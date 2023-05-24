@@ -2,162 +2,316 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D5570FE38
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 21:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7B170FE67
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 21:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjEXTHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 15:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S229954AbjEXTTQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 15:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjEXTHv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 15:07:51 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFADB12B;
-        Wed, 24 May 2023 12:07:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JqQPSSvo9axDlZOfc+5rUGx5S27Mx1sxVhGVlLkVJHjFLQBco+GZJ6a8gzyHUCvm9Sao/CDOnnVi5tG0HYPp9GTVqGrmheXqgwkF2FuvFXe2VQ6Qg5XNhA4ay95G7pZdeDSLpVpRYFbdVAepJamFhoKkvg60Ptry8efer0Msdw9Mq/q6AAnB5oSLZRICqBQFPRXRpgsmNlo/8laTl9MWW1/ARj3uxDQL/nXylf5UERn7He94tw6b/CNQhRl9FrJRubfrdRrCrchZwBAHE2Vsn09oIIX1flGkkKAAGhb72269wdp+niDWEEkU/UgrA71GfVZIgLsZmBZhd+synth9Xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cN5XhjMdwL/hTBA3wvpOgjLrhkNRBDaNwSHLJzJuxog=;
- b=i03d965G5g0eeVHogn5GPwSBIQ3T/2irQWAn6BE5ORDUIU8pwl8kg8ol8Htoc1zSf35Z6FfBd7f+h1TFsG6+QcOvQniUHQKMS11EUXM/lrxIqmSaaY5q1dSiqYMSy9+JTfw1Uz8C0ShMPbu0cMAhh2ezBQ8Lw4mYR7WCUq9j8XN/hm+KXHjyQLH77ysYev8GLnZVrjQbIJBZ2pSQ/VUAuidW+ZE0BRMvE1SjQD3hUQ39UeaSvZ0rSdEk46UKp+WzeKdf7f6vIICp7fZYYUICJZ+12sltMGAf96Mjswk/QDD47JB1ngBSoCuAAkUGZN0Y8NimbQfM0FuLb94YAMZEkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cN5XhjMdwL/hTBA3wvpOgjLrhkNRBDaNwSHLJzJuxog=;
- b=jGKFW75gOI064+EGE0LOM7vRNYhCoeBrawHVnZhOr/5ZcUPTlX6SXyM7tUyLU9GyHwPxJq+TtUbO1uJC0K5/ZtbYQKx8CV4hWnLiw7/Zb/7sPx+6iCD873BSgoQSz8y6b8w7W9PwTlUD0BjLRIfbRI2S4voCt0GmeD4z/Xm32wQ=
-Received: from MW3PR06CA0022.namprd06.prod.outlook.com (2603:10b6:303:2a::27)
- by CH3PR12MB9077.namprd12.prod.outlook.com (2603:10b6:610:1a2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 24 May
- 2023 19:07:48 +0000
-Received: from CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:2a:cafe::3f) by MW3PR06CA0022.outlook.office365.com
- (2603:10b6:303:2a::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
- Transport; Wed, 24 May 2023 19:07:48 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT084.mail.protection.outlook.com (10.13.174.194) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.30 via Frontend Transport; Wed, 24 May 2023 19:07:47 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 24 May
- 2023 14:07:45 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "S-k Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        <linux-pm@vger.kernel.org>, Lukas Wunner <lukas@wunner.de>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Iain Lane <iain@orangesquash.org.uk>
-Subject: [PATCH v4 2/2] PCI: Don't assume root ports from > 2015 are power manageable
-Date:   Wed, 24 May 2023 14:07:26 -0500
-Message-ID: <20230524190726.17012-2-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230524190726.17012-1-mario.limonciello@amd.com>
-References: <20230524190726.17012-1-mario.limonciello@amd.com>
+        with ESMTP id S229459AbjEXTTP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 15:19:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF9DA4;
+        Wed, 24 May 2023 12:19:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BF486402C;
+        Wed, 24 May 2023 19:19:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE12C433EF;
+        Wed, 24 May 2023 19:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684955952;
+        bh=UrGuYtn1xPI8m/h89y7lPAigXIpFhTgc56VT/0n00Yw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gSvvRmFT8sf4ysJEpWdOTFQzO5zkbZgEGg9DwPrl2WUntNM/dg5xnM2VEzqb02P+j
+         c6iVycvwtfLZRdyYTPsD+Z6OScIfCb5kFn8JlDs1D03THeABrXy9ipWXmbc6AR5/Ts
+         hLwBr907o8jGHEP50RfI8bGIyYEnMzDDYcFS7ZG+zT9F7ZowfYwqI6+bs7kMA7MaPS
+         C0NaD+A36TyXhujq1L+/YIM8Jn2c70+Uu2bKbUekgzz59miuoBkBIfMw4dIZPKZVAl
+         a2AxEL38VG1ALqm+vTY1kUpGFDrN88QxJ4AQV920UTva2reAsoyD02UJPM27wACrii
+         qt0DuaNHwoZ9A==
+Date:   Wed, 24 May 2023 20:19:08 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, sre@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ convert to yaml
+Message-ID: <20230524-blizzard-hunting-4da815e634e2@spud>
+References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
+ <20230524123528.439082-4-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT084:EE_|CH3PR12MB9077:EE_
-X-MS-Office365-Filtering-Correlation-Id: 20423d81-28f9-4195-7352-08db5c8a29d8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GLgEezDeCwTykxH7CHCamNY/gPbMVzMQu73M8FTT3Ic+xi3mJZSU5ZwfQuUf+ub7UMDNtBbK45WBxZ01g63ylh2zMxAoVxFl6bIY4NKfXTqhHbypvShNSHTzf17tLtv53rMMnYQbcF2KgFsg4B9Q6h9cvh7+x/L/XuduEwM2C+NhvwIn4imj9J8m5QVNqvNbj+dXPHnrM2eWM1nNFiM6/zwhIQvWFFBPXiKEqq3EqVvPUD/l1n55y5hqFZYyqcEDPvpy0dJQmr/TALlO+HSfY2h7ojcl0Yz1DOYQZT89qQZwmD//eMZfNqU15Il3J4XnAfOieXo95KoIhju7cpTdPTKgpBcyPhS1I/b9vJUjx90mG3z40LbCkJ210EHP5JU39KEU5MyOwCrloKUiEOxuYSp1ZKv2roTvkiLRmZX77G0b9TDqTKxu4tmXUugCTrH5YtXGf0s6NgZrrpDLXpVVgV6fTanbUscj89aOvgVg3QxaYaaW2Lct2vS+yS4MZKs7KOm+qEUrBS56wKaKVqSwsG4h5nLyXXqyIunTs8nSz0skT16Gq5Ql2v1qzFuOoqJDvqiurMv/yDmPAoK5D75Lp9v3VaWFgkn4iIS3ZCJTC2+pkA8ACpEMbgd4r+xhRYnEkQSJSPDICYXMxgcTdgq6Kh2MX8hz3sFCSirZEBLftX4xNoVVhGKKaN5eQ126ntxgg6acDG3OMyN0mk91pdFi1o4K7EYr0W8R6tj3/ZZuVarbUu1pYzdpGugwZEIL4L4nOFHSkJUDWMH6avWdr4QHFQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(136003)(451199021)(36840700001)(40470700004)(46966006)(40460700003)(5660300002)(8676002)(8936002)(16526019)(186003)(2906002)(36860700001)(86362001)(2616005)(36756003)(336012)(426003)(83380400001)(66574015)(47076005)(44832011)(82740400003)(356005)(40480700001)(26005)(1076003)(82310400005)(316002)(70586007)(70206006)(4326008)(6666004)(110136005)(54906003)(478600001)(81166007)(7696005)(966005)(41300700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 19:07:47.8944
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 20423d81-28f9-4195-7352-08db5c8a29d8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT084.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9077
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wk90yo5YHkHmxCdc"
+Content-Disposition: inline
+In-Reply-To: <20230524123528.439082-4-claudiu.beznea@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Using a USB keyboard or mouse to wakeup the system from s2idle fails when
-that XHCI device is connected to a USB-C port for an AMD USB4 router.
 
-Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-all PCIe ports go into D3 during s2idle.
+--wk90yo5YHkHmxCdc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-When specific root ports are put into D3 over s2idle on some AMD platforms
-it is not possible for the platform to properly identify wakeup sources.
-This happens whether the root port goes into D3hot or D3cold.
+On Wed, May 24, 2023 at 03:35:27PM +0300, Claudiu Beznea wrote:
+> Convert Atmel SAMA5D2 shutdown controller to YAML. SAMA7G5 SHDWC DT node
+> (available in arch/arm/boot/dts/sama7g5.dtsi) has syscon along with its
+> compatible. There is no usage of this syscon in the current code but it
+> may be necessary in future as some registers of SHDWC are accessed in
+> different drivers (at91-sama5d2_shdwc.c and arch/arm/mach-at91/pm.c).
+> Thus update the YAML with it to make DT checkers happy.
+>=20
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
 
-Comparing registers between Linux and Windows 11 this behavior to put
-these specific root ports into D3 at suspend is unique to Linux. On an
-affected system Windows does not put those specific root ports into D3
-over Modern Standby.
+Modulo the license thing that I mentioned on v1,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Windows doesn't put the root ports into D3 because root ports are not
-power manageable.
+Thanks,
+Conor.
+> ---
+>  .../devicetree/bindings/arm/atmel-sysregs.txt |  63 ----------
+>  .../power/reset/atmel,sama5d2-shdwc.yaml      | 115 ++++++++++++++++++
+>  2 files changed, 115 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,s=
+ama5d2-shdwc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt b/Do=
+cumentation/devicetree/bindings/arm/atmel-sysregs.txt
+> index e6b2fb291b45..67a66bf74895 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> +++ b/Documentation/devicetree/bindings/arm/atmel-sysregs.txt
+> @@ -52,69 +52,6 @@ Example:
+>  		reg =3D <0xe3804000 0x1000>;
+>  };
+> =20
+> -SHDWC SAMA5D2-Compatible Shutdown Controller
+> -
+> -1) shdwc node
+> -
+> -required properties:
+> -- compatible: should be "atmel,sama5d2-shdwc", "microchip,sam9x60-shdwc"=
+ or
+> -  "microchip,sama7g5-shdwc"
+> -- reg: should contain registers location and length
+> -- clocks: phandle to input clock.
+> -- #address-cells: should be one. The cell is the wake-up input index.
+> -- #size-cells: should be zero.
+> -
+> -optional properties:
+> -
+> -- debounce-delay-us: minimum wake-up inputs debouncer period in
+> -  microseconds. It's usually a board-related property.
+> -- atmel,wakeup-rtc-timer: boolean to enable Real-Time Clock wake-up.
+> -
+> -optional microchip,sam9x60-shdwc or microchip,sama7g5-shdwc properties:
+> -- atmel,wakeup-rtt-timer: boolean to enable Real-time Timer Wake-up.
+> -
+> -The node contains child nodes for each wake-up input that the platform u=
+ses.
+> -
+> -2) input nodes
+> -
+> -Wake-up input nodes are usually described in the "board" part of the Dev=
+ice
+> -Tree. Note also that input 0 is linked to the wake-up pin and is frequen=
+tly
+> -used.
+> -
+> -Required properties:
+> -- reg: should contain the wake-up input index [0 - 15].
+> -
+> -Optional properties:
+> -- atmel,wakeup-active-high: boolean, the corresponding wake-up input des=
+cribed
+> -  by the child, forces the wake-up of the core power supply on a high le=
+vel.
+> -  The default is to be active low.
+> -
+> -Example:
+> -
+> -On the SoC side:
+> -	shdwc@f8048010 {
+> -		compatible =3D "atmel,sama5d2-shdwc";
+> -		reg =3D <0xf8048010 0x10>;
+> -		clocks =3D <&clk32k>;
+> -		#address-cells =3D <1>;
+> -		#size-cells =3D <0>;
+> -		atmel,wakeup-rtc-timer;
+> -	};
+> -
+> -On the board side:
+> -	shdwc@f8048010 {
+> -		debounce-delay-us =3D <976>;
+> -
+> -		input@0 {
+> -			reg =3D <0>;
+> -		};
+> -
+> -		input@1 {
+> -			reg =3D <1>;
+> -			atmel,wakeup-active-high;
+> -		};
+> -	};
+> -
+>  Special Function Registers (SFR)
+> =20
+>  Special Function Registers (SFR) manage specific aspects of the integrat=
+ed
+> diff --git a/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-=
+shdwc.yaml b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-sh=
+dwc.yaml
+> new file mode 100644
+> index 000000000000..31a16a354a3a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.y=
+aml
+> @@ -0,0 +1,115 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and =
+VDDCORE
+> +  and the wake-up detection on debounced input lines.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: microchip,sama7g5-shdwc
+> +          - const: syscon
+> +      - items:
+> +          enum:
+> +            - atmel,sama5d2-shdwc
+> +            - microchip,sam9x60-shdwc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  debounce-delay-us:
+> +    description:
+> +      Minimum wake-up inputs debouncer period in microseconds. It is usu=
+ally a
+> +      board-related property.
+> +
+> +  atmel,wakeup-rtc-timer:
+> +    description: enable real-time clock wake-up
+> +    type: boolean
+> +
+> +patternProperties:
+> +  "^input@[0-15]$":
+> +    description:
+> +      Wake-up input nodes. These are usually described in the "board" pa=
+rt of
+> +      the Device Tree. Note also that input 0 is linked to the wake-up p=
+in and
+> +      is frequently used.
+> +    type: object
+> +    properties:
+> +      reg:
+> +        description: contains the wake-up input index
+> +        minimum: 0
+> +        maximum: 15
+> +
+> +      atmel,wakeup-active-high:
+> +        description:
+> +          The corresponding wake-up input described by the child forces =
+the
+> +          wake-up of the core power supply on a high level. The default =
+is to
+> +          be active low.
+> +        type: boolean
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - microchip,sam9x60-shdwc
+> +              - microchip,sama7g5-shdwc
+> +    then:
+> +      properties:
+> +        atmel,wakeup-rtt-timer:
+> +          description: enable real-time timer wake-up
+> +          type: boolean
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    shdwc: poweroff@f8048010 {
+> +        compatible =3D "atmel,sama5d2-shdwc";
+> +        reg =3D <0xf8048010 0x10>;
+> +        clocks =3D <&clk32k>;
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +        atmel,wakeup-rtc-timer;
+> +        debounce-delay-us =3D <976>;
+> +
+> +        input@0 {
+> +            reg =3D <0>;
+> +        };
+> +
+> +        input@1 {
+> +            reg =3D <1>;
+> +            atmel,wakeup-active-high;
+> +        };
+> +    };
+> +
+> +...
+> --=20
+> 2.34.1
+>=20
 
-Linux shouldn't assume root ports support D3 just because they're on a
-machine newer than 2015, the ports should also be deemed power manageable.
-Add an extra check explicitly for root ports to ensure D3 isn't selected
-for these ports.
+--wk90yo5YHkHmxCdc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-Reported-by: Iain Lane <iain@orangesquash.org.uk>
-Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v3->v4:
- * Move after refactor
----
- drivers/pci/pci.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index d1fa040bcea7..d293db963327 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3015,6 +3015,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
- 	if (dmi_check_system(bridge_d3_blacklist))
- 		return false;
- 
-+	/*
-+	 * It's not safe to put root ports that don't support power
-+	 * management into D3.
-+	 */
-+	if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
-+	    !platform_pci_power_manageable(bridge))
-+		return false;
-+
- 	/*
- 	 * It should be safe to put PCIe ports from 2015 or newer
- 	 * to D3.
--- 
-2.34.1
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG5jKwAKCRB4tDGHoIJi
+0p9OAQDaa+pUPo20aynlsVZ+ZkT1qKrlrMyJEBUl4ZP+2YwgCgEArC5r7v2+ddus
+dDpEvz6OUd7qIXJhVBt7zYHGf3oeuAc=
+=WmUB
+-----END PGP SIGNATURE-----
 
+--wk90yo5YHkHmxCdc--
