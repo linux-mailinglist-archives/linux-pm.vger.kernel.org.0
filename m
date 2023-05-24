@@ -2,84 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 662FC70FBC6
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 18:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C99770FBD2
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 18:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjEXQi4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 12:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S230021AbjEXQkv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 12:40:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjEXQiz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 12:38:55 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A31FE9;
-        Wed, 24 May 2023 09:38:53 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-9739440b60bso7890966b.0;
-        Wed, 24 May 2023 09:38:53 -0700 (PDT)
+        with ESMTP id S229605AbjEXQku (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 12:40:50 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767F6E7
+        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 09:40:49 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-96f72e6925cso26856566b.1
+        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 09:40:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684946332; x=1687538332;
+        d=1e100.net; s=20221208; t=1684946448; x=1687538448;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C02MeIwQdNrwFQOvJ+pcAUppiGgc5dW7CdevAd4vdUk=;
-        b=BsjwOJLIryTIyvXhJuOuw90G8QRzlNlPJsMsoG5Gyv5LTz1WeCac43aEtfmVWkd/vc
-         EIu379W3uqPHZYalAvWWasnv8IqkJAlxohGf7EppHJ2z+Al4jKfGL1OOyAd3XemijNdf
-         hMgmPdQ9CpTpyfW+xR/5I9bNPYYHMC1LXG2cHyo+lGJdvAPPRQ6GK2mvFEY4DVX2a+f0
-         7Sjqvaao1saTpsWwE5jRb6MX7MwcWvz8A8T61UXUqfulDP9EQDwa6PwXwtx5XrOsq2J0
-         X2pFNt2bXjQL5XskS6Yn61NSWKGrUGjtHkAC9Mm88ktxvvBJnstIBFjJYKgvrvt/VA+j
-         6+xQ==
-X-Gm-Message-State: AC+VfDwiY6o/wQakwM4RH6y0RJq4yipBVDswQ5/733e7Eqhhk6yABTfm
-        BCHG7rAUXCkoeZuiykfTNjYDAy9ZW9VmJARt+pU=
-X-Google-Smtp-Source: ACHHUZ7E0a2P+VolsTST++i+uFAwZwlCSQUa6OiN8Tdhq5fOeJaXxi9FQM3qOnqgxQqZBURXj3cbAkPmJXlgoZCxa+8=
-X-Received: by 2002:a17:906:5199:b0:965:9602:3ee1 with SMTP id
- y25-20020a170906519900b0096596023ee1mr15583280ejk.2.1684946331935; Wed, 24
- May 2023 09:38:51 -0700 (PDT)
+        bh=ZWcbgYQgtmwVAalaEpfC1JpWDRKIHQvmUuBPZCBbaAg=;
+        b=KrXXK4qBsC+95H10J5DJ7uc1/WIlKKoHCiLNC30KrJ2MRIZiVbIM2XclwvHDOHqZC0
+         11SPDfqqmqcMv3zOSgz39zq4c+E27LD1JkmfdKIaLyZ9+9vjjZu7dfUZfaE4gKx/SVyJ
+         +01LxQm/KLR+cjfjUIe1LZwRb7WZGienYcON21z6hqolUw6PVrn0D9QJe+TdthFkB5nX
+         3x7eANknvW/8hxwvMuk4HCTtUQQE72GLHISWYpHB9WrMgn1Bhm0alJ0yjSkplFuaRG1w
+         3TodA07Bx6B/lum55X2IkhE+CsXazI41RU/xG+V1WSuOyK12s/jZh3dgxjNf+Vgoh8cv
+         KTwg==
+X-Gm-Message-State: AC+VfDxSWuyPlZ/FrAEr1nbStYadrsCqj1Eo6SZwNyPrbnuc4t0GdSOn
+        AWYLOHueaVl5tJlem60/2H4rbvQkFPLqb9er8is=
+X-Google-Smtp-Source: ACHHUZ7XveAeO11HtEaBJWPYNJKpf8yd1Hx3AEYsMtXP5REsedEFsOe9rn233K4bOeS8Qic64ICFbnBHbtJfpy1VC0w=
+X-Received: by 2002:a17:906:10ca:b0:965:c518:4681 with SMTP id
+ v10-20020a17090610ca00b00965c5184681mr2563490ejv.7.1684946447894; Wed, 24 May
+ 2023 09:40:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230418130743.67024-1-n.zhandarovich@fintech.ru> <CAPDyKFqC6eCMCjg4n_pRi9oJrkBfJuUT3Hpm=3C93dmU5E1muA@mail.gmail.com>
-In-Reply-To: <CAPDyKFqC6eCMCjg4n_pRi9oJrkBfJuUT3Hpm=3C93dmU5E1muA@mail.gmail.com>
+References: <20230407024759.2320858-1-xiongxin@kylinos.cn>
+In-Reply-To: <20230407024759.2320858-1-xiongxin@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 18:38:40 +0200
-Message-ID: <CAJZ5v0gx7bD9EZKPQWyAAZ6hSKjK4hr-nkrJu84HEK-g2AMAaw@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: fix integer overflow issues in genpd_parse_state()
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
+Date:   Wed, 24 May 2023 18:40:36 +0200
+Message-ID: <CAJZ5v0juDz6=P23NJ11mNCVBCjp_p3qNRFo0i8YqFBPUW9tkQQ@mail.gmail.com>
+Subject: Re: [v2] powercap: intel_rapl: Optimize rp->domains memory allocation
+To:     xiongxin <xiongxin@kylinos.cn>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 8, 2023 at 12:37 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Fri, Apr 7, 2023 at 4:48 AM xiongxin <xiongxin@kylinos.cn> wrote:
 >
-> On Tue, 18 Apr 2023 at 15:07, Nikita Zhandarovich
-> <n.zhandarovich@fintech.ru> wrote:
-> >
-> > Currently, while calculating residency and latency values, right
-> > operands may overflow if resulting values are big enough.
-> >
-> > To prevent this, albeit unlikely case, play it safe and convert
-> > right operands to left ones' type s64.
-> >
-> > Found by Linux Verification Center (linuxtesting.org) with static
-> > analysis tool SVACE.
-> >
-> > Fixes: 30f604283e05 ("PM / Domains: Allow domain power states to be read from DT")
-> > Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+> In the memory allocation of rp->domains in rapl_detect_domains(), there
+> is an additional memory of struct rapl_domain allocated, optimize the
+> code here to save sizeof(struct rapl_domain) bytes of memory.
 >
-> Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Test in Intel NUC (i5-1135G7).
+>
+> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> Tested-by: xiongxin <xiongxin@kylinos.cn>
+> ---
+>
+> v2: The extra memory will never be used, so can directly remove '+1'.
+>
+>  drivers/powercap/intel_rapl_common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+> index 8970c7b80884..a766d6e43c34 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1319,7 +1319,7 @@ static int rapl_detect_domains(struct rapl_package *rp, int cpu)
+>         }
+>         pr_debug("found %d domains on %s\n", rp->nr_domains, rp->name);
+>
+> -       rp->domains = kcalloc(rp->nr_domains + 1, sizeof(struct rapl_domain),
+> +       rp->domains = kcalloc(rp->nr_domains, sizeof(struct rapl_domain),
+>                               GFP_KERNEL);
+>         if (!rp->domains)
+>                 return -ENOMEM;
+> --
 
-Applied as 6.5 material, thanks!
+Srinivas, is this OK, or does it miss anything?
 
-And sorry for the delay.
+>
