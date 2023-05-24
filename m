@@ -2,46 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 620FE70FCF1
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:45:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7E270FD1F
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235994AbjEXRpp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55986 "EHLO
+        id S235060AbjEXRrt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235952AbjEXRpo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:45:44 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53CBDE5F;
-        Wed, 24 May 2023 10:45:06 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94ea38c90ccso31055566b.1;
-        Wed, 24 May 2023 10:45:06 -0700 (PDT)
+        with ESMTP id S231446AbjEXRrs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:47:48 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017691B0;
+        Wed, 24 May 2023 10:47:23 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96fc07d7e6bso29977966b.1;
+        Wed, 24 May 2023 10:47:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950305; x=1687542305;
+        d=1e100.net; s=20221208; t=1684950442; x=1687542442;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=snWan0OEQt+zA5xYjeMRb7pV8yuQ1oJNvMel69SqIZw=;
-        b=OetKplGA0YMKgE9oCUQkNTOmgjk/LCK0fL8q5X+CqDKckuZUh2yzpazNWWpIKhH+wj
-         qsBg/Exo0IBP7IgTDbCSKo6dEMQ7I9hSl034LaHBmTM8OydT2DuSO5QRwubaLVQBs1kB
-         B6zlILE2Xo4e5ng4njYS2yLochJ38gf+16bB6hVuJfCkLA5fBTf7jNIf/tjYaYXMQWCh
-         eA/lsMmDe8794qHP1pbZQycGcUDk4PRMYe8qepVYX0ojqRRTni4gx6WeDEKt//HsAaaZ
-         UgvOWJjLF4iqUZ8/aT1Xm2gWlUz0oEEEyTi7BTIaExRNdcfoeG+dPmQbpCWAKLon7HAI
-         GBYQ==
-X-Gm-Message-State: AC+VfDxrLlv1HRXVgCZMZpZlclq+2+35dDfPMlKAfAiR40UdTUJTCOee
-        NryDxyZ4BxuEeDpDaRoolCNeGKuimSFynSaRQIADdB7lgVM=
-X-Google-Smtp-Source: ACHHUZ70tUjBY1nqtSU6XcGiPqwWef0icBJnZ5b8IrhwvOw/C9DirxgMBQ/VxL5fYMvzCwPqmPk1nj3ILqQn/MeuWRw=
-X-Received: by 2002:a17:906:6495:b0:8d2:78c5:1d4e with SMTP id
- e21-20020a170906649500b008d278c51d4emr18279435ejm.5.1684950304470; Wed, 24
- May 2023 10:45:04 -0700 (PDT)
+        bh=MtHsKfwHpJ/MA8hmcGf3XA0dHKGtuHV+9hRCpO7LUUQ=;
+        b=YbRSDzMKa4jU5aZFXUWeYeO9W8pvI2ZNPxhznCKYmIcKOgXtPAzg/bgdNOGwMjuq0w
+         xjT2OkYWUxHulq+QISGoK+VFfwJtgVJnrWrw0SEiTZRLS4BJY1E2F8NsUZ//5/bXLulB
+         ucxyN3+Lo5FOOWKBH+XTHOA79+mlsKwha8NHIeYgFBbuZeDsCrOIFxzsse6Xaa0NehBh
+         u0zDuV9VfKlovPGo8WPjPj2qhY3npQ7Itu83Fqd7rTM9ilkz/i+6BRrjxtKVVIKeobTI
+         2RmZN+uTxNGumuvZUm6XsscgyTllQlqVji966qm9+WY6eXPghKn5DbDm4ViT18WDpT11
+         uKvw==
+X-Gm-Message-State: AC+VfDy1W1Tjml2M8LpTlwOyGj14eAMYqT0Hfg0e67z9jIpuz+MsmnuR
+        djFz5r9PaI+DhtPqyaGa3dM9BgTPCSqp9FxUx/aTef59
+X-Google-Smtp-Source: ACHHUZ7wV5rpKfHlT4Qvg5kxQ7ILIFzV9E6zc6/Zo7WWoX8XyhFI0scNMfjaJOLlZP/M2c0c5gL6LM9eBkeEvdEzDtQ=
+X-Received: by 2002:a17:906:7a52:b0:965:9db5:3823 with SMTP id
+ i18-20020a1709067a5200b009659db53823mr15874562ejo.3.1684950442317; Wed, 24
+ May 2023 10:47:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517162817.8538-1-wyes.karny@amd.com> <20230517162817.8538-4-wyes.karny@amd.com>
-In-Reply-To: <20230517162817.8538-4-wyes.karny@amd.com>
+References: <20230517162817.8538-1-wyes.karny@amd.com> <20230517162817.8538-2-wyes.karny@amd.com>
+In-Reply-To: <20230517162817.8538-2-wyes.karny@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:44:53 +0200
-Message-ID: <CAJZ5v0gte_QAt1MXXXhpGUTEAC3Eo8LCY6N+=uSFi0NRBG-Omw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] cpufreq: Return failure if fast_switch is not set
- and fast_switch_possible is set
+Date:   Wed, 24 May 2023 19:47:11 +0200
+Message-ID: <CAJZ5v0h+frxNpTz4GsjQ=OdbXXnTgLB=ufA5P2pNjbDF_FhNUQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] amd_pstate: Add ->fast_switch() callback
 To:     Wyes Karny <wyes.karny@amd.com>
 Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -50,76 +49,109 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 17, 2023 at 6:30 PM Wyes Karny <wyes.karny@amd.com> wrote:
+On Wed, May 17, 2023 at 6:29 PM Wyes Karny <wyes.karny@amd.com> wrote:
 >
-> If fast_switch_possible flag is set by the scaling driver, the governor
-> is free to select fast_switch function even if adjust_perf is set.  Some
-> scaling drivers which use adjust_perf don't set fast_switch thinking
-> that the governor would never fall back to fast_switch. But the governor
-> can fall back to fast_switch even in runtime if frequency invariance is
-> disabled due to some reason. This could crash the kernel if the driver
-> didn't set the fast_switch function pointer.
+> From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
 >
-> Therefore, return failure in cpufreq_online function if fast_switch is
-> not set and fast_switch_possible is set.
+> Schedutil normally calls the adjust_perf callback for drivers with
+> adjust_perf callback available and fast_switch_possible flag set.
+> However, when frequency invariance is disabled and schedutil tries to
+> invoke fast_switch. So, there is a chance of kernel crash if this
+> function pointer is not set. To protect against this scenario add
+> fast_switch callback to amd_pstate driver.
+>
+> Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
 >
 > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 > ---
->  drivers/cpufreq/cpufreq.c | 5 +++++
->  include/linux/cpufreq.h   | 4 +++-
->  2 files changed, 8 insertions(+), 1 deletion(-)
+>  drivers/cpufreq/amd-pstate.c | 36 ++++++++++++++++++++++++++++++------
+>  1 file changed, 30 insertions(+), 6 deletions(-)
 >
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6b52ebe5a890..7835ba4fa34c 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1376,6 +1376,11 @@ static int cpufreq_online(unsigned int cpu)
->                         goto out_free_policy;
->                 }
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 5a3d4aa0f45a..45711fc0a856 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -444,9 +444,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
+>         return 0;
+>  }
 >
-> +               if (policy->fast_switch_possible && !cpufreq_driver->fast_switch) {
-> +                       pr_err("fast_switch_possible is enabled but fast_switch callback is not set\n");
-> +                       ret = -EINVAL;
-> +                       goto out_destroy_policy;
-> +               }
-
-The driver registration can fail if the driver has ->adjust_perf
-without ->fast_switch.  Then the check above would not be necessary
-any more.
-
->                 /*
->                  * The initialization has succeeded and the policy is online.
->                  * If there is a problem with its frequency table, take it
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 26e2eb399484..8cdf77bb3bc1 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -340,7 +340,9 @@ struct cpufreq_driver {
->         /*
->          * ->fast_switch() replacement for drivers that use an internal
->          * representation of performance levels and can pass hints other than
-> -        * the target performance level to the hardware.
-> +        * the target performance level to the hardware. If driver is setting this,
-> +        * then it needs to set fast_switch also. Because in certain scenario scale
-> +        * invariance could be disabled and governor can switch back to fast_switch.
-
-I would say something like "This can only be set if ->fast_switch is
-set too, because in those cases (under specific conditions) scale
-invariance can be disabled, which causes the schedutil governor to
-fall back to the latter."
-
->          */
->         void            (*adjust_perf)(unsigned int cpu,
->                                        unsigned long min_perf,
+> -static int amd_pstate_target(struct cpufreq_policy *policy,
+> -                            unsigned int target_freq,
+> -                            unsigned int relation)
+> +static int amd_pstate_update_freq(struct cpufreq_policy *policy,
+> +                                 unsigned int target_freq, bool fast_switch)
+>  {
+>         struct cpufreq_freqs freqs;
+>         struct amd_cpudata *cpudata = policy->driver_data;
+> @@ -465,14 +464,37 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
+>         des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
+>                                      cpudata->max_freq);
+>
+> -       cpufreq_freq_transition_begin(policy, &freqs);
+> +       WARN_ON(fast_switch && !policy->fast_switch_enabled);
+> +       /*
+> +        * If fast_switch is desired, then there aren't any registered
+> +        * transition notifiers. See comment for
+> +        * cpufreq_enable_fast_switch().
+> +        */
+> +       if (!fast_switch)
+> +               cpufreq_freq_transition_begin(policy, &freqs);
+> +
+>         amd_pstate_update(cpudata, min_perf, des_perf,
+> -                         max_perf, false, policy->governor->flags);
+> -       cpufreq_freq_transition_end(policy, &freqs, false);
+> +                       max_perf, fast_switch, policy->governor->flags);
+> +
+> +       if (!fast_switch)
+> +               cpufreq_freq_transition_end(policy, &freqs, false);
+>
+>         return 0;
+>  }
+>
+> +static int amd_pstate_target(struct cpufreq_policy *policy,
+> +                            unsigned int target_freq,
+> +                            unsigned int relation)
+> +{
+> +       return amd_pstate_update_freq(policy, target_freq, false);
+> +}
+> +
+> +static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
+> +                                 unsigned int target_freq)
+> +{
+> +       return amd_pstate_update_freq(policy, target_freq, true);
+> +}
+> +
+>  static void amd_pstate_adjust_perf(unsigned int cpu,
+>                                    unsigned long _min_perf,
+>                                    unsigned long target_perf,
+> @@ -715,6 +737,7 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
+>
+>         freq_qos_remove_request(&cpudata->req[1]);
+>         freq_qos_remove_request(&cpudata->req[0]);
+> +       policy->fast_switch_possible = false;
+>         kfree(cpudata);
+>
+>         return 0;
+> @@ -1309,6 +1332,7 @@ static struct cpufreq_driver amd_pstate_driver = {
+>         .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
+>         .verify         = amd_pstate_verify,
+>         .target         = amd_pstate_target,
+> +       .fast_switch    = amd_pstate_fast_switch,
+>         .init           = amd_pstate_cpu_init,
+>         .exit           = amd_pstate_cpu_exit,
+>         .suspend        = amd_pstate_cpu_suspend,
 > --
-> 2.34.1
->
+
+Applied along with the [2/3], thanks!
+
+Do you need them in 6.4 or would 6.5 be sufficient?  Also do you need
+them to go into "stable"?
