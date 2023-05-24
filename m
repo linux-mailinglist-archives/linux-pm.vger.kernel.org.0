@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4924F70FE9A
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 21:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4639170FEA7
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 21:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjEXThe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 15:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
+        id S232021AbjEXTms (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 15:42:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEXThd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 15:37:33 -0400
+        with ESMTP id S231785AbjEXTms (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 15:42:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAA312F;
-        Wed, 24 May 2023 12:37:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0E219C;
+        Wed, 24 May 2023 12:42:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76E8063F8F;
-        Wed, 24 May 2023 19:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70EE0C433EF;
-        Wed, 24 May 2023 19:37:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 550C06405E;
+        Wed, 24 May 2023 19:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3685AC433EF;
+        Wed, 24 May 2023 19:42:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684957049;
-        bh=W7a/E/JmcLp7eemBI11m1MdaS39Qaf9Q1E7uRiBdevA=;
+        s=k20201202; t=1684957362;
+        bh=yZ++4rmAz/binbPZ2raZ7oKQBeGS4KnGAb2gGZ8Sg9s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T37qhazCENR9JuPMlWE7t4OivKMYBhCBP3INUNmST7+0LodR6iMQPmN9u/tFYMPXb
-         EepvcoB/h+WHChUe9clMGWIfX13Ya8UCHwlMeLeruKNd7BTHLyu5uuAFqRAVydvyQF
-         Vdl0BYLnL4arDYBnTuHd+iDBX9RM6CFOGcZJeMDaaWMMl1lkIPIYyTcduMR8HbbZ3H
-         2Z7hxSGBnTnx5dMZp6DJMc7lbGT21YRzJhRv007UOjr2WwFI0qlS2qNTIvC/mA+pRp
-         460N8wN91UPCHRl2MgCO5c5QBlp2BTfyPmN9zgibFAsaZxxwjCbtfi1A/r/UVtaZAW
-         yyHcUNmazeVzw==
-Date:   Wed, 24 May 2023 20:37:23 +0100
+        b=GnpAesAX1Mplqldy+UcyxvjJnee2n29HLmjvyzYkREAddxM1xqMyZHkEm3L1R65gx
+         JkENY78Gjqxwr2sOUI2GcM9NeMaUb1urWDGiIVayse7u/RxpuUSy/hAuTrUL6urxM/
+         6OPpwlIZtAyL2IGwXWWTLUuPJRqpAjCnbKAXT04tQWe5AlapwwpDXDHZPOExWjjyhJ
+         Vb1n4nSEgV2CrbBLeYVpLMP3m9j8ABzHhKNRnuV5X/2w0PSecXvAM4DfCYMWTHhAOj
+         0nIWnDQZJPDN0HOAqFjl0bPjbMBkuNcHAGeVbly/rKew214e3daRAZ0z400dW995YG
+         Ek+4YxLXKUHeQ==
+Date:   Wed, 24 May 2023 20:42:36 +0100
 From:   Conor Dooley <conor@kernel.org>
 To:     Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     linux-rockchip@lists.infradead.org,
@@ -47,16 +47,16 @@ Cc:     linux-rockchip@lists.infradead.org,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 22/25] dt-bindings: devfreq: event: rockchip,dfi: Add
- rk3588 support
-Message-ID: <20230524-reptile-reexamine-187d778443d2@spud>
+Subject: Re: [PATCH v5 21/25] dt-bindings: devfreq: event: rockchip,dfi: Add
+ rk3568 support
+Message-ID: <20230524-cleft-dial-80d6af1444b1@spud>
 References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230524083153.2046084-23-s.hauer@pengutronix.de>
+ <20230524083153.2046084-22-s.hauer@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/2uqOHRXXrjZKaKe"
+        protocol="application/pgp-signature"; boundary="e2+WROMaYECLcWsp"
 Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-23-s.hauer@pengutronix.de>
+In-Reply-To: <20230524083153.2046084-22-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,71 +68,78 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---/2uqOHRXXrjZKaKe
+--e2+WROMaYECLcWsp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, May 24, 2023 at 10:31:50AM +0200, Sascha Hauer wrote:
-> This adds rockchip,rk3588-dfi to the list of compatibles. Unlike ealier
-> SoCs the rk3588 has four interrupts (one for each channel) instead of
-> only one, so increase the number of allowed interrupts to four and also
-> add interrupt-names.
+On Wed, May 24, 2023 at 10:31:49AM +0200, Sascha Hauer wrote:
+> This adds the rockchip,rk3568-dfi compatible to the binding. Make clocks
+> optional for this SoC as the RK3568 doesn't have a kernel controllable
+> PCLK.
 >=20
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+
+This one looks fine to me,
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
 > ---
->=20
-> Notes:
->     Changes since v4:
->     - new patch
->=20
->  .../bindings/devfreq/event/rockchip,dfi.yaml       | 14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
+>  .../bindings/devfreq/event/rockchip,dfi.yaml      | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi=
 =2Eyaml b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> index e8b64494ee8bd..4e647a9560560 100644
+> index 7a82f6ae0701e..e8b64494ee8bd 100644
 > --- a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
 > +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
-> @@ -14,6 +14,7 @@ properties:
+> @@ -13,6 +13,7 @@ properties:
+>    compatible:
 >      enum:
 >        - rockchip,rk3399-dfi
->        - rockchip,rk3568-dfi
-> +      - rockchip,rk3588-dfi
+> +      - rockchip,rk3568-dfi
 > =20
 >    clocks:
 >      maxItems: 1
-> @@ -23,7 +24,18 @@ properties:
->        - const: pclk_ddr_mon
+> @@ -34,11 +35,21 @@ properties:
 > =20
->    interrupts:
-> -    maxItems: 1
-> +    minItems: 1
-> +    maxItems: 4
+>  required:
+>    - compatible
+> -  - clocks
+> -  - clock-names
+>    - interrupts
+>    - reg
+> =20
+> +if:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - rockchip,rk3399-dfi
 > +
-> +  interrupt-names:
-> +    oneOf:
-> +      - items:
-> +          - const: ch0
-> +      - items:
-> +          - const: ch0
-> +          - const: ch1
-> +          - const: ch2
-> +          - const: ch3
+> +then:
+> +  required:
+> +    - clocks
+> +    - clock-names
+> +
+>  additionalProperties: false
+> =20
+>  examples:
+> --=20
+> 2.39.2
+>=20
 
-Is it worth adding restrictions so that only the new compatible is
-allowed to have more than 1 interrupt?
-Heiko?
-
---/2uqOHRXXrjZKaKe
+--e2+WROMaYECLcWsp
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG5ncwAKCRB4tDGHoIJi
-0snjAPsGu+sRgh8DdDX+QFO1l4XLF6inu5NEmhRvEaPxXF/EfgEA6Gs+tEOw+1bE
-A44YiDjl2lV7sQ2e0kzLndSsi+WkhwQ=
-=UYXc
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZG5orAAKCRB4tDGHoIJi
+0ucHAP9IMyFG6czvO674KoDL2bxtyJclg3iXK5ERZj5OwBBCgwEAjKj4CDc0G7VZ
+3Sw9LBW8vUtkMyeqs1or9GnhhepHAg0=
+=eVHC
 -----END PGP SIGNATURE-----
 
---/2uqOHRXXrjZKaKe--
+--e2+WROMaYECLcWsp--
