@@ -2,115 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B5070F0CB
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 10:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AB770F304
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 11:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240185AbjEXIch (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 04:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
+        id S230000AbjEXJhQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 05:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240196AbjEXIce (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 04:32:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12EEE1BF
-        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 01:32:32 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1q1jub-0002r5-QC; Wed, 24 May 2023 10:32:01 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1q1jua-002RaV-Gm; Wed, 24 May 2023 10:32:00 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1q1juY-009jQW-0H; Wed, 24 May 2023 10:31:58 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v5 25/25] arm64: dts: rockchip: rk3588s: Add DFI
-Date:   Wed, 24 May 2023 10:31:53 +0200
-Message-Id: <20230524083153.2046084-26-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230524083153.2046084-1-s.hauer@pengutronix.de>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+        with ESMTP id S229996AbjEXJhE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 05:37:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2BDC0;
+        Wed, 24 May 2023 02:37:04 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O6fofo026930;
+        Wed, 24 May 2023 09:36:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=VQXFxZcZKyrFCWtXJjsowcqhlxAPRo6QQL79Ok5hhsg=;
+ b=UmxaMBVwY0npeAOD/nZm9kBHcChSY7ZWp94a67ebF8Qpzm6wf/nIDOqdqzPgVcEdlQcu
+ edsSUcMRyAqwXhd2th2U3ZZa9bBBUaqflvStEsM3Fn0rHUneiLdU52Ayu3P53ep1dZkt
+ /xwye+wCI83HBMRO8OjffYhrFXpxlZzwI+/OMH0nPKjaGb+UrsNgAeWwaahyUm9Z484h
+ OXA9xCuybgLXLlRHJAgLsWaZzY3H9ZvQVVslBstLxuYmAbQK4S/OU8YhDUjpCvA02jFj
+ dQmo4R7ZLSVmON+MNXvcons2xvRbkr3WrWo0TNKMra1mzmo8xItgUtNBfNdDozzsQ0c7 zg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsdhh0cpy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 09:36:24 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O9aNPe011557
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 24 May 2023 09:36:23 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 24 May 2023 02:36:18 -0700
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
+Subject: [PATCH v4 0/3] Enable IPQ9574 TSENS support
+Date:   Wed, 24 May 2023 15:06:08 +0530
+Message-ID: <cover.1684920389.git.quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: aZaueBI0v5IMblqczMdM6SoMntLNdZqv
+X-Proofpoint-ORIG-GUID: aZaueBI0v5IMblqczMdM6SoMntLNdZqv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 clxscore=1015 malwarescore=0 bulkscore=0 spamscore=0
+ mlxscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 impostorscore=0
+ mlxlogscore=785 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305240081
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The DFI unit can be used to measure DRAM utilization using perf. Add the
-node to the device tree. The DFI needs a rockchip,pmu phandle to the pmu
-containing registers for SDRAM configuration details. This is added in
-this patch as well.
+This patch set enables tsens in IPQ9574
 
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
+Depends on
+	https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
+[v4]:
+	Drop the sm6375-tsens and qcm2290-tsens related bindings
+	fix as it is already posted
 
-Notes:
-    Changes since v4:
-    - new patch
+	Remove unnecessary changes from previous version
 
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+[v3]:
+	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 657c019d27fa9..4a445d8704c8f 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -388,6 +388,11 @@ scmi_shmem: sram@0 {
- 		};
- 	};
- 
-+	pmu1grf: syscon@fd58a000 {
-+		compatible = "rockchip,rk3588-pmugrf", "syscon", "simple-mfd";
-+		reg = <0x0 0xfd58a000 0x0 0x10000>;
-+	};
-+
- 	sys_grf: syscon@fd58c000 {
- 		compatible = "rockchip,rk3588-sys-grf", "syscon";
- 		reg = <0x0 0xfd58c000 0x0 0x1000>;
-@@ -1112,6 +1117,17 @@ qos_vop_m1: qos@fdf82200 {
- 		reg = <0x0 0xfdf82200 0x0 0x20>;
- 	};
- 
-+	dfi: dfi@fe060000 {
-+		reg = <0x00 0xfe060000 0x00 0x10000>;
-+		compatible = "rockchip,rk3588-dfi";
-+		interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH 0>;
-+		interrupt-names = "ch0", "ch1", "ch2", "ch3";
-+		rockchip,pmu = <&pmu1grf>;
-+	};
-+
- 	gmac1: ethernet@fe1c0000 {
- 		compatible = "rockchip,rk3588-gmac", "snps,dwmac-4.20a";
- 		reg = <0x0 0xfe1c0000 0x0 0x10000>;
+[v2]:
+	Drop the driver change (https://lore.kernel.org/lkml/b45d33d38a334aabbd52c83b0d6028af1f4c74c8.1682682753.git.quic_varada@quicinc.com/)
+	since the tsens device is compatible with 8074's tsens
+	and use 8074's compatible itself
+
+	Rename clusterX nodes as cpussX
+
+[v1]:
+	Fix DT node names
+
+[v0]:
+	Initial patch introducing TSENS support
+
+Praveenkumar I (1):
+  dt-bindings: thermal: tsens: Add ipq9574 compatible
+
+Varadarajan Narayanan (2):
+  arm64: dts: qcom: ipq9574: add tsens node
+  arm64: dts: qcom: ipq9574: add thermal zone nodes
+
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |  11 +-
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi              | 217 +++++++++++++++++++++
+ 2 files changed, 226 insertions(+), 2 deletions(-)
+
 -- 
-2.39.2
+2.7.4
 
