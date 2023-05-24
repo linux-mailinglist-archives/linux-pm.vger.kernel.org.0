@@ -2,156 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5C770F9FE
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 17:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C37B70EF87
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 09:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjEXPWw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 11:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S239985AbjEXHgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 03:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjEXPWY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 11:22:24 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2049.outbound.protection.outlook.com [40.107.223.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA29F5;
-        Wed, 24 May 2023 08:22:22 -0700 (PDT)
+        with ESMTP id S239957AbjEXHgQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 03:36:16 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaf::609])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2F8F;
+        Wed, 24 May 2023 00:36:15 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bWZv8JIbrwYTVqpgZuRDP6a19dUkdMPBtjsq+qTTyqZG+b5KT6PbCGvTABJ6O9B6zozDTcGLmaEVncM90zRDSkj+fMFw7ha3cg0wy6UwbI+RhJKOHxzMsQU9qAub0NExDcaXzyJW1MSzi0TsQLqqh+M7YI/LKuBenKd/V6efdAaexKNft/9UwMN94SoPC06DrZY2wK/nSMxeJqwFAtBcOzxf0xjZSo/4dJYS4CdWD3E8qYzj1TuoXEdMKsQ6z3lmkdtJoTe1eOy+G4L/0an6XnRueGi62esq0vBL5j3DeGqiTjfrK7Hx0YQUaa1LRi6vIYbmk3qsAs/3+OTtNVNcHQ==
+ b=caSxp5NTN/DAxGGUfe5oXeUEM6I5AaDsgoOqEE7LQJB+CraU7De9mQ0zqqSnw2T6olT/5LpVAeYlSetK4NpRly5idtlUPrO2qMsHcKXQtvS32n1OnwHC+2In9Ccex8PyVaTWjYO/vGx6k0TvHK973wRC8VjhfSs2LTdJyCVqoypQ6sdDJKWEr3eAa/S5Zw3ViVKWAafHwAdG4a/SGs9zg8Lcc2ZoJP3Rj2d3jjbIBVk9I8ry9CxV7+XrGnPkUWahtwxJAq7jJlUPQ8Gx/FG/1W6tqu9tGmZ91ObXKnDdk7+R6HA+SWIkm6se21/zgfobwEHanlkQQmKM9ipfh96J7A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QYLBkh1JwuGcWKNkwufe7MgWSU5eNBqDSsmnx43WOIM=;
- b=DIVhgxVZ8A6bkAkoLuE5qr/MyXTInfOJKRRIgdhU+63hIXpHJaPlSLpr9KkWrAxZm3wCtw+sJhUvim9EEQQWui+8I4s5+vFhhu6uBV1cdbuLJn/I6PxnhLc8wBOGRRqGxtm21wIBa38k7ZaWEXvXWFX3nwX6EYs2Ey4PQAq9ESbhRQO0aMzdDMjZoclkP4q3uLbSNOl+0sQeawDxGfIUya3arLCTLCTivM+1NrpGogdZw+X1acaF/QIUjInhAGxaaNXqgkIs5EZ/vHsSrlaPubt/RPzY6bNpzW5k5Hj+POVoEDakAW41fl0Nwde7aeoBxuQNvNFSN7TPMcTHoT45ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=mnS6c7Cs2mSUih8jW4N3wv7WrKDYKtgTAG03X0paeBs=;
+ b=LjM70rq2bZx0Cm2yjxLHMZbgrmx33AQsQUtIHWGz4BeD0cyWGmVF2sPEIbTmHznXVy0blrFGHmzAZQLW2yQ64/rpsx8/VL2wxwkFZBs5JG/ijuTyCTfWzZETMiBV0jzhmrzBGfyr/o1oHhbfFM3h6vWHAyXWuHgXrHktxZRvol1OpFqTDuS+C8pHy+It+FBARXfksXNKEfIIlbHtVtmkSlQ4GReN8vziqhFJ8C2QlDup+dOigenG2WebIXxJWPKO2PvMkUmzHQfUuMITJxXfnDBpQNgwzcwjI/++yFUsinlyCr8fI32BsAzpyWY+gtW7VyHNzgdaOdlf08u5jT1y8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QYLBkh1JwuGcWKNkwufe7MgWSU5eNBqDSsmnx43WOIM=;
- b=jkG3rCsC++Irs4HmSQ77diWZI042SawpP0NLZyp1mmo4QYqukSUHHr/Q0yMF8knt50DCAyxldwT1J9woZ/HuMTUmv3X3oTyV4F4Be0poJiQNK1UFQC37U4ZI4KEnBCKDBljPfmtynAMrt5OykKn7P1x/Pmd14mA6YgmVVy2SKU0=
-Received: from CYZPR10CA0002.namprd10.prod.outlook.com (2603:10b6:930:8a::6)
- by SJ0PR12MB6902.namprd12.prod.outlook.com (2603:10b6:a03:484::7) with
+ bh=mnS6c7Cs2mSUih8jW4N3wv7WrKDYKtgTAG03X0paeBs=;
+ b=MtUZCRiNuYuTowb6VQfCxFr5UX/ugMFtEoSkJ5TnyfJPQ1SlaF3qni7qahPbhvguvA/Qfz18dHRAV0eI2rc03jJhvLChO5MP3OVlEBTQY0KpqO+oZQeQFbblmlTGR5w+HYsEC2J939bmKkoxkR9IhreDjUVUQ/5HkBbBE2itAi8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8304.eurprd04.prod.outlook.com (2603:10a6:102:1bc::10)
+ by PAXPR04MB9375.eurprd04.prod.outlook.com (2603:10a6:102:2b3::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15; Wed, 24 May
- 2023 15:22:19 +0000
-Received: from CY4PEPF0000C973.namprd02.prod.outlook.com
- (2603:10b6:930:8a:cafe::c0) by CYZPR10CA0002.outlook.office365.com
- (2603:10b6:930:8a::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.15 via Frontend
- Transport; Wed, 24 May 2023 15:22:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000C973.mail.protection.outlook.com (10.167.242.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6433.7 via Frontend Transport; Wed, 24 May 2023 15:22:19 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 24 May
- 2023 10:22:12 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "S-k Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        <linux-pm@vger.kernel.org>, Lukas Wunner <lukas@wunner.de>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Iain Lane <iain@orangesquash.org.uk>
-Subject: [PATCH v3] PCI: Don't assume root ports from > 2015 are power manageable
-Date:   Wed, 24 May 2023 10:21:36 -0500
-Message-ID: <20230524152136.1033-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.29; Wed, 24 May
+ 2023 07:36:11 +0000
+Received: from PAXPR04MB8304.eurprd04.prod.outlook.com
+ ([fe80::513b:76ce:48c9:f9f2]) by PAXPR04MB8304.eurprd04.prod.outlook.com
+ ([fe80::513b:76ce:48c9:f9f2%6]) with mapi id 15.20.6411.028; Wed, 24 May 2023
+ 07:36:10 +0000
+From:   Zhipeng Wang <zhipeng.wang_1@nxp.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] cpufreq: dt-platdev: Add MODULE_LICENSE
+Date:   Wed, 24 May 2023 15:34:16 +0000
+Message-Id: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+X-Mailer: git-send-email 2.25.1
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: SI2PR01CA0001.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::13) To PAXPR04MB8304.eurprd04.prod.outlook.com
+ (2603:10a6:102:1bc::10)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C973:EE_|SJ0PR12MB6902:EE_
-X-MS-Office365-Filtering-Correlation-Id: ad197781-c17e-48eb-6328-08db5c6aaa3f
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8304:EE_|PAXPR04MB9375:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b7b9fb2-4057-4e9c-3df3-08db5c298b43
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4/79Siq/efG6Hl8vqDMt/nnE1k0/D5ua61M5n3YoCQ/vxEzKX8WWI4uKHwz7bEMK2uUjasCYzth7TlT8HTgrWSEQc0ZTF2u1VtGF90LZD7RWzEZ74PnCqCF8QdTuIjI1mqZQFshwjEAtdlT6XszBBiZKeaTnYq75fyQMAtAgSWEIpj5JUEqC6029mfVEx+m4VmKUcwlqoGGivB+lqSIv41/yRdaSSHD1GWqshq8h3pfEVdyfdr8Cy8i4oE47W3Nuq0O3Qk/mwGGSr4DI/f/N/2DUndGGfSGbpZ2eh0CouxK1eyCKC4fWhr3Oxo3dfNwb5Mi7zymH7Pj3UuK5FSFTOX90doaGEORbZgww2GFIJf/Ix3yrlxq58897vpW824/yVUMeuIHbtLXN6PloF0l+uSwnDd/IUIrrSPY3re5jwDX2tWZiGaey/V54TDzLhR2mZ15e57xuJvPeZYyeZGsVDT14fZRS5QnMyaNCEDIXyYwQ411K3Vvryx0D3JfChsk/XGdZwRNyZPogweHTT17h+j/g3DyRjkHBHRtMgdoWM+VCl9XmGCeItsYSRbBJzDdYG82l5G8pWc5XQ7qOA8GAgbzY0Vls1jGmiNXpDyESlB5gjcr3HmDtee4Hy2xIqWe+jynRtU+pJ/LzNJxaPmpv7ZYn4vv/L3DQ7XB5kloXuBVD2D2pLnb8GHoXEU6GfqcjhPQmPqcKNvbDWS45d0T+tH2rzG61cBf4uKX8kr0DrTYWldkfzAuJaZ1e0LcUIGgnUUB4RF3sYwpGcth1yo51Vg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(54906003)(110136005)(6666004)(26005)(1076003)(70206006)(70586007)(316002)(4326008)(7696005)(41300700001)(966005)(478600001)(8936002)(8676002)(5660300002)(40460700003)(40480700001)(2616005)(83380400001)(86362001)(426003)(336012)(36756003)(2906002)(356005)(82740400003)(81166007)(82310400005)(44832011)(16526019)(186003)(36860700001)(66574015)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 15:22:19.4532
+X-Microsoft-Antispam-Message-Info: Tk6qOshHhAgwhSi5X80z7we8b8tN2JP2mPya65OOKXkgyFmLrl01CQagRawofTD1xPNHUHDlsFe6cmdGsJSttVZ9CM9ZMcPNntYVprXvE1C4N49IQkxlZo7N1kItIyZ2dKjnbq/ObDOsfRWepYanAAvGxHXL6EJ06Fuz9vBhjkzPQlEZa2CSEdq2drB/m7YdDl9ox+4jZzkFbOadKCK//9NbXoGQ5z3UFBza+NBMfQSynEQ9FMRGMcfSNjpf0ZUNXDfvLLsQVgJRRaRYz6B303QzCGJn5TL77T7PbfdJm0LtBK0t42fQuILNPsuYHtOQiRPNLqlwhtWjpi2KLx3k4lEL1AtnPakVN7h5wxFsDDn8nm4ioNc72Q2plD0WYNy/PvZ/iYDvk16mRFSLnP47H8/chSSyPIShoS8/dW0+tV66YiYsRurR++TalX9gofwUDs/KBO9XACJQgnrxiRB8TiNZz2CCxmb1VRAgrCszHc6YRQZ52XjX5yHNNZp/Y0Gfmam9HqZr0xOaRRkI/nOHh7oKDPRZy3vBJ5E5KY3ANGC6dqyREcxcHFW37iStVBP+jdgMQYydGUz+wiRhn7aj49ZK+/CQnhZ+jdi1LUIApBM2o1ISHgsLwEke0Z32sNhL
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8304.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(366004)(376002)(451199021)(26005)(6512007)(1076003)(6506007)(2616005)(186003)(2906002)(4744005)(36756003)(4326008)(316002)(66476007)(66556008)(66946007)(41300700001)(52116002)(38100700002)(6486002)(38350700002)(478600001)(8676002)(86362001)(8936002)(5660300002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bcPdKYf/HxLZyag5W+TF1uvuyNbwLR7wC2F8o3lDGrFSBe2bQ37sWntn3zfa?=
+ =?us-ascii?Q?ExBS/6sZ68S25fUlofu2zqSEMI9/Mv9tZDIbXd+qVjg/w71+avAy31Zy//Un?=
+ =?us-ascii?Q?pycOWwp1UgvR7UH5LuSKwUc07wItUJBue4xrclCI0ry/nVml+mWmXURMAlwA?=
+ =?us-ascii?Q?AmZrmknvzu9z7fMeEQ9y4zitSotq1Ac5L1+HYLPqGkUTeUfdSop4DnokrjKO?=
+ =?us-ascii?Q?PexMJ2mLwTh0f9pGvkiklT2T0Y2ntjdFNzXWRZ+7srpWqQIlo7IEx0dbEOTt?=
+ =?us-ascii?Q?v+UbS+vrqEd4bgtn+JDSOqBABbwOP/U1p1//uajkbsmrGbYaz2Zo3E9pGCeJ?=
+ =?us-ascii?Q?pMwT0/Yl0m2rbn/fKE6gcb2sptKi52OF7yS3/JPNS9OqOD4ffF/618j4rrKu?=
+ =?us-ascii?Q?+yPvOW8PWa+BXfM9qw7bNkhjmdC8R08fYMnqC+bm/UEoiQPGHsB9Zn2VaZZZ?=
+ =?us-ascii?Q?p/tXC5MhvL7Z/L6taAo5Z/bZRtr3rEUQvd9J8MX/Xg+aeCM96YXl54/QiVwK?=
+ =?us-ascii?Q?rZ/zgWLdZ05hgKYc+GaGOhLdcL0ZzMp9CIBzqKd79HgkgjP8uhHNwF01b/gZ?=
+ =?us-ascii?Q?wYnVy2eD5suL4GM8gA0kce+o/1utjCQnFj+7iv1oR8oCfOBV6QIsQcXPB8s5?=
+ =?us-ascii?Q?3MbcGuXEQwk276DIU/IrOeeIruP1pcMeQLBVQ062f0GbYiCVu2P39LZdtJhI?=
+ =?us-ascii?Q?XHz3TYvvAtUpAKVNBFoqWVDXkLsuctlwbdu2wXQtGxF7emSC8PLPLyxrC2RJ?=
+ =?us-ascii?Q?3GSzNIIjgM08NwY9Qik25Zf49IMDOXBfTAE0OnB9F7Wd2Ov2Z7/RCg3y7z5T?=
+ =?us-ascii?Q?7/AXf0zlKpr6XoXe1+Y4rccLZqFK3XU0zXahaDmjeQMZm6LlfAiD47fz7BK1?=
+ =?us-ascii?Q?Wrp8WeFYnSQvyZkkj0LQ/C921wHEqKLMM+8DL9ck+EiV3wGGCSMBUMV+cIvr?=
+ =?us-ascii?Q?DUq7kXKnqwoluMflwB2mxfvm0FzBXki3YFG+mITwjJpf2/h3ItFm9ladeD1f?=
+ =?us-ascii?Q?bWbSxdSiO3oBmBX4UWMAmDc3qhVMPZ2/It5VpBZZtk+DGLkEoCG8cY5beET+?=
+ =?us-ascii?Q?qeBRjVQ6ialZ8JWEE7VQU6YmTZdb8jG07CcqQgJK8FAaIKU4UN88TW6HuXXE?=
+ =?us-ascii?Q?psqAUqXoARwwCmO5bFBnMz7zPwX6D05YdeMhHt0uRkoQkjGTDowq+KVxX/Br?=
+ =?us-ascii?Q?fm5xhj/748NThu3q+hBc7HeNo1nIbd0pDckgaRD8dF3Pak34xvO/YLkETbBc?=
+ =?us-ascii?Q?QafmRckTP6pQxvyPN8DtruFeGbqOemUN5Tn4bk+GKjdDJg9s0p+YYu9DKn5z?=
+ =?us-ascii?Q?/5FKSdlAEqJ4ewn9ccgDJFafKV/Zvv0+/X2g485G03aqOuovMhJDqC8xX3if?=
+ =?us-ascii?Q?e3v5Q4FXiMNE8An9f3aB1hRgF+hdc096JV2Ga/jhficUAWKWbkyM0n56I/uP?=
+ =?us-ascii?Q?PHkqgPqzwgErZO+j0tDZ+xb9AdAiDAYvMH+wViK+A4qWm6exXN7ZvpSciOM9?=
+ =?us-ascii?Q?O3/710liCI45aQTBolQG1HBSbKQbWDBhlvgVT4tgvlZ/cxvcXCGwuttBEubs?=
+ =?us-ascii?Q?pZjm9YJZKfUmxaWLmuhUduQxig7Fx3VZZFrBWnwc?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b7b9fb2-4057-4e9c-3df3-08db5c298b43
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8304.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 May 2023 07:36:10.6841
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ad197781-c17e-48eb-6328-08db5c6aaa3f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C973.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6902
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tf9cMMzFWNTv6fyjr55zeTjWeAnpvN2R4muDr2uPscpolHckTvHrX3ygfxl5Vv0mZPwJH3ZOk+RBLFFY3+qRVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9375
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Using a USB keyboard or mouse to wakeup the system from s2idle fails when
-that XHCI device is connected to a USB-C port for an AMD USB4 router.
+Add MODULE_LICENSE to support building as module.
 
-Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-all PCIe ports go into D3 during s2idle.
-
-When specific root ports are put into D3 over s2idle on some AMD platforms
-it is not possible for the platform to properly identify wakeup sources.
-This happens whether the root port goes into D3hot or D3cold.
-
-Comparing registers between Linux and Windows 11 this behavior to put
-these specific root ports into D3 at suspend is unique to Linux. On an
-affected system Windows does not put those specific root ports into D3
-over Modern Standby.
-
-Windows doesn't put the root ports into D3 because root ports are not
-power manageable.
-
-Linux shouldn't assume root ports support D3 just because they're on a
-machine newer than 2015, the ports should also be deemed power manageable.
-Add an extra check explicitly for root ports to ensure D3 isn't selected
-for these ports.
-
-Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-Reported-by: Iain Lane <iain@orangesquash.org.uk>
-Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
 ---
-v2->v3:
- * Only apply to root ports
- * Update commit message
----
- drivers/pci/pci.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 5ede93222bc1..51126891a2db 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -2976,6 +2976,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
- 
- 	switch (pci_pcie_type(bridge)) {
- 	case PCI_EXP_TYPE_ROOT_PORT:
-+		if (!platform_pci_power_manageable(bridge))
-+			return false;
-+		fallthrough;
- 	case PCI_EXP_TYPE_UPSTREAM:
- 	case PCI_EXP_TYPE_DOWNSTREAM:
- 		if (pci_bridge_d3_disable)
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 338cf6cc6596..54529aa16d53 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -214,3 +214,4 @@ static int __init cpufreq_dt_platdev_init(void)
+ 			       sizeof(struct cpufreq_dt_platform_data)));
+ }
+ core_initcall(cpufreq_dt_platdev_init);
++MODULE_LICENSE("GPL");
 -- 
-2.34.1
+2.25.1
 
