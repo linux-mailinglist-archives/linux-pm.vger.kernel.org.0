@@ -2,80 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D4A70F5A8
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 13:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E80570F693
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 14:35:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjEXLur (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 07:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
+        id S230138AbjEXMfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 08:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjEXLuq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 07:50:46 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6172B10CC
-        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 04:50:07 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f60dfc5f93so7356305e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 04:50:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684929005; x=1687521005;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4G5qr+y8Og34U7/wuDAr7A7OdYIwtt1sXsW3Z1wgc7s=;
-        b=FLh2wEpBZnXzP6FyUREj4UtF+u+VMWaRCMJY5DDGY/zxhOuCy86kMpFs24uUtSXZe/
-         lEZKCSmMHCPocGNBOZ7IuVXjiTWElwGNLJIdbNk9oe9TRW9cTTSg1JdfEJTpasqH7+uk
-         sqvgep9fcZCAeq6AHcY8Ct8gJPqsbVbCVgu2huLpKSj83ya1flHYFYuqqb2btaV4T13E
-         NvtFxsJWVBcy7LOH/2MG4rbgZ8KeS3gfZHGLz9gobcz7Y0PwnDYei7ryheFwq+jTYoH6
-         tvh0rWGAugf23f4dr0kKFAGk3AwFoher5z1z8BvVVcrFPC/Mkj+fiaXc+N+ygy/tvrW9
-         AGgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684929005; x=1687521005;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4G5qr+y8Og34U7/wuDAr7A7OdYIwtt1sXsW3Z1wgc7s=;
-        b=dT5aNZM8X0/ruUBA2h6i3fZnt1PvjCoiR8sadZz/tbnHhoSXzI4hNTjr1E27t1oqeK
-         1e0iCjfw94gLEnV8D3VHNsi09Uy+ivVJQquPJqkmJARuP2OfcKa+wWAT0xPHtVHctaiz
-         WhauYpehCufEhHT3ulgmGKr/9VRX2bTFsqlFoFY96k625lGbRdhE7lPcnL3WBOIlQByd
-         H10TUpXSFy1h5NqAqjI+XSvD5nwANvxFdT98pEvgLwWQZXHx9gaHJ4XCyaK5eUNMfxRO
-         COpBmQ6CqhsTiMmi4JsbhqlGg2cKloXg4jAFO3R1pnAruWy5mLaxzdY2NPB7TjCOB05I
-         v8nw==
-X-Gm-Message-State: AC+VfDyJ2GXGOmDhFU1GShUAI0AcAJK/qpKG2REwR05C78D38YjYko1N
-        GBYBGheSq8rCH2dZqGI+Gtu3SA==
-X-Google-Smtp-Source: ACHHUZ5THFSDvb91AuGnOhK8nElYleH7LWUlOjDpqU2ToXSDnl/8XKLy8wFBwVoEQZSxitOFSzNUjw==
-X-Received: by 2002:a1c:7315:0:b0:3f5:9ba:442d with SMTP id d21-20020a1c7315000000b003f509ba442dmr12902482wmb.33.1684929005471;
-        Wed, 24 May 2023 04:50:05 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:fd45:6a0d:5512:e76? ([2a05:6e02:1041:c10:fd45:6a0d:5512:e76])
-        by smtp.googlemail.com with ESMTPSA id i1-20020a05600c354100b003f61177faffsm3916021wmq.0.2023.05.24.04.50.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 May 2023 04:50:04 -0700 (PDT)
-Message-ID: <5ee23c8d-a9a6-f93a-ee6c-a7dd1285a806@linaro.org>
-Date:   Wed, 24 May 2023 13:50:03 +0200
+        with ESMTP id S229611AbjEXMft (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 08:35:49 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4B39E;
+        Wed, 24 May 2023 05:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684931741; x=1716467741;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aIQ08FazEATaZLqUbE2A3gNV7nxZaTgJKb/zA3gePik=;
+  b=VXNbiGwFEVIic9HWk12LX2v6V9Nn7TxBqil0FkCDgyVxIXF+zK3OM3Nb
+   WBIGHVstYqeX8MbFanNj/SGdqloMUMq3RHW4oKCs3h1khUyn0DfytlMKK
+   5ZXLky1QapI/H4WKwXbDDCyA6xGG3FDi/6BpSdPW25iPZt953tyGz5ARE
+   zJm8uVb5y5v1dmnSdpLNK+5FxR7xccBJZU2mjYX8yewwQXANrRQScCRXM
+   9U29aS3+WAvD8DX/QGG7VDd/wF/lW9oDorK0J7m/TYsoNP8a7cf94Cs7P
+   ZAqkWiWsfa59P2nbG5fIfgEwYnd/ahtzFUj8df8NxOSd24+437vr9ZvHM
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,189,1681196400"; 
+   d="scan'208";a="215268121"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 May 2023 05:35:40 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 24 May 2023 05:35:40 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 24 May 2023 05:35:36 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <sre@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v2 0/4] dt-bindings: power: reset: at91: convert to YAML
+Date:   Wed, 24 May 2023 15:35:24 +0300
+Message-ID: <20230524123528.439082-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [CfP] Power Management and Thermal Control MC (LPC2023)
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
- <745b8b17-af4d-e8e1-83c1-89d600e7cd19@linaro.org>
- <CAJZ5v0iqWMKZo8yJMqymwLwZK9kXJFi89USd96A-H+aktSYT+A@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0iqWMKZo8yJMqymwLwZK9kXJFi89USd96A-H+aktSYT+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,98 +64,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/05/2023 12:25, Rafael J. Wysocki wrote:
-> On Wed, May 24, 2023 at 10:06 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 22/05/2023 19:12, Rafael J. Wysocki wrote:
->>> Hi Folks,
->>>
->>> I'm going to submit a Power Management and Thermal Control
->>> micro-conference proposal for LPC2023 along the lines of what happened
->>> in the previous iterations of it.
->>>
->>> If you have topics that you'd like to be discussed there, please let
->>> me know by Friday, May 26.
->>>
->>> Please note that LPC MC topics are expected to cover work in progress
->>> or at the concept stage.  They are not supposed to be about work that
->>> has been done already.
->>
->> * Create a relevant debugfs thermal infrastructure + cleanup the sysfs
->> debug related information.
->>      -> average temperature (overall / moving)
->>      -> mitigation episodes (duration, temperature max, min, avg, average
->> performance througput)
->>      -> thermal zone behavior (temperature slope dT/dt vs performance
->> througput)
->>      -> more TBD at LPC
-> 
-> Sounds good.
-> 
->> [ RFC series ready but depends on the generic trip point ]
->>
->> * New thermal trip types. Currently we have 'hot', 'passive', 'active',
->> 'critical' trip points. The userspace needs to deal with the thermal
->> also but in a different manner. Currently, it has to poll the thermal
->> zone to get the temperature, thus introducing more wakes up on the
->> system. However the sensors have now a programmable register to trigger
->> an interrupt and the userspace may benefit that. By adding one or
->> several writable 'custom' trip points, the userspace can program a point
->> to be notified and do an action. So we separate the actions from the
->> kernel to protect the silicon and the ones from userspace to manage the
->> overall thermal behavior in the system at lower temperatures.
->>
->> [ depends on the generic trip points ]
-> 
-> So this basically would be an interface for user space to add a trip
-> point at run time?
+Hi,
 
-I was thinking about a description like any other trip points. So they 
-will be added in sysfs as trip_point_x_temp. The thermal framework will 
-ensure the trip temperature is below the temperature of other trip 
-points types.
+Series convert AT91 shutdown controllers documentation to YAML.
+Along with it device trees were updated and also entries to
+MAINTAINERS with documentation files.
 
-> What about a "send me an event if the temperature is equal to this"
-> interface instead?
+Thank you,
+Claudiu
 
-If you add a writable trip point that is what the thermal framework will 
-do. The idea is to clearly identify an 'userspace' trip point which will 
-be writable, other types will stay read-only.
+Changes in v2:
+- use minimum, maximum on uint32 enums instead of all possible values
+- change commit description for patch 3/4 to explain why there is a
+  syscon along with microchip,sama7g5-shdwc
+- remove | near description entries
 
+Claudiu Beznea (4):
+  ARM: dts: at91: use generic name for shutdown controller
+  dt-bindings: power: reset: atmel,at91sam9260-shdwc: convert to yaml
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: convert to yaml
+  MAINTAINERS: add documentation file for Microchip SAMA5D2 shutdown
+    controller
 
-> But yes, as a discussion topic this would be fine.
-
-Yeah, we can see that is already triggering a discussion here :)
-
-
->> * Thermal management without the time dimension taken into account is
->> too simplistic. Add this dimension in the thermal information for better
->> decision (eg. notification when a temperature is above a temperature
->> after a duration)
-> 
-> OK
-> 
->> * Improve the step wise governor. The step wise governor may take too
->> much time to react when there are many cooling device states as it will
->> increment with one step at each update (eg. idle cooling device has 100
->> states). That may result on overshoots. Depending on the temperature
->> slope we should increase the number of steps for the cooling action. The
->> result should be some kind of PID regulation loop but simplified
->> regarding the power allocator.
-> 
-> Sounds good, but it is kind of minor with respect to the above.  We'll see.
-
-No problem
-
-Thanks!
-
-   -- Daniel
+ .../devicetree/bindings/arm/atmel-sysregs.txt |  94 --------------
+ .../power/reset/atmel,at91sam9260-shdwc.yaml  |  82 +++++++++++++
+ .../power/reset/atmel,sama5d2-shdwc.yaml      | 115 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/at91-qil_a9260.dts          |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts   |   2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9260ek.dts           |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi   |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   2 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
+ arch/arm/boot/dts/usb_a9260.dts               |   2 +-
+ arch/arm/boot/dts/usb_a9263.dts               |   2 +-
+ 24 files changed, 218 insertions(+), 114 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
