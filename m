@@ -2,156 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7E270FD1F
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF90070FD39
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 19:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbjEXRrt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:47:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
+        id S231376AbjEXRwE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 24 May 2023 13:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbjEXRrs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:47:48 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017691B0;
-        Wed, 24 May 2023 10:47:23 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96fc07d7e6bso29977966b.1;
-        Wed, 24 May 2023 10:47:23 -0700 (PDT)
+        with ESMTP id S229630AbjEXRwD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 13:52:03 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD236B6;
+        Wed, 24 May 2023 10:52:01 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f44435d92so36069866b.0;
+        Wed, 24 May 2023 10:52:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684950442; x=1687542442;
+        d=1e100.net; s=20221208; t=1684950720; x=1687542720;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MtHsKfwHpJ/MA8hmcGf3XA0dHKGtuHV+9hRCpO7LUUQ=;
-        b=YbRSDzMKa4jU5aZFXUWeYeO9W8pvI2ZNPxhznCKYmIcKOgXtPAzg/bgdNOGwMjuq0w
-         xjT2OkYWUxHulq+QISGoK+VFfwJtgVJnrWrw0SEiTZRLS4BJY1E2F8NsUZ//5/bXLulB
-         ucxyN3+Lo5FOOWKBH+XTHOA79+mlsKwha8NHIeYgFBbuZeDsCrOIFxzsse6Xaa0NehBh
-         u0zDuV9VfKlovPGo8WPjPj2qhY3npQ7Itu83Fqd7rTM9ilkz/i+6BRrjxtKVVIKeobTI
-         2RmZN+uTxNGumuvZUm6XsscgyTllQlqVji966qm9+WY6eXPghKn5DbDm4ViT18WDpT11
-         uKvw==
-X-Gm-Message-State: AC+VfDy1W1Tjml2M8LpTlwOyGj14eAMYqT0Hfg0e67z9jIpuz+MsmnuR
-        djFz5r9PaI+DhtPqyaGa3dM9BgTPCSqp9FxUx/aTef59
-X-Google-Smtp-Source: ACHHUZ7wV5rpKfHlT4Qvg5kxQ7ILIFzV9E6zc6/Zo7WWoX8XyhFI0scNMfjaJOLlZP/M2c0c5gL6LM9eBkeEvdEzDtQ=
-X-Received: by 2002:a17:906:7a52:b0:965:9db5:3823 with SMTP id
- i18-20020a1709067a5200b009659db53823mr15874562ejo.3.1684950442317; Wed, 24
- May 2023 10:47:22 -0700 (PDT)
+        bh=A8s+iCfLGhAWMeUCmISWbcng6Ztiz5xZ2WYWKuHiGSM=;
+        b=lF4CE7v3mkS5uyHcSO3DBJsY2RIW2jmgW7C2ODtdsVJjqUwAU9J20fCEvLMVFdD/GZ
+         w1E38YNRYMWyBgxeMz7wY40FTrUvw2gvt0npA9vyqdHtWRrl7WSQ5sU+170Fc3J/2WGp
+         VZrbHcktcSUTxTnNqh1TRtmZTQnMdxqn/XvVuazkN0865Q6FYBM9vNjh4Op8UFzYkT6g
+         25mXHJPWvCloZMugvWwsd8QOz/YCcCmMkDSX/byTEZDdLTPeuI3KB54IvDLODwjKEUY3
+         cGhy5a8LyXoiiTGGaURqEhxz6EF9fukhYJbYmHlwjVVvO90f6UtV3s5xw0hlXWI20VKB
+         mHbQ==
+X-Gm-Message-State: AC+VfDysLP9+W0FFnabPqAYDkKNo+g7qB8m4d9eCeCkL86IPOUe+cxAh
+        WQc+1olkRUWMa9o9zQvDHEDT+indzuuilqjy8pg=
+X-Google-Smtp-Source: ACHHUZ4YXBkzSuEfty00UMlynnqkeyUgeGVEfPlZ+2J8FPdlV5kw/fEgWNxRTkh05T2PyijTLADuM1aNeKD5o0+b3Sk=
+X-Received: by 2002:a17:906:77d8:b0:959:37cc:190e with SMTP id
+ m24-20020a17090677d800b0095937cc190emr16001159ejn.3.1684950719996; Wed, 24
+ May 2023 10:51:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517162817.8538-1-wyes.karny@amd.com> <20230517162817.8538-2-wyes.karny@amd.com>
-In-Reply-To: <20230517162817.8538-2-wyes.karny@amd.com>
+References: <20230522223844.2330343-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230522223844.2330343-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 24 May 2023 19:47:11 +0200
-Message-ID: <CAJZ5v0h+frxNpTz4GsjQ=OdbXXnTgLB=ufA5P2pNjbDF_FhNUQ@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] amd_pstate: Add ->fast_switch() callback
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+Date:   Wed, 24 May 2023 19:51:48 +0200
+Message-ID: <CAJZ5v0izNboNVZHvtV+-hB7e7P73MfJAMj5i0SjFRJwVAt4D3g@mail.gmail.com>
+Subject: Re: [PATCH] thermal: int340x: Add new line for UUID display
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gautham.shenoy@amd.com
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 17, 2023 at 6:29 PM Wyes Karny <wyes.karny@amd.com> wrote:
+On Tue, May 23, 2023 at 12:39 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+> Prior to the commit:
+> "763bd29fd3d1 ("thermal: int340x_thermal: Use sysfs_emit_at() instead of
+> scnprintf()"
+> there was a new line after each UUID string. With the newline removed,
+> existing user space like "thermald" fails to compare each supported UUID
+> as it is using getline() to read UUID and apply correct thermal table.
 >
-> Schedutil normally calls the adjust_perf callback for drivers with
-> adjust_perf callback available and fast_switch_possible flag set.
-> However, when frequency invariance is disabled and schedutil tries to
-> invoke fast_switch. So, there is a chance of kernel crash if this
-> function pointer is not set. To protect against this scenario add
-> fast_switch callback to amd_pstate driver.
+> To avoid breaking existing user space, add newline after each UUID string.
 >
-> Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
->
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Fixes: 763bd29fd3d1 ("thermal: int340x_thermal: Use sysfs_emit_at() instead of scnprintf()")
+> Cc: stable@vger.kernel.org # v6.3+
 > ---
->  drivers/cpufreq/amd-pstate.c | 36 ++++++++++++++++++++++++++++++------
->  1 file changed, 30 insertions(+), 6 deletions(-)
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 5a3d4aa0f45a..45711fc0a856 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -444,9 +444,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
->         return 0;
->  }
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 810231b59dcd..5e1164226ada 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -131,7 +131,7 @@ static ssize_t available_uuids_show(struct device *dev,
 >
-> -static int amd_pstate_target(struct cpufreq_policy *policy,
-> -                            unsigned int target_freq,
-> -                            unsigned int relation)
-> +static int amd_pstate_update_freq(struct cpufreq_policy *policy,
-> +                                 unsigned int target_freq, bool fast_switch)
->  {
->         struct cpufreq_freqs freqs;
->         struct amd_cpudata *cpudata = policy->driver_data;
-> @@ -465,14 +464,37 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
->         des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
->                                      cpudata->max_freq);
+>         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; i++) {
+>                 if (priv->uuid_bitmap & (1 << i))
+> -                       length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
+> +                       length += sysfs_emit_at(buf, length, "%s\n", int3400_thermal_uuids[i]);
+>         }
 >
-> -       cpufreq_freq_transition_begin(policy, &freqs);
-> +       WARN_ON(fast_switch && !policy->fast_switch_enabled);
-> +       /*
-> +        * If fast_switch is desired, then there aren't any registered
-> +        * transition notifiers. See comment for
-> +        * cpufreq_enable_fast_switch().
-> +        */
-> +       if (!fast_switch)
-> +               cpufreq_freq_transition_begin(policy, &freqs);
-> +
->         amd_pstate_update(cpudata, min_perf, des_perf,
-> -                         max_perf, false, policy->governor->flags);
-> -       cpufreq_freq_transition_end(policy, &freqs, false);
-> +                       max_perf, fast_switch, policy->governor->flags);
-> +
-> +       if (!fast_switch)
-> +               cpufreq_freq_transition_end(policy, &freqs, false);
+>         return length;
+> @@ -149,7 +149,7 @@ static ssize_t current_uuid_show(struct device *dev,
 >
->         return 0;
->  }
+>         for (i = 0; i <= INT3400_THERMAL_CRITICAL; i++) {
+>                 if (priv->os_uuid_mask & BIT(i))
+> -                       length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
+> +                       length += sysfs_emit_at(buf, length, "%s\n", int3400_thermal_uuids[i]);
+>         }
 >
-> +static int amd_pstate_target(struct cpufreq_policy *policy,
-> +                            unsigned int target_freq,
-> +                            unsigned int relation)
-> +{
-> +       return amd_pstate_update_freq(policy, target_freq, false);
-> +}
-> +
-> +static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
-> +                                 unsigned int target_freq)
-> +{
-> +       return amd_pstate_update_freq(policy, target_freq, true);
-> +}
-> +
->  static void amd_pstate_adjust_perf(unsigned int cpu,
->                                    unsigned long _min_perf,
->                                    unsigned long target_perf,
-> @@ -715,6 +737,7 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
->
->         freq_qos_remove_request(&cpudata->req[1]);
->         freq_qos_remove_request(&cpudata->req[0]);
-> +       policy->fast_switch_possible = false;
->         kfree(cpudata);
->
->         return 0;
-> @@ -1309,6 +1332,7 @@ static struct cpufreq_driver amd_pstate_driver = {
->         .flags          = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
->         .verify         = amd_pstate_verify,
->         .target         = amd_pstate_target,
-> +       .fast_switch    = amd_pstate_fast_switch,
->         .init           = amd_pstate_cpu_init,
->         .exit           = amd_pstate_cpu_exit,
->         .suspend        = amd_pstate_cpu_suspend,
+>         if (length)
 > --
 
-Applied along with the [2/3], thanks!
-
-Do you need them in 6.4 or would 6.5 be sufficient?  Also do you need
-them to go into "stable"?
+Applied as 6.4-rc material, thanks!
