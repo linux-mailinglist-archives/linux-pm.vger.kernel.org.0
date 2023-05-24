@@ -2,316 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF7A70F307
-	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 11:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A23470F394
+	for <lists+linux-pm@lfdr.de>; Wed, 24 May 2023 11:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjEXJhP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 05:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
+        id S231735AbjEXJ5K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 05:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjEXJgz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 05:36:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9EBA7;
-        Wed, 24 May 2023 02:36:54 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34O7lGw1002007;
-        Wed, 24 May 2023 09:36:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=KO04TejNcw+K1nlzoaCwibJTPYCBLhl01pLzVmpMwK8=;
- b=B9Hg1Blpb2zA7DE/mAMdj6tYe5BoVFaiVp4Ep1rvk7tQ9IxpS2gbpFPdgBlmjTwQNPI8
- YLtMbSTQXykc8JKRU6SPiLHjMzIZJH7ormOJ28Y/5Y9qy/g5szffkxmT0eU+WaDcIPcB
- /G5sRUYi5obM+XXfC9GmhFEJxqlPNYn9c7H5W/00YEUHJ/iC66gkXSXUb0hIoPSZoHDN
- J3ZMVzhLhFCdQyZ4iJkz7uCxgp8FStjGQCrfZWG2JbyzXCgotRjYKU9Z7Q0mP0vogusw
- l4UrZlkNggwV4P2iGsUrl053i4dDW2Lz2vbk1nB2ycxXrNb2XHG54zxgiP6IUGL7u7dE jQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qs805h044-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:36:40 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34O9adLE011777
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 24 May 2023 09:36:39 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 24 May 2023 02:36:33 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: [PATCH v4 3/3] arm64: dts: qcom: ipq9574: add thermal zone nodes
-Date:   Wed, 24 May 2023 15:06:11 +0530
-Message-ID: <e95b1413d825b1131c9b0bd1bffde1e0b3bb497b.1684920389.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1684920389.git.quic_varada@quicinc.com>
-References: <cover.1684920389.git.quic_varada@quicinc.com>
+        with ESMTP id S230227AbjEXJ5H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 05:57:07 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CABD130
+        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 02:57:05 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9e27684b53so692653276.0
+        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 02:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684922224; x=1687514224;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vH2+XRfLbLSg7dX3ECLEuFafMqGcT0nmYiMVQ0VO/PQ=;
+        b=iOEW2/dj0DCI7mcTXMDXrLv+AO07KE9MkpVYnkH81hXbJ6cXQRNIVP3lE3INLp8FPc
+         BigpxgYT8Md1dDGHyDIUmFA4vG28TXl1inmwRqaODbWcX1vok0M/XdW4X8EwqxS/veNL
+         yy3SVWB9ZkTu5r68coUC7ubnxT3zweVbl9u7wEztcCHHkySZlUKQ28+kT8q8qx4aI5ND
+         kgPqvxpr/StwubC+NmjOg+usoBLi9r7GCBNPG4U8W7si/W8byF0xJi7vgvKCa8v9RsKX
+         n4NP7ua7JiDxWL8Iv4uSc6eAFKfhEoWmPsk15EOzV4hWx2b1Zc1cNqL43XFGpYdRp+LH
+         gMEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684922224; x=1687514224;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vH2+XRfLbLSg7dX3ECLEuFafMqGcT0nmYiMVQ0VO/PQ=;
+        b=TUr35/HPTVincEFAC+uwEGOhf6NO5zY6TthjEXalA0D0lfuPlPFUHpC7+WlOCYMkgM
+         yB3cUatHxJoYVjwZyikcMpuEVrnK2fatxFWA/FE6bm+hH+vzb1QFcADxp4znlg0sdPAx
+         32l/O0iODhVlJ7Y+MYqRshyR/Z9D0/JYudZfp/d8cuQzBzZYgjak+5yDvZXP7kSsskKV
+         fPJoE1kMFbhuaqPZuDDtOmM+hnvl0LmtDoRLFSTs281e/lunnaGAGMduZJHnufM/ZreY
+         g8czwUjB16zRum6Lm2NpL8Bv6Fv1fmG29YbQPdfGETM2DE53Bo5aogf8SqxeQ7T91apd
+         VTww==
+X-Gm-Message-State: AC+VfDz8vWRb2mj1wRQuHFHPOEsqZ6z/4VrgLOHLyCQysKtBKAnmF387
+        AY8Zap9SijVhX6T/EgeLlpSHPPrLi/CPWAZqupV6/A==
+X-Google-Smtp-Source: ACHHUZ5g3w1b7BDAEbgQDZk9MGbN4UM4FbejYnoo/ZcxSc23w+cGK0C5F6MQyriujIDtYDLoCJamTLG9MfMQCDMK+lY=
+X-Received: by 2002:a25:73c5:0:b0:b8c:54d:c60c with SMTP id
+ o188-20020a2573c5000000b00b8c054dc60cmr16230310ybc.34.1684922224229; Wed, 24
+ May 2023 02:57:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: StEralnYJLPvI1gyZ6G20ph9wnlWQhFf
-X-Proofpoint-GUID: StEralnYJLPvI1gyZ6G20ph9wnlWQhFf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-24_05,2023-05-23_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxlogscore=967 phishscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305240081
+References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
+In-Reply-To: <20230424110933.3908-1-quic_mkshah@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 24 May 2023 11:56:28 +0200
+Message-ID: <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
+To:     andersson@kernel.org, Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     dianders@chromium.org, swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds thermal zone nodes for the various
-sensors present in IPQ9574
+On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+>
+> Changes in v4:
+> - Add missing s-o-b line and reviewed by in patch 1
+> - Address ulf's comments for error handling in patch 2
+>
+> Changes in v3:
+> - Add new change to provide helper function dt_idle_pd_remove_topology()
+> - Address ulf's comments for error handling
+> - Add reviewed by ulf for devicetree change
+>
+> Changes in v2:
+> - Add new change to Move enabling OSI mode after power domains creation
+> - Fix compatible string to domains-idle-states for cluster idle state.
+> - Update cover letter with some more details on OSI and PC mode
+>   comparision
+>
+> The dependency [2] is now merged in trustedfirmware project.
+>
+> Stats comparision between OSI and PC mode are captured at [3] with
+> usecase
+> details, where during multiple CPUs online the residency in cluster idle
+> state is better with OSI and also inline with single CPU mode. In PC
+> mode
+> with multiple CPUs cluster idle state residency is dropping compare to
+> single CPU mode.
+>
+> Recording of this meeting is also available at [4].
+>
+> This change adds power-domains for cpuidle states to use PSCI OS
+> initiated mode for sc7280.
+>
+> This change depends on external project changes [1] & [2] which are
+> under review/discussion to add PSCI os-initiated support in Arm Trusted
+> Firmware.
+>
+> I can update here once the dependency are in and change is ready to
+> merge.
+>
+> [1] https://review.trustedfirmware.org/q/topic:psci-osi
+> [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
+> [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
+> [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+>
+> Maulik Shah (3):
+>   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
+>   cpuidle: psci: Move enabling OSI mode after power domains creation
+>   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
+>
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
+>  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
+>  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
+>  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
+>  4 files changed, 117 insertions(+), 51 deletions(-)
+>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Co-developed-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 208 ++++++++++++++++++++++++++++++++++
- 1 file changed, 208 insertions(+)
+Looks like this series has not been queued up yet. Note that patch1
+and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
+DTS change) is dependent on patch 1 and patch2.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index 15c9447..d162851 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -969,6 +969,214 @@
- 		};
- 	};
- 
-+	thermal-zones {
-+		nss-top-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 3>;
-+
-+			trips {
-+				nss-top-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 4>;
-+
-+			trips {
-+				ubi_0-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 5>;
-+
-+			trips {
-+				ubi_1-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 6>;
-+
-+			trips {
-+				ubi_2-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		ubi-3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 7>;
-+
-+			trips {
-+				ubi_3-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 8>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpuss1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 9>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cpu0-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 10>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu1-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 11>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu2-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 12>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		cpu3-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 13>;
-+
-+			trips {
-+				cpu-critical {
-+					temperature = <120000>;
-+					hysteresis = <10000>;
-+					type = "critical";
-+				};
-+
-+				cpu-passive {
-+					temperature = <110000>;
-+					hysteresis = <1000>;
-+					type = "passive";
-+				};
-+			};
-+		};
-+
-+		wcss-phyb-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 14>;
-+
-+			trips {
-+				wcss_phyb-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		top-glue-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&tsens 15>;
-+
-+			trips {
-+				top_glue-critical {
-+					temperature = <125000>;
-+					hysteresis = <1000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupts = <GIC_PPI 2 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
--- 
-2.7.4
+Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
+Bjorn, is that okay for you?
 
+Kind regards
+Uffe
