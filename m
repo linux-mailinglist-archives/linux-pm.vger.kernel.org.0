@@ -2,119 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1492710195
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 01:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982F77102F5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 04:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjEXXQ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 19:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52790 "EHLO
+        id S237488AbjEYCmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 22:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjEXXQ1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 19:16:27 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4954099
-        for <linux-pm@vger.kernel.org>; Wed, 24 May 2023 16:16:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684970186; x=1716506186;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=A2FqvhLyssRN2VUlpnlAyU18AJA7kp1q2GkgQNo7Kp4=;
-  b=O5izqKYCyInm9FQlbwbrHnnARvyLSbP580im1FsFxqjJCwoQNOr5JbuG
-   d+uVQqF44JeCZsq+3WXpbEEFI8w1l+ETEte0jWI9d+dzmNlTQwQbSNilS
-   I8xGkkyFfDOZoJ0PuzJC0LECDRNyCFhcCSZ2HNQdwoT+EQCVm7zul4xn3
-   Muxx0NmVWLmA53RuPmi2V1DOeg8p0oR9J1R04ISudAJxEiEZghkM9A0us
-   9kQhbJAaMRG1A8OTUJLbR+ERyM6XR+TTDIrdua6lxe7tXwcE4UO4BgLyx
-   rFyAGnbPSR6y0erzzfWux7I8HU5P2bdWWdCjpZDkLG2O9IPOSC7TGwS5T
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="343182646"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="343182646"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 16:16:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10720"; a="951221614"
-X-IronPort-AV: E=Sophos;i="6.00,190,1681196400"; 
-   d="scan'208";a="951221614"
-Received: from khourymi-mobl.amr.corp.intel.com ([10.213.181.140])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2023 16:16:25 -0700
-Message-ID: <6a712fb99c97d24bffb602cc99dcd69e6fe41d74.camel@linux.intel.com>
-Subject: Re: [v2] powercap: intel_rapl: Optimize rp->domains memory
- allocation
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        xiongxin <xiongxin@kylinos.cn>
-Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org
-Date:   Wed, 24 May 2023 16:16:22 -0700
-In-Reply-To: <CAJZ5v0juDz6=P23NJ11mNCVBCjp_p3qNRFo0i8YqFBPUW9tkQQ@mail.gmail.com>
-References: <20230407024759.2320858-1-xiongxin@kylinos.cn>
-         <CAJZ5v0juDz6=P23NJ11mNCVBCjp_p3qNRFo0i8YqFBPUW9tkQQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S237470AbjEYCl6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 22:41:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D18E6;
+        Wed, 24 May 2023 19:41:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5778E641C7;
+        Thu, 25 May 2023 02:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F8BC433EF;
+        Thu, 25 May 2023 02:41:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684982515;
+        bh=Lo0WBDv5SBGCOSEzfMDGCJroIZ+pRlkVidFrQmSKfLY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=apyuiFwb+iBikMNct1s2IUQYAidJ06qwTnOBbhz5ll9rRVcRVY6QdNFrncPi2HPYv
+         rxp/i9IrQkvbGEnoBQNHo5LJHVODPPXhn+E+4FXKOxY0umIiihutLlQnLbG/9UOyT0
+         wqeX/U9ridLMYk3uo2WLx6UOq3+1Rh98e9Qtj3VdTVl5wKNt9hTK38wT4pecIs0s3a
+         dIO3QYpjhD5EgI7ww1j+sSAatzdHPDS2/shSkf6ctRFjftx26CiUO+O4cTAowrZ4PL
+         h1LQQlCOqsl38jf9F+7cTsQ2GAWRD9iEYe4MF1ymL35qCdxtPhfmN3jjcGsMu0xpvM
+         IfmdcEN4ItuuA==
+Date:   Wed, 24 May 2023 19:45:46 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
+        swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
+Message-ID: <20230525024546.ug6nbrmkgx2alerc@ripper>
+References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
+ <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2023-05-24 at 18:40 +0200, Rafael J. Wysocki wrote:
-> On Fri, Apr 7, 2023 at 4:48=E2=80=AFAM xiongxin <xiongxin@kylinos.cn> wro=
-te:
-> >=20
-> > In the memory allocation of rp->domains in rapl_detect_domains(),
-> > there
-> > is an additional memory of struct rapl_domain allocated, optimize
-> > the
-> > code here to save sizeof(struct rapl_domain) bytes of memory.
-> >=20
-> > Test in Intel NUC (i5-1135G7).
-> >=20
-> > Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> > Tested-by: xiongxin <xiongxin@kylinos.cn>
-> > ---
-> >=20
-> > v2: The extra memory will never be used, so can directly remove
-> > '+1'.
-> >=20
-> > =C2=A0drivers/powercap/intel_rapl_common.c | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/powercap/intel_rapl_common.c
-> > b/drivers/powercap/intel_rapl_common.c
-> > index 8970c7b80884..a766d6e43c34 100644
-> > --- a/drivers/powercap/intel_rapl_common.c
-> > +++ b/drivers/powercap/intel_rapl_common.c
-> > @@ -1319,7 +1319,7 @@ static int rapl_detect_domains(struct
-> > rapl_package *rp, int cpu)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pr_debug("found %d domains o=
-n %s\n", rp->nr_domains, rp-
-> > >name);
-> >=20
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rp->domains =3D kcalloc(rp->nr_do=
-mains + 1, sizeof(struct
-> > rapl_domain),
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rp->domains =3D kcalloc(rp->nr_do=
-mains, sizeof(struct
-> > rapl_domain),
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 GFP_KERNEL);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!rp->domains)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 return -ENOMEM;
-> > --
->=20
-> Srinivas, is this OK, or does it miss anything?
-Looks good.
+On Wed, May 24, 2023 at 11:56:28AM +0200, Ulf Hansson wrote:
+> On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+> >
+> > Changes in v4:
+> > - Add missing s-o-b line and reviewed by in patch 1
+> > - Address ulf's comments for error handling in patch 2
+> >
+> > Changes in v3:
+> > - Add new change to provide helper function dt_idle_pd_remove_topology()
+> > - Address ulf's comments for error handling
+> > - Add reviewed by ulf for devicetree change
+> >
+> > Changes in v2:
+> > - Add new change to Move enabling OSI mode after power domains creation
+> > - Fix compatible string to domains-idle-states for cluster idle state.
+> > - Update cover letter with some more details on OSI and PC mode
+> >   comparision
+> >
+> > The dependency [2] is now merged in trustedfirmware project.
+> >
+> > Stats comparision between OSI and PC mode are captured at [3] with
+> > usecase
+> > details, where during multiple CPUs online the residency in cluster idle
+> > state is better with OSI and also inline with single CPU mode. In PC
+> > mode
+> > with multiple CPUs cluster idle state residency is dropping compare to
+> > single CPU mode.
+> >
+> > Recording of this meeting is also available at [4].
+> >
+> > This change adds power-domains for cpuidle states to use PSCI OS
+> > initiated mode for sc7280.
+> >
+> > This change depends on external project changes [1] & [2] which are
+> > under review/discussion to add PSCI os-initiated support in Arm Trusted
+> > Firmware.
+> >
+> > I can update here once the dependency are in and change is ready to
+> > merge.
+> >
+> > [1] https://review.trustedfirmware.org/q/topic:psci-osi
+> > [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
+> > [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
+> > [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+> >
+> > Maulik Shah (3):
+> >   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
+> >   cpuidle: psci: Move enabling OSI mode after power domains creation
+> >   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
+> >
+> >  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
+> >  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
+> >  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
+> >  4 files changed, 117 insertions(+), 51 deletions(-)
+> >
+> 
+> Looks like this series has not been queued up yet. Note that patch1
+> and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
+> DTS change) is dependent on patch 1 and patch2.
+> 
+> Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
+> Bjorn, is that okay for you?
+> 
 
-Reviewed-by: Srinivas Pandruvada<srinivas.pandruvada@linux.intel.com>
->=20
-> >=20
+Sorry, this fell between the chairs after you pointed me to it...
 
+I can certainly pick the 3 patches through my tree, but are they fixing
+any current regressions, or is it just that we need the first two
+patches to land before the 3rd patch?
+
+I also presume the 3rd patch is only needed when paired with the new
+ATF?
+
+Regards,
+Bjorn
