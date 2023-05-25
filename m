@@ -2,264 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A07710DEB
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 16:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2BF710E0F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 16:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241533AbjEYOCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 10:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
+        id S234918AbjEYOPp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 25 May 2023 10:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241532AbjEYOCs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 10:02:48 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06302E4F
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:19 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3078a3f3b5fso2128824f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685023331; x=1687615331;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xlMjiYWjIod1M5ysecwWR9Zw02vJku0YSHje4x3URRI=;
-        b=w1RsQ+stlMrNo0+vFPex2i/zi2qhFPU+CG+4wI4u4KpQiT7VBQ6e3KEg8o5ksT22h5
-         2rWiRy33QN4BFcZxdsBLNxdSk0xC4y6NjDXQYitf8YgGuLluXosBbSmIKQA8ph9Fl45R
-         oTIPz/Od566ZvOtUFKDcJn3tBUsIjj6LxWHBEYAwkJfh8sVd2xc0lRvTwoMYDLgSw5XN
-         uSlV7pXP3ezzS56NM2yclfL5Q+71pi3xDuWsMCLCDcHsq2ZtebcR4QGrsWcoLm6nNVqa
-         S8+V+FKrddJIkmwQVwgEnPYxzRJWSz6xCRwKMnpi56Ip1M6a6Z2WWNs+9jb2S9wG/83c
-         aBJg==
+        with ESMTP id S232848AbjEYOPp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 10:15:45 -0400
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82422183;
+        Thu, 25 May 2023 07:15:43 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96f44435d92so63296366b.0;
+        Thu, 25 May 2023 07:15:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023331; x=1687615331;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1685024142; x=1687616142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xlMjiYWjIod1M5ysecwWR9Zw02vJku0YSHje4x3URRI=;
-        b=aGVslnpMABM7uMv3iC6XteMe4PyF2JHeHAMBCXEQlfQ/LB3F5OHxB2qtrBjEG4ozai
-         l/d11//PRtPbO+eCmaJd7EdnSIXpEu3zeC7dceel3/MYAMNPHrToyjP6oNTkVIc3G0LW
-         H1Ihm1X0QW0b2NZ8shEkeVnP9CXOv282hc5GH1KFsIYlo1GGofU+pNZcyD8DYRthPNO1
-         GVkH/54nteMHpzHdVBQ7/n792lfEzRkx58HRMmh/j7NK3NT/wVBgIoou6+wAP+ZgI4HO
-         cMpnUb3kGNzG95yPCUSiRwS04h+LxoPfEuyO28yMMU9B8tSkw8/ewS5+p7x6qUe4BGSY
-         Hdsw==
-X-Gm-Message-State: AC+VfDyM/yG9uSrIRYU+yXcVMoFk6DStszYcDMJR7nbBLwwgPxWYRyq+
-        yvfIUhrIL3XsdYnTfckJBEXCIQ==
-X-Google-Smtp-Source: ACHHUZ6VTuTPHdSAz9DsUXXmuiMQweDChxDD2cBuim7IKj+jS9IGjmwrEViGz+Z1wiMrdyCg6dK5UQ==
-X-Received: by 2002:adf:f348:0:b0:306:3381:67fe with SMTP id e8-20020adff348000000b00306338167femr2737955wrp.27.1685023331567;
-        Thu, 25 May 2023 07:02:11 -0700 (PDT)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5aef:8608:89d7:7961])
-        by smtp.gmail.com with ESMTPSA id u4-20020adfdd44000000b003063176ef09sm1944866wrm.6.2023.05.25.07.02.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 07:02:11 -0700 (PDT)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 8/8] thermal/core: Move the thermal zone structure to the private core header
-Date:   Thu, 25 May 2023 16:01:35 +0200
-Message-Id: <20230525140135.3589917-9-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+        bh=aQ2g4elRikyixYIC50RK+Kur2gPh7SkgFNK50sXBtIU=;
+        b=ljOzKGF7YfR1iOeq0xMEdkB/yQIaChrCege93rkn+Nr78TUusLUMfJjVSH32sd0H6c
+         BEBJ3Nt0wjMEHVw+z116epDyUXu1wgrM1InGac1Ypxq36uvBC/CBCncRxP4WyHZ6/dgL
+         E7yHZ1u0TyWB2cXUUMDwz1mmxaZzwmco3NRjVdrH0lwK/ATs53ijImVzeBbv/BQslO0F
+         vBk4H5eSF2hRDKMoI9HVBFxB8U+x5JZ5lQmaO6YxPEYNVLSDxZ2e9kp31LiIq9DsGtEA
+         KOgc2hiIqrbWc4mYJfR4tKxvm3nNB0I2A6dIkCypwuXzjAWBXrLOL7un0vGwEcI+ktNZ
+         9hWQ==
+X-Gm-Message-State: AC+VfDxU41QVEVqBcv/YMcrtrKrcnr+g2mm7OzNvoUJkUFfZDNErqQ9b
+        Gql7uEK2/IYm0z+Y65hjkeV16/3eQKEkQAB03yU=
+X-Google-Smtp-Source: ACHHUZ4hzHl+ujaKW7jGsG5zfh0wu+kzIkGH1M/X2hpn4MzleSBJWnQCYvcE6JgR+CFem1LH+sjTv1jhOvGlHTywx/s=
+X-Received: by 2002:a17:906:d3:b0:94f:66af:b1f7 with SMTP id
+ 19-20020a17090600d300b0094f66afb1f7mr18698786eji.1.1685024141748; Thu, 25 May
+ 2023 07:15:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230524190726.17012-1-mario.limonciello@amd.com> <20230524190726.17012-2-mario.limonciello@amd.com>
+In-Reply-To: <20230524190726.17012-2-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 25 May 2023 16:15:30 +0200
+Message-ID: <CAJZ5v0j8b78LWiO0UsiXvdf6jLqnQ6yLM4hRgCjyNrDncaZMZQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] PCI: Don't assume root ports from > 2015 are power manageable
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        linux-pm@vger.kernel.org, Lukas Wunner <lukas@wunner.de>,
+        Iain Lane <iain@orangesquash.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The code in the different drivers have been sanitized and they no
-longer access the thermal zone structure internals. This one is just a
-pointer passed around to the thermal core code as a handler.
+On Wed, May 24, 2023 at 9:07 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> Using a USB keyboard or mouse to wakeup the system from s2idle fails when
+> that XHCI device is connected to a USB-C port for an AMD USB4 router.
+>
+> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> all PCIe ports go into D3 during s2idle.
+>
+> When specific root ports are put into D3 over s2idle on some AMD platforms
+> it is not possible for the platform to properly identify wakeup sources.
+> This happens whether the root port goes into D3hot or D3cold.
+>
+> Comparing registers between Linux and Windows 11 this behavior to put
+> these specific root ports into D3 at suspend is unique to Linux. On an
+> affected system Windows does not put those specific root ports into D3
+> over Modern Standby.
+>
+> Windows doesn't put the root ports into D3 because root ports are not
+> power manageable.
+>
+> Linux shouldn't assume root ports support D3 just because they're on a
+> machine newer than 2015, the ports should also be deemed power manageable.
+> Add an extra check explicitly for root ports to ensure D3 isn't selected
+> for these ports.
 
-Move the structure definition to the private core code header to
-self-encapsulate the core code.
+"D3 isn't selected for them if they are not power-manageable through
+platform firmware."  Or similar.
 
-No functional changes intented.
+With this addressed:
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.h | 75 ++++++++++++++++++++++++++++++++++
- include/linux/thermal.h        | 75 ----------------------------------
- 2 files changed, 75 insertions(+), 75 deletions(-)
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index c27a9930f904..b93386640799 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -18,6 +18,81 @@
- #warning This header can only be included by the thermal core code
- #endif
- 
-+/**
-+ * struct thermal_zone_device - structure for a thermal zone
-+ * @id:		unique id number for each thermal zone
-+ * @type:	the thermal zone device type
-+ * @device:	&struct device for this thermal zone
-+ * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
-+ * @trip_type_attrs:	attributes for trip points for sysfs: trip type
-+ * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-+ * @mode:		current mode of this thermal zone
-+ * @devdata:	private pointer for device private data
-+ * @trips:	an array of struct thermal_trip
-+ * @num_trips:	number of trip points the thermal zone supports
-+ * @trips_disabled;	bitmap for disabled trips
-+ * @passive_delay_jiffies: number of jiffies to wait between polls when
-+ *			performing passive cooling.
-+ * @polling_delay_jiffies: number of jiffies to wait between polls when
-+ *			checking whether trip points have been crossed (0 for
-+ *			interrupt driven systems)
-+ * @temperature:	current temperature.  This is only for core code,
-+ *			drivers should use thermal_zone_get_temp() to get the
-+ *			current temperature
-+ * @last_temperature:	previous temperature read
-+ * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-+ * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-+ * @prev_low_trip:	the low current temperature if you've crossed a passive
-+			trip point.
-+ * @prev_high_trip:	the above current temperature if you've crossed a
-+			passive trip point.
-+ * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
-+ * @ops:	operations this &thermal_zone_device supports
-+ * @tzp:	thermal zone parameters
-+ * @governor:	pointer to the governor for this thermal zone
-+ * @governor_data:	private pointer for governor data
-+ * @thermal_instances:	list of &struct thermal_instance of this thermal zone
-+ * @ida:	&struct ida to generate unique id for this zone's cooling
-+ *		devices
-+ * @lock:	lock to protect thermal_instances list
-+ * @node:	node in thermal_tz_list (in thermal_core.c)
-+ * @poll_queue:	delayed work for polling
-+ * @notify_event: Last notification event
-+ */
-+struct thermal_zone_device {
-+	int id;
-+	char type[THERMAL_NAME_LENGTH];
-+	struct device device;
-+	struct attribute_group trips_attribute_group;
-+	struct thermal_attr *trip_temp_attrs;
-+	struct thermal_attr *trip_type_attrs;
-+	struct thermal_attr *trip_hyst_attrs;
-+	enum thermal_device_mode mode;
-+	void *devdata;
-+	struct thermal_trip *trips;
-+	int num_trips;
-+	unsigned long trips_disabled;	/* bitmap for disabled trips */
-+	unsigned long passive_delay_jiffies;
-+	unsigned long polling_delay_jiffies;
-+	int temperature;
-+	int last_temperature;
-+	int emul_temperature;
-+	int passive;
-+	int prev_low_trip;
-+	int prev_high_trip;
-+	atomic_t need_update;
-+	struct thermal_zone_device_ops *ops;
-+	struct thermal_zone_params *tzp;
-+	struct thermal_governor *governor;
-+	void *governor_data;
-+	struct list_head thermal_instances;
-+	struct ida ida;
-+	struct mutex lock;
-+	struct list_head node;
-+	struct delayed_work poll_queue;
-+	enum thermal_notify_event notify_event;
-+};
-+
- /* Default Thermal Governor */
- #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
- #define DEFAULT_THERMAL_GOVERNOR       "step_wise"
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 83937256a01c..0ea2da5c33ac 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -112,81 +112,6 @@ struct thermal_cooling_device {
- 	struct list_head node;
- };
- 
--/**
-- * struct thermal_zone_device - structure for a thermal zone
-- * @id:		unique id number for each thermal zone
-- * @type:	the thermal zone device type
-- * @device:	&struct device for this thermal zone
-- * @trip_temp_attrs:	attributes for trip points for sysfs: trip temperature
-- * @trip_type_attrs:	attributes for trip points for sysfs: trip type
-- * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
-- * @mode:		current mode of this thermal zone
-- * @devdata:	private pointer for device private data
-- * @trips:	an array of struct thermal_trip
-- * @num_trips:	number of trip points the thermal zone supports
-- * @trips_disabled;	bitmap for disabled trips
-- * @passive_delay_jiffies: number of jiffies to wait between polls when
-- *			performing passive cooling.
-- * @polling_delay_jiffies: number of jiffies to wait between polls when
-- *			checking whether trip points have been crossed (0 for
-- *			interrupt driven systems)
-- * @temperature:	current temperature.  This is only for core code,
-- *			drivers should use thermal_zone_get_temp() to get the
-- *			current temperature
-- * @last_temperature:	previous temperature read
-- * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
-- * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
-- * @prev_low_trip:	the low current temperature if you've crossed a passive
--			trip point.
-- * @prev_high_trip:	the above current temperature if you've crossed a
--			passive trip point.
-- * @need_update:	if equals 1, thermal_zone_device_update needs to be invoked.
-- * @ops:	operations this &thermal_zone_device supports
-- * @tzp:	thermal zone parameters
-- * @governor:	pointer to the governor for this thermal zone
-- * @governor_data:	private pointer for governor data
-- * @thermal_instances:	list of &struct thermal_instance of this thermal zone
-- * @ida:	&struct ida to generate unique id for this zone's cooling
-- *		devices
-- * @lock:	lock to protect thermal_instances list
-- * @node:	node in thermal_tz_list (in thermal_core.c)
-- * @poll_queue:	delayed work for polling
-- * @notify_event: Last notification event
-- */
--struct thermal_zone_device {
--	int id;
--	char type[THERMAL_NAME_LENGTH];
--	struct device device;
--	struct attribute_group trips_attribute_group;
--	struct thermal_attr *trip_temp_attrs;
--	struct thermal_attr *trip_type_attrs;
--	struct thermal_attr *trip_hyst_attrs;
--	enum thermal_device_mode mode;
--	void *devdata;
--	struct thermal_trip *trips;
--	int num_trips;
--	unsigned long trips_disabled;	/* bitmap for disabled trips */
--	unsigned long passive_delay_jiffies;
--	unsigned long polling_delay_jiffies;
--	int temperature;
--	int last_temperature;
--	int emul_temperature;
--	int passive;
--	int prev_low_trip;
--	int prev_high_trip;
--	atomic_t need_update;
--	struct thermal_zone_device_ops *ops;
--	struct thermal_zone_params *tzp;
--	struct thermal_governor *governor;
--	void *governor_data;
--	struct list_head thermal_instances;
--	struct ida ida;
--	struct mutex lock;
--	struct list_head node;
--	struct delayed_work poll_queue;
--	enum thermal_notify_event notify_event;
--};
--
- /**
-  * struct thermal_governor - structure that holds thermal governor information
-  * @name:	name of the governor
--- 
-2.34.1
-
+>
+> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v3->v4:
+>  * Move after refactor
+> ---
+>  drivers/pci/pci.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index d1fa040bcea7..d293db963327 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3015,6 +3015,14 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+>         if (dmi_check_system(bridge_d3_blacklist))
+>                 return false;
+>
+> +       /*
+> +        * It's not safe to put root ports that don't support power
+> +        * management into D3.
+> +        */
+> +       if (pci_pcie_type(bridge) == PCI_EXP_TYPE_ROOT_PORT &&
+> +           !platform_pci_power_manageable(bridge))
+> +               return false;
+> +
+>         /*
+>          * It should be safe to put PCIe ports from 2015 or newer
+>          * to D3.
+> --
+> 2.34.1
+>
