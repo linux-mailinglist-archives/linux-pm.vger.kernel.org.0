@@ -2,135 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982F77102F5
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 04:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD50710314
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 04:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbjEYCmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 24 May 2023 22:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S234043AbjEYCu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 24 May 2023 22:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237470AbjEYCl6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 22:41:58 -0400
+        with ESMTP id S235011AbjEYCu6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 24 May 2023 22:50:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D18E6;
-        Wed, 24 May 2023 19:41:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5913A;
+        Wed, 24 May 2023 19:50:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5778E641C7;
-        Thu, 25 May 2023 02:41:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F8BC433EF;
-        Thu, 25 May 2023 02:41:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E585A63456;
+        Thu, 25 May 2023 02:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85E2FC433D2;
+        Thu, 25 May 2023 02:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684982515;
-        bh=Lo0WBDv5SBGCOSEzfMDGCJroIZ+pRlkVidFrQmSKfLY=;
+        s=k20201202; t=1684983055;
+        bh=xrBtlH9XLV3WQLwYJd/ujweniDgTMEIrltiM1P03kAE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=apyuiFwb+iBikMNct1s2IUQYAidJ06qwTnOBbhz5ll9rRVcRVY6QdNFrncPi2HPYv
-         rxp/i9IrQkvbGEnoBQNHo5LJHVODPPXhn+E+4FXKOxY0umIiihutLlQnLbG/9UOyT0
-         wqeX/U9ridLMYk3uo2WLx6UOq3+1Rh98e9Qtj3VdTVl5wKNt9hTK38wT4pecIs0s3a
-         dIO3QYpjhD5EgI7ww1j+sSAatzdHPDS2/shSkf6ctRFjftx26CiUO+O4cTAowrZ4PL
-         h1LQQlCOqsl38jf9F+7cTsQ2GAWRD9iEYe4MF1ymL35qCdxtPhfmN3jjcGsMu0xpvM
-         IfmdcEN4ItuuA==
-Date:   Wed, 24 May 2023 19:45:46 -0700
+        b=NuLXsmDNA23iRja8+VlaTh1wpOAdbmplDAQdgImnXs2tu3EJoqBACNPe6StbOhzCo
+         sB53LvoevqeyZUVw9kDSYqjatVDcWKIx3Tgi/H/MyI8s2fwYXFJpfRSKQPuHNBNqkQ
+         yKgYuqPD+domU3cbqjBBZL4aEyCDMskbIIbbn8NQKCyOT3qOfeu/fyDuwnQiEYN5H3
+         onLAV0y8oTGWd+0gno/pfbphqnC87CBa+Gu+M0QKrAXhGuOeQghBFAnf4/TsYLlIVJ
+         bPqdBtJ3B6kRR0mZJ9MIqkPwE5vVokG6lZLWggpzof9HkO6cGicL4XIC5E7DEWO5rt
+         4hN2XrXcpieyA==
+Date:   Wed, 24 May 2023 19:54:45 -0700
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
-        swboyd@chromium.org, wingers@google.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        jwerner@chromium.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com
-Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
-Message-ID: <20230525024546.ug6nbrmkgx2alerc@ripper>
-References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
- <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Trilok Soni <quic_tsoni@quicinc.com>,
+        Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, ansuelsmth@gmail.com
+Subject: Re: [PATCH v2 2/4] soc: qcom: smem: introduce qcom_smem_get_msm_id()
+Message-ID: <20230525025445.lxfvmnlm2ezzi45g@ripper>
+References: <20230524162329.819770-1-robimarko@gmail.com>
+ <20230524162329.819770-2-robimarko@gmail.com>
+ <47c0faf0-f855-d3c4-6825-e51a1a1a7c83@quicinc.com>
+ <d9406953-6452-2394-ab3f-4ce1d8986fce@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d9406953-6452-2394-ab3f-4ce1d8986fce@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 24, 2023 at 11:56:28AM +0200, Ulf Hansson wrote:
-> On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
-> >
-> > Changes in v4:
-> > - Add missing s-o-b line and reviewed by in patch 1
-> > - Address ulf's comments for error handling in patch 2
-> >
-> > Changes in v3:
-> > - Add new change to provide helper function dt_idle_pd_remove_topology()
-> > - Address ulf's comments for error handling
-> > - Add reviewed by ulf for devicetree change
-> >
-> > Changes in v2:
-> > - Add new change to Move enabling OSI mode after power domains creation
-> > - Fix compatible string to domains-idle-states for cluster idle state.
-> > - Update cover letter with some more details on OSI and PC mode
-> >   comparision
-> >
-> > The dependency [2] is now merged in trustedfirmware project.
-> >
-> > Stats comparision between OSI and PC mode are captured at [3] with
-> > usecase
-> > details, where during multiple CPUs online the residency in cluster idle
-> > state is better with OSI and also inline with single CPU mode. In PC
-> > mode
-> > with multiple CPUs cluster idle state residency is dropping compare to
-> > single CPU mode.
-> >
-> > Recording of this meeting is also available at [4].
-> >
-> > This change adds power-domains for cpuidle states to use PSCI OS
-> > initiated mode for sc7280.
-> >
-> > This change depends on external project changes [1] & [2] which are
-> > under review/discussion to add PSCI os-initiated support in Arm Trusted
-> > Firmware.
-> >
-> > I can update here once the dependency are in and change is ready to
-> > merge.
-> >
-> > [1] https://review.trustedfirmware.org/q/topic:psci-osi
-> > [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
-> > [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
-> > [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
-> >
-> > Maulik Shah (3):
-> >   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
-> >   cpuidle: psci: Move enabling OSI mode after power domains creation
-> >   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
-> >
-> >  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
-> >  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
-> >  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
-> >  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
-> >  4 files changed, 117 insertions(+), 51 deletions(-)
-> >
+On Wed, May 24, 2023 at 08:27:03PM +0200, Konrad Dybcio wrote:
 > 
-> Looks like this series has not been queued up yet. Note that patch1
-> and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
-> DTS change) is dependent on patch 1 and patch2.
 > 
-> Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
-> Bjorn, is that okay for you?
+> On 24.05.2023 20:16, Trilok Soni wrote:
+> > On 5/24/2023 9:23 AM, Robert Marko wrote:
+> >> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+> >> exact SoC model as there may be differences in the same SoC family.
+> >>
+> >> Currently, cpufreq-nvmem does this completely in the driver and there has
+> >> been more interest expresed for other drivers to use this information so
+> >> lets expose a common helper to prevent redoing it in individual drivers
+> >> since this field is present on every SMEM table version.
+> >>
+> >> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> >> ---
+> >>   drivers/soc/qcom/smem.c       | 19 +++++++++++++++++++
+> >>   include/linux/soc/qcom/smem.h |  2 ++
+> >>   2 files changed, 21 insertions(+)
+> >>
+> >> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> >> index 6be7ea93c78c..0d6ba9bce8cb 100644
+> >> --- a/drivers/soc/qcom/smem.c
+> >> +++ b/drivers/soc/qcom/smem.c
+> >> @@ -14,6 +14,7 @@
+> >>   #include <linux/sizes.h>
+> >>   #include <linux/slab.h>
+> >>   #include <linux/soc/qcom/smem.h>
+> >> +#include <linux/soc/qcom/socinfo.h>
+> >>     /*
+> >>    * The Qualcomm shared memory system is a allocate only heap structure that
+> >> @@ -772,6 +773,24 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
+> >>   }
+> >>   EXPORT_SYMBOL(qcom_smem_virt_to_phys);
+> >>   +/**
+> >> + * qcom_smem_get_msm_id() - return the SoC ID
+> >> + *
+> >> + * Look up SoC ID from HW/SW build ID and return it.
+> >> + */
+> >> +int qcom_smem_get_msm_id(void)
+> On top of Trilok's point, this should return le32, or at least unsigned int.
 > 
 
-Sorry, this fell between the chairs after you pointed me to it...
+Returning the value in CPU-native endian sounds very reasonable, so we
+don't need __le32_to_cpu() on the calling side.
 
-I can certainly pick the 3 patches through my tree, but are they fixing
-any current regressions, or is it just that we need the first two
-patches to land before the 3rd patch?
-
-I also presume the 3rd patch is only needed when paired with the new
-ATF?
+If we want to worry about this value going beyond 31 bits the
+appropriate way would be to take, and assign, a unsigned int* argument
+and return 0/-errno to indicate success/failure.
 
 Regards,
 Bjorn
+
+> Konrad
+> >> +{
+> >> +    size_t len;
+> >> +    struct socinfo *info;
+> >> +
+> >> +    info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
+> >> +    if (IS_ERR(info))
+> >> +        return PTR_ERR(info);
+> >> +
+> >> +    return __le32_to_cpu(info->id);
+> >> +}
+> >> +EXPORT_SYMBOL(qcom_smem_get_msm_id);
+> > 
+> > EXPORT_SYMBOL_GPL please?
+> > 
+> > Please change it for other symbols in the driver as well w/ separate patch.
+> > 
+> > ---Trilok Soni
+> > 
+> > 
