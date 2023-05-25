@@ -2,59 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6665710DDA
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 16:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFC5710DDB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 16:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241460AbjEYOCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S241438AbjEYOCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Thu, 25 May 2023 10:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240681AbjEYOC2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 10:02:28 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5551419C
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:01 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30a95ec7744so2114916f8f.3
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:01 -0700 (PDT)
+        with ESMTP id S241461AbjEYOC3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 10:02:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D941A2
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:02 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30a8c4afa46so795738f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685023319; x=1687615319;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uj+6V8WW91QqsY0pMlDoAGkPT97dYdNbbS5RZJ59Y6I=;
-        b=ZvmorFKt6WL/TA7rE4Ghpw2SPGWwMUIszaCeZ6h1o2iZEcGC5lgjeXlIG36SHVmeL+
-         1j8PGE7UWHKCGtJZ1NlOyTnw1CDE7RZSz/4mCd3eEWmS5bDEEBzsI+GUOO4zP9gaI9wz
-         BHvNtvXQ3N4JvQDf6LUrRxQ4IXrn7YukYCw3Ick9XZPL56CDX/XsyAiwXhf0CtFBX1D0
-         zkhWKNnRaObFEguh/yJpDtax237nOTqjkIuPElJeNzvh7MCeb+KFAK0ceagmCZRzgjWm
-         gYydKF6B037cdD2Q62omm+rRsnTiYNIsfOG/qXl1YGAxI14+b7e4FBeIxGqzkNCnN7WS
-         BFVQ==
+        d=linaro.org; s=google; t=1685023320; x=1687615320;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HUbH3AqqDl8CE94ueCQYCD3fcBOZcuYmHQxQOWzVdSI=;
+        b=AB/2sJFSbuTqwsZTCrfgFt0hVWsnb/KsgsZvmfNIJ/vK0a8oqMv1d5VqO+0UXeGcqC
+         WNmVQURw2sdgCCZv2evGfdvntSL9XeVy7KQIio/WVhMEEWuRkFMYfDq8Nwg/DahYA5zy
+         egQSSPXTeS52CzY8Bd1kfbW+OFdLCwoBKT/jkG7tCa5iRqLXAJRZtsfkr0V7d/FGDrqa
+         8h2UGsOQHanQlZTXB1y644pZaRDcfNFSFHfjU5XvOTetWyShK4SwDSBraE7w7DUZiSVN
+         9IPrrwyvzX4KGugorH2+x1cOBhmY8zb+uqKHmkyHmToSDvbK20MDgJEUWTpCUrXA22CL
+         922g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023319; x=1687615319;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uj+6V8WW91QqsY0pMlDoAGkPT97dYdNbbS5RZJ59Y6I=;
-        b=LU1ZrsnCV+/IYr+ZTdY84HS4yKamegyQYFdL58hPbLLV1JkRgdChGOstsVYqwdec5n
-         2oamdGYw5K6sqW0GFmN+NQDFt5uO45R5kBE2NFFaykIiQModB4aSQBg9eN/CxUemdFXY
-         cfkmOb9mBFvsjp5amqj3SI9N9agiuhYsgGjSn/qKtMhpkz4welfK60N/NZSX3RdXXXkx
-         ES30ZPovpq0UFpG7cVl+EvPSi1/+0JS1Z92YYA37MfK8q+ajbyFUYgX+3TQRTr9L2pdz
-         QE4UeFYBklIPGSmxr42BhDKWVDqUpohdLFxrzS0MCqMNj0QkLU8WZD0i/4MHQLUTbrSi
-         zDFw==
-X-Gm-Message-State: AC+VfDywXHolq4Qo/9l7IJ7DssEOqTJ3ceZ5vVGVQhxc8VxtEfn0AV//
-        Q7V1tstwct6BP7kD0n5i6DrpKw==
-X-Google-Smtp-Source: ACHHUZ6PIC4qrJOn8gtrGlEafL9LZI+9B8weySI11B47JNYd4x0mVAVyoScC6ofRuHP41Wg7VfibqA==
-X-Received: by 2002:a5d:4d43:0:b0:307:8651:258e with SMTP id a3-20020a5d4d43000000b003078651258emr3008774wru.21.1685023319089;
-        Thu, 25 May 2023 07:01:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685023320; x=1687615320;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HUbH3AqqDl8CE94ueCQYCD3fcBOZcuYmHQxQOWzVdSI=;
+        b=OaCwyJIVwgtWbA16eojjc3rd4lfnP+1mDhItmNOePjzn1ouqKVfh0truIEdqnPRtnj
+         +Q7ka/VkrQxvlB9ZWa8X+tJarX5kezmUqV5bxb9onuWdaDX8hjswWVCqcT2LJ+DEcxSv
+         uRYG/EUut+iHGZuJNFbi1/ubwl9j2z1Q1SSFWHvXRmKan999f5wV88N8y0n0TRMGv837
+         LjpE1olxp2OOravjjpsBVr/wLm/6gdNMBQM4QJmJlibP3jDMihUdSQn7Cz5H4mRr4hvb
+         VbeG86/5zc5ColHQCqjg1/U8QmWY+uo7Rwzg9+Sg19cEOVi977sGAV7tgZ31GvlmFjQJ
+         86AA==
+X-Gm-Message-State: AC+VfDyrScMti+yz+q/fomt+zab2vUWhzqLRaMHTO/I1wOtZ1ARYTtqP
+        O0ax/aNjApNw8ADFoTPXBZ9L1w==
+X-Google-Smtp-Source: ACHHUZ4tXSENb+Vpjdf1ltyggjuSDPeNMOgHYDIP1ZGt4QKGSuaeGFxeAHpbVKgbP5ttyGtPZ1y0ew==
+X-Received: by 2002:adf:f644:0:b0:309:6fe4:a20d with SMTP id x4-20020adff644000000b003096fe4a20dmr2025859wrp.9.1685023320556;
+        Thu, 25 May 2023 07:02:00 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5aef:8608:89d7:7961])
-        by smtp.gmail.com with ESMTPSA id u4-20020adfdd44000000b003063176ef09sm1944866wrm.6.2023.05.25.07.01.58
+        by smtp.gmail.com with ESMTPSA id u4-20020adfdd44000000b003063176ef09sm1944866wrm.6.2023.05.25.07.01.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 07:01:58 -0700 (PDT)
+        Thu, 25 May 2023 07:01:59 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com
-Subject: [PATCH 0/8] Finish thermal zone structure encapsulation
-Date:   Thu, 25 May 2023 16:01:27 +0200
-Message-Id: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        Sandipan Patra <spatra@nvidia.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev@vger.kernel.org (open list:MELLANOX MLX5 core VPI driver),
+        linux-rdma@vger.kernel.org (open list:MELLANOX MLX5 core VPI driver),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/8] net/mlx5: Update the driver with the recent thermal changes
+Date:   Thu, 25 May 2023 16:01:28 +0200
+Message-Id: <20230525140135.3589917-2-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,64 +81,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The series are the last changes to self-encapsulate the thermal zone device
-structure in order to protect wild accesses to the thermal zone device
-internals, especially the trip points and the locks.
+The thermal framework is migrating to the generic trip points. The set
+of changes also implies a self-encapsulation of the thermal zone
+device structure where the internals are no longer directly accessible
+but with accessors.
 
-Meanwhile the latest changes, a new driver has come via the network tree which
-directly accesses the thermal zone device structure information and uses the
-old thermal_zone_device_register function. The first patch does the change to
-use the accessor and the new registering function. It is expected to have the
-changes to go through the thermal tree along with the other patches.
+Use the new API instead, so the next changes can be pushed in the
+thermal framework without this driver failing to compile.
 
-The second patch adds a macro to warn at compilation time if the
-thermal_core.h is included in a file not belonging to the thermal core
-code. One warning will happen with the nvidia drivers but this is in
-the way to be solved.
+No functional changes intended.
 
-The third patch reorders the headers inclusion in the core code.
+Cc: Sandipan Patra <spatra@nvidia.com>
+Cc: Gal Pressman <gal@nvidia.com>
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/net/ethernet/mellanox/mlx5/core/thermal.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-The fourth patch provides an API to update the thermal trips of a
-thermal zone. This function takes care of the locking and the thermal
-zone update.
-
-The next patches makes the int340x drivers to use the thermal trip
-update above and the different accessors for thermal zone structure.
-
-Finally the last patch moves the thermal zone device structure from
-the exported thermal.h header to the thermal core private header.
-
-Daniel Lezcano (8):
-  net/mlx5: Update the driver with the recent thermal changes
-  thermal/core: Hardening the self-encapsulation
-  thermal/core: Reorder the headers inclusion
-  thermal/core: Update the generic trip points
-  thermal/drivers/int3400: Use thermal zone device wrappers
-  thermal/drivers/int340x: Do not check the thermal zone state
-  thermal/drivers/int340x: Use thermal zone device trip update
-  thermal/core: Move the thermal zone structure to the private core
-    header
-
- .../net/ethernet/mellanox/mlx5/core/thermal.c | 15 ++--
- drivers/thermal/gov_bang_bang.c               |  1 +
- drivers/thermal/gov_fair_share.c              |  1 +
- drivers/thermal/gov_power_allocator.c         |  7 +-
- drivers/thermal/gov_step_wise.c               |  1 +
- drivers/thermal/gov_user_space.c              |  1 +
- .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++-----
- .../int340x_thermal/int340x_thermal_zone.c    | 17 ++--
- drivers/thermal/thermal_acpi.c                |  1 +
- drivers/thermal/thermal_core.c                | 47 +++++------
- drivers/thermal/thermal_core.h                | 82 +++++++++++++++++++
- drivers/thermal/thermal_helpers.c             |  1 +
- drivers/thermal/thermal_hwmon.c               |  1 +
- drivers/thermal/thermal_netlink.c             |  1 +
- drivers/thermal/thermal_of.c                  |  1 +
- drivers/thermal/thermal_sysfs.c               |  1 +
- drivers/thermal/thermal_trip.c                | 79 ++++++++++++++++++
- include/linux/thermal.h                       | 79 +-----------------
- 18 files changed, 241 insertions(+), 139 deletions(-)
-
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/thermal.c b/drivers/net/ethernet/mellanox/mlx5/core/thermal.c
+index e47fa6fb836f..20bb5eb266c1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/thermal.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/thermal.c
+@@ -45,7 +45,7 @@ static int mlx5_thermal_get_mtmp_temp(struct mlx5_core_dev *mdev, u32 id, int *p
+ static int mlx5_thermal_get_temp(struct thermal_zone_device *tzdev,
+ 				 int *p_temp)
+ {
+-	struct mlx5_thermal *thermal = tzdev->devdata;
++	struct mlx5_thermal *thermal = thermal_zone_device_priv(tzdev);
+ 	struct mlx5_core_dev *mdev = thermal->mdev;
+ 	int err;
+ 
+@@ -81,12 +81,13 @@ int mlx5_thermal_init(struct mlx5_core_dev *mdev)
+ 		return -ENOMEM;
+ 
+ 	thermal->mdev = mdev;
+-	thermal->tzdev = thermal_zone_device_register(data,
+-						      MLX5_THERMAL_NUM_TRIPS,
+-						      MLX5_THERMAL_TRIP_MASK,
+-						      thermal,
+-						      &mlx5_thermal_ops,
+-						      NULL, 0, MLX5_THERMAL_POLL_INT_MSEC);
++	thermal->tzdev = thermal_zone_device_register_with_trips(data,
++								 NULL,
++								 MLX5_THERMAL_NUM_TRIPS,
++								 MLX5_THERMAL_TRIP_MASK,
++								 thermal,
++								 &mlx5_thermal_ops,
++								 NULL, 0, MLX5_THERMAL_POLL_INT_MSEC);
+ 	if (IS_ERR(thermal->tzdev)) {
+ 		dev_err(mdev->device, "Failed to register thermal zone device (%s) %ld\n",
+ 			data, PTR_ERR(thermal->tzdev));
 -- 
 2.34.1
 
