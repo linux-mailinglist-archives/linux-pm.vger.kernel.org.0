@@ -2,96 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECFB6711805
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 22:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E510711899
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 23:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbjEYUVz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 16:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S233695AbjEYVA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 17:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241062AbjEYUVx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 16:21:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBDFBB;
-        Thu, 25 May 2023 13:21:51 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34PKF3fg004577;
-        Thu, 25 May 2023 20:21:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+jv0tSUkqXYAsbK/kPqtx+0ChG7JKI02Wxt8hXxY6ic=;
- b=ZF77pkntnQnPZspifzfWSQ/NkR5X4P/Aq2yK8wmd1CS4VT6u9aOufiLWF+r0sLnFnPRN
- o/Kdm0Rr9J6rsUOLDtlIxp/7TUXN5DBg0XAKlNB+pB5637wSgB+NEXMWolIMX6WN4BXG
- aDHXUlliU3ItpXBA0Xc20gUpXHRSb+KO63auMXBjnHBIIh+79Bw4eDGq0Rm45+5b5TTI
- uYJgaGuZfKP9Atmlz9w735W+CA7ZDbmL+WX7nNHlVaSHnZsTDaPh2pGQjF6hZJXZwkCa
- J2cA8RM+SUrF/3gLX8cXyRQIbgALZCTAilE4mNgzvSgTu5SdwtklmuhBrQ2uNnlDamuY Zg== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qsqqjay6v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 20:21:47 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34PKLkgw030985
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 25 May 2023 20:21:46 GMT
-Received: from [10.110.51.179] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 25 May
- 2023 13:21:45 -0700
-Message-ID: <44062c19-673c-f65e-2ee9-f49bf38fed1a@quicinc.com>
-Date:   Thu, 25 May 2023 13:21:44 -0700
+        with ESMTP id S229470AbjEYVAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 17:00:25 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C5F195
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 14:00:24 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25533eb3e5dso168847a91.0
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 14:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1685048424; x=1687640424;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=swKmr+zPlqFk0w2HEdubha8oHaV+iGC//6H4l1unchs=;
+        b=IXmFgKVWC8u8moP6qd8UD27c87Zt7/37TZUU2oy/+k5qTjIAGa7Mx7r9zpyIhjicCs
+         zhW+0udAhbb86ZyUNbHBzVFgaPHN3BBoE6svQ/2e9R3LUvn9N3YXBzZ2obb7+ErmUJpM
+         cvqn55nVDNMOHHBbMn3I5i3FHctz4XoWBXwgTgI0d+mUQCRBBHPQQYhEijlJ3CZrdknx
+         yuXoZBzu4+XuitcVQnbDMekLPjSlHhr+cqNOlCs7HpwQ491BpFJxh7/CapIsN74/7o6n
+         VLlzG20lgLpldvWOb0Lo24cam7gTXxIhfyK/b7aiNWMlawcLEBaodhVENRcK+XjhIHlK
+         IijA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685048424; x=1687640424;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=swKmr+zPlqFk0w2HEdubha8oHaV+iGC//6H4l1unchs=;
+        b=h4tZvT7L0f4G46/BQFhqlSCq21DC/1hnwtm7PzxUAVReEzN9bKr0I4HjNSB/UyLzVS
+         03nSuLeWxy2keQsL9C1APo54LP2dMMzAv5HLIMS7hUhCqzmXKmOWAjFIF7BIfCDTRChQ
+         d/b7aZlbTkUcHl34OGZK11EnSu9Nnw4//DewDtYR8QNSgJvOTKgEAQz/J3pGas6J6rQ2
+         LnvJBVd1k/BdiEwWYVVKuMp6dpBXm9o1F26mSa9UEGB38bxTgTwMCAUbBzusSv67rpF8
+         vmDAh2vh8LlwRiwsnvTm4iXgEdQq8cuwn9569S8ANMQnR+ovudzUlxtgm0Yyn1eJloCQ
+         HtKg==
+X-Gm-Message-State: AC+VfDyAHLYMTNgggIfBSHjPZsg0KdZf5GKMxBso4htaWjcL6BcP6PUF
+        Z2StRKsDXuXtek0eJiTAOZYh8Q==
+X-Google-Smtp-Source: ACHHUZ48uYIZmcM99bLQE/QjrgvfCxeXZQoApR3zMj5TIWWLRxVt3sb0WYzvrWYHMnjaLxXMc3YoEw==
+X-Received: by 2002:a17:90a:d591:b0:253:8a50:1bcb with SMTP id v17-20020a17090ad59100b002538a501bcbmr3219255pju.25.1685048424036;
+        Thu, 25 May 2023 14:00:24 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k93-20020a17090a4ce600b00250334d97dasm3622008pjh.31.2023.05.25.14.00.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 14:00:23 -0700 (PDT)
+Message-ID: <646fcc67.170a0220.f013f.7c7d@mx.google.com>
+Date:   Thu, 25 May 2023 14:00:23 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 2/5] soc: qcom: smem: Switch to EXPORT_SYMBOL_GPL()
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <ilia.lin@kernel.org>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <ansuelsmth@gmail.com>
-References: <20230525120956.3095317-1-robimarko@gmail.com>
- <20230525120956.3095317-2-robimarko@gmail.com>
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <20230525120956.3095317-2-robimarko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fzQOidQUoPcouyI1M6lFZZhxiGJJ2l7k
-X-Proofpoint-ORIG-GUID: fzQOidQUoPcouyI1M6lFZZhxiGJJ2l7k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-25_12,2023-05-25_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 bulkscore=0 adultscore=0 suspectscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 phishscore=0 mlxscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305250172
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.4-rc3-33-g1ef93b68531a
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 7 warnings (v6.4-rc3-33-g1ef93b68531a)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/25/2023 5:09 AM, Robert Marko wrote:
-> SMEM has been GPL licensed from the start, and there is no reason to use
-> EXPORT_SYMBOL() so switch to the GPL version.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+pm/testing build: 7 builds: 0 failed, 7 passed, 7 warnings (v6.4-rc3-33-g1e=
+f93b68531a)
 
-Excellent. Thank you.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+4-rc3-33-g1ef93b68531a/
 
-Reviewed-by: Trilok Soni <tsoni@quicinc.com>
+Tree: pm
+Branch: testing
+Git Describe: v6.4-rc3-33-g1ef93b68531a
+Git Commit: 1ef93b68531af36f2eb776dc3a123ab2604b2672
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
----Trilok Soni
+Warnings Detected:
+
+arc:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+    x86_64_defconfig (gcc-10): 3 warnings
 
 
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
+vec_from_user.part.0() with UACCESS enabled
+    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redunda=
+nt UACCESS disable
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
+CCESS disable
+    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
+rom_user.part.0() with UACCESS enabled
+
+---
+For more info write to <info@kernelci.org>
