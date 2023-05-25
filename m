@@ -2,178 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E510711899
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 23:00:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3FD7118B0
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 23:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233695AbjEYVA0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 17:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S233039AbjEYVCt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 17:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEYVAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 17:00:25 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C5F195
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 14:00:24 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-25533eb3e5dso168847a91.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 14:00:24 -0700 (PDT)
+        with ESMTP id S232203AbjEYVCt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 17:02:49 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1C7E4A;
+        Thu, 25 May 2023 14:02:18 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so5337770a12.3;
+        Thu, 25 May 2023 14:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1685048424; x=1687640424;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=swKmr+zPlqFk0w2HEdubha8oHaV+iGC//6H4l1unchs=;
-        b=IXmFgKVWC8u8moP6qd8UD27c87Zt7/37TZUU2oy/+k5qTjIAGa7Mx7r9zpyIhjicCs
-         zhW+0udAhbb86ZyUNbHBzVFgaPHN3BBoE6svQ/2e9R3LUvn9N3YXBzZ2obb7+ErmUJpM
-         cvqn55nVDNMOHHBbMn3I5i3FHctz4XoWBXwgTgI0d+mUQCRBBHPQQYhEijlJ3CZrdknx
-         yuXoZBzu4+XuitcVQnbDMekLPjSlHhr+cqNOlCs7HpwQ491BpFJxh7/CapIsN74/7o6n
-         VLlzG20lgLpldvWOb0Lo24cam7gTXxIhfyK/b7aiNWMlawcLEBaodhVENRcK+XjhIHlK
-         IijA==
+        d=gmail.com; s=20221208; t=1685048537; x=1687640537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rcZFua0EILx4UgL94m890/UaW7590iqXfYJZcRYRhjI=;
+        b=plLBOrfRRrLKTFd8DM3UtUZCksznD4j1oAjH6MqevOs+L5cZ2wiRB2GqjLwGlXX6CU
+         zlq/wrvABrF5J+hz83++55KphZPp8sE7CdQAoSm6FT+PUVOpVjXnir2nZdeFGvPughRg
+         2MLlfji2K6QX1B0vrgTYGxLV1yAdNcLbFgurysJcCEWMjybmRxOLooanzucfImdJy61S
+         WgTOOkrglebpKpewgbAxJMEMq7DBol+G1d9VWWnhXzXcOc5BW6kYJ39/QJfUsx8U4kEc
+         UTgZ3r/cYSyJ2PCM0eiEBZMzVK3OF77T/TZu2noiU+jDMOXoyjKjDh5oX2LxBB56sB2K
+         XAfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685048424; x=1687640424;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1685048537; x=1687640537;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=swKmr+zPlqFk0w2HEdubha8oHaV+iGC//6H4l1unchs=;
-        b=h4tZvT7L0f4G46/BQFhqlSCq21DC/1hnwtm7PzxUAVReEzN9bKr0I4HjNSB/UyLzVS
-         03nSuLeWxy2keQsL9C1APo54LP2dMMzAv5HLIMS7hUhCqzmXKmOWAjFIF7BIfCDTRChQ
-         d/b7aZlbTkUcHl34OGZK11EnSu9Nnw4//DewDtYR8QNSgJvOTKgEAQz/J3pGas6J6rQ2
-         LnvJBVd1k/BdiEwWYVVKuMp6dpBXm9o1F26mSa9UEGB38bxTgTwMCAUbBzusSv67rpF8
-         vmDAh2vh8LlwRiwsnvTm4iXgEdQq8cuwn9569S8ANMQnR+ovudzUlxtgm0Yyn1eJloCQ
-         HtKg==
-X-Gm-Message-State: AC+VfDyAHLYMTNgggIfBSHjPZsg0KdZf5GKMxBso4htaWjcL6BcP6PUF
-        Z2StRKsDXuXtek0eJiTAOZYh8Q==
-X-Google-Smtp-Source: ACHHUZ48uYIZmcM99bLQE/QjrgvfCxeXZQoApR3zMj5TIWWLRxVt3sb0WYzvrWYHMnjaLxXMc3YoEw==
-X-Received: by 2002:a17:90a:d591:b0:253:8a50:1bcb with SMTP id v17-20020a17090ad59100b002538a501bcbmr3219255pju.25.1685048424036;
-        Thu, 25 May 2023 14:00:24 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k93-20020a17090a4ce600b00250334d97dasm3622008pjh.31.2023.05.25.14.00.23
+        bh=rcZFua0EILx4UgL94m890/UaW7590iqXfYJZcRYRhjI=;
+        b=lV333o6mHMOrPW48H/hsrfZndG3VdhWJWSgAhz+46Ph4uOdut/DvG1egE+t4DJKYl+
+         5GdGJxufL1aYt64TlxgpnTzpXaam2H9PTgd0fnguYuoGozzI+3qlNZc0jFW0Ehmq794H
+         0xt9Izf3fNXJX3f3H4/irPV7E8rQvBut+w1Vjn/B2GJOXJNUVr6kdzQyFZ8HswW2OXli
+         J1TWkDwRsacOrGLi47pCLrEtHQSVwu7xYNPozaHZqMNIpCDWGD45Wchr7C021JdvmELr
+         PIndDBvLGQ5iVP6dklqXBCnqyVlaExiFRq4akMV4slT24ZWyAb0iUnhf8wB3KeMXxekx
+         Ab0g==
+X-Gm-Message-State: AC+VfDxYqRWQ0QxBqY/sgrrmptY5VgDWpNTbk0dSlHhfLvYPFUnl+dpm
+        BYT1/Xoc+5kCqJxwAbjF7bvpBi/bkPA0Ag==
+X-Google-Smtp-Source: ACHHUZ4MAbNqROgew6250c1ibcAAraJFBK02li4jq/olWHmtGNQk+ySTPiowvkaMBK/HGQZ9q4HS5Q==
+X-Received: by 2002:aa7:d451:0:b0:50b:caac:d25 with SMTP id q17-20020aa7d451000000b0050bcaac0d25mr5303932edr.34.1685048536956;
+        Thu, 25 May 2023 14:02:16 -0700 (PDT)
+Received: from fedora.. ([213.149.38.146])
+        by smtp.googlemail.com with ESMTPSA id c25-20020aa7df19000000b0050e04125a46sm913010edy.10.2023.05.25.14.02.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 14:00:23 -0700 (PDT)
-Message-ID: <646fcc67.170a0220.f013f.7c7d@mx.google.com>
-Date:   Thu, 25 May 2023 14:00:23 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 25 May 2023 14:02:16 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v4 1/5] soc: qcom: socinfo: move SMEM item struct and defines to a header
+Date:   Thu, 25 May 2023 23:02:10 +0200
+Message-Id: <20230525210214.78235-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.4-rc3-33-g1ef93b68531a
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 7 warnings (v6.4-rc3-33-g1ef93b68531a)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 7 warnings (v6.4-rc3-33-g1e=
-f93b68531a)
+Move SMEM item struct and related defines to a header in order to be able
+to reuse them in the SMEM driver instead of duplicating them.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-4-rc3-33-g1ef93b68531a/
-
-Tree: pm
-Branch: testing
-Git Describe: v6.4-rc3-33-g1ef93b68531a
-Git Commit: 1ef93b68531af36f2eb776dc3a123ab2604b2672
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 3 warnings
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redunda=
-nt UACCESS disable
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
+Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
-For more info write to <info@kernelci.org>
+ drivers/soc/qcom/socinfo.c       | 67 +-----------------------------
+ include/linux/soc/qcom/socinfo.h | 70 ++++++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 66 deletions(-)
+ create mode 100644 include/linux/soc/qcom/socinfo.h
+
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index c2e4a57dd666..ee6bbf76d941 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -11,6 +11,7 @@
+ #include <linux/random.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/smem.h>
++#include <linux/soc/qcom/socinfo.h>
+ #include <linux/string.h>
+ #include <linux/stringify.h>
+ #include <linux/sys_soc.h>
+@@ -32,15 +33,6 @@
+ #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+ #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
+ 
+-#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
+-#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
+-
+-/*
+- * SMEM item id, used to acquire handles to respective
+- * SMEM region.
+- */
+-#define SMEM_HW_SW_BUILD_ID            137
+-
+ #ifdef CONFIG_DEBUG_FS
+ #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+ #define SMEM_IMAGE_VERSION_SIZE                4096
+@@ -126,64 +118,7 @@ static const char *const pmic_models[] = {
+ 	[58] = "PM8450",
+ 	[65] = "PM8010",
+ };
+-#endif /* CONFIG_DEBUG_FS */
+-
+-/* Socinfo SMEM item structure */
+-struct socinfo {
+-	__le32 fmt;
+-	__le32 id;
+-	__le32 ver;
+-	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+-	/* Version 2 */
+-	__le32 raw_id;
+-	__le32 raw_ver;
+-	/* Version 3 */
+-	__le32 hw_plat;
+-	/* Version 4 */
+-	__le32 plat_ver;
+-	/* Version 5 */
+-	__le32 accessory_chip;
+-	/* Version 6 */
+-	__le32 hw_plat_subtype;
+-	/* Version 7 */
+-	__le32 pmic_model;
+-	__le32 pmic_die_rev;
+-	/* Version 8 */
+-	__le32 pmic_model_1;
+-	__le32 pmic_die_rev_1;
+-	__le32 pmic_model_2;
+-	__le32 pmic_die_rev_2;
+-	/* Version 9 */
+-	__le32 foundry_id;
+-	/* Version 10 */
+-	__le32 serial_num;
+-	/* Version 11 */
+-	__le32 num_pmics;
+-	__le32 pmic_array_offset;
+-	/* Version 12 */
+-	__le32 chip_family;
+-	__le32 raw_device_family;
+-	__le32 raw_device_num;
+-	/* Version 13 */
+-	__le32 nproduct_id;
+-	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+-	/* Version 14 */
+-	__le32 num_clusters;
+-	__le32 ncluster_array_offset;
+-	__le32 num_defective_parts;
+-	__le32 ndefective_parts_array_offset;
+-	/* Version 15 */
+-	__le32 nmodem_supported;
+-	/* Version 16 */
+-	__le32  feature_code;
+-	__le32  pcode;
+-	__le32  npartnamemap_offset;
+-	__le32  nnum_partname_mapping;
+-	/* Version 17 */
+-	__le32 oem_variant;
+-};
+ 
+-#ifdef CONFIG_DEBUG_FS
+ struct socinfo_params {
+ 	u32 raw_device_family;
+ 	u32 hw_plat_subtype;
+diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
+new file mode 100644
+index 000000000000..d1cbc49a2a2d
+--- /dev/null
++++ b/include/linux/soc/qcom/socinfo.h
+@@ -0,0 +1,70 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __QCOM_SOCINFO_H__
++#define __QCOM_SOCINFO_H__
++
++/*
++ * SMEM item id, used to acquire handles to respective
++ * SMEM region.
++ */
++#define SMEM_HW_SW_BUILD_ID		137
++
++#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
++#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
++
++/* Socinfo SMEM item structure */
++struct socinfo {
++	__le32 fmt;
++	__le32 id;
++	__le32 ver;
++	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
++	/* Version 2 */
++	__le32 raw_id;
++	__le32 raw_ver;
++	/* Version 3 */
++	__le32 hw_plat;
++	/* Version 4 */
++	__le32 plat_ver;
++	/* Version 5 */
++	__le32 accessory_chip;
++	/* Version 6 */
++	__le32 hw_plat_subtype;
++	/* Version 7 */
++	__le32 pmic_model;
++	__le32 pmic_die_rev;
++	/* Version 8 */
++	__le32 pmic_model_1;
++	__le32 pmic_die_rev_1;
++	__le32 pmic_model_2;
++	__le32 pmic_die_rev_2;
++	/* Version 9 */
++	__le32 foundry_id;
++	/* Version 10 */
++	__le32 serial_num;
++	/* Version 11 */
++	__le32 num_pmics;
++	__le32 pmic_array_offset;
++	/* Version 12 */
++	__le32 chip_family;
++	__le32 raw_device_family;
++	__le32 raw_device_num;
++	/* Version 13 */
++	__le32 nproduct_id;
++	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
++	/* Version 14 */
++	__le32 num_clusters;
++	__le32 ncluster_array_offset;
++	__le32 num_defective_parts;
++	__le32 ndefective_parts_array_offset;
++	/* Version 15 */
++	__le32 nmodem_supported;
++	/* Version 16 */
++	__le32  feature_code;
++	__le32  pcode;
++	__le32  npartnamemap_offset;
++	__le32  nnum_partname_mapping;
++	/* Version 17 */
++	__le32 oem_variant;
++};
++
++#endif
+-- 
+2.40.1
+
