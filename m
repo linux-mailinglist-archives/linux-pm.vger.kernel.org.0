@@ -2,63 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DBD710DE0
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 16:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFCA710DE1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 16:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241475AbjEYOCc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 10:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42044 "EHLO
+        id S241498AbjEYOCd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 10:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241476AbjEYOCb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 10:02:31 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357F2E5F
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:05 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f6042d610fso6926465e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:05 -0700 (PDT)
+        with ESMTP id S241493AbjEYOCc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 10:02:32 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB68E61
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:06 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3078cc99232so2114715f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 07:02:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685023323; x=1687615323;
+        d=linaro.org; s=google; t=1685023324; x=1687615324;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8B9aQ7Lplcn7G2JB0WPPOQOR+fAGdexdV4KhX+LOA7s=;
-        b=CxESNjIkH3BboOwT79PfxTbJqEYO+ulPMr3xuPgq2RQc2zfHIA96lwJCDWHXUrvzm6
-         piAYphSeATpyEUOwZ6GBdLtnJ4aDCc6tfX5DVVhVxBPEykCgBBh9EFG4dpc6XDeKqE67
-         VkDHGrzXmUDv07jcMWvLfTEp/6bsqma5lwiNy9qGZ0GuRx4DcybOPU5p+kSGRuWUruvO
-         Y1G7iYNI6MR73/gHHYrDnZGZcYDqolv410rYhvZnlHxLAO1FTad0IvgF+YzIBKHEvxsM
-         bNlX7G9V77O1U5KNpzXOVby1gYgLgnP04O8EMEZ8qzh51m3REi+0rd7wRUdPancKMU4C
-         S+2g==
+        bh=f7GrEPFhayNtImibH8MsMjS6Dma/89gLhxwpMIW9yxY=;
+        b=RpvIHYxC1L44ES6U7GEAWLQGswS5iAFE0DExP5zmyuhCwp7enuXc3eZ7jBk7SR+zHy
+         L9vLWMb4rDhnPg2g1VoGUgfGv6uDlrEjB9T77/gkUMJk0570P5oaBsrexSVDVmBatg1A
+         BsbgJxWYkogcPg4g7RiuDdlNkiWARFam2jLJJzSM+LLTPNSuPspqetAZC0qlLq9+olwB
+         Ycen8vukVwyZsSMDPhZ1TY0Fgv8hFTCyZ8Ai/+93q1IBYLWaNlFUKD9vonAR85ypcRC8
+         wVGb5MHogYaxZxR41PPplCGVsUrD6hnAYp11/RvhLOpWV2lQIMfWKwb3A7VAlWynMr5p
+         zSpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685023323; x=1687615323;
+        d=1e100.net; s=20221208; t=1685023324; x=1687615324;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8B9aQ7Lplcn7G2JB0WPPOQOR+fAGdexdV4KhX+LOA7s=;
-        b=lCimw2mld7TjwBXXtaKMpMdCyAmqCrm5J+KjgS1R0CCH/Jc92bDZzx//Aa1xSqFGuk
-         RAm4C7Te5gEm1TGs27Lb2qb9/GS+UywCZiYLOemr6YACsdzZauYWTAcgJ73HVhwLJc6M
-         sGu2/6WkMFwQI22sZc0jfhvm961RBUCkUBiuILp6rQkL9H2HVEsg7Jt7mI4gEiusB3Q6
-         I+v7pC9ab46zmln51iR+jrXsNWkCMBcc2fHH2z8GkTWA+09mV+Tf6gGWo8h2UrHnlK1q
-         Zs9LabZN3Wk4LpPCl4F8oRbUQ9WP1nn+RO7V1a0ApDcqO/pMY52AkHRTOmCyXkTOnQGk
-         Tz5g==
-X-Gm-Message-State: AC+VfDwFY8G9iApxkkUr5415xJrcTelDVpwgb9Oo3/IiMzcm1Q/nfQWE
-        nIThjCnpQVHHH5XPzPL5vAOSQg==
-X-Google-Smtp-Source: ACHHUZ4F1fh7DZgNjE4ieVsv54Ei3k5AvurrK2sWewLerZ2R9/Zni1p50lrMYUzDcyELCRbAnCitsA==
-X-Received: by 2002:a5d:69c4:0:b0:2cf:f01f:ed89 with SMTP id s4-20020a5d69c4000000b002cff01fed89mr2474905wrw.24.1685023323146;
-        Thu, 25 May 2023 07:02:03 -0700 (PDT)
+        bh=f7GrEPFhayNtImibH8MsMjS6Dma/89gLhxwpMIW9yxY=;
+        b=hMO7hM18bq7tF+OxKeJDcCHogk71Loi1z/kbANgUPX2WUt36LLDW+p2SoZsEQHziSQ
+         Q4XzaN02qaVB+OxkSVv8frVArFqOQY/IvVusrQghx84AMs33V0ddsQE3xCjlGoC0ifCM
+         3rz2Tpxz7jk8rV9f6OKU7X10xNtrdWRy2J27Xt1MIp3cTvR9So70G4non+YOzCWfPhpb
+         KWgfW0MFrKIf2NTMohda3BWoL5NFKxgl+Lwvc12do/D9zGCITWnkitHthXDxJ+XGooMQ
+         VB0m3kKyY/i9ClzReiWlP4JaSYp/JDcUfsvxedk5vErqbli1kwTXOoesVnf81yQXTZYu
+         G8JQ==
+X-Gm-Message-State: AC+VfDymgURi1YdLCcw3mhoz9Voj07ftB0YxnnMyY1z2gEexxggigfzx
+        MDQ1laGGzHF/cUiYMyH7CAEqWw==
+X-Google-Smtp-Source: ACHHUZ5ji2kITZJRetE5AnyLqm88KcN37w8yCMnnvtqmdUj9ATobOayhpip9OOZqEWhQTZZlK7zm2A==
+X-Received: by 2002:a5d:5248:0:b0:307:873d:2ea with SMTP id k8-20020a5d5248000000b00307873d02eamr2413486wrc.47.1685023324377;
+        Thu, 25 May 2023 07:02:04 -0700 (PDT)
 Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:5aef:8608:89d7:7961])
-        by smtp.gmail.com with ESMTPSA id u4-20020adfdd44000000b003063176ef09sm1944866wrm.6.2023.05.25.07.02.02
+        by smtp.gmail.com with ESMTPSA id u4-20020adfdd44000000b003063176ef09sm1944866wrm.6.2023.05.25.07.02.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 May 2023 07:02:02 -0700 (PDT)
+        Thu, 25 May 2023 07:02:03 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Lukasz Luba <lukasz.luba@arm.com>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 3/8] thermal/core: Reorder the headers inclusion
-Date:   Thu, 25 May 2023 16:01:30 +0200
-Message-Id: <20230525140135.3589917-4-daniel.lezcano@linaro.org>
+Subject: [PATCH 4/8] thermal/core: Update the generic trip points
+Date:   Thu, 25 May 2023 16:01:31 +0200
+Message-Id: <20230525140135.3589917-5-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
 References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
@@ -74,62 +73,228 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The next changes will move the thermal device structure inside the
-thermal core code. Consequently, the traces must be included after
-thermal_core.h as this one contains the thermal zone device structure
-definition the traces need.
+At this point, the generic trip points rework allows to create a
+thermal zone with a fixed number of trip points. This usage satisfy
+almost all of the existing drivers.
 
-Reorder the inclusions.
+A few remaining drivers have a mechanism where the firmware updates
+the trip points. But there is no such update mechanism for the generic
+trip points, thus those drivers can not be converted to the generic
+approach.
 
-No functional changes intended.
+This patch provides a function 'thermal_zone_trips_update()' allowing
+to change the trip points of a thermal zone.
+
+At the same time, with the logic the trip points array is passed as a
+parameter to the thermal zone at creation time, we make our own
+private trip points array by copying the one passed as parameter.
+
+Note, no code has been found where the trip points update leads to a
+refresh of the trip points in sysfs, so it is very unlikey the number
+of trip points changes. However, for the sake of consistency it would
+be nicer to have the trip points being refreshed in sysfs also, but
+that could be done in a separate set of changes.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/gov_power_allocator.c | 6 +++---
- drivers/thermal/thermal_core.c        | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/thermal/thermal_core.c | 40 ++++++++---------
+ drivers/thermal/thermal_core.h |  3 ++
+ drivers/thermal/thermal_trip.c | 78 ++++++++++++++++++++++++++++++++++
+ include/linux/thermal.h        |  4 ++
+ 4 files changed, 102 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index d1c6ad92e5b4..6056ed15460b 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -11,12 +11,12 @@
- #include <linux/slab.h>
- #include <linux/thermal.h>
- 
--#define CREATE_TRACE_POINTS
--#include "thermal_trace_ipa.h"
--
- #define THERMAL_CORE_SUBSYS
- #include "thermal_core.h"
- 
-+#define CREATE_TRACE_POINTS
-+#include "thermal_trace_ipa.h" 
-+
- #define INVALID_TRIP -1
- 
- #define FRAC_BITS 10
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 6bca97e27d59..afcd4197babd 100644
+index afcd4197babd..3688b06401c8 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -21,13 +21,13 @@
- #include <linux/of.h>
- #include <linux/suspend.h>
+@@ -1224,32 +1224,11 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ 		return ERR_PTR(-EINVAL);
+ 	}
  
--#define CREATE_TRACE_POINTS
--#include "thermal_trace.h"
+-	/*
+-	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
+-	 * For example, shifting by 32 will result in compiler warning:
+-	 * warning: right shift count >= width of type [-Wshift-count- overflow]
+-	 *
+-	 * Also "mask >> num_trips" will always be true with 32 bit shift.
+-	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
+-	 * mask >> 32 = 0x80000000
+-	 * This will result in failure for the below condition.
+-	 *
+-	 * Check will be true when the bit 31 of the mask is set.
+-	 * 32 bit shift will cause overflow of 4 byte integer.
+-	 */
+-	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
+-		pr_err("Incorrect number of thermal trips\n");
+-		return ERR_PTR(-EINVAL);
+-	}
 -
+ 	if (!ops) {
+ 		pr_err("Thermal zone device ops not defined\n");
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
+-		return ERR_PTR(-EINVAL);
+-
+ 	if (!thermal_class)
+ 		return ERR_PTR(-ENODEV);
+ 
+@@ -1283,8 +1262,22 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ 	tz->ops = ops;
+ 	tz->device.class = thermal_class;
+ 	tz->devdata = devdata;
+-	tz->trips = trips;
+-	tz->num_trips = num_trips;
++
++	if (trips) {
++		result = __thermal_zone_trips_update(tz, trips, num_trips, mask);
++		if (result)
++			goto remove_id;
++	} else {
++		/*
++		 * Legacy trip point handling
++		 */
++		if ((!tz->ops->get_trip_type || !tz->ops->get_trip_temp) && num_trips) {
++			result = -EINVAL;
++			goto remove_id;
++		}
++
++		tz->num_trips = num_trips;
++	}
+ 
+ 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+ 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
+@@ -1451,6 +1444,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ 	mutex_unlock(&tz->lock);
+ 
+ 	kfree(tz->tzp);
++	kfree(tz->trips);
+ 
+ 	put_device(&tz->device);
+ 
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 84ada34ff079..c27a9930f904 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -125,6 +125,9 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+ void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+ int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+ 			    struct thermal_trip *trip);
++int __thermal_zone_trips_update(struct thermal_zone_device *tz,
++				struct thermal_trip *trips,
++				int num_trips, int mask);
+ int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+ 
+ /* sysfs I/F */
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index 61d927c35776..171b1902c01c 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -7,6 +7,8 @@
+  *
+  * Thermal trips handling
+  */
++#include <linux/slab.h>
++
  #define THERMAL_CORE_SUBSYS
  #include "thermal_core.h"
- #include "thermal_hwmon.h"
  
-+#define CREATE_TRACE_POINTS
-+#include "thermal_trace.h"
+@@ -181,3 +183,79 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+ 
+ 	return 0;
+ }
 +
- static DEFINE_IDA(thermal_tz_ida);
- static DEFINE_IDA(thermal_cdev_ida);
++int __thermal_zone_trips_update(struct thermal_zone_device *tz, struct thermal_trip *trips,
++				int num_trips, int mask)
++{
++	struct thermal_trip *new_trips;
++
++	/*
++	 * Legacy trip point handling is incompatible with this
++	 * function
++	 */
++	if (tz->ops->get_trip_type || tz->ops->get_trip_temp) {
++		pr_err("Legacy trip points use incompatible function '%s'\n", __func__);
++		return -ENOSYS;
++	}
++	
++	/*
++	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
++	 * For example, shifting by 32 will result in compiler warning:
++	 * warning: right shift count >= width of type [-Wshift-count- overflow]
++	 *
++	 * Also "mask >> num_trips" will always be true with 32 bit shift.
++	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
++	 * mask >> 32 = 0x80000000
++	 * This will result in failure for the below condition.
++	 *
++	 * Check will be true when the bit 31 of the mask is set.
++	 * 32 bit shift will cause overflow of 4 byte integer.
++	 */
++	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
++		pr_err("Incorrect number of thermal trips\n");
++		return -EINVAL;
++	}
++
++	/*
++	 * New generic trip point handling
++	 */
++	if (num_trips > 0 && !trips) {
++		pr_err("Inconsistent parameters\n");
++		return -EINVAL;
++	}
++
++	/*
++	 * Allocate our private trip points array structure
++	 */
++	new_trips = kmemdup(trips, sizeof(*trips) * num_trips, GFP_KERNEL);
++	if (!new_trips)
++		return -ENOMEM;
++	
++	/*
++	 * Newly allocated thermal zone will have the 'trips' field
++	 * NULL, kfree() is immune against that
++	 */
++	kfree(tz->trips);
++	tz->trips = new_trips;
++	tz->num_trips = num_trips;
++
++	return 0;
++}
++
++int thermal_zone_trips_update(struct thermal_zone_device *tz, struct thermal_trip *trips,
++			      int num_trips, int mask)
++{
++	int ret;
++
++	mutex_lock(&tz->lock);
++	ret = __thermal_zone_trips_update(tz, trips, num_trips, mask);
++	mutex_unlock(&tz->lock);
++
++	if (ret)
++		return ret;
++
++	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(thermal_zone_trips_update);
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 87837094d549..83937256a01c 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -291,6 +291,10 @@ int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
  
+ int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
+ 
++int thermal_zone_trips_update(struct thermal_zone_device *tz,
++			      struct thermal_trip *trips,
++			      int num_trips, int mask);
++
+ #ifdef CONFIG_THERMAL_ACPI
+ int thermal_acpi_active_trip_temp(struct acpi_device *adev, int id, int *ret_temp);
+ int thermal_acpi_passive_trip_temp(struct acpi_device *adev, int *ret_temp);
 -- 
 2.34.1
 
