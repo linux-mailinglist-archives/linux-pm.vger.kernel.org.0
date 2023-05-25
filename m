@@ -2,153 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA50710BB4
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 14:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2A5710BBF
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 14:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbjEYMHD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 25 May 2023 08:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46242 "EHLO
+        id S241130AbjEYMKI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 08:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbjEYMHC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 08:07:02 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4720E7;
-        Thu, 25 May 2023 05:07:00 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-9739440b60bso29999766b.0;
-        Thu, 25 May 2023 05:07:00 -0700 (PDT)
+        with ESMTP id S240825AbjEYMKF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 08:10:05 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05D6E7;
+        Thu, 25 May 2023 05:10:01 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f6a9131fdso79529366b.1;
+        Thu, 25 May 2023 05:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685016600; x=1687608600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rcZFua0EILx4UgL94m890/UaW7590iqXfYJZcRYRhjI=;
+        b=e51ZnOfJ1t/HYqAKC9YQAQk0SSWNN6Gcf6eX15qnKverJ5v2wTq1XItzYrgvLb6Jlc
+         nhS13CzXaongQ9ENjk2B1KGf3BvBL2Y0M6y9AlxFM4iysWL6uB9U25VP6lRXdjP5TbTk
+         w2Ct2rt0kxCfGhR50mAp4HILAlPtkxTzsCi5xumrO/Pj/0Y2mkap5gqJyjiK9zj/0XBo
+         0xReVcHuBoxG9om06U1JiXltUSvNKtm+EWnDUNNtYHCiGVua/zsWiRI8bFRUJ8y4MODi
+         Ss7ewqnkGgO68IVTpCqs4rJL5RTZuzncA2cPhTadyae4YsVGgLL5IIT91uDCAAgsdgaM
+         l2HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685016419; x=1687608419;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hKW6nh3Stu7+N3Kp7mLlmvutOp3dc9cSfF1cRxfu1tI=;
-        b=dbJi4YeDCBVWMp0fZp5TjHNoAK96oqYvbW5U7hLpWC7p/7P5IfxcUlOjRK6/W7uP2G
-         +gWBDfIFoGN5KaxM4+UyaI92yaPUOztuXwuU0xAhZZP/49ttsRebSZ91LObmCb+HKwjO
-         VehSSQVJl/MeL4uLx2K97h/CF4TUvSUT5/kbLX02bbAzAOkyCxWD8SGblLquIVdY4Vah
-         oejrCvIyAvvs0ehjSYJlICjQVIKNzbLsam0I2VYiU+MQtZf2TjDunAOKSBYm4OSpldyv
-         JStpHhZc4u3vbsyahLJQh5lW+0lHCD5lPY48/KQZDfQcaNw+2B+EAajhiZ+Y4i8Ns6hw
-         7Xyw==
-X-Gm-Message-State: AC+VfDwvExtrFkiqSjXDU014hkUNscncI5UNDfkph3gPjltLHyagARm+
-        VyeAtclv7ljagQ+pHHw5X2YHPPP5Vi9NVwQlWFs=
-X-Google-Smtp-Source: ACHHUZ6IRQ/SnBgyfpCgayrSbirvIindZHWRMc+FngvXIzH25Iu+YuHgvlryIKQiaIxUsbTuhF1Hvdfb9QDAWtg1VY4=
-X-Received: by 2002:a17:906:72d4:b0:96f:da08:d451 with SMTP id
- m20-20020a17090672d400b0096fda08d451mr11519029ejl.6.1685016418720; Thu, 25
- May 2023 05:06:58 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685016600; x=1687608600;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rcZFua0EILx4UgL94m890/UaW7590iqXfYJZcRYRhjI=;
+        b=lvAwIzP4RsZXlposbj3n3VSqZvcQ0ewyq43P9BslIyqucnIyUTYfqlbReMQRf411sv
+         AfZzO9j/mcqey+i8VhDga8ae3vxHIVMuJjKUfWpnss+hfeqAK0XB26iieeN5fsSMuIRk
+         4ywIKtNgBVo0loD+DyC4hjH+jmXb8OF2BARWWNXTSEOwzjTy1qd5kTexC5z41wjfMKO0
+         TRcAKk1kaiNLFiZsra+V9R5lPwMp+PR6Ucc+kNJn3tQTNHHyHN71njVgMtDhnJ5ah1/6
+         I7xKgVrbPXN96ucMga2HVdnWfDfrt+/OSsnI5W1a7fW6wK3ZNE5gFLEDTqHXmaPo6HpR
+         DBdA==
+X-Gm-Message-State: AC+VfDySsFSSMnahpN7MUiD3+VKYVzEefuGtnH7qcDI0C/JI9NEUh5KB
+        frVfwwa7zRzJTKdeskVdoPQ=
+X-Google-Smtp-Source: ACHHUZ7zIdWYYBbfyJFITOB1FxiDdqR7ygd9FU8331naFjWq13i+5GYuWd8Ym1lSFAJSdAzQNFATPg==
+X-Received: by 2002:a17:907:3185:b0:957:862a:9e6e with SMTP id xe5-20020a170907318500b00957862a9e6emr1104852ejb.73.1685016599901;
+        Thu, 25 May 2023 05:09:59 -0700 (PDT)
+Received: from fedora.. ([213.149.38.146])
+        by smtp.googlemail.com with ESMTPSA id d5-20020a170906640500b0094ef923a6ccsm765216ejm.219.2023.05.25.05.09.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 May 2023 05:09:59 -0700 (PDT)
+From:   Robert Marko <robimarko@gmail.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com, Robert Marko <robimarko@gmail.com>
+Subject: [PATCH v3 1/5] soc: qcom: socinfo: move SMEM item struct and defines to a header
+Date:   Thu, 25 May 2023 14:09:52 +0200
+Message-Id: <20230525120956.3095317-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230522200033.2605-1-mario.limonciello@amd.com>
- <20230522200033.2605-4-mario.limonciello@amd.com> <e9eb526d-84fe-b814-67a3-6f7977aa0078@redhat.com>
- <MN0PR12MB6101AF7606A3547EC5AA42A7E2409@MN0PR12MB6101.namprd12.prod.outlook.com>
- <dcdb3d12-e0af-5e4d-119e-d4fbe9a9495b@redhat.com>
-In-Reply-To: <dcdb3d12-e0af-5e4d-119e-d4fbe9a9495b@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 25 May 2023 14:06:46 +0200
-Message-ID: <CAJZ5v0h=tSKjZxQJECZCQqzWDMAwY8cKf7F_xyLQSBG8TPyzrg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend
- related messages
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 25, 2023 at 12:13 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Mario,
->
-> On 5/23/23 18:21, Limonciello, Mario wrote:
-> > [AMD Official Use Only - General]
-> >
-> >> -----Original Message-----
-> >> From: Hans de Goede <hdegoede@redhat.com>
-> >> Sent: Tuesday, May 23, 2023 6:08 AM
-> >> To: Limonciello, Mario <Mario.Limonciello@amd.com>; rafael@kernel.org;
-> >> linus.walleij@linaro.org
-> >> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> >> gpio@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-
-> >> pm@vger.kernel.org; S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>;
-> >> Natikar, Basavaraj <Basavaraj.Natikar@amd.com>
-> >> Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for
-> >> suspend related messages
-> >>
-> >> Hi Mario,
-> >>
-> >> On 5/22/23 22:00, Mario Limonciello wrote:
-> >>> Using pm_pr_dbg() allows users to toggle
-> >> `/sys/power/pm_debug_messages`
-> >>> as a single knob to turn on messages that amd-pmc can emit to aid in
-> >>> any s2idle debugging.
-> >>>
-> >>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >>> ---
-> >>>  drivers/platform/x86/amd/pmc.c | 4 ++--
-> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/platform/x86/amd/pmc.c
-> >> b/drivers/platform/x86/amd/pmc.c
-> >>> index 427905714f79..1304cd6f13f6 100644
-> >>> --- a/drivers/platform/x86/amd/pmc.c
-> >>> +++ b/drivers/platform/x86/amd/pmc.c
-> >>> @@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct
-> >> amd_pmc_dev *pdev, struct device *dev,
-> >>>     }
-> >>>
-> >>>     if (dev)
-> >>> -           dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
-> >>> +           pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
-> >>>
-> >>>     if (s)
-> >>>             seq_printf(s, "SMU idlemask : 0x%x\n", val);
-> >>
-> >> This does not compile, amd/pmc.c may be build as an amd-pmc.ko module
-> >> and currently the pm_debug_messages_on flag used by pm_pr_dbg()
-> >> is not exported to modules:
-> >>
-> >>   CC [M]  drivers/platform/x86/amd/pmc.o
-> >>   LD [M]  drivers/platform/x86/amd/amd-pmc.o
-> >>   MODPOST Module.symvers
-> >> ERROR: modpost: "pm_debug_messages_on"
-> >> [drivers/platform/x86/amd/amd-pmc.ko] undefined!
-> >> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
-> >> make: *** [Makefile:1978: modpost] Error 2
-> >>
-> >> Regards,
-> >>
-> >> Hans
-> >>
-> >
-> > My apologies, yes I was compiling in when testing.  Let me ask if this
-> > series makes sense and is "generally" agreeable though.
->
-> I have no objections against this series, otherwise I don't really
-> have a strong opinion on this series.
->
-> If this makes sense and if exporting pm_debug_messages_on is ok
-> is Rafael's call to make IMHO.
->
-> Rafael ?
+Move SMEM item struct and related defines to a header in order to be able
+to reuse them in the SMEM driver instead of duplicating them.
 
-I have no strong opinion.
+Signed-off-by: Robert Marko <robimarko@gmail.com>
+---
+ drivers/soc/qcom/socinfo.c       | 67 +-----------------------------
+ include/linux/soc/qcom/socinfo.h | 70 ++++++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+), 66 deletions(-)
+ create mode 100644 include/linux/soc/qcom/socinfo.h
 
-I would do it slightly differently as mentioned in my reply to patch
-[1/4] (and then the new function could be used in patch [2/4] I
-think).
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index c2e4a57dd666..ee6bbf76d941 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -11,6 +11,7 @@
+ #include <linux/random.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/smem.h>
++#include <linux/soc/qcom/socinfo.h>
+ #include <linux/string.h>
+ #include <linux/stringify.h>
+ #include <linux/sys_soc.h>
+@@ -32,15 +33,6 @@
+ #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+ #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
+ 
+-#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
+-#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
+-
+-/*
+- * SMEM item id, used to acquire handles to respective
+- * SMEM region.
+- */
+-#define SMEM_HW_SW_BUILD_ID            137
+-
+ #ifdef CONFIG_DEBUG_FS
+ #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+ #define SMEM_IMAGE_VERSION_SIZE                4096
+@@ -126,64 +118,7 @@ static const char *const pmic_models[] = {
+ 	[58] = "PM8450",
+ 	[65] = "PM8010",
+ };
+-#endif /* CONFIG_DEBUG_FS */
+-
+-/* Socinfo SMEM item structure */
+-struct socinfo {
+-	__le32 fmt;
+-	__le32 id;
+-	__le32 ver;
+-	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+-	/* Version 2 */
+-	__le32 raw_id;
+-	__le32 raw_ver;
+-	/* Version 3 */
+-	__le32 hw_plat;
+-	/* Version 4 */
+-	__le32 plat_ver;
+-	/* Version 5 */
+-	__le32 accessory_chip;
+-	/* Version 6 */
+-	__le32 hw_plat_subtype;
+-	/* Version 7 */
+-	__le32 pmic_model;
+-	__le32 pmic_die_rev;
+-	/* Version 8 */
+-	__le32 pmic_model_1;
+-	__le32 pmic_die_rev_1;
+-	__le32 pmic_model_2;
+-	__le32 pmic_die_rev_2;
+-	/* Version 9 */
+-	__le32 foundry_id;
+-	/* Version 10 */
+-	__le32 serial_num;
+-	/* Version 11 */
+-	__le32 num_pmics;
+-	__le32 pmic_array_offset;
+-	/* Version 12 */
+-	__le32 chip_family;
+-	__le32 raw_device_family;
+-	__le32 raw_device_num;
+-	/* Version 13 */
+-	__le32 nproduct_id;
+-	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+-	/* Version 14 */
+-	__le32 num_clusters;
+-	__le32 ncluster_array_offset;
+-	__le32 num_defective_parts;
+-	__le32 ndefective_parts_array_offset;
+-	/* Version 15 */
+-	__le32 nmodem_supported;
+-	/* Version 16 */
+-	__le32  feature_code;
+-	__le32  pcode;
+-	__le32  npartnamemap_offset;
+-	__le32  nnum_partname_mapping;
+-	/* Version 17 */
+-	__le32 oem_variant;
+-};
+ 
+-#ifdef CONFIG_DEBUG_FS
+ struct socinfo_params {
+ 	u32 raw_device_family;
+ 	u32 hw_plat_subtype;
+diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
+new file mode 100644
+index 000000000000..d1cbc49a2a2d
+--- /dev/null
++++ b/include/linux/soc/qcom/socinfo.h
+@@ -0,0 +1,70 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __QCOM_SOCINFO_H__
++#define __QCOM_SOCINFO_H__
++
++/*
++ * SMEM item id, used to acquire handles to respective
++ * SMEM region.
++ */
++#define SMEM_HW_SW_BUILD_ID		137
++
++#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
++#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
++
++/* Socinfo SMEM item structure */
++struct socinfo {
++	__le32 fmt;
++	__le32 id;
++	__le32 ver;
++	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
++	/* Version 2 */
++	__le32 raw_id;
++	__le32 raw_ver;
++	/* Version 3 */
++	__le32 hw_plat;
++	/* Version 4 */
++	__le32 plat_ver;
++	/* Version 5 */
++	__le32 accessory_chip;
++	/* Version 6 */
++	__le32 hw_plat_subtype;
++	/* Version 7 */
++	__le32 pmic_model;
++	__le32 pmic_die_rev;
++	/* Version 8 */
++	__le32 pmic_model_1;
++	__le32 pmic_die_rev_1;
++	__le32 pmic_model_2;
++	__le32 pmic_die_rev_2;
++	/* Version 9 */
++	__le32 foundry_id;
++	/* Version 10 */
++	__le32 serial_num;
++	/* Version 11 */
++	__le32 num_pmics;
++	__le32 pmic_array_offset;
++	/* Version 12 */
++	__le32 chip_family;
++	__le32 raw_device_family;
++	__le32 raw_device_num;
++	/* Version 13 */
++	__le32 nproduct_id;
++	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
++	/* Version 14 */
++	__le32 num_clusters;
++	__le32 ncluster_array_offset;
++	__le32 num_defective_parts;
++	__le32 ndefective_parts_array_offset;
++	/* Version 15 */
++	__le32 nmodem_supported;
++	/* Version 16 */
++	__le32  feature_code;
++	__le32  pcode;
++	__le32  npartnamemap_offset;
++	__le32  nnum_partname_mapping;
++	/* Version 17 */
++	__le32 oem_variant;
++};
++
++#endif
+-- 
+2.40.1
 
-Otherwise this is fine with me if it helps to debug failures in the field.
