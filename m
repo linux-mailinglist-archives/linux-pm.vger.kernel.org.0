@@ -2,80 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7849C7108A7
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 11:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B5097109A5
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 12:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232968AbjEYJSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 05:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S240828AbjEYKO4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 06:14:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjEYJSu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 05:18:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB63CA9
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 02:18:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B57771042;
-        Thu, 25 May 2023 02:19:33 -0700 (PDT)
-Received: from bogus (unknown [10.57.96.86])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F329E3F67D;
-        Thu, 25 May 2023 02:18:46 -0700 (PDT)
-Date:   Thu, 25 May 2023 10:18:44 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [CfP] Power Management and Thermal Control MC (LPC2023)
-Message-ID: <20230525091844.tbxrk5gcwr2lppfo@bogus>
-References: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
+        with ESMTP id S240886AbjEYKOt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 06:14:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEFA510C6
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 03:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1685009599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3qUwZavWeot6BxoSwWB1BeOsQSAKpT3nzUsF0j/xmbk=;
+        b=HwEdC2z4TDa0JTuP9UuNI/G1yjiJy/jfcjJxsGbf2ktudUEZSy2NCXQsDOPZizwFOJZQqA
+        FRN3IMqMYVStQ4eDTqKhMU68Zv4ClT3TKJupG9cMOAZc8N2hYWtvISUt4ga0bKmtasUgJX
+        ClZ4UK0SywpRv0HwTQPCt3KPsRpkSgE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-653-GLNjHbT5NVWs9TNJ0gqtJA-1; Thu, 25 May 2023 06:13:17 -0400
+X-MC-Unique: GLNjHbT5NVWs9TNJ0gqtJA-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-96fe603151eso54411566b.0
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 03:13:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685009596; x=1687601596;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qUwZavWeot6BxoSwWB1BeOsQSAKpT3nzUsF0j/xmbk=;
+        b=QNQ5Hnwujtfrfq+IxjthqWhbbhmfxC8S4Kl1oXSkNX1UbHVdQtaJJZqzO4l5vX7wUk
+         DeLvswiDmPz/KOjgIgPFgh0gWiLCptTfthEldKDww9Z130oGHtQRTukWWnlYjl3Ugs1a
+         wJ/BkZ5TRNBjZoOvSxfTDc8p462zI2WqOfXNcF2ThplEAqPl2b5EZ3vQjwap/aX9LEI+
+         gzsj7zQnNWuK30LvtipFgdvgHH5kfnWI4j6WWM2oCB+PEUZbVn/gnLtbrA7vYUQCM1IC
+         tO9VaUtIgNnutboBPz88i6ehYgc09P0UriKxWFuTxXKqTKzDGVZQ9RyoB4jie3HNT/09
+         3cmw==
+X-Gm-Message-State: AC+VfDyoChy1TVSDHi/2uQxxQVVtJ5AUtTXKjLEOFl7EpHJlkaTi4Sy9
+        jGaXWKe9rFh9q4x4QkBBHjB3hL8JIumxtCToSIijK+TAPL5hspVADYrBAu9Y+NQ7V4FHOPxDhAs
+        aklHSsWoKIpq6VKg0/Qo=
+X-Received: by 2002:a17:907:720f:b0:972:aa30:203e with SMTP id dr15-20020a170907720f00b00972aa30203emr1112329ejc.34.1685009596737;
+        Thu, 25 May 2023 03:13:16 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4UVuOdKtAJmTw+9/lxOTaN96LepZ+KFwgazTOkVRaQ7goTvLQZICLYaLw7QL++QbWevUCWkA==
+X-Received: by 2002:a17:907:720f:b0:972:aa30:203e with SMTP id dr15-20020a170907720f00b00972aa30203emr1112304ejc.34.1685009596436;
+        Thu, 25 May 2023 03:13:16 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id kq10-20020a170906abca00b00960005e09a3sm648261ejb.61.2023.05.25.03.13.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 May 2023 03:13:15 -0700 (PDT)
+Message-ID: <dcdb3d12-e0af-5e4d-119e-d4fbe9a9495b@redhat.com>
+Date:   Thu, 25 May 2023 12:13:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for suspend
+ related messages
+Content-Language: en-US, nl
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>
+Cc:     "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "Natikar, Basavaraj" <Basavaraj.Natikar@amd.com>
+References: <20230522200033.2605-1-mario.limonciello@amd.com>
+ <20230522200033.2605-4-mario.limonciello@amd.com>
+ <e9eb526d-84fe-b814-67a3-6f7977aa0078@redhat.com>
+ <MN0PR12MB6101AF7606A3547EC5AA42A7E2409@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <MN0PR12MB6101AF7606A3547EC5AA42A7E2409@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+Hi Mario,
 
-On Mon, May 22, 2023 at 07:12:39PM +0200, Rafael J. Wysocki wrote:
-> Hi Folks,
+On 5/23/23 18:21, Limonciello, Mario wrote:
+> [AMD Official Use Only - General]
 > 
-> I'm going to submit a Power Management and Thermal Control
-> micro-conference proposal for LPC2023 along the lines of what happened
-> in the previous iterations of it.
+>> -----Original Message-----
+>> From: Hans de Goede <hdegoede@redhat.com>
+>> Sent: Tuesday, May 23, 2023 6:08 AM
+>> To: Limonciello, Mario <Mario.Limonciello@amd.com>; rafael@kernel.org;
+>> linus.walleij@linaro.org
+>> Cc: linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+>> gpio@vger.kernel.org; platform-driver-x86@vger.kernel.org; linux-
+>> pm@vger.kernel.org; S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>;
+>> Natikar, Basavaraj <Basavaraj.Natikar@amd.com>
+>> Subject: Re: [PATCH v2 4/4] platform/x86/amd: pmc: Use pm_pr_dbg() for
+>> suspend related messages
+>>
+>> Hi Mario,
+>>
+>> On 5/22/23 22:00, Mario Limonciello wrote:
+>>> Using pm_pr_dbg() allows users to toggle
+>> `/sys/power/pm_debug_messages`
+>>> as a single knob to turn on messages that amd-pmc can emit to aid in
+>>> any s2idle debugging.
+>>>
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>> ---
+>>>  drivers/platform/x86/amd/pmc.c | 4 ++--
+>>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/platform/x86/amd/pmc.c
+>> b/drivers/platform/x86/amd/pmc.c
+>>> index 427905714f79..1304cd6f13f6 100644
+>>> --- a/drivers/platform/x86/amd/pmc.c
+>>> +++ b/drivers/platform/x86/amd/pmc.c
+>>> @@ -543,7 +543,7 @@ static int amd_pmc_idlemask_read(struct
+>> amd_pmc_dev *pdev, struct device *dev,
+>>>     }
+>>>
+>>>     if (dev)
+>>> -           dev_dbg(pdev->dev, "SMU idlemask s0i3: 0x%x\n", val);
+>>> +           pm_pr_dbg("SMU idlemask s0i3: 0x%x\n", val);
+>>>
+>>>     if (s)
+>>>             seq_printf(s, "SMU idlemask : 0x%x\n", val);
+>>
+>> This does not compile, amd/pmc.c may be build as an amd-pmc.ko module
+>> and currently the pm_debug_messages_on flag used by pm_pr_dbg()
+>> is not exported to modules:
+>>
+>>   CC [M]  drivers/platform/x86/amd/pmc.o
+>>   LD [M]  drivers/platform/x86/amd/amd-pmc.o
+>>   MODPOST Module.symvers
+>> ERROR: modpost: "pm_debug_messages_on"
+>> [drivers/platform/x86/amd/amd-pmc.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:136: Module.symvers] Error 1
+>> make: *** [Makefile:1978: modpost] Error 2
+>>
+>> Regards,
+>>
+>> Hans
+>>
 > 
-> If you have topics that you'd like to be discussed there, please let
-> me know by Friday, May 26.
-> 
-> Please note that LPC MC topics are expected to cover work in progress
-> or at the concept stage.  They are not supposed to be about work that
-> has been done already.
-> 
+> My apologies, yes I was compiling in when testing.  Let me ask if this
+> series makes sense and is "generally" agreeable though.
 
-One topic I am thinking of is possible ACPI extensions for device DVFS
-something similar to CPU CPPC which I think both x86 and Arm community
-are interested. There are also bunch of topics for Arm based laptop like
-devices which probably x86 don't have to deal with. I am not sure if 
-LPC uconf is the right forum but since many of the topics are now driven
-by code first approach, I thought of bringing it up here and see if there
-is any interest.
+I have no objections against this series, otherwise I don't really
+have a strong opinion on this series.
 
-Let me know what do you think.
+If this makes sense and if exporting pm_debug_messages_on is ok
+is Rafael's call to make IMHO.
 
--- 
+Rafael ?
+
 Regards,
-Sudeep
+
+Hans
+
+
+
+
