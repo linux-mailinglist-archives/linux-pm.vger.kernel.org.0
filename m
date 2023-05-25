@@ -2,73 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E22711934
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 23:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A599711A76
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 01:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241590AbjEYVgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 17:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
+        id S233533AbjEYXNR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 19:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjEYVgQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 17:36:16 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3399C
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 14:36:14 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4bdcde899so2993828e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 14:36:14 -0700 (PDT)
+        with ESMTP id S229689AbjEYXNQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 19:13:16 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27788EE
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 16:13:13 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af2d092d7aso1124421fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 16:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685050573; x=1687642573;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=linaro.org; s=google; t=1685056391; x=1687648391;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=h4/FnL/3RdSlVyE6Xkxbbh+4KZeaW1VsiE2otyNq+0k=;
-        b=Gd1VGQCj218weDsv3Ax0ruESXqz/Hs6ZisMKKhQCgAGntmiUmMBjI+hIHdTQYaQbOg
-         6qAcKIBf/PPNFD7nkJ+d+Y+uBnHR69M3TaFEV7RazSmPUo0Dk8r223xMcx+z9OvcNlIz
-         WpDvu+E++It1+2XqmdcvL9Y9azfk7flynpytTYOjQLR51ANZqrjvoBA17JXg0F1/0DGv
-         PNEGE6eDBJ07faugbGpRvmpqJ/XXDHnak9E6jAQ000O9zJ5RFQTCZm8y+USXWiBfXZPX
-         MsgwawVxle+I08NZJ4W9FKielyQOcsI0I5tRc2/el0mh2nNU7a5FpdAmC4KjUYQtsILx
-         pTZg==
+        bh=peywgRsEweJrcss//NWXsO8aU97w0pmYonvmiT2oGtw=;
+        b=RQ3BAeSVTcE3DQWaEVwVIupI0e0dk2Cv5p3FrDVcrdrM1NipgKi+t+3FjKph8gfz+8
+         VEBUq/rG8bqTiKWJQ79/LEKhSFapX31wgDTAK3m6dWhmKnc0ZtOFYS6EZe0yIAovPjOx
+         EhAjGB2BxE0Bw+J69Lp04GYmYEtDAkO3jsqr37gipgK5INnD/z3BZVM0K9PvDaxmtf+F
+         9Kth/U4Jdw6pSobadaZ71lnLaHuTUigxC/fuwYB5YJbn4N08MzKI2YxPmOk1K9L+ugvP
+         jJmSMqfEUJr4gEeef//EEtRlJhie9q/oaoghmXvAYztIIx+coowXamqknGoCqmxdFGvt
+         4WCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685050573; x=1687642573;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        d=1e100.net; s=20221208; t=1685056391; x=1687648391;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h4/FnL/3RdSlVyE6Xkxbbh+4KZeaW1VsiE2otyNq+0k=;
-        b=QYdhKGAXEB6ljoEqWgdnepf486qfOUz9D132KILnEQJdrsd3ewje7NoQYtmSNpe//I
-         ar8kktE8SXJLn1RtUsn19JzOmNMeIaIjEE6jTnKjviVTNmRcI4qda1N6AV7PaD+dAYDP
-         jCPd3J6bO5UksBR7Qja/axOYUOXfBvUtey4qVyPjGsaWCC0FykLZKyWAQ7dYHd4IbeZz
-         gehpV58SZ/M0JKdw+3wkmx3LwPBOyZkU1RsIZ9MVLIOoOVMc2uTLxuTMD0bTVqOeG7Yl
-         4Eb463hWJvGIOTV0LxLzduYRAxdczZrbdKOrbhk7QIjolECRNxeDO6jc0QHbVJ+475G6
-         9QtA==
-X-Gm-Message-State: AC+VfDya8H7jmisA48DS+YTDnyJ0otEYEVksCT9fleUKkaVtKmzMomSe
-        sDw+kne6VbEvNlZozchgjZL7jw==
-X-Google-Smtp-Source: ACHHUZ7Owa9UgNcNm+29fRuSaLnMhZX7/tlwuo26yYQ0Vqy35GaTwXwh9+eYViU+FE43Vn3foR9nUg==
-X-Received: by 2002:ac2:4c14:0:b0:4ed:c5a4:28dc with SMTP id t20-20020ac24c14000000b004edc5a428dcmr6154495lfq.38.1685050573158;
-        Thu, 25 May 2023 14:36:13 -0700 (PDT)
+        bh=peywgRsEweJrcss//NWXsO8aU97w0pmYonvmiT2oGtw=;
+        b=PYc4tjDBVXRGKpBD4IUmS0Abw3aSi8l+eE7XinoUoO64E23iSPH2JsSjPGSoIqdzdd
+         S8/GgHd+CVaYbLHx56SmHHgirbFfF7ifEzk9HMqBjE0Kuydh176+k9WceFePnuNOz/VI
+         bQs06fZGLla3Poy7H/atvsJ7tQvdKsi78+DG85gSM5HewWOb7IFrmLeVwBTJ4if7B6FV
+         rWXwsSdcIp2tQQgT5ZTIi1WMb3RTx4uwtHeqnqCVkcmqhrOnFUBOhShRZ+aSbGvlGu7h
+         kkAYsgqc7fHqyZRqtnHEqSvIdW3U2/rEzs9u9UGs4tXvnJZRWs4ynESSSwbExhbB3mAk
+         ZVlQ==
+X-Gm-Message-State: AC+VfDzKuCTaK07+qDbHSY1FMbx9vQCZWPuyi1L2p+PiM1f+BxCavVZ/
+        p22UXArwwBxmUWrLA9nETr+e+w==
+X-Google-Smtp-Source: ACHHUZ4cRMs+1HeP/z0RO+yiFJwD64q8H438xO67ZVNuXholyAMXH40W5smMWHFvAvVqf/l6b8kb1A==
+X-Received: by 2002:a2e:9aca:0:b0:29b:80b4:7bf7 with SMTP id p10-20020a2e9aca000000b0029b80b47bf7mr28614ljj.41.1685056391155;
+        Thu, 25 May 2023 16:13:11 -0700 (PDT)
 Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id r13-20020ac25a4d000000b004f4b0493749sm340106lfn.303.2023.05.25.14.36.12
+        by smtp.gmail.com with ESMTPSA id v17-20020a2e7a11000000b002ad9a1bfa8esm437777ljc.1.2023.05.25.16.13.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 14:36:12 -0700 (PDT)
-Message-ID: <e3df6de8-5137-9119-b1de-719cc1336a2e@linaro.org>
-Date:   Thu, 25 May 2023 23:36:11 +0200
+        Thu, 25 May 2023 16:13:10 -0700 (PDT)
+Message-ID: <27f12349-1ee5-503b-3e38-e757db4331bc@linaro.org>
+Date:   Fri, 26 May 2023 01:13:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/5] soc: qcom: smem: introduce qcom_smem_get_msm_id()
+Subject: Re: [PATCH v4 1/5] soc: qcom: socinfo: move SMEM item struct and
+ defines to a header
 Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, ilia.lin@kernel.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com
+References: <20230525210214.78235-1-robimarko@gmail.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Robert Marko <robimarko@gmail.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, ilia.lin@kernel.org,
-        rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, ansuelsmth@gmail.com
-References: <20230525120956.3095317-1-robimarko@gmail.com>
- <20230525120956.3095317-3-robimarko@gmail.com>
- <c4a50acd-2c0a-7c18-95d8-e9145fa1ff24@quicinc.com>
- <CAOX2RU72PFrdJoJfCGB-Q=V781WD6jEJomjkBeY9jsVPG6MOPQ@mail.gmail.com>
- <af6f2b60-49f6-3622-7868-a2b3a6bd462f@linaro.org>
-In-Reply-To: <af6f2b60-49f6-3622-7868-a2b3a6bd462f@linaro.org>
+In-Reply-To: <20230525210214.78235-1-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,110 +79,186 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 25.05.2023 23:21, Konrad Dybcio wrote:
+On 25.05.2023 23:02, Robert Marko wrote:
+> Move SMEM item struct and related defines to a header in order to be able
+> to reuse them in the SMEM driver instead of duplicating them.
 > 
-> 
-> On 25.05.2023 17:03, Robert Marko wrote:
->> On Thu, 25 May 2023 at 14:59, Kathiravan T <quic_kathirav@quicinc.com> wrote:
->>>
->>>
->>> On 5/25/2023 5:39 PM, Robert Marko wrote:
->>>> Introduce a helper to return the SoC SMEM ID, which is used to identify the
->>>> exact SoC model as there may be differences in the same SoC family.
->>>>
->>>> Currently, cpufreq-nvmem does this completely in the driver and there has
->>>> been more interest expresed for other drivers to use this information so
->>>> lets expose a common helper to prevent redoing it in individual drivers
->>>> since this field is present on every SMEM table version.
->>>>
->>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>>> ---
->>>> Changes in v3:
->>>> * Change export to EXPORT_SYMBOL_GPL
->>>> * Use an argument for returning SoC ID
->>>> * Update kerneldoc
->>>> ---
->>>>   drivers/soc/qcom/smem.c       | 24 ++++++++++++++++++++++++
->>>>   include/linux/soc/qcom/smem.h |  2 ++
->>>>   2 files changed, 26 insertions(+)
->>>>
->>>> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
->>>> index bc98520c4969..185ed0da11a1 100644
->>>> --- a/drivers/soc/qcom/smem.c
->>>> +++ b/drivers/soc/qcom/smem.c
->>>> @@ -14,6 +14,7 @@
->>>>   #include <linux/sizes.h>
->>>>   #include <linux/slab.h>
->>>>   #include <linux/soc/qcom/smem.h>
->>>> +#include <linux/soc/qcom/socinfo.h>
->>>>
->>>>   /*
->>>>    * The Qualcomm shared memory system is a allocate only heap structure that
->>>> @@ -772,6 +773,29 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
->>>>
->>>> +/**
->>>> + * qcom_smem_get_msm_id() - return the SoC ID
->>>> + * @id:      On success, we return the SoC ID here.
->>>> + *
->>>> + * Look up SoC ID from HW/SW build ID and return it.
->>>> + *
->>>> + * Return: 0 on success, negative errno on failure.
->>>> + */
->>>> +int qcom_smem_get_msm_id(u32 *id)
->>>
->>>
->>> I think, MSM  is not the only platform which will leverage this API.
->>> qcom_smem_get_soc_id() / qcom_smem_get_cpu_id() would make more sense
->>> than qcom_smem_get_msm_id() ?
->>
->> I agree, qcom_smem_get_soc_id() sounds better to me as its not just MSM parts.
->>>
->>>
->>>> +{
->>>> +     size_t len;
->>>> +     struct socinfo *info;
->>>> +
->>>> +     info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, &len);
->>>
->>>
->>> len is unused after this, can we just pass NULL? Did a quick check on
->>> the code, if we pass the address, size of the item will be updated, else no.
->>
->> Yes, indeed passing NULL works here for the simple case this helper is handling.
->> Will address in v4.
-> Please also consider Bjorn's suggestion of using PTR_ERR
-Nevermind, brain too laggy ;)
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
+>  drivers/soc/qcom/socinfo.c       | 67 +-----------------------------
+>  include/linux/soc/qcom/socinfo.h | 70 ++++++++++++++++++++++++++++++++
+>  2 files changed, 71 insertions(+), 66 deletions(-)
+>  create mode 100644 include/linux/soc/qcom/socinfo.h
 > 
-> Konrad
->>
->> Regards,
->> Robert
->>>
->>>
->>>> +     if (IS_ERR(info))
->>>> +             return PTR_ERR(info);
->>>> +
->>>> +     *id = info->id;
->>>> +
->>>> +     return 0;
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(qcom_smem_get_msm_id);
->>>> +
->>>>   static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
->>>>   {
->>>>       struct smem_header *header;
->>>> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
->>>> index 86e1b358688a..cb204ad6373c 100644
->>>> --- a/include/linux/soc/qcom/smem.h
->>>> +++ b/include/linux/soc/qcom/smem.h
->>>> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
->>>>
->>>>   phys_addr_t qcom_smem_virt_to_phys(void *p);
->>>>
->>>> +int qcom_smem_get_msm_id(u32 *id);
->>>> +
->>>>   #endif
+> diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+> index c2e4a57dd666..ee6bbf76d941 100644
+> --- a/drivers/soc/qcom/socinfo.c
+> +++ b/drivers/soc/qcom/socinfo.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/random.h>
+>  #include <linux/slab.h>
+>  #include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/socinfo.h>
+>  #include <linux/string.h>
+>  #include <linux/stringify.h>
+>  #include <linux/sys_soc.h>
+> @@ -32,15 +33,6 @@
+>  #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+>  #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
+>  
+> -#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
+> -#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
+> -
+> -/*
+> - * SMEM item id, used to acquire handles to respective
+> - * SMEM region.
+> - */
+> -#define SMEM_HW_SW_BUILD_ID            137
+> -
+>  #ifdef CONFIG_DEBUG_FS
+>  #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+>  #define SMEM_IMAGE_VERSION_SIZE                4096
+> @@ -126,64 +118,7 @@ static const char *const pmic_models[] = {
+>  	[58] = "PM8450",
+>  	[65] = "PM8010",
+>  };
+> -#endif /* CONFIG_DEBUG_FS */
+> -
+> -/* Socinfo SMEM item structure */
+> -struct socinfo {
+> -	__le32 fmt;
+> -	__le32 id;
+> -	__le32 ver;
+> -	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+> -	/* Version 2 */
+> -	__le32 raw_id;
+> -	__le32 raw_ver;
+> -	/* Version 3 */
+> -	__le32 hw_plat;
+> -	/* Version 4 */
+> -	__le32 plat_ver;
+> -	/* Version 5 */
+> -	__le32 accessory_chip;
+> -	/* Version 6 */
+> -	__le32 hw_plat_subtype;
+> -	/* Version 7 */
+> -	__le32 pmic_model;
+> -	__le32 pmic_die_rev;
+> -	/* Version 8 */
+> -	__le32 pmic_model_1;
+> -	__le32 pmic_die_rev_1;
+> -	__le32 pmic_model_2;
+> -	__le32 pmic_die_rev_2;
+> -	/* Version 9 */
+> -	__le32 foundry_id;
+> -	/* Version 10 */
+> -	__le32 serial_num;
+> -	/* Version 11 */
+> -	__le32 num_pmics;
+> -	__le32 pmic_array_offset;
+> -	/* Version 12 */
+> -	__le32 chip_family;
+> -	__le32 raw_device_family;
+> -	__le32 raw_device_num;
+> -	/* Version 13 */
+> -	__le32 nproduct_id;
+> -	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+> -	/* Version 14 */
+> -	__le32 num_clusters;
+> -	__le32 ncluster_array_offset;
+> -	__le32 num_defective_parts;
+> -	__le32 ndefective_parts_array_offset;
+> -	/* Version 15 */
+> -	__le32 nmodem_supported;
+> -	/* Version 16 */
+> -	__le32  feature_code;
+> -	__le32  pcode;
+> -	__le32  npartnamemap_offset;
+> -	__le32  nnum_partname_mapping;
+> -	/* Version 17 */
+> -	__le32 oem_variant;
+> -};
+>  
+> -#ifdef CONFIG_DEBUG_FS
+>  struct socinfo_params {
+>  	u32 raw_device_family;
+>  	u32 hw_plat_subtype;
+> diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
+> new file mode 100644
+> index 000000000000..d1cbc49a2a2d
+> --- /dev/null
+> +++ b/include/linux/soc/qcom/socinfo.h
+> @@ -0,0 +1,70 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef __QCOM_SOCINFO_H__
+> +#define __QCOM_SOCINFO_H__
+> +
+> +/*
+> + * SMEM item id, used to acquire handles to respective
+> + * SMEM region.
+> + */
+> +#define SMEM_HW_SW_BUILD_ID		137
+> +
+> +#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
+> +#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
+> +
+> +/* Socinfo SMEM item structure */
+> +struct socinfo {
+> +	__le32 fmt;
+> +	__le32 id;
+> +	__le32 ver;
+> +	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+> +	/* Version 2 */
+> +	__le32 raw_id;
+> +	__le32 raw_ver;
+> +	/* Version 3 */
+> +	__le32 hw_plat;
+> +	/* Version 4 */
+> +	__le32 plat_ver;
+> +	/* Version 5 */
+> +	__le32 accessory_chip;
+> +	/* Version 6 */
+> +	__le32 hw_plat_subtype;
+> +	/* Version 7 */
+> +	__le32 pmic_model;
+> +	__le32 pmic_die_rev;
+> +	/* Version 8 */
+> +	__le32 pmic_model_1;
+> +	__le32 pmic_die_rev_1;
+> +	__le32 pmic_model_2;
+> +	__le32 pmic_die_rev_2;
+> +	/* Version 9 */
+> +	__le32 foundry_id;
+> +	/* Version 10 */
+> +	__le32 serial_num;
+> +	/* Version 11 */
+> +	__le32 num_pmics;
+> +	__le32 pmic_array_offset;
+> +	/* Version 12 */
+> +	__le32 chip_family;
+> +	__le32 raw_device_family;
+> +	__le32 raw_device_num;
+> +	/* Version 13 */
+> +	__le32 nproduct_id;
+> +	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+> +	/* Version 14 */
+> +	__le32 num_clusters;
+> +	__le32 ncluster_array_offset;
+> +	__le32 num_defective_parts;
+> +	__le32 ndefective_parts_array_offset;
+> +	/* Version 15 */
+> +	__le32 nmodem_supported;
+> +	/* Version 16 */
+> +	__le32  feature_code;
+> +	__le32  pcode;
+> +	__le32  npartnamemap_offset;
+> +	__le32  nnum_partname_mapping;
+> +	/* Version 17 */
+> +	__le32 oem_variant;
+> +};
+> +
+> +#endif
