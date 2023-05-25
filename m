@@ -2,132 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F061C710BD1
-	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 14:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EA5710BE4
+	for <lists+linux-pm@lfdr.de>; Thu, 25 May 2023 14:19:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240238AbjEYMMT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 08:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S240787AbjEYMTP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 08:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236257AbjEYMMS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 08:12:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BC6A4
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 05:12:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4eed764a10cso2268355e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 05:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685016735; x=1687608735;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XvimAcS+ZqUCgtUPuylnz5rLyY+z8RpskX6gwW+E/gs=;
-        b=tHwtdktVxcIOe67U/5tEhb9b4Vs3LQ8Au8IUUF8YfDGCGMomWdlLCk3QXkJFgLj8p6
-         FMYINgLa7kSI1EqvwNxCLtJtAts1m1A6amNdCL/7Ap2SlYrMhsLaQQmSkX8qtN8r87kP
-         FnvnGKGR2u/PTsuUDE7J0vFA1d5MlPgqVHlqs0TaZBE2DZbglVjtnxD+87xPwH4MUBz/
-         fHTGkNMettCpuvdrzCpNfkoXaA23PmNk0fIuL9dhNLs8UwPdVqBSrtuNACwHzwuFkSuL
-         nOYux+Dk9Ct67I6+gLvTN8c8BY9viIxRLvsYPA+Oyl3S30jUdqX7d3SBM2uAjeUO9vhY
-         YeeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685016735; x=1687608735;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XvimAcS+ZqUCgtUPuylnz5rLyY+z8RpskX6gwW+E/gs=;
-        b=iLzB5G+zMQxvlZmUn9AU2jjQI4n2OWSgH9SX89p8R5xXD8Gk9rlTEkD0I2lR/69EXX
-         d0SMbDPbpS1hge7wEwzqEzfRs7fRRwqlDrSZVhN84nciB+0KULjiLG94hePdZXslx6+u
-         mmQeYEOYwOHqUCiDAbxySm/gU+/8CMys9KHAEikQo8UxXpxzk2ybqs46Ip6l3GSHX7KM
-         w6gfHCPbRqULpVU00Cd7M5QxTTuNdqBDD4ew+yXxnjkHY+jcUw9NXllTeUXK8BetMLte
-         xDufmEqQa0JO8KiGXqkd1d03Hbq46wle7n8ZfHXPHC9do1mAwu4r6IlRkmrQQxTUzjTI
-         QCQg==
-X-Gm-Message-State: AC+VfDzGnE7lOjmcgFilp8whuwxyaWc0PdFelp0HO2pKbSushnNjn82O
-        /D0TdODkkpcPE8lOV13Rg9YTrg==
-X-Google-Smtp-Source: ACHHUZ5ejVEKFhSF38eME2EJbbEhNyTzcL8KFdPsj5cEn1qQqKTJi8YBxBDdH/wiasqax5rzbj3lCA==
-X-Received: by 2002:a05:6512:515:b0:4f1:44c0:a921 with SMTP id o21-20020a056512051500b004f144c0a921mr6603459lfb.55.1685016735075;
-        Thu, 25 May 2023 05:12:15 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id n6-20020a195506000000b004f00189e1dcsm189563lfe.117.2023.05.25.05.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 May 2023 05:12:14 -0700 (PDT)
-Message-ID: <ed82970f-691a-b508-604a-17f78db9fdc1@linaro.org>
-Date:   Thu, 25 May 2023 14:12:13 +0200
+        with ESMTP id S232193AbjEYMTP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 08:19:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4563FA9
+        for <linux-pm@vger.kernel.org>; Thu, 25 May 2023 05:19:13 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2a0c:5a83:9203:ad00:d93f:618:db35:8dd6])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A2B86605840;
+        Thu, 25 May 2023 13:19:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685017152;
+        bh=9Kjptvnd7/EwDs1L9wlJNdhS6Kf2YOrwxsH7p8jxz7E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=lUCPW+k4/y6CecJGmRpMLtSBQxgWG3fXrzOI7KVQYkLfYxpLK/wMZYjjf9aagr0vc
+         2WjodDU1UATEEMCkKMbQEa71HlfSVhdTEYeJbyNNM83ecgJdR0USIVY8YA+MNvq7l7
+         FUc1Jq2L2q7Si3Ah/NZvMSrRh2ubKGhGatp15TwwiTMVAPL8eBEgsZ50AcsF8exa7J
+         BWqxHy4i5n3bW+rAizn4h4Fpa9wR20gORcOP6Ih9AZWyK98bRCgsYhm48rP2av+/h5
+         iZPUYFudExYFCfMYVBdPnPbxT7U99aPj+uikR6DD2/Pz/57pfHR+QquU4xoVVIAHG+
+         +6BM5n5wnq/Lg==
+From:   =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     void0red@hust.edu.cn, angelogioacchino.delregno@collabora.com,
+        daniel.lezcano@linaro.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH v2] Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource leak in mtk_thermal_probe"
+Date:   Thu, 25 May 2023 14:18:11 +0200
+Message-Id: <20230525121811.3360268-1-ricardo.canuelo@collabora.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/5] soc: qcom: smem: Switch to EXPORT_SYMBOL_GPL()
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        andersson@kernel.org, ilia.lin@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com
-References: <20230525120956.3095317-1-robimarko@gmail.com>
- <20230525120956.3095317-2-robimarko@gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230525120956.3095317-2-robimarko@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This reverts commit f05c7b7d9ea9477fcc388476c6f4ade8c66d2d26.
 
+That change was causing a regression in the generic-adc-thermal-probed
+bootrr test as reported in the kernelci-results list [1].
+A proper rework will take longer, so revert it for now.
 
-On 25.05.2023 14:09, Robert Marko wrote:
-> SMEM has been GPL licensed from the start, and there is no reason to use
-> EXPORT_SYMBOL() so switch to the GPL version.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+[1] https://groups.io/g/kernelci-results/message/42660
 
-Konrad
->  drivers/soc/qcom/smem.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
-> index 6be7ea93c78c..bc98520c4969 100644
-> --- a/drivers/soc/qcom/smem.c
-> +++ b/drivers/soc/qcom/smem.c
-> @@ -500,7 +500,7 @@ int qcom_smem_alloc(unsigned host, unsigned item, size_t size)
->  
->  	return ret;
->  }
-> -EXPORT_SYMBOL(qcom_smem_alloc);
-> +EXPORT_SYMBOL_GPL(qcom_smem_alloc);
->  
->  static void *qcom_smem_get_global(struct qcom_smem *smem,
->  				  unsigned item,
-> @@ -674,7 +674,7 @@ void *qcom_smem_get(unsigned host, unsigned item, size_t *size)
->  	return ptr;
->  
->  }
-> -EXPORT_SYMBOL(qcom_smem_get);
-> +EXPORT_SYMBOL_GPL(qcom_smem_get);
->  
->  /**
->   * qcom_smem_get_free_space() - retrieve amount of free space in a partition
-> @@ -719,7 +719,7 @@ int qcom_smem_get_free_space(unsigned host)
->  
->  	return ret;
->  }
-> -EXPORT_SYMBOL(qcom_smem_get_free_space);
-> +EXPORT_SYMBOL_GPL(qcom_smem_get_free_space);
->  
->  static bool addr_in_range(void __iomem *base, size_t size, void *addr)
->  {
-> @@ -770,7 +770,7 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
->  
->  	return 0;
->  }
-> -EXPORT_SYMBOL(qcom_smem_virt_to_phys);
-> +EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
->  
->  static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
->  {
+Fixes: f05c7b7d9ea9 ("thermal/drivers/mediatek: Use devm_of_iomap to avoid resource leak in mtk_thermal_probe")
+Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+
+Changes in v2:
+  - "Fixes" and "Reviewed-by" tags added
+
+ drivers/thermal/mediatek/auxadc_thermal.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index 0b5528804bbd..f59d36de20a0 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -1222,12 +1222,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	auxadc_base = devm_of_iomap(&pdev->dev, auxadc, 0, NULL);
+-	if (IS_ERR(auxadc_base)) {
+-		of_node_put(auxadc);
+-		return PTR_ERR(auxadc_base);
+-	}
+-
++	auxadc_base = of_iomap(auxadc, 0);
+ 	auxadc_phys_base = of_get_phys_base(auxadc);
+ 
+ 	of_node_put(auxadc);
+@@ -1243,12 +1238,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	apmixed_base = devm_of_iomap(&pdev->dev, apmixedsys, 0, NULL);
+-	if (IS_ERR(apmixed_base)) {
+-		of_node_put(apmixedsys);
+-		return PTR_ERR(apmixed_base);
+-	}
+-
++	apmixed_base = of_iomap(apmixedsys, 0);
+ 	apmixed_phys_base = of_get_phys_base(apmixedsys);
+ 
+ 	of_node_put(apmixedsys);
+-- 
+2.25.1
+
