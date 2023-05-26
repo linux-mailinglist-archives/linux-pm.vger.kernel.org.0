@@ -2,195 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC6F711E11
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 04:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD3171222A
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 10:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbjEZCjf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 22:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59472 "EHLO
+        id S236265AbjEZI1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 04:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjEZCjd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 22:39:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75DEE6;
-        Thu, 25 May 2023 19:39:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A84564C6F;
-        Fri, 26 May 2023 02:39:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA3D5C433EF;
-        Fri, 26 May 2023 02:39:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685068768;
-        bh=EERlqtTQFu4zaiK5VJdJnzeU2mLn2j64zgfoHXd3vdc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XPOFssIFixk1PVl+LdDPvLRbPZkPCrGW+eLBDlgBLtJ5n8Dcxvivs4B51l4Ds4gVg
-         0y6hEcpcpnPTTciBD4cu3QpHzrXlgAudlnDUm2XbJ4XNgGPmuQHPRp5ooQej458LZs
-         avk4mGz6eQVtslKb07OyONU2pA1YKeJeJSh9W7Jh1vLNJSBkwtLeYQgtycOe3fpHSs
-         vD3TRsqWjB5REg1aXalCknJUzKXp0KT7H+B0VwfHl686neAUlhoSNs4dJPEbp8BZot
-         GXxpgSHsSbqS2ntlP/B3GT0Xv1xwZdieNsZULfwfiNq1dnzvFvFXI+VHGomLsPCnQl
-         sjf1++Y6F+TWg==
-Date:   Thu, 25 May 2023 19:43:17 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        ilia.lin@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, ansuelsmth@gmail.com
-Subject: Re: [PATCH v4 5/5] cpufreq: qcom-nvmem: use helper to get SMEM SoC ID
-Message-ID: <20230526024317.3t6nfv2aw27mrlj5@ripper>
-References: <20230525210214.78235-1-robimarko@gmail.com>
- <20230525210214.78235-5-robimarko@gmail.com>
- <5382b518-7691-ee70-c522-9ce0b14d60c1@linaro.org>
+        with ESMTP id S229981AbjEZI1n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 04:27:43 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE44D8
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 01:27:42 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f603d4bc5bso5267705e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 01:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685089660; x=1687681660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gN48o2+p7aZtsqqZOKCgJkMAQgtVzXUNifpR/gjpQl4=;
+        b=Fmhd+P0G9VuCh0HKkc2052Qu7/LE0E4TvU6tby4vDzZoZZfYs3EELfOpDGbETeXefY
+         BnTvqu0+SHsNir45oP7a12v9Bs3ypK6KWmVgKx6zZnqE0wlipWd9VuSLeiuN3H2glBwM
+         r1m0MX74of2mX5k1vyDq8BHVfsGcz73w1BnwR8FTxIfTRD0z8Z0CZwlhwXCt8SmN3a68
+         /Gg7mgz3tHIykqXhr+FiGEWFN9jpeddjhRzDJamLLiFcPryMIPiIu+tep2KGMrFNNtZe
+         0rxO87/Zj2SSI5iMqd0aCQOmw4E6LG4Xlvx/NR9dpWJC/isQsADz+EjATk9QD3HGSSCJ
+         0qlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685089660; x=1687681660;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gN48o2+p7aZtsqqZOKCgJkMAQgtVzXUNifpR/gjpQl4=;
+        b=MThFokCpI6Mt7QmNMcg9NPkjFqnU2HNiDOO1J/UsJZq0fCF19a5y01QMz5wpr8Jb21
+         hXqpthe4U/+XRuRvItnnF6MLSpPtfli2CqrP6WXQUxWyWva9CkPu448PjJQqY+GVV1FH
+         SFWpul3pKUmbt5wcKCnJNmUvO3BKq4WgnjWzLxmoBCEEi2TRD4gDFK0N5yiQjh3S9doM
+         5somLkY8QZiiNeERydN/rzWqwagiQBFxuYz46fgscNO/QhMmjDnogxXRB6AdLS9ZCGas
+         EjS8Qi+es1yx6jvULA1ZxwzwAA6iR3P9SkrqlYmw6NMZzH3mYnEG1iyugUhy/EHPyMO4
+         uFgA==
+X-Gm-Message-State: AC+VfDyi8thtjRQvIN0RMNTz/VmNjZUoFuxtl/82f1Pb6MuW9FgzVrws
+        aJb9shUAC6N5uC06l975wMMsZz7aKDCm1PGVFnU=
+X-Google-Smtp-Source: ACHHUZ6Z1cK32XZ3gr8PVujnMwDDsDSJja39N9auJcm/ggfYKYDFTMBwx7+H/NmqmTDZX1+P93lJQQ==
+X-Received: by 2002:a5d:4851:0:b0:306:4273:9efc with SMTP id n17-20020a5d4851000000b0030642739efcmr714329wrs.40.1685089660523;
+        Fri, 26 May 2023 01:27:40 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:5aef:8608:89d7:7961? ([2a05:6e02:1041:c10:5aef:8608:89d7:7961])
+        by smtp.googlemail.com with ESMTPSA id z16-20020adfe550000000b003063a92bbf5sm4357978wrm.70.2023.05.26.01.27.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 01:27:40 -0700 (PDT)
+Message-ID: <fb558491-9906-fb3a-60c5-349cb4210695@linaro.org>
+Date:   Fri, 26 May 2023 10:27:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5382b518-7691-ee70-c522-9ce0b14d60c1@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/3] thermal: hook in with reboot and crash
+Content-Language: en-US
+To:     Eduardo Valentin <evalenti@kernel.org>, rafael@kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Eduardo Valentin <eduval@amazon.com>
+References: <20230525211655.627415-1-evalenti@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230525211655.627415-1-evalenti@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 26, 2023 at 01:18:02AM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 25.05.2023 23:02, Robert Marko wrote:
-> > Now that SMEM exports a helper to get the SMEM SoC ID lets utilize it.
-> > Currently qcom_cpufreq_get_msm_id() is encoding the returned SMEM SoC ID
-> > into an enum, however there is no reason to do so and we can just match
-> > directly on the SMEM SoC ID as returned by qcom_smem_get_soc_id().
-> > 
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > ---
-> > Changes in v4:
-> > * Adapt to name change to qcom_smem_get_soc_id()
-> > 
-> > Changes in v3:
-> > * Adapt to helper using argument now
-> > 
-> > Changes in v2:
-> > * Utilize helper exported by SMEM instead of refactoring
-> > qcom_cpufreq_get_msm_id()
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 56 +++++-----------------------
-> >  1 file changed, 10 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > index 60e99be2d3db..a88b6fe5db50 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > @@ -29,16 +29,8 @@
-> >  #include <linux/slab.h>
-> >  #include <linux/soc/qcom/smem.h>
-> >  
-> > -#define MSM_ID_SMEM	137
-> > -
-> >  #include <dt-bindings/arm/qcom,ids.h>
-> >  
-> > -enum _msm8996_version {
-> > -	MSM8996_V3,
-> > -	MSM8996_SG,
-> > -	NUM_OF_MSM8996_VERSIONS,
-> > -};
-> > -
-> >  struct qcom_cpufreq_drv;
-> >  
-> >  struct qcom_cpufreq_match_data {
-> > @@ -135,60 +127,32 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
-> >  	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
-> >  }
-> >  
-> > -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
-> > -{
-> > -	size_t len;
-> > -	u32 *msm_id;
-> > -	enum _msm8996_version version;
-> > -
-> > -	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
-> > -	if (IS_ERR(msm_id))
-> > -		return NUM_OF_MSM8996_VERSIONS;
-> > -
-> > -	/* The first 4 bytes are format, next to them is the actual msm-id */
-> > -	msm_id++;
-> > -
-> > -	switch ((enum _msm_id)*msm_id) {
-> > -	case QCOM_ID_MSM8996:
-> > -	case QCOM_ID_APQ8096:
-> > -		version = MSM8996_V3;
-> > -		break;
-> > -	case QCOM_ID_MSM8996SG:
-> > -	case QCOM_ID_APQ8096SG:
-> > -		version = MSM8996_SG;
-> > -		break;
-> > -	default:
-> > -		version = NUM_OF_MSM8996_VERSIONS;
-> > -	}
-> > -
-> > -	return version;
-> > -}
-> > -
-> >  static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
-> >  					  struct nvmem_cell *speedbin_nvmem,
-> >  					  char **pvs_name,
-> >  					  struct qcom_cpufreq_drv *drv)
-> >  {
-> >  	size_t len;
-> > +	u32 msm_id;
-> __le32
-> 
-> >  	u8 *speedbin;
-> > -	enum _msm8996_version msm8996_version;
-> > +	int ret;
-> >  	*pvs_name = NULL;
-> >  
-> > -	msm8996_version = qcom_cpufreq_get_msm_id();
-> > -	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
-> > -		dev_err(cpu_dev, "Not Snapdragon 820/821!");
-> > -		return -ENODEV;
-> > -	}
-> > +	ret = qcom_smem_get_soc_id(&msm_id);
-> > +	if (ret)
-> > +		return ret;
-> Now since it can return a PTR_ERR, you should check for IS_ERR
-> and return ERR_PTR if that happens
 
-No, the PTR_ERR() extracted the error value out of the pointer, so it's
-just an integer now (or zero on success). So this is looking correct to
-me.
+Hi,
 
+On 25/05/2023 23:16, Eduardo Valentin wrote:
+> From: Eduardo Valentin <eduval@amazon.com>
 > 
-> LGTM otherwise!
+> Hello,
 > 
-> Konrad
-> >  
-> >  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> >  	if (IS_ERR(speedbin))
-> >  		return PTR_ERR(speedbin);
-> >  
-> > -	switch (msm8996_version) {
-> > -	case MSM8996_V3:
-> > +	switch (msm_id) {
-> > +	case QCOM_ID_MSM8996:
+> This small series of changes teaches thermal core about
+> reboot and crash callbacks. The intention is to have the core
+> to get notified and the pass in the event to thermal governors
+> that are willing to perform actions during reboot or crash events.
+> The thermal workers will be teared down in the process too.
 
-And here are those cpu-endian constants... If msm_id is a __le32 then
-all these constants needs to be cpu_to_le32().
+What problem does it solve?
 
-Regards,
-Bjorn
 
-> > +	case QCOM_ID_APQ8096:
-> >  		drv->versions = 1 << (unsigned int)(*speedbin);
-> >  		break;
-> > -	case MSM8996_SG:
-> > +	case QCOM_ID_MSM8996SG:
-> > +	case QCOM_ID_APQ8096SG:
-> >  		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
-> >  		break;
-> >  	default:
+> There is no code dependency this series was built on top of:
+> https://lkml.org/lkml/2023/5/18/1207
+> 
+> Separate governor changes will be sent in another series.
+> 
+> BR,
+> 
+> Eduardo Valentin (3):
+>    thermal: core: introduce governor .reboot_prepare()
+>    thermal: core: register reboot nb
+>    thermal: core: register a crash callback
+> 
+>   drivers/thermal/thermal_core.c | 54 ++++++++++++++++++++++++++++++++++
+>   include/linux/thermal.h        |  4 +++
+>   2 files changed, 58 insertions(+)
+> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
