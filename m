@@ -2,107 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050A4712A20
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 18:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 835A0712AAC
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 18:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243927AbjEZQAi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 May 2023 12:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
+        id S230268AbjEZQcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 12:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243897AbjEZQAh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 12:00:37 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58F0187
-        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 09:00:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q2Zrl-0007N5-50; Fri, 26 May 2023 18:00:33 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q2Zrk-002zHp-Gc; Fri, 26 May 2023 18:00:32 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q2Zrj-008Cim-QB; Fri, 26 May 2023 18:00:31 +0200
-Date:   Fri, 26 May 2023 18:00:31 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Switch i2c drivers back to use .probe()
-Message-ID: <20230526160031.itnqw4skpfdwlawt@pengutronix.de>
-References: <20230517165514.163216-1-u.kleine-koenig@pengutronix.de>
+        with ESMTP id S230041AbjEZQcS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 12:32:18 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50107DF;
+        Fri, 26 May 2023 09:32:17 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5147f32df82so124209a12.0;
+        Fri, 26 May 2023 09:32:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685118736; x=1687710736;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XXhdKxqSFYkKSH0aln6Zruim3OwYUDkaSG2oPvequ0Q=;
+        b=E7tBbNNi6e2BoeWzw50KrLgVmt4zS+rj3qEKUwcYfve+9or4tM6TZVZRPcmDkG4pIF
+         3aIpmguDCe1BX14p6LaJODtSlSe9J3Vr4xU6o7WQullCJbLaIHVLbNxv88joEV+Q6TX/
+         PGTIiXO5yUqsR3DhhEjvgPkyuc50ozmZZOzikMQ07hkuJCCBhdOsaX+3mdgvuUhS5Ndu
+         XGjEY/kpwvVEPeyY47nP4yH/hatEWbpvl9j0Wf7/CQQWFEnTpHRQ6chdhHI2EFRYY1C4
+         P7Ir+sfjKk82LOd4tjJc7HJS2xwXxj7olW+7sutAtBCRqcYZmOV1Urii+MpZFJpmYV6Z
+         dVAQ==
+X-Gm-Message-State: AC+VfDx272739pZCS4CwC57fR2++ILc41T3dayn8uGJjvDzpPnHCC6Eq
+        mK9DVnbnRkExqWiC3eORFtj3EB5MQropiJID3VNskPhqKUw=
+X-Google-Smtp-Source: ACHHUZ5xB8PBLY5c725ADRoJAV35GRPW13xpNZv99hwoJn6PUt98y1V/jlsrwPua3ewK6gpSbV/QEo8kALLN47UZ5XE=
+X-Received: by 2002:a17:906:729e:b0:94f:66af:b1f7 with SMTP id
+ b30-20020a170906729e00b0094f66afb1f7mr2442638ejl.1.1685118735347; Fri, 26 May
+ 2023 09:32:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="owunuezhnqoqlitd"
-Content-Disposition: inline
-In-Reply-To: <20230517165514.163216-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 26 May 2023 18:32:02 +0200
+Message-ID: <CAJZ5v0gV=NM2Tg7x2fEM8imVQ15D5KpZeP+EyaOEnjwPCmF9gg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.4-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
 
---owunuezhnqoqlitd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please pull from the tag
 
-Hello,
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.4-rc4
 
-On Wed, May 17, 2023 at 06:55:14PM +0200, Uwe Kleine-K=F6nig wrote:
-> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type"), all drivers being converted to .probe_new() and then
-> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
-> back to (the new) .probe() to be able to eventually drop .probe_new() from
-> struct i2c_driver.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> I used v6.4-rc1 as base for this patch, but it also fits on top of
-> today's next master. If there are some conflicts when you apply it, feel
-> free to just drop all conflicting hunks, I'll care about the fallout
-> later.
->=20
-> I chose to do this in a single patch for all drivers below
-> drivers/power/supply. If you want me to split it, just tell me.
->=20
-> Also note I didn't Cc: all the individual maintainers to not exceed the
-> allowed length of To: and Cc:. If this patch will be split I can extend
-> the audience accordingly.
+with top-most commit 3bf8c6307bad5c0cc09cde982e146d847859b651
 
-I didn't get any feedback on this patch. It's great if it makes it into
-the mainline during the next merge window. Any chances for that?
+ cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
 
-Best regards
-Uwe
+on top of commit 44c026a73be8038f03dbdeef028b642880cf1511
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+ Linux 6.4-rc3
 
---owunuezhnqoqlitd
-Content-Type: application/pgp-signature; name="signature.asc"
+to receive power management fixes for 6.4-rc4.
 
------BEGIN PGP SIGNATURE-----
+These fix 3 issues related to the ->fast_switch callback in the AMD
+P-state cpufreq driver (Gautham R. Shenoy and Wyes Karny).
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRw154ACgkQj4D7WH0S
-/k57EggApRqzzTC+44kfUD2qS4RLJcxMM3V2LDNij6RcRLKVE7IThzX2ct3Vl2Ta
-5Q/j6akppzwvvfF7ynBLaU+zAmc+1HRQ3rmoCi8yMGXs5gLAxEMU0OP72uzU7H6o
-1167nROizoqApsEpbdFi0iXeKvVy/BBwb031iWJgBV4KHZvKPF4dzJ+148KLWzdL
-FmuSJsRsd/vsbAHeXuWwTDJtBIgQ57KQauQC9U8xXTZOZnvjBD9zo0Q69Xaz328S
-6sAuVPPAgVBvLdcREX9bCmeyp3FMO6Xy/v1ZG0taoOeQZ4W4s5iPgASff2gbB4sg
-7r+jABY4XXFrim+BTg2+QpdxT/qqrg==
-=Zg4L
------END PGP SIGNATURE-----
+Thanks!
 
---owunuezhnqoqlitd--
+
+---------------
+
+Gautham R. Shenoy (1):
+      cpufreq: amd-pstate: Add ->fast_switch() callback
+
+Wyes Karny (2):
+      cpufreq: amd-pstate: Remove fast_switch_possible flag from active driver
+      cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
+
+---------------
+
+ drivers/cpufreq/amd-pstate.c | 46 +++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 37 insertions(+), 9 deletions(-)
