@@ -2,144 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF867122D0
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 10:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC69F712336
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 11:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242774AbjEZI6x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 May 2023 04:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
+        id S236878AbjEZJSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 05:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242378AbjEZI6w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 04:58:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85C712A;
-        Fri, 26 May 2023 01:58:49 -0700 (PDT)
-Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QSJd26cYrzqSZW;
-        Fri, 26 May 2023 16:54:14 +0800 (CST)
-Received: from [10.174.179.163] (10.174.179.163) by
- kwepemi500024.china.huawei.com (7.221.188.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 26 May 2023 16:58:46 +0800
-Message-ID: <9025b93a-faec-bc84-00c4-34a3b1c01b35@huawei.com>
-Date:   Fri, 26 May 2023 16:58:45 +0800
+        with ESMTP id S242192AbjEZJSK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 05:18:10 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02193194
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 02:18:08 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso527522e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 02:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685092687; x=1687684687;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=91tk7JnZvoP+ZW5JLDTfXwmLebfjuJ7VnX3iXfJ77W0=;
+        b=QS8bKhKDThq0rAuN2+fsxR00emtYae6i+vLDdt4gCEZeMJSjGK0lyiRKpfBAucZFjL
+         lXJ86c8/7cbuyQ5mxw10zfrrrgdNHL4s18Om9KqnxUeNN39T8uKXQALXoPnH8XKAA3sn
+         /LGJU7IBGUfV4Hr8xwnEh3v7z22V9Dx8gSEJlxTezrdk4lkklWL7BJKLnDMuluIyDqXR
+         konuJc7n1imdaQGuAXdF0uP4lIcmX1KSy5LY1mGLzesbQ3reYvVf3Pr0lEC791Solvlv
+         nQrLtbFqIXkIAB/gyvCn2r8RREtOCrZWdlgPVpw9r8fs/MKCup1T4NdI4cEVOTlFIN23
+         t7GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685092687; x=1687684687;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=91tk7JnZvoP+ZW5JLDTfXwmLebfjuJ7VnX3iXfJ77W0=;
+        b=DJJxPBmj20yulfT7aFu1R13CkDa3f76R+q2xA2W28GgHyXG0Sx5CFytE4pBDBilwSw
+         xKSfVWumm6obozIPfseMkntCaggxePykelMJrT3xLcAZDMXcUGLeiWPCyaKMiATpmjb7
+         c0ZnK9qCEyf5wxoIWPP/qBAxbRUooP0z5ENYnjdlGqLOZIXewLGuB0DxW9rJvHI59DNW
+         gn59yYp0NVqMnTUUwef/Mzkk83BTd/uK8XBHK+5cwJ+Bt6lUlUvIgwgKYXb6++p9PhfK
+         cAYPHkAXVxrwZCE2JKRGXfVOGZ+Ek1f35/hGevCqXY6NKU74AOOEB07OrS7iI7Q2qq19
+         EWKQ==
+X-Gm-Message-State: AC+VfDwfKyxSMn0ZwA+NY5XXzk5pMuKh+sCXauJZ51xTvt0PGf7PRrJR
+        9T700ZyKIX1PHBI9EsmzbRIu4Q==
+X-Google-Smtp-Source: ACHHUZ5pVXxnq41qSI3DUD3q3lMcT395RxsySupwpCpNXWyJC1IBqJiIE9xgJ5ip/vOMblL+KfTBVw==
+X-Received: by 2002:ac2:5297:0:b0:4f0:1076:2682 with SMTP id q23-20020ac25297000000b004f010762682mr299189lfm.42.1685092687181;
+        Fri, 26 May 2023 02:18:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id y16-20020ac255b0000000b004eed8de597csm541544lfg.32.2023.05.26.02.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 02:18:06 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Fri, 26 May 2023 11:17:57 +0200
+Subject: [PATCH] opp: Provide a function for just setting bandwidth
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] cpufreq: CPPC: keep target core awake when reading
- its cpufreq rate
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        Ionela Voinescu <Ionela.Voinescu@arm.com>, <sumitg@nvidia.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <wangxiongfeng2@huawei.com>, <xiexiuqi@huawei.com>,
-        <liwei391@huawei.com>, <linux-acpi@vger.kernel.org>,
-        <lenb@kernel.org>, <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        Yang Shi <yang@os.amperecomputing.com>
-References: <20230516133248.712242-1-zengheng4@huawei.com>
- <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
-From:   Zeng Heng <zengheng4@huawei.com>
-In-Reply-To: <a1075da1-4ff1-4a8b-2902-3954db717ded@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.163]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500024.china.huawei.com (7.221.188.100)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230526-topic-opp_bw-v1-1-e881091363af@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAER5cGQC/x2N0QqDMAwAf0XyvEBX56j7lTEkrZkGpC3tNgfiv
+ xt8vIPjNqhchCs8mg0K/6RKigrXSwNhpjgxyqgM1tjWdPaOn5QlYMp58Cu60dzIddS35EATT5X
+ RF4ph1ih+l0VlLvyW//l4vvb9AEqQCpxzAAAA
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685092686; l=2963;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=jmkpzRF+36y/udydjUbD4CkymkzSnR6tIx+s488Udkg=;
+ b=pooO+7/d+QQWxeUu11CD/xGFtkMuBp2jmmtr446tuhCyL/PQzTmHgqcGjl3Xb+UcTy4HKDfUW
+ FNJPdUPUBTuBqnhHj0s6oWCT/Fs2sTpaBviLJz2Y1iduC2IxlYw/RsR
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Currently it's not possible to set just the bandwidth if the OPP
+describes other properties (required-opps, opp-hz etc.).
 
-在 2023/5/17 16:17, Pierre Gondois 写道:
-> +Ionela, Sumit, Yang,
->
-> Hello Zeng,
->
-> I think solutions around related issues were suggested at:
->
-> [1] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
-> [2] 
-> https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-> [3] https://lore.kernel.org/all/ZEl1Fms%2FJmdEZsVn@arm.com/
->
-> About this patch, it seems to mean that CPPC counters of CPUx are always
-> accessed from CPUx, even when they are not AMUs. For instance CPPC
-> counters could be memory mapped and accessible from any CPU.
-> cpu_has_amu_feat() should allow to probe if a CPU uses AMUs or not,
-> and [2] had an implementation using it.
->
-> Another comment about PATCH 2/2 is that if the counters are accessed
-> through FFH, arm64 version of cpc_read_ffh() is calling
-> counters_read_on_cpu(), and a comment in counters_read_on_cpu() seems
-> to specify the function must be called with interrupt enabled.
->
-> I think the best solution so far was the one at [3], suggested by Ionela,
-> but it doesn't seem to solve your issue. Indeed, it is not checked 
-> whether
-> the counters are AMU counters and that they must be remotely read (to
-> have the CPU awake),
->
-> Regards,
-> Pierre
+Introduce dev_pm_opp_set_bw() to solve this problem.
 
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/opp/core.c     | 28 ++++++++++++++++++++++++++++
+ include/linux/pm_opp.h |  6 ++++++
+ 2 files changed, 34 insertions(+)
 
-Here is segment I picked from patch[3], and there is a modification is 
-deserved to be discussed:
-
----------------------------------------------------------------------------
-
-@@ -1336,8 +1361,25 @@ int cppc_get_perf_ctrs(int cpunum, struct 
-cppc_perf_fb_ctrs *perf_fb_ctrs)
-          }
-      }
-
--    cpc_read(cpunum, delivered_reg, &delivered);
--    cpc_read(cpunum, reference_reg, &reference);
-+    ctrs.cpunum = cpunum;
-+    ctrs.delivered_reg = delivered_reg;
-+    ctrs.reference_reg = reference_reg;
-+    ctrs.delivered = &delivered;
-+    ctrs.reference = &reference;
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 85cbc8de407c..00d7f7c20189 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1278,6 +1278,34 @@ int dev_pm_opp_set_opp(struct device *dev, struct dev_pm_opp *opp)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_set_opp);
+ 
++/**
++ * dev_pm_opp_set_bw() - Configure device's interconnect bandwidth from OPP
++ * @dev: device for which we do this operation
++ * @opp: OPP to get the bandwidth data from
++ *
++ * This configures the interconnect bandwidth based on the properties of the
++ * OPP passed to this routine.
++ *
++ * Return: 0 on success, a negative error number otherwise.
++ */
++int dev_pm_opp_set_bw(struct device *dev, struct dev_pm_opp *opp)
++{
++	struct opp_table *opp_table;
++	int ret;
 +
-
-+    if (CPC_IN_FFH(delivered_reg) && CPC_IN_FFH(reference_reg)) {
-
-Here we call cpu_has_amu_feat() as precondition (like Sumit's mail 
-mentions), which could be compatible with
-
-any SoCs with AMU that could be accessible via sys-register and system 
-memory both.
-
-
-+        ret = smp_call_on_cpu(cpunum, cppc_get_cycle_ctrs, &ctrs, false);
-+    } else {
-+        if (CPC_IN_SYSTEM_MEMORY(delivered_reg) &&
-+            CPC_IN_SYSTEM_MEMORY(reference_reg)) {
-+            local_irq_save(flags);
-+            cppc_get_cycle_ctrs(&ctrs);
-+            local_irq_restore(flags);
-+        } else {
-+            cppc_get_cycle_ctrs(&ctrs);
-+        }
-+    }
++	opp_table = _find_opp_table(dev);
++	if (IS_ERR(opp_table)) {
++		dev_err(dev, "%s: device opp doesn't exist\n", __func__);
++		return PTR_ERR(opp_table);
++	}
 +
-      cpc_read(cpunum, ref_perf_reg, &ref_perf);
++	ret = _set_opp_bw(opp_table, opp, dev);
++	dev_pm_opp_put_opp_table(opp_table);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(dev_pm_opp_set_bw);
++
+ /* OPP-dev Helpers */
+ static void _remove_opp_dev(struct opp_device *opp_dev,
+ 			    struct opp_table *opp_table)
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index dc1fb5890792..5e074ac7a68e 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -167,6 +167,7 @@ struct dev_pm_opp *dev_pm_opp_xlate_required_opp(struct opp_table *src_table, st
+ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table, struct opp_table *dst_table, unsigned int pstate);
+ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq);
+ int dev_pm_opp_set_opp(struct device *dev, struct dev_pm_opp *opp);
++int dev_pm_opp_set_bw(struct device *dev, struct dev_pm_opp *opp);
+ int dev_pm_opp_set_sharing_cpus(struct device *cpu_dev, const struct cpumask *cpumask);
+ int dev_pm_opp_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask);
+ void dev_pm_opp_remove_table(struct device *dev);
+@@ -373,6 +374,11 @@ static inline int dev_pm_opp_set_opp(struct device *dev, struct dev_pm_opp *opp)
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int dev_pm_opp_set_bw(struct device *dev, struct dev_pm_opp *opp)
++{
++	return -EOPNOTSUPP;
++}
++
+ static inline int dev_pm_opp_set_sharing_cpus(struct device *cpu_dev, const struct cpumask *cpumask)
+ {
+ 	return -EOPNOTSUPP;
 
------------------------------------------------------------------------------------
+---
+base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+change-id: 20230526-topic-opp_bw-8d04a85a93a8
 
-If there were a new version patch released, please loop me at that time.
-
-Thanks a lot in advance.
-
-
-B.R.,
-
-Zeng Heng
-
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
