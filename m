@@ -2,64 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8C3711D70
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 04:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C08E711DDA
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 04:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbjEZCIR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 25 May 2023 22:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46836 "EHLO
+        id S230099AbjEZC1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 25 May 2023 22:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjEZCIQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 22:08:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9599BE7;
-        Thu, 25 May 2023 19:08:15 -0700 (PDT)
+        with ESMTP id S229689AbjEZC1T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 25 May 2023 22:27:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C122E9B;
+        Thu, 25 May 2023 19:27:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A70E64BE8;
-        Fri, 26 May 2023 02:08:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB496C433EF;
-        Fri, 26 May 2023 02:08:12 +0000 (UTC)
-Date:   Thu, 25 May 2023 22:08:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [BUG 6.4-rc3] BUG: kernel NULL pointer dereference in
- __dev_fwnode
-Message-ID: <20230525220806.33e66caf@rorschach.local.home>
-In-Reply-To: <20230525164248.wsmyzsv5iwwswntz@mercury.elektranox.org>
-References: <20230524131200.0f6fb318@rorschach.local.home>
-        <CAHk-=wiNagW7exChQ4YuiRpCDN=kxmUdY5u7ebFux1jgEoL2tg@mail.gmail.com>
-        <20230525164248.wsmyzsv5iwwswntz@mercury.elektranox.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C7264B7B;
+        Fri, 26 May 2023 02:27:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1015C433EF;
+        Fri, 26 May 2023 02:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685068037;
+        bh=IjyfqYdDittzF4tAOZQdZ6/Y82iHJkRqWBGwxbBg8oQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JFnVko+8k4pihJ0qM+7G/pCT8x9IQmKp/6xd/DnhPw/BE1BSWI0M9TRaOWKePlWVf
+         +lK01wchufp1ksgCy7BKqWVSW3VfAsNCC7+4sir0SlGl73T5YlaP6kw3CSsQKvpTgP
+         nLTz9NpNoBRx9UA2ibHnN2crMc6dpGR36hmizOw1HjDIYJstJHnoxmqKdYoUc6gL8z
+         079roSFb0XrDbXQWZxtR6aNXonDgCXPYrJXRqffLF38yF89yvAL6L65ge5zsky5Lq9
+         +bj3NEmO75zQzNozr1kyBUgqllnA1zYikpR+H3s0d7/1Js4FeMk/8PtN/1rokRYy73
+         tPaMLD1lOYqsw==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     konrad.dybcio@linaro.org, robh+dt@kernel.org, agross@kernel.org,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        krzysztof.kozlowski+dt@linaro.org, djakov@kernel.org
+Cc:     stephan@gerhold.net, dmitry.baryshkov@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, benl@squareup.com,
+        linux-arm-msm@vger.kernel.org, leo.yan@linaro.org,
+        fabien.parent@linaro.org, shawn.guo@linaro.org
+Subject: Re: [PATCH v9 0/4] Add MSM8939 SoC support with two devices
+Date:   Thu, 25 May 2023 19:31:07 -0700
+Message-Id: <168506826317.164705.12122160122945640956.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230407194905.611461-1-bryan.odonoghue@linaro.org>
+References: <20230407194905.611461-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 25 May 2023 18:42:48 +0200
-Sebastian Reichel <sre@kernel.org> wrote:
-
-> I have a fix for that in my fixes branch, that I planned to send
-> this week:
+On Fri, 7 Apr 2023 20:49:00 +0100, Bryan O'Donoghue wrote:
+> V9:
+> - Fixes name of tsens
+>   s4 is not present
+>   s4->s5
+>   s5->s6
+>   s6->s7
+>   s7->s8
+>   s8->s9
+>   I erroneously thought the last sensor needed to be brought in but,
+>   as has been pointed out to me, the last sensor isn't used, so
+>   no need to support the reading and reassembly of the non-contiguous
+>   calibration data - Stephan/Dmitry
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=fixes&id=44c524b642996148a8e94f1a1b8751076edcf577
+> [...]
 
-This appears to fix the bug I reported.
+Applied, thanks!
 
-Tested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+[1/5] dt-bindings: vendor-prefixes: Add Square
+      commit: 8051c8b83ac076ab7f4fc80cff5e7f8cc3b1eefb
+[2/5] arm64: dts: qcom: Add msm8939 SoC
+      commit: 61550c6c156c3715baf54ab2cdd678c8c35b3803
+[3/5] arm64: dts: qcom: Add msm8939-pm8916.dtsi include
+      commit: 1e6dfe47ba020a192d743c7c820b469fd7253813
+[4/5] arm64: dts: qcom: Add Square apq8039-t2 board
+      commit: 273a3dc13eb746c7b7abe7ea682811a8dacc89d6
+[5/5] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
+      commit: f1134f738fad68c51a44216ab0f68a0f086a1a5e
 
--- Steve
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
