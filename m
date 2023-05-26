@@ -2,146 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB1D712352
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 11:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 177D3712515
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 12:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242775AbjEZJUu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 May 2023 05:20:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S243021AbjEZKxa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 06:53:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242890AbjEZJUn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 05:20:43 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2134.outbound.protection.outlook.com [40.107.100.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD0D194;
-        Fri, 26 May 2023 02:20:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gj70CEAqh23Rm3smK2wykLmJEx8zBT/i/btRdepinpnN38STCR8/OZONvoCNnYqX7eeTUKpVlWNUYYmjgg44+YDqKEGUofD3MNUwIPofJ+BOfTJLCnjKTQAiFCjT9chtmftMkKKdMgpc8hhHaq9H3Y1ndUzNWbmNfZwL/lj6dQxCg26YtqI0w5tVgd+fVXXRb8pI03WSkJhZ+PhfmMFPhdUm1kF58GgC/SDjtkLN30q0q9Tz/aYzS1dfwPRtb6c3ER3ftD0Jix+l10GVi01DCA7DvLzVpvCHJJ9ldMe/0DIgB8GjSuPy1JFeoHpOpfoX8ChDQ3c3XP+JRL54w27jGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ACRFNt4ZXC/GFs0S72HHZU/dCu41XtO+ZKAHnFQ12u4=;
- b=fAgKVSUfgU3ySYsV3GR+X2MQVOl6g4MqiyNtSH/EicW9XDLTMYC58nhXRWxxAamFFmcEJV43DVmM5RuOhuacg5MUnreDYjT8qSnD5Uwmztcf6BXV4WLwB3/705oBXDcCwYS8ZPc2HpH/Kg2plyDZkRyALyTKxJjMx/Ih6Sh4f7XWLmixsEFq4x6rZtOKvAQIDv9QFl6sKd+8JzNWpvdweD6joMfbgienzCRq7bD4+0COFzj5duewveC25YYESOPhKrYGnzMAr6At8KS18b6pdajLJskfXAqcn01tbXQpEMRSfhbjg2HCiNh9/YvOrm+hZdyPhuu341eeBRBqxMm35w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        with ESMTP id S230292AbjEZKx3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 06:53:29 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0634194
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 03:53:23 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64d2981e3abso659852b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 03:53:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ACRFNt4ZXC/GFs0S72HHZU/dCu41XtO+ZKAHnFQ12u4=;
- b=Hgh1A7d5awK+KQHj9nl0KFbuu4J8wGvZwlhEo6icmQP34zwaiojR46hnbjTDRZA2uosOcPZI3ckztQel42Q9IS3m6gA9ibLQDW4bOA9TjQRBH6VLbfuVlFhjVYzaaYdlt8LPE38TzkRssgoe+xjCP1NZ2aTUUgse32PJcT6cFqk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH2PR13MB3781.namprd13.prod.outlook.com (2603:10b6:610:9a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.18; Fri, 26 May
- 2023 09:20:39 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::5e55:9a39:751f:55f6%3]) with mapi id 15.20.6433.017; Fri, 26 May 2023
- 09:20:38 +0000
-Date:   Fri, 26 May 2023 11:20:30 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        thierry.reding@gmail.com, Sandipan Patra <spatra@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:MELLANOX MLX5 core VPI driver" <netdev@vger.kernel.org>,
-        "open list:MELLANOX MLX5 core VPI driver" 
-        <linux-rdma@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] net/mlx5: Update the driver with the recent thermal
- changes
-Message-ID: <ZHB53sm0od4RvsKe@corigine.com>
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-2-daniel.lezcano@linaro.org>
+        d=linaro.org; s=google; t=1685098403; x=1687690403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zZaUcPzxpXLq4q3ksbnQken4Ept0l6BdGBrTXJ2GhJ0=;
+        b=LVkU7SDd5isg+vkO4TFsklxe8wPkV2HjaU47K+MWPblNxRO2I1XL7kz7zLI+sD8bJz
+         iso/X23qLbOnACM5eeUJsIxkIEUeIBSGJN7FqcplLvKCFrmG/uvt6Pg0n0udK1xkuJXA
+         j5Tkz7m3ESH1KFawyrKjwD4lPvC3t247yeL410EWyGKQHcVgO6blQQAM7v4eRfjNWoFR
+         vfi+2bev4zTOAZ6HtyZnUZRx7iwkRHX37/qrhuOLMKMKnCG1yxptKqUtDdcwKXkNQ1Y0
+         pQEIEmMDODrZ5KEiNHDks5fPTWESfrz9kD0i/wAeF2K2b8Gq1U8rNlnw3ZU5VTuDES/U
+         toUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685098403; x=1687690403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zZaUcPzxpXLq4q3ksbnQken4Ept0l6BdGBrTXJ2GhJ0=;
+        b=e9CSslk6u2AELOVovPhhHUVFn5MJVj8q/2U4i3mwnebxRJd6MsxAeskTUnXcwtIL9R
+         f1h0Ltl32myRluL3LtVqN6aCl5IH8fqFfPNaj1KxNpE0+ESUXPlh2bq3NqB9ZES39MAa
+         9rR5gXr4YY6N20mPVvntl1SLyxXjd8XTcrgfvw6DUdt4vb+A8OolPEiypk0pkvKZFOLN
+         bRAKs4NlRkrHDUK5a+7JyhFJBcoqalpp2y8dZtzsbaprcqxUdTXfw0YqWQpu24Gu6Ikk
+         KW3X1a7xPCIk5su/9hAquj86+P3V3pPgi196ORdqADu9YIHhmInfXIDF6zl0Y4WHVO0U
+         rniQ==
+X-Gm-Message-State: AC+VfDy+fr84UAXGhZ7EfmN2soht6/Xl0GqBcEXzYI/MW/T69Fdo0CAr
+        JR8VIwbXBOnP8Rh+37WlU8EMtw==
+X-Google-Smtp-Source: ACHHUZ5cBOagZMGeGoDaS3frB1q6nyW4neA6oySmK5jIoJt0MCmuMOHyEB+7VQMy1vjpp1vMNZk7Tw==
+X-Received: by 2002:a05:6a20:3d0f:b0:10b:ecde:291f with SMTP id y15-20020a056a203d0f00b0010becde291fmr1935400pzi.57.1685098403340;
+        Fri, 26 May 2023 03:53:23 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id gl21-20020a17090b121500b00253305f36c4sm4365923pjb.18.2023.05.26.03.53.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 03:53:22 -0700 (PDT)
+Date:   Fri, 26 May 2023 16:23:20 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] opp: Provide a function for just setting bandwidth
+Message-ID: <20230526105320.pfnu3oxl2cm37ot7@vireshk-i7>
+References: <20230526-topic-opp_bw-v1-1-e881091363af@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230525140135.3589917-2-daniel.lezcano@linaro.org>
-X-ClientProxiedBy: AM0PR01CA0168.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:aa::37) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3781:EE_
-X-MS-Office365-Filtering-Correlation-Id: b24c71f4-a83b-4bcd-462c-08db5dca7819
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /JIRNiXBWU/UwpjqyWiVyc8OcXoOxyGZrv9d5v/L4LQNL82WnkT9WKZy190A84AbuRC6BWZ+Uqgz1WrDL41lbemwO0X2BTCyLo5tGws7TgKcTMGJMqM5nhaBkOiSwL8RzhEWG++YWxfYtF+A7MQEBmKSnd+IT4sVwbLC/SviclKslui7e5JTmJ7rMec8u3MVCoo0qestI9ppEsjfZ+ePY2ctjSF3FJ7KxmNYUR4hVlonrG2ClPjRnk8jweWB+3lF/ev8s+USSJrnRT0BIAgsOgY++3effbTlbYijkoOupxt/zQvZ0s+L1E0exWRz3VvgPYyKHVsz3Od0QB3I21KNfrzTCd41WAgM8fJoviTWXBWFeviB9wA4Nd5yZ6WJGFmeSzDIsQi+AvFD9sTObsRMPQBMFu8fI6RglnM211okwKuLmjzvBud7PiCgGoune8kFWmRC38053TW0UbWeo0zMjFV0BxnQH0tSknrM+8bi5a8niyFi4BBZUuVzhpO7I3vEVc0UMDwQM96xeETSrlEcpV1RCovJRq+wJ7ts9KbAZQ2UbmMnpwFNSPPSx1yzYZvB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39840400004)(396003)(376002)(366004)(136003)(451199021)(54906003)(86362001)(83380400001)(478600001)(2616005)(186003)(4744005)(2906002)(66946007)(44832011)(6512007)(6916009)(4326008)(66556008)(66476007)(6666004)(7416002)(36756003)(6506007)(316002)(6486002)(41300700001)(5660300002)(8676002)(8936002)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hxge8S3laYkpCmPB/VzmLniftQA7NeJ7iurxhpQPr22rXDgVzD23cZyWCWR2?=
- =?us-ascii?Q?Q47sW5y4TvFF9o5IDCSYz/dcecdVZMqzu8b3/diVCfGiyGgYhLNWu1WLb7uo?=
- =?us-ascii?Q?Es3ee+1SWlNzk+0zdK1dSM6OOI97wEKs9L5z16bw//2bZQ6Y5esr5Ku1qnX/?=
- =?us-ascii?Q?6UuvFSb3PtDYUCM25g6OV9e6aMQEOzMvpX6jkIu1ERzxkdKt+NOt9KqS1NVb?=
- =?us-ascii?Q?InjA2BvFm5MJ+eUAjMvIkGuzChHV3dc98Gc6SQUdZVEqTGT5AguGMlFcqZAE?=
- =?us-ascii?Q?1DrXU+0WXbVfOhHXFeET5DyW9077kUj5jJnZQNdAa5gvDkujx4mip1DMUrvE?=
- =?us-ascii?Q?b1Fdl9sL/i4Zs0ptQ2XDNLo3D2DiLTa7fbm/G+46c4tCSAnLNu3V0juefUUh?=
- =?us-ascii?Q?CEOiP5BEBDgFPFD8JPdLjMqNlIjJWSAndLDXgafQX8Z/U5drMVYGZt2+W0Er?=
- =?us-ascii?Q?jvlapAUHeYrQk/ZUL9Wee6NnhdV9q+y2VyC/rI0RAvhIyoMKRDVdr5DqtlIK?=
- =?us-ascii?Q?ApJntEr1OwsC6qpaJR039P6PLieWZ1YRAEbZLOlzlK0+iK5UF9wnNZU2giVO?=
- =?us-ascii?Q?GpuXrLDgD898X+ZibhmYDiYUvyUvXnGsWVKo17J9GtrYpg/Ody6CmqTLHtIm?=
- =?us-ascii?Q?j6t5DVtkXO2R8DjqBzHPf1cD5J724MG2siJAWEr5DnpBettP/uL7HFJBREzp?=
- =?us-ascii?Q?efB0iIIexiCKFsYWmTN87AJBWlWEOpHk1OVUmZ3Noc5iHbfpbVwll3rAY3j6?=
- =?us-ascii?Q?oL3b8D6o8gl+HmnbOcRB9Zjd8FfzdpI6ECI+qq8d9vmYLbr1Aph2SfNccyN0?=
- =?us-ascii?Q?GD7aHeVI1gpp6GFTqcE1SSZAWDykPmLoNFMqyWMVG+hJBlDkDiRaCNjzLPQM?=
- =?us-ascii?Q?CuO+A4r/dFoMbSie56qf7SrtTupGf3/K28wchy0+Ou14a7jsfIrJ8y7H1lUK?=
- =?us-ascii?Q?PGPFSZMi0BWB08/LcwpNuBH4Awl6xk8MeFdCp140kpqFVUhqk1QEXB4UoCFd?=
- =?us-ascii?Q?7qP6eJbPH+GIT3FuTFlVKkmmYT/jNSmQTRS6ZdI8qeX+c1zz5CHtcCHjIdPZ?=
- =?us-ascii?Q?wxEaaVCyQIqMvG4CdSeJinItCaty+Bn7rPDSKQoDWwnMJ8q86xCepfY4u3lD?=
- =?us-ascii?Q?BWaJB0uYtjSBwkeTUwGm0w1D7NmoQEqozD0dSPKANjc3r8q32CPC4E0dlNc1?=
- =?us-ascii?Q?pTmMe6tpBNYW4NvgyJEwMBvNx0dlElpwngmy5kEbeOq5IRGdF0BNu8UPrGL2?=
- =?us-ascii?Q?ApsYU4CTERQWye/PYKbCD6vABHJZrhwKfRjcb6L6nCssNQH1XKizRRdjk2Vf?=
- =?us-ascii?Q?ufZMgCz9wZC68RpwUrhdhBLhYbUi2fSRAImk+Aw3VV0DYgR03d1XxBEYhD88?=
- =?us-ascii?Q?LeHDxfaQdqZIJQ4H+Quzdw2ufEy4THvxqqhvt7T0ug58u5KYmE/DKwW6OpPE?=
- =?us-ascii?Q?EUEIXz96w7i0M3Aw35peLWBBFK81uMn/pP9FNRG6EMbz5s3RjmSXZtSXV2Ke?=
- =?us-ascii?Q?u4PnDaT9PgGffIWoAwwPXdi/i9EuLtiCGDdY5SLLMsN5pnHsruhskQYICTf+?=
- =?us-ascii?Q?7cIvNTOEOwDDbaYIGaAE9UIro09xcuWrSlKCNOGyJ4C24n9GHqlU1za5Ana0?=
- =?us-ascii?Q?2q6vR82cT1F4DgXv/+WTXNjJlRS+PVeGFst+uS5YfNrc1DSE2Dq3YBE+HnpC?=
- =?us-ascii?Q?h2MMhg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b24c71f4-a83b-4bcd-462c-08db5dca7819
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 May 2023 09:20:38.4085
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i0mUvcORRmTwG5VbzAUqPeZnOOfbnEh29rioMOOYk9p9rP92l4r/saqMVoTrhEWY0Y9qzD1m/CxkWuuxJDzvcgeBjbv/ut42QiG7wQDZe+U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3781
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230526-topic-opp_bw-v1-1-e881091363af@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, May 25, 2023 at 04:01:28PM +0200, Daniel Lezcano wrote:
-> The thermal framework is migrating to the generic trip points. The set
-> of changes also implies a self-encapsulation of the thermal zone
-> device structure where the internals are no longer directly accessible
-> but with accessors.
+On 26-05-23, 11:17, Konrad Dybcio wrote:
+> Currently it's not possible to set just the bandwidth if the OPP
+> describes other properties (required-opps, opp-hz etc.).
 > 
-> Use the new API instead, so the next changes can be pushed in the
-> thermal framework without this driver failing to compile.
-> 
-> No functional changes intended.
-> 
-> Cc: Sandipan Patra <spatra@nvidia.com>
-> Cc: Gal Pressman <gal@nvidia.com>
-> Cc: Saeed Mahameed <saeedm@nvidia.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Introduce dev_pm_opp_set_bw() to solve this problem.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+The OPP core (intentionally) doesn't provide any such interface for
+freq, volt, bw, level, etc.
 
+Setting just one of the properties for a device is potentially harmful and the
+OPP must be set as a whole and so this isn't allowed. There is
+dev_pm_opp_set_freq(), but it uses freq to just find the OPP and sets entire OPP
+only.
+
+Why should be break this for bw ?
+
+-- 
+viresh
