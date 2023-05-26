@@ -2,74 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 677FD712E96
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 22:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492C7712EA9
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 23:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243907AbjEZU6c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 May 2023 16:58:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55874 "EHLO
+        id S229502AbjEZVFb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 17:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjEZU6b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 16:58:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640DE1AC;
-        Fri, 26 May 2023 13:58:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C08E46155B;
-        Fri, 26 May 2023 20:58:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 34AE0C4339B;
-        Fri, 26 May 2023 20:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685134709;
-        bh=gMRoNKLEU3gIKJLumTlFfMLU3SUr9JyLXH4EFcfqjqM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=qQymOyDZFf9Lt9nwaNy68w/d5XXYx9xswPeIcAk4SZYe7LWpW6XbyFe7wTL1kwnYg
-         3BwlJ9M0Fr0T1Smfo/p8xzz1XJgssvo6q37OPb0hO0DzsOuMgpDe0F5PLGjLZi92Mf
-         RVE+3QGXVrtNBeapusS8YdVHV5I47s2moz/orL8WDFxi5OF5KnIHhq8fkYjY9dIEL7
-         FvA9KfXj0P7FjPdZw5ja/mEANAeRGZOxj8A2iSyWGA6ef255DkofMdFN8ej4F10c+9
-         zp8tVTlBBLRqXwMdERtaa6u+Eiq4uR474E/Cid5upNrGtjjBZbq8W0BhcnA6fdJvGb
-         tTIO6ykpE9WpQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 106F0C4166F;
-        Fri, 26 May 2023 20:58:29 +0000 (UTC)
-Subject: Re: [GIT PULL] Thermal control fix for v6.4-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0gh2RTNjJ-YQAv8pdrOYJjjdj4dcp7+8EnUAYWiP0BVuw@mail.gmail.com>
-References: <CAJZ5v0gh2RTNjJ-YQAv8pdrOYJjjdj4dcp7+8EnUAYWiP0BVuw@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0gh2RTNjJ-YQAv8pdrOYJjjdj4dcp7+8EnUAYWiP0BVuw@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.4-rc4
-X-PR-Tracked-Commit-Id: 5f7fdb0f255756b594cc45c2c08b0140bc4a1761
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 77af1f2b9a2464e4bce20cfd32bfb2390c67de7c
-Message-Id: <168513470906.2904.18094565219968509548.pr-tracker-bot@kernel.org>
-Date:   Fri, 26 May 2023 20:58:29 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229950AbjEZVFa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 17:05:30 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABD41B0
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 14:05:18 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso1363249e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 14:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685135117; x=1687727117;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GqzChK2p9Fmsbypm5fA/GYnlAjU1PYB3ZgmsKK+VVus=;
+        b=t2cG7LYWCQ/fIqzKcGIfk8cwHzaznVTEc9PDO/9dcOBDmlYOw89iJUHjEWU/vSWIga
+         uN+5r85b0ymLK9qb/cjnwav6OXL2AQNSx4FUrbqXm2LiD+EJWIOWcA1CWaHGk24z/j5t
+         +iPXTpgeaVuDao1h3fkkw6uk8Hzl9360uPMzJJjBM27071/yl4kEIoCY9Ot7HL95lzwh
+         LJEZ4P1YtgaSqTGP1qA655qKXErtuC81ekYUrvb++UQKoqan/I2wXBE8ZDW9zMok9/6o
+         ohgLcLPkdP2HD81wTynIMiSdSJ/e8KV9RUP+WQUGUjfULLHUn2MnL3hhubMlE2rF6O9x
+         DB2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685135117; x=1687727117;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GqzChK2p9Fmsbypm5fA/GYnlAjU1PYB3ZgmsKK+VVus=;
+        b=NC0Lk1+1UVeTe8C78nxwIyI9ADC2Fl9S7UIGaCFXovlVRfFum4bXTTmb2HyqAcgvug
+         Ve3/HP74itEeiq5NvE+jNRJ5V4ghks9Cw4KhLxU5gBjlb/gbfGawiMINwQG0etpHgSzG
+         +d2LOGUj58KHHSh74pRirLGac5DEB4RTjx8gLm27anIFn9uOzYRBSFIzwNtZOvNa7WXr
+         XHRDlO/i9mL8WP6NYy4rtqP8EjPaISRVBolcPy70BkwNYuEFrtbOSAshn6i5LqFTzXLL
+         ovH5sO4/zy/W4ysuBY+r/zPxe2JSIr23a5UEZRZ6nOjBpzRL5bvznZhCmNTZRINogxOg
+         cD6w==
+X-Gm-Message-State: AC+VfDxarYJXKRG/In1yRxwtpIThJoGwa7F+iDVmdBtg0aUPW7a2INtq
+        +CTwRb88ll4wrpc4N3pfkfNl7g==
+X-Google-Smtp-Source: ACHHUZ7O5tQX7gUXjHxxBp9kqHiKWVIiLCI+vuE0LsVKLdoVIEf/7YYM17Gn3NJ68MieU9Pnvc8NSg==
+X-Received: by 2002:a2e:a164:0:b0:2af:b4b:8583 with SMTP id u4-20020a2ea164000000b002af0b4b8583mr1060146ljl.15.1685135116776;
+        Fri, 26 May 2023 14:05:16 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id a24-20020a2e8618000000b002a76c16ad65sm951941lji.87.2023.05.26.14.05.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 May 2023 14:05:16 -0700 (PDT)
+Message-ID: <e8436d49-f9d7-fbb6-a4f7-935dc43c5ce4@linaro.org>
+Date:   Fri, 26 May 2023 23:05:14 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 3/5] soc: qcom: smem: introduce qcom_smem_get_soc_id()
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
+        andersson@kernel.org, ilia.lin@kernel.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     ansuelsmth@gmail.com
+References: <20230526204802.3081168-1-robimarko@gmail.com>
+ <20230526204802.3081168-3-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230526204802.3081168-3-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 26 May 2023 18:33:07 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.4-rc4
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/77af1f2b9a2464e4bce20cfd32bfb2390c67de7c
+On 26.05.2023 22:48, Robert Marko wrote:
+> Introduce a helper to return the SoC SMEM ID, which is used to identify the
+> exact SoC model as there may be differences in the same SoC family.
+> 
+> Currently, cpufreq-nvmem does this completely in the driver and there has
+> been more interest expresed for other drivers to use this information so
+> lets expose a common helper to prevent redoing it in individual drivers
+> since this field is present on every SMEM table version.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+> Changes in v5:
+> * Convert the __le32 ID to CPU endinaness
+Sorry for the confusion in my previous reviews.
 
-Thank you!
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Konrad
+> 
+> Changes in v4:
+> * Change helper name to qcom_smem_get_soc_id()
+> * Remove len and just pass NULL, that is sufficient here
+> 
+> Changes in v3:
+> * Change export to EXPORT_SYMBOL_GPL
+> * Use an argument for returning SoC ID
+> * Update kerneldoc
+> ---
+>  drivers/soc/qcom/smem.c       | 23 +++++++++++++++++++++++
+>  include/linux/soc/qcom/smem.h |  2 ++
+>  2 files changed, 25 insertions(+)
+> 
+> diff --git a/drivers/soc/qcom/smem.c b/drivers/soc/qcom/smem.c
+> index bc98520c4969..b0d59e815c3b 100644
+> --- a/drivers/soc/qcom/smem.c
+> +++ b/drivers/soc/qcom/smem.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/sizes.h>
+>  #include <linux/slab.h>
+>  #include <linux/soc/qcom/smem.h>
+> +#include <linux/soc/qcom/socinfo.h>
+>  
+>  /*
+>   * The Qualcomm shared memory system is a allocate only heap structure that
+> @@ -772,6 +773,28 @@ phys_addr_t qcom_smem_virt_to_phys(void *p)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_smem_virt_to_phys);
+>  
+> +/**
+> + * qcom_smem_get_soc_id() - return the SoC ID
+> + * @id:	On success, we return the SoC ID here.
+> + *
+> + * Look up SoC ID from HW/SW build ID and return it.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +int qcom_smem_get_soc_id(u32 *id)
+> +{
+> +	struct socinfo *info;
+> +
+> +	info = qcom_smem_get(QCOM_SMEM_HOST_ANY, SMEM_HW_SW_BUILD_ID, NULL);
+> +	if (IS_ERR(info))
+> +		return PTR_ERR(info);
+> +
+> +	*id = __le32_to_cpu(info->id);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(qcom_smem_get_soc_id);
+> +
+>  static int qcom_smem_get_sbl_version(struct qcom_smem *smem)
+>  {
+>  	struct smem_header *header;
+> diff --git a/include/linux/soc/qcom/smem.h b/include/linux/soc/qcom/smem.h
+> index 86e1b358688a..223db6a9c733 100644
+> --- a/include/linux/soc/qcom/smem.h
+> +++ b/include/linux/soc/qcom/smem.h
+> @@ -11,4 +11,6 @@ int qcom_smem_get_free_space(unsigned host);
+>  
+>  phys_addr_t qcom_smem_virt_to_phys(void *p);
+>  
+> +int qcom_smem_get_soc_id(u32 *id);
+> +
+>  #endif
