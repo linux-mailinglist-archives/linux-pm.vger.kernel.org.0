@@ -2,197 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB5E712EAB
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 23:06:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E64712F15
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 23:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237834AbjEZVGR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 May 2023 17:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
+        id S243572AbjEZVol (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 17:44:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237050AbjEZVGQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 17:06:16 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3514BB
-        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 14:06:14 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso1290546e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 14:06:14 -0700 (PDT)
+        with ESMTP id S230025AbjEZVok (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 17:44:40 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7608CE62
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 14:44:17 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30957dd7640so728090f8f.3
+        for <linux-pm@vger.kernel.org>; Fri, 26 May 2023 14:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685135173; x=1687727173;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HCC2tysqUqqkaNpnqdNWnUBouxAoiiM0e8gfRKPQ5dg=;
-        b=GGJ9BfMkvOG0mXaVIBEMdVdTuzayT86InEdbaj8/tl/frdzfg7m+DgT5B7mt9rJbCQ
-         /GokqKGTpWO20celynhnQeyQKVa+AsnJR+4qAHpGRgnpyajFD740ib+hhbInDq2K8w2J
-         VC5LeTqwhbR8GtA38Vii7gBHV5Dvn4LhJb42e70mAdYQ6zkXXsWqU31ylNa2QhqL3zHr
-         MXDxW6Trk4rH+HEn5Oh2mOn383z0WaYjSsNojkKwo33YZaKxS6WzS/KhVPR6J8QCRu6H
-         UsXwr4KpGjBiPtDtK8gsOtqlwwpDBAmMSePqC0DlZRgLs/7BISJjiyWGBmVdnXglMDTW
-         AA6w==
+        d=linaro.org; s=google; t=1685137456; x=1687729456;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UYFopvK0TbM2VEpCPpkGXSYwRCmtfEBkrHRwu/VEJOc=;
+        b=F/kZ01mNxkvFZgeTbJjlskpUIhbm68Rlr9vZiScRbRrplQHX8VbIoQbljdyzomnydh
+         1jbP7FZAQhNRaaVSoydeBoH9UMCGAwsWbKdKFPRrbPmav4/G4IHL+jdmGpox/2gT0MJJ
+         AbTyP6RZhh0I9GHymf7QI77rMQsLM9AO0vlh4hrbZ91rhH6iV/rkQyA1LGkyrmwmLc9W
+         +845mvxzQ67iQXl7herPj3SdoK+10g1dHk7Y2fepYDPJENzizvaPwU6Cy5iozx9hLyWr
+         XPDiqWAxc4ssZ+q7URsLLRpSNy83CziEydqZerf0aAcinxArUrfCVnsrY8uq+RcjY/zz
+         4o8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685135173; x=1687727173;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HCC2tysqUqqkaNpnqdNWnUBouxAoiiM0e8gfRKPQ5dg=;
-        b=Fya7dRPYGuxoN//PVfoNyKp+rgVx4dO2B0Sx0ahZX2TThnH4pX1HpP6syWOYHvqdzJ
-         30OcUkbGPUafFCrzF2wjwUmxj3oEXVfs/3wji4xM41XPfGoDIH2Niw19iqGgoHeeEEZI
-         c1N99rdMcjps7vdnl23o48PcQxswUBfInRH1y33leO5Tvq3idMzR/BcSivCMg6cZYFZp
-         mpGn+Zbgm3Gzi9JaEfz8TwXGXLUX3TaANSj6WAyuZPWa889FBzlKfBbK7dHqssT85cTg
-         wAOFRuDEd94th4/dpCN2LyIo9xXIiVnwEqN41Q4AimNMxYW9ZhYOFNsKgz6SYCiUvEi/
-         2SeQ==
-X-Gm-Message-State: AC+VfDzYbW/dnril/9aN8Ko/cZ5G481uexkEExXsdC5Pzh2bMm3wuZcA
-        smkRFn1JwnVqzycoCaZnRgkMbg==
-X-Google-Smtp-Source: ACHHUZ7B4FIban15l1ISJAPvtW7ZjsrwGVWbiw5WbYtvCRaYlaZVzhno4m4NHbLnSWar9vL/kiiz9A==
-X-Received: by 2002:a05:6512:21e:b0:4e8:5e39:6234 with SMTP id a30-20020a056512021e00b004e85e396234mr746343lfo.16.1685135173104;
-        Fri, 26 May 2023 14:06:13 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id n7-20020a195507000000b004efedad4604sm794156lfe.18.2023.05.26.14.06.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 May 2023 14:06:12 -0700 (PDT)
-Message-ID: <04a57d7a-8e9f-c4df-b6a7-6161c9e83b38@linaro.org>
-Date:   Fri, 26 May 2023 23:06:11 +0200
+        d=1e100.net; s=20221208; t=1685137456; x=1687729456;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UYFopvK0TbM2VEpCPpkGXSYwRCmtfEBkrHRwu/VEJOc=;
+        b=G6z8QhyhwdXBoxOPvrXBGhBQsgEEyHV2HBtwXdqdJp7sqcQjU0aietj/3eP/AkPLxM
+         qu2euEZTKf1VgVn2pvhXvaAaFNrniZqlbNnzbZdmZ4eZkNXa35+4dl29pedxSyvj1//x
+         qCnBwd+1MtTDtgvYg7xNbscQOR5mCRII/dH6CXkUdZcaKNNsD7+XmMsiYfyeSd/QJwQG
+         ZsIbYSoU0cI9pxfDW1PG+m80X9R3fnvcq+CRD52SZp+KmLk9jJY8a8ezlb0nqJIORd0T
+         wSMMLd1JCQB5N1EVn2LjF3Us9aica2zQadCN7W7mDGWK1o+G5tvLnSzhGyO3HyLYTDg+
+         nN4w==
+X-Gm-Message-State: AC+VfDyoBBixmXaZ5nGA9BLJ+hzjpHtkRUqCl3Oo4TugD7pN2VvYCnkZ
+        apm9cQRaBCcl22RGuMT7ivgiAw==
+X-Google-Smtp-Source: ACHHUZ6ZSG+H1ULJSKW01PE/Ox8Ma/fXVIZNcxWpuXW639bkievCG+xl6m7FFwsBPNcfaPfetl5l+g==
+X-Received: by 2002:adf:f0c5:0:b0:306:2d28:d556 with SMTP id x5-20020adff0c5000000b003062d28d556mr2477923wro.34.1685137455881;
+        Fri, 26 May 2023 14:44:15 -0700 (PDT)
+Received: from lion.localdomain (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id d16-20020adff850000000b0030903d44dbcsm6138905wrq.33.2023.05.26.14.44.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 May 2023 14:44:15 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+Subject: [PATCH v9 0/2] power: supply: introduce support for the Qualcomm
+ smb2 charger
+Date:   Fri, 26 May 2023 22:44:13 +0100
+Message-Id: <20230524-pmi8998-charger-v9-0-cd7f6d03c0ab@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 5/5] cpufreq: qcom-nvmem: use helper to get SMEM SoC ID
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, agross@kernel.org,
-        andersson@kernel.org, ilia.lin@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com
-References: <20230526204802.3081168-1-robimarko@gmail.com>
- <20230526204802.3081168-5-robimarko@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230526204802.3081168-5-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-B4-Tracking: v=1; b=H4sIAC0ocWQC/3WOTQ6DIBCFr2JYF0so6tBV79G4ABmUpIoZGtLGe
+ Pei+y6/95P3NpaQAiZ2rzZGmEMKcSmgLxUbJrOMyIMrzKSQN9FIxdc5gNbAi0sjEgcptLPWd60
+ CVlrWJOSWzDJMRy+5GVRzbWvFHeYjsBL68Dknn33hKaR3pO/5IMOh/h/LwAW30Hk/OA2tco9XW
+ AzFOtLI+n3ff7rKH1fQAAAA
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>
+X-Mailer: b4 0.13-dev-46309
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1638;
+ i=caleb.connolly@linaro.org; h=from:subject:message-id;
+ bh=ossN8nvmsJ0dCCuZ5FP76rbpQnytfD6/+O9I3aGsBDw=;
+ b=owEBbQKS/ZANAwAIAQWDMSsZX2S2AcsmYgBkcSguwmasYNUd62k34L/rVRuK2+Jm8FA8pU7EE
+ Yrc4bdHPHCJAjMEAAEIAB0WIQS2UaFGPGq+0GkMVc0FgzErGV9ktgUCZHEoLgAKCRAFgzErGV9k
+ tublD/4yBtake5gCD6+StCy+oKpRyabsjHm2vzy3oftvXH/GyDLklER0cHR04bnBF9vAVhYjpcv
+ Oy08mbDZjlzuV1Mqo6E8zhkAEd8rlkgsthXQ4mzjOl0TWvDm6RAtwoP3AhU2pkGVk5xcjAI/V8h
+ Uzq4kkKJ8YS1f3Rqv32enx4Sx6Kt8QWTTVIE+lu6OUoUdmJ0Fr3PrC6H76dB92iU/L3do4DOmD2
+ rkdvUA9hPEcLhb3p2+s/YHFx9syohDnib1xO0Jcf3/UR/tbcnMsVRk3QPqpQ9Qqg+qmoklhIdkU
+ HcAKaZn+RavNn6m4BF0KAmTcdIHBTwjv9oOSdd2KOD1xMDXBlpjiM/k9N5zLGfp8N8Uopwq0gAL
+ kgyfUt43j7nq5LaV87Yt3TNoIy3UhZEw0eWb+qY2tFIJRr1NUig2wvmq69zBrNo380bgS9rdpif
+ 0K0V1dKSUwQTWh3t0oqglluV9VsfXPhOpye0DoMtFSG//Vf6dB0Rxg3ev7uZO4BAzOUSTwbNsDr
+ tDGHMafPTMSLz1q937Dyw8P9YhI2/3LcjDR+5Rx7yWhi7TtbAXt9wv6nRPfdiH+5ax0hw8W0v6w
+ KTj++vB8nwbc2ni6qvBsYFgotFigfYaSQ1ICKdGoY9xu+X7a5wnS4lcMN8GTlx3iZDpXjUIlJyW
+ yem9YqFQDDqydzw==
+X-Developer-Key: i=caleb.connolly@linaro.org; a=openpgp;
+ fpr=83B24DA7FE145076BC38BB250CD904EB673A7C47
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
+This is the second generation SMB charger, and replaces the previous
+SMBB hardware found in older PMICs.
 
+Changes since v8:
+ * Add charger bindings reference to qcom,spmi-pmic.yaml
+V8: https://lore.kernel.org/all/20230524-pmi8998-charger-v8-0-b87ffcd9864d@linaro.org/
 
-On 26.05.2023 22:48, Robert Marko wrote:
-> Now that SMEM exports a helper to get the SMEM SoC ID lets utilize it.
-> Currently qcom_cpufreq_get_msm_id() is encoding the returned SMEM SoC ID
-> into an enum, however there is no reason to do so and we can just match
-> directly on the SMEM SoC ID as returned by qcom_smem_get_soc_id().
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> Changes in v4:
-> * Adapt to name change to qcom_smem_get_soc_id()
-> 
-> Changes in v3:
-> * Adapt to helper using argument now
-> 
-> Changes in v2:
-> * Utilize helper exported by SMEM instead of refactoring
-> qcom_cpufreq_get_msm_id()
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Changes since v7:
+ * Implement fixes suggested by Sebastian
+ * Fix format warning
+V7: https://lore.kernel.org/linux-arm-msm/20230127230506.3140297-1-caleb.connolly@linaro.org/
 
-Konrad
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 56 +++++-----------------------
->  1 file changed, 10 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index 60e99be2d3db..a88b6fe5db50 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -29,16 +29,8 @@
->  #include <linux/slab.h>
->  #include <linux/soc/qcom/smem.h>
->  
-> -#define MSM_ID_SMEM	137
-> -
->  #include <dt-bindings/arm/qcom,ids.h>
->  
-> -enum _msm8996_version {
-> -	MSM8996_V3,
-> -	MSM8996_SG,
-> -	NUM_OF_MSM8996_VERSIONS,
-> -};
-> -
->  struct qcom_cpufreq_drv;
->  
->  struct qcom_cpufreq_match_data {
-> @@ -135,60 +127,32 @@ static void get_krait_bin_format_b(struct device *cpu_dev,
->  	dev_dbg(cpu_dev, "PVS version: %d\n", *pvs_ver);
->  }
->  
-> -static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
-> -{
-> -	size_t len;
-> -	u32 *msm_id;
-> -	enum _msm8996_version version;
-> -
-> -	msm_id = qcom_smem_get(QCOM_SMEM_HOST_ANY, MSM_ID_SMEM, &len);
-> -	if (IS_ERR(msm_id))
-> -		return NUM_OF_MSM8996_VERSIONS;
-> -
-> -	/* The first 4 bytes are format, next to them is the actual msm-id */
-> -	msm_id++;
-> -
-> -	switch ((enum _msm_id)*msm_id) {
-> -	case QCOM_ID_MSM8996:
-> -	case QCOM_ID_APQ8096:
-> -		version = MSM8996_V3;
-> -		break;
-> -	case QCOM_ID_MSM8996SG:
-> -	case QCOM_ID_APQ8096SG:
-> -		version = MSM8996_SG;
-> -		break;
-> -	default:
-> -		version = NUM_OF_MSM8996_VERSIONS;
-> -	}
-> -
-> -	return version;
-> -}
-> -
->  static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
->  					  struct nvmem_cell *speedbin_nvmem,
->  					  char **pvs_name,
->  					  struct qcom_cpufreq_drv *drv)
->  {
->  	size_t len;
-> +	u32 msm_id;
->  	u8 *speedbin;
-> -	enum _msm8996_version msm8996_version;
-> +	int ret;
->  	*pvs_name = NULL;
->  
-> -	msm8996_version = qcom_cpufreq_get_msm_id();
-> -	if (NUM_OF_MSM8996_VERSIONS == msm8996_version) {
-> -		dev_err(cpu_dev, "Not Snapdragon 820/821!");
-> -		return -ENODEV;
-> -	}
-> +	ret = qcom_smem_get_soc_id(&msm_id);
-> +	if (ret)
-> +		return ret;
->  
->  	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
->  	if (IS_ERR(speedbin))
->  		return PTR_ERR(speedbin);
->  
-> -	switch (msm8996_version) {
-> -	case MSM8996_V3:
-> +	switch (msm_id) {
-> +	case QCOM_ID_MSM8996:
-> +	case QCOM_ID_APQ8096:
->  		drv->versions = 1 << (unsigned int)(*speedbin);
->  		break;
-> -	case MSM8996_SG:
-> +	case QCOM_ID_MSM8996SG:
-> +	case QCOM_ID_APQ8096SG:
->  		drv->versions = 1 << ((unsigned int)(*speedbin) + 4);
->  		break;
->  	default:
+To: Sebastian Reichel <sre@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+To: Caleb Connolly <caleb.connolly@linaro.org>
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+To: Tom Rix <trix@redhat.com>
+
+---
+Caleb Connolly (2):
+      dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for smb2 driver
+      power: supply: add Qualcomm PMI8998 SMB2 Charger driver
+
+ .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |    1 +
+ .../power/supply/qcom,pmi8998-charger.yaml         |   82 ++
+ drivers/power/supply/Kconfig                       |    9 +
+ drivers/power/supply/Makefile                      |    1 +
+ drivers/power/supply/qcom_pmi8998_charger.c        | 1059 ++++++++++++++++++++
+ 5 files changed, 1152 insertions(+)
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+
+// Caleb (they/them)
+
