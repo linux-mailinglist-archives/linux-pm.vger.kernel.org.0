@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 835A0712AAC
-	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 18:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C430E712AB2
+	for <lists+linux-pm@lfdr.de>; Fri, 26 May 2023 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjEZQcT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 26 May 2023 12:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S230525AbjEZQdY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 26 May 2023 12:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjEZQcS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 12:32:18 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50107DF;
-        Fri, 26 May 2023 09:32:17 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5147f32df82so124209a12.0;
-        Fri, 26 May 2023 09:32:17 -0700 (PDT)
+        with ESMTP id S229766AbjEZQdX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 26 May 2023 12:33:23 -0400
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47F3BC;
+        Fri, 26 May 2023 09:33:21 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-50a20bfe366so235674a12.0;
+        Fri, 26 May 2023 09:33:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685118736; x=1687710736;
+        d=1e100.net; s=20221208; t=1685118800; x=1687710800;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XXhdKxqSFYkKSH0aln6Zruim3OwYUDkaSG2oPvequ0Q=;
-        b=E7tBbNNi6e2BoeWzw50KrLgVmt4zS+rj3qEKUwcYfve+9or4tM6TZVZRPcmDkG4pIF
-         3aIpmguDCe1BX14p6LaJODtSlSe9J3Vr4xU6o7WQullCJbLaIHVLbNxv88joEV+Q6TX/
-         PGTIiXO5yUqsR3DhhEjvgPkyuc50ozmZZOzikMQ07hkuJCCBhdOsaX+3mdgvuUhS5Ndu
-         XGjEY/kpwvVEPeyY47nP4yH/hatEWbpvl9j0Wf7/CQQWFEnTpHRQ6chdhHI2EFRYY1C4
-         P7Ir+sfjKk82LOd4tjJc7HJS2xwXxj7olW+7sutAtBCRqcYZmOV1Urii+MpZFJpmYV6Z
-         dVAQ==
-X-Gm-Message-State: AC+VfDx272739pZCS4CwC57fR2++ILc41T3dayn8uGJjvDzpPnHCC6Eq
-        mK9DVnbnRkExqWiC3eORFtj3EB5MQropiJID3VNskPhqKUw=
-X-Google-Smtp-Source: ACHHUZ5xB8PBLY5c725ADRoJAV35GRPW13xpNZv99hwoJn6PUt98y1V/jlsrwPua3ewK6gpSbV/QEo8kALLN47UZ5XE=
-X-Received: by 2002:a17:906:729e:b0:94f:66af:b1f7 with SMTP id
- b30-20020a170906729e00b0094f66afb1f7mr2442638ejl.1.1685118735347; Fri, 26 May
- 2023 09:32:15 -0700 (PDT)
+        bh=Gomzi9+i68UXlcqzXNqpd5rMReQDTrVe8y2yHjIN4s0=;
+        b=Yg9QaYrQK9l/Et1XYnROO5lMIkY8kOH22g5ypa4jsOyL/+x6V89lTHwgmFO0sYI5Cn
+         5PwL9E1g2whGbjA23kSi5Mw4vX4wpog9SYZ8PAMtr6RfAM1rzORwQe4unhbC2CMWRMhZ
+         XpnKdKHcGoqz3xDGd2q/8jN9KrPQ6ZZTcpFL6E6Rrxqj7MmLeuE6bB52Fuaxn8ueSKEU
+         X0+6qVDuQFkTtHGY76MmHDdh+8YmU6n0az/EGY3DfQUf5cf6Ibliimqyti08zAYPCT/R
+         TWwaxPeblOy0ItxweYrdzR9BpKr6I/H+QNPEBGHcnpmG1OCItw0ka6kDGwh9TyvDZ4X+
+         2AqA==
+X-Gm-Message-State: AC+VfDxwbl0wAvUWItBaoieJYlUWtXpXEzhHDvXYJ+LxPkJTpQa3KgFL
+        t8bDiVSvKnitjvU0AVpROUqWOKOvaBBcmyj6cMd3i6L1+FI=
+X-Google-Smtp-Source: ACHHUZ6gdV3c48hoWAHrscb2AUq3jUqJHebVukz+VJRQHCuyKHT9DY123Fve3MTqqdRVb1F9vKvD4ESZ+vAMTF0BI0k=
+X-Received: by 2002:a17:906:113:b0:953:2918:71e7 with SMTP id
+ 19-20020a170906011300b00953291871e7mr2218098eje.5.1685118799983; Fri, 26 May
+ 2023 09:33:19 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 26 May 2023 18:32:02 +0200
-Message-ID: <CAJZ5v0gV=NM2Tg7x2fEM8imVQ15D5KpZeP+EyaOEnjwPCmF9gg@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.4-rc4
+Date:   Fri, 26 May 2023 18:33:07 +0200
+Message-ID: <CAJZ5v0gh2RTNjJ-YQAv8pdrOYJjjdj4dcp7+8EnUAYWiP0BVuw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control fix for v6.4-rc4
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
@@ -57,34 +57,31 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.4-rc4
+ thermal-6.4-rc4
 
-with top-most commit 3bf8c6307bad5c0cc09cde982e146d847859b651
+with top-most commit 5f7fdb0f255756b594cc45c2c08b0140bc4a1761
 
- cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
+ thermal: intel: int340x: Add new line for UUID display
 
 on top of commit 44c026a73be8038f03dbdeef028b642880cf1511
 
  Linux 6.4-rc3
 
-to receive power management fixes for 6.4-rc4.
+to receive a thermal control fix for 6.4-rc4.
 
-These fix 3 issues related to the ->fast_switch callback in the AMD
-P-state cpufreq driver (Gautham R. Shenoy and Wyes Karny).
+This fixes a regression introduced inadvertently during the 6.3 cycle
+by a commit making the Intel int340x thermal driver use sysfs_emit_at()
+instead of scnprintf() (Srinivas Pandruvada).
 
 Thanks!
 
 
 ---------------
 
-Gautham R. Shenoy (1):
-      cpufreq: amd-pstate: Add ->fast_switch() callback
-
-Wyes Karny (2):
-      cpufreq: amd-pstate: Remove fast_switch_possible flag from active driver
-      cpufreq: amd-pstate: Update policy->cur in amd_pstate_adjust_perf()
+Srinivas Pandruvada (1):
+      thermal: intel: int340x: Add new line for UUID display
 
 ---------------
 
- drivers/cpufreq/amd-pstate.c | 46 +++++++++++++++++++++++++++++++++++---------
- 1 file changed, 37 insertions(+), 9 deletions(-)
+ drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
