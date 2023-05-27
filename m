@@ -2,144 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3A71351B
-	for <lists+linux-pm@lfdr.de>; Sat, 27 May 2023 16:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078EF71358C
+	for <lists+linux-pm@lfdr.de>; Sat, 27 May 2023 17:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230360AbjE0OM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 May 2023 10:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
+        id S232719AbjE0P4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 May 2023 11:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjE0OM2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 May 2023 10:12:28 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEE8E1;
-        Sat, 27 May 2023 07:12:26 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso18499375e9.0;
-        Sat, 27 May 2023 07:12:26 -0700 (PDT)
+        with ESMTP id S232725AbjE0P4O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 May 2023 11:56:14 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B72FDF
+        for <linux-pm@vger.kernel.org>; Sat, 27 May 2023 08:56:09 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f37b860173so2091960e87.2
+        for <linux-pm@vger.kernel.org>; Sat, 27 May 2023 08:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685196745; x=1687788745;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google; t=1685202968; x=1687794968;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y73LttJXgXAmHhQ5741s9WbrUG10KAIdhEW2zXBoOQc=;
-        b=SSaPjwvbMG4ZCo291BUkrxKdVuhVg+Wj6kvou/lqhMCj3nP/54QbnaMb7OxpDeo3NU
-         ZoJexsI4K3GBGylrGpIQVv+olEPNxqSZvAl/b6h0/svnjQnDyEjQ2VhYtdtgcqmsWa/N
-         7bZDcgMlWxoRtRx0Azs4enYz9xTFKuIVDGWGbKp8EMp88hF+L9kGNe9btYiJyHdhQxLP
-         k82dUONAIov4yY1o6SzIHbtCgk3k4X9D6HthCiM+WBAAqcd6d2k2TjYOeIlhOY63Iqbz
-         69YYGV5/mNgE1IPWDNsnN6p4wiqkJBDFydqaWtVm/nznxcZpMXgWeV/sop3xNdxKsiS8
-         /GNg==
+        bh=/cqYMlSk8xZ/AYAV4YOl8MtaHv1NVr7y1pd2r773yPA=;
+        b=NBNmJtyUPMssgu3Jo2k9smK5k0RDHqvwFDGNDHQB/XaVP/DqWZB+/0YgDV36wUgj2Q
+         ntRBHLP+CVOBol8UcjsIcdIxtPJRxQtCr9m98pBiVxIrLqn0nzcaibZN5emDRjTCp5Ud
+         ox5nlOGyl7BUKPGrsa1cUIPrOJfvEbSSHCWA7qYqszAxTReyom+2VffTW3IMBs/6f6uR
+         BumkGw4/XUc9w6eZ2ZcfQSaJycbWFZoj2dzgeBdnq36TCv5mWs5nz2VdKUEMxYoYaFXt
+         UeEANA2g65mp2gGT8x3i6xyzqWzhxC3Z/uAJ4cimiITF5x2a3F6N9Be8PhxgGDDypzsl
+         H+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685196745; x=1687788745;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1685202968; x=1687794968;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y73LttJXgXAmHhQ5741s9WbrUG10KAIdhEW2zXBoOQc=;
-        b=h5fxcQAO/PggCUAcFCrrAZGbr6qXzcO30HNkMCZ7q7ROXkm0gvRVEOyv4C+kykGuCe
-         xFrpLRHRMQG95MUTw4HH+i1ER/ukPPF1wGtSeUJ1sxnaBL8Kpdky/9fjrqDNu8ojFtio
-         Chalqc9uLTlQIGL28/0XOb0ZzN+iiuC9EsFwpQu9YO3g5p1GxS73ynLdwX783Uk7zD3m
-         TGbJMQ6mvMWpkspS19ZdiFU8H8gNyB6bOJKcEp8sEcBWcJumYLpyFTG9uibF+HhgbVFf
-         ehqgdRrYEjvEg3zxFbv1zhABuQFtVxGC8OvDKZ/ghV+bk2pd1hVL34efDHJ4Kaiz/5GF
-         jtSw==
-X-Gm-Message-State: AC+VfDyM8c6jKibhIi/zWQn+26BVhvMWzHFKKnoHmdfYOKylnoOG8KZn
-        LB3rKKbpzOgCJu/enCq7Y2E=
-X-Google-Smtp-Source: ACHHUZ7iYd9QDeDJnyOgG5uAS9aZak2X8ynHR3qkQl+oqxSFLYVzUSO3mpKQZEUnoaSQrFv9DvxE0Q==
-X-Received: by 2002:a1c:7415:0:b0:3f6:89e:2716 with SMTP id p21-20020a1c7415000000b003f6089e2716mr4510310wmc.33.1685196744886;
-        Sat, 27 May 2023 07:12:24 -0700 (PDT)
-Received: from standask-GA-A55M-S2HP ([188.123.113.247])
-        by smtp.gmail.com with ESMTPSA id q21-20020a1ce915000000b003f421979398sm12015239wmc.26.2023.05.27.07.12.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 May 2023 07:12:24 -0700 (PDT)
-Date:   Sat, 27 May 2023 16:12:22 +0200
-From:   Stanislav Jakubek <stano.jakubek@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>
-Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: power: reset: bcm21664-resetmgr: convert to YAML
-Message-ID: <20230527141222.GA5048@standask-GA-A55M-S2HP>
+        bh=/cqYMlSk8xZ/AYAV4YOl8MtaHv1NVr7y1pd2r773yPA=;
+        b=YcGS6zahzZYCUwXAlBL70hB9UGSgJfoj9edwUuXfu5wzcBktU/Mip5GzzDBbl2ZpzM
+         yTVRJ03w+ZpmxQ/TFwUBc9jrkkSDhRqKsTRmKAUy/GSjGiwcKMsOFVIT/Ri0evTerig7
+         o1qMGR8XyGxFWVxHVGhQ0zPscYclQcYDGZnfXeHdtKqyP/p3ARCQGq3wRRBS8rYiY3wz
+         M8AdVDmqW03T7XlVdDMB7oxTs7UEDIlf18xeCDb5KZ1VEg/S5ENXmU3AcVOcAFx9kUkS
+         I1fQEOAGL4iKp/r5M+qRE2kW0TZplDYDgMtBIuNB8s3FsLb6fodFdASXpCp5J2BpSqbj
+         dEuQ==
+X-Gm-Message-State: AC+VfDypR/oAyuBirnqAve6lWDf3Y4SFZzvQwJnCUQvKePjkIyeAEs6k
+        MVLfmtj67/9FYsHoYdfCTKVXlg==
+X-Google-Smtp-Source: ACHHUZ57z815Rw86ZAzccrmEVlvtwRLiuRUNeKT9FtM/L5APrmviTWfXN5tVxSi5pYXFr65QdkxOEA==
+X-Received: by 2002:a19:ee01:0:b0:4f4:b3e2:ff54 with SMTP id g1-20020a19ee01000000b004f4b3e2ff54mr1423055lfb.51.1685202967853;
+        Sat, 27 May 2023 08:56:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id t9-20020ac243a9000000b004f13634da05sm1175648lfl.180.2023.05.27.08.56.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 May 2023 08:56:07 -0700 (PDT)
+Message-ID: <b227820b-239d-32fa-4dd4-78cba2a148e0@linaro.org>
+Date:   Sat, 27 May 2023 17:56:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] cpufreq: qcom-nvmem: add support for IPQ8074
+Content-Language: en-US
+To:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
+        agross@kernel.org, andersson@kernel.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ansuelsmth@gmail.com
+References: <20230527095229.12019-1-robimarko@gmail.com>
+ <20230527095229.12019-2-robimarko@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230527095229.12019-2-robimarko@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert Broadcom Kona family reset manager bindings to DT schema.
 
-Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
----
- .../power/reset/brcm,bcm21664-resetmgr.txt    | 14 ---------
- .../power/reset/brcm,bcm21664-resetmgr.yaml   | 31 +++++++++++++++++++
- 2 files changed, 31 insertions(+), 14 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml
 
-diff --git a/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt b/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt
-deleted file mode 100644
-index 93f31ca1ef4b..000000000000
---- a/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt
-+++ /dev/null
-@@ -1,14 +0,0 @@
--Broadcom Kona Family Reset Manager
------------------------------------
--
--The reset manager is used on the Broadcom BCM21664 SoC.
--
--Required properties:
--  - compatible: brcm,bcm21664-resetmgr
--  - reg: memory address & range
--
--Example:
--	brcm,resetmgr@35001f00 {
--		compatible = "brcm,bcm21664-resetmgr";
--		reg = <0x35001f00 0x24>;
--	};
-diff --git a/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml b/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml
-new file mode 100644
-index 000000000000..3e28a59d718f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml
-@@ -0,0 +1,31 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/reset/brcm,bcm21664-resetmgr.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom Kona family reset manager
-+
-+maintainers:
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+properties:
-+  compatible:
-+    const: brcm,bcm21664-resetmgr
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    reset-controller@35001f00 {
-+        compatible = "brcm,bcm21664-resetmgr";
-+        reg = <0x35001f00 0x24>;
-+    };
-+...
--- 
-2.25.1
+On 27.05.2023 11:52, Robert Marko wrote:
+> IPQ8074 comes in 2 families:
+> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
+> 
+> So, in order to be able to share one OPP table lets add support for IPQ8074
+> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
+> 
+> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+> will get created by NVMEM CPUFreq driver.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 40 ++++++++++++++++++++++++++++
+>  2 files changed, 41 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 14aa8281c7f4..e4d6d128647d 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -169,6 +169,7 @@ static const struct of_device_id blocklist[] __initconst = {
+>  	{ .compatible = "ti,am625", },
+>  
+>  	{ .compatible = "qcom,ipq8064", },
+> +	{ .compatible = "qcom,ipq8074", },
+>  	{ .compatible = "qcom,apq8064", },
+>  	{ .compatible = "qcom,msm8974", },
+>  	{ .compatible = "qcom,msm8960", },
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index a88b6fe5db50..607fc0273e9c 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -31,6 +31,9 @@
+>  
+>  #include <dt-bindings/arm/qcom,ids.h>
+>  
+> +#define IPQ8074_HAWKEYE_VERSION		BIT(0)
+> +#define IPQ8074_ACORN_VERSION		BIT(1)
+> +
+>  struct qcom_cpufreq_drv;
+>  
+>  struct qcom_cpufreq_match_data {
+> @@ -204,6 +207,38 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+>  	return ret;
+>  }
+>  
+> +static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
+> +					     struct nvmem_cell *speedbin_nvmem,
+> +					     char **pvs_name,
+> +					     struct qcom_cpufreq_drv *drv)
+> +{
+> +	u32 msm_id;
+> +	int ret;
+> +	*pvs_name = NULL;
+> +
+> +	ret = qcom_smem_get_soc_id(&msm_id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (msm_id) {
+> +	case QCOM_ID_IPQ8070A:
+> +	case QCOM_ID_IPQ8071A:
+> +		drv->versions = IPQ8074_ACORN_VERSION;
+> +		break;
+> +	case QCOM_ID_IPQ8072A:
+> +	case QCOM_ID_IPQ8074A:
+> +	case QCOM_ID_IPQ8076A:
+> +	case QCOM_ID_IPQ8078A:
+> +		drv->versions = IPQ8074_HAWKEYE_VERSION;
+> +		break;
+> +	default:
+> +		BUG();
+I'd say pr_err, or at least WARN() + setting the slowest bin would be
+more desirable here, cpufreq probes early so people without uart etc.
+will be unlikely to find out why their kernel dies.
 
+Konrad
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct qcom_cpufreq_match_data match_data_kryo = {
+>  	.get_version = qcom_cpufreq_kryo_name_version,
+>  };
+> @@ -218,6 +253,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
+>  	.genpd_names = qcs404_genpd_names,
+>  };
+>  
+> +static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
+> +	.get_version = qcom_cpufreq_ipq8074_name_version,
+> +};
+> +
+>  static int qcom_cpufreq_probe(struct platform_device *pdev)
+>  {
+>  	struct qcom_cpufreq_drv *drv;
+> @@ -363,6 +402,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
+>  	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
+>  	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+>  	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
+> +	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+>  	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
+>  	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+>  	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
