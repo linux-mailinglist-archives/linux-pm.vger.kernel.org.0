@@ -2,112 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D917A713407
-	for <lists+linux-pm@lfdr.de>; Sat, 27 May 2023 12:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14A3A71351B
+	for <lists+linux-pm@lfdr.de>; Sat, 27 May 2023 16:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjE0KfG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 27 May 2023 06:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47448 "EHLO
+        id S230360AbjE0OM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 27 May 2023 10:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjE0KfE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 May 2023 06:35:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B2710A;
-        Sat, 27 May 2023 03:35:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 901CA61830;
-        Sat, 27 May 2023 10:35:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0677BC433EF;
-        Sat, 27 May 2023 10:34:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685183702;
-        bh=sg2FrDsa4OyGlWP61AQ7Bo4NewAEhbkfSJkPzv0P6QQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kyuvmmXC5XO8XPh6CnRozru8D8aARsE0yU9P5OkmbMBnuXw2o3T29Bp36D/GBWkV1
-         Z80HO32V5/EUR/JUHQgFmoPf/91NS0UaPaf1l6i0ES2pr2xAT4whW0x+8gSj1Yqnf1
-         LycJStW+Fjl74+gnHBsb10Zte0AB4Y1yBX3ke5WT6+6uZZ1tCP+4ZGDeBg/L8qKkzD
-         u1N7feJIDA2cWFW1Lr/yL/uKifG5WP7BJsFZpdiiwOUQF9VveAAn0yEWWIVn74tf+q
-         TSLnJTaABiif3cBlzeexuI72zXomNOkIQUMBhCpRUVAYpdh9lw8k6eA7NT//9muVRB
-         uDmIyHUoWRWkw==
-Date:   Sat, 27 May 2023 11:34:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
+        with ESMTP id S230137AbjE0OM2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 27 May 2023 10:12:28 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEE8E1;
+        Sat, 27 May 2023 07:12:26 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso18499375e9.0;
+        Sat, 27 May 2023 07:12:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685196745; x=1687788745;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y73LttJXgXAmHhQ5741s9WbrUG10KAIdhEW2zXBoOQc=;
+        b=SSaPjwvbMG4ZCo291BUkrxKdVuhVg+Wj6kvou/lqhMCj3nP/54QbnaMb7OxpDeo3NU
+         ZoJexsI4K3GBGylrGpIQVv+olEPNxqSZvAl/b6h0/svnjQnDyEjQ2VhYtdtgcqmsWa/N
+         7bZDcgMlWxoRtRx0Azs4enYz9xTFKuIVDGWGbKp8EMp88hF+L9kGNe9btYiJyHdhQxLP
+         k82dUONAIov4yY1o6SzIHbtCgk3k4X9D6HthCiM+WBAAqcd6d2k2TjYOeIlhOY63Iqbz
+         69YYGV5/mNgE1IPWDNsnN6p4wiqkJBDFydqaWtVm/nznxcZpMXgWeV/sop3xNdxKsiS8
+         /GNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685196745; x=1687788745;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y73LttJXgXAmHhQ5741s9WbrUG10KAIdhEW2zXBoOQc=;
+        b=h5fxcQAO/PggCUAcFCrrAZGbr6qXzcO30HNkMCZ7q7ROXkm0gvRVEOyv4C+kykGuCe
+         xFrpLRHRMQG95MUTw4HH+i1ER/ukPPF1wGtSeUJ1sxnaBL8Kpdky/9fjrqDNu8ojFtio
+         Chalqc9uLTlQIGL28/0XOb0ZzN+iiuC9EsFwpQu9YO3g5p1GxS73ynLdwX783Uk7zD3m
+         TGbJMQ6mvMWpkspS19ZdiFU8H8gNyB6bOJKcEp8sEcBWcJumYLpyFTG9uibF+HhgbVFf
+         ehqgdRrYEjvEg3zxFbv1zhABuQFtVxGC8OvDKZ/ghV+bk2pd1hVL34efDHJ4Kaiz/5GF
+         jtSw==
+X-Gm-Message-State: AC+VfDyM8c6jKibhIi/zWQn+26BVhvMWzHFKKnoHmdfYOKylnoOG8KZn
+        LB3rKKbpzOgCJu/enCq7Y2E=
+X-Google-Smtp-Source: ACHHUZ7iYd9QDeDJnyOgG5uAS9aZak2X8ynHR3qkQl+oqxSFLYVzUSO3mpKQZEUnoaSQrFv9DvxE0Q==
+X-Received: by 2002:a1c:7415:0:b0:3f6:89e:2716 with SMTP id p21-20020a1c7415000000b003f6089e2716mr4510310wmc.33.1685196744886;
+        Sat, 27 May 2023 07:12:24 -0700 (PDT)
+Received: from standask-GA-A55M-S2HP ([188.123.113.247])
+        by smtp.gmail.com with ESMTPSA id q21-20020a1ce915000000b003f421979398sm12015239wmc.26.2023.05.27.07.12.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 27 May 2023 07:12:24 -0700 (PDT)
+Date:   Sat, 27 May 2023 16:12:22 +0200
+From:   Stanislav Jakubek <stano.jakubek@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        phone-devel@vger.kernel.org
-Subject: Re: [PATCH v9 1/2] dt-bindings: power: supply: qcom,pmi8998-charger:
- add bindings for smb2 driver
-Message-ID: <20230527-retaining-backless-7e1c5298b2b2@spud>
-References: <20230524-pmi8998-charger-v9-0-cd7f6d03c0ab@linaro.org>
- <20230524-pmi8998-charger-v9-1-cd7f6d03c0ab@linaro.org>
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: power: reset: bcm21664-resetmgr: convert to YAML
+Message-ID: <20230527141222.GA5048@standask-GA-A55M-S2HP>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4dHMmvzTtB+odP/d"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524-pmi8998-charger-v9-1-cd7f6d03c0ab@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Convert Broadcom Kona family reset manager bindings to DT schema.
 
---4dHMmvzTtB+odP/d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+---
+ .../power/reset/brcm,bcm21664-resetmgr.txt    | 14 ---------
+ .../power/reset/brcm,bcm21664-resetmgr.yaml   | 31 +++++++++++++++++++
+ 2 files changed, 31 insertions(+), 14 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt
+ create mode 100644 Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml
 
-On Fri, May 26, 2023 at 10:44:14PM +0100, Caleb Connolly wrote:
-> Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-> driver.
->=20
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> ---
->  .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |  1 +
->  .../power/supply/qcom,pmi8998-charger.yaml         | 82 ++++++++++++++++=
-++++++
->  2 files changed, 83 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/=
-Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> index 36de335a33aa..44590dc112be 100644
-> --- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-> @@ -133,6 +133,7 @@ patternProperties:
->      oneOf:
->        - $ref: /schemas/power/supply/qcom,pm8941-charger.yaml#
->        - $ref: /schemas/power/supply/qcom,pm8941-coincell.yaml#
-> +      - $ref: /schemas/power/supply/qcom,pmi8998-charger.yaml#
+diff --git a/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt b/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt
+deleted file mode 100644
+index 93f31ca1ef4b..000000000000
+--- a/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.txt
++++ /dev/null
+@@ -1,14 +0,0 @@
+-Broadcom Kona Family Reset Manager
+-----------------------------------
+-
+-The reset manager is used on the Broadcom BCM21664 SoC.
+-
+-Required properties:
+-  - compatible: brcm,bcm21664-resetmgr
+-  - reg: memory address & range
+-
+-Example:
+-	brcm,resetmgr@35001f00 {
+-		compatible = "brcm,bcm21664-resetmgr";
+-		reg = <0x35001f00 0x24>;
+-	};
+diff --git a/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml b/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml
+new file mode 100644
+index 000000000000..3e28a59d718f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/reset/brcm,bcm21664-resetmgr.yaml
+@@ -0,0 +1,31 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/reset/brcm,bcm21664-resetmgr.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom Kona family reset manager
++
++maintainers:
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++properties:
++  compatible:
++    const: brcm,bcm21664-resetmgr
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    reset-controller@35001f00 {
++        compatible = "brcm,bcm21664-resetmgr";
++        reg = <0x35001f00 0x24>;
++    };
++...
+-- 
+2.25.1
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
---4dHMmvzTtB+odP/d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHHc0QAKCRB4tDGHoIJi
-0giLAQDd90qpqDEoqwaiVOGr+nJqPeUk42Zfbbahtll20cqwfAEA/DkptlMVYcLy
-IMEADcbgGO6H3ug9jI1YnTs/d+Od1gw=
-=31dr
------END PGP SIGNATURE-----
-
---4dHMmvzTtB+odP/d--
