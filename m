@@ -2,70 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3465E714BF0
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 16:23:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF25A714BF6
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 16:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjE2OXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 10:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S229962AbjE2OZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 10:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjE2OXv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 10:23:51 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4190FA0;
-        Mon, 29 May 2023 07:23:50 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-2566e60cc5aso1217693a91.3;
-        Mon, 29 May 2023 07:23:50 -0700 (PDT)
+        with ESMTP id S229667AbjE2OZM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 10:25:12 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E54CCA0;
+        Mon, 29 May 2023 07:25:10 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-53f04fdd77dso1604203a12.3;
+        Mon, 29 May 2023 07:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685370230; x=1687962230;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1685370310; x=1687962310;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QqJeUFI0e/XUEdlHTY4e2wDrM7CepfDC9k/Dx+kj8ME=;
-        b=b+E42wo3vgI4jYGQ3xuQ9baGkNjBVT1Kt5aR+UQ0p2b8Fln0i8SIoxVZDgLgpfSulN
-         zsmDLiWsxJfjgX9laEEmTKAcQ0e7Vd/Raii9SNkwCEauNF19mzefCuZPT+xdNLPND9RV
-         JGd/dJ9+oSoaUtEfyoHWdZfv0FajPjkp9gCvFulxVr04ke7Gq+WWzuDQOibektfWx+Sf
-         pCKTLK7CT9RFBrdD97d6KaEQ4uc9QcI6jtWt6eCbNsqG3E6saQagHN+q9+rNtznE6Gi0
-         C+jUSLACU5VuZ0ofiuRBSy7gJlTcuiBbFrB8j95CahtlVUlG9V2YLvZM52+M3elMCvYx
-         PEFA==
+        bh=orDUenRNzVU+ubj1gufGe2wfcJd11DQOinKFj2BgI2Y=;
+        b=QSCnD2hSWTzxINu7KBy/VnvDhdIbzLbWQ96VXsAi7W8BBovEz+pn1nQLyDWNlOpbSd
+         /11LShyK1beUgefGta9WPx7jecVvtQg298EP8zGR975TPNHuuo2ag2e6g+JWv2wpPFi3
+         SCDekm5/UWDAWtwFkdUAR7Aq0/pMo0bjJOPIwRV6LH5yF5hTPYkn/fkG9c/tOt1syzJf
+         fhJ2VZX01Dae8eeMAk5Gp6Zoe+Wa88ULXpZcTPfnUeL39pxkvigsaN46EGmgq3CFC0TD
+         zqQ1wME15bb/vBO4EXTcwimDI5GxpEwNFlvBOli8+0Zt4zza5PC1ROPQr405NEyXkR+Z
+         /84A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685370230; x=1687962230;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1685370310; x=1687962310;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QqJeUFI0e/XUEdlHTY4e2wDrM7CepfDC9k/Dx+kj8ME=;
-        b=eL2/vflUl17UqlH9IPsJYJoIMu9VXmfI/nvrU8dvkHSaTdpyUuSQA1CMPwjuFkmWIg
-         wXD8Ky9E7890eCeZs3i3g0RiNkbO6xnot4Hqh2cuTsJmwWEN2Phq5+9jLr5wBiJZlfdZ
-         y3dt7pTXXDRBo/pxHT27sMiznExdTgZDKUcM3zR7RA5jPdGbWiMBK/a3ujH9EHDBRwCN
-         fio9ZhvKnb20j2MNu4kEJ5rCEC37PJXnwOBLhMORFIaxIVBc5JZUN9LTTl8QIYdwli+N
-         9iHzEs+OyIKTSEQkYDF6/ZXQcXm+T2gQh399mDRLIp926RGbJgYsjh/QJYUF6t+f8WYu
-         yIIQ==
-X-Gm-Message-State: AC+VfDxaozpLBRybV57UUZEGHCFpk6TnwYyodyAsxsT281lOcRdV1GON
-        gJD6eobKwitChR81XUafbkU=
-X-Google-Smtp-Source: ACHHUZ6/DiWFb6+BGVzq9xdTbPAP5aNtypk8M4u2Z+kqbqRBFIXQBRs7+9cy1Ks97fWUToCt7hYrAQ==
-X-Received: by 2002:a17:90a:748:b0:24d:f992:5286 with SMTP id s8-20020a17090a074800b0024df9925286mr10873036pje.36.1685370229465;
-        Mon, 29 May 2023 07:23:49 -0700 (PDT)
+        bh=orDUenRNzVU+ubj1gufGe2wfcJd11DQOinKFj2BgI2Y=;
+        b=NbWx3DQBanChQ2/wkKpFvViyN9TzA3rzuvxCeHwxPbD7Z4/A7Gn9bQztJry4DvBQc3
+         dXD60KoR4fLnJpkmKZxExJttDcc4biYM1MBaglysex9BecvI40nVGgO1rU2L4ImqqGez
+         B33SD0ybzkppJBasmKaqlQ6E7k0EcH3MBkCEwcWRedMFVDxT5ymUidXfE0q/yCETPNPU
+         MOINrZRjKxjflqS8ZvtZ7pXm46bQXHD3mEg2+zGwcJQWUlTvU/lOyQnvh4UlYydNbCun
+         aQ21jfXXfm3AV3ykoFaYVtsXqHerDW6giK2cr/MuE2o2JY/FpS8FQZ3yVw3UOIyCjbTX
+         33WQ==
+X-Gm-Message-State: AC+VfDywE3e9WsA+ocFyk6nygaI5tT5V7cjMgOsimeMDH7dsctOhpNVS
+        OBKd0fLp/ovAk8sokrxTDxc=
+X-Google-Smtp-Source: ACHHUZ4UlUSb1GMRStKeVjpCvJ3bWJPfc862kJAiNejRrmZFRDFlYiCx+7FIgSNUbenPBCt6YyJSrA==
+X-Received: by 2002:a17:902:f551:b0:1ae:e84:268d with SMTP id h17-20020a170902f55100b001ae0e84268dmr13868646plf.25.1685370310246;
+        Mon, 29 May 2023 07:25:10 -0700 (PDT)
 Received: from [172.30.1.35] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id 25-20020a17090a199900b0024e4f169931sm9846519pji.2.2023.05.29.07.23.47
+        by smtp.gmail.com with ESMTPSA id p18-20020a170902e75200b001b00fd3cf5bsm6445318plf.297.2023.05.29.07.25.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:23:48 -0700 (PDT)
-Message-ID: <1d8df8d2-f44a-dd66-8e01-7e50fa147660@gmail.com>
-Date:   Mon, 29 May 2023 23:23:45 +0900
+        Mon, 29 May 2023 07:25:08 -0700 (PDT)
+Message-ID: <b2d8f6e6-689a-be77-fddf-673b08f4d993@gmail.com>
+Date:   Mon, 29 May 2023 23:25:04 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH] PM / devfreq: Reorder fields in 'struct
- devfreq_dev_status'
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <6b1611f1440c8b73feb475723ad25f390cad3480.1683531691.git.christophe.jaillet@wanadoo.fr>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
+Subject: Re: [PATCH] PM / devfreq: exynos: add Exynos PPMU as a soft module
+ dependency
 Content-Language: en-US
-In-Reply-To: <6b1611f1440c8b73feb475723ad25f390cad3480.1683531691.git.christophe.jaillet@wanadoo.fr>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+References: <CGME20230518074416eucas1p1dfd47a3438f2252211cf7daa82e2ac1e@eucas1p1.samsung.com>
+ <20230518074403.2894799-1-m.szyprowski@samsung.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230518074403.2894799-1-m.szyprowski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,95 +79,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23. 5. 8. 16:42, Christophe JAILLET wrote:
-> Group some variables based on their sizes to reduce holes.
-> On x86_64, this shrinks the size of 'struct devfreq_dev_status' from 72 to
-> 64 bytes.
+On 23. 5. 18. 16:44, Marek Szyprowski wrote:
+> Commit adf8238ef403 ("ARM: dts: exynos: move exynos-bus nodes out of soc
+> in Exynos4412") changed the order of the exynos-bus nodes, what results
+> in different probe order of the Exynos Bus devices. Although the driver
+> properly handles the deferred probe and all devices seems to be finally
+> properly registered, this change revealed some kind of a bug related to
+> PPMU counters registration and passive governor operation. Usually in 1
+> of 10 boots this results in complete board freeze during loading of the
+> kernel modules.
 > 
-> This structure is used both to allocate static variables or is embedded in
-> some other structures. In both cases, reducing its size is nice to have.
+> To avoid that freeze, ensure that the Exynos PPMU driver is already
+> loaded before the Exynos Bus driver starts probing.
 > 
-> Moreover, the whole structure now fits in a single cache line on x86_64.
-> 
-> Finally, it makes the order of code match the order of the above kernel
-> doc.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
-> Using pahole
-> 
-> Before:
-> ======
-> struct devfreq_dev_profile {
-> 	long unsigned int          initial_freq;         /*     0     8 */
-> 	unsigned int               polling_ms;           /*     8     4 */
-> 	enum devfreq_timer         timer;                /*    12     4 */
-> 	bool                       is_cooling_device;    /*    16     1 */
-> 
-> 	/* XXX 7 bytes hole, try to pack */
-> 
-> 	int                        (*target)(struct device *, long unsigned int *, u32); /*    24     8 */
-> 	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    32     8 */
-> 	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    40     8 */
-> 	void                       (*exit)(struct device *); /*    48     8 */
-> 	long unsigned int *        freq_table;           /*    56     8 */
-> 	/* --- cacheline 1 boundary (64 bytes) --- */
-> 	unsigned int               max_state;            /*    64     4 */
-> 
-> 	/* size: 72, cachelines: 2, members: 10 */
-> 	/* sum members: 61, holes: 1, sum holes: 7 */
-> 	/* padding: 4 */
-> 	/* last cacheline: 8 bytes */
-> };
-> 
-> 
-> After:
-> =====
-> struct devfreq_dev_profile {
-> 	long unsigned int          initial_freq;         /*     0     8 */
-> 	unsigned int               polling_ms;           /*     8     4 */
-> 	enum devfreq_timer         timer;                /*    12     4 */
-> 	int                        (*target)(struct device *, long unsigned int *, u32); /*    16     8 */
-> 	int                        (*get_dev_status)(struct device *, struct devfreq_dev_status *); /*    24     8 */
-> 	int                        (*get_cur_freq)(struct device *, long unsigned int *); /*    32     8 */
-> 	void                       (*exit)(struct device *); /*    40     8 */
-> 	long unsigned int *        freq_table;           /*    48     8 */
-> 	unsigned int               max_state;            /*    56     4 */
-> 	bool                       is_cooling_device;    /*    60     1 */
-> 
-> 	/* size: 64, cachelines: 1, members: 10 */
-> 	/* padding: 3 */
-> };
+> This is a follow-up of the following discussion:
+> https://lore.kernel.org/all/d287ca9f-b056-d39a-aa93-b0e2cb279f73@linaro.org/
 > ---
->  include/linux/devfreq.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/devfreq/exynos-bus.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 7fd704bb8f3d..d312ffbac4dd 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -108,7 +108,6 @@ struct devfreq_dev_profile {
->  	unsigned long initial_freq;
->  	unsigned int polling_ms;
->  	enum devfreq_timer timer;
-> -	bool is_cooling_device;
->  
->  	int (*target)(struct device *dev, unsigned long *freq, u32 flags);
->  	int (*get_dev_status)(struct device *dev,
-> @@ -118,6 +117,8 @@ struct devfreq_dev_profile {
->  
->  	unsigned long *freq_table;
->  	unsigned int max_state;
-> +
-> +	bool is_cooling_device;
+> diff --git a/drivers/devfreq/exynos-bus.c b/drivers/devfreq/exynos-bus.c
+> index 88414445adf3..245898f1a88e 100644
+> --- a/drivers/devfreq/exynos-bus.c
+> +++ b/drivers/devfreq/exynos-bus.c
+> @@ -518,6 +518,7 @@ static struct platform_driver exynos_bus_platdrv = {
 >  };
+>  module_platform_driver(exynos_bus_platdrv);
 >  
->  /**
+> +MODULE_SOFTDEP("pre: exynos_ppmu");
+>  MODULE_DESCRIPTION("Generic Exynos Bus frequency driver");
+>  MODULE_AUTHOR("Chanwoo Choi <cw00.choi@samsung.com>");
+>  MODULE_LICENSE("GPL v2");
 
-
-Applied it.
-
-Thanks.
+Applied it. Thanks.
 
 -- 
 Best Regards,
