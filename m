@@ -2,77 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6D671471F
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 11:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 541F1714731
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 11:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjE2JfL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 05:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
+        id S231631AbjE2JlA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 05:41:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjE2JfL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 05:35:11 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580CEAF
-        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 02:35:09 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f4f8b94c06so1422968e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 02:35:09 -0700 (PDT)
+        with ESMTP id S231718AbjE2Jkx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 05:40:53 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CFBB106
+        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 02:40:45 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b04706c85fso5341965ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 02:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685352907; x=1687944907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EOKCBUL648q97kLRF9tfMFKtwd6LoXtmMXWYb2u6bRk=;
-        b=JVg1Trzmwy2eoA06j0namth1kL0WPHXxv80mECAM3b/CUsdb0Dkf98mBF6g4MIxmvp
-         jKPKcAs3VTZxDquiltTYH7h4+ncDB4yGEl7NI/SguvFTuvZjuGtr0R6dwfl/f7eenT0m
-         +TWLkDfK6XeMPQiwlVVcKznqCtyxfswe/ULyd/tx5LXV9/oNKi/EJ2rhNgG1MAfcuOQg
-         1Ag0cyV35/djicQDH1wnnO/GRmUPc5YZH7xNbMMHyFBOAfOD0IfpoAJbmpgEEoLwmjow
-         3NVRULnGDZiCJVQtDDiPiYL9mkaWN5DYt2QXCFCt0k+HgM0BoQVb55P1Tiu52Ib6hFwi
-         kBsg==
+        d=linaro.org; s=google; t=1685353244; x=1687945244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D1scMJbm+J8SOCLBtYHV08jK5p9nUqNWylfex8fdHi4=;
+        b=iV9h0aO/Fsuqo4rNWd7XwSC0Ryvt+KSIV3T9UC7f+r35Hv3NBFsA/fI65BfscuvJ+e
+         qUnGeKXaZ2tUMnY0bmJPJomOGKNVN74BeDbZYIkUjszgsjA0VofdaCL9XvTJfVUesWPN
+         ajvvOusig+h2yfedFa93k3ceeLTKWwZNI1sXivPr9wrCa8dY38nFqg3XBGBB2R7VBnM+
+         Bm8DB9rJUxeNtGPio0GG3caDOjFbYlrZHgrXOmHv/lZ3edxSPXR5/SA66NeL5+KGw9Ga
+         z4NXnXUpHVjjNjk9EvOEE49LVO084k9+nDdaCxjSX21nqzIgt8WjlCyiriQqV+csRtqd
+         LssQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685352907; x=1687944907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EOKCBUL648q97kLRF9tfMFKtwd6LoXtmMXWYb2u6bRk=;
-        b=XUXZ4GrP+BGgM2n6MeZhb0WSJhUKQ9m79wnpZTyOmj/vO3M/NeEBih0FUT2PIvy1P+
-         e4rtEBNswmUxHXeGSr9zgP8AT9LBmB0KETyXhs8Rd0SGuHfvoPxPbpZRf/ozWcvTfwRU
-         SXsb6V91T/DPxKWVJjr6VJe17NPqPqYzEKu4BsUDjc09j6QEU0rX2E4DTyA2DxsKyN8b
-         RLy3MqU2II21yAbK/ZV+vGiMjO3KEqUHy14C8X/Odnqt0VAOyFKkKAOKanI+RVYC/8HN
-         S+l8Rw3uWoSFE2sRePcbtMPPulXjqpP4zQ6UE19jxc2Dvu5hpZGddsxXbvkljcppBnXv
-         UGZA==
-X-Gm-Message-State: AC+VfDwqJdmfhEM0SusVcEoyR5gMgUIqRkCmZvgclK5lp+/aIRQTbCOK
-        3NVnkpB20VyrXfBRpbcPMowV/g==
-X-Google-Smtp-Source: ACHHUZ5k6Jz2kHv+nXZor5o1b9WEfEPLB6caKN8Zn2RiFU78OHEwZDH0Q0ZhTu0o+mhwNv/254YUFA==
-X-Received: by 2002:a05:6512:64:b0:4f0:c18:5114 with SMTP id i4-20020a056512006400b004f00c185114mr3436816lfo.26.1685352907550;
-        Mon, 29 May 2023 02:35:07 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id g21-20020a19ee15000000b004f13bc97b00sm1880535lfb.119.2023.05.29.02.35.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 02:35:07 -0700 (PDT)
-Message-ID: <cbea8bc5-5dd2-b097-964d-3494935d4f68@linaro.org>
-Date:   Mon, 29 May 2023 11:35:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH] opp: Provide a function for just setting bandwidth
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+        d=1e100.net; s=20221208; t=1685353244; x=1687945244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D1scMJbm+J8SOCLBtYHV08jK5p9nUqNWylfex8fdHi4=;
+        b=KWJdEB47NoDztWoN1HXic599ld1bIPg1byFeOKktlOTrO+apCJk587YI6Zof0fsoUC
+         YNahVV/dremd2Xj8WFzDMXFHmw0UDSZsAczAz28p2ezThbwd1PuHqXC96MY9tzrbAjal
+         UcnsxDYBFoCVbQmqFCKoOFzYGJ12EqpkG9PHOZCgucRwvUFwzoS4/YM7gB7+iEq5FQJg
+         VpidThdXOvcxBV32G3u9VxZ+VWCJHu85ZwrpbGPl5bUpikodNL9DfYbp3JbnvxlET+gF
+         OpSLjStpyMu7wHfPjBFPew1wjFlWq+5I1uES7+aVx+Cf+fWjTxiAT4CAkNDFJuM+w7Xr
+         QfyQ==
+X-Gm-Message-State: AC+VfDxIfLoQ7qKKn0CkIp7iwKj/rYLLr3/n93LZUDa1NetIIFUy+FFJ
+        o0bpLwL8B2hZNlQHtcNhr5sDCQ==
+X-Google-Smtp-Source: ACHHUZ7aCOig1EImIzb6dqvjE5ijTS1gNJGa3lDR5166QVQjaa8OalmKRFP/AV7SlRYdfe7t1oI1zA==
+X-Received: by 2002:a17:903:4095:b0:1aa:ee36:40a5 with SMTP id z21-20020a170903409500b001aaee3640a5mr7957734plc.34.1685353244630;
+        Mon, 29 May 2023 02:40:44 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id m17-20020a170902db1100b001a65fa33e62sm7758023plx.154.2023.05.29.02.40.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 02:40:44 -0700 (PDT)
+Date:   Mon, 29 May 2023 15:10:41 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Marijn Suijten <marijn.suijten@somainline.org>,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] opp: Provide a function for just setting bandwidth
+Message-ID: <20230529094041.s4fj6gjliivugk3r@vireshk-i7>
 References: <20230526-topic-opp_bw-v1-1-e881091363af@linaro.org>
  <20230526105320.pfnu3oxl2cm37ot7@vireshk-i7>
  <f8731d93-b335-6d9a-183c-34a652f45455@linaro.org>
  <20230529045854.gh36k5my4i35jspc@vireshk-i7>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230529045854.gh36k5my4i35jspc@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+ <cbea8bc5-5dd2-b097-964d-3494935d4f68@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cbea8bc5-5dd2-b097-964d-3494935d4f68@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,46 +77,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 29.05.2023 06:58, Viresh Kumar wrote:
-> On 26-05-23, 12:59, Konrad Dybcio wrote:
->> There are some users which have tight power sequencing requirements,
->> like the Qualcomm Adreno GPU.
->>
->> Dropping the entire OPP kills clocks, bw and required-opps at once,
->> but on certain Adrenos we need something like:
->>
->>
->> disable memory clock (clk)
->> disable all other clocks, including the opp-managed core clock (clk_bulk)
->> kill one, fully manually controlled genpd (manual runtime pm)
->> remove bus vote (func proposed in this patch)
->> kill another genpd (manual runtime pm)
->> kill the opp-managed genpd (automatic pm calls)
->>
->> Changing the order kills the chip until you reboot the whole board and
->> setting freq=0 using dev_pm_opp_set_rate doesn't drop the bw vote.
+On 29-05-23, 11:35, Konrad Dybcio wrote:
+> I think I didn't state my intentions correctly..
 > 
-> I am a bit confused now.
+> The proposed function would set *just* the bandwidth through OPP,
+> so it'd be essentially equal to
 > 
-> What's the exact problem with dev_pm_opp_set_rate(dev, 0) ? It does set the
-> bandwidth too, from what I can see.
-I think I didn't state my intentions correctly..
-
-The proposed function would set *just* the bandwidth through OPP,
-so it'd be essentially equal to
-
-loop over num_paths {
-	icc_get(...)
-
-	icc_set(...)
-
-	icc_put(...)
-}
-
-but since OPP already picked up these interconnect paths, it makes
-little sense to mess with them through raw APIs.
-
-Konrad
+> loop over num_paths {
+> 	icc_get(...)
 > 
+> 	icc_set(...)
+> 
+> 	icc_put(...)
+> }
+
+Right, but why do you need to do it ? Why isn't this done as part of
+dev_pm_opp_set_{freq|opp}() ?
+
+> but since OPP already picked up these interconnect paths, it makes
+> little sense to mess with them through raw APIs.
+
+I am not sure if I would want to expose an API to just configure part of the
+entire OPP switching mechanism. I would rather let you do that via ICC APIs,
+instead of going through the OPP core. Since there is a possibility of
+accidental misuse of the same here.
+
+-- 
+viresh
