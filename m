@@ -2,305 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29B0714A9F
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 15:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F843714BBE
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 16:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjE2Nrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 09:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S229587AbjE2OKG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 10:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjE2Nrw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 09:47:52 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBAF0106;
-        Mon, 29 May 2023 06:47:45 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-309382efe13so2027635f8f.2;
-        Mon, 29 May 2023 06:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685368064; x=1687960064;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=myJE6wqP7SpgcJyO3f8/0tcs82r/jtAw33/b3j2JkJ8=;
-        b=oCpcveOpc3ZxOpH99/p0DTvagTnLnycBju6u9B40KEfprAGFjUByl9JlqOLM/v1+8U
-         CGqm3R588wyIj0Pj6Dp/toPskJS/CZidIXvZcgfB2lNvWxST65L0b1WWKhGnGoILA1hS
-         Juz8Kk2fmmW979GQpwI2/eEI0oWWlBcMa7/cQEaboUWgSGowZzAegovGuyC57RO/WVZK
-         4Zn3qpOxCebc7xVHB+Y4Xkaggmr3XAr7SkX3q6RvyrvXt8tWAn7XlzVhPZ3L/NAsCjtQ
-         R6nayL5XJKPqNFy+zbSgo5n7NWEF8mJXEFkdBNuacnyn5ty8pOyLdctD7G0agT1ZmhoT
-         W4YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685368064; x=1687960064;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=myJE6wqP7SpgcJyO3f8/0tcs82r/jtAw33/b3j2JkJ8=;
-        b=N5VXvRSMW1mB2YbbmjN5FaKLNWzaS8Z9pPa+WBsdz0s9mzASOxL7bYBl33VcOTUkEZ
-         5bpZY3EIt1dKTFhnUWDC1Oy4sT62C+8vuX5ayJ1RDhPvm8CB1uiUcVv4QpQ5ezH/05fy
-         vnZSSFwUuLTAwqxpthfnHZa7y03hHmeRnMI1DCe2xUBFtUjD2KMTcfMWfYhhOZaVJQGg
-         CWfgIoZd6buuLj5Cmj3LfilcPXaS1eQxUPDxzVrxQjKwN0uInwqCT5/AAmGr/7Or8VbE
-         U6iwPJSaUgni/xWMhFK8WRbPXkY3+s0Egsd5NQEHnGCgH6XISZ9Olw5HHej1d20f0MNQ
-         D3yg==
-X-Gm-Message-State: AC+VfDze1vl0TAYQ5wpBHz52wifr/tf4MI2n1JYv+rn0liFo3XvIo1dz
-        VPcQFrGnhnUwbn0h3sOFXz8=
-X-Google-Smtp-Source: ACHHUZ4CbOFmTDokYBwfIa3AupZCc9BFrord46r0GreN2feVi5EocX/omYSGgSN05k20qNnh3fvB3g==
-X-Received: by 2002:adf:cd8a:0:b0:30a:e59f:cd60 with SMTP id q10-20020adfcd8a000000b0030ae59fcd60mr5247477wrj.48.1685368064021;
-        Mon, 29 May 2023 06:47:44 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id t16-20020a5d6910000000b00307a86a4bcesm30885wru.35.2023.05.29.06.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 06:47:43 -0700 (PDT)
-Message-ID: <e9064b57-bbe2-7774-1d08-4d7b8e28ecbf@gmail.com>
-Date:   Mon, 29 May 2023 15:47:41 +0200
+        with ESMTP id S230375AbjE2OJ5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 10:09:57 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::603])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7F9B1B1;
+        Mon, 29 May 2023 07:09:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hAplPR4ESHDHD1Lsa0DGSNKkDaOd2Vrob5/YtsfxdiIHFTMkEXXh51YJHTnRsvd5YBsnzUjR1hhJSvIJvI2IRxKy98eK4B9nfGDjArTxpgh1eS73aFtVP15fVy7b/CRPF2CCWbWUQ3WO1/yJIM+kf3oEEE/IMmoz03JziZ+MTIWr4LsnOvYs0ITwwUIwgD/CRz1jVW0JYCeU8UrZHfLfDlk4MIhRpfnsoZayCUwHVPkZBWXDfyqTE3nqRniL1KOBIyc5mkgdVXj9FW6SnOmtJeXOpyJFiQNUu3RnB9rU5G8R9WleSqT/FHuM34+21b2LZbc18i1sSKcf9AwN9Qqutw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MPgn/Lt1Wz2gFEsfGN+N8N/OqClxywbpbevxBzdpz3o=;
+ b=ZcadNh2gClVJAZid1Ovu04NQ/G2zzJw36rRPrk483SYGZ1KPooA5QhhI/jHFyx15/LfQe+C+nBceG/s+xlZkZWLWPR5sIDsEXPSnadiRevYYNQvBcMi1XyRwvanlQ6hyXPklJ/3Xn1XkQpR9TQ1gArfKbixYVdp6xda/TT5TdU6AC9G50iM+NtvIM5SpNBeEJia9RYKupkeqgn34NfrQRpTcFugL52PuVxNYFhxvkrHEiAyL6hL3acAXMpagVCWK62vK23CtMpsKgAaB5XQhF91AexrQoA7NhrXvEkrITqkmfb4Ewfm4lAtB/SNh96YV6XqRFPWQ/iMkCVIivXk2cw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MPgn/Lt1Wz2gFEsfGN+N8N/OqClxywbpbevxBzdpz3o=;
+ b=Aru7ndmQ0cfgnY0LndUiAbBhvW+WnKLPrRBHoXNHMygOLaEBTfkcdloMyqy1LCYVG+gsyoo9Do6lkmDTJYXYWFdmYbfmofY4vhOJgaUH53lJw04y6/Bp5d2JeFtpeSLLRR+ixg5T5qlD800GJkCNQ9j/azJHxJiducnGM67y53U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by IA1PR12MB7616.namprd12.prod.outlook.com (2603:10b6:208:427::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23; Mon, 29 May
+ 2023 14:08:59 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218%4]) with mapi id 15.20.6433.022; Mon, 29 May 2023
+ 14:08:59 +0000
+Date:   Mon, 29 May 2023 19:38:43 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     ray.huang@amd.com, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gautham.shenoy@amd.com
+Subject: Re: [PATCH v4 3/3] cpufreq: Return failure if fast_switch is not set
+ and fast_switch_possible is set
+Message-ID: <ZHSx61V6fgMcXsvh@BLR-5CG13462PL.amd.com>
+References: <20230517162817.8538-1-wyes.karny@amd.com>
+ <20230517162817.8538-4-wyes.karny@amd.com>
+ <CAJZ5v0gte_QAt1MXXXhpGUTEAC3Eo8LCY6N+=uSFi0NRBG-Omw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gte_QAt1MXXXhpGUTEAC3Eo8LCY6N+=uSFi0NRBG-Omw@mail.gmail.com>
+X-ClientProxiedBy: PN2PR01CA0058.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:22::33) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-Content-Language: en-US, ca-ES, es-ES
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230405100907.53740-1-bchihi@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230405100907.53740-1-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|IA1PR12MB7616:EE_
+X-MS-Office365-Filtering-Correlation-Id: c762d962-7999-4926-c4a4-08db604e3f53
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: YnDFJI1AO+pj0ZM5YeWuL+FIrjnXF2K/87cgWVXjYbUXt1VYFtDSTC+lSsyV3lrVEnl2dp9SRdMxatY3CUvf6WGJBvA3dJPQb0h2a3VkYYZ51zqaNnm0bnCdOHfAVUnYQhxCC+PHC3JjZzAu7aZ+rkenDgU3Cc/bzlYf43HeUPV5MjOc75bAsfcUda0/9tzBCnk6obeTPyVg+R9Bh5MKlUDRBIrb3ax/SjjoOxKHerbKAevJstPEuO8jPCqrgat+yEubo+Fh9f9RAKUJwjHEug0H0GDuQKFY0NLaS4lqQsO5Jra8p0vgMfv0kae49Sfl+6OogoZ/9UFZ5DExRE+dpgxMRFgrs17X2UzwIXfRosJ8sZt3/GreLXSFlpgm1jH6YRSPAo5zzBFZtk/I61hdOXvQyYpoi5kqzITmofsOIGMwhYAf2FqoF8hCAzLYo4O5QYx56itMJIL6bzGyR0SQI0hv1RoYoHuWWcMCpGT0SOU+QO6uZHiyAgMOkIXknbz+ehv69c8p9Qj+O8ipVvIHl4ml2BtL+XK5W0xaxoH1Vr8NXi05Pv46MgwNPz7taGYY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(346002)(396003)(366004)(39860400002)(451199021)(83380400001)(5660300002)(316002)(6666004)(66946007)(66476007)(66556008)(6916009)(4326008)(8676002)(8936002)(41300700001)(38100700002)(6486002)(86362001)(53546011)(2906002)(6512007)(6506007)(186003)(44832011)(478600001)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MWtNd2hqUklSa041aGM1YkdKQ3NFU0ovTEgwTkpCMU9sakFwbmZlMXBLR25V?=
+ =?utf-8?B?blRFREFzczZ1Qm1wUFBQYVc2SCsrRm1DdDA1aUxuSzRiaGNmT21zdkVMYlFG?=
+ =?utf-8?B?cDR3OHJ6eCtFSFcwRUc1dENxZXBSdjZyTFh0YVlEbDRwL09xZW5HQXduWDlP?=
+ =?utf-8?B?NlpDcTZKZWd1ajVCYXUyZFJsU3dseDQ2bm43NFE5UUhCV1grdVloZk5zenUz?=
+ =?utf-8?B?RDkxa2lsQXFGWS9mR0svTEdLUFUrc2VzVzVwbHRwTStwVG92SUN4eHFRR3FK?=
+ =?utf-8?B?WHA0b3RyMHR5SGovZkk5YW1XSnoraDBuemoxckxhL242cDlRRlJxcEk0TS9V?=
+ =?utf-8?B?QnMvOEllN0c4OFFNRjdaaEJyVmZmajNISVhOckF5a0preW1Sei9KQUMxdEEr?=
+ =?utf-8?B?V0pFYkFBRmVEKzZ0K3VWWnErRENQNW5Fa3ovTHV6cERPdTErTEk4ZC9WSWdk?=
+ =?utf-8?B?R0V2enQ5dEdXcUtOVGhqKzVTVWNZc1pwbE8wa3Z5aUlJNWtXVmprWXFUUGdK?=
+ =?utf-8?B?ZlBmWmtiQzh0bEd3KzJwWXVvYzFoWDlvZit5Q3hzeHRnK2wvUkJSRlNUcUl1?=
+ =?utf-8?B?aDBqVk9tVjlsZ0ZKd0xHOUNFWXkvditoekNLeEtKdmdnOEtPcjMrN0tXY0U1?=
+ =?utf-8?B?bzVIOStGcXFQNFVJVEpTZHhsVVdxV1RMVmpMZ1ZhVjlkN284dVZuTWJiOGN5?=
+ =?utf-8?B?TkxDcTFZMzlzcFNUNGhQeDYvaDUvcWlzaEU1N0ZYZVNJS1VWaUJpTlpsQnIr?=
+ =?utf-8?B?L2Q0LzRqejZUSVdxNHhDa2JSZzA4YzFwT1lXZUhGMnNaQ1lsZ2JHRG9Lbm9u?=
+ =?utf-8?B?UHJhOFJlSUt1UmNZbDBDaFlkaUk4YS95NGNQSktucWFsL0lNdzdnckRqenNx?=
+ =?utf-8?B?RmlxQXl6U2lRc2gwRkh5ZjBSNmhQU0svay85bGZXdXl5ei9jYlF0ekhyUm4v?=
+ =?utf-8?B?cnhlTkZuYUtWV3krZVRhYjdqQ2hIUUV6Z0d3STRsdUErckIvaitRNU5WaHEz?=
+ =?utf-8?B?YTNGMkJHVFBWNnVCa21wSkxqM3c2V0xFVnlWaGRrSnZ5d0VWK2dFR0Nob01s?=
+ =?utf-8?B?Q1BVZmxmZVI2bytaM042ZjZPQ2hvMS9vZVFmRXZnM1VrSiswT1E3cFpTM3ZR?=
+ =?utf-8?B?d0twRU9iUVJhaTdpeEI3QzQ2RzN5YmZIZ1NoSmZ5Y0hwYXZNaDJ4MmI1T3Bq?=
+ =?utf-8?B?UUFVQmxTYVpKZURWVDRJdUZmOFZpbjVPVDJlN1oxWmIrU20zL0o0b2lJb3M0?=
+ =?utf-8?B?MW4rMVo3SldsZHhCMnVxdjdQWjlORmI1Znh6N21kNWNRVGkrMkpuWmhSVEZW?=
+ =?utf-8?B?THFwZzliME4xRGVWUGovendnT1I1MFBQQXllM1lSVTd5YjZublEvK2FTWXJS?=
+ =?utf-8?B?bDd0VjUyS3lDaFhGaG05dmlEMENNVGNsbTZNY210cmpzSTlITTBqSTl5alZz?=
+ =?utf-8?B?dzYrZ1FadVpuM0VHUExDeE5WOFU5cHNGdG5kSUpRTmk2VlBabG5rbGlUc0tC?=
+ =?utf-8?B?SFVjZGYwZW1KTkxJRnI4dEZWWXkwSHBBVVJkNFo4K3hmVmpTb2ZLbCs1ZGpx?=
+ =?utf-8?B?czNMZDB6MG56SlVTOFVpeGxrVm5wbVptTkpKaEUvVHdGSCt6M3JyR3lMUWdI?=
+ =?utf-8?B?VE4vYldnZnZwaW44NGVBUU9WbHVjMElTbGFxNVJiVXBKZ2YrN2tmVld2SEtv?=
+ =?utf-8?B?bWRCZFZUajRTNXppL1lJeGFJN2Jvak5Ec1lmNjZyYkE1WFRBQ3l6UDFSZmpQ?=
+ =?utf-8?B?NG5xT1g4TkNoOTN0VW5TWEhpcGIxdzc4Nkdzd1JvTHdlcDh3TEYxWjlSY2Jh?=
+ =?utf-8?B?ZU96OGY2c0pYTG5aMGdWTitCRHpiVmRXYkh5SWZhdEhMK2lDMkZDaDlodG5Q?=
+ =?utf-8?B?ZENnS09Ob3Q0UytISDczQ2JQWFZnUmVIWVpUbzBxSDZhRlJ6SU1vNTBZQzBo?=
+ =?utf-8?B?b1hCNTRrNVNTVUFPUC85TjFteUlUMUNCUlpydURVN1FVYW83MFBMSlVESVU1?=
+ =?utf-8?B?UUliZCtCdFhrSUhUUGJKMXpsTUhDRGovbysvTGhpbXNremZzTmcvbXBaamhY?=
+ =?utf-8?B?M0Y1SzFvV2tzeXJMZ3pwcVc5b3VTZmNsN0VQU29GbXlURk1Ob0JaNWptZC9i?=
+ =?utf-8?Q?8Jq/unPsatuNpXnQgzEYOyoo8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c762d962-7999-4926-c4a4-08db604e3f53
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 May 2023 14:08:59.2633
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SCdehQQcAnRJzQpRKRAub33/T5iO/4exzfd6k1aohZjNIO+lBhrN3TZCPqp1qLrYMReaUDETxAP7y5qXDwGqxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7616
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rafael,
 
+On 24 May 19:44, Rafael J. Wysocki wrote:
+> On Wed, May 17, 2023 at 6:30 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > If fast_switch_possible flag is set by the scaling driver, the governor
+> > is free to select fast_switch function even if adjust_perf is set.  Some
+> > scaling drivers which use adjust_perf don't set fast_switch thinking
+> > that the governor would never fall back to fast_switch. But the governor
+> > can fall back to fast_switch even in runtime if frequency invariance is
+> > disabled due to some reason. This could crash the kernel if the driver
+> > didn't set the fast_switch function pointer.
+> >
+> > Therefore, return failure in cpufreq_online function if fast_switch is
+> > not set and fast_switch_possible is set.
+> >
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 5 +++++
+> >  include/linux/cpufreq.h   | 4 +++-
+> >  2 files changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 6b52ebe5a890..7835ba4fa34c 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1376,6 +1376,11 @@ static int cpufreq_online(unsigned int cpu)
+> >                         goto out_free_policy;
+> >                 }
+> >
+> > +               if (policy->fast_switch_possible && !cpufreq_driver->fast_switch) {
+> > +                       pr_err("fast_switch_possible is enabled but fast_switch callback is not set\n");
+> > +                       ret = -EINVAL;
+> > +                       goto out_destroy_policy;
+> > +               }
+> 
+> The driver registration can fail if the driver has ->adjust_perf
+> without ->fast_switch.  Then the check above would not be necessary
+> any more.
 
-On 05/04/2023 12:09, bchihi@baylibre.com wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add AP Domain thermal zones for the mt8195 and
-> specify the targeted temperature thresholds.
-> 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> 
+Sure. Will do that.
 
-Applied, thanks!
+> 
+> >                 /*
+> >                  * The initialization has succeeded and the policy is online.
+> >                  * If there is a problem with its frequency table, take it
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 26e2eb399484..8cdf77bb3bc1 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -340,7 +340,9 @@ struct cpufreq_driver {
+> >         /*
+> >          * ->fast_switch() replacement for drivers that use an internal
+> >          * representation of performance levels and can pass hints other than
+> > -        * the target performance level to the hardware.
+> > +        * the target performance level to the hardware. If driver is setting this,
+> > +        * then it needs to set fast_switch also. Because in certain scenario scale
+> > +        * invariance could be disabled and governor can switch back to fast_switch.
+> 
+> I would say something like "This can only be set if ->fast_switch is
+> set too, because in those cases (under specific conditions) scale
+> invariance can be disabled, which causes the schedutil governor to
+> fall back to the latter."
 
-> ---
-> This patch squashes and replaces
+Sure. Will update and send the updated patch in-reply-to this.
+
+Thanks & Regards,
+Wyes
+
 > 
-> [PATCH 3/4] arm64: dts: mediatek: mt8195: Add AP domain thermal zones
-> https://lore.kernel.org/all/20230307154524.118541-4-bchihi@baylibre.com/
-> 
-> and
-> 
-> [PATCH 4/4] arm64: dts: mediatek: mt8195: Add AP domain temperature thresholds
-> https://lore.kernel.org/all/20230307154524.118541-5-bchihi@baylibre.com/
-> 
-> of the series
-> 
-> [PATCH 0/4] Add LVTS's AP thermal domain support for mt8195
-> https://lore.kernel.org/all/20230307154524.118541-1-bchihi@baylibre.com/
-> ---
-> ---
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 180 +++++++++++++++++++++++
->   1 file changed, 180 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> index 972c5b86ddae..75da456c512b 100644
-> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-> @@ -2909,5 +2909,185 @@ map0 {
->   				};
->   			};
->   		};
-> +
-> +		vpu0-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
-> +
-> +			trips {
-> +				vpu0_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				vpu0_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		vpu1-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_VPU1>;
-> +
-> +			trips {
-> +				vpu1_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				vpu1_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		gpu0-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_GPU0>;
-> +
-> +			trips {
-> +				gpu0_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				gpu0_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		gpu1-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_GPU1>;
-> +
-> +			trips {
-> +				gpu1_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				gpu1_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		vdec-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_VDEC>;
-> +
-> +			trips {
-> +				vdec_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				vdec_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		img-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_IMG>;
-> +
-> +			trips {
-> +				img_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				img_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		infra-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_INFRA>;
-> +
-> +			trips {
-> +				infra_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				infra_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		cam0-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_CAM0>;
-> +
-> +			trips {
-> +				cam0_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				cam0_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +
-> +		cam1-thermal {
-> +			polling-delay = <1000>;
-> +			polling-delay-passive = <250>;
-> +			thermal-sensors = <&lvts_ap MT8195_AP_CAM1>;
-> +
-> +			trips {
-> +				cam1_alert: trip-alert {
-> +					temperature = <85000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				cam1_crit: trip-crit {
-> +					temperature = <100000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
->   	};
->   };
+> >          */
+> >         void            (*adjust_perf)(unsigned int cpu,
+> >                                        unsigned long min_perf,
+> > --
+> > 2.34.1
+> >
