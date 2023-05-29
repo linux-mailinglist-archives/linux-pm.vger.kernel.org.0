@@ -2,76 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEF6D7148C8
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 13:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB607714903
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 14:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjE2LpG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 07:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S231224AbjE2MEL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 08:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjE2Los (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 07:44:48 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F11CF
-        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 04:44:47 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d3491609fso2367267b3a.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 04:44:47 -0700 (PDT)
+        with ESMTP id S229478AbjE2MEL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 08:04:11 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5285AD9
+        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 05:04:09 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-565cdb77b01so26427167b3.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 05:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685360687; x=1687952687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xjm4PS56z1gyE4pd4bEwf/9whtkeMcCRIdP6RDpCngU=;
-        b=vJTYOGcR60r4BmR4eY04yDKwQj/b7gxrG2lNOLWPDfRvyrpTnGCMeB5kekcX2bvKz8
-         cWnyzVOU1fZP6T9hV8MlVcYuNQAnDjRk1XP5cGYeqYXPnr7lKU9pwYwslvCk0dxxwmr1
-         g2yrWsaZXL8xyAcyeZ5Ii6raYaiiRwR7BwS2I3STBhuYszvO7PmKn2GVNfloNoLSbWpY
-         GGC3vHmGL8/f3r6LmZ7djmJSWsPp7f30COwIkj9Xv1dqhwRo1InDUbXx2SZgyeWRmsYO
-         OJpJpUFJu6oIMfcaWsboc4HEGdaBv0Q7fpTgcinmRUNFfEtffVjsFppUo6hlPOVUNUVm
-         F/rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685360687; x=1687952687;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1685361848; x=1687953848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xjm4PS56z1gyE4pd4bEwf/9whtkeMcCRIdP6RDpCngU=;
-        b=YtZUXhdoMph54SWxYWrVNqSNwvI2v0aosRQ/nMrVg26XY4pO92rm04oP6WSdX9ysfG
-         fOm0/5p8JhTgoardlxa7PBbSMAt7Qak/ZEuQH9/t1m86tohq4krRvAiTd5hx92gITaCL
-         MzoNmS9l0TQZ18aujrvBoBxHaTTzIvswS2WKFy+6x0/AhuNvmyzvHv9+Mg/VwBFJrHl4
-         DKRwjTVoIvsC1IRqcgHMCPJGhyWNtLAiAv05Iy4GLObxgcIZXWCDmwLj3Pgvj8rACClR
-         omT/VC5qoa0iLBy71unPW6mQLsW4KQeT6q6IbFOm7BHfYGgez/j/u5xYfy0Vb/HNy+su
-         uzHg==
-X-Gm-Message-State: AC+VfDytcUsj13A9dU0hALsBWoJvNBLBcc6uA3husnEV2aaBpGkHHCyQ
-        927msSSlMJUawQpatQTB+Epn7w==
-X-Google-Smtp-Source: ACHHUZ5mBN1ktRwr9aXdj/LvweDGHaPKCPAMJuFxUdPObRpGpihC+SrLzr/u3h9QEQIVOQS2Cl9jiw==
-X-Received: by 2002:a05:6a20:914e:b0:10f:500b:18a2 with SMTP id x14-20020a056a20914e00b0010f500b18a2mr7982058pzc.48.1685360687170;
-        Mon, 29 May 2023 04:44:47 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id 9-20020aa79249000000b0064aea45b040sm6517819pfp.168.2023.05.29.04.44.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 04:44:46 -0700 (PDT)
-Date:   Mon, 29 May 2023 17:14:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] opp: Provide a function for just setting bandwidth
-Message-ID: <20230529114444.kkciicopgt6fb6xq@vireshk-i7>
-References: <20230526-topic-opp_bw-v1-1-e881091363af@linaro.org>
- <20230526105320.pfnu3oxl2cm37ot7@vireshk-i7>
- <f8731d93-b335-6d9a-183c-34a652f45455@linaro.org>
- <20230529045854.gh36k5my4i35jspc@vireshk-i7>
- <cbea8bc5-5dd2-b097-964d-3494935d4f68@linaro.org>
- <20230529094041.s4fj6gjliivugk3r@vireshk-i7>
- <485cd9cf-6a0d-4a1e-0212-9afc1a41a10b@linaro.org>
+        bh=o2plw05Kj1GqS9DZ4v7YPnt5HZhf5Vi3QfmRalqD/9E=;
+        b=Yb9AbhtkESyzW4UCaJL00nxKM2J8YN24gJ1OYukCu7dxIHr8/arT5qXLo1SnIVIYCv
+         G3D6sBj+4lJJ3qVmautZe+oPkToSDcNvwEP8bY8Jblyhkd4MSfPe9eopzyewIRILxmT1
+         L1KH1ksve+DaolrpWz43SCTvEN8bbOnFSPERgEvCrjZubO6gFFojpA4/1j6uD/dpPgwo
+         qqbVz4r3pNV6P2K2b0pQxMrADwiXDvZTvJFxwm3b7uj/AvvFThI2Xl6GQjeztNNeMygq
+         igEnx4MNOqQVuR2/4NzGCYLhZAV/6tGV/8CIQirShAfVlCS1bVpiUlyp0MqqxOZjIkjb
+         ySyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685361848; x=1687953848;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o2plw05Kj1GqS9DZ4v7YPnt5HZhf5Vi3QfmRalqD/9E=;
+        b=b/vVDK2HR/1pgowwiZLCjeR3Fwx8LbCiqSTK7NE84SOMS6FsXbT5+GOCSI5Ftl0tWQ
+         fq1saFwXNmqJ39FpN1qt7D3RdbUAO8QVZXyIZxzeOTXw/YKxz2IoGrGuLw/dr+QailN2
+         kL49Od2T1TR1388Xsy9nfXX7WztfoIE9s0S8TIQgTkBNYpQJwMuUFhPdwbNFuREV1wxB
+         kFPWjaGLOYWXHA1LZk5nxQyuihSaTYnlOkFrn3XB+zR3s2g8wuZELellCnjaHhH5q0XH
+         lfppuk5aNHTSacQqnkCganfLZL+cHMLM1E+mhw6NwMYYs7YNgtcdT7IUIzgie2zN9E9X
+         EvoA==
+X-Gm-Message-State: AC+VfDyexxLBYGr4Sk2E3XYQuOXkDowMp6/OEIqNVk8uImLjO13bGDlY
+        6vEEonN3mnc0WW1R1KNvPMLP7/G2NSwurHSJ7VJ7720ZYo23+aVTPY4=
+X-Google-Smtp-Source: ACHHUZ5r0/R3DR5PN7uN55XUQan64ulWn0CJxl4jFW9DYYqJ2+zCHrHX44nufDLoUvl5YRa1tJn/hpXRlFm8KHpIzGE=
+X-Received: by 2002:a0d:cb11:0:b0:565:de69:2ac9 with SMTP id
+ n17-20020a0dcb11000000b00565de692ac9mr6574038ywd.29.1685361848544; Mon, 29
+ May 2023 05:04:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <485cd9cf-6a0d-4a1e-0212-9afc1a41a10b@linaro.org>
+References: <CAFiuC=8bwgac2kafh6om3jHw6QtcDqtomA-Fpt+uekcqMv63aA@mail.gmail.com>
+In-Reply-To: <CAFiuC=8bwgac2kafh6om3jHw6QtcDqtomA-Fpt+uekcqMv63aA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 29 May 2023 14:03:32 +0200
+Message-ID: <CAPDyKFqdSFhHobJD-22MsE1jTpaLzKDBWw-vH1NGza=27soBHg@mail.gmail.com>
+Subject: Re: On dev_pm_domain_attach function behavior
+To:     Quang Hoang <quangh@google.com>
+Cc:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,13 +67,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29-05-23, 13:38, Konrad Dybcio wrote:
-> I did some more testing and I think that I was just trying to abuse
-> the APIs.. Adding power-domains + pm calls + required-opps to the genpd
-> provider made the set_opp func work fine on suspend.. Consider this
-> solved!
+On Mon, 22 May 2023 at 06:08, Quang Hoang <quangh@google.com> wrote:
+>
+> Hi Ulf Hansson,
+>
+> Hope you are doing well!
+>
+> I am Quang from Google Silicon team. I am working on drivers that use gen=
+eric power domains.
+> I have a few questions related to the behavior of dev_pm_domain_attach fu=
+nction and genpd:
+>
+> 1. in dev_pm_domain_attach function, why don't we pass power_on variable =
+to genpd_dev_pm_attach function?
 
-Nice!
+At the introduction of the dev_pm_domain_attach() function, the
+power_on variable was only relevant for the ACPI PM domain. For genpd,
+we needed to always power on, as that was the assumption that was used
+by the consumer drivers to allow them to probe their devices.
 
--- 
-viresh
+> 2. Currently, if a device has only one power domain, its power domain is =
+automatically attached and powered on probe. What is the reason behind this=
+ behavior? Why don't we let the driver decide when to power on its power do=
+main via calling pm_runtime_get_sync() for example (as in cases where a dev=
+ice has multiple power domains, see this patch).
+
+The behaviour comes from legacy. It's not a trivial task to change the
+behaviour in genpd around this, as a lot of consumer drivers rely on
+it. Especially those that use pm_runtime_set_active() in ->probe().
+
+In the case of multiple PM domains per device, we did not have legacy
+behaviour from consumer drivers to consider - thus leaving the PM
+domain powered off while attaching is perfectly fine.
+
+>
+> Looking forward to hearing from you,
+> Regard,
+> Quang.
+
+Kind regards
+Uffe
