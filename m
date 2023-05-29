@@ -2,126 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C74714C0D
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 16:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43602714D1D
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 17:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjE2O2C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 10:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S229889AbjE2Pfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 11:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjE2O2B (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 10:28:01 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A10BE;
-        Mon, 29 May 2023 07:27:58 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-64d5b4c400fso3839084b3a.1;
-        Mon, 29 May 2023 07:27:58 -0700 (PDT)
+        with ESMTP id S229494AbjE2Pfi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 11:35:38 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CBF3C9
+        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 08:35:36 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3078cc99232so3187444f8f.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 08:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685370478; x=1687962478;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Jmuun/VWT+neP2DA7RKfwQ89UBcOBnCQ2W3RabGpYlk=;
-        b=sShWWNQl21iKyy6VI0j8on90ULIeyVnlk1w3zQwvz7MOJzRfMW5cp5G4uijrcrxEY0
-         6C8sKU2Qfzpb3GFSngykxKOa8CLHryobEhZ4eZzXiRyC6Mi6eNG+Ax7UhTl/oFRANKgy
-         epWdGu5xe1F27+rkJh6DJVBn/p25g2l+3p2r93rbc1YY4HC3W01v4hxU7WuxvqpT6LG4
-         PUHfudkGsFaeQKBlCUt4NFIzNEyPMCdPcl4l23AZfQDQQxkj9r6jE+NS8HFqE6uxkeMt
-         ZPUXaQTJOTsgiF+Cb4BrdFDtGUGzPcZHQEna70vWf3MG27npVY5Gzq4OaeMWBPR8Es1Y
-         4oQQ==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685374534; x=1687966534;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=P5W2InnJUP/UeKBwKYOBuhVJVSTGLUNK+LLVoQR0plI=;
+        b=2Efh/A+7Ot1ySLPh0HhuRd0fb/e85j22M6yPB6MrBkBETBIncWTMWHl7iQeWdhvm8z
+         E/KCBLl0OHFf/DQRXmcRF7gLBTARTeAdGxsi9U68igMF/0KEQydwFh7+XWRe8V3j0cgo
+         rFB47LLcAORkYZVzAT3kkKsUoolrCNpG7G0BHyBm3FbDo60e4eTekw44cLnZrxSYP+eg
+         nqY5AHN7hnHmKBF4dXFbZ4heyzlAXdwew3P3y6ufXQmpML8OcCXLhjbhrmXC/qf+YUqe
+         9b4fMiQ3AzICvSlmkVdJMDthPn9TNuDTZ6ygctqBTZV1PUj1WYhENlAiflEl2w7e6xrQ
+         tmlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685370478; x=1687962478;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Jmuun/VWT+neP2DA7RKfwQ89UBcOBnCQ2W3RabGpYlk=;
-        b=EAnLDJDdOvk2msZoaW3fyXjyh6zN6yFH99/0yjSJ03QMmcf9HqU55R86Wf8fdkblIy
-         /j2JH+8XhfCT3r+08SF6M01yW0l8VneNQwLLQWe74UoQTJKT7v3cB3a7qWxSe00LJ7M+
-         28ksJ9xzVZNpjQEtoPx4pSZdoEkqe7/tljdCyrG3VuWrW3xS0iQSoCJdcK5kH1sKgh3F
-         DeklydW3bIGrU0GnqxAkO3AaBxKap7IlpZqzNd5uw/XEtN/P6LWBD2Qo1Kyf0/E/p4Em
-         77eALimYg7TqdDUCQa5283i5EAhYs11TVymW+RrZoRomZ3Ic3E1fE663iTpaLCdcb6Pg
-         wksw==
-X-Gm-Message-State: AC+VfDxvdhZ9wPQP5Rf/f59lllHZnW34jwtnv44pPwht6HjmFHHZTmCB
-        SZuL9B84DgyO2Wyulv/dN2gp04Sjymosyg==
-X-Google-Smtp-Source: ACHHUZ4m+1SBfexp2uuaKCxUBhxnxFcc8rr2wUBHwXHwRK+R4InktUg565WydQIQVbv++T185v9wPw==
-X-Received: by 2002:a05:6a00:228f:b0:63d:368b:76b4 with SMTP id f15-20020a056a00228f00b0063d368b76b4mr16718661pfe.17.1685370477720;
-        Mon, 29 May 2023 07:27:57 -0700 (PDT)
-Received: from [172.30.1.35] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id g10-20020aa7818a000000b0064f97ff4506sm36358pfi.68.2023.05.29.07.27.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 May 2023 07:27:57 -0700 (PDT)
-Message-ID: <eba06c01-e2bb-f715-8b2e-9c489e7c06d3@gmail.com>
-Date:   Mon, 29 May 2023 23:27:51 +0900
+        d=1e100.net; s=20221208; t=1685374534; x=1687966534;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P5W2InnJUP/UeKBwKYOBuhVJVSTGLUNK+LLVoQR0plI=;
+        b=a2VZNnP+jGz4ltRUjNcKRNKaPpXafLi8x/HeExv7Ya89Oo9TObeDWPnTTKI+V9A7hr
+         MVIVL4otop50G9Q/WNJmdvF0xAhG9ik+qx7uTjIAPXSwRgXv4MlyhCRw7JrjxvGBu3n+
+         C2kAFICP4w+rjmDDNhP5yJPBXOPHP0UpaSj/P8VPcy3o6g2wPIK3cN1T7LMWcdD2Su0V
+         0Qoxbs2l06KdeFHnmAKwzgc36ffKFEz7V5GijyG+dyT7dms5tppf0MBq0Kw3T8j6WFwF
+         Je/iJdZRV4uDKdzf9w9V34/tGAegH1IbpWkwnPue0kG4CPrxmyllGaKQcdfHO/7EACMC
+         suTA==
+X-Gm-Message-State: AC+VfDyVQkNUyRDAdouGA8a8PO8UbkL1RAGetEJjoB4eAHB7hcWMrdn1
+        iWAFBOAOObMoZ9NEExMuy0U5hw==
+X-Google-Smtp-Source: ACHHUZ6Gh08w/RoJi45yAq2DuH7Uxj3S/ix6965ss0uiu0zUF7ysxLa6FUS6BJZzcfzOeCVWN9YUHg==
+X-Received: by 2002:a05:6000:120f:b0:306:36b5:8ada with SMTP id e15-20020a056000120f00b0030636b58adamr9515336wrx.29.1685374534530;
+        Mon, 29 May 2023 08:35:34 -0700 (PDT)
+Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id j27-20020a5d453b000000b003095a329e90sm269781wra.97.2023.05.29.08.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 May 2023 08:35:34 -0700 (PDT)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzystof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pangutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
+        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
+Subject: [PATCH v3 0/5] 
+Date:   Mon, 29 May 2023 17:35:27 +0200
+Message-ID: <20230529153532.3541327-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.41.0.rc2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH5b51a54ae2fa1cc8459b68a28b3c8ca7b7203994] PM / devfreq:
- mtk-cci: Fix variable deferencing before NULL check
-Content-Language: en-US
-To:     Sukrut Bellary <sukrut.bellary@linux.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-References: <20230518084033.508711-1-sukrut.bellary@linux.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20230518084033.508711-1-sukrut.bellary@linux.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23. 5. 18. 17:40, Sukrut Bellary wrote:
-> smatch warning:
-> drivers/devfreq/mtk-cci-devfreq.c:135 mtk_ccifreq_target()
-> warn: variable dereferenced before check 'drv' (see line 130)
-> 
-> This is based on static analysis only. Compilation tested.
-> 
-> Signed-off-by: Sukrut Bellary <sukrut.bellary@linux.com>
-> ---
->  drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-> index e5458ada5197..6354622eda65 100644
-> --- a/drivers/devfreq/mtk-cci-devfreq.c
-> +++ b/drivers/devfreq/mtk-cci-devfreq.c
-> @@ -127,7 +127,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
->  			      u32 flags)
->  {
->  	struct mtk_ccifreq_drv *drv = dev_get_drvdata(dev);
-> -	struct clk *cci_pll = clk_get_parent(drv->cci_clk);
-> +	struct clk *cci_pll;
->  	struct dev_pm_opp *opp;
->  	unsigned long opp_rate;
->  	int voltage, pre_voltage, inter_voltage, target_voltage, ret;
-> @@ -139,6 +139,7 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
->  		return 0;
->  
->  	inter_voltage = drv->inter_voltage;
-> +	cci_pll = clk_get_parent(drv->cci_clk);
->  
->  	opp_rate = *freq;
->  	opp = devfreq_recommended_opp(dev, &opp_rate, 1);
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Applied it. Thanks.
+Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
+Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+and update the documentation that describes the Calibration Data Offsets.
 
+Changelog:
+    v3 : 
+        - Rebased :
+            base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+        - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
+          Use filtered mode to make sure threshold interrupts are triggered,
+          protocol documentation, cosmetics
+        - I (bero@baylibre.com) will be taking care of this patchset
+          from now on, since Balsam has left BayLibre. Thanks for
+          getting it almost ready, Balsam!
+
+    v2 :
+        - Based on top of thermal/linux-next :
+            base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
+        - Squash "add thermal zones and thermal nodes" and
+            "add temperature mitigation threshold" commits together to form
+            "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones" commit.
+        - Add Suspend and Resume support to LVTS Driver.
+        - Update Calibration Data documentation.
+        - Fix calibration data offsets for mt8192
+            (Thanks to "Chen-Yu Tsai" and "Nícolas F. R. A. Prado").
+        https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/
+        Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+
+    v1 :
+        - The initial series "Add LVTS support for mt8192" :
+            "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/".
+
+Balsam CHIHI (5):
+  dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
+    for mt8192
+  thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
+  thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+  arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
+  thermal/drivers/mediatek/lvts_thermal: Update calibration data
+    documentation
+
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
+ drivers/thermal/mediatek/lvts_thermal.c       | 160 +++++-
+ .../thermal/mediatek,lvts-thermal.h           |  19 +
+ 3 files changed, 631 insertions(+), 2 deletions(-)
+
+base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.41.0.rc2
 
