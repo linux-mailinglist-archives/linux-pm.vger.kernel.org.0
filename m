@@ -2,152 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A999714D23
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 17:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2337714DCD
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 18:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjE2Pfs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 11:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S229552AbjE2QFM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 12:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjE2Pfo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 11:35:44 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077B0C4
-        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 08:35:43 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30ad458f085so2244715f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 29 May 2023 08:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1685374541; x=1687966541;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o6KztWxfOQw7uIdLc2nfQ4eiSQgNkopQmfDWyk3B1pA=;
-        b=Z/5vpH68gfM2Ty2Ec0/olSNrF62z+MjGSGvYcxO/T5RFeSI7y4z78JOiOkT8C5lHvu
-         odfYG21AkP/qg7t/V39xpytr/gb43qVoeMiNbwqIqOnBfPNlC0/pRWen2T4OIkGcpAfn
-         Nc6elGSJRgGhppzsrffnFHBNlMy62eCnshaj4bpIKVeewTOQBgGjAwXUZyVj82LWgAP1
-         s+NgSJ50l6j2vMNi3Gdb2tOeklNDF/FuuWVpvoKBSG/i0G1CN7sqplEsoGKWQJZVHFlZ
-         OoHZG0JuFHiC5U5MH7VKcYwXPQxX2sQ5+cmO+HgeHgLJnbnOBmY0DWaqbODWWO+OZu4/
-         wSrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685374541; x=1687966541;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o6KztWxfOQw7uIdLc2nfQ4eiSQgNkopQmfDWyk3B1pA=;
-        b=kkimFpffKxvIjZe8ne8reSy6Wt5XlN2PGIgWJs6oeARxEYVosI7p80CrMRgXDxrAT5
-         Parr4XrIiNWVmutMC/zvWFEqGNONQZJo+hmGQSejmTTFiTyMXRHpQ5QS1zfjDjiCkxKL
-         7zdbplRMlMxpTM0JCJqZHneMwJ75rmppSXxHonEcAi76JyxVu1gLjiEtliy5JvUVx8CK
-         X2IslqP0WlQo7pTCujVhQeLwEXsdrPQRZ2kxwOWglQ+6LgMqhCrDSWZ+Wgs+CP9UBWrU
-         vF8wRV1pUl74IjzKbxIboBFdxJB/KIh8R4PS+8XLyYO6k+ibN2TMEqlgr2TzRpqAJM25
-         sTrQ==
-X-Gm-Message-State: AC+VfDxSXhk/d9FU7ZcEUA9gt9z3sUdB3Zns96xuFOm8TFpbFDkXePlk
-        oWYragzHH9r6/GlKvQgjxLOLlQ==
-X-Google-Smtp-Source: ACHHUZ4iluD/nMcdT4wH1pwxlqw2W2qqyXc2nIq400406PfuiYEVls27Yxb0nakKynMHxLpe0DI2cw==
-X-Received: by 2002:a05:6000:1050:b0:30a:aeb3:f3b0 with SMTP id c16-20020a056000105000b0030aaeb3f3b0mr6698603wrx.17.1685374541302;
-        Mon, 29 May 2023 08:35:41 -0700 (PDT)
-Received: from ph18.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j27-20020a5d453b000000b003095a329e90sm269781wra.97.2023.05.29.08.35.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 May 2023 08:35:40 -0700 (PDT)
-From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzystof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pangutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Subject: [PATCH v3 5/5] thermal/drivers/mediatek/lvts_thermal: Update calibration data documentation
-Date:   Mon, 29 May 2023 17:35:32 +0200
-Message-ID: <20230529153532.3541327-6-bero@baylibre.com>
-X-Mailer: git-send-email 2.41.0.rc2
-In-Reply-To: <20230529153532.3541327-1-bero@baylibre.com>
-References: <20230529153532.3541327-1-bero@baylibre.com>
+        with ESMTP id S229502AbjE2QFL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 12:05:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAA8A3;
+        Mon, 29 May 2023 09:05:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6508561867;
+        Mon, 29 May 2023 16:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F32C433EF;
+        Mon, 29 May 2023 16:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685376304;
+        bh=t40J5JZnLXPu4dLWyk7LytZopSHtsnIgIWiXLwRaxow=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ucf7oznGLgG9VgQBa5NukJpjCOBM4t2xbBCgLvJJ5cvxNC+Py9ykgdqjB8qsViCCn
+         wmN11xFJxglou82a5jEuQ5CpgTdgqgQ1QqxQKgIsod5Kfp7QSm9DQbp3VmbSfheiUk
+         CCi7KkFYjQO2tSynXytAWXSvUFgFQQGpDbibaMOqXrZ+O7ed5ZesTJFWYnb2QCGkyz
+         LWUSw+tfr1uYDJddG7UUuon08BYxYTfsjp77jgauroCNlgtBsHk6jTju4Cj2FGdOu3
+         DGbDLsiSOi1d5cI4EZpakQWIVwLi1e7f0QRG9Rl6OyWM240LseK9UqHa5/YQIuRFoI
+         W5Z+JrgWB1Lwg==
+Date:   Mon, 29 May 2023 09:08:48 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
+        swboyd@chromium.org, wingers@google.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
+        jwerner@chromium.org, quic_lsrao@quicinc.com,
+        quic_rjendra@quicinc.com
+Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
+Message-ID: <20230529160848.ujthfuuj3zblkq4b@ripper>
+References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
+ <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
+ <20230525024546.ug6nbrmkgx2alerc@ripper>
+ <CAPDyKFrzHHz+c_y787TVKLGizA3vVfKvnu+uJ1JC+itgryfdSQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrzHHz+c_y787TVKLGizA3vVfKvnu+uJ1JC+itgryfdSQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+On Mon, May 29, 2023 at 10:58:23AM +0200, Ulf Hansson wrote:
+> On Thu, 25 May 2023 at 04:41, Bjorn Andersson <andersson@kernel.org> wrote:
+> >
+> > On Wed, May 24, 2023 at 11:56:28AM +0200, Ulf Hansson wrote:
+> > > On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+> > > >
+> > > > Changes in v4:
+> > > > - Add missing s-o-b line and reviewed by in patch 1
+> > > > - Address ulf's comments for error handling in patch 2
+> > > >
+> > > > Changes in v3:
+> > > > - Add new change to provide helper function dt_idle_pd_remove_topology()
+> > > > - Address ulf's comments for error handling
+> > > > - Add reviewed by ulf for devicetree change
+> > > >
+> > > > Changes in v2:
+> > > > - Add new change to Move enabling OSI mode after power domains creation
+> > > > - Fix compatible string to domains-idle-states for cluster idle state.
+> > > > - Update cover letter with some more details on OSI and PC mode
+> > > >   comparision
+> > > >
+> > > > The dependency [2] is now merged in trustedfirmware project.
+> > > >
+> > > > Stats comparision between OSI and PC mode are captured at [3] with
+> > > > usecase
+> > > > details, where during multiple CPUs online the residency in cluster idle
+> > > > state is better with OSI and also inline with single CPU mode. In PC
+> > > > mode
+> > > > with multiple CPUs cluster idle state residency is dropping compare to
+> > > > single CPU mode.
+> > > >
+> > > > Recording of this meeting is also available at [4].
+> > > >
+> > > > This change adds power-domains for cpuidle states to use PSCI OS
+> > > > initiated mode for sc7280.
+> > > >
+> > > > This change depends on external project changes [1] & [2] which are
+> > > > under review/discussion to add PSCI os-initiated support in Arm Trusted
+> > > > Firmware.
+> > > >
+> > > > I can update here once the dependency are in and change is ready to
+> > > > merge.
+> > > >
+> > > > [1] https://review.trustedfirmware.org/q/topic:psci-osi
+> > > > [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
+> > > > [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
+> > > > [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+> > > >
+> > > > Maulik Shah (3):
+> > > >   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
+> > > >   cpuidle: psci: Move enabling OSI mode after power domains creation
+> > > >   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
+> > > >
+> > > >  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
+> > > >  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
+> > > >  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
+> > > >  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
+> > > >  4 files changed, 117 insertions(+), 51 deletions(-)
+> > > >
+> > >
+> > > Looks like this series has not been queued up yet. Note that patch1
+> > > and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
+> > > DTS change) is dependent on patch 1 and patch2.
+> > >
+> > > Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
+> > > Bjorn, is that okay for you?
+> > >
+> >
+> > Sorry, this fell between the chairs after you pointed me to it...
+> >
+> > I can certainly pick the 3 patches through my tree, but are they fixing
+> > any current regressions, or is it just that we need the first two
+> > patches to land before the 3rd patch?
+> 
+> I am not aware of any current regressions.
+> 
 
-Update LVTS calibration data documentation for mt8192 and mt8195.
+Okay, that confirms my understanding. So not -rc material.
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-[bero@baylibre.com: Fix issues pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>]
-Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
----
- drivers/thermal/mediatek/lvts_thermal.c | 31 +++++++++++++++++++++++--
- 1 file changed, 29 insertions(+), 2 deletions(-)
+> >
+> > I also presume the 3rd patch is only needed when paired with the new
+> > ATF?
+> 
+> Patch3 is beneficial to use with a new TF-A, but works with an old
+> TF-A too. Anyway, forget what I said about patch3 earlier, as that was
+> just not the complete information.
+> 
+> The problem is that we can't be using a new TF-A (supporting both PSCI
+> OSI and PC mode) without patch1 and patch2, unless we are using
+> patch3.
+> 
+> Thus, I strongly suggest we tag patch1 and patch2 for stable kernels,
+> to avoid any potential conflicts of TF-A versions that may be used.
+> 
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index d5e5214784ece..9185d02003633 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -531,7 +531,8 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * The efuse blob values follows the sensor enumeration per thermal
-  * controller. The decoding of the stream is as follow:
-  *
-- * stream index map for MCU Domain :
-+ * MT8195 :
-+ * Stream index map for MCU Domain mt8195 :
-  *
-  * <-----mcu-tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-  *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09
-@@ -542,7 +543,7 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----mcu-tc#2-----> <-----sensor#4-----> <-----sensor#5-----> <-----sensor#6-----> <-----sensor#7----->
-  *  0x13 | 0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21
-  *
-- * stream index map for AP Domain :
-+ * Stream index map for AP Domain mt8195 :
-  *
-  * <-----ap--tc#0-----> <-----sensor#0-----> <-----sensor#1----->
-  *  0x22 | 0x23 | 0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A
-@@ -556,6 +557,32 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
-  * <-----ap--tc#3-----> <-----sensor#7-----> <-----sensor#8----->
-  *  0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47 | 0x48
-  *
-+ * MT8192 :
-+ * Stream index map for MCU Domain mt8192 :
-+ *
-+ * <-----mcu-tc#0-----> <-----sensor#0----->        <-----sensor#1----->
-+ *  0x01 | 0x02 | 0x03 | 0x04 | 0x05 | 0x06 | 0x07 | 0x08 | 0x09 | 0x0A | 0x0B
-+ *
-+ * <-----sensor#2----->        <-----sensor#3----->
-+ *  0x0C | 0x0D | 0x0E | 0x0F | 0x10 | 0x11 | 0x12 | 0x13
-+ *
-+ * <-----sensor#4----->        <-----sensor#5----->        <-----sensor#6----->        <-----sensor#7----->
-+ *  0x14 | 0x15 | 0x16 | 0x17 | 0x18 | 0x19 | 0x1A | 0x1B | 0x1C | 0x1D | 0x1E | 0x1F | 0x20 | 0x21 | 0x22 | 0x23
-+ *
-+ * Stream index map for AP Domain mt8192 :
-+ *
-+ * <-----sensor#0----->        <-----sensor#1----->
-+ *  0x24 | 0x25 | 0x26 | 0x27 | 0x28 | 0x29 | 0x2A | 0x2B
-+ *
-+ * <-----sensor#2----->        <-----sensor#3----->
-+ *  0x2C | 0x2D | 0x2E | 0x2F | 0x30 | 0x31 | 0x32 | 0x33
-+ *
-+ * <-----sensor#4----->        <-----sensor#5----->
-+ *  0x34 | 0x35 | 0x36 | 0x37 | 0x38 | 0x39 | 0x3A | 0x3B
-+ *
-+ * <-----sensor#6----->        <-----sensor#7----->        <-----sensor#8----->
-+ *  0x3C | 0x3D | 0x3E | 0x3F | 0x40 | 0x41 | 0x42 | 0x43 | 0x44 | 0x45 | 0x46 | 0x47
-+ *
-  * The data description gives the offset of the calibration data in
-  * this bytes stream for each sensor.
-  */
--- 
-2.41.0.rc2
+So you're suggesting that I pick them for v6.5 and add a Cc: stable?
 
+An alternative would be that you take the cpuidle patches for v6.4-rc
+and I pick the dt for v6.5 - given that the cpuidle patches actually
+resolves a problem, while the dts just introduces "new functionality".
+
+> >
+> > Regards,
+> > Bjorn
+> 
+> Did that make more sense?
+> 
+
+Yes, it's getting there :)
+
+Thanks,
+Bjorn
+
+> Br
+> Uffe
