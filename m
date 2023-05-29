@@ -2,176 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2337714DCD
-	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 18:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C00714E4E
+	for <lists+linux-pm@lfdr.de>; Mon, 29 May 2023 18:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjE2QFM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 29 May 2023 12:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50578 "EHLO
+        id S229475AbjE2QbE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 29 May 2023 12:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjE2QFL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 12:05:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAA8A3;
-        Mon, 29 May 2023 09:05:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6508561867;
-        Mon, 29 May 2023 16:05:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F32C433EF;
-        Mon, 29 May 2023 16:05:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685376304;
-        bh=t40J5JZnLXPu4dLWyk7LytZopSHtsnIgIWiXLwRaxow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ucf7oznGLgG9VgQBa5NukJpjCOBM4t2xbBCgLvJJ5cvxNC+Py9ykgdqjB8qsViCCn
-         wmN11xFJxglou82a5jEuQ5CpgTdgqgQ1QqxQKgIsod5Kfp7QSm9DQbp3VmbSfheiUk
-         CCi7KkFYjQO2tSynXytAWXSvUFgFQQGpDbibaMOqXrZ+O7ed5ZesTJFWYnb2QCGkyz
-         LWUSw+tfr1uYDJddG7UUuon08BYxYTfsjp77jgauroCNlgtBsHk6jTju4Cj2FGdOu3
-         DGbDLsiSOi1d5cI4EZpakQWIVwLi1e7f0QRG9Rl6OyWM240LseK9UqHa5/YQIuRFoI
-         W5Z+JrgWB1Lwg==
-Date:   Mon, 29 May 2023 09:08:48 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
-        swboyd@chromium.org, wingers@google.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        jwerner@chromium.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com
-Subject: Re: [PATCH v4 0/3] Use PSCI OS initiated mode for sc7280
-Message-ID: <20230529160848.ujthfuuj3zblkq4b@ripper>
-References: <20230424110933.3908-1-quic_mkshah@quicinc.com>
- <CAPDyKFqSY9HJgKwuOqJPU5aA=wcAtDp91s0hkQye+dm=Wk=YDQ@mail.gmail.com>
- <20230525024546.ug6nbrmkgx2alerc@ripper>
- <CAPDyKFrzHHz+c_y787TVKLGizA3vVfKvnu+uJ1JC+itgryfdSQ@mail.gmail.com>
+        with ESMTP id S229457AbjE2QbD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 29 May 2023 12:31:03 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7219DAB;
+        Mon, 29 May 2023 09:31:02 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6a6b9c079so22869085e9.1;
+        Mon, 29 May 2023 09:31:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685377861; x=1687969861;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fl5UqcVglx/Zk4w3uBA6m2BcPMsFBjrRyQ7G0qcJSnw=;
+        b=czU8EWyfqVVWum0f9XkGKu0jfiJKyRLWAWQTbnM9PgfeGqVvCD7Xx3pMDXFXcZOkL3
+         fMbb+fve6pNR01Vg00VBv5ZdB5F54WDGgndSixL18EAfFd9wdotJ6Nohc2FhtDsv4T0w
+         /hm8/erKDe/oDQzgeJ9lAEcsZrSvsY81H60DrUsdwH8EfWbep9f/RBjkxxmkifWOhxW/
+         oC5+foF5Aaek7VmjZbihB1HMuSBqgoGlrxCapUDDp5kSyaZt/M0MbU87AP1yp2Bb266E
+         Zd4lmkZWHYUb7/ZXmISXbeYtQBYf+QLJckDj1BcynPKtdDbj2Z9Me3w+k5TanXj2foqn
+         NhJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685377861; x=1687969861;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fl5UqcVglx/Zk4w3uBA6m2BcPMsFBjrRyQ7G0qcJSnw=;
+        b=NqYMSk6KbAkW6BIzU1+7zf112tUqbrY1TthvBE2WwM1hMLPEL+//S7qjXtOZFoJBjg
+         JyIQ0jN7rWFJSYuVcXzm9tIw1vS0oY1vwcOFawJn0I6nf3UbzZu4HYGjcAI/8p3B/oDu
+         lAJUUu+riyKfItxoRPGcrQzpNrjtLZKGRSmUPBqzldsFELlYrDVT+CWJBAFSt3pKD8eK
+         WhBke4fS77d2/Mdt9fnp4EXqaVZJ7JqEg6TOK1xZAIs3y2VTlDoTNAo6IkgOlKi4azT3
+         8KqJnh+Hq4/r+MVFkZrqTkymOMYiJ21DrL0DEyn85oqso/uCuz5EzHKoUbIKmJAmuRIW
+         4KrQ==
+X-Gm-Message-State: AC+VfDxeh4OaUn14HZQkXXYhSkTf62/i65m2FmerTCENUS+5HSuIf53+
+        jQBMxqoVxHbc2IhWY1mopfU=
+X-Google-Smtp-Source: ACHHUZ68EkX8uWUYLnaeTCPg9KW76zCSKxPbjesOhvm3Uf4e0jK8An2oGQJJJQ2gVB6MRWG8RERtRA==
+X-Received: by 2002:a1c:f704:0:b0:3f1:74bd:bc22 with SMTP id v4-20020a1cf704000000b003f174bdbc22mr8535282wmh.6.1685377860857;
+        Mon, 29 May 2023 09:31:00 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id x15-20020a1c7c0f000000b003f4266965fbsm18306579wmc.5.2023.05.29.09.30.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 May 2023 09:30:59 -0700 (PDT)
+Message-ID: <634c155d-6c04-00a3-2e5b-618c36ec706f@gmail.com>
+Date:   Mon, 29 May 2023 18:30:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrzHHz+c_y787TVKLGizA3vVfKvnu+uJ1JC+itgryfdSQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 0/5]
+Content-Language: en-US, ca-ES, es-ES
+To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, krzystof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pangutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
+        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
+References: <20230529153532.3541327-1-bero@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230529153532.3541327-1-bero@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, May 29, 2023 at 10:58:23AM +0200, Ulf Hansson wrote:
-> On Thu, 25 May 2023 at 04:41, Bjorn Andersson <andersson@kernel.org> wrote:
-> >
-> > On Wed, May 24, 2023 at 11:56:28AM +0200, Ulf Hansson wrote:
-> > > On Mon, 24 Apr 2023 at 13:09, Maulik Shah <quic_mkshah@quicinc.com> wrote:
-> > > >
-> > > > Changes in v4:
-> > > > - Add missing s-o-b line and reviewed by in patch 1
-> > > > - Address ulf's comments for error handling in patch 2
-> > > >
-> > > > Changes in v3:
-> > > > - Add new change to provide helper function dt_idle_pd_remove_topology()
-> > > > - Address ulf's comments for error handling
-> > > > - Add reviewed by ulf for devicetree change
-> > > >
-> > > > Changes in v2:
-> > > > - Add new change to Move enabling OSI mode after power domains creation
-> > > > - Fix compatible string to domains-idle-states for cluster idle state.
-> > > > - Update cover letter with some more details on OSI and PC mode
-> > > >   comparision
-> > > >
-> > > > The dependency [2] is now merged in trustedfirmware project.
-> > > >
-> > > > Stats comparision between OSI and PC mode are captured at [3] with
-> > > > usecase
-> > > > details, where during multiple CPUs online the residency in cluster idle
-> > > > state is better with OSI and also inline with single CPU mode. In PC
-> > > > mode
-> > > > with multiple CPUs cluster idle state residency is dropping compare to
-> > > > single CPU mode.
-> > > >
-> > > > Recording of this meeting is also available at [4].
-> > > >
-> > > > This change adds power-domains for cpuidle states to use PSCI OS
-> > > > initiated mode for sc7280.
-> > > >
-> > > > This change depends on external project changes [1] & [2] which are
-> > > > under review/discussion to add PSCI os-initiated support in Arm Trusted
-> > > > Firmware.
-> > > >
-> > > > I can update here once the dependency are in and change is ready to
-> > > > merge.
-> > > >
-> > > > [1] https://review.trustedfirmware.org/q/topic:psci-osi
-> > > > [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
-> > > > [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
-> > > > [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
-> > > >
-> > > > Maulik Shah (3):
-> > > >   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
-> > > >   cpuidle: psci: Move enabling OSI mode after power domains creation
-> > > >   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
-> > > >
-> > > >  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
-> > > >  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
-> > > >  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
-> > > >  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
-> > > >  4 files changed, 117 insertions(+), 51 deletions(-)
-> > > >
-> > >
-> > > Looks like this series has not been queued up yet. Note that patch1
-> > > and patch2 are needed for stable kernels too. Moreover, patch3 (Qcom
-> > > DTS change) is dependent on patch 1 and patch2.
-> > >
-> > > Therefore I suggest Bjorn to pick this up via the Qcom SoC tree.
-> > > Bjorn, is that okay for you?
-> > >
-> >
-> > Sorry, this fell between the chairs after you pointed me to it...
-> >
-> > I can certainly pick the 3 patches through my tree, but are they fixing
-> > any current regressions, or is it just that we need the first two
-> > patches to land before the 3rd patch?
-> 
-> I am not aware of any current regressions.
-> 
+Hi Bernhard,
 
-Okay, that confirms my understanding. So not -rc material.
+Please resend with a subject line for the cover letter.
 
-> >
-> > I also presume the 3rd patch is only needed when paired with the new
-> > ATF?
+Regards,
+Matthias
+
+On 29/05/2023 17:35, Bernhard Rosenkränzer wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Patch3 is beneficial to use with a new TF-A, but works with an old
-> TF-A too. Anyway, forget what I said about patch3 earlier, as that was
-> just not the complete information.
+> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
+> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+> and update the documentation that describes the Calibration Data Offsets.
 > 
-> The problem is that we can't be using a new TF-A (supporting both PSCI
-> OSI and PC mode) without patch1 and patch2, unless we are using
-> patch3.
+> Changelog:
+>      v3 :
+>          - Rebased :
+>              base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+>          - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
+>            Use filtered mode to make sure threshold interrupts are triggered,
+>            protocol documentation, cosmetics
+>          - I (bero@baylibre.com) will be taking care of this patchset
+>            from now on, since Balsam has left BayLibre. Thanks for
+>            getting it almost ready, Balsam!
 > 
-> Thus, I strongly suggest we tag patch1 and patch2 for stable kernels,
-> to avoid any potential conflicts of TF-A versions that may be used.
+>      v2 :
+>          - Based on top of thermal/linux-next :
+>              base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
+>          - Squash "add thermal zones and thermal nodes" and
+>              "add temperature mitigation threshold" commits together to form
+>              "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones" commit.
+>          - Add Suspend and Resume support to LVTS Driver.
+>          - Update Calibration Data documentation.
+>          - Fix calibration data offsets for mt8192
+>              (Thanks to "Chen-Yu Tsai" and "Nícolas F. R. A. Prado").
+>          https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/
+>          Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 > 
-
-So you're suggesting that I pick them for v6.5 and add a Cc: stable?
-
-An alternative would be that you take the cpuidle patches for v6.4-rc
-and I pick the dt for v6.5 - given that the cpuidle patches actually
-resolves a problem, while the dts just introduces "new functionality".
-
-> >
-> > Regards,
-> > Bjorn
+>      v1 :
+>          - The initial series "Add LVTS support for mt8192" :
+>              "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/".
 > 
-> Did that make more sense?
+> Balsam CHIHI (5):
+>    dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
+>      for mt8192
+>    thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
+>    thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+>    arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
+>    thermal/drivers/mediatek/lvts_thermal: Update calibration data
+>      documentation
 > 
-
-Yes, it's getting there :)
-
-Thanks,
-Bjorn
-
-> Br
-> Uffe
+>   arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
+>   drivers/thermal/mediatek/lvts_thermal.c       | 160 +++++-
+>   .../thermal/mediatek,lvts-thermal.h           |  19 +
+>   3 files changed, 631 insertions(+), 2 deletions(-)
+> 
+> base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
