@@ -2,100 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB48716619
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 17:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65A971677B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 17:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbjE3PEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 11:04:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S232526AbjE3Prn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 11:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233109AbjE3PEl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 11:04:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC34118;
-        Tue, 30 May 2023 08:04:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04B98630FF;
-        Tue, 30 May 2023 15:04:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 181E2C433AE;
-        Tue, 30 May 2023 15:04:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685459067;
-        bh=QnEoh+X+SgNcIBxD5KzNnV5xmRN1TrKhb2ZElCWGT+8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E3jWOhPweOzR2ItjP8ZU+908Aay1KcouvnvGiVgboQaHDLkc0/4LNgMeFKx4X94T/
-         Gp4aM6Fv0bxhFIuCsdWeqHbtcuIBymKu4iv0saqyg7A7J4Dx4hypkXKRKe9/nPQU3e
-         ZZ0WCXNWC8FHoTBGTALmgCKcCrhhuZcRKuhNGjzMBkbkMpRyuGofpNZQTjMnaA3rql
-         UAwIsY/DFwamgl6nb2/h0D7KwTV5axTLimNDik/dAq3qkq4OgmUOykOmxkl0/qoFqh
-         7Hsmo23aIkJ7CQgMwh/CqLsFhKR3IZwEx+EwjRBA0eDRUt8kRy4dODFixGHdZ07yrx
-         BsTXkPms8MBsg==
-From:   matthias.bgg@kernel.org
-To:     rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH 2/2] arm64: dts: mt8173: Update thermal node
-Date:   Tue, 30 May 2023 17:04:13 +0200
-Message-Id: <20230530150413.12918-2-matthias.bgg@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230530150413.12918-1-matthias.bgg@kernel.org>
-References: <20230530150413.12918-1-matthias.bgg@kernel.org>
+        with ESMTP id S232210AbjE3Prj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 11:47:39 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60136131
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 08:47:15 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so1511778f8f.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 08:47:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685461633; x=1688053633;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X98uEJIUr5N96PKhi+a99X85M9f95CxufPpRR6wZq8A=;
+        b=I4GPQWEllzF6GBOexpjF+zqBiGkBryBgzrEJtXRHQddmLLIOOng95jwaUCgCr1tgsL
+         Jv05YlGGBLV0dnEU2jx+6DUkVpHbZZepwRBsWcxCtgO8LoZjofiJopoMWOJYUc+vHkEQ
+         0nkVIfh2wmrheNx40RaXua8/vNVNYV3VLClb9m6E/Ib2FLzBWX3w9HnRDP2/WMrzrS8f
+         v4h6Xo4rA+eN7dUYhsWR5dZNWvYr3wPUYkyCzlOkIvWmVKVA7aPpl5Uo/hMqOlL9W4Vv
+         BdMCjM0CqmsjMAMQfh3IpccWhHSKKBIVBKD0aCHhWnL/8VqQTWkP4jpb17llwILviawK
+         Yhdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685461633; x=1688053633;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X98uEJIUr5N96PKhi+a99X85M9f95CxufPpRR6wZq8A=;
+        b=jVdPQjNglxNoqhFaiykbMS817Vqtgu7PZ7q8eEBjzIWJvhQmke6n0XbXte4ZKINnZa
+         mK2VU7Zt7eb3G7A4iHnrNBOw2w+UL9C9INXrxYIleySgdmalnOzTLHPvkgwzlhsz47AQ
+         t8v7nzHKnJshtHHSONi93DtE+I27NEOTKa4+pj6cyZTud6gQkNfNJrL10IrqEO+GjZ3N
+         P9NaJHu6xIIv8Wh0uQtziFnLgpXBoO/zY2oYQLkm8gO9N57h5k/YzBpp3l1OCXwMQdrm
+         uL1Vtcdk5fiAOqp9p+FzXSowudZMnGX8KaIT+wCXI6BOu/XAM2y7WzZhV7N7pR4syIaf
+         Rvng==
+X-Gm-Message-State: AC+VfDyk3wfZxhlF2atPyYc8iIIFGNyadBElcrzDP0WE8zy7pLksW/9Y
+        0TyTjRbDeQroeMrfAGKV7G3GRg==
+X-Google-Smtp-Source: ACHHUZ7srJ4pOnP/FvjZ38eh3SqEMIgReJFKmoPPE7Dt9i4SzWqtjk05iWZ0+SjI68fY+m6jsF8SOw==
+X-Received: by 2002:adf:f485:0:b0:30a:c681:fd2e with SMTP id l5-20020adff485000000b0030ac681fd2emr2350372wro.22.1685461633507;
+        Tue, 30 May 2023 08:47:13 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf? ([2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf])
+        by smtp.googlemail.com with ESMTPSA id d1-20020adfe881000000b0030631a599a0sm3735752wrm.24.2023.05.30.08.47.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 08:47:13 -0700 (PDT)
+Message-ID: <35dea714-6a0f-4673-fd33-23644ea85d33@linaro.org>
+Date:   Tue, 30 May 2023 17:47:12 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH] lvts_thermal.c: Fix error checking for debugfs_create_dir
+Content-Language: en-US
+To:     Osama Muhammad <osmtendev@gmail.com>, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
+        wenst@chromium.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230517160326.10732-1-osmtendev@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230517160326.10732-1-osmtendev@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Matthias Brugger <matthias.bgg@gmail.com>
+On 17/05/2023 18:03, Osama Muhammad wrote:
+> This patch fixes the error checking in lvts_thermal.c in
+> debugfs_create_dir. The correct way to check if an error occurred
+> is 'IS_ERR' inline function.
 
-Following the binding description, update to use
-thermal-sensor-cells = 1
+We do no longer check debugfs functions return values.
 
-Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
+eg.
 
----
+  https://www.spinics.net/lists/linux-spi/msg37903.html
+  https://lore.kernel.org/lkml/2023052835-oxidant-doily-404f@gregkh/
 
- arch/arm64/boot/dts/mediatek/mt8173.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-index c47d7d900f28..44c553bddd46 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
-@@ -270,7 +270,7 @@ cpu_thermal: cpu-thermal {
- 			polling-delay-passive = <1000>; /* milliseconds */
- 			polling-delay = <1000>; /* milliseconds */
- 
--			thermal-sensors = <&thermal>;
-+			thermal-sensors = <&thermal 0>;
- 			sustainable-power = <1500>; /* milliwatts */
- 
- 			trips {
-@@ -766,7 +766,7 @@ spi: spi@1100a000 {
- 		};
- 
- 		thermal: thermal@1100b000 {
--			#thermal-sensor-cells = <0>;
-+			#thermal-sensor-cells = <1>;
- 			compatible = "mediatek,mt8173-thermal";
- 			reg = <0 0x1100b000 0 0x1000>;
- 			interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> ---
+>   drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index d0a3f95b7884..61386be78fa0 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -188,7 +188,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>   	int i;
+>   
+>   	lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
+> -	if (!lvts_td->dom_dentry)
+> +	if (IS_ERR(lvts_td->dom_dentry))
+>   		return 0;
+>   
+>   	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+> @@ -197,7 +197,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>   
+>   		sprintf(name, "controller%d", i);
+>   		dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
+> -		if (!dentry)
+> +		if (IS_ERR(dentry))
+>   			continue;
+>   
+>   		regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
+
 -- 
-2.40.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
