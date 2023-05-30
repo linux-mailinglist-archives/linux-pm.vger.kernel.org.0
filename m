@@ -2,195 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AE9716999
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 18:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8D97169E4
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 18:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231618AbjE3Qck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 12:32:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S232210AbjE3Qkn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 12:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjE3Qcc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 12:32:32 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1D9E47
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 09:32:10 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f4f757d575so3627250e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 09:32:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685464327; x=1688056327;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uh8bp8/N+tK7m/qngGoSnlIckrTNqW73X1nH+GEEZ04=;
-        b=I992L0kdjAMvDOU10MyEwZLBJ9kglidWBiS8y95NrZnyENV8f+wdP2Oki6Oiq2k4C7
-         kre68MArgwNwvBKLYJKH6HlHS5gYIXZtNx5LK7+dxkZyRYwFY7nC7xR0IjQqEA7CnsRV
-         W1eD2kwnVBJKhc8ycVXh53+tPfj81OtFsMewMgro4iGxlUgGK/XgS9aeIbtBXd/rsBdS
-         3jpYHAm/v32KxCvvdK4Vn219S+IbrWTrwCVXYZPB6YfCRd5YrRAxCW1oCbr2BnTGFV7t
-         94BhxY8DqLsrXsTVA6ZWldtUSyaBFJCC3wd1gMKYZ7zkosF4zW7eR/gDtRIi4ky3SwNJ
-         jshQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685464327; x=1688056327;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uh8bp8/N+tK7m/qngGoSnlIckrTNqW73X1nH+GEEZ04=;
-        b=XN0yzobfzNUzjMhtIp9jhxDrX5eoEKyJdTMy6jOpbK1XB3uaMyQJ35YUk+LQ4It3DN
-         bfutU/GFixIeVSvfl1JJbQkU7umjMOxwukNlwn9yQtnoiPFhS6yvJu++HXAlgrqfEiCf
-         n/J9CG1VuHBUgu5D6bgWTtBB9fCB5TTIa+TMBCSz8uXDHYWaghtTrFpDsy44Yggpdk9k
-         fI2P0Nd3xMKfxaWtnJGVWsdKKCJ1rTu1He2CLhLFWOYP9yukd4LCfw7hEopEXojirKyv
-         b0KhQm1vkyg44M5N4SZBQ0sj1a84LhS+XrLguldom68tuFeoZs9S03oEW68L6Zgx1yKL
-         Y6wg==
-X-Gm-Message-State: AC+VfDzB+k206SdQqeSgmO0K+rN9+L5/KIzdTmEgPT31OAWQOzQBJoYo
-        PrSaSG2A5g6bqEkvY1paCkTCGA==
-X-Google-Smtp-Source: ACHHUZ4oCmCBcr/w6q63AE5PHt6atRdVEiJTRNk2+IUqht5cc2lVYIGFEh7FiYS+1l0O4rgLVLUi8A==
-X-Received: by 2002:a05:6512:6ca:b0:4f3:a763:ccb7 with SMTP id u10-20020a05651206ca00b004f3a763ccb7mr3626951lff.2.1685464326959;
-        Tue, 30 May 2023 09:32:06 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac244af000000b004f4b42e2d7dsm386045lfm.230.2023.05.30.09.32.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 09:32:06 -0700 (PDT)
-Message-ID: <5a26e456-fe45-6def-27f9-26ec00c333e6@linaro.org>
-Date:   Tue, 30 May 2023 18:32:04 +0200
+        with ESMTP id S230096AbjE3Qkm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 12:40:42 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2049.outbound.protection.outlook.com [40.107.92.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C038E;
+        Tue, 30 May 2023 09:40:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=auoYI/7tR/q/htwnsxypEFjjd3ANBIx/PntSX8pUDUPRrqPAPZUYnhU6q7SI5XBsgLSb6Q6R4Nr3Z6rQB0h47O00/DjwQLrAQ0E2whROCc5t7vWveKuIWw2lWyXJhYXoa62t8dV1g/63bEr76IslPbHik8O+r8nzbFA/Eaefaz1y/RpGlFKL2neLSi5n9NFszHu/+TOVVs3wq1ckBw2x5Zm+zaRPn9/tZZpc3txEaqHyLpC9M9yYc5zqkebIYvpWoU+54hfybZ2XvR42ADCBourUMy09oZbo17W0HK9l/SwtTwpzMAA4kEtUxRHYqicKDrDrMec1x+anEivY+nO6qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yPd8OTGDycxlNwmgaxjuPJhy0mVv8FZr21RzRhTXfz8=;
+ b=NdS1wN16xtB/fW6Sxitkk//isfrzSY4RbEAUhCKSwAa3G6/z8pN4H6+K3idR38treXY2vkd4RSf98DxC12oIw2XlpGANQGMJExcLQoMZC3mxyoqLI4ZmF12BGVesgwE08391xFnS/rWSuGqYLBPXqumrQDKggHTWoiObbg+iCWni+EiKouUjI96i7HsJ7Kx3pW3ZiEFTs0hzmTwtjfETDh/hgAPMmWBBHrnQQqaKXTIq3diUpSWZXBitWvy8WunGwiqcdSVd8dL6AJrRKgX3Ld9bRZeN8rNiY0vpe1SK3Nkmu8r9RckttuT9Mv8S/Pq6kPEmFnlh4yjGcCFQs6Q7pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yPd8OTGDycxlNwmgaxjuPJhy0mVv8FZr21RzRhTXfz8=;
+ b=mlMypBv+5PIM+voLwkDgsn3y+c8cYZdFHMXbiPK+HCiczMuhbdQrkVCDTUDwDXncao/+E7T41Km01ZE7wshlHoIROMl9dcmXv2Cxi7HRYx9qZC4CW7svKJiuwb/3plY+nmVEGV1lVB83UfxOic/qaZ961+nmHrRd+23h4n8L6zE=
+Received: from BN9PR03CA0444.namprd03.prod.outlook.com (2603:10b6:408:113::29)
+ by PH8PR12MB8430.namprd12.prod.outlook.com (2603:10b6:510:259::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Tue, 30 May
+ 2023 16:40:38 +0000
+Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:113:cafe::e3) by BN9PR03CA0444.outlook.office365.com
+ (2603:10b6:408:113::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
+ Transport; Tue, 30 May 2023 16:40:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Tue, 30 May 2023 16:40:37 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 30 May
+ 2023 11:40:35 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-pm@vger.kernel.org>, Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v5 1/2] PCI: Refactor pci_bridge_d3_possible()
+Date:   Tue, 30 May 2023 11:39:46 -0500
+Message-ID: <20230530163947.230418-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-20-1bf8e6663c4e@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH 20/20] interconnect: qcom: Divide clk rate by src node bus
- width
-In-Reply-To: <20230526-topic-smd_icc-v1-20-1bf8e6663c4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT023:EE_|PH8PR12MB8430:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2f4084fd-1b5f-41f1-f8c0-08db612c993c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ncbdg4dC8gpBttNSn0rC3eVfWU54EL5VIGsTFJFv3a9ZG6XyeO2KLQQb/ZpGdc6y5zljUeVHX+D35/aw9+ufnF0ApvPJkYe4EuKiBFUYToAmJBo6YCDVW7SWvGD1vzss37TKNUIZMGEONJsPg+3C3+uNEvuu42oZmQUTs0RWkWH03nfkEj7LDo3KwfSS+cyomZ+PcVqIoWL5bx1Lp6mOVN4uRt3O894BXVLbnOVYY8bBwRVwy0HsOSQF+qhhoDwl9y3fDi2XsfRWDw9XS36JNvG8HoqQzK7QnPqG3Gt8MZ4DvwDgjBpXW4rQlXABbE4VX+fdXeU54JYU1d0BVjp1DV+L2Z/mmKdw+6HxVo/r6fgMfGCax3Idrlmz4Xh4W9fX85SSEhb0EWZZvige2X609cslXpBCc1YikMEUf5A9lQdSII37kHjyobTIgDHVf0MkG9wE7D8JlMdu1VdhpBjyloWpYsL+d07kqG0mZeWO5dc2uU30k47sefFFB8yyvFHA1XhLpiz52/+L0adbs5W18pmZopN0cpTGmXV7tYcN1laDxMcE7uub+hRW89dnDCiPC93iQof/sya/ht3SRsWfU6tS0QZum0TRYiGtsCgqaSdZHfQIIGvAiGqLxmtqAncUXJNzMSCNOqf92V9ejFwr2GQBuzkj0IPU5TIXFzD0fN0o5kSG55KT2VK7ndt5f+VNpPSGSdtRilKrPufT0wvYTI6C02KGyHs5cZv9ujNrSl9OT/YnqhiGKGZp/qdV7nxR2Ibr2McR5Fzq0rbYa3Mz3A==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199021)(46966006)(40470700004)(36840700001)(7696005)(356005)(81166007)(40460700003)(26005)(40480700001)(6666004)(1076003)(82740400003)(36756003)(5660300002)(478600001)(36860700001)(186003)(16526019)(86362001)(2616005)(336012)(426003)(4326008)(70586007)(70206006)(6916009)(47076005)(54906003)(41300700001)(2906002)(82310400005)(316002)(83380400001)(8936002)(8676002)(44832011)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 16:40:37.9952
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f4084fd-1b5f-41f1-f8c0-08db612c993c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB8430
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+All of the cases handled by pci_bridge_d3_possible() are specific
+to these branches:
+```
+	case PCI_EXP_TYPE_ROOT_PORT:
+	case PCI_EXP_TYPE_UPSTREAM:
+	case PCI_EXP_TYPE_DOWNSTREAM:
+```
+Drop a level of indentation by returning false in the default case
+instead.  No intended functional changes.
 
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+v4->v5:
+ * Add tags
+v3->v4:
+ * New patch
+---
+ drivers/pci/pci.c | 68 +++++++++++++++++++++++------------------------
+ 1 file changed, 34 insertions(+), 34 deletions(-)
 
-On 30.05.2023 12:20, Konrad Dybcio wrote:
-> Ever since the introduction of SMD RPM ICC, we've been dividing the
-> clock rate by the wrong bus width. This has resulted in:
-> 
-> - setting wrong (mostly too low) rates, affecting performance
->   - most often /2 or /4
->   - things like DDR never hit their full potential
->   - the rates were only correct if src bus width == dst bus width
->     for all src, dst pairs on a given bus
-> 
-> - Qualcomm using the same wrong logic in their BSP driver in msm-5.x
->   that ships in production devices today
-> 
-> - me losing my sanity trying to find this
-> 
-> Resolve it by using dst_qn, if it exists.
-> 
-> Fixes: 5e4e6c4d3ae0 ("interconnect: qcom: Add QCS404 interconnect provider driver")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-The problem is deeper.
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 5ede93222bc1..d1fa040bcea7 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2978,48 +2978,48 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+ 	case PCI_EXP_TYPE_ROOT_PORT:
+ 	case PCI_EXP_TYPE_UPSTREAM:
+ 	case PCI_EXP_TYPE_DOWNSTREAM:
+-		if (pci_bridge_d3_disable)
+-			return false;
++		break;
++	default:
++		return false;
++	}
+ 
+-		/*
+-		 * Hotplug ports handled by firmware in System Management Mode
+-		 * may not be put into D3 by the OS (Thunderbolt on non-Macs).
+-		 */
+-		if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
+-			return false;
++	if (pci_bridge_d3_disable)
++		return false;
+ 
+-		if (pci_bridge_d3_force)
+-			return true;
++	/*
++	 * Hotplug ports handled by firmware in System Management Mode
++	 * may not be put into D3 by the OS (Thunderbolt on non-Macs).
++	 */
++	if (bridge->is_hotplug_bridge && !pciehp_is_native(bridge))
++		return false;
+ 
+-		/* Even the oldest 2010 Thunderbolt controller supports D3. */
+-		if (bridge->is_thunderbolt)
+-			return true;
++	if (pci_bridge_d3_force)
++		return true;
+ 
+-		/* Platform might know better if the bridge supports D3 */
+-		if (platform_pci_bridge_d3(bridge))
+-			return true;
++	/* Even the oldest 2010 Thunderbolt controller supports D3. */
++	if (bridge->is_thunderbolt)
++		return true;
+ 
+-		/*
+-		 * Hotplug ports handled natively by the OS were not validated
+-		 * by vendors for runtime D3 at least until 2018 because there
+-		 * was no OS support.
+-		 */
+-		if (bridge->is_hotplug_bridge)
+-			return false;
++	/* Platform might know better if the bridge supports D3 */
++	if (platform_pci_bridge_d3(bridge))
++		return true;
+ 
+-		if (dmi_check_system(bridge_d3_blacklist))
+-			return false;
++	/*
++	 * Hotplug ports handled natively by the OS were not validated
++	 * by vendors for runtime D3 at least until 2018 because there
++	 * was no OS support.
++	 */
++	if (bridge->is_hotplug_bridge)
++		return false;
+ 
+-		/*
+-		 * It should be safe to put PCIe ports from 2015 or newer
+-		 * to D3.
+-		 */
+-		if (dmi_get_bios_year() >= 2015)
+-			return true;
+-		break;
+-	}
++	if (dmi_check_system(bridge_d3_blacklist))
++		return false;
+ 
+-	return false;
++	/*
++	 * It should be safe to put PCIe ports from 2015 or newer
++	 * to D3.
++	 */
++	return dmi_get_bios_year() >= 2015;
+ }
+ 
+ static int pci_dev_check_d3cold(struct pci_dev *dev, void *data)
 
-Chatting with Stephan (+CC), we tackled a few issues (that I will send
-fixes for in v2):
+base-commit: 7877cb91f1081754a1487c144d85dc0d2e2e7fc4
+-- 
+2.34.1
 
-1. qcom_icc_rpm_set() should take per-node (src_qn->sum_avg, dst_qn->sum_avg)
-   and NOT aggregated bw (unless you want ALL of your nodes on a given provider
-   to "go very fast")
-
-2. the aggregate bw/clk rate calculation should use the node-specific bus widths
-   and not only the bus width of the src/dst node, otherwise the average bw
-   values will be utterly meaningless
-
-3. thanks to (1) and (2) qcom_icc_bus_aggregate() can be remodeled to instead
-   calculate the clock rates for the two rpm contexts, which we can then max()
-   and pass on to the ratesetting call
-
-
-----8<---- Cutting off Stephan's seal of approval, this is my thinking ----
-
-4. I *think* Qualcomm really made a mistake in their msm-5.4 driver where they
-   took most of the logic from the current -next state and should have been
-   setting the rate based on the *DST* provider, or at least that's my
-   understanding trying to read the "known good" msm-4.19 driver
-   (which remembers msm-3.0 lol).. Or maybe we should keep src but ensure there's
-   also a final (dst, dst) vote cast:
-
-provider->inter_set = false // current state upstream
-
-setting apps_proc<->slv_bimc_snoc
-setting mas_bimc_snoc<->slv_snoc_cnoc
-setting mas_snoc_cnoc<->qhs_sdc2
-
-
-provider->inter_set = true // I don't think there's effectively a difference?
-
-setting apps_proc<->slv_bimc_snoc
-setting slv_bimc_snoc<->mas_bimc_snoc
-setting mas_bimc_snoc<->slv_snoc_cnoc
-setting slv_snoc_cnoc<->mas_snoc_cnoc
-setting mas_snoc_cnoc<->qhs_sdc2
-
-all the (mas|slv)_bus1_bus2 are very wide whereas the target nodes are usually
-4-, 8- or 16-wide, which without this patch or something equivalent decimates
-(or actually 2^n-ates) the calculated rates..
-
-Konrad
-
-
->  drivers/interconnect/qcom/icc-rpm.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 59be704364bb..58e2a8b1b7c3 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -340,7 +340,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->  static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  {
->  	struct qcom_icc_provider *qp;
-> -	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
-> +	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL, *qn = NULL;
->  	struct icc_provider *provider;
->  	u64 active_rate, sleep_rate;
->  	u64 agg_avg[QCOM_SMD_RPM_STATE_NUM], agg_peak[QCOM_SMD_RPM_STATE_NUM];
-> @@ -353,6 +353,8 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  	provider = src->provider;
->  	qp = to_qcom_provider(provider);
->  
-> +	qn = dst_qn ? dst_qn : src_qn;
-> +
->  	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
->  
->  	ret = qcom_icc_rpm_set(src_qn, agg_avg);
-> @@ -372,11 +374,11 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  	/* Intentionally keep the rates in kHz as that's what RPM accepts */
->  	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
->  			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
-> -	do_div(active_rate, src_qn->buswidth);
-> +	do_div(active_rate, qn->buswidth);
->  
->  	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
->  			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
-> -	do_div(sleep_rate, src_qn->buswidth);
-> +	do_div(sleep_rate, qn->buswidth);
->  
->  	/*
->  	 * Downstream checks whether the requested rate is zero, but it makes little sense
-> 
