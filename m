@@ -2,236 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD71E7157E6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 10:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C8871588C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 10:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjE3IFj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 04:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
+        id S230315AbjE3IcC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 04:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjE3IFi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 04:05:38 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205E90
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 01:05:36 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f4d80bac38so4451022e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 01:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1685433935; x=1688025935;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EE2V4w60Dr4KmhFU+zZAwNVp1NcYAQGXzbYjl1GCUek=;
-        b=keNryjCZTZ+P0D96maQFGaRLcSCRBFFxPHnEhjqLpCh7+4kizGYxuGYQZnwqlfazRo
-         rRBh2+OrKdMSdqiBCBElVDaVyE4lw5GHC3/zCDICzkuAGTbkIf+saAuVY0bQIJXuQUgv
-         9mehGHJKI/7Igd4ZY8dPdKvObfGKnGtLCUItGKjrfJ0oml17bbTGhl3PxCbEQ4I0MYe+
-         2s/4BCmvmvwKtZ7y7BspsViyniky0xWxTXy278AOjU0ncyJLd7e3lKoWAKekHWGwrPOD
-         1/xjIlyPK8KBVBrs1+keBLKqdKb2gHXeambE9hZ/jRvIAStc6A2pzQlyBaqSJeDpIiwZ
-         s6ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685433935; x=1688025935;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EE2V4w60Dr4KmhFU+zZAwNVp1NcYAQGXzbYjl1GCUek=;
-        b=YK63K7WgzDDRL9i413oW93k/dglR9oF5TUToKzKqK/P8vT3EfBDPW34/HZ4zTcXOdw
-         YKfMZ6tNYG2zG/Yb8OftaGlZeCphvIkRUXuvG+CfT3WPxTQea492zpY7fnnPOympqQ25
-         xBKArlKs/caTxFyGm33LTuP5d6IQmcwxoNKRVeMc+kZ22rbIFoh9ZVhIoz+DH7+PqENE
-         mYHeBjIcL/KQ/ZwgEqXPNCEGhkKIGrGvaeDjmmMJaA6xG6wd8YzbgwrKH5lVWoR7F3cR
-         BJ701N4cwcKgcwlJG0D0yMlgQhd/ID1tHM1b1HWW/4K5ZjRiSFvQZh97XQKsuYF2rWqR
-         DB5g==
-X-Gm-Message-State: AC+VfDxQ6k6V8nRi3sA+ahD0Ra7y+2DLHgHPm80AOXVtlXDqzoU3QIGC
-        FaIkhhhRMhFGSHvtDE+OfAgNuA==
-X-Google-Smtp-Source: ACHHUZ6FZUGXMLScHcwke2B9uBZnDkB6vzPJlFOBVa3kFIacWRhIPLdZVZkw0IyBdZ03ROfGk7u0IA==
-X-Received: by 2002:a19:f502:0:b0:4f4:db63:239f with SMTP id j2-20020a19f502000000b004f4db63239fmr388689lfb.24.1685433934690;
-        Tue, 30 May 2023 01:05:34 -0700 (PDT)
-Received: from localhost.localdomain (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id n4-20020a05600c294400b003f3157988f8sm16296889wmd.26.2023.05.30.01.05.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 01:05:34 -0700 (PDT)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [RFC PATCH 1/1] fdt: Mark "/reserved-memory" nodes as nosave if !reusable
-Date:   Tue, 30 May 2023 10:04:25 +0200
-Message-Id: <20230530080425.18612-2-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230530080425.18612-1-alexghiti@rivosinc.com>
-References: <20230530080425.18612-1-alexghiti@rivosinc.com>
+        with ESMTP id S229886AbjE3IcB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 04:32:01 -0400
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3665B0;
+        Tue, 30 May 2023 01:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Type:MIME-Version:References:
+        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:Reply-To:
+        Content-ID:Content-Description;
+        bh=xxZiuTwjLOZE6OJVRI8BOAJnaeWqlQ7edowHad2fcVc=; b=R5wIjQrLvjYY7D/iqXCshIqAwj
+        h0AhxKvT+FoY/KsdQm7aaEQahuzBhYl1YyhJ3RVpk2qJeT/A72T1ZfbSnNLDJFw+eyeoXdrRGNCvz
+        dpVeD3bh5KRjebQi+hYomrZmiOp9b+5PDV+gViI4jMcePuXL44sXqmhQDAdnM56y7WRdAeEdnT1FW
+        YisBpnv35Csu8rtDBOyX+nPNa4pXBnr0ob3L4IP8JytQP0CFHZ3xzujxMT1ZmvLpHGbAxXrTOg2gv
+        7LqKHolRTTkhrwzKzNg9fgWNtH4l7KlThTY04bdtTeW/VWxQV8xij/OU2DqPBSpVm8bv6BKEQv6EH
+        ia0o9aeg==;
+Received: from [10.22.3.24] (helo=kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1q3uli-003bTB-WA; Tue, 30 May 2023 10:31:51 +0200
+Date:   Tue, 30 May 2023 10:31:44 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] opp: Fix use-after-free in lazy_opp_tables after probe
+ deferral
+Message-ID: <ZHW0YY4xoUmR_UPg@kernkonzept.com>
+References: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
+ <20230529053148.xuhuv6skg2xqworr@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230529053148.xuhuv6skg2xqworr@vireshk-i7>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The hibernation process will access those reserved memory regions if
-they are part of the linear mapping, but as described in
-devicetree/bindings/reserved-memory/reserved-memory.yaml,
-"/reserved-memory" nodes should not be used as normal memory, unless they
-are marked as reusable which means the kernel can access it at some point.
+On Mon, May 29, 2023 at 11:01:48AM +0530, Viresh Kumar wrote:
+> On 24-05-23, 19:56, Stephan Gerhold wrote:
+> > When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
+> > -EPROBE_DEFER, the opp_table is freed again, to wait until all the
+> > interconnect paths are available.
+> > 
+> > However, if the OPP table is using required-opps then it may already
+> > have been added to the global lazy_opp_tables list. The error path
+> > does not remove the opp_table from the list again.
+> > 
+> > This can cause crashes later when the provider of the required-opps
+> > is added, since we will iterate over OPP tables that have already been
+> > freed. E.g.:
+> > 
+> >   Unable to handle kernel NULL pointer dereference when read
+> >   CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
+> >   PC is at _of_add_opp_table_v2 (include/linux/of.h:949
+> >   drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
+> >   drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
+> > 
+> > Fix this by removing the opp_table from the list before freeing it.
+> 
+> I think you need this instead:
+> 
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 954c94865cf5..b5973fefdfd8 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1358,7 +1358,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+>         return opp_table;
+> 
+>  remove_opp_dev:
+> +       _of_clear_opp_table(opp_table);
+>         _remove_opp_dev(opp_dev, opp_table);
+> +       mutex_destroy(&opp_table->genpd_virt_dev_lock);
+> +       mutex_destroy(&opp_table->lock);
+>  err:
+>         kfree(opp_table);
+>         return ERR_PTR(ret);
+> 
 
-Otherwise those regions are only used by drivers which should do what's
-necessary when the hibernation process is started, or they can contain
-the firmware reserved memory regions which should not be accessed at all.
+Thanks, this seems to fix the crash as well. Are you going to handle it
+or should I send a v2 with this diff?
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- arch/riscv/kernel/setup.c |  2 +
- drivers/of/fdt.c          | 77 +++++++++++++++++++++++++++++++++++++++
- include/linux/of_fdt.h    |  1 +
- 3 files changed, 80 insertions(+)
+> > Cc: stable@vger.kernel.org
+> > Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
+> > Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> > ---
+> > This fixes the crash I ran into after adding an OPP table with
+> > both "required-opps" and interconnect paths (opp-peak-kBps).
+> > 
+> > By the way, the "lazy_opp_tables" does not seem to be protected by any
+> > locks(?)
+> 
+> It is always accessed with opp_table_lock held I believe.
+> 
 
-diff --git a/arch/riscv/kernel/setup.c b/arch/riscv/kernel/setup.c
-index 36b026057503..642f1035b5ce 100644
---- a/arch/riscv/kernel/setup.c
-+++ b/arch/riscv/kernel/setup.c
-@@ -299,6 +299,8 @@ void __init setup_arch(char **cmdline_p)
- 	if (IS_ENABLED(CONFIG_RISCV_ISA_ZICBOM) &&
- 	    riscv_isa_extension_available(NULL, ZICBOM))
- 		riscv_noncoherent_supported();
-+
-+	early_init_fdt_nosave_reserved_mem();
- }
- 
- static int __init topology_init(void)
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index bf502ba8da95..863de7e6b10c 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -26,6 +26,7 @@
- #include <linux/serial_core.h>
- #include <linux/sysfs.h>
- #include <linux/random.h>
-+#include <linux/suspend.h>
- 
- #include <asm/setup.h>  /* for COMMAND_LINE_SIZE */
- #include <asm/page.h>
-@@ -494,6 +495,43 @@ static int __init early_init_dt_reserve_memory(phys_addr_t base,
- 	return memblock_reserve(base, size);
- }
- 
-+/*
-+ * __reserved_mem_nosave_reg() - Make all memory described in 'reg' property as
-+ * nosave, unless it is "reusable".
-+ */
-+static void __init __reserved_mem_nosave_reg(unsigned long node,
-+					     const char *uname)
-+{
-+	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
-+	phys_addr_t base, size;
-+	int len;
-+	const __be32 *prop;
-+	bool reusable;
-+
-+	prop = of_get_flat_dt_prop(node, "reg", &len);
-+	if (!prop)
-+		return;
-+
-+	if (len && len % t_len != 0) {
-+		pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
-+		       uname);
-+		return;
-+	}
-+
-+	reusable = of_get_flat_dt_prop(node, "reusable", NULL) != NULL;
-+
-+	while (len >= t_len) {
-+		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
-+		size = dt_mem_next_cell(dt_root_size_cells, &prop);
-+
-+		if (size && !reusable)
-+			register_nosave_region(phys_to_pfn(base),
-+					       phys_to_pfn(base + size));
-+
-+		len -= t_len;
-+	}
-+}
-+
- /*
-  * __reserved_mem_reserve_reg() - reserve all memory described in 'reg' property
-  */
-@@ -596,6 +634,38 @@ static int __init fdt_scan_reserved_mem(void)
- 	return 0;
- }
- 
-+/*
-+ * fdt_nosave_reserved_mem() - scan a single FDT node to mark reserved memory
-+ * as nosave.
-+ */
-+static int __init fdt_nosave_reserved_mem(void)
-+{
-+	int node, child;
-+	const void *fdt = initial_boot_params;
-+
-+	node = fdt_path_offset(fdt, "/reserved-memory");
-+	if (node < 0)
-+		return -ENODEV;
-+
-+	if (__reserved_mem_check_root(node) != 0) {
-+		pr_err("Reserved memory: unsupported node format, ignoring\n");
-+		return -EINVAL;
-+	}
-+
-+	fdt_for_each_subnode(child, fdt, node) {
-+		const char *uname;
-+
-+		if (!of_fdt_device_is_available(fdt, child))
-+			continue;
-+
-+		uname = fdt_get_name(fdt, child, NULL);
-+
-+		__reserved_mem_nosave_reg(child, uname);
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * fdt_reserve_elfcorehdr() - reserves memory for elf core header
-  *
-@@ -649,6 +719,13 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 	fdt_init_reserved_mem();
- }
- 
-+void __init early_init_fdt_nosave_reserved_mem(void)
-+{
-+#ifdef CONFIG_HIBERNATION
-+	fdt_nosave_reserved_mem();
-+#endif
-+}
-+
- /**
-  * early_init_fdt_reserve_self() - reserve the memory used by the FDT blob
-  */
-diff --git a/include/linux/of_fdt.h b/include/linux/of_fdt.h
-index d69ad5bb1eb1..55eb5a0f7305 100644
---- a/include/linux/of_fdt.h
-+++ b/include/linux/of_fdt.h
-@@ -63,6 +63,7 @@ extern int early_init_dt_scan_memory(void);
- extern void early_init_dt_check_for_usable_mem_range(void);
- extern int early_init_dt_scan_chosen_stdout(void);
- extern void early_init_fdt_scan_reserved_mem(void);
-+extern void early_init_fdt_nosave_reserved_mem(void);
- extern void early_init_fdt_reserve_self(void);
- extern void early_init_dt_add_memory_arch(u64 base, u64 size);
- extern u64 dt_mem_next_cell(int s, const __be32 **cellp);
+During _allocate_opp_table() it's accessed without the opp_table_lock,
+because of
+
+	/* Drop the lock to reduce the size of critical section */
+	mutex_unlock(&opp_table_lock);
+
+	if (opp_table) {
+		/* ... */
+		mutex_lock(&opp_table_lock);
+	} else {
+		opp_table = _allocate_opp_table(dev, index);
+
+		mutex_lock(&opp_table_lock);
+		/* ... */
+	}
+
+This doesn't seem to cause any problems in my case though so it's
+unrelated to the crash I observed.
+
+Thanks,
+Stephan
 -- 
-2.39.2
-
+Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
