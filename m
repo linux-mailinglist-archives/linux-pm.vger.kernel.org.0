@@ -2,137 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF636716824
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 17:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78128716900
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 18:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjE3PzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 11:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S233276AbjE3QQR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 12:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbjE3PzA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 11:55:00 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBC4C7;
-        Tue, 30 May 2023 08:54:59 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75b2a2bf757so274003785a.2;
-        Tue, 30 May 2023 08:54:59 -0700 (PDT)
+        with ESMTP id S232036AbjE3QQR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 12:16:17 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B919B
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 09:15:50 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30a1fdde3d6so4650785f8f.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 09:15:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685462098; x=1688054098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9s5DlRI1Ww8WGRfLlLIBGkH5nMkMdXv1f8qiMvf3a2w=;
-        b=lEznzOIFWCa9WlNKlX46MRWcJJvy9TkfKRc1KqK23dKijDQzLkamUrD9Z8Jo3mRV0V
-         MDx2m/lxlRTFwdc0m6aRWOxqeIXGkVX86ewSkeGNTotOyYcpgW1kcLLI84ho8EVpHbVx
-         qlPY08S5BqCsAB88qdleNfdchdxDeviwfPr0H2rRPiofoqRxm4mLoEIu5XJJPvMn2WhY
-         ORmxLzsLLt4yxYvKPXmIYdFjz6Id4fvTyga6s7d9BYreoSWQRYhyRsREze1kaoDTKkyv
-         E1c7z9KRFt9mmtu6NVfPGPvvQGlpGIn3zij2gHrIzJ7PIOAmDrJySgD5CQuoiPvTT4WJ
-         i6bg==
+        d=linaro.org; s=google; t=1685463345; x=1688055345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lu5F1IugEspqMHiESvEcsCnoLLm2yf+WZVoj3bzugVA=;
+        b=sBQPDSjCuRu9YKi7k3CVzG/+spA7rUL/9CoX5x7rJEhMeQnJ7VlumvVoMqE0XcFOH3
+         ffMgQMp0NI/SF3+OY0Jyf5RBJ0sjlwMflffxsQxhUhHZj3+p+uyZl67dHQ24THmHxAE3
+         Bs8VM4EP9Ksnp/Ed6ioD17dLDI1nNqQJII41YYhNJnYHTh7wjvwlC1og7Cab/tbmgoGx
+         vSFy+Whg/YPlK3i0eTogldEKejXwazU63hwgy39bsJ8Iwgxt0eS3KD98hF3AI4riHp09
+         2pj5NIx46cfY948PHOItT3IRhUlaGF6nv3F1Iod6FeZod6dfqygPrSTv9mNqDCUJ8HPs
+         GG6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685462098; x=1688054098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9s5DlRI1Ww8WGRfLlLIBGkH5nMkMdXv1f8qiMvf3a2w=;
-        b=T5qb84k2MQqiL6HO/86m5KgTmPiwuqxMxNyl8822nWLwUArkf1+dVahyEjsZqclrHG
-         sncS2S9Pi6P8jCQsp2UciWhNMqNRAGjEFB4axa+lrgPlV8LirSlz43FV6dJgX5VsLrbb
-         lJDHAJlIEpsXNFuHY0+TvI5hQ7yj4QhiG0ZIyOmJE5wowKiN9XcZYxT4hKgUvO6+yakv
-         G8m5kVqCZrPGP4ovTfyGjmfijGmZ3i2kP7KR0xTfRKSWCSFiOUGipUKcHx8RpkP2c6XF
-         ymT/Rb4u+78O9loA0DSHLt4acoGEpsxtDk1V0eKKvalFDwg1WsVrIdHhnxNP9KHyR1q+
-         ywCw==
-X-Gm-Message-State: AC+VfDy0FlkErgwLF1N5sUKmPXRj5mISgB5fRRr5Xq2A8DIPB2WP6tfW
-        8qnNhCkuiosgZLAa/CZJOCYXS8uuWNOBNSsc/vo=
-X-Google-Smtp-Source: ACHHUZ5H2+h/6gsqWP6ovqBCWYLBnTOUhomZBQgQatSvOvmMPSqJ7RS+6sbm/47VFlSpJDCggsxisegmKNpKtCoO9l4=
-X-Received: by 2002:a05:6214:1c09:b0:626:24aa:87ef with SMTP id
- u9-20020a0562141c0900b0062624aa87efmr2599319qvc.62.1685462098230; Tue, 30 May
- 2023 08:54:58 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685463345; x=1688055345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lu5F1IugEspqMHiESvEcsCnoLLm2yf+WZVoj3bzugVA=;
+        b=gYgJBZeBATitbmSG4B7yYqZAT8c+Q98jgA87OCKzn8tNkfigsRnh1c76zyTK7TRnpR
+         ieFUU9XkUHDU/vD2xzrqBihR9VHP8Tc0vXdaq9IrmM0FmysJz4PF7tabHPernih1o+/N
+         +tZWCJKgb3C7+q5wkTJUVj2H/yxj3dRbL1nN/3O0PgcAOOH39ppXX1fRsW/OCmk9+/SQ
+         DDFV5rjh7yTI/H/DJe3PDdLJvYLXLzQo5+EjY6J8Kr2FrfOsx+HqwLAMgG2k+gSojIv5
+         wGnaqSP7CTUbEmSgFBDisRsf+Tf1pUThnb03wJLJGsgJtwCp0GbmilMkqne6MEQ+6EGl
+         gyXQ==
+X-Gm-Message-State: AC+VfDzoCZqMJF10ZtcgZmr9VZKXUFHxtvF7+x3/TC/rr5TV8Dbm1IHb
+        hnFuKJevyGA+1eXNsmBo639x9U5XYAa9n8LvPxk=
+X-Google-Smtp-Source: ACHHUZ42K36rLZ48dPrVtP3seqX1SMMRi1TXQGERYwCPsenYkesR6k6ZiyZSoDrPZOLk3hqWtc3iSQ==
+X-Received: by 2002:adf:dc84:0:b0:307:9702:dfc8 with SMTP id r4-20020adfdc84000000b003079702dfc8mr1993243wrj.48.1685463345307;
+        Tue, 30 May 2023 09:15:45 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf? ([2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf])
+        by smtp.googlemail.com with ESMTPSA id n13-20020adfe78d000000b003078681a1e8sm3767021wrm.54.2023.05.30.09.15.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 May 2023 09:15:44 -0700 (PDT)
+Message-ID: <3ba14507-18be-f1df-a29f-4844efa6081b@linaro.org>
+Date:   Tue, 30 May 2023 18:15:44 +0200
 MIME-Version: 1.0
-References: <20230517160326.10732-1-osmtendev@gmail.com> <35dea714-6a0f-4673-fd33-23644ea85d33@linaro.org>
-In-Reply-To: <35dea714-6a0f-4673-fd33-23644ea85d33@linaro.org>
-From:   Osama Muhammad <osmtendev@gmail.com>
-Date:   Tue, 30 May 2023 20:54:47 +0500
-Message-ID: <CAK6rUAOn_+WSqc8R94deSsZHHwJaJLL2LxFGv929bMj7foCcGw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
 Subject: Re: [PATCH] lvts_thermal.c: Fix error checking for debugfs_create_dir
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Language: en-US
+To:     Osama Muhammad <osmtendev@gmail.com>
 Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
         matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
         bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517160326.10732-1-osmtendev@gmail.com>
+ <35dea714-6a0f-4673-fd33-23644ea85d33@linaro.org>
+ <CAK6rUAOn_+WSqc8R94deSsZHHwJaJLL2LxFGv929bMj7foCcGw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAK6rUAOn_+WSqc8R94deSsZHHwJaJLL2LxFGv929bMj7foCcGw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On 30/05/2023 17:54, Osama Muhammad wrote:
+> Hi,
+> 
+> After Reading more about it I also learned about this and I was
+> planning to send a patch to remove the error checking for debugfs
+> API.Should I send the patch for it?
+> 
 
-After Reading more about it I also learned about this and I was
-planning to send a patch to remove the error checking for debugfs
-API.Should I send the patch for it?
+Yes, you can change also the prototype of the lvts_debugfs_init() 
+function by returning void
 
-Thanks
-osmten
+And then replace the call site:
 
+         return lvts_debugfs_init(dev, lvts_td);
 
-On Tue, 30 May 2023 at 20:47, Daniel Lezcano <daniel.lezcano@linaro.org> wr=
-ote:
->
-> On 17/05/2023 18:03, Osama Muhammad wrote:
-> > This patch fixes the error checking in lvts_thermal.c in
-> > debugfs_create_dir. The correct way to check if an error occurred
-> > is 'IS_ERR' inline function.
->
-> We do no longer check debugfs functions return values.
->
-> eg.
->
->   https://www.spinics.net/lists/linux-spi/msg37903.html
->   https://lore.kernel.org/lkml/2023052835-oxidant-doily-404f@gregkh/
->
->
-> > Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
-> > ---
-> >   drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/=
-mediatek/lvts_thermal.c
-> > index d0a3f95b7884..61386be78fa0 100644
-> > --- a/drivers/thermal/mediatek/lvts_thermal.c
-> > +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> > @@ -188,7 +188,7 @@ static int lvts_debugfs_init(struct device *dev, st=
-ruct lvts_domain *lvts_td)
-> >       int i;
-> >
-> >       lvts_td->dom_dentry =3D debugfs_create_dir(dev_name(dev), NULL);
-> > -     if (!lvts_td->dom_dentry)
-> > +     if (IS_ERR(lvts_td->dom_dentry))
-> >               return 0;
-> >
-> >       for (i =3D 0; i < lvts_td->num_lvts_ctrl; i++) {
-> > @@ -197,7 +197,7 @@ static int lvts_debugfs_init(struct device *dev, st=
-ruct lvts_domain *lvts_td)
-> >
-> >               sprintf(name, "controller%d", i);
-> >               dentry =3D debugfs_create_dir(name, lvts_td->dom_dentry);
-> > -             if (!dentry)
-> > +             if (IS_ERR(dentry))
-> >                       continue;
-> >
-> >               regset =3D devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL)=
-;
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+  by:
+
+	lvts_debugfs_init(dev, lvts_td);
+
+	return 0;
+
+> osmten
+> 
+> 
+> On Tue, 30 May 2023 at 20:47, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 17/05/2023 18:03, Osama Muhammad wrote:
+>>> This patch fixes the error checking in lvts_thermal.c in
+>>> debugfs_create_dir. The correct way to check if an error occurred
+>>> is 'IS_ERR' inline function.
+>>
+>> We do no longer check debugfs functions return values.
+>>
+>> eg.
+>>
+>>    https://www.spinics.net/lists/linux-spi/msg37903.html
+>>    https://lore.kernel.org/lkml/2023052835-oxidant-doily-404f@gregkh/
+>>
+>>
+>>> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+>>> ---
+>>>    drivers/thermal/mediatek/lvts_thermal.c | 4 ++--
+>>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+>>> index d0a3f95b7884..61386be78fa0 100644
+>>> --- a/drivers/thermal/mediatek/lvts_thermal.c
+>>> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+>>> @@ -188,7 +188,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>>>        int i;
+>>>
+>>>        lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
+>>> -     if (!lvts_td->dom_dentry)
+>>> +     if (IS_ERR(lvts_td->dom_dentry))
+>>>                return 0;
+>>>
+>>>        for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+>>> @@ -197,7 +197,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>>>
+>>>                sprintf(name, "controller%d", i);
+>>>                dentry = debugfs_create_dir(name, lvts_td->dom_dentry);
+>>> -             if (!dentry)
+>>> +             if (IS_ERR(dentry))
+>>>                        continue;
+>>>
+>>>                regset = devm_kzalloc(dev, sizeof(*regset), GFP_KERNEL);
+>>
+>> --
+>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>>
+>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+>> <http://twitter.com/#!/linaroorg> Twitter |
+>> <http://www.linaro.org/linaro-blog/> Blog
+>>
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
