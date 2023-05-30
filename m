@@ -2,228 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD77715644
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 09:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B362B7157E2
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 10:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjE3HMk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 03:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
+        id S229605AbjE3IEh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 04:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjE3HMj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 03:12:39 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01ED90;
-        Tue, 30 May 2023 00:12:37 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f60804faf4so26488965e9.3;
-        Tue, 30 May 2023 00:12:37 -0700 (PDT)
+        with ESMTP id S229636AbjE3IEg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 04:04:36 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C10B0
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 01:04:35 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f6dfc4e01fso43022365e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 01:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685430756; x=1688022756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EhiYOnsYcT5eT162fH50ozvyNeO9MUK81ojzqXqppDY=;
-        b=U83neCvrC1S8vKrCVu6eew6hp0L1KaCWdX+0LE6hOcZvfUkVF3y9EJvWzgJDTtj4Ed
-         n4M3B8h4PCfuB2DdbM9zErpdK8206Dx8woGg27lb5kyuDd/yMjCclmDFb0stcl5A9UWr
-         uxU4I0ObOSXW2BlMzr/L3HliTb6Cer24nlCyqV0T+CnIdOsQjgUMkP7IPCKsZtOZsven
-         MTAhXEPrXhWWSAcCb6ySl6h7wipC2u9xKdiHnTDlgEtdSX6H2QLJ+9zxe03Pg7faC1AA
-         1mb7c6alVJYHJJMUl5DqFW6S6/Wq8djM9+m2qXbk+Kd4QkPOn9ybxBr/AGWSu9KE7WP9
-         kDjg==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1685433874; x=1688025874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RjdcHakCzRp2uDPOf1QJOq47vmihq6bx2AuDxoEXfOE=;
+        b=FDmwQIBU+rDZiJvbW1YTb6Nvtv32CT3waSZraGR5m0N/Ms1Hp4lSo9Cjsgx0SEuSex
+         G7kgDEEDswd6pBtrVkoYvLUf48IXqIoDPi6HcJa672ZxeKgNQe3jKbnlg7nS5ZbJAErG
+         BcpjlO6WedDL2jJ7QGURxWfRh+kEtQi4jrqUn62BBZtLnjtNq86oWP7St++e9x2zSpgO
+         GSMJmPalS5q7PHUPPtpjq9yxF1mDEMvYcyMsFNK33+vhn6r/xi5uMhiLsm0BvNGhHWpa
+         fAnVIfUp5JI106rZE2MESeh4Iw+o2yHf4TdOtfMeGL7HqA0daZj7wo5o/gPK8jDUKuMK
+         +DNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685430756; x=1688022756;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhiYOnsYcT5eT162fH50ozvyNeO9MUK81ojzqXqppDY=;
-        b=U8yt7+suts1fU19oJKBM0w+c7c8AF/2PHVr4O7PFYniji4JYW+riany/dzXYKYMUp6
-         hHypJFfu4q+16aBMU/0WVuaZRk46r959CMET9md2ZR8CpsCcd1aW1mTIMx+/m7jXsTkC
-         wKBxaoyd9NOd8P71tIQo/mJvt4NVfMrv0CP/1ztc+6qFmRiWmnNHAZI+iojzGE1XuUnT
-         gapa9066uCM5u7VPNKThu8x0s0XAktiQxiUYYxEePgrX8KT/uBQGLPCjLLD4ve9wrkMP
-         VmKGF8cfWVMPU3bRxgC58/jHPyvJaH5NzPsTyAlox4T8w+kdJg8hRNb3fz4I6G0HzaAp
-         2fLQ==
-X-Gm-Message-State: AC+VfDybh8EA7M7BTGvI3YJFNlwhSvqhD9DjTQy+quFPIwVQMDcRdHbI
-        XVzCX012JymDUXUu18gDckQ=
-X-Google-Smtp-Source: ACHHUZ4TXP7FM+FJLQx0g9zOkQnADdQ6DuE8ZawqR+xzm9uue4UInlabGeS+fHbG8n0MP2sy32jqHg==
-X-Received: by 2002:a05:600c:21c7:b0:3f5:176:c398 with SMTP id x7-20020a05600c21c700b003f50176c398mr809351wmj.31.1685430756217;
-        Tue, 30 May 2023 00:12:36 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id 24-20020a05600c021800b003f080b2f9f4sm19926196wmi.27.2023.05.30.00.12.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 00:12:34 -0700 (PDT)
-Message-ID: <34d3298c-7d50-468b-b8e6-36440ccc0790@gmail.com>
-Date:   Tue, 30 May 2023 09:12:33 +0200
+        d=1e100.net; s=20221208; t=1685433874; x=1688025874;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RjdcHakCzRp2uDPOf1QJOq47vmihq6bx2AuDxoEXfOE=;
+        b=NCoWmESWjqx7/eXh13ect+gRILqqot3sOQnpiaz15lfhlRrzQHoHu9cyOHtemu6/kI
+         7Ccqpt9Xszcs19FyoHtDCfSthF/F9oBymIpT6llttY3AdNlMgVIDP7qMwLrsVlfS7t5W
+         LRy1ckV88ftxcOEq0EWH8vxqk1SiIgyvM3kfZaVL4b/KYIndvczZ2TpAaBGsqcoji2MW
+         zbUnDUwyH11zgVBDhkCk4sK7ZZTUxOjiavKyNCHXTSBuBAd4XZyd5pyOwRbc8b4r/ifa
+         HuCn98+A7Xemkt34xtvOATgh1lUOTN63egACnJQO+Adjo44JIBh3wXs+DtjxJx7nMAPw
+         RQTQ==
+X-Gm-Message-State: AC+VfDyNSxSVwEwYZVuGiJ8rvR76DmnTSdkj1d1PDtcTzxPeYHl8jrxc
+        NLqNN7cMmr3eMrFsm/naoNYcJg==
+X-Google-Smtp-Source: ACHHUZ4EXH26JifnRLV35t73W7c9aZ6OsRaB13FCf0u1UgCoCH3BzpbjGhbi2O2/JVao2KQatBmCug==
+X-Received: by 2002:a7b:ce96:0:b0:3f4:2174:b28a with SMTP id q22-20020a7bce96000000b003f42174b28amr1280948wmj.15.1685433873743;
+        Tue, 30 May 2023 01:04:33 -0700 (PDT)
+Received: from localhost.localdomain (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id f12-20020a7bcd0c000000b003f601a31ca2sm16762193wmj.33.2023.05.30.01.04.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 01:04:33 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [RFC PATCH 0/1] fdt: Mark "/reserved-memory" nodes as nosave if !reusable
+Date:   Tue, 30 May 2023 10:04:24 +0200
+Message-Id: <20230530080425.18612-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/5] thermal/drivers/mediatek/lvts_thermal: Add mt8192
- support
-Content-Language: en-US, ca-ES, es-ES
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230529164605.3552619-1-bero@baylibre.com>
- <20230529164605.3552619-4-bero@baylibre.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230529164605.3552619-4-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+In the RISC-V kernel, the firmware does not mark the region it uses as
+"no-map" so that the kernel can avoid having holes in the linear mapping
+and then use larger pages.
 
+But with the recent support of hibernation on RISC-V, we noticed that
+the hibernation process was trying to access those firmware regions
+which are protected from *all* accesses (using PMP). So the hibernation
+process fails.
 
-On 29/05/2023 18:46, Bernhard Rosenkränzer wrote:
-> From: Balsam CHIHI <bchihi@baylibre.com>
-> 
-> Add LVTS Driver support for MT8192.
-> 
-> Co-developed-by : Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
+We still don't have any "specification" regarding the naming of those
+firmware regions, so we can't currently target those specific regions
+(they are described as subnodes of "/reserved-memory").
 
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+I think we should actually mark all those "/reserved-memory" regions as
+"nosave" since they should not be used by the kernel (see the
+documentation pointed in the patch), hence the RFC since I may be
+missing something here (legacy, other usage...etc).
 
-> ---
->   drivers/thermal/mediatek/lvts_thermal.c | 95 +++++++++++++++++++++++++
->   1 file changed, 95 insertions(+)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 5ea8a9d569ea6..d5e5214784ece 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -80,6 +80,7 @@
->   #define LVTS_MSR_FILTERED_MODE		1
->   
->   #define LVTS_HW_SHUTDOWN_MT8195		105000
-> +#define LVTS_HW_SHUTDOWN_MT8192		105000
->   
->   static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
->   static int coeff_b = LVTS_COEFF_B;
-> @@ -1280,6 +1281,88 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
->   	}
->   };
->   
-> +static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
-> +	{
-> +		.cal_offset = { 0x04, 0x08 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU0 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.cal_offset = { 0x0c, 0x10 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU2 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU3 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU0 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU1 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU2 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU3 }
-> +		},
-> +		.num_lvts_sensor = 4,
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	}
-> +};
-> +
-> +static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] = {
-> +		{
-> +		.cal_offset = { 0x24, 0x28 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_VPU0 },
-> +			{ .dt_id = MT8192_AP_VPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x2c, 0x30 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_GPU0 },
-> +			{ .dt_id = MT8192_AP_GPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x34, 0x38 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_INFRA },
-> +			{ .dt_id = MT8192_AP_CAM },
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x3c, 0x40, 0x44 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_MD0 },
-> +			{ .dt_id = MT8192_AP_MD1 },
-> +			{ .dt_id = MT8192_AP_MD2 }
-> +		},
-> +		.num_lvts_sensor = 3,
-> +		.offset = 0x300,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	}
-> +};
-> +
->   static const struct lvts_data mt8195_lvts_mcu_data = {
->   	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
-> @@ -1290,9 +1373,21 @@ static const struct lvts_data mt8195_lvts_ap_data = {
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
->   };
->   
-> +static const struct lvts_data mt8192_lvts_mcu_data = {
-> +	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
-> +};
-> +
-> +static const struct lvts_data mt8192_lvts_ap_data = {
-> +	.lvts_ctrl	= mt8192_lvts_ap_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_ap_data_ctrl),
-> +};
-> +
->   static const struct of_device_id lvts_of_match[] = {
->   	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
->   	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
-> +	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data },
-> +	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data },
->   	{},
->   };
->   MODULE_DEVICE_TABLE(of, lvts_of_match);
+Please let me know what you think!
+
+Alexandre Ghiti (1):
+  fdt: Mark "/reserved-memory" nodes as nosave if !reusable
+
+ arch/riscv/kernel/setup.c |  2 +
+ drivers/of/fdt.c          | 77 +++++++++++++++++++++++++++++++++++++++
+ include/linux/of_fdt.h    |  1 +
+ 3 files changed, 80 insertions(+)
+
+-- 
+2.39.2
+
