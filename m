@@ -2,47 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C17715AC7
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 11:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BBC715ACF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 11:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbjE3JyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 05:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34708 "EHLO
+        id S231285AbjE3J4S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 05:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjE3JyK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 05:54:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 81D37FF;
-        Tue, 30 May 2023 02:53:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DFC6AB6;
-        Tue, 30 May 2023 02:54:42 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 05EF13F67D;
-        Tue, 30 May 2023 02:53:54 -0700 (PDT)
-Message-ID: <93afb0fd-6226-4b0d-380a-182ecf028b34@arm.com>
-Date:   Tue, 30 May 2023 11:53:53 +0200
+        with ESMTP id S229922AbjE3J4Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 05:56:16 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7599C125
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 02:55:50 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso4577568e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 02:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685440548; x=1688032548;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fV0A9lh1lqDIlbdillmGoiC07mhiQejFpkRc8wrmkBo=;
+        b=X1jGllTD0rXkJr8JvHV5/Wa7WZbZl8pQ2KKM/ClxFhWq5Wdi8vv/pI8WxMwIZBVaCl
+         knL9wVpmeGls3FR9tjZizHWswdcQ6vyMjTLjhjZMUHGEfi8tvznbiPOBFUjEPqVQhMlV
+         Aqo1Sd3lAlwSFz/Fghan0mAZlKc9bfP5xpbDO9ZJaRVtvo+EavvNmzQf7797HyHA7C+q
+         wS2WQmYogIbJws6dI26ZXx9V6CA0lN3mbNQBw5fzmunUGB7H3LqIkl+88zyqhVL+N9EY
+         0fAhDj0zRMm1GBXmlWc/TlxLSDq/MsRkrEmDcHmgdtL0dHbLv10t/OXtalqd3cAS9uMR
+         CKwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685440548; x=1688032548;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fV0A9lh1lqDIlbdillmGoiC07mhiQejFpkRc8wrmkBo=;
+        b=KvTkRS0a8gZsuIyw87nqe/IQ2myaf3MF0xLIy59wyfkRPrrCDUHlkIv2E/R0KsEXIh
+         SgLM6Ftl0N4zvjDQuB4qf+V66OEqNnQKTwlStBtot15A7Pwlq4ZuEMxT2k6nSBhf631n
+         /UK8WtQOkHvJSi9GvA6e6miNjvDKvnhYeVXvCui3mrTTxE10BrGn7wKAzvT4j1dwFL0a
+         kgShXxKDXLSbaUSU2PFgU/ZyV7wlhO+gYzQOiIwZ1MrooNw3lqSZg5M9sfsZNdZXAjs/
+         gu6vpyeawVhbFap3UAxTX9VgvDyXg/z0whzCl7nnQwV12eAGhvDa3I7h9Zs76ioMZNFx
+         KQcw==
+X-Gm-Message-State: AC+VfDwkqCiZwTXzLuEMuWjy8EDlnaGhjMu6/iNnuTwNQwF/5yQypvp/
+        Q/VOVgVGF+K51Lmk6z8aca87LtvGbpawJ+l/2pI=
+X-Google-Smtp-Source: ACHHUZ740qedWBuyEGK8mzdvZtJt6JQ5S/1PcHOCvgFR5t2BGLsVlByelp1mqEzCOksVeqG2W2EfFQ==
+X-Received: by 2002:a05:6512:21aa:b0:4f3:8223:eb81 with SMTP id c10-20020a05651221aa00b004f38223eb81mr487631lft.6.1685440548632;
+        Tue, 30 May 2023 02:55:48 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id b3-20020ac25e83000000b004f377f317d4sm282857lfq.285.2023.05.30.02.55.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 02:55:48 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PM: domains: Move the verification of in-params from genpd_add_device()
+Date:   Tue, 30 May 2023 11:55:36 +0200
+Message-Id: <20230530095536.61907-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 12/17] PM: EM: Add argument to get_cost() for runtime
- modification
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-13-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230512095743.3393563-13-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,19 +70,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/2023 11:57, Lukasz Luba wrote:
-> The Energy Model (EM) supports runtime modifications. Let also the
-> artificial EM use this new feature and allow to update the 'cost' values
-> at runtime. When the artificial EM is used there is a need to provide
-> two callbacks: get_cost() and update_power(), not only the last one.
-> 
-> Update also CPPC driver code, since the new argument is needed there
-> to compile properly and register EM.
+The commit f38d1a6d0025 ("PM: domains: Allocate governor data dynamically
+based on a genpd governor") started to use the in-parameters in
+genpd_add_device(), without first doing a verification of them.
 
-Is there a real use case behind this? It can't be mobile which IMHO
-drivers the rest of the 'Runtime modifiable EM' feature.
+This isn't really a big problem, as most callers do a verification already.
+Therefore, let's drop the verification from genpd_add_device() and make
+sure all the callers take care of it instead.
 
-Do we know of any machine using the artificial EM. And do they care
-about EM matching workload or static power?
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Fixes: f38d1a6d0025 ("PM: domains: Allocate governor data dynamically based on a genpd governor")
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/base/power/domain.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-[...]
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index 51b9d4eaab5e..5cb2023581d4 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -1632,9 +1632,6 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
+ 
+ 	dev_dbg(dev, "%s()\n", __func__);
+ 
+-	if (IS_ERR_OR_NULL(genpd) || IS_ERR_OR_NULL(dev))
+-		return -EINVAL;
+-
+ 	gpd_data = genpd_alloc_dev_data(dev, gd);
+ 	if (IS_ERR(gpd_data))
+ 		return PTR_ERR(gpd_data);
+@@ -1676,6 +1673,9 @@ int pm_genpd_add_device(struct generic_pm_domain *genpd, struct device *dev)
+ {
+ 	int ret;
+ 
++	if (!genpd || !dev)
++		return -EINVAL;
++
+ 	mutex_lock(&gpd_list_lock);
+ 	ret = genpd_add_device(genpd, dev, dev);
+ 	mutex_unlock(&gpd_list_lock);
+@@ -2523,6 +2523,9 @@ int of_genpd_add_device(struct of_phandle_args *genpdspec, struct device *dev)
+ 	struct generic_pm_domain *genpd;
+ 	int ret;
+ 
++	if (!dev)
++		return -EINVAL;
++
+ 	mutex_lock(&gpd_list_lock);
+ 
+ 	genpd = genpd_get_from_provider(genpdspec);
+-- 
+2.34.1
+
