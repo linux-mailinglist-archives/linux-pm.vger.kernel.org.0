@@ -2,103 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B1071677E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 17:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B901871681A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 17:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbjE3PsF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 11:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S231891AbjE3PyA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 11:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232564AbjE3Pry (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 11:47:54 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E16C10D
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 08:47:39 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30ae5f2ac94so3011622f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 08:47:39 -0700 (PDT)
+        with ESMTP id S230469AbjE3Px6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 11:53:58 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC6FFE
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 08:53:42 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-25695bb6461so1232026a91.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 08:53:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685461658; x=1688053658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LzcHJ5N47jbcQgg3gy8V4hezxG1EIwZMZwvr2QGN8DU=;
-        b=CuqkGjN4WOnSTTNgcn2tWVuOskO6K/bFIbN+OJmXMKWcyoKXqPVgOlWPiiaK5RTokw
-         0ra5zf17v8KgRkZhpatpeTILa/IIQcaGz5V1e4Fwbz0xskamzNq/VsiRvtvG52qV68o5
-         sXSqGJMpAp2SgTJ5E9iRckLvkVO7A2AuvfFQmw2ssxTdkcFFNoQs22a9smnMfFB8glyD
-         Cg+68n7t0TdUTKkuCXfCEbLJGtR3YEOu/RcKFeQ7KruK2mHGprGbl8yhsF5xUsRMEACt
-         1aWQtZ4RXVLnA5OTDV8TE6IoH7ENQl8/aA2LjPkLAVMa3fmRdR4eNJ7+iREVJVyHlLaz
-         7ONw==
+        d=gmail.com; s=20221208; t=1685462022; x=1688054022;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WNArju2Q8+Sr5dwcNQgGMkuM+vdAY/tBFjavnfU7aAs=;
+        b=m6P4SpRmIhLWilK2bwoWEMQsEWk/K6yhndm14R57q2fmXCIxmQD0hmLtubyT0ltNsD
+         5mzb/C0TgKgAvGKJRMLkGevN9ywiUjPUBVA17GMkjuXksQd7uKuMPAsayxRi957MlXgz
+         VF+5Lk9yteg1zp99/PHovVO1luQYBqZR1begl5GE6xnlUaOH7P8fp/y6TJyqCQrhfJOz
+         GmSLlBKjWMEbPAFAhBZaduYCAy/a7mb7dItIGo7O38cxcSSHJ3fi4GVHm5aPyFiNx0y7
+         0Ylcwe2+d6CvCscSCSmWp1hLDgSsGszHIHhs0OZ+Ti2EwuimZiT8yf6j1niWNwR5h9Dm
+         4p7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685461658; x=1688053658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LzcHJ5N47jbcQgg3gy8V4hezxG1EIwZMZwvr2QGN8DU=;
-        b=EmBkEF0RrzopBakeTE54BNJthn777t0JqHCAHO1SWr4LOjPF4XuXj05xtEa4DuXLby
-         GceR53pM6e6JAKDkPr2kEMEWVLTDPeSJONralSnEwVBe8f3eQ7+S2NXtjpUC/dQPR+VB
-         1vZ7gK0Kmbo2j9b0sqrh5Y2C1UTx/AGdsq/5Ai7HceG1PaJ6K2keeBdqPc+bQWMErHzZ
-         O6ckruDBQbz2Du95S22aw+NAp6kYv1x+Qa42RkI1dt3wgkZicqk9I13LLpnOcaB0pOJ/
-         7MDogcLJT3UHJL4qoirn7YDhQEIkkh9jvZnNlPgdKDi1Tpj1lpvupBEZpabr8cKniDxw
-         pkFw==
-X-Gm-Message-State: AC+VfDwfSUeQUJqHec35NrWCYXy8xpPj4kT79rxHBmjb5TOXbCPo6R/X
-        V+APW3xTjHMDibAoG3LtF0ec7g==
-X-Google-Smtp-Source: ACHHUZ5XXan9zWhxjB7dwcSvxARIUlNNZb50kCE6Bse1z98A8kiiRGbsieUOavGAIglFzOkCjBIU1g==
-X-Received: by 2002:a5d:534f:0:b0:309:4ad6:b3ec with SMTP id t15-20020a5d534f000000b003094ad6b3ecmr1718299wrv.0.1685461657956;
-        Tue, 30 May 2023 08:47:37 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf? ([2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf])
-        by smtp.googlemail.com with ESMTPSA id k5-20020adff5c5000000b0030af1d87342sm3777230wrp.6.2023.05.30.08.47.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 08:47:37 -0700 (PDT)
-Message-ID: <d29f6e23-9659-5897-fe78-368a937124a1@linaro.org>
-Date:   Tue, 30 May 2023 17:47:36 +0200
+        d=1e100.net; s=20221208; t=1685462022; x=1688054022;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WNArju2Q8+Sr5dwcNQgGMkuM+vdAY/tBFjavnfU7aAs=;
+        b=No1JuwgkF92M+OKFJEbVbeh0H2CbDg7m4CRA26RWMqUSQ4yLaMEVfEFaUvRWUP5xAS
+         VKiNbZpEVU8XXhyBiSJ6fo6cTCXpjEV4bvpEnKti4vC250tA0EHfG4yYg2E9KiAN/ygE
+         cJPOlAbQMUpeX+Ss2ZK6VNHQQqmwmgDEScVmixFAhKXf42f+cfItdb/iD5XVufIT38Ft
+         BDOPItkhJ/3kfyLnNoM4goM783ZnASJAPPhXFapBl8x80cg/QDLzMJt/ToNQ5WAVL/pd
+         X0dNAfk1PLkbtTLzVOq4RTB32PvJyRARmraaEfQB2AteU4YyQx5mfnnyRRt4SDn4hVDt
+         RpuQ==
+X-Gm-Message-State: AC+VfDzVf4kY99hxNX15YWhggxRxbakAgyG4czFp69+n9S2NrnboTdi8
+        ovq3FF1uyZIkzKp6HnxUcoTY+MQcMKZpsPVDt04=
+X-Google-Smtp-Source: ACHHUZ7sn3ztVKnJjhBggbCbONyO+AsW8XNE2yHvSV08ahzB8uFM1wykgNjVYghRFNCNNXUNIoLTKjLnsrfc/pmUUYs=
+X-Received: by 2002:a17:90a:bf8c:b0:253:25c3:7a95 with SMTP id
+ d12-20020a17090abf8c00b0025325c37a95mr11888507pjs.14.1685462021937; Tue, 30
+ May 2023 08:53:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH RESEND 0/2] Lost tsens compatibles
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230516-topic-lost_tsens_bindings-v1-0-99715746ddb1@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230516-topic-lost_tsens_bindings-v1-0-99715746ddb1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:ba3:b0:65:5d1b:9a16 with HTTP; Tue, 30 May 2023
+ 08:53:41 -0700 (PDT)
+Reply-To: jkirinec101@gmail.com
+From:   marine <jessicakirinec1@gmail.com>
+Date:   Tue, 30 May 2023 16:53:41 +0100
+Message-ID: <CACrLz9RUfqd1XDcU1qQ-MXYbKcZCtOrXa35uzso1LTdRbsO_FQ@mail.gmail.com>
+Subject: Hallo
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:102f listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4998]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [jkirinec101[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jessicakirinec1[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jessicakirinec1[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/05/2023 13:53, Konrad Dybcio wrote:
-> Resending what's been lost in the following series:
-> 
-> https://lore.kernel.org/linux-arm-msm/f7f38099-f183-d7b6-f542-1bdac6652a77@linaro.org/
-> https://lore.kernel.org/linux-arm-msm/20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org/
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Applied, thanks
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Hallo, es tut mir so leid, Ihre Privatsph=C3=A4re zu verletzen. Es hei=C3=
+=9Ft:
+=E2=80=9EEin Bild sagt mehr als tausend Worte, aber als ich Ihres sah, war =
+es
+mehr, als Worte erkl=C3=A4ren k=C3=B6nnten.=E2=80=9C Das charmante Profil i=
+st
+unwiderstehlich, obwohl es eine kleine pers=C3=B6nliche Nachricht ist, aber
+Ihr Aussehen verr=C3=A4t viel =C3=BCber eine nette Person ... Also musste i=
+ch
+der charmanten Person mit diesem tollen Profil eine Nachricht
+hinterlassen. Ich glaube, es ist die Neugier, die mich in einer
+solchen Zeit zu Ihnen f=C3=BChrt. Ich muss noch einmal sagen, dass es mir
+leid tut, wenn das Schreiben an Sie Ihrer moralischen Ethik
+widerspricht. Ich m=C3=B6chte dich einfach besser kennenlernen und ein
+Freund sein oder mehr. Ich hoffe, irgendwann von Ihnen zu h=C3=B6ren.
