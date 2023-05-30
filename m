@@ -2,131 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0087A715B4F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 12:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E6B715B59
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 12:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjE3KS1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 06:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S231439AbjE3KUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 06:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjE3KS0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 06:18:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0744A93;
-        Tue, 30 May 2023 03:18:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08365AB6;
-        Tue, 30 May 2023 03:19:10 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 582F43F67D;
-        Tue, 30 May 2023 03:18:22 -0700 (PDT)
-Message-ID: <c4052a3d-ab24-6c20-ed07-d752098e6286@arm.com>
-Date:   Tue, 30 May 2023 12:18:21 +0200
+        with ESMTP id S231324AbjE3KUH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 06:20:07 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68819CD
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 03:20:05 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3a9ad31dbso4875274e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 03:20:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685442003; x=1688034003;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3mCrqWltv1neqVqCpZo0gfCGWXLEFNOguKdIUsP/Fuo=;
+        b=eeVzdLBgnCbIQSDvehs4g2Y1udKY5OVVr8yEIkmYaeA1N5ub/4ihUzU6fmNAvUKK7s
+         XHKRENGifZXrMQM7Mbf+9eZJOoEjJq3shnqpjS8kPhIv6qEpIX9KMPxqXBIQFQ7Jbh3i
+         dF/NXF2cNNltXaKVDP7iyi7Cejo5WGtwdYYtRBuT895s2OznKWYVHYZeJuBkQvTngsVo
+         h1z6fF8fpM4aLcgJu8Er/jR4qwdduW/81vJQxoaPo4smDVM2/iiuR3x0tk1lRPTzAL1S
+         EenFsxKGxZmxrdIERAbaD3Gl4biKpuQEtviH30vyYrylDYOPV52nJvtglRe7mcDD/yyf
+         /A8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685442003; x=1688034003;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3mCrqWltv1neqVqCpZo0gfCGWXLEFNOguKdIUsP/Fuo=;
+        b=Fsh5Ces8YoHI/qljX4UmckakRAjRupAQ2U6eBZ/DbAepvixQfcsrr4WRz0m105CJBa
+         D6/6U1l6ue6lAfSmI1frE+5dnYaRLgeew4vECCTx61L7NX86dguj+A5sl5wWXeQ7MTvS
+         /O9KUGI+v7T0pfHxEsbwHXY6a/nMNtGMQ4OCjo3VycFneKKcuASbtpXD98lk5mSUaDEv
+         jfsVQkfSg49Eq8eq03Sjja3CUhvVj3IiEZ2wmdPQIm8552G9HmAFPNv7MDmtmaP+AQki
+         568JZYi1ATh1Q+nWNzAD6AcCG3FSqbhepc7E4Naona1igkWzDo5lm1vvbf+iKMFugkEg
+         D2gg==
+X-Gm-Message-State: AC+VfDyoFo9z0+PXcVdDsMl5HuRK4GJAmOtRknG5JwIF1PRfb/JuqZzz
+        ESoUT7uUk1It/tcqbPJdMgakGQ==
+X-Google-Smtp-Source: ACHHUZ6LzQiKwm5NNt92+vL6PmntTJMXHFhIRImesVTAXXaH7iQjNZfL0vVIup8Tp0aQwOvgtVtgCw==
+X-Received: by 2002:ac2:489a:0:b0:4eb:2d47:602 with SMTP id x26-20020ac2489a000000b004eb2d470602mr492112lfc.59.1685442003660;
+        Tue, 30 May 2023 03:20:03 -0700 (PDT)
+Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac24159000000b004cc8196a308sm290902lfi.98.2023.05.30.03.20.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 03:20:02 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 00/20] Restructure RPM SMD ICC
+Date:   Tue, 30 May 2023 12:19:59 +0200
+Message-Id: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-9-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230512095743.3393563-9-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAM/NdWQC/x2N0QqDMAwAf0XyvIDWOXS/MkTaNNOAq9KoDMR/X
+ 9jjHRx3gnIWVngWJ2Q+RGVJBtWtAJp8GhklGoMrXV027oHbsgqhfuIgRBhaV9XdvfUNR7AmeGU
+ M2SearEr7PJtcM7/l+5+8+uv6AYV8eQR0AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1685442001; l=4253;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=Km9sqvTozptxIsrlMv2khmSR+d/xI6LidkhWc28eWlY=;
+ b=edruqj25akE940gqlnj49Rt1V4+E+Q47AlcTzS0rDBPMGy9OF2dB70oLMRr+Vcmxh6OSYy2Tq
+ DHYY4zhupelB+URtlh6a5cxUEV7zkaCNSzJKMQeAB4IFLGq5zj6D/H4
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/2023 11:57, Lukasz Luba wrote:
-> This patch introduces the new feature: modifiable EM perf_state table.
-> The new runtime table would be populated with a new power data to better
-> reflect the actual power. The power can vary over time e.g. due to the
-> SoC temperature change. Higher temperature can increase power values.
-> For longer running scenarios, such as game or camera, when also other
-> devices are used (e.g. GPU, ISP) the CPU power can change. The new
-> EM framework is able to addresses this issue and change the data
-> at runtime safely. The runtime modifiable EM data is used by the Energy
-> Aware Scheduler (EAS) for the task placement.
+This series reshuffles things around, moving the management of SMD RPM
+bus clocks to the interconnect framework where they belong. This helps
+us solve a couple of issues:
 
-It's important to say that EAS is the _only_user of the `runtime
-modifiable EM`. All the other users (thermal, etc.) are still using the
-default (basic) EM. IMHO, this fact drove the design here.
+1. We can work towards unused clk cleanup of RPMCC without worrying
+   about it killing some NoC bus, resulting in the SoC dying.
+   Deasserting actually unused RPM clocks (among other things) will
+   let us achieve "true SoC-wide power collapse states", also known as
+   VDD_LOW and VDD_MIN.
 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/linux/energy_model.h | 13 +++++++++++++
->  kernel/power/energy_model.c  | 24 ++++++++++++++++++++++++
->  2 files changed, 37 insertions(+)
-> 
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index cc2bf607191e..a616006a8130 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -36,9 +36,21 @@ struct em_perf_state {
->   */
->  #define EM_PERF_STATE_INEFFICIENT BIT(0)
->  
-> +/**
-> + * struct em_perf_table - Performance states table, which can be
-> + *		runtime modifiable and protected with RCU
+2. We no longer have to keep tons of quirky bus clock ifs in the icc
+   driver. You either have a RPM clock and call "rpm set rate" or you
+   have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
 
-which is `runtime modifiable` ? So `runtime modifiable performance state
-table`? RCU is obvious since we have `struct rcu_head rcu`.
+3. There's less overhead - instead of going through layers and layers of
+   the CCF, ratesetting comes down to calling max() and sending a single
+   RPM message. ICC is very very dynamic so that's a big plus.
 
-> + * @state:	List of performance states, in ascending order
-> + * @rcu:	RCU used for safe access and destruction
-> + */
-> +struct em_perf_table {
-> +	struct em_perf_state *state;
-> +	struct rcu_head rcu;
-> +};
-> +
->  /**
->   * struct em_perf_domain - Performance domain
->   * @table:		List of performance states, in ascending order
-> + * @runtime_table:	Pointer to the runtime modified em_perf_table
+The clocks still need to be vaguely described in the clk-smd-rpm driver,
+as it gives them an initial kickoff, before actually telling RPM to
+enable DVFS scaling.  After RPM receives that command, all clocks that
+have not been assigned a rate are considered unused and are shut down
+in hardware, leading to the same issue as described in point 1.
 
-s/modified/modifiable
+We can consider marking them __initconst in the future, but this series
+is very fat even without that..
 
-[...]
+Apart from that, it squashes a couple of bugs that really need fixing..
 
-> @@ -237,12 +238,23 @@ static int em_create_pd(struct device *dev, int nr_states,
->  			return -ENOMEM;
->  	}
->  
-> +	runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
-> +	if (!runtime_table) {
-> +		kfree(pd);
-> +		return -ENOMEM;
-> +	}
-> +
->  	ret = em_create_perf_table(dev, pd, nr_states, cb, flags);
->  	if (ret) {
->  		kfree(pd);
-> +		kfree(runtime_table);
->  		return ret;
->  	}
->  
-> +	/* Re-use temporally (till 1st modification) the memory */
+--- MERGING STRATEGY ---
+If Stephen and Georgi agree, it would be best to take all of this through
+the qcom tree, as it touches on heavily intertwined components and
+introduces compile-time dependencies between icc and clk drivers.
 
-So this means that the runtime (modifiable) table
-(pd->runtime_table>state) is mapped to the default (basic) table
-(pd->default_table->state) until the first call to
-em_dev_update_perf_domain() (here mentioned as the 1st modification)?
+Tested on SM6375 (OOT), MSM8998 (OOT), MSM8996.
 
-IMHO, not easy to understand since neither the cover letter, nor
-documentation patch 15/17 describes this in a consistent story.
+MSM8974 conversion to common code and modernization will be handled separately.
 
-[...]
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (20):
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      clk: qcom: smd-rpm: Export clock scaling availability
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: icc-rpm: Allow negative QoS offset
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: Divide clk rate by src node bus width
+
+ drivers/clk/qcom/clk-smd-rpm.c             | 300 ++++++++++++-----------------
+ drivers/interconnect/qcom/Makefile         |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c |  66 +++++++
+ drivers/interconnect/qcom/icc-rpm.c        | 183 ++++++++++--------
+ drivers/interconnect/qcom/icc-rpm.h        |  55 ++++--
+ drivers/interconnect/qcom/msm8916.c        |   4 +-
+ drivers/interconnect/qcom/msm8939.c        |   5 +-
+ drivers/interconnect/qcom/msm8974.c        |   2 +-
+ drivers/interconnect/qcom/msm8996.c        |   9 +-
+ drivers/interconnect/qcom/qcm2290.c        |   7 +-
+ drivers/interconnect/qcom/qcs404.c         |   4 +-
+ drivers/interconnect/qcom/sdm660.c         |   7 +-
+ drivers/interconnect/qcom/smd-rpm.c        |  39 +++-
+ drivers/interconnect/qcom/smd-rpm.h        |  15 --
+ include/linux/soc/qcom/smd-rpm.h           |  22 ++-
+ 15 files changed, 424 insertions(+), 296 deletions(-)
+---
+base-commit: 8c33787278ca8db73ad7d23f932c8c39b9f6e543
+change-id: 20230526-topic-smd_icc-b8213948a5ed
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
