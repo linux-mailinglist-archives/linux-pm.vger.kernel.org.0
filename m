@@ -2,127 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5C8715F4C
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 14:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1859716140
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 15:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjE3M2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 08:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
+        id S232513AbjE3NON (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 09:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231279AbjE3M2O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 08:28:14 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6225AC7
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 05:27:40 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6ef9a928fso27332245e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 05:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685449658; x=1688041658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tlT+2nXHH7figLXYqN6h97DwdAFo3rxIuidTGSYR/P0=;
-        b=sI3MnPYHWBdlGJxiLPwGf/TfKcYpod81NSp/jqBI3YWZtng5r/1mPKNwzutsfR10Kg
-         DwHcdqhPcVpeSrLYmXXOWsb3iH3S4Qm80vFDhZLXQVOOayYS9XKAhPo9S76wn9sB1ArQ
-         PwZWzRRrwr8mNnGETh/SBJgw/jjQk+CIKC9kVLnSme8yPNMasFySwRn1D+uo27CWNNHN
-         xzPf4rayDYp4Saq1c+Tzd/ZEw/4Z0umLRNsTZRBKj30NRJ0Ebl2G3gOk6LZKdXEkZMWM
-         eogv660XswWl/hQ2wcPZybEtPHy6xKc8I3mf7sQtGd39dAlRit3RXAbyft/o56g36/lb
-         mlIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685449658; x=1688041658;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tlT+2nXHH7figLXYqN6h97DwdAFo3rxIuidTGSYR/P0=;
-        b=Uy6t2PPQt910zPw2TIK/Z2+/G5k2F4n3/ST7cN/tcWd7dae4KcpOx4vJxe+YgGGNlK
-         KYSMK6SQHdhvxR9cFouVnNcm6bRfOb2Bun3fBI7X5Ogq7cxvq7t1RxIng5xvshhfK8Yc
-         4pFQs6h4MHeWlpTAhB+iGeIgT1zgjN6J7sLyfcGA++/tNx/ssXL/nUA6MFGpBI9FA5Bl
-         UipN3Eb66DU+8BWwGZnCpd3ukqRXC6eN4ge3ZuL1l2MqJPwqLpEJRcjIwGhFN5MbWWlp
-         BYcvK4Zdtqm8P5Dv9Rh2yMVYLPYPnHF3VC4Dj1c7GD8KMEr1d7HrDvh1rP6qg4eCPKbE
-         7pAg==
-X-Gm-Message-State: AC+VfDzQpX37H0Y4TDuyDj0JeWEZWX74hg8+9K8eMHTC+VQe/QQBRhGz
-        z0u3xv4k6HNsDj1KBA+tkCvvaYtXMbBo1y1pTUw=
-X-Google-Smtp-Source: ACHHUZ7tZSoWKLv88vvxIwF7juwlLyZPiMNgkF2OQNOSMP/LIQEoMZgC2CZdWs3Pf8uYLb5InErZcg==
-X-Received: by 2002:a5d:4eca:0:b0:30a:a478:f559 with SMTP id s10-20020a5d4eca000000b0030aa478f559mr1456676wrv.2.1685449658181;
-        Tue, 30 May 2023 05:27:38 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf? ([2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf])
-        by smtp.googlemail.com with ESMTPSA id c17-20020adffb11000000b0030633152664sm3101590wrr.87.2023.05.30.05.27.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 05:27:37 -0700 (PDT)
-Message-ID: <87b0f5cd-67a8-fbd5-5ca7-a286b543d796@linaro.org>
-Date:   Tue, 30 May 2023 14:27:36 +0200
+        with ESMTP id S232257AbjE3NOM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 09:14:12 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C993A92;
+        Tue, 30 May 2023 06:14:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VdxJ0aK1sRg1mX4iKnCcOwBkHWdh+F+DEsoHmcorT+K2z0mzlFX1hgOSRzszkZz9FlBGtNkQ2aO7qUWhXsXkkaxcthPF2nhpOJWRgR9rvsJZpAur0X2BNOWW7HXAoUoBNWGXN4k6HHNfIInzEBzMUud5FiSBovbXPdIIZt9ZV4mdCTjXymdrEIoCDnC1sJYsjSm+kjNrG/ku33A+JhUK9d8Qr4wi6+HaT4iCmuNlA0f/iaj7cp9wmLSoQmDg/yLVhGw5VV8IJ7DVHrjz+ww8g9iBlGn2SvdmsQ7FEVkp0PFRJ+0qxYGwNHCXVrBbA4GApQ56gWUbobhXQW9gc5c8jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bzR0cKvRJ+9aZlXCu9vMzM/3LW3j3cxBH8VFBkp3cbQ=;
+ b=CdeVN2aUH6/2L/43jBF+dBVqj8/MZCjJ2nss6+5L10hcC/YF5yqCQU7IK4uKHEqgof8ed6NguYIsSXU5W3len8sLfb5uiyjnpm9IkWeRAOEW48pDmjZBaDtdTbFiTBOn9H50a3BucCMZOouKLqSkskcBmgOr0M6BfHzOg+PtavoMSr7N0XuXiybIBX953AwT29RhoRm3f5Zy2t4jbufeioWDqvHQsbgrOuo52s1zAALn3DFOri2pX4IcNpIMlqa2eosnHdJsOwEqIYKoNnqI6JZv2NnfuI6rRyv1OizGhuvLK/yKi6bgJQZ6b5RN6Zzqdp2EUtmOIiQDp25iaMYP7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bzR0cKvRJ+9aZlXCu9vMzM/3LW3j3cxBH8VFBkp3cbQ=;
+ b=Gz7eXxP+qSHVZu/gM/bCpsIqMd2S4OmNc8v25Sjq/J6qejN9BSy7srGyzzC1xB4FEzFDcxlvSwfc4o59ow4IptHWA42TNGE2qcC95RVXkPhJNeI69su+JkbUVHkvCY6uQw2s69tEkbuehbHeJefkciV0eZPTztzYsb25rrooCJE=
+Received: from MW4PR03CA0003.namprd03.prod.outlook.com (2603:10b6:303:8f::8)
+ by CYYPR12MB8750.namprd12.prod.outlook.com (2603:10b6:930:be::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.22; Tue, 30 May
+ 2023 13:14:06 +0000
+Received: from CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8f:cafe::64) by MW4PR03CA0003.outlook.office365.com
+ (2603:10b6:303:8f::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.23 via Frontend
+ Transport; Tue, 30 May 2023 13:14:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT042.mail.protection.outlook.com (10.13.174.250) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.22 via Frontend Transport; Tue, 30 May 2023 13:14:06 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 30 May
+ 2023 08:14:02 -0500
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <Mario.Limonciello@amd.com>, <Perry.Yuan@amd.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Wyes Karny <wyes.karny@amd.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
+Subject: [PATCH v2] cpufreq/amd-pstate: Write CPPC enable bit per-socket
+Date:   Tue, 30 May 2023 13:13:48 +0000
+Message-ID: <20230530131348.4135-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/3] thermal/drivers/mediatek/lvts_thermal: Fixes to the
- interrupt handling
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230428195347.3832687-1-nfraprado@collabora.com>
- <20230502103344.GA3388518@google.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230502103344.GA3388518@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT042:EE_|CYYPR12MB8750:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbd8be1e-0981-4ed7-9d35-08db610fbf66
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 11pBRTSqjQPXKeQQ14mjL5of9Zp/5QJlE4WOhmHiw9Wa+Ixa2oIQWNNfc/N+oXnqRH6nVA/zfiKLgLOnffUStabcCGWs6U5XdPPjjZQhjs1hEUPrcVDgK4/EzL0rL61J1fioupXjpS7mPNPgrEpPVREQ1gtOs7oCUpliG9W/8RqqgjirtjLa4hZKu8isu06xr128uTOcX5UxixlRkWfH1lPoS9WRyT09mC8lyGqnLAthF6GLMndDc9z+8l1WN76mboFAoHB3nWCZEK8oGeCApb+WskaX0FFdwQqKRkSf1d1SshRKHLCSQMnvNnurWW4hI0l7JRU5jPmEExLUNLzm14gBxrndKLpcF4gJCpQ2eWXsHFxP53GEwjYqo6JSD5xMdGGvCglqJmTVGW686tZZoeKGAnjOBoXy7JogOVpaO9NgdOA6HP9REETGVNIVbaP/boAtzXsXx2CAyK0qcMUwU1peTJV0rz/vmQPwHEqpBvuI030An/cBLC753Rg3oFbmpTB0EXhivH37TANdrYS9it/S/LppooNzF9yKR5aLXewVEI/wmlk80f0IAV1XG7CGZ8ZkJugSvdC3Ug/5vRPvyTSt0MmLe28xWZaQTjPCo0hyDLyfc8IVQMjh58JmkGIAYtWb4MJabZlAM/tW3J3qGvOjYRJgdf3XT+BI8FX3GIfe/w6xZPDSZjokck+7QE3WeYLWlTDRNtR1SNBWUQdvwjnoLR8MCzs9Y3C4dtVUORB7Sov1xs7GrOQbywoqxaM30k7J9/MQYrinwV9r1Q+dbkNFsge1j9bwQmwcROGAGEA=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199021)(46966006)(40470700004)(36840700001)(356005)(1076003)(316002)(82310400005)(44832011)(81166007)(186003)(16526019)(7696005)(40480700001)(82740400003)(8676002)(8936002)(41300700001)(40460700003)(6666004)(26005)(5660300002)(47076005)(83380400001)(36756003)(36860700001)(4326008)(70206006)(70586007)(110136005)(54906003)(2906002)(2616005)(86362001)(336012)(478600001)(426003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 May 2023 13:14:06.5227
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbd8be1e-0981-4ed7-9d35-08db610fbf66
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT042.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8750
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Currently amd_pstate sets CPPC enable bit in MSR_AMD_CPPC_ENABLE only
+for the CPU where the module_init happened. But MSR_AMD_CPPC_ENABLE is
+per-socket. This causes CPPC enable bit to set for only one socket for
+servers with more than one physical packages. To fix this write
+MSR_AMD_CPPC_ENABLE per-socket.
 
-Hi,
+Also, handle duplicate calls for cppc_enable, because it's called from
+per-policy/per-core callbacks and can result in duplicate MSR writes.
 
-On 02/05/2023 12:33, Chen-Yu Tsai wrote:
-> On Fri, Apr 28, 2023 at 03:53:44PM -0400, Nícolas F. R. A. Prado wrote:
->>
->> Fixes in the interrupt handling of the LVTS thermal driver noticed while
->> testing it on the Spherion Chromebook (mt8192-asurada-spherion) with the
->> MT8192 support series [1].
->>
->> These are standalone fixes and don't depend on anything else.
->>
->> [1] https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/
->>
->> Thanks,
->> Nícolas
->>
->>
->> Nícolas F. R. A. Prado (3):
->>    thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
->>    thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate mode
->>    thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
-> 
-> This series seems to have solved all interrupt storm issue I ran into, so
-> 
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+Before the fix:
+amd@amd:~$ sudo rdmsr -a 0xc00102b1 | uniq --count
+	192 0
+    192 1
 
-I gave a try on a mt8195 board and I don't see any interrupt firing when 
-crossing the temperature thresholds.
+After the fix:
+amd@amd:~$ sudo rdmsr -a 0xc00102b1 | uniq --count
+    384 1
 
-Did I miss something ?
+Suggested-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+---
+v1 -> v2:
+- Made CPPC enable read/write per-socket
 
+ drivers/cpufreq/amd-pstate.c | 28 +++++++++++++++++++++++++++-
+ 1 file changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 5a3d4aa0f45a..45b9e359f638 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -63,6 +63,7 @@ static struct cpufreq_driver *current_pstate_driver;
+ static struct cpufreq_driver amd_pstate_driver;
+ static struct cpufreq_driver amd_pstate_epp_driver;
+ static int cppc_state = AMD_PSTATE_DISABLE;
++static bool cppc_enabled;
+ 
+ /*
+  * AMD Energy Preference Performance (EPP)
+@@ -228,7 +229,28 @@ static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
+ 
+ static inline int pstate_enable(bool enable)
+ {
+-	return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
++	int ret, cpu;
++	unsigned long logical_proc_id_mask = 0;
++
++	if (enable == cppc_enabled)
++		return 0;
++
++	for_each_present_cpu(cpu) {
++		unsigned long logical_id = topology_logical_die_id(cpu);
++
++		if (test_bit(logical_id, &logical_proc_id_mask))
++			continue;
++
++		set_bit(logical_id, &logical_proc_id_mask);
++
++		ret = wrmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_ENABLE,
++				enable);
++		if (ret)
++			return ret;
++	}
++
++	cppc_enabled = enable;
++	return 0;
+ }
+ 
+ static int cppc_enable(bool enable)
+@@ -236,6 +258,9 @@ static int cppc_enable(bool enable)
+ 	int cpu, ret = 0;
+ 	struct cppc_perf_ctrls perf_ctrls;
+ 
++	if (enable == cppc_enabled)
++		return 0;
++
+ 	for_each_present_cpu(cpu) {
+ 		ret = cppc_set_enable(cpu, enable);
+ 		if (ret)
+@@ -251,6 +276,7 @@ static int cppc_enable(bool enable)
+ 		}
+ 	}
+ 
++	cppc_enabled = enable;
+ 	return ret;
+ }
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
