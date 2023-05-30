@@ -2,47 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4648715A3A
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 11:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18B6715A76
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 11:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjE3Jcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 05:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
+        id S229930AbjE3JlU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 05:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230349AbjE3JcN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 05:32:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25450135;
-        Tue, 30 May 2023 02:31:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34EF02F4;
-        Tue, 30 May 2023 02:32:23 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B01563F663;
-        Tue, 30 May 2023 02:31:35 -0700 (PDT)
-Message-ID: <70e630b8-e577-a148-0179-61aedf910c09@arm.com>
-Date:   Tue, 30 May 2023 11:31:34 +0200
+        with ESMTP id S231183AbjE3JlB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 05:41:01 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE44A184
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 02:40:42 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-bad87129480so1937645276.2
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 02:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685439642; x=1688031642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=np76NH4DXG5VPctuj6JKiBCHCXXXSYiZoU6sFG87XRo=;
+        b=Z6O/YRq798f/jWzC/w9ubTwCF4GKZjvsXGJrDqFux7uEH73IqpbLodsyL+/9ZDm2a1
+         pi6p15vIDnMLqePre2XyNk5eX7rCmb8AHbUx8Q7cimy6TABGiK2cuyRw2foOOHvjGdgA
+         rBlE5CdGi81IGzy21KmMOkcKfbBZg/Rbim1tiWGCWSfsVZuyT/bL0DEzSNbi2mZRIdFn
+         Fojya9hZlPdSZRmJmw/E6sLz/2y5mFYCnXrFD0b+Y6izlartjn6TGZW2TycxjbxexZDs
+         dIcR3aOuq5Ir4x7w2+u/Ba/N7VyHZJzwCO1wAaRfprpj3zndIjMuF7YTU7N1dZlcw+hT
+         kkZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685439642; x=1688031642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=np76NH4DXG5VPctuj6JKiBCHCXXXSYiZoU6sFG87XRo=;
+        b=AF4Q0tzNkuCj5C7xEfFNpg3iZk+PtC14K1WB4EEeaN0KNoaBRcORHNk4yMl/Zy1mfl
+         G1AEy0dwzg7jMo5wI39GQz66w19hri5RKVylfkC3rqLhkxTKZDmwVo+ocGlaWdwWKHMs
+         6CW8aS8uAQBzuCDnKlmw8pXQ0CEsF9MQ2xgkPC/KQRWx2rCPDeLty3laTQrp21ohoSRS
+         mhi1jDwgrOoZ6QxHqomturhabyGBVhQgCFBzzi8JjkzKVAyc8ORk8JP8tHmkv5DsPYwB
+         RPDIOdG4jC1BJGTiKD8ZYJWLcyVm+6i/BIqXpR12Q7Be//Q8TuvV2p84KACC+NH5zwzQ
+         dI1w==
+X-Gm-Message-State: AC+VfDz5mKncQERgIc5UkyldB/lKtdepoGa+KE5DW0u0eEj2rJEmFaFf
+        QjJP/aONceWk2VLT4vQagHQpYfvt77Du8bXZEL0wqg==
+X-Google-Smtp-Source: ACHHUZ7hWGOjZ6t9I+QJjuE3Ygrmb7SGRAWd1kZ6LyiMFZlDj0Tf/BRJmUuMKxkm3mbmAhMtYkrwF9PGE7YzEDcuIzE=
+X-Received: by 2002:a25:764b:0:b0:ba8:26da:3147 with SMTP id
+ r72-20020a25764b000000b00ba826da3147mr1971460ybc.59.1685439641947; Tue, 30
+ May 2023 02:40:41 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 06/17] PM: EM: Add update_power() callback for runtime
- modifications
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-7-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230512095743.3393563-7-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <CAFiuC=8bwgac2kafh6om3jHw6QtcDqtomA-Fpt+uekcqMv63aA@mail.gmail.com>
+ <CAPDyKFqdSFhHobJD-22MsE1jTpaLzKDBWw-vH1NGza=27soBHg@mail.gmail.com> <CAFiuC=_OvOE6naD-ReAceJOVnUkaGOEqJkWP11AkV59MVUdaLA@mail.gmail.com>
+In-Reply-To: <CAFiuC=_OvOE6naD-ReAceJOVnUkaGOEqJkWP11AkV59MVUdaLA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 30 May 2023 11:40:06 +0200
+Message-ID: <CAPDyKFq3uFouiOnbP_jW79qNy-d_zECQHvTHqkTdW6Zi=rit7w@mail.gmail.com>
+Subject: Re: On dev_pm_domain_attach function behavior
+To:     Quang Hoang <quangh@google.com>
+Cc:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,60 +68,72 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/2023 11:57, Lukasz Luba wrote:
-> The Energy Model (EM) is going to support runtime modifications. This
-> new callback would be used in the upcoming EM changes. The drivers
-> or frameworks which want to modify the EM have to implement the
-> update_power() callback and provide it via EM API
-> em_dev_update_perf_domain(). The callback is then used by the EM
-> framework to get new power values for each frequency in existing EM.
+On Tue, 30 May 2023 at 02:21, Quang Hoang <quangh@google.com> wrote:
+>
+> Hi Ulf,
+> Thanks for your response.
+>
+> What is the recommended way to disable auto attach and powering on a doma=
+in on driver probe? I am thinking of using an additional dummy power domain=
+, but it seems to be hacky.
 
-Do we have any numbers or feedback that the chosen design (i.e. update
-per performance state through update_power()) is performant enough for
-the anticipated use case on real devices?
+Auto attach is done for the single PM domain case for some of the most
+common and generic cases, like the platform bus for example. In some
+cases, there are consumer nodes in DT that need "manual" attaching, as
+those don't always get a platform device created for it. Like the CPUs
+for example.
 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/linux/energy_model.h | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 8069f526c9d8..cc2bf607191e 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -158,6 +158,26 @@ struct em_data_callback {
->  	 */
->  	int (*get_cost)(struct device *dev, unsigned long freq,
->  			unsigned long *cost);
-> +
-> +	/**
-> +	 * update_power() - Provide new power at the given performance state of
-> +	 *		a device
-> +	 * @dev		: Device for which we do this operation (can be a CPU)
-> +	 * @freq	: Frequency at the performance state in kHz
-> +	 * @power	: New power value at the performance state
-> +	 *		(modified)
-> +	 * @priv	: Pointer to private data useful for tracking context
-> +	 *		during run-time modifications of EM.
-> +	 *
-> +	 * The update_power() is used by run-time modifiable EM. It aims to
-> +	 * provide updated power value for a given frequency, which is stored
-> +	 * in the performance state. The power value provided by this callback
-> +	 * should fit in the [0, EM_MAX_POWER] range.
-> +	 *
-> +	 * Return 0 on success, or appropriate error value in case of failure.
-> +	 */
-> +	int (*update_power)(struct device *dev, unsigned long freq,
-> +			    unsigned long *power, void *priv);
->  };
->  #define EM_SET_ACTIVE_POWER_CB(em_cb, cb) ((em_cb).active_power = cb)
->  #define EM_ADV_DATA_CB(_active_power_cb, _cost_cb)	\
-> @@ -165,6 +185,7 @@ struct em_data_callback {
->  	  .get_cost = _cost_cb }
->  #define EM_DATA_CB(_active_power_cb)			\
->  		EM_ADV_DATA_CB(_active_power_cb, NULL)
-> +#define EM_UPDATE_CB(_update_power_cb) { .update_power = &_update_power_cb }
->  
->  struct em_perf_domain *em_cpu_get(int cpu);
->  struct em_perf_domain *em_pd_get(struct device *dev);
+Adding a dummy power domain seems certainly hacky. Although I am
+trying to understand the problem, why doesn't "auto attach" work fine
+for you?
 
+Kind regards
+Uffe
+
+>
+> Regards,
+> Quang
+>
+> On Mon, May 29, 2023 at 8:04=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+>>
+>> On Mon, 22 May 2023 at 06:08, Quang Hoang <quangh@google.com> wrote:
+>> >
+>> > Hi Ulf Hansson,
+>> >
+>> > Hope you are doing well!
+>> >
+>> > I am Quang from Google Silicon team. I am working on drivers that use =
+generic power domains.
+>> > I have a few questions related to the behavior of dev_pm_domain_attach=
+ function and genpd:
+>> >
+>> > 1. in dev_pm_domain_attach function, why don't we pass power_on variab=
+le to genpd_dev_pm_attach function?
+>>
+>> At the introduction of the dev_pm_domain_attach() function, the
+>> power_on variable was only relevant for the ACPI PM domain. For genpd,
+>> we needed to always power on, as that was the assumption that was used
+>> by the consumer drivers to allow them to probe their devices.
+>>
+>> > 2. Currently, if a device has only one power domain, its power domain =
+is automatically attached and powered on probe. What is the reason behind t=
+his behavior? Why don't we let the driver decide when to power on its power=
+ domain via calling pm_runtime_get_sync() for example (as in cases where a =
+device has multiple power domains, see this patch).
+>>
+>> The behaviour comes from legacy. It's not a trivial task to change the
+>> behaviour in genpd around this, as a lot of consumer drivers rely on
+>> it. Especially those that use pm_runtime_set_active() in ->probe().
+>>
+>> In the case of multiple PM domains per device, we did not have legacy
+>> behaviour from consumer drivers to consider - thus leaving the PM
+>> domain powered off while attaching is perfectly fine.
+>>
+>> >
+>> > Looking forward to hearing from you,
+>> > Regard,
+>> > Quang.
+>>
+>> Kind regards
+>> Uffe
