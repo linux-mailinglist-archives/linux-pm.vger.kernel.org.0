@@ -2,104 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B54871599F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 11:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4648715A3A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 11:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjE3JNg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 05:13:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35902 "EHLO
+        id S230319AbjE3Jcc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 05:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjE3JNe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 05:13:34 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B49EA
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 02:13:33 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso3121778b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 02:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685438013; x=1688030013;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YyyX52BF67Diz7Uf4mK/fLgyb9Q3DsmlKfmTtraC+Kc=;
-        b=qhpLK30bDaXs2103YXxXpPhPc9s/QNqCZj9KumXFLCR9TTKSCLJQE+c6iGbdMsJrK1
-         Q1fp47dMZcqYjxeTbuXkNHnJRYHHXaQWSX4SUNNL1SoC0rpTYATl9Akj6eG/rrGIf6ef
-         GftP40ZjmYSLYaEQeZpUpw0hAIC/fWA+Xga094ToFIptD4zI7muZzLtioAI7/MPItX/d
-         b0btwY1DqYJAU4RMB3OK73yoiSIMCaPAKMRMhHNHWm5WUYnXpSQiw/9JGXeVoGJMp7eC
-         1w6VPReUF9a+IdFMumse+29Apj3Op1kFYnmJFGVdeEXpZLRK2inLG3XM7CwPU6z2wFvC
-         aTHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685438013; x=1688030013;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YyyX52BF67Diz7Uf4mK/fLgyb9Q3DsmlKfmTtraC+Kc=;
-        b=NkFKcUGQKVvJ0uYtEv8MHwnmmScfxFOcf8CVojz4J/L+7uw7wTL00WbdUx4ICmsZzG
-         I/+LJOZDfmDwagzK3gkParDhZRWtGhAfHcBwXpc9Y+Jhu05FkLV72A0MsLmULxhcwPyI
-         XIiSACyxcHbtvEveBzuKhHERAsOPDa2s+6L+PJB/xU3DSHpkXX+0uZjh4pt+WfTyEval
-         CWIWvmpfpbGtzh5MfR8vHTDr3L1ezBCWti7QHlcLQdKfdRc2UIQXaFJjvxu0fCZK6FQr
-         iG9jS91GXKLhGf1Olb7cY9SCduXMm1bu37C8oddAfpa9RmV6gHuHsTWh3eA4ZXJ9HPRf
-         jeew==
-X-Gm-Message-State: AC+VfDy46ZqdDDFt5B/aidWAdowefo1dcPrGzMe404Ge4WbHJQ6biuVe
-        vdTp1sD37jTuDTowBDhIzjWkFQ==
-X-Google-Smtp-Source: ACHHUZ75GlZV0riMuA+mh9FpJNHYTb//2BMZQzskvLcCzyby+XqrOWQk0a7PECu6ai46safOQB5OAQ==
-X-Received: by 2002:a05:6a20:9e4a:b0:10c:d33a:5c50 with SMTP id mt10-20020a056a209e4a00b0010cd33a5c50mr1807478pzb.36.1685438012962;
-        Tue, 30 May 2023 02:13:32 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id c17-20020aa78c11000000b0063afb08afeesm1224572pfd.67.2023.05.30.02.13.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 May 2023 02:13:32 -0700 (PDT)
-Date:   Tue, 30 May 2023 14:43:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] opp: Fix use-after-free in lazy_opp_tables after probe
- deferral
-Message-ID: <20230530091330.e3nawo6ey2an4ir2@vireshk-i7>
-References: <20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com>
- <20230529053148.xuhuv6skg2xqworr@vireshk-i7>
- <ZHW0YY4xoUmR_UPg@kernkonzept.com>
+        with ESMTP id S230349AbjE3JcN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 05:32:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25450135;
+        Tue, 30 May 2023 02:31:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34EF02F4;
+        Tue, 30 May 2023 02:32:23 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B01563F663;
+        Tue, 30 May 2023 02:31:35 -0700 (PDT)
+Message-ID: <70e630b8-e577-a148-0179-61aedf910c09@arm.com>
+Date:   Tue, 30 May 2023 11:31:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZHW0YY4xoUmR_UPg@kernkonzept.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 06/17] PM: EM: Add update_power() callback for runtime
+ modifications
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rafael@kernel.org
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org
+References: <20230512095743.3393563-1-lukasz.luba@arm.com>
+ <20230512095743.3393563-7-lukasz.luba@arm.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20230512095743.3393563-7-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-05-23, 10:31, Stephan Gerhold wrote:
-> Thanks, this seems to fix the crash as well. Are you going to handle it
-> or should I send a v2 with this diff?
+On 12/05/2023 11:57, Lukasz Luba wrote:
+> The Energy Model (EM) is going to support runtime modifications. This
+> new callback would be used in the upcoming EM changes. The drivers
+> or frameworks which want to modify the EM have to implement the
+> update_power() callback and provide it via EM API
+> em_dev_update_perf_domain(). The callback is then used by the EM
+> framework to get new power values for each frequency in existing EM.
 
-Please send a V2 :)
+Do we have any numbers or feedback that the chosen design (i.e. update
+per performance state through update_power()) is performant enough for
+the anticipated use case on real devices?
 
-> During _allocate_opp_table() it's accessed without the opp_table_lock,
-> because of
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/linux/energy_model.h | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 > 
-> 	/* Drop the lock to reduce the size of critical section */
-> 	mutex_unlock(&opp_table_lock);
-> 
-> 	if (opp_table) {
-> 		/* ... */
-> 		mutex_lock(&opp_table_lock);
-> 	} else {
-> 		opp_table = _allocate_opp_table(dev, index);
-> 
-> 		mutex_lock(&opp_table_lock);
-> 		/* ... */
-> 	}
-> 
-> This doesn't seem to cause any problems in my case though so it's
-> unrelated to the crash I observed.
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 8069f526c9d8..cc2bf607191e 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -158,6 +158,26 @@ struct em_data_callback {
+>  	 */
+>  	int (*get_cost)(struct device *dev, unsigned long freq,
+>  			unsigned long *cost);
+> +
+> +	/**
+> +	 * update_power() - Provide new power at the given performance state of
+> +	 *		a device
+> +	 * @dev		: Device for which we do this operation (can be a CPU)
+> +	 * @freq	: Frequency at the performance state in kHz
+> +	 * @power	: New power value at the performance state
+> +	 *		(modified)
+> +	 * @priv	: Pointer to private data useful for tracking context
+> +	 *		during run-time modifications of EM.
+> +	 *
+> +	 * The update_power() is used by run-time modifiable EM. It aims to
+> +	 * provide updated power value for a given frequency, which is stored
+> +	 * in the performance state. The power value provided by this callback
+> +	 * should fit in the [0, EM_MAX_POWER] range.
+> +	 *
+> +	 * Return 0 on success, or appropriate error value in case of failure.
+> +	 */
+> +	int (*update_power)(struct device *dev, unsigned long freq,
+> +			    unsigned long *power, void *priv);
+>  };
+>  #define EM_SET_ACTIVE_POWER_CB(em_cb, cb) ((em_cb).active_power = cb)
+>  #define EM_ADV_DATA_CB(_active_power_cb, _cost_cb)	\
+> @@ -165,6 +185,7 @@ struct em_data_callback {
+>  	  .get_cost = _cost_cb }
+>  #define EM_DATA_CB(_active_power_cb)			\
+>  		EM_ADV_DATA_CB(_active_power_cb, NULL)
+> +#define EM_UPDATE_CB(_update_power_cb) { .update_power = &_update_power_cb }
+>  
+>  struct em_perf_domain *em_cpu_get(int cpu);
+>  struct em_perf_domain *em_pd_get(struct device *dev);
 
-Hmm, right. Maybe we need a lock for that list, want to take that up ?
-
--- 
-viresh
