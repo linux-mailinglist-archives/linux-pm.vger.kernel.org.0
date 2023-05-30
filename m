@@ -2,76 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19FCC715EC6
-	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 14:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5C8715F4C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 May 2023 14:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjE3MQj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 08:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S231240AbjE3M2T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 08:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbjE3MQg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 08:16:36 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48988F9
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 05:16:30 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3bb395e69so4983114e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 05:16:30 -0700 (PDT)
+        with ESMTP id S231279AbjE3M2O (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 08:28:14 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6225AC7
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 05:27:40 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6ef9a928fso27332245e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 05:27:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685448988; x=1688040988;
+        d=linaro.org; s=google; t=1685449658; x=1688041658;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5uD3+suOcpbgdqFW0GkZogqfSEcYKxt6e0zHCfxECmw=;
-        b=ohYB0D566NjRxX69H7xtKhz+iJYxu/BY3KPkHmrLerOmX1LD9eNiMaP25GIX5MtoYL
-         c5nYyGwieNiS0xryV4M77yzPPLXUD5Z36v1q0cbmW1mXhi7I10m0ymgZLa65vrb3M2yV
-         BWBTmpavyt9XFbiIjGz/N/pL501nqIdt85denSxKP/KVyYSydL+kLxqZ7EtcM644bhDN
-         B1EDVjCjAjnr6h2J5rNlppthY7iCGzQ21xfGkO9CWwCaZNmMLLDE7hY2bupycclQl5NP
-         U+aU/D+lX643viWDe6RM5E9FIRyHk7i7XAoumRShkST+neoZFPh5gjJkjHu2+uQfLPh+
-         TCpQ==
+        bh=tlT+2nXHH7figLXYqN6h97DwdAFo3rxIuidTGSYR/P0=;
+        b=sI3MnPYHWBdlGJxiLPwGf/TfKcYpod81NSp/jqBI3YWZtng5r/1mPKNwzutsfR10Kg
+         DwHcdqhPcVpeSrLYmXXOWsb3iH3S4Qm80vFDhZLXQVOOayYS9XKAhPo9S76wn9sB1ArQ
+         PwZWzRRrwr8mNnGETh/SBJgw/jjQk+CIKC9kVLnSme8yPNMasFySwRn1D+uo27CWNNHN
+         xzPf4rayDYp4Saq1c+Tzd/ZEw/4Z0umLRNsTZRBKj30NRJ0Ebl2G3gOk6LZKdXEkZMWM
+         eogv660XswWl/hQ2wcPZybEtPHy6xKc8I3mf7sQtGd39dAlRit3RXAbyft/o56g36/lb
+         mlIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685448988; x=1688040988;
+        d=1e100.net; s=20221208; t=1685449658; x=1688041658;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5uD3+suOcpbgdqFW0GkZogqfSEcYKxt6e0zHCfxECmw=;
-        b=fw6Z9utMcXhSYCmRz0CodSCFABKzczQl0PEw9p1mta7I/zOPZiaCkZcPstIDIu1maZ
-         eTyKPGoa2Rgx++W4FdthCTwWjSpqPvl/9dJfDW6jHI9MVBvQ7H6NRz8M+rM5A45I93uw
-         2vIGmHBv/mkgWPIRUM0oUkeuD2IhxbwWkWfCnXsQXf8unVdH3pr49QFlPyb6A+94mDn3
-         NLdZ56JR6I31luXt6xN3KJslDrtDg1k2TQkbPbKXk5n5V3bw31tzIfq3r0jyj58GCFX6
-         Ja3YnV3iQ43TXb9PkKR41cNa0QQOrQu4OYDwPGkoG6eiCMKrcPgqZn35YrjCsrDttbMq
-         jMew==
-X-Gm-Message-State: AC+VfDwgR+p837V+hmqYDxzniPkwA/+hUVRc9WLtq4p6EI8eZdPr/Qrc
-        Dml5IRXrWleYA8Tjiv8E403fOQ==
-X-Google-Smtp-Source: ACHHUZ6Ww0h+GaMyC1dkoIaj9nYT0oX8YdJ01HzwsJyaD9FCIelgw3F49GrnRv0+ct/oXUCi81jKUA==
-X-Received: by 2002:ac2:4473:0:b0:4f4:c32f:2a86 with SMTP id y19-20020ac24473000000b004f4c32f2a86mr671461lfl.33.1685448988344;
-        Tue, 30 May 2023 05:16:28 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id u11-20020ac243cb000000b004efedad4604sm328571lfl.18.2023.05.30.05.16.27
+        bh=tlT+2nXHH7figLXYqN6h97DwdAFo3rxIuidTGSYR/P0=;
+        b=Uy6t2PPQt910zPw2TIK/Z2+/G5k2F4n3/ST7cN/tcWd7dae4KcpOx4vJxe+YgGGNlK
+         KYSMK6SQHdhvxR9cFouVnNcm6bRfOb2Bun3fBI7X5Ogq7cxvq7t1RxIng5xvshhfK8Yc
+         4pFQs6h4MHeWlpTAhB+iGeIgT1zgjN6J7sLyfcGA++/tNx/ssXL/nUA6MFGpBI9FA5Bl
+         UipN3Eb66DU+8BWwGZnCpd3ukqRXC6eN4ge3ZuL1l2MqJPwqLpEJRcjIwGhFN5MbWWlp
+         BYcvK4Zdtqm8P5Dv9Rh2yMVYLPYPnHF3VC4Dj1c7GD8KMEr1d7HrDvh1rP6qg4eCPKbE
+         7pAg==
+X-Gm-Message-State: AC+VfDzQpX37H0Y4TDuyDj0JeWEZWX74hg8+9K8eMHTC+VQe/QQBRhGz
+        z0u3xv4k6HNsDj1KBA+tkCvvaYtXMbBo1y1pTUw=
+X-Google-Smtp-Source: ACHHUZ7tZSoWKLv88vvxIwF7juwlLyZPiMNgkF2OQNOSMP/LIQEoMZgC2CZdWs3Pf8uYLb5InErZcg==
+X-Received: by 2002:a5d:4eca:0:b0:30a:a478:f559 with SMTP id s10-20020a5d4eca000000b0030aa478f559mr1456676wrv.2.1685449658181;
+        Tue, 30 May 2023 05:27:38 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf? ([2a05:6e02:1041:c10:dd1c:e75b:56ba:6bf])
+        by smtp.googlemail.com with ESMTPSA id c17-20020adffb11000000b0030633152664sm3101590wrr.87.2023.05.30.05.27.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 05:16:27 -0700 (PDT)
-Message-ID: <e1a38af8-2b48-1e47-e400-3cd9d17efa3b@linaro.org>
-Date:   Tue, 30 May 2023 14:16:26 +0200
+        Tue, 30 May 2023 05:27:37 -0700 (PDT)
+Message-ID: <87b0f5cd-67a8-fbd5-5ca7-a286b543d796@linaro.org>
+Date:   Tue, 30 May 2023 14:27:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 20/20] interconnect: qcom: Divide clk rate by src node bus
- width
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 0/3] thermal/drivers/mediatek/lvts_thermal: Fixes to the
+ interrupt handling
 Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-20-1bf8e6663c4e@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v1-20-1bf8e6663c4e@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20230428195347.3832687-1-nfraprado@collabora.com>
+ <20230502103344.GA3388518@google.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230502103344.GA3388518@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -82,68 +87,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Note: the commit title is wrong (src -> dst obviously).
-Thanks Stephan for spotting this.
 
-Konrad
+Hi,
 
-On 30.05.2023 12:20, Konrad Dybcio wrote:
-> Ever since the introduction of SMD RPM ICC, we've been dividing the
-> clock rate by the wrong bus width. This has resulted in:
+On 02/05/2023 12:33, Chen-Yu Tsai wrote:
+> On Fri, Apr 28, 2023 at 03:53:44PM -0400, Nícolas F. R. A. Prado wrote:
+>>
+>> Fixes in the interrupt handling of the LVTS thermal driver noticed while
+>> testing it on the Spherion Chromebook (mt8192-asurada-spherion) with the
+>> MT8192 support series [1].
+>>
+>> These are standalone fixes and don't depend on anything else.
+>>
+>> [1] https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/
+>>
+>> Thanks,
+>> Nícolas
+>>
+>>
+>> Nícolas F. R. A. Prado (3):
+>>    thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
+>>    thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate mode
+>>    thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
 > 
-> - setting wrong (mostly too low) rates, affecting performance
->   - most often /2 or /4
->   - things like DDR never hit their full potential
->   - the rates were only correct if src bus width == dst bus width
->     for all src, dst pairs on a given bus
+> This series seems to have solved all interrupt storm issue I ran into, so
 > 
-> - Qualcomm using the same wrong logic in their BSP driver in msm-5.x
->   that ships in production devices today
-> 
-> - me losing my sanity trying to find this
-> 
-> Resolve it by using dst_qn, if it exists.
-> 
-> Fixes: 5e4e6c4d3ae0 ("interconnect: qcom: Add QCS404 interconnect provider driver")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 59be704364bb..58e2a8b1b7c3 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -340,7 +340,7 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider,
->  static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  {
->  	struct qcom_icc_provider *qp;
-> -	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
-> +	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL, *qn = NULL;
->  	struct icc_provider *provider;
->  	u64 active_rate, sleep_rate;
->  	u64 agg_avg[QCOM_SMD_RPM_STATE_NUM], agg_peak[QCOM_SMD_RPM_STATE_NUM];
-> @@ -353,6 +353,8 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  	provider = src->provider;
->  	qp = to_qcom_provider(provider);
->  
-> +	qn = dst_qn ? dst_qn : src_qn;
-> +
->  	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
->  
->  	ret = qcom_icc_rpm_set(src_qn, agg_avg);
-> @@ -372,11 +374,11 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  	/* Intentionally keep the rates in kHz as that's what RPM accepts */
->  	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
->  			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
-> -	do_div(active_rate, src_qn->buswidth);
-> +	do_div(active_rate, qn->buswidth);
->  
->  	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
->  			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
-> -	do_div(sleep_rate, src_qn->buswidth);
-> +	do_div(sleep_rate, qn->buswidth);
->  
->  	/*
->  	 * Downstream checks whether the requested rate is zero, but it makes little sense
-> 
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+
+I gave a try on a mt8195 board and I don't see any interrupt firing when 
+crossing the temperature thresholds.
+
+Did I miss something ?
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
