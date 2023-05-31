@@ -2,241 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082A1717A9C
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 10:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B37771733F
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 03:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234527AbjEaIst (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 04:48:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
+        id S233561AbjEaBmz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 21:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjEaIsR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 04:48:17 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5502010CA;
-        Wed, 31 May 2023 01:47:54 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30aeee7c8a0so546656f8f.1;
-        Wed, 31 May 2023 01:47:54 -0700 (PDT)
+        with ESMTP id S231417AbjEaBmy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 21:42:54 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6DB510B
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 18:42:51 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so6017116e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 18:42:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685522873; x=1688114873;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=op3yDZuhLildiEClG3ofYGddByOEYT8YVnfVcFniJM4=;
-        b=P2cYuxP9Bq8/926b/sL6/xaVlK+ftTA5gn6K3qSNfN0To9H8ZbM1nXg1NwtPSnGuPm
-         2GKuvm4Nfpsqfmmh/HeQLwS1c30o3RXb8ljqv2cHgFwxusDYZg6muNyoV5oNZiZKORI1
-         6HSmPVfg1Y9AwIh9w6njbol98QSSSG4JbhcVfsojVm3dpt2i7qyfBp9BQvmqQwQFh3zF
-         PjJQM3nN8r/4+feWXZECAu+R6eUOjZiAvleH1EGfq8xcczjnyY7oqjl9XhlsvapJv9/I
-         Lq9pX3AAUE67mWJAzm97Me7oOfZklN5FIwliA6r/tvL+9gHmOWxsHMwSi2oSjtEa8+3N
-         70tw==
+        d=linaro.org; s=google; t=1685497370; x=1688089370;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xljCA29YsIP0+Y8LXCa8pJbogsbieLDmlx+5/VMZqTY=;
+        b=SWqiVEQwq8FHaTqPlNJFfKiJZyzqNaGU/zfCjJgd7azcScFpxSZrpzGNhNCYs1uWlE
+         9WJdMY5CZH+/IU1R3GjgtRAjcPuRpyc+opEiJJ5d5LkoxYdZrugdFjWZYNaGWeaY1+l0
+         +tcEwi7LbSiyyekWSBEtRHzS3jsaM4l1YfcxykTLqQG4dAYGfxED3oQgnvWoxWfgmCCf
+         8xDbio3HFhtdOZWK+bTomv38VVj7v26vPGiK6iJMZEgu290vgZwWvoE8BmOaQQPMNH92
+         hr3ifiEDv3Bu3Uj/msaiFup9Kt/1p/jdk4rlQpg1m7o70S8kOVQEYrcWMJz6TWYqt0wM
+         W/tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685522873; x=1688114873;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=op3yDZuhLildiEClG3ofYGddByOEYT8YVnfVcFniJM4=;
-        b=gAubauXRFAoc3fbYmOjJ9wF5AZAflZgYM2m50X1QimRqYU4uNTk4iZuxL31MygVZCa
-         TJt1pS+/3lSwcmQ7x2ddaDF5221SsLtBXPo6eoQjsKii3iJsc8zZbUTUR0NQvmP3I93u
-         0ZHWapjxGVowDI4+zGSTL4KbtOH9rKEoY3BGqi0UUKN5KtdmRL7qcZBeqyNe5SIMCCwB
-         w6zRAtD+7vhAXkDvIZWRKnrdMaiSuD6xMgezSv1bf1tZdrnpsdNWZpmC2m9G+924SYlm
-         5gMmvcGQjrBtaUZ1wyTq2xswr1QVtyNFOwg4IOlLlVJW7pSip6tvlcPLcmO+nHgxsdf/
-         m43w==
-X-Gm-Message-State: AC+VfDxUgJyZknFtUiAIBEr3rXta6ehtuuABdQGQErq8ncGj65vxpzuS
-        t5eNH2BUWsS6QXycvWZJWmJV8vravBk=
-X-Google-Smtp-Source: ACHHUZ5a7fMycdAntwUgVUjIdNV7lWwpMhgxxjEJBS/4OwVmZiM52mYWFiQDD2lM6ssyWL+IHExDTQ==
-X-Received: by 2002:a5d:490b:0:b0:306:2ff1:5227 with SMTP id x11-20020a5d490b000000b003062ff15227mr4283365wrq.23.1685522872506;
-        Wed, 31 May 2023 01:47:52 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id i2-20020adfdec2000000b002e61e002943sm5845850wrn.116.2023.05.31.01.47.51
+        d=1e100.net; s=20221208; t=1685497370; x=1688089370;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xljCA29YsIP0+Y8LXCa8pJbogsbieLDmlx+5/VMZqTY=;
+        b=P+MexJX7UgflWqKAW6Bxjp8AujGZXAqejAAT1k+nG4iZvyHfyXHaOc3+tIVvZcmxZ/
+         aM08HbAy5xe4GBXBhLsR27IlnCitqnWE47scvdAmSFXrz4SxrOFfH5hEeEaXxfVzpUU/
+         ZXxcChQfHj3CeUEN2zNJbZHc5fng7ruhAUY4yPPHYAAI2lj1glkbOm6B9jiqoE1No6Hx
+         3+tCDrjrPmt0LSFod8FQIxt4z/w72KR7UF7Iel9B4bH3MvjEUlHI25y57CcNZHqjdmJl
+         i/5fbvhpjzrF9sT1a9Dsifaq5ekdp/nDisndWKls4qy+Ac/kXE7kXTR/j1WTBYdAmPMx
+         Uk6Q==
+X-Gm-Message-State: AC+VfDxo7xZelFQXs7CUgJPOSsyjZ5KbgUJZ//wEOK0jFz/ICQKtM8gd
+        Rlc4jKejFwLBQUn+3UtkFx18aQ==
+X-Google-Smtp-Source: ACHHUZ4MedO+Nhhc9D9iy3fSvGi45ICLjQmEmMfqx1wmxIVXvGC2pI5+Wp/ab5tm+1MKgPkT2OYXqg==
+X-Received: by 2002:ac2:4461:0:b0:4f0:345:6ceb with SMTP id y1-20020ac24461000000b004f003456cebmr1536886lfl.14.1685497370018;
+        Tue, 30 May 2023 18:42:50 -0700 (PDT)
+Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
+        by smtp.gmail.com with ESMTPSA id q20-20020ac25294000000b004f3945751b2sm515994lfm.43.2023.05.30.18.42.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 01:47:52 -0700 (PDT)
-Message-ID: <647709b8.df0a0220.28e58.6a42@mx.google.com>
-X-Google-Original-Message-ID: <ZHalcEN06Ka4vGFp@Ansuel-xps.>
-Date:   Wed, 31 May 2023 03:40:00 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
-        ilia.lin@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [RESEND PATCH v2 2/2] cpufreq: qcom-nvmem: add support for
- IPQ8064
-References: <20230530165807.642084-1-robimarko@gmail.com>
- <20230530165807.642084-2-robimarko@gmail.com>
- <507831fd-326a-a5f7-cdc1-5584ad1aa11b@linaro.org>
+        Tue, 30 May 2023 18:42:49 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 0/4] ARM: dts: qcom: apq8074-dragonboard: enable resin device
+Date:   Wed, 31 May 2023 04:42:44 +0300
+Message-Id: <20230531014248.3824043-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <507831fd-326a-a5f7-cdc1-5584ad1aa11b@linaro.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 31, 2023 at 10:40:54AM +0200, Konrad Dybcio wrote:
-> 
-> 
-> On 30.05.2023 18:58, Robert Marko wrote:
-> > From: Christian Marangi <ansuelsmth@gmail.com>
-> > 
-> > IPQ8064 comes in 3 families:
-> > * IPQ8062 up to 1.0GHz
-> > * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
-> > * IPQ8065/IPQ8069 up to 1.7Ghz
-> > 
-> > So, in order to be able to share one OPP table, add support for
-> > IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
-> > IPQ8064.
-> > 
-> > Bit are set with the following logic:
-> > * IPQ8062 BIT 0
-> > * IPQ8064/IPQ8066/IPQ8068 BIT 1
-> > * IPQ8065/IPQ8069 BIT 2
-> > 
-> > speed is never fused, only psv values are fused.
-> > Set speed to the versions to permit a unified opp table following
-> > this named opp:
-> > 
-> > opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
-> > 
-> > Example:
-> > - for ipq8062 psv2
-> >   opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
-> > - for ipq8064 psv2
-> >   opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
-> > - for ipq8065 psv2
-> >   opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
-> >  1 file changed, 72 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > index ce444b5962f2..c644138680ba 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> > @@ -34,6 +34,10 @@
-> >  #define IPQ8074_HAWKEYE_VERSION		BIT(0)
-> >  #define IPQ8074_ACORN_VERSION		BIT(1)
-> >  
-> > +#define IPQ8062_VERSION		BIT(0)
-> > +#define IPQ8064_VERSION		BIT(1)
-> > +#define IPQ8065_VERSION		BIT(2)
-> > +
-> >  struct qcom_cpufreq_drv;
-> >  
-> >  struct qcom_cpufreq_match_data {
-> > @@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
-> >  	return ret;
-> >  }
-> >  
-> > +static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
-> > +					     struct nvmem_cell *speedbin_nvmem,
-> > +					     char **pvs_name,
-> > +					     struct qcom_cpufreq_drv *drv)
-> > +{
-> > +	int speed = 0, pvs = 0, pvs_ver = 0;
-> > +	int msm_id, ret = 0;
-> > +	u8 *speedbin;
-> > +	size_t len;
-> > +
-> > +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
-> > +
-> > +	if (IS_ERR(speedbin))
-> > +		return PTR_ERR(speedbin);
-> > +
-> > +	switch (len) {
-> Do we expect more variety here? Otherwise a switch statement sounds a
-> bit too heavy for the job, imo.
->
+Add support for buttons, LEDs and coincell charger found on the APQ8074
+dragonboard device.
 
-Well no, considering ipq8064 is effectively EOL i guess format 4 is the
-only one present. But if you check the driver this is like a pattern so
-the idea was too keep that. I can totally change that to a simple
-if (len != 4) if we really want.
+For PM8941 we don't have a defined field to store the reset reason.
+Support wrapping pwrkey and resin, but without writing the reset
+reason.
 
-> > +	case 4:
-> > +		get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
-> > +				       speedbin);
-> > +		break;
-> > +	default:
-> > +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
-> > +		ret = -ENODEV;
-> > +		goto len_error;
-> > +	}
-> > +
-> > +	ret = qcom_smem_get_soc_id(&msm_id);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	switch (msm_id) {
-> > +	case QCOM_ID_IPQ8062:
-> > +		drv->versions = IPQ8062_VERSION;
-> > +		break;
-> > +	case QCOM_ID_IPQ8064:
-> > +	case QCOM_ID_IPQ8066:
-> > +	case QCOM_ID_IPQ8068:
-> > +		drv->versions = IPQ8064_VERSION;
-> > +		break;
-> > +	case QCOM_ID_IPQ8065:
-> > +	case QCOM_ID_IPQ8069:
-> > +		drv->versions = IPQ8065_VERSION;
-> > +		break;
-> > +	default:
-> > +		dev_err(cpu_dev,
-> > +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
-> > +			msm_id);
-> > +		drv->versions = IPQ8062_VERSION;
-> > +		break;
-> > +	}
-> > +
-> > +	/*
-> > +	 * IPQ8064 speed is never fused. Only psv values are fused.
-> > +	 * Set speed to the versions to permit a unified opp table.
-> > +	 */
-> > +	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
-> > +		 drv->versions, pvs, pvs_ver);
-> > +
-> > +len_error:
-> > +	kfree(speedbin);
-> Perhaps we should switch to devres-managed nvmem soon..
-> 
+Changes since v2:
+- Split non-pon patches to separate patchset
+- Changed schema to disallow reboot modes for pm8941-pon (Konrad)
 
-devres nvmem would be very good, maybe an idea would be search for the
-actualy use of nvmem_cell_read and see if it's worth to introduce these
-new API.
+Changes since v1 (noted by Konrad):
+ - Changed to use freshly defined qcom,pm8941-pon compat
+ - Fixed indentiation for LEDs definition
+ - Reverted the order of pinctrl fields
+ - Moved status field to the last position
+ - Removed unnecessary pinconf indirection
 
-> > +	return ret;
-> > +}
-> > +
-> >  static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
-> >  					     struct nvmem_cell *speedbin_nvmem,
-> >  					     char **pvs_name,
-> > @@ -256,6 +323,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
-> >  	.genpd_names = qcs404_genpd_names,
-> >  };
-> >  
-> > +static const struct qcom_cpufreq_match_data match_data_ipq8064 = {
-> > +	.get_version = qcom_cpufreq_ipq8064_name_version,
-> > +};
-> > +
-> >  static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
-> >  	.get_version = qcom_cpufreq_ipq8074_name_version,
-> >  };
-> > @@ -404,7 +475,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
-> >  	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
-> >  	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
-> >  	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
-> > -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
-> > +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
-> >  	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
-> >  	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
-> >  	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
+Dmitry Baryshkov (4):
+  dt-bindings: power: reset: qcom-pon: define pm8941-pon
+  power: reset: qcom-pon: add support for pm8941-pon
+  ARM: dts: qcom-pm8941: add resin support
+  ARM: dts: qcom: apq8074-dragonboard: add resin
+
+ .../bindings/power/reset/qcom,pon.yaml        | 12 +++++++++-
+ .../arm/boot/dts/qcom-apq8074-dragonboard.dts |  5 +++++
+ arch/arm/boot/dts/qcom-pm8941.dtsi            | 22 ++++++++++++++-----
+ drivers/power/reset/qcom-pon.c                | 22 +++++++++++++------
+ 4 files changed, 48 insertions(+), 13 deletions(-)
 
 -- 
-	Ansuel
+2.39.2
+
