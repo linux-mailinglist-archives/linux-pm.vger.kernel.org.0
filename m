@@ -2,44 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2B1718372
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 15:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8282D7183A0
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 15:51:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237057AbjEaNvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 09:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
+        id S237287AbjEaNvj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 May 2023 09:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237141AbjEaNtw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 09:49:52 -0400
+        with ESMTP id S237208AbjEaNt7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 09:49:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4942733;
-        Wed, 31 May 2023 06:45:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A021BE3;
+        Wed, 31 May 2023 06:45:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA05163B8B;
-        Wed, 31 May 2023 13:45:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D75C433D2;
-        Wed, 31 May 2023 13:45:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4321363BB1;
+        Wed, 31 May 2023 13:45:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D86C433EF;
+        Wed, 31 May 2023 13:45:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540710;
-        bh=6rJCrLQ0Ki9e+ieM67cun1HapIPKB5enjh301jmWabs=;
+        s=k20201202; t=1685540715;
+        bh=hxqL/LCoaj3Zcni+e7NzFqlj9+tnjdcyJo84hFDp0YQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QRJIY/eGZ1h/qXnzaJEysuj3mbgYEQ2UfVA3G1ojAffyPKZiV8apmB/ZXv1NHPvnY
-         Dqv7HXh3xMkfSCsYq489t6mtEe34uKIAn2/ofsCYJ14vrxBXT0M5FVk1ZZgcNj8hqC
-         g8C+nMvXBkR5NoUiHwx2va5aUXxQIgvP2YBNe26zxfRSuiJ0R2tqQcQfi9W9w5xdWh
-         kp1LN3WjAxwgIxqKCIWzwbbKTfmHPJQVFvZB+w1z4bbh2wmA5VIXISpuMq0XZ4Nt4I
-         ghwSvOXjxp+3txb0QzcHeL9i2cbiQzYeT26hd1WbY/1jx0vHdcyKlImh6aU2vuCcNu
-         koUmukqB7keYg==
+        b=DbhK7chTzJarQ5zq5lcHbZPBp7lLHZ9bIxmVg8MfBKekrpKOBvhpyLnhA4Vl6HG69
+         xT82mVcq+/yx3qjHkCngdQt9dnphPqLamVAuqcninp5QWeGKoqQUwHo8Ihg7ZLcRX7
+         o/8MV/IKDgPvpLcxX5okONDw+xjueSNNooO3pwzcaOTdCS3Wzrfd+OMLrP1uH3nrI3
+         yuAmDFMACNs5DUiG8Q/9FsFse1dOWDQ6ncSycgtkKtbn/xYlxu5tDqfVIJ3jDpMQD1
+         TAa84sJn66Fu4UKXRyx+yBZQNFa6uR2CDCLEbb1BR+ij+YgLLUzz7/5eL7RQ/V7vGv
+         dLMs/q9uaFZfQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Evan Quan <Evan.Quan@amd.com>, Lijo Lazar <Lijo.Lazar@amd.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, sre@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 05/17] power: supply: Ratelimit no data debug output
-Date:   Wed, 31 May 2023 09:44:49 -0400
-Message-Id: <20230531134502.3384828-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 09/17] power: supply: Fix logic checking if system is running from battery
+Date:   Wed, 31 May 2023 09:44:53 -0400
+Message-Id: <20230531134502.3384828-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134502.3384828-1-sashal@kernel.org>
 References: <20230531134502.3384828-1-sashal@kernel.org>
@@ -57,41 +58,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit 155c45a25679f571c2ae57d10db843a9dfc63430 ]
+[ Upstream commit 95339f40a8b652b5b1773def31e63fc53c26378a ]
 
-Reduce the amount of output this dev_dbg() statement emits into logs,
-otherwise if system software polls the sysfs entry for data and keeps
-getting -ENODATA, it could end up filling the logs up.
+The logic used for power_supply_is_system_supplied() counts all power
+supplies and assumes that the system is running from AC if there is
+either a non-battery power-supply reporting to be online or if no
+power-supplies exist at all.
 
-This does in fact make systemd journald choke, since during boot the
-sysfs power supply entries are polled and if journald starts at the
-same time, the journal is just being repeatedly filled up, and the
-system stops on trying to start journald without booting any further.
+The second rule is for desktop systems, that don't have any
+battery/charger devices. These systems will incorrectly report to be
+powered from battery once a device scope power-supply is registered
+(e.g. a HID device), since these power-supplies increase the counter.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Apart from HID devices, recent dGPUs provide UCSI power supplies on a
+desktop systems. The dGPU by default doesn't have anything plugged in so
+it's 'offline'. This makes power_supply_is_system_supplied() return 0
+with a count of 1 meaning all drivers that use this get a wrong judgement.
+
+To fix this case adjust the logic to also examine the scope of the power
+supply. If the power supply is deemed a device power supply, then don't
+count it.
+
+Cc: Evan Quan <Evan.Quan@amd.com>
+Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/power_supply_sysfs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/power/supply/power_supply_core.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index f37ad4eae60b9..d6c47ea27010c 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -127,7 +127,8 @@ static ssize_t power_supply_show_property(struct device *dev,
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index fd24254d90142..4a490ac4e4ed3 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -347,6 +347,10 @@ static int __power_supply_is_system_supplied(struct device *dev, void *data)
+ 	struct power_supply *psy = dev_get_drvdata(dev);
+ 	unsigned int *count = data;
  
- 		if (ret < 0) {
- 			if (ret == -ENODATA)
--				dev_dbg(dev, "driver has no data for `%s' property\n",
-+				dev_dbg_ratelimited(dev,
-+					"driver has no data for `%s' property\n",
- 					attr->attr.name);
- 			else if (ret != -ENODEV && ret != -EAGAIN)
- 				dev_err_ratelimited(dev,
++	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
++		if (ret.intval == POWER_SUPPLY_SCOPE_DEVICE)
++			return 0;
++
+ 	(*count)++;
+ 	if (psy->desc->type != POWER_SUPPLY_TYPE_BATTERY)
+ 		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
+@@ -365,8 +369,8 @@ int power_supply_is_system_supplied(void)
+ 				      __power_supply_is_system_supplied);
+ 
+ 	/*
+-	 * If no power class device was found at all, most probably we are
+-	 * running on a desktop system, so assume we are on mains power.
++	 * If no system scope power class device was found at all, most probably we
++	 * are running on a desktop system, so assume we are on mains power.
+ 	 */
+ 	if (count == 0)
+ 		return 1;
 -- 
 2.39.2
 
