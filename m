@@ -2,74 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D54171737E
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 04:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5ED717484
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 05:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbjEaCIV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 30 May 2023 22:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50786 "EHLO
+        id S229676AbjEaDvY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 30 May 2023 23:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbjEaCIU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 22:08:20 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7DF118
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 19:08:18 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f4db9987f8so538051e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 19:08:18 -0700 (PDT)
+        with ESMTP id S229878AbjEaDvX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 30 May 2023 23:51:23 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC536EC
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 20:51:21 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6af6fe73f11so4122149a34.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 May 2023 20:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685498897; x=1688090897;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5iTXqtzGDHFLNxZV32WsXRFXjr4KXN2U3ND/5EGM83Y=;
-        b=ypyCJC7GH8jeiNf4pyOhwKDsCMEo2q4WeURt84BgHrRahFsXwBJQNCEs4rWvGFQSv0
-         3lqEb4LSMiftwHKT8sBbpXi4H+ThILu6CLd2eI0EzGOrX8UbVaA3T58RmIifJoF3B1lU
-         RCBmz4+w8Y8nZxNiDnlQn2c1Msuq1KmO6JeBTLEXRsQ0wIITjD37Rj9mgRhI9cznsNXY
-         jJJSuYWhLyCaZfBGKFimBQ84ObU/8p7dEN4X47d7or56NAhHd+3xlapJznuVsj2j99YK
-         BJ/55j3u/ZMWvl4p2Lr/S6PhRQ7zQXIw+RASgAIswtcaG06/CaWEKqUJtI1SAxlvAgB0
-         19Nw==
+        d=linaro.org; s=google; t=1685505081; x=1688097081;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mc749fSoT7HRuZHMhc7vPNXSe/JLAydSHJGmkjEZ7Fw=;
+        b=Tyw1GlPkBOpYbtCaPr1gWiNTs0bxcS6ipEd5PkOHCkTMrkh1ohHRoksZR0UIArJ3rg
+         hsYeEAhYA0cXPOqUq2M+3QFgZEUXxlYNU3ZxeyfnqnulkOIDEX6fkmRpLDxIAp4GZghe
+         EyJvK5eEVUeQWu0uZDXJAPY0yJA5p49qVhRCucigkF0nbqGHcvxIq9lT1RDydxJbZzhi
+         E35zaf4AdqKIrM2DyWkr6PIX4uEONBZrlOGqQUGSE8Ad6C8xMhOFypJr9FUPLlCSHJkJ
+         Fwntqrm4vyIeOcD6Ec3g0RvqurFYAQRtgu0K3r3vSHcorv11AxDERz5EaCwgbad/0rIe
+         GEHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685498897; x=1688090897;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iTXqtzGDHFLNxZV32WsXRFXjr4KXN2U3ND/5EGM83Y=;
-        b=b7SV1LEG6Rv/J1JrN0G0GBOxTP+zVOzfb1CWQNB6tf4d3XNN3P3sspVYHJz8lLkYX8
-         JCUY9EMksJoCKoa+2WFSOE/X2oP9RXYO0R5HrlfIfNBFR6W2BLTwZUDkxs3sJSff0BUi
-         AedgozZb31uUPnv/GONC0jsp9SUgMPOcEoa+qMkCLhO7x6KfpC/XxMcwUiXEGZDPRFwH
-         WsGrIGzmL2Cd6z9OmJidB4PNBH2KVBdQ9MRqC9HTPdsowsF07hfiOR8UPnzBavhYYin0
-         L1DVijqHM/YjumFIPeUkZDMlBfgz0bUupmWPNI9DdAX2c5gnCEUZvEVRpRiJnrwajbsx
-         srPg==
-X-Gm-Message-State: AC+VfDwngbhgNdV0I5DpYSoCIzBe2NdPEdO2v+VSXOXI7OitWdmjgKrC
-        OLn/LWQqNRgqWtDhaItxI9qA4g==
-X-Google-Smtp-Source: ACHHUZ7sSzuf0HhfEAr84cuSEr/jxLNJn7QGG4Q3HMrJbRvWhZwjkWFpG5x/xrM6bnd2xCXA0IsWig==
-X-Received: by 2002:a05:6512:12c3:b0:4eb:4258:bf62 with SMTP id p3-20020a05651212c300b004eb4258bf62mr4666945lfg.8.1685498896738;
-        Tue, 30 May 2023 19:08:16 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id q10-20020ac25a0a000000b004f0199e8770sm522667lfn.65.2023.05.30.19.08.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 May 2023 19:08:16 -0700 (PDT)
-Message-ID: <e162134f-1c5d-d815-08af-b8633f709db9@linaro.org>
-Date:   Wed, 31 May 2023 05:08:15 +0300
+        d=1e100.net; s=20221208; t=1685505081; x=1688097081;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mc749fSoT7HRuZHMhc7vPNXSe/JLAydSHJGmkjEZ7Fw=;
+        b=luCR8sDgsnPGAQNJCY0iJiQLalrRhmyLnBki0IYnixJRgezaYk6Atc0qFLi5dxdzof
+         F0XfXpWDFlOC34Df7xFV4nAZPpMQalB+njJjs39DNLVll3qQsK15UXqgHXsG8qd6QVIo
+         vupX4BkIF3vGIKjPE5NAe0wxgnk2YQxK0mHR+4cR9yRjctXi+yw8dhLIZ0WUX+D1pmFA
+         nP3IKp3TSpFyPxcFMjauIPbt9219IJqUjSfgFvfTB7Nt/J5TCwx3/p+qw26SNB7SfnvH
+         0m6lRUp3HaIxLYdDdWgeIxMoEd9QWakRGEmtpHuNKoVO94iz4QE0TTwvkOcFkwvQMHiK
+         p+gw==
+X-Gm-Message-State: AC+VfDxM/SG5DM6dqMzfmYfkL7aSSUYX4qfANafWD64L6g4xvwhT3C59
+        ObvwT+1JlBjwQRz56sJl4lrfmw==
+X-Google-Smtp-Source: ACHHUZ60r75L+3Ycnf3xvFGl18uDOQ2gSUt6IFQ22YuOR4Dob9Ig7awwVDgye5CrNzIKDflk01jw+g==
+X-Received: by 2002:a05:6358:7241:b0:123:3133:1899 with SMTP id i1-20020a056358724100b0012331331899mr590034rwa.1.1685505081036;
+        Tue, 30 May 2023 20:51:21 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id i10-20020a17090332ca00b001af98dcf958sm81371plr.288.2023.05.30.20.51.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 May 2023 20:51:20 -0700 (PDT)
+Date:   Wed, 31 May 2023 09:21:18 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] opp: Fix use-after-free in lazy_opp_tables after
+ probe deferral
+Message-ID: <20230531035118.p3iogejcmatd7nql@vireshk-i7>
+References: <20230524-opp-lazy-uaf-v2-1-c26304544a47@kernkonzept.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v2 1/2] cpufreq: qcom-nvmem: add support for
- IPQ8074
-Content-Language: en-GB
-To:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ilia.lin@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     ansuelsmth@gmail.com
-References: <20230530165807.642084-1-robimarko@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230530165807.642084-1-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230524-opp-lazy-uaf-v2-1-c26304544a47@kernkonzept.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,123 +72,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/05/2023 19:58, Robert Marko wrote:
-> IPQ8074 comes in 2 families:
-> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
-> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
+On 30-05-23, 17:54, Stephan Gerhold wrote:
+> When dev_pm_opp_of_find_icc_paths() in _allocate_opp_table() returns
+> -EPROBE_DEFER, the opp_table is freed again, to wait until all the
+> interconnect paths are available.
 > 
-> So, in order to be able to share one OPP table lets add support for IPQ8074
-> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
+> However, if the OPP table is using required-opps then it may already
+> have been added to the global lazy_opp_tables list. The error path
+> does not remove the opp_table from the list again.
 > 
-> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
-> will get created by NVMEM CPUFreq driver.
+> This can cause crashes later when the provider of the required-opps
+> is added, since we will iterate over OPP tables that have already been
+> freed. E.g.:
 > 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>   Unable to handle kernel NULL pointer dereference when read
+>   CPU: 0 PID: 7 Comm: kworker/0:0 Not tainted 6.4.0-rc3
+>   PC is at _of_add_opp_table_v2 (include/linux/of.h:949
+>   drivers/opp/of.c:98 drivers/opp/of.c:344 drivers/opp/of.c:404
+>   drivers/opp/of.c:1032) -> lazy_link_required_opp_table()
+> 
+> Fix this by calling _of_clear_opp_table() to remove the opp_table from
+> the list and clear other allocated resources. While at it, also add the
+> missing mutex_destroy() calls in the error path.
+> 
+> Cc: stable@vger.kernel.org
+> Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Fixes: 7eba0c7641b0 ("opp: Allow lazy-linking of required-opps")
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 > ---
 > Changes in v2:
-> * Print an error if SMEM ID is not part of the IPQ8074 family
-> and restrict the speed to Acorn variant (1.4GHz)
-
-My comments to the patch2 apply here too. Would it be possible to add 
-separate dtsi files targeting each of these families?
-
-If not, please change IPQ8074_foo_VERSIONS macros to the enum instead of 
-BIT(n).
-
+> - Call _of_clear_opp_table() as suggested by Viresh
+> - Also add missing mutex_destroy() calls in the error path
+> - Link to v1: https://lore.kernel.org/r/20230524-opp-lazy-uaf-v1-1-f5f95cb4b6de@kernkonzept.com
 > ---
->   drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
->   drivers/cpufreq/qcom-cpufreq-nvmem.c | 43 ++++++++++++++++++++++++++++
->   2 files changed, 44 insertions(+)
+> This fixes the crash I ran into after adding an OPP table with
+> both "required-opps" and interconnect paths (opp-peak-kBps).
+> ---
+>  drivers/opp/core.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index ea86c9f3ed7a..78f6ff933f93 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -170,6 +170,7 @@ static const struct of_device_id blocklist[] __initconst = {
->   	{ .compatible = "ti,am62a7", },
->   
->   	{ .compatible = "qcom,ipq8064", },
-> +	{ .compatible = "qcom,ipq8074", },
->   	{ .compatible = "qcom,apq8064", },
->   	{ .compatible = "qcom,msm8974", },
->   	{ .compatible = "qcom,msm8960", },
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index a88b6fe5db50..ce444b5962f2 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -31,6 +31,9 @@
->   
->   #include <dt-bindings/arm/qcom,ids.h>
->   
-> +#define IPQ8074_HAWKEYE_VERSION		BIT(0)
-> +#define IPQ8074_ACORN_VERSION		BIT(1)
-> +
->   struct qcom_cpufreq_drv;
->   
->   struct qcom_cpufreq_match_data {
-> @@ -204,6 +207,41 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->   	return ret;
->   }
->   
-> +static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
-> +					     struct nvmem_cell *speedbin_nvmem,
-> +					     char **pvs_name,
-> +					     struct qcom_cpufreq_drv *drv)
-> +{
-> +	u32 msm_id;
-> +	int ret;
-> +	*pvs_name = NULL;
-> +
-> +	ret = qcom_smem_get_soc_id(&msm_id);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (msm_id) {
-> +	case QCOM_ID_IPQ8070A:
-> +	case QCOM_ID_IPQ8071A:
-> +		drv->versions = IPQ8074_ACORN_VERSION;
-> +		break;
-> +	case QCOM_ID_IPQ8072A:
-> +	case QCOM_ID_IPQ8074A:
-> +	case QCOM_ID_IPQ8076A:
-> +	case QCOM_ID_IPQ8078A:
-> +		drv->versions = IPQ8074_HAWKEYE_VERSION;
-> +		break;
-> +	default:
-> +		dev_err(cpu_dev,
-> +			"SoC ID %u is not part of IPQ8074 family, limiting to 1.4GHz!\n",
-> +			msm_id);
-> +		drv->versions = IPQ8074_ACORN_VERSION;
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static const struct qcom_cpufreq_match_data match_data_kryo = {
->   	.get_version = qcom_cpufreq_kryo_name_version,
->   };
-> @@ -218,6 +256,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
->   	.genpd_names = qcs404_genpd_names,
->   };
->   
-> +static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
-> +	.get_version = qcom_cpufreq_ipq8074_name_version,
-> +};
-> +
->   static int qcom_cpufreq_probe(struct platform_device *pdev)
->   {
->   	struct qcom_cpufreq_drv *drv;
-> @@ -363,6 +405,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
->   	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
->   	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
->   	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
-> +	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
->   	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
->   	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
->   	{ .compatible = "qcom,msm8960", .data = &match_data_krait },
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 85cbc8de407c..7046487dc6f4 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1358,7 +1358,10 @@ static struct opp_table *_allocate_opp_table(struct device *dev, int index)
+>  	return opp_table;
+>  
+>  remove_opp_dev:
+> +	_of_clear_opp_table(opp_table);
+>  	_remove_opp_dev(opp_dev, opp_table);
+> +	mutex_destroy(&opp_table->genpd_virt_dev_lock);
+> +	mutex_destroy(&opp_table->lock);
+>  err:
+>  	kfree(opp_table);
+>  	return ERR_PTR(ret);
+> 
+
+Applied. Thanks.
 
 -- 
-With best wishes
-Dmitry
-
+viresh
