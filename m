@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40842718959
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 20:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2610718967
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 20:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjEaS0f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 14:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S230360AbjEaSbW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 May 2023 14:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbjEaS0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 14:26:34 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B15497
-        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 11:26:33 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f3b314b1d7so6862134e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 11:26:33 -0700 (PDT)
+        with ESMTP id S229775AbjEaSbV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 14:31:21 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BD9193
+        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 11:31:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f4f8b94c06so5371328e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 11:31:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1685557591; x=1688149591;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1685557867; x=1688149867;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=suwwf3segF0JfVvw0RJx5BeLxnNIcxSxshqwjhCRkQY=;
-        b=jRoN6yyuDRGkMKkx2B0Xe1d9pbTb6HKkELObgRxT5OUCyfyknFvQdKC58MCJS5r/JH
-         5OGbz+/CKUmoOSXB6rAal7eb63DX1QZVVaD221FlZP2xkAdqG728/JGv3vEWhlki5dW5
-         Sy9L6uS//A3e5IEH2tmw1sh0+uh2K5WEypwtY6VE4whn5vhRQ2MZU0/OhRfR4YAJflpa
-         Ng5GgJK2MXut6oPEUuQPQEJfRD4x7Z3Gjd4U6T0BYxC+y9OkCQ7cUNzxxH8Bj9A49w3g
-         X+44G4YZwLSFf03RqjWtEspvB+DAYNkwK0lc2AFQPPfUs8YxZxB7DM7Clb1Uvlvv2ZbL
-         qk0A==
+        bh=K7PA/kuSsG3SQ44Ob6dTk9/jtnQJTTK0jHBW73mzFeY=;
+        b=h8tiHuBrFDLXkl9nrdp7fgm7bO1t2C6I1bCrClPe3KXQBr3z89mukHeXMS/qLg6yXf
+         X/ayxJ4h59Q4L6OuLHp59JwNueqnsZIfDG9rfBSzu7/xGs4C23XFC8zG9j6DPDdgBnru
+         g/NGf0v4af63JRO2VhxtHrMUHENUfjv8IJxt+0o4d4z0UHP7/ZqTSWR4KG68dXjiTdT2
+         8yXb9OgI+INjF8MUNRzd/8fub8kqRnz3byaFAhco0oZrPUN8+AwhqxoX0tUw5DL8Iqjf
+         NMx9krkmI/si/Tt3shu1AcReVlwKpBAMgg/DWHNbA0Cxl94jbkdQvZSFaqXgIk5nFnX8
+         cmvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685557591; x=1688149591;
+        d=1e100.net; s=20221208; t=1685557867; x=1688149867;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=suwwf3segF0JfVvw0RJx5BeLxnNIcxSxshqwjhCRkQY=;
-        b=dKnGs8AYppYVwlNxPkXgLRcFQA4+ewuKK2QBzdesu76MQ2vv8Alr00n3W7R41S05zd
-         NlRwB0MMdqdEDHYT4cFZr/WafsHf6gSR9T2GO5YFTKUTTMOfkvwaDSwyO/bgpGfCNTUy
-         uadj3OMangNSfO3vsgccjDoX/A4uvtOwx7X/K12Ppv2TGg6gJ+ZU/n/ZJwvMeaHXU7WH
-         wg5D+Gm8LsQlHS8Ur4b5+FabDd/TyNNFaVlaZjvL8PgtCaytvuq7U5BXyTLvWvN+/1dS
-         0LMJHL7gxgE/dk/Z7l0ZwCUrGCnD+2B1NjP2koleHEktSLlCZei4byA5C/1UOLhuNK02
-         VKEg==
-X-Gm-Message-State: AC+VfDz1TPzEJuU+glIn4dvvBwcbWYiRBrRhJewv1Tlw95XW86hxIdtY
-        Zhd0m1LfqrJjlbN8laldOZ31Wg==
-X-Google-Smtp-Source: ACHHUZ4ZGRRltCWJt4Gmd6jPcsg/hHzjXIvc8xDd9X7Zz8ZY24cy4NW87Ub0FC00KbmHHgQoG8XpoQ==
-X-Received: by 2002:ac2:5598:0:b0:4f3:824e:a94b with SMTP id v24-20020ac25598000000b004f3824ea94bmr3482327lfg.54.1685557591120;
-        Wed, 31 May 2023 11:26:31 -0700 (PDT)
+        bh=K7PA/kuSsG3SQ44Ob6dTk9/jtnQJTTK0jHBW73mzFeY=;
+        b=XZ615H5FkwaT669dzp4CzhKFmNwSmG5NTBFUJS5WVGdMPkiBdEJ+7JxN7KnefLVrw7
+         6nQxYfAvEcwu5U4A87lZCQv6p2AiG++Dht0Uzjdo8gI1Fxk+RAq+rKYFyQTKAkUX/tKq
+         q/LaEt0QLhelw650fDjEVLPLdv0Squ8KwZIG2q/oVAThXoLqxcBYh5ldWCT6fFHuzj4l
+         iNOMDs3uA23m9tt2Whrnl32oAD6K+PHpRBldfw623oJzCO5Oq47Vzn4lFx3Ucm9litz1
+         Wq94c6klcNii1jWJ/CpEw0Kl1nkZtxj1cdN+AUBQe5FOapYkkYKqjZc4FEB2YlGcvzUK
+         hlOg==
+X-Gm-Message-State: AC+VfDxl3Uj5EkOHqUAGxVdys5pyxAvPQvxw1lmix51e7HvimZEOWCxe
+        W9yPI8PP98ySfLPhjHYC7giYPg==
+X-Google-Smtp-Source: ACHHUZ4bcBJ3dEfE+Ms+4JAf3HYi0nt2YoJWh5X16fmQivwwguL0D6rldA0fxzTXBTLWdFWY9pX9SQ==
+X-Received: by 2002:a19:a409:0:b0:4f4:af2c:97e with SMTP id q9-20020a19a409000000b004f4af2c097emr2916729lfc.11.1685557867403;
+        Wed, 31 May 2023 11:31:07 -0700 (PDT)
 Received: from airbuntu (host109-154-46-114.range109-154.btcentralplus.com. [109.154.46.114])
-        by smtp.gmail.com with ESMTPSA id 10-20020a05600c228a00b003f42461ac75sm25172249wmf.12.2023.05.31.11.26.29
+        by smtp.gmail.com with ESMTPSA id b9-20020adfe309000000b003079986fd71sm7808799wrj.88.2023.05.31.11.31.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 May 2023 11:26:30 -0700 (PDT)
-Date:   Wed, 31 May 2023 19:26:29 +0100
+        Wed, 31 May 2023 11:31:07 -0700 (PDT)
+Date:   Wed, 31 May 2023 19:31:05 +0100
 From:   Qais Yousef <qyousef@layalina.io>
 To:     Lukasz Luba <lukasz.luba@arm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
@@ -57,20 +57,19 @@ Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         juri.lelli@redhat.com, vincent.guittot@linaro.org,
         dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
         bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
-        qyousef@google.com
-Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
- uclamp set from user-space
-Message-ID: <20230531182629.nztie5rwhjl53v3d@airbuntu>
+        qyousef@google.com, kernel test robot <lkp@intel.com>
+Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
+ filter out requests
+Message-ID: <20230531183105.r5tqpdx5axoogkzp@airbuntu>
 References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-2-lukasz.luba@arm.com>
+ <20230522145702.2419654-4-lukasz.luba@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230522145702.2419654-2-lukasz.luba@arm.com>
+In-Reply-To: <20230522145702.2419654-4-lukasz.luba@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,17 +77,63 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 05/22/23 15:57, Lukasz Luba wrote:
-> The user-space can set uclamp value for a given task. It impacts task
-> placement decisions made by the scheduler. This is very useful information
-> and helps to understand the system behavior or track improvements in
-> middleware and applications which start using uclamp mechanisms and report
-> better performance in tests.
+> Some of the frequency update requests coming form the task scheduler
+> might be filter out. It can happen when the previous request was served
+> not that long ago (in a period smaller than provided by the cpufreq driver
+> as minimum for frequency update). In such case, we want to know if some of
+> the frequency updates cannot make through.
+> Export the new tracepoint as well. That would allow to handle it by a
+> toolkit for trace analyzes.
+> 
+> Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/trace/events/sched.h     |  4 ++++
+>  kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
+>  2 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> index dbfb30809f15..e34b7cd5de73 100644
+> --- a/include/trace/events/sched.h
+> +++ b/include/trace/events/sched.h
+> @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
+>  	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+>  	TP_ARGS(tsk, uclamp_id, value));
+>  
+> +DECLARE_TRACE(schedutil_update_filtered_tp,
+> +	TP_PROTO(int cpu),
+> +	TP_ARGS(cpu));
+> +
+>  #endif /* _TRACE_SCHED_H */
+>  
+>  /* This part must be outside protection */
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index f462496e5c07..4f9daf258a65 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -6,6 +6,8 @@
+>   * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>   */
+>  
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
+> +
+>  #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
+>  
+>  struct sugov_tunables {
+> @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+>  
+>  	ignore_dl_rate_limit(sg_cpu);
+>  
+> -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
+> +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+>  		return false;
+> +	}
 
-Do you mind adding a generic one instead please? And explain why we can't just
-attach to the syscall via kprobes? I think you want to bypass the permission
-checks, so maybe a generic tracepoint after that might be justifiable?
-Then anyone can use it to track how userspace has changed any attributes for
-a task, not just uclamp.
+Can't we have something more generic here too? Are you interested to count
+these events? How do you plan to use it?
+
+I think this will be a very noisy event by the way.
 
 
 Thanks
@@ -96,56 +141,20 @@ Thanks
 --
 Qais Yousef
 
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/trace/events/sched.h | 4 ++++
->  kernel/sched/core.c          | 5 +++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-> index fbb99a61f714..dbfb30809f15 100644
-> --- a/include/trace/events/sched.h
-> +++ b/include/trace/events/sched.h
-> @@ -735,6 +735,10 @@ DECLARE_TRACE(sched_update_nr_running_tp,
->  	TP_PROTO(struct rq *rq, int change),
->  	TP_ARGS(rq, change));
 >  
-> +DECLARE_TRACE(uclamp_update_tsk_tp,
-> +	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
-> +	TP_ARGS(tsk, uclamp_id, value));
-> +
->  #endif /* _TRACE_SCHED_H */
+>  	sugov_get_util(sg_cpu);
+>  	sugov_iowait_apply(sg_cpu, time, max_cap);
+> @@ -446,8 +450,10 @@ sugov_update_shared(struct update_util_data *hook, u64 time, unsigned int flags)
 >  
->  /* This part must be outside protection */
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 944c3ae39861..7b9b800ebb6c 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -114,6 +114,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(uclamp_update_tsk_tp);
+>  	ignore_dl_rate_limit(sg_cpu);
 >  
->  DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+> -	if (!sugov_should_update_freq(sg_policy, time))
+> +	if (!sugov_should_update_freq(sg_policy, time)) {
+> +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+>  		goto unlock;
+> +	}
 >  
-> @@ -1956,12 +1957,16 @@ static void __setscheduler_uclamp(struct task_struct *p,
->  	    attr->sched_util_min != -1) {
->  		uclamp_se_set(&p->uclamp_req[UCLAMP_MIN],
->  			      attr->sched_util_min, true);
-> +		trace_uclamp_update_tsk_tp(p, UCLAMP_MIN,
-> +					   attr->sched_util_min);
->  	}
->  
->  	if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP_MAX &&
->  	    attr->sched_util_max != -1) {
->  		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
->  			      attr->sched_util_max, true);
-> +		trace_uclamp_update_tsk_tp(p, UCLAMP_MAX,
-> +					   attr->sched_util_max);
->  	}
->  }
+>  	next_f = sugov_next_freq_shared(sg_cpu, time);
 >  
 > -- 
 > 2.25.1
