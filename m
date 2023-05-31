@@ -2,48 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357BF718384
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 15:51:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AE86718396
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 15:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237187AbjEaNvP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 09:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60728 "EHLO
+        id S237218AbjEaNvU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 May 2023 09:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237347AbjEaNu0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 09:50:26 -0400
+        with ESMTP id S237440AbjEaNuh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 09:50:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01DDA30D8;
-        Wed, 31 May 2023 06:45:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C8C3591;
+        Wed, 31 May 2023 06:46:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F9D663B8F;
-        Wed, 31 May 2023 13:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03786C4339C;
-        Wed, 31 May 2023 13:45:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8685A63AEF;
+        Wed, 31 May 2023 13:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3585EC4339B;
+        Wed, 31 May 2023 13:46:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540751;
-        bh=nD1t/E19GvuM185RwEMXumOUXDzA4+3FRbzJrA/BCOg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Iv7oUAn4kVHxXpCm1hI93SHedeTy0IUSUzWrC4wjZ5nZuOvDAhbwH9U6j69GO1Mdj
-         /JqQpQkcDebL+JzBMIkj8NSHTQ3xsduYm/VgBwVAuEn9wSZgboaoJaWrwtOewNKV77
-         NL5Tqo3z0GoeYB2leqaVGtixaHbIacZv25+4EPZ1OfzhfGJJ6L48mLKHNK3YbWyg7m
-         EApW5ipboUd88AqG2904entXFki+xyCSR93cPke7sS6iDNAPBqxyudcjVVa8w1GZfC
-         mHLzr86VdjlxPWScijVIJEcg0Y/4aNaDbodQ452DK9UTb4V0e+2I6amXpa2r2dSLL+
-         u7EV0lNi77qUg==
+        s=k20201202; t=1685540769;
+        bh=N4srQR9OZBgSCwNEzl/+0LuTOtskbuyIIi8sxgsCfrU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gZRU15Z0xBbhkm0YKM5XOrnLX1Z6OhU5c5TD5QcaFT76Uo+E+jOs9971Rh/RdbZNa
+         djifW5fY8mb1y1B/t85MOig+RV2ft8Mx6V/V3TJU4BHqoa5zO7ZcrT3yYJubyPjqvH
+         2EGbxX/ZVCNL24MykNkWaY6VLZaah17QcvrC+Fzq6WpIQGrBPV7rvxP1Vz+sOkp5P5
+         UpFtOPDRxzfrDsNu0ouMWnW6IdfIAAj8eexarq3zaQWRQ1HMzRVmDMl5ke8NzhUag9
+         xGTwMNbhhOdKFbwgc9Zum4flkiYdhFRkLorqxglpcBB+/Kb9sf7BuporMRfFm5XOxg
+         Q46JavJxPlkPw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Evan Quan <Evan.Quan@amd.com>, Lijo Lazar <Lijo.Lazar@amd.com>,
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, sre@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/13] power: supply: Fix logic checking if system is running from battery
-Date:   Wed, 31 May 2023 09:45:35 -0400
-Message-Id: <20230531134541.3385043-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 01/10] power: supply: ab8500: Fix external_power_changed race
+Date:   Wed, 31 May 2023 09:45:57 -0400
+Message-Id: <20230531134606.3385210-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230531134541.3385043-1-sashal@kernel.org>
-References: <20230531134541.3385043-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -58,64 +56,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit 95339f40a8b652b5b1773def31e63fc53c26378a ]
+[ Upstream commit a5299ce4e96f3e8930e9c051b28d8093ada87b08 ]
 
-The logic used for power_supply_is_system_supplied() counts all power
-supplies and assumes that the system is running from AC if there is
-either a non-battery power-supply reporting to be online or if no
-power-supplies exist at all.
+ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
+which gets sets in ab8500_btemp_probe() like this:
 
-The second rule is for desktop systems, that don't have any
-battery/charger devices. These systems will incorrectly report to be
-powered from battery once a device scope power-supply is registered
-(e.g. a HID device), since these power-supplies increase the counter.
+        di->btemp_psy = devm_power_supply_register(dev, &ab8500_btemp_desc,
+                                                   &psy_cfg);
 
-Apart from HID devices, recent dGPUs provide UCSI power supplies on a
-desktop systems. The dGPU by default doesn't have anything plugged in so
-it's 'offline'. This makes power_supply_is_system_supplied() return 0
-with a count of 1 meaning all drivers that use this get a wrong judgement.
+As soon as devm_power_supply_register() has called device_add()
+the external_power_changed callback can get called. So there is a window
+where ab8500_btemp_external_power_changed() may get called while
+di->btemp_psy has not been set yet leading to a NULL pointer dereference.
 
-To fix this case adjust the logic to also examine the scope of the power
-supply. If the power supply is deemed a device power supply, then don't
-count it.
+Fixing this is easy. The external_power_changed callback gets passed
+the power_supply which will eventually get stored in di->btemp_psy,
+so ab8500_btemp_external_power_changed() can simply directly use
+the passed in psy argument which is always valid.
 
-Cc: Evan Quan <Evan.Quan@amd.com>
-Suggested-by: Lijo Lazar <Lijo.Lazar@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+And the same applies to ab8500_fg_external_power_changed().
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/power_supply_core.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/power/supply/ab8500_btemp.c | 6 ++----
+ drivers/power/supply/ab8500_fg.c    | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 9b98921a3b16a..1d1a095569e91 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -350,6 +350,10 @@ static int __power_supply_is_system_supplied(struct device *dev, void *data)
- 	struct power_supply *psy = dev_get_drvdata(dev);
- 	unsigned int *count = data;
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 97423a04fc0f0..c58644a3345ce 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -976,10 +976,8 @@ static int ab8500_btemp_get_ext_psy_data(struct device *dev, void *data)
+  */
+ static void ab8500_btemp_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_btemp *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->btemp_psy, ab8500_btemp_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_btemp_get_ext_psy_data);
+ }
  
-+	if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_SCOPE, &ret))
-+		if (ret.intval == POWER_SUPPLY_SCOPE_DEVICE)
-+			return 0;
-+
- 	(*count)++;
- 	if (psy->desc->type != POWER_SUPPLY_TYPE_BATTERY)
- 		if (!psy->desc->get_property(psy, POWER_SUPPLY_PROP_ONLINE,
-@@ -368,8 +372,8 @@ int power_supply_is_system_supplied(void)
- 				      __power_supply_is_system_supplied);
+ /* ab8500 btemp driver interrupts and their respective isr */
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index b00844103a07a..f99e248f6aed3 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2384,10 +2384,8 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+  */
+ static void ab8500_fg_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_fg *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->fg_psy, ab8500_fg_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_fg_get_ext_psy_data);
+ }
  
- 	/*
--	 * If no power class device was found at all, most probably we are
--	 * running on a desktop system, so assume we are on mains power.
-+	 * If no system scope power class device was found at all, most probably we
-+	 * are running on a desktop system, so assume we are on mains power.
- 	 */
- 	if (count == 0)
- 		return 1;
+ /**
 -- 
 2.39.2
 
