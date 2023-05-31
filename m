@@ -2,129 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85254717B95
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 11:17:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53294717C10
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 11:36:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232537AbjEaJRo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 05:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
+        id S235361AbjEaJgg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 May 2023 05:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235146AbjEaJRm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 05:17:42 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B197BE6
-        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 02:17:40 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96fb45a5258so974001666b.2
-        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 02:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685524659; x=1688116659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OADC3RfZz8aGJuKXNoOKeJUa9cEawhPV5nN0Ge23Nzo=;
-        b=Ff5Z9vs7m6+MWJxaKpqar6M9LALIChP6jBiwVtVzc3n81B4S6RoiYfhqOP9ZQc9L7O
-         rZ5u0Q584Ng+8r4dGqx6ZmwULpo/ZwLqmQwRIXxmMpCZk62etI4oJ6VFEIgKKPKJlutf
-         w0hZ55SSQ05ac0O3gXNybzXJVMaNAm/CgG9+KAONDSZDvxPdwo//S1wW29I/iLlatzkI
-         SsF+EUEvnnGaeyzAKP8wfRFHMUQUNkXlfbFzCj8xM9SM8fbwUL4jP8YiRzzX1Gu1sDVu
-         352fRp8qaqO5ANlDAbN1Lyxvm65fWCNG8Di7lWIuaTR3w8dmciNewyu1zGuLUvFq74Ye
-         kccg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685524659; x=1688116659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OADC3RfZz8aGJuKXNoOKeJUa9cEawhPV5nN0Ge23Nzo=;
-        b=KL0hM+D3YLytW1f6+3hhZPjNfCxoJnqHPsDfDijmG3SwcSLwM6rEj5Jc6qkjx4N/cS
-         3tpCUmV2JtTvZHyPq30Uu5mdNiVwH7xiUIVURirZnrsE/O5P48B8lwsiaxo77T7UKi83
-         36WKaOA/umifLlhy4x2dO+EkWzyADN5UWHZvw3iA1ibTSGa7+8FJtFtt3dHMfwmQGKpM
-         MjJ5wKuVAM8ADvvBxZwarCTAgd70p0MoWQJem5yeq8ls/6wmj0IA9TTG+qGoczlM4rHP
-         OR2HFJaOOHYlwW5TUVQfA5Bmj438KaNP6JyMFOMdvu/50yYVooupUI3yn6MiItcYKJuE
-         Cipg==
-X-Gm-Message-State: AC+VfDzjaCwPuCbx2g/9JLE8SugFBoH5LyoqjRtHx4EF0a3avgsgmPHq
-        P7F+nyHLV4NlMw52uC931DiZpQ==
-X-Google-Smtp-Source: ACHHUZ6Mwh1uhjbIvXzEqr7u6gpp/I8WIdGTzFCAjeE3E4N0lM8OSIEEpXCjuHkrdJ3YTuCvJFnGrg==
-X-Received: by 2002:a17:906:6a0c:b0:973:daa0:2f6 with SMTP id qw12-20020a1709066a0c00b00973daa002f6mr4796212ejc.3.1685524659193;
-        Wed, 31 May 2023 02:17:39 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170906b28a00b00965d294e633sm8682465ejz.58.2023.05.31.02.17.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 May 2023 02:17:38 -0700 (PDT)
-Message-ID: <1f966e93-50c3-142e-620c-8fbb16e9b1a7@linaro.org>
-Date:   Wed, 31 May 2023 11:17:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+        with ESMTP id S230236AbjEaJgf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 05:36:35 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBA83C0;
+        Wed, 31 May 2023 02:36:32 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(761:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Wed, 31 May 2023 17:36:19 +0800 (CST)
+Received: from ex3.rt.l (192.168.10.46) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Wed, 31 May
+ 2023 17:36:18 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Wed, 31 May 2023 17:36:18 +0800
+Date:   Wed, 31 May 2023 17:36:18 +0800
+From:   ChiYuan Huang <cy_huang@richtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <sre@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <chiaen_wu@richtek.com>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH] dt-bindings: power: supply: Fix rt9467 charger enable
  gpio active level
-Content-Language: en-US
-To:     cy_huang@richtek.com, sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     chiaen_wu@richtek.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <20230531093618.GA17005@linuxcarl2.richtek.com>
 References: <1685522813-14481-1-git-send-email-cy_huang@richtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1685522813-14481-1-git-send-email-cy_huang@richtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+ <1f966e93-50c3-142e-620c-8fbb16e9b1a7@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1f966e93-50c3-142e-620c-8fbb16e9b1a7@linaro.org>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/05/2023 10:46, cy_huang@richtek.com wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, May 31, 2023 at 11:17:37AM +0200, Krzysztof Kozlowski wrote:
+> On 31/05/2023 10:46, cy_huang@richtek.com wrote:
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> > 
+> > The RT9467 charger enable pin is an external signal that used to enable
+> > battery charging. From the datasheet, the active level is low. Although
+> > it's already configured to logic low at driver probe function, but the
 > 
-> The RT9467 charger enable pin is an external signal that used to enable
-> battery charging. From the datasheet, the active level is low. Although
-> it's already configured to logic low at driver probe function, but the
-
-NAK.
-
-You mix two different things. Driver behavior and DTS. Driver can
-operate either on real level - matching hardware - or on logical level
-(high as enable, low as disable). First choice is usually wrong, because
-it does not allow inverted signals.
-
-'Correcting' bindings to wrong approach is wrong. If the signal is
-active low, then the flag is active low. Simple as that.
-
-> current binding example declared it as 'GPIO_ACTIVE_LOW', this causes
-> this pin be output high and disable battery charging.
+> NAK.
 > 
-> Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
-> Hi,
+> You mix two different things. Driver behavior and DTS. Driver can
+> operate either on real level - matching hardware - or on logical level
+> (high as enable, low as disable). First choice is usually wrong, because
+> it does not allow inverted signals.
 > 
->   This patch is to fix the active level for charger enable gpio polarity.
+> 'Correcting' bindings to wrong approach is wrong. If the signal is
+> active low, then the flag is active low. Simple as that.
+>
+If my understanding is right, so the correct way is to fix the driver code,
+not binding exmaple.
 
-This is just example - it does not fix anything...
-
-> Currently, the wrong active level makes the user confused and
-> unexpectedly disable battery charging by default.
-> ---
->  Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > current binding example declared it as 'GPIO_ACTIVE_LOW', this causes
+> > this pin be output high and disable battery charging.
+> > 
+> > Fixes: e1b4620fb503 ("dt-bindings: power: supply: Add Richtek RT9467 battery charger")
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > ---
+> > Hi,
+> > 
+> >   This patch is to fix the active level for charger enable gpio polarity.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-> index 3723717..cdc7678 100644
-> --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
-> @@ -69,7 +69,7 @@ examples:
->          reg = <0x5b>;
->          wakeup-source;
->          interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
-> -        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
-> +        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_HIGH>;
->  
->          rt9467_otg_vbus: usb-otg-vbus-regulator {
->            regulator-name = "rt9467-usb-otg-vbus";
+> This is just example - it does not fix anything...
+> 
+Sorry, this issue comes from the customer. They directly copy the example into their
+platform dts. That's why originally I think it may be a fix.
 
-Best regards,
-Krzysztof
+Anyway, you're right. To maintain the maximum flexibility, the choice shouldn't be to fix
+the example. It has to correct the driver code for this pin behavior.
 
+Thanks.
+> > Currently, the wrong active level makes the user confused and
+> > unexpectedly disable battery charging by default.
+> > ---
+> >  Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+> > index 3723717..cdc7678 100644
+> > --- a/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+> > +++ b/Documentation/devicetree/bindings/power/supply/richtek,rt9467.yaml
+> > @@ -69,7 +69,7 @@ examples:
+> >          reg = <0x5b>;
+> >          wakeup-source;
+> >          interrupts-extended = <&gpio_intc 32 IRQ_TYPE_LEVEL_LOW>;
+> > -        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_LOW>;
+> > +        charge-enable-gpios = <&gpio26 1 GPIO_ACTIVE_HIGH>;
+> >  
+> >          rt9467_otg_vbus: usb-otg-vbus-regulator {
+> >            regulator-name = "rt9467-usb-otg-vbus";
+> 
+> Best regards,
+> Krzysztof
+> 
