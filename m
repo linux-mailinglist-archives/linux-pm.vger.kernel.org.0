@@ -2,216 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B00971799D
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 10:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92547179F0
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 10:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbjEaIH5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 04:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S234740AbjEaIWr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 May 2023 04:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbjEaIH4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 04:07:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E910F93;
-        Wed, 31 May 2023 01:07:54 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FC7A6605840;
-        Wed, 31 May 2023 09:07:52 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685520473;
-        bh=syibSnSgVW/WgKtMEucS9UFVkWbwc3QJ4w7wcrUGNe4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=lGTUTiov8cdSlXACf27Y27u3DUVUgRr0kpNk+qIvvL+OolmBZtQ5wUXE+v3DjRU9O
-         vWfsHEwq/zp3+cCXfiHECRqp1uP39YNqAezjOLeQrHnrHYkVQzhnc55JK/gBGr95jw
-         7qBUfGooI++rwUhkA+1B80kDqk6jYZy3aWgYDqTi5vi7MTUaGsQuAfz7MrWjtp/F5t
-         bgNwAX3vYymrSOQMnz2ekb+i3RcXVcXbNyfwzZXb8BO5a+6RqQOj10kDxU0JV77vbT
-         CBMMXdTbwSMdNNmdRc52NwUdcM+u0c1T2XUO+1n+iQJUUb/qkSlOLvh/fG7gg/da7a
-         wEb3FxVeQmvWg==
-Message-ID: <7acba6fc-e1f7-8711-cf4a-2c24b2ccaf36@collabora.com>
-Date:   Wed, 31 May 2023 10:07:49 +0200
+        with ESMTP id S233509AbjEaIWq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 04:22:46 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFAEBE
+        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 01:22:43 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51496f57e59so5271458a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 31 May 2023 01:22:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685521362; x=1688113362;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pOPIHFPeoZm1SHuLb6csoeVTgdHyefcQkMoNigozzN8=;
+        b=JAihcfs2MO9yplHrNsezyN7/h08pjwHwVJtCock7qeleu9jKO+ZKUeZOxRt0vzdKho
+         4SvHmcW7tAbINr6vtbDFK7AEaoeV87JQwkMNqQDcB7Cc6ZEpj9U8S2irG1wiFvChg7Dn
+         ZXSGP56/NVauqW5kd391TwetSg6XN5AwA7RM1yiGGXUAim5wv/IjrwL3BK78WBI2xZ4L
+         7eqhU4OAEoKFkpzuAMa61tF3aODSYU77hvQL6TUDuJ7O/iIj4D5bPBsQGoKrYPx1L7PR
+         OTG2fFHFt4KmdnuVJexaAY736pleKDO5wzwZBa62eqH4oMPLmJ4A8L6fHtjsukbBAWVh
+         yfhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685521362; x=1688113362;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pOPIHFPeoZm1SHuLb6csoeVTgdHyefcQkMoNigozzN8=;
+        b=Re/L/wYo9vAtwa3Aaoj8JD7ZapiYDdMjsxoC1pIFcAHfN3qiw9BuDzbSy0eNFrvko8
+         sO+c4bZzWJahBDg/fZXhV3HzIYHSo4ghmitAFRFI+tsGqXX+hYcMAFMHVAEohTrRjkjh
+         Bi3NYhocyQLm6/q2RLfSux0QAfUrnREK33U6iXKmBtip0nFlSpOmVZmUFTZN1WfmTTKn
+         NrC2UdVeOOo+zRubLtZxFP/eUTSPu3UUFDdcu1qiwjrcjW3FZXv9zhryH/s3puVEb5fO
+         hIjGigA8f62gGxfYSIjWc3kuf3Ki3UE+jet50JXI7WFzjyV4qOwUHRx5ZygRnX12E8BP
+         MXLQ==
+X-Gm-Message-State: AC+VfDz/lgKeAhrlcevveUkS68Z8hLireGujTmfmthgOK6/psh9QPn8u
+        v5cf+xLHH0oTmjH18zObpyWU5Q==
+X-Google-Smtp-Source: ACHHUZ5Wk3l5CAgQaZYEzeLVhzAc4NvsiwKflcjb6jHYnk4P12fD8YntptsueSI367nTvfoDbv1d9A==
+X-Received: by 2002:a17:907:7f0d:b0:973:d71f:4029 with SMTP id qf13-20020a1709077f0d00b00973d71f4029mr5522344ejc.2.1685521362364;
+        Wed, 31 May 2023 01:22:42 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id lf4-20020a170907174400b0096f7500502csm8609718ejc.199.2023.05.31.01.22.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 May 2023 01:22:41 -0700 (PDT)
+Message-ID: <25e3ed2f-d691-1a80-e2ba-6c7413b7261a@linaro.org>
+Date:   Wed, 31 May 2023 10:22:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 3/5] thermal/drivers/mediatek/lvts_thermal: Add mt8192
- support
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 03/15] dt-bindings: interconnect: split SC8180x to own
+ schema
 Content-Language: en-US
-To:     =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        wenst@chromium.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230530195132.2286163-1-bero@baylibre.com>
- <20230530195132.2286163-4-bero@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230530195132.2286163-4-bero@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230530162454.51708-1-vkoul@kernel.org>
+ <20230530162454.51708-4-vkoul@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230530162454.51708-4-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 30/05/23 21:51, Bernhard Rosenkränzer ha scritto:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On 30/05/2023 18:24, Vinod Koul wrote:
+> SC8180x comes with interconnects with missing IO address space and
+> variable number of clocks, so split it from common file for easier
+> maintenance and to fix warnings like:
 > 
-> Add LVTS Driver support for MT8192.
+> sc8180x-lenovo-flex-5g.dtb: interconnect-0: 'reg' is a required property
 > 
-> Co-developed-by : Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 > ---
->   drivers/thermal/mediatek/lvts_thermal.c | 95 +++++++++++++++++++++++++
->   1 file changed, 95 insertions(+)
+>  .../bindings/interconnect/qcom,rpmh.yaml      | 11 -----
+>  .../interconnect/qcom,sc8180x-rpmh.yaml       | 49 +++++++++++++++++++
+>  2 files changed, 49 insertions(+), 11 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
 > 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 5ea8a9d569ea6..d5e5214784ece 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -80,6 +80,7 @@
->   #define LVTS_MSR_FILTERED_MODE		1
->   
->   #define LVTS_HW_SHUTDOWN_MT8195		105000
-> +#define LVTS_HW_SHUTDOWN_MT8192		105000
->   
->   static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
->   static int coeff_b = LVTS_COEFF_B;
-> @@ -1280,6 +1281,88 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
->   	}
->   };
->   
-> +static const struct lvts_ctrl_data mt8192_lvts_mcu_data_ctrl[] = {
-> +	{
-> +		.cal_offset = { 0x04, 0x08 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU0 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.cal_offset = { 0x0c, 0x10 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_BIG_CPU2 },
-> +			{ .dt_id = MT8192_MCU_BIG_CPU3 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	},
-> +	{
-> +		.cal_offset = { 0x14, 0x18, 0x1c, 0x20 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU0 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU1 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU2 },
-> +			{ .dt_id = MT8192_MCU_LITTLE_CPU3 }
-> +		},
-> +		.num_lvts_sensor = 4,
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +		.mode = LVTS_MSR_FILTERED_MODE,
-> +	}
-> +};
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index 4d93ad415e0b..5cbc3be49e99 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -39,17 +39,6 @@ properties:
+>        - qcom,sc7180-npu-noc
+>        - qcom,sc7180-qup-virt
+>        - qcom,sc7180-system-noc
+> -      - qcom,sc8180x-aggre1-noc
+> -      - qcom,sc8180x-aggre2-noc
+> -      - qcom,sc8180x-camnoc-virt
+> -      - qcom,sc8180x-compute-noc
+> -      - qcom,sc8180x-config-noc
+> -      - qcom,sc8180x-dc-noc
+> -      - qcom,sc8180x-gem-noc
+> -      - qcom,sc8180x-mc-virt
+> -      - qcom,sc8180x-mmss-noc
+> -      - qcom,sc8180x-qup-virt
+> -      - qcom,sc8180x-system-noc
+>        - qcom,sdm670-aggre1-noc
+>        - qcom,sdm670-aggre2-noc
+>        - qcom,sdm670-config-noc
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
+> new file mode 100644
+> index 000000000000..b182c2c5addc
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sc8180x-rpmh.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,sc8180x-rpmh.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +static const struct lvts_ctrl_data mt8192_lvts_ap_data_ctrl[] = {
-> +		{
-> +		.cal_offset = { 0x24, 0x28 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_VPU0 },
-> +			{ .dt_id = MT8192_AP_VPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x0,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x2c, 0x30 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_GPU0 },
-> +			{ .dt_id = MT8192_AP_GPU1 }
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x100,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-
-I'm unable to get readings for the GPU sensors, didn't really check
-the others; `cat (xxxx)` gives a resource not available error, is that
-the same for you?!
-
-Regards,
-Angelo
-
-> +	},
-> +	{
-> +		.cal_offset = { 0x34, 0x38 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_INFRA },
-> +			{ .dt_id = MT8192_AP_CAM },
-> +		},
-> +		.num_lvts_sensor = 2,
-> +		.offset = 0x200,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	},
-> +	{
-> +		.cal_offset = { 0x3c, 0x40, 0x44 },
-> +		.lvts_sensor = {
-> +			{ .dt_id = MT8192_AP_MD0 },
-> +			{ .dt_id = MT8192_AP_MD1 },
-> +			{ .dt_id = MT8192_AP_MD2 }
-> +		},
-> +		.num_lvts_sensor = 3,
-> +		.offset = 0x300,
-> +		.hw_tshut_temp = LVTS_HW_SHUTDOWN_MT8192,
-> +	}
-> +};
+> +title: Qualcomm RPMh Network-On-Chip Interconnect on SC8180X
 > +
->   static const struct lvts_data mt8195_lvts_mcu_data = {
->   	.lvts_ctrl	= mt8195_lvts_mcu_data_ctrl,
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_mcu_data_ctrl),
-> @@ -1290,9 +1373,21 @@ static const struct lvts_data mt8195_lvts_ap_data = {
->   	.num_lvts_ctrl	= ARRAY_SIZE(mt8195_lvts_ap_data_ctrl),
->   };
->   
-> +static const struct lvts_data mt8192_lvts_mcu_data = {
-> +	.lvts_ctrl	= mt8192_lvts_mcu_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_mcu_data_ctrl),
-> +};
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +  - Konrad Dybcio <konrad.dybcio@linaro.org>
 > +
-> +static const struct lvts_data mt8192_lvts_ap_data = {
-> +	.lvts_ctrl	= mt8192_lvts_ap_data_ctrl,
-> +	.num_lvts_ctrl	= ARRAY_SIZE(mt8192_lvts_ap_data_ctrl),
-> +};
+> +description: |
+> +  RPMh interconnect providers support system bandwidth requirements through
+> +  RPMh hardware accelerators known as Bus Clock Manager (BCM).
 > +
->   static const struct of_device_id lvts_of_match[] = {
->   	{ .compatible = "mediatek,mt8195-lvts-mcu", .data = &mt8195_lvts_mcu_data },
->   	{ .compatible = "mediatek,mt8195-lvts-ap", .data = &mt8195_lvts_ap_data },
-> +	{ .compatible = "mediatek,mt8192-lvts-mcu", .data = &mt8192_lvts_mcu_data },
-> +	{ .compatible = "mediatek,mt8192-lvts-ap", .data = &mt8192_lvts_ap_data },
->   	{},
->   };
->   MODULE_DEVICE_TABLE(of, lvts_of_match);
+> +  See also:: include/dt-bindings/interconnect/qcom,sc8180x.h
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,sc8180x-aggre1-noc
+> +      - qcom,sc8180x-aggre2-noc
+> +      - qcom,sc8180x-camnoc-virt
+> +      - qcom,sc8180x-compute-noc
+> +      - qcom,sc8180x-config-noc
+> +      - qcom,sc8180x-dc-noc
+> +      - qcom,sc8180x-gem-noc
+> +      - qcom,sc8180x-ipa-virt
+> +      - qcom,sc8180x-mc-virt
+> +      - qcom,sc8180x-mmss-noc
+> +      - qcom,sc8180x-qup-virt
+> +      - qcom,sc8180x-system-noc
+> +
+> +required:
+> +  - compatible
+> +
+> +allOf:
+> +  - $ref: qcom,rpmh-common.yaml#
 
+This should be based on sc7280. You need reg for some of the entries.
+
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    interconnect-0 {
+
+Just "interconnect"
+
+
+> +        compatible = "qcom,sc8180x-camnoc-virt";
+> +        #interconnect-cells = <2>;
+> +        qcom,bcm-voters = <&apps_bcm_voter>;
+> +    };
+
+Best regards,
+Krzysztof
 
