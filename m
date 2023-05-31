@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FB171839A
-	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 15:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2B1718372
+	for <lists+linux-pm@lfdr.de>; Wed, 31 May 2023 15:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237259AbjEaNvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 31 May 2023 09:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S237057AbjEaNvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 31 May 2023 09:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237142AbjEaNtw (ORCPT
+        with ESMTP id S237141AbjEaNtw (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 31 May 2023 09:49:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F782272E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4942733;
         Wed, 31 May 2023 06:45:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D88B63B60;
-        Wed, 31 May 2023 13:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C34D2C433D2;
-        Wed, 31 May 2023 13:45:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA05163B8B;
+        Wed, 31 May 2023 13:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D75C433D2;
+        Wed, 31 May 2023 13:45:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685540707;
-        bh=TjxJqD0DkPjHGoisM68MtQw2MJoUgIVUc7f9djlk6iQ=;
+        s=k20201202; t=1685540710;
+        bh=6rJCrLQ0Ki9e+ieM67cun1HapIPKB5enjh301jmWabs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q5Zejjzmhx0OKGHAGFxgoYfvNzHuUUTogrhUwg9eIQ1fWbCq2RBlqD5B1bB1Gsfyt
-         /Nd6xlw5UG2yG++7grqIFID6IfvaucRvwVjVemGsOXd6vQSIg9QUZMI566uokpTCpX
-         M6IrflIq9en238d89gfe7ZxFdNpU912FaueXfW3daGb4EDFIRAWWkQatd3ZIkPViZ+
-         W3j3nG936TvL4NUhF8d7/zTpPhEhJkj0zJ6OhIeLdxaEYI1uMPsyze7JVBdj7Hd53G
-         48od/yRJZIMWDsG4XswaWXVMJGvX1eCanx6hIJadc+NDrZ0SHCjPSYt6ZYORgcdxYe
-         B17ljzHIlzQJw==
+        b=QRJIY/eGZ1h/qXnzaJEysuj3mbgYEQ2UfVA3G1ojAffyPKZiV8apmB/ZXv1NHPvnY
+         Dqv7HXh3xMkfSCsYq489t6mtEe34uKIAn2/ofsCYJ14vrxBXT0M5FVk1ZZgcNj8hqC
+         g8C+nMvXBkR5NoUiHwx2va5aUXxQIgvP2YBNe26zxfRSuiJ0R2tqQcQfi9W9w5xdWh
+         kp1LN3WjAxwgIxqKCIWzwbbKTfmHPJQVFvZB+w1z4bbh2wmA5VIXISpuMq0XZ4Nt4I
+         ghwSvOXjxp+3txb0QzcHeL9i2cbiQzYeT26hd1WbY/1jx0vHdcyKlImh6aU2vuCcNu
+         koUmukqB7keYg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
+Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sasha Levin <sashal@kernel.org>, sre@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 03/17] power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() + schedule()
-Date:   Wed, 31 May 2023 09:44:47 -0400
-Message-Id: <20230531134502.3384828-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 05/17] power: supply: Ratelimit no data debug output
+Date:   Wed, 31 May 2023 09:44:49 -0400
+Message-Id: <20230531134502.3384828-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230531134502.3384828-1-sashal@kernel.org>
 References: <20230531134502.3384828-1-sashal@kernel.org>
@@ -57,37 +57,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Marek Vasut <marex@denx.de>
 
-[ Upstream commit 59dddea9879713423c7b2ade43c423bb71e0d216 ]
+[ Upstream commit 155c45a25679f571c2ae57d10db843a9dfc63430 ]
 
-Use mod_delayed_work() instead of separate cancel_delayed_work_sync() +
-schedule_delayed_work() calls.
+Reduce the amount of output this dev_dbg() statement emits into logs,
+otherwise if system software polls the sysfs entry for data and keeps
+getting -ENODATA, it could end up filling the logs up.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+This does in fact make systemd journald choke, since during boot the
+sysfs power supply entries are polled and if journald starts at the
+same time, the journal is just being repeatedly filled up, and the
+system stops on trying to start journald without booting any further.
+
+Signed-off-by: Marek Vasut <marex@denx.de>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/bq27xxx_battery.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/power/supply/power_supply_sysfs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index b1a37aa388800..f30f80f0a7c6e 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -886,10 +886,8 @@ static int poll_interval_param_set(const char *val, const struct kernel_param *k
- 		return ret;
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index f37ad4eae60b9..d6c47ea27010c 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -127,7 +127,8 @@ static ssize_t power_supply_show_property(struct device *dev,
  
- 	mutex_lock(&bq27xxx_list_lock);
--	list_for_each_entry(di, &bq27xxx_battery_devices, list) {
--		cancel_delayed_work_sync(&di->work);
--		schedule_delayed_work(&di->work, 0);
--	}
-+	list_for_each_entry(di, &bq27xxx_battery_devices, list)
-+		mod_delayed_work(system_wq, &di->work, 0);
- 	mutex_unlock(&bq27xxx_list_lock);
- 
- 	return ret;
+ 		if (ret < 0) {
+ 			if (ret == -ENODATA)
+-				dev_dbg(dev, "driver has no data for `%s' property\n",
++				dev_dbg_ratelimited(dev,
++					"driver has no data for `%s' property\n",
+ 					attr->attr.name);
+ 			else if (ret != -ENODEV && ret != -EAGAIN)
+ 				dev_err_ratelimited(dev,
 -- 
 2.39.2
 
