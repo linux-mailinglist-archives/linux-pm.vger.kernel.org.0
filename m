@@ -2,40 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29CC71F1F9
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 20:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD9971F217
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 20:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjFASav (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 14:30:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35882 "EHLO
+        id S232656AbjFASat (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 14:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232350AbjFASao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 14:30:44 -0400
+        with ESMTP id S232258AbjFASan (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 14:30:43 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F151196
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ED1197
         for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 11:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1685644242; x=1717180242;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mWfrGVa+PTb4FgQoPCZsWhwVeY1hyETZCVFPyRVU/GM=;
-  b=KqdnTM6Dio8UvkCMKgVhm9Ncp6zTcv0PYrLDhLvRlNYAOTZNE8vkR/eA
-   MiOn57OD356+ZFyX7YYk39wTLlRLNLuae/UAf6j9l/S40MUy5x1b8YGL8
-   QxaxnDM8oy8E0K0jKONBcq5GBOrk3KOhDTcldEd1p58ZOikWsH82jsMzV
-   VZqw5G+J2ADKuwIUP3hL5rMP70aTvx8PCxz8/ixqqor6wKwSY/aKMSd/s
-   e4hakcWp/z4pGekOWo6sqDZkOcMWRzMqFZsurjFDj9Gr7GQroF5Vu63cW
-   Hae9l6r7iSwI1vyGc/SkZ45eKGNbFe+o1KJvqc/G3onyQoUu0x4JPGtl9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383921626"
+  bh=TV9+KotZgTt2wCEdDqxarJhA1EkexUK6f2+xSypUoxQ=;
+  b=VcrMwIQCOhffYBvwC/Qhblc5czevZDF+rHuSVqPo0cIaOgLT4oec42SU
+   t4zxGUFl9APz13lRvqDKIVq7lDp47N9TNrUAKB99sHG8VR4MBhv/wtGW7
+   fLoleOciMNjC0i3Ra4Ya406VfD2rQ8npP+ZcQLI5+SAXaPiKWveU7CmGL
+   MoIo6ct+hL8X8e+EVpqiaSz0gCScLusZhL7ym/nukt+p8rBSHZHoox8kc
+   fcnjgRbEYVAulILGGLwsK48z98RcFkaBlSk0PcwEofjQ/CJPzCyEN9YdI
+   ZbGGga0GS7z0cfxgNkKuY/86Nrm9IBPu4rnod1lgH9j8MOlMVsaqKZSa1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383921632"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="383921626"
+   d="scan'208";a="383921632"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:19 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657900910"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657900914"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="657900910"
+   d="scan'208";a="657900914"
 Received: from arjan-box.jf.intel.com ([10.54.74.119])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:19 -0700
 From:   arjan@linux.intel.com
@@ -43,9 +43,9 @@ To:     linux-pm@vger.kernel.org
 Cc:     artem.bityutskiy@linux.intel.com, rafael@kernel.org,
         Arjan van de Ven <arjan.van.de.ven@intel.com>,
         Arjan van de Ven <arjan@linux.intel.com>
-Subject: [PATCH 2/7] intel_idle: clean up the (new) state_update_enter_method function
-Date:   Thu,  1 Jun 2023 18:27:56 +0000
-Message-Id: <20230601182801.2622044-3-arjan@linux.intel.com>
+Subject: [PATCH 3/7] intel_idle: Add a sanity check in the new state_update_enter_method function
+Date:   Thu,  1 Jun 2023 18:27:57 +0000
+Message-Id: <20230601182801.2622044-4-arjan@linux.intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601182801.2622044-1-arjan@linux.intel.com>
 References: <20230601182801.2622044-1-arjan@linux.intel.com>
@@ -63,51 +63,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Arjan van de Ven <arjan.van.de.ven@intel.com>
 
-Now that the logic for state_update_enter_method() is in its own
-function, the long if .. else if .. else if .. else if chain
-can be simplified by just returning from the function
-at the various places. This does not change functionality,
-but it makes the logic much simpler to read or modify later.
+The state_update_enter_method function updates a state's enter function pointer,
+but does so assuming that the current function is "intel_idle" or "intel_idle_irq".
+
+In the code currently that's basically the case, but soon this will change.
+Add a sanity check early in the function to make the assumption explicit,
+and return early if the precondition is not met.
 
 Signed-off-by: Arjan van de Ven <arjan@linux.intel.com>
 ---
- drivers/idle/intel_idle.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/idle/intel_idle.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index c351b21c0875..256c2d42e350 100644
+index 256c2d42e350..8415965372c7 100644
 --- a/drivers/idle/intel_idle.c
 +++ b/drivers/idle/intel_idle.c
-@@ -1849,7 +1849,10 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
- 		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IBRS);
- 		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
- 		state->enter = intel_idle_xstate;
--	} else if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+@@ -1841,6 +1841,14 @@ static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
+ 
+ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+ {
++	/*
++	 * The updates below are only valid if state->enter is actually the
++	 * 'intel_idle' or 'intel_idle_irq' functions; for all other cases
++	 * we just bow out early.
++	 */
++	if (state->enter != intel_idle && state->enter != intel_idle_irq )
 +		return;
-+	}
 +
-+	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
- 			   state->flags & CPUIDLE_FLAG_IBRS) {
+ 	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
  		/*
- 		 * IBRS mitigation requires that C-states are entered
-@@ -1857,9 +1860,15 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
- 		 */
- 		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
- 		state->enter = intel_idle_ibrs;
--	} else if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
-+		return;
-+	}
-+
-+	if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
- 		state->enter = intel_idle_irq;
--	} else if (force_irq_on) {
-+		return;
-+	}
-+
-+	if (force_irq_on) {
- 		pr_info("forced intel_idle_irq for state %d\n", cstate);
- 		state->enter = intel_idle_irq;
- 	}
+ 		 * Combining with XSTATE with IBRS or IRQ_ENABLE flags
 -- 
 2.40.1
 
