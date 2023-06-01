@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AEB71F200
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 20:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4367E71F206
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 20:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232758AbjFASbK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 14:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
+        id S232250AbjFASbJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 14:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232776AbjFASas (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 14:30:48 -0400
+        with ESMTP id S232758AbjFASar (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 14:30:47 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606C11B8
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610151B9
         for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 11:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1685644246; x=1717180246;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=y2t8/LIeUlBkDeRC1K4Q3OOvQDYIW/K1pQfYY1RRulw=;
-  b=k0L0IRQ+FDd1MRXdbFlO4aXPdBggAk9u4ROrPwNzPc+i9SzgblTpY6Sa
-   sdL1x+EHDXbELdje6k+126TA6MPmU9b/BrGZj5/Cs1o01x3IqB6WiYEMg
-   /xAxT3sZJxMmw28cUh2gLnO9xdJ1uxBOxXUwbI5WjETeaTk2X7utg7gpa
-   wZl6vOUuZSJkvLfNBff57YD7DxaGoz36WNUZNkD/2jaIPT7Rqyia3KmPw
-   eWRYLBfqsisbIUV1iuAXEo1Ir85ic7UNf/1sncK+2znErqAXz93TYMZrh
-   1AMe92GLHPXGKyT+E5dQW981KbsqCH3krmaOk+sz02cLGWnMnz0ceVzNO
+  bh=X7iBLJ8cWDJrTQv0o3e2MbK1UDlcv/vN12Fvbh88Azo=;
+  b=a59LSMRu8Ki2v7YqCgNHDI2ndlRlccRsrxZHYFud76muADSLC6Hv8MWH
+   86iUW1FNT4Nyb8racBTFf4LCK6POTNPEBRI68zf9oriuTmtwjM808UxoD
+   lJvedjnCFPRzHxE/EFtvaFAhJftMRnRCycsxWtvC3h3u6CUeW6FK70KP6
+   5XwS7jnuPATyTz3dKLdMHk4cKnOv3IIe5LjTigKNO1eXS/BWEfolmfXeG
+   6tYTXfnbur7sUUL79atTeTWnnHSskVPBF4Qvhpc62wboqADrL0Nxjwi1i
+   wmQ1h1dMtKGV7/Scdywum/+6Zmciht8lRtNi1fvlPUkFaHRnswXMDF/z4
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383921645"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383921647"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="383921645"
+   d="scan'208";a="383921647"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657900926"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657900932"
 X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
-   d="scan'208";a="657900926"
+   d="scan'208";a="657900932"
 Received: from arjan-box.jf.intel.com ([10.54.74.119])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:21 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:22 -0700
 From:   arjan@linux.intel.com
 To:     linux-pm@vger.kernel.org
 Cc:     artem.bityutskiy@linux.intel.com, rafael@kernel.org,
         Arjan van de Ven <arjan.van.de.ven@intel.com>,
         Arjan van de Ven <arjan@linux.intel.com>
-Subject: [PATCH 6/7] intel_idle: Add support for using intel_idle in a VM guest using just hlt
-Date:   Thu,  1 Jun 2023 18:28:00 +0000
-Message-Id: <20230601182801.2622044-7-arjan@linux.intel.com>
+Subject: [PATCH 7/7] intel_idle: Add a "Long HLT" C1 state for the VM guest mode
+Date:   Thu,  1 Jun 2023 18:28:01 +0000
+Message-Id: <20230601182801.2622044-8-arjan@linux.intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230601182801.2622044-1-arjan@linux.intel.com>
 References: <20230601182801.2622044-1-arjan@linux.intel.com>
@@ -63,26 +63,36 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Arjan van de Ven <arjan.van.de.ven@intel.com>
 
-In a typical VM guest, the mwait instruction is not available, leaving only the
-'hlt' instruction (which causes a VMEXIT to the host).
+intel_idle will, for the bare metal case, usually have one or more deep
+power states that have the CPUIDLE_FLAG_TLB_FLUSHED flag set. When
+a state with this flag is selected by the cpuidle framework, it will also
+flush the TLBs as part of entering this state. The benefit of doing this is
+that the kernel does not need to wake the cpu out of this deep power state
+just to flush the TLBs... for which the latency can be very high due to
+the exit latency of deep power states.
 
-So currently, intel_idle will detect the lack of mwait, and fail
-to initialize (after which another idle method would step in which will
-just use hlt always).
+In a VM guest currently, this benefit of avoiding the wakeup does not exist,
+while the problem (long exit latency) is even more severe. Linux will need
+to wake up a vCPU (causing the host to either come out of a deep C state,
+or the VMM to have to deschedule something else to schedule the vCPU) which
+can take a very long time.. adding a lot of latency to tlb flush operations
+(including munmap and others).
 
-By providing capability to do this with the intel_idle driver, we can
-do better than this fallback. While this current change only gets us parity
-to the existing behavior, later patches in this series will add new capabilities.
+To solve this, add a "Long HLT" C state to the state table for the VM guest
+case that has the CPUIDLE_FLAG_TLB_FLUSHED flag set.  The result of that is
+that for long idle periods (where the VMM is likely to do things that cause
+large latency) the cpuidle framework will flush the TLBs (and avoid the
+wakeups), while for short/quick idle durations, the existing behavior is
+retained.
 
-In order to do this, a simplified version of the initialization function
-for VM guests is created, and this will be called if the CPU is recognized,
-but mwait is not supported, and we're in a VM guest.
-
-One thing to note is that the latency (and break even) of this C1 state
-is higher than the typical bare metal C1 state. Because hlt causes a vmexit,
-and the cost of vmexit + hypervisor overhead + vmenter is typically in the
-order of upto 5 microseconds... even if the hypervisor does not actually
-goes into a hardware power saving state.
+Now, there is still only "hlt" available in the guest, but for long idle,
+the host can go to a deeper state (say C6).  There is a reasonable debate
+one can have to what to set for the exit_latency and break even point for
+this "Long HLT" state.  The good news is that intel_idle has these values
+available for the underlying CPU (even when mwait is not exposed).  The
+solution thus is to just use the latency and break even of the deepest state
+from the bare metal CPU.  This is under the assumption that this is a pretty
+reasonable estimate of what the VMM would do to cause latency.
 
 Signed-off-by: Arjan van de Ven <arjan@linux.intel.com>
 ---
@@ -90,84 +100,84 @@ Signed-off-by: Arjan van de Ven <arjan@linux.intel.com>
  1 file changed, 54 insertions(+)
 
 diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 55c3e6ece3dd..c4929d8a35a4 100644
+index c4929d8a35a4..e056e1ec64a9 100644
 --- a/drivers/idle/intel_idle.c
 +++ b/drivers/idle/intel_idle.c
-@@ -1280,6 +1280,18 @@ static struct cpuidle_state snr_cstates[] __initdata = {
+@@ -1288,6 +1288,13 @@ static struct cpuidle_state vmguest_cstates[] __initdata = {
+ 		.exit_latency = 5,
+ 		.target_residency = 10,
+ 		.enter = &intel_idle_hlt_irq, },
++	{
++		.name = "C1L",
++		.desc = "Long HLT",
++		.flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.exit_latency = 5,
++		.target_residency = 200,
++		.enter = &intel_idle_hlt, },
+ 	{
  		.enter = NULL }
  };
- 
-+static struct cpuidle_state vmguest_cstates[] __initdata = {
-+	{
-+		.name = "C1",
-+		.desc = "HLT",
-+		.flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_IRQ_ENABLE,
-+		.exit_latency = 5,
-+		.target_residency = 10,
-+		.enter = &intel_idle_hlt_irq, },
-+	{
-+		.enter = NULL }
-+};
-+
- static const struct idle_cpu idle_cpu_nehalem __initconst = {
- 	.state_table = nehalem_cstates,
- 	.auto_demotion_disable_flags = NHM_C1_AUTO_DEMOTE | NHM_C3_AUTO_DEMOTE,
-@@ -2105,6 +2117,46 @@ static void __init intel_idle_cpuidle_devices_uninit(void)
+@@ -2117,6 +2124,44 @@ static void __init intel_idle_cpuidle_devices_uninit(void)
  		cpuidle_unregister_device(per_cpu_ptr(intel_idle_cpuidle_devices, i));
  }
  
-+static int __init intel_idle_vminit(const struct x86_cpu_id *id)
++/*
++ * Match up the latency and break even point of the bare metal (cpu based)
++ * states with the deepest VM available state.
++ *
++ * We only want to do this for the deepest state, the ones that has
++ * the TLB_FLUSHED flag set on the .
++ *
++ * All our short idle states are dominated by vmexit/vmenter latencies,
++ * not the underlying hardware latencies so we keep our values for these.
++ */
++static void matchup_vm_state_with_baremetal(void)
 +{
-+	int retval;
++	int cstate;
 +
-+	cpuidle_state_table = vmguest_cstates;
-+	skip_mwait_check = true; /* hypervisor hides mwait from us normally */
++	for (cstate = 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
++		int matching_cstate;
 +
-+	icpu = (const struct idle_cpu *)id->driver_data;
++		if (intel_idle_max_cstate_reached(cstate))
++			break;
 +
-+	pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
-+		 boot_cpu_data.x86_model);
++		if (!cpuidle_state_table[cstate].enter &&
++		    !cpuidle_state_table[cstate].enter_s2idle)
++			break;
 +
-+	intel_idle_cpuidle_devices = alloc_percpu(struct cpuidle_device);
-+	if (!intel_idle_cpuidle_devices)
-+		return -ENOMEM;
++		if (!(cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_TLB_FLUSHED))
++			continue;
 +
-+	intel_idle_cpuidle_driver_init(&intel_idle_driver);
++		for (matching_cstate = 0; matching_cstate < CPUIDLE_STATE_MAX; ++matching_cstate) {
++			if (icpu->state_table[matching_cstate].exit_latency > cpuidle_state_table[cstate].exit_latency) {
++				cpuidle_state_table[cstate].exit_latency = icpu->state_table[matching_cstate].exit_latency;
++				cpuidle_state_table[cstate].target_residency = icpu->state_table[matching_cstate].target_residency;
++			}
++		}
 +
-+	retval = cpuidle_register_driver(&intel_idle_driver);
-+	if (retval) {
-+		struct cpuidle_driver *drv = cpuidle_get_driver();
-+		printk(KERN_DEBUG pr_fmt("intel_idle yielding to %s\n"),
-+		       drv ? drv->name : "none");
-+		goto init_driver_fail;
 +	}
-+
-+	retval = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "idle/intel:online",
-+				   intel_idle_cpu_online, NULL);
-+	if (retval < 0)
-+		goto hp_setup_fail;
-+
-+	return 0;
-+hp_setup_fail:
-+	intel_idle_cpuidle_devices_uninit();
-+	cpuidle_unregister_driver(&intel_idle_driver);
-+init_driver_fail:
-+	free_percpu(intel_idle_cpuidle_devices);
-+	return retval;
 +}
 +
- static int __init intel_idle_init(void)
++
+ static int __init intel_idle_vminit(const struct x86_cpu_id *id)
  {
- 	const struct x86_cpu_id *id;
-@@ -2123,6 +2175,8 @@ static int __init intel_idle_init(void)
- 	id = x86_match_cpu(intel_idle_ids);
- 	if (id) {
- 		if (!boot_cpu_has(X86_FEATURE_MWAIT)) {
-+			if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-+				return intel_idle_vminit(id);
- 			pr_debug("Please enable MWAIT in BIOS SETUP\n");
- 			return -ENODEV;
- 		}
+ 	int retval;
+@@ -2133,6 +2178,15 @@ static int __init intel_idle_vminit(const struct x86_cpu_id *id)
+ 	if (!intel_idle_cpuidle_devices)
+ 		return -ENOMEM;
+ 
++	/*
++	 * We don't know exactly what the host will do when we go idle, but as a worst estimate
++	 * we can assume that the exit latency of the deepest host state will be hit for our
++	 * deep (long duration) guest idle state.
++	 * The same logic applies to the break even point for the long duration guest idle state.
++	 * So lets copy these two properties from the table we found for the host CPU type.
++	 */
++	matchup_vm_state_with_baremetal();
++
+ 	intel_idle_cpuidle_driver_init(&intel_idle_driver);
+ 
+ 	retval = cpuidle_register_driver(&intel_idle_driver);
 -- 
 2.40.1
 
