@@ -2,68 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B02719EFA
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 16:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3311471A0EE
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 16:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbjFAOBA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 10:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S229498AbjFAOuO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 10:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233230AbjFAOBA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 10:01:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBE9184;
-        Thu,  1 Jun 2023 07:00:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B90E64562;
-        Thu,  1 Jun 2023 14:00:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ECD8C4339B;
-        Thu,  1 Jun 2023 14:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1685628058;
-        bh=k0lroTYvtzGNwTev1CPUc1dbilaAPIIZm6XNUqRGNLg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hRoX7cPhPvvJnIoEKa2MoFUn8l+YPPLQxGZp0KkE4D5M4OMjdNFagc1pic1TaDzFC
-         zWOlIfTCBiIqQA//MIYLdhzh1BCBls/zq3gN062MoZvhKDRcsuJgdUqw6FGzIeSOll
-         bH1QVDhTDzc74GjUpmfUajEk2dz80+XbokU4WwhLMX2y1oQCEpdPlZaL8B3xxEjxng
-         nMJmY1yqGm2h2qt2uN22hTOgF7cq0eS1Nlfy5c8HLnL9I/ekUP0UUeati+kvqHi/v+
-         ddhgngSXrIlfX6iJb7ax8iP9q55cnnjYoFMqssj8+Qx+RJfU5VY/M60CtPrWaxW1tj
-         PUIwhunq6gX8Q==
-Date:   Thu, 1 Jun 2023 15:00:49 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v6 00/10 RESEND] Add RT5033 charger device driver
-Message-ID: <20230601140049.GF449117@google.com>
-References: <cover.1684182964.git.jahau.ref@rocketmail.com>
- <cover.1684182964.git.jahau@rocketmail.com>
- <a308cd6f-0f72-6a12-aa34-ce06290ce0bb@rocketmail.com>
+        with ESMTP id S234638AbjFAOuD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 10:50:03 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7920FE2;
+        Thu,  1 Jun 2023 07:49:50 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 351DHHjV020697;
+        Thu, 1 Jun 2023 14:49:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uuwqSuz1PcuNkBPIdq4ZDFCm0wtjyN2RBzjediqXQRA=;
+ b=RxKftAKYdG19Tru+v1XcbHcsZlep3pXSH0gMxkEZafYIp6cCK1/0IhMLgsKCzfyPfz2a
+ FBSUFK0Y0FneIO79IBmKFDcbjYRi68KjjZ016K0wGUG4zzVmWE138ubp2Sv/lzuvAFtd
+ ztWC3zMhMWHR/Gh5SOrommvArpe82HmaVJUAV6xPNjkD/mLAqFwyum+++tyxZlzYenM+
+ MHWyyJwkInJWcEKFHBYfkQu7IRC93oFJ/z/pEPnuXpQJB+W0XSj5ac4vaB8ASbc/ny1m
+ vtZacLQfZeOmqWtl1jTfPuG4WGjMh0xI51x2Hq4A0X3EArK7J2+pdYm0qUXxhwFXlmrL IA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qxpt7156m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Jun 2023 14:49:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 351EnjrA022616
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Jun 2023 14:49:45 GMT
+Received: from [10.50.0.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 1 Jun 2023
+ 07:49:40 -0700
+Message-ID: <2a78c9ce-f631-53fd-581f-2e8c906be989@quicinc.com>
+Date:   Thu, 1 Jun 2023 20:19:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [RESEND PATCH v2 1/2] cpufreq: qcom-nvmem: add support for
+ IPQ8074
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     Robert Marko <robimarko@gmail.com>
+CC:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <ilia.lin@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <ansuelsmth@gmail.com>
+References: <20230530165807.642084-1-robimarko@gmail.com>
+ <b565b9b5-d7c1-7779-532e-565c3f5c5cd3@quicinc.com>
+ <CAOX2RU6ay_Bc0JYQ6rBcTRadm-71Jie5YH9B0J_1UywkcyqZ8g@mail.gmail.com>
+ <70de3314-766d-4c7f-5b1a-41740cfeac8c@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <70de3314-766d-4c7f-5b1a-41740cfeac8c@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a308cd6f-0f72-6a12-aa34-ce06290ce0bb@rocketmail.com>
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4fzk8363ydfQy6HguNB4xFdSFq5eBxVX
+X-Proofpoint-GUID: 4fzk8363ydfQy6HguNB4xFdSFq5eBxVX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-01_08,2023-05-31_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 phishscore=0 mlxscore=0 clxscore=1015
+ bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2306010130
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,83 +85,173 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 31 May 2023, Jakob Hauser wrote:
 
-> Dear all,
-> 
-> On 15.05.23 22:57, Jakob Hauser wrote:
-> > This patchset adds the charger driver "rt5033-charger". It is part of the
-> > multifunction device rt5033. The patchset is based on an older version by
-> > Beomho Seo of March 2015. For more information on the history and setup of
-> > the patchset see the cover sheet of version v1, there is a link further down
-> > below the changelog.
-> > 
-> > RESEND: Sorry for spamming. The first try of sending v6 got interrupted and
-> > was split into two threads on the lore list. Therefore sending it again.
-> > 
-> > Changes in v6:
-> >   - Patch 5: In function rt5033_charger_probe() after
-> >     calling rt5033_charger_dt_init() replaced the return value from "-ENODEV"
-> >     to "PTR_ERR(charger->chg)", as suggested by Christophe.
-> >   - Patch 9: Changed the patch from adding "power-supplies: true" to replacing
-> >     "additionalProperties: false" by "unevaluatedProperties: false", as
-> >     suggested by Krzysztof.
-> > 
-> > v1: https://lore.kernel.org/linux-pm/cover.1677620677.git.jahau@rocketmail.com/T/#t
-> > v2: https://lore.kernel.org/linux-pm/cover.1681646904.git.jahau@rocketmail.com/T/#t
-> > v3: https://lore.kernel.org/linux-pm/cover.1682636929.git.jahau@rocketmail.com/T/#t
-> > v4: https://lore.kernel.org/linux-pm/20230506155435.3005-1-jahau@rocketmail.com/T/#t
-> > v5: https://lore.kernel.org/linux-pm/20230514123130.41172-1-jahau@rocketmail.com/T/#t
-> > 
-> > The result of the patchset v6 can be seen at:
-> > https://github.com/Jakko3/linux/blob/rt5033-charger_v6/drivers/power/supply/rt5033_charger.c
-> 
-> What's missing on this patchset? I'm not familiar with the procedures. If
-> all patches need ack's, then the ones for mfd (patches 2 & 4) and for
-> dt-bindings (patch 10) are missing.
+On 6/1/2023 6:54 PM, Kathiravan T wrote:
+>
+> On 6/1/2023 6:40 PM, Robert Marko wrote:
+>> On Thu, 1 Jun 2023 at 14:57, Kathiravan T <quic_kathirav@quicinc.com> 
+>> wrote:
+>>>
+>>> On 5/30/2023 10:28 PM, Robert Marko wrote:
+>>>> IPQ8074 comes in 2 families:
+>>>> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+>>>> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
+>>>>
+>>>> So, in order to be able to share one OPP table lets add support for 
+>>>> IPQ8074
+>>>> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
+>>>>
+>>>> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq 
+>>>> device
+>>>> will get created by NVMEM CPUFreq driver.
+>>>>
+>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
+>>>> ---
+>>>> Changes in v2:
+>>>> * Print an error if SMEM ID is not part of the IPQ8074 family
+>>>> and restrict the speed to Acorn variant (1.4GHz)
+>>>> ---
+>>>>    drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
+>>>>    drivers/cpufreq/qcom-cpufreq-nvmem.c | 43 
+>>>> ++++++++++++++++++++++++++++
+>>>>    2 files changed, 44 insertions(+)
+>>>>
+>>>> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c 
+>>>> b/drivers/cpufreq/cpufreq-dt-platdev.c
+>>>> index ea86c9f3ed7a..78f6ff933f93 100644
+>>>> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+>>>> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+>>>> @@ -170,6 +170,7 @@ static const struct of_device_id blocklist[] 
+>>>> __initconst = {
+>>>>        { .compatible = "ti,am62a7", },
+>>>>
+>>>>        { .compatible = "qcom,ipq8064", },
+>>>> +     { .compatible = "qcom,ipq8074", },
+>>>>        { .compatible = "qcom,apq8064", },
+>>>>        { .compatible = "qcom,msm8974", },
+>>>>        { .compatible = "qcom,msm8960", },
+>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c 
+>>>> b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>> index a88b6fe5db50..ce444b5962f2 100644
+>>>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>>>> @@ -31,6 +31,9 @@
+>>>>
+>>>>    #include <dt-bindings/arm/qcom,ids.h>
+>>>>
+>>>> +#define IPQ8074_HAWKEYE_VERSION              BIT(0)
+>>>> +#define IPQ8074_ACORN_VERSION                BIT(1)
+>>>> +
+>>>>    struct qcom_cpufreq_drv;
+>>>>
+>>>>    struct qcom_cpufreq_match_data {
+>>>> @@ -204,6 +207,41 @@ static int 
+>>>> qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+>>>>        return ret;
+>>>>    }
+>>>>
+>>>> +static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
+>>>> +                                          struct nvmem_cell 
+>>>> *speedbin_nvmem,
+>>>> +                                          char **pvs_name,
+>>>> +                                          struct qcom_cpufreq_drv 
+>>>> *drv)
+>>>
+>>> Most of the IPQ SoCs also supports the fuse based frequency selection.
+>>> Can we rename the function name to generic so that all the IPQ chips 
+>>> can
+>>> use the same function?
+>> Well, the only speedbin fuse I was able to dig from downstream is the 
+>> one from
+>> CPR driver and that one is 0 on all devices so it's not helpful.
+>> Do you maybe know if there is one in the IPQ8074 family?
+>
+>
+> Let me check on this and get back to you probably by tomorrow...
 
-You're waiting on me.  I will apply all of the patches and submit a PR.
 
-You're in the queue - please stand-by.
- 
-> Link to the current patchset v6:
-> - on lore: https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
-> - on patchwork: https://patchwork.kernel.org/project/linux-pm/list/?series=747771&state=%2A&archive=both
-> 
-> > Jakob Hauser (9):
-> >    mfd: rt5033: Fix chip revision readout
-> >    mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
-> >    mfd: rt5033: Apply preparatory changes before adding rt5033-charger
-> >      driver
-> >    power: supply: rt5033_charger: Add RT5033 charger device driver
-> >    power: supply: rt5033_charger: Add cable detection and USB OTG supply
-> >    power: supply: rt5033_battery: Move struct rt5033_battery to battery
-> >      driver
-> >    power: supply: rt5033_battery: Adopt status property from charger
-> >    dt-bindings: power: supply: rt5033-battery: Apply
-> >      unevaluatedProperties
-> >    dt-bindings: Add rt5033 mfd, regulator and charger
-> > 
-> > Stephan Gerhold (1):
-> >    mfd: rt5033: Drop rt5033-battery sub-device
-> > 
-> >   .../bindings/mfd/richtek,rt5033.yaml          | 138 ++++
-> >   .../power/supply/richtek,rt5033-battery.yaml  |   2 +-
-> >   .../power/supply/richtek,rt5033-charger.yaml  |  65 ++
-> >   drivers/mfd/rt5033.c                          |   8 +-
-> >   drivers/power/supply/Kconfig                  |   8 +
-> >   drivers/power/supply/Makefile                 |   1 +
-> >   drivers/power/supply/rt5033_battery.c         |  38 +-
-> >   drivers/power/supply/rt5033_charger.c         | 744 ++++++++++++++++++
-> >   include/linux/mfd/rt5033-private.h            |  64 +-
-> >   include/linux/mfd/rt5033.h                    |  24 -
-> >   10 files changed, 1034 insertions(+), 58 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> >   create mode 100644 drivers/power/supply/rt5033_charger.c
-> 
-> Kind regards,
-> Jakob
+Robert, checked with the team and IPQ807x doesn't use fuse to determine 
+the CPU freq limits. Current approach (SoC ID based) should be fine.
+BTW, are the DTS changes already posted or yet to be posted?
 
--- 
-Lee Jones [李琼斯]
+
+>
+>
+>>
+>> Function is not supposed to be shared between SoC-s, so I dont see a 
+>> point in it
+>> having a generic name cause for example IPQ6018 has a working fuse 
+>> and its logic
+>> is completely different for setting the versioning than IPQ8074, I
+>> dont think having a
+>> catch-all would work here.
+>
+>
+> Makes sense, thanks Robert and Konrad.
+>
+>
+>>
+>>>
+>>>> +{
+>>>> +     u32 msm_id;
+>>>
+>>> soc_id please...?
+>> Sure, that is more suitable.
+>>
+>> Regards,
+>> Robert
+>>>
+>>>> +     int ret;
+>>>> +     *pvs_name = NULL;
+>>>> +
+>>>> +     ret = qcom_smem_get_soc_id(&msm_id);
+>>>> +     if (ret)
+>>>> +             return ret;
+>>>> +
+>>>> +     switch (msm_id) {
+>>>> +     case QCOM_ID_IPQ8070A:
+>>>> +     case QCOM_ID_IPQ8071A:
+>>>> +             drv->versions = IPQ8074_ACORN_VERSION;
+>>>> +             break;
+>>>> +     case QCOM_ID_IPQ8072A:
+>>>> +     case QCOM_ID_IPQ8074A:
+>>>> +     case QCOM_ID_IPQ8076A:
+>>>> +     case QCOM_ID_IPQ8078A:
+>>>> +             drv->versions = IPQ8074_HAWKEYE_VERSION;
+>>>> +             break;
+>>>> +     default:
+>>>> +             dev_err(cpu_dev,
+>>>> +                     "SoC ID %u is not part of IPQ8074 family, 
+>>>> limiting to 1.4GHz!\n",
+>>>> +                     msm_id);
+>>>> +             drv->versions = IPQ8074_ACORN_VERSION;
+>>>> +             break;
+>>>> +     }
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>> +
+>>>>    static const struct qcom_cpufreq_match_data match_data_kryo = {
+>>>>        .get_version = qcom_cpufreq_kryo_name_version,
+>>>>    };
+>>>> @@ -218,6 +256,10 @@ static const struct qcom_cpufreq_match_data 
+>>>> match_data_qcs404 = {
+>>>>        .genpd_names = qcs404_genpd_names,
+>>>>    };
+>>>>
+>>>> +static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
+>>>> +     .get_version = qcom_cpufreq_ipq8074_name_version,
+>>>> +};
+>>>> +
+>>>>    static int qcom_cpufreq_probe(struct platform_device *pdev)
+>>>>    {
+>>>>        struct qcom_cpufreq_drv *drv;
+>>>> @@ -363,6 +405,7 @@ static const struct of_device_id 
+>>>> qcom_cpufreq_match_list[] __initconst = {
+>>>>        { .compatible = "qcom,msm8996", .data = &match_data_kryo },
+>>>>        { .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
+>>>>        { .compatible = "qcom,ipq8064", .data = &match_data_krait },
+>>>> +     { .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
+>>>>        { .compatible = "qcom,apq8064", .data = &match_data_krait },
+>>>>        { .compatible = "qcom,msm8974", .data = &match_data_krait },
+>>>>        { .compatible = "qcom,msm8960", .data = &match_data_krait },
