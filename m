@@ -2,85 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFED8719E34
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 15:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01DB2719E8F
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 15:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233954AbjFANaI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 09:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
+        id S229899AbjFANop (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 09:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233974AbjFAN3j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 09:29:39 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2481F1A4
-        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 06:29:17 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f60bc818d7so248757e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 06:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685626149; x=1688218149;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bi4W45hTLVZELv8za/V/2Zxr2Ta54wvM2WdGCMd0O68=;
-        b=usImXdnWeIdqEvzWwlkFEyzWjMmuHQv5QUbYFpAKRMLB8He1y/ZwMjOrjfF1jlFZPJ
-         PCf5j44mSgnLPhk/j3P3qzv1eP8CT5YysheWpWPC++9ltw/wFL/7dqkLq5gEcBRYdQ29
-         6i5o5oRWrH1HYCLZZnO4SjVOVX4pVjtWDBVMraNHklYD5gxb4gVFg3OtOSB+woHK38Mi
-         pj7HWN15JxJAJoggGokB3aBDvvPP39g9cThhZmfktvefJYGhNtyxSGjCQ9dqD+TRatb0
-         a4MU+Gl4BfE8Xgmh5lf2nwsznu/7KS6SNnX4UMj88t2IdUBlTf4xaOlj3k0tRY6iODj8
-         ypfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685626149; x=1688218149;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bi4W45hTLVZELv8za/V/2Zxr2Ta54wvM2WdGCMd0O68=;
-        b=FqSZ1+EuRj+FwXaqFJujNcmgtA5TdJodsd46ZPNO03uOPLf4qdJjfIV13eLB47LLGl
-         xBZQULtmjw4kt/sDmg5R/n5vzlggKuyEEIWMhkSgA9uGs7+eCkRm8paBVvUPhwgM+VyQ
-         UV3NjLvIUakZj+3u+O1R0KKKYoo2o+rOYXRjJIA+Qu+Keu7eiEWI2SmCzv0c3DPANrTs
-         LiZ2vySMB0cPWFyOQ4hEitO/Cy2LnX0E3kxMF15rbiSij58wkDxaLP1Bpq3F4YOmRn96
-         7g68XeBnWhdRH2vtDezB4ENbeZ12FalsQHiLJbViDF5KCqPDPAoKTs5b+VqLk19ulmqt
-         4wOw==
-X-Gm-Message-State: AC+VfDwsZIIg4mL2ah5gSYkxTkru6VPPmyxBWO7u24lC52F+kv3HJlWb
-        MkzaEOQv5zEu3mz9nVtwFBijDw==
-X-Google-Smtp-Source: ACHHUZ7xdhJFrnEy0COc6Xnf+tMXkERGlnWTaEpzDFcQgu4QYbHbjeFepEL1SVezrW0HikHmrmE7xQ==
-X-Received: by 2002:ac2:4312:0:b0:4f3:afcc:e1bb with SMTP id l18-20020ac24312000000b004f3afcce1bbmr1756419lfh.1.1685626149679;
-        Thu, 01 Jun 2023 06:29:09 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id c25-20020ac24159000000b004f20d0ebe50sm1084096lfi.94.2023.06.01.06.29.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 06:29:09 -0700 (PDT)
-Message-ID: <98c8fb8f-1fe6-1c05-2093-67efc7ec582a@linaro.org>
-Date:   Thu, 1 Jun 2023 15:29:07 +0200
+        with ESMTP id S233300AbjFANoo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 09:44:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC09138;
+        Thu,  1 Jun 2023 06:44:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72BBA64542;
+        Thu,  1 Jun 2023 13:44:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AB1C433EF;
+        Thu,  1 Jun 2023 13:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685627081;
+        bh=i9d2RUZUKNfyrbtB+Rn03BoaOzOiWiw7rxwB7rAOB7A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SRvKheduSKeo4K8bsY6U4I95jcrRsnS8RYMiMDiip2FiqtI6s8AwnUenOT/5VHcvA
+         8oVXoZJ8LhUsHzUHTabmhxgCn0EdKx1P4o83tDpxkxh50DAQQLT0nSUoF9pPH64/XL
+         +Y3TJud+5l16vGKHFSzBMy8rO8i+qcI1gIA8xr19RPWwFmlBn8abH6GJq5/q9HN2Je
+         WIJlLNH90pHxkCSNjO/OU280CZhgruA8stn4RCVg3rQcn9bfG5Ds1fQYWn/1I4N+8H
+         Xn69l65zOHgGQkatYQL7mxsk00saqzydlnH3BlkgHBxorY44pAlLg0saEeZzadUzZx
+         0M5N8O4kHzNDg==
+From:   matthias.bgg@kernel.org
+To:     rafael@kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: thermal: mediatek: Move auxdac binding to yaml
+Date:   Thu,  1 Jun 2023 15:44:24 +0200
+Message-Id: <20230601134425.29499-1-matthias.bgg@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 20/20] interconnect: qcom: Divide clk rate by src node bus
- width
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-20-1bf8e6663c4e@linaro.org>
- <5a26e456-fe45-6def-27f9-26ec00c333e6@linaro.org>
- <ZHZIVJFd-HU_AO2F@gerhold.net>
- <4943572a-3456-ae33-387f-db476ff382e4@linaro.org>
- <ZHib62imkvHds-9a@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZHib62imkvHds-9a@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,106 +60,247 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Matthias Brugger <matthias.bgg@gmail.com>
 
+Convert the older binding to yaml syntax.
+The thermal IP has several sensors, to reflect that
+thermal-sensors-cells is set to '1'. Apart optional regulator
+for bank supply wasn't part of the old binding description,
+this patch adds them.
 
-On 1.06.2023 15:23, Stephan Gerhold wrote:
-> On Thu, Jun 01, 2023 at 02:43:50PM +0200, Konrad Dybcio wrote:
->> On 30.05.2023 21:02, Stephan Gerhold wrote:
->>> On Tue, May 30, 2023 at 06:32:04PM +0200, Konrad Dybcio wrote:
->>>> On 30.05.2023 12:20, Konrad Dybcio wrote:
->>>>> Ever since the introduction of SMD RPM ICC, we've been dividing the
->>>>> clock rate by the wrong bus width. This has resulted in:
->>>>>
->>>>> - setting wrong (mostly too low) rates, affecting performance
->>>>>   - most often /2 or /4
->>>>>   - things like DDR never hit their full potential
->>>>>   - the rates were only correct if src bus width == dst bus width
->>>>>     for all src, dst pairs on a given bus
->>>>>
->>>>> - Qualcomm using the same wrong logic in their BSP driver in msm-5.x
->>>>>   that ships in production devices today
->>>>>
->>>>> - me losing my sanity trying to find this
->>>>>
->>>>> Resolve it by using dst_qn, if it exists.
->>>>>
->>>>> Fixes: 5e4e6c4d3ae0 ("interconnect: qcom: Add QCS404 interconnect provider driver")
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>> ---
->>>> The problem is deeper.
->>>>
->>>> Chatting with Stephan (+CC), we tackled a few issues (that I will send
->>>> fixes for in v2):
->>>>
->>>> 1. qcom_icc_rpm_set() should take per-node (src_qn->sum_avg, dst_qn->sum_avg)
->>>>    and NOT aggregated bw (unless you want ALL of your nodes on a given provider
->>>>    to "go very fast")
->>>>
->>>> 2. the aggregate bw/clk rate calculation should use the node-specific bus widths
->>>>    and not only the bus width of the src/dst node, otherwise the average bw
->>>>    values will be utterly meaningless
->>>>
->>>
->>> The peak bandwidth / clock rate is wrong as well if you have two paths
->>> with different buswidths on the same bus/NoC. (If someone is interested
->>> in details I can post my specific example I had in the chat, it shows
->>> this more clearly.)
->> agg_peak takes care of that, I believe..
->>
-> 
-> I was just nitpicking on your description here, I think the solution
-> you/we had in mind was already correct. :)
-> 
->>
->>>
->>>> 3. thanks to (1) and (2) qcom_icc_bus_aggregate() can be remodeled to instead
->>>>    calculate the clock rates for the two rpm contexts, which we can then max()
->>>>    and pass on to the ratesetting call
->>>>
->>>
->>> Sounds good.
->>>
->>>>
->>>> ----8<---- Cutting off Stephan's seal of approval, this is my thinking ----
->>>>
->>>> 4. I *think* Qualcomm really made a mistake in their msm-5.4 driver where they
->>>>    took most of the logic from the current -next state and should have been
->>>>    setting the rate based on the *DST* provider, or at least that's my
->>>>    understanding trying to read the "known good" msm-4.19 driver
->>>>    (which remembers msm-3.0 lol).. Or maybe we should keep src but ensure there's
->>>>    also a final (dst, dst) vote cast:
->>>>
->>>> provider->inter_set = false // current state upstream
->>>>
->>>> setting apps_proc<->slv_bimc_snoc
->>>> setting mas_bimc_snoc<->slv_snoc_cnoc
->>>> setting mas_snoc_cnoc<->qhs_sdc2
->>>>
->>>>
->>>> provider->inter_set = true // I don't think there's effectively a difference?
->>>>
->>>> setting apps_proc<->slv_bimc_snoc
->>>> setting slv_bimc_snoc<->mas_bimc_snoc
->>>> setting mas_bimc_snoc<->slv_snoc_cnoc
->>>> setting slv_snoc_cnoc<->mas_snoc_cnoc
->>>> setting mas_snoc_cnoc<->qhs_sdc2
->>>>
->>>
->>> I think with our proposed changes above it does no longer matter if a
->>> node is passed as "src" or "dst". This means in your example above you
->>> just waste additional time setting the bandwidth twice for
->>> slv_bimc_snoc, mas_bimc_snoc, slv_snoc_cnoc and mas_snoc_cnoc.
->>> The final outcome is the same with or without "inter_set".
->> Yeah I guess due to the fact that two "real" nodes are always
->> connected by a set of "gateway" nodes, the rate will be applied..
->>
->> I am however not sure if we're supposed to set the bandwidth
->> (via qcom_icc_rpm_set()) on all of them..
->>
-> 
-> I think so? The nodes RPM doesn't care about shouldn't have
-> a slv/mas_rpm_id.
-Hm I guess the inter_set doesn't make a difference anyway, as you
-pointed out.. Thankfully one thing less to fix :D
+Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-Konrad
+---
+
+Changes in v2:
+- drop auxadc and apmixedsys nodes
+- maxItems for clocks
+- drop obvious description of reset
+- mention optional regulators in commit message
+- mention thermal-sensors-cells change in commit message
+
+ .../bindings/thermal/mediatek,thermal.yaml    | 152 ++++++++++++++++++
+ .../bindings/thermal/mediatek-thermal.txt     |  52 ------
+ 2 files changed, 152 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+new file mode 100644
+index 000000000000..bbc9c2935da0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+@@ -0,0 +1,152 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/mediatek,thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MediaTek Thermal Sensor
++
++maintainers:
++  - Matthias Brugger <matthias.bgg@gmail.com>
++
++description: |
++  The MediaTek thermal controller measures the on-SoC temperatures.
++  This device does not have its own ADC, instead it directly controls
++  the AUXADC via AHB bus accesses. For this reason this device needs
++  phandles to the AUXADC. Also it controls a mux in the apmixedsys
++  register space via AHB bus accesses, so a phandle to the APMIXEDSYS
++  is also needed.
++
++properties:
++  compatible:
++    oneOf:
++      - enum:
++          - mediatek,mt2701-thermal
++          - mediatek,mt2712-thermal
++          - mediatek,mt7622-thermal
++          - mediatek,mt7986-thermal
++          - mediatek,mt8173-thermal
++          - mediatek,mt8183-thermal
++          - mediatek,mt8365-thermal
++      - items:
++          - const: mediatek,mt7981-thermal
++          - const: mediatek,mt7986-thermal
++      - items:
++          - const: mediatek,mt8516-thermal
++          - const: mediatek,mt2701-thermal
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 2
++
++  clock-names:
++    items:
++      - const: therm
++      - const: auxadc
++
++  resets:
++    maxItems: 1
++
++  reset-names:
++    items:
++      - const: therm
++
++  nvmem-cells:
++    items:
++      - description: Calibration eFuse data. If unspecified default values are used.
++
++  nvmem-cell-names:
++    items:
++      - const: calibration-data
++
++  mediatek,auxadc:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      A phandle to the AUXADC which the thermal controller uses.
++
++  mediatek,apmixedsys:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      A phandle to the APMIXEDSYS controller.
++
++  "#thermal-sensor-cells":
++    const: 1
++
++  bank0-supply:
++    description: Regulator supplying voltage to the first bank
++
++  bank1-supply:
++    description: Regulator supplying voltage to the second bank
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - mediatek,auxadc
++  - mediatek,apmixedsys
++  - "#thermal-sensor-cells"
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/mt8173-clk.h>
++    #include <dt-bindings/reset/mt8173-resets.h>
++
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      thermal: thermal@1100b000 {
++        #thermal-sensor-cells = <1>;
++        compatible = "mediatek,mt8173-thermal";
++        reg = <0 0x1100b000 0 0x1000>;
++        interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
++        clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
++        clock-names = "therm", "auxadc";
++        resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
++        reset-names = "therm";
++        mediatek,auxadc = <&auxadc>;
++        mediatek,apmixedsys = <&apmixedsys>;
++        nvmem-cells = <&thermal_calibration_data>;
++        nvmem-cell-names = "calibration-data";
++      };
++
++      thermal-zones {
++        cpu_thermal: cpu-thermal {
++          polling-delay-passive = <1000>;
++          polling-delay = <1000>;
++
++          thermal-sensors = <&thermal 0>;
++          sustainable-power = <1500>;
++
++          trips {
++            threshold: trip-point0 {
++              temperature = <68000>;
++              hysteresis = <2000>;
++              type = "passive";
++            };
++
++            target: trip-point1 {
++              temperature = <85000>;
++              hysteresis = <2000>;
++              type = "passive";
++            };
++
++            cpu_crit: cpu-crit0 {
++              temperature = <115000>;
++              hysteresis = <2000>;
++              type = "critical";
++            };
++          };
++        };
++      };
++    };
++...
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+deleted file mode 100644
+index ac39c7156fde..000000000000
+--- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
++++ /dev/null
+@@ -1,52 +0,0 @@
+-* Mediatek Thermal
+-
+-This describes the device tree binding for the Mediatek thermal controller
+-which measures the on-SoC temperatures. This device does not have its own ADC,
+-instead it directly controls the AUXADC via AHB bus accesses. For this reason
+-this device needs phandles to the AUXADC. Also it controls a mux in the
+-apmixedsys register space via AHB bus accesses, so a phandle to the APMIXEDSYS
+-is also needed.
+-
+-Required properties:
+-- compatible:
+-  - "mediatek,mt8173-thermal" : For MT8173 family of SoCs
+-  - "mediatek,mt2701-thermal" : For MT2701 family of SoCs
+-  - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
+-  - "mediatek,mt7622-thermal" : For MT7622 SoC
+-  - "mediatek,mt7981-thermal", "mediatek,mt7986-thermal" : For MT7981 SoC
+-  - "mediatek,mt7986-thermal" : For MT7986 SoC
+-  - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
+-  - "mediatek,mt8365-thermal" : For MT8365 family of SoCs
+-  - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
+-- reg: Address range of the thermal controller
+-- interrupts: IRQ for the thermal controller
+-- clocks, clock-names: Clocks needed for the thermal controller. required
+-                       clocks are:
+-		       "therm":	 Main clock needed for register access
+-		       "auxadc": The AUXADC clock
+-- mediatek,auxadc: A phandle to the AUXADC which the thermal controller uses
+-- mediatek,apmixedsys: A phandle to the APMIXEDSYS controller.
+-- #thermal-sensor-cells : Should be 0. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description.
+-
+-Optional properties:
+-- resets: Reference to the reset controller controlling the thermal controller.
+-- nvmem-cells: A phandle to the calibration data provided by a nvmem device. If
+-               unspecified default values shall be used.
+-- nvmem-cell-names: Should be "calibration-data"
+-
+-Example:
+-
+-	thermal: thermal@1100b000 {
+-		#thermal-sensor-cells = <1>;
+-		compatible = "mediatek,mt8173-thermal";
+-		reg = <0 0x1100b000 0 0x1000>;
+-		interrupts = <0 70 IRQ_TYPE_LEVEL_LOW>;
+-		clocks = <&pericfg CLK_PERI_THERM>, <&pericfg CLK_PERI_AUXADC>;
+-		clock-names = "therm", "auxadc";
+-		resets = <&pericfg MT8173_PERI_THERM_SW_RST>;
+-		reset-names = "therm";
+-		mediatek,auxadc = <&auxadc>;
+-		mediatek,apmixedsys = <&apmixedsys>;
+-		nvmem-cells = <&thermal_calibration_data>;
+-		nvmem-cell-names = "calibration-data";
+-	};
+-- 
+2.40.1
+
