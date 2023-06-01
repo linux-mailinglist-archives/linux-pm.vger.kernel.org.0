@@ -2,61 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6416E719869
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 12:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A3771987A
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 12:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbjFAKJc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 06:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S232470AbjFAKKm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 06:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233302AbjFAKJP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 06:09:15 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6B3185
-        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 03:07:19 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so273103e87.2
-        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 03:07:19 -0700 (PDT)
+        with ESMTP id S233422AbjFAKKH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 06:10:07 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0701B1
+        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 03:08:39 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f3b39cea1eso699199e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 03:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685614037; x=1688206037;
+        d=linaro.org; s=google; t=1685614118; x=1688206118;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DlJOSvTxFqzu1vsBnWmNhHSpMwuNc6ynDx6kXiqQq/s=;
-        b=nbT1m2mtrTLzOU9m6eAg8yofW8n66e5RRkLFWVa0QPNp3fwVSxjFrNVQzaD0NOJ1LZ
-         vyVuUF3mUyvKVJFVRWGCeCLhEsj9ocIHGD1o7VXLLsU7cQPqERVbI8V/705Xuc1BETxt
-         UNIqAWPVFcOx/EwiiGWM9bokeAcPsLKw4pBVbuzwrFJsAkRIRDYtvSIUryT2sUbb2922
-         VZLhshEme/tUlCyCzNELf6Pp+EupBwxGNI/T37SZX7PuRbNVj654fNE6p4Gl/L737wlP
-         9Fwg7wv5xqKYCu+6vkpE+TdLyPXntqFrhHs67z8I8zhGGhFEz2/EyCug7fS4IghA0AvQ
-         Nf9A==
+        bh=LId+xDs8gP3XAdJnMwsTdg3eMFNvv8hWyJliU34ljxU=;
+        b=hpCdrezfqk5s+aWf2dZz/Bwfa67Sj3DPRzE4/ot5Z3FX6HZSPfsyeNWBXBFRB/WJlD
+         ZS4R5HNfKw9R6gxwZCsGe7Uq8/+8UcCSIN8zjbYizNoO2TLaY30NYZKL4/eKRQ6TOn5z
+         U3ne+idykm1rIyWxfOgT81mCDsYbS+yCmniq4MJYBrusDt4ha6E7qoVkuJX1m5RCBIfh
+         zKvOZV4BBaqf0yKk4RnP/o+u1GE+v3VLdo5ZL4qOxZqDIrlt1eKyxZyvr/2SBjmjpXOP
+         Z0uIGtvqTlm2TSIEOz64PAucSEef9U7WSTXkuH4znHVmDHIG/XpljRR6phZQubp7Ghfx
+         KKAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685614037; x=1688206037;
+        d=1e100.net; s=20221208; t=1685614118; x=1688206118;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DlJOSvTxFqzu1vsBnWmNhHSpMwuNc6ynDx6kXiqQq/s=;
-        b=E5qKZbPXGcrYtlpf58fRyyeWKH9t7rFIiyzHRxaAqNYH48BXOXrkRQfof8lV+rCRiz
-         O77vrY/bZTGzZWKuxD0WNeIfhfri7t5qCp/zY+r4zPqzk4RVTHuYcjYKRK0/7YUI8m+O
-         CxQJOedE0AU5bKy+ip+WgGYvNA45V/QaRxQCX0+L0kKSHtUNDwRHfAR7Zvux2Mkm6fcR
-         JTxEdc9hzdXPB0/XBRvMxJDpB3BNTAL+yjUbqgwtNYF5vy0QCiWqU1hzjeD4UGWGAzWk
-         +x5lHbMoh8EyFSnvK8xYHnApPsfxUXhOpJPfIvrNmFNdd5pSP3oRVU8XWG6eq7Dma07W
-         Vvew==
-X-Gm-Message-State: AC+VfDwOT0KTaaxW21HAhmNLXjMWyG0vjt6O7dAf9lDeemi3JPWhzY1A
-        HkNW342tHcAi85TYBQdojuAXMQ==
-X-Google-Smtp-Source: ACHHUZ6vrphQJG8VEMbFrXbIFxbypPJ2w6EZDqBQ8tTjg3Dbl3MS3eNa0c3nwi3DZ6i270/KWqfKGQ==
-X-Received: by 2002:ac2:548c:0:b0:4f4:ca61:82ba with SMTP id t12-20020ac2548c000000b004f4ca6182bamr914748lfk.67.1685614037444;
-        Thu, 01 Jun 2023 03:07:17 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id t20-20020ac243b4000000b004eb0c18efc2sm1030578lfl.221.2023.06.01.03.07.16
+        bh=LId+xDs8gP3XAdJnMwsTdg3eMFNvv8hWyJliU34ljxU=;
+        b=GX/6gDhJ1cWd+2WLHaAGvcK44EKhjVikqhW0RfnCd0Eo8uFHYT5vfydcn7aRVbptqd
+         S5qXjGJTEKjR3DhWLuhGeqL6uvXlNk4Z4EZf2UycdxB2KaEdaoQk7CgT6NJC0KJ7uJ+d
+         CQDIQ5vf6kj6tNiYdbDOP0Rj1c47HlldnwSjc7bcMzvFK+MgXWn+Qxw1MLjiWj/Udhj0
+         5pTZSg3HUlxW17hacYZfDGFg1d1EnSFP7dks9kvKeTF9u17EZSVcrdKEPgCqbyoXlIF2
+         sme8dqGU8ePiE940dgsAu6h28bFsGileneX95Q0TM8guLwYO/yoH2XDabZPT8faDvpTV
+         4HBw==
+X-Gm-Message-State: AC+VfDxpaRuz7bTw1WbUMTu+9NdKLHwtsMFQ+dSje+TnmIhp7DAUiMKO
+        +lfkvY6xjRXRZj0B7e8/VwKufw==
+X-Google-Smtp-Source: ACHHUZ5e8k80mJSMgWGc7MYP9JQ1Kv0aw/gHHXJ0neEqFsMcnHIU4bYKqC0lHp386LiXqqMi3+DvlQ==
+X-Received: by 2002:a19:f718:0:b0:4f3:dd96:bf55 with SMTP id z24-20020a19f718000000b004f3dd96bf55mr984726lfe.11.1685614117820;
+        Thu, 01 Jun 2023 03:08:37 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u2-20020a056512040200b004f4c3feb9f1sm1039655lfk.62.2023.06.01.03.08.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 03:07:17 -0700 (PDT)
-Message-ID: <a361aa49-49a7-d26b-d417-e7ebcf2eae37@linaro.org>
-Date:   Thu, 1 Jun 2023 12:07:15 +0200
+        Thu, 01 Jun 2023 03:08:37 -0700 (PDT)
+Message-ID: <62eaf77a-94c4-0a48-e335-83664fe343db@linaro.org>
+Date:   Thu, 1 Jun 2023 13:08:36 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 07/20] interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 12/20] interconnect: qcom: msm8996: Hook up RPM bus clk
+ definitions
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -67,14 +68,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
- <20230526-topic-smd_icc-v1-7-1bf8e6663c4e@linaro.org>
- <ea21f29f-482e-1dd3-12d7-b9f685b1d5dd@linaro.org>
- <4de7d05a-91da-501c-2889-4eee8e3bd34f@linaro.org>
- <21f6b17b-366b-1233-e8f8-c9ac8503eeab@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <21f6b17b-366b-1233-e8f8-c9ac8503eeab@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <20230526-topic-smd_icc-v1-12-1bf8e6663c4e@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230526-topic-smd_icc-v1-12-1bf8e6663c4e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -85,44 +83,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 1.06.2023 12:04, Dmitry Baryshkov wrote:
-> On 01/06/2023 13:00, Konrad Dybcio wrote:
->>
->>
->> On 1.06.2023 11:57, Dmitry Baryshkov wrote:
->>> On 30/05/2023 13:20, Konrad Dybcio wrote:
->>>> smd-rpm.h is not very useful as-is and both files are always included
->>>> anyway.. Combine them.
->>>
->>> If we ever add interconnect driver for non-SMD RPM platforms (like MSM8960/APQ8064), we can just ignore the smd part.
->> icc-rpm sends requests via smd so that doesn't sound unifiable
+On 30/05/2023 13:20, Konrad Dybcio wrote:
+> Assign the necessary definitions to migrate to the new bus clock
+> handling mechanism.
 > 
-> Ack. Should we rename it to icc-smd-rpm.c while doing the merge?
-I'd stay it's fine if it stays as-is for now, until (if) somebody
-tackles "old" RPM.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/interconnect/qcom/msm8996.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+> index 1f7e88a37acd..a596f4035d2e 100644
+> --- a/drivers/interconnect/qcom/msm8996.c
+> +++ b/drivers/interconnect/qcom/msm8996.c
+> @@ -1840,6 +1840,7 @@ static const struct qcom_icc_desc msm8996_a1noc = {
+>   	.type = QCOM_ICC_NOC,
+>   	.nodes = a1noc_nodes,
+>   	.num_nodes = ARRAY_SIZE(a1noc_nodes),
+> +	.bus_clk_desc = &aggre1_branch_clk,
+>   	.regmap_cfg = &msm8996_a1noc_regmap_config
+>   };
+>   
+> @@ -1861,6 +1862,7 @@ static const struct qcom_icc_desc msm8996_a2noc = {
+>   	.type = QCOM_ICC_NOC,
+>   	.nodes = a2noc_nodes,
+>   	.num_nodes = ARRAY_SIZE(a2noc_nodes),
+> +	.bus_clk_desc = &aggre2_branch_clk,
+>   	.intf_clocks = a2noc_intf_clocks,
+>   	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
+>   	.regmap_cfg = &msm8996_a2noc_regmap_config
+> @@ -1889,6 +1891,7 @@ static const struct qcom_icc_desc msm8996_bimc = {
+>   	.type = QCOM_ICC_BIMC,
+>   	.nodes = bimc_nodes,
+>   	.num_nodes = ARRAY_SIZE(bimc_nodes),
+> +	.bus_clk_desc = &bimc_clk,
+>   	.regmap_cfg = &msm8996_bimc_regmap_config
+>   };
+>   
+> @@ -1947,6 +1950,7 @@ static const struct qcom_icc_desc msm8996_cnoc = {
+>   	.type = QCOM_ICC_NOC,
+>   	.nodes = cnoc_nodes,
+>   	.num_nodes = ARRAY_SIZE(cnoc_nodes),
+> +	.bus_clk_desc = &bus_2_clk,
+>   	.regmap_cfg = &msm8996_cnoc_regmap_config
+>   };
+>   
+> @@ -2000,6 +2004,7 @@ static const struct qcom_icc_desc msm8996_mnoc = {
+>   	.type = QCOM_ICC_NOC,
+>   	.nodes = mnoc_nodes,
+>   	.num_nodes = ARRAY_SIZE(mnoc_nodes),
+> +	.bus_clk_desc = &mmaxi_0_clk,
 
-Konrad
+What about an ahb_clk_src here?
+
+>   	.intf_clocks = mm_intf_clocks,
+>   	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
+>   	.regmap_cfg = &msm8996_mnoc_regmap_config
+> @@ -2038,6 +2043,7 @@ static const struct qcom_icc_desc msm8996_pnoc = {
+>   	.type = QCOM_ICC_NOC,
+>   	.nodes = pnoc_nodes,
+>   	.num_nodes = ARRAY_SIZE(pnoc_nodes),
+> +	.bus_clk_desc = &bus_0_clk,
+>   	.regmap_cfg = &msm8996_pnoc_regmap_config
+>   };
+>   
+> @@ -2082,6 +2088,7 @@ static const struct qcom_icc_desc msm8996_snoc = {
+>   	.type = QCOM_ICC_NOC,
+>   	.nodes = snoc_nodes,
+>   	.num_nodes = ARRAY_SIZE(snoc_nodes),
+> +	.bus_clk_desc = &bus_1_clk,
+>   	.regmap_cfg = &msm8996_snoc_regmap_config
+>   };
+>   
 > 
->>
->> Konrad
->>>
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>    drivers/interconnect/qcom/icc-rpm.c |  1 -
->>>>    drivers/interconnect/qcom/icc-rpm.h |  5 +++++
->>>>    drivers/interconnect/qcom/msm8916.c |  1 -
->>>>    drivers/interconnect/qcom/msm8939.c |  1 -
->>>>    drivers/interconnect/qcom/msm8974.c |  2 +-
->>>>    drivers/interconnect/qcom/msm8996.c |  1 -
->>>>    drivers/interconnect/qcom/qcm2290.c |  1 -
->>>>    drivers/interconnect/qcom/qcs404.c  |  1 -
->>>>    drivers/interconnect/qcom/sdm660.c  |  1 -
->>>>    drivers/interconnect/qcom/smd-rpm.c |  2 +-
->>>>    drivers/interconnect/qcom/smd-rpm.h | 15 ---------------
->>>>    11 files changed, 7 insertions(+), 24 deletions(-)
->>>
->>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>
-> 
+
+-- 
+With best wishes
+Dmitry
+
