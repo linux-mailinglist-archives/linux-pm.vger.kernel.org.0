@@ -2,148 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2129571F3CE
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 22:25:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E9871F4C4
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 23:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbjFAUZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 16:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S231279AbjFAVcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 17:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbjFAUY6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 16:24:58 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E63E77;
-        Thu,  1 Jun 2023 13:24:27 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b02d0942caso7154285ad.1;
-        Thu, 01 Jun 2023 13:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1685651067; x=1688243067;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=jr4QoGMO1QTzHP9BeseO541cUPfP+RsuPOsza+Ci6zg=;
-        b=dxhgsvLIy1s+XWMQCTe4+xlGB+vnb45lA6Lh/e+U/FPOFMSsIYKCAlmWKHZKA7o+ou
-         xEdJ04wbVmkLV9mo8/IKkR9sGGVHQ/yYrheMbzknJhogN3Ld8SKhDk7g1Mc4HLpoXIJI
-         huZVxAOXQ8yZkB5UTEIC/aSV86GrtltiamEuPf7ZrZTCLWyrTd/kXDDwSOpqFiOUHvuj
-         bv+Smf92g/THGIV2uuKEIdAwkcH/C/9VQJ2msvWja1E2BT139RiUMFAbf0T25JEnAhE/
-         /xwYwEqwGdieHB7zYcQHYH8UXIHJj4/7c1ooecRq3eOi9BkWY0+4JfxLSyp6P33DHXIo
-         t/IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685651067; x=1688243067;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jr4QoGMO1QTzHP9BeseO541cUPfP+RsuPOsza+Ci6zg=;
-        b=KIFM7kSt7IZ6sZtvPpYDsULHOV6/jPPNiJNU0yLsbk7VyAUI/zRzZsVq2CnzOjd/Xm
-         5NVimHb2KtSEWnOuBF/RtyPILMd5zgl+bU7dxo3GCVPcjPwGNi0HfslVXIu0Vlr+LtrC
-         RLM+JL+6u8NvtGCxkE08L+SZFcUuhyFOlaQmGCN84BFzRINPf7M8i65P2EWYyFB/Ef0Z
-         EPKy2zbg4Tfs+Pwk6WsA/y5vgQcn7QzdYr8g77HAUcoOCOIWKh4nuoPPTSVkTCSw+Wvy
-         4XoEP5HbpRTlK0xn1WRXLV9BL5o/T3vnjvEDL8vq/ZEEpe7HL1k00c/7p7u4EUCYc0I4
-         oMlg==
-X-Gm-Message-State: AC+VfDxKWCwfbTTm597tbWHX8MeUjQQ5bwLCcs2u2nawpFeGkE1SNJa+
-        AgZn9fo3jPDVadbEPknopTI=
-X-Google-Smtp-Source: ACHHUZ73Ubusk/S2VWgqOC4SdykzigIl9jroTRyTqEbZOYA6hn4V9gHTTznzcAG0r1MhWfSay382ug==
-X-Received: by 2002:a17:903:2603:b0:1b1:bcc1:bcdb with SMTP id jd3-20020a170903260300b001b1bcc1bcdbmr23072plb.53.1685651066747;
-        Thu, 01 Jun 2023 13:24:26 -0700 (PDT)
-Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
-        by smtp.googlemail.com with ESMTPSA id t14-20020a1709028c8e00b001b052483e9csm3898254plo.231.2023.06.01.13.24.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 13:24:26 -0700 (PDT)
-Message-ID: <269262acfcce8eb1b85ee1fe3424a5ef2991f481.camel@gmail.com>
-Subject: Re: [PATCH] e1000e: Use PME poll to circumvent unreliable ACPI wake
-From:   Alexander H Duyck <alexander.duyck@gmail.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
-Cc:     linux-pm@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        with ESMTP id S229610AbjFAVcy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 17:32:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6F6184;
+        Thu,  1 Jun 2023 14:32:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F45164A01;
+        Thu,  1 Jun 2023 21:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4923C433EF;
+        Thu,  1 Jun 2023 21:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685655171;
+        bh=g2rzy9p5nDkRT5WQ+jqTex7ivDzoyB3d1o/6rkyQ008=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Qt2KlGyjZVky0lAKv82opTBW9mUDkM0Vd5xFaNjCWso1aWryPa/Nb4exeTSfkSDTH
+         GW1Jw1c0j3TeKqjmlsh5ccslCVjDMlnzCLX2YBzVnoUIrD3+viiRt7LloUH63oM/+/
+         18jNbCe4745xU19oWfP0BkDw5RXimB4jgzkd6ZMCBVPRhzRkvK9Gi+rIdUIxutt8iZ
+         CvncHntkYE6bnLHhCULprPYzhr46zG/GQxwDU80HRnFS7ckLmzC4p2Kr5qMj4fwwtO
+         LZ0VUlvFlDY9sacDCiCIvMJtqjyF/pCYOCsbnF8wzC0ahpWlktBeRX7mTgWfJxdaDE
+         fsxzgrF0KAnLQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Lukasz Luba <lukasz.luba@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Thu, 01 Jun 2023 13:24:24 -0700
-In-Reply-To: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
-References: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
+Subject: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
+Date:   Thu,  1 Jun 2023 23:32:41 +0200
+Message-Id: <20230601213246.3271412-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2023-06-02 at 00:25 +0800, Kai-Heng Feng wrote:
-> On some I219 devices, ethernet cable plugging detection only works once
-> from PCI D3 state. Subsequent cable plugging does set PME bit correctly,
-> but device still doesn't get woken up.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Do we have a root cause on why things don't get woken up? This seems
-like an issue where something isn't getting reset after the first
-wakeup and so future ones are blocked.
+When the intel_rapl driver is built-in, but iosf_mbi is a loadable module,
+the kernel fails to link:
 
-> Since I219 connects to the root complex directly, it relies on platform
-> firmware (ACPI) to wake it up. In this case, the GPE from _PRW only
-> works for first cable plugging but fails to notify the driver for
-> subsequent plugging events.
->=20
-> The issue was originally found on CNP, but the same issue can be found
-> on ADL too. So workaround the issue by continuing use PME poll after
-> first ACPI wake. As PME poll is always used, the runtime suspend
-> restriction for CNP can also be removed.
->=20
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/net/ethernet/intel/e1000e/netdev.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/eth=
-ernet/intel/e1000e/netdev.c
-> index bd7ef59b1f2e..f0e48f2bc3a2 100644
-> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
-> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
-> @@ -7021,6 +7021,8 @@ static __maybe_unused int e1000e_pm_runtime_resume(=
-struct device *dev)
->  	struct e1000_adapter *adapter =3D netdev_priv(netdev);
->  	int rc;
-> =20
-> +	pdev->pme_poll =3D true;
-> +
->  	rc =3D __e1000_resume(pdev);
->  	if (rc)
->  		return rc;
+x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
+intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to `iosf_mbi_write'
+x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined reference to `iosf_mbi_read'
 
-Doesn't this enable this too broadly. I know there are a number of
-devices that run under the e1000e and I would imagine that we don't
-want them all running with "pme_poll =3D true" do we?
+The driver can work with iosf_mbi completely disabled, so add a dependency
+that still allows this configuration, but otherwise forces it to not be
+built-in when iosf_mbi is a loadable module.
 
-It seems like at a minimum we should only be setting this for specific
-platofrms or devices instead of on all of them.
+Fixes: 9eef7f9da928c ("powercap: intel_rapl: Introduce RAPL TPMI interface driver")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/powercap/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Also this seems like something we should be setting on the suspend side
-since it seems to be clared in the wakeup calls.
+diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
+index e71399804c143..21ad50b22d6b9 100644
+--- a/drivers/powercap/Kconfig
++++ b/drivers/powercap/Kconfig
+@@ -36,6 +36,7 @@ config INTEL_RAPL
+ config INTEL_RAPL_TPMI
+ 	tristate "Intel RAPL Support via TPMI Interface"
+ 	depends on X86
++	depends on IOSF_MBI || IOSF_MBI=n
+ 	depends on INTEL_TPMI
+ 	select INTEL_RAPL_CORE
+ 	help
+-- 
+2.39.2
 
-Lastly I am not sure the first one is necessarily succeding. You might
-want to check the status of pme_poll before you run your first test.
-From what I can tell it looks like the initial state is true in
-pci_pm_init. If so it might be getting cleared after the first wakeup
-which is what causes your issues.
-
-> @@ -7682,7 +7684,7 @@ static int e1000_probe(struct pci_dev *pdev, const =
-struct pci_device_id *ent)
-> =20
->  	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
-> =20
-> -	if (pci_dev_run_wake(pdev) && hw->mac.type !=3D e1000_pch_cnp)
-> +	if (pci_dev_run_wake(pdev))
->  		pm_runtime_put_noidle(&pdev->dev);
-> =20
->  	return 0;
-
-I assume this is the original workaround that was put in to address
-this issue. Perhaps you should add a Fixes tag to this to identify
-which workaround this patch is meant to be replacing.
