@@ -2,62 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B598E719464
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 09:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 052087196AF
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 11:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjFAHgh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 03:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        id S232654AbjFAJUN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 05:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231478AbjFAHeg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 03:34:36 -0400
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A617180
-        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 00:32:38 -0700 (PDT)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id B2C7183A9A; Thu,  1 Jun 2023 08:32:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1685604756; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=K+bkAtH7Ocaiozc9x9EFOxycTf3iLycxpMyllsvun5omAgwdYtegBTPpwF4gpWWln
-         ETOm+u3yAlLZvTYw5Gne6laxt5+2eOeEBLAn4eJGSk2qCnJ+X/jlrKwYYYni6DbpAr
-         9OQ76NG/oh0Yg7nhCMsYMRIqVwAGcUez+egd1bsZUGSEBsF8ozHdHwmBM9olZboqIe
-         1nOdRG5myRFmokFl0rudrapw+DMEZb36CegBfPzkcdmHz+va68jHDePOYZCrfoZqBp
-         lAdgw+v7E43P/XOl+LJcBbR2YH5sYrxbTRp68XmbBag16OQRVzPjUMPhUawpJqWilV
-         lOQO9MvAlx5lQ==
-Received: by mail.lokoho.com for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 07:30:57 GMT
-Message-ID: <20230601074503-0.1.6c.2g51m.0.i8fnpy3lpb@lokoho.com>
-Date:   Thu,  1 Jun 2023 07:30:57 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-pm@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S232633AbjFAJUM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 05:20:12 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A2F11F
+        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 02:20:10 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2af2958db45so8354301fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 02:20:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685611209; x=1688203209;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Upah+Y2Kh3L4tAtOneXdavHB+WOOs6JqtTqR8dmqzds=;
+        b=S/KHssHYzPJWmfFSB5M5xj22NYmg/IOW4C4BQvGuikrGKeyG+xulgw5l15OVYiPkjY
+         RTjoVbRRNwVA2maZFzhBj4Cciat+jaljNMi8aUEsvN5lPCZ0SS4qBXxqtKuEQlRh0bMb
+         Bx6yIPXJN11nAxR2roAQS1ynl6MJbco+JW9i1hfa6vwqJ3evf9qYt+4xEdlPrrab5KoI
+         4R4iVUzbL4PA/dVOzJ6e1kBiADVsa1JpIBLgiii32bt1AX+t+7ezN6Ivnq417vSIu43D
+         nzJ/hWX2InOAMX8VaBCV6Xgp9H68B/qc5C9GqdCcmbVg9tCL3VOw5cEYpZWc6z5PHl3D
+         mptw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685611209; x=1688203209;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Upah+Y2Kh3L4tAtOneXdavHB+WOOs6JqtTqR8dmqzds=;
+        b=ScUZYzpqUrlG8AR2lxNkFEPNRAIvwC54CKNuLsVmvyx7+Ntbi1MvPRilU0rTaLL6rh
+         PpwmjS0DDgpQBSfkCFAMVrQZ/MhH/ImbCD9FpuTsFtnWcgxv9ziPL/V5gWqL0ZqZFVER
+         xgNxBEuT74YNZz7tuIojfFIXNE0rFPjWJDDMfEjgHX+Je+T9rcJmwCQwaYVCOB50i90J
+         GMPN4yHVFQeL1aoD6DY5tmbc5iDVtO2RFpZSX8qENsPvk0rKT9le0Uuf+qCx5R9gKFNZ
+         U4qbAXtqmI7dO5mL9ake7ezM9iwfXho4Ya7bsepMkmrq2yOrZ+nV00Ycl8Y/Jf7iIgBU
+         8imA==
+X-Gm-Message-State: AC+VfDzLAZw6utGAWvRjPbqraWGQTERQvlwAajCIgRr1vLdFIMLGAHic
+        77kw4A5Xo39923Op2Ly3c/Ia9g==
+X-Google-Smtp-Source: ACHHUZ6RxwFq+p0b2D5wHLlVhYYjxiBWXwQJegyxxJ116UwzQSHJVQQWNbBwcND/yWywUW9ZHQFnBw==
+X-Received: by 2002:a2e:8283:0:b0:2a8:e4d3:11e2 with SMTP id y3-20020a2e8283000000b002a8e4d311e2mr4741440ljg.39.1685611209198;
+        Thu, 01 Jun 2023 02:20:09 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id s18-20020a2e2c12000000b0029c96178425sm3719347ljs.19.2023.06.01.02.20.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jun 2023 02:20:08 -0700 (PDT)
+Message-ID: <2679410b-b40d-97b5-b7c2-46f32395b796@linaro.org>
+Date:   Thu, 1 Jun 2023 12:20:08 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 01/20] soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org>
+ <20230526-topic-smd_icc-v1-1-1bf8e6663c4e@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230526-topic-smd_icc-v1-1-1bf8e6663c4e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,
+On 30/05/2023 13:20, Konrad Dybcio wrote:
+> Add a preprocessor define to indicate the number of RPM contexts/states.
+> While at it, use tabs instead of spaces for the existing entries.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   include/linux/soc/qcom/smd-rpm.h | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/soc/qcom/smd-rpm.h b/include/linux/soc/qcom/smd-rpm.h
+> index 2990f425fdef..99499e4b080e 100644
+> --- a/include/linux/soc/qcom/smd-rpm.h
+> +++ b/include/linux/soc/qcom/smd-rpm.h
+> @@ -4,8 +4,9 @@
+>   
+>   struct qcom_smd_rpm;
+>   
+> -#define QCOM_SMD_RPM_ACTIVE_STATE        0
+> -#define QCOM_SMD_RPM_SLEEP_STATE         1
+> +#define QCOM_SMD_RPM_ACTIVE_STATE	0
+> +#define QCOM_SMD_RPM_SLEEP_STATE	1
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+This is what we usually try to abstain from: ident changes + functional 
+changes. I'd say, leave spaces as is and just add the new entry.
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+> +#define QCOM_SMD_RPM_STATE_NUM		2
+>   
+>   /*
+>    * Constants used for addressing resources in the RPM.
+> 
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+-- 
+With best wishes
+Dmitry
 
-
-Pozdrawiam
-Adam Charachuta
