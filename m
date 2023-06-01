@@ -2,78 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CF771A1F2
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 17:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29A871A36F
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 17:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbjFAPJQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 11:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S233990AbjFAP5y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 11:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233558AbjFAPJL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 11:09:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5FE1A7
-        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 08:08:46 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so1208922e87.2
-        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 08:08:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685632038; x=1688224038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nhrt/1kbZo1WGd9bqUxFgUA77aZYWI2EtqRfb5cofNk=;
-        b=p+j+QHsYedatEunjmIsqmYJ+EZNRzUY4GsYzlTe+eRDXQuT7Vh5cELtoFVRr30kj4/
-         SXwgGC6QnmxzDTuUJiAMMkUF6fI7v44fJXPLqiPKlEmPMbDKNQpu3uFTAFdXd+38n3Zs
-         cVhFXnGB1aclcPqYcoflRwNruUwORUMNOBNLtZv7JnJU4fd+TtY9KmlHinPQbGAh06Bg
-         rM3m/jGLNFHC5a8ApOjz70IjhwWD37nNLKOz2IJoVSvnnDFn8m3sj614i6ZKDn7ly8UW
-         /MZ5eHqkKRLqmbSxpnxds/k7M2QjEkjfAgaqDrxLR1tiICdikXQfG2vVoNKqYTq/M2/6
-         yKng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685632038; x=1688224038;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nhrt/1kbZo1WGd9bqUxFgUA77aZYWI2EtqRfb5cofNk=;
-        b=f48VvEfS8XvBQ44yJ+Rd77XFCnaS4qzNUJpDe1z9dTp9lXbnUFDatdrVseN6E0d8P3
-         2yndov13g3Wisw0qF5geW/ryXIsfyaULBrppttuTBg+Al0sQ7btLGtPm/l8tbBlLezlC
-         QlD2xkmDEQm1TKSs5Za64vfRHHw7fFTWHVurnIjB63WulUGi9ODkZjxLyB67hNbSXIKf
-         7jcVbfvzHZpdx79w8WW2Gqu/TYCxWYFRImSzsYz4KDIPI3i80HYzHsEZo7llCyPpRhVu
-         O8WTeGpnzrQIoVSfwTNhzWvFwHifL8A2JEbDlduANJf0To3L+kZ91opLT2xtTwy/LByJ
-         X52Q==
-X-Gm-Message-State: AC+VfDzJLy5/JDg44ZOkBrSMmvBqgeFOY8e9B7I+DlyZYtJMBOad9BLd
-        CljSbrla+QAbzdvwwGiGvdx5sWZiRuHaJaz9+y8=
-X-Google-Smtp-Source: ACHHUZ7uf4fti3eUJKD/fDjTjB1esmiPNPYdbZUliBqEDu/Toj34vBdtzDVLCniLeKc4i8kl+dnNyA==
-X-Received: by 2002:ac2:5605:0:b0:4f2:4419:932c with SMTP id v5-20020ac25605000000b004f24419932cmr151494lfd.23.1685632038174;
-        Thu, 01 Jun 2023 08:07:18 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id m1-20020ac24ac1000000b004f13634da05sm1116245lfp.180.2023.06.01.08.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 08:07:17 -0700 (PDT)
-Message-ID: <517f8b82-1230-985a-811a-2100f0dd339e@linaro.org>
-Date:   Thu, 1 Jun 2023 18:07:17 +0300
+        with ESMTP id S234084AbjFAP5x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 11:57:53 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92617134;
+        Thu,  1 Jun 2023 08:57:51 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id A20C641795;
+        Thu,  1 Jun 2023 15:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685635070;
+        bh=DhRFpLZy2hfyDYD8yUQHlqkoTRIcIzEoR9HeLiZfc8o=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=ZB5QNLujNDq3B3ALtV9mHbJwDV0D6Gc0PJfypM5wZYljiX8OB8kkvlJ8HTtqCOk9O
+         QNqLgOkcnDjiP0Q5b0pDDfe5ALUWcH9JEeIgvbZsgIaJ+XJ+6EWzn1h4RWi5k/oV5T
+         PKzvxp241OFnxXfMj8WBR/S8FPSlx5RHz0paftwOcUJkO9GhZRKy8Yppk309mvXTcG
+         uQzelo2SEQ3vtb0J3ekC7qL8lkKpm7IFbb29ZPeg4/czSp7FVBCtoyj84QSlZ8XMaX
+         BvCkK6UQVfFiAMv4HxR4467ReodYJW2xJoD9bZciZvxDcqlhBBpcXtImlp/XiPHlkn
+         zK4eXONY/TBPA==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     dlemoal@kernel.org, bblock@linux.ibm.com, acelan.kao@canonical.com,
+        linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5] scsi: core: Wait until device is fully resumed before doing rescan
+Date:   Thu,  1 Jun 2023 23:56:52 +0800
+Message-Id: <20230601155652.1157611-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND PATCH v2 2/2] cpufreq: qcom-nvmem: add support for
- IPQ8064
-Content-Language: en-GB
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Robert Marko <robimarko@gmail.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ilia.lin@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230530165807.642084-1-robimarko@gmail.com>
- <20230530165807.642084-2-robimarko@gmail.com>
- <3f1bfaf9-35ff-59ae-6756-84fc8900ed92@linaro.org>
- <647708e2.050a0220.514c7.feab@mx.google.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <647708e2.050a0220.514c7.feab@mx.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,193 +52,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/05/2023 04:36, Christian Marangi wrote:
-> On Wed, May 31, 2023 at 05:03:01AM +0300, Dmitry Baryshkov wrote:
->> On 30/05/2023 19:58, Robert Marko wrote:
->>> From: Christian Marangi <ansuelsmth@gmail.com>
->>>
->>> IPQ8064 comes in 3 families:
->>> * IPQ8062 up to 1.0GHz
->>> * IPQ8064/IPQ8066/IPQ8068 up to 1.4GHz
->>> * IPQ8065/IPQ8069 up to 1.7Ghz
->>>
->>> So, in order to be able to share one OPP table, add support for
->>> IPQ8064 family based of SMEM SoC ID-s as speedbin fuse is always 0 on
->>> IPQ8064.
->>>
->>> Bit are set with the following logic:
->>> * IPQ8062 BIT 0
->>> * IPQ8064/IPQ8066/IPQ8068 BIT 1
->>> * IPQ8065/IPQ8069 BIT 2
->>>
->>> speed is never fused, only psv values are fused.
->>> Set speed to the versions to permit a unified opp table following
->>> this named opp:
->>>
->>> opp-microvolt-speed<SPEED_VALUE>-pvs<PSV_VALUE>-v0
->>>
->>> Example:
->>> - for ipq8062 psv2
->>>     opp-microvolt-speed0-pvs2-v0 = < 925000 878750 971250>
->>> - for ipq8064 psv2
->>>     opp-microvolt-speed2-pvs2-v0 = <925000 878750 971250>;
->>> - for ipq8065 psv2
->>>     opp-microvolt-speed4-pvs2-v0 = <950000 902500 997500>;
->>>
->>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>> ---
->>>    drivers/cpufreq/qcom-cpufreq-nvmem.c | 73 +++++++++++++++++++++++++++-
->>>    1 file changed, 72 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> index ce444b5962f2..c644138680ba 100644
->>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>> @@ -34,6 +34,10 @@
->>>    #define IPQ8074_HAWKEYE_VERSION		BIT(0)
->>>    #define IPQ8074_ACORN_VERSION		BIT(1)
->>> +#define IPQ8062_VERSION		BIT(0)
->>> +#define IPQ8064_VERSION		BIT(1)
->>> +#define IPQ8065_VERSION		BIT(2)
->>
->> I think it would be more logical to change these defines to consecutive enum
->> instead of BIT(n) values. Another (and better in my opinion) option is to
->> drop versions completely (and remove speedN from the opp names) and to have
->> per-SoC tables in per-SoC dtsi files. There are already separate
->> ipq8064.dtsi, ipq8062.dtsi and ipq8065.dtsi files. It makes little sense to
->> overcomplicate the OPP tables.
->>
-> 
-> That is what was used downstream but it was also wrong and against the
-> normal implementation of this driver itself.
-> 
-> OPP have opp-supported-hw just for the task with the principle of
-> declaring a single table in dtsi and automatically select the right one.
-> 
-> Using the implementation downstream (opp table in each dtsi) is actually
-> worse as ipq8065 have 1.4ghz and not 1.2ghz and that can correctly be
-> handled with opp-supported-hw (and this change) or using delete-property
-> in dtsi (that I don't really like and it's ugly)
-> 
-> Also this implementation would match what is currently secribed for the
-> use of OPP in the documentation.
-> 
-> Hope you can understand the reason of this change, the intention is to
-> clear and trying to use standard OPP stuff instead of hacks in the DTS.
+During system resuming process, the resuming order is from top to down.
+Namely, the ATA host is resumed before disks connected to it.
 
-I'm fine with the opp-supported-hw part (I forgot that it is used by 
-default with the help of drv->versions). I do not like the idea of 
-encoding the same value into the -speedN part. If it is not needed, it's 
-better be dropped than using a semi-dummy value there.
+When an EH is scheduled while ATA host is resumed and disk device is
+still suspended, the device_lock hold by scsi_rescan_device() is never
+released so the dpm_resume() of the disk is blocked forerver, therefore
+the system can never be resumed back.
 
-So, I'd suggest to define an enum, use BIT(enum_value) for drv->versions 
-and drop the speed%d part.
+That's because scsi_attach_vpd() is expecting the disk device is in
+operational state, as it doesn't work on suspended device.
 
-Also, while we are at it, could you please define a schema for your opp 
-extensions? An example would make it easier to understand the bindings 
-(and will also provide a reference for possible other implementers).
+To avoid such deadlock, wait until the scsi device is fully resumed,
+before continuing the rescan process.
 
-> 
->>> +
->>>    struct qcom_cpufreq_drv;
->>>    struct qcom_cpufreq_match_data {
->>> @@ -207,6 +211,69 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->>>    	return ret;
->>>    }
->>> +static int qcom_cpufreq_ipq8064_name_version(struct device *cpu_dev,
->>> +					     struct nvmem_cell *speedbin_nvmem,
->>> +					     char **pvs_name,
->>> +					     struct qcom_cpufreq_drv *drv)
->>> +{
->>> +	int speed = 0, pvs = 0, pvs_ver = 0;
->>> +	int msm_id, ret = 0;
->>> +	u8 *speedbin;
->>> +	size_t len;
->>> +
->>> +	speedbin = nvmem_cell_read(speedbin_nvmem, &len);
->>> +
->>> +	if (IS_ERR(speedbin))
->>> +		return PTR_ERR(speedbin);
->>> +
->>> +	switch (len) {
->>> +	case 4:
->>> +		get_krait_bin_format_a(cpu_dev, &speed, &pvs, &pvs_ver,
->>> +				       speedbin);
->>> +		break;
->>> +	default:
->>> +		dev_err(cpu_dev, "Unable to read nvmem data. Defaulting to 0!\n");
->>> +		ret = -ENODEV;
->>> +		goto len_error;
->>> +	}
->>> +
->>> +	ret = qcom_smem_get_soc_id(&msm_id);
->>> +	if (ret)
->>> +		return ret;
->>> +
->>> +	switch (msm_id) {
->>> +	case QCOM_ID_IPQ8062:
->>> +		drv->versions = IPQ8062_VERSION;
->>> +		break;
->>> +	case QCOM_ID_IPQ8064:
->>> +	case QCOM_ID_IPQ8066:
->>> +	case QCOM_ID_IPQ8068:
->>> +		drv->versions = IPQ8064_VERSION;
->>> +		break;
->>> +	case QCOM_ID_IPQ8065:
->>> +	case QCOM_ID_IPQ8069:
->>> +		drv->versions = IPQ8065_VERSION;
->>> +		break;
->>> +	default:
->>> +		dev_err(cpu_dev,
->>> +			"SoC ID %u is not part of IPQ8064 family, limiting to 1.0GHz!\n",
->>> +			msm_id);
->>> +		drv->versions = IPQ8062_VERSION;
->>> +		break;
->>> +	}
->>> +
->>> +	/*
->>> +	 * IPQ8064 speed is never fused. Only psv values are fused.
->>> +	 * Set speed to the versions to permit a unified opp table.
->>> +	 */
->>> +	snprintf(*pvs_name, sizeof("speedXX-pvsXX-vXX"), "speed%d-pvs%d-v%d",
->>> +		 drv->versions, pvs, pvs_ver);
->>> +
->>> +len_error:
->>> +	kfree(speedbin);
->>> +	return ret;
->>> +}
->>> +
->>>    static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
->>>    					     struct nvmem_cell *speedbin_nvmem,
->>>    					     char **pvs_name,
->>> @@ -256,6 +323,10 @@ static const struct qcom_cpufreq_match_data match_data_qcs404 = {
->>>    	.genpd_names = qcs404_genpd_names,
->>>    };
->>> +static const struct qcom_cpufreq_match_data match_data_ipq8064 = {
->>> +	.get_version = qcom_cpufreq_ipq8064_name_version,
->>> +};
->>> +
->>>    static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
->>>    	.get_version = qcom_cpufreq_ipq8074_name_version,
->>>    };
->>> @@ -404,7 +475,7 @@ static const struct of_device_id qcom_cpufreq_match_list[] __initconst = {
->>>    	{ .compatible = "qcom,apq8096", .data = &match_data_kryo },
->>>    	{ .compatible = "qcom,msm8996", .data = &match_data_kryo },
->>>    	{ .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
->>> -	{ .compatible = "qcom,ipq8064", .data = &match_data_krait },
->>> +	{ .compatible = "qcom,ipq8064", .data = &match_data_ipq8064 },
->>>    	{ .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
->>>    	{ .compatible = "qcom,apq8064", .data = &match_data_krait },
->>>    	{ .compatible = "qcom,msm8974", .data = &match_data_krait },
->>
->> -- 
->> With best wishes
->> Dmitry
->>
-> 
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v5:
+ - Use a different approach. Wait until the disk device is resumed.
 
+v4: 
+ - No change.
+
+v3:
+ - New patch to resolve undefined pm_suspend_target_state.
+
+v2:
+ - Schedule rescan task at the end of system resume phase.
+ - Wording.
+
+ drivers/scsi/scsi_scan.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index d217be323cc6..a59aada98ac5 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1621,6 +1621,9 @@ void scsi_rescan_device(struct device *dev)
+ {
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+ 
++	if (dev->power.is_suspended)
++		wait_for_completion(&dev->power.completion);
++
+ 	device_lock(dev);
+ 
+ 	scsi_attach_vpd(sdev);
 -- 
-With best wishes
-Dmitry
+2.34.1
 
