@@ -2,61 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAD171F04D
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 19:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4B271F20F
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 20:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbjFARJZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 13:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
+        id S232258AbjFASav (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 14:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjFARJY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 13:09:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8970D1;
-        Thu,  1 Jun 2023 10:09:21 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B1ED6606ECA;
-        Thu,  1 Jun 2023 18:09:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685639359;
-        bh=Y8F29vZfkHL4Cb3ef4MuhHy4Zp5QvDAZ2kfIEyGPM9A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=djfaRrFbe5vpFwhkOMJQAaXxfPSn6juAwXkAr4/vbafpbvECworn4C6+M5gHXSwC/
-         omKlx04ZB5h0aJdt1pRwK5f1fh/c0wVQDIoAhMR0OHegtLoUymiw1hnFy5Wg2yblOH
-         SoizdaLsweDvPsQ+6QiYYYElLbHJf2pVZsRtIulNG1gHSYjfdSXdHwEoGnHsI9Nrwo
-         kC9g+1xMF4lc+XJffyLIolrsX8Xe3yqm354tkULZ4uxHR3nYlYthbfVUEJ4gYxkZ+O
-         2R+0K6KZb6diN81tPegpYjt0x83mMUvzIROFsegGI+kMLOEgnoDrS86IzX3s7IGG3U
-         v3DweIR4ktFlg==
-Date:   Thu, 1 Jun 2023 13:09:12 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Bernhard =?utf-8?Q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
-Message-ID: <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
-References: <20230530195132.2286163-1-bero@baylibre.com>
- <CAGXv+5EVfgEBDm=7MmQ=OsP322KmE23PwycJ-0LjU+3dEZygUQ@mail.gmail.com>
+        with ESMTP id S232409AbjFASao (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 14:30:44 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE07184
+        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 11:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1685644242; x=1717180242;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=EzlV7P3scPV9wXckjZ6iYgdq/piEBu9LPkvmXDheyIA=;
+  b=dxE0B2l1jD0GmH0C1Tven/WAnnmv9VgyZNF2/jcKFjQK8BYmKxmM7/74
+   QN2tVCO1q80SODxtkA1Zm13hJWBVFzC16oG0R6cU6GMqUiI+JnBb9ZJ/k
+   1esQajVRzkFBYXtED8ccZibbXDGI0DyI5FR3jygUHdH8XmWVQDjvJ4y06
+   8dWT+sYHg/hV3yPZOoEcLnMXO1NfRiZD0s16SZNNeIb1EgMwcZ1H/VV/k
+   U+hggfnctnlybj1uUuqWyJSYR270/009a9bB2b7iSB7QIpddL0d87jQsD
+   16uENwh33+K5Uc6dzzv+hyDrKYn4VdUeHxN9IUGBCPT8D71qbafBT2laC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="383921598"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="383921598"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="657900897"
+X-IronPort-AV: E=Sophos;i="6.00,210,1681196400"; 
+   d="scan'208";a="657900897"
+Received: from arjan-box.jf.intel.com ([10.54.74.119])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 11:28:13 -0700
+From:   arjan@linux.intel.com
+To:     linux-pm@vger.kernel.org
+Cc:     artem.bityutskiy@linux.intel.com, rafael@kernel.org,
+        Arjan van de Ven <arjan@linux.intel.com>
+Subject: [PATCH 00/7 Add support for running in VM guests to intel_idle
+Date:   Thu,  1 Jun 2023 18:27:54 +0000
+Message-Id: <20230601182801.2622044-1-arjan@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGXv+5EVfgEBDm=7MmQ=OsP322KmE23PwycJ-0LjU+3dEZygUQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,52 +58,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 31, 2023 at 12:49:43PM +0800, Chen-Yu Tsai wrote:
-> On Wed, May 31, 2023 at 3:51 AM Bernhard Rosenkränzer <bero@baylibre.com> wrote:
-> >
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
-> > Also, add Suspend and Resume support to LVTS Driver (all SoCs),
-> > and update the documentation that describes the Calibration Data Offsets.
-> >
-> > Changelog:
-> >     v4 :
-> >         - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
-> >           room for SVS support, pointed out by
-> >           AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> >
-> >     v3 :
-> >         - Rebased :
-> >             base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
-> >         - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
-> >           Use filtered mode to make sure threshold interrupts are triggered,
-> 
-> I'm seeing sensor readout (either through sysfs/thermal/<x>/temp or hwmon)
-> fail frequently on MT8192. If I run `sensors` (lm-sensors), at least a couple
-> of the LVTS sensors would be N/A. Not sure if this is related to this change.
+From: Arjan van de Ven <arjan@linux.intel.com>
 
-Yes, it is. Filtered mode has some delay associated with reading, meaning most
-of the time the value isn't ready, while immediate mode is, well, pretty much
-immediate and the read always succeeds.
+intel_idle provides the CPU Idle states (for power saving in idle) to the
+cpuidle framework, based on per-cpu tables combined with limited hardware
+enumeration. This combination of cpuidle and intel_idle provides dynamic
+behavior where power saving and performance impact are dynamically balanced
+and where a set of generic knobs are provided in sysfs for users to tune
+the heuristics (and get statistics etc)
 
-For temperature monitoring, filtered mode should be used. It supports triggering
-interrupts when crossing the thresholds. Immediate mode is meant for one-off
-readings of the temperature. This is why I suggested using filtered mode.
+However, intel_idle currently does not support running inside VM guests, and
+the linux kernel falls back to either ACPI based idle (if supported by the
+hypervisor/virtual bios) or just the default x86 fallback "hlt" based idle
+method... that was introduced in the 1.2 kernel series... and lacks all the
+dynamic behavior, user control and statistics that cpuidle brings.
 
-As far as the thermal framework goes, it's ok that filtered mode doesn't always
-return a value, as it will keep the old one. But of course, having the
-temperature readout always work would be a desired improvement.
+While this is obviously functional, it's not great and we can do better
+for the user by hooking up intel_idle into the cpuidle framework also
+for the "in a guest" case.
+And not only not great for the user, it's also not optimal and lacks two
+key capabilities that are supported by the bare metal case:
 
-As for ways to achieve that, I think the intended way would be to enable the
-interrupts that signal data ready on filtered mode (bits 19, 20, 21, 28), read
-the temperature and cache it so it is always available when the get_temp()
-callback is called. The issue with this is that it would cause *a lot* of
-interrupts, which doesn't seem worth it.
+1) The ability to flush the TLB for very long idle periods, to avoid
+   a costly (and high latency) IPI wakeup later, of an idle vCPU when a
+   process that used to run on the idle vCPU does an munmap or similar
+   operation. Avoiding high latency IPIs helps avoid performance jitter.
+2) The ability to use the new Intel C0.2 idle state instead of polling
+   for very short duration idle periods to save power (and carbon footprint)
 
-Another option that comes to mind would be to enable immediate mode only during
-the get_temp() callback, to immediately read a value, and return to filtered
-mode at the end. That might work, but I haven't tried yet.
+This patch series adds the basic support to run in a VM guest
+to the intel_idle driver, and then addresses the first of these shortfalls.
+The C0.2 gap will be fixed with a small additional patch after the
+C0.2 support is merged seperately.
 
-Thanks,
-Nícolas
+Arjan van de Ven (7):
+  intel_idle: refactor state->enter manipulation into its own function
+  intel_idle: clean up the (new) state_update_enter_method function
+  intel_idle: Add a sanity check in the new state_update_enter_method
+    function
+  intel_idle: Add helper functions to support 'hlt' as idle state
+  intel_idle: Add a way to skip the mwait check on all states
+  intel_idle: Add support for using intel_idle in a VM guest using just
+    hlt
+  intel_idle: Add a "Long HLT" C1 state for the VM guest mode
+
+ drivers/idle/intel_idle.c | 216 ++++++++++++++++++++++++++++++++++----
+ 1 file changed, 194 insertions(+), 22 deletions(-)
+
+-- 
+2.40.1
+
