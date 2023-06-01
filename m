@@ -2,90 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8023671F332
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 21:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2129571F3CE
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 22:25:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjFATsr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 15:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
+        id S232102AbjFAUZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 16:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjFATsq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 15:48:46 -0400
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8383184;
-        Thu,  1 Jun 2023 12:48:45 -0700 (PDT)
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b041cceb16so11143115ad.2;
-        Thu, 01 Jun 2023 12:48:45 -0700 (PDT)
+        with ESMTP id S232771AbjFAUY6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 16:24:58 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E63E77;
+        Thu,  1 Jun 2023 13:24:27 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b02d0942caso7154285ad.1;
+        Thu, 01 Jun 2023 13:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1685651067; x=1688243067;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=jr4QoGMO1QTzHP9BeseO541cUPfP+RsuPOsza+Ci6zg=;
+        b=dxhgsvLIy1s+XWMQCTe4+xlGB+vnb45lA6Lh/e+U/FPOFMSsIYKCAlmWKHZKA7o+ou
+         xEdJ04wbVmkLV9mo8/IKkR9sGGVHQ/yYrheMbzknJhogN3Ld8SKhDk7g1Mc4HLpoXIJI
+         huZVxAOXQ8yZkB5UTEIC/aSV86GrtltiamEuPf7ZrZTCLWyrTd/kXDDwSOpqFiOUHvuj
+         bv+Smf92g/THGIV2uuKEIdAwkcH/C/9VQJ2msvWja1E2BT139RiUMFAbf0T25JEnAhE/
+         /xwYwEqwGdieHB7zYcQHYH8UXIHJj4/7c1ooecRq3eOi9BkWY0+4JfxLSyp6P33DHXIo
+         t/IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685648925; x=1688240925;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jIvV0wZNClXbTeFKKUQvtDmnFEe+LAtKQ1KeK9o1Yds=;
-        b=eCz9pV6g9w2DRT/Z5Te383UF3Vi5xuoCzBgKvojs6PUPeUQDNqaqc51S6sBKFZIswG
-         N/QXOAGUJiAeqrcRUD0mtnHPG0l5Iq8iZZu1cT5fjgJHCmKgSFLy82mIHUtNJvpvSbkh
-         GIkdpOfXuLlwZ50Ai65roZpAENcJD8lsB/S1I9Hlpb1puixVmY12Vsi7pYXrt8po3Y4P
-         RrWWGbUVtombVHJ7tvhqgVzrIyBZHrti1lsaGAsegU+pkaZRmtFffXm3ri4zQJ77XR3C
-         OnO1DH59NWPpG+1nJa1Wyluq+gv78M6AetgmEIMlJoiypv5EgnKnjb+Pa+27tE4+MZ3c
-         1fMw==
-X-Gm-Message-State: AC+VfDxanAWHCE5cm97nSVgTXd/J1FTHhrzgXCghpAhBvfD2pzCUKqoA
-        oftJ2OGbO7QSEoWbY6MmJPg=
-X-Google-Smtp-Source: ACHHUZ7Iwtz3jz01FcOvoBj0hs4t01IPS1TfcdJfY7bwsIfn7GoqjmozuA0FNYyJ2k9UviF0s2TKaw==
-X-Received: by 2002:a17:902:ce8f:b0:1aa:d545:462e with SMTP id f15-20020a170902ce8f00b001aad545462emr472333plg.13.1685648924940;
-        Thu, 01 Jun 2023 12:48:44 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id e3-20020a170902744300b001b0395c4002sm3845405plt.210.2023.06.01.12.48.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jun 2023 12:48:44 -0700 (PDT)
-Message-ID: <164576ab-4e68-ca5d-0c9e-d756588cdbb5@acm.org>
-Date:   Thu, 1 Jun 2023 12:48:43 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5] scsi: core: Wait until device is fully resumed before
- doing rescan
-Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     dlemoal@kernel.org, bblock@linux.ibm.com, acelan.kao@canonical.com,
-        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        d=1e100.net; s=20221208; t=1685651067; x=1688243067;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jr4QoGMO1QTzHP9BeseO541cUPfP+RsuPOsza+Ci6zg=;
+        b=KIFM7kSt7IZ6sZtvPpYDsULHOV6/jPPNiJNU0yLsbk7VyAUI/zRzZsVq2CnzOjd/Xm
+         5NVimHb2KtSEWnOuBF/RtyPILMd5zgl+bU7dxo3GCVPcjPwGNi0HfslVXIu0Vlr+LtrC
+         RLM+JL+6u8NvtGCxkE08L+SZFcUuhyFOlaQmGCN84BFzRINPf7M8i65P2EWYyFB/Ef0Z
+         EPKy2zbg4Tfs+Pwk6WsA/y5vgQcn7QzdYr8g77HAUcoOCOIWKh4nuoPPTSVkTCSw+Wvy
+         4XoEP5HbpRTlK0xn1WRXLV9BL5o/T3vnjvEDL8vq/ZEEpe7HL1k00c/7p7u4EUCYc0I4
+         oMlg==
+X-Gm-Message-State: AC+VfDxKWCwfbTTm597tbWHX8MeUjQQ5bwLCcs2u2nawpFeGkE1SNJa+
+        AgZn9fo3jPDVadbEPknopTI=
+X-Google-Smtp-Source: ACHHUZ73Ubusk/S2VWgqOC4SdykzigIl9jroTRyTqEbZOYA6hn4V9gHTTznzcAG0r1MhWfSay382ug==
+X-Received: by 2002:a17:903:2603:b0:1b1:bcc1:bcdb with SMTP id jd3-20020a170903260300b001b1bcc1bcdbmr23072plb.53.1685651066747;
+        Thu, 01 Jun 2023 13:24:26 -0700 (PDT)
+Received: from ?IPv6:2605:59c8:448:b800:82ee:73ff:fe41:9a02? ([2605:59c8:448:b800:82ee:73ff:fe41:9a02])
+        by smtp.googlemail.com with ESMTPSA id t14-20020a1709028c8e00b001b052483e9csm3898254plo.231.2023.06.01.13.24.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jun 2023 13:24:26 -0700 (PDT)
+Message-ID: <269262acfcce8eb1b85ee1fe3424a5ef2991f481.camel@gmail.com>
+Subject: Re: [PATCH] e1000e: Use PME poll to circumvent unreliable ACPI wake
+From:   Alexander H Duyck <alexander.duyck@gmail.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
+Cc:     linux-pm@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230601155652.1157611-1-kai.heng.feng@canonical.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230601155652.1157611-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Date:   Thu, 01 Jun 2023 13:24:24 -0700
+In-Reply-To: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
+References: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-3.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/1/23 08:56, Kai-Heng Feng wrote:
-> During system resuming process, the resuming order is from top to down.
-> Namely, the ATA host is resumed before disks connected to it.
-> 
-> When an EH is scheduled while ATA host is resumed and disk device is
-> still suspended, the device_lock hold by scsi_rescan_device() is never
-> released so the dpm_resume() of the disk is blocked forerver, therefore
-> the system can never be resumed back.
-> 
-> That's because scsi_attach_vpd() is expecting the disk device is in
-> operational state, as it doesn't work on suspended device.
-> 
-> To avoid such deadlock, wait until the scsi device is fully resumed,
-> before continuing the rescan process.
+On Fri, 2023-06-02 at 00:25 +0800, Kai-Heng Feng wrote:
+> On some I219 devices, ethernet cable plugging detection only works once
+> from PCI D3 state. Subsequent cable plugging does set PME bit correctly,
+> but device still doesn't get woken up.
 
-Why doesn't scsi_attach_vpd() support runtime power management? Calling 
-scsi_attach_vpd() should result in a call of sdev_runtime_resume(), 
-isn't it?
+Do we have a root cause on why things don't get woken up? This seems
+like an issue where something isn't getting reset after the first
+wakeup and so future ones are blocked.
 
-Thanks,
+> Since I219 connects to the root complex directly, it relies on platform
+> firmware (ACPI) to wake it up. In this case, the GPE from _PRW only
+> works for first cable plugging but fails to notify the driver for
+> subsequent plugging events.
+>=20
+> The issue was originally found on CNP, but the same issue can be found
+> on ADL too. So workaround the issue by continuing use PME poll after
+> first ACPI wake. As PME poll is always used, the runtime suspend
+> restriction for CNP can also be removed.
+>=20
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/net/ethernet/intel/e1000e/netdev.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/eth=
+ernet/intel/e1000e/netdev.c
+> index bd7ef59b1f2e..f0e48f2bc3a2 100644
+> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+> @@ -7021,6 +7021,8 @@ static __maybe_unused int e1000e_pm_runtime_resume(=
+struct device *dev)
+>  	struct e1000_adapter *adapter =3D netdev_priv(netdev);
+>  	int rc;
+> =20
+> +	pdev->pme_poll =3D true;
+> +
+>  	rc =3D __e1000_resume(pdev);
+>  	if (rc)
+>  		return rc;
 
-Bart.
+Doesn't this enable this too broadly. I know there are a number of
+devices that run under the e1000e and I would imagine that we don't
+want them all running with "pme_poll =3D true" do we?
 
+It seems like at a minimum we should only be setting this for specific
+platofrms or devices instead of on all of them.
+
+Also this seems like something we should be setting on the suspend side
+since it seems to be clared in the wakeup calls.
+
+Lastly I am not sure the first one is necessarily succeding. You might
+want to check the status of pme_poll before you run your first test.
+From what I can tell it looks like the initial state is true in
+pci_pm_init. If so it might be getting cleared after the first wakeup
+which is what causes your issues.
+
+> @@ -7682,7 +7684,7 @@ static int e1000_probe(struct pci_dev *pdev, const =
+struct pci_device_id *ent)
+> =20
+>  	dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
+> =20
+> -	if (pci_dev_run_wake(pdev) && hw->mac.type !=3D e1000_pch_cnp)
+> +	if (pci_dev_run_wake(pdev))
+>  		pm_runtime_put_noidle(&pdev->dev);
+> =20
+>  	return 0;
+
+I assume this is the original workaround that was put in to address
+this issue. Perhaps you should add a Fixes tag to this to identify
+which workaround this patch is meant to be replacing.
