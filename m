@@ -2,174 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8BF719259
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 07:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F3271932D
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jun 2023 08:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjFAFiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Jun 2023 01:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S231339AbjFAGZ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Jun 2023 02:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbjFAFiN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 01:38:13 -0400
-Received: from forward103b.mail.yandex.net (forward103b.mail.yandex.net [178.154.239.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A72A19D;
-        Wed, 31 May 2023 22:37:17 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:c83:0:640:84f9:0])
-        by forward103b.mail.yandex.net (Yandex) with ESMTP id 7B13660064;
-        Thu,  1 Jun 2023 08:37:13 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id OaGNfZvWv8c0-bTdTQYrz;
-        Thu, 01 Jun 2023 08:37:13 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1685597833;
-        bh=RJv1enniNURToHuLUERjxyUqTf6LjwxVg1LD+JWPLmA=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=MVDnefRDt1lyXlfumLMMFOHp2cWmDIMGCBXR3hDxQlR6guXnuyb7pMZ6HqAVlsH8F
-         AWZDG6eYzf0T1M2YTVtYoyXGYFPpWbKttRKXkr9pQwhtJT2nzlHHu1ZoqyaOi7tdPn
-         bI6w0fP3B45FnW6riDtFHfA/qreqG3ZCfplp/xWc=
-Authentication-Results: mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Nikita Shubin <nikita.shubin@maquefel.me>,
-        Michael Peters <mpeters@embeddedTS.com>,
-        Kris Bahnsen <kris@embeddedTS.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH v1 14/43] power: reset: Add a driver for the ep93xx reset
-Date:   Thu,  1 Jun 2023 08:34:05 +0300
-Message-Id: <20230601053546.9574-15-nikita.shubin@maquefel.me>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+        with ESMTP id S229689AbjFAGZ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Jun 2023 02:25:27 -0400
+Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68EDD188;
+        Wed, 31 May 2023 23:24:54 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 192.168.10.46
+        by mg.richtek.com with MailGates ESMTP Server V5.0(767:0:AUTH_RELAY)
+        (envelope-from <cy_huang@richtek.com>); Thu, 01 Jun 2023 14:24:38 +0800 (CST)
+Received: from ex4.rt.l (192.168.10.47) by ex3.rt.l (192.168.10.46) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 1 Jun
+ 2023 14:24:37 +0800
+Received: from linuxcarl2.richtek.com (192.168.10.154) by ex4.rt.l
+ (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
+ Transport; Thu, 1 Jun 2023 14:24:37 +0800
+From:   <cy_huang@richtek.com>
+To:     <sre@kernel.org>
+CC:     <krzysztof.kozlowski+dt@linaro.org>, <cy_huang@richtek.com>,
+        <chiaen_wu@richtek.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: rt9467: Make charger-enable control as logic level
+Date:   Thu, 1 Jun 2023 14:24:36 +0800
+Message-ID: <1685600676-25124-1-git-send-email-cy_huang@richtek.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Implement the reset behaviour of the various EP93xx SoCS in drivers/power/reset.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-It used to be located in arch/arm/mach-ep93xx.
+The current coding make 'charger-enable-gpio' control as real hardware
+level. This conflicts with the default binding example. For driver
+behavior, no need to use real hardware level, just logic level is
+enough. This change can make this flexibility keep in dts gpio active
+level about this pin.
 
-Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-Acked-by: Sebastian Reichel <sre@kernel.org>
+Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
+Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
- drivers/power/reset/Kconfig          | 10 +++++
- drivers/power/reset/Makefile         |  1 +
- drivers/power/reset/ep93xx-restart.c | 65 ++++++++++++++++++++++++++++
- 3 files changed, 76 insertions(+)
- create mode 100644 drivers/power/reset/ep93xx-restart.c
+Hi,
 
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index 8c87eeda0fec..2a61afbb047b 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -75,6 +75,16 @@ config POWER_RESET_BRCMSTB
- 	  Say Y here if you have a Broadcom STB board and you wish
- 	  to have restart support.
+  This change is from our customer. They use the default binding
+example as the dts config. By default, this configurethe
+charger-enable-gpio to real harware level high and disable battery charging
+with external hardware pin.
+
+The last patch I sent is to fix the binding example. But refer to the
+discussion, the correct way is to change the gpio control coding as logic level,
+not real hardware level.
+https://lore.kernel.org/lkml/1685522813-14481-1-git-send-email-cy_huang@richtek.com/
+---
+ drivers/power/supply/rt9467-charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
+index ea33693..b0b9ff8 100644
+--- a/drivers/power/supply/rt9467-charger.c
++++ b/drivers/power/supply/rt9467-charger.c
+@@ -1192,7 +1192,7 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
+ 	i2c_set_clientdata(i2c, data);
  
-+config POWER_RESET_EP93XX
-+	bool "Cirrus EP93XX reset driver" if COMPILE_TEST
-+	depends on MFD_SYSCON
-+	default ARCH_EP93XX
-+	help
-+	  This driver provides restart support for Cirrus EP93XX SoC.
-+
-+	  Say Y here if you have a Cirrus EP93XX SoC and you wish
-+	  to have restart support.
-+
- config POWER_RESET_GEMINI_POWEROFF
- 	bool "Cortina Gemini power-off driver"
- 	depends on ARCH_GEMINI || COMPILE_TEST
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index d763e6735ee3..61f4e11619b2 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -7,6 +7,7 @@ obj-$(CONFIG_POWER_RESET_ATC260X) += atc260x-poweroff.o
- obj-$(CONFIG_POWER_RESET_AXXIA) += axxia-reset.o
- obj-$(CONFIG_POWER_RESET_BRCMKONA) += brcm-kona-reset.o
- obj-$(CONFIG_POWER_RESET_BRCMSTB) += brcmstb-reboot.o
-+obj-$(CONFIG_POWER_RESET_EP93XX) += ep93xx-restart.o
- obj-$(CONFIG_POWER_RESET_GEMINI_POWEROFF) += gemini-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO) += gpio-poweroff.o
- obj-$(CONFIG_POWER_RESET_GPIO_RESTART) += gpio-restart.o
-diff --git a/drivers/power/reset/ep93xx-restart.c b/drivers/power/reset/ep93xx-restart.c
-new file mode 100644
-index 000000000000..0dab09d4fd3c
---- /dev/null
-+++ b/drivers/power/reset/ep93xx-restart.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: (GPL-2.0)
-+/*
-+ * Cirrus EP93xx SoC reset driver
-+ *
-+ * Copyright (C) 2021 Nikita Shubin <nikita.shubin@maquefel.me>
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/notifier.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/reboot.h>
-+
-+#include <linux/soc/cirrus/ep93xx.h>
-+
-+#define EP93XX_SYSCON_DEVCFG_SWRST	BIT(31)
-+
-+static int ep93xx_restart_handle(struct notifier_block *this,
-+				 unsigned long mode, void *cmd)
-+{
-+	/* Issue the reboot */
-+	ep93xx_devcfg_set_clear(EP93XX_SYSCON_DEVCFG_SWRST, 0x00);
-+	ep93xx_devcfg_set_clear(0x00, EP93XX_SYSCON_DEVCFG_SWRST);
-+
-+	mdelay(1000);
-+
-+	pr_emerg("Unable to restart system\n");
-+	return NOTIFY_DONE;
-+}
-+
-+static int ep93xx_reboot_probe(struct platform_device *pdev)
-+{
-+	struct notifier_block *res_han;
-+	struct device *dev = &pdev->dev;
-+	int err;
-+
-+	res_han = devm_kzalloc(&pdev->dev, sizeof(*res_han), GFP_KERNEL);
-+	if (!res_han)
-+		return -ENOMEM;
-+
-+	res_han->notifier_call = ep93xx_restart_handle;
-+	res_han->priority = 128;
-+
-+	err = register_restart_handler(res_han);
-+	if (err)
-+		dev_err(dev, "can't register restart notifier (err=%d)\n", err);
-+
-+	return err;
-+}
-+
-+static const struct of_device_id ep93xx_reboot_of_match[] = {
-+	{
-+		.compatible = "cirrus,ep9301-reboot",
-+	},
-+	{}
-+};
-+
-+static struct platform_driver ep93xx_reboot_driver = {
-+	.probe = ep93xx_reboot_probe,
-+	.driver = {
-+		.name = "ep9301-reboot",
-+		.of_match_table = ep93xx_reboot_of_match,
-+	},
-+};
-+builtin_platform_driver(ep93xx_reboot_driver);
+ 	/* Default pull charge enable gpio to make 'CHG_EN' by SW control only */
+-	ceb_gpio = devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_LOW);
++	ceb_gpio = devm_gpiod_get_optional(dev, "charge-enable", GPIOD_OUT_HIGH);
+ 	if (IS_ERR(ceb_gpio))
+ 		return dev_err_probe(dev, PTR_ERR(ceb_gpio),
+ 				     "Failed to config charge enable gpio\n");
 -- 
-2.37.4
+2.7.4
 
