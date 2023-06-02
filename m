@@ -2,51 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4062471FC58
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9D871FC7E
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbjFBIpO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 04:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
+        id S234067AbjFBItP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 04:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234135AbjFBIpF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:45:05 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE41E67;
-        Fri,  2 Jun 2023 01:44:32 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aebf4.dynamic.kabel-deutschland.de [95.90.235.244])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2F6E361EA1BFF;
-        Fri,  2 Jun 2023 10:43:27 +0200 (CEST)
-Message-ID: <577f38ed-8532-c32e-07bd-4a3b384d5fe8@molgen.mpg.de>
-Date:   Fri, 2 Jun 2023 10:43:27 +0200
+        with ESMTP id S234351AbjFBIsg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:48:36 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744CDE49
+        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 01:48:34 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6e68cc738so17412265e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 01:48:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685695713; x=1688287713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hy7ZWgwvbQw0vF/j44DrE+pxcxlkHmF/+G3M51v+f2Y=;
+        b=UvECccFHPDOZZjOqEWbW35gXhOHqQaqYC8jpmi8noSSduan5Ls0a9rI2ViSkjq5IdO
+         F7qf/DcGydpfz1XSvpU3XFjDS8QyPRahRVrLV4jgk/jKPZWbo25hETwcJhe/AidT9fFq
+         fYvMIvLP8PlKnd5KEmYoiKXJv464N1oayK0otffMCh2hSapCl0leD9ISOAOHggzwDMdJ
+         mqOytqN8lC7fhpvRZelksmgCaftQHwhCSzVk/rTENPiYseUjOppiER9l4rFNKA1DEuDq
+         nXZ7CXU+JwZSI3ol9LNDxuIO3lJf93V/AvIwDzSh0Kt9c4f//1K1wrqQ5j2yJGttZJeR
+         s/EQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685695713; x=1688287713;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hy7ZWgwvbQw0vF/j44DrE+pxcxlkHmF/+G3M51v+f2Y=;
+        b=fh1cteR7x2fYVMbhRRF/Pz4KGtlYlE57squND2aL9Jtz3W1a93HmmnJvfCLAFnEOy7
+         Dj82Oip2z+L26cy7kU3DAOs4a+UF7izQ619omdnBu9GR27Y4hPqS+DyH+FAbsbxMB7d5
+         No/ROxB3P1ShJVpBzkzIAIlbezjq5yn1tiXPDrOs7Dlw45EE11mk+U3JT1Pty7BVQfIp
+         7XDpoEjmItwgVlE/c6EqJIodlw3FQ6MO0F8YNDng+8vXiNuZL3e3SugfweYNOgsP/FRo
+         8PqXa9nxOftAIHaKD/XF+XWiItGj3nadQDQfVrGZA+/CycngkNXDm5RrYUSmfAB8WNg9
+         coHA==
+X-Gm-Message-State: AC+VfDxdzTIacdIWgVfadtT9C6CNHd3YDR5u3H/DazJLrj7HsNseJDgP
+        61vu0mBqts6Av6ihwknAHj4rAg==
+X-Google-Smtp-Source: ACHHUZ4D84wQyp47giQRpl65CGko8rey1F9ShVN6NGtUak9BS4hDjYgHB3xL2Np6FnsSeXDKWbtBGQ==
+X-Received: by 2002:a05:600c:2045:b0:3f6:c7b:d3b7 with SMTP id p5-20020a05600c204500b003f60c7bd3b7mr1377479wmg.37.1685695712781;
+        Fri, 02 Jun 2023 01:48:32 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:548f:8f7e:a3c2:888a? ([2a05:6e02:1041:c10:548f:8f7e:a3c2:888a])
+        by smtp.googlemail.com with ESMTPSA id l4-20020a1c7904000000b003f5ffba9ae1sm1234932wme.24.2023.06.02.01.48.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 01:48:32 -0700 (PDT)
+Message-ID: <b0576c2c-9249-1759-642f-b0accabfc773@linaro.org>
+Date:   Fri, 2 Jun 2023 10:48:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Intel-wired-lan] [PATCH] e1000e: Use PME poll to circumvent
- unreliable ACPI wake
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/6] thermal/drivers/mediatek/lvts_thermal: Honor
+ sensors in immediate mode
 Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Alexander H Duyck <alexander.duyck@gmail.com>
-Cc:     linux-pm@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>, linux-pci@vger.kernel.org
-References: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
- <269262acfcce8eb1b85ee1fe3424a5ef2991f481.camel@gmail.com>
- <CAAd53p7c6eEqxd3jecfgvpxuYO3nmmmovcqD=3PgbqSVCWFfxA@mail.gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <CAAd53p7c6eEqxd3jecfgvpxuYO3nmmmovcqD=3PgbqSVCWFfxA@mail.gmail.com>
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com, Alexandre Mergnat <amergnat@baylibre.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20230504004852.627049-1-nfraprado@collabora.com>
+ <20230504004852.627049-3-nfraprado@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230504004852.627049-3-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,127 +87,134 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Cc: linux-pci@vger.kernel.org]
-
-Dear Kai,
-
-
-Thank you for your patch.
-
-Am 02.06.23 um 03:46 schrieb Kai-Heng Feng:
-> On Fri, Jun 2, 2023 at 4:24 AM Alexander H Duyck wrote:
->>
->> On Fri, 2023-06-02 at 00:25 +0800, Kai-Heng Feng wrote:
->>> On some I219 devices, ethernet cable plugging detection only works once
->>> from PCI D3 state. Subsequent cable plugging does set PME bit correctly,
->>> but device still doesn't get woken up.
-
-Could you please add the list of all the devices with the firmware 
-version, you know this problem exists on? Please also add the URLs of 
-the bug reports at the end of the commit message.
-
-Is that problem logged somehow? Could a log message be added first?
-
->> Do we have a root cause on why things don't get woken up? This seems
->> like an issue where something isn't getting reset after the first
->> wakeup and so future ones are blocked.
+On 04/05/2023 02:48, Nícolas F. R. A. Prado wrote:
+> Each controller can be configured to operate on immediate or filtered
+> mode. On filtered mode, the sensors are enabled by setting the
+> corresponding bits in MONCTL0, while on immediate mode, by setting
+> MSRCTL1.
 > 
-> No we don't know the root cause.
-> I guess the D3 wake isn't really tested under Windows because I219
-> doesn't use runtime D3 on Windows.
-
-How do you know? Where you able to look at the Microsoft Windows driver 
-source code?
-
->>> Since I219 connects to the root complex directly, it relies on platform
->>> firmware (ACPI) to wake it up. In this case, the GPE from _PRW only
->>> works for first cable plugging but fails to notify the driver for
->>> subsequent plugging events.
->>>
->>> The issue was originally found on CNP, but the same issue can be found
->>> on ADL too. So workaround the issue by continuing use PME poll after
-
-The verb is spelled with a space: work around.
-
->>> first ACPI wake. As PME poll is always used, the runtime suspend
->>> restriction for CNP can also be removed.
-
-When was that restriction for CNP added?
-
->>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>> ---
->>>   drivers/net/ethernet/intel/e1000e/netdev.c | 4 +++-
->>>   1 file changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
->>> index bd7ef59b1f2e..f0e48f2bc3a2 100644
->>> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
->>> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
->>> @@ -7021,6 +7021,8 @@ static __maybe_unused int e1000e_pm_runtime_resume(struct device *dev)
->>>        struct e1000_adapter *adapter = netdev_priv(netdev);
->>>        int rc;
->>>
->>> +     pdev->pme_poll = true;
->>> +
->>>        rc = __e1000_resume(pdev);
->>>        if (rc)
->>>                return rc;
->>
->> Doesn't this enable this too broadly. I know there are a number of
->> devices that run under the e1000e and I would imagine that we don't
->> want them all running with "pme_poll = true" do we?
+> Previously, the code would set MSRCTL1 for all four sensors when
+> configured to immediate mode, but given that the controller might not
+> have all four sensors connected, this would cause interrupts to trigger
+> for non-existent sensors. Fix this by handling the MSRCTL1 register
+> analogously to the MONCTL0: only enable the sensors that were declared.
 > 
-> Whack a mole isn't scaling, either.
-> The generation between CNP and ADL are probably affected too.
+> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
 > 
->> It seems like at a minimum we should only be setting this for specific
->> platofrms or devices instead of on all of them.
->>
->> Also this seems like something we should be setting on the suspend side
->> since it seems to be cleared in the wakeup calls.
+> (no changes since v1)
 > 
-> pme_poll gets cleared on wakeup, and once it's cleared the device will
-> be removed from pci_pme_list.
+>   drivers/thermal/mediatek/lvts_thermal.c | 50 +++++++++++++------------
+>   1 file changed, 26 insertions(+), 24 deletions(-)
 > 
-> To prevent that, reset pme_poll to true immediately on runtime resume.
-> 
->> Lastly I am not sure the first one is necessarily succeeding. You might
->> want to check the status of pme_poll before you run your first test.
->> From what I can tell it looks like the initial state is true in
->> pci_pm_init. If so it might be getting cleared after the first wakeup
->> which is what causes your issues.
-> 
-> That's by design. pme_poll gets cleared when the hardware is capable
-> to signal wakeup via PME# or ACPI GPE. For detected hardwares, the
-> pme_poll will never be cleared.
-> So this becomes tricky for the issue, since the ACPI GPE works for
-> just one time, but never again.
-> 
->>> @@ -7682,7 +7684,7 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->>>
->>>        dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
->>>
->>> -     if (pci_dev_run_wake(pdev) && hw->mac.type != e1000_pch_cnp)
->>> +     if (pci_dev_run_wake(pdev))
->>>                pm_runtime_put_noidle(&pdev->dev);
->>>
->>>        return 0;
->>
->> I assume this is the original workaround that was put in to address
->> this issue. Perhaps you should add a Fixes tag to this to identify
->> which workaround this patch is meant to be replacing.
-> 
-> Another possibility is to remove runtime power management completely.
-> I wonder why Windows keep the device at D0 all the time?
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 2988f201633a..f7d998a45ea0 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -922,24 +922,6 @@ static int lvts_ctrl_configure(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+>   			LVTS_HW_FILTER << 3 | LVTS_HW_FILTER;
+>   	writel(value, LVTS_MSRCTL0(lvts_ctrl->base));
+>   
+> -	/*
+> -	 * LVTS_MSRCTL1 : Measurement control
+> -	 *
+> -	 * Bits:
+> -	 *
+> -	 * 9: Ignore MSRCTL0 config and do immediate measurement on sensor3
+> -	 * 6: Ignore MSRCTL0 config and do immediate measurement on sensor2
+> -	 * 5: Ignore MSRCTL0 config and do immediate measurement on sensor1
+> -	 * 4: Ignore MSRCTL0 config and do immediate measurement on sensor0
+> -	 *
+> -	 * That configuration will ignore the filtering and the delays
+> -	 * introduced below in MONCTL1 and MONCTL2
+> -	 */
+> -	if (lvts_ctrl->mode == LVTS_MSR_IMMEDIATE_MODE) {
+> -		value = BIT(9) | BIT(6) | BIT(5) | BIT(4);
+> -		writel(value, LVTS_MSRCTL1(lvts_ctrl->base));
+> -	}
+> -
+>   	/*
+>   	 * LVTS_MONCTL1 : Period unit and group interval configuration
+>   	 *
+> @@ -1004,6 +986,8 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+>   	struct lvts_sensor *lvts_sensors = lvts_ctrl->sensors;
+>   	struct thermal_zone_device *tz;
+>   	u32 sensor_map = 0;
+> +	u32 sensor_map_bits[][4] = {{BIT(4), BIT(5), BIT(6), BIT(9)},
+> +				    {BIT(0), BIT(1), BIT(2), BIT(3)}};
 
-Who knows how to contact Intel’s driver developers for Microsoft Windows?
+Even correct, this initialization sounds prone to error and a bit 
+obfuscating (eg. it assumes LVTS_MSR_IMMEDIATE_MODE is 1).
 
-> Can Linux align with Windows?
+What about?
 
-Before deciding this, the power usage in the different states should be 
-measured.
+	/*
+	 * A description
+	 */
+	u32 sensor_imm_bitmap[] = { BIT(0), BIT(1), BIT(2), BIT(3) };
+	u32 sensor_filt_bitmap[] = { BIT(4), BIT(5), BIT(6), BIT(9) };
 
+	u32 *sensor_bitmap = lvts_ctrl->mode ? LVTS_MSR_IMMEDIATE_MODE : 
+sensor_imm_bitmap : sensor_filt_bitmap;
 
-Kind regards,
+>   	int i;
+>   
+>   	for (i = 0; i < lvts_ctrl->num_lvts_sensor; i++) {
+> @@ -1040,20 +1024,38 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+>   		 * map, so we can enable the temperature monitoring in
+>   		 * the hardware thermal controller.
+>   		 */
+> -		sensor_map |= BIT(i);
+> +		sensor_map |= sensor_map_bits[lvts_ctrl->mode][i];
 
-Paul
+		sensor_map |= sensor_bitmap[i];
+>   	}
+>   
+>   	/*
+> -	 * Bits:
+> -	 *      9: Single point access flow
+> -	 *    0-3: Enable sensing point 0-3
+> -	 *
+>   	 * The initialization of the thermal zones give us
+>   	 * which sensor point to enable. If any thermal zone
+>   	 * was not described in the device tree, it won't be
+>   	 * enabled here in the sensor map.
+>   	 */
+> -	writel(sensor_map | BIT(9), LVTS_MONCTL0(lvts_ctrl->base));
+> +	if (lvts_ctrl->mode == LVTS_MSR_IMMEDIATE_MODE) {
+> +		/*
+> +		 * LVTS_MSRCTL1 : Measurement control
+> +		 *
+> +		 * Bits:
+> +		 *
+> +		 * 9: Ignore MSRCTL0 config and do immediate measurement on sensor3
+> +		 * 6: Ignore MSRCTL0 config and do immediate measurement on sensor2
+> +		 * 5: Ignore MSRCTL0 config and do immediate measurement on sensor1
+> +		 * 4: Ignore MSRCTL0 config and do immediate measurement on sensor0
+> +		 *
+> +		 * That configuration will ignore the filtering and the delays
+> +		 * introduced in MONCTL1 and MONCTL2
+> +		 */
+> +		writel(sensor_map, LVTS_MSRCTL1(lvts_ctrl->base));
+> +	} else {
+> +		/*
+> +		 * Bits:
+> +		 *      9: Single point access flow
+> +		 *    0-3: Enable sensing point 0-3
+> +		 */
+> +		writel(sensor_map | BIT(9), LVTS_MONCTL0(lvts_ctrl->base));
+> +	}
+>   
+>   	return 0;
+>   }
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
