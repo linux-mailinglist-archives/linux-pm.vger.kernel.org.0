@@ -2,143 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39FF7204FC
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 16:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F662720631
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 17:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236276AbjFBO41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 10:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
+        id S235672AbjFBPaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 11:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235634AbjFBO4V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 10:56:21 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EDE123
-        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 07:56:19 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96f5685f902so306295166b.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 07:56:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685717778; x=1688309778;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wnzl+oKBQQYlv+ufXrrOrmqqiDIhBJ9gKxeDwPiop2U=;
-        b=GMxQutQqOI2tYKBtzZAaqKIUqU7r+PbwrkxhgYgJ/iORGQqWjNUT689CDWDrVKPob9
-         XKn5G6+X4YG/uBUk6V3WDG1ZKe1Pihx+25lJWj/bIiP3047DfEbvgkYd1qbcubV4u9wP
-         i3yIPb66r8f6GAu5D18gRLF4cz1zhO0XOg1Qw9MZJAfbdhK7B9tMCYXg230OYF/1VcFG
-         nnTG22QXULPNj4Qvx+OSyRySFNN04gaYx34Ll+kkFTbJ/VYPc7oTiL5+fyStGEfvUdmI
-         DaiY0eTy39o/0NEEYBq+Ap7jZICjSb/Ih38Gx/hIYnDufYAWV5NolWjtuMPijXaBDM9O
-         Ub5Q==
+        with ESMTP id S235457AbjFBPaX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 11:30:23 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C33118C;
+        Fri,  2 Jun 2023 08:30:22 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-64d57cd373fso2601142b3a.1;
+        Fri, 02 Jun 2023 08:30:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717778; x=1688309778;
+        d=1e100.net; s=20221208; t=1685719822; x=1688311822;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wnzl+oKBQQYlv+ufXrrOrmqqiDIhBJ9gKxeDwPiop2U=;
-        b=I5uVw2PK8cam0L+MrMNWVfarXah8xG+rYhFxD8iK2UP3yKcUSvSoRulITPqGOgi8/y
-         kdAZX7Epfci4pO+RZDDKeYOOMKteJN12kMevTDATj3CBmuibE0Xf8FF5U/E+L6vTs8kq
-         t+d0UKqdxR2k86ZM8a3SKtsuihogH1Y/gVBfdZfSJgzl8ftFF0+gC8ByfvMviVd/tO/m
-         Dluy8fv+k5LQ2d2NO82yGLywUUh+o60dq45uB9MNuXvaYUNUYzelp8KZw0/aRGwmJCzy
-         nvl6ehpulZ+Y80jmPWSGiWAOuiNdjev5n67lTJna043L/pJBOAC58YBq5Zm8U1ljZ5wq
-         6dXw==
-X-Gm-Message-State: AC+VfDxz0sTNI49xFxo+GWKpNo0mRsOozD/+fVg5impyNr6ezCmrQ+rT
-        X60R7QNmGWvCMVtwtBZiMJ8R9w==
-X-Google-Smtp-Source: ACHHUZ4hcWFfF0FCaSfbTI+lzp2kZljSmf3H9Wn8b8Dj2qTDyDNjHbvmC3SaZv9TvGPuinNqTX/0LA==
-X-Received: by 2002:a17:907:8a22:b0:969:7739:2eb7 with SMTP id sc34-20020a1709078a2200b0096977392eb7mr11905326ejc.4.1685717778140;
-        Fri, 02 Jun 2023 07:56:18 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id a24-20020a170906245800b009745ecf5438sm839680ejb.193.2023.06.02.07.56.16
+        bh=TPKdSeegJ1AjrJW7LMNG9qtOmBvErTcO60Kp9uoBAUo=;
+        b=B9ra3mj7DImeWz7UQ+7vlYszdhQQs67FppTsNnLFkwnf6zcN+f/+YYvcQEBbavjksc
+         6C4V7ZL67thxgkK1CLQWaft5aLBIMLqkx1WEUDtfxZM5bK4dDr7Y6zT+TGq5j3EuicRK
+         I84BVKgeCstctHErojGZ3hz3EGQ9YNVrgc34FK3Vo853KRAKiD2SnNr1MvXG9w8iKA14
+         9wedDXR8YdEJgCfj1ciQZbZs9eihPJUeQmsQEGenrNl/fODUtePpaeMJebMwuI9P8Gab
+         dABxyhqq1RWjgyZoiPYHp1LDGFvupZPW/BTMNPip2y7S8BrP5JuBtnOEc3Zdn985GuZH
+         Ffnw==
+X-Gm-Message-State: AC+VfDyrwkXynhhzH2a59n+gWyesSJblk2LgcY9igrFjbDIq2meFQF6I
+        jv9zSfhg2hp2/JZ83suS8VY=
+X-Google-Smtp-Source: ACHHUZ6t+PZGDb1tlOYRkSVMTfB+/8WJ1iwPlQA6V89bTxaoWefn2zm47DGjvtayj0rFawrAfWDGbA==
+X-Received: by 2002:a17:902:e9d5:b0:1b0:56cf:b89d with SMTP id 21-20020a170902e9d500b001b056cfb89dmr152512plk.12.1685719821515;
+        Fri, 02 Jun 2023 08:30:21 -0700 (PDT)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902904500b001ae365072cfsm1508558plz.219.2023.06.02.08.30.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 07:56:17 -0700 (PDT)
-Message-ID: <c0c0dba2-2d93-9b30-7106-7bf7826844b2@linaro.org>
-Date:   Fri, 2 Jun 2023 16:56:15 +0200
+        Fri, 02 Jun 2023 08:30:21 -0700 (PDT)
+Message-ID: <7b553268-69d3-913a-f9de-28f8d45bdb1e@acm.org>
+Date:   Fri, 2 Jun 2023 08:30:19 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 2/4] dt-bindings: power: reset:
- atmel,at91sam9260-shdwc: convert to yaml
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6] scsi: core: Wait until device is fully resumed before
+ doing rescan
 Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        sre@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
- <20230524123528.439082-3-claudiu.beznea@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230524123528.439082-3-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     dlemoal@kernel.org, bblock@linux.ibm.com, acelan.kao@canonical.com,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230602084956.1299001-1-kai.heng.feng@canonical.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230602084956.1299001-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/05/2023 14:35, Claudiu Beznea wrote:
-> Convert Atmel shutdown controller to YAML.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
-
-
+On 6/2/23 01:49, Kai-Heng Feng wrote:
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index d217be323cc6..092f37464101 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1621,6 +1621,11 @@ void scsi_rescan_device(struct device *dev)
+>   {
+>   	struct scsi_device *sdev = to_scsi_device(dev);
+>   
+> +#ifdef CONFIG_PM_SLEEP
+> +	if (dev->power.is_suspended)
+> +		wait_for_completion(&dev->power.completion);
+> +#endif
 > +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,at91sam9260-shdwc
-> +              - atmel,at91sam9rl-shdwc
-> +    then:
-> +      properties:
-> +        atmel,wakeup-rtt-timer:
-> +          description: enable real-time timer wake-up
-> +          type: boolean
+>   	device_lock(dev);
+>   
+>   	scsi_attach_vpd(sdev);
 
-No, don't define properties in allOf.
+Directly accessing dev->power.completion from the SCSI core seems like a 
+layering violation to me. Isn't this an object that should only be 
+accessed directly by the device driver power management core? 
+Additionally, what guarantees that the desired power state has been 
+reached after wait_for_completion(&dev->power.completion) has finished?
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - atmel,at91sam9rl-shdwc
-> +              - atmel,at91sam9x5-shdwc
-> +    then:
-> +      properties:
-> +        atmel,wakeup-rtc-timer:
-> +          description: enable real-time clock wake-up
-> +          type: boolean
+I think we need another solution. The device_lock() and device_unlock() 
+calls have been introduced by commit e27829dc92e5 ("scsi: serialize 
+->rescan against ->remove"). I think there are other ways to serialize
+scsi_rescan_device() against scsi_remove_device(), e.g. via 
+host->scan_mutex. Is this something that has been considered?
 
-Same problem.
+Thanks,
 
-> +
-> +unevaluatedProperties: false
-
-This should be additionalProperties: false.
-> +
-> +examples:
-> +  - |
-> +    shdwc: poweroff@fffffd10 {
-> +        compatible = "atmel,at91sam9260-shdwc";
-> +        reg = <0xfffffd10 0x10>;
-> +        clocks = <&clk32k>;
-> +    };
-> +
-> +...
-
-Best regards,
-Krzysztof
-
+Bart.
