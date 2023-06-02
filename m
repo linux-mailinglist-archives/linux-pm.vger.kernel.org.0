@@ -2,144 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 449C371F94F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 06:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F90471F9E7
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 08:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233006AbjFBE0M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 00:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S233754AbjFBGK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 02:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbjFBE0L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 00:26:11 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7BFD3;
-        Thu,  1 Jun 2023 21:26:10 -0700 (PDT)
+        with ESMTP id S233700AbjFBGKZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 02:10:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108AA19A;
+        Thu,  1 Jun 2023 23:10:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685679970; x=1717215970;
+  t=1685686224; x=1717222224;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=csfhNafk9mF6E6/qV6/dDOIICipEWAC/QtetxLOCpoE=;
-  b=DtvXacJt38TpYeW6iEIPfIhK4Ggs15hkVuhYVND5EN8maCUD+RLZC79E
-   ZC7wfh43XjcP0llzCf3UYQwttmoWYasdl3nNHWl7d1ZPuLJLKsSY8d2q3
-   Xb2XI8pekMt2NDqgvUIc81GfB8PXA3t5X339Fmmepx7HNJ7hKbkopo4RG
-   tpuKlqz2eOTXxQJF0ZOCJEL0iYYJrIRpIjO/8t9/4MI0c1X/4n4eRp46o
-   xRpXVjfIWW60rmiAyTH+gtXg6uNyRapseWRVfwDVvMVqTw9YiYbCWLiGz
-   4yZsRYH5HwuSA57MXqmavEzs3gZTmUIxRyXmHtVH73Cc0n19nRa1qeAcP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="358196902"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="358196902"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 21:26:09 -0700
+  bh=8MCDzOZf6ynqWV2m8S12QsjH7rgGxvUKD86pDe2odnI=;
+  b=MB/FILjtdC+LvLDhouUHiaZV3nu8PBGISjVTQQ3n4JiOsOVxWabT4Ni8
+   KZ6fiRAroLF+Rh/Z4edx6gffdL8HLmBy4KshDeVVeKkeCpxNcPb4dPtPp
+   qkWmOaWvcJ0dCRKU02USCi75ZhfKawqaph9YQ1tMyyjRH2u2l20y+4M1a
+   98t4Xwa4H4jFnK3SSDfQ1wqJSpwqihX8m+47Kncalo6Lxvl+sTKdunTKN
+   Hz1Cw9NIpezoNzyFgdxJ4K6i6iqXsrSzUcT0PXHtwZJcITDvCC24kcjV1
+   K13WH6F3EHC5gKGtbtrPC282xaiQxdePDiroZQbOC4itiUSFdq7RX/3Cb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="355799797"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="355799797"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2023 23:10:17 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="1037763083"
-X-IronPort-AV: E=Sophos;i="6.00,211,1681196400"; 
-   d="scan'208";a="1037763083"
+X-IronPort-AV: E=McAfee;i="6600,9927,10728"; a="772748985"
+X-IronPort-AV: E=Sophos;i="6.00,212,1681196400"; 
+   d="scan'208";a="772748985"
 Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Jun 2023 21:26:06 -0700
+  by fmsmga008.fm.intel.com with ESMTP; 01 Jun 2023 23:10:14 -0700
 Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1q4wMY-00003r-01;
-        Fri, 02 Jun 2023 04:26:06 +0000
-Date:   Fri, 2 Jun 2023 12:25:16 +0800
+        id 1q4xzJ-00009Z-2I;
+        Fri, 02 Jun 2023 06:10:13 +0000
+Date:   Fri, 2 Jun 2023 14:09:14 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     oe-kbuild-all@lists.linux.dev, dlemoal@kernel.org,
-        bblock@linux.ibm.com, acelan.kao@canonical.com,
-        linux-pm@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] scsi: core: Wait until device is fully resumed before
- doing rescan
-Message-ID: <202306021251.amkU7A6P-lkp@intel.com>
-References: <20230601155652.1157611-1-kai.heng.feng@canonical.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Rafael Wysocki <rafael@kernel.org>, hdegoede@redhat.com,
+        linus.walleij@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v3 1/4] include/linux/suspend.h: Only show pm_pr_dbg
+ messages at suspend/resume
+Message-ID: <202306021344.JymS3JYg-lkp@intel.com>
+References: <20230601232923.1248-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230601155652.1157611-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20230601232923.1248-1-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kai-Heng,
+Hi Mario,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on jejb-scsi/for-next linus/master v6.4-rc4 next-20230601]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test WARNING on 7736c431466abb54a2679dc257f739fddfa84295]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kai-Heng-Feng/scsi-core-Wait-until-device-is-fully-resumed-before-doing-rescan/20230601-235821
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230601155652.1157611-1-kai.heng.feng%40canonical.com
-patch subject: [PATCH v5] scsi: core: Wait until device is fully resumed before doing rescan
-config: parisc-defconfig (https://download.01.org/0day-ci/archive/20230602/202306021251.amkU7A6P-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.3.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/ACPI-x86-Add-pm_debug_messages-for-LPS0-_DSM-state-tracking/20230602-073044
+base:   7736c431466abb54a2679dc257f739fddfa84295
+patch link:    https://lore.kernel.org/r/20230601232923.1248-1-mario.limonciello%40amd.com
+patch subject: [PATCH v3 1/4] include/linux/suspend.h: Only show pm_pr_dbg messages at suspend/resume
+config: powerpc-randconfig-r035-20230531 (https://download.01.org/0day-ci/archive/20230602/202306021344.JymS3JYg-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
 reproduce (this is a W=1 build):
         mkdir -p ~/bin
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fe2b65dd8204442bd73db8a6e40d8307e11fcd04
+        # https://github.com/intel-lab-lkp/linux/commit/5828d770a5f17c4028520050068fd3cdd13b80a1
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kai-Heng-Feng/scsi-core-Wait-until-device-is-fully-resumed-before-doing-rescan/20230601-235821
-        git checkout fe2b65dd8204442bd73db8a6e40d8307e11fcd04
+        git fetch --no-tags linux-review Mario-Limonciello/ACPI-x86-Add-pm_debug_messages-for-LPS0-_DSM-state-tracking/20230602-073044
+        git checkout 5828d770a5f17c4028520050068fd3cdd13b80a1
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=parisc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/base/power/ kernel/power/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306021251.amkU7A6P-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306021344.JymS3JYg-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   drivers/scsi/scsi_scan.c: In function 'scsi_rescan_device':
->> drivers/scsi/scsi_scan.c:1627:48: error: 'struct dev_pm_info' has no member named 'completion'
-    1627 |                 wait_for_completion(&dev->power.completion);
-         |                                                ^
+   drivers/base/power/wakeup.c: In function 'pm_print_active_wakeup_sources':
+>> drivers/base/power/wakeup.c:861:12: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+     861 |         if (!active && last_activity_ws)
+         |            ^
+--
+   kernel/power/hibernate.c: In function 'disk_store':
+>> kernel/power/hibernate.c:1158:12: warning: suggest explicit braces to avoid ambiguous 'else' [-Wdangling-else]
+    1158 |         if (!error)
+         |            ^
 
 
-vim +1627 drivers/scsi/scsi_scan.c
+vim +/else +861 drivers/base/power/wakeup.c
 
-  1621	
-  1622	void scsi_rescan_device(struct device *dev)
-  1623	{
-  1624		struct scsi_device *sdev = to_scsi_device(dev);
-  1625	
-  1626		if (dev->power.is_suspended)
-> 1627			wait_for_completion(&dev->power.completion);
-  1628	
-  1629		device_lock(dev);
-  1630	
-  1631		scsi_attach_vpd(sdev);
-  1632		scsi_cdl_check(sdev);
-  1633	
-  1634		if (sdev->handler && sdev->handler->rescan)
-  1635			sdev->handler->rescan(sdev);
-  1636	
-  1637		if (dev->driver && try_module_get(dev->driver->owner)) {
-  1638			struct scsi_driver *drv = to_scsi_driver(dev->driver);
-  1639	
-  1640			if (drv->rescan)
-  1641				drv->rescan(dev);
-  1642			module_put(dev->driver->owner);
-  1643		}
-  1644		device_unlock(dev);
-  1645	}
-  1646	EXPORT_SYMBOL(scsi_rescan_device);
-  1647	
+074037ec79bea7 Rafael J. Wysocki  2010-09-22  841  
+bb177fedd348c9 Julius Werner      2013-06-12  842  void pm_print_active_wakeup_sources(void)
+a938da0682c248 Todd Poynor        2012-08-12  843  {
+a938da0682c248 Todd Poynor        2012-08-12  844  	struct wakeup_source *ws;
+ea0212f40c6bc0 Thomas Gleixner    2017-06-25  845  	int srcuidx, active = 0;
+a938da0682c248 Todd Poynor        2012-08-12  846  	struct wakeup_source *last_activity_ws = NULL;
+a938da0682c248 Todd Poynor        2012-08-12  847  
+ea0212f40c6bc0 Thomas Gleixner    2017-06-25  848  	srcuidx = srcu_read_lock(&wakeup_srcu);
+2591e7b17c0d3f Madhuparna Bhowmik 2020-03-04  849  	list_for_each_entry_rcu_locked(ws, &wakeup_sources, entry) {
+a938da0682c248 Todd Poynor        2012-08-12  850  		if (ws->active) {
+74a1dd86d1739e Stephen Boyd       2019-03-25  851  			pm_pr_dbg("active wakeup source: %s\n", ws->name);
+a938da0682c248 Todd Poynor        2012-08-12  852  			active = 1;
+a938da0682c248 Todd Poynor        2012-08-12  853  		} else if (!active &&
+a938da0682c248 Todd Poynor        2012-08-12  854  			   (!last_activity_ws ||
+a938da0682c248 Todd Poynor        2012-08-12  855  			    ktime_to_ns(ws->last_time) >
+a938da0682c248 Todd Poynor        2012-08-12  856  			    ktime_to_ns(last_activity_ws->last_time))) {
+a938da0682c248 Todd Poynor        2012-08-12  857  			last_activity_ws = ws;
+a938da0682c248 Todd Poynor        2012-08-12  858  		}
+a938da0682c248 Todd Poynor        2012-08-12  859  	}
+a938da0682c248 Todd Poynor        2012-08-12  860  
+a938da0682c248 Todd Poynor        2012-08-12 @861  	if (!active && last_activity_ws)
+74a1dd86d1739e Stephen Boyd       2019-03-25  862  		pm_pr_dbg("last active wakeup source: %s\n",
+a938da0682c248 Todd Poynor        2012-08-12  863  			last_activity_ws->name);
+ea0212f40c6bc0 Thomas Gleixner    2017-06-25  864  	srcu_read_unlock(&wakeup_srcu, srcuidx);
+a938da0682c248 Todd Poynor        2012-08-12  865  }
+bb177fedd348c9 Julius Werner      2013-06-12  866  EXPORT_SYMBOL_GPL(pm_print_active_wakeup_sources);
+a938da0682c248 Todd Poynor        2012-08-12  867  
 
 -- 
 0-DAY CI Kernel Test Service
