@@ -2,190 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D31B97202D1
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 15:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E03720321
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 15:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235259AbjFBNMc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 09:12:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S235295AbjFBNWl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 09:22:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236108AbjFBNMK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 09:12:10 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5BD2E5A
-        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 06:11:40 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f5021faa16so2772345e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 06:11:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685711499; x=1688303499;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fdOza1gLCalLSXkYNY4mfvWYzR4Q4eTY/qnCdvd8TFI=;
-        b=OQG6NkGTY8w1iNprv3qIaPBF7ojyVzw2L0LdKDBQuojwW4n/Gwj2GkpkFfrtl4V2gI
-         2xrnUG/TogFtedY6rDXNS9MtJyr9C4KFoLSZayqrqdEBTj0RfS7YeAeJoCCQsmW8cjvs
-         sdMhxEWwbQS0bFCJS/YJCKpxNoQdOEJpHnxSRuzLH2mw4e8rUaP775d897/oBebWdnN9
-         Ads0I/oo/n2vkWTkKmowPFMhpxThhbO5bXQIZZVINcEGx8MQX8qbaz9MGEUjpqhsdOE+
-         tJrzXcx+lLit2xsTI9zZ/hUIMESUEPdWE29IcxYRFqHYh6NpZlTpRY8wRhcxGzuRfQst
-         OYUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685711499; x=1688303499;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fdOza1gLCalLSXkYNY4mfvWYzR4Q4eTY/qnCdvd8TFI=;
-        b=EyRbqC6qtoItaCuiO+IwfQ4VeOCEzn9qOYP+rWRhqipwpF6hgkv/U6apquRUIOY5h8
-         LWI4bWv9aSntETMRRedUZ2REIt0saeu5OISBrbulmUpeftCK/ZkNP4GJhMc1YQiukoHe
-         fOYM+lS6HurWOAEOnCSRzCFaS6pdDUh4ozcBBo1koVT0ZWLJbhmCOQ7d+wCCk1TIjDXG
-         8SBObdm2nmlzMzsih8LzipnjFUfrvr/kaXxUXio6JCE76+i2Ns3ysIJSW8l0IBwpEDED
-         NJmuG7VUo2f/CaFrvcVEmjOEW/2zCcBZnhaSCu7zIOlRzjZy9hbpppXa+pL2PJ2BZKBj
-         e2NA==
-X-Gm-Message-State: AC+VfDwLHijKTCCF/kE5PbpaXcMhV9Ptcq9iE6PqAiwiZcNxU0bjh4xI
-        PeUOyzl3SiaXxUPYVlj9x1F1Mg==
-X-Google-Smtp-Source: ACHHUZ6pzMnLSLO1Ama3yhQyeYIg1fA+OJjI4CJNmdzdAHVyE5wYPdc1sGelcxVvpPlfy2h5ZJCI+w==
-X-Received: by 2002:a19:7014:0:b0:4f3:982a:8be1 with SMTP id h20-20020a197014000000b004f3982a8be1mr1894490lfc.69.1685711498965;
-        Fri, 02 Jun 2023 06:11:38 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:40f6:d082:aa42:96f0? ([2a05:6e02:1041:c10:40f6:d082:aa42:96f0])
-        by smtp.googlemail.com with ESMTPSA id 24-20020a05600c22d800b003f3e50eb606sm1931739wmg.13.2023.06.02.06.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 06:11:38 -0700 (PDT)
-Message-ID: <0eb717ac-82b1-8a76-58a2-394167e69b28@linaro.org>
-Date:   Fri, 2 Jun 2023 15:11:37 +0200
+        with ESMTP id S234217AbjFBNWk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 09:22:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24D6EC0;
+        Fri,  2 Jun 2023 06:22:39 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E8C766056D4;
+        Fri,  2 Jun 2023 14:22:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1685712157;
+        bh=9gZsj5IAGBccJ98w1UVTDdhacpAgqlDEC1+urDUBzEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oL/F5giqODrgUiS/uhsae74g85EyeUwD1ZX68qa1dTMpzQbNImIx5mfhMIZAkafYJ
+         btdZ7ZU85HXvpyOpFHbABF+QEBD19mj7HDOgPCyhZUgU2ROKFNkYM3pGyi9HBYXyW9
+         QlkHh8Bnb1sQHmFvDm3D9judWVsN00Vo/KfT824aU9eIz1nmBvU+tUxpaK3R0jsfR7
+         ojy5s8I0VCS+1SqG8vzIeWgjE3VOQhrBAlY+/Yn2QNorF+CmIJDekyxuWHwTfvj1E9
+         BCKFiyboFStz/PbZGtinebUcJMyoK1JERCftTy5qVJVisvyXSekiAc56TZ5zOzRjDv
+         QvDvPsEWdos8g==
+Date:   Fri, 2 Jun 2023 09:22:31 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/3] thermal/drivers/mediatek/lvts_thermal: Fixes to the
+ interrupt handling
+Message-ID: <aee68ead-fedd-4aa6-996f-a0274f7c5300@notapiano>
+References: <20230428195347.3832687-1-nfraprado@collabora.com>
+ <20230502103344.GA3388518@google.com>
+ <87b0f5cd-67a8-fbd5-5ca7-a286b543d796@linaro.org>
+ <8a38a0da-3a4f-4e39-9f9e-42682edfd9bf@notapiano>
+ <68393044-9d28-8402-e190-7cbb28442f6d@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alice Guo <alice.guo@nxp.com>
-References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
- <20230516083746.63436-3-peng.fan@oss.nxp.com>
- <3c59c4e0-68eb-b778-6b12-9f9e331f81dd@linaro.org>
- <PA4PR04MB94165217C8C0D9E8E0087AF988489@PA4PR04MB9416.eurprd04.prod.outlook.com>
- <01197bb8-da0d-f726-79bc-d8ab7d3ea992@linaro.org>
- <DU0PR04MB9417D9020578083527FC16C888489@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <68393044-9d28-8402-e190-7cbb28442f6d@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/06/2023 11:52, Peng Fan wrote:
-> Hi Daniel,
+On Fri, Jun 02, 2023 at 10:07:29AM +0200, Daniel Lezcano wrote:
+> On 30/05/2023 21:46, Nícolas F. R. A. Prado wrote:
+> > On Tue, May 30, 2023 at 02:27:36PM +0200, Daniel Lezcano wrote:
+> > > 
+> > > Hi,
+> > > 
+> > > On 02/05/2023 12:33, Chen-Yu Tsai wrote:
+> > > > On Fri, Apr 28, 2023 at 03:53:44PM -0400, Nícolas F. R. A. Prado wrote:
+> > > > > 
+> > > > > Fixes in the interrupt handling of the LVTS thermal driver noticed while
+> > > > > testing it on the Spherion Chromebook (mt8192-asurada-spherion) with the
+> > > > > MT8192 support series [1].
+> > > > > 
+> > > > > These are standalone fixes and don't depend on anything else.
+> > > > > 
+> > > > > [1] https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/
+> > > > > 
+> > > > > Thanks,
+> > > > > Nícolas
+> > > > > 
+> > > > > 
+> > > > > Nícolas F. R. A. Prado (3):
+> > > > >     thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
+> > > > >     thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate mode
+> > > > >     thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
+> > > > 
+> > > > This series seems to have solved all interrupt storm issue I ran into, so
+> > > > 
+> > > > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> > > 
+> > > I gave a try on a mt8195 board and I don't see any interrupt firing when
+> > > crossing the temperature thresholds.
+> > > 
+> > > Did I miss something ?
+> > 
+> > No, indeed interrupts seem to be completely disabled on mt8195, even after
+> > setting the controllers to filtered mode (a requirement to get interrupts).
 > 
->> Subject: RE: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
->> sensors
->>
->>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
->>> sensors
->>>
->>> On 31/05/2023 14:05, Peng Fan wrote:
->>>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable
->>>>> supported sensors
->>>>>
->>>>> On 16/05/2023 10:37, Peng Fan (OSS) wrote:
->>>>>> From: Peng Fan <peng.fan@nxp.com>
->>>>>>
->>>>>> There are MAX 16 sensors, but not all of them supported. Such as
->>>>>> i.MX8MQ, there are only 3 sensors. Enabling all 16 sensors will
->>>>>> touch reserved bits from i.MX8MQ reference mannual, and TMU will
->>>>>> stuck, temperature will not update anymore.
->>>>>>
->>>>>> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before
->>>>>> registering them")
->>>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>>>>> ---
->>>>>>     drivers/thermal/qoriq_thermal.c | 30 +++++++++++++++++++----------
->> -
->>>>>>     1 file changed, 19 insertions(+), 11 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/thermal/qoriq_thermal.c
->>>>>> b/drivers/thermal/qoriq_thermal.c index
->> b806a0929459..53748c4a5be1
->>>>>> 100644
->>>>>> --- a/drivers/thermal/qoriq_thermal.c
->>>>>> +++ b/drivers/thermal/qoriq_thermal.c
->>>>>> @@ -31,7 +31,6 @@
->>>>>>     #define TMR_DISABLE	0x0
->>>>>>     #define TMR_ME		0x80000000
->>>>>>     #define TMR_ALPF	0x0c000000
->>>>>> -#define TMR_MSITE_ALL	GENMASK(15, 0)
->>>>>>
->>>>>>     #define REGS_TMTMIR	0x008	/* Temperature measurement
->>>>> interval Register */
->>>>>>     #define TMTMIR_DEFAULT	0x0000000f
->>>>>> @@ -105,6 +104,11 @@ static int tmu_get_temp(struct
->>>>> thermal_zone_device *tz, int *temp)
->>>>>>     	 * within sensor range. TEMP is an 9 bit value representing
->>>>>>     	 * temperature in KelVin.
->>>>>>     	 */
->>>>>> +
->>>>>> +	regmap_read(qdata->regmap, REGS_TMR, &val);
->>>>>> +	if (!(val & TMR_ME))
->>>>>> +		return -EAGAIN;
->>>>>
->>>>> How is this change related to what is described in the changelog?
->>>>
->>>> devm_thermal_zone_of_sensor_register will invoke get temp, since we
->>>> reverted the 45038e03d633 did, we need to check TMR_ME to avoid
->>> return
->>>> invalid temperature.
->>>
->>>
->>>   From a higher perspective if the sensor won't be enabled, then the
->>> thermal zone should not be registered, the get_temp won't happen on a
->>> disabled sensor and this test won't be necessary, no ?
+> Really? interrupts work only on filtered mode? That sounds strange
+
+Sorry my reply was confusing, let me clarify. What I meant to say is that
+the threshold interrupts (cold, hot2normal, hot, low offset, high offset) only
+trigger in filtered mode. AFAICT that's by design, since immediate mode is meant
+only for one-off temperature readings, and filtered mode is the one meant to be
+used for temperature monitoring. But in immediate mode you could still get the
+data ready for immediate mode (bits 16, 17, 18, 27) interrupts triggering.
+Though note that I have disabled those in my series, since they are triggered
+constantly.
+
 > 
-> After thinking more, I'd prefer current logic.
+> What board are you using for testing?
+
+I'm testing on the Acer Chromebook 514 (mt8192-asurada-spherion-r0). And noticed
+the interrupts aren't triggered on Acer Chromebook Spin 513
+(mt8195-cherry-tomato-r2).
+
 > 
-> We rely on devm_thermal_of_zone_register's return value to know
-> whether there is a valid zone, then set sites bit, and after collected
-> all site bits, we enable the thermal IP.
+> > I
+> > haven't investigated that further yet. This series was validated on mt8192,
+> > which did have working interrupts, but they were being triggered too often.
 > 
-> If move the enabling thermal IP before devm_thermal_of_zone_register,
-> We need check dtb thermal zone, to know which zone is valid for current
-> thermal IP. This would complicate the design.
+> Ok.
 > 
-> So just checking the enabling bit in get temperature would be much
-> simpler, and there just a small window before enabling thermal IP.
+> > Also note that I've sent a v2 with even more fixes:
+> > https://lore.kernel.org/all/20230504004852.627049-1-nfraprado@collabora.com/
+> 
+> Yes, I'm reviewing it closely
 
+Thanks!
 
-If the thermal zone is not described, then the thermal zone won't be 
-created as it fails with -ENODEV and thus get_temp won't be called on a 
-disabled site, right?
-
-Having test in the get_temp() ops is usually the sign there is something 
-wrong with the driver initialization.
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Nícolas
