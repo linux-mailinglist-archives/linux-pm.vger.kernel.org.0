@@ -2,164 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8618871FD49
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 11:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1841671FD7B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 11:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbjFBJM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 05:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
+        id S235127AbjFBJSv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 05:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbjFBJMa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 05:12:30 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B26FE52;
-        Fri,  2 Jun 2023 02:11:24 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 258945C007F;
-        Fri,  2 Jun 2023 05:11:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 02 Jun 2023 05:11:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1685697082; x=1685783482; bh=AP
-        AvZ+7IxRhfLRjzPSOa/K0myZhAJEYLPd6OAOyyhBE=; b=snQVbPZ5si+eWAoLyH
-        1Ta1hjw0H9HLebxhopTdG1vEEJdJ6oqUuCEyuEH5q7/MC0eHZPZ2ujKMKoPFjfdd
-        /9pDzi2yBt7LvkjcGJPxw38duY+ZNmfydn4cnNfgNfuiGyrj4xo83TwO3Wue1YBe
-        nl7ebcZ/stOKNIyYQOruFzAtdEwGAuSqMLOWziI2kE2SpUUJhGuH1O12M3+83/Kh
-        mq3+5kvoWeSxsWQ1xwa7IFapPiDKnPaQ2Z2BQAlT29YdGaw56ljfUOHlMsKqKosS
-        dyemSxWg+8BWQfin31u7vLkMlmdvguSjRUt6p0jLA3wyAYJzS4Ajt6OZVe4S4rkj
-        cQ1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1685697082; x=1685783482; bh=APAvZ+7IxRhfL
-        RjzPSOa/K0myZhAJEYLPd6OAOyyhBE=; b=uOn5XeP6ZPV6FOIZBzvvUsqRTFqIu
-        yYDgLHoQpGKVYy64B8t5IG6K5WLmzR0WfTjRdM6FhVcnm158F32X/m5W7O24Qxjb
-        2+oP+gobwGRWLOgTQs2/1QKrSC4DVrCMaKKDBSDcRNVcrS4f8foVqyIkwr+j7a9Y
-        LLuJQiaeb+ov/uNoL/rQ1qFLxf3nd/0oydtRAOTJADRuPb9tmXbE8suLs1BZ7UU7
-        +W9wQhR5FlFsqsW1F1MKe0G87yQIePEqzbID+noG7xDozWpkCwXK+tgK1fb6up4B
-        lgHYUpYXGHKFtEGKeap1iE/afgQCUVKpUqhne7av2XiDyyv5MBAeLkLSA==
-X-ME-Sender: <xms:ObJ5ZMQEog263-qA1fp65RtwtSqpQgEwUjeJ6OkcZVVvExnmSeXW4g>
-    <xme:ObJ5ZJw76gLUgl8EnMNgebe441QSixgT4p9e-gXpD2RotHndxxGu0zBa9ilH0pxzm
-    YgX1Wb1V990ssjd6lQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelfedguddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:ObJ5ZJ3heeJkJwZecF6tYDIfvvW6ODHZWjAqRfFN6KsIyW_f5jEN9w>
-    <xmx:ObJ5ZACKN1btlqbPbGCXvrHY6BunWtzI5y7FWLVXhnfIrbiWlvY2yQ>
-    <xmx:ObJ5ZFiG5Q92PcPsWmQZLqiNy_P7NJn-OKyOOSn7MHkpBTOQRbJaqw>
-    <xmx:OrJ5ZDbbWMoRSGhAB5y7mcDNkd6YNjptZ_mQAS7_UTJ7G2gmZc2eRg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id D2DEFB60086; Fri,  2 Jun 2023 05:11:21 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
-Mime-Version: 1.0
-Message-Id: <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
-In-Reply-To: <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
-References: <20230601213246.3271412-1-arnd@kernel.org>
- <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
-Date:   Fri, 02 Jun 2023 11:11:01 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Zhang Rui" <rui.zhang@intel.com>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     "Sudeep Holla" <sudeep.holla@arm.com>,
-        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Cristian Marussi" <cristian.marussi@arm.com>
-Subject: Re: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S235130AbjFBJSS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 05:18:18 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F2D1722
+        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 02:17:31 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4b80bf93aso2391759e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 02:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685697449; x=1688289449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wjb4y9f/OAblmhtUQxR2kzYBl3YoolTkNzcf3IrEYtY=;
+        b=PekzTB4NEY2nA9GPUJVIBcKeoQpV+aIEe2nmErsgiefDoj5ypbOd5+i40Prt5AoBe+
+         XfaBDNPpYu+LNX2YcHUnR0hv+g/YROhYw/V6jjmQuNYOF7ytCz5ke45oumzljt3p0phL
+         0Xm5ZoUjq5cbmeLsQ4ePpoEsAcziXxnkng8Un6QMi3fuThIXraxZtUWyRpOBnHPILUpr
+         3GjRlgfrT9/aklNsN1Lyrgv9rHsUDxUrqpZmZlnUrHhnHEQV9A2d6YoFWmtVrnqpA0LS
+         lAaeeKBbSVeKCCkB0NFBK1saaOAZJ50dp124wG3nM/KTjd4MPZ110pBsWuCEfXeCR9Xa
+         NdPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685697449; x=1688289449;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wjb4y9f/OAblmhtUQxR2kzYBl3YoolTkNzcf3IrEYtY=;
+        b=fNM8AiZnf36D4STyvcUahajOfmaojnR+ND+4jTBR6JPEqGmfBLaQt776T9UcQwdmzq
+         mQZ2jRTKvq9QRc12PlkRPQEaOtV3gve4wX3+utkkBWWjzxYeVR0XSXG23+wHcRcU+4Xm
+         STd2N9pOfspQMWO3dzz/jjV2KUNfmazcHkiUaXE2LXbCjuX86DCya8YtR8pH4peBxdz9
+         T5R7xsXGTHQKm6UxYJGQWLz9/BHQiC8ZFORyE7Oj9HtEnnEswEEVcvJveNhEPWMzTHAc
+         7oZb2sMBEffTDgPOg1hit15koxtnEvmJTzyafZ2kSddSvMqKwUz3eCfpvWMXDPqBxiCu
+         c8cA==
+X-Gm-Message-State: AC+VfDy0Wczpb9yP9Bf9Xxwhpb1R6jv1GQtN+vPzHdayk6cTerYJsHoG
+        NUEH7Y/qEfsRzJP5UI6rsxTCbg==
+X-Google-Smtp-Source: ACHHUZ4d9PtFuny6rQdn1Vgtvd/NuLyoJXiaApszdFajTfmb8wElIAA9bAtFoXQfDWguF0DecsIfmA==
+X-Received: by 2002:ac2:4a74:0:b0:4f4:26d8:3668 with SMTP id q20-20020ac24a74000000b004f426d83668mr1457320lfp.25.1685697448598;
+        Fri, 02 Jun 2023 02:17:28 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:548f:8f7e:a3c2:888a? ([2a05:6e02:1041:c10:548f:8f7e:a3c2:888a])
+        by smtp.googlemail.com with ESMTPSA id l18-20020a05600c1d1200b003f61177faffsm12498463wms.0.2023.06.02.02.17.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 02:17:28 -0700 (PDT)
+Message-ID: <5d810151-3a3b-51af-bbc1-0ee45668bcc4@linaro.org>
+Date:   Fri, 2 Jun 2023 11:17:27 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/6] thermal/drivers/mediatek/lvts_thermal: Don't leave
+ threshold zeroed
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com, Alexandre Mergnat <amergnat@baylibre.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20230504004852.627049-1-nfraprado@collabora.com>
+ <20230504004852.627049-6-nfraprado@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230504004852.627049-6-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 2, 2023, at 10:04, Zhang, Rui wrote:
-> On Thu, 2023-06-01 at 23:32 +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> When the intel_rapl driver is built-in, but iosf_mbi is a loadable
->> module,
->> the kernel fails to link:
->> 
->> x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
->> intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to
->> `iosf_mbi_write'
->> x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined
->> reference to `iosf_mbi_read'
->> 
->
-> IMO, it is the intel_rapl_common.c that calls IOSF APIs without
-> specifying the dependency. Thus it should be fixed by something like
-> below,
->
-> --- a/drivers/powercap/Kconfig
-> +++ b/drivers/powercap/Kconfig
-> @@ -18,10 +18,11 @@ if POWERCAP
->  # Client driver configurations go here.
->  config INTEL_RAPL_CORE
->  	tristate
-> +	select IOSF_MBI
+On 04/05/2023 02:48, Nícolas F. R. A. Prado wrote:
+> The thermal framework might leave the low threshold unset if there
+> aren't any lower trip points. This leaves the register zeroed, which
+> translates to a very high temperature for the low threshold. The
+> interrupt for this threshold is then immediately triggered, and the
+> state machine gets stuck, preventing any other temperature monitoring
+> interrupts to ever trigger.
 > 
->  config INTEL_RAPL
->  	tristate "Intel RAPL Support via MSR Interface"
-> -	depends on X86 && IOSF_MBI
-> +	depends on X86
->  	select INTEL_RAPL_CORE
->  	help
->  	  This enables support for the Intel Running Average Power Limit 
+> (The same happens by not setting the Cold or Hot to Normal thresholds
+> when using those)
+> 
+> Set the unused threshold to a valid low value. This value was chosen so
+> that for any valid golden temperature read from the efuse, when the
+> value is converted to raw and back again to milliCelsius, the result
+> doesn't underflow.
+> 
+> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> 
+> Changes in v2:
+> - Added this commit
+> 
+>   drivers/thermal/mediatek/lvts_thermal.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index efd1e938e1c2..951a4cb75ef6 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -82,6 +82,8 @@
+>   #define LVTS_HW_SHUTDOWN_MT8195		105000
+>   #define LVTS_HW_SHUTDOWN_MT8192		105000
+>   
+> +#define LVTS_MINIUM_THRESHOLD		20000
 
-I think that has the logic slightly backwards from a usability point
-of view: The way I read the arch/x86/Kconfig description, IOSF_MBI
-is a feature of specific Intel hardware implementations, which
-gets enabled when any of these SoC platforms are enabled in
-the build, and the INTEL_RAPL driver specifically only works
-on those, while the new INTEL_RAPL_TPMI driver works on other
-hardware.
+MINIMUM
 
-More generally speaking, I think it is a mistake for a device
-driver in one subsystem to use 'select' to enforce a build
-dependency on a driver in another subsystem when the other
-symbol is user-visible.
+So if the thermal zone reaches 20°C, the interrupt fires, the set_trips 
+sets again 20°C but the interrupt won't fire until the temperature goes 
+above 20°C and then crosses the temperature low threshold the way down 
+again?
 
->> The driver can work with iosf_mbi completely disabled, so add a
->> dependency
->> that still allows this configuration, but otherwise forces it to not
->> be
->> built-in when iosf_mbi is a loadable module.
->
-> On the other side, I agree with you that the TPMI driver should work
-> with iosf_mbi completely disabled.
->
-> A cleaner way to do this is to move the rapl_defaults setting (even the
-> rapl_primitive_info setting) from intel_rapl_common.c to the I/F
-> drivers, as this is really interface specific.
->
-> Maybe we can use the above patch as a quick fix, and remove the
-> IOSF_MBI dependency from RAPL common code as a long term solution?
+>   static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
+>   static int coeff_b = LVTS_COEFF_B;
+>   
+> @@ -309,6 +311,11 @@ static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
+>   		pr_debug("%s: Setting low limit temperature interrupt: %d\n",
+>   			 thermal_zone_device_type(tz), low);
+>   		writel(raw_low, LVTS_OFFSETL(base));
+> +	} else {
+> +		pr_debug("%s: Setting low limit temperature to minimum\n",
+> +			 thermal_zone_device_type(tz));
+> +		raw_low = lvts_temp_to_raw(LVTS_MINIUM_THRESHOLD);
+> +		writel(raw_low, LVTS_OFFSETL(base));
 
-I agree that your long-term solution is the best way to avoid the
-build dependency, but for the short-term fix I think my patch
-makes a little more sense than yours. 
+That's duplicate code:
 
-Either approach is of course enough to address the build
-regression, so no objections to your patch if you still
-prefer that.
+u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : 
+LVTS_MINIMUM_THRESHOLD);
 
-     Arnd
+And then the condition in the code goes away:
+         if (low != -INT_MAX) {
+	}
+
+>   	}
+>   
+>   	/*
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
