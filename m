@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B277204F0
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 16:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39FF7204FC
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 16:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236261AbjFBOyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 10:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S236276AbjFBO41 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 10:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235321AbjFBOyQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 10:54:16 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F63E48
-        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 07:54:03 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so3088439a12.3
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 07:54:03 -0700 (PDT)
+        with ESMTP id S235634AbjFBO4V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 10:56:21 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EDE123
+        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 07:56:19 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96f5685f902so306295166b.2
+        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 07:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685717642; x=1688309642;
+        d=linaro.org; s=google; t=1685717778; x=1688309778;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9xMbXrKiLyyuLN8qCy2zxwaeNTTxFej7ZJUbtFNTsHs=;
-        b=enocWQlxi9aM7lEuM5cN4/5zbO4CCWDNMrAfeR8/SPxRriqSpXdhvvVYM6ffSl0PQU
-         wWUwXgr5KgwtRHsyQGkk3kfOQmO8CWT6IV/iSLruyn0af5kGbOOPtMfHqugtqzFMS+Ef
-         jQ0/65+BahEfMOw1leNNB495ugWsxV+HM90T32C+CMDxcRoEDmOytz47MsNKiuEeaxWg
-         jxdGwx2pHXUc+c88xcbw7rqnRErEn6Li2e41mTRV4YrSHNdOk3GguAsbFZ/cgpAh0FMx
-         2qNhiMOIeALU/Cu+9zcPrKIYF89IwORU0Csiwt0SMikp2F+Xn5Mm0jlaUeRnhMa96j5s
-         agBg==
+        bh=wnzl+oKBQQYlv+ufXrrOrmqqiDIhBJ9gKxeDwPiop2U=;
+        b=GMxQutQqOI2tYKBtzZAaqKIUqU7r+PbwrkxhgYgJ/iORGQqWjNUT689CDWDrVKPob9
+         XKn5G6+X4YG/uBUk6V3WDG1ZKe1Pihx+25lJWj/bIiP3047DfEbvgkYd1qbcubV4u9wP
+         i3yIPb66r8f6GAu5D18gRLF4cz1zhO0XOg1Qw9MZJAfbdhK7B9tMCYXg230OYF/1VcFG
+         nnTG22QXULPNj4Qvx+OSyRySFNN04gaYx34Ll+kkFTbJ/VYPc7oTiL5+fyStGEfvUdmI
+         DaiY0eTy39o/0NEEYBq+Ap7jZICjSb/Ih38Gx/hIYnDufYAWV5NolWjtuMPijXaBDM9O
+         Ub5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717642; x=1688309642;
+        d=1e100.net; s=20221208; t=1685717778; x=1688309778;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9xMbXrKiLyyuLN8qCy2zxwaeNTTxFej7ZJUbtFNTsHs=;
-        b=YgcChXih0hun6+XyDoghlIUcG0GpH2CZG1lSq2KnHQjN1mxrFSSlv+UuKgmyIapoaB
-         EtLfQa7vl/UI0AO8co6maBEpChD2yvfpgg0IMb1T3s7ScywKoXAEovfcV3RvTScMcKDW
-         Sp2iqumlYz58zt2K0K7zphM1X2UCXpEoJkNpQhP0QH5SWq+LlHZS+xZdQVrDCZHzgsf/
-         8lEvaZNmJ5rj7yUt7iIuK7Xfwl/WPnNzWxwWo0VNZlyFrPYafZWbLfJdt7lwddYB++z7
-         ZYryytcIqFxwjcEr4SGWjM1XwppnVLAL3qfs2VBb8WEQE4K9OatfmgirDh5PYtwUvu0h
-         UwJQ==
-X-Gm-Message-State: AC+VfDznoiTds80Je/QfKpHIR+f0YfujNgCcWWcR1WUX1EJMoS4D+ljp
-        SDY/4aZbr000BxXtvrsiBHPg8A==
-X-Google-Smtp-Source: ACHHUZ6elBIFjqsTmLfob/zz/7BgFRCLZ7+L3B38jyfwZr1xbGmbrmk+HoW5Dntk5AIUM0bteKC70g==
-X-Received: by 2002:a05:6402:718:b0:4be:b39b:ea8f with SMTP id w24-20020a056402071800b004beb39bea8fmr2097721edx.2.1685717642397;
-        Fri, 02 Jun 2023 07:54:02 -0700 (PDT)
+        bh=wnzl+oKBQQYlv+ufXrrOrmqqiDIhBJ9gKxeDwPiop2U=;
+        b=I5uVw2PK8cam0L+MrMNWVfarXah8xG+rYhFxD8iK2UP3yKcUSvSoRulITPqGOgi8/y
+         kdAZX7Epfci4pO+RZDDKeYOOMKteJN12kMevTDATj3CBmuibE0Xf8FF5U/E+L6vTs8kq
+         t+d0UKqdxR2k86ZM8a3SKtsuihogH1Y/gVBfdZfSJgzl8ftFF0+gC8ByfvMviVd/tO/m
+         Dluy8fv+k5LQ2d2NO82yGLywUUh+o60dq45uB9MNuXvaYUNUYzelp8KZw0/aRGwmJCzy
+         nvl6ehpulZ+Y80jmPWSGiWAOuiNdjev5n67lTJna043L/pJBOAC58YBq5Zm8U1ljZ5wq
+         6dXw==
+X-Gm-Message-State: AC+VfDxz0sTNI49xFxo+GWKpNo0mRsOozD/+fVg5impyNr6ezCmrQ+rT
+        X60R7QNmGWvCMVtwtBZiMJ8R9w==
+X-Google-Smtp-Source: ACHHUZ4hcWFfF0FCaSfbTI+lzp2kZljSmf3H9Wn8b8Dj2qTDyDNjHbvmC3SaZv9TvGPuinNqTX/0LA==
+X-Received: by 2002:a17:907:8a22:b0:969:7739:2eb7 with SMTP id sc34-20020a1709078a2200b0096977392eb7mr11905326ejc.4.1685717778140;
+        Fri, 02 Jun 2023 07:56:18 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.199.204])
-        by smtp.gmail.com with ESMTPSA id n8-20020a05640204c800b005106975c7a1sm777664edw.23.2023.06.02.07.54.00
+        by smtp.gmail.com with ESMTPSA id a24-20020a170906245800b009745ecf5438sm839680ejb.193.2023.06.02.07.56.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 07:54:01 -0700 (PDT)
-Message-ID: <c0e49551-4c69-3f17-aa6d-9e983bf80849@linaro.org>
-Date:   Fri, 2 Jun 2023 16:53:59 +0200
+        Fri, 02 Jun 2023 07:56:17 -0700 (PDT)
+Message-ID: <c0c0dba2-2d93-9b30-7106-7bf7826844b2@linaro.org>
+Date:   Fri, 2 Jun 2023 16:56:15 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
- convert to yaml
+Subject: Re: [PATCH v2 2/4] dt-bindings: power: reset:
+ atmel,at91sam9260-shdwc: convert to yaml
 Content-Language: en-US
 To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -64,9 +64,9 @@ To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
- <20230524123528.439082-4-claudiu.beznea@microchip.com>
+ <20230524123528.439082-3-claudiu.beznea@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230524123528.439082-4-claudiu.beznea@microchip.com>
+In-Reply-To: <20230524123528.439082-3-claudiu.beznea@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,88 +80,12 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 24/05/2023 14:35, Claudiu Beznea wrote:
-> Convert Atmel SAMA5D2 shutdown controller to YAML. SAMA7G5 SHDWC DT node
-> (available in arch/arm/boot/dts/sama7g5.dtsi) has syscon along with its
-> compatible. There is no usage of this syscon in the current code but it
-> may be necessary in future as some registers of SHDWC are accessed in
-> different drivers (at91-sama5d2_shdwc.c and arch/arm/mach-at91/pm.c).
-> Thus update the YAML with it to make DT checkers happy.
+> Convert Atmel shutdown controller to YAML.
 > 
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+> ---
 
 
-
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
-> +
-> +maintainers:
-> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> +
-> +description:
-> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and VDDCORE
-> +  and the wake-up detection on debounced input lines.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: microchip,sama7g5-shdwc
-> +          - const: syscon
-> +      - items:
-
-These are not items, but just enum. This could not work as intended.
-
-> +          enum:
-> +            - atmel,sama5d2-shdwc
-> +            - microchip,sam9x60-shdwc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  debounce-delay-us:
-> +    description:
-> +      Minimum wake-up inputs debouncer period in microseconds. It is usually a
-> +      board-related property.
-> +
-> +  atmel,wakeup-rtc-timer:
-> +    description: enable real-time clock wake-up
-> +    type: boolean
-> +
-> +patternProperties:
-> +  "^input@[0-15]$":
-> +    description:
-> +      Wake-up input nodes. These are usually described in the "board" part of
-> +      the Device Tree. Note also that input 0 is linked to the wake-up pin and
-> +      is frequently used.
-> +    type: object
-> +    properties:
-> +      reg:
-> +        description: contains the wake-up input index
-> +        minimum: 0
-> +        maximum: 15
-> +
-> +      atmel,wakeup-active-high:
-> +        description:
-> +          The corresponding wake-up input described by the child forces the
-> +          wake-up of the core power supply on a high level. The default is to
-> +          be active low.
-> +        type: boolean
-> +
-> +    required:
-> +      - reg
-> +
-> +    additionalProperties: false
 > +
 > +required:
 > +  - compatible
@@ -174,18 +98,46 @@ These are not items, but just enum. This could not work as intended.
 > +        compatible:
 > +          contains:
 > +            enum:
-> +              - microchip,sam9x60-shdwc
-> +              - microchip,sama7g5-shdwc
+> +              - atmel,at91sam9260-shdwc
+> +              - atmel,at91sam9rl-shdwc
 > +    then:
 > +      properties:
 > +        atmel,wakeup-rtt-timer:
 > +          description: enable real-time timer wake-up
 > +          type: boolean
 
-Don't define properties in allOf. This should be in top-level.
+No, don't define properties in allOf.
 
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - atmel,at91sam9rl-shdwc
+> +              - atmel,at91sam9x5-shdwc
+> +    then:
+> +      properties:
+> +        atmel,wakeup-rtc-timer:
+> +          description: enable real-time clock wake-up
+> +          type: boolean
 
-Missing additionalProperties: false.
+Same problem.
+
+> +
+> +unevaluatedProperties: false
+
+This should be additionalProperties: false.
+> +
+> +examples:
+> +  - |
+> +    shdwc: poweroff@fffffd10 {
+> +        compatible = "atmel,at91sam9260-shdwc";
+> +        reg = <0xfffffd10 0x10>;
+> +        clocks = <&clk32k>;
+> +    };
+> +
+> +...
 
 Best regards,
 Krzysztof
