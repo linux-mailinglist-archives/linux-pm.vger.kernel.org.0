@@ -2,64 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B29571F926
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 06:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D1A71F92B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 06:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbjFBEMj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 00:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
+        id S233381AbjFBENs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 00:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbjFBEMi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 00:12:38 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDDB132
-        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 21:12:37 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-652a45266dfso461831b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 21:12:37 -0700 (PDT)
+        with ESMTP id S229542AbjFBENh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 00:13:37 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E047E1A7
+        for <linux-pm@vger.kernel.org>; Thu,  1 Jun 2023 21:13:30 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso1483280a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 01 Jun 2023 21:13:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685679156; x=1688271156;
+        d=linaro.org; s=google; t=1685679210; x=1688271210;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eb+4QTrum6u3laOCC4chpSy2X8fQPYWr/n4Wparj6q0=;
-        b=M35OtoSrfBiRZ0xmZ6cjYaWOCfSBBE48Nre4yAPoGRb+d1kYbPZucMu5NQu4bDcOak
-         S9Pn2wfs7adVu2De/K03KLRBnvAUcK5YZXHZ6w9BHnxuCRKx2wtckBxiTLdFGDt9rOfB
-         aYX6iEhgiJlTKlOpU1QHHri3Cbw7aU75zpD+VIuLTg964N4opcIdvlrwknWvkZqTMgZs
-         19oeEmzJGzPsHbermS1g7pcC+cQKJP22mYKrd7/JSROSV2/ubiAHrbip814JLyxmsBUx
-         rmmU7QfgChfRsUcxCTqftS8fgWD93+zUuKQquII7mSK2xb+ckafve3OcMs4s74MkA4TL
-         12tg==
+        bh=CEV47gt+ZCZAA8du0k/DRIUXH34XMcva/BFXCCGFINc=;
+        b=XuwSId57gjd8r07z06gEvKOJy7AhpKGKpbN238DHatkKvVPw5ZqvBupXh1owDImg8/
+         KDMNQJrf10NXVNMbAJFy8W/oe6/buICZnojYYykjKrAVrhvPZASaQy/lSFoESFEZ+vXt
+         I+emnc9KjBi1gSDvMsPi2P6RKqWGfZUpSD45I1Tlzl04D+XCLta/luk3K99tzO+othxz
+         qHveZIELIiM7ET0h7pTtN2Iammc1GNhFIU8jUZXoWFfuJz+nbcNimueLXBbAJ0D1dYJr
+         GLjbi108pvoUmcXA6mBru20GFY88sjFAKY3PEqVtgb9CynZ3KZoJgFe1IxyVxskB2lRR
+         RDcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685679156; x=1688271156;
+        d=1e100.net; s=20221208; t=1685679210; x=1688271210;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eb+4QTrum6u3laOCC4chpSy2X8fQPYWr/n4Wparj6q0=;
-        b=Y3sfGI9vIkXB52TOuZxQFTsWfVbRBWHfx/w+HQwhswXmGo/pQtNgCkdu03W7MhSB5U
-         YiUcNqIKpoKoniJ5hcnEUVMYXasLUyjNi5t+0+6GQZrEbUkRH3yNdQVT/UyawUDnnan9
-         y6a1wO791NV6OvXDWON7DnrJdpUea0Hj6+esRFOrh82m2EvmpM3P3ysFBgN/2vfJ1vdj
-         IqFmJxozey2JFCJbYd7oas7F9lYqI5K5fH5W/4WL17CkGYQACgKyupDSnSR/cw1QDB9g
-         xTy4w8PHlrGXTM6my99AIcv10JY2YOWo+/2VlCFSskAHCroIqd5zBnyHUl6zPrCLzvnH
-         LE9Q==
-X-Gm-Message-State: AC+VfDwICz5fMC9PwNkaJTDS95OA76IDaeR65tZGz1ZYxyGV5iMlnKSU
-        AXzpCDH0Oaut9qxibrj1qQfhcw==
-X-Google-Smtp-Source: ACHHUZ6JRpEW0H2b8f3O/zmPBsFaFOSng23/i7raVXThjx2ODWlDyZiZrERoWczrti+ZkwxjKOX9hw==
-X-Received: by 2002:a05:6a20:8421:b0:10b:97c8:2e16 with SMTP id c33-20020a056a20842100b0010b97c82e16mr9845806pzd.29.1685679156687;
-        Thu, 01 Jun 2023 21:12:36 -0700 (PDT)
+        bh=CEV47gt+ZCZAA8du0k/DRIUXH34XMcva/BFXCCGFINc=;
+        b=IMjIaL+71za9uwx5BOGbJcR8/IoaMu3WjRqwZV/QCZn6JHi4qON3+CkjZ/euYNlW4e
+         2p3CTtToEsGOB6xRGN4KYHmuQoQKiQHuDSzI4bHV1gSly0t2ipgLvV3DiJqI+0Sd5WyZ
+         5K+f+s7ciRK9Pi2yTzvFyQyWZ1wdGaTkm9dwLTx6v3A84LE3opz1cZl2mmmdn33fTmhD
+         679a/0TY/TsazT0vv1eVp7b9OLZmUMUMutx6QZqNvkFLp/I6N8m2UvUBL4Km2AJbiXLi
+         WM95vEcrBVhXwIVA5ha32REWOcJv72/0T5jaCEzNu5lL+/xrGY+4KEg1+ue1qsnQ2guA
+         ve2Q==
+X-Gm-Message-State: AC+VfDz/0vgbpFSJljNKoZWLTgk5+hh4iBgLAGnyyruRJ20czH3faakm
+        7Av+/DoQeAw8/pblhBfFh46UWw==
+X-Google-Smtp-Source: ACHHUZ62tXR3tRhbGClnMrXrJBv4svBg6ZDY81NDJr5a+svSbolCg1mmUaznB+ELePuz5sRaQK1smg==
+X-Received: by 2002:a17:903:249:b0:1b0:522d:8ff4 with SMTP id j9-20020a170903024900b001b0522d8ff4mr1360769plh.21.1685679210408;
+        Thu, 01 Jun 2023 21:13:30 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id q3-20020a17090311c300b001b0295de9acsm194205plh.179.2023.06.01.21.12.35
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902904500b001ae365072cfsm187707plz.219.2023.06.01.21.13.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jun 2023 21:12:36 -0700 (PDT)
-Date:   Fri, 2 Jun 2023 09:42:34 +0530
+        Thu, 01 Jun 2023 21:13:29 -0700 (PDT)
+Date:   Fri, 2 Jun 2023 09:43:27 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Zhipeng Wang <zhipeng.wang_1@nxp.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpufreq: dt-platdev: Add MODULE_LICENSE
-Message-ID: <20230602041234.sb77clozdjqorz3j@vireshk-i7>
-References: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     rafael@kernel.org, ilia.lin@kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, ansuelsmth@gmail.com
+Subject: Re: [PATCH 1/2] cpufreq: qcom-nvmem: add support for IPQ8074
+Message-ID: <20230602041327.klyjs4cevmzn6vs7@vireshk-i7>
+References: <20230530165409.641661-1-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230524153417.2738448-1-zhipeng.wang_1@nxp.com>
+In-Reply-To: <20230530165409.641661-1-robimarko@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -70,25 +72,20 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-05-23, 15:34, Zhipeng Wang wrote:
-> Add MODULE_LICENSE to support building as module.
+On 30-05-23, 18:54, Robert Marko wrote:
+> IPQ8074 comes in 2 families:
+> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
+> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
 > 
-> Signed-off-by: Zhipeng Wang <zhipeng.wang_1@nxp.com>
-> ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
+> So, in order to be able to share one OPP table lets add support for IPQ8074
+> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
 > 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 338cf6cc6596..54529aa16d53 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -214,3 +214,4 @@ static int __init cpufreq_dt_platdev_init(void)
->  			       sizeof(struct cpufreq_dt_platform_data)));
->  }
->  core_initcall(cpufreq_dt_platdev_init);
-> +MODULE_LICENSE("GPL");
+> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq device
+> will get created by NVMEM CPUFreq driver.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
 
-Merged both patches and applied. Thanks.
+I am waiting for someone from Qcom to review this stuff.
 
 -- 
 viresh
