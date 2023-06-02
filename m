@@ -2,86 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB2F71FB8A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4062471FC58
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234234AbjFBIHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 04:07:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S234733AbjFBIpO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 04:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbjFBIHg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:07:36 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F141D3
-        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 01:07:32 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-30ad752f433so1580699f8f.3
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 01:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685693251; x=1688285251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mO/RY3F3B8GPgwLB+7S4hwzVRXzzO6lIPxIO1gccjeg=;
-        b=A598VmaeQlIXU5K1gtsDSH/qH+2fNkD6meglLxmoet8DKTfui5H2P1hC+6+8TtYUOW
-         MnB9VrNtFdGkSFg/mEQ9TN1U2/FtVCU7hqcQ74JZWpxANY+fABdbkCnz68Zv0kuFqkO1
-         A1XgwUfJXRaIcHo73epEQZGz8+43hPhrR37OP4u1kG5lPH2M7bk6mQB7bADLWEt6GoUz
-         VD7/LilwTL4qKynoEcDLjk9Nwb+fRuhjY2W59L6SaO8K8ZSU8vT5BZ4908x4/t8tT1nu
-         1cvIHtGamhZCJp4HSp6kFt0K9ubiiiwsG8u8oRn8DiY/E1uiOdqr05TTbzeBb0zX7kTO
-         1xWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685693251; x=1688285251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mO/RY3F3B8GPgwLB+7S4hwzVRXzzO6lIPxIO1gccjeg=;
-        b=lRW4XPva1Djbs05/woElvuq4Wc53eyqSwGyOqo6PZxonT0WS5KrS8z2XfXMS4qbXsC
-         CypsD8uBMFNdz3B5Sn7njvdKGJpC8Lzfwhq2hen3E1IyjOQJRTwtD7JC2Rkzh6ordZNO
-         XXT+ht7K1fo3zcuhgZOWGY0+cf85f13CbbpxTj09QIZHNisUaGNBTFvs0KNMI4z8M8o/
-         cR1uAJzMR5TkgQ+VHXcD+vf6YZv2Nt8ay3qGCPHS+qEmMr+MI49Ruy/uIq1cZeWszLBM
-         hSdGFZLDGwxPHyUoddMcDVElL5oZBTgOlEKhWSHMcTBDGQ2s0OL1Ho0zuI0/uAi+m3cS
-         Vu2w==
-X-Gm-Message-State: AC+VfDw14Hsgne3jDTqGjJBotXapW+GaGaKXsAOazL/1G7NwnOaquBL+
-        vjE9eu8NA6n5Wg5eQxoU68pmrw==
-X-Google-Smtp-Source: ACHHUZ4iJjab6zb7VKTRm84jdXYQvx32T3lqpuKG6BtYc68C7Lg6oyRp4fV/jUzSTe+AMMJXE2XPLw==
-X-Received: by 2002:adf:cd8b:0:b0:307:83a4:5860 with SMTP id q11-20020adfcd8b000000b0030783a45860mr3794370wrj.68.1685693250955;
-        Fri, 02 Jun 2023 01:07:30 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:548f:8f7e:a3c2:888a? ([2a05:6e02:1041:c10:548f:8f7e:a3c2:888a])
-        by smtp.googlemail.com with ESMTPSA id d8-20020adff848000000b0030ae849c70csm929300wrq.37.2023.06.02.01.07.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 01:07:30 -0700 (PDT)
-Message-ID: <68393044-9d28-8402-e190-7cbb28442f6d@linaro.org>
-Date:   Fri, 2 Jun 2023 10:07:29 +0200
+        with ESMTP id S234135AbjFBIpF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:45:05 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE41E67;
+        Fri,  2 Jun 2023 01:44:32 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aebf4.dynamic.kabel-deutschland.de [95.90.235.244])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 2F6E361EA1BFF;
+        Fri,  2 Jun 2023 10:43:27 +0200 (CEST)
+Message-ID: <577f38ed-8532-c32e-07bd-4a3b384d5fe8@molgen.mpg.de>
+Date:   Fri, 2 Jun 2023 10:43:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 0/3] thermal/drivers/mediatek/lvts_thermal: Fixes to the
- interrupt handling
+ Thunderbird/102.11.0
+Subject: Re: [Intel-wired-lan] [PATCH] e1000e: Use PME poll to circumvent
+ unreliable ACPI wake
 Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>,
-        Alexandre Bailon <abailon@baylibre.com>, kernel@collabora.com,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230428195347.3832687-1-nfraprado@collabora.com>
- <20230502103344.GA3388518@google.com>
- <87b0f5cd-67a8-fbd5-5ca7-a286b543d796@linaro.org>
- <8a38a0da-3a4f-4e39-9f9e-42682edfd9bf@notapiano>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <8a38a0da-3a4f-4e39-9f9e-42682edfd9bf@notapiano>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Alexander H Duyck <alexander.duyck@gmail.com>
+Cc:     linux-pm@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>, linux-pci@vger.kernel.org
+References: <20230601162537.1163270-1-kai.heng.feng@canonical.com>
+ <269262acfcce8eb1b85ee1fe3424a5ef2991f481.camel@gmail.com>
+ <CAAd53p7c6eEqxd3jecfgvpxuYO3nmmmovcqD=3PgbqSVCWFfxA@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CAAd53p7c6eEqxd3jecfgvpxuYO3nmmmovcqD=3PgbqSVCWFfxA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,62 +54,127 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/05/2023 21:46, Nícolas F. R. A. Prado wrote:
-> On Tue, May 30, 2023 at 02:27:36PM +0200, Daniel Lezcano wrote:
+[Cc: linux-pci@vger.kernel.org]
+
+Dear Kai,
+
+
+Thank you for your patch.
+
+Am 02.06.23 um 03:46 schrieb Kai-Heng Feng:
+> On Fri, Jun 2, 2023 at 4:24 AM Alexander H Duyck wrote:
 >>
->> Hi,
->>
->> On 02/05/2023 12:33, Chen-Yu Tsai wrote:
->>> On Fri, Apr 28, 2023 at 03:53:44PM -0400, Nícolas F. R. A. Prado wrote:
->>>>
->>>> Fixes in the interrupt handling of the LVTS thermal driver noticed while
->>>> testing it on the Spherion Chromebook (mt8192-asurada-spherion) with the
->>>> MT8192 support series [1].
->>>>
->>>> These are standalone fixes and don't depend on anything else.
->>>>
->>>> [1] https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/
->>>>
->>>> Thanks,
->>>> Nícolas
->>>>
->>>>
->>>> Nícolas F. R. A. Prado (3):
->>>>     thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
->>>>     thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate mode
->>>>     thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
->>>
->>> This series seems to have solved all interrupt storm issue I ran into, so
->>>
->>> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
->>
->> I gave a try on a mt8195 board and I don't see any interrupt firing when
->> crossing the temperature thresholds.
->>
->> Did I miss something ?
+>> On Fri, 2023-06-02 at 00:25 +0800, Kai-Heng Feng wrote:
+>>> On some I219 devices, ethernet cable plugging detection only works once
+>>> from PCI D3 state. Subsequent cable plugging does set PME bit correctly,
+>>> but device still doesn't get woken up.
+
+Could you please add the list of all the devices with the firmware 
+version, you know this problem exists on? Please also add the URLs of 
+the bug reports at the end of the commit message.
+
+Is that problem logged somehow? Could a log message be added first?
+
+>> Do we have a root cause on why things don't get woken up? This seems
+>> like an issue where something isn't getting reset after the first
+>> wakeup and so future ones are blocked.
 > 
-> No, indeed interrupts seem to be completely disabled on mt8195, even after
-> setting the controllers to filtered mode (a requirement to get interrupts).
+> No we don't know the root cause.
+> I guess the D3 wake isn't really tested under Windows because I219
+> doesn't use runtime D3 on Windows.
 
-Really? interrupts work only on filtered mode? That sounds strange
+How do you know? Where you able to look at the Microsoft Windows driver 
+source code?
 
-What board are you using for testing?
+>>> Since I219 connects to the root complex directly, it relies on platform
+>>> firmware (ACPI) to wake it up. In this case, the GPE from _PRW only
+>>> works for first cable plugging but fails to notify the driver for
+>>> subsequent plugging events.
+>>>
+>>> The issue was originally found on CNP, but the same issue can be found
+>>> on ADL too. So workaround the issue by continuing use PME poll after
 
-> I
-> haven't investigated that further yet. This series was validated on mt8192,
-> which did have working interrupts, but they were being triggered too often.
+The verb is spelled with a space: work around.
 
-Ok.
+>>> first ACPI wake. As PME poll is always used, the runtime suspend
+>>> restriction for CNP can also be removed.
 
-> Also note that I've sent a v2 with even more fixes:
-> https://lore.kernel.org/all/20230504004852.627049-1-nfraprado@collabora.com/
+When was that restriction for CNP added?
 
-Yes, I'm reviewing it closely
+>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> ---
+>>>   drivers/net/ethernet/intel/e1000e/netdev.c | 4 +++-
+>>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c b/drivers/net/ethernet/intel/e1000e/netdev.c
+>>> index bd7ef59b1f2e..f0e48f2bc3a2 100644
+>>> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
+>>> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
+>>> @@ -7021,6 +7021,8 @@ static __maybe_unused int e1000e_pm_runtime_resume(struct device *dev)
+>>>        struct e1000_adapter *adapter = netdev_priv(netdev);
+>>>        int rc;
+>>>
+>>> +     pdev->pme_poll = true;
+>>> +
+>>>        rc = __e1000_resume(pdev);
+>>>        if (rc)
+>>>                return rc;
+>>
+>> Doesn't this enable this too broadly. I know there are a number of
+>> devices that run under the e1000e and I would imagine that we don't
+>> want them all running with "pme_poll = true" do we?
+> 
+> Whack a mole isn't scaling, either.
+> The generation between CNP and ADL are probably affected too.
+> 
+>> It seems like at a minimum we should only be setting this for specific
+>> platofrms or devices instead of on all of them.
+>>
+>> Also this seems like something we should be setting on the suspend side
+>> since it seems to be cleared in the wakeup calls.
+> 
+> pme_poll gets cleared on wakeup, and once it's cleared the device will
+> be removed from pci_pme_list.
+> 
+> To prevent that, reset pme_poll to true immediately on runtime resume.
+> 
+>> Lastly I am not sure the first one is necessarily succeeding. You might
+>> want to check the status of pme_poll before you run your first test.
+>> From what I can tell it looks like the initial state is true in
+>> pci_pm_init. If so it might be getting cleared after the first wakeup
+>> which is what causes your issues.
+> 
+> That's by design. pme_poll gets cleared when the hardware is capable
+> to signal wakeup via PME# or ACPI GPE. For detected hardwares, the
+> pme_poll will never be cleared.
+> So this becomes tricky for the issue, since the ACPI GPE works for
+> just one time, but never again.
+> 
+>>> @@ -7682,7 +7684,7 @@ static int e1000_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+>>>
+>>>        dev_pm_set_driver_flags(&pdev->dev, DPM_FLAG_SMART_PREPARE);
+>>>
+>>> -     if (pci_dev_run_wake(pdev) && hw->mac.type != e1000_pch_cnp)
+>>> +     if (pci_dev_run_wake(pdev))
+>>>                pm_runtime_put_noidle(&pdev->dev);
+>>>
+>>>        return 0;
+>>
+>> I assume this is the original workaround that was put in to address
+>> this issue. Perhaps you should add a Fixes tag to this to identify
+>> which workaround this patch is meant to be replacing.
+> 
+> Another possibility is to remove runtime power management completely.
+> I wonder why Windows keep the device at D0 all the time?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Who knows how to contact Intel’s driver developers for Microsoft Windows?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> Can Linux align with Windows?
 
+Before deciding this, the power usage in the different states should be 
+measured.
+
+
+Kind regards,
+
+Paul
