@@ -2,113 +2,191 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738357204E5
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 16:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B277204F0
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 16:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbjFBOva convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 2 Jun 2023 10:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        id S236261AbjFBOyS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 10:54:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234989AbjFBOva (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 10:51:30 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA023E49;
-        Fri,  2 Jun 2023 07:51:27 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-50c079eb705so512354a12.1;
-        Fri, 02 Jun 2023 07:51:27 -0700 (PDT)
+        with ESMTP id S235321AbjFBOyQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 10:54:16 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F63E48
+        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 07:54:03 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51494659d49so3088439a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 07:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1685717642; x=1688309642;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9xMbXrKiLyyuLN8qCy2zxwaeNTTxFej7ZJUbtFNTsHs=;
+        b=enocWQlxi9aM7lEuM5cN4/5zbO4CCWDNMrAfeR8/SPxRriqSpXdhvvVYM6ffSl0PQU
+         wWUwXgr5KgwtRHsyQGkk3kfOQmO8CWT6IV/iSLruyn0af5kGbOOPtMfHqugtqzFMS+Ef
+         jQ0/65+BahEfMOw1leNNB495ugWsxV+HM90T32C+CMDxcRoEDmOytz47MsNKiuEeaxWg
+         jxdGwx2pHXUc+c88xcbw7rqnRErEn6Li2e41mTRV4YrSHNdOk3GguAsbFZ/cgpAh0FMx
+         2qNhiMOIeALU/Cu+9zcPrKIYF89IwORU0Csiwt0SMikp2F+Xn5Mm0jlaUeRnhMa96j5s
+         agBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685717486; x=1688309486;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kXHfdMrgpozX1VOcBn1dgVWQVi3s3HG1/X81+A5jHZo=;
-        b=TCH68Eg01gaFre+ljvdcoNPQIntwKCxFANPIf5v0v6S4xrx+q7O/N88wO8d4mrw6h0
-         7dpJOrBa+P/mBVEJX/Wp2nwx4+t+FFLZNF17w7LvTgTKboWyjaBEncgi4IxHA2XBjnJm
-         yeOJ9a+mKUgISQ7/adlPfE3s5SYTFfL4wI83L5m/GuUe4fGUGFvNdrxbIcvkQ7z/sOsT
-         FOx8gpr7z/gCBtlu8+SGNb2Trg1CEul6Qmw1RSghiYiVVnb/J1gReoF+E/B7EUtT8LHr
-         7N60nxm8e1VNczFdCL3+q8CLAh4a/S9bcFXLsydXFKxuLXdBUMEANVV98J5/9zsUmJdr
-         ujRw==
-X-Gm-Message-State: AC+VfDwKK1zngNkJgAAQIUvzoOH5Pd9Ghj1ZNZFrW7hIYWLLKDvTKumA
-        SSu3+M/VBgOrCiKVw6Mxy8G+aEkRurplfQwM+tK6Y8mS
-X-Google-Smtp-Source: ACHHUZ40ia8U3bhmMtJZKW83lKmq8I3pg3C5oT7SvB79yrvkP1+pKAZzyzJNV2VAYGQnq/2KV8MQdP61loiTbPyHfPw=
-X-Received: by 2002:a17:906:5199:b0:975:bb7:5dc3 with SMTP id
- y25-20020a170906519900b009750bb75dc3mr958357ejk.7.1685717486156; Fri, 02 Jun
- 2023 07:51:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1685717642; x=1688309642;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9xMbXrKiLyyuLN8qCy2zxwaeNTTxFej7ZJUbtFNTsHs=;
+        b=YgcChXih0hun6+XyDoghlIUcG0GpH2CZG1lSq2KnHQjN1mxrFSSlv+UuKgmyIapoaB
+         EtLfQa7vl/UI0AO8co6maBEpChD2yvfpgg0IMb1T3s7ScywKoXAEovfcV3RvTScMcKDW
+         Sp2iqumlYz58zt2K0K7zphM1X2UCXpEoJkNpQhP0QH5SWq+LlHZS+xZdQVrDCZHzgsf/
+         8lEvaZNmJ5rj7yUt7iIuK7Xfwl/WPnNzWxwWo0VNZlyFrPYafZWbLfJdt7lwddYB++z7
+         ZYryytcIqFxwjcEr4SGWjM1XwppnVLAL3qfs2VBb8WEQE4K9OatfmgirDh5PYtwUvu0h
+         UwJQ==
+X-Gm-Message-State: AC+VfDznoiTds80Je/QfKpHIR+f0YfujNgCcWWcR1WUX1EJMoS4D+ljp
+        SDY/4aZbr000BxXtvrsiBHPg8A==
+X-Google-Smtp-Source: ACHHUZ6elBIFjqsTmLfob/zz/7BgFRCLZ7+L3B38jyfwZr1xbGmbrmk+HoW5Dntk5AIUM0bteKC70g==
+X-Received: by 2002:a05:6402:718:b0:4be:b39b:ea8f with SMTP id w24-20020a056402071800b004beb39bea8fmr2097721edx.2.1685717642397;
+        Fri, 02 Jun 2023 07:54:02 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id n8-20020a05640204c800b005106975c7a1sm777664edw.23.2023.06.02.07.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Jun 2023 07:54:01 -0700 (PDT)
+Message-ID: <c0e49551-4c69-3f17-aa6d-9e983bf80849@linaro.org>
+Date:   Fri, 2 Jun 2023 16:53:59 +0200
 MIME-Version: 1.0
-References: <20230601233953.1332-1-mario.limonciello@amd.com>
- <d1e0d5fc837753c292f78a5357fd9ba4531f06d2.camel@linux.intel.com>
- <b0e0abc0-26ba-d104-ff73-b89745510be8@amd.com> <05162d36a009a1669870a2c82bd0b2b65458b244.camel@linux.intel.com>
-In-Reply-To: <05162d36a009a1669870a2c82bd0b2b65458b244.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 2 Jun 2023 16:51:13 +0200
-Message-ID: <CAJZ5v0j8-1Kg5v04yBNMEvPJpJ5KdFX8opu+EXFRw_e6jvEAAw@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: x86: Adjust Microsoft LPS0 _DSM handling sequence
-To:     david.e.box@linux.intel.com
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        rafael@kernel.org, linux-acpi@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
+ convert to yaml
+Content-Language: en-US
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        sre@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
+ <20230524123528.439082-4-claudiu.beznea@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230524123528.439082-4-claudiu.beznea@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 5:06 AM David E. Box <david.e.box@linux.intel.com> wrote:
->
-> On Thu, 2023-06-01 at 20:46 -0500, Limonciello, Mario wrote:
-> >
-> > On 6/1/2023 8:31 PM, David E. Box wrote:
-> > > On Thu, 2023-06-01 at 18:39 -0500, Mario Limonciello wrote:
-> > > > In Windows the Microsoft _DSM doesn't call functions 3->5->7 for suspend
-> > > > and 8->6->4 for resume like Linux currently does.
-> > > >
-> > > > Rather it calls 3->7->5 for suspend and 6->8->4 for resume.
-> > > > Align this calling order for Linux as well.
-> > > >
-> > > > Link:
-> > > > https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-states
-> > > I didn't catch the ordering in the link.
-> >
-> > Yeah it's tough to interpret from the link, because the picture at the
-> > bottom
-> > is missing annotations.
-> >
-> > Basically if you look at the picture the blue part is the screen on/off.
-> >
-> > The green part is "modern standby" and then the little "humps" are LPS0
-> > enter/exit.
-> >
-> > > Was there any issue that prompted this
-> > > change?
-> >
-> >
-> > We were debugging an unrelated problem and noticed the difference
-> > comparing the
-> >
-> > BIOS debugging log from Windows and Linux.
-> >
-> > If an OEM depends on this call order in that code used in LPS0 phase
-> > requires
-> > changes from MS phase I could hypothesize this fixes it.
-> >
-> >
-> > > David
-> >
-> > BTW - is there interest in supporting the Microsoft _DSM GUID for Intel
-> > side too?
-> >
-> > It's an incongruity today that we run both AMD GUID and Microsoft GUID
-> > for AMD systems
-> > but only run Intel GUID for Intel systems.
->
-> There hasn't been a need yet. Rafael have you look at it?
+On 24/05/2023 14:35, Claudiu Beznea wrote:
+> Convert Atmel SAMA5D2 shutdown controller to YAML. SAMA7G5 SHDWC DT node
+> (available in arch/arm/boot/dts/sama7g5.dtsi) has syscon along with its
+> compatible. There is no usage of this syscon in the current code but it
+> may be necessary in future as some registers of SHDWC are accessed in
+> different drivers (at91-sama5d2_shdwc.c and arch/arm/mach-at91/pm.c).
+> Thus update the YAML with it to make DT checkers happy.
+> 
 
-Nothing official ATM AFAICS.
 
-But I guess it'll need to be used on Intel at one point too.
+
+> +---
+> +$id: http://devicetree.org/schemas/power/reset/atmel,sama5d2-shdwc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Atmel SAMA5D2 SHDWC Shutdown Controller
+> +
+> +maintainers:
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +description:
+> +  Atmel SHDWC shutdown controller controls the power supplies VDDIO and VDDCORE
+> +  and the wake-up detection on debounced input lines.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: microchip,sama7g5-shdwc
+> +          - const: syscon
+> +      - items:
+
+These are not items, but just enum. This could not work as intended.
+
+> +          enum:
+> +            - atmel,sama5d2-shdwc
+> +            - microchip,sam9x60-shdwc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +  debounce-delay-us:
+> +    description:
+> +      Minimum wake-up inputs debouncer period in microseconds. It is usually a
+> +      board-related property.
+> +
+> +  atmel,wakeup-rtc-timer:
+> +    description: enable real-time clock wake-up
+> +    type: boolean
+> +
+> +patternProperties:
+> +  "^input@[0-15]$":
+> +    description:
+> +      Wake-up input nodes. These are usually described in the "board" part of
+> +      the Device Tree. Note also that input 0 is linked to the wake-up pin and
+> +      is frequently used.
+> +    type: object
+> +    properties:
+> +      reg:
+> +        description: contains the wake-up input index
+> +        minimum: 0
+> +        maximum: 15
+> +
+> +      atmel,wakeup-active-high:
+> +        description:
+> +          The corresponding wake-up input described by the child forces the
+> +          wake-up of the core power supply on a high level. The default is to
+> +          be active low.
+> +        type: boolean
+> +
+> +    required:
+> +      - reg
+> +
+> +    additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - microchip,sam9x60-shdwc
+> +              - microchip,sama7g5-shdwc
+> +    then:
+> +      properties:
+> +        atmel,wakeup-rtt-timer:
+> +          description: enable real-time timer wake-up
+> +          type: boolean
+
+Don't define properties in allOf. This should be in top-level.
+
+
+Missing additionalProperties: false.
+
+Best regards,
+Krzysztof
+
