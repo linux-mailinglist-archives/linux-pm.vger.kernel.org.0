@@ -2,83 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9D871FC7E
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AB271FC91
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbjFBItP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 04:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
+        id S234928AbjFBIva (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 04:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234351AbjFBIsg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:48:36 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744CDE49
-        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 01:48:34 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f6e68cc738so17412265e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 01:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685695713; x=1688287713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hy7ZWgwvbQw0vF/j44DrE+pxcxlkHmF/+G3M51v+f2Y=;
-        b=UvECccFHPDOZZjOqEWbW35gXhOHqQaqYC8jpmi8noSSduan5Ls0a9rI2ViSkjq5IdO
-         F7qf/DcGydpfz1XSvpU3XFjDS8QyPRahRVrLV4jgk/jKPZWbo25hETwcJhe/AidT9fFq
-         fYvMIvLP8PlKnd5KEmYoiKXJv464N1oayK0otffMCh2hSapCl0leD9ISOAOHggzwDMdJ
-         mqOytqN8lC7fhpvRZelksmgCaftQHwhCSzVk/rTENPiYseUjOppiER9l4rFNKA1DEuDq
-         nXZ7CXU+JwZSI3ol9LNDxuIO3lJf93V/AvIwDzSh0Kt9c4f//1K1wrqQ5j2yJGttZJeR
-         s/EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685695713; x=1688287713;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hy7ZWgwvbQw0vF/j44DrE+pxcxlkHmF/+G3M51v+f2Y=;
-        b=fh1cteR7x2fYVMbhRRF/Pz4KGtlYlE57squND2aL9Jtz3W1a93HmmnJvfCLAFnEOy7
-         Dj82Oip2z+L26cy7kU3DAOs4a+UF7izQ619omdnBu9GR27Y4hPqS+DyH+FAbsbxMB7d5
-         No/ROxB3P1ShJVpBzkzIAIlbezjq5yn1tiXPDrOs7Dlw45EE11mk+U3JT1Pty7BVQfIp
-         7XDpoEjmItwgVlE/c6EqJIodlw3FQ6MO0F8YNDng+8vXiNuZL3e3SugfweYNOgsP/FRo
-         8PqXa9nxOftAIHaKD/XF+XWiItGj3nadQDQfVrGZA+/CycngkNXDm5RrYUSmfAB8WNg9
-         coHA==
-X-Gm-Message-State: AC+VfDxdzTIacdIWgVfadtT9C6CNHd3YDR5u3H/DazJLrj7HsNseJDgP
-        61vu0mBqts6Av6ihwknAHj4rAg==
-X-Google-Smtp-Source: ACHHUZ4D84wQyp47giQRpl65CGko8rey1F9ShVN6NGtUak9BS4hDjYgHB3xL2Np6FnsSeXDKWbtBGQ==
-X-Received: by 2002:a05:600c:2045:b0:3f6:c7b:d3b7 with SMTP id p5-20020a05600c204500b003f60c7bd3b7mr1377479wmg.37.1685695712781;
-        Fri, 02 Jun 2023 01:48:32 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:548f:8f7e:a3c2:888a? ([2a05:6e02:1041:c10:548f:8f7e:a3c2:888a])
-        by smtp.googlemail.com with ESMTPSA id l4-20020a1c7904000000b003f5ffba9ae1sm1234932wme.24.2023.06.02.01.48.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 01:48:32 -0700 (PDT)
-Message-ID: <b0576c2c-9249-1759-642f-b0accabfc773@linaro.org>
-Date:   Fri, 2 Jun 2023 10:48:31 +0200
+        with ESMTP id S234942AbjFBIvB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:51:01 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9296C10EF;
+        Fri,  2 Jun 2023 01:50:48 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id ED5803F181;
+        Fri,  2 Jun 2023 08:50:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1685695846;
+        bh=9iDW23eSDGpAU5YPcKTOrXKlERG4X+SdChKCH7zHRoE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=YeXM7zAYzGpv/Tgh19segV9F0cuncXXVEmaobPJ0MIVMdrRkhjpcmeW2nS1F00BlO
+         lJO2gfE5ZwyDtZQDtlryH4uEzhlsulbaUDjWR/xAioOseUVily8cZkUWHHnxEY829O
+         IZLMWXfBKirAz0Lnc809TPdds3niGmrg0eotgcqptRTf2d95GPxiqrnGacQmBcruGa
+         bTaWkXlW+/VlvlnOPfigL7s2zLXEm6LuyPSB6RdU4fWJ53LIj2HTt5z/CFZjVHDdeY
+         DOZDv4c/CnjpHBJ3mpYW3MWdFnoOsF1geOhhwSVm+Nm6YGCJi04fQ8bqaGCFhF2HC7
+         VA07WFU6wvUDA==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     dlemoal@kernel.org, bblock@linux.ibm.com, acelan.kao@canonical.com,
+        linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6] scsi: core: Wait until device is fully resumed before doing rescan
+Date:   Fri,  2 Jun 2023 16:49:56 +0800
+Message-Id: <20230602084956.1299001-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 2/6] thermal/drivers/mediatek/lvts_thermal: Honor
- sensors in immediate mode
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     kernel@collabora.com, Alexandre Mergnat <amergnat@baylibre.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230504004852.627049-1-nfraprado@collabora.com>
- <20230504004852.627049-3-nfraprado@collabora.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230504004852.627049-3-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,134 +52,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/05/2023 02:48, Nícolas F. R. A. Prado wrote:
-> Each controller can be configured to operate on immediate or filtered
-> mode. On filtered mode, the sensors are enabled by setting the
-> corresponding bits in MONCTL0, while on immediate mode, by setting
-> MSRCTL1.
-> 
-> Previously, the code would set MSRCTL1 for all four sensors when
-> configured to immediate mode, but given that the controller might not
-> have all four sensors connected, this would cause interrupts to trigger
-> for non-existent sensors. Fix this by handling the MSRCTL1 register
-> analogously to the MONCTL0: only enable the sensors that were declared.
-> 
-> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> ---
-> 
-> (no changes since v1)
-> 
->   drivers/thermal/mediatek/lvts_thermal.c | 50 +++++++++++++------------
->   1 file changed, 26 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 2988f201633a..f7d998a45ea0 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -922,24 +922,6 @@ static int lvts_ctrl_configure(struct device *dev, struct lvts_ctrl *lvts_ctrl)
->   			LVTS_HW_FILTER << 3 | LVTS_HW_FILTER;
->   	writel(value, LVTS_MSRCTL0(lvts_ctrl->base));
->   
-> -	/*
-> -	 * LVTS_MSRCTL1 : Measurement control
-> -	 *
-> -	 * Bits:
-> -	 *
-> -	 * 9: Ignore MSRCTL0 config and do immediate measurement on sensor3
-> -	 * 6: Ignore MSRCTL0 config and do immediate measurement on sensor2
-> -	 * 5: Ignore MSRCTL0 config and do immediate measurement on sensor1
-> -	 * 4: Ignore MSRCTL0 config and do immediate measurement on sensor0
-> -	 *
-> -	 * That configuration will ignore the filtering and the delays
-> -	 * introduced below in MONCTL1 and MONCTL2
-> -	 */
-> -	if (lvts_ctrl->mode == LVTS_MSR_IMMEDIATE_MODE) {
-> -		value = BIT(9) | BIT(6) | BIT(5) | BIT(4);
-> -		writel(value, LVTS_MSRCTL1(lvts_ctrl->base));
-> -	}
-> -
->   	/*
->   	 * LVTS_MONCTL1 : Period unit and group interval configuration
->   	 *
-> @@ -1004,6 +986,8 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
->   	struct lvts_sensor *lvts_sensors = lvts_ctrl->sensors;
->   	struct thermal_zone_device *tz;
->   	u32 sensor_map = 0;
-> +	u32 sensor_map_bits[][4] = {{BIT(4), BIT(5), BIT(6), BIT(9)},
-> +				    {BIT(0), BIT(1), BIT(2), BIT(3)}};
+During system resuming process, the resuming order is from top to down.
+Namely, the ATA host is resumed before disks connected to it.
 
-Even correct, this initialization sounds prone to error and a bit 
-obfuscating (eg. it assumes LVTS_MSR_IMMEDIATE_MODE is 1).
+When an EH is scheduled while ATA host is resumed and disk device is
+still suspended, the device_lock hold by scsi_rescan_device() is never
+released so the dpm_resume() of the disk is blocked forerver, therefore
+the system can never be resumed back.
 
-What about?
+That's because scsi_attach_vpd() is expecting the disk device is in
+operational state, as it doesn't work on suspended device.
 
-	/*
-	 * A description
-	 */
-	u32 sensor_imm_bitmap[] = { BIT(0), BIT(1), BIT(2), BIT(3) };
-	u32 sensor_filt_bitmap[] = { BIT(4), BIT(5), BIT(6), BIT(9) };
+To avoid such deadlock, wait until the scsi device is fully resumed,
+before continuing the rescan process.
 
-	u32 *sensor_bitmap = lvts_ctrl->mode ? LVTS_MSR_IMMEDIATE_MODE : 
-sensor_imm_bitmap : sensor_filt_bitmap;
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v6:
+ - Fix !CONFIG_PM_SLEEP compilation error.
 
->   	int i;
->   
->   	for (i = 0; i < lvts_ctrl->num_lvts_sensor; i++) {
-> @@ -1040,20 +1024,38 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
->   		 * map, so we can enable the temperature monitoring in
->   		 * the hardware thermal controller.
->   		 */
-> -		sensor_map |= BIT(i);
-> +		sensor_map |= sensor_map_bits[lvts_ctrl->mode][i];
+v5:
+ - Use a different approach. Wait until the disk device is resumed.
 
-		sensor_map |= sensor_bitmap[i];
->   	}
->   
->   	/*
-> -	 * Bits:
-> -	 *      9: Single point access flow
-> -	 *    0-3: Enable sensing point 0-3
-> -	 *
->   	 * The initialization of the thermal zones give us
->   	 * which sensor point to enable. If any thermal zone
->   	 * was not described in the device tree, it won't be
->   	 * enabled here in the sensor map.
->   	 */
-> -	writel(sensor_map | BIT(9), LVTS_MONCTL0(lvts_ctrl->base));
-> +	if (lvts_ctrl->mode == LVTS_MSR_IMMEDIATE_MODE) {
-> +		/*
-> +		 * LVTS_MSRCTL1 : Measurement control
-> +		 *
-> +		 * Bits:
-> +		 *
-> +		 * 9: Ignore MSRCTL0 config and do immediate measurement on sensor3
-> +		 * 6: Ignore MSRCTL0 config and do immediate measurement on sensor2
-> +		 * 5: Ignore MSRCTL0 config and do immediate measurement on sensor1
-> +		 * 4: Ignore MSRCTL0 config and do immediate measurement on sensor0
-> +		 *
-> +		 * That configuration will ignore the filtering and the delays
-> +		 * introduced in MONCTL1 and MONCTL2
-> +		 */
-> +		writel(sensor_map, LVTS_MSRCTL1(lvts_ctrl->base));
-> +	} else {
-> +		/*
-> +		 * Bits:
-> +		 *      9: Single point access flow
-> +		 *    0-3: Enable sensing point 0-3
-> +		 */
-> +		writel(sensor_map | BIT(9), LVTS_MONCTL0(lvts_ctrl->base));
-> +	}
->   
->   	return 0;
->   }
+v4: 
+ - No change.
 
+v3:
+ - New patch to resolve undefined pm_suspend_target_state.
+
+v2:
+ - Schedule rescan task at the end of system resume phase.
+ - Wording.
+
+ drivers/scsi/scsi_scan.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index d217be323cc6..092f37464101 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1621,6 +1621,11 @@ void scsi_rescan_device(struct device *dev)
+ {
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+ 
++#ifdef CONFIG_PM_SLEEP
++	if (dev->power.is_suspended)
++		wait_for_completion(&dev->power.completion);
++#endif
++
+ 	device_lock(dev);
+ 
+ 	scsi_attach_vpd(sdev);
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
