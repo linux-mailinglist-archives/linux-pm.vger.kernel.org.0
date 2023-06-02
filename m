@@ -2,271 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7E571FCD9
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 10:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8618871FD49
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jun 2023 11:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234401AbjFBI6R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Jun 2023 04:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S234996AbjFBJM6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Jun 2023 05:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234629AbjFBI5q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 04:57:46 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB6E10DC
-        for <linux-pm@vger.kernel.org>; Fri,  2 Jun 2023 01:57:33 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f50a8f6dd7so2405957e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jun 2023 01:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685696251; x=1688288251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eaozavS8Dw9G07q3WIthaz1oxPUnWkRUgVfQ/uWKK+o=;
-        b=k+L76lILkvNpMK5eJwtttR1ZvSPzVJjxvKM2Uf6nqssGPPfOz3NLOtmL75ANFbc53R
-         DlX2NzD2i1CraPX/uYoKH6qnECz9eU1Z8pbQhl6DBpA6YRZuSzQh/YKaqfPYRQwiKI6P
-         SE6S4mV6cOWjRibdDHXVhVTadG0O4BmMZ5pr9ir9Fvh260aUzngk9xM6Ao60QAD0Ej6r
-         mhiJds4K3j/QaeW+CRqGZX60SsXq1nIN/hcGjwv/UpwyiM9iIr7h5Ym3uBq2VcBal+F7
-         nXMpo9rrWgMsMW6AytdRAMQYqXcWtGgd59xS5K/CA0EbgepAo5GyAp8YPgKbzo2TP8Fn
-         p2Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685696251; x=1688288251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eaozavS8Dw9G07q3WIthaz1oxPUnWkRUgVfQ/uWKK+o=;
-        b=Nq7Q82hro/FKjHsRFtdf+IjyE+hS4F5gDXsfYkQHy9cagJCwjBRI4Zzq3+tqOCGj8H
-         E6RHnI+vOSNmnomqGcsDK9aaCJVbHHrY7izy+WeOflmVMvvAzE2ZSw9JyTSGMlkgoWgg
-         kZdrDl30Z90jzZRwvRunN4isfp9kGWFfbR7+qfd3uVkB1b4ArufKoEeuIztap/qBXN2I
-         jTm1o9fszWHQp38LJc2c9rf6s/cGhfjuH5KxKm2tJI5xDu7cQ21UQJ+ww+npyNVP1yPs
-         uC82J9WSdlRFOUk4WZVXUVazWwCcyHHoi6VPhvzXZHvfgLF6yaV5lbJdM3h9oysy8iIr
-         lrUQ==
-X-Gm-Message-State: AC+VfDyy7nS0XeMb02Zxu3c4042fHbfDCXIc+lpRZHNFmmAZT3o/FdUU
-        PEpZZbhw9txUHP051EZQ/DSpgQ==
-X-Google-Smtp-Source: ACHHUZ5eY5OrhtEFe+ABmF8b5ll+9yOH8otZRhdWVPdyaCx97VYsne4VKioFkB97qFTdvzfJMaOylQ==
-X-Received: by 2002:ac2:4246:0:b0:4f4:d538:3450 with SMTP id m6-20020ac24246000000b004f4d5383450mr1182657lfl.49.1685696251372;
-        Fri, 02 Jun 2023 01:57:31 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id w13-20020a05651203cd00b004ef11b30a17sm94809lfp.91.2023.06.02.01.57.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Jun 2023 01:57:30 -0700 (PDT)
-Message-ID: <5ab92f01-720d-1a27-3ab5-1af1d63bd139@linaro.org>
-Date:   Fri, 2 Jun 2023 10:57:29 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [RESEND PATCH v2 1/2] cpufreq: qcom-nvmem: add support for
- IPQ8074
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>,
-        Kathiravan T <quic_kathirav@quicinc.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, agross@kernel.org,
-        andersson@kernel.org, ilia.lin@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, ansuelsmth@gmail.com
-References: <20230530165807.642084-1-robimarko@gmail.com>
- <b565b9b5-d7c1-7779-532e-565c3f5c5cd3@quicinc.com>
- <CAOX2RU6ay_Bc0JYQ6rBcTRadm-71Jie5YH9B0J_1UywkcyqZ8g@mail.gmail.com>
- <70de3314-766d-4c7f-5b1a-41740cfeac8c@quicinc.com>
- <2a78c9ce-f631-53fd-581f-2e8c906be989@quicinc.com>
- <CAOX2RU4k4bDvtU8m4cxA=9x6b2B0mwiKsBWXFV3TY+jvk49vwg@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAOX2RU4k4bDvtU8m4cxA=9x6b2B0mwiKsBWXFV3TY+jvk49vwg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235000AbjFBJMa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Jun 2023 05:12:30 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B26FE52;
+        Fri,  2 Jun 2023 02:11:24 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 258945C007F;
+        Fri,  2 Jun 2023 05:11:22 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 02 Jun 2023 05:11:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1685697082; x=1685783482; bh=AP
+        AvZ+7IxRhfLRjzPSOa/K0myZhAJEYLPd6OAOyyhBE=; b=snQVbPZ5si+eWAoLyH
+        1Ta1hjw0H9HLebxhopTdG1vEEJdJ6oqUuCEyuEH5q7/MC0eHZPZ2ujKMKoPFjfdd
+        /9pDzi2yBt7LvkjcGJPxw38duY+ZNmfydn4cnNfgNfuiGyrj4xo83TwO3Wue1YBe
+        nl7ebcZ/stOKNIyYQOruFzAtdEwGAuSqMLOWziI2kE2SpUUJhGuH1O12M3+83/Kh
+        mq3+5kvoWeSxsWQ1xwa7IFapPiDKnPaQ2Z2BQAlT29YdGaw56ljfUOHlMsKqKosS
+        dyemSxWg+8BWQfin31u7vLkMlmdvguSjRUt6p0jLA3wyAYJzS4Ajt6OZVe4S4rkj
+        cQ1g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1685697082; x=1685783482; bh=APAvZ+7IxRhfL
+        RjzPSOa/K0myZhAJEYLPd6OAOyyhBE=; b=uOn5XeP6ZPV6FOIZBzvvUsqRTFqIu
+        yYDgLHoQpGKVYy64B8t5IG6K5WLmzR0WfTjRdM6FhVcnm158F32X/m5W7O24Qxjb
+        2+oP+gobwGRWLOgTQs2/1QKrSC4DVrCMaKKDBSDcRNVcrS4f8foVqyIkwr+j7a9Y
+        LLuJQiaeb+ov/uNoL/rQ1qFLxf3nd/0oydtRAOTJADRuPb9tmXbE8suLs1BZ7UU7
+        +W9wQhR5FlFsqsW1F1MKe0G87yQIePEqzbID+noG7xDozWpkCwXK+tgK1fb6up4B
+        lgHYUpYXGHKFtEGKeap1iE/afgQCUVKpUqhne7av2XiDyyv5MBAeLkLSA==
+X-ME-Sender: <xms:ObJ5ZMQEog263-qA1fp65RtwtSqpQgEwUjeJ6OkcZVVvExnmSeXW4g>
+    <xme:ObJ5ZJw76gLUgl8EnMNgebe441QSixgT4p9e-gXpD2RotHndxxGu0zBa9ilH0pxzm
+    YgX1Wb1V990ssjd6lQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeelfedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ObJ5ZJ3heeJkJwZecF6tYDIfvvW6ODHZWjAqRfFN6KsIyW_f5jEN9w>
+    <xmx:ObJ5ZACKN1btlqbPbGCXvrHY6BunWtzI5y7FWLVXhnfIrbiWlvY2yQ>
+    <xmx:ObJ5ZFiG5Q92PcPsWmQZLqiNy_P7NJn-OKyOOSn7MHkpBTOQRbJaqw>
+    <xmx:OrJ5ZDbbWMoRSGhAB5y7mcDNkd6YNjptZ_mQAS7_UTJ7G2gmZc2eRg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D2DEFB60086; Fri,  2 Jun 2023 05:11:21 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-447-ge2460e13b3-fm-20230525.001-ge2460e13
+Mime-Version: 1.0
+Message-Id: <0d627109-483d-42c2-86c7-337c2d38fadb@app.fastmail.com>
+In-Reply-To: <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
+References: <20230601213246.3271412-1-arnd@kernel.org>
+ <ee67348af01d729a959563f5cb2ecab7534f2e53.camel@intel.com>
+Date:   Fri, 02 Jun 2023 11:11:01 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Zhang Rui" <rui.zhang@intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     "Sudeep Holla" <sudeep.holla@arm.com>,
+        "lukasz.luba@arm.com" <lukasz.luba@arm.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Cristian Marussi" <cristian.marussi@arm.com>
+Subject: Re: [PATCH] powercap: intel_rapl: fix CONFIG_IOSF_MBI dependency
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 1.06.2023 16:55, Robert Marko wrote:
-> On Thu, 1 Jun 2023 at 16:49, Kathiravan T <quic_kathirav@quicinc.com> wrote:
->>
->>
->> On 6/1/2023 6:54 PM, Kathiravan T wrote:
->>>
->>> On 6/1/2023 6:40 PM, Robert Marko wrote:
->>>> On Thu, 1 Jun 2023 at 14:57, Kathiravan T <quic_kathirav@quicinc.com>
->>>> wrote:
->>>>>
->>>>> On 5/30/2023 10:28 PM, Robert Marko wrote:
->>>>>> IPQ8074 comes in 2 families:
->>>>>> * IPQ8070A/IPQ8071A (Acorn) up to 1.4GHz
->>>>>> * IPQ8072A/IPQ8074A/IPQ8076A/IPQ8078A (Hawkeye) up to 2.2GHz
->>>>>>
->>>>>> So, in order to be able to share one OPP table lets add support for
->>>>>> IPQ8074
->>>>>> family based of SMEM SoC ID-s as speedbin fuse is always 0 on IPQ8074.
->>>>>>
->>>>>> IPQ8074 compatible is blacklisted from DT platdev as the cpufreq
->>>>>> device
->>>>>> will get created by NVMEM CPUFreq driver.
->>>>>>
->>>>>> Signed-off-by: Robert Marko <robimarko@gmail.com>
->>>>>> ---
->>>>>> Changes in v2:
->>>>>> * Print an error if SMEM ID is not part of the IPQ8074 family
->>>>>> and restrict the speed to Acorn variant (1.4GHz)
->>>>>> ---
->>>>>>    drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
->>>>>>    drivers/cpufreq/qcom-cpufreq-nvmem.c | 43
->>>>>> ++++++++++++++++++++++++++++
->>>>>>    2 files changed, 44 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c
->>>>>> b/drivers/cpufreq/cpufreq-dt-platdev.c
->>>>>> index ea86c9f3ed7a..78f6ff933f93 100644
->>>>>> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
->>>>>> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
->>>>>> @@ -170,6 +170,7 @@ static const struct of_device_id blocklist[]
->>>>>> __initconst = {
->>>>>>        { .compatible = "ti,am62a7", },
->>>>>>
->>>>>>        { .compatible = "qcom,ipq8064", },
->>>>>> +     { .compatible = "qcom,ipq8074", },
->>>>>>        { .compatible = "qcom,apq8064", },
->>>>>>        { .compatible = "qcom,msm8974", },
->>>>>>        { .compatible = "qcom,msm8960", },
->>>>>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> index a88b6fe5db50..ce444b5962f2 100644
->>>>>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
->>>>>> @@ -31,6 +31,9 @@
->>>>>>
->>>>>>    #include <dt-bindings/arm/qcom,ids.h>
->>>>>>
->>>>>> +#define IPQ8074_HAWKEYE_VERSION              BIT(0)
->>>>>> +#define IPQ8074_ACORN_VERSION                BIT(1)
->>>>>> +
->>>>>>    struct qcom_cpufreq_drv;
->>>>>>
->>>>>>    struct qcom_cpufreq_match_data {
->>>>>> @@ -204,6 +207,41 @@ static int
->>>>>> qcom_cpufreq_krait_name_version(struct device *cpu_dev,
->>>>>>        return ret;
->>>>>>    }
->>>>>>
->>>>>> +static int qcom_cpufreq_ipq8074_name_version(struct device *cpu_dev,
->>>>>> +                                          struct nvmem_cell
->>>>>> *speedbin_nvmem,
->>>>>> +                                          char **pvs_name,
->>>>>> +                                          struct qcom_cpufreq_drv
->>>>>> *drv)
->>>>>
->>>>> Most of the IPQ SoCs also supports the fuse based frequency selection.
->>>>> Can we rename the function name to generic so that all the IPQ chips
->>>>> can
->>>>> use the same function?
->>>> Well, the only speedbin fuse I was able to dig from downstream is the
->>>> one from
->>>> CPR driver and that one is 0 on all devices so it's not helpful.
->>>> Do you maybe know if there is one in the IPQ8074 family?
->>>
->>>
->>> Let me check on this and get back to you probably by tomorrow...
->>
->>
->> Robert, checked with the team and IPQ807x doesn't use fuse to determine
->> the CPU freq limits. Current approach (SoC ID based) should be fine.
->> BTW, are the DTS changes already posted or yet to be posted?
+On Fri, Jun 2, 2023, at 10:04, Zhang, Rui wrote:
+> On Thu, 2023-06-01 at 23:32 +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> When the intel_rapl driver is built-in, but iosf_mbi is a loadable
+>> module,
+>> the kernel fails to link:
+>> 
+>> x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
+>> intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to
+>> `iosf_mbi_write'
+>> x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined
+>> reference to `iosf_mbi_read'
+>> 
+>
+> IMO, it is the intel_rapl_common.c that calls IOSF APIs without
+> specifying the dependency. Thus it should be fixed by something like
+> below,
+>
+> --- a/drivers/powercap/Kconfig
+> +++ b/drivers/powercap/Kconfig
+> @@ -18,10 +18,11 @@ if POWERCAP
+>  # Client driver configurations go here.
+>  config INTEL_RAPL_CORE
+>  	tristate
+> +	select IOSF_MBI
 > 
-> Thanks for checking,
-> DTS changes are not posted as CPR support is required in order for scaling to
-> properly work, otherwise, all I could do is try and guess some safe voltages.
-> There was an effort to get CPR upstreamed, but I think that stalled out for now.
-As much as I don't like it, yes it's stalled.. I have to get some bigger
-fish out of my queue first.
+>  config INTEL_RAPL
+>  	tristate "Intel RAPL Support via MSR Interface"
+> -	depends on X86 && IOSF_MBI
+> +	depends on X86
+>  	select INTEL_RAPL_CORE
+>  	help
+>  	  This enables support for the Intel Running Average Power Limit 
 
-Konrad
-> 
-> Regards,
-> Robert
->>
->>
->>>
->>>
->>>>
->>>> Function is not supposed to be shared between SoC-s, so I dont see a
->>>> point in it
->>>> having a generic name cause for example IPQ6018 has a working fuse
->>>> and its logic
->>>> is completely different for setting the versioning than IPQ8074, I
->>>> dont think having a
->>>> catch-all would work here.
->>>
->>>
->>> Makes sense, thanks Robert and Konrad.
->>>
->>>
->>>>
->>>>>
->>>>>> +{
->>>>>> +     u32 msm_id;
->>>>>
->>>>> soc_id please...?
->>>> Sure, that is more suitable.
->>>>
->>>> Regards,
->>>> Robert
->>>>>
->>>>>> +     int ret;
->>>>>> +     *pvs_name = NULL;
->>>>>> +
->>>>>> +     ret = qcom_smem_get_soc_id(&msm_id);
->>>>>> +     if (ret)
->>>>>> +             return ret;
->>>>>> +
->>>>>> +     switch (msm_id) {
->>>>>> +     case QCOM_ID_IPQ8070A:
->>>>>> +     case QCOM_ID_IPQ8071A:
->>>>>> +             drv->versions = IPQ8074_ACORN_VERSION;
->>>>>> +             break;
->>>>>> +     case QCOM_ID_IPQ8072A:
->>>>>> +     case QCOM_ID_IPQ8074A:
->>>>>> +     case QCOM_ID_IPQ8076A:
->>>>>> +     case QCOM_ID_IPQ8078A:
->>>>>> +             drv->versions = IPQ8074_HAWKEYE_VERSION;
->>>>>> +             break;
->>>>>> +     default:
->>>>>> +             dev_err(cpu_dev,
->>>>>> +                     "SoC ID %u is not part of IPQ8074 family,
->>>>>> limiting to 1.4GHz!\n",
->>>>>> +                     msm_id);
->>>>>> +             drv->versions = IPQ8074_ACORN_VERSION;
->>>>>> +             break;
->>>>>> +     }
->>>>>> +
->>>>>> +     return 0;
->>>>>> +}
->>>>>> +
->>>>>>    static const struct qcom_cpufreq_match_data match_data_kryo = {
->>>>>>        .get_version = qcom_cpufreq_kryo_name_version,
->>>>>>    };
->>>>>> @@ -218,6 +256,10 @@ static const struct qcom_cpufreq_match_data
->>>>>> match_data_qcs404 = {
->>>>>>        .genpd_names = qcs404_genpd_names,
->>>>>>    };
->>>>>>
->>>>>> +static const struct qcom_cpufreq_match_data match_data_ipq8074 = {
->>>>>> +     .get_version = qcom_cpufreq_ipq8074_name_version,
->>>>>> +};
->>>>>> +
->>>>>>    static int qcom_cpufreq_probe(struct platform_device *pdev)
->>>>>>    {
->>>>>>        struct qcom_cpufreq_drv *drv;
->>>>>> @@ -363,6 +405,7 @@ static const struct of_device_id
->>>>>> qcom_cpufreq_match_list[] __initconst = {
->>>>>>        { .compatible = "qcom,msm8996", .data = &match_data_kryo },
->>>>>>        { .compatible = "qcom,qcs404", .data = &match_data_qcs404 },
->>>>>>        { .compatible = "qcom,ipq8064", .data = &match_data_krait },
->>>>>> +     { .compatible = "qcom,ipq8074", .data = &match_data_ipq8074 },
->>>>>>        { .compatible = "qcom,apq8064", .data = &match_data_krait },
->>>>>>        { .compatible = "qcom,msm8974", .data = &match_data_krait },
->>>>>>        { .compatible = "qcom,msm8960", .data = &match_data_krait },
+I think that has the logic slightly backwards from a usability point
+of view: The way I read the arch/x86/Kconfig description, IOSF_MBI
+is a feature of specific Intel hardware implementations, which
+gets enabled when any of these SoC platforms are enabled in
+the build, and the INTEL_RAPL driver specifically only works
+on those, while the new INTEL_RAPL_TPMI driver works on other
+hardware.
+
+More generally speaking, I think it is a mistake for a device
+driver in one subsystem to use 'select' to enforce a build
+dependency on a driver in another subsystem when the other
+symbol is user-visible.
+
+>> The driver can work with iosf_mbi completely disabled, so add a
+>> dependency
+>> that still allows this configuration, but otherwise forces it to not
+>> be
+>> built-in when iosf_mbi is a loadable module.
+>
+> On the other side, I agree with you that the TPMI driver should work
+> with iosf_mbi completely disabled.
+>
+> A cleaner way to do this is to move the rapl_defaults setting (even the
+> rapl_primitive_info setting) from intel_rapl_common.c to the I/F
+> drivers, as this is really interface specific.
+>
+> Maybe we can use the above patch as a quick fix, and remove the
+> IOSF_MBI dependency from RAPL common code as a long term solution?
+
+I agree that your long-term solution is the best way to avoid the
+build dependency, but for the short-term fix I think my patch
+makes a little more sense than yours. 
+
+Either approach is of course enough to address the build
+regression, so no objections to your patch if you still
+prefer that.
+
+     Arnd
