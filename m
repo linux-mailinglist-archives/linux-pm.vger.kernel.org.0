@@ -2,116 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508D97212A8
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Jun 2023 22:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E1F72131B
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Jun 2023 23:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbjFCUY6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Jun 2023 16:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
+        id S229463AbjFCVQK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Jun 2023 17:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjFCUY5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jun 2023 16:24:57 -0400
-Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE0FD123
-        for <linux-pm@vger.kernel.org>; Sat,  3 Jun 2023 13:24:56 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
-        id b367a8af-024c-11ee-abf4-005056bdd08f;
-        Sat, 03 Jun 2023 23:24:54 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Sat, 3 Jun 2023 23:24:54 +0300
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 14/43] power: reset: Add a driver for the ep93xx reset
-Message-ID: <ZHuhlguJxvBzPFUp@surfacebook>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
- <20230601053546.9574-15-nikita.shubin@maquefel.me>
+        with ESMTP id S229452AbjFCVQK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jun 2023 17:16:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF9097;
+        Sat,  3 Jun 2023 14:16:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6013760B61;
+        Sat,  3 Jun 2023 21:16:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9503C433EF;
+        Sat,  3 Jun 2023 21:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685826963;
+        bh=LJM8vKQSQ2RdRTp9RFziQNMxva4VRFMhJsh8lrUlmRk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EO0knllIEbHgMKF9bb/HSLeEyrNl2gcHYO2cqrr9UA3PsTXJnenHYAu7K+VbJFIwD
+         /RZU4zUCB9del9munixsYO0lqFugBAPh8B/HVIOstiqgvxT2MxYCkWZued6iiRDo5T
+         TicTu0H+y5VyOZ1R2mFWS4yPBozVSEnS0swMQDPRRxmiEPpsDoPVbY8Gsv6TKNwi2F
+         g5xp88gpKILBB5VyNZNZlSKa0G/txR0MYTC17ZrrCMRN7CyXARTMkqG227wm3T0GoO
+         XJI42e1GoB3IlVA+Kk+Sl34DruJbEIG6YAw6Id3Cbzqo1okisfHBVXK2bw3wO+vMey
+         cdrkXhcxZPQOA==
+Date:   Sat, 3 Jun 2023 22:15:54 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>
+Cc:     tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        gregkh@linuxfoundation.org, linux@armlinux.org.uk,
+        mturquette@baylibre.com, sboyd@kernel.org, sre@kernel.org,
+        broonie@kernel.org, arnd@arndb.de, gregory.clement@bootlin.com,
+        sudeep.holla@arm.com, balamanikandan.gunasundar@microchip.com,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 03/21] dt-bindings: usb: generic-ehci: Document
+ clock-names property
+Message-ID: <20230603-skincare-ideology-bfbc3fd384c5@spud>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-4-varshini.rajendran@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nAMUQ1Zej8t05qRN"
 Content-Disposition: inline
-In-Reply-To: <20230601053546.9574-15-nikita.shubin@maquefel.me>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230603200243.243878-4-varshini.rajendran@microchip.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thu, Jun 01, 2023 at 08:34:05AM +0300, Nikita Shubin kirjoitti:
-> Implement the reset behaviour of the various EP93xx SoCS in drivers/power/reset.
-> 
-> It used to be located in arch/arm/mach-ep93xx.
 
-...
+--nAMUQ1Zej8t05qRN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +config POWER_RESET_EP93XX
-> +	bool "Cirrus EP93XX reset driver" if COMPILE_TEST
+Hey Varshini,
 
-Can you elaborate this construction, please?
+On Sun, Jun 04, 2023 at 01:32:25AM +0530, Varshini Rajendran wrote:
+> Document the property clock-names in the schema.
+>=20
+> It fixes the dtbs_warning,
 
-> +	depends on MFD_SYSCON
-> +	default ARCH_EP93XX
-> +	help
-> +	  This driver provides restart support for Cirrus EP93XX SoC.
+s/dtbs_warning/dtbs_check warning/?
+
+> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+Does this fix a warning currently in the tree, or fix a warning
+introduced by some patches in this series? (Or both?)
+
+Cheers,
+Conor.
+
+>=20
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Do=
+cumentation/devicetree/bindings/usb/generic-ehci.yaml
+> index 7e486cc6cfb8..542ac26960fc 100644
+> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+> @@ -102,6 +102,10 @@ properties:
+>          - if a USB DRD channel: first clock should be host and second
+>            one should be peripheral
+> =20
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 4
 > +
-> +	  Say Y here if you have a Cirrus EP93XX SoC and you wish
-> +	  to have restart support.
+>    power-domains:
+>      maxItems: 1
+> =20
+> --=20
+> 2.25.1
+>
 
-...
+--nAMUQ1Zej8t05qRN
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Missing bits.h
+-----BEGIN PGP SIGNATURE-----
 
-> +#include <linux/delay.h>
-> +#include <linux/notifier.h>
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHutdAAKCRB4tDGHoIJi
+0qo0AP492GWxNAZm5/JMwehSB/wjebZYTgg7CggXNDp4e+9ZmAEAqBHDVLVYKYXY
+7h8c0U3NLQA8eGWDBjGhhXJ+h5Ab0gc=
+=sdYv
+-----END PGP SIGNATURE-----
 
-> +#include <linux/of_device.h>
-
-Wrong header. One is mod_devicetable.h, dunno what other implicit dependencies
-you have in mind when added this.
-
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-
-> +#include <linux/soc/cirrus/ep93xx.h>
-
-...
-
-> +	struct notifier_block *res_han;
-> +	struct device *dev = &pdev->dev;
-
-Longer lines first?
-
-> +	int err;
-> +
-> +	res_han = devm_kzalloc(&pdev->dev, sizeof(*res_han), GFP_KERNEL);
-
-You have dev, use it.
-
-> +	if (!res_han)
-> +		return -ENOMEM;
-
-...
-
-> +	err = register_restart_handler(res_han);
-> +	if (err)
-> +		dev_err(dev, "can't register restart notifier (err=%d)\n", err);
-
-		return dev_err_probe(...);
-
-> +	return err;
-> +}
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+--nAMUQ1Zej8t05qRN--
