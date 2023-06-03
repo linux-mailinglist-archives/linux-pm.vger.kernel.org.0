@@ -2,237 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60616720ECD
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Jun 2023 10:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F08F720F2F
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Jun 2023 12:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjFCIt3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Jun 2023 04:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35502 "EHLO
+        id S231765AbjFCKZP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Jun 2023 06:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjFCIt2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jun 2023 04:49:28 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75F81BB
-        for <linux-pm@vger.kernel.org>; Sat,  3 Jun 2023 01:49:26 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f3a9ad31dbso3988394e87.0
-        for <linux-pm@vger.kernel.org>; Sat, 03 Jun 2023 01:49:26 -0700 (PDT)
+        with ESMTP id S230041AbjFCKZN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Jun 2023 06:25:13 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B5F1A5
+        for <linux-pm@vger.kernel.org>; Sat,  3 Jun 2023 03:25:12 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9700219be87so438534066b.1
+        for <linux-pm@vger.kernel.org>; Sat, 03 Jun 2023 03:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685782165; x=1688374165;
+        d=linaro.org; s=google; t=1685787910; x=1688379910;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oKrgDt9/GDQniYKD6QzC2hOE29gA71xWg9JcNbitrVs=;
-        b=xspzxuweEXr360zEIkQk3pb36jOCLa4PMZsZpqsUfDT+BHERo8Gg+miaSpRZUPM89/
-         avNBwxVQaR2iSZuFDmMq67veES1/U+3fjXVpcz6oPRsq24bL6zDJ68g+RVKXNoGmOp5n
-         o83Eocdh7C0zru50ZfQnh0kikUb0UT4eETqn13398mJyRRyrmNRIX3n0GpshXvziDUN7
-         s9bekbmYw6PTjbzsKeQfjijV2HkQeFvVpnRKeRbQZnmYuwenwI9954MGZ7M84MqwlV4c
-         sWVnVtouSkH19M+0QYh00vgU+v4M4OuURvUBQ87WD2Y32fkkUm/N4av6JaNfg/QmsWKz
-         2Dzg==
+        bh=v+jZuOe65re37AzNecWfF6HpJCyT3y03+7tLInXnNWQ=;
+        b=m6aTXbeftyu4E9hUYm1P1nRqzPfy4R3eGl0ZtZuw9TPm9lMxue/YmBkOvGrJKmPt/4
+         EAOabbpQktUMfZO+vU+yYIDjoQ0ARk9lbiBlS8QhbF2d9YmO0SALs7UlCA3EYbcZwgb8
+         LQ9C1nQ4jFUUTlJP9qwmQUSqzLarNWg/1myyPYsTGe2+iKdDmGzc5gSXUQtIMMsm7rKR
+         Yq5k0LhEVxSmNzrePBHpfo15VAp/M495OFkzZgw/2cpwC6bvEbsduI5HcJQbY0jo0npZ
+         5ewet5wjRCKTjFLKgKixZ7GRjVMvcQaZP/YuRYD2idrD2t6eeTcDSyMImvWeQNLGqr2y
+         pR1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685782165; x=1688374165;
+        d=1e100.net; s=20221208; t=1685787910; x=1688379910;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oKrgDt9/GDQniYKD6QzC2hOE29gA71xWg9JcNbitrVs=;
-        b=dG9it273dCI015SVBClwE2cd+QJLf9FliPHjZTl4aLQsGumbEoRkAYV+rxqR1AqyUr
-         Qz5mRAGl34bLo8JheIemP9AZjLz1I6MHpatIq2LxYDQUR6w8qu8gGPyboWUOXzBDxSKl
-         yMvxeT6SBez5C6bShYCt8pDrioN06uegD8ZQe/A/C82jtXURhGSeqJJ9zd2W6Qu2q43l
-         uep2Dp2OPd/LeFApAxLFObeJpqNM6nuHXSr9HDYqz7W70cRcohjlBLnfsC+K7Gfclq/L
-         xbKNiaR4zoZhp/vwCfovJ6JDgS9x0M8V7ZK3t3snRFxxV0vXLrljkbfNkblkkbbLa7Qo
-         8Tlw==
-X-Gm-Message-State: AC+VfDy260Y5rtYKJQrovlO1WUZZUSqZfkJaGfwjRsjOLlbH1te7WHFU
-        13B6N4iC0/j/eHtE8VMZN0+NYQ==
-X-Google-Smtp-Source: ACHHUZ49DSBJnUzcyPQah/mTMDEfiKsMTCTDB9hncMEFrbjT6C1kTda30Y74YDNoLZb4NX97Jdu19Q==
-X-Received: by 2002:ac2:4253:0:b0:4ed:bdac:7a49 with SMTP id m19-20020ac24253000000b004edbdac7a49mr2635062lfl.54.1685782165002;
-        Sat, 03 Jun 2023 01:49:25 -0700 (PDT)
-Received: from [192.168.1.101] (abyj77.neoplus.adsl.tpnet.pl. [83.9.29.77])
-        by smtp.gmail.com with ESMTPSA id c7-20020a197607000000b004f38411f148sm424698lff.84.2023.06.03.01.49.23
+        bh=v+jZuOe65re37AzNecWfF6HpJCyT3y03+7tLInXnNWQ=;
+        b=KePfoOGooAKbmkAC5aGVeeb1yTtI3Gq/mM11Ji+YxSf4HcKpPvvfGX39LygMfvtPPP
+         LcTAhxLCgmiv25hpYKASQENYlh4d4OBI6AoMBGer0iMXY4qp4OfAEA0sywml3MR8pP5k
+         VGCCl0yQVCVN/6ozpLTf75fjQcjCmuRFNyTh/Zlp7USzixBFpHIr27n7yAF2jzBgbYJ+
+         QDbY+M9GHda9aASGK9gpqiu9H5fZTvibvZ0XQTjyT5jv3l+i/jwpuurFDcA8XLG7Ne6X
+         iZ8/MCSMj9YIThSok9FNGGpo600D26RgBJMgMBgCgry317UdyV7anI792Unluse1LY49
+         8Y4g==
+X-Gm-Message-State: AC+VfDynqdz4C7W6obtzf2PJxjFzeRvsjHFC1xpoX8BUlmYnEV+JuaMM
+        r+1NCX2KQcZTE7czVm5dlF+Asg==
+X-Google-Smtp-Source: ACHHUZ6opopcUXNqIYZla8BAwCRp4JdG6D/Dr2DYaziUe9IcX8o7/9dboGLzXJAKPkuZdY5jTsXaRw==
+X-Received: by 2002:a17:906:dc91:b0:974:1c98:d38e with SMTP id cs17-20020a170906dc9100b009741c98d38emr1382426ejc.2.1685787910267;
+        Sat, 03 Jun 2023 03:25:10 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.199.204])
+        by smtp.gmail.com with ESMTPSA id bw6-20020a170906c1c600b0096a91ab434fsm1797055ejb.40.2023.06.03.03.25.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jun 2023 01:49:24 -0700 (PDT)
-Message-ID: <dc78e4b3-975b-6fc8-3906-8fa935bde625@linaro.org>
-Date:   Sat, 3 Jun 2023 10:49:22 +0200
+        Sat, 03 Jun 2023 03:25:09 -0700 (PDT)
+Message-ID: <447e880f-2b68-c0e0-6345-67811b1cda3e@linaro.org>
+Date:   Sat, 3 Jun 2023 12:25:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v10 4/6] soc: qcom: cpr: Move common functions to new file
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org>
- <20230217-topic-cpr3h-v10-4-67aed8fdfa61@linaro.org>
- <94c18cc3-4b1a-440b-3bd8-3c81ddffc148@linaro.org>
+Subject: Re: [PATCH v5 1/3] dt-bindings: thermal: tsens: Add ipq9574
+ compatible
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Praveenkumar I <quic_ipkumar@quicinc.com>
+References: <cover.1685703605.git.quic_varada@quicinc.com>
+ <1daf835b3c77fd84ad55b0195816fabc3f0ab800.1685703605.git.quic_varada@quicinc.com>
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <94c18cc3-4b1a-440b-3bd8-3c81ddffc148@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1daf835b3c77fd84ad55b0195816fabc3f0ab800.1685703605.git.quic_varada@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 02/06/2023 13:03, Varadarajan Narayanan wrote:
+> From: Praveenkumar I <quic_ipkumar@quicinc.com>
+> 
+> Qualcomm IPQ9574 has tsens v2.3.1 block, which is similar to IPQ8074 tsens.
+> 
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On 27.02.2023 04:09, Dmitry Baryshkov wrote:
-> On 17/02/2023 13:08, Konrad Dybcio wrote:
->> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->>
->> In preparation for implementing a new driver that will be handling
->> CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
->> file.
->>
->> Update cpr_get_fuses in preparation for CPR3 implementation, change
->> parameters where necessary to not take cpr.c private data structures.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
->> [Konrad: rebase, apply review comments, don't break backwards compat, improve msg]
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/soc/qcom/Makefile     |   2 +-
->>   drivers/soc/qcom/cpr-common.c | 363 +++++++++++++++++++++++++++++++++++++++
->>   drivers/soc/qcom/cpr-common.h | 108 ++++++++++++
->>   drivers/soc/qcom/cpr.c        | 386 +++---------------------------------------
->>   4 files changed, 494 insertions(+), 365 deletions(-)
->>
-> 
-> [skipped]
-> 
->> diff --git a/drivers/soc/qcom/cpr-common.h b/drivers/soc/qcom/cpr-common.h
->> new file mode 100644
->> index 000000000000..2cd15f7eac90
->> --- /dev/null
->> +++ b/drivers/soc/qcom/cpr-common.h
->> @@ -0,0 +1,108 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#include <linux/clk.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pm_opp.h>
->> +#include <linux/regulator/consumer.h>
->> +
->> +enum voltage_change_dir {
->> +    NO_CHANGE,
->> +    DOWN,
->> +    UP,
->> +};
->> +
->> +struct fuse_corner_data {
->> +    int ref_uV;
->> +    int max_uV;
->> +    int min_uV;
->> +    int range_uV;
->> +    /* fuse volt: closed/open loop */
->> +    int volt_cloop_adjust;
->> +    int volt_oloop_adjust;
-> 
-> For CPR3 these values are per-fusing-rev.
-> (for 8996 tables list per-fusing-rev values for min_uV, volt_cloop_adjust and volt_oloop_adjust)
-Yes they are per-fuse-rev on other SoCs as well.. Angelo didn't implement
-this in the original revision of the driver and I think it'd be good to
-add it incrementally since we already consume the necessary fuse..
-Otherwise -ETOOFAT!
+Best regards,
+Krzysztof
 
-
-> 
-> Another option, of course, might be to have a per-SoC code that uses fusing_rev to update the fuse_corner_data, but it would mean making it non-const.
-Hm.. a const array sounds better to me..
-
-> 
->> +    int max_volt_scale;
->> +    int max_quot_scale;
-> 
-> Any reason for these limitations?
-I'd assume that's a safety feature Qualcomm implemented to avoid
-burning chips if cosmic rays poke at DRAM or some chips are fused
-incorrectly.. Preferably, I'd keep it!
-
-> 
->> +    /* fuse quot */
->> +    int quot_offset;
->> +    int quot_scale;
->> +    int quot_adjust;
-> 
-> I see that quot_offset/quot_scale/quot_adjust are set to 0/1/0 for all the platforms I can assess at this moment (8996/8998/sdm660). Can we drop them? If we need them later, we can readd them later.
-I was about to do it, but noticed 8956 sets scaling to 10..
-Guess we can leave it since it's already there!
-
-Konrad
-> 
->> +    /* fuse quot_offset */
->> +    int quot_offset_scale;
->> +    int quot_offset_adjust;
->> +};
->> +
->> +struct cpr_fuse {
->> +    char *ring_osc;
->> +    char *init_voltage;
->> +    char *quotient;
->> +    char *quotient_offset;
->> +};
->> +
->> +struct fuse_corner {
->> +    int min_uV;
->> +    int max_uV;
->> +    int uV;
->> +    int quot;
->> +    int step_quot;
->> +    const struct reg_sequence *accs;
->> +    int num_accs;
->> +    unsigned long max_freq;
->> +    u8 ring_osc_idx;
->> +};
->> +
->> +struct corner {
->> +    int min_uV;
->> +    int max_uV;
->> +    int uV;
->> +    int last_uV;
->> +    int quot_adjust;
->> +    u32 save_ctl;
->> +    u32 save_irq;
->> +    unsigned long freq;
->> +    bool is_open_loop;
->> +    struct fuse_corner *fuse_corner;
->> +};
->> +
->> +struct corner_data {
->> +    unsigned int fuse_corner;
->> +    unsigned long freq;
->> +};
->> +
->> +struct acc_desc {
->> +    unsigned int    enable_reg;
->> +    u32        enable_mask;
->> +
->> +    struct reg_sequence    *config;
->> +    struct reg_sequence    *settings;
->> +    int            num_regs_per_fuse;
->> +};
->> +
->> +struct cpr_acc_desc {
->> +    const struct cpr_desc *cpr_desc;
->> +    const struct acc_desc *acc_desc;
->> +};
->> +
-> 
-> [skipped the rest]
-> 
