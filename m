@@ -2,55 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D077219FA
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 22:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06324721A1E
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 23:08:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjFDUii (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Jun 2023 16:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S231699AbjFDVIP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Jun 2023 17:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjFDUih (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 16:38:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E14CE
-        for <linux-pm@vger.kernel.org>; Sun,  4 Jun 2023 13:38:37 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229635AbjFDVIO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 17:08:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513AB8;
+        Sun,  4 Jun 2023 14:08:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EBE75660037C;
-        Sun,  4 Jun 2023 21:38:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1685911115;
-        bh=qRQQB2uZi3P00xsxcFI3Psh5r6qA3AM6/mQw97gyuqI=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A651260ADE;
+        Sun,  4 Jun 2023 21:08:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EE49C433D2;
+        Sun,  4 Jun 2023 21:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1685912892;
+        bh=tBcMEkXrQsgqR/F6ZhRcf1FCjzt6WCA3VYv57KwwRro=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UpbBvjeBAvkBsfWooZIF9gmttBTRAaEH1oI52aXtllg7P8MVRgrkHGflvp0CxUamr
-         lkKsswhDCTzMqttWoMWo7D6AqWbSOCvar6Z5v2cmwhVcMACGKFmQpor/jvBUnBiRuZ
-         hHOOzwR1hxPmU10u5SHvo8lb2lr26sfxJBuJu60nzDBubpBTNkyZvwCnZrDJsSRyD7
-         oEpipo2htBpQxgiH+KnNDm32t2P33UfxBZpzKodGtIBAZTSF5i73AMR1RYeIN6Aphv
-         jPw3Ov0pmgQjeblKzWR9lYbEXXJiqOrGkODtzQDsbovot0EDJIw4FFv2RP+lSLVvzO
-         VTolm0z9jBK3w==
-Received: by mercury (Postfix, from userid 1000)
-        id CD33E1060921; Sun,  4 Jun 2023 22:38:31 +0200 (CEST)
-Date:   Sun, 4 Jun 2023 22:38:31 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     kernel@pengutronix.de, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: Switch i2c drivers back to use .probe()
-Message-ID: <20230604203831.vwev4nuw2eugmkbq@mercury.elektranox.org>
-References: <20230517165514.163216-1-u.kleine-koenig@pengutronix.de>
- <20230526160031.itnqw4skpfdwlawt@pengutronix.de>
+        b=YeJvobG8z6dzqRsit5sIsSHMfcoFQJQT0lsk3RpGpNSTXDUpBvLvbZnPp18xsw1Op
+         EBQhljqx4fl05CY9+Re1+ccLsuY9GKV+ir1TyjHK5DRSWtN6F8OsTwBNDd8FBU+Pih
+         23wuxP4tRvW6pTbWVXhKuUcJiUPfbc2nnuNrgIz2/dapwchbfo1C/5UIGWZ94Sot9I
+         Qj5WEi3i9Bm718xXQy+3Rv6VIXijNzlygT89FFhcc2X+0xWR4CYmI35Wj4jGycgU0u
+         OS+Ay2auw/kJzPl6KAbpX/AwwWAlGQCxRMTLZhtF4kdvL0EMS6vTnEje9yF2mjMd+n
+         eOf7SY6ruMbPQ==
+Date:   Sun, 4 Jun 2023 22:08:02 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Balamanikandan Gunasundar 
+        <balamanikandan.gunasundar@microchip.com>,
+        mihai.sain@microchip.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, linux-usb@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        durai.manickamkr@microchip.com, manikandan.m@microchip.com,
+        dharma.b@microchip.com, nayabbasha.sayed@microchip.com,
+        balakrishnan.s@microchip.com
+Subject: Re: [PATCH 15/21] dt-bindings: irqchip/atmel-aic5: Add support for
+ sam9x7 aic
+Message-ID: <20230604-cohesive-unmoving-032da3272620@spud>
+References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
+ <20230603200243.243878-16-varshini.rajendran@microchip.com>
+ <20230603-fervor-kilowatt-662c84b94853@spud>
+ <20230603-sanded-blunderer-73cdd7c290c1@spud>
+ <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3cldheaddz7aepda"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3Md+FIkjg+Lb1NW6"
 Content-Disposition: inline
-In-Reply-To: <20230526160031.itnqw4skpfdwlawt@pengutronix.de>
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <4d3694b3-8728-42c1-8497-ae38134db37c@app.fastmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,68 +89,74 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---3cldheaddz7aepda
-Content-Type: text/plain; charset=iso-8859-1
+--3Md+FIkjg+Lb1NW6
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Sun, Jun 04, 2023 at 11:49:48AM +0200, Arnd Bergmann wrote:
+> On Sat, Jun 3, 2023, at 23:23, Conor Dooley wrote:
+> > On Sat, Jun 03, 2023 at 10:19:50PM +0100, Conor Dooley wrote:
+> >> Hey Varshini,
+> >>=20
+> >> On Sun, Jun 04, 2023 at 01:32:37AM +0530, Varshini Rajendran wrote:
+> >> > Document the support added for the Advanced interrupt controller(AIC)
+> >> > chip in the sam9x7 soc family
+> >>=20
+> >> Please do not add new family based compatibles, but rather use per-soc
+> >> compatibles instead.
+> >
+> > These things leave me penally confused. Afaiu, sam9x60 is a particular
 
-On Fri, May 26, 2023 at 06:00:31PM +0200, Uwe Kleine-K=F6nig wrote:
-> Hello,
+s/penally/perennially/
+
+> > SoC. sam9x7 is actually a family, containing sam9x70, sam9x72 and
+> > sam9x75. It would appear to me that each should have its own compatible,
+> > no?
 >=20
-> On Wed, May 17, 2023 at 06:55:14PM +0200, Uwe Kleine-K=F6nig wrote:
-> > After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> > call-back type"), all drivers being converted to .probe_new() and then
-> > 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") conve=
-rt
-> > back to (the new) .probe() to be able to eventually drop .probe_new() f=
-rom
-> > struct i2c_driver.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > I used v6.4-rc1 as base for this patch, but it also fits on top of
-> > today's next master. If there are some conflicts when you apply it, feel
-> > free to just drop all conflicting hunks, I'll care about the fallout
-> > later.
-> >=20
-> > I chose to do this in a single patch for all drivers below
-> > drivers/power/supply. If you want me to split it, just tell me.
-> >=20
-> > Also note I didn't Cc: all the individual maintainers to not exceed the
-> > allowed length of To: and Cc:. If this patch will be split I can extend
-> > the audience accordingly.
+> I think the usual way this works is that the sam9x7 refers to the
+> SoC design as in what is actually part of the chip, whereas the 70,
+> 72 and 75 models are variants that have a certain subset of the
+> features enabled.
 >=20
-> I didn't get any feedback on this patch. It's great if it makes it into
-> the mainline during the next merge window. Any chances for that?
+> If that is the case here, then referring to the on-chip parts by
+> the sam9x7 name makes sense, and this is similar to what we do
+> on TI AM-series chips.
+
+If it is the case that what differentiates them is having bits chopped
+off, and there's no implementation differences that seems fair.
+
+> There is a remaining risk that a there would be a future
+> sam9x71/73/74/76/... product based on a new chip that uses
+> incompatible devices, but at that point we can still use the
+> more specific model number to identify those without being
+> ambiguous. The same thing can of course happen when a SoC
+> vendor reuses a specific name of a prior product with an update
+> chip that has software visible changes.
 >=20
-> Best regards
-> Uwe
+> I'd just leave this up to Varshini and the other at91 maintainers
+> here, provided they understand the exact risks.
 
-Sorry, I'm still catching up in going through my backlog. It's
-queued now.
+Ye, seems fair to me. Nicolas/Claudiu etc, is there a convention to use
+the "0" model as the compatible (like the 9x60 did) or have "random"
+things been done so far?
 
--- Sebastian
+> It's different for the parts that are listed as just sam9x60
+> compatible in the DT, I think those clearly need to have sam9x7
+> in the compatible list, but could have the sam9x60 identifier
+> as a fallback if the hardware is compatible.
 
---3cldheaddz7aepda
+Aye.
+
+--3Md+FIkjg+Lb1NW6
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmR89kQACgkQ2O7X88g7
-+ppSPA/9G54Q8TSG4+10Ap9g2y+hqL6qS81N8vTDmV7ySWPNv/srkrd7bFIJrJ9h
-Q4A3aBvHUYmjL0eM8Wi0gNJlDc6boaE/T+zpRisuUfgSBXkX1DvCdnpSg6dYTTvR
-REgubAlwq+5+wHdMx/Waaaa2umyAJsLCKbbaZrVrRDLjO9M5/+wfYYJ6lAK+0Vmg
-MKkx5LKslGCE6D1kj2Pz7foAspU/6/mtqo+59knxYXE14s2uX607JWdS5QU54w27
-WrdP58zt9iPNCCtbbTqwABEUp6SL/OUpH7brJI+0asN+8v39fxL7NWmtEOkSlnpb
-4mkdGfEXMa+A6+hituP5yTwNTXLenPZ6Ws9KSf4mLuTo+1ETBP1nzevCGooAvGpK
-BbctbbV/Bx1bWkP8BdBJ6vrwovwWHbdvpn5ipQsEo5dcxLRhMicykCl19hyftqeg
-Dkj0rZXVCP+GOuADFlFZfWMBdxxghVxxiPQQsVMTygSys4T3IMca+ZjcjYR/mzLk
-2b7jn/HVZAk/iLQ+d/hkllQD4DT7EOnMrMXqSSpPTNmjm+2L9wnDL4Jum4cjSldL
-yNG9/A8VkEddIY6Obk+PMZpFqYXkvZ86nhp1YzqAHw2+ghJsL3XAl8JttW2rfDEs
-YSq1BQz58cjT9whRUGYJRdU0+yZgcF3Ex/5uOwtjsaCWOPUGZco=
-=JeSU
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZHz9MgAKCRB4tDGHoIJi
+0ldWAP0RQc1PNr/7S0ZoI1mtSvW5rkogdGae6SPbH5C+bLhcmQEApOd41QvYR3Pq
+xuVQ4aC0kBM/JFWUKg2lYgoQNcmmEQw=
+=Dd5S
 -----END PGP SIGNATURE-----
 
---3cldheaddz7aepda--
+--3Md+FIkjg+Lb1NW6--
