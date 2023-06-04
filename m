@@ -2,48 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31517721815
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 17:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADE6721837
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 17:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFDPB3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sun, 4 Jun 2023 11:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
+        id S229635AbjFDPe5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 4 Jun 2023 11:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjFDPB2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 11:01:28 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF9F83
-        for <linux-pm@vger.kernel.org>; Sun,  4 Jun 2023 08:01:27 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-974539fd9f0so65424166b.0
-        for <linux-pm@vger.kernel.org>; Sun, 04 Jun 2023 08:01:27 -0700 (PDT)
+        with ESMTP id S230153AbjFDPen (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 11:34:43 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25A9CD
+        for <linux-pm@vger.kernel.org>; Sun,  4 Jun 2023 08:34:41 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-974604c1394so68605266b.0
+        for <linux-pm@vger.kernel.org>; Sun, 04 Jun 2023 08:34:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685890885; x=1688482885;
+        d=1e100.net; s=20221208; t=1685892880; x=1688484880;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6vBlLS8JticIB6GsRN1lEWPgN19Qtc5J5rWjPP6B4mM=;
-        b=anpwwXdolfJvA0kQ536enGLocMoPqCwWElxeKtshypAhGi7W34lf2LlKStGyhZReqv
-         TYWfCUD367FWeg2wC8oV8nK9YhDNWeqImr8DyVRpOEqYCyzuMUoqQ1KiGYKXVY0wiRlD
-         9G/hwEqMXIEAZjcLUCHaGkMtOVIIqjk1beJDqkzbTvMslbKNinCP1OuUOu8hBypSBgcI
-         o1AoHtaXOD2AH6JffXKPKJa9CTsl7RrQtMZAIJ2V1YJ+/lxReZp+J53WQWREpR7BnV4K
-         6f1g1Ya9IPN2a/E46SJ4sfCJJJSpmpwihA2/p+GiLRbqT1ZZF9e/B2gklQpKjfOusQ8w
-         u1jw==
-X-Gm-Message-State: AC+VfDyThff52VWyrtRtBgaIJd4jxeFCbixLz2HBtVnJ/O5Mkc9V8bwi
-        d6iHiDGiaX05XHJu94zSFaG0R2aJH7VZPatV2ODr1G2S
-X-Google-Smtp-Source: ACHHUZ5cdwlkyOzk1Y2D4u6lGVmaYZWzUUl5mSPG6FqkDQx+62xxTrIu8KXNvkpTiZd1EobvcJZ+MHcGnaGvEudaRGE=
-X-Received: by 2002:a17:906:109b:b0:974:5480:6270 with SMTP id
- u27-20020a170906109b00b0097454806270mr6276951eju.0.1685890885270; Sun, 04 Jun
- 2023 08:01:25 -0700 (PDT)
+        bh=XKPyAhSLXQmW6xvxgFwNtorJccijYF4JCh1VkoaPO6Q=;
+        b=Oc9Cesa9SMZ8PUu1cq7/D0I2rzZ5Pzvnio9JMEe1sZmREERFCFC/w8gVAEWC8xoXLO
+         Ug2JucvfY+Gm3/uXyXiyIY2mLOy0JNhw4qnUUvFijNRm3pM2eQ7Q89XrW59woIySZZJ3
+         v2DjkwuHhTd8RSH8no9Lu3tmgznGJ9C2KnLjceTe/kyuwdh9UrI6ltSqrKLZpmeVv53Y
+         1yIoXa6YWebXUIzFXolEg/tHxmFJatkF/JlEIt7ptWfmf0ocGs8KZje5uqBKzSxjLoKe
+         PD/GzmpImvCj5sSk5bPzs8DSfxgFNK/yMmG+MkzOxRq9mh0OHQ6+DR3eCj2JiCzjxaHC
+         piLA==
+X-Gm-Message-State: AC+VfDxmmE08j6wPjEYRMOkFQsGY0W0pEeJIvLe+DsTlu/UP++uU/8Ra
+        Nxhd8Dc2ciHJqBa0jVeIAEaul01J6AOBYQiLf8k=
+X-Google-Smtp-Source: ACHHUZ4Sb8NACLhPTAeXPp4uDCUfKyGtVZ1jbuJpLlXU1WYD8d+QvULL8qzKV3EymhvrWewLLGKoc85rZzw8GS3nrDY=
+X-Received: by 2002:a17:906:74c7:b0:977:c853:fba6 with SMTP id
+ z7-20020a17090674c700b00977c853fba6mr3175618ejl.2.1685892880076; Sun, 04 Jun
+ 2023 08:34:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601182801.2622044-1-arjan@linux.intel.com>
-In-Reply-To: <20230601182801.2622044-1-arjan@linux.intel.com>
+References: <20230601182801.2622044-1-arjan@linux.intel.com> <20230601182801.2622044-3-arjan@linux.intel.com>
+In-Reply-To: <20230601182801.2622044-3-arjan@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 4 Jun 2023 17:01:14 +0200
-Message-ID: <CAJZ5v0hL+v22S6RX+2y8B+3RL3uSUJ-i6N8kEuLcOXKN3zgx9Q@mail.gmail.com>
-Subject: Re: [PATCH 00/7 Add support for running in VM guests to intel_idle
+Date:   Sun, 4 Jun 2023 17:34:29 +0200
+Message-ID: <CAJZ5v0hO_WFnKpBaFay7NtUiemrS1rKKfh_0an0U7UC9FDBGOg@mail.gmail.com>
+Subject: Re: [PATCH 2/7] intel_idle: clean up the (new) state_update_enter_method
+ function
 To:     arjan@linux.intel.com
 Cc:     linux-pm@vger.kernel.org, artem.bityutskiy@linux.intel.com,
-        rafael@kernel.org
+        rafael@kernel.org, Arjan van de Ven <arjan.van.de.ven@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -59,57 +60,57 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Jun 1, 2023 at 8:28 PM <arjan@linux.intel.com> wrote:
 >
-> From: Arjan van de Ven <arjan@linux.intel.com>
+> From: Arjan van de Ven <arjan.van.de.ven@intel.com>
 >
-> intel_idle provides the CPU Idle states (for power saving in idle) to the
-> cpuidle framework, based on per-cpu tables combined with limited hardware
-> enumeration. This combination of cpuidle and intel_idle provides dynamic
-> behavior where power saving and performance impact are dynamically balanced
-> and where a set of generic knobs are provided in sysfs for users to tune
-> the heuristics (and get statistics etc)
+> Now that the logic for state_update_enter_method() is in its own
+> function, the long if .. else if .. else if .. else if chain
+> can be simplified by just returning from the function
+> at the various places. This does not change functionality,
+> but it makes the logic much simpler to read or modify later.
 >
-> However, intel_idle currently does not support running inside VM guests, and
-> the linux kernel falls back to either ACPI based idle (if supported by the
-> hypervisor/virtual bios) or just the default x86 fallback "hlt" based idle
-> method... that was introduced in the 1.2 kernel series... and lacks all the
-> dynamic behavior, user control and statistics that cpuidle brings.
->
-> While this is obviously functional, it's not great and we can do better
-> for the user by hooking up intel_idle into the cpuidle framework also
-> for the "in a guest" case.
-> And not only not great for the user, it's also not optimal and lacks two
-> key capabilities that are supported by the bare metal case:
->
-> 1) The ability to flush the TLB for very long idle periods, to avoid
->    a costly (and high latency) IPI wakeup later, of an idle vCPU when a
->    process that used to run on the idle vCPU does an munmap or similar
->    operation. Avoiding high latency IPIs helps avoid performance jitter.
-> 2) The ability to use the new Intel C0.2 idle state instead of polling
->    for very short duration idle periods to save power (and carbon footprint)
->
-> This patch series adds the basic support to run in a VM guest
-> to the intel_idle driver, and then addresses the first of these shortfalls.
+> Signed-off-by: Arjan van de Ven <arjan@linux.intel.com>
 
-Is intel_idle supposed to replace ACPI idle inside VM guests where it
-is supported?
+This and the [1/7] can be applied without the rest of the series, so
+please let me know if you want me to do that.
 
-If not, how is it prevented from taking over in those cases?
-
-> The C0.2 gap will be fixed with a small additional patch after the
-> C0.2 support is merged seperately.
+> ---
+>  drivers/idle/intel_idle.c | 15 ++++++++++++---
+>  1 file changed, 12 insertions(+), 3 deletions(-)
 >
-> Arjan van de Ven (7):
->   intel_idle: refactor state->enter manipulation into its own function
->   intel_idle: clean up the (new) state_update_enter_method function
->   intel_idle: Add a sanity check in the new state_update_enter_method
->     function
->   intel_idle: Add helper functions to support 'hlt' as idle state
->   intel_idle: Add a way to skip the mwait check on all states
->   intel_idle: Add support for using intel_idle in a VM guest using just
->     hlt
->   intel_idle: Add a "Long HLT" C1 state for the VM guest mode
->
->  drivers/idle/intel_idle.c | 216 ++++++++++++++++++++++++++++++++++----
->  1 file changed, 194 insertions(+), 22 deletions(-)
->
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index c351b21c0875..256c2d42e350 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1849,7 +1849,10 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+>                 WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IBRS);
+>                 WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>                 state->enter = intel_idle_xstate;
+> -       } else if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+> +               return;
+> +       }
+> +
+> +       if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+>                            state->flags & CPUIDLE_FLAG_IBRS) {
+>                 /*
+>                  * IBRS mitigation requires that C-states are entered
+> @@ -1857,9 +1860,15 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+>                  */
+>                 WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>                 state->enter = intel_idle_ibrs;
+> -       } else if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
+> +               return;
+> +       }
+> +
+> +       if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
+>                 state->enter = intel_idle_irq;
+> -       } else if (force_irq_on) {
+> +               return;
+> +       }
+> +
+> +       if (force_irq_on) {
+>                 pr_info("forced intel_idle_irq for state %d\n", cstate);
+>                 state->enter = intel_idle_irq;
+>         }
 > --
+> 2.40.1
+>
