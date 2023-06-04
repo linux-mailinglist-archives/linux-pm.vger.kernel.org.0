@@ -2,163 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9147F7216B5
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 14:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31517721815
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 17:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231768AbjFDMNa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Jun 2023 08:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43642 "EHLO
+        id S229670AbjFDPB3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 4 Jun 2023 11:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjFDMN1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 08:13:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3547DB;
-        Sun,  4 Jun 2023 05:13:25 -0700 (PDT)
-Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MLhwM-1po7By0Ya0-00HjUJ; Sun, 04 Jun 2023 14:12:50 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-pm@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 10/10] dt-bindings: timer: convert bcm2835-system-timer bindings to YAML
-Date:   Sun,  4 Jun 2023 14:12:23 +0200
-Message-Id: <20230604121223.9625-11-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230604121223.9625-1-stefan.wahren@i2se.com>
-References: <20230604121223.9625-1-stefan.wahren@i2se.com>
+        with ESMTP id S229578AbjFDPB2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 11:01:28 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF9F83
+        for <linux-pm@vger.kernel.org>; Sun,  4 Jun 2023 08:01:27 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-974539fd9f0so65424166b.0
+        for <linux-pm@vger.kernel.org>; Sun, 04 Jun 2023 08:01:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685890885; x=1688482885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6vBlLS8JticIB6GsRN1lEWPgN19Qtc5J5rWjPP6B4mM=;
+        b=anpwwXdolfJvA0kQ536enGLocMoPqCwWElxeKtshypAhGi7W34lf2LlKStGyhZReqv
+         TYWfCUD367FWeg2wC8oV8nK9YhDNWeqImr8DyVRpOEqYCyzuMUoqQ1KiGYKXVY0wiRlD
+         9G/hwEqMXIEAZjcLUCHaGkMtOVIIqjk1beJDqkzbTvMslbKNinCP1OuUOu8hBypSBgcI
+         o1AoHtaXOD2AH6JffXKPKJa9CTsl7RrQtMZAIJ2V1YJ+/lxReZp+J53WQWREpR7BnV4K
+         6f1g1Ya9IPN2a/E46SJ4sfCJJJSpmpwihA2/p+GiLRbqT1ZZF9e/B2gklQpKjfOusQ8w
+         u1jw==
+X-Gm-Message-State: AC+VfDyThff52VWyrtRtBgaIJd4jxeFCbixLz2HBtVnJ/O5Mkc9V8bwi
+        d6iHiDGiaX05XHJu94zSFaG0R2aJH7VZPatV2ODr1G2S
+X-Google-Smtp-Source: ACHHUZ5cdwlkyOzk1Y2D4u6lGVmaYZWzUUl5mSPG6FqkDQx+62xxTrIu8KXNvkpTiZd1EobvcJZ+MHcGnaGvEudaRGE=
+X-Received: by 2002:a17:906:109b:b0:974:5480:6270 with SMTP id
+ u27-20020a170906109b00b0097454806270mr6276951eju.0.1685890885270; Sun, 04 Jun
+ 2023 08:01:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:oMr1lTfefQ7XSyP/6XiPy6FpM+TVqfrRR0B16B0MUjm0fmnsWJ9
- tXpqm4A8tBbCHLxJpHHVJam+o9XaRneH/yvew6r3hok0Oln6lu/xjV0oeAZYuwvBmg6Q3Og
- Yw9s7SjyFl5sAsxTyW4l2GJOER0A/jGMj13s2Bk2a7BkPNysFRc5ADTze+J+SR6UijgLaUJ
- CjXVFOYus+JCSVK6Zickg==
-UI-OutboundReport: notjunk:1;M01:P0:3fgNAr6VTfc=;0X5GpLSO88Vwv0T2LGOU/vv/rFC
- apzcUSG1Umg593oEieEHm1Cspgd9S2BGndtOWJ8jTS0udRb9zbiQCt93rT/oSFv2ZB8hWhoP1
- ligzgL35FqamqGJ14zITAFDkWmcUycEEVrnArVkPhuBES+WFA+tgETzWWor6Ty1yyIoqAmKgD
- 5EW1UqzI4FPaDy5jo0tCkyYdq+aCymSDTTQQl48XNCYAHyXfCRs75CFUTvo4cGD0QqvI8OoZS
- ZzBff+wrS2TknYHK6tzbvW4GJ0Uh7fV0Nq+qe1UjzXgzsIPyivRw5E6rBaxLEyp7Evmkc0sIA
- NyCVuy1qyb7KaUNe2mZos5GryPirvuceUjgPCItg6wddGxjLu7M94nLFeieq4kJ/1Ee27dLRA
- GvHKCS6bZhyynA0E8ncn8SY0ob+jl6eMIezQmRmOhygA/z9RHHVbH983iFygs2PYs9AGUwZ+P
- 5M7SojbIWflmDMzpdySxIhBNDJPdPQDRDX4+s1iLY7AXbsGYqYL6/MVMBx96g5aWqOBgmxpOV
- dPf0qedK+gt2kotQCeZovS0651yTOYDdnTdiJDTuSahcz623FkV0jxemZMmiWqP7jEw90k7kC
- dkmjYL52sgz0rvWJs4PtAoNQpdYPK+E/Ky46ya+CTTQk+4+ngH41L0pkfQa+1deo+4LZ1A1ZZ
- pJ0nrEH15l2gen6cxgH0vco6jBe1pJEBRCSNEl+GPA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230601182801.2622044-1-arjan@linux.intel.com>
+In-Reply-To: <20230601182801.2622044-1-arjan@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 4 Jun 2023 17:01:14 +0200
+Message-ID: <CAJZ5v0hL+v22S6RX+2y8B+3RL3uSUJ-i6N8kEuLcOXKN3zgx9Q@mail.gmail.com>
+Subject: Re: [PATCH 00/7 Add support for running in VM guests to intel_idle
+To:     arjan@linux.intel.com
+Cc:     linux-pm@vger.kernel.org, artem.bityutskiy@linux.intel.com,
+        rafael@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the DT binding document for bcm2835-system-timer from .txt
-to YAML.
+On Thu, Jun 1, 2023 at 8:28 PM <arjan@linux.intel.com> wrote:
+>
+> From: Arjan van de Ven <arjan@linux.intel.com>
+>
+> intel_idle provides the CPU Idle states (for power saving in idle) to the
+> cpuidle framework, based on per-cpu tables combined with limited hardware
+> enumeration. This combination of cpuidle and intel_idle provides dynamic
+> behavior where power saving and performance impact are dynamically balanced
+> and where a set of generic knobs are provided in sysfs for users to tune
+> the heuristics (and get statistics etc)
+>
+> However, intel_idle currently does not support running inside VM guests, and
+> the linux kernel falls back to either ACPI based idle (if supported by the
+> hypervisor/virtual bios) or just the default x86 fallback "hlt" based idle
+> method... that was introduced in the 1.2 kernel series... and lacks all the
+> dynamic behavior, user control and statistics that cpuidle brings.
+>
+> While this is obviously functional, it's not great and we can do better
+> for the user by hooking up intel_idle into the cpuidle framework also
+> for the "in a guest" case.
+> And not only not great for the user, it's also not optimal and lacks two
+> key capabilities that are supported by the bare metal case:
+>
+> 1) The ability to flush the TLB for very long idle periods, to avoid
+>    a costly (and high latency) IPI wakeup later, of an idle vCPU when a
+>    process that used to run on the idle vCPU does an munmap or similar
+>    operation. Avoiding high latency IPIs helps avoid performance jitter.
+> 2) The ability to use the new Intel C0.2 idle state instead of polling
+>    for very short duration idle periods to save power (and carbon footprint)
+>
+> This patch series adds the basic support to run in a VM guest
+> to the intel_idle driver, and then addresses the first of these shortfalls.
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
----
- .../timer/brcm,bcm2835-system-timer.txt       | 22 ----------
- .../timer/brcm,bcm2835-system-timer.yaml      | 44 +++++++++++++++++++
- 2 files changed, 44 insertions(+), 22 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
+Is intel_idle supposed to replace ACPI idle inside VM guests where it
+is supported?
 
-diff --git a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
-deleted file mode 100644
-index 844bd5fbd04c..000000000000
---- a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--BCM2835 System Timer
--
--The System Timer peripheral provides four 32-bit timer channels and a
--single 64-bit free running counter. Each channel has an output compare
--register, which is compared against the 32 least significant bits of the
--free running counter values, and generates an interrupt.
--
--Required properties:
--
--- compatible : should be "brcm,bcm2835-system-timer"
--- reg : Specifies base physical address and size of the registers.
--- interrupts : A list of 4 interrupt sinks; one per timer channel.
--- clock-frequency : The frequency of the clock that drives the counter, in Hz.
--
--Example:
--
--timer {
--	compatible = "brcm,bcm2835-system-timer";
--	reg = <0x7e003000 0x1000>;
--	interrupts = <1 0>, <1 1>, <1 2>, <1 3>;
--	clock-frequency = <1000000>;
--};
-diff --git a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
-new file mode 100644
-index 000000000000..555fca4897e7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/brcm,bcm2835-system-timer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: BCM2835 System Timer
-+
-+maintainers:
-+  - Stefan Wahren <stefan.wahren@i2se.com>
-+
-+description:
-+  The System Timer peripheral provides four 32-bit timer channels and a
-+  single 64-bit free running counter. Each channel has an output compare
-+  register, which is compared against the 32 least significant bits of the
-+  free running counter values, and generates an interrupt.
-+
-+properties:
-+  compatible:
-+    const: brcm,bcm2835-system-timer
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 4
-+
-+  clock-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timer@7e003000 {
-+      compatible = "brcm,bcm2835-system-timer";
-+      reg = <0x7e003000 0x1000>;
-+      interrupts = <1 0>, <1 1>, <1 2>, <1 3>;
-+      clock-frequency = <1000000>;
-+    };
--- 
-2.34.1
+If not, how is it prevented from taking over in those cases?
 
+> The C0.2 gap will be fixed with a small additional patch after the
+> C0.2 support is merged seperately.
+>
+> Arjan van de Ven (7):
+>   intel_idle: refactor state->enter manipulation into its own function
+>   intel_idle: clean up the (new) state_update_enter_method function
+>   intel_idle: Add a sanity check in the new state_update_enter_method
+>     function
+>   intel_idle: Add helper functions to support 'hlt' as idle state
+>   intel_idle: Add a way to skip the mwait check on all states
+>   intel_idle: Add support for using intel_idle in a VM guest using just
+>     hlt
+>   intel_idle: Add a "Long HLT" C1 state for the VM guest mode
+>
+>  drivers/idle/intel_idle.c | 216 ++++++++++++++++++++++++++++++++++----
+>  1 file changed, 194 insertions(+), 22 deletions(-)
+>
+> --
