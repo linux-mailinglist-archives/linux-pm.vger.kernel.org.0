@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6344272185B
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 17:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CC672185F
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jun 2023 18:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjFDPzI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Sun, 4 Jun 2023 11:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S229806AbjFDQAA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 4 Jun 2023 12:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbjFDPzF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 11:55:05 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E0DDF
-        for <linux-pm@vger.kernel.org>; Sun,  4 Jun 2023 08:55:04 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-977d3292be0so16812566b.1
-        for <linux-pm@vger.kernel.org>; Sun, 04 Jun 2023 08:55:04 -0700 (PDT)
+        with ESMTP id S229578AbjFDP77 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Jun 2023 11:59:59 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56663BB
+        for <linux-pm@vger.kernel.org>; Sun,  4 Jun 2023 08:59:58 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-977d3292be0so16956966b.1
+        for <linux-pm@vger.kernel.org>; Sun, 04 Jun 2023 08:59:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685894103; x=1688486103;
+        d=1e100.net; s=20221208; t=1685894397; x=1688486397;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p/dDtElB7q30aD2QguPmnh4ENDLkJY0HSWqXaGeimlk=;
-        b=ZwWI+FBBgEyhovIpVaA0k32NoxjCmkrHGkS7n4dRFlLw5b9XHy3W6RvwjskPYpb1Gx
-         +Kvs6SDYTQuVyzcVQKSMPy2M5Wdj7sbFnDduMQvY5BZnflG2+dhdG4sXDWC1kEUWJg/v
-         GqJMgc+mXJcgiDdSqVMTPIJ/XfwExueYxN6/QRvzmcc4fvFJ3u5HftGKUvd5P0t2if4U
-         qudSSkCNiDaaxY9SyCsEaoN2T4grJ0POYzRlrSR+IEkM9I7SxmH15tWCyfSOUPANxRij
-         Rv8qKAX/UMyFJui7RwpIQU+YJV/C3vWsm/ec6XiiQa410kz6QUTsNpSngoG+tXpT5Vro
-         GYyQ==
-X-Gm-Message-State: AC+VfDyWwJJa8mPo+87leut4YsvfN/boLCPazE69tYgJ6oq27ureZ63s
-        xL5Y2js7yEhyOVZKNi0/J0ULzcuxFx9mLHlFq7jOJQDXnz0=
-X-Google-Smtp-Source: ACHHUZ5UL0Z21mHYowFX3CjjoFnSijIoyJ7eWATt+rHCc/4do7Fz3OnscDT5lgqyTk+PzlqgA6/N++9723EQEkvLKaU=
-X-Received: by 2002:a17:906:74d1:b0:977:b21d:7d8c with SMTP id
- z17-20020a17090674d100b00977b21d7d8cmr3765164ejl.6.1685894102673; Sun, 04 Jun
- 2023 08:55:02 -0700 (PDT)
+        bh=lRoNxg0TT+kZgn775fw3xbqdv0W7dCW4E8mcjC02JbI=;
+        b=fcHm9e7v6vmT5PkujYDfBNVS1p1WAz4LCS+c5Qzh8RRYtpZTn+kY0DHymuAmi6EbgE
+         lNlcL5OwI9KzQxxd727j/oi2yY5mguhGxTEcf6J7Etf5N/mSGHbMwqKyUDp8UZzg3blx
+         KWgGMc1B5NnzJYD5LfDhhcnWHjKq17bY8qN8RjoKszw0rTW3c8zjjC6IJ1zGEl9InoLH
+         9EPVZnmrmHzlScHhUU1XRm3BGPLJ7Z9Oa7jq1J2oBlPfbQtAQ5jFw+au5ZZXE/qjlAJJ
+         pThSrYOG83y/w8XB0OneSePNVo9Ws//MR0iVvm4EoQyczvX1ViB4Ddx8aXf5DQdkE+36
+         Wo0g==
+X-Gm-Message-State: AC+VfDzRlv/BS5FwyVHe6a4FcjrQnoWChqhZoxKBcDTFFUxb0yQNlG1G
+        ORshLbUerJ1QcU4ESkhWmMh2WcaSlBt0RxDq8Lg=
+X-Google-Smtp-Source: ACHHUZ7cdL+fRFe4vmbSqoRDIinnhQnsmP9hkQ0VKB34ZsneW8LiKfcRF8SuCvt8YsuwHhzPVwHJydcKNq27sZq3/bk=
+X-Received: by 2002:a17:906:77c6:b0:977:cc87:62b5 with SMTP id
+ m6-20020a17090677c600b00977cc8762b5mr2258253ejn.4.1685894396478; Sun, 04 Jun
+ 2023 08:59:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230601182801.2622044-1-arjan@linux.intel.com> <20230601182801.2622044-6-arjan@linux.intel.com>
-In-Reply-To: <20230601182801.2622044-6-arjan@linux.intel.com>
+References: <20230601182801.2622044-1-arjan@linux.intel.com> <20230601182801.2622044-7-arjan@linux.intel.com>
+In-Reply-To: <20230601182801.2622044-7-arjan@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Sun, 4 Jun 2023 17:54:51 +0200
-Message-ID: <CAJZ5v0gUCmf1e+uSQnYbQcTUjqDqKVjgJ=UaXW7Rk6NjB5K3Eg@mail.gmail.com>
-Subject: Re: [PATCH 5/7] intel_idle: Add a way to skip the mwait check on all states
+Date:   Sun, 4 Jun 2023 17:59:45 +0200
+Message-ID: <CAJZ5v0h7VjEXaXzH1aiOP8PLdGLeYde6GkCbwJLLWLgx-Pnk4Q@mail.gmail.com>
+Subject: Re: [PATCH 6/7] intel_idle: Add support for using intel_idle in a VM
+ guest using just hlt
 To:     arjan@linux.intel.com
 Cc:     linux-pm@vger.kernel.org, artem.bityutskiy@linux.intel.com,
         rafael@kernel.org, Arjan van de Ven <arjan.van.de.ven@intel.com>
@@ -61,54 +62,117 @@ On Thu, Jun 1, 2023 at 8:28 PM <arjan@linux.intel.com> wrote:
 >
 > From: Arjan van de Ven <arjan.van.de.ven@intel.com>
 >
-> Currently, intel_idle verifies that the cpuid instruction enumerates
-> that the mwait value for a state is actually supported by the CPU.
+> In a typical VM guest, the mwait instruction is not available, leaving only the
+> 'hlt' instruction (which causes a VMEXIT to the host).
+
+What if it is available?  It can be AFAICS.
+
+> So currently, intel_idle will detect the lack of mwait, and fail
+> to initialize (after which another idle method would step in which will
+> just use hlt always).
 >
-> Going forward, when running in a VM guest, that check will not work
-> and we're going to need a way to turn it off.
+> By providing capability to do this with the intel_idle driver, we can
+> do better than this fallback. While this current change only gets us parity
+> to the existing behavior, later patches in this series will add new capabilities.
 >
-> Add a global bool for this, and uses this in the check
-> function to short circuit this cpuid check.
+> In order to do this, a simplified version of the initialization function
+> for VM guests is created, and this will be called if the CPU is recognized,
+> but mwait is not supported, and we're in a VM guest.
+
+It will cause intel_idle to become the idle driver in some cases in
+which ACPI idle is used nowadays if I'm not mistaken.  Wouldn't that
+be regarded as a problem?
+
+> One thing to note is that the latency (and break even) of this C1 state
+> is higher than the typical bare metal C1 state. Because hlt causes a vmexit,
+> and the cost of vmexit + hypervisor overhead + vmenter is typically in the
+> order of upto 5 microseconds... even if the hypervisor does not actually
+> goes into a hardware power saving state.
 >
 > Signed-off-by: Arjan van de Ven <arjan@linux.intel.com>
 > ---
->  drivers/idle/intel_idle.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/idle/intel_idle.c | 54 +++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
 >
 > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index 66d262fd267e..55c3e6ece3dd 100644
+> index 55c3e6ece3dd..c4929d8a35a4 100644
 > --- a/drivers/idle/intel_idle.c
 > +++ b/drivers/idle/intel_idle.c
-> @@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
->  static unsigned int disabled_states_mask __read_mostly;
->  static unsigned int preferred_states_mask __read_mostly;
->  static bool force_irq_on __read_mostly;
-> +static bool skip_mwait_check __read_mostly;
+> @@ -1280,6 +1280,18 @@ static struct cpuidle_state snr_cstates[] __initdata = {
+>                 .enter = NULL }
+>  };
 >
->  static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
->
-> @@ -1866,6 +1867,9 @@ static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
->         unsigned int num_substates = (mwait_substates >> mwait_cstate * 4) &
->                                         MWAIT_SUBSTATE_MASK;
->
-> +       if (skip_mwait_check)
-> +               return true;
+> +static struct cpuidle_state vmguest_cstates[] __initdata = {
+> +       {
+> +               .name = "C1",
+> +               .desc = "HLT",
+> +               .flags = MWAIT2flg(0x00) | CPUIDLE_FLAG_IRQ_ENABLE,
+> +               .exit_latency = 5,
+> +               .target_residency = 10,
+> +               .enter = &intel_idle_hlt_irq, },
+> +       {
+> +               .enter = NULL }
+> +};
 > +
-
-I don't think that the static variable is needed here.
-
-This function is only called from intel_idle_init_cstates_icpu() which
-in turn is only called by intel_idle_cpuidle_driver_init().
-
-The latter is called directly by intel_idle_vminit() in the next patch
-and so it can be passed a bool arg indicating whether or not to skip
-the mwait checks.
-
-I would even check this arg in intel_idle_init_cstates_icpu() so it is
-not necessary to look into intel_idle_verify_cstate() to see what it
-is for.
-
->         /* Ignore the C-state if there are NO sub-states in CPUID for it. */
->         if (num_substates == 0)
->                 return false;
+>  static const struct idle_cpu idle_cpu_nehalem __initconst = {
+>         .state_table = nehalem_cstates,
+>         .auto_demotion_disable_flags = NHM_C1_AUTO_DEMOTE | NHM_C3_AUTO_DEMOTE,
+> @@ -2105,6 +2117,46 @@ static void __init intel_idle_cpuidle_devices_uninit(void)
+>                 cpuidle_unregister_device(per_cpu_ptr(intel_idle_cpuidle_devices, i));
+>  }
+>
+> +static int __init intel_idle_vminit(const struct x86_cpu_id *id)
+> +{
+> +       int retval;
+> +
+> +       cpuidle_state_table = vmguest_cstates;
+> +       skip_mwait_check = true; /* hypervisor hides mwait from us normally */
+> +
+> +       icpu = (const struct idle_cpu *)id->driver_data;
+> +
+> +       pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
+> +                boot_cpu_data.x86_model);
+> +
+> +       intel_idle_cpuidle_devices = alloc_percpu(struct cpuidle_device);
+> +       if (!intel_idle_cpuidle_devices)
+> +               return -ENOMEM;
+> +
+> +       intel_idle_cpuidle_driver_init(&intel_idle_driver);
+> +
+> +       retval = cpuidle_register_driver(&intel_idle_driver);
+> +       if (retval) {
+> +               struct cpuidle_driver *drv = cpuidle_get_driver();
+> +               printk(KERN_DEBUG pr_fmt("intel_idle yielding to %s\n"),
+> +                      drv ? drv->name : "none");
+> +               goto init_driver_fail;
+> +       }
+> +
+> +       retval = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "idle/intel:online",
+> +                                  intel_idle_cpu_online, NULL);
+> +       if (retval < 0)
+> +               goto hp_setup_fail;
+> +
+> +       return 0;
+> +hp_setup_fail:
+> +       intel_idle_cpuidle_devices_uninit();
+> +       cpuidle_unregister_driver(&intel_idle_driver);
+> +init_driver_fail:
+> +       free_percpu(intel_idle_cpuidle_devices);
+> +       return retval;
+> +}
+> +
+>  static int __init intel_idle_init(void)
+>  {
+>         const struct x86_cpu_id *id;
+> @@ -2123,6 +2175,8 @@ static int __init intel_idle_init(void)
+>         id = x86_match_cpu(intel_idle_ids);
+>         if (id) {
+>                 if (!boot_cpu_has(X86_FEATURE_MWAIT)) {
+> +                       if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
+> +                               return intel_idle_vminit(id);
+>                         pr_debug("Please enable MWAIT in BIOS SETUP\n");
+>                         return -ENODEV;
+>                 }
 > --
+> 2.40.1
+>
