@@ -2,150 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80215722A78
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 17:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E171722A99
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 17:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjFEPJM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 5 Jun 2023 11:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
+        id S234786AbjFEPN0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Jun 2023 11:13:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbjFEPIs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 11:08:48 -0400
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FC7E8;
-        Mon,  5 Jun 2023 08:08:47 -0700 (PDT)
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-652d76be8c2so4031464b3a.3;
-        Mon, 05 Jun 2023 08:08:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685977727; x=1688569727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Aiwp/bDLmwSr5erFDhpBQgGpKXSsi00J2xGn70rauW0=;
-        b=i/t6YyMlsjxqkrnXcHZz40E0tIOs/MX1dkTUnkQFq3Whz5BuqPrf8MmlMlfTUTIeq5
-         GzgzH6ufZFkL8dUCo86PsKTMhdtrki3W8CWh6JmdrFxKh+Tmve4A9RrKYgXkelwFFRPV
-         05JQHomJITaILvFidLUhVK7fLCbtTe0jCbQn2D18vcqrn9LtD3qnMFy7xQnj/SGQESIT
-         G8ckZm8GVVpLogGt1Nf65lCfZQiUVroc/Muf6Stka0dTMEltCgABJ2/1eVehkOT406W0
-         t0sg41pWIQcd3sQMALvLyygMJUHjP2jtild2HauQlIty+Af4Q5VWE1v92N/a+TYQj82E
-         O9UQ==
-X-Gm-Message-State: AC+VfDz7JqZcupCyyg8bHRmkBkhgsw/iX7sW9c87/IEUK9eqWbOm2jvp
-        OCani0oj7Wb0BoANli1zgm5Jlxu5fkuFlQ==
-X-Google-Smtp-Source: ACHHUZ4MY6YnuUEHDcUmTbFEAZ6SSspWqZ1lBBkbZm3P116kLzJ54SkD8Rf/7C8YgiKfKUsZ330efg==
-X-Received: by 2002:a05:6a20:7490:b0:109:c161:a679 with SMTP id p16-20020a056a20749000b00109c161a679mr9141445pzd.19.1685977726567;
-        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com. [209.85.210.173])
-        by smtp.gmail.com with ESMTPSA id q16-20020a62e110000000b0063d29df1589sm5302851pfh.136.2023.06.05.08.08.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6532671ccc7so3740863b3a.2;
-        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
-X-Received: by 2002:a05:6870:3e4:b0:19e:86e4:55b0 with SMTP id
- h36-20020a05687003e400b0019e86e455b0mr54853oaf.1.1685977705560; Mon, 05 Jun
- 2023 08:08:25 -0700 (PDT)
+        with ESMTP id S234262AbjFEPNO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 11:13:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94102109;
+        Mon,  5 Jun 2023 08:12:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DybvNlac65df0r0pwdKAU9K93YyXXpWBQ+UcdfHS6UGP1KtvTLkBKrHrwPJ0a5viTWKqMyqGYLi6iQIc4NhC3Z2WI8AiCR/JobUtX22ToHRz5iS99zM9mfAi2Y+WvEudja2XMCwDHCwldJh5+oYxGrCJauUjz6bOyzoys3llY3lvG2m+jub2UjarIk6/Vz9ucb591UfeUFtleBL/FEgF653MoVlyi/bkSS76Ofi0dKIQBZzf2lyICE8jZT6hNlPKX1SI5CGhtBsfQuEH/E9gFFYrOzOP7acstdyOue2lRw9nyMWkVhbvh+gCxyjWc5fy+t/hps+13SyH6JJANEymlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gYnxTogBpZOUMyP4Kt72f776HwnVabAklKaP9FXXeAE=;
+ b=cc28McKpoQTAh3cbn7XaKdl/0yn8slyVl2tCMaaF/IsPeozIGPl8R/UfJopNK7uKaxTQVM64YosznFNXWlqzSOZNEDyeJPEfoElvsp/rD2YZawdj5MpOoFyDsJ/hxO1AfTtgm/P6hwfKJiP3degaIOeSKW01DsInk7MF6f4qix5HsZaaU8LqccGlP9HgbXPYl9Hd+lmsVW0Y65eXYYSOFkkJ5M51avkjQFK3uV1aNnWdEvQfDmZKXnKFPVEgOriuAri8xGUYxGr6ZNx2uwQGyP+2jSybkGSRgsK9dIWqKYPE4CmmvoBjCgmSBSZUGMP6fSp1e+MPgZmSIbRtvVpGWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gYnxTogBpZOUMyP4Kt72f776HwnVabAklKaP9FXXeAE=;
+ b=uiRKn138uMAFDm76jOOAeSI0cqv4IHWXgTUUFL5xfsTwym2tOlbfhTEFD4HIwhScaDaoFkHKmE1mvzvNmJqKmCGIA7wMvrv2S/aWnN9qRrX7twEp2GWz1u1gK/MMxHCZ7KR2Q3X4MG439BKwueznANoggfOAoRJXkrs3exXvcpw=
+Received: from BN0PR02CA0002.namprd02.prod.outlook.com (2603:10b6:408:e4::7)
+ by PH0PR12MB7932.namprd12.prod.outlook.com (2603:10b6:510:280::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 15:12:04 +0000
+Received: from BN8NAM11FT085.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e4:cafe::9) by BN0PR02CA0002.outlook.office365.com
+ (2603:10b6:408:e4::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33 via Frontend
+ Transport; Mon, 5 Jun 2023 15:12:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT085.mail.protection.outlook.com (10.13.176.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6455.33 via Frontend Transport; Mon, 5 Jun 2023 15:12:03 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 5 Jun
+ 2023 10:12:02 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Huang Rui <ray.huang@amd.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devel@acpica.org>,
+        Gautham Ranjal Shenoy <gautham.shenoy@amd.com>,
+        "Wyes Karny" <Wyes.Karny@amd.com>, Perry Yuan <perry.yuan@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH 0/4] Enable amd-pstate active mode by default
+Date:   Mon, 5 Jun 2023 10:11:29 -0500
+Message-ID: <20230605151133.2615-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <cover.1685692810.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1685692810.git.geert+renesas@glider.be>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 5 Jun 2023 17:08:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXrgyWT=RtS6cuUP6sT-Ta9Oa4cU2kHP10ah-U50DOSsg@mail.gmail.com>
-Message-ID: <CAMuHMdXrgyWT=RtS6cuUP6sT-Ta9Oa4cU2kHP10ah-U50DOSsg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/7] iopoll: Busy loop and timeout improvements + conversions
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT085:EE_|PH0PR12MB7932:EE_
+X-MS-Office365-Filtering-Correlation-Id: 456c0cc1-3b08-4997-3492-08db65d7383a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SHVRXq5dsCanNuEU2QOW4cwHwVF2pC6geeH5NT5oJoap8XOd9bzmo5U5mqYmhoUpO+JA4/McCGI0hAdRyDcE0ssOCX5sKHESLkGiNSJcvss5CRV8G+fCFW9wc8BXvfb5YNFEpJX+gmvxOwtvyHNRQU5nA/VELHxMeK1c42npFp1n5/HsQQvn0aqQhdOD4f8+aDVVnHh9E+WcNtvKDWQFVmXc/nHOoXutjI5V8MRgeqm+wS1gWoZSpXUX+d04me3CdHPIr/L1Tl0ReQPE2WvXl0z/qDKEV5iE4gwGrxbs6rUhtzPrScm6Q+0hs6bBsVMENS2446Ai8cc/20AfTRIT/CJ1ZEAu/X7zgwfIpPezL66u1DgFKMiWNI82j/q66ZLe1ZdA8Mjq9uH/VgYy1Ow3PYMpPNv0jowgsGetoZh6MnrgWuxWKAcxq730s3FxI1AasMnCPnYcVoO50TeN+m5T02Hd7AaXuPfE+/hFKYabTyRBxWhmDT2cch4Fnq/SrUrnPq3u5swMyVZRy4AR54IqCfE3vUq7slRJjVHs2AJsFE/+5fX4ycaXGkIg/qtQuMJlPUaWdnyTwpH//liZRClud1aRv8gtIGI5gQze86dLhOW0H07M29DD5bh1VOvtGhZPkGomTHeRneAd2lcva0rBLwS7T+7cqbivSjncTDXWjVdCRSMTKPNJ+4sTptWeO9gp5Zw/ziW/j0m+nhWnFin+dF4atVG72DE8IOv6UMklFHRBI3eGJi3e7SpF/FbkcW/n4dLHf3lKmjb2bVQWeGu9MA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(1076003)(26005)(40460700003)(36860700001)(36756003)(47076005)(83380400001)(426003)(336012)(86362001)(82310400005)(81166007)(356005)(82740400003)(16526019)(186003)(2616005)(40480700001)(41300700001)(44832011)(54906003)(110136005)(2906002)(478600001)(70586007)(70206006)(4326008)(8936002)(8676002)(316002)(5660300002)(7696005)(6666004)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jun 2023 15:12:03.8301
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 456c0cc1-3b08-4997-3492-08db65d7383a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT085.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7932
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 10:51 AM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
-> When implementing a polling loop, a common review comment is to use one
-> of the read*_poll_timeout*() helpers.  Unfortunately this is not always
-> possible, or might introduce subtle bugs.  This patch series aims to
-> improve these helpers, so they can gain wider use.
->
->   1. The first patch improves busy-looping behavior of both the atomic
->      and non-atomic read*_poll_timeout*() helpers.
->      The issue addressed by this patch was discussed before[1-2], but I
->      am not aware of any patches moving forward.
->
->   2. The second patch fixes timeout handling of the atomic variants.
->      Some of the issues addressed by this patch were mitigated in
->      various places[3-5], and some of these findings may be of interest
->      to the authors of [6-8].
->
-> The first two patches were sent before, and already received some acks
-> and reviews.  I plan to queue these in an immutable and tagged branch
-> after the weekend, for consumption by myself, and by other interested
-> parties.
+Active mode for amd-pstate has shown enough success now that it makes sense
+to enable it by default on client systems.
 
-FTR...
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+This series introduces a new kernel configuration option to set the default
+policy for amd-pstate modes for a kernel.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+Server systems will by identified by the PM preferred profile and still be
+set as disabled by default for now.
 
-are available in the Git repository at:
+Mario Limonciello (4):
+  ACPI: CPPC: Add a symbol to check if the preferred profile is a server
+  cpufreq: amd-pstate: Set a fallback policy based on preferred_profile
+  cpufreq: amd-pstate: Add a kernel config option to set default mode
+  cpufreq: intel_pstate: Use the acpi_pm_profile_server() symbol
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
-tags/iopoll-busy-loop-timeout-tag
-
-for you to fetch changes up to 7349a69cf3125e92d48e442d9f400ba446fa314f:
-
-  iopoll: Do not use timekeeping in read_poll_timeout_atomic()
-(2023-06-05 15:35:27 +0200)
-
-----------------------------------------------------------------
-iopoll: Busy loop and timeout improvements
-
-----------------------------------------------------------------
-Geert Uytterhoeven (2):
-      iopoll: Call cpu_relax() in busy loops
-      iopoll: Do not use timekeeping in read_poll_timeout_atomic()
-
- include/linux/iopoll.h | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
+ drivers/acpi/cppc_acpi.c       | 34 +++++++++++++++
+ drivers/cpufreq/Kconfig.x86    | 17 ++++++++
+ drivers/cpufreq/amd-pstate.c   | 80 ++++++++++++++++++++++------------
+ drivers/cpufreq/intel_pstate.c | 17 +-------
+ include/acpi/actbl.h           |  3 +-
+ include/acpi/processor.h       | 10 +++++
+ include/linux/amd-pstate.h     |  4 +-
+ 7 files changed, 121 insertions(+), 44 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
