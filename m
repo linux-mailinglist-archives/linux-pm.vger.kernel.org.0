@@ -2,116 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9463B7226D4
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 15:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56A1472272A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 15:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbjFENFS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jun 2023 09:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S234012AbjFENP4 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 5 Jun 2023 09:15:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233941AbjFENEz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 09:04:55 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FC1FD;
-        Mon,  5 Jun 2023 06:04:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1685970294; x=1717506294;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=nROIitPltbPWMd0kgRZLjZjy+4djGlBLlehlPkk3LwQ=;
-  b=MFCFjrbeaazSaqcICVkfwCQTeStGd/SZ3BBeJ4eJcamyZHt7zZsusDce
-   vdOhBAkenqNmZOMdhkwtCNYMt3nsZW8jbp7xQjcN1371fCpA3nvekYfO9
-   VEY1R+xzK4oXUi7uMz5NlEiN9Jp+p/zeexMNohmDefyZ4Fof8BUwvL5Lk
-   5oKREt5bmixHeePJDMpRWXcBoNvLN1eFROJLf0ZQmEGkHzg0xH+2cuFhQ
-   G1fhozPQSwA0vOTEM+aSLwERh7/MRlgIrXLGUBAU0+w1OqNt58cpZquBH
-   mDUjjHic4UHl78kVvboZzovUdykwg9Rl4ONYq/Sxb0zKYkIE1kFRN0ucz
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="214657607"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 05 Jun 2023 06:04:52 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 5 Jun 2023 06:04:47 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 5 Jun 2023 06:04:41 -0700
-Message-ID: <c3f7c08f-272a-5abb-da78-568c408f40de@microchip.com>
-Date:   Mon, 5 Jun 2023 15:04:34 +0200
+        with ESMTP id S234015AbjFENPv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 09:15:51 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2C0E8;
+        Mon,  5 Jun 2023 06:15:49 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-62606e67c0dso42669076d6.2;
+        Mon, 05 Jun 2023 06:15:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685970948; x=1688562948;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=evDCePhMrS7Ny+TFmHSDloaESI5T/zQOM1dd67+oY2c=;
+        b=Z2f94QkcOhLJQUKjSw31y6xZbxRMpPBvGikkcKSBHkoYbXya7/B3JbcgU+x4JovXJp
+         G7wsNKiY53TcmCwYW0fTphzVm8hulAkoy7vPyo3PCcU57J2hj4BxIpJsdkE5nd+vIMcZ
+         L8+Hq0Ia9K+MQ41HrAnBvRfYi9jgeupekVWvL2XPyu0ozafvd3eW8pc0SnF+6/supsjI
+         AhoXFvo+a22Rie3EYZ88Qqql2sYHEG2eYDBdcdAwDgQLR057xFAB1KKPLaR9w2Aa4wbV
+         P9Njd+AHQVAlDPw5a4Zi0b2uGrVKRC+m3YgJPt4Jet+Gecyo+DfJSx9WKwEJgJjH6sK4
+         ibrw==
+X-Gm-Message-State: AC+VfDyJPuciJ7aSdaBvarlEz74U+3vPJ5nyfb7OcUVMzxgXe/CX56HJ
+        IaP6RJw1CSFIFPzf7GJKM9XPf1J1CMVPXg==
+X-Google-Smtp-Source: ACHHUZ43dmtEypQe0I2S0CTImw5harU0FrUV+yzWbIYKN00lpjQhg4QYsXfaxuYjydlMC0SgYMAAvA==
+X-Received: by 2002:a05:6214:130c:b0:626:2461:9f09 with SMTP id pn12-20020a056214130c00b0062624619f09mr8274707qvb.40.1685970948287;
+        Mon, 05 Jun 2023 06:15:48 -0700 (PDT)
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
+        by smtp.gmail.com with ESMTPSA id mn14-20020a0562145ece00b006235e8fe94esm4629206qvb.58.2023.06.05.06.15.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 06:15:47 -0700 (PDT)
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-62614a2ce61so42649146d6.3;
+        Mon, 05 Jun 2023 06:15:47 -0700 (PDT)
+X-Received: by 2002:a25:76cf:0:b0:ba9:89d4:b2f5 with SMTP id
+ r198-20020a2576cf000000b00ba989d4b2f5mr14228253ybc.53.1685970927309; Mon, 05
+ Jun 2023 06:15:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 17/21] power: reset: at91-poweroff: lookup for proper pmc
- dt node for sam9x7
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Varshini Rajendran <varshini.rajendran@microchip.com>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>,
-        <linux@armlinux.org.uk>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <sre@kernel.org>, <broonie@kernel.org>,
-        <arnd@arndb.de>, <gregory.clement@bootlin.com>,
-        <sudeep.holla@arm.com>, <balamanikandan.gunasundar@microchip.com>,
-        <mihai.sain@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
-        <durai.manickamkr@microchip.com>, <manikandan.m@microchip.com>,
-        <dharma.b@microchip.com>, <nayabbasha.sayed@microchip.com>,
-        <balakrishnan.s@microchip.com>
-References: <20230603200243.243878-1-varshini.rajendran@microchip.com>
- <20230603200243.243878-18-varshini.rajendran@microchip.com>
- <2a538004-351f-487a-361c-df723d186c27@linaro.org>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <2a538004-351f-487a-361c-df723d186c27@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1685692810.git.geert+renesas@glider.be> <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
+In-Reply-To: <ae4bf03ab8fd5a557c683086958d6764babc0723.1685692810.git.geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 5 Jun 2023 15:15:16 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdV9n3ypBG1HffvHxYke5Ym068ZK1s2QryE-rbVgFS9dzw@mail.gmail.com>
+Message-ID: <CAMuHMdV9n3ypBG1HffvHxYke5Ym068ZK1s2QryE-rbVgFS9dzw@mail.gmail.com>
+Subject: Re: [PATCH v3 6/7] soc: renesas: rmobile-sysc: Convert to readl_poll_timeout_atomic()
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/06/2023 at 08:43, Krzysztof Kozlowski wrote:
-> On 03/06/2023 22:02, Varshini Rajendran wrote:
->> Use sam9x7 pmc's compatible to lookup for in the SHDWC driver
->>
->> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
->> ---
->>   drivers/power/reset/at91-sama5d2_shdwc.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
->> index d8ecffe72f16..d0f29b99f25e 100644
->> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
->> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
->> @@ -326,6 +326,7 @@ static const struct of_device_id at91_pmc_ids[] = {
->>        { .compatible = "atmel,sama5d2-pmc" },
->>        { .compatible = "microchip,sam9x60-pmc" },
->>        { .compatible = "microchip,sama7g5-pmc" },
->> +     { .compatible = "microchip,sam9x7-pmc" },
-> 
-> Why do you need new entry if these are compatible?
+On Fri, Jun 2, 2023 at 10:51 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> Use readl_poll_timeout_atomic() instead of open-coding the same
+> operation.
+>
+>   1. rmobile_pd_power_down(): as typically less than 20 retries are
+>      needed, PSTR_RETRIES (100) µs is a suitable timeout value.
+>
+>   2. __rmobile_pd_power_up(): the old method of first polling some
+>      cycles with a 1 µs delay, followed by more polling cycles without
+>      any delay didn't make much sense, as the latter was insignificant
+>      compared to the former.  Furthermore, typically no retries are
+>      needed.  Hence just retain the polling with delay.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Yes, PMC is very specific to a SoC silicon. As we must look for it in 
-the shutdown controller, I think we need a new entry here.
+> diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/soc/renesas/rmobile-sysc.c
+> index 728ebac98e14a5cc..5d621c35fba1116a 100644
 
-Best regards,
-   Nicolas
+> @@ -74,25 +71,17 @@ static int rmobile_pd_power_down(struct generic_pm_domain *genpd)
+>
+>  static int __rmobile_pd_power_up(struct rmobile_pm_domain *rmobile_pd)
+>  {
+> -       unsigned int mask = BIT(rmobile_pd->bit_shift);
+> -       unsigned int retry_count;
+> -       int ret = 0;
+> +       unsigned int val, mask = BIT(rmobile_pd->bit_shift);
+> +       int ret;
+
+Oops, "ret" should still be initialized to zero.
+
+>
+>         if (readl(rmobile_pd->base + PSTR) & mask)
+>                 return ret;
+>
+>         writel(mask, rmobile_pd->base + SWUCR);
+>
+> -       for (retry_count = 2 * PSTR_RETRIES; retry_count; retry_count--) {
+> -               if (!(readl(rmobile_pd->base + SWUCR) & mask))
+> -                       break;
+> -               if (retry_count > PSTR_RETRIES)
+> -                       udelay(PSTR_DELAY_US);
+> -               else
+> -                       cpu_relax();
+> -       }
+> -       if (!retry_count)
+> -               ret = -EIO;
+> +       ret = readl_poll_timeout_atomic(rmobile_pd->base + SWUCR, val,
+> +                                       (val & mask), PSTR_DELAY_US,
+> +                                       PSTR_RETRIES * PSTR_DELAY_US);
+>
+>         pr_debug("%s: Power on, 0x%08x -> PSTR = 0x%08x\n",
+>                  rmobile_pd->genpd.name, mask,
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Nicolas Ferre
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
