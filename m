@@ -2,181 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C81722EB1
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 20:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197DB722ECD
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 20:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbjFESar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jun 2023 14:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
+        id S232480AbjFESf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Jun 2023 14:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234525AbjFESaq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 14:30:46 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47D4F1
-        for <linux-pm@vger.kernel.org>; Mon,  5 Jun 2023 11:30:45 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-ba81deea9c2so5303436276.2
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jun 2023 11:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685989845; x=1688581845;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bCD5PZj1At8yqhL4CYuYaQGs7kVSIn0/Mt/nLV2HXs=;
-        b=c5a8KY3tXAcIgrvqx6pKcIyicw4mhKUoO7L6uvtT5vI+5nzchsky91+qaYZuDhZWgk
-         loqPxlttSDTnongyVNVNRJw46CKmugZ4Q5VIalUbQjK5O9X9gCKOZn70yBFlBtwX5GgJ
-         gySIHVqIxIpPzWsFxS1u+wOtokXml2HheNIg0+4LdlbaZuy/3n/GmU2iR5097ifqOFBZ
-         9hyNiMEde/WN0CU5S8l8NNOmrYr2h5H4DbB4SrjtsHqqWGhMBtMD+Cu3SGuY4dIiwbo2
-         q5mHLcwYphvgfbYJO9U/a2Ft+KsZX8f2RJhBOKsg8sTjvMvsGJqdQEPRWQCiwXIUojff
-         qrNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685989845; x=1688581845;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2bCD5PZj1At8yqhL4CYuYaQGs7kVSIn0/Mt/nLV2HXs=;
-        b=IKGcNUSHMQZ1bp1ipz7XQLUO77ncxyjRTsYq1Ii1IqHsJnrS+K3WULEaYIiAMTDoBu
-         6FkgB/y0vtEHveqP47vPhyDtZpyYvn6EJpy+NKepb0I61ZdHPDhKrWoqmemvbY2sjEtc
-         mKlRWBpTHxQq5TDiA1HPGbpLVyUmSTPmKnmwxwrotGzoiuMddGFSjyTFMJuf/5YXcBmS
-         JQu7vmTJl0vA3Nx+Yp1v+mLyzF76ngpqOIX+uhRFtY6LqKyTzjQExZ4SEw8sL9lAKa67
-         JjQ6FlzbAUeVXTg9Zg8Tbge0O5f6WJ5FiMf82t7Mam4iu1K8zb5HGkP64nOpVr1dYhX6
-         JnIw==
-X-Gm-Message-State: AC+VfDzASP8H5eM+bwRBYdUPfEseHNtClhB8hGn85Tt2vtf0ZxkTHCpy
-        jghtHGrTT+yM6rt+CjV1WxHWU3beJI4CbP10BqNvtw==
-X-Google-Smtp-Source: ACHHUZ6mF0HQB1db3oxZ/PWuW6L+XmF5rCHXz5idoZNIDLqw0b82MU/KjjtQYOFBLP++iwX0UEUHhBXI+vEEnCK+zB4=
-X-Received: by 2002:a25:2413:0:b0:bad:1159:1aea with SMTP id
- k19-20020a252413000000b00bad11591aeamr11057933ybk.8.1685989844815; Mon, 05
- Jun 2023 11:30:44 -0700 (PDT)
+        with ESMTP id S229529AbjFESf5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 14:35:57 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577D0D9;
+        Mon,  5 Jun 2023 11:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=wwWxJXe5pQm4QqI2inojr71AUA3uHrvhwwB6tIvkbAY=;
+        t=1685990155; x=1687199755; b=vMSJw61j6Bh6IqvojaxzY4mlzdqYZK0dibeB2zbz+cgxLH6
+        Cm1urxgzbBLJyEl4zL4uNeEkwYkwQg6y5tYTSJBxSmcN4CKJr6ZADeL3QQgibgdB6vTOv03rT9xNC
+        yieSXPjOML3zRbfGrUXUKJ13FcU28wivSl2kyOH12vcCOnK0yTN/Y2bTw3z3F5HuZjFfPr55DF2Zt
+        X/LExVBoO3H2sSJznI1yFnlHW4ZEzaNkg8y5ICc0qlaJR5N+YLRn8abpVR6aYI+NK1FTXmmxtm0Zu
+        k7mwUMzGJMFZpRNGiu14eCJtzYgM/7dQPW3/s4J19wamxaNpabkHhU9vROR3WStg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1q6F3W-00EaFL-2E;
+        Mon, 05 Jun 2023 20:35:50 +0200
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH v2] PCI/PM: enable runtime PM later during device scanning
+Date:   Mon,  5 Jun 2023 20:35:45 +0200
+Message-Id: <20230605203519.bc4232207449.Idbaa55b93f780838af44ebccb84c36f60716df04@changeid>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230605121621.4259f1be6cd2.Idbaa55b93f780838af44ebccb84c36f60716df04@changeid>
+References: <20230605121621.4259f1be6cd2.Idbaa55b93f780838af44ebccb84c36f60716df04@changeid>
 MIME-Version: 1.0
-References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com> <1685982557-28326-8-git-send-email-quic_rohiagar@quicinc.com>
-In-Reply-To: <1685982557-28326-8-git-send-email-quic_rohiagar@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 5 Jun 2023 21:30:34 +0300
-Message-ID: <CAA8EJpogj0uzQdk-kDqm7Pju7Q5aXJg6FHswkJy+ugawqePWLw@mail.gmail.com>
-Subject: Re: [PATCH v2 07/10] arm64: dts: qcom: Add support for GCC and RPMHCC
- for SDX75
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        tglx@linutronix.de, maz@kernel.org, will@kernel.org,
-        robin.murphy@arm.com, joro@8bytes.org, mani@kernel.org,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Imran Shaik <quic_imrashai@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 5 Jun 2023 at 19:30, Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
->
-> From: Imran Shaik <quic_imrashai@quicinc.com>
->
-> Add support for GCC and RPMHCC clock nodes for SDX75 platform.
->
-> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sdx75.dtsi | 37 ++++++++++++++++++++++++++++++++++++-
->  1 file changed, 36 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> index 3d1646b..f83eef8 100644
-> --- a/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
-> @@ -7,6 +7,7 @@
->   */
->
->  #include <dt-bindings/clock/qcom,rpmh.h>
-> +#include <dt-bindings/clock/qcom,sdx75-gcc.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->
-> @@ -22,7 +23,21 @@
->                 reg = <0 0x80000000 0 0>;
->         };
->
-> -       clocks { };
-> +       clocks {
-> +               xo_board: xo_board {
+From: Johannes Berg <johannes.berg@intel.com>
 
-No underscores in node names
+We found that that the following race is possible if userspace
+enables runtime PM/auto-suspend immediately when a device shows
+up in sysfs, if there's any call to pci_rescan_bus() during
+normal system state (i.e. userspace is already active):
 
-> +                       compatible = "fixed-clock";
-> +                       clock-frequency = <76800000>;
-> +                       clock-output-names = "xo_board";
+ - we rescan the PCI bus (*)
+ - this creates the new PCI device including its sysfs
+   representation
+ - udev sees the new device, and the (OS-specific) scripting
+   enables runtime PM by writing to power/control; this can
+   happen _before_ the next step - this will runtime-suspend
+   the device which saves the config space, including the BARs
+   that weren't assigned yet
+ - the bus rescan assigns resources to the devices and writes
+   them to the config space of the device
+   (but not the runtime-pm saved copy, course)
+ - the driver binds and this disallows runtime PM, so the device
+   is resumed, restoring the (incomplete!) config space
+ - the device cannot work due to BARs not being configured
 
-Why do you need this?
+Fix this by allowing runtime PM only once the device has been
+fully added. Also, with a warning, reject runtime PM on a not-
+added device; this shouldn't happen anymore now.
 
-> +                       #clock-cells = <0>;
-> +               };
-> +
-> +               sleep_clk: sleep_clk {
+Note that the comment that was there (that I'm replacing) was
+indicating that pci_device_add() wouldn't be called at this
+place yet, but in fact it's called much earlier during the whole
+scan/probe process, which in part causes this problem, but it
+doesn't seem possible to defer it until here either.
 
-No underscores in node names
+(*) In the case we encountered, this happened due to some reset
+    of the iwlwifi device that the driver then needs to recover
+    from by rescanning the bus since the device was reset and
+    the system doesn't know about it yet.
 
-> +                       compatible = "fixed-clock";
-> +                       clock-frequency = <32000>;
-> +                       clock-output-names = "sleep_clk";
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+---
+v2: use pm_runtime_get_noresume()/pm_runtime_put_noidle()
+    instead as advised by Rafael
+---
+ drivers/pci/bus.c        | 8 ++++++--
+ drivers/pci/pci-driver.c | 3 +++
+ drivers/pci/pci.c        | 1 +
+ 3 files changed, 10 insertions(+), 2 deletions(-)
 
-Why do you need this?
-
-> +                       #clock-cells = <0>;
-> +               };
-> +       };
->
->         cpus {
->                 #address-cells = <2>;
-> @@ -358,6 +373,18 @@
->                 ranges = <0 0 0 0 0x10 0>;
->                 dma-ranges = <0 0 0 0 0x10 0>;
->
-> +               gcc: clock-controller@80000 {
-> +                       compatible = "qcom,sdx75-gcc";
-> +                       reg = <0x0 0x0080000 0x0 0x1f7400>;
-> +                       clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +                                <&sleep_clk>;
-> +                       clock-names = "bi_tcxo",
-> +                                     "sleep_clk";
-
-As this is a new platform, it should not be using clock-names to bind
-gcc clocks. Please use clock indices instead.
-
-> +                       #clock-cells = <1>;
-> +                       #reset-cells = <1>;
-> +                       #power-domain-cells = <1>;
-> +               };
-> +
->                 tcsr_mutex: hwlock@1f40000 {
->                         compatible = "qcom,tcsr-mutex";
->                         reg = <0x0 0x01f40000 0x0 0x40000>;
-> @@ -520,6 +547,14 @@
->                         apps_bcm_voter: bcm_voter {
->                                 compatible = "qcom,bcm-voter";
->                         };
-> +
-> +                       rpmhcc: clock-controller {
-> +                               compatible = "qcom,sdx75-rpmh-clk";
-> +                               clocks = <&xo_board>;
-
-> +                               clock-names = "xo";
-> +                               #clock-cells = <1>;
-> +                       };
-> +
->                 };
->         };
->
-> --
-> 2.7.4
->
-
-
+diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
+index 5bc81cc0a2de..e06ea5449be9 100644
+--- a/drivers/pci/bus.c
++++ b/drivers/pci/bus.c
+@@ -13,6 +13,7 @@
+ #include <linux/ioport.h>
+ #include <linux/proc_fs.h>
+ #include <linux/slab.h>
++#include <linux/pm_runtime.h>
+ 
+ #include "pci.h"
+ 
+@@ -335,9 +336,12 @@ void pci_bus_add_device(struct pci_dev *dev)
+ 	int retval;
+ 
+ 	/*
+-	 * Can not put in pci_device_add yet because resources
+-	 * are not assigned yet for some devices.
++	 * Allow runtime PM only here, since otherwise we may
++	 * try to suspend a device that isn't fully configured
++	 * yet, which causes problems.
+ 	 */
++	pm_runtime_put_noidle(&dev->dev);
++
+ 	pcibios_bus_add_device(dev);
+ 	pci_fixup_device(pci_fixup_final, dev);
+ 	pci_create_sysfs_dev_files(dev);
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index ae9baf801681..8d82b4abb169 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -1278,6 +1278,9 @@ static int pci_pm_runtime_suspend(struct device *dev)
+ 	pci_power_t prev = pci_dev->current_state;
+ 	int error;
+ 
++	if (WARN_ON(!pci_dev_is_added(pci_dev)))
++		return -EBUSY;
++
+ 	pci_suspend_ptm(pci_dev);
+ 
+ 	/*
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 5ede93222bc1..808906ad14b9 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -3139,6 +3139,7 @@ void pci_pm_init(struct pci_dev *dev)
+ 	u16 pmc;
+ 
+ 	pm_runtime_forbid(&dev->dev);
++	pm_runtime_get_noresume(&dev->dev);
+ 	pm_runtime_set_active(&dev->dev);
+ 	pm_runtime_enable(&dev->dev);
+ 	device_enable_async_suspend(&dev->dev);
 -- 
-With best wishes
-Dmitry
+2.40.1
+
