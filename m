@@ -2,154 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62582722CCF
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 18:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11559722D8B
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 19:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbjFEQhU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jun 2023 12:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S234244AbjFERWL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Jun 2023 13:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbjFEQhS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 12:37:18 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A2C10A;
-        Mon,  5 Jun 2023 09:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685983031; x=1717519031;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=qoKGLD9sD+Y6htIHpR6WQkvxzj49DbOJF0aFbQergrk=;
-  b=XSQEFOGvaOuaHJJlzkuKlLxeHDlJfPY/qH1uMh/NuKEdGTwYaW+j28ek
-   WU7Ury4U0J6+RG6uv+UmmU0syv6elzifIbKqsZyB/HsZy2HNkfd9p83Lt
-   JwUK7LD1b/CAyo0I00j5wnOjG0hJKeLSZV+zkwtkJXu8HnoKLzl5X0cwr
-   smmqaCn1E8HrvqwUBtmWJ0ewQHrReexRRcL3Pkwg6r+bcjFJNuvLYF4mg
-   jy6sQmhnkG8DuxLZ2ZMkbKpRhSkFdx3q/l3GcX9pr6mJiDrjRgCD+fuui
-   J0s4GU2se+1Fh42A7fJtyHuKX6w/i+Qo8atuxTvQQFw57TLe4W333vkGP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422240728"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="422240728"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 09:37:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="853038525"
-X-IronPort-AV: E=Sophos;i="6.00,218,1681196400"; 
-   d="scan'208";a="853038525"
-Received: from bgutier1-mobl.amr.corp.intel.com ([10.209.145.132])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 09:36:57 -0700
-Message-ID: <9a4660438e0466c04880fad4450215707921521e.camel@linux.intel.com>
-Subject: Re: [PATCH] thermal: intel_powerclamp: Check for a possible array
- out of bounds access.
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniil Dulov <d.dulov@aladdin.ru>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Chen Yu <yu.c.chen@intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Date:   Mon, 05 Jun 2023 09:36:54 -0700
-In-Reply-To: <CAJZ5v0iyDvApQVjY=BopVSXZSg3tqmcYBnDQN2HORp3Oy8atEQ@mail.gmail.com>
-References: <20230602085546.376086-1-d.dulov@aladdin.ru>
-         <CAJZ5v0iyDvApQVjY=BopVSXZSg3tqmcYBnDQN2HORp3Oy8atEQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S229791AbjFERWI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 13:22:08 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D96011A
+        for <linux-pm@vger.kernel.org>; Mon,  5 Jun 2023 10:22:05 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-39b349405d9so69723b6e.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Jun 2023 10:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1685985725; x=1688577725;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6XZ3PYFTW8wBOrcxa44gmTJZRL7p9p613s1N10mZMVY=;
+        b=ycFVn/L/naAjRsAnEqR9ysNncUv/HbQfjetBqXx4erHA+VIlFcLYsCCYZpKwYV2LfY
+         KG9fKbgqWBtjwwWULsEPR4hELvi+OZ1caxlR7XcilK6EroWpiY6H/p7eKLSZ+XxaHD3z
+         Np995JYCblZZVyD3K7OFjrqfChq6ClFMXNni2e95MICclPFh9tYtD96AnJBnDqL0e5h3
+         gNQx/XCZtwcC6ZUYiuGd7rF+gU4oSsIdadeHa4vlVuCgI+cVs0ugq+AgzEMh9VhTYA88
+         lKTzoHiM5hZHwFCpR2aBwpBWlk5yBK2tuS/6r6Rh0flFXVi7X0z9nkLjh+5izffZ0SFk
+         gqwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685985725; x=1688577725;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6XZ3PYFTW8wBOrcxa44gmTJZRL7p9p613s1N10mZMVY=;
+        b=PjJahuO5/4ZfiohH2pze0bxHnubLQZrJ4nh8+onPEOaYSZBC0gnvBNTLEl8ovAUONK
+         MKhdDSsdSjOg7Snc2dHvPJ4dCxxlH914CbouT0Tt/j+Up5z7v1iHoaP3sGQ7zWYo9gr9
+         Fyk1GyDXWTl/1C+OsQHfoShkt6s/i/Kc1bdij3rcmWiSBTZ/5TTTso/XAMQZp2SHmkj4
+         vSgp4rRSombdLfiwa6UsXfn/jOmY87n4W5qsChSFiRGgQFanhILDXboNJ2KBS+9ojZUY
+         iAOhv3By9e0nebhZbYTNoTEffuG0JmTex51pf/q0ByeK3ilO0jzw7st5Dkt+RM6diYKo
+         Fr4A==
+X-Gm-Message-State: AC+VfDwG8NM4Mqu9utDR+SqyGOLQXgZOgoHZfIYldbO4J8DYJ7eMCHid
+        lvnsLLn9FBbptaVhTlAKKbTC4w==
+X-Google-Smtp-Source: ACHHUZ55ijmtRxUtr2PJeE7u8S0QvWcKyGSmOe2wfBtgxRK6mvg8iopMfucIMuRB5AN9ZmOkwUXzHA==
+X-Received: by 2002:a05:6358:c401:b0:127:6a3c:2280 with SMTP id ff1-20020a056358c40100b001276a3c2280mr4551121rwb.2.1685985724648;
+        Mon, 05 Jun 2023 10:22:04 -0700 (PDT)
+Received: from [127.0.0.1] ([2600:380:c01c:32f0:eff8:7692:bf8a:abc6])
+        by smtp.gmail.com with ESMTPSA id cl9-20020a17090af68900b0025643e5da99sm7993666pjb.37.2023.06.05.10.22.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jun 2023 10:22:03 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+In-Reply-To: <20230531125535.676098-2-hch@lst.de>
+References: <20230531125535.676098-1-hch@lst.de>
+ <20230531125535.676098-2-hch@lst.de>
+Subject: Re: [PATCH 01/24] driver core: return bool from driver_probe_done
+Message-Id: <168598572280.2504.3952473013804137907.b4-ty@kernel.dk>
+Date:   Mon, 05 Jun 2023 11:22:02 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 2023-06-04 at 18:13 +0200, Rafael J. Wysocki wrote:
-> Cc list trimmed.
->=20
-> On Fri, Jun 2, 2023 at 11:12=E2=80=AFAM Daniil Dulov <d.dulov@aladdin.ru>
-> wrote:
-> >=20
-> > ratio may be equal to MAX_TARGET_RATIO - 1 that will result in
-> > out of bound access.
-> >=20
-The description was not clear to me.
 
-May be something like this:
+On Wed, 31 May 2023 14:55:12 +0200, Christoph Hellwig wrote:
+> bool is the most sensible return value for a yes/no return.  Also
+> add __init as this funtion is only called from the early boot code.
+> 
+> 
 
-"
-The max value of "ratio" parameter passed to the function
-get_compensation() is MAX_TARGET_RATIO - 1. The size of cal_data array
-is MAX_TARGET_RATIO. Hence, accessing cal_data[ratio + 1], will result
-in out of bound access.
+Applied, thanks!
 
-Add a condition to check ratio < MAX_TARGET_RATIO - 1, before accsssing
-cal_data[ratio + 1].
-"
+[01/24] driver core: return bool from driver_probe_done
+        commit: aa5f6ed8c21ec1aa5fd688118d8d5cd87c5ffc1d
+[02/24] PM: hibernate: factor out a helper to find the resume device
+        commit: 02b42d58f3898134b900ff3030561099e38adb32
+[03/24] PM: hibernate: remove the global snapshot_test variable
+        commit: d6545e687271ab27472eebff770f2de6a5f1a464
+[04/24] PM: hibernate: move finding the resume device out of software_resume
+        commit: cc89c63e2fe37d476357c82390dfb12edcd41cdd
+[05/24] init: remove pointless Root_* values
+        commit: f5524c3fadba35c075a5131bad74e3041507a694
+[06/24] init: rename mount_block_root to mount_root_generic
+        commit: e3102722ffe77094ba9e7e46380792b3dd8a7abd
+[07/24] init: refactor mount_root
+        commit: a6a41d39c2d91ff2543d31b6cc6070f3957e3aea
+[08/24] init: pass root_device_name explicitly
+        commit: c8643c72bc42781fc169c6498a3902bec447099e
+[09/24] init: don't remove the /dev/ prefix from error messages
+        commit: 73231b58b1b496d631fa0ecf9fa7f64f5a07c6e3
+[10/24] init: handle ubi/mtd root mounting like all other root types
+        commit: 07d63cbb67cdb5e2a7720fdd8579b3be979c2d66
+[11/24] init: factor the root_wait logic in prepare_namespace into a helper
+        commit: 3701c600a3e735b9fbac6f7a73e4c086090c97ca
+[12/24] init: move the nfs/cifs/ram special cases out of name_to_dev_t
+        commit: c0c1a7dcb6f5db4500e6574294674213bc24940c
+[13/24] init: improve the name_to_dev_t interface
+        commit: cf056a43121559d3642419917d405c3237ded90a
+[14/24] init: clear root_wait on all invalid root= strings
+        commit: 079caa35f7863cd9958b4555ae873ea4d352a502
+[15/24] block: move the code to do early boot lookup of block devices to block/
+        commit: 702f3189e454b3c3c2f3c99dbf30acf41aab707c
+[16/24] block: move more code to early-lookup.c
+        commit: 7cadcaf1d82618852745e7206fffa2c72c17ce4b
+[17/24] dm-snap: simplify the origin_dev == cow_dev check in snapshot_ctr
+        commit: 26110d5afe8117d1b505fe735ac709bdf063f4da
+[18/24] dm: open code dm_get_dev_t in dm_init_init
+        commit: 49177377e910a8fd5cd1388c966d8fbb51075c3c
+[19/24] dm: remove dm_get_dev_t
+        commit: d4a28d7defe79006e59293a4b43d518ba8483fb0
+[20/24] dm: only call early_lookup_bdev from early boot context
+        commit: 7a126d5bf975f082281fb9b45d110cd49b7c3ee4
+[21/24] PM: hibernate: don't use early_lookup_bdev in resume_store
+        commit: 1e8c813b083c4122dfeaa5c3b11028331026e85d
+[22/24] mtd: block2mtd: factor the early block device open logic into a helper
+        commit: b2baa57475e3a24bb9ad27bb9047ea3be94627f5
+[23/24] mtd: block2mtd: don't call early_lookup_bdev after the system is running
+        commit: 8d03187ee7328af8e18ef1782289e0b034e75485
+[24/24] block: mark early_lookup_bdev as __init
+        commit: 2577f53f42947d8ca01666e3444bb7307319ea38
 
-The change is correct. But for actual code change,
-the ratio < MAX_TARGET_RATIO - 1 is also checked in else if() before,
-which can be merged to check only once for this condition.
-
-Thanks,
-Srinivas
-
-
-
-
-
-
-> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> >=20
-> > Fixes: d6d71ee4a14a ("PM: Introduce Intel PowerClamp Driver")
-> > Signed-off-by: Daniil Dulov <d.dulov@aladdin.ru>
-> > ---
-> > =C2=A0drivers/thermal/intel/intel_powerclamp.c | 3 ++-
-> > =C2=A01 file changed, 2 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/thermal/intel/intel_powerclamp.c
-> > b/drivers/thermal/intel/intel_powerclamp.c
-> > index fb04470d7d4b..9deaf2b8ccf6 100644
-> > --- a/drivers/thermal/intel/intel_powerclamp.c
-> > +++ b/drivers/thermal/intel/intel_powerclamp.c
-> > @@ -277,7 +277,8 @@ static unsigned int get_compensation(int ratio)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 comp =3D (cal_data[ratio].steady_comp +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cal_d=
-ata[ratio - 1].steady_comp +
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cal_d=
-ata[ratio - 2].steady_comp) / 3;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (cal_data[ratio].confid=
-ence >=3D CONFIDENCE_OK &&
-
-I think the concern is that cal_data[ratio + 1] is going out of bound
-for the "ratio" passed to this function, when ratio =3D=3D
-ARRAY_SIZE(cal_data) - 1;
-
-Here size of cal_data array is 50. The max possible "ratio" passed can
-be 49.
+Best regards,
+-- 
+Jens Axboe
 
 
-
-
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (ratio < MAX_TARGET_RAT=
-IO - 1 &&
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 cal_data[ratio].confidence >=3D CONFIDENCE_OK &&
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cal_data[ratio - 1].confidence >=3D CONFIDENCE_OK &&
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cal_data[ratio + 1].confidence >=3D CONFIDENCE_OK) {
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 comp =3D (cal_data[ratio].steady_comp +
-> > --
->=20
-> Rui, Srinivas, can you have a look at this, please?
 
