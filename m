@@ -2,359 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4C9722C15
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 18:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545D7722C2C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 18:07:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233736AbjFEQAv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jun 2023 12:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
+        id S232155AbjFEQHd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Jun 2023 12:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjFEQAs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 12:00:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B88294;
-        Mon,  5 Jun 2023 09:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1685980846; x=1717516846;
-  h=date:from:to:cc:subject:message-id;
-  bh=1XMWJYaZIA+06520U05wDEJCcPWqKpSnIw3WPggaMuE=;
-  b=NQvg/cGAzZikxr6Et/mX+yMMpp26zK42Nc4SqmJ2K/4vhyXq4bOimjio
-   kUgFoRI6xzc4mY87OOazs/CKg67hKOtO7Xg1wCl37q3QumoZHe7WOohJ3
-   HYVJlNoMj0ytRY9BM+++sW1SMav1ORq8qmUmq6VLekEcLXlf81a3usvGZ
-   zCz0xLIlvmkKYngvIdslevksVjS4DEBIxpY5U8LnBri2fBXDxsesKdwJq
-   HwHSZLHPOL3qpNQmE80uodrCZQspXuMGJVWsDvtWh7CZpmVEq7OerwcOu
-   joyCJNT6eOvgfeW67ZnxvgMA/1mA86sndOapqlhRrpcO+cJThI88ZYyOr
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="422229224"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="422229224"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 09:00:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="702796973"
-X-IronPort-AV: E=Sophos;i="6.00,217,1681196400"; 
-   d="scan'208";a="702796973"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 05 Jun 2023 09:00:10 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6Ccs-0004GI-07;
-        Mon, 05 Jun 2023 16:00:10 +0000
-Date:   Mon, 05 Jun 2023 23:59:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        bpf@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        linux-arm-msm@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-xfs@vger.kernel.org, samba-technical@lists.samba.org
-Subject: [linux-next:master] BUILD REGRESSION
- 9ca10bfb8aa8fbf19ee22e702c8cf9b66ea73a54
-Message-ID: <20230605155917.CRiQj%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229634AbjFEQHc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 12:07:32 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2079.outbound.protection.outlook.com [40.107.243.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610A3B7;
+        Mon,  5 Jun 2023 09:07:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z2zb+n1L5WFwlQ8T6pnmxn21FUAV6XjFWwIN2JMatQsLEqVIqdTxvLpLJQ9WjaXdB8UABPKPnwTQi6HFzi7vZ09/dEZqSSCidfKc52APayTnWz8kPKW/PFmZNgLIveR9Lo0FnzS3TCRfbJm5BbGiodFkeJ3uApNqnz/D/zuX1IntsX+z+D+BUabbEvvKMb4Q0+78QYyBbGN3XU2gOoBHkpxQv7Mh0ArmzhL0Z6rJuc9zNU4fbdW0EXIXkNhEGEIMjQkNaouXTWS1gx7tvPmfWho+D8A325JP0L5dtBmpDQrOUKXBnc1A81VpF4QvuhOHw96HAvge649j+o2rV5CXkg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qGCYkFJX9TGWlcMPZEBgP67u4k53RLi7tr9V/TuNiqQ=;
+ b=Oj8/Z6ZQBC/DnZi8jAGlT9HPzkb2R108qO/SNIvJaPWf/19JuN6kIUiyxchEp37EQ5wnUgaAbtcaDiQ29JmSeJAblB/iewNdM1li9ibe1bFuh54e0eXPExwhop9h5dKnWizMAHDCRGjDSq+6YuvcjqfX0rgjY8jaqOQRc26oD0PX4T/rcwcNX5GmjF9j4pecEYjtySR1eDi1o07q5PIP4ZbmGy++l6tZYMGnuJc1fzv7ianQ1Ph2RnrffezWcP8RpZDbBsEhXAhtq0wn2T6CvoA1519x8NXd7D4WgXc5IEIv2oge0S6KGXe4Qg5gYe7LTOYWlOb7jh0546IFs8od/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qGCYkFJX9TGWlcMPZEBgP67u4k53RLi7tr9V/TuNiqQ=;
+ b=jsDpaDDGOYbd2AZoRU5Psf/Pss00jHcBHsxcUi4n1stHIdWEjYmkhFof3ICtnCnzdt1TxhUCzn4f3he7xMYO1AASsQduQ8Pty+RNNePavUp4lff4IhJpfQsKMBREZSju1NnnRbF/GA8vb+tSxOsCRo51g3b/dAxakVt/uaQ1tKY=
+Received: from CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19)
+ by MW5PR12MB5649.namprd12.prod.outlook.com (2603:10b6:303:19d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 5 Jun
+ 2023 16:07:27 +0000
+Received: from CYYPR12MB8655.namprd12.prod.outlook.com
+ ([fe80::6239:f594:96fd:2af3]) by CYYPR12MB8655.namprd12.prod.outlook.com
+ ([fe80::6239:f594:96fd:2af3%4]) with mapi id 15.20.6455.030; Mon, 5 Jun 2023
+ 16:07:27 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+CC:     Len Brown <lenb@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devel@acpica.org" <devel@acpica.org>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>
+Subject: RE: [PATCH 0/4] Enable amd-pstate active mode by default
+Thread-Topic: [PATCH 0/4] Enable amd-pstate active mode by default
+Thread-Index: AQHZl8AYgGk+ncCZWUSMrNFXSaXP9K98XhLw
+Date:   Mon, 5 Jun 2023 16:07:27 +0000
+Message-ID: <CYYPR12MB8655C41A0DE7938EBF44DFCF9C4DA@CYYPR12MB8655.namprd12.prod.outlook.com>
+References: <20230605151133.2615-1-mario.limonciello@amd.com>
+In-Reply-To: <20230605151133.2615-1-mario.limonciello@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=51047bad-fa66-471a-832f-e0183515fd3d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-05T16:00:02Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CYYPR12MB8655:EE_|MW5PR12MB5649:EE_
+x-ms-office365-filtering-correlation-id: 55935776-486d-4687-fe11-08db65def52a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wDWbFE9vOtpHefz2EOzvm0ll5g8jamStv6RaFJLYOnZjl/A2YDVLlgsweX512GYC5C2dAcw2sUFojSZly2OJ+vD1Ury58roOBf9sXb68qg21R5czMHIIBUj5y6m13ghUoiCgmQAwOZGCnIVzE7jcxHz7Ob78f2YbedKxuAZ3JM+4+uT/jevHu1RTqioVEAfSQ5ZVpDxCAnqmu6JZ+kiY0fJBU2bWeJE68Nz32LAqaLjU5lAFZOxYlCOcMtQrD53FDUlur0fq8I95wTQ1QmWpnfhC6djkcZ0szKBNeglsgmNaix8fr8BJ9hgjzun0jnkO+zFvSQeIEEoGJQDqusR67c2ewzDgHsElNDUMArA7j5iOJbIoS5kSvbQ54zSIpHW0l11qirF0ExDsR7SCdc2v0cAmEevTPZBdofV/3OpmP6Bmfw04nOYDMB4rMzEC28lehLpRLxi6LCgeWc28EJyvAxlczgsEV4B+E/sC09DGdYs1TW4xqqva6fxjFRVnachTtVEM2SwPe7Ms65+D/LqMGHKtQL9rGkvUQ9uDv5pVwT7xFdyg2DDGDJRPjh/vBM3wJ22VcmswWrO4V6UgBLIqXtIDWzu72irRIqBGz1C1OuSN5xJhQPMyU5734f9Om4wo
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8655.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(366004)(451199021)(54906003)(110136005)(71200400001)(478600001)(52536014)(5660300002)(8936002)(8676002)(38070700005)(2906002)(33656002)(86362001)(4326008)(122000001)(64756008)(66446008)(66476007)(66556008)(76116006)(316002)(66946007)(55016003)(38100700002)(41300700001)(53546011)(9686003)(6506007)(26005)(186003)(83380400001)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?e0fe2IJyDRiGr8bK+ntBQDvg2UnB/RVz+BmFmKF/kJsvedhLFHz5CR9LaSze?=
+ =?us-ascii?Q?AB4DSUJ+8kxrlKJHh3vlebGfBmwzREhc+KzMlN/2GfV5LPuNuetk2fOAH7fA?=
+ =?us-ascii?Q?/N5fb9J63fjCa2uAYwir2i6KeRQRPBXMgrBYbmHY29MZV+mscPi8cTqve/9Y?=
+ =?us-ascii?Q?MiaWX3yemo6LqiZZ7dnhV/OSbL588fBSb67p7nIOL2XsKumJnovysLPUoLig?=
+ =?us-ascii?Q?5BJ/bnWN6TbijroOY+J0ntoqmA+TuyXqwCmNTXvH//BL35DxunmUQkyapxXJ?=
+ =?us-ascii?Q?C5c/anieN5FxkmEWNEBagzIBzWyqn37g62atdocDoKDcPWei0wR1vzGkfInQ?=
+ =?us-ascii?Q?PKeGPRKRvTsTHmCUXHbNRe0V4wM8FddbIL7ywHXa6dsvTL5gEqpLv9T8AYam?=
+ =?us-ascii?Q?ljVajdQAFKLA1lH5I3F7hecOdthBo3V11MqBJlXKPoafIWt1sMJhieB07yrx?=
+ =?us-ascii?Q?Wuqh7qpIVubDu6l1S8uRpwBM+6h5+IjX/xwTuJxsFc+rsNSVheZA+ZRfOA+U?=
+ =?us-ascii?Q?L5MWLjkjls4oUjE+E2xftYsqdmLMcWFs6uq+Duns9IW9hyoZ+atzcaTUPTm2?=
+ =?us-ascii?Q?F492fOvztY+e7uDDee34e4BEblwvQA3B4kWWNAbf77p0XLSOELD2t2jMQHcr?=
+ =?us-ascii?Q?ysMBg1iFNd+LXz8/CY0bqwhGuMwae5URiFh662Ympx755WoXxZyNPh8aihfF?=
+ =?us-ascii?Q?iR3UAjA98nwDFEHNyGab3vLc3yjAfSqWTxq7HJRgc733AHLgYmt3H+APbNln?=
+ =?us-ascii?Q?/s95y38dkVNh6CF/RqqsIwvdq2krEH4Gc6niWlUvg/sQY/lvVVfFNDcxelNq?=
+ =?us-ascii?Q?8WQ+11KQ2t85cUECmqKsfL4aj0shza7krPYILDQkQZkJNOcpA5ai1FfaaC6e?=
+ =?us-ascii?Q?r+tnpH8VrdUM2P6nRuHEpWrwCrrJN1qsgmQ+eTnh6TYUVio0zPVdS+DrsbBq?=
+ =?us-ascii?Q?y0AVI6Wp9GyiVhUkSWHX51GyiwdhvGMItQ390fZgHc59QY75JLSBkCEWdeCS?=
+ =?us-ascii?Q?o3mLuBXaegvQnpwGxyhpLvxtQj0uOF891JoQ3NincBhtENTYtTMk8tGnHtva?=
+ =?us-ascii?Q?H/Ei7bxlWKTfM19UJ2WaH3sOfLypU9PMZSkJBjNkOVLsK0XsczXowxtwYZ4s?=
+ =?us-ascii?Q?2vk3CvWXnuax4qt1TbWD2t1EOLvmQ27DmfrNz8nSpsLZqQ6yABbjf4VSzBNj?=
+ =?us-ascii?Q?Wzk6An2axcOq8rLvoJrEaSn3P8ac8Vxt8/KY6wy190KmTvfn9zC7hPP8lt8r?=
+ =?us-ascii?Q?/5ynSVNlN/MZqJzOD5uFCS6akCQfW5dDHZEtkuGDUUpZoi0MoR9M9sAdEJ4X?=
+ =?us-ascii?Q?/fzwXno2odwRIM/94zUAndtWfYwvnOTnJw4yxTDsmqUu46tYo7luGUSY3zmg?=
+ =?us-ascii?Q?TDZgEBwC7vv2rDMbrN3IrPpjStPy2H0lIqls7yn08TUnsyoqQkuoJ1lWRxxA?=
+ =?us-ascii?Q?DZA8OzzIgK/XXdfJdUkpqz0u6Fn22hIYTTjr2bpMqlmXK+UpipfEIQuMJNFQ?=
+ =?us-ascii?Q?Zlmtxfrh9NzPfpU/CGjkvQBjdPTZ00BG41CAeuK+izIX7fIRD9lHethlfohS?=
+ =?us-ascii?Q?/qzrWOzTBob39avm2BU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8655.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 55935776-486d-4687-fe11-08db65def52a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2023 16:07:27.3242
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jbncZ8sMdJ0ysB6dr+epkuzhsNvd5tOJyRIIcOfzZDxYE3Tu6QLEK1hodqTjz4CBnJaEO+qG6LW7MFa51me9MA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5649
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 9ca10bfb8aa8fbf19ee22e702c8cf9b66ea73a54  Add linux-next specific files for 20230605
+[AMD Official Use Only - General]
 
-Error/Warning reports:
+Hi Mario, Raphael,
 
-https://lore.kernel.org/oe-kbuild-all/202305070840.X0G3ofjl-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202305132244.DwzBUcUd-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306021936.OktTcMAT-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306051319.EihCQZPs-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306051812.1YdWyZca-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306051823.Gbzkjb7e-lkp@intel.com
+> -----Original Message-----
+> From: Limonciello, Mario <Mario.Limonciello@amd.com>
+> Sent: Monday, June 5, 2023 11:11 PM
+> To: Huang, Ray <Ray.Huang@amd.com>; Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com>
+> Cc: Rafael J . Wysocki <rafael@kernel.org>; Len Brown <lenb@kernel.org>;
+> Viresh Kumar <viresh.kumar@linaro.org>; Robert Moore
+> <robert.moore@intel.com>; linux-acpi@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-pm@vger.kernel.org; devel@acpica.org; Sheno=
+y,
+> Gautham Ranjal <gautham.shenoy@amd.com>; Karny, Wyes
+> <Wyes.Karny@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Limonciello,
+> Mario <Mario.Limonciello@amd.com>
+> Subject: [PATCH 0/4] Enable amd-pstate active mode by default
+>
+> Active mode for amd-pstate has shown enough success now that it makes
+> sense to enable it by default on client systems.
+>
+> This series introduces a new kernel configuration option to set the defau=
+lt
+> policy for amd-pstate modes for a kernel.
+>
+> Server systems will by identified by the PM preferred profile and still b=
+e set as
+> disabled by default for now.
+>
+> Mario Limonciello (4):
+>   ACPI: CPPC: Add a symbol to check if the preferred profile is a server
+>   cpufreq: amd-pstate: Set a fallback policy based on preferred_profile
+>   cpufreq: amd-pstate: Add a kernel config option to set default mode
+>   cpufreq: intel_pstate: Use the acpi_pm_profile_server() symbol
+>
+>  drivers/acpi/cppc_acpi.c       | 34 +++++++++++++++
+>  drivers/cpufreq/Kconfig.x86    | 17 ++++++++
+>  drivers/cpufreq/amd-pstate.c   | 80 ++++++++++++++++++++++------------
+>  drivers/cpufreq/intel_pstate.c | 17 +-------
+>  include/acpi/actbl.h           |  3 +-
+>  include/acpi/processor.h       | 10 +++++
+>  include/linux/amd-pstate.h     |  4 +-
+>  7 files changed, 121 insertions(+), 44 deletions(-)
+>
+> --
+> 2.34.1
 
-Error/Warning: (recently discovered and may have been fixed)
+The series is tested with commit 7736c431466abb54a2679dc257f739fddfa84295 (=
+linux-pm/bleeding-edge)
 
-arch/x86/tests/amd-ibs-via-core-pmu.c:47:25: error: 'pmus' undeclared (first use in this function)
-arch/x86/tests/amd-ibs-via-core-pmu.c:48:17: error: implicit declaration of function 'perf_pmu__scan'; did you mean 'perf_pmus__scan'? [-Werror=implicit-function-declaration]
-arch/x86/tests/amd-ibs-via-core-pmu.c:50:17: error: assignment to 'struct perf_pmu *' from 'int' makes pointer from integer without a cast [-Werror=int-conversion]
-arch/x86/tests/amd-ibs-via-core-pmu.c:50:19: error: implicit declaration of function 'perf_pmu__find'; did you mean 'perf_pmus__find'? [-Werror=implicit-function-declaration]
-drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev' is uninitialized when used here [-Wuninitialized]
-drivers/cpufreq/cpufreq-dt-platdev.c:104:34: warning: 'blocklist' defined but not used [-Wunused-const-variable=]
-drivers/cpufreq/cpufreq-dt-platdev.c:17:34: warning: 'allowlist' defined but not used [-Wunused-const-variable=]
-include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:330:18: warning: no previous prototype for 'bpf_kfunc_call_test_offset' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:336:1: warning: no previous prototype for 'bpf_kfunc_call_memb_acquire' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:342:18: warning: no previous prototype for 'bpf_kfunc_call_memb1_release' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:394:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail1' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:398:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail2' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:402:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail3' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:410:18: warning: no previous prototype for 'bpf_kfunc_call_test_mem_len_fail1' [-Wmissing-prototypes]
+Default option will enable EPP mode without any parameters added to kernel =
+command line,
+If user adds "amd_pstate=3Dpassive" to kernel command line, they still can =
+choose other modes to use.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+Based the testing result.
+Tested-by: Yuan Perry <Perry.Yuan@amd.com>
 
-drivers/clk/qcom/gpucc-sm8550.c:37:22: sparse: sparse: decimal constant 2300000000 is between LONG_MAX and ULONG_MAX. For C99 that means long long, C90 compilers are very likely to produce unsigned long (and a warning) here
-drivers/clk/qcom/videocc-sm8550.c:34:22: sparse: sparse: decimal constant 2300000000 is between LONG_MAX and ULONG_MAX. For C99 that means long long, C90 compilers are very likely to produce unsigned long (and a warning) here
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
-drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c:217:30: sparse: sparse: incorrect type in argument 1 (different base types)
-fs/btrfs/volumes.c:6407 btrfs_map_block() error: we previously assumed 'mirror_num_ret' could be null (see line 6245)
-fs/smb/client/cifsfs.c:982 cifs_smb3_do_mount() warn: possible memory leak of 'cifs_sb'
-fs/smb/client/cifssmb.c:4089 CIFSFindFirst() warn: missing error code? 'rc'
-fs/smb/client/cifssmb.c:4216 CIFSFindNext() warn: missing error code? 'rc'
-fs/smb/client/connect.c:2725 cifs_match_super() error: 'tlink' dereferencing possible ERR_PTR()
-fs/smb/client/connect.c:2924 generic_ip_connect() error: we previously assumed 'socket' could be null (see line 2912)
-fs/xfs/scrub/fscounters.c:459 xchk_fscounters() warn: ignoring unreachable code.
-kernel/events/uprobes.c:478 uprobe_write_opcode() warn: passing zero to 'PTR_ERR'
-lib/kunit/test.c:336 __kunit_abort() warn: ignoring unreachable code.
-{standard input}:1078: Error: pcrel too far
+Perry.
 
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-randconfig-c031-20230605
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- i386-allyesconfig
-|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-randconfig-m021-20230605
-|   |-- fs-smb-client-cifsfs.c-cifs_smb3_do_mount()-warn:possible-memory-leak-of-cifs_sb
-|   |-- fs-smb-client-cifssmb.c-CIFSFindFirst()-warn:missing-error-code-rc
-|   |-- fs-smb-client-cifssmb.c-CIFSFindNext()-warn:missing-error-code-rc
-|   |-- fs-smb-client-connect.c-cifs_match_super()-error:tlink-dereferencing-possible-ERR_PTR()
-|   |-- fs-smb-client-connect.c-generic_ip_connect()-error:we-previously-assumed-socket-could-be-null-(see-line-)
-|   |-- fs-xfs-scrub-fscounters.c-xchk_fscounters()-warn:ignoring-unreachable-code.
-|   `-- kernel-events-uprobes.c-uprobe_write_opcode()-warn:passing-zero-to-PTR_ERR
-|-- i386-randconfig-s042-20230605
-|   |-- drivers-cpufreq-cpufreq-dt-platdev.c:warning:allowlist-defined-but-not-used
-|   `-- drivers-cpufreq-cpufreq-dt-platdev.c:warning:blocklist-defined-but-not-used
-|-- m68k-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- m68k-randconfig-m041-20230605
-|   `-- lib-kunit-test.c-__kunit_abort()-warn:ignoring-unreachable-code.
-|-- m68k-randconfig-s043-20230605
-|   |-- drivers-clk-qcom-gpucc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-he
-|   `-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|-- mips-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- mips-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- powerpc-randconfig-s053-20230604
-|   `-- drivers-usb-typec-tcpm-qcom-qcom_pmic_typec_pdphy.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-header-got-restricted-__le16-const-usertype-header
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- s390-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- s390-randconfig-s052-20230604
-|   |-- mm-filemap.c:sparse:sparse:Using-plain-integer-as-NULL-pointer
-|   `-- mm-kfence-core.c:sparse:sparse:cast-to-restricted-__le64
-|-- sh-allmodconfig
-|   `-- standard-input:Error:pcrel-too-far
-|-- sparc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- x86_64-randconfig-k001-20230605
-|   |-- arch-x86-tests-amd-ibs-via-core-pmu.c:error:assignment-to-struct-perf_pmu-from-int-makes-pointer-from-integer-without-a-cast
-|   |-- arch-x86-tests-amd-ibs-via-core-pmu.c:error:implicit-declaration-of-function-perf_pmu__find
-|   |-- arch-x86-tests-amd-ibs-via-core-pmu.c:error:implicit-declaration-of-function-perf_pmu__scan
-|   |-- arch-x86-tests-amd-ibs-via-core-pmu.c:error:pmus-undeclared-(first-use-in-this-function)
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_memb1_release
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_memb_acquire
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail1
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail2
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail3
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_mem_len_fail1
-|   `-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_offset
-`-- x86_64-randconfig-m001-20230605
-    |-- fs-btrfs-volumes.c-btrfs_map_block()-error:we-previously-assumed-mirror_num_ret-could-be-null-(see-line-)
-    `-- fs-xfs-scrub-fscounters.c-xchk_fscounters()-warn:ignoring-unreachable-code.
-clang_recent_errors
-`-- arm-randconfig-r046-20230605
-    `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-
-elapsed time: 726m
-
-configs tested: 162
-configs skipped: 9
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r005-20230605   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                        nsimosci_defconfig   gcc  
-arc                  randconfig-r005-20230605   gcc  
-arc                  randconfig-r012-20230605   gcc  
-arc                  randconfig-r013-20230605   gcc  
-arc                  randconfig-r043-20230605   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       imx_v4_v5_defconfig   clang
-arm                         lpc18xx_defconfig   gcc  
-arm                  randconfig-r006-20230605   gcc  
-arm                  randconfig-r036-20230605   gcc  
-arm                  randconfig-r046-20230605   clang
-arm                        vexpress_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r003-20230605   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230605   clang
-arm64                randconfig-r014-20230605   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r033-20230605   gcc  
-hexagon              randconfig-r002-20230605   clang
-hexagon              randconfig-r011-20230605   clang
-hexagon              randconfig-r034-20230605   clang
-hexagon              randconfig-r041-20230605   clang
-hexagon              randconfig-r045-20230605   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230605   clang
-i386                 randconfig-i002-20230605   clang
-i386                 randconfig-i003-20230605   clang
-i386                 randconfig-i004-20230605   clang
-i386                 randconfig-i005-20230605   clang
-i386                 randconfig-i006-20230605   clang
-i386                 randconfig-i011-20230605   gcc  
-i386                 randconfig-i012-20230605   gcc  
-i386                 randconfig-i013-20230605   gcc  
-i386                 randconfig-i014-20230605   gcc  
-i386                 randconfig-i015-20230605   gcc  
-i386                 randconfig-i016-20230605   gcc  
-i386                 randconfig-i051-20230605   clang
-i386                 randconfig-i052-20230605   clang
-i386                 randconfig-i053-20230605   clang
-i386                 randconfig-i054-20230605   clang
-i386                 randconfig-i055-20230605   clang
-i386                 randconfig-i056-20230605   clang
-i386                 randconfig-i061-20230605   clang
-i386                 randconfig-i062-20230605   clang
-i386                 randconfig-i063-20230605   clang
-i386                 randconfig-i064-20230605   clang
-i386                 randconfig-i065-20230605   clang
-i386                 randconfig-i066-20230605   clang
-ia64                      gensparse_defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r024-20230605   gcc  
-microblaze           randconfig-r005-20230605   gcc  
-microblaze           randconfig-r014-20230605   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                  cavium_octeon_defconfig   clang
-mips                         db1xxx_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-mips                      pic32mzda_defconfig   clang
-mips                        qi_lb60_defconfig   clang
-mips                 randconfig-r023-20230605   clang
-mips                 randconfig-r035-20230605   gcc  
-nios2                         3c120_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r016-20230605   gcc  
-nios2                randconfig-r025-20230605   gcc  
-nios2                randconfig-r031-20230605   gcc  
-openrisc     buildonly-randconfig-r001-20230605   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-openrisc             randconfig-r002-20230605   gcc  
-openrisc             randconfig-r016-20230605   gcc  
-openrisc             randconfig-r021-20230605   gcc  
-openrisc             randconfig-r022-20230605   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r032-20230605   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r006-20230605   gcc  
-powerpc                     mpc5200_defconfig   clang
-powerpc                 mpc8315_rdb_defconfig   clang
-powerpc              randconfig-r011-20230605   gcc  
-powerpc              randconfig-r015-20230605   gcc  
-powerpc                     sequoia_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r033-20230605   clang
-riscv                randconfig-r042-20230605   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230605   clang
-s390                 randconfig-r004-20230605   clang
-s390                 randconfig-r032-20230605   clang
-s390                 randconfig-r044-20230605   gcc  
-sh                               allmodconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                            hp6xx_defconfig   gcc  
-sh                   randconfig-r001-20230605   gcc  
-sh                   randconfig-r012-20230605   gcc  
-sh                   randconfig-r013-20230605   gcc  
-sh                   randconfig-r031-20230605   gcc  
-sh                           se7722_defconfig   gcc  
-sh                   sh7770_generic_defconfig   gcc  
-sh                  sh7785lcr_32bit_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r026-20230605   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r002-20230605   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230605   clang
-x86_64               randconfig-a002-20230605   clang
-x86_64               randconfig-a003-20230605   clang
-x86_64               randconfig-a004-20230605   clang
-x86_64               randconfig-a005-20230605   clang
-x86_64               randconfig-a006-20230605   clang
-x86_64               randconfig-a011-20230605   gcc  
-x86_64               randconfig-a012-20230605   gcc  
-x86_64               randconfig-a013-20230605   gcc  
-x86_64               randconfig-a014-20230605   gcc  
-x86_64               randconfig-a015-20230605   gcc  
-x86_64               randconfig-a016-20230605   gcc  
-x86_64               randconfig-k001-20230605   gcc  
-x86_64               randconfig-x051-20230605   gcc  
-x86_64               randconfig-x052-20230605   gcc  
-x86_64               randconfig-x053-20230605   gcc  
-x86_64               randconfig-x054-20230605   gcc  
-x86_64               randconfig-x055-20230605   gcc  
-x86_64               randconfig-x056-20230605   gcc  
-x86_64               randconfig-x061-20230605   gcc  
-x86_64               randconfig-x062-20230605   gcc  
-x86_64               randconfig-x063-20230605   gcc  
-x86_64               randconfig-x064-20230605   gcc  
-x86_64               randconfig-x065-20230605   gcc  
-x86_64               randconfig-x066-20230605   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa       buildonly-randconfig-r004-20230605   gcc  
-xtensa               randconfig-r003-20230605   gcc  
-xtensa               randconfig-r004-20230605   gcc  
-xtensa               randconfig-r015-20230605   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
