@@ -2,73 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9032722951
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 16:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80215722A78
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 17:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbjFEOsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jun 2023 10:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S233103AbjFEPJM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 5 Jun 2023 11:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231583AbjFEOsY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 10:48:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0C109;
-        Mon,  5 Jun 2023 07:48:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id F1F4921B72;
-        Mon,  5 Jun 2023 14:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1685976502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2IPv0LcB/KR9amQatic4dj9dYr0rrctL8g04cJxaOqA=;
-        b=PvQgnf7xF8mqDAh4wqFPqeNtV69voQ29WMSffauLX/ATIfkqYuXsGLpeRVhN9/70/4LqFs
-        9wsRe8GWGCMJ1gEZWzm0SIHsTIEhhvEHX5s0LxClKRrtLsAygPSKNipDqqe9HJP6EDpW26
-        zLP10W93wAqIxBRj4f575jYOrRgP5p4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1685976502;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2IPv0LcB/KR9amQatic4dj9dYr0rrctL8g04cJxaOqA=;
-        b=M0AQtyoigFAOVZpW5mUOi+uKFvZY/DVYx2m6NlM7nzi8drQ4/NKqKwxP1V4SNoCSlHt2tk
-        aSRW2d3BFh6yVIDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A36EF139C8;
-        Mon,  5 Jun 2023 14:48:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MNUAJ7X1fWQvXwAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 05 Jun 2023 14:48:21 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
-        deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
-        daniel.thompson@linaro.org, jingoohan1@gmail.com
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org
-Subject: [PATCH 24/30] fbdev/core: Pass Linux device to pm_vt_switch_*() functions
-Date:   Mon,  5 Jun 2023 16:48:06 +0200
-Message-Id: <20230605144812.15241-25-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230605144812.15241-1-tzimmermann@suse.de>
-References: <20230605144812.15241-1-tzimmermann@suse.de>
+        with ESMTP id S234356AbjFEPIs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 11:08:48 -0400
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5FC7E8;
+        Mon,  5 Jun 2023 08:08:47 -0700 (PDT)
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-652d76be8c2so4031464b3a.3;
+        Mon, 05 Jun 2023 08:08:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1685977727; x=1688569727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Aiwp/bDLmwSr5erFDhpBQgGpKXSsi00J2xGn70rauW0=;
+        b=i/t6YyMlsjxqkrnXcHZz40E0tIOs/MX1dkTUnkQFq3Whz5BuqPrf8MmlMlfTUTIeq5
+         GzgzH6ufZFkL8dUCo86PsKTMhdtrki3W8CWh6JmdrFxKh+Tmve4A9RrKYgXkelwFFRPV
+         05JQHomJITaILvFidLUhVK7fLCbtTe0jCbQn2D18vcqrn9LtD3qnMFy7xQnj/SGQESIT
+         G8ckZm8GVVpLogGt1Nf65lCfZQiUVroc/Muf6Stka0dTMEltCgABJ2/1eVehkOT406W0
+         t0sg41pWIQcd3sQMALvLyygMJUHjP2jtild2HauQlIty+Af4Q5VWE1v92N/a+TYQj82E
+         O9UQ==
+X-Gm-Message-State: AC+VfDz7JqZcupCyyg8bHRmkBkhgsw/iX7sW9c87/IEUK9eqWbOm2jvp
+        OCani0oj7Wb0BoANli1zgm5Jlxu5fkuFlQ==
+X-Google-Smtp-Source: ACHHUZ4MY6YnuUEHDcUmTbFEAZ6SSspWqZ1lBBkbZm3P116kLzJ54SkD8Rf/7C8YgiKfKUsZ330efg==
+X-Received: by 2002:a05:6a20:7490:b0:109:c161:a679 with SMTP id p16-20020a056a20749000b00109c161a679mr9141445pzd.19.1685977726567;
+        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com. [209.85.210.173])
+        by smtp.gmail.com with ESMTPSA id q16-20020a62e110000000b0063d29df1589sm5302851pfh.136.2023.06.05.08.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6532671ccc7so3740863b3a.2;
+        Mon, 05 Jun 2023 08:08:46 -0700 (PDT)
+X-Received: by 2002:a05:6870:3e4:b0:19e:86e4:55b0 with SMTP id
+ h36-20020a05687003e400b0019e86e455b0mr54853oaf.1.1685977705560; Mon, 05 Jun
+ 2023 08:08:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <cover.1685692810.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1685692810.git.geert+renesas@glider.be>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 5 Jun 2023 17:08:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXrgyWT=RtS6cuUP6sT-Ta9Oa4cU2kHP10ah-U50DOSsg@mail.gmail.com>
+Message-ID: <CAMuHMdXrgyWT=RtS6cuUP6sT-Ta9Oa4cU2kHP10ah-U50DOSsg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] iopoll: Busy loop and timeout improvements + conversions
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +91,61 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Pass the Linux device to pm_vt_switch_*() instead of the virtual
-fbdev device. Prepares fbdev for making struct fb_info.dev optional.
+On Fri, Jun 2, 2023 at 10:51 AM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+> When implementing a polling loop, a common review comment is to use one
+> of the read*_poll_timeout*() helpers.  Unfortunately this is not always
+> possible, or might introduce subtle bugs.  This patch series aims to
+> improve these helpers, so they can gain wider use.
+>
+>   1. The first patch improves busy-looping behavior of both the atomic
+>      and non-atomic read*_poll_timeout*() helpers.
+>      The issue addressed by this patch was discussed before[1-2], but I
+>      am not aware of any patches moving forward.
+>
+>   2. The second patch fixes timeout handling of the atomic variants.
+>      Some of the issues addressed by this patch were mitigated in
+>      various places[3-5], and some of these findings may be of interest
+>      to the authors of [6-8].
+>
+> The first two patches were sent before, and already received some acks
+> and reviews.  I plan to queue these in an immutable and tagged branch
+> after the weekend, for consumption by myself, and by other interested
+> parties.
 
-The type of device that is passed to the PM functions does not matter
-much. It is only a token within the internal list of known devices.
-The PM functions do not refer to any of the device's properties or its
-type.
+FTR...
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: linux-pm@vger.kernel.org
----
- drivers/video/fbdev/core/fbmem.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
-index 329d16e49a90..f91ae7d4c94d 100644
---- a/drivers/video/fbdev/core/fbmem.c
-+++ b/drivers/video/fbdev/core/fbmem.c
-@@ -1478,9 +1478,9 @@ static int do_register_framebuffer(struct fb_info *fb_info)
- 		INIT_LIST_HEAD(&fb_info->modelist);
- 
- 	if (fb_info->skip_vt_switch)
--		pm_vt_switch_required(fb_info->dev, false);
-+		pm_vt_switch_required(fb_info->device, false);
- 	else
--		pm_vt_switch_required(fb_info->dev, true);
-+		pm_vt_switch_required(fb_info->device, true);
- 
- 	fb_var_to_videomode(&mode, &fb_info->var);
- 	fb_add_videomode(&mode, &fb_info->modelist);
-@@ -1520,7 +1520,7 @@ static void unlink_framebuffer(struct fb_info *fb_info)
- 
- 	device_destroy(fb_class, MKDEV(FB_MAJOR, i));
- 
--	pm_vt_switch_unregister(fb_info->dev);
-+	pm_vt_switch_unregister(fb_info->device);
- 
- 	unbind_console(fb_info);
- 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git
+tags/iopoll-busy-loop-timeout-tag
+
+for you to fetch changes up to 7349a69cf3125e92d48e442d9f400ba446fa314f:
+
+  iopoll: Do not use timekeeping in read_poll_timeout_atomic()
+(2023-06-05 15:35:27 +0200)
+
+----------------------------------------------------------------
+iopoll: Busy loop and timeout improvements
+
+----------------------------------------------------------------
+Geert Uytterhoeven (2):
+      iopoll: Call cpu_relax() in busy loops
+      iopoll: Do not use timekeeping in read_poll_timeout_atomic()
+
+ include/linux/iopoll.h | 24 +++++++++++++++++++-----
+ 1 file changed, 19 insertions(+), 5 deletions(-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.40.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
