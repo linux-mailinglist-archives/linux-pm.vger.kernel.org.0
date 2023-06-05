@@ -2,103 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B44722904
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 16:40:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9032722951
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jun 2023 16:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234284AbjFEOkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Jun 2023 10:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S234572AbjFEOsZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Jun 2023 10:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232416AbjFEOj7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 10:39:59 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DB9F7
-        for <linux-pm@vger.kernel.org>; Mon,  5 Jun 2023 07:39:57 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f62b512fe2so1332905e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jun 2023 07:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1685975996; x=1688567996;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mZ/Wx/zgJSwTp0t38WigvjTJRaMO4qIiJIqQKGcMOHk=;
-        b=nTxpFfcBbzT/AvpjfHhD0vjOL/nnhWeDIgReAfU/7mTBRdEo7UTeyRb+celMb6ool6
-         YvHkgSKDWEgEWiohHMQ6gCaYspB4RcZSE3w1+XosRPylxtbtGcpjPxAB1EpYNGH1s3om
-         5DLnkvUz9+VBulBxLJj5S66zZSr2OcO2st0sEiSq0RCYB/qFwV1UmDly+WiaaGmRW8hy
-         1o750eifhSEE4t2APzqhbV2o+OPJCB6F5G8XNNn3GULCL/WP9es3atal4Yno1/jWm+9u
-         DU6FPYbnA+yoqk7nex7sOVAldrEFfu9pZr9fYh6DIyg0NX9ej8Hcow9XlwjPZfhVgBqZ
-         qstg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1685975996; x=1688567996;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZ/Wx/zgJSwTp0t38WigvjTJRaMO4qIiJIqQKGcMOHk=;
-        b=H+8BRUOPEb8/ER3za93lsU7pB0ufzCPb726l+nIBvkb5kM994rooMov6jxQbUQ/3DB
-         Nw0rjp7HtJGECSLZ3eygzTtLAOYJuRnsUQL6Q2LnTH40bPH6XyxPl2D0bIFco8I4vLNO
-         Plt6gCQmaUyeXlPTbsCA7geP441ZYrw8fWzOA+LivP6ZEl2AsLXIOaYufcNM4Wbb5Eu2
-         44sbi5dpJvSHMBscMS7TDDSqMz8urbFkt2fhqAH50TF3eJ4OChq1SdBwTcHTIjrdS1B7
-         li16XJ4HVECEHq/Xl24YZDuaF09gr855U63VmFYotlk/HSqGeWcTuhqGNsbwGc7mUr0z
-         Dq8Q==
-X-Gm-Message-State: AC+VfDx6gDEdCfjDt5I4AjgejtXFjHBsh0arBpHaqMq18RefQqLIuzhT
-        0Lva7hQx4rDHy6UZoWPxmZrbBw==
-X-Google-Smtp-Source: ACHHUZ7WDoAhYXeQfKqx3mhLebnwXX+a5Kx8rUIlNfmQYvJmv/Cuj8dkaJfOMD2HqLlQTsBU2ee3cw==
-X-Received: by 2002:a19:740f:0:b0:4f6:217a:5620 with SMTP id v15-20020a19740f000000b004f6217a5620mr2681255lfe.39.1685975995851;
-        Mon, 05 Jun 2023 07:39:55 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:2385:9257:ace1:1efc? ([2a05:6e02:1041:c10:2385:9257:ace1:1efc])
-        by smtp.googlemail.com with ESMTPSA id g26-20020a7bc4da000000b003f50e88ffc1sm14725899wmk.0.2023.06.05.07.39.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 07:39:55 -0700 (PDT)
-Message-ID: <751ed2d6-3008-bd47-1921-2f2ca7cc92e1@linaro.org>
-Date:   Mon, 5 Jun 2023 16:39:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/6] dt-bindings: thermal: tsens: Add compatible for
- MSM8226
-Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S231583AbjFEOsY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Jun 2023 10:48:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0C109;
+        Mon,  5 Jun 2023 07:48:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id F1F4921B72;
+        Mon,  5 Jun 2023 14:48:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1685976502; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2IPv0LcB/KR9amQatic4dj9dYr0rrctL8g04cJxaOqA=;
+        b=PvQgnf7xF8mqDAh4wqFPqeNtV69voQ29WMSffauLX/ATIfkqYuXsGLpeRVhN9/70/4LqFs
+        9wsRe8GWGCMJ1gEZWzm0SIHsTIEhhvEHX5s0LxClKRrtLsAygPSKNipDqqe9HJP6EDpW26
+        zLP10W93wAqIxBRj4f575jYOrRgP5p4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1685976502;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2IPv0LcB/KR9amQatic4dj9dYr0rrctL8g04cJxaOqA=;
+        b=M0AQtyoigFAOVZpW5mUOi+uKFvZY/DVYx2m6NlM7nzi8drQ4/NKqKwxP1V4SNoCSlHt2tk
+        aSRW2d3BFh6yVIDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A36EF139C8;
+        Mon,  5 Jun 2023 14:48:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id MNUAJ7X1fWQvXwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 05 Jun 2023 14:48:21 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     daniel@ffwll.ch, javierm@redhat.com, sam@ravnborg.org,
+        deller@gmx.de, geert+renesas@glider.be, lee@kernel.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-sh@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230507201225.89694-1-matti.lehtimaki@gmail.com>
- <20230507201225.89694-3-matti.lehtimaki@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230507201225.89694-3-matti.lehtimaki@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Pavel Machek <pavel@ucw.cz>, linux-pm@vger.kernel.org
+Subject: [PATCH 24/30] fbdev/core: Pass Linux device to pm_vt_switch_*() functions
+Date:   Mon,  5 Jun 2023 16:48:06 +0200
+Message-Id: <20230605144812.15241-25-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230605144812.15241-1-tzimmermann@suse.de>
+References: <20230605144812.15241-1-tzimmermann@suse.de>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/05/2023 22:12, Matti Lehtimäki wrote:
-> Qualcomm MSM8226 has tsens v0.1 block.
-> 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
+Pass the Linux device to pm_vt_switch_*() instead of the virtual
+fbdev device. Prepares fbdev for making struct fb_info.dev optional.
 
-Applied, thanks
+The type of device that is passed to the PM functions does not matter
+much. It is only a token within the internal list of known devices.
+The PM functions do not refer to any of the device's properties or its
+type.
 
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/video/fbdev/core/fbmem.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/video/fbdev/core/fbmem.c b/drivers/video/fbdev/core/fbmem.c
+index 329d16e49a90..f91ae7d4c94d 100644
+--- a/drivers/video/fbdev/core/fbmem.c
++++ b/drivers/video/fbdev/core/fbmem.c
+@@ -1478,9 +1478,9 @@ static int do_register_framebuffer(struct fb_info *fb_info)
+ 		INIT_LIST_HEAD(&fb_info->modelist);
+ 
+ 	if (fb_info->skip_vt_switch)
+-		pm_vt_switch_required(fb_info->dev, false);
++		pm_vt_switch_required(fb_info->device, false);
+ 	else
+-		pm_vt_switch_required(fb_info->dev, true);
++		pm_vt_switch_required(fb_info->device, true);
+ 
+ 	fb_var_to_videomode(&mode, &fb_info->var);
+ 	fb_add_videomode(&mode, &fb_info->modelist);
+@@ -1520,7 +1520,7 @@ static void unlink_framebuffer(struct fb_info *fb_info)
+ 
+ 	device_destroy(fb_class, MKDEV(FB_MAJOR, i));
+ 
+-	pm_vt_switch_unregister(fb_info->dev);
++	pm_vt_switch_unregister(fb_info->device);
+ 
+ 	unbind_console(fb_info);
+ 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.40.1
 
