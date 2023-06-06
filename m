@@ -2,154 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BC9724DDB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 22:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11738725031
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 00:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233416AbjFFUSc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 16:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S240102AbjFFWvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 18:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239706AbjFFUSb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 16:18:31 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC241A7;
-        Tue,  6 Jun 2023 13:18:29 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5C91B5C0189;
-        Tue,  6 Jun 2023 16:18:27 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 06 Jun 2023 16:18:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1686082707; x=1686169107; bh=/7YL0I/wdpR1Dyl/whVOKKeGk3Kq8M8MxbU
-        JFQZ6VKA=; b=3RTJflr+Jr/ONLWddDwxwFKO98Mg53p2jZEW/c+lCMYnOA1YjDJ
-        o2CWUmyc5gs3vBQLTNQnl7hKEFX6gmtHof7EoxFxeXVw91ua6hQnyNeQHEpiaUus
-        YuyaAp/tYVq8PuXLhsBJGliRqEDOt9gm+A2Ssqgw/Ek1tF3YMgy43f/cOD+uRsG6
-        0/oQpbjK1EyjHiXJGzEKLMe8SCk0sp8yUzfFqX/0i4hwEZNn7hMmwa22Z2HreLto
-        o26zhtaj1/15Gs2CA+cJZXfJ+a/NKfJVFXShjmLE/QEAcF/NyVWP8K92zgVL324Z
-        +tb+j9G0ShWOKvp3WAfkEaKOUxiPnRRir9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1686082707; x=1686169107; bh=/7YL0I/wdpR1Dyl/whVOKKeGk3Kq8M8MxbU
-        JFQZ6VKA=; b=UrHmkgFO7902chnScDG+wfosItXrw46HGp5V/ecfTHQv/eGutyG
-        b7uW1QhMFanTqncPAlQu/Nq0tfv9lnSJmhHzv9pml9XDgk+1/XTyCw493fxOYKdV
-        TPZs/qdoDmws82lAiv5P+XvtKIChCtA2/4kY/4Xja+MurwF/ehz+7YBo7FnGIm33
-        oH5d833ukWKCrP/lPd/LEd4ojlLFpoQVde5NB66O0F4zmdYuYn/j5DnRbvQKB1XU
-        Wu1DStCfwzNEXCZaFks6oD2AZrNk8GFGVz4bit8pUJEt1YwtgKLOVtqYBwhfdKv0
-        G+8WYqRyc413wBCF640XHfB5lrtp/nYx1+g==
-X-ME-Sender: <xms:k5R_ZOPY4fbT2CG2pPWiu5LnK4DWKPr9aDKj9MHuDtztVqWYraH2Fg>
-    <xme:k5R_ZM9mPxrSPN3B2XAnwue-RRKFQSsJPvp6dhWNkigINEFBsUj6jK0xG8Zhu8mpm
-    G7kMELJ9PptCDv6>
-X-ME-Received: <xmr:k5R_ZFQYkWPvWvr9NYvFU5rDE6o771XdN36zxWElooyZiryc_B8U1ZlwdEJpPIcAmYz28jc6ei1aD1bmYswl04s_QJgqS7K8mUBZYvNoj5MOlEE-mLFz>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgedtuddgudehtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepuegv
-    rhhnugcuufgthhhusggvrhhtuceosggvrhhnugdrshgthhhusggvrhhtsehfrghsthhmrg
-    hilhdrfhhmqeenucggtffrrghtthgvrhhnpedtueejffeuhedtfeejtdefleetvdfhhfet
-    heffvedulefhgeeitdduvdetkefghfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsggvrhhn
-    ugdrshgthhhusggvrhhtsehfrghsthhmrghilhdrfhhm
-X-ME-Proxy: <xmx:k5R_ZOs_9kr7lbZF9qt0rG1deCSz5W3orW86YxLlHZcv-4VSRyN6wA>
-    <xmx:k5R_ZGcdLht1RpaRq4x8WE-pVIFK6X_7a3EVAUzgaQ3Ys4gx9nwstA>
-    <xmx:k5R_ZC2r5-5wuTNEdYxV0q43ube7_jbyrQZGUv24FD0ptrAL2Gvbbw>
-    <xmx:k5R_ZDGdEMocbr2Vtf3WrOQElo4zvCPh_c3y_Cebgf7Jm25fxd7chA>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 6 Jun 2023 16:18:26 -0400 (EDT)
-Message-ID: <5d69a11e-c64e-25dd-a982-fd4c935f2bf3@fastmail.fm>
-Date:   Tue, 6 Jun 2023 22:18:23 +0200
+        with ESMTP id S240062AbjFFWvJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 18:51:09 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EBF1728
+        for <linux-pm@vger.kernel.org>; Tue,  6 Jun 2023 15:50:47 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30ad458f085so14570f8f.0
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jun 2023 15:50:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20221208.gappssmtp.com; s=20221208; t=1686091846; x=1688683846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZsgUvAUYrCnrR/1XiT9juxzkogVY5Vs72GapwMni78s=;
+        b=VmbPZldWPYAwRsYyMwk8A03rXJyrpTvXOEYSvwFSEfXYGQ9f0DibZgbOcZv9ahaGKf
+         PI5+OxAdMYvbZGfbUvFF/CsIWyPYoUJBv4adaCgbsLoKZ4qUcAWsIa6Ri3jpTK/bHQrT
+         Ohep93vPQ7ryyJQWAyfDBFxol1ij/mZJMW0A0iwqiwl36LvAZOLX1aeY9L0SpoZCLnJz
+         wVbN864mtnWORoS661vBrZSXNRIiY6AXoBUlqUh/rkIvLh2gwYqiK+WaVFKW8of/Br1s
+         OKeXsZtVkiiCWR6CHlkqhjfmhnyDAQPTMoZhbcUNAf6eh7p56c8hqiOZ1oxWgdRViFlH
+         o2mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686091846; x=1688683846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZsgUvAUYrCnrR/1XiT9juxzkogVY5Vs72GapwMni78s=;
+        b=AxDo7J9wRaiKa0sPWOpa2c2rmp9l0d00ZdyH3zsnHYOy/S7lu9lKT7xzUq2XmT+tJy
+         mDbnq1bYi3bnWC9YtfhAQC0kCrK3NNuu6Al4M8JxCw3EZKH5Bw4sp2+UNdimqI/ZeT9m
+         Fa9zNZ2a+pJTD1BqcoV3iRo1ycYGVM5PQeSHLCJXR/2aCx421U6RuKZHjIzAP7ds2Asf
+         ZzSkD7tnAXbvG2eEKaZHd/MgsckcTW9rW3giAYweYrzWItfmkLWiTObumnx++fQAVmN4
+         dnyd47l5B4MbziiJ48JaOHiGEutQXVOsS+X4fgZNbm9a3Mb8fmDebQU7QGIXEkFmRmkV
+         78YQ==
+X-Gm-Message-State: AC+VfDy6MZP3i16x9xc6vVHHqtTI1Es46wiYn6E97O6JkIylRKtVKYKW
+        /aMNZVTKdpKJ0nuDH20z4pfSBg==
+X-Google-Smtp-Source: ACHHUZ6DIZ/PhyT9JV3FzdchvbYZ3qIwLNNEqf/pmfFBTRfAYv0aDDapWKAK27qD8k0ew1wS3jRAUg==
+X-Received: by 2002:a5d:6b82:0:b0:30e:47e2:7eca with SMTP id n2-20020a5d6b82000000b0030e47e27ecamr4524731wrx.3.1686091845858;
+        Tue, 06 Jun 2023 15:50:45 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id l6-20020a5d4bc6000000b0030ae3a6be5bsm13760443wrt.78.2023.06.06.15.50.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jun 2023 15:50:45 -0700 (PDT)
+Date:   Tue, 6 Jun 2023 23:50:43 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Richard Weinberger <richard@nod.at>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Coly Li <colyli@suse.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-btrfs@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 02/31] cdrom: remove the unused bdev argument to
+ cdrom_open
+Message-ID: <ZH+4QyeJ2WCOaPGO@equinox>
+References: <20230606073950.225178-1-hch@lst.de>
+ <20230606073950.225178-3-hch@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Askar Safin <safinaskar@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
- <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-Content-Language: en-US, de-DE
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606073950.225178-3-hch@lst.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jun 06, 2023 at 09:39:21AM +0200, Christoph Hellwig wrote:
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  drivers/cdrom/cdrom.c | 3 +--
+>  drivers/cdrom/gdrom.c | 2 +-
+>  drivers/scsi/sr.c     | 2 +-
+>  include/linux/cdrom.h | 3 +--
+>  4 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+> index 416f723a2dbb33..e3eab319cb0474 100644
+> --- a/drivers/cdrom/cdrom.c
+> +++ b/drivers/cdrom/cdrom.c
+> @@ -1155,8 +1155,7 @@ int open_for_data(struct cdrom_device_info *cdi)
+>   * is in their own interest: device control becomes a lot easier
+>   * this way.
+>   */
+> -int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
+> -	       fmode_t mode)
+> +int cdrom_open(struct cdrom_device_info *cdi, fmode_t mode)
+>  {
+>  	int ret;
+>  
+> diff --git a/drivers/cdrom/gdrom.c b/drivers/cdrom/gdrom.c
+> index ceded5772aac6d..eaa2d5a90bc82f 100644
+> --- a/drivers/cdrom/gdrom.c
+> +++ b/drivers/cdrom/gdrom.c
+> @@ -481,7 +481,7 @@ static int gdrom_bdops_open(struct block_device *bdev, fmode_t mode)
+>  	bdev_check_media_change(bdev);
+>  
+>  	mutex_lock(&gdrom_mutex);
+> -	ret = cdrom_open(gd.cd_info, bdev, mode);
+> +	ret = cdrom_open(gd.cd_info, mode);
+>  	mutex_unlock(&gdrom_mutex);
+>  	return ret;
+>  }
+> diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+> index 12869e6d4ebda8..61b83880e395a4 100644
+> --- a/drivers/scsi/sr.c
+> +++ b/drivers/scsi/sr.c
+> @@ -498,7 +498,7 @@ static int sr_block_open(struct block_device *bdev, fmode_t mode)
+>  		sr_revalidate_disk(cd);
+>  
+>  	mutex_lock(&cd->lock);
+> -	ret = cdrom_open(&cd->cdi, bdev, mode);
+> +	ret = cdrom_open(&cd->cdi, mode);
+>  	mutex_unlock(&cd->lock);
+>  
+>  	scsi_autopm_put_device(sdev);
+> diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
+> index 67caa909e3e615..cc5717cb0fa8a8 100644
+> --- a/include/linux/cdrom.h
+> +++ b/include/linux/cdrom.h
+> @@ -101,8 +101,7 @@ int cdrom_read_tocentry(struct cdrom_device_info *cdi,
+>  		struct cdrom_tocentry *entry);
+>  
+>  /* the general block_device operations structure: */
+> -extern int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
+> -			fmode_t mode);
+> +int cdrom_open(struct cdrom_device_info *cdi, fmode_t mode);
+>  extern void cdrom_release(struct cdrom_device_info *cdi, fmode_t mode);
+>  extern int cdrom_ioctl(struct cdrom_device_info *cdi, struct block_device *bdev,
+>  		       fmode_t mode, unsigned int cmd, unsigned long arg);
+> -- 
+> 2.39.2
+> 
 
+Thanks for the patch, looks good to me.
 
-On 6/6/23 16:37, Miklos Szeredi wrote:
-> On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
->>
->> Will this patch fix a long-standing fuse vs suspend bug? (
->> https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
-> 
-> No.
-> 
-> The solution to the fuse issue is to freeze processes that initiate
-> fuse requests *before* freezing processes that serve fuse requests.
-> 
-> The problem is finding out which is which.  This can be complicated by
-> the fact that a process could be both serving requests *and*
-> initiating them (even without knowing).
-> 
-> The best idea so far is to let fuse servers set a process flag
-> (PF_FREEZE_LATE) that is inherited across fork/clone.  For example the
-> sshfs server would do the following before starting request processing
-> or starting ssh:
-> 
->    echo 1 > /proc/self/freeze_late
-> 
-> This would make the sshfs and ssh processes be frozen after processes
-> that call into the sshfs mount.
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
 
-Hmm, why would this need to be done manually on the server (daemon) 
-side? It could be automated on the fuse kernel side, for example in 
-process_init_reply() using current task context?
-
-A slightly better version would give scores, the later the daemon/server 
-is created the higher its freezing score - would help a bit with stacked 
-fuse file systems, although not perfectly. For that struct task would 
-need to be extended, though.
-
-> 
-> After normal (non-server) processes are frozen, server processes
-> should not be getting new requests and can be frozen.
-> 
-> Issues remaining:
-> 
->   - if requests are stuck (e.g. network is down) then the requester
-> process can't be frozen and suspend will still fail.
-> 
->   - if server process is generating filesystem activity (new fuse
-> requests) spontaneously, then there's nothing to differentiate between
-> server processes and we are back to the original problem
-> 
-> Solution to both these are probably non-kernel: impacted servers need
-> to receive notification from systemd when suspend is starting and act
-> accordingly.
-> 
-> Attaching work-in-progress patch.  This needs to be improved to freeze
-> server processes in a separate phase from kernel threads, but it
-> should be able to demonstrate the idea.
-
-
-Thanks,
-Bernd
+Regards,
+Phil
