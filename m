@@ -2,110 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8077237BD
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 08:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C06C7237D2
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 08:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjFFGdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 02:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42340 "EHLO
+        id S234771AbjFFGhS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 02:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232402AbjFFGdl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 02:33:41 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8A9123;
-        Mon,  5 Jun 2023 23:33:36 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3565kBw0021598;
-        Tue, 6 Jun 2023 06:33:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wGNR35vj0lPMC8yPcOx3emygX/jN2PAWABJ3cTjLVpo=;
- b=UVzTF3a2IdxFbtx67yd9Fd8UKRt9dqqF9WJ1lPFog6lZ/7pe+MV4TT5SIf2G5fwzgL5o
- MXor21wmZzTj7v68wBCdMqs0hji001dMxESeUegDli/u9JRGvDIYi8gEhrEeTJGdmSzB
- x2WuWlePQ4608qwkDvcGUqjbXzYcfjIC6YrFKmLk4LCs7V5VBxlEsLH6Pzb8uRyEASGq
- nXL3uVA3+oxJ6OM0TJP+jUJWMaGot32cfeFpMZs3mZNiLNlovfx5e+DWFcgfmagfd0j4
- s226Mttgnr+ByiBgePKjmM48WN9LI/cHOohQERRNl9GUgjbfdMU43bU53AUKt4HTLqQ2 1w== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r1xxr040m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jun 2023 06:33:11 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3566X99S020873
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Jun 2023 06:33:09 GMT
-Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 5 Jun 2023
- 23:33:03 -0700
-Message-ID: <3cd1d957-007e-d5d2-a33d-6b826916c892@quicinc.com>
-Date:   Tue, 6 Jun 2023 12:03:00 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2 08/10] arm64: dts: qcom: Add QUPv3 UART console node
- for SDX75
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <will@kernel.org>,
-        <robin.murphy@arm.com>, <joro@8bytes.org>, <mani@kernel.org>,
-        <robimarko@gmail.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <iommu@lists.linux.dev>
-References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
- <1685982557-28326-9-git-send-email-quic_rohiagar@quicinc.com>
- <7a6544b0-5c8d-8b61-71e8-32f59e93c2d4@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <7a6544b0-5c8d-8b61-71e8-32f59e93c2d4@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: omBu5-ParGuCgWQyZRV6y31HxOW8NBcS
-X-Proofpoint-ORIG-GUID: omBu5-ParGuCgWQyZRV6y31HxOW8NBcS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-06_03,2023-06-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 phishscore=0 impostorscore=0
- mlxlogscore=791 spamscore=0 mlxscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2306060055
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S235399AbjFFGhE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 02:37:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09905E4F;
+        Mon,  5 Jun 2023 23:37:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686033423; x=1717569423;
+  h=date:from:to:cc:subject:message-id;
+  bh=womVFeEwgqMoccN1kbUwjvaJp0TZtYpmw3GBXAlLnjE=;
+  b=BXUIWUGJNs0KI2LTnADP9a6f96ZXcH1YAWULDTMBB4pXbKPXdEK4WvSt
+   sO1hDNNnwkZ9BnKSIg0RyOpp3RgM42snPYKi59STUyH3piIAn/w4HqTSt
+   4S9fCyEXPitrMXGkYZrATp79RMZuUYUJidHfmOOmqBfiYFM3C7/oH2jpY
+   0dMfrvakgKC6F2hX7yjttAyZybDLJF0DjOuCt6U2386jh8QmyNmrPnmcI
+   sOHGgVKxGORDiBk4wphsTGAJ20tQqjDxgz9P6AZOwh4nLEhsPFa9F6LkZ
+   0bxMxy8bC1A5bBHY0ODha4fVIuxEA4+ABqX/K297uy6E2ZRZyQ+Vb+5Zl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="336938803"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="336938803"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jun 2023 23:37:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="774007259"
+X-IronPort-AV: E=Sophos;i="6.00,219,1681196400"; 
+   d="scan'208";a="774007259"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Jun 2023 23:37:01 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6QJQ-0004wR-1i;
+        Tue, 06 Jun 2023 06:37:00 +0000
+Date:   Tue, 06 Jun 2023 14:36:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 65491e9d74b424454284f3b14a5953b6a80df8dd
+Message-ID: <20230606063633.zZVrf%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 65491e9d74b424454284f3b14a5953b6a80df8dd  Merge branch 'acpi-pm' into bleeding-edge
 
-On 6/6/2023 11:36 AM, Krzysztof Kozlowski wrote:
-> On 05/06/2023 18:29, Rohit Agarwal wrote:
->> Add the debug uart console node in devicetree.
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sdx75.dtsi | 49 +++++++++++++++++++++++++++++++++++++
->>   1 file changed, 49 insertions(+)
-> GCC and UART are parts of basic DTSI and do not make sense on their own.
-> Otherwise, what exactly boots on your "basic DTSI" commit if you do not
-> have any clocks and serial console?
-Ok Will club all the additional patches into the same base dtsi patch.
+elapsed time: 724m
 
-Thanks,
-Rohit.
->
-> Best regards,
-> Krzysztof
->
+configs tested: 138
+configs skipped: 7
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230605   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                  randconfig-r015-20230605   gcc  
+arc                  randconfig-r043-20230605   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r032-20230605   gcc  
+arm                  randconfig-r046-20230605   clang
+arm                         s3c6400_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230605   clang
+hexagon              randconfig-r045-20230605   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230605   clang
+i386                 randconfig-i002-20230605   clang
+i386                 randconfig-i003-20230605   clang
+i386                 randconfig-i004-20230605   clang
+i386                 randconfig-i005-20230605   clang
+i386                 randconfig-i006-20230605   clang
+i386                 randconfig-i011-20230605   gcc  
+i386                 randconfig-i012-20230605   gcc  
+i386                 randconfig-i013-20230605   gcc  
+i386                 randconfig-i014-20230605   gcc  
+i386                 randconfig-i015-20230605   gcc  
+i386                 randconfig-i016-20230605   gcc  
+i386                 randconfig-i051-20230605   clang
+i386                 randconfig-i052-20230605   clang
+i386                 randconfig-i053-20230605   clang
+i386                 randconfig-i054-20230605   clang
+i386                 randconfig-i055-20230605   clang
+i386                 randconfig-i056-20230605   clang
+i386                 randconfig-i061-20230605   clang
+i386                 randconfig-i062-20230605   clang
+i386                 randconfig-i063-20230605   clang
+i386                 randconfig-i064-20230605   clang
+i386                 randconfig-i065-20230605   clang
+i386                 randconfig-i066-20230605   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r006-20230606   gcc  
+loongarch            randconfig-r025-20230605   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r002-20230606   gcc  
+microblaze           randconfig-r003-20230606   gcc  
+microblaze           randconfig-r035-20230605   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                        bcm63xx_defconfig   clang
+mips         buildonly-randconfig-r002-20230605   gcc  
+mips         buildonly-randconfig-r003-20230605   gcc  
+mips                         cobalt_defconfig   gcc  
+mips                     loongson1b_defconfig   gcc  
+nios2                            alldefconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r021-20230605   gcc  
+nios2                randconfig-r024-20230605   gcc  
+nios2                randconfig-r031-20230605   gcc  
+nios2                randconfig-r034-20230605   gcc  
+openrisc     buildonly-randconfig-r001-20230605   gcc  
+openrisc     buildonly-randconfig-r004-20230605   gcc  
+openrisc             randconfig-r036-20230605   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r014-20230605   gcc  
+parisc               randconfig-r022-20230605   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                    amigaone_defconfig   gcc  
+powerpc                  iss476-smp_defconfig   gcc  
+powerpc                 mpc8315_rdb_defconfig   clang
+powerpc                 mpc834x_itx_defconfig   gcc  
+powerpc                 mpc85xx_cds_defconfig   gcc  
+powerpc              randconfig-r005-20230606   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                     tqm8540_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv        buildonly-randconfig-r006-20230605   gcc  
+riscv                               defconfig   gcc  
+riscv             nommu_k210_sdcard_defconfig   gcc  
+riscv                randconfig-r033-20230605   clang
+riscv                randconfig-r042-20230605   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230606   gcc  
+s390                 randconfig-r044-20230605   gcc  
+sh                               allmodconfig   gcc  
+sh                                  defconfig   gcc  
+sh                          kfr2r09_defconfig   gcc  
+sh                            migor_defconfig   gcc  
+sh                   randconfig-r026-20230605   gcc  
+sparc                               defconfig   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230605   clang
+x86_64               randconfig-a002-20230605   clang
+x86_64               randconfig-a003-20230605   clang
+x86_64               randconfig-a004-20230605   clang
+x86_64               randconfig-a005-20230605   clang
+x86_64               randconfig-a006-20230605   clang
+x86_64               randconfig-a011-20230605   gcc  
+x86_64               randconfig-a012-20230605   gcc  
+x86_64               randconfig-a013-20230605   gcc  
+x86_64               randconfig-a014-20230605   gcc  
+x86_64               randconfig-a015-20230605   gcc  
+x86_64               randconfig-a016-20230605   gcc  
+x86_64               randconfig-x051-20230605   gcc  
+x86_64               randconfig-x052-20230605   gcc  
+x86_64               randconfig-x053-20230605   gcc  
+x86_64               randconfig-x054-20230605   gcc  
+x86_64               randconfig-x055-20230605   gcc  
+x86_64               randconfig-x056-20230605   gcc  
+x86_64               randconfig-x061-20230605   gcc  
+x86_64               randconfig-x062-20230605   gcc  
+x86_64               randconfig-x063-20230605   gcc  
+x86_64               randconfig-x064-20230605   gcc  
+x86_64               randconfig-x065-20230605   gcc  
+x86_64               randconfig-x066-20230605   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r012-20230605   gcc  
+xtensa               randconfig-r023-20230605   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
