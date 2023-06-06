@@ -2,63 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4FB72466E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 16:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F89B724824
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 17:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238299AbjFFOj3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 10:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S233304AbjFFPqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 11:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238190AbjFFOjF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 10:39:05 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FAF1BFA
-        for <linux-pm@vger.kernel.org>; Tue,  6 Jun 2023 07:38:07 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977e0fbd742so317693666b.2
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jun 2023 07:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1686062283; x=1688654283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tIeHacKUXBl3wNCe/SoZ0G9j6l2l916cMNODLOIB+Cw=;
-        b=VEr5PWCvUfJNT7Cml/NWI0Dk3piC7E1AU4e38Aheb09axj0dVMhU4478RBtGT+GNn1
-         IIOVGmZfXCCPtd+2klnyfpIKutva+P9VUHf9mh7BTVlrLiWlrJ7VJPrudRSE7EkNBWOw
-         LYbfpTHbN71p5D25slwTGKKMDMNQs0PNUS2I0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686062283; x=1688654283;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tIeHacKUXBl3wNCe/SoZ0G9j6l2l916cMNODLOIB+Cw=;
-        b=LmCQupkrkVnF4dE7ysiTzuyC7swF+WPMCDgTbJz1/DmnZqNfsYgDHkLFAP6/JmaFrd
-         R2AuqlO2jfEpv9dJEkEVUMKAjS5amm8irmIqAQPkIECRY6xS+S87V6S/hmliLAZjylrg
-         RbVuwj3EyMgrmx0gU50PY9JnzArBoTNp3T4GaSjOZGst7LtNlFNlFVEZsd46heDZuv1y
-         2T33ZbygAhwWrs5I3NGniIIvBBIZ2syrO3mDNuvtTeSuEB31ggQ5dnMn4AElXpIaOK9F
-         a5iCYuIyFU/sj2NNwI3nSP0X69xXMW6h767uCLb4pQAcBKhsRV37IiGyFNwRbkf1tZje
-         Ptyg==
-X-Gm-Message-State: AC+VfDw83qO6lRwpcyqix30sHrmO0p5/tvr6px63JDC+OsZB++C8J/93
-        SlCgZF0b3Dps7jsBHzmlHCtu2wdUK7clbGSUa0k2zw==
-X-Google-Smtp-Source: ACHHUZ4K3SMR7FO9doJR5vPa6kooUNGtkS1TgurOkU5LY+CEESPGEtSdoMX8wReEZLBB/vdccKMA4q14dA1n0lml78o=
-X-Received: by 2002:a17:906:7316:b0:973:e79c:3da8 with SMTP id
- di22-20020a170906731600b00973e79c3da8mr2653192ejc.17.1686062282939; Tue, 06
- Jun 2023 07:38:02 -0700 (PDT)
+        with ESMTP id S232951AbjFFPqn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 11:46:43 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0A6139;
+        Tue,  6 Jun 2023 08:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686066402; x=1717602402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zF/fEVl6MHKWIe2ynqPywg19p+43Sr/+dB18evdwwEg=;
+  b=AIctuMP9ObXDsDqkBJdk/5kD1X1LfDVcMrSF40QtzWLM1+2zBJ7ihsCh
+   At//HQgN97FgJI2b73A1YoHcweVMEoCQ9fcbKPmzfEllWgWyL/Zc2vWkE
+   kcejYarB/AF9+3DVdnAn7g9KU8yxUcxdXEJbRmUzq81gKJyjpjUnhdgnw
+   0NOFQ5ZYTBLiCG/IjUJYV0K0ZCyCVPW/Pq/iTMvzjzAjW3RfICp075oEz
+   cG/MAQNw6/BrO9gAGwpFqwES7bwQOHaPA01RRJaya10X3uYx74T0fCzVc
+   v1tesahN6II8+SKz5sZtYb1xVQ8NexSLWMUQCMKYglzAY3k1G/t2ieNqt
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="356728020"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="356728020"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 08:46:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="779027112"
+X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
+   d="scan'208";a="779027112"
+Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Jun 2023 08:46:39 -0700
+Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q6YtK-0005Pv-2f;
+        Tue, 06 Jun 2023 15:46:38 +0000
+Date:   Tue, 6 Jun 2023 23:45:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        rafael.j.wysocki@intel.com, daniel.lezcano@linaro.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, arnd@arndb.de
+Subject: Re: [PATCH] powercap: intel_rapl: Fix CONFIG_IOSF_MBI dependency
+Message-ID: <202306062334.5Z1NkD1F-lkp@intel.com>
+References: <20230606140000.385223-1-rui.zhang@intel.com>
 MIME-Version: 1.0
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
-In-Reply-To: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Tue, 6 Jun 2023 16:37:51 +0200
-Message-ID: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Askar Safin <safinaskar@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-Content-Type: multipart/mixed; boundary="00000000000071ca5d05fd76f736"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606140000.385223-1-rui.zhang@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,188 +65,151 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---00000000000071ca5d05fd76f736
-Content-Type: text/plain; charset="UTF-8"
+Hi Zhang,
 
-On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
->
-> Will this patch fix a long-standing fuse vs suspend bug? (
-> https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
+kernel test robot noticed the following build errors:
 
-No.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on next-20230606]
+[cannot apply to linus/master v6.4-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The solution to the fuse issue is to freeze processes that initiate
-fuse requests *before* freezing processes that serve fuse requests.
+url:    https://github.com/intel-lab-lkp/linux/commits/Zhang-Rui/powercap-intel_rapl-Fix-CONFIG_IOSF_MBI-dependency/20230606-220222
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230606140000.385223-1-rui.zhang%40intel.com
+patch subject: [PATCH] powercap: intel_rapl: Fix CONFIG_IOSF_MBI dependency
+config: i386-randconfig-i011-20230606 (attached as .config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce (this is a W=1 build):
+        mkdir -p ~/bin
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+        git fetch rafael-pm linux-next
+        git checkout rafael-pm/linux-next
+        b4 shazam https://lore.kernel.org/r/20230606140000.385223-1-rui.zhang@intel.com
+        # save the config file
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 ARCH=i386 
 
-The problem is finding out which is which.  This can be complicated by
-the fact that a process could be both serving requests *and*
-initiating them (even without knowing).
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306062334.5Z1NkD1F-lkp@intel.com/
 
-The best idea so far is to let fuse servers set a process flag
-(PF_FREEZE_LATE) that is inherited across fork/clone.  For example the
-sshfs server would do the following before starting request processing
-or starting ssh:
+All errors (new ones prefixed by >>):
 
-  echo 1 > /proc/self/freeze_late
+>> arch/x86/Kconfig:674:error: recursive dependency detected!
+   arch/x86/Kconfig:674:	symbol IOSF_MBI is selected by INTEL_RAPL_CORE
+   drivers/powercap/Kconfig:19:	symbol INTEL_RAPL_CORE is selected by INTEL_RAPL_TPMI
+   drivers/powercap/Kconfig:38:	symbol INTEL_RAPL_TPMI depends on IOSF_MBI
+   For a resolution refer to Documentation/kbuild/kconfig-language.rst
+   subsection "Kconfig recursive dependency limitations"
 
-This would make the sshfs and ssh processes be frozen after processes
-that call into the sshfs mount.
 
-After normal (non-server) processes are frozen, server processes
-should not be getting new requests and can be frozen.
+vim +674 arch/x86/Kconfig
 
-Issues remaining:
+506f1d07b31081 Sam Ravnborg              2007-11-09  592  
+ddd70cf93d784a Jun Nakajima              2013-01-21  593  config X86_GOLDFISH
+ddd70cf93d784a Jun Nakajima              2013-01-21  594  	bool "Goldfish (Virtual Platform)"
+cb7b80237a9f41 Ben Hutchings             2013-06-24  595  	depends on X86_EXTENDED_PLATFORM
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  596  	help
+ddd70cf93d784a Jun Nakajima              2013-01-21  597  	  Enable support for the Goldfish virtual platform used primarily
+ddd70cf93d784a Jun Nakajima              2013-01-21  598  	  for Android development. Unless you are building for the Android
+ddd70cf93d784a Jun Nakajima              2013-01-21  599  	  Goldfish emulator say N here.
+ddd70cf93d784a Jun Nakajima              2013-01-21  600  
+c751e17b5371ad Thomas Gleixner           2010-11-09  601  config X86_INTEL_CE
+c751e17b5371ad Thomas Gleixner           2010-11-09  602  	bool "CE4100 TV platform"
+c751e17b5371ad Thomas Gleixner           2010-11-09  603  	depends on PCI
+c751e17b5371ad Thomas Gleixner           2010-11-09  604  	depends on PCI_GODIRECT
+6084a6e23c971e Jiang Liu                 2014-06-09  605  	depends on X86_IO_APIC
+c751e17b5371ad Thomas Gleixner           2010-11-09  606  	depends on X86_32
+c751e17b5371ad Thomas Gleixner           2010-11-09  607  	depends on X86_EXTENDED_PLATFORM
+37bc9f5078c62b Dirk Brandewie            2010-11-09  608  	select X86_REBOOTFIXUPS
+da6b737b9ab768 Sebastian Andrzej Siewior 2011-02-22  609  	select OF
+da6b737b9ab768 Sebastian Andrzej Siewior 2011-02-22  610  	select OF_EARLY_FLATTREE
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  611  	help
+c751e17b5371ad Thomas Gleixner           2010-11-09  612  	  Select for the Intel CE media processor (CE4100) SOC.
+c751e17b5371ad Thomas Gleixner           2010-11-09  613  	  This option compiles in support for the CE4100 SOC for settop
+c751e17b5371ad Thomas Gleixner           2010-11-09  614  	  boxes and media devices.
+c751e17b5371ad Thomas Gleixner           2010-11-09  615  
+4cb9b00f42e078 David Cohen               2013-12-16  616  config X86_INTEL_MID
+43605ef188cd39 Alan Cox                  2011-07-12  617  	bool "Intel MID platform support"
+43605ef188cd39 Alan Cox                  2011-07-12  618  	depends on X86_EXTENDED_PLATFORM
+edc6bc784028f2 David Cohen               2014-01-21  619  	depends on X86_PLATFORM_DEVICES
+1ea7c6737c8f68 Alan Cox                  2011-11-10  620  	depends on PCI
+3fda5bb420e79b Andy Shevchenko           2016-01-15  621  	depends on X86_64 || (PCI_GOANY && X86_32)
+1ea7c6737c8f68 Alan Cox                  2011-11-10  622  	depends on X86_IO_APIC
+4cb9b00f42e078 David Cohen               2013-12-16  623  	select I2C
+7c9c3a1e5fc872 Alan Cox                  2011-12-29  624  	select DW_APB_TIMER
+54b34aa0a7295c Mika Westerberg           2020-04-16  625  	select INTEL_SCU_PCI
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  626  	help
+4cb9b00f42e078 David Cohen               2013-12-16  627  	  Select to build a kernel capable of supporting Intel MID (Mobile
+4cb9b00f42e078 David Cohen               2013-12-16  628  	  Internet Device) platform systems which do not have the PCI legacy
+4cb9b00f42e078 David Cohen               2013-12-16  629  	  interfaces. If you are building for a PC class system say N here.
+1ea7c6737c8f68 Alan Cox                  2011-11-10  630  
+4cb9b00f42e078 David Cohen               2013-12-16  631  	  Intel MID platforms are based on an Intel processor and chipset which
+4cb9b00f42e078 David Cohen               2013-12-16  632  	  consume less power than most of the x86 derivatives.
+43605ef188cd39 Alan Cox                  2011-07-12  633  
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  634  config X86_INTEL_QUARK
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  635  	bool "Intel Quark platform support"
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  636  	depends on X86_32
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  637  	depends on X86_EXTENDED_PLATFORM
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  638  	depends on X86_PLATFORM_DEVICES
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  639  	depends on X86_TSC
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  640  	depends on PCI
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  641  	depends on PCI_GOANY
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  642  	depends on X86_IO_APIC
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  643  	select IOSF_MBI
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  644  	select INTEL_IMR
+9ab6eb51ef4ad6 Andy Shevchenko           2015-03-05  645  	select COMMON_CLK
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  646  	help
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  647  	  Select to include support for Quark X1000 SoC.
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  648  	  Say Y here if you have a Quark based system such as the Arduino
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  649  	  compatible Intel Galileo.
+8bbc2a135b63be Bryan O'Donoghue          2015-01-30  650  
+3d48aab1d5035f Mika Westerberg           2013-01-18  651  config X86_INTEL_LPSS
+3d48aab1d5035f Mika Westerberg           2013-01-18  652  	bool "Intel Low Power Subsystem Support"
+5962dd22f0ff6f Sinan Kaya                2019-01-02  653  	depends on X86 && ACPI && PCI
+3d48aab1d5035f Mika Westerberg           2013-01-18  654  	select COMMON_CLK
+0f531431d3de88 Mathias Nyman             2013-09-13  655  	select PINCTRL
+eebb3e8d8aaf28 Andy Shevchenko           2015-12-12  656  	select IOSF_MBI
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  657  	help
+3d48aab1d5035f Mika Westerberg           2013-01-18  658  	  Select to build support for Intel Low Power Subsystem such as
+3d48aab1d5035f Mika Westerberg           2013-01-18  659  	  found on Intel Lynxpoint PCH. Selecting this option enables
+0f531431d3de88 Mathias Nyman             2013-09-13  660  	  things like clock tree (common clock framework) and pincontrol
+0f531431d3de88 Mathias Nyman             2013-09-13  661  	  which are needed by the LPSS peripheral drivers.
+3d48aab1d5035f Mika Westerberg           2013-01-18  662  
+92082a8886f30a Ken Xue                   2015-02-06  663  config X86_AMD_PLATFORM_DEVICE
+92082a8886f30a Ken Xue                   2015-02-06  664  	bool "AMD ACPI2Platform devices support"
+92082a8886f30a Ken Xue                   2015-02-06  665  	depends on ACPI
+92082a8886f30a Ken Xue                   2015-02-06  666  	select COMMON_CLK
+92082a8886f30a Ken Xue                   2015-02-06  667  	select PINCTRL
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  668  	help
+92082a8886f30a Ken Xue                   2015-02-06  669  	  Select to interpret AMD specific ACPI device to platform device
+92082a8886f30a Ken Xue                   2015-02-06  670  	  such as I2C, UART, GPIO found on AMD Carrizo and later chipsets.
+92082a8886f30a Ken Xue                   2015-02-06  671  	  I2C and UART depend on COMMON_CLK to set clock. GPIO driver is
+92082a8886f30a Ken Xue                   2015-02-06  672  	  implemented under PINCTRL subsystem.
+92082a8886f30a Ken Xue                   2015-02-06  673  
+ced3ce760b8df0 David E. Box              2014-09-17 @674  config IOSF_MBI
+ced3ce760b8df0 David E. Box              2014-09-17  675  	tristate "Intel SoC IOSF Sideband support for SoC platforms"
+ced3ce760b8df0 David E. Box              2014-09-17  676  	depends on PCI
+a7f7f6248d9740 Masahiro Yamada           2020-06-14  677  	help
+ced3ce760b8df0 David E. Box              2014-09-17  678  	  This option enables sideband register access support for Intel SoC
+ced3ce760b8df0 David E. Box              2014-09-17  679  	  platforms. On these platforms the IOSF sideband is used in lieu of
+ced3ce760b8df0 David E. Box              2014-09-17  680  	  MSR's for some register accesses, mostly but not limited to thermal
+ced3ce760b8df0 David E. Box              2014-09-17  681  	  and power. Drivers may query the availability of this device to
+ced3ce760b8df0 David E. Box              2014-09-17  682  	  determine if they need the sideband in order to work on these
+ced3ce760b8df0 David E. Box              2014-09-17  683  	  platforms. The sideband is available on the following SoC products.
+ced3ce760b8df0 David E. Box              2014-09-17  684  	  This list is not meant to be exclusive.
+ced3ce760b8df0 David E. Box              2014-09-17  685  	   - BayTrail
+ced3ce760b8df0 David E. Box              2014-09-17  686  	   - Braswell
+ced3ce760b8df0 David E. Box              2014-09-17  687  	   - Quark
+ced3ce760b8df0 David E. Box              2014-09-17  688  
+ced3ce760b8df0 David E. Box              2014-09-17  689  	  You should say Y if you are running a kernel on one of these SoC's.
+ced3ce760b8df0 David E. Box              2014-09-17  690  
 
- - if requests are stuck (e.g. network is down) then the requester
-process can't be frozen and suspend will still fail.
-
- - if server process is generating filesystem activity (new fuse
-requests) spontaneously, then there's nothing to differentiate between
-server processes and we are back to the original problem
-
-Solution to both these are probably non-kernel: impacted servers need
-to receive notification from systemd when suspend is starting and act
-accordingly.
-
-Attaching work-in-progress patch.  This needs to be improved to freeze
-server processes in a separate phase from kernel threads, but it
-should be able to demonstrate the idea.
-
-Thanks,
-Miklos
-
---00000000000071ca5d05fd76f736
-Content-Type: application/x-patch; 
-	name="0001_freezer_configure_user_space_process_frozen_along_with_kernel_threads.patch"
-Content-Disposition: attachment; 
-	filename="0001_freezer_configure_user_space_process_frozen_along_with_kernel_threads.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_likdcauo0>
-X-Attachment-Id: f_likdcauo0
-
-RnJvbTogTGkgRmVpIDxmZWkubGlAaW50ZWwuY29tPgpTdWJqZWN0OiBmcmVlemVyOiBjb25maWd1
-cmUgdXNlciBzcGFjZSBwcm9jZXNzIGZyb3plbiBhbG9uZyB3aXRoIGtlcm5lbCB0aHJlYWRzCkRh
-dGU6IFdlZCwgMjAgRmViIDIwMTMgMTA6MTU6MjUgKzA4MDAKClRoZXJlIGlzIHdlbGwga25vd24g
-aXNzdWUgdGhhdCBmcmVlemluZyB3aWxsIGZhaWwgaW4gY2FzZSB0aGF0IGZ1c2UKZGFlbW9uIGlz
-IGZyb3plbiBmaXJzdGx5IHdpdGggc29tZSByZXF1ZXN0cyBub3QgaGFuZGxlZCwgYXMgdGhlIGZ1
-c2UKdXNhZ2UgdGFzayBpcyB3YWl0aW5nIGZvciB0aGUgcmVzcG9uc2UgZnJvbSBmdXNlIGRhZW1v
-biBhbmQgY2FuJ3QgYmUKZnJvemVuLiBUbyBzb2x2ZSB0aGUgaXNzdWUgYXMgYWJvdmUsIG1ha2Ug
-ZnVzZSBkYWVtb24gZnJvemVuIGFmdGVyCmFsbCB1c2VyIHNwYWNlIHByb2Nlc3NlcyBmcm96ZW4g
-YW5kIGR1cmluZyB0aGUga2VybmVsIHRocmVhZHMgZnJvemVuCnBoYXNlLgoKQWZ0ZXIgZGlzY3Vz
-c2lvbiwgYXQgcHJlc2VudCBpdCdzIGdlbmVyYWxseSBhZ3JlZWQgdGhhdDoKMSkgSXQncyBvbmx5
-IHRoZSBmdXNlIGRhZW1vbiBpdHNlbGYga25vdyBkZWZpbml0ZWx5IHRoYXQgaXQgbmVlZHMKYW5k
-IGNhbiBiZSBmcm96ZW4gdG9nZXRoZXIgd2l0aCBrZXJuZWwgdGhyZWFkczsKMikgSXQncyBoZWxw
-ZnVsIHRvIGV4cG9zZSBpbnRlcmZhY2UgdGhhdCB1c2VyIHNwYWNlIHByb2Nlc3NlcyBjYW4KdXNl
-IHRvIGNvbmZpZ3VyZSB1c2VyIHNwYWNlIHByb2Nlc3NlcyB0byBiZSBmcm96ZW4gdG9nZXRoZXIg
-d2l0aAprZXJuZWwgdGhyZWFkcy4KTW9yZSBpbmZvcm1hdGlvbiBjYW4gYmUgZm91bmQgb24gaHR0
-cHM6Ly9sa21sLm9yZy9sa21sLzIwMTMvMi8xOC8xNzQuCgpUbyBzdXBwb3J0IHRoZSByZXF1aXJl
-bWVudCBhYm92ZSwgYXR0cmlidXRlIC9wcm9jLzxQSUQ+L2ZyZWV6ZV9sYXRlCmlzIGFkZGVkLCB3
-cml0aW5nIDEgdG8gaXQgd2lsbCBtYWtlIHRoZSBwcm9jZXNzIHRvIGJlIGZyb3plbiB0b2dldGhl
-cgp3aXRoIGtlcm5lbCB0aHJlYWRzLCBhbmQgd3JpdGluZyAwIHRvIGl0IHdpbGwgbWFrZSB0aGUg
-cHJvY2VzcyB0byBiZQpmcm96ZW4gdG9nZXRoZXIgd2l0aCB1c2VyIHNwYWNlIHByb2Nlc3Nlcy4K
-ClNpZ25lZC1vZmYtYnk6IExpdSBDaHVhbnNoZW5nIDxjaHVhbnNoZW5nLmxpdUBpbnRlbC5jb20+
-ClNpZ25lZC1vZmYtYnk6IFdhbmcgQmlhbyA8Ymlhby53YW5nQGludGVsLmNvbT4KU2lnbmVkLW9m
-Zi1ieTogTGkgRmVpIDxmZWkubGlAaW50ZWwuY29tPgotLS0KIGZzL3Byb2MvYmFzZS5jICAgICAg
-ICAgIHwgICA3NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysKIGluY2x1ZGUvbGludXgvZnJlZXplci5oIHwgICAgNiArKysKIGluY2x1ZGUvbGludXgvc2No
-ZWQuaCAgIHwgICAgMiAtCiBrZXJuZWwvZnJlZXplci5jICAgICAgICB8ICAgMjkgKysrKysrKysr
-KysrKysrKysrCiBrZXJuZWwvcG93ZXIvcHJvY2Vzcy5jICB8ICAgIDIgLQogNSBmaWxlcyBjaGFu
-Z2VkLCAxMTAgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCi0tLSBhL2ZzL3Byb2MvYmFz
-ZS5jCisrKyBiL2ZzL3Byb2MvYmFzZS5jCkBAIC05OCw2ICs5OCw5IEBACiAjaW5jbHVkZSA8bGlu
-dXgvY25fcHJvYy5oPgogI2luY2x1ZGUgPGxpbnV4L2tzbS5oPgogI2luY2x1ZGUgPHRyYWNlL2V2
-ZW50cy9vb20uaD4KKyNpZmRlZiBDT05GSUdfRlJFRVpFUgorI2luY2x1ZGUgPGxpbnV4L2ZyZWV6
-ZXIuaD4KKyNlbmRpZgogI2luY2x1ZGUgImludGVybmFsLmgiCiAjaW5jbHVkZSAiZmQuaCIKIApA
-QCAtMjI1Miw2ICsyMjU1LDcwIEBAIHByb2NfbWFwX2ZpbGVzX2dldF9saW5rKHN0cnVjdCBkZW50
-cnkgKmQKIAlyZXR1cm4gcHJvY19waWRfZ2V0X2xpbmsoZGVudHJ5LCBpbm9kZSwgZG9uZSk7CiB9
-CiAKKyNpZmRlZiBDT05GSUdfRlJFRVpFUgorCitzdGF0aWMgc3NpemVfdCBmcmVlemVfbGF0ZV9y
-ZWFkKHN0cnVjdCBmaWxlICpmaWxlLCBjaGFyIF9fdXNlciAqYnVmLAorCQkJCQlzaXplX3QgY291
-bnQsIGxvZmZfdCAqcHBvcykKK3sKKwlzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRhc2sgPSBnZXRfcHJv
-Y190YXNrKGZpbGUtPmZfcGF0aC5kZW50cnktPmRfaW5vZGUpOworCWNoYXIgYnVmZmVyW1BST0Nf
-TlVNQlVGXTsKKwlpbnQgZnJlZXplX2xhdGU7CisJc2l6ZV90IGxlbjsKKwlpZiAoIXRhc2spCisJ
-CXJldHVybiAtRVNSQ0g7CisJZnJlZXplX2xhdGUgPSAodGFzay0+ZmxhZ3MgJiBQRl9GUkVFWkVf
-TEFURSkgPyAxIDogMDsKKwlsZW4gPSBzbnByaW50ZihidWZmZXIsIHNpemVvZihidWZmZXIpLCAi
-JWRcbiIsIGZyZWV6ZV9sYXRlKTsKKwlyZXR1cm4gc2ltcGxlX3JlYWRfZnJvbV9idWZmZXIoYnVm
-LCBjb3VudCwgcHBvcywgYnVmZmVyLCBsZW4pOworfQorCitzdGF0aWMgc3NpemVfdCBmcmVlemVf
-bGF0ZV93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwgY29uc3QgY2hhciBfX3VzZXIgKmJ1ZiwKKwkJ
-CQkJc2l6ZV90IGNvdW50LCBsb2ZmX3QgKnBwb3MpCit7CisJc3RydWN0IHRhc2tfc3RydWN0ICp0
-YXNrOworCWNoYXIgYnVmZmVyW1BST0NfTlVNQlVGXTsKKwlpbnQgZnJlZXplX2xhdGU7CisJaW50
-IGVycjsKKworCW1lbXNldChidWZmZXIsIDAsIHNpemVvZihidWZmZXIpKTsKKwlpZiAoY291bnQg
-PiBzaXplb2YoYnVmZmVyKSAtIDEpCisJCWNvdW50ID0gc2l6ZW9mKGJ1ZmZlcikgLSAxOworCWlm
-IChjb3B5X2Zyb21fdXNlcihidWZmZXIsIGJ1ZiwgY291bnQpKSB7CisJCWVyciA9IC1FRkFVTFQ7
-CisJCWdvdG8gb3V0OworCX0KKworCWVyciA9IGtzdHJ0b2ludChzdHJzdHJpcChidWZmZXIpLCAw
-LCAmZnJlZXplX2xhdGUpOworCWlmIChlcnIpCisJCWdvdG8gb3V0OworCWlmIChmcmVlemVfbGF0
-ZSA8IEZSRUVaRV9MQVRFX01JTiB8fAorCQkJZnJlZXplX2xhdGUgPiBGUkVFWkVfTEFURV9NQVgp
-IHsKKwkJZXJyID0gLUVJTlZBTDsKKwkJZ290byBvdXQ7CisJfQorCisJdGFzayA9IGdldF9wcm9j
-X3Rhc2soZmlsZS0+Zl9wYXRoLmRlbnRyeS0+ZF9pbm9kZSk7CisJaWYgKCF0YXNrKSB7CisJCWVy
-ciA9IC1FU1JDSDsKKwkJZ290byBvdXQ7CisJfQorCisJaWYgKGZyZWV6ZV9sYXRlKQorCQlzZXRf
-ZnJlZXplX2xhdGVfZmxhZyh0YXNrKTsKKwllbHNlCisJCWNsZWFyX2ZyZWV6ZV9sYXRlX2ZsYWco
-dGFzayk7CisKK291dDoKKwlyZXR1cm4gZXJyIDwgMCA/IGVyciA6IGNvdW50OworfQorCitzdGF0
-aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBwcm9jX2ZyZWV6ZV9sYXRlX29wZXJhdGlv
-bnMgPSB7CisJLnJlYWQJCT0gZnJlZXplX2xhdGVfcmVhZCwKKwkud3JpdGUJCT0gZnJlZXplX2xh
-dGVfd3JpdGUsCisJLmxsc2VlawkJPSBnZW5lcmljX2ZpbGVfbGxzZWVrLAorfTsKKworI2VuZGlm
-CisKIC8qCiAgKiBJZGVudGljYWwgdG8gcHJvY19waWRfbGlua19pbm9kZV9vcGVyYXRpb25zIGV4
-Y2VwdCBmb3IgZ2V0X2xpbmsoKQogICovCkBAIC0zMzUxLDYgKzM0MTgsOSBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IHBpZF9lbnRyeSB0Z2lkX2Jhc2VfCiAJT05FKCJrc21fbWVyZ2luZ19wYWdlcyIs
-ICBTX0lSVVNSLCBwcm9jX3BpZF9rc21fbWVyZ2luZ19wYWdlcyksCiAJT05FKCJrc21fc3RhdCIs
-ICBTX0lSVVNSLCBwcm9jX3BpZF9rc21fc3RhdCksCiAjZW5kaWYKKyNpZmRlZiBDT05GSUdfRlJF
-RVpFUgorCVJFRygiZnJlZXplX2xhdGUiLCBTX0lSVUdPfFNfSVdVU1IsIHByb2NfZnJlZXplX2xh
-dGVfb3BlcmF0aW9ucyksCisjZW5kaWYKIH07CiAKIHN0YXRpYyBpbnQgcHJvY190Z2lkX2Jhc2Vf
-cmVhZGRpcihzdHJ1Y3QgZmlsZSAqZmlsZSwgc3RydWN0IGRpcl9jb250ZXh0ICpjdHgpCkBAIC0z
-Njg5LDYgKzM3NTksMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBwaWRfZW50cnkgdGlkX2Jhc2Vf
-cwogCU9ORSgia3NtX21lcmdpbmdfcGFnZXMiLCAgU19JUlVTUiwgcHJvY19waWRfa3NtX21lcmdp
-bmdfcGFnZXMpLAogCU9ORSgia3NtX3N0YXQiLCAgU19JUlVTUiwgcHJvY19waWRfa3NtX3N0YXQp
-LAogI2VuZGlmCisjaWZkZWYgQ09ORklHX0ZSRUVaRVIKKwlSRUcoImZyZWV6ZV9sYXRlIiwgU19J
-UlVHT3xTX0lXVVNSLCBwcm9jX2ZyZWV6ZV9sYXRlX29wZXJhdGlvbnMpLAorI2VuZGlmCisKIH07
-CiAKIHN0YXRpYyBpbnQgcHJvY190aWRfYmFzZV9yZWFkZGlyKHN0cnVjdCBmaWxlICpmaWxlLCBz
-dHJ1Y3QgZGlyX2NvbnRleHQgKmN0eCkKLS0tIGEvaW5jbHVkZS9saW51eC9mcmVlemVyLmgKKysr
-IGIvaW5jbHVkZS9saW51eC9mcmVlemVyLmgKQEAgLTYwLDYgKzYwLDEwIEBAIHN0YXRpYyBpbmxp
-bmUgYm9vbCB0cnlfdG9fZnJlZXplKHZvaWQpCiAKIGV4dGVybiBib29sIGZyZWV6ZV90YXNrKHN0
-cnVjdCB0YXNrX3N0cnVjdCAqcCk7CiBleHRlcm4gYm9vbCBzZXRfZnJlZXphYmxlKHZvaWQpOwor
-I2RlZmluZSBGUkVFWkVfTEFURV9NSU4gMAorI2RlZmluZSBGUkVFWkVfTEFURV9NQVggMQorZXh0
-ZXJuIHZvaWQgc2V0X2ZyZWV6ZV9sYXRlX2ZsYWcoc3RydWN0IHRhc2tfc3RydWN0ICpwKTsKK2V4
-dGVybiB2b2lkIGNsZWFyX2ZyZWV6ZV9sYXRlX2ZsYWcoc3RydWN0IHRhc2tfc3RydWN0ICpwKTsK
-IAogI2lmZGVmIENPTkZJR19DR1JPVVBfRlJFRVpFUgogZXh0ZXJuIGJvb2wgY2dyb3VwX2ZyZWV6
-aW5nKHN0cnVjdCB0YXNrX3N0cnVjdCAqdGFzayk7CkBAIC04NCw2ICs4OCw4IEBAIHN0YXRpYyBp
-bmxpbmUgdm9pZCB0aGF3X2tlcm5lbF90aHJlYWRzKHYKIHN0YXRpYyBpbmxpbmUgYm9vbCB0cnlf
-dG9fZnJlZXplKHZvaWQpIHsgcmV0dXJuIGZhbHNlOyB9CiAKIHN0YXRpYyBpbmxpbmUgdm9pZCBz
-ZXRfZnJlZXphYmxlKHZvaWQpIHt9CitzdGF0aWMgaW5saW5lIHZvaWQgc2V0X2ZyZWV6ZV9sYXRl
-X2ZsYWcodm9pZCkge30KK3N0YXRpYyBpbmxpbmUgdm9pZCBjbGVhcl9mcmVlemVfbGF0ZV9mbGFn
-KHZvaWQpIHt9CiAKICNlbmRpZiAvKiAhQ09ORklHX0ZSRUVaRVIgKi8KIAotLS0gYS9pbmNsdWRl
-L2xpbnV4L3NjaGVkLmgKKysrIGIvaW5jbHVkZS9saW51eC9zY2hlZC5oCkBAIC0xNzM3LDcgKzE3
-MzcsNyBAQCBleHRlcm4gc3RydWN0IHBpZCAqY2FkX3BpZDsKICNkZWZpbmUgUEZfVVNFRF9NQVRI
-CQkweDAwMDAyMDAwCS8qIElmIHVuc2V0IHRoZSBmcHUgbXVzdCBiZSBpbml0aWFsaXplZCBiZWZv
-cmUgdXNlICovCiAjZGVmaW5lIFBGX1VTRVJfV09SS0VSCQkweDAwMDA0MDAwCS8qIEtlcm5lbCB0
-aHJlYWQgY2xvbmVkIGZyb20gdXNlcnNwYWNlIHRocmVhZCAqLwogI2RlZmluZSBQRl9OT0ZSRUVa
-RQkJMHgwMDAwODAwMAkvKiBUaGlzIHRocmVhZCBzaG91bGQgbm90IGJlIGZyb3plbiAqLwotI2Rl
-ZmluZSBQRl9fSE9MRV9fMDAwMTAwMDAJMHgwMDAxMDAwMAorI2RlZmluZSBQRl9GUkVFWkVfTEFU
-RQkJMHgwMDAxMDAwMAkvKiBUaHJlYWRzIHRvIGJlIGZyb3plbiBhbG9uZyB3aXRoIGtlcm5lbCB0
-aHJlYWRzICovCiAjZGVmaW5lIFBGX0tTV0FQRAkJMHgwMDAyMDAwMAkvKiBJIGFtIGtzd2FwZCAq
-LwogI2RlZmluZSBQRl9NRU1BTExPQ19OT0ZTCTB4MDAwNDAwMDAJLyogQWxsIGFsbG9jYXRpb24g
-cmVxdWVzdHMgd2lsbCBpbmhlcml0IEdGUF9OT0ZTICovCiAjZGVmaW5lIFBGX01FTUFMTE9DX05P
-SU8JMHgwMDA4MDAwMAkvKiBBbGwgYWxsb2NhdGlvbiByZXF1ZXN0cyB3aWxsIGluaGVyaXQgR0ZQ
-X05PSU8gKi8KLS0tIGEva2VybmVsL2ZyZWV6ZXIuYworKysgYi9rZXJuZWwvZnJlZXplci5jCkBA
-IC00Niw3ICs0Niw4IEBAIGJvb2wgZnJlZXppbmdfc2xvd19wYXRoKHN0cnVjdCB0YXNrX3N0cnUK
-IAlpZiAocG1fbm9zaWdfZnJlZXppbmcgfHwgY2dyb3VwX2ZyZWV6aW5nKHApKQogCQlyZXR1cm4g
-dHJ1ZTsKIAotCWlmIChwbV9mcmVlemluZyAmJiAhKHAtPmZsYWdzICYgUEZfS1RIUkVBRCkpCisJ
-aWYgKHBtX2ZyZWV6aW5nICYmICEocC0+ZmxhZ3MgJiBQRl9LVEhSRUFEKSAmJgorCQkJCSEocC0+
-ZmxhZ3MgJiBQRl9GUkVFWkVfTEFURSkpCiAJCXJldHVybiB0cnVlOwogCiAJcmV0dXJuIGZhbHNl
-OwpAQCAtMjMzLDMgKzIzNCwyOSBAQCBib29sIHNldF9mcmVlemFibGUodm9pZCkKIAlyZXR1cm4g
-dHJ5X3RvX2ZyZWV6ZSgpOwogfQogRVhQT1JUX1NZTUJPTChzZXRfZnJlZXphYmxlKTsKKworLyoq
-CisgKiBzZXRfZnJlZXplX2xhdGVfZmxhZyAtIG1ha2UgJXAgdG8gYmUgZnJvemVuIGxhdGUKKyAq
-CisgKiBNYWtlICVwIHRvIGJlIGZyb3plbiBieSBmcmVlemVyIGFsb25nIHdpdGgga2VybmVsIHRo
-cmVhZHMKKyAqLwordm9pZCBzZXRfZnJlZXplX2xhdGVfZmxhZyhzdHJ1Y3QgdGFza19zdHJ1Y3Qg
-KnApCit7CisJc3Bpbl9sb2NrX2lycSgmZnJlZXplcl9sb2NrKTsKKwlwLT5mbGFncyB8PSBQRl9G
-UkVFWkVfTEFURTsKKwlzcGluX3VubG9ja19pcnEoJmZyZWV6ZXJfbG9jayk7Cit9CitFWFBPUlRf
-U1lNQk9MKHNldF9mcmVlemVfbGF0ZV9mbGFnKTsKKworLyoqCisgKiBjbGVhcl9mcmVlemVfbGF0
-ZV9mbGFnIC0gbWFrZSAlcCB0byBiZSBmcm96ZW4gZWFybHkKKyAqCisgKiBNYWtlICVwIHRvIGJl
-IGZyb3plbiBieSBmcmVlemVyIGFsb25nIHdpdGggdXNlciBzcGFjZSBwcm9jZXNzZXMKKyAqLwor
-dm9pZCBjbGVhcl9mcmVlemVfbGF0ZV9mbGFnKHN0cnVjdCB0YXNrX3N0cnVjdCAqcCkKK3sKKwlz
-cGluX2xvY2tfaXJxKCZmcmVlemVyX2xvY2spOworCXAtPmZsYWdzICY9IH5QRl9GUkVFWkVfTEFU
-RTsKKwlzcGluX3VubG9ja19pcnEoJmZyZWV6ZXJfbG9jayk7Cit9CitFWFBPUlRfU1lNQk9MKGNs
-ZWFyX2ZyZWV6ZV9sYXRlX2ZsYWcpOwotLS0gYS9rZXJuZWwvcG93ZXIvcHJvY2Vzcy5jCisrKyBi
-L2tlcm5lbC9wb3dlci9wcm9jZXNzLmMKQEAgLTIyNSw3ICsyMjUsNyBAQCB2b2lkIHRoYXdfa2Vy
-bmVsX3RocmVhZHModm9pZCkKIAogCXJlYWRfbG9jaygmdGFza2xpc3RfbG9jayk7CiAJZm9yX2Vh
-Y2hfcHJvY2Vzc190aHJlYWQoZywgcCkgewotCQlpZiAocC0+ZmxhZ3MgJiBQRl9LVEhSRUFEKQor
-CQlpZiAocC0+ZmxhZ3MgJiAoUEZfS1RIUkVBRCB8IFBGX0ZSRUVaRV9MQVRFKSkKIAkJCV9fdGhh
-d190YXNrKHApOwogCX0KIAlyZWFkX3VubG9jaygmdGFza2xpc3RfbG9jayk7Cg==
---00000000000071ca5d05fd76f736--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
