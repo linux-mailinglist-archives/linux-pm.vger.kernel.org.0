@@ -2,60 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D74A723723
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 08:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE20723725
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 08:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjFFGFk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 02:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S229532AbjFFGG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 02:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjFFGFb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 02:05:31 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5013510E0
-        for <linux-pm@vger.kernel.org>; Mon,  5 Jun 2023 23:05:00 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-977c88c9021so422108166b.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jun 2023 23:05:00 -0700 (PDT)
+        with ESMTP id S231424AbjFFGGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 02:06:50 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF2810DC
+        for <linux-pm@vger.kernel.org>; Mon,  5 Jun 2023 23:06:24 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97458c97333so698779566b.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Jun 2023 23:06:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686031498; x=1688623498;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1686031583; x=1688623583;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=L9h6iIn8tVMxDio3DDyTS9fJwTAuNwCTFgsK9pHhOlo=;
-        b=btZtmzTuI4MLVs+fYn14ZcCdRVIabbztQnAttPga6eE3e+r43+2jhik4nZnxAyehEG
-         +hlXK6+pEhMvIFYsHSTZCgPFq3n72lrHIly4TuYWRIkg9fccQf6GPBkki/fwy2nfFR1L
-         6id2R6puXXqyzQzZ8EiugsDJugS7MHcJH4BrPNgQu90oqnaD6hEOBDiTA4FYzNcFGDu1
-         zf70oJbrRdcGt8pjU9BiqwR2lhWO1V6IuMbWVrV3avFSOnqeHZ8ltbic9kmjm6trqLlW
-         HjrEwPcwF2LVilPS0yN30RFKcCGs/WvQF/yCw56++zcMJf8M7L3+CpWofZ8Ie+jtIk8A
-         y4KA==
+        bh=kvDh5BsnU3tF3jOG1nk9VooktqarbPV+7D1/4gVZFeU=;
+        b=PpVLxDUIMRzQlN/pvWtGQLa7SpeCYQ1H05zs/yOGO3P5SXkR578MQ6gxdfls1LX2JA
+         tDI7ct04Oi0CT28GjgsHsiK7mRRuKjbGb//3UVagqp3/aQt++aFXnlYQZKyNwZcgEyFE
+         xm0r94rVOqhHBF6/xyAgKLdIEK7TrQ7zMdkGpcPAID5NEtg+PepBl9qRq3q3UD92AT1H
+         h8FJB4EhBj/Rpw5UWx5/yROTKn0YhbUWlKyUqRMJlfJ6Je+8yN24Lzvz6fuTKMqfRHu6
+         /8G+q8JVBV2AFFFfrNxjA3JCTV02cM20YojRv43SXusj9tbtZWjfhIJC+64Iip3XL+wJ
+         ypPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686031498; x=1688623498;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686031583; x=1688623583;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L9h6iIn8tVMxDio3DDyTS9fJwTAuNwCTFgsK9pHhOlo=;
-        b=SukoimpPKvMfEymaBZ0YXl4iVeudqfdo+5sOREmPCT6Y36nFqlIhTMwyTjpv/fdgmj
-         c0g6XwM4cN210JyR1SZ6FjLUrb9uDTJh4hntLY1qd/+m3LiyxCLxQG2izuJc+1+vuBLO
-         F0yiGb5Xi8Soa3oR3vIHHrnE+TypZGdRNuTMXgc7v1Efzl7zYVKksDfYZmPL/pSRhsFv
-         69HT66HKLPgBnXX+h1xJXTUzJTVJ1/bU7QXAJ+kbIU/uqMuU2RtMfH/IvI1HKlgY2hOJ
-         sVTKw93OttwixVFLLuXH5nwShSKbKGEfEr/jqhKONjj/ayxzfElxIeN5fetIQRVbTmOt
-         x8jQ==
-X-Gm-Message-State: AC+VfDx1+diRbAwmkxVHhObIebwADZO6wSshSaiUOTGM+NrEH1vvdgaD
-        8B8TToADR4QnPrfF1NnnDEik4w==
-X-Google-Smtp-Source: ACHHUZ4HwHDNxVn79sHOEZUVTLCrNDJeMg/HIqnfWkb9LuwZmOx7L2932vKhcn3a/Rnq71N5KvWdwQ==
-X-Received: by 2002:a17:907:8a0a:b0:969:fc68:fa9a with SMTP id sc10-20020a1709078a0a00b00969fc68fa9amr1224348ejc.40.1686031498531;
-        Mon, 05 Jun 2023 23:04:58 -0700 (PDT)
+        bh=kvDh5BsnU3tF3jOG1nk9VooktqarbPV+7D1/4gVZFeU=;
+        b=R4ed3f+MdsuWVuQtQ+N2MdMlLEJAZm02f35Tr3YnDEO2fw5+5yZKU7/fH8LPE19dhH
+         fJrN05lxOZ1DPXc9TGOr7MnOU5gIntQGXrQQH9Ot5wU059BxmT/8wI58Y7bRa+xvovKd
+         i5niwNAeIhVbw2wAO4Ii9x/4HkQJJate2sh1Tg9nTkgH9pEemCgb/Yg7agMCs5HjYoCR
+         Zlj2wXGcO2IiagmtABwMbwmzrPxBnhffY1DwQlMQVQdDvJg1PIsjLcI/aglcqCgd1cGG
+         Cu4JvXtk07/rD8q6EREptQBg/vzdjbJkSOtaN/sxtpvnHZJd0Hpkt+AimxltPxxnk/4f
+         LOng==
+X-Gm-Message-State: AC+VfDxpuseoPXCLQPdy9n51+3U1KkD505G0Zt8qgfoC1rvejJrEpvnM
+        Dkizp6mb4Y6stcTYwIVPQbYJ5g==
+X-Google-Smtp-Source: ACHHUZ7aR5/H9xX8f558HHUOk+j277NWhkqZokqLSzVflv5qVSUKTBACmv4OYehJ9JH+WgM8BErYQQ==
+X-Received: by 2002:a17:907:3d93:b0:977:c7f6:4e9e with SMTP id he19-20020a1709073d9300b00977c7f64e9emr1096759ejc.33.1686031582796;
+        Mon, 05 Jun 2023 23:06:22 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id ks2-20020a170906f84200b009534211cc97sm5123968ejb.159.2023.06.05.23.04.56
+        by smtp.gmail.com with ESMTPSA id o12-20020a170906358c00b00966447c76f3sm5179810ejb.39.2023.06.05.23.06.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jun 2023 23:04:58 -0700 (PDT)
-Message-ID: <99873cd6-b9d7-8d3c-323e-9711315a67dc@linaro.org>
-Date:   Tue, 6 Jun 2023 08:04:55 +0200
+        Mon, 05 Jun 2023 23:06:22 -0700 (PDT)
+Message-ID: <7a6544b0-5c8d-8b61-71e8-32f59e93c2d4@linaro.org>
+Date:   Tue, 6 Jun 2023 08:06:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2 05/10] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75
- compatible
+Subject: Re: [PATCH v2 08/10] arm64: dts: qcom: Add QUPv3 UART console node
+ for SDX75
+Content-Language: en-US
 To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -66,16 +67,15 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev
 References: <1685982557-28326-1-git-send-email-quic_rohiagar@quicinc.com>
- <1685982557-28326-6-git-send-email-quic_rohiagar@quicinc.com>
-Content-Language: en-US
+ <1685982557-28326-9-git-send-email-quic_rohiagar@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1685982557-28326-6-git-send-email-quic_rohiagar@quicinc.com>
+In-Reply-To: <1685982557-28326-9-git-send-email-quic_rohiagar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -83,15 +83,16 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 05/06/2023 18:29, Rohit Agarwal wrote:
-> Add compatible for EPSS CPUFREQ-HW on SDX75.
+> Add the debug uart console node in devicetree.
 > 
 > Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/qcom/sdx75.dtsi | 49 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+GCC and UART are parts of basic DTSI and do not make sense on their own.
+Otherwise, what exactly boots on your "basic DTSI" commit if you do not
+have any clocks and serial console?
 
 Best regards,
 Krzysztof
