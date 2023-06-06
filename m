@@ -2,121 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9C272451C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 16:00:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1B8724561
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 16:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237507AbjFFOAR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 10:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S237460AbjFFOMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 10:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237283AbjFFOAO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 10:00:14 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608F28F;
-        Tue,  6 Jun 2023 07:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686060013; x=1717596013;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+YfBe28FJBeWLtVuxtwibWtJc96Mf0mg0trJtgQ5LNo=;
-  b=RaNkACGuPWjLX49AcNF2OIeE2kh2L9B2OBm73zV0cikAwhbcYybG0JHT
-   HP1VeLo2k7SKVZZNtq32N7MBqeSQmI2BWE88d4SgbMRsharbNZ1qFDoxr
-   1elRVUNcdRLC/+Ui/qUZ3u0BckD6GUaQh+xTOpemfj+1jZmMQsiqAyptX
-   4tvwrEomkghPayjX4p91AwLZ0SqUnmrDOFsF2gA8UppeLRYbKqI7SnFer
-   3+cfF5CrmWiBDN3CbCZE5J706juFi0TQ6PkvX4sgnaQ3vrSaZWFxiBZaz
-   IuOZNoE91V8flp+CoU+nUiq+K8BV8kfDJDMbvyEu5HOdmd5usrSagOUXo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="337030889"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="337030889"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:00:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10732"; a="955762442"
-X-IronPort-AV: E=Sophos;i="6.00,221,1681196400"; 
-   d="scan'208";a="955762442"
-Received: from lwang35-mobl1.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.212.138])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 07:00:11 -0700
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org
-Cc:     linux-kernel@vger.kernel.org, arnd@arndb.de
-Subject: [PATCH] powercap: intel_rapl: Fix CONFIG_IOSF_MBI dependency
-Date:   Tue,  6 Jun 2023 22:00:00 +0800
-Message-Id: <20230606140000.385223-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S237115AbjFFOMQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 10:12:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2E1D3;
+        Tue,  6 Jun 2023 07:12:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4999561DB8;
+        Tue,  6 Jun 2023 14:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CD5C433D2;
+        Tue,  6 Jun 2023 14:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686060734;
+        bh=nYj9AbUU59HCaqannbEYbVUupazB1udPANPd7R8v5fQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=U513mg2pt/PkVILvX0n/tTQXpeUHYZtOFnWFoFW0UwGt6DSqq+qp7w0DZytaZL7X3
+         7IIvxbwVDW/vIBcFzkyRO0EA+l+xCTer77JfX8KA289KyQm7D+ZXH7u8w3cFES7MTo
+         UBerx5hAMQtTvyZk9QTFFlJoujvTd4oK7D/ECPsLRci25/Fq8gSxibITHNizCqcpnT
+         bTc8cLvdXs05pbBlds+Jg8w540qG8R4J6yynxoWLL7HecSO2Jcgc07bUvu14u9KKtd
+         ZQuOGdUvcSylgdhKaclPeiC73awgc/EBvPcoBjM9HiedsWaHaRhBKYo7zow6Nauxns
+         Tav0rZFR1wVnw==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 06 Jun 2023 15:11:49 +0100
+Subject: [PATCH] selftests/cpufreq: Don't enable generic lock debugging
+ options
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230605-kselftest-cpufreq-options-v1-1-d4621e0c7cbe@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKQ+f2QC/x2NywrDIBBFfyXMugNW0xT6K6ULo2MjKWpn7ANC/
+ j0my3PhnLuAEEcSuHULMH2jxJwanE8duMmmJ2H0jUErbdSgLjgLvUIlqejKJzC9MZfaJEEd/OD
+ 7a6+NMdD80QrhyDa5aS/8Ms/7XJhC/B+X98e6bj8VZnOCAAAA
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2394; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=nYj9AbUU59HCaqannbEYbVUupazB1udPANPd7R8v5fQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkfz670xVO01Ifmckeit23E9d7DWAFVjrMqaG6WWQv
+ 8TuP8bCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZH8+uwAKCRAk1otyXVSH0LdwB/
+ 9IqeAx8yIONur8WnWgUToSGK2QrJMUBBj6P+M47oCrhbFaOvAis3W6FvK6RoXLxtCy96o+eycqABqr
+ lBlwSy9EAS7ePr+qZdI5kJVIwamhwvc5sfuFSHEvGfhLlwDZx5ztUYZ9mpL3TshKL0/Vgqq9Dh/1ty
+ WleOs4db9hWDhQcIqTLFOFsPgf5AZNYEgfyizWATaDsyi3P3Jt+dwm95c7+quAYL7GW4WS2OA2oWY9
+ iKRsRYZcbWLL+2L9333+3tP6gQqb92bfaEenhRRWdYj1eZqke7t/lihOtj1hdi8/ty2YzF5k4wXENX
+ wN5uw1FcMUmDEHzXqr6GkflmaPct+J
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-After commit 3382388d7148 ("intel_rapl: abstract RAPL common code"),
-accessing to IOSF_MBI interface is done in the RAPL common code.
+Currently the the config fragment for cpufreq enables a lot of generic
+lock debugging.  While these options are useful when testing cpufreq
+they aren't actually required to run the tests and are therefore out of
+scope for the cpufreq fragement, they are more of a thing that it's good
+to enable while doing testing than an actual requirement for cpufreq
+testing specifically.  Having these debugging options enabled,
+especially the mutex and spinlock instrumentation, mean that any build
+that includes the cpufreq fragment is both very much larger than a
+standard defconfig (eg, I'm seeing 35% on x86_64) and also slower at
+runtime.
 
-Thus it is the CONFIG_INTEL_RAPL_CORE that has dependency of
-CONFIG_IOSF_MBI, while CONFIG_INTEL_RAPL_MSR does not.
+This is causing real problems for CI systems.  In order to avoid
+building large numbers of kernels they try to group kselftest fragments
+together, frequently just grouping all the kselftest fragments into a
+single block.  The increased size is an issue for memory constrained
+systems and is also problematic for systems with fixed storage
+allocations for kernel images (eg, typical u-boot systems) where it
+frequently causes the kernel to overflow the storage space allocated for
+kernels.  The reduced performance isn't too bad with real hardware but
+can be disruptive on emulated platforms.
 
-This problem was not exposed previously because all the previous RAPL
-common code users, aka, the RAPL MSR and MMIO I/F drivers, have
-CONFIG_IOSF_MBI selected.
+In order to avoid these issues remove these generic instrumentation
+options from the cpufreq fragment, bringing the cpufreq fragment into
+line with other fragments which generally set requirements for testing
+rather than nice to haves.
 
-Fix the CONFIG_IOSF_MBI dependency in RAPL code. This also fixes a build
-time failure when the RAPL TPMI I/F driver is introduced without
-selecting CONFIG_IOSF_MBI.
-
-x86_64-linux-ld: vmlinux.o: in function `set_floor_freq_atom':
-intel_rapl_common.c:(.text+0x2dac9b8): undefined reference to `iosf_mbi_write'
-x86_64-linux-ld: intel_rapl_common.c:(.text+0x2daca66): undefined reference to `iosf_mbi_read'
-
-Reference to iosf_mbi.h is also removed from the RAPL MSR I/F driver.
-
-Fixes: 3382388d7148 ("intel_rapl: abstract RAPL common code")
-Reported-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/all/20230601213246.3271412-1-arnd@kernel.org
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- drivers/powercap/Kconfig          | 4 +++-
- drivers/powercap/intel_rapl_msr.c | 1 -
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ tools/testing/selftests/cpufreq/config | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-index 90d33cd1b670..b063f7511773 100644
---- a/drivers/powercap/Kconfig
-+++ b/drivers/powercap/Kconfig
-@@ -18,10 +18,12 @@ if POWERCAP
- # Client driver configurations go here.
- config INTEL_RAPL_CORE
- 	tristate
-+	depends on PCI
-+	select IOSF_MBI
- 
- config INTEL_RAPL
- 	tristate "Intel RAPL Support via MSR Interface"
--	depends on X86 && IOSF_MBI
-+	depends on X86 && PCI
- 	select INTEL_RAPL_CORE
- 	help
- 	  This enables support for the Intel Running Average Power Limit (RAPL)
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index a27673706c3d..be118d46f32e 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -22,7 +22,6 @@
- #include <linux/processor.h>
- #include <linux/platform_device.h>
- 
--#include <asm/iosf_mbi.h>
- #include <asm/cpu_device_id.h>
- #include <asm/intel-family.h>
- 
+diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
+index 75e900793e8a..ce5068f5a6a2 100644
+--- a/tools/testing/selftests/cpufreq/config
++++ b/tools/testing/selftests/cpufreq/config
+@@ -5,11 +5,3 @@ CONFIG_CPU_FREQ_GOV_USERSPACE=y
+ CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+ CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
+ CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
+-CONFIG_DEBUG_RT_MUTEXES=y
+-CONFIG_DEBUG_PLIST=y
+-CONFIG_DEBUG_SPINLOCK=y
+-CONFIG_DEBUG_MUTEXES=y
+-CONFIG_DEBUG_LOCK_ALLOC=y
+-CONFIG_PROVE_LOCKING=y
+-CONFIG_LOCKDEP=y
+-CONFIG_DEBUG_ATOMIC_SLEEP=y
+
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230605-kselftest-cpufreq-options-2fd6d4742333
+
+Best regards,
 -- 
-2.34.1
+Mark Brown <broonie@kernel.org>
 
