@@ -2,126 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1B8724561
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 16:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F4FB72466E
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jun 2023 16:39:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237460AbjFFOMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 10:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50720 "EHLO
+        id S238299AbjFFOj3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 10:39:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237115AbjFFOMQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 10:12:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2E1D3;
-        Tue,  6 Jun 2023 07:12:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4999561DB8;
-        Tue,  6 Jun 2023 14:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05CD5C433D2;
-        Tue,  6 Jun 2023 14:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686060734;
-        bh=nYj9AbUU59HCaqannbEYbVUupazB1udPANPd7R8v5fQ=;
-        h=From:Date:Subject:To:Cc:From;
-        b=U513mg2pt/PkVILvX0n/tTQXpeUHYZtOFnWFoFW0UwGt6DSqq+qp7w0DZytaZL7X3
-         7IIvxbwVDW/vIBcFzkyRO0EA+l+xCTer77JfX8KA289KyQm7D+ZXH7u8w3cFES7MTo
-         UBerx5hAMQtTvyZk9QTFFlJoujvTd4oK7D/ECPsLRci25/Fq8gSxibITHNizCqcpnT
-         bTc8cLvdXs05pbBlds+Jg8w540qG8R4J6yynxoWLL7HecSO2Jcgc07bUvu14u9KKtd
-         ZQuOGdUvcSylgdhKaclPeiC73awgc/EBvPcoBjM9HiedsWaHaRhBKYo7zow6Nauxns
-         Tav0rZFR1wVnw==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Tue, 06 Jun 2023 15:11:49 +0100
-Subject: [PATCH] selftests/cpufreq: Don't enable generic lock debugging
- options
+        with ESMTP id S238190AbjFFOjF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 10:39:05 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FAF1BFA
+        for <linux-pm@vger.kernel.org>; Tue,  6 Jun 2023 07:38:07 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-977e0fbd742so317693666b.2
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jun 2023 07:38:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1686062283; x=1688654283;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tIeHacKUXBl3wNCe/SoZ0G9j6l2l916cMNODLOIB+Cw=;
+        b=VEr5PWCvUfJNT7Cml/NWI0Dk3piC7E1AU4e38Aheb09axj0dVMhU4478RBtGT+GNn1
+         IIOVGmZfXCCPtd+2klnyfpIKutva+P9VUHf9mh7BTVlrLiWlrJ7VJPrudRSE7EkNBWOw
+         LYbfpTHbN71p5D25slwTGKKMDMNQs0PNUS2I0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686062283; x=1688654283;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tIeHacKUXBl3wNCe/SoZ0G9j6l2l916cMNODLOIB+Cw=;
+        b=LmCQupkrkVnF4dE7ysiTzuyC7swF+WPMCDgTbJz1/DmnZqNfsYgDHkLFAP6/JmaFrd
+         R2AuqlO2jfEpv9dJEkEVUMKAjS5amm8irmIqAQPkIECRY6xS+S87V6S/hmliLAZjylrg
+         RbVuwj3EyMgrmx0gU50PY9JnzArBoTNp3T4GaSjOZGst7LtNlFNlFVEZsd46heDZuv1y
+         2T33ZbygAhwWrs5I3NGniIIvBBIZ2syrO3mDNuvtTeSuEB31ggQ5dnMn4AElXpIaOK9F
+         a5iCYuIyFU/sj2NNwI3nSP0X69xXMW6h767uCLb4pQAcBKhsRV37IiGyFNwRbkf1tZje
+         Ptyg==
+X-Gm-Message-State: AC+VfDw83qO6lRwpcyqix30sHrmO0p5/tvr6px63JDC+OsZB++C8J/93
+        SlCgZF0b3Dps7jsBHzmlHCtu2wdUK7clbGSUa0k2zw==
+X-Google-Smtp-Source: ACHHUZ4K3SMR7FO9doJR5vPa6kooUNGtkS1TgurOkU5LY+CEESPGEtSdoMX8wReEZLBB/vdccKMA4q14dA1n0lml78o=
+X-Received: by 2002:a17:906:7316:b0:973:e79c:3da8 with SMTP id
+ di22-20020a170906731600b00973e79c3da8mr2653192ejc.17.1686062282939; Tue, 06
+ Jun 2023 07:38:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230605-kselftest-cpufreq-options-v1-1-d4621e0c7cbe@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKQ+f2QC/x2NywrDIBBFfyXMugNW0xT6K6ULo2MjKWpn7ANC/
- j0my3PhnLuAEEcSuHULMH2jxJwanE8duMmmJ2H0jUErbdSgLjgLvUIlqejKJzC9MZfaJEEd/OD
- 7a6+NMdD80QrhyDa5aS/8Ms/7XJhC/B+X98e6bj8VZnOCAAAA
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-bfdf5
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2394; i=broonie@kernel.org;
- h=from:subject:message-id; bh=nYj9AbUU59HCaqannbEYbVUupazB1udPANPd7R8v5fQ=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkfz670xVO01Ifmckeit23E9d7DWAFVjrMqaG6WWQv
- 8TuP8bCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZH8+uwAKCRAk1otyXVSH0LdwB/
- 9IqeAx8yIONur8WnWgUToSGK2QrJMUBBj6P+M47oCrhbFaOvAis3W6FvK6RoXLxtCy96o+eycqABqr
- lBlwSy9EAS7ePr+qZdI5kJVIwamhwvc5sfuFSHEvGfhLlwDZx5ztUYZ9mpL3TshKL0/Vgqq9Dh/1ty
- WleOs4db9hWDhQcIqTLFOFsPgf5AZNYEgfyizWATaDsyi3P3Jt+dwm95c7+quAYL7GW4WS2OA2oWY9
- iKRsRYZcbWLL+2L9333+3tP6gQqb92bfaEenhRRWdYj1eZqke7t/lihOtj1hdi8/ty2YzF5k4wXENX
- wN5uw1FcMUmDEHzXqr6GkflmaPct+J
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
+In-Reply-To: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 6 Jun 2023 16:37:51 +0200
+Message-ID: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
+To:     Askar Safin <safinaskar@gmail.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bernd Schubert <bernd.schubert@fastmail.fm>,
+        linux-pm@vger.kernel.org,
+        fuse-devel <fuse-devel@lists.sourceforge.net>
+Content-Type: multipart/mixed; boundary="00000000000071ca5d05fd76f736"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the the config fragment for cpufreq enables a lot of generic
-lock debugging.  While these options are useful when testing cpufreq
-they aren't actually required to run the tests and are therefore out of
-scope for the cpufreq fragement, they are more of a thing that it's good
-to enable while doing testing than an actual requirement for cpufreq
-testing specifically.  Having these debugging options enabled,
-especially the mutex and spinlock instrumentation, mean that any build
-that includes the cpufreq fragment is both very much larger than a
-standard defconfig (eg, I'm seeing 35% on x86_64) and also slower at
-runtime.
+--00000000000071ca5d05fd76f736
+Content-Type: text/plain; charset="UTF-8"
 
-This is causing real problems for CI systems.  In order to avoid
-building large numbers of kernels they try to group kselftest fragments
-together, frequently just grouping all the kselftest fragments into a
-single block.  The increased size is an issue for memory constrained
-systems and is also problematic for systems with fixed storage
-allocations for kernel images (eg, typical u-boot systems) where it
-frequently causes the kernel to overflow the storage space allocated for
-kernels.  The reduced performance isn't too bad with real hardware but
-can be disruptive on emulated platforms.
+On Sun, 14 May 2023 at 00:04, Askar Safin <safinaskar@gmail.com> wrote:
+>
+> Will this patch fix a long-standing fuse vs suspend bug? (
+> https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
 
-In order to avoid these issues remove these generic instrumentation
-options from the cpufreq fragment, bringing the cpufreq fragment into
-line with other fragments which generally set requirements for testing
-rather than nice to haves.
+No.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/cpufreq/config | 8 --------
- 1 file changed, 8 deletions(-)
+The solution to the fuse issue is to freeze processes that initiate
+fuse requests *before* freezing processes that serve fuse requests.
 
-diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
-index 75e900793e8a..ce5068f5a6a2 100644
---- a/tools/testing/selftests/cpufreq/config
-+++ b/tools/testing/selftests/cpufreq/config
-@@ -5,11 +5,3 @@ CONFIG_CPU_FREQ_GOV_USERSPACE=y
- CONFIG_CPU_FREQ_GOV_ONDEMAND=y
- CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
- CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
--CONFIG_DEBUG_RT_MUTEXES=y
--CONFIG_DEBUG_PLIST=y
--CONFIG_DEBUG_SPINLOCK=y
--CONFIG_DEBUG_MUTEXES=y
--CONFIG_DEBUG_LOCK_ALLOC=y
--CONFIG_PROVE_LOCKING=y
--CONFIG_LOCKDEP=y
--CONFIG_DEBUG_ATOMIC_SLEEP=y
+The problem is finding out which is which.  This can be complicated by
+the fact that a process could be both serving requests *and*
+initiating them (even without knowing).
 
----
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
-change-id: 20230605-kselftest-cpufreq-options-2fd6d4742333
+The best idea so far is to let fuse servers set a process flag
+(PF_FREEZE_LATE) that is inherited across fork/clone.  For example the
+sshfs server would do the following before starting request processing
+or starting ssh:
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
+  echo 1 > /proc/self/freeze_late
 
+This would make the sshfs and ssh processes be frozen after processes
+that call into the sshfs mount.
+
+After normal (non-server) processes are frozen, server processes
+should not be getting new requests and can be frozen.
+
+Issues remaining:
+
+ - if requests are stuck (e.g. network is down) then the requester
+process can't be frozen and suspend will still fail.
+
+ - if server process is generating filesystem activity (new fuse
+requests) spontaneously, then there's nothing to differentiate between
+server processes and we are back to the original problem
+
+Solution to both these are probably non-kernel: impacted servers need
+to receive notification from systemd when suspend is starting and act
+accordingly.
+
+Attaching work-in-progress patch.  This needs to be improved to freeze
+server processes in a separate phase from kernel threads, but it
+should be able to demonstrate the idea.
+
+Thanks,
+Miklos
+
+--00000000000071ca5d05fd76f736
+Content-Type: application/x-patch; 
+	name="0001_freezer_configure_user_space_process_frozen_along_with_kernel_threads.patch"
+Content-Disposition: attachment; 
+	filename="0001_freezer_configure_user_space_process_frozen_along_with_kernel_threads.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_likdcauo0>
+X-Attachment-Id: f_likdcauo0
+
+RnJvbTogTGkgRmVpIDxmZWkubGlAaW50ZWwuY29tPgpTdWJqZWN0OiBmcmVlemVyOiBjb25maWd1
+cmUgdXNlciBzcGFjZSBwcm9jZXNzIGZyb3plbiBhbG9uZyB3aXRoIGtlcm5lbCB0aHJlYWRzCkRh
+dGU6IFdlZCwgMjAgRmViIDIwMTMgMTA6MTU6MjUgKzA4MDAKClRoZXJlIGlzIHdlbGwga25vd24g
+aXNzdWUgdGhhdCBmcmVlemluZyB3aWxsIGZhaWwgaW4gY2FzZSB0aGF0IGZ1c2UKZGFlbW9uIGlz
+IGZyb3plbiBmaXJzdGx5IHdpdGggc29tZSByZXF1ZXN0cyBub3QgaGFuZGxlZCwgYXMgdGhlIGZ1
+c2UKdXNhZ2UgdGFzayBpcyB3YWl0aW5nIGZvciB0aGUgcmVzcG9uc2UgZnJvbSBmdXNlIGRhZW1v
+biBhbmQgY2FuJ3QgYmUKZnJvemVuLiBUbyBzb2x2ZSB0aGUgaXNzdWUgYXMgYWJvdmUsIG1ha2Ug
+ZnVzZSBkYWVtb24gZnJvemVuIGFmdGVyCmFsbCB1c2VyIHNwYWNlIHByb2Nlc3NlcyBmcm96ZW4g
+YW5kIGR1cmluZyB0aGUga2VybmVsIHRocmVhZHMgZnJvemVuCnBoYXNlLgoKQWZ0ZXIgZGlzY3Vz
+c2lvbiwgYXQgcHJlc2VudCBpdCdzIGdlbmVyYWxseSBhZ3JlZWQgdGhhdDoKMSkgSXQncyBvbmx5
+IHRoZSBmdXNlIGRhZW1vbiBpdHNlbGYga25vdyBkZWZpbml0ZWx5IHRoYXQgaXQgbmVlZHMKYW5k
+IGNhbiBiZSBmcm96ZW4gdG9nZXRoZXIgd2l0aCBrZXJuZWwgdGhyZWFkczsKMikgSXQncyBoZWxw
+ZnVsIHRvIGV4cG9zZSBpbnRlcmZhY2UgdGhhdCB1c2VyIHNwYWNlIHByb2Nlc3NlcyBjYW4KdXNl
+IHRvIGNvbmZpZ3VyZSB1c2VyIHNwYWNlIHByb2Nlc3NlcyB0byBiZSBmcm96ZW4gdG9nZXRoZXIg
+d2l0aAprZXJuZWwgdGhyZWFkcy4KTW9yZSBpbmZvcm1hdGlvbiBjYW4gYmUgZm91bmQgb24gaHR0
+cHM6Ly9sa21sLm9yZy9sa21sLzIwMTMvMi8xOC8xNzQuCgpUbyBzdXBwb3J0IHRoZSByZXF1aXJl
+bWVudCBhYm92ZSwgYXR0cmlidXRlIC9wcm9jLzxQSUQ+L2ZyZWV6ZV9sYXRlCmlzIGFkZGVkLCB3
+cml0aW5nIDEgdG8gaXQgd2lsbCBtYWtlIHRoZSBwcm9jZXNzIHRvIGJlIGZyb3plbiB0b2dldGhl
+cgp3aXRoIGtlcm5lbCB0aHJlYWRzLCBhbmQgd3JpdGluZyAwIHRvIGl0IHdpbGwgbWFrZSB0aGUg
+cHJvY2VzcyB0byBiZQpmcm96ZW4gdG9nZXRoZXIgd2l0aCB1c2VyIHNwYWNlIHByb2Nlc3Nlcy4K
+ClNpZ25lZC1vZmYtYnk6IExpdSBDaHVhbnNoZW5nIDxjaHVhbnNoZW5nLmxpdUBpbnRlbC5jb20+
+ClNpZ25lZC1vZmYtYnk6IFdhbmcgQmlhbyA8Ymlhby53YW5nQGludGVsLmNvbT4KU2lnbmVkLW9m
+Zi1ieTogTGkgRmVpIDxmZWkubGlAaW50ZWwuY29tPgotLS0KIGZzL3Byb2MvYmFzZS5jICAgICAg
+ICAgIHwgICA3NCArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KysKIGluY2x1ZGUvbGludXgvZnJlZXplci5oIHwgICAgNiArKysKIGluY2x1ZGUvbGludXgvc2No
+ZWQuaCAgIHwgICAgMiAtCiBrZXJuZWwvZnJlZXplci5jICAgICAgICB8ICAgMjkgKysrKysrKysr
+KysrKysrKysrCiBrZXJuZWwvcG93ZXIvcHJvY2Vzcy5jICB8ICAgIDIgLQogNSBmaWxlcyBjaGFu
+Z2VkLCAxMTAgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkKCi0tLSBhL2ZzL3Byb2MvYmFz
+ZS5jCisrKyBiL2ZzL3Byb2MvYmFzZS5jCkBAIC05OCw2ICs5OCw5IEBACiAjaW5jbHVkZSA8bGlu
+dXgvY25fcHJvYy5oPgogI2luY2x1ZGUgPGxpbnV4L2tzbS5oPgogI2luY2x1ZGUgPHRyYWNlL2V2
+ZW50cy9vb20uaD4KKyNpZmRlZiBDT05GSUdfRlJFRVpFUgorI2luY2x1ZGUgPGxpbnV4L2ZyZWV6
+ZXIuaD4KKyNlbmRpZgogI2luY2x1ZGUgImludGVybmFsLmgiCiAjaW5jbHVkZSAiZmQuaCIKIApA
+QCAtMjI1Miw2ICsyMjU1LDcwIEBAIHByb2NfbWFwX2ZpbGVzX2dldF9saW5rKHN0cnVjdCBkZW50
+cnkgKmQKIAlyZXR1cm4gcHJvY19waWRfZ2V0X2xpbmsoZGVudHJ5LCBpbm9kZSwgZG9uZSk7CiB9
+CiAKKyNpZmRlZiBDT05GSUdfRlJFRVpFUgorCitzdGF0aWMgc3NpemVfdCBmcmVlemVfbGF0ZV9y
+ZWFkKHN0cnVjdCBmaWxlICpmaWxlLCBjaGFyIF9fdXNlciAqYnVmLAorCQkJCQlzaXplX3QgY291
+bnQsIGxvZmZfdCAqcHBvcykKK3sKKwlzdHJ1Y3QgdGFza19zdHJ1Y3QgKnRhc2sgPSBnZXRfcHJv
+Y190YXNrKGZpbGUtPmZfcGF0aC5kZW50cnktPmRfaW5vZGUpOworCWNoYXIgYnVmZmVyW1BST0Nf
+TlVNQlVGXTsKKwlpbnQgZnJlZXplX2xhdGU7CisJc2l6ZV90IGxlbjsKKwlpZiAoIXRhc2spCisJ
+CXJldHVybiAtRVNSQ0g7CisJZnJlZXplX2xhdGUgPSAodGFzay0+ZmxhZ3MgJiBQRl9GUkVFWkVf
+TEFURSkgPyAxIDogMDsKKwlsZW4gPSBzbnByaW50ZihidWZmZXIsIHNpemVvZihidWZmZXIpLCAi
+JWRcbiIsIGZyZWV6ZV9sYXRlKTsKKwlyZXR1cm4gc2ltcGxlX3JlYWRfZnJvbV9idWZmZXIoYnVm
+LCBjb3VudCwgcHBvcywgYnVmZmVyLCBsZW4pOworfQorCitzdGF0aWMgc3NpemVfdCBmcmVlemVf
+bGF0ZV93cml0ZShzdHJ1Y3QgZmlsZSAqZmlsZSwgY29uc3QgY2hhciBfX3VzZXIgKmJ1ZiwKKwkJ
+CQkJc2l6ZV90IGNvdW50LCBsb2ZmX3QgKnBwb3MpCit7CisJc3RydWN0IHRhc2tfc3RydWN0ICp0
+YXNrOworCWNoYXIgYnVmZmVyW1BST0NfTlVNQlVGXTsKKwlpbnQgZnJlZXplX2xhdGU7CisJaW50
+IGVycjsKKworCW1lbXNldChidWZmZXIsIDAsIHNpemVvZihidWZmZXIpKTsKKwlpZiAoY291bnQg
+PiBzaXplb2YoYnVmZmVyKSAtIDEpCisJCWNvdW50ID0gc2l6ZW9mKGJ1ZmZlcikgLSAxOworCWlm
+IChjb3B5X2Zyb21fdXNlcihidWZmZXIsIGJ1ZiwgY291bnQpKSB7CisJCWVyciA9IC1FRkFVTFQ7
+CisJCWdvdG8gb3V0OworCX0KKworCWVyciA9IGtzdHJ0b2ludChzdHJzdHJpcChidWZmZXIpLCAw
+LCAmZnJlZXplX2xhdGUpOworCWlmIChlcnIpCisJCWdvdG8gb3V0OworCWlmIChmcmVlemVfbGF0
+ZSA8IEZSRUVaRV9MQVRFX01JTiB8fAorCQkJZnJlZXplX2xhdGUgPiBGUkVFWkVfTEFURV9NQVgp
+IHsKKwkJZXJyID0gLUVJTlZBTDsKKwkJZ290byBvdXQ7CisJfQorCisJdGFzayA9IGdldF9wcm9j
+X3Rhc2soZmlsZS0+Zl9wYXRoLmRlbnRyeS0+ZF9pbm9kZSk7CisJaWYgKCF0YXNrKSB7CisJCWVy
+ciA9IC1FU1JDSDsKKwkJZ290byBvdXQ7CisJfQorCisJaWYgKGZyZWV6ZV9sYXRlKQorCQlzZXRf
+ZnJlZXplX2xhdGVfZmxhZyh0YXNrKTsKKwllbHNlCisJCWNsZWFyX2ZyZWV6ZV9sYXRlX2ZsYWco
+dGFzayk7CisKK291dDoKKwlyZXR1cm4gZXJyIDwgMCA/IGVyciA6IGNvdW50OworfQorCitzdGF0
+aWMgY29uc3Qgc3RydWN0IGZpbGVfb3BlcmF0aW9ucyBwcm9jX2ZyZWV6ZV9sYXRlX29wZXJhdGlv
+bnMgPSB7CisJLnJlYWQJCT0gZnJlZXplX2xhdGVfcmVhZCwKKwkud3JpdGUJCT0gZnJlZXplX2xh
+dGVfd3JpdGUsCisJLmxsc2VlawkJPSBnZW5lcmljX2ZpbGVfbGxzZWVrLAorfTsKKworI2VuZGlm
+CisKIC8qCiAgKiBJZGVudGljYWwgdG8gcHJvY19waWRfbGlua19pbm9kZV9vcGVyYXRpb25zIGV4
+Y2VwdCBmb3IgZ2V0X2xpbmsoKQogICovCkBAIC0zMzUxLDYgKzM0MTgsOSBAQCBzdGF0aWMgY29u
+c3Qgc3RydWN0IHBpZF9lbnRyeSB0Z2lkX2Jhc2VfCiAJT05FKCJrc21fbWVyZ2luZ19wYWdlcyIs
+ICBTX0lSVVNSLCBwcm9jX3BpZF9rc21fbWVyZ2luZ19wYWdlcyksCiAJT05FKCJrc21fc3RhdCIs
+ICBTX0lSVVNSLCBwcm9jX3BpZF9rc21fc3RhdCksCiAjZW5kaWYKKyNpZmRlZiBDT05GSUdfRlJF
+RVpFUgorCVJFRygiZnJlZXplX2xhdGUiLCBTX0lSVUdPfFNfSVdVU1IsIHByb2NfZnJlZXplX2xh
+dGVfb3BlcmF0aW9ucyksCisjZW5kaWYKIH07CiAKIHN0YXRpYyBpbnQgcHJvY190Z2lkX2Jhc2Vf
+cmVhZGRpcihzdHJ1Y3QgZmlsZSAqZmlsZSwgc3RydWN0IGRpcl9jb250ZXh0ICpjdHgpCkBAIC0z
+Njg5LDYgKzM3NTksMTAgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBwaWRfZW50cnkgdGlkX2Jhc2Vf
+cwogCU9ORSgia3NtX21lcmdpbmdfcGFnZXMiLCAgU19JUlVTUiwgcHJvY19waWRfa3NtX21lcmdp
+bmdfcGFnZXMpLAogCU9ORSgia3NtX3N0YXQiLCAgU19JUlVTUiwgcHJvY19waWRfa3NtX3N0YXQp
+LAogI2VuZGlmCisjaWZkZWYgQ09ORklHX0ZSRUVaRVIKKwlSRUcoImZyZWV6ZV9sYXRlIiwgU19J
+UlVHT3xTX0lXVVNSLCBwcm9jX2ZyZWV6ZV9sYXRlX29wZXJhdGlvbnMpLAorI2VuZGlmCisKIH07
+CiAKIHN0YXRpYyBpbnQgcHJvY190aWRfYmFzZV9yZWFkZGlyKHN0cnVjdCBmaWxlICpmaWxlLCBz
+dHJ1Y3QgZGlyX2NvbnRleHQgKmN0eCkKLS0tIGEvaW5jbHVkZS9saW51eC9mcmVlemVyLmgKKysr
+IGIvaW5jbHVkZS9saW51eC9mcmVlemVyLmgKQEAgLTYwLDYgKzYwLDEwIEBAIHN0YXRpYyBpbmxp
+bmUgYm9vbCB0cnlfdG9fZnJlZXplKHZvaWQpCiAKIGV4dGVybiBib29sIGZyZWV6ZV90YXNrKHN0
+cnVjdCB0YXNrX3N0cnVjdCAqcCk7CiBleHRlcm4gYm9vbCBzZXRfZnJlZXphYmxlKHZvaWQpOwor
+I2RlZmluZSBGUkVFWkVfTEFURV9NSU4gMAorI2RlZmluZSBGUkVFWkVfTEFURV9NQVggMQorZXh0
+ZXJuIHZvaWQgc2V0X2ZyZWV6ZV9sYXRlX2ZsYWcoc3RydWN0IHRhc2tfc3RydWN0ICpwKTsKK2V4
+dGVybiB2b2lkIGNsZWFyX2ZyZWV6ZV9sYXRlX2ZsYWcoc3RydWN0IHRhc2tfc3RydWN0ICpwKTsK
+IAogI2lmZGVmIENPTkZJR19DR1JPVVBfRlJFRVpFUgogZXh0ZXJuIGJvb2wgY2dyb3VwX2ZyZWV6
+aW5nKHN0cnVjdCB0YXNrX3N0cnVjdCAqdGFzayk7CkBAIC04NCw2ICs4OCw4IEBAIHN0YXRpYyBp
+bmxpbmUgdm9pZCB0aGF3X2tlcm5lbF90aHJlYWRzKHYKIHN0YXRpYyBpbmxpbmUgYm9vbCB0cnlf
+dG9fZnJlZXplKHZvaWQpIHsgcmV0dXJuIGZhbHNlOyB9CiAKIHN0YXRpYyBpbmxpbmUgdm9pZCBz
+ZXRfZnJlZXphYmxlKHZvaWQpIHt9CitzdGF0aWMgaW5saW5lIHZvaWQgc2V0X2ZyZWV6ZV9sYXRl
+X2ZsYWcodm9pZCkge30KK3N0YXRpYyBpbmxpbmUgdm9pZCBjbGVhcl9mcmVlemVfbGF0ZV9mbGFn
+KHZvaWQpIHt9CiAKICNlbmRpZiAvKiAhQ09ORklHX0ZSRUVaRVIgKi8KIAotLS0gYS9pbmNsdWRl
+L2xpbnV4L3NjaGVkLmgKKysrIGIvaW5jbHVkZS9saW51eC9zY2hlZC5oCkBAIC0xNzM3LDcgKzE3
+MzcsNyBAQCBleHRlcm4gc3RydWN0IHBpZCAqY2FkX3BpZDsKICNkZWZpbmUgUEZfVVNFRF9NQVRI
+CQkweDAwMDAyMDAwCS8qIElmIHVuc2V0IHRoZSBmcHUgbXVzdCBiZSBpbml0aWFsaXplZCBiZWZv
+cmUgdXNlICovCiAjZGVmaW5lIFBGX1VTRVJfV09SS0VSCQkweDAwMDA0MDAwCS8qIEtlcm5lbCB0
+aHJlYWQgY2xvbmVkIGZyb20gdXNlcnNwYWNlIHRocmVhZCAqLwogI2RlZmluZSBQRl9OT0ZSRUVa
+RQkJMHgwMDAwODAwMAkvKiBUaGlzIHRocmVhZCBzaG91bGQgbm90IGJlIGZyb3plbiAqLwotI2Rl
+ZmluZSBQRl9fSE9MRV9fMDAwMTAwMDAJMHgwMDAxMDAwMAorI2RlZmluZSBQRl9GUkVFWkVfTEFU
+RQkJMHgwMDAxMDAwMAkvKiBUaHJlYWRzIHRvIGJlIGZyb3plbiBhbG9uZyB3aXRoIGtlcm5lbCB0
+aHJlYWRzICovCiAjZGVmaW5lIFBGX0tTV0FQRAkJMHgwMDAyMDAwMAkvKiBJIGFtIGtzd2FwZCAq
+LwogI2RlZmluZSBQRl9NRU1BTExPQ19OT0ZTCTB4MDAwNDAwMDAJLyogQWxsIGFsbG9jYXRpb24g
+cmVxdWVzdHMgd2lsbCBpbmhlcml0IEdGUF9OT0ZTICovCiAjZGVmaW5lIFBGX01FTUFMTE9DX05P
+SU8JMHgwMDA4MDAwMAkvKiBBbGwgYWxsb2NhdGlvbiByZXF1ZXN0cyB3aWxsIGluaGVyaXQgR0ZQ
+X05PSU8gKi8KLS0tIGEva2VybmVsL2ZyZWV6ZXIuYworKysgYi9rZXJuZWwvZnJlZXplci5jCkBA
+IC00Niw3ICs0Niw4IEBAIGJvb2wgZnJlZXppbmdfc2xvd19wYXRoKHN0cnVjdCB0YXNrX3N0cnUK
+IAlpZiAocG1fbm9zaWdfZnJlZXppbmcgfHwgY2dyb3VwX2ZyZWV6aW5nKHApKQogCQlyZXR1cm4g
+dHJ1ZTsKIAotCWlmIChwbV9mcmVlemluZyAmJiAhKHAtPmZsYWdzICYgUEZfS1RIUkVBRCkpCisJ
+aWYgKHBtX2ZyZWV6aW5nICYmICEocC0+ZmxhZ3MgJiBQRl9LVEhSRUFEKSAmJgorCQkJCSEocC0+
+ZmxhZ3MgJiBQRl9GUkVFWkVfTEFURSkpCiAJCXJldHVybiB0cnVlOwogCiAJcmV0dXJuIGZhbHNl
+OwpAQCAtMjMzLDMgKzIzNCwyOSBAQCBib29sIHNldF9mcmVlemFibGUodm9pZCkKIAlyZXR1cm4g
+dHJ5X3RvX2ZyZWV6ZSgpOwogfQogRVhQT1JUX1NZTUJPTChzZXRfZnJlZXphYmxlKTsKKworLyoq
+CisgKiBzZXRfZnJlZXplX2xhdGVfZmxhZyAtIG1ha2UgJXAgdG8gYmUgZnJvemVuIGxhdGUKKyAq
+CisgKiBNYWtlICVwIHRvIGJlIGZyb3plbiBieSBmcmVlemVyIGFsb25nIHdpdGgga2VybmVsIHRo
+cmVhZHMKKyAqLwordm9pZCBzZXRfZnJlZXplX2xhdGVfZmxhZyhzdHJ1Y3QgdGFza19zdHJ1Y3Qg
+KnApCit7CisJc3Bpbl9sb2NrX2lycSgmZnJlZXplcl9sb2NrKTsKKwlwLT5mbGFncyB8PSBQRl9G
+UkVFWkVfTEFURTsKKwlzcGluX3VubG9ja19pcnEoJmZyZWV6ZXJfbG9jayk7Cit9CitFWFBPUlRf
+U1lNQk9MKHNldF9mcmVlemVfbGF0ZV9mbGFnKTsKKworLyoqCisgKiBjbGVhcl9mcmVlemVfbGF0
+ZV9mbGFnIC0gbWFrZSAlcCB0byBiZSBmcm96ZW4gZWFybHkKKyAqCisgKiBNYWtlICVwIHRvIGJl
+IGZyb3plbiBieSBmcmVlemVyIGFsb25nIHdpdGggdXNlciBzcGFjZSBwcm9jZXNzZXMKKyAqLwor
+dm9pZCBjbGVhcl9mcmVlemVfbGF0ZV9mbGFnKHN0cnVjdCB0YXNrX3N0cnVjdCAqcCkKK3sKKwlz
+cGluX2xvY2tfaXJxKCZmcmVlemVyX2xvY2spOworCXAtPmZsYWdzICY9IH5QRl9GUkVFWkVfTEFU
+RTsKKwlzcGluX3VubG9ja19pcnEoJmZyZWV6ZXJfbG9jayk7Cit9CitFWFBPUlRfU1lNQk9MKGNs
+ZWFyX2ZyZWV6ZV9sYXRlX2ZsYWcpOwotLS0gYS9rZXJuZWwvcG93ZXIvcHJvY2Vzcy5jCisrKyBi
+L2tlcm5lbC9wb3dlci9wcm9jZXNzLmMKQEAgLTIyNSw3ICsyMjUsNyBAQCB2b2lkIHRoYXdfa2Vy
+bmVsX3RocmVhZHModm9pZCkKIAogCXJlYWRfbG9jaygmdGFza2xpc3RfbG9jayk7CiAJZm9yX2Vh
+Y2hfcHJvY2Vzc190aHJlYWQoZywgcCkgewotCQlpZiAocC0+ZmxhZ3MgJiBQRl9LVEhSRUFEKQor
+CQlpZiAocC0+ZmxhZ3MgJiAoUEZfS1RIUkVBRCB8IFBGX0ZSRUVaRV9MQVRFKSkKIAkJCV9fdGhh
+d190YXNrKHApOwogCX0KIAlyZWFkX3VubG9jaygmdGFza2xpc3RfbG9jayk7Cg==
+--00000000000071ca5d05fd76f736--
