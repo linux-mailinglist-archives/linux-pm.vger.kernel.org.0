@@ -2,81 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40693725B24
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 11:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD6C0725BD9
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 12:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239435AbjFGJ7E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 05:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37544 "EHLO
+        id S238819AbjFGKsQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 06:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234789AbjFGJ7D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 05:59:03 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C83221BC3;
-        Wed,  7 Jun 2023 02:59:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA853AB6;
-        Wed,  7 Jun 2023 02:59:45 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE3E13F587;
-        Wed,  7 Jun 2023 02:58:58 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 10:58:56 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Beata Michalska <beata.michalska@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, ionela.voinescu@arm.com,
-        sumitg@nvidia.com, Sudeep Holla <sudeep.holla@arm.com>,
-        yang@os.amperecomputing.com
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <20230607095856.7nyv7vzuehceudnl@bogus>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
+        with ESMTP id S238476AbjFGKsN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 06:48:13 -0400
+Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C051C10EC;
+        Wed,  7 Jun 2023 03:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kernkonzept.com; s=mx1; h=Cc:To:Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-Id:Date:Subject:From:References:In-Reply-To:Reply-To:
+        Content-ID:Content-Description;
+        bh=l/zVS58cvAcEWC+l4J5gkSm4eGpLkpBXWoGcuN8ztvU=; b=oXe6aY4Ltjr9nd5GOoBRHVqWCA
+        ekpw4HVFlN4iDZgHRHIqOJ8WXWQMyH4DXEMjMTaCM67+GDv4AbDydFRzM5XiclHtRxZuHw+e+MdZj
+        kY/FEDPO5qeZ0QRI7pf4irii+wJvkUCGhTm4n2hkXobZPVOlIVdsjeuNOXHxaOI92GVFPQEBy/SgS
+        pT7Moxb35Pqro0ba0tCteibwgxCqtT4KR4QvppA6rWhEnpdB5oIcZucdo/Hw4keM5kYKcVc7fc3Vt
+        +IZX2hUdnI/xXUJkD/yFmsW2F4OooNIJLwUeqOYgDesMHvlk10Y6Ts97Tmdd6jG9DhBvJZwSs+dMG
+        mfExv4wA==;
+Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
+        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
+        id 1q6qhm-0069NL-If; Wed, 07 Jun 2023 12:47:54 +0200
+From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+Subject: [PATCH v5 0/6] thermal: qcom: tsens: Fix MDM9607, add MSM8909
+Date:   Wed, 07 Jun 2023 12:47:43 +0200
+Message-Id: <20230508-msm8909-tsens-v5-0-5eb632235ba7@kernkonzept.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606155754.245998-1-beata.michalska@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE9ggGQC/6WPO27DMBBEr2Kwzgr8iJLpKvcIXFDS2iQskcIuI
+ yQxdPfQblIEqVK+Bd7M7F0wUkQWp8NdEG6RY04V7MtBjMGnK0KcKgsttZFWHmHh5eikg8KYGLr
+ eGN9NrbIDiuoMnhEG8mkM1Urv81yPK+ElfjxL3s6VL5QXKIHQ/0QbZZU0zspGd70zqgcFXHCtG
+ 5orUsjz9HpDSrecvnAtzZiXR1+IXDJ9Pudv7aPgX3F/fLm1IGFySrlO63FQ7pd73vf9G7EHnUJ
+ MAQAA
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 04:57:54PM +0100, Beata Michalska wrote:
-> With the Frequency Invariance Engine (FIE) being already wired up with
-> sched tick and making use of relevant (core counter and constant
-> counter) AMU counters, getting the current frequency for a given CPU
-> on supported platforms, can be achieved by utilizing the frequency scale
-> factor which reflects an average CPU frequency for the last tick period
-> length.
-> 
-> With that at hand, arch_freq_get_on_cpu dedicated implementation
-> gets enrolled into cpuinfo_cur_freq policy sysfs attribute handler,
-> which is expected to represent the current frequency of a given CPU,
-> as obtained by the hardware. This is exactly the type of feedback that
-> cycle counters provide.
-> 
-> In order to avoid calling arch_freq_get_on_cpu from the scaling_cur_freq
-> attribute handler for platforms that do provide cpuinfo_cur_freq, and
-> yet keeping things intact for those platform that do not, its use gets
-> conditioned on the presence of cpufreq_driver (*get) callback (which also
-> seems to be the case for creating cpuinfo_cur_freq attribute).
->
+Make the MDM9607 thermal sensor support consistent with Qualcomm's
+vendor kernel (msm-3.18) by applying the correct default slope values
+and adding "correction factors" to the factory calibration values in the
+fuses. Use the same functionality to add the very similar MSM8909 SoC to
+the tsens driver.
 
-LGTM,
+---
+Changes in v5:
+- Rebase on top of MSM8226 series that way applied by Daniel
+  (https://lore.kernel.org/linux-arm-msm/4097223e-5297-1536-18bb-512ef28c8329@linaro.org/)
+- Add review tags from Dmitry
+- Link to v4: https://lore.kernel.org/r/20230508-msm8909-tsens-v4-0-d9119622cb19@kernkonzept.com
+Changes in v4:
+- Mostly just resend, explicitly initialize zero values for
+  the MSM8909 p1/p2_calib_offset for better clarity (Konrad)
+- Link to v3: https://lore.kernel.org/r/20230315103950.2679317-1-stephan.gerhold@kernkonzept.com
+Changes in v3:
+- Drop now unused definition reported by kernel test robot
+Changes in v2:
+- Rewrite on top of per-sensor nvmem cell changes that landed in 6.3
+- Add patches to fix existing support for MDM9607
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+Stephan Gerhold (6):
+      thermal: qcom: tsens: Drop unused legacy structs
+      thermal: qcom: tsens-v0_1: Fix mdm9607 slope values
+      thermal: qcom: tsens-v0_1: Add mdm9607 correction offsets
+      dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
+      dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
+      thermal: qcom: tsens-v0_1: Add MSM8909 data
 
-However I fail to understand if both the changes are dependent ?
-Can this be split into 2 patches ? I fail to see the dependency, what
-am I missing ? Even if there is some dependency to get arch value
-(arch_freq_get_on_cpu() from show_cpuinfo_cur_freq()), you can push
-that change first followed by the arm64 change as 2 different change.
+ .../devicetree/bindings/thermal/qcom-tsens.yaml    |  23 +----
+ drivers/thermal/qcom/tsens-v0_1.c                  | 101 +++++++++++++--------
+ drivers/thermal/qcom/tsens-v1.c                    |  22 -----
+ drivers/thermal/qcom/tsens.c                       |  19 +++-
+ drivers/thermal/qcom/tsens.h                       |   6 +-
+ 5 files changed, 88 insertions(+), 83 deletions(-)
+---
+base-commit: 7e25e9706bbade1b3dc670fad44a920d087064df
+change-id: 20230508-msm8909-tsens-6733a6d415be
 
+Best regards,
 -- 
-Regards,
-Sudeep
+Stephan Gerhold
+Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+
