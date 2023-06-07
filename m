@@ -2,207 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491AA7253CD
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 08:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 747E072544D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 08:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbjFGGB5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 02:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
+        id S232876AbjFGGde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 02:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjFGGBz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 02:01:55 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116AE83;
-        Tue,  6 Jun 2023 23:01:53 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id 39AF6F02A5;
-        Tue,  6 Jun 2023 23:01:23 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 6Vkz2YQVTD2t; Tue,  6 Jun 2023 23:01:22 -0700 (PDT)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1686117682; bh=O/zY6nrU7+HTjpYMUtFjQrMmI4VyQoafvb7Oak+nsQg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tL0Wnua/AJ8o6hZMURKpgqDELpV//ecZXVJFWl+AQFquPkohEnO+Lx0yqbfm0+yAR
-         moIQq2iggqvU0lNjlqgLj+B+H5XNJbysRHvjwVbfXuQiZog/y13N0MJ1hoLX3KKHnd
-         CHfg11vg2g+rdrePXt8xz+VcFlxBsMKTdyyUYwgce0BBsjEH9my0FX5JlWoN+inYH9
-         GHctBUJGLYnTjgeUtiCIBXt+EXBwI8e8UKIDOrfb3AptfZ5a5utYruC4LU+mTPwoqA
-         sLHf75IArwU9KMvAHeEbkLELvUa77ysgs+UpBNFVLfSco+cl7Rr+L8BeIHtej6tiZH
-         r3iHMOcpNQd/g==
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        with ESMTP id S236918AbjFGGdP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 02:33:15 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267991BF9;
+        Tue,  6 Jun 2023 23:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686119576; x=1717655576;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=UgFOYQGqDzLp4xx5oY7zBmMyA3RJ/nZ8tQokKBNT+N4=;
+  b=EvDnJgxPr9wDmL6fo0lkQ5L9CnYsfLMWyxqshU7m3g4B/fx01O0ktmxU
+   TlMEtrq2uzlPvgRSvmoIJfpjkwxEtDSIlFUDRO7IZofrlyukD/ky7Rlnz
+   wNaVKCSinLiEPIx0AmpIzBB6GYqXkddstQElCFI81WxzydYNBpXrfumix
+   ZIRQmlroleWxGXvr4PLVYPxnGtXtuOE50BDBJlEeeTVbZSbIcx0U0NiJX
+   uZOvIFRmi/nNpen2mFoUD8gqsS9Y+DX/kXmRoRufSJmHBf7yYqc/bQ2PP
+   FljNylgz4N4lc4m4xi4bz+tfs7RemDtTb+XkTL95ZUzD2K1IxrjZ+VMZn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="355756528"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="355756528"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jun 2023 23:32:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10733"; a="703484803"
+X-IronPort-AV: E=Sophos;i="6.00,223,1681196400"; 
+   d="scan'208";a="703484803"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga007.jf.intel.com with ESMTP; 06 Jun 2023 23:32:54 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 6 Jun 2023 23:32:54 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 6 Jun 2023 23:32:53 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 6 Jun 2023 23:32:53 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.106)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 6 Jun 2023 23:32:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ndw8rLURpRs06TGjqy8MqhOn9qy1mrwwZL5XMr0IosOZVSU1KvLf0Vv53iC/0CjN1/RODAuS6JJT9Kmx2RKGwKQec7aNYKurrH8Hryw8xKK26l/L1Q62E0Uk0eYdyTk76D6+bhfZvRdjY8FBTAYnfI+2r+I9U9mS5gvDZkihYADZIzLUZsaSn5eiVTSsPGrJ0tq4gaCzy+F2hMWeVyQJ+x3fNv07ftrkKgbxpy0+B+UqDtugOK1tVhb7mLdwrwpszSJSEAyGUVvPY4KnJTkXwsSp6TLC6BOIDO+/IQtvzdj4UWIh49BTsfWB4QI4nrCyObbGDhgPRlDVgL4N6AM2BA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UgFOYQGqDzLp4xx5oY7zBmMyA3RJ/nZ8tQokKBNT+N4=;
+ b=bB6qy4W7nROs3d15oK7e8HP6yzVHFFfAD9nF2OlmteCgk7fbDPh9jik1ApffNYkEwKrHf55y6abmMmDW5BCXq68tFFgM56rJ9rv7aOkeOf5amR0aoZnRU/dszbnSYlzBTWe+TZC7Su+rbUb17JS2NKVtzFsnsqeVyd3hjltbKfN+HWmyEh+gx+jdMijvN/Hl/honOEwJqMcbt++iMpP8nwdZZm5IeYItJwB6hO5GuucXtHhhLEPfWgMBqvUVi+/0GFm32N/zWEfOFzOuee3xErVlKpZFHkYeU2qPvWFxvaVa1ZMGZyw3yttJdfkLhTbKK412JF2luN0GrnUIwz6x7Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH7PR11MB6605.namprd11.prod.outlook.com (2603:10b6:510:1b0::16)
+ by CY8PR11MB7033.namprd11.prod.outlook.com (2603:10b6:930:53::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.24; Wed, 7 Jun
+ 2023 06:32:46 +0000
+Received: from PH7PR11MB6605.namprd11.prod.outlook.com
+ ([fe80::cbf6:1cb5:b0d7:4fe8]) by PH7PR11MB6605.namprd11.prod.outlook.com
+ ([fe80::cbf6:1cb5:b0d7:4fe8%7]) with mapi id 15.20.6455.027; Wed, 7 Jun 2023
+ 06:32:46 +0000
+From:   "Zhang, Rui" <rui.zhang@intel.com>
+To:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
         "rafael@kernel.org" <rafael@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alice Guo <alice.guo@nxp.com>
-Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
-Date:   Wed, 07 Jun 2023 08:01:14 +0200
-Message-ID: <21914890.EfDdHjke4D@pliszka>
-In-Reply-To: <0eb717ac-82b1-8a76-58a2-394167e69b28@linaro.org>
-References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
- <DU0PR04MB9417D574603B54AEF76480AE88499@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <0eb717ac-82b1-8a76-58a2-394167e69b28@linaro.org>
+        "evalenti@kernel.org" <evalenti@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "amitk@kernel.org" <amitk@kernel.org>
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Thread-Topic: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Thread-Index: AQHZmNhPM/sHhzNBMEmsondXNqHQpq9+4gyA
+Date:   Wed, 7 Jun 2023 06:32:46 +0000
+Message-ID: <27c8bd5ddea62391f9573ea77cfcebb4fa88ff66.camel@intel.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+In-Reply-To: <20230607003721.834038-1-evalenti@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4-0ubuntu1 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR11MB6605:EE_|CY8PR11MB7033:EE_
+x-ms-office365-filtering-correlation-id: 50d5d125-ce02-410d-7a6a-08db672101ad
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iPBLxTl0TBZAOHd++3B6QH3jwLggLBvCIGggsStrwuyIc40EIbmWmxQsWC0et6zXtcLpljQXCQ/KdAHATs39j8xFYl4SbDsexIXyl7xbfciHlPVDKTtx/JReDfPEfQG4bABxzQ/DmTAKIyioi9J1VEc0rpVCbT+DaTMcgad7kk5ni8ESvEDLl0t27j4e44cbpBN7Yy945YzNkyHx18QRB8fBEbttu93+GY5HffgboSYkR8tU8U3wyiYtVK0sjH1wL+AJ/36z63FeCkhU+ue46FVL7SjnUUSmFovcZ11N9dbGdAFQ9Q1wmpZ3ugthK8BB5kTt3S+H6ZIgQyQLR3QcCQInJF41ofjKWu069lNnHxUm+QxUuU0wz6YqRP1ITvw6nGR/tYc5EBBsejHPO1/pKhOs6CFY4KdOAPV+fYEOq50WrlbvvmQbnuCdLV9bEbuaEHKIbzkIVmPy5SEmrdMJTN+d4VijgexiiJx5PZgNnq66ths9vhq8x8OoRS3Z4qyjl5GqezRlRhA5ycJXMBo8VwwoVHp6dEZl03ec6e7mjNnIyUywYTyr6PuW5dm1TsZwH9eTw1AFRgify06SJFrdH/5n2gkeI5pdcvqZmBDq0ow=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6605.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199021)(66446008)(36756003)(66556008)(66946007)(64756008)(91956017)(66476007)(316002)(76116006)(41300700001)(4326008)(110136005)(8936002)(2906002)(5660300002)(8676002)(6486002)(478600001)(71200400001)(82960400001)(83380400001)(26005)(6506007)(186003)(2616005)(122000001)(38070700005)(86362001)(6512007)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L2lBUm9lOXozQ3duNDdJRnJCRVpkbThhSDAwNUk5VUIyQWdGS0NsN25Yazlw?=
+ =?utf-8?B?NVgwNFpUaExDeFhlYTlCTlRESWs0QmdmUEVtSXc1R1VZeHZVa2hyaVQ2MkFB?=
+ =?utf-8?B?MFJhN0YrdkJyMGRFalVKcTFlOTE0TVZzZmYzLzZHSndiRmJVVHozejFTT1JZ?=
+ =?utf-8?B?MHZvZjZLSE9md1ptY2hZNDNRZkpWVDd4SXJISlo5R0t0Z1NibnJOcUE0QWdi?=
+ =?utf-8?B?UUsrSmRGakxnYWpmUnE1OG1xcmRWVGN1YUV0RUhxWGQ3OVNYa2FGNm1CaDFs?=
+ =?utf-8?B?cFhXYzM5VWc4dUxTTTJza24vM3A3L3JDam4yNUJZTk1RdGJLNThNVVYzWmJB?=
+ =?utf-8?B?eEJxOFBPWGhITHRrTzBveEZ6QnJYWWJ6SWVxNnRCZDUrTkljMVRmZ1FEWE9k?=
+ =?utf-8?B?ZVh0aVNGTExxZFc0Q0tUdzAvcG5jcFQxcmdyTVlxOXRDenoxbTJNYVlXSTNt?=
+ =?utf-8?B?bGRWejFZdlR2bDRJdys0NjlIekxoTmo3S1pvd2RzMnFZRzVQODlIU0xlTXl5?=
+ =?utf-8?B?OWwvVDBXV1F5QWI0SXlVTjNxdklIekJRaGdlU3pnaStjQlJzUVpUaDJzdEp6?=
+ =?utf-8?B?Y3NZNkRua2l1STFGUzBUdG1nZXBYaWw4eDl3bjBTMHNMalE2Mm9mT0ZhbjQx?=
+ =?utf-8?B?UFlMRG4yajBUUzRHa0dDRWdONm9qS21FZjBBU09nSnAvMHE0Ni9xSU5lMW4w?=
+ =?utf-8?B?K1dZd3R2MnBFTDdXbE5URmlmWkJXaHpXMkx1M3BpTGhnSDVHeHhISEg1YmJa?=
+ =?utf-8?B?WVRYWlZSTDZmNS9oazRLZGk5cHh2U3h0eHJreGRnb0VwTEs1T1h2VVArdGVo?=
+ =?utf-8?B?NlNWVGtjSWhyU25mQUxMUTJ1WEFqK0FjbEM3MWJIb2NYeU9jLzhEeGZkL25X?=
+ =?utf-8?B?bjFlbWVUMWhIUUY0NTBjNW9aZ0NTS0JtVjZIbmxJMVp1NGsxd2U5bG1OVEJE?=
+ =?utf-8?B?cGwrTXROY2trZHl5REplSzJPYWJpTmIxbk52RjhkREppeXAxWnd4cUZvSW1u?=
+ =?utf-8?B?eVpKaC92dXB6R3F1MTFPejRPUWNOc2U1L2J2R3ZiRjYxSDJPTmhsRUM4azhR?=
+ =?utf-8?B?bXgrWEpkMnUyMkNvdWQ4ZW1UUW5EWkVrbWtRQWt0UWxJclVZYVJDbGxDdjgz?=
+ =?utf-8?B?SkJ1RnlsVW1wdGFGY3JNNTgxYXZkL2NJMCtxZ01UYkpKckd3SGNvZ2ptWWl1?=
+ =?utf-8?B?eCthaEdqNW5nQXNTQTJMdUtuN3o5Sm5YRWtnV2NDNmtCMWRTODZOYlhjeWUv?=
+ =?utf-8?B?SVpOSmlCZlBXUzN4TnVVbHJid2tWaWhNNlBkM2JwTkRRTVVHZ2dMNnNXMzRm?=
+ =?utf-8?B?eG5PUTFHb0hQNDFjZkVZbVVTc2NoMHVIVENoSkJiVlU5L1dCVXlPN0l5bStJ?=
+ =?utf-8?B?Z09icEM0VGZ3eVF4Y1daMTlMYnVocFJIN2RkSy9DWi8xK3RaNmhseVZiVTNR?=
+ =?utf-8?B?QkpEcTFzT2tyaWJSUHVEZUE0L3dVMUs5b3gwZzRwVlg3SG5yNi9MdjI3MDZp?=
+ =?utf-8?B?SkV2dTI0V2k5eDdrUTJOdVBpMnlhOHZUakZIM01iU1FTS3BFVEsybk53Snpr?=
+ =?utf-8?B?Njc0a0M1blB0ZkpxVEhYRVE3QmNiRUIwUU8zT2xxemZhQ0lXOVJmeWU3eXY4?=
+ =?utf-8?B?UXJOYWx6OGhuakNaWFpKdnd5RUw5ZTJrTFB4WU5pOHBQY2o1dEcrZG9zUzRE?=
+ =?utf-8?B?M2djYzMrai8xM0d4S1dpeGpyWlk2R3ZQSVNUeDYweklCMDhQZjlDTi93UFlC?=
+ =?utf-8?B?QnBCS2h5cUN5dGd0ZWp0RTRWYm15NmxubjNHYW5NN0NWNDVoTDlSMUQ2WUR1?=
+ =?utf-8?B?MmMzdUhsd1lHbEJrdzVaUGRCejljeTZpN2NzTmFtOXBPTFE4QXpETkZHQ2w0?=
+ =?utf-8?B?V0dRMVJmVnJERFNLT0ZBOTdoeDc0QkhHanR0Y1Z1ODVFL3N4ZnpkL01HcU5l?=
+ =?utf-8?B?TEZJTlBPcUhOV2RoMUZDKzgyUVB5dFplNWhKZWIyYkl0UVJrQ1AyTzVWT1pM?=
+ =?utf-8?B?VWFlUWppK3kwZUFRbVN2SnoxRFcrUGdBaU1CSXUvWmtBMXU5QVRsMnk1TWxq?=
+ =?utf-8?B?VTZCVXdyY20zRGJGeDd5UnJZRlpGS3d0Sk5QYk9ZU0tuZlJFT2FEd0E3N2xv?=
+ =?utf-8?Q?gHQHragjIYND2ocCApXR4CP+1?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1B72A07E7C626F4297CA10C68F17FC01@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6605.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50d5d125-ce02-410d-7a6a-08db672101ad
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jun 2023 06:32:46.2739
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fNIKLtx75RmsZIelnV1nfSnwJCq789zeAopFyo5CDDh/qXeWoGLplbUuuCWKdd/i9eigZs/HD8sqGKxsqP13IQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7033
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On pi=C4=85tek, 2 czerwca 2023 15:11:37 CEST Daniel Lezcano wrote:
-> On 01/06/2023 11:52, Peng Fan wrote:
-> > Hi Daniel,
-> >=20
-> >> Subject: RE: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
-> >> sensors
-> >>=20
-> >>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported
-> >>> sensors
-> >>>=20
-> >>> On 31/05/2023 14:05, Peng Fan wrote:
-> >>>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable
-> >>>>> supported sensors
-> >>>>>=20
-> >>>>> On 16/05/2023 10:37, Peng Fan (OSS) wrote:
-> >>>>>> From: Peng Fan <peng.fan@nxp.com>
-> >>>>>>=20
-> >>>>>> There are MAX 16 sensors, but not all of them supported. Such as
-> >>>>>> i.MX8MQ, there are only 3 sensors. Enabling all 16 sensors will
-> >>>>>> touch reserved bits from i.MX8MQ reference mannual, and TMU will
-> >>>>>> stuck, temperature will not update anymore.
-> >>>>>>=20
-> >>>>>> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before
-> >>>>>> registering them")
-> >>>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> >>>>>> ---
-> >>>>>>=20
-> >>>>>>     drivers/thermal/qoriq_thermal.c | 30
-> >>>>>>     +++++++++++++++++++----------
-> >>=20
-> >> -
-> >>=20
-> >>>>>>     1 file changed, 19 insertions(+), 11 deletions(-)
-> >>>>>>=20
-> >>>>>> diff --git a/drivers/thermal/qoriq_thermal.c
-> >>>>>> b/drivers/thermal/qoriq_thermal.c index
-> >>=20
-> >> b806a0929459..53748c4a5be1
-> >>=20
-> >>>>>> 100644
-> >>>>>> --- a/drivers/thermal/qoriq_thermal.c
-> >>>>>> +++ b/drivers/thermal/qoriq_thermal.c
-> >>>>>> @@ -31,7 +31,6 @@
-> >>>>>>=20
-> >>>>>>     #define TMR_DISABLE	0x0
-> >>>>>>     #define TMR_ME		0x80000000
-> >>>>>>     #define TMR_ALPF	0x0c000000
-> >>>>>>=20
-> >>>>>> -#define TMR_MSITE_ALL	GENMASK(15, 0)
-> >>>>>>=20
-> >>>>>>     #define REGS_TMTMIR	0x008	/* Temperature measurement
-> >>>>>=20
-> >>>>> interval Register */
-> >>>>>=20
-> >>>>>>     #define TMTMIR_DEFAULT	0x0000000f
-> >>>>>>=20
-> >>>>>> @@ -105,6 +104,11 @@ static int tmu_get_temp(struct
-> >>>>>=20
-> >>>>> thermal_zone_device *tz, int *temp)
-> >>>>>=20
-> >>>>>>     	 * within sensor range. TEMP is an 9 bit value representing
-> >>>>>>     	 * temperature in KelVin.
-> >>>>>>     	 */
-> >>>>>>=20
-> >>>>>> +
-> >>>>>> +	regmap_read(qdata->regmap, REGS_TMR, &val);
-> >>>>>> +	if (!(val & TMR_ME))
-> >>>>>> +		return -EAGAIN;
-> >>>>>=20
-> >>>>> How is this change related to what is described in the changelog?
-> >>>>=20
-> >>>> devm_thermal_zone_of_sensor_register will invoke get temp, since we
-> >>>> reverted the 45038e03d633 did, we need to check TMR_ME to avoid
-> >>>=20
-> >>> return
-> >>>=20
-> >>>> invalid temperature.
-> >>>>=20
-> >>>   From a higher perspective if the sensor won't be enabled, then the
-> >>>=20
-> >>> thermal zone should not be registered, the get_temp won't happen on a
-> >>> disabled sensor and this test won't be necessary, no ?
-> >=20
-> > After thinking more, I'd prefer current logic.
-> >=20
-> > We rely on devm_thermal_of_zone_register's return value to know
-> > whether there is a valid zone, then set sites bit, and after collected
-> > all site bits, we enable the thermal IP.
-> >=20
-> > If move the enabling thermal IP before devm_thermal_of_zone_register,
-> > We need check dtb thermal zone, to know which zone is valid for current
-> > thermal IP. This would complicate the design.
-> >=20
-> > So just checking the enabling bit in get temperature would be much
-> > simpler, and there just a small window before enabling thermal IP.
->=20
-> If the thermal zone is not described, then the thermal zone won't be
-> created as it fails with -ENODEV and thus get_temp won't be called on a
-> disabled site, right?
-
-That's not what the problem is. It's about zones that *will* be created -=20
-since the driver only knows that a thermal zone isn't described in the devi=
-ce=20
-tree after it fails registering, it can't enable the site *before* the zone=
-=20
-gets registered - so it happens afterwards. That's why it needs this check =
-to=20
-not return a bogus initial value before the site gets actually enabled late=
-r=20
-in qoriq_tmu_register_tmu_zone.
-
-> Having test in the get_temp() ops is usually the sign there is something
-> wrong with the driver initialization.
-
-I've sent a patch that solved this exact problem back in 2021 by checking=20
-whether a zone is described first with thermal_zone_of_get_sensor_id, but i=
-t=20
-was sitting out there ignored long enough that the function got removed fro=
-m=20
-the kernel in 5d10f480f77b and I'm not exactly sure how to solve it cleanly=
-=20
-without getting it back. Without a replacement, what Peng did seems like th=
-e=20
-only way to not reintroduce the problem 45038e03d633 was supposed to fix.
-
-The patch: https://lore.kernel.org/linux-pm/20220301033402.415445-1-sebasti=
-an.krzyszkowiak@puri.sm/
-
-Questions on how to proceed further: https://lore.kernel.org/linux-pm/
-5800115.iIbC2pHGDl@pliszka/
-
-Would be nice to get this finally resolved, the mainline TMU driver has bee=
-n=20
-completely unreliable on i.MX8MQ for years now.
-
-Thanks,
-Sebastian
-
-
+T24gVHVlLCAyMDIzLTA2LTA2IGF0IDE3OjM3IC0wNzAwLCBFZHVhcmRvIFZhbGVudGluIHdyb3Rl
+Ogo+IEZyb206IEVkdWFyZG8gVmFsZW50aW4gPGVkdXZhbEBhbWF6b24uY29tPgo+IAo+IEFzIHRo
+ZSB0aGVybWFsIHpvbmUgY2FjaGVzIHRoZSBjdXJyZW50IGFuZCBsYXN0IHRlbXBlcmF0dXJlCj4g
+dmFsdWUsIHRoZSBzeXNmcyBpbnRlcmZhY2UgY2FuIHVzZSB0aGF0IGluc3RlYWQgb2YKPiBmb3Jj
+aW5nIGFuIGFjdHVhbCB1cGRhdGUgb3IgcmVhZCBmcm9tIHRoZSBkZXZpY2UuCj4gVGhpcyB3YXks
+IGlmIG11bHRpcGxlIHVzZXJzcGFjZSByZXF1ZXN0cyBhcmUgY29taW5nCj4gaW4sIHdlIGF2b2lk
+IHN0b3JtaW5nIHRoZSBkZXZpY2Ugd2l0aCBtdWx0aXBsZSByZWFkcwo+IGFuZCBwb3RlbnRpYWxs
+eSBjbG9nZ2luZyB0aGUgdGltaW5nIHJlcXVpcmVtZW50Cj4gZm9yIHRoZSBnb3Zlcm5vcnMuCj4g
+Cj4gQ2M6ICJSYWZhZWwgSi4gV3lzb2NraSIgPHJhZmFlbEBrZXJuZWwub3JnPiAoc3VwcG9ydGVy
+OlRIRVJNQUwpCj4gQ2M6IERhbmllbCBMZXpjYW5vIDxkYW5pZWwubGV6Y2Fub0BsaW5hcm8ub3Jn
+PiAoc3VwcG9ydGVyOlRIRVJNQUwpCj4gQ2M6IEFtaXQgS3VjaGVyaWEgPGFtaXRrQGtlcm5lbC5v
+cmc+IChyZXZpZXdlcjpUSEVSTUFMKQo+IENjOiBaaGFuZyBSdWkgPHJ1aS56aGFuZ0BpbnRlbC5j
+b20+IChyZXZpZXdlcjpUSEVSTUFMKQo+IENjOiBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmfCoChv
+cGVuIGxpc3Q6VEhFUk1BTCkKPiBDYzogbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZ8KgKG9w
+ZW4gbGlzdCkKPiAKPiBTaWduZWQtb2ZmLWJ5OiBFZHVhcmRvIFZhbGVudGluIDxlZHV2YWxAYW1h
+em9uLmNvbT4KPiAtLS0KPiDCoGRyaXZlcnMvdGhlcm1hbC90aGVybWFsX3N5c2ZzLmMgfCAyMSAr
+KysrKysrKysrKysrKysrLS0tLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCsp
+LCA1IGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3RoZXJtYWwvdGhlcm1h
+bF9zeXNmcy5jCj4gYi9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9zeXNmcy5jCj4gaW5kZXggYjZk
+YWVhMjM5OGRhLi5hMjQwYzU4ZDllMDggMTAwNjQ0Cj4gLS0tIGEvZHJpdmVycy90aGVybWFsL3Ro
+ZXJtYWxfc3lzZnMuYwo+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX3N5c2ZzLmMKPiBA
+QCAtMzUsMTIgKzM1LDIzIEBAIHN0YXRpYyBzc2l6ZV90Cj4gwqB0ZW1wX3Nob3coc3RydWN0IGRl
+dmljZSAqZGV2LCBzdHJ1Y3QgZGV2aWNlX2F0dHJpYnV0ZSAqYXR0ciwgY2hhcgo+ICpidWYpCj4g
+wqB7Cj4gwqDCoMKgwqDCoMKgwqDCoHN0cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlICp0eiA9IHRv
+X3RoZXJtYWxfem9uZShkZXYpOwo+IC3CoMKgwqDCoMKgwqDCoGludCB0ZW1wZXJhdHVyZSwgcmV0
+Owo+IC0KPiAtwqDCoMKgwqDCoMKgwqByZXQgPSB0aGVybWFsX3pvbmVfZ2V0X3RlbXAodHosICZ0
+ZW1wZXJhdHVyZSk7Cj4gK8KgwqDCoMKgwqDCoMKgaW50IHRlbXBlcmF0dXJlOwo+IMKgCj4gLcKg
+wqDCoMKgwqDCoMKgaWYgKHJldCkKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0
+dXJuIHJldDsKPiArwqDCoMKgwqDCoMKgwqAvKgo+ICvCoMKgwqDCoMKgwqDCoCAqIGRvbid0IGZv
+cmNlIG5ldyB1cGRhdGUgZnJvbSBleHRlcm5hbCByZWFkcwo+ICvCoMKgwqDCoMKgwqDCoCAqIFRo
+aXMgd2F5IHdlIGF2b2lkIG1lc3NpbmcgdXAgd2l0aCB0aW1lIGNvbnN0cmFpbnRzLgo+ICvCoMKg
+wqDCoMKgwqDCoCAqLwo+ICvCoMKgwqDCoMKgwqDCoGlmICh0ei0+bW9kZSA9PSBUSEVSTUFMX0RF
+VklDRV9ESVNBQkxFRCkgewo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnQgcjsK
+PiArCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHIgPSB0aGVybWFsX3pvbmVfZ2V0
+X3RlbXAodHosICZ0ZW1wZXJhdHVyZSk7IC8qIGhvbGRzCj4gdHotPmxvY2sqLwoKd2hhdCBpcyB0
+aGUgZXhwZWN0ZWQgYmVoYXZpb3Igb2YgYSBkaXNhYmxlZCB6b25lPwoKSU1PLCB0aGUgaGFyZHdh
+cmUgbWF5IG5vdCBiZSBmdW5jdGlvbmFsIGF0IHRoaXMgcG9pbnQsIGFuZCByZWFkaW5nIHRoZQp0
+ZW1wZXJhdHVyZSBzaG91bGQgYmUgYXZvaWRlZCwgYXMgd2UgZG8gaW4KX190aGVybWFsX3pvbmVf
+ZGV2aWNlX3VwZGF0ZSgpLgoKc2hvdWxkIHdlIGp1c3QgcmV0dXJuIGZhaWx1cmUgaW4gdGhpcyBj
+YXNlPwoKdXNlcnNwYWNlIHNob3VsZCBwb2tlIHRoZSB0ZW1wIGF0dHJpYnV0ZSBmb3IgZW5hYmxl
+ZCB6b25lcyBvbmx5LgoKdGhhbmtzLApydWkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgaWYgKHIpCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqByZXR1cm4gcjsKPiArwqDCoMKgwqDCoMKgwqB9IGVsc2Ugewo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBtdXRleF9sb2NrKCZ0ei0+bG9jayk7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoHRlbXBlcmF0dXJlID0gdHotPnRlbXBlcmF0dXJlOwo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBtdXRleF91bmxvY2soJnR6LT5sb2NrKTsKPiArwqDCoMKgwqDC
+oMKgwqB9Cj4gwqAKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIHNwcmludGYoYnVmLCAiJWRcbiIs
+IHRlbXBlcmF0dXJlKTsKPiDCoH0KCg==
