@@ -2,81 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44807725278
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 05:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6A5725287
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 05:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240454AbjFGDmi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Jun 2023 23:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59774 "EHLO
+        id S240864AbjFGDqN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Jun 2023 23:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234518AbjFGDmh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 23:42:37 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EE719B7
-        for <linux-pm@vger.kernel.org>; Tue,  6 Jun 2023 20:42:37 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-650c89c7e4fso7041143b3a.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jun 2023 20:42:36 -0700 (PDT)
+        with ESMTP id S240836AbjFGDpz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Jun 2023 23:45:55 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E450D1BE1
+        for <linux-pm@vger.kernel.org>; Tue,  6 Jun 2023 20:45:42 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-651ffcc1d3dso4034102b3a.3
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jun 2023 20:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686109356; x=1688701356;
+        d=linaro.org; s=google; t=1686109542; x=1688701542;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5amr3SUDsqzdSzy/47lg6a8IdfkrVtyksktE2N9uX2s=;
-        b=pG9v16DF0kJRXNnHQrtaQv1di9rgPuLK9JyDO3nX1wsvYUfkmBuWSVDD/4etvL6rG0
-         khItlfqQ7lZIknwFLwzRVPHK3llkPaK3WF7/xIxfy2hiW+hAgMjO1lhXeF54pnVVSoFM
-         A4RbZaCKs4AlHPD5LCDp+wUfA1PeQOsuz3wMIqgdqJOADCpZ3eaVI5jqrCP6kTU7kCWD
-         fOQr7/2PYxeLJhs7T//i14GQlS0k/E5+oG+u+vZnpC3mSk03RHlyUWgMMrEuVHsO7z7e
-         qNwhaX1Nj1RARTxkfp6taoYulUx/qw8WE3VPV4QxjdyAhPGTjR2XlJc+RB5HJbkWe7a5
-         Awnw==
+        bh=HdpSHMsTOSVCkXRFROKcP6ci/vyGxzV4L9Wlzxsgow0=;
+        b=Go5rRhNYT07xJCUsf4tMxKB6OP+B/ECVTPpMmaE0rs1IXaf1pY8RHX4Agu1IbC1Dlp
+         lFjBzKmTFhgR6Ha7+lCO1aI6apgzv8BxEb0geTSRhvMYKQtUin4dfnKo5h/DpHREwOyv
+         Y0o4YHpAiV22EQX7YNHmO9Biejq3kK1IfY/m1fFEgjOVaY9NtPwq4JtDTiIqAAyv7say
+         cRNBDQDb8w6EE4JZr41n6EQU/qxQyRY+m6OGDk4HKHziYbXmvXEGB5rsa+OzdQJXpn4o
+         t3im/yUD+lDy5I6vCYApsepqoI0rCNzvVIZzC9u5bxGIQ0pn1vrcOjaEOnSY5Rq0pp2l
+         4fOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686109356; x=1688701356;
+        d=1e100.net; s=20221208; t=1686109542; x=1688701542;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5amr3SUDsqzdSzy/47lg6a8IdfkrVtyksktE2N9uX2s=;
-        b=KEPrs7nM6QZFTd0vF/7z7wz9DYbKDJ9cID/xs9iwGttHFlxNJqXXhv12+DmDp8nEOq
-         hHHxQWHskdcHOJ2X9f6jSreIWQz+SrUa+6AuTNFjdTDr8nbnaaVAfQ5j8cKheSW+x0G5
-         wWY7InxvitIm7R8Ul4rN3lNWw8T+wJipnrGxoi+i2/yohgGaa1OgJfojyifGqVTai9r/
-         dm2FnfE71zK65ODUoouF9m/61kr+H2xxKG+SDHaZcORWySovOIldUqYi10rhT7HiWA5V
-         1dhRWub3CiMMipwCNgYQeJYDe/cAO2L3vMeSbzq1XJV4TjJKNomlt5K/ZXAHDI7oiFwT
-         ZpOg==
-X-Gm-Message-State: AC+VfDwYC353YjIVDXGb4EttqGpQJNA/3t/h1ZCQcxlto387HKL1sD/S
-        rRMQS6EynXviWM6eqU0DclNztSn0tEWOnkC+jXs=
-X-Google-Smtp-Source: ACHHUZ5jCaF84UNonxB7KCxf8AOMiF/ye9ip8+WqDMTb1jALjhGRnv+csTkREcknVbiC31dS9AgSNQ==
-X-Received: by 2002:a05:6a00:1794:b0:64d:632a:d0ac with SMTP id s20-20020a056a00179400b0064d632ad0acmr5534707pfg.25.1686109356519;
-        Tue, 06 Jun 2023 20:42:36 -0700 (PDT)
+        bh=HdpSHMsTOSVCkXRFROKcP6ci/vyGxzV4L9Wlzxsgow0=;
+        b=HYhLQEf14KQqAQ/WHcsJ1o3zwhVKPOBOdHldoeSf+P7oJAdJwrlXJ2Y6/IMKYQJ5LX
+         qzGfSg2a2mwvyUPgCKZ3h45O48er9Wm8ku4lCdbzEsUKo/rWrhk7EswErjnepdEkDNaP
+         A8Bns8NZtgF83y3HrMKtM2fW6EtiNLCj+J+AchxYbwPLHL4O/ce5rrehqTFmg1M4zvQO
+         N1NkaFIgTOniCrcy3/5vKnjDMEMCHakXMyaLk7EtOhCkXOhKt6L3yGsvV/tEsohTozSm
+         csqgpkSPk1mTnIRJ7Ki2u17a2tFogjmhwG08WihsFnE0pjPo2HgalfkSAqQHfvIduhyh
+         tWgA==
+X-Gm-Message-State: AC+VfDx40EiPiKQycZhiMbu5uKVeuW4xBmD2s52EFO4rFwxIN0e9YtW2
+        nlBRaUMT2x4C8sWhchhQmmSIiJwE6bReGYtb+JI=
+X-Google-Smtp-Source: ACHHUZ6BOQu7G436PRy1bcsNq9Uf6arDa79terEt7W8v2qvEIMjsbx3eTqDoM5JyO1h6WqZD7F4rRw==
+X-Received: by 2002:a05:6a21:33a9:b0:110:9b0b:71a5 with SMTP id yy41-20020a056a2133a900b001109b0b71a5mr1389481pzb.23.1686109542388;
+        Tue, 06 Jun 2023 20:45:42 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id i8-20020a635408000000b00520b677c645sm8092718pgb.41.2023.06.06.20.42.35
+        by smtp.gmail.com with ESMTPSA id c16-20020a170903235000b001b2404c7d53sm1486521plh.175.2023.06.06.20.45.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jun 2023 20:42:36 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 09:12:34 +0530
+        Tue, 06 Jun 2023 20:45:41 -0700 (PDT)
+Date:   Wed, 7 Jun 2023 09:15:40 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Mason Huo <mason.huo@starfivetech.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shengyu Qu <wiagn233@outlook.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v4 2/3] cpufreq: dt-platdev: Add JH7110 SOC to the
- allowlist
-Message-ID: <20230607034234.rgjb43gchkdtpuxw@vireshk-i7>
-References: <20230606105656.124355-1-mason.huo@starfivetech.com>
- <20230606105656.124355-3-mason.huo@starfivetech.com>
- <20230606110804.qns4rolrrj2gku6w@vireshk-i7>
- <20230606-unsmooth-slip-c80fab59c9b4@wendy>
- <f29a14dad3d744bba54e561a050bdfaa@EXMBX067.cuchost.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/cpufreq: Don't enable generic lock debugging
+ options
+Message-ID: <20230607034540.ldjugl3g6ryyyi5q@vireshk-i7>
+References: <20230605-kselftest-cpufreq-options-v1-1-d4621e0c7cbe@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f29a14dad3d744bba54e561a050bdfaa@EXMBX067.cuchost.com>
+In-Reply-To: <20230605-kselftest-cpufreq-options-v1-1-d4621e0c7cbe@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -87,10 +72,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-06-23, 02:04, Mason Huo wrote:
-> Or you can just ignore it?
+On 06-06-23, 15:11, Mark Brown wrote:
+> Currently the the config fragment for cpufreq enables a lot of generic
+> lock debugging.  While these options are useful when testing cpufreq
+> they aren't actually required to run the tests and are therefore out of
+> scope for the cpufreq fragement, they are more of a thing that it's good
+> to enable while doing testing than an actual requirement for cpufreq
+> testing specifically.  Having these debugging options enabled,
+> especially the mutex and spinlock instrumentation, mean that any build
+> that includes the cpufreq fragment is both very much larger than a
+> standard defconfig (eg, I'm seeing 35% on x86_64) and also slower at
+> runtime.
+> 
+> This is causing real problems for CI systems.  In order to avoid
+> building large numbers of kernels they try to group kselftest fragments
+> together, frequently just grouping all the kselftest fragments into a
+> single block.  The increased size is an issue for memory constrained
+> systems and is also problematic for systems with fixed storage
+> allocations for kernel images (eg, typical u-boot systems) where it
+> frequently causes the kernel to overflow the storage space allocated for
+> kernels.  The reduced performance isn't too bad with real hardware but
+> can be disruptive on emulated platforms.
+> 
+> In order to avoid these issues remove these generic instrumentation
+> options from the cpufreq fragment, bringing the cpufreq fragment into
+> line with other fragments which generally set requirements for testing
+> rather than nice to haves.
 
-I can do that :)
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+ 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/cpufreq/config | 8 --------
+>  1 file changed, 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cpufreq/config b/tools/testing/selftests/cpufreq/config
+> index 75e900793e8a..ce5068f5a6a2 100644
+> --- a/tools/testing/selftests/cpufreq/config
+> +++ b/tools/testing/selftests/cpufreq/config
+> @@ -5,11 +5,3 @@ CONFIG_CPU_FREQ_GOV_USERSPACE=y
+>  CONFIG_CPU_FREQ_GOV_ONDEMAND=y
+>  CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
+>  CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
+> -CONFIG_DEBUG_RT_MUTEXES=y
+> -CONFIG_DEBUG_PLIST=y
+> -CONFIG_DEBUG_SPINLOCK=y
+> -CONFIG_DEBUG_MUTEXES=y
+> -CONFIG_DEBUG_LOCK_ALLOC=y
+> -CONFIG_PROVE_LOCKING=y
+> -CONFIG_LOCKDEP=y
+> -CONFIG_DEBUG_ATOMIC_SLEEP=y
+
+FWIW, I enabled these earlier as cpufreq core had a history of races
+that are normally not caught without these enabled. But I think we
+have come a long way from that and these can be removed now.
 
 -- 
 viresh
