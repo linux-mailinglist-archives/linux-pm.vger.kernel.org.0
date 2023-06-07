@@ -2,346 +2,228 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BED3B726629
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 18:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8732072679B
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 19:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjFGQkl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 12:40:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S230178AbjFGRnA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 13:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjFGQkj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 12:40:39 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1AD1FC2;
-        Wed,  7 Jun 2023 09:40:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686156038; x=1717692038;
-  h=date:from:to:cc:subject:message-id;
-  bh=GqKYxnubSgI/pE7wcj7bL/DYozmNTzniYDllwQ8VGnI=;
-  b=IlcXsEYU5osmmKzgoWUE+cze9oF8zu6jVhPVnt1qJL49r0n+W9LX/+rB
-   24QZySQgRYyK4eKVXED2zP92dJT7hvDzN7dTo0fzwMOuKN5ov+vSBwFs0
-   K3jkz/zTVVOjMXYDTth1L5dMhAnSesQMKudlQQ+TQFUW4V7w59vd2AmaH
-   /lwuedLT1o/apV2S1XqH9Gk7Y8VjCQfPSAud1mPuk0EgR5pwY1gtt2eX/
-   P+TKjvWPiVMx3dDNN3TcUTqtmSwG2RfhPOIOI9Z0WRkOMUIKN5DlME6MJ
-   aNYYRpkZs1XsvTRAVbLanCG5/jd0HGm8zdH1jtS1kXQsPISJTXXeh4zbc
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="341695969"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="341695969"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2023 09:40:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10734"; a="712726946"
-X-IronPort-AV: E=Sophos;i="6.00,224,1681196400"; 
-   d="scan'208";a="712726946"
-Received: from lkp-server01.sh.intel.com (HELO 15ab08e44a81) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2023 09:40:24 -0700
-Received: from kbuild by 15ab08e44a81 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q6wCu-0006kl-0a;
-        Wed, 07 Jun 2023 16:40:24 +0000
-Date:   Thu, 08 Jun 2023 00:39:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Memory Management List <linux-mm@kvack.org>,
-        bpf@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kasan-dev@googlegroups.com, kunit-dev@googlegroups.com,
-        kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: [linux-next:master] BUILD REGRESSION
- abbd8bb42915d9ed06df11b430bf4ecb3d8ac5ad
-Message-ID: <20230607163937.ZTc-D%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231562AbjFGRm7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 13:42:59 -0400
+Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A1591BF7;
+        Wed,  7 Jun 2023 10:42:58 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id EEF9DED298;
+        Wed,  7 Jun 2023 10:42:27 -0700 (PDT)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VSwjU-ZNeK2n; Wed,  7 Jun 2023 10:42:27 -0700 (PDT)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
+        t=1686159746; bh=yzcHza535Knz3sPmrJrUUFyPYQOMzuWWt47W0zm0kPk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Kxr8ZpRVXotS3CvCC+tJXoqIVRX3KtkDEAyOIvqB3BEUe5oAqNMbfSPc+gZeIkKs5
+         2z+eY/0LOgjRWsZkQRU70x9bEh2K7hVNCM67+knFWNwm5ioR1Z3yoT/9qdX6GXw3ZL
+         E3WVUirXuI/Yuf1SCXnluJwn4q/8rAUcs0bIK3xYPo/Ui4pd4y2fFZ7BUpYC6mR4lc
+         DWWvqCChO13B8MFIVm92Rp5NH1WFLMAsmzp30B9tGqsyclUzvP8fE7NYfbkzUbKJZE
+         +OXcXIuvQSji97zy9WGJPvgDs7LOHrykgygdptTHNqDAxm7QS3HC8uP07klRSJt6xq
+         ufrQT8FokmmbA==
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alice Guo <alice.guo@nxp.com>
+Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
+Date:   Wed, 07 Jun 2023 19:42:12 +0200
+Message-ID: <1966575.usQuhbGJ8B@pliszka>
+In-Reply-To: <3120c2d5-4473-5b72-29bf-d841e806878f@linaro.org>
+References: <20230516083746.63436-1-peng.fan@oss.nxp.com> <21914890.EfDdHjke4D@pliszka>
+ <3120c2d5-4473-5b72-29bf-d841e806878f@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: abbd8bb42915d9ed06df11b430bf4ecb3d8ac5ad  Add linux-next specific files for 20230607
+On =C5=9Broda, 7 czerwca 2023 10:28:59 CEST Daniel Lezcano wrote:
+> On 07/06/2023 08:01, Sebastian Krzyszkowiak wrote:
+> > On pi=C4=85tek, 2 czerwca 2023 15:11:37 CEST Daniel Lezcano wrote:
+> >> On 01/06/2023 11:52, Peng Fan wrote:
+> >>> Hi Daniel,
+> >>>=20
+> >>>> Subject: RE: [PATCH 2/3] thermal: qoriq_thermal: only enable support=
+ed
+> >>>> sensors
+> >>>>=20
+> >>>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable suppor=
+ted
+> >>>>> sensors
+> >>>>>=20
+> >>>>> On 31/05/2023 14:05, Peng Fan wrote:
+> >>>>>>> Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable
+> >>>>>>> supported sensors
+> >>>>>>>=20
+> >>>>>>> On 16/05/2023 10:37, Peng Fan (OSS) wrote:
+> >>>>>>>> From: Peng Fan <peng.fan@nxp.com>
+> >>>>>>>>=20
+> >>>>>>>> There are MAX 16 sensors, but not all of them supported. Such as
+> >>>>>>>> i.MX8MQ, there are only 3 sensors. Enabling all 16 sensors will
+> >>>>>>>> touch reserved bits from i.MX8MQ reference mannual, and TMU will
+> >>>>>>>> stuck, temperature will not update anymore.
+> >>>>>>>>=20
+> >>>>>>>> Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before
+> >>>>>>>> registering them")
+> >>>>>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> >>>>>>>> ---
+> >>>>>>>>=20
+> >>>>>>>>      drivers/thermal/qoriq_thermal.c | 30
+> >>>>>>>>      +++++++++++++++++++----------
+> >>>>=20
+> >>>> -
+> >>>>=20
+> >>>>>>>>      1 file changed, 19 insertions(+), 11 deletions(-)
+> >>>>>>>>=20
+> >>>>>>>> diff --git a/drivers/thermal/qoriq_thermal.c
+> >>>>>>>> b/drivers/thermal/qoriq_thermal.c index
+> >>>>=20
+> >>>> b806a0929459..53748c4a5be1
+> >>>>=20
+> >>>>>>>> 100644
+> >>>>>>>> --- a/drivers/thermal/qoriq_thermal.c
+> >>>>>>>> +++ b/drivers/thermal/qoriq_thermal.c
+> >>>>>>>> @@ -31,7 +31,6 @@
+> >>>>>>>>=20
+> >>>>>>>>      #define TMR_DISABLE	0x0
+> >>>>>>>>      #define TMR_ME		0x80000000
+> >>>>>>>>      #define TMR_ALPF	0x0c000000
+> >>>>>>>>=20
+> >>>>>>>> -#define TMR_MSITE_ALL	GENMASK(15, 0)
+> >>>>>>>>=20
+> >>>>>>>>      #define REGS_TMTMIR	0x008	/* Temperature measurement
+> >>>>>>>=20
+> >>>>>>> interval Register */
+> >>>>>>>=20
+> >>>>>>>>      #define TMTMIR_DEFAULT	0x0000000f
+> >>>>>>>>=20
+> >>>>>>>> @@ -105,6 +104,11 @@ static int tmu_get_temp(struct
+> >>>>>>>=20
+> >>>>>>> thermal_zone_device *tz, int *temp)
+> >>>>>>>=20
+> >>>>>>>>      	 * within sensor range. TEMP is an 9 bit value=20
+representing
+> >>>>>>>>      	 * temperature in KelVin.
+> >>>>>>>>      	 */
+> >>>>>>>>=20
+> >>>>>>>> +
+> >>>>>>>> +	regmap_read(qdata->regmap, REGS_TMR, &val);
+> >>>>>>>> +	if (!(val & TMR_ME))
+> >>>>>>>> +		return -EAGAIN;
+> >>>>>>>=20
+> >>>>>>> How is this change related to what is described in the changelog?
+> >>>>>>=20
+> >>>>>> devm_thermal_zone_of_sensor_register will invoke get temp, since we
+> >>>>>> reverted the 45038e03d633 did, we need to check TMR_ME to avoid
+> >>>>>=20
+> >>>>> return
+> >>>>>=20
+> >>>>>> invalid temperature.
+> >>>>>>=20
+> >>>>>    From a higher perspective if the sensor won't be enabled, then t=
+he
+> >>>>>=20
+> >>>>> thermal zone should not be registered, the get_temp won't happen on=
+ a
+> >>>>> disabled sensor and this test won't be necessary, no ?
+> >>>=20
+> >>> After thinking more, I'd prefer current logic.
+> >>>=20
+> >>> We rely on devm_thermal_of_zone_register's return value to know
+> >>> whether there is a valid zone, then set sites bit, and after collected
+> >>> all site bits, we enable the thermal IP.
+> >>>=20
+> >>> If move the enabling thermal IP before devm_thermal_of_zone_register,
+> >>> We need check dtb thermal zone, to know which zone is valid for curre=
+nt
+> >>> thermal IP. This would complicate the design.
+> >>>=20
+> >>> So just checking the enabling bit in get temperature would be much
+> >>> simpler, and there just a small window before enabling thermal IP.
+> >>=20
+> >> If the thermal zone is not described, then the thermal zone won't be
+> >> created as it fails with -ENODEV and thus get_temp won't be called on a
+> >> disabled site, right?
+> >=20
+> > That's not what the problem is. It's about zones that *will* be created=
+ -
+> > since the driver only knows that a thermal zone isn't described in the
+> > device tree after it fails registering, it can't enable the site *befor=
+e*
+> > the zone gets registered - so it happens afterwards. That's why it needs
+> > this check to not return a bogus initial value before the site gets
+> > actually enabled later in qoriq_tmu_register_tmu_zone.
+>=20
+> Sorry, I get the point but I don't see how that can happen:
+>=20
+> qoriq_tmu_register_tmu_zone() calls devm_thermal_of_zone_register() for
+> *all* sites regardless if they really exists or not.
+>=20
+> Under the hood, the function devm_thermal_of_zone_register() calls
+> thermal_of_zone_register(). This one fails when calling
+> of_thermal_zone_find() because it does not exist and returns -ENODEV.
+>=20
+> Hence, the thermal_zone_device_register_with_trips() is not called, the
+> thermal zone is not created neither updated.
 
-Error/Warning reports:
+Again - that's not the case the check is there for. It's there for zones th=
+at=20
+do exist and that do get registered, because REGS_TMR only gets set *after*=
+=20
+all the zones are already registered (the driver as it is right now does no=
+t=20
+know which sites it should enable before registering the zones). Because of=
+=20
+that, the first value a zone gets after being registered is always bogus,=20
+because no monitoring site has been enabled yet at all.
 
-https://lore.kernel.org/oe-kbuild-all/202305132244.DwzBUcUd-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306021936.OktTcMAT-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306051812.1YdWyZca-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202306071513.vCmugxAi-lkp@intel.com
+> So I don't understand why the test:
+>=20
+> +	regmap_read(qdata->regmap, REGS_TMR, &val);
+> +	if (!(val & TMR_ME))
+> +		return -EAGAIN;
+>=20
+> is needed in the get_temp() ops as the thermal zone for this disabled
+> site should not exist.
+>=20
+> I'm not putting in question the series, just wanting to avoid a
+> potential pointless check in an ops.
 
-Error/Warning: (recently discovered and may have been fixed)
+It's definitely not pointless (it does workaround a real issue). Is it eleg=
+ant?=20
+IMO bringing thermal_zone_of_get_sensor_id back (or doing something=20
+equivalent) instead would be much cleaner:)
 
-ERROR: modpost: "lynx_pcs_destroy" [drivers/net/ethernet/stmicro/stmmac/stmmac.ko] undefined!
-drivers/bus/fsl-mc/fsl-mc-allocator.c:108:12: warning: variable 'mc_bus_dev' is uninitialized when used here [-Wuninitialized]
-drivers/cpufreq/cpufreq-dt-platdev.c:105:34: warning: 'blocklist' defined but not used [-Wunused-const-variable=]
-drivers/cpufreq/cpufreq-dt-platdev.c:18:34: warning: 'allowlist' defined but not used [-Wunused-const-variable=]
-drivers/net/ethernet/altera/altera_tse_main.c:1419: undefined reference to `lynx_pcs_create_mdiodev'
-drivers/net/ethernet/altera/altera_tse_main.c:1473: undefined reference to `lynx_pcs_destroy'
-include/drm/drm_print.h:456:39: error: format '%ld' expects argument of type 'long int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Werror=format=]
-lib/kunit/executor_test.c:138:4: error: cast from 'void (*)(const void *)' to 'kunit_action_t *' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
-microblaze-linux-ld: (.text+0x14a4): undefined reference to `lynx_pcs_destroy'
-nios2-linux-ld: drivers/net/ethernet/altera/altera_tse_main.c:1451: undefined reference to `lynx_pcs_destroy'
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:330:18: warning: no previous prototype for 'bpf_kfunc_call_test_offset' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:336:1: warning: no previous prototype for 'bpf_kfunc_call_memb_acquire' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:342:18: warning: no previous prototype for 'bpf_kfunc_call_memb1_release' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:394:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail1' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:398:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail2' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:402:18: warning: no previous prototype for 'bpf_kfunc_call_test_fail3' [-Wmissing-prototypes]
-tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c:410:18: warning: no previous prototype for 'bpf_kfunc_call_test_mem_len_fail1' [-Wmissing-prototypes]
+Cheers,
+Sebastian
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
 
-arch/arm64/kvm/mmu.c:147:3-9: preceding lock on line 140
-drivers/clk/qcom/gpucc-sm8550.c:37:22: sparse: sparse: decimal constant 2300000000 is between LONG_MAX and ULONG_MAX. For C99 that means long long, C90 compilers are very likely to produce unsigned long (and a warning) here
-drivers/clk/qcom/videocc-sm8550.c:34:22: sparse: sparse: decimal constant 2300000000 is between LONG_MAX and ULONG_MAX. For C99 that means long long, C90 compilers are very likely to produce unsigned long (and a warning) here
-drivers/nvme/host/pr.c:268:23-26: ERROR: reference preceded by free on line 278
-drivers/pci/endpoint/functions/pci-epf-mhi.c:362:2-9: line 362 is redundant because platform_get_irq() already prints an error
-drivers/usb/cdns3/cdns3-starfive.c:23: warning: expecting prototype for cdns3(). Prototype was for USB_STRAP_HOST() instead
-drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c:217:30: sparse: sparse: incorrect type in argument 1 (different base types)
-kernel/events/uprobes.c:478 uprobe_write_opcode() warn: passing zero to 'PTR_ERR'
-lib/kunit/test.c:336 __kunit_abort() warn: ignoring unreachable code.
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- arc-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- arm64-randconfig-c004-20230607
-|   `-- arch-arm64-kvm-mmu.c:preceding-lock-on-line
-|-- csky-randconfig-s053-20230607
-|   |-- drivers-clk-qcom-gpucc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-he
-|   `-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|-- i386-allyesconfig
-|   |-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|   `-- include-drm-drm_print.h:error:format-ld-expects-argument-of-type-long-int-but-argument-has-type-size_t-aka-unsigned-int
-|-- i386-randconfig-m021-20230607
-|   `-- kernel-events-uprobes.c-uprobe_write_opcode()-warn:passing-zero-to-PTR_ERR
-|-- m68k-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- microblaze-randconfig-c041-20230607
-|   `-- drivers-nvme-host-pr.c:ERROR:reference-preceded-by-free-on-line
-|-- microblaze-randconfig-c044-20230607
-|   `-- microblaze-linux-ld:(.text):undefined-reference-to-lynx_pcs_destroy
-|-- mips-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- nios2-defconfig
-|   |-- drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_create_mdiodev
-|   |-- drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_destroy
-|   `-- nios2-linux-ld:drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_destroy
-|-- openrisc-randconfig-s052-20230607
-|   |-- drivers-clk-qcom-gpucc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-he
-|   |-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|   |-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|   `-- drivers-usb-typec-tcpm-qcom-qcom_pmic_typec_pdphy.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-header-got-restricted-__le16-const-usertype-header
-|-- parisc-randconfig-s042-20230607
-|   |-- drivers-clk-qcom-videocc-sm8550.c:sparse:sparse:decimal-constant-is-between-LONG_MAX-and-ULONG_MAX.-For-C99-that-means-long-long-C90-compilers-are-very-likely-to-produce-unsigned-long-(and-a-warning)-
-|   `-- mm-kfence-core.c:sparse:sparse:cast-to-restricted-__le64
-|-- powerpc-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- powerpc-randconfig-c031-20230607
-|   `-- drivers-pci-endpoint-functions-pci-epf-mhi.c:line-is-redundant-because-platform_get_irq()-already-prints-an-error
-|-- riscv-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- riscv-defconfig
-|   `-- ERROR:lynx_pcs_destroy-drivers-net-ethernet-stmicro-stmmac-stmmac.ko-undefined
-|-- riscv-rv32_defconfig
-|   `-- ERROR:lynx_pcs_destroy-drivers-net-ethernet-stmicro-stmmac-stmmac.ko-undefined
-|-- s390-allmodconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- s390-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- sh-randconfig-m041-20230607
-|   `-- lib-kunit-test.c-__kunit_abort()-warn:ignoring-unreachable-code.
-|-- x86_64-allyesconfig
-|   `-- drivers-usb-cdns3-cdns3-starfive.c:warning:expecting-prototype-for-cdns3().-Prototype-was-for-USB_STRAP_HOST()-instead
-|-- x86_64-randconfig-c044-20230607
-|   |-- drivers-cpufreq-cpufreq-dt-platdev.c:warning:allowlist-defined-but-not-used
-|   `-- drivers-cpufreq-cpufreq-dt-platdev.c:warning:blocklist-defined-but-not-used
-|-- x86_64-randconfig-k001-20230607
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_memb1_release
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_memb_acquire
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail1
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail2
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_fail3
-|   |-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_mem_len_fail1
-|   `-- tools-testing-selftests-bpf-bpf_testmod-bpf_testmod.c:warning:no-previous-prototype-for-bpf_kfunc_call_test_offset
-|-- x86_64-randconfig-x062-20230607
-|   `-- drivers-net-ethernet-altera-altera_tse_main.c:undefined-reference-to-lynx_pcs_destroy
-`-- x86_64-randconfig-x066-20230607
-    `-- ERROR:lynx_pcs_destroy-drivers-net-ethernet-stmicro-stmmac-stmmac.ko-undefined
-clang_recent_errors
-|-- arm64-randconfig-r036-20230607
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-|-- i386-randconfig-i002-20230607
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-|-- i386-randconfig-i061-20230607
-|   `-- drivers-bus-fsl-mc-fsl-mc-allocator.c:warning:variable-mc_bus_dev-is-uninitialized-when-used-here
-`-- riscv-randconfig-r032-20230607
-    `-- lib-kunit-executor_test.c:error:cast-from-void-(-)(const-void-)-to-kunit_action_t-(aka-void-(-)(void-)-)-converts-to-incompatible-function-type-Werror-Wcast-function-type-strict
-
-elapsed time: 721m
-
-configs tested: 143
-configs skipped: 6
-
-tested configs:
-alpha                            alldefconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha        buildonly-randconfig-r002-20230607   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                  randconfig-r002-20230607   gcc  
-arc                  randconfig-r016-20230607   gcc  
-arc                  randconfig-r033-20230607   gcc  
-arc                  randconfig-r043-20230607   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                           h3600_defconfig   gcc  
-arm                            hisi_defconfig   gcc  
-arm                           imxrt_defconfig   gcc  
-arm                  randconfig-r046-20230607   clang
-arm                          sp7021_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230607   clang
-arm64                randconfig-r036-20230607   clang
-csky         buildonly-randconfig-r003-20230607   gcc  
-csky                                defconfig   gcc  
-hexagon              randconfig-r014-20230607   clang
-hexagon              randconfig-r041-20230607   clang
-hexagon              randconfig-r045-20230607   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r005-20230607   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230607   clang
-i386                 randconfig-i002-20230607   clang
-i386                 randconfig-i003-20230607   clang
-i386                 randconfig-i004-20230607   clang
-i386                 randconfig-i005-20230607   clang
-i386                 randconfig-i006-20230607   clang
-i386                 randconfig-i011-20230607   gcc  
-i386                 randconfig-i012-20230607   gcc  
-i386                 randconfig-i051-20230607   clang
-i386                 randconfig-i052-20230607   clang
-i386                 randconfig-i053-20230607   clang
-i386                 randconfig-i054-20230607   clang
-i386                 randconfig-i055-20230607   clang
-i386                 randconfig-i056-20230607   clang
-i386                 randconfig-i061-20230607   clang
-i386                 randconfig-i062-20230607   clang
-i386                 randconfig-i063-20230607   clang
-i386                 randconfig-i064-20230607   clang
-i386                 randconfig-i065-20230607   clang
-i386                 randconfig-i066-20230607   clang
-i386                 randconfig-r022-20230607   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r004-20230607   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r021-20230607   gcc  
-loongarch            randconfig-r024-20230607   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                 randconfig-r004-20230607   gcc  
-mips                 randconfig-r031-20230607   gcc  
-mips                        vocore2_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r026-20230607   gcc  
-openrisc             randconfig-r023-20230607   gcc  
-openrisc             randconfig-r032-20230607   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                     ksi8560_defconfig   clang
-powerpc                      makalu_defconfig   gcc  
-powerpc                       maple_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc              randconfig-r005-20230607   clang
-powerpc              randconfig-r023-20230607   gcc  
-powerpc                 xes_mpc85xx_defconfig   clang
-riscv                            alldefconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r022-20230607   gcc  
-riscv                randconfig-r042-20230607   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r006-20230607   clang
-s390                 randconfig-r024-20230607   gcc  
-s390                 randconfig-r044-20230607   gcc  
-sh                               allmodconfig   gcc  
-sh                         ap325rxa_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sparc        buildonly-randconfig-r006-20230607   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r015-20230607   gcc  
-sparc                randconfig-r026-20230607   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64              randconfig-r021-20230607   gcc  
-sparc64              randconfig-r034-20230607   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230607   clang
-x86_64               randconfig-a002-20230607   clang
-x86_64               randconfig-a003-20230607   clang
-x86_64               randconfig-a004-20230607   clang
-x86_64               randconfig-a005-20230607   clang
-x86_64               randconfig-a006-20230607   clang
-x86_64               randconfig-a011-20230607   gcc  
-x86_64               randconfig-a012-20230607   gcc  
-x86_64               randconfig-a013-20230607   gcc  
-x86_64               randconfig-a014-20230607   gcc  
-x86_64               randconfig-a015-20230607   gcc  
-x86_64               randconfig-a016-20230607   gcc  
-x86_64               randconfig-k001-20230607   gcc  
-x86_64               randconfig-x051-20230607   gcc  
-x86_64               randconfig-x052-20230607   gcc  
-x86_64               randconfig-x053-20230607   gcc  
-x86_64               randconfig-x054-20230607   gcc  
-x86_64               randconfig-x055-20230607   gcc  
-x86_64               randconfig-x056-20230607   gcc  
-x86_64               randconfig-x061-20230607   gcc  
-x86_64               randconfig-x062-20230607   gcc  
-x86_64               randconfig-x063-20230607   gcc  
-x86_64               randconfig-x064-20230607   gcc  
-x86_64               randconfig-x065-20230607   gcc  
-x86_64               randconfig-x066-20230607   gcc  
-x86_64                               rhel-8.3   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa               randconfig-r011-20230607   gcc  
-xtensa               randconfig-r012-20230607   gcc  
-xtensa               randconfig-r035-20230607   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
