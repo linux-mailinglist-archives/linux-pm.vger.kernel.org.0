@@ -2,41 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66ADC725BE7
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 12:48:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82203725CC1
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 13:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239706AbjFGKsc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 06:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
+        id S239378AbjFGLJ2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 07:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239309AbjFGKs2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 06:48:28 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B8F1BE6;
-        Wed,  7 Jun 2023 03:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=Cc:To:In-Reply-To:References:Message-Id:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From:
-        Reply-To:Content-ID:Content-Description;
-        bh=Du2Hg8eWo8TN3RCAEt+biisl8e0xVlaEapus0jGGoCI=; b=Z5U7dsmXqCONrNBw4MlGEy2Aqv
-        8zLJ35adAkobtcgjvV90nPNi+9DiAN947XETRd7nqrwDTiP7IG769rA+Sb7nHC/s57PU4CtqZ26aM
-        JTfjZ2WaSmvZDEPlWRDqbcblL0KkTlF/3J9tCMTkmUuBasIRWN3ce9ccU4oIJOrNwGHNQHJ+YNI3M
-        gBbwSIgAgKaYSq2pPgpVa1BlbR6x3iPMta97ZUL5hJN8rVvvqwuU+1eItqNUD4/GwoufpYknWaK/V
-        Hbz4YTrcEE2K0M9MV91451Ia9Z8Jw9Qn783vymLlMRFkTKb8KdR21955hf+dyKaM3A3XvEsLMBH/H
-        RJlLRl6w==;
-Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1q6qi8-0069NL-IF; Wed, 07 Jun 2023 12:48:16 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-Date:   Wed, 07 Jun 2023 12:47:49 +0200
-Subject: [PATCH v5 6/6] thermal: qcom: tsens-v0_1: Add MSM8909 data
+        with ESMTP id S240198AbjFGLJU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 07:09:20 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC0C10FB
+        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 04:08:55 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f6148f9679so6662979e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 04:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686136131; x=1688728131;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5KFnEHxnHsY5ORT5+vCk7re0Z/SbzSvLlr7u70HouNM=;
+        b=mYSSEIwoK0ohHCQN7sWH+G63YxZ9c6gvfwTapMO8sZ5t1PhYpZ34LUwboM+lXoTPNJ
+         2HDuiMgM9IJmHaJRIOLGTWptYTCvfmdu843n9KwZBw9c+I3/VMhw4IAebsUbcWSH6fvH
+         fvO/9WdCXHv1/8g5vMrtpDdATQYClGKY2aWnHF5XzH9CftipP6lHV4zhniHJ/X395IFp
+         1/g3cfeJtkZb73uu/9Jr75T/UyEEgjZDdkuu2PW1egQuLDCstB7DmKqSg82EIAAK4+sq
+         4EDXk6EEpVVkMKazN8ZJupHFTNCistQDm9XYXmrTW1gPcA9Z9d8WNTpC5C2VDt6CxC89
+         zjnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686136131; x=1688728131;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5KFnEHxnHsY5ORT5+vCk7re0Z/SbzSvLlr7u70HouNM=;
+        b=Lphu1Z0hfrMIF06xj0tsLM9tVRHHx3IlJhVH4n/J3fX3GP2r/3NqIMSn6VSjUjb4NX
+         UD00p28AvI9caxDVHck6KQ/cPL3W+npbeINcXYFZ2YpJedF+T90DblhdDkLicrSuyF5/
+         XYb1+oJSYZZe+rk2dsJrc3bJkz/g+NZOK28obB3L2BquCrhYHH+gON0Bg2ac5UDn5MJA
+         igITy/7Bs/XBKfplvAFwZDjAh8YbVR/B1waEjYJ9llrV4nZtCe/7vNho5mFZfunzCrsm
+         5eLCj8o/eX8cvyVqSvrRGLcEK5MS+pq0bcDxLn16Se4WCHx7tPYPNDIfeiY6VjHdMNEd
+         jWag==
+X-Gm-Message-State: AC+VfDzqhbETEFjYWU+zWkhbkPzrgPLQck5BPEfS9xAZhyEE2/mpKNi+
+        m4sEg/5McvBVszdgpST/hNbWzQ==
+X-Google-Smtp-Source: ACHHUZ5FU7gfJqgR6Bbf9okouulqzQ/fg4hH+NUBnT1B9xe4An7hHPqqYOoHE38MR8eh9M7iMp8TFw==
+X-Received: by 2002:ac2:52b4:0:b0:4f2:5d38:2c37 with SMTP id r20-20020ac252b4000000b004f25d382c37mr2204352lfm.15.1686136130920;
+        Wed, 07 Jun 2023 04:08:50 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id b17-20020ac247f1000000b004f139712835sm1778576lfp.293.2023.06.07.04.08.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 04:08:50 -0700 (PDT)
+Message-ID: <8e5e7bc4-1767-8179-b6ac-f09ac0b5361d@linaro.org>
+Date:   Wed, 7 Jun 2023 14:08:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230508-msm8909-tsens-v5-6-5eb632235ba7@kernkonzept.com>
-References: <20230508-msm8909-tsens-v5-0-5eb632235ba7@kernkonzept.com>
-In-Reply-To: <20230508-msm8909-tsens-v5-0-5eb632235ba7@kernkonzept.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 1/6] thermal: qcom: tsens: Drop unused legacy structs
+Content-Language: en-GB
+To:     Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>,
         Andy Gross <agross@kernel.org>,
@@ -44,131 +65,47 @@ Cc:     Amit Kucheria <amitk@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230508-msm8909-tsens-v5-0-5eb632235ba7@kernkonzept.com>
+ <20230508-msm8909-tsens-v5-1-5eb632235ba7@kernkonzept.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230508-msm8909-tsens-v5-1-5eb632235ba7@kernkonzept.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The MSM8909 SoC has 5 thermal sensors in a TSENS v0.1 block. Like
-MDM9607 it uses a non-standard default slope value of 3000 [1] and needs
-per-sensor "correction factors" to workaround issues with the factory
-calibration [2].
+On 07/06/2023 13:47, Stephan Gerhold wrote:
+> The old single-cell parsing code was removed for MSM8939, MDM9607 and
+> MSM8976 but for some reason the structs defining the bit positions etc
+> were kept around (unused). Drop them now.
+> 
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Fixes: 51d78b8b1beb ("thermal/drivers/tsens: Drop single-cell code for mdm9607")
+> Fixes: dfadb4599ab0 ("thermal/drivers/tsens: Drop single-cell code for msm8939")
+> Fixes: 3a908971f7cb ("thermal/drivers/tsens: Drop single-cell code for msm8976/msm8956")
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+>   drivers/thermal/qcom/tsens-v0_1.c | 36 ------------------------------------
+>   drivers/thermal/qcom/tsens-v1.c   | 22 ----------------------
+>   2 files changed, 58 deletions(-)
 
-[1]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.UM.7.7.c26-09100-8x09.0/arch/arm/boot/dts/qcom/msm8909.dtsi#L476
-[2]: https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/commit/6df022c6d0c2c1b4a5a6c2124dba4d57910c0911
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
----
- drivers/thermal/qcom/tsens-v0_1.c | 36 +++++++++++++++++++++++++++++++++++-
- drivers/thermal/qcom/tsens.c      |  3 +++
- drivers/thermal/qcom/tsens.h      |  2 +-
- 3 files changed, 39 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index 4a55a8ea0043..a941b4241b0a 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -219,6 +219,27 @@ static int __init init_8226(struct tsens_priv *priv)
- 	return init_common(priv);
- }
- 
-+static int __init init_8909(struct tsens_priv *priv)
-+{
-+	int i;
-+
-+	for (i = 0; i < priv->num_sensors; ++i)
-+		priv->sensor[i].slope = 3000;
-+
-+	priv->sensor[0].p1_calib_offset = 0;
-+	priv->sensor[0].p2_calib_offset = 0;
-+	priv->sensor[1].p1_calib_offset = -10;
-+	priv->sensor[1].p2_calib_offset = -6;
-+	priv->sensor[2].p1_calib_offset = 0;
-+	priv->sensor[2].p2_calib_offset = 0;
-+	priv->sensor[3].p1_calib_offset = -9;
-+	priv->sensor[3].p2_calib_offset = -9;
-+	priv->sensor[4].p1_calib_offset = -8;
-+	priv->sensor[4].p2_calib_offset = -10;
-+
-+	return init_common(priv);
-+}
-+
- static int __init init_8939(struct tsens_priv *priv) {
- 	priv->sensor[0].slope = 2911;
- 	priv->sensor[1].slope = 2789;
-@@ -255,7 +276,7 @@ static int __init init_9607(struct tsens_priv *priv)
- 	return init_common(priv);
- }
- 
--/* v0.1: 8226, 8916, 8939, 8974, 9607 */
-+/* v0.1: 8226, 8909, 8916, 8939, 8974, 9607 */
- 
- static struct tsens_features tsens_v0_1_feat = {
- 	.ver_major	= VER_0_1,
-@@ -323,6 +344,19 @@ struct tsens_plat_data data_8226 = {
- 	.fields	= tsens_v0_1_regfields,
- };
- 
-+static const struct tsens_ops ops_8909 = {
-+	.init		= init_8909,
-+	.calibrate	= tsens_calibrate_common,
-+	.get_temp	= get_temp_common,
-+};
-+
-+struct tsens_plat_data data_8909 = {
-+	.num_sensors	= 5,
-+	.ops		= &ops_8909,
-+	.feat		= &tsens_v0_1_feat,
-+	.fields	= tsens_v0_1_regfields,
-+};
-+
- static const struct tsens_ops ops_8916 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_8916,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 9dd5e4b70911..1ab165370fb0 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -1112,6 +1112,9 @@ static const struct of_device_id tsens_table[] = {
- 	}, {
- 		.compatible = "qcom,msm8226-tsens",
- 		.data = &data_8226,
-+	}, {
-+		.compatible = "qcom,msm8909-tsens",
-+		.data = &data_8909,
- 	}, {
- 		.compatible = "qcom,msm8916-tsens",
- 		.data = &data_8916,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 1cd8f4fe0971..2805de1c6827 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -639,7 +639,7 @@ int get_temp_common(const struct tsens_sensor *s, int *temp);
- extern struct tsens_plat_data data_8960;
- 
- /* TSENS v0.1 targets */
--extern struct tsens_plat_data data_8226, data_8916, data_8939, data_8974, data_9607;
-+extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8974, data_9607;
- 
- /* TSENS v1 targets */
- extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
 
 -- 
-2.30.2
+With best wishes
+Dmitry
 
