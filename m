@@ -2,114 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7DF725CCE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 13:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10C7725D95
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 13:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238797AbjFGLOA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 07:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50918 "EHLO
+        id S240417AbjFGLsI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 07:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238952AbjFGLN7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 07:13:59 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD604BA;
-        Wed,  7 Jun 2023 04:13:57 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-556f2c24a28so7730097b3.1;
-        Wed, 07 Jun 2023 04:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686136437; x=1688728437;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DrJxdATXyWpfUu9r5bzsGo7jpJOQRgXwendTd3rc1FE=;
-        b=aiOUFUqeLlVZtivXeuMxlIRytiQmCvbbISRdnDWJFCTV93pU6Tu8PVTdwB1vQ204pj
-         Ncbb/gjSOvN3SwyDs5PBb8nFOPtvlnJxNCv9qcofK+c7CoGUc75gKCUfnzZ+euu21qix
-         qn+o6BmItfsHrP7Ke5FxoI9QczQ5J3xPA5yXcp6wDBLBX4ZPx+gfuwp6Aw+o5r63n7Lu
-         pLQQU6ALFiPN+oz+II84PrUwpHYYJvML3M3gshbKrWgNIq5TeDMmprvPJOlevrR2Jpdf
-         DrydmW0E2rFBw9CDvqAySbCvaZJs1+GdU6qrV5xu0MWFz970EPZbZN2nWa5VS3gga0gB
-         P+BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686136437; x=1688728437;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DrJxdATXyWpfUu9r5bzsGo7jpJOQRgXwendTd3rc1FE=;
-        b=MUz9jlyGvT1QZaB/HvU4OcVK0qO+M0kHrfPKfh6MI/xumKx1QFSuliobj+0OW3kI0z
-         ZlPap6Tw9YuiSro+8rLUpMbL6CgC6TuJE8KH9duSDzGH40NwHOxhyVDaWwM12pXHkQ0o
-         bLIMDyvpy/0HhacLMZ4cesLTIsTM0UpoB8rPv4xDw47EvSVS9z3YWxAuV+OZIu3jf5ih
-         ecC4Ds20haZ8CauwavuTaVOzpQnBC9dzZjSpTtH7QN+KS/vYBUTU53Dzdd9C+VP3G/zE
-         zh+7Htb9/fuuawsPCEiLGI+lduQr3t4QBf6XdjfPSG30sGqvjfXmXkCpSGvL2xe/58yA
-         h3yw==
-X-Gm-Message-State: AC+VfDz5v5yPclvNaqeicCaSQuP/vidZlwAV1lKWUjoTJFVLxuz1xEds
-        ZG/gQip0xjXfFG+aEmbQrD0ZAFL9amHRYXW5N90=
-X-Google-Smtp-Source: ACHHUZ5gEYpTZhSH45XyjcrNKKw+KEn1RjUYSZUD37fuwbaQJUo28O8P4HoP+LwveAAA9KED5RCP6pwa9Lqdt44TxA4=
-X-Received: by 2002:a81:7915:0:b0:569:e91c:ed8 with SMTP id
- u21-20020a817915000000b00569e91c0ed8mr1374564ywc.2.1686136436858; Wed, 07 Jun
- 2023 04:13:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
- <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-In-Reply-To: <CAJfpeguZX5pF8-UNsSfJmMhpgeUFT5XyG_rDzMD-4pB+MjkhZA@mail.gmail.com>
-From:   Askar Safin <safinaskar@gmail.com>
-Date:   Wed, 7 Jun 2023 14:13:20 +0300
-Message-ID: <CAPnZJGB8XKtv8W7KYtyZ7AFWWB-LTG_nP3wLAzus6jHFp_mWfg@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        linux-pm@vger.kernel.org,
-        fuse-devel <fuse-devel@lists.sourceforge.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S239978AbjFGLsG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 07:48:06 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193FB19D;
+        Wed,  7 Jun 2023 04:48:06 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 357BUF5l001215;
+        Wed, 7 Jun 2023 11:47:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=V5VxbyKrbJL/YaD4lToHiz/oU8BiLRJMivsLrvBR6/E=;
+ b=SDkI55MjKKtLPYyNbzAj9BeeT2n2xINGQSs1hMUOmCMfS4wzOhpDGdlyokrnS2EI/PL2
+ plEzweqdxVn9vSjnQLYUsacNIRF9Mq00jmwfwEJh1Rv1sb2fgPNu/dZUQ9HnFgc4kOD5
+ xTVwIGqYg8vmv9M7oL9oOZubKSWdKKAIHXx7ZVloOjJcH3IEgVMBDNusYu4e8cfFFWgF
+ 9yEdt1Zu8pY0rfvheB0JnlpwJQtrB7CuMRTlJvvK6aKc6TP4BF+LfOTxJxqfl1uSmhK7
+ njOB2NibbpkJ7FXMK/EbJJXgpUr5LwqZC4esAXTnj+8wJVcdYuJBfSAiCj8R3YelLwQF xQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r2a719rmg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Jun 2023 11:47:55 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 357Bl2mV030269;
+        Wed, 7 Jun 2023 11:47:51 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3qyxkm28p6-1;
+        Wed, 07 Jun 2023 11:47:51 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 357BlpMQ030886;
+        Wed, 7 Jun 2023 11:47:51 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 357BlpH2030883;
+        Wed, 07 Jun 2023 11:47:51 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 52E005F24; Wed,  7 Jun 2023 17:17:50 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, mani@kernel.org,
+        robimarko@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v3 0/5] Add devicetree support for SDX75 Modem and IDP
+Date:   Wed,  7 Jun 2023 17:17:44 +0530
+Message-Id: <1686138469-1464-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8TLqnmKwnLTB1Ej_LjLh22mBNPnoXKSw
+X-Proofpoint-ORIG-GUID: 8TLqnmKwnLTB1Ej_LjLh22mBNPnoXKSw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-07_06,2023-06-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 bulkscore=0 phishscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 mlxlogscore=561 suspectscore=0 malwarescore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306070097
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I found a workaround for sshfs+suspend problem!
+Hi,
 
-On Tue, Jun 6, 2023 at 5:38=E2=80=AFPM Miklos Szeredi <miklos@szeredi.hu> w=
-rote:
-> Issues remaining:
->
->  - if requests are stuck (e.g. network is down) then the requester
-> process can't be frozen and suspend will still fail.
+Changes in v3:
+ - Clubbed all the dt node into a single patch as suggested by Krzysztof.
+ - Removed the applied patch.
+ - Addressed some comments from Konrad and Dmitry.
 
-> Solution to both these are probably non-kernel: impacted servers need
-> to receive notification from systemd when suspend is starting and act
-> accordingly.
+Changes in v2:
+ - Added the CPUFreq support patch.
+ - Collected the Acked by tags.
+ - Addressed some minor comments from Konrad.
 
-Okay, so you said that the only way to solve the problem "network is
-down" is to fix the problem at the sshfs side. Unfortunately, sshfs
-project was closed ( https://github.com/libfuse/sshfs ). So the only
-remaining option is to use some hack. And I found such a hack!
+This series adds devicetree support for Qualcomm SDX75 platform and IDP
+board. This series functionally depends on GCC and RPMh Clock support
+series [1], and pinctrl support for SDX75 [2] which are under review.
 
-I simply added "-o ServerAliveInterval=3D10" to sshfs command. This will
-cause ssh process exit if remote side is unreachable. Thus the bug is
-prevented. I tested the fix and it works.
+With this current devicetree support, the IDP can boot into initramfsshell.
 
-But this will mean that ssh process will exit in such situation, and
-thus sshfs process will exit, too. If this is not what you want, then
-also add "-o reconnect" option, this will restart connection if ssh
-dies. So the final command will look like this:
+[1] https://lore.kernel.org/lkml/20230419133013.2563-3-quic_tdas@quicinc.com/
+[2] https://lore.kernel.org/all/1684409015-25196-1-git-send-email-quic_rohiagar@quicinc.com/
 
-sshfs -o reconnect,ServerAliveInterval=3D10 ...
+Thanks,
+Rohit.
 
-This finally solved the problem for me.
 
-But one issue still remains: if the network goes down and then you
-immediately try to access sshfs filesystem and then you will try to
-suspend (and ssh doesn't yet noticed that the network gone down), then
-suspend will still fail. (I tested this situation, the suspend
-actually fails.) But I don't think I even will reach such situation.
-The lesser ServerAliveInterval you will set, the lower is probability
-that you will reach such situation
+Rohit Agarwal (5):
+  dt-bindings: arm: qcom: Document SDX75 platform and boards
+  dt-bindings: firmware: scm: Add compatible for SDX75
+  dt-bindings: interrupt-controller: Add SDX75 PDC compatible
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75 compatible
+  arm64: dts: qcom: Add SDX75 platform and IDP board support
 
---=20
-Askar Safin
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   7 +
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |   1 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   1 +
+ .../bindings/interrupt-controller/qcom,pdc.yaml    |   1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+ arch/arm64/boot/dts/qcom/sdx75-idp.dts             |  33 ++
+ arch/arm64/boot/dts/qcom/sdx75.dtsi                | 660 +++++++++++++++++++++
+ 7 files changed, 704 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdx75-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdx75.dtsi
+
+-- 
+2.7.4
+
