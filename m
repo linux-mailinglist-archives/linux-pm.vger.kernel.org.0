@@ -2,83 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EBAC7260F4
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 15:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C60726104
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 15:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240256AbjFGNRe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 09:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
+        id S240435AbjFGNS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 09:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239875AbjFGNRc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 09:17:32 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB5395
-        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 06:17:31 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so31400935e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 06:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686143850; x=1688735850;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SYupklKPpCKqKq19TrZNmrOzCG5CBVYGrgEKzSjksBw=;
-        b=Uxytj1HUTANpDEX7sOxU5muMpy2+aTbVqSBOhYkeKyZU3X6/GU21krI9hvsWQ9K8+U
-         dewEqv6TAKDvpFdMDkkexuQvAL17bwxsqWNgYTiw4xagNxMgE2jS3JnVd3Zy13eYwETp
-         4XY1/zyBB6XDqGreJwvdqOU8LLgdeQpGgmNWlSJ2eRnNxAH8PAFIZCtgRY6dnwEV7cx4
-         Ovce5CkcTgIjwIjOyT/5XfH3i6gh7uDk7PR7w8FheonfK7Ec8iWkp1P5T6IQOxphpxWf
-         dyTgHZuhLtd1hhikpBY0NylOIbLCkLtQ4I/hcbzmbe+p9gnMXksFGWVqOfyE7O6biDL3
-         MQ2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686143850; x=1688735850;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SYupklKPpCKqKq19TrZNmrOzCG5CBVYGrgEKzSjksBw=;
-        b=OpzCnI3Qzk31F2E/YffAxQrsvI12AWZ9IqgyyYziQd9vkzHYj/ZMJT3v7xrXJ3PAPa
-         rT1UCe/+zSgvgnB/AR4pfBiEtPP9ePW11PxvE3g766uB0DcqGIqi8aCUQI/Cn4yzf7PH
-         /DMcqOUnkG/TU2pdF+6ekK1Cl3qldnknUFYyGOTu5ckG7NaNOHXNPD1mihQI7WCKLo/o
-         5Egwzmu9owwQQSuzNaW8HMB3hzbjOU5+iCZdqGr/YtaQZFcSNNUUNEr7yMY75XPOcucZ
-         /nIcUCzVcNuIiqXCvBz7MGZCqtdS1b6WQNK/IOjopwwxQkbJ1q8oOifg4sTaEx+neCmh
-         795g==
-X-Gm-Message-State: AC+VfDyRTC5YHfX0APzcvq8SCczmQDu3p67xEKyx4a38kIjdX5hDgXPN
-        o4iDSd3zFOcrlG8pcUZ4lZMxeA==
-X-Google-Smtp-Source: ACHHUZ6A2Mv4i6a8CT5EZdOFavhuZd9JFWLbOlgPuVri5jEuN8Bi4i8e21JI9qcWVoyRIvzHEfIj8g==
-X-Received: by 2002:a05:600c:204e:b0:3f6:d2f:27f7 with SMTP id p14-20020a05600c204e00b003f60d2f27f7mr4774242wmg.17.1686143849965;
-        Wed, 07 Jun 2023 06:17:29 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:3a59:921c:4758:7db5? ([2a05:6e02:1041:c10:3a59:921c:4758:7db5])
-        by smtp.googlemail.com with ESMTPSA id i10-20020a05600c290a00b003f60faa4612sm2154979wmd.22.2023.06.07.06.17.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jun 2023 06:17:29 -0700 (PDT)
-Message-ID: <05402205-bbe1-617c-d43e-205b0d238508@linaro.org>
-Date:   Wed, 7 Jun 2023 15:17:28 +0200
+        with ESMTP id S240430AbjFGNSv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 09:18:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8944C1735;
+        Wed,  7 Jun 2023 06:18:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3B2C71FDAB;
+        Wed,  7 Jun 2023 13:18:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686143929; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Udh/Vtqb23Sw8g+BkC8HMo4Q973SRGdJCkPyY7KWLNs=;
+        b=AG50lh6cNYbwFkDgaT6ESY/6kXvuXC7sDHKKcw8pqjJuajtZFb5iJMjU+bUHLK8tmhUW/e
+        3ggaoVJAuSiXjFOzMcU4WcpaNZCGv6jm+/3d19A6Snff4yAvXS0PckIuYdEhm38+y+iNCH
+        we5Xow+88Kal0HjgD/hcxHzey97Vt2s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686143929;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Udh/Vtqb23Sw8g+BkC8HMo4Q973SRGdJCkPyY7KWLNs=;
+        b=yrTu3ioEdQb/jvgg+opgbJOkJi/9oj9MdczoHd3QPBmppQ7hl9wTr/b/RUlZdWJ4DBVXYd
+        uqhxaF5C7dZDCxAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D3BEE1346D;
+        Wed,  7 Jun 2023 13:18:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xHLBMriDgGQvYwAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 07 Jun 2023 13:18:48 +0000
+Message-ID: <82a4143b-f800-09b9-98f2-6cda791877da@suse.de>
+Date:   Wed, 7 Jun 2023 15:18:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 1/8] net/mlx5: Update the driver with the recent thermal
- changes
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 08/31] block: share code between disk_check_media_change
+ and disk_force_media_change
 Content-Language: en-US
-To:     Saeed Mahameed <saeed@kernel.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        thierry.reding@gmail.com, Sandipan Patra <spatra@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:MELLANOX MLX5 core VPI driver" <netdev@vger.kernel.org>,
-        "open list:MELLANOX MLX5 core VPI driver" 
-        <linux-rdma@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-2-daniel.lezcano@linaro.org> <ZHfF2kXIiONh6iDr@x130>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZHfF2kXIiONh6iDr@x130>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Richard Weinberger <richard@nod.at>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Coly Li <colyli@suse.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-btrfs@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20230606073950.225178-1-hch@lst.de>
+ <20230606073950.225178-9-hch@lst.de>
+ <30183892-dce6-6946-2f7a-1bc693a657a2@suse.de>
+ <20230607122131.GB14579@lst.de>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230607122131.GB14579@lst.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,34 +96,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/06/2023 00:10, Saeed Mahameed wrote:
-> On 25 May 16:01, Daniel Lezcano wrote:
->> The thermal framework is migrating to the generic trip points. The set
->> of changes also implies a self-encapsulation of the thermal zone
->> device structure where the internals are no longer directly accessible
->> but with accessors.
+On 6/7/23 14:21, Christoph Hellwig wrote:
+> On Wed, Jun 07, 2023 at 02:19:00PM +0200, Hannes Reinecke wrote:
+>>> -	return true;
+>>> +	return __disk_check_media_change(disk,
+>>> +			disk_clear_events(disk, DISK_EVENT_MEDIA_CHANGE |
+>>> +						DISK_EVENT_EJECT_REQUEST));
 >>
->> Use the new API instead, so the next changes can be pushed in the
->> thermal framework without this driver failing to compile.
->>
->> No functional changes intended.
->>
+>> Can you move the call to disk_clear_events() out of the call to
+>> __disk_check_media_change()?
+>> I find this pattern hard to read.
 > 
-> I see this patch is part of a large series, do you expect me to re-post to
-> net-next or you are going to submit via another tree ?
+> I suspect you've not done enough functional programming in your youth :)
 
-Sorry for the delay.
+That's why I said 'I find'; purely personal preference.
+If you're happy with:
 
-Yes, this patch is targeted for the thermal tree. The last patch of the 
-series depends on it as it moves the thermal zone device structure to 
-the private thermal header, thus the structure internals won't be 
-accessible from this driver anymore.
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
+Cheers,
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Hannes
+(In my youth? One is tempted to quote Falco: "If you remember the '90s 
+you haven't experienced them...")
 
