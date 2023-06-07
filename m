@@ -2,83 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8CB725A2E
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 11:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E15725A36
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 11:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239940AbjFGJX5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 05:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
+        id S238084AbjFGJYd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 05:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234349AbjFGJXy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 05:23:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FC31FD8;
-        Wed,  7 Jun 2023 02:23:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58095633BD;
-        Wed,  7 Jun 2023 09:23:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B328C433EF;
-        Wed,  7 Jun 2023 09:23:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686129819;
-        bh=2dBZxelf4g0w/gdLM0HKDBqAqVXwuGv1PlJcXlPn9lY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FA37ryzewz3+4K4l8Ktr97eYBVVqBLv2pVXW0viLjV+m+r/uNhWaJUioMBllxDrcb
-         m/2rQlbq2vyk3xPBmVzj29M7JVrvLsSMjwUJJkNN8B6XdEYn5s49h4hyw6bLTtoi9p
-         EjTM+zpv2Dhmnnkhitfx/vj2brk5MHkYyJoQRtsq8+0xWW/1nK8yf7e6n1c+pCWVlV
-         C1XYMaOxwobfzPLR8thTUoG0bwIiC1DRhAZeaP57LjbKOs0qtf1boJvs5JbZewwmWa
-         ZNyTmf20EjV9XQz4d8qaTsyPbhurixlhBxn2jxz+gzDDr74A/rLls/VWc0tFau9VX+
-         GD8kCkpo5IuUg==
-Date:   Wed, 7 Jun 2023 11:23:31 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Richard Weinberger <richard@nod.at>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Coly Li <colyli@suse.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-btrfs@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 29/31] block: always use I_BDEV on file->f_mapping->host
- to find the bdev
-Message-ID: <20230607-thermal-sohlen-1ff852d8a99d@brauner>
-References: <20230606073950.225178-1-hch@lst.de>
- <20230606073950.225178-30-hch@lst.de>
+        with ESMTP id S235429AbjFGJY0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 05:24:26 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEF6AA
+        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 02:24:24 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30e3caa6aa7so4173149f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 02:24:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686129863; x=1688721863;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHiJavEgLpvPSoAWMa5+afasJi2XtguSQGZabSBoZy4=;
+        b=yIDOuj7qUNG9ylsspk2Kypvp30Q/UrBU5ozHjp0V0cIlT1FfoESemKGtuMJFsMI9gP
+         ZQH9lGtuSodflpCW7WqFbNbVI8xj9beDwYYM/mYHXesZ3W4IX8jzUj501t6Lem3XoiTt
+         OgDSDveDLa7WsJZvb8EQFPZG7t2JS/eeHNITmntY896PbJS+2C9DBWcJ9C5SlXfK9RGY
+         r9IknGQtYpn0TzDrNvRh9mUtZEFum8gPhlu4ltQhZ9lfW/634lyTYG290DNvK7bJKptE
+         E+ZrSaUOmQZnfm0Vplh1OWz/0l4hmAy5AV12s8VOj25xqISkAy3uJ0NnWIe7Lk2HYdTK
+         Fi9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686129863; x=1688721863;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MHiJavEgLpvPSoAWMa5+afasJi2XtguSQGZabSBoZy4=;
+        b=kk5BWUmOglFO4PaVsCLuqlzTza84bpHSMZYGUbfCOw17L+SfoVh/pVpgpCmqZVn/Mx
+         p+Ilp9ADGVqjPn53eCzc7duzJi/5AqUy12RF0ll3eEi8A0FPnB4e4ApBPtGjXSPPIH3+
+         bMgdujp3C9wG5li/+HtrVp7024o3risMBOrve8hPYnE0q/UxI71ZfSntYO5mj/V/ptkc
+         hmHqXxHD2JCww9rlZn/ZM17W7Xu1SPpCJrJcbJrv8Gz/1vvBV+GV5W953timaELRQp2Q
+         Gvd/ZTCSazWDV/VNDnCXtnzSd3Bji9PJCGToIZnGwOOTGYxD1DB67RJ9q+TWijRTbOAo
+         QVmg==
+X-Gm-Message-State: AC+VfDz7UillPhfDwsK+Si5wQtRDZS+XZddNthn3Tb+J4kn1BqpQ4hBr
+        2ZyiqPViZfBEzs1yf9eGeWfwsg==
+X-Google-Smtp-Source: ACHHUZ5O4Fpz4/8sz3Ma22BHJaCCEsF27TTTWpL4mIJyJoYmHDyN4aF1OIDyfDZ+7yNgQpnTvLdZzw==
+X-Received: by 2002:a5d:5341:0:b0:30e:1fc4:d0c9 with SMTP id t1-20020a5d5341000000b0030e1fc4d0c9mr3726783wrv.9.1686129863290;
+        Wed, 07 Jun 2023 02:24:23 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d8fb:84d9:d402:6b22? ([2a05:6e02:1041:c10:d8fb:84d9:d402:6b22])
+        by smtp.googlemail.com with ESMTPSA id y13-20020adfd08d000000b003063db8f45bsm14852094wrh.23.2023.06.07.02.24.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Jun 2023 02:24:22 -0700 (PDT)
+Message-ID: <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+Date:   Wed, 7 Jun 2023 11:24:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230606073950.225178-30-hch@lst.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Content-Language: en-US
+To:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230607003721.834038-1-evalenti@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 09:39:48AM +0200, Christoph Hellwig wrote:
-> Always use I_BDEV(file->f_mapping->host) to find the bdev for a file to
-> free up file->private_data for other uses.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
 
-Looks good to me,
-Acked-by: Christian Brauner <brauner@kernel.org>
+Hi Eduardo,
+
+On 07/06/2023 02:37, Eduardo Valentin wrote:
+> From: Eduardo Valentin <eduval@amazon.com>
+> 
+> As the thermal zone caches the current and last temperature
+> value, the sysfs interface can use that instead of
+> forcing an actual update or read from the device.
+
+If the read fails, userspace can handle that by using the previous 
+value. Do we really want to hide driver dysfunctions?
+
+> This way, if multiple userspace requests are coming
+> in, we avoid storming the device with multiple reads
+> and potentially clogging the timing requirement
+> for the governors.
+
+
+Can you elaborate 'the timing requirement for the governors' ? I'm 
+missing the point
+
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
+> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
+> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
+> Cc: linux-kernel@vger.kernel.org (open list)
+> 
+> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> ---
+>   drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index b6daea2398da..a240c58d9e08 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -35,12 +35,23 @@ static ssize_t
+>   temp_show(struct device *dev, struct device_attribute *attr, char *buf)
+>   {
+>   	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -	int temperature, ret;
+> -
+> -	ret = thermal_zone_get_temp(tz, &temperature);
+> +	int temperature;
+>   
+> -	if (ret)
+> -		return ret;
+> +	/*
+> +	 * don't force new update from external reads
+> +	 * This way we avoid messing up with time constraints.
+> +	 */
+> +	if (tz->mode == THERMAL_DEVICE_DISABLED) {
+> +		int r;
+> +
+> +		r = thermal_zone_get_temp(tz, &temperature); /* holds tz->lock*/
+> +		if (r)
+> +			return r;
+> +	} else {
+> +		mutex_lock(&tz->lock);
+> +		temperature = tz->temperature;
+> +		mutex_unlock(&tz->lock);
+> +	}
+
+No please, we are pushing since several weeks a lot of changes to 
+encapsulate the thermal zone device structure and prevent external core 
+components to use the internals directly. Even if we can consider the 
+thermal_sysfs as part of the core code, that changes is not sysfs related.
+
+>   	return sprintf(buf, "%d\n", temperature);
+>   }
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
