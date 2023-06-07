@@ -2,45 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 109F7726325
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 16:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD807265EE
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 18:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241017AbjFGOnj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 10:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S230247AbjFGQ3p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 12:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbjFGOni (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 10:43:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B14B21BD2;
-        Wed,  7 Jun 2023 07:43:28 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC1EE2F4;
-        Wed,  7 Jun 2023 07:44:13 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E78683F587;
-        Wed,  7 Jun 2023 07:43:26 -0700 (PDT)
-Date:   Wed, 7 Jun 2023 15:43:24 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] arm_scmi/opp/dvfs: Add generic performance scaling
- support
-Message-ID: <ZICXjExmCRwcQ3BA@e120937-lin>
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+        with ESMTP id S231599AbjFGQ3p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 12:29:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8761FEC;
+        Wed,  7 Jun 2023 09:29:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DFD46415F;
+        Wed,  7 Jun 2023 16:28:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CD5C433EF;
+        Wed,  7 Jun 2023 16:28:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686155330;
+        bh=qhVYY2FmMZrFRsftIUZetCqdFejj1HerZ9DwCRLZCxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JM4c4kh8ZNry5+PjpNC3mhXchJQIlXchKkkbksW3y4vGtvDWXBwLDA8+r03W3aAqY
+         OTn5QZnAh1PkstgOXLFhV4DaGIzs4kuiJM7s9gcgYJhV2+lE0kZxDsdON81OJhN1a3
+         XatHC3jWdWGULKXBtIbquO5i+KqCyQqcCcLbE3U6/+Tc8nIvRe/wOfWQAAMD/ZomZV
+         MLGwYvkA6RmHyL4SKCT76t7B0snL9IgLfPoWJIUx1I6PBDcWKMZJwzGWc8SJ+9QCZ2
+         8ysLrF1rxAWuqgqQVGtOFyzMfsm3ZrLGszM/4b3NCnwepl3Y95yOBJ3ZqU64v7QWpV
+         QSOVEcr6sJ7ug==
+Date:   Wed, 7 Jun 2023 09:28:47 -0700
+From:   Eduardo Valentin <evalenti@kernel.org>
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Valentin, Eduardo" <eduval@amazon.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "evalenti@kernel.org" <evalenti@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Message-ID: <ZICwP9MqJYwrw0HW@uf8f119305bce5e.ant.amazon.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+ <27c8bd5ddea62391f9573ea77cfcebb4fa88ff66.camel@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607124628.157465-1-ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <27c8bd5ddea62391f9573ea77cfcebb4fa88ff66.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,60 +59,113 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 02:46:12PM +0200, Ulf Hansson wrote:
-> The current SCMI performance scaling support is limited to cpufreq. This series
-> extends the support, so it can be used for all kind of devices and not only for
-> CPUs.
+Rui!
+
+Long time no chatting! In this case, no email exchange. Good to hear from you.
+
+On Wed, Jun 07, 2023 at 06:32:46AM +0000, Zhang, Rui wrote:
 > 
-> The changes are spread over a couple of different subsystems, although the
-> changes that affects the other subsystems than the arm_scmi directory are
-> mostly smaller. The series is based upon v6.4-rc5. That said, let's figure out
-> on how to best move forward with this. I am of course happy to help in any way.
 > 
-> Note that, so far this is only be tested on the Qemu virt platform with Optee
-> running an SCMI server. If you want some more details about my test setup, I am
-> certainly open to share that with you!
 > 
-> Looking forward to get your feedback!
+> On Tue, 2023-06-06 at 17:37 -0700, Eduardo Valentin wrote:
+> > From: Eduardo Valentin <eduval@amazon.com>
+> >
+> > As the thermal zone caches the current and last temperature
+> > value, the sysfs interface can use that instead of
+> > forcing an actual update or read from the device.
+> > This way, if multiple userspace requests are coming
+> > in, we avoid storming the device with multiple reads
+> > and potentially clogging the timing requirement
+> > for the governors.
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
+> > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
+> > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+> > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
+> > Cc: linux-kernel@vger.kernel.org (open list)
+> >
+> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> > ---
+> >  drivers/thermal/thermal_sysfs.c | 21 ++++++++++++++++-----
+> >  1 file changed, 16 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/thermal/thermal_sysfs.c
+> > b/drivers/thermal/thermal_sysfs.c
+> > index b6daea2398da..a240c58d9e08 100644
+> > --- a/drivers/thermal/thermal_sysfs.c
+> > +++ b/drivers/thermal/thermal_sysfs.c
+> > @@ -35,12 +35,23 @@ static ssize_t
+> >  temp_show(struct device *dev, struct device_attribute *attr, char
+> > *buf)
+> >  {
+> >         struct thermal_zone_device *tz = to_thermal_zone(dev);
+> > -       int temperature, ret;
+> > -
+> > -       ret = thermal_zone_get_temp(tz, &temperature);
+> > +       int temperature;
+> >
+> > -       if (ret)
+> > -               return ret;
+> > +       /*
+> > +        * don't force new update from external reads
+> > +        * This way we avoid messing up with time constraints.
+> > +        */
+> > +       if (tz->mode == THERMAL_DEVICE_DISABLED) {
+> > +               int r;
+> > +
+> > +               r = thermal_zone_get_temp(tz, &temperature); /* holds
+> > tz->lock*/
+> 
+> what is the expected behavior of a disabled zone?
+> 
+> IMO, the hardware may not be functional at this point, and reading the
+> temperature should be avoided, as we do in
+> __thermal_zone_device_update().
+> 
+> should we just return failure in this case?
+> 
+> userspace should poke the temp attribute for enabled zones only.
+
+While I see your point, My understanding is that thermal zone mode
+is either kernel mode or userspace mode, which to my interpretation,
+it dictating where the control is, not that there is a malfunction,
+necessarily.
+
+Taking that perspective, the expected behavior here is to have a
+in userspace control/governor, where it:
+1. disables the in kernel control
+2. monitors the thermal zone by reading the /temp property
+3. Actuates on the assigned cooling devices for the thermal zone.
+
+The above setup works pretty well for non critical control, where
+the system design or state does not require an in kernel control.
+And for that scenario, the proposed cached value will not be updated
+given that the in kernel thread is not collecting/updating temperature
+values anymore, therefore, the sysfs entry has to talk to the
+driver to get the most current value.
+
+For the failure case you referred to, Rui, This patch will handle it
+too. It will talk to the driver, if the device is malfunction, the
+driver will return an error which will be reported back
+to userspace, as an error code upon read, which is expected behavior
+for userspace to know that there is a problem.
+
+> 
+> thanks,
+> rui
+> > +               if (r)
+> > +                       return r;
+> > +       } else {
+> > +               mutex_lock(&tz->lock);
+> > +               temperature = tz->temperature;
+> > +               mutex_unlock(&tz->lock);
+> > +       }
+> >
+> >         return sprintf(buf, "%d\n", temperature);
+> >  }
 > 
 
-Hi Ulf,
-
-thanks for this first of all.
-
-I'll have a look at this properly in the next weeks, in the meantime
-just a small minor remark after having had a quick look.
-
-You expose a few new perf_ops to fit your needs and in fact PERF was
-still not exposing those data for (apparent) lack of users needing
-those. (and/or historical reason I think)
-
-My concern is that this would lead to a growing number of ops as soon as
-more data will be needed by future users; indeed other protocols do
-expose more data but use a different approach: instead of custom ops
-they let the user access a common static info structure like
-
-
-+       int (*num_domains_get)(const struct scmi_protocol_handle *ph);
-+       const struct scmi_perf_dom_info __must_check *(*info_get)
-+               (const struct scmi_protocol_handle *ph, u32 domain);
-
-and expose the related common info struct in scmi_protocol.h too.
-Another reason to stick to this aproach would be consistency with other
-protos (even though I think PERF is not the only lacking info_get)
-
-Now, since really there was already a hidden user for this perf data
-(that would be me :P ... in terms of an unpublished SCMI test-driver),
-I happen to have a tested patch that just expose those 2 above ops and
-exports scmi_perf_dom_info and related structures to scmi_protocol.h
-
-If you (and Sudeep) agree with this approach of limiting the number of
-exposed ops in favour of sharing upfront some static info data, I can
-quickly cleanup and post this patch for you to pick it up in your next
-iteration.
-
-(really I'd have more conversion of this kind also for other remaining
- protos but these are unrelated to your series and I'd post it later)
-
-Thanks,
-Cristian
+-- 
+All the best,
+Eduardo Valentin
