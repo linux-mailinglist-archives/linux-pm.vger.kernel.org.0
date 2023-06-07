@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DB1725FE9
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 14:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016F4725FE5
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jun 2023 14:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241030AbjFGMrb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Jun 2023 08:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54466 "EHLO
+        id S241090AbjFGMr2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Jun 2023 08:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239432AbjFGMrY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 08:47:24 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818221BE5
-        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 05:47:08 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f4b384c09fso8859631e87.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 05:47:08 -0700 (PDT)
+        with ESMTP id S241065AbjFGMrZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Jun 2023 08:47:25 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9371FC0
+        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 05:47:10 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f122ff663eso9008576e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 05:47:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686142028; x=1688734028;
+        d=linaro.org; s=google; t=1686142030; x=1688734030;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=W/gi1wYyuTGyxRPCnXy/W6dl0ztApfjNz5N46Tr334c=;
-        b=iAk48snIpP5FAUcrOXKzaso2EfYDoBqaGWM3B8Qdt+hejNMFNiyGWiUY7ipuqdhcIG
-         YkRLuIzAv35XMuOwamJpKqrl8yKzF7KvysKf8JPh3nYZ2AUeWurkxIAYvk40xMRLw1Py
-         r/N02dBKTh2IPq5oDDSKk+8nakTeTFMVBBS5LnpjxlojC/1YvyBV73zW1ur7QkC162oo
-         PlyMV34cjVQ11mvjWMdfYjItPVRo9di3kX2R/ee3FSob0LVlZpyBLuMqInEotACmxtiC
-         IzY5yfSEQ3WodR5SirsXRXi4fWLkxZPObgIMk9GOCHyKy3xWZ5HdN5pwG2IBh7udVHQP
-         abTg==
+        bh=ZFOFaTdB/ZAJjZPTuGERS2BWBk3lHevQSrGw284LH/A=;
+        b=VDnMswoWv3vXbGiOyeKlRwDyVh+DQTlDneRSvPwp7iemvODyTy+cM31LXX6NhCSYbA
+         wTp4dDrlmRGPT4rHQejDkJL38iDAByWnVWHOYDsn6Z29FjXHNbLtjIcGlRPvSV8J7P0m
+         bjIIl2WKPB2zY4LQlV/w4+wswycvn99VC2JJNz4COf/zUUPzxQ/TwHV5kjJPX1ODiGuc
+         23HhM4aGDRjmBGGjoKBDghYwVN7RGThmU66R2/MoS+gKsN0Me0hsrzrAnpOyBQej785l
+         efeqj5qSS9SeXJPEm4g2001M65IDuIuO8Ao9+Dkoe+bMRwwYZPufT5nQKEP9U4jhUjDT
+         VZmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686142028; x=1688734028;
+        d=1e100.net; s=20221208; t=1686142030; x=1688734030;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=W/gi1wYyuTGyxRPCnXy/W6dl0ztApfjNz5N46Tr334c=;
-        b=eOU5kBfQ6NnLR3ch82D1pQSa4CUXahF7a0WfUO+detNI63UtH/rQEyeJft8nv+L3nk
-         CAJRakIqAGFBxvhQfv+uIfNsW+dqyMVqm3GNqUiAB4cZ68Qk0duMm4KEtJ/KAkNFqW7D
-         LKfUPi5RhTw84rG2YtpmVg/GC0Ih5Rc2IZxY4pl/OmUTWJq/F0qvJkThbSPqZ8n23GBg
-         lmonPOlalcDZxPQ+xTi/2tDQzxuQqfPJfd3Le0FePCqkwPsEWLzMKzeVgG7fD6hDr+74
-         5kaLNVju4ZdUJYlvzQ9GtI2qX/+JmA9RrVJ+JYDoeXaPGPcTo45d6VotCfg15VMmIX3k
-         qecw==
-X-Gm-Message-State: AC+VfDyPiC4/FbfquQta+tf76yFvyATQLZqzog/KfEgi6PTQG37Uij99
-        vm1KIdE1Z8Khd/+leqwiXgaZFj1kbYPGzaFY5ZQ=
-X-Google-Smtp-Source: ACHHUZ6bmAujPPGUaE0p6wW6yTU2QtF+4D5UiiKNAqQSVwwLLD5tdqR7H3fNEKvFf2vmeP/ZqqmnYQ==
-X-Received: by 2002:ac2:59db:0:b0:4f3:aa29:b672 with SMTP id x27-20020ac259db000000b004f3aa29b672mr2008947lfn.30.1686142028046;
-        Wed, 07 Jun 2023 05:47:08 -0700 (PDT)
+        bh=ZFOFaTdB/ZAJjZPTuGERS2BWBk3lHevQSrGw284LH/A=;
+        b=KoD81Cewk10XDlV7WSTp9N6dtY09DtbBSXmR7TFRyGbO7Mxv3keQ10VJAE1XZU5m9R
+         FltQNOC9+6QT8G9YYbNj/DOSymQrP24C6Wchb/S0EVSpHyXCRaXKwXeCBYwn77QZofIt
+         2jcc78GLQkLwm0mGEFjP1W1iQERKioLxipDZI9oZdlmyb2FLnXo8dxoLbIjFvJJ2EvdU
+         qQjP3tlXJNLvV2NC37+6d/ySu7h6JJXZr4aK4AkcRBbAXbjBWPl5uqlYeME7P6GkBrg/
+         mJSqjqXKanoqnA7X+EnQF3QHTCB+jPlDhf4zqVA9I4prXvSOQNApMJtTOc0TV4D8voSe
+         e5Jg==
+X-Gm-Message-State: AC+VfDyVt4X2E0Sr85jlUK9eIpf/jOQGxULAjHs/YxDSX4WMrRWMdR4I
+        EGCobThDvQ7kqzz0cLmSFT9iZGJhMfvRK9AfjvQ=
+X-Google-Smtp-Source: ACHHUZ5wwtUo78oY555XmA9CeIllwbLEbC2LxOMp8LF9LoXOjriV0ZXhcNiRJoFkEDLb/DqT8FOxkA==
+X-Received: by 2002:ac2:5108:0:b0:4f4:b592:74ab with SMTP id q8-20020ac25108000000b004f4b59274abmr1853886lfb.62.1686142029801;
+        Wed, 07 Jun 2023 05:47:09 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id z7-20020a19f707000000b004f4b3e9e0cesm1781708lfe.297.2023.06.07.05.47.06
+        by smtp.gmail.com with ESMTPSA id z7-20020a19f707000000b004f4b3e9e0cesm1781708lfe.297.2023.06.07.05.47.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 05:47:07 -0700 (PDT)
+        Wed, 07 Jun 2023 05:47:09 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Sudeep Holla <sudeep.holla@arm.com>,
         Cristian Marussi <cristian.marussi@arm.com>,
@@ -59,9 +59,9 @@ Cc:     Nikunj Kela <nkela@quicinc.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 10/16] firmware: arm_scmi: Add the SCMI performance domain
-Date:   Wed,  7 Jun 2023 14:46:22 +0200
-Message-Id: <20230607124628.157465-11-ulf.hansson@linaro.org>
+Subject: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
+Date:   Wed,  7 Jun 2023 14:46:23 +0200
+Message-Id: <20230607124628.157465-12-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230607124628.157465-1-ulf.hansson@linaro.org>
 References: <20230607124628.157465-1-ulf.hansson@linaro.org>
@@ -77,222 +77,202 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To enable support for performance scaling (DVFS) for generic devices with
-the SCMI performance protocol, let's add an SCMI performance domain. This
-is being modelled as a genpd provider, with support for performance scaling
-through genpd's ->set_performance_state() callback.
-
-Note that, this adds the initial support that allows consumer drivers for
-attached devices, to vote for a new performance state via calling the
-dev_pm_genpd_set_performance_state(). However, this should be avoided as
-it's in most cases preferred to use the OPP library to vote for a new OPP
-instead. The support using the OPP library is implemented from subsequent
-changes.
+The dev_pm_opp_add() API is limited to add dynamic OPPs with a frequency
+and/or voltage level. To enable more flexibility, let's add a new
+dev_pm_opp_add_dynamic() API, that's takes a struct dev_pm_opp_data*
+instead of list of in-parameters.
 
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/firmware/arm_scmi/Kconfig            |  12 ++
- drivers/firmware/arm_scmi/Makefile           |   1 +
- drivers/firmware/arm_scmi/scmi_perf_domain.c | 155 +++++++++++++++++++
- 3 files changed, 168 insertions(+)
- create mode 100644 drivers/firmware/arm_scmi/scmi_perf_domain.c
+ drivers/opp/core.c     | 49 ++++++++++++++++++++++++++++++++----------
+ drivers/opp/of.c       | 11 ++++++----
+ drivers/opp/opp.h      |  2 +-
+ include/linux/pm_opp.h | 18 ++++++++++++++++
+ 4 files changed, 64 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/firmware/arm_scmi/Kconfig b/drivers/firmware/arm_scmi/Kconfig
-index ea0f5083ac47..706d1264d038 100644
---- a/drivers/firmware/arm_scmi/Kconfig
-+++ b/drivers/firmware/arm_scmi/Kconfig
-@@ -181,6 +181,18 @@ config ARM_SCMI_POWER_DOMAIN
- 	  will be called scmi_pm_domain. Note this may needed early in boot
- 	  before rootfs may be available.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 954c94865cf5..0e6ee2980f88 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1921,8 +1921,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+  * _opp_add_v1() - Allocate a OPP based on v1 bindings.
+  * @opp_table:	OPP table
+  * @dev:	device for which we do this operation
+- * @freq:	Frequency in Hz for this OPP
+- * @u_volt:	Voltage in uVolts for this OPP
++ * @opp:	The OPP to add
+  * @dynamic:	Dynamically added OPPs.
+  *
+  * This function adds an opp definition to the opp table and returns status.
+@@ -1940,10 +1939,10 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+  * -ENOMEM	Memory allocation failure
+  */
+ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+-		unsigned long freq, long u_volt, bool dynamic)
++		struct dev_pm_opp_data *opp, bool dynamic)
+ {
+ 	struct dev_pm_opp *new_opp;
+-	unsigned long tol;
++	unsigned long tol, u_volt = opp->u_volt;
+ 	int ret;
  
-+config ARM_SCMI_PERF_DOMAIN
-+	tristate "SCMI performance domain driver"
-+	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-+	default y
-+	select PM_GENERIC_DOMAINS if PM
-+	help
-+	  This enables support for the SCMI performance domains which can be
-+	  enabled or disabled via the SCP firmware.
+ 	if (!assert_single_clk(opp_table))
+@@ -1954,7 +1953,7 @@ int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+ 		return -ENOMEM;
+ 
+ 	/* populate the opp table */
+-	new_opp->rates[0] = freq;
++	new_opp->rates[0] = opp->freq;
+ 	tol = u_volt * opp_table->voltage_tolerance_v1 / 100;
+ 	new_opp->supplies[0].u_volt = u_volt;
+ 	new_opp->supplies[0].u_volt_min = u_volt - tol;
+@@ -2738,10 +2737,9 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+ }
+ 
+ /**
+- * dev_pm_opp_add()  - Add an OPP table from a table definitions
+- * @dev:	device for which we do this operation
+- * @freq:	Frequency in Hz for this OPP
+- * @u_volt:	Voltage in uVolts for this OPP
++ * dev_pm_opp_add_dynamic()  - Add an OPP table from a table definitions
++ * @dev:	The device for which we do this operation
++ * @opp:	The OPP to be added
+  *
+  * This function adds an opp definition to the opp table and returns status.
+  * The opp is made available by default and it can be controlled using
+@@ -2754,7 +2752,7 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+  *		Duplicate OPPs (both freq and volt are same) and !opp->available
+  * -ENOMEM	Memory allocation failure
+  */
+-int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
++int dev_pm_opp_add_dynamic(struct device *dev, struct dev_pm_opp_data *opp)
+ {
+ 	struct opp_table *opp_table;
+ 	int ret;
+@@ -2766,12 +2764,41 @@ int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+ 	/* Fix regulator count for dynamic OPPs */
+ 	opp_table->regulator_count = 1;
+ 
+-	ret = _opp_add_v1(opp_table, dev, freq, u_volt, true);
++	ret = _opp_add_v1(opp_table, dev, opp, true);
+ 	if (ret)
+ 		dev_pm_opp_put_opp_table(opp_table);
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(dev_pm_opp_add_dynamic);
 +
-+	  This driver can also be built as a module. If so, the module will be
-+	  called scmi_perf_domain.
-+
- config ARM_SCMI_POWER_CONTROL
- 	tristate "SCMI system power control driver"
- 	depends on ARM_SCMI_PROTOCOL || (COMPILE_TEST && OF)
-diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
-index b31d78fa66cc..afee66a65dcb 100644
---- a/drivers/firmware/arm_scmi/Makefile
-+++ b/drivers/firmware/arm_scmi/Makefile
-@@ -17,6 +17,7 @@ obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-core.o
- obj-$(CONFIG_ARM_SCMI_PROTOCOL) += scmi-module.o
- 
- obj-$(CONFIG_ARM_SCMI_POWER_DOMAIN) += scmi_pm_domain.o
-+obj-$(CONFIG_ARM_SCMI_PERF_DOMAIN) += scmi_perf_domain.o
- obj-$(CONFIG_ARM_SCMI_POWER_CONTROL) += scmi_power_control.o
- 
- ifeq ($(CONFIG_THUMB2_KERNEL)$(CONFIG_CC_IS_CLANG),yy)
-diff --git a/drivers/firmware/arm_scmi/scmi_perf_domain.c b/drivers/firmware/arm_scmi/scmi_perf_domain.c
-new file mode 100644
-index 000000000000..9be90a7d94de
---- /dev/null
-+++ b/drivers/firmware/arm_scmi/scmi_perf_domain.c
-@@ -0,0 +1,155 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI performance domain support.
++/**
++ * dev_pm_opp_add()  - Add an OPP table from a table definitions
++ * @dev:	device for which we do this operation
++ * @freq:	Frequency in Hz for this OPP
++ * @u_volt:	Voltage in uVolts for this OPP
 + *
-+ * Copyright (C) 2023 Linaro Ltd.
++ * This function adds an opp definition to the opp table and returns status.
++ * The opp is made available by default and it can be controlled using
++ * dev_pm_opp_enable/disable functions.
++ *
++ * Return:
++ * 0		On success OR
++ *		Duplicate OPPs (both freq and volt are same) and opp->available
++ * -EEXIST	Freq are same and volt are different OR
++ *		Duplicate OPPs (both freq and volt are same) and !opp->available
++ * -ENOMEM	Memory allocation failure
 + */
++int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
++{
++	struct dev_pm_opp_data opp;
 +
-+#include <linux/err.h>
-+#include <linux/device.h>
-+#include <linux/module.h>
-+#include <linux/pm_domain.h>
-+#include <linux/scmi_protocol.h>
-+#include <linux/slab.h>
++	memset(&opp, 0, sizeof(opp));
++	opp.freq = freq;
++	opp.u_volt = u_volt;
 +
-+struct scmi_perf_domain {
-+	struct generic_pm_domain genpd;
-+	const struct scmi_perf_proto_ops *perf_ops;
-+	const struct scmi_protocol_handle *ph;
-+	u32 domain_id;
-+	bool can_level_set;
++	return dev_pm_opp_add_dynamic(dev, &opp);
++}
+ EXPORT_SYMBOL_GPL(dev_pm_opp_add);
+ 
+ /**
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 8246e9b7afe7..b96f6304f497 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -1079,13 +1079,16 @@ static int _of_add_opp_table_v1(struct device *dev, struct opp_table *opp_table)
+ 
+ 	val = prop->value;
+ 	while (nr) {
+-		unsigned long freq = be32_to_cpup(val++) * 1000;
+-		unsigned long volt = be32_to_cpup(val++);
++		struct dev_pm_opp_data opp;
+ 
+-		ret = _opp_add_v1(opp_table, dev, freq, volt, false);
++		memset(&opp, 0, sizeof(opp));
++		opp.freq = be32_to_cpup(val++) * 1000;
++		opp.u_volt = be32_to_cpup(val++);
++
++		ret = _opp_add_v1(opp_table, dev, &opp, false);
+ 		if (ret) {
+ 			dev_err(dev, "%s: Failed to add OPP %ld (%d)\n",
+-				__func__, freq, ret);
++				__func__, opp.freq, ret);
+ 			goto remove_static_opp;
+ 		}
+ 		nr -= 2;
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 2a057c42ddf4..b15770b2305e 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -255,7 +255,7 @@ struct dev_pm_opp *_opp_allocate(struct opp_table *opp_table);
+ void _opp_free(struct dev_pm_opp *opp);
+ int _opp_compare_key(struct opp_table *opp_table, struct dev_pm_opp *opp1, struct dev_pm_opp *opp2);
+ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp, struct opp_table *opp_table);
+-int _opp_add_v1(struct opp_table *opp_table, struct device *dev, unsigned long freq, long u_volt, bool dynamic);
++int _opp_add_v1(struct opp_table *opp_table, struct device *dev, struct dev_pm_opp_data *opp, bool dynamic);
+ void _dev_pm_opp_cpumask_remove_table(const struct cpumask *cpumask, int last_cpu);
+ struct opp_table *_add_opp_table_indexed(struct device *dev, int index, bool getclk);
+ void _put_opp_list_kref(struct opp_table *opp_table);
+diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
+index dc1fb5890792..305cd87b394c 100644
+--- a/include/linux/pm_opp.h
++++ b/include/linux/pm_opp.h
+@@ -92,6 +92,16 @@ struct dev_pm_opp_config {
+ 	struct device ***virt_devs;
+ };
+ 
++/**
++ * struct dev_pm_opp_data - The data to use to initialize an OPP.
++ * @freq: The clock rate in Hz for the OPP.
++ * @u_volt: The voltage in uV for the OPP.
++ */
++struct dev_pm_opp_data {
++	unsigned long freq;
++	unsigned long u_volt;
 +};
 +
-+#define to_scmi_pd(pd) container_of(pd, struct scmi_perf_domain, genpd)
+ #if defined(CONFIG_PM_OPP)
+ 
+ struct opp_table *dev_pm_opp_get_opp_table(struct device *dev);
+@@ -142,6 +152,8 @@ void dev_pm_opp_put(struct dev_pm_opp *opp);
+ 
+ int dev_pm_opp_add(struct device *dev, unsigned long freq,
+ 		   unsigned long u_volt);
++int dev_pm_opp_add_dynamic(struct device *dev, struct dev_pm_opp_data *opp);
 +
-+static int
-+scmi_pd_set_perf_state(struct generic_pm_domain *genpd, unsigned int state)
+ void dev_pm_opp_remove(struct device *dev, unsigned long freq);
+ void dev_pm_opp_remove_all_dynamic(struct device *dev);
+ 
+@@ -297,6 +309,12 @@ static inline int dev_pm_opp_add(struct device *dev, unsigned long freq,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int
++dev_pm_opp_add_dynamic(struct device *dev, struct dev_pm_opp_data *opp)
 +{
-+	struct scmi_perf_domain *pd = to_scmi_pd(genpd);
-+	int ret;
-+
-+	if (!pd->can_level_set)
-+		return 0;
-+
-+	ret = pd->perf_ops->level_set(pd->ph, pd->domain_id, state, true);
-+	if (ret)
-+		dev_warn(&genpd->dev, "Failed with %d when trying to set %d perf level",
-+			 ret, state);
-+
-+	return ret;
++	return -EOPNOTSUPP;
 +}
 +
-+static int scmi_perf_domain_probe(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	const struct scmi_handle *handle = sdev->handle;
-+	const struct scmi_perf_proto_ops *perf_ops;
-+	struct scmi_protocol_handle *ph;
-+	struct scmi_perf_domain *scmi_pd;
-+	struct genpd_onecell_data *scmi_pd_data;
-+	struct generic_pm_domain **domains;
-+	int num_domains, i, ret = 0;
-+	u32 perf_level;
-+
-+	if (!handle)
-+		return -ENODEV;
-+
-+	/* The OF node must specify us as a power-domain provider. */
-+	if (!of_find_property(dev->of_node, "#power-domain-cells", NULL))
-+		return 0;
-+
-+	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
-+	if (IS_ERR(perf_ops))
-+		return PTR_ERR(perf_ops);
-+
-+	num_domains = perf_ops->num_domains_get(ph);
-+	if (num_domains < 0) {
-+		dev_warn(dev, "Failed with %d when getting num perf domains\n",
-+			 num_domains);
-+		return num_domains;
-+	} else if (!num_domains) {
-+		return 0;
-+	}
-+
-+	scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
-+	if (!scmi_pd)
-+		return -ENOMEM;
-+
-+	scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
-+	if (!scmi_pd_data)
-+		return -ENOMEM;
-+
-+	domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
-+	if (!domains)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_domains; i++, scmi_pd++) {
-+		scmi_pd->domain_id = i;
-+		scmi_pd->perf_ops = perf_ops;
-+		scmi_pd->ph = ph;
-+		scmi_pd->can_level_set = perf_ops->can_level_set(ph, i);
-+
-+		scmi_pd->genpd.name = perf_ops->name_get(ph, i);
-+		scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
-+		scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
-+
-+		ret = perf_ops->level_get(ph, i, &perf_level, false);
-+		if (ret) {
-+			dev_dbg(dev, "Failed to get perf level for %s",
-+				 scmi_pd->genpd.name);
-+			perf_level = 0;
-+		}
-+
-+		/* Let the perf level indicate the power-state too. */
-+		ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
-+		if (ret)
-+			goto err;
-+
-+		domains[i] = &scmi_pd->genpd;
-+	}
-+
-+	scmi_pd_data->domains = domains;
-+	scmi_pd_data->num_domains = num_domains;
-+
-+	ret = of_genpd_add_provider_onecell(dev->of_node, scmi_pd_data);
-+	if (ret)
-+		goto err;
-+
-+	dev_set_drvdata(dev, scmi_pd_data);
-+	dev_info(dev, "Initialized %d performance domains", num_domains);
-+	return 0;
-+err:
-+	for (i--; i >= 0; i--)
-+		pm_genpd_remove(domains[i]);
-+	return ret;
-+}
-+
-+static void scmi_perf_domain_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
-+	int i;
-+
-+	of_genpd_del_provider(dev->of_node);
-+
-+	for (i = 0; i < scmi_pd_data->num_domains; i++)
-+		pm_genpd_remove(scmi_pd_data->domains[i]);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_PERF, "perf" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static struct scmi_driver scmi_perf_domain_driver = {
-+	.name		= "scmi-perf-domain",
-+	.probe		= scmi_perf_domain_probe,
-+	.remove		= scmi_perf_domain_remove,
-+	.id_table	= scmi_id_table,
-+};
-+module_scmi_driver(scmi_perf_domain_driver);
-+
-+MODULE_AUTHOR("Ulf Hansson <ulf.hansson@linaro.org>");
-+MODULE_DESCRIPTION("ARM SCMI perf domain driver");
-+MODULE_LICENSE("GPL v2");
+ static inline void dev_pm_opp_remove(struct device *dev, unsigned long freq)
+ {
+ }
 -- 
 2.34.1
 
