@@ -2,76 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480667276C0
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 07:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729B17278FE
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 09:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234403AbjFHFe6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 01:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S231715AbjFHHnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 03:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbjFHFeu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 01:34:50 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504791BD
-        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 22:34:49 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b01d912a76so452005ad.2
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 22:34:49 -0700 (PDT)
+        with ESMTP id S231674AbjFHHnb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 03:43:31 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87D61FF3
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 00:43:28 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-543d32eed7cso58706a12.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 00:43:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686202489; x=1688794489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hi3h3STrD8nAW7/sg6jcuBzQ5Kz2zlpfMrjH0c93LuE=;
-        b=t3Csx9jDOUGENAtJPJP0Bujqdp02H1al9yUYvJhgfDb5TYN7yPNiQ53mifoKoBQSW5
-         XRL+1BDN4BBdaz+F7j6Aa1TZIrEPMH2IfCi3aAXWrJ81JqsUDN3lTE3vYclFSkSXXjyh
-         rT4rlUEHxODl6nFE7lQ9QRPdETQq+FfWZbXW9Ef8hBjDhSzU5Q+hsZQ3y3mZw5WdyiEH
-         EuP0B60BiEtYEJB8UbFkBEWBk9qNx7XLg6SHllGl3V8yyCA57+kRlalVsRMjU0Px0CN+
-         u2zfS0lftayqESTQ4rUk9VUlYnB7df1oDDteQQ+siDAqVIQ9c6TBIS+sXcn5Yzi2P3xV
-         +iLA==
+        d=linaro.org; s=google; t=1686210208; x=1688802208;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0OfgmpgDHudBar0PkB75jmvbWcXu/mU1WxwDHf7lT8s=;
+        b=U0nOdlvP39p5uX7o0CjgR+gjIRdLQNBvHjRgZIwHS6hQ2DmyhQxQChM21Thf1Ls1ak
+         E7uW+mP8GHHdYjKpywOV0XKSAIaMos9pYGy2uHvpO/4PbXPQcY6oQJz/n+438q2MYO91
+         DfJ72bfBIVz3HkklASv+mEJ052zPdHsH9BmLM4NSfdNILlp0fYa6RjAZK+GNmZkv77nx
+         uZKmwmsb0OJDKY/2VRXXST1ot0t9PB0bBpivphWrp2xkUaAb5qo5um7zAAkqvy2EUBiJ
+         Y+ynfcCLLKvoGs7YWuX/TTaKYEH/PB0p1o/xFb6SRXjJpcUo1queiZhfiK3sFiaDvgIk
+         XJGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686202489; x=1688794489;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hi3h3STrD8nAW7/sg6jcuBzQ5Kz2zlpfMrjH0c93LuE=;
-        b=LQkpvWt+7Gc6FRPltXbDYsXAvMN/G8AJ7rKzocvW4O3GxrxeOm29fdk4Jq3YQLHpuj
-         eRJAt4yf7hgYHk+i6Mp2m7HpHeKadSGm6ht9Wy4OnjoLVO9QMI24V7Q3gj09pbUmOCkx
-         Av9f1mS70WlkxUKEIYpTO17+KLUUYCMWCF8K/IDBMLVf9UZSeDPJDgp9rCUFTqI/Biyp
-         8x2cjwMc4mV4zpeFqTVdN8nv81CEgHehCieFqaPE8upVzxA4o8F7qTPdY2lHWkEHS7x5
-         X+PCwpk8ciOnenpGC6mNIO4ZAzoyJ4J14N3ahXsDtF5zZzDn8QpIRT3t9qEj+bXcfsey
-         m37g==
-X-Gm-Message-State: AC+VfDxqPkQVqoM2yi9MUst4ziDweRWKoJGL5D6BOQmIQ72V83judE7W
-        JUAZCDtF4C0ZdrGt6CEBd3fK2Q==
-X-Google-Smtp-Source: ACHHUZ69DUeIZySrAUAki+m1E/uiJQzSlLA8X20Zfy3gPcqX9L/hc9WeD08FTtkNJ1y0TBB4FQQQgg==
-X-Received: by 2002:a17:903:493:b0:1ae:55c8:6b60 with SMTP id jj19-20020a170903049300b001ae55c86b60mr3174132plb.1.1686202488870;
-        Wed, 07 Jun 2023 22:34:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686210208; x=1688802208;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0OfgmpgDHudBar0PkB75jmvbWcXu/mU1WxwDHf7lT8s=;
+        b=Bd0WnW4QvMQsYI59AceSt8EoPQWUSIueluZg6HEnxHji3sD6EFGIvUf4FsGgYKKjev
+         oX0IHX++YlToB33hfSwRGeSactCpVen+ofwp76MUHTd1IEyV/U1Bct9hoAufbAl2UZi5
+         KY0knEtOBKg7ZT3uJM80Pz253JcBPGTfSfZMuApIaMfZC9zBk/4FIAO8Itn2TvnAEGEO
+         Y+HGwGzdZp2+qWsIaIahiMlC4ZSmKLWsqKPV4JKLwfb/vLJHrXRkycpcFIj1tcQpkTVG
+         yc8Nt6NVcU8BfIwkCq2rq7/sYKtJIMzOqT3IkOAg/LosOJjf69xSNlgMIUm8BmllsJ+D
+         gJsQ==
+X-Gm-Message-State: AC+VfDzicHfozRLVYUEdKVVlSSSiO7eqlj+1ULIfbYaILhYRUC4aqUqG
+        9Q8NpvkUq/iBuTdst2KdWIzNSg==
+X-Google-Smtp-Source: ACHHUZ43hUcE3IkfNSVm5eTUzCPpYMps9NfFJ0j+3+bdWcZoAprFIEewEMgnWtVLlnCsvMAUKktKUA==
+X-Received: by 2002:a17:902:dacc:b0:1ae:5b7:e437 with SMTP id q12-20020a170902dacc00b001ae05b7e437mr4837803plx.4.1686210208266;
+        Thu, 08 Jun 2023 00:43:28 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902694100b00199203a4fa3sm446622plt.203.2023.06.07.22.34.47
+        by smtp.gmail.com with ESMTPSA id d9-20020a170902aa8900b001acaf7e22bdsm778017plr.14.2023.06.08.00.43.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 22:34:48 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 11:04:46 +0530
+        Thu, 08 Jun 2023 00:43:27 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider
- support
-Message-ID: <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-14-ulf.hansson@linaro.org>
+Subject: [PATCH 1/2] OPP: Staticize `lazy_opp_tables` in of.c
+Date:   Thu,  8 Jun 2023 13:13:22 +0530
+Message-Id: <167eb2bd947d9c04b0f6f1a5495ce4a99eeab598.1686210112.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230607124628.157465-14-ulf.hansson@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,30 +72,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07-06-23, 14:46, Ulf Hansson wrote:
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 79b4b44ced3e..81a3418e2eaf 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -1112,6 +1112,15 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  			return ret;
->  		}
->  
-> +		if (opp->provider == DEV_PM_OPP_TYPE_GENPD) {
-> +			ret = dev_pm_genpd_set_performance_state(dev, opp->level);
-> +			if (ret) {
-> +				dev_err(dev, "Failed to set performance level: %d\n",
-> +					ret);
-> +				return ret;
-> +			}
-> +		}
-> +
+`lazy_opp_tables` is only used in of.c, move it there and mark it
+`static`.
 
-I don't like this :)
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ drivers/opp/core.c | 3 ---
+ drivers/opp/of.c   | 3 +++
+ drivers/opp/opp.h  | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-We already have these calls in place from within _set_required_opps(), and we
-should try to get this done in a way that those calls themselves get the
-performance state configured.
-
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 7046487dc6f4..9f918077cd62 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -29,9 +29,6 @@
+  */
+ LIST_HEAD(opp_tables);
+ 
+-/* OPP tables with uninitialized required OPPs */
+-LIST_HEAD(lazy_opp_tables);
+-
+ /* Lock to allow exclusive modification to the device and opp lists */
+ DEFINE_MUTEX(opp_table_lock);
+ /* Flag indicating that opp_tables list is being updated at the moment */
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 8246e9b7afe7..c740a907ef76 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -21,6 +21,9 @@
+ 
+ #include "opp.h"
+ 
++/* OPP tables with uninitialized required OPPs */
++static LIST_HEAD(lazy_opp_tables);
++
+ /*
+  * Returns opp descriptor node for a device node, caller must
+  * do of_node_put().
+diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+index 2a057c42ddf4..eb71385d96c1 100644
+--- a/drivers/opp/opp.h
++++ b/drivers/opp/opp.h
+@@ -26,7 +26,7 @@ struct regulator;
+ /* Lock to allow exclusive modification to the device and opp lists */
+ extern struct mutex opp_table_lock;
+ 
+-extern struct list_head opp_tables, lazy_opp_tables;
++extern struct list_head opp_tables;
+ 
+ /* OPP Config flags */
+ #define OPP_CONFIG_CLK			BIT(0)
 -- 
-viresh
+2.31.1.272.g89b43f80a514
+
