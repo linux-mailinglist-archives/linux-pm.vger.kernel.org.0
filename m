@@ -2,108 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B152727A9D
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 10:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA416727AAD
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbjFHI4a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 04:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S233473AbjFHJAb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 05:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235683AbjFHI4Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 04:56:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE71272E;
-        Thu,  8 Jun 2023 01:56:22 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3587h1M0023948;
-        Thu, 8 Jun 2023 08:56:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=bn9KhC8FKFvue6z73xOS+tpNfMXdjDhem7nRo2uOZ5k=;
- b=Tvs7y1Kyj5lcja3tCBS1XH/ICPrAjanwDOJHEyoVQfYTCMV5jj5Fr5yCH5eh+tlNmxLF
- dpIac4HU7Q6NZKnLkT6xWUwdTMr7GblSjXCdec99sYapipPvWOMJ4rPEVIpC1IQNG5+1
- wnAKheSEMsL+HeHT0+bxQgsi9K/lipdVt7PzAG1wmSMsk/sZJN33mLab78ihGpdq6mvH
- lXcS7hrAGpgCSvsr4EV1r7JuQ3O4WxAE9qeLjlcnbeManRhrw1gcvHCJf5QVCpFGXxd2
- MH2zYynEJRXY1OartHkSZW8FRDCkq52ib2h5T8I4eukUSXCPGplf+mc1OvdQi+E41jgR 5Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r39ku89kp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Jun 2023 08:56:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3588uIYR026503
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Jun 2023 08:56:18 GMT
-Received: from hu-tnimkar-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 01:56:15 -0700
-From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>, Tushar Nimkar <quic_tnimkar@quicinc.com>
-Subject: [PATCH 2/2] cpuidle: dt: Add support to keep idle state disabled
-Date:   Thu, 8 Jun 2023 14:25:44 +0530
-Message-ID: <20230608085544.16211-4-quic_tnimkar@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+        with ESMTP id S232116AbjFHJAa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:00:30 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDA39E
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 02:00:28 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-566586b180fso3183217b3.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 02:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686214827; x=1688806827;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbS7bAo8RzhYC9F95C74bwc0WgK8qcH9Nsq7/PhrBD4=;
+        b=RLLQpNe0Um2T3leRxsS6jhQMutCxtncL1kCOpfVD91JdQvhCv43heXnzcOB4nfk0uV
+         m5x8VP6xXzWYazK5d4spsYoVt/wgUO01Nhq6Y/PSCGXVFTznd7EcRiaYFakAGCqppUiB
+         H8KOQrESEQddCUtcvTbNXjMbvZnGmLMwloPT3nIEKpiLgwS0cE/5r0kcySZQaJqMJgA6
+         6yVrGpilLZd5TWN2qG7KCcu+lQVaCw3sV44TaqkonroNJ+tkVwSYV3/NpVN8Yodna92e
+         076dmtMB8YmJZTIvosEYfDXjg/MV3bOJKGEILYqTDZajX27MjtmBy15Z/NppcRvtihwr
+         NreQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686214827; x=1688806827;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PbS7bAo8RzhYC9F95C74bwc0WgK8qcH9Nsq7/PhrBD4=;
+        b=k7/aIpk3RyPtcZUKtYxpFNgSA6gsLyRDmUhu2K4XVs4yvk1tlUQ+5jYSG8YmsuYjTU
+         sK02tm9xbLQtkwIdB+qJP37eIp/+y2Z1Pricekh7PobLqT7utgvVL4Ac1BvJL9lwXR4O
+         vGtCmrvA4Gv6sNVifWazzf/qpAgJNTOoqOCMjwUVuG/j71eherEpvtP9WhlsMkB0k5nq
+         NC+MuN/f8Hd7nwNGpPBb/0AK9292skJwwYGrJniR51k7SdELxqbfA3zRTpVgdDRZLiCM
+         hxMZ0BFVutpaNcp9fFZQx2ICukShhunNgXSXp0iY2PNMP6O7kvpg1HL4vNVpu1OD88Ll
+         HTOA==
+X-Gm-Message-State: AC+VfDxukljA4En75o2kITZO+K470bj8/I9Q7wACLP3SDosFosz8Iknr
+        p2V8ZrjaZHatUhbsju770PgLYLcUSER720/P5MHU6XMvFEMWaSTu
+X-Google-Smtp-Source: ACHHUZ501BMS8jGFf40yhOCCWQ7oQe9q9IAK69pq3af0USYacTgEH7+htpKND7lXGWncLPF2uc5MIREhy7QU/PtZwqQ=
+X-Received: by 2002:a81:5d05:0:b0:55a:18e2:cdf9 with SMTP id
+ r5-20020a815d05000000b0055a18e2cdf9mr9070544ywb.49.1686214827585; Thu, 08 Jun
+ 2023 02:00:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9C8DWiqLhxnEVGl0Q8LGS2q6QT_vF4e5
-X-Proofpoint-ORIG-GUID: 9C8DWiqLhxnEVGl0Q8LGS2q6QT_vF4e5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-08_05,2023-06-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- mlxscore=0 mlxlogscore=895 lowpriorityscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306080076
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-12-ulf.hansson@linaro.org> <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
+In-Reply-To: <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jun 2023 10:59:51 +0200
+Message-ID: <CAPDyKFodvtRE5DHeMSSG5o4iJw07TjFHSeAoTuugH9OAmE8bMQ@mail.gmail.com>
+Subject: Re: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Mark the idle state as disabled using CPUIDLE_FLAG_OFF when
-idle-state-disabled property is present.
+On Thu, 8 Jun 2023 at 07:29, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 07-06-23, 14:46, Ulf Hansson wrote:
+> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > index 954c94865cf5..0e6ee2980f88 100644
+> > --- a/drivers/opp/core.c
+> > +++ b/drivers/opp/core.c
+> > @@ -1921,8 +1921,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+> >   * _opp_add_v1() - Allocate a OPP based on v1 bindings.
+> >   * @opp_table:       OPP table
+> >   * @dev:     device for which we do this operation
+> > - * @freq:    Frequency in Hz for this OPP
+> > - * @u_volt:  Voltage in uVolts for this OPP
+> > + * @opp:     The OPP to add
+> >   * @dynamic: Dynamically added OPPs.
+> >   *
+> >   * This function adds an opp definition to the opp table and returns status.
+> > @@ -1940,10 +1939,10 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+> >   * -ENOMEM   Memory allocation failure
+> >   */
+> >  int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+> > -             unsigned long freq, long u_volt, bool dynamic)
+> > +             struct dev_pm_opp_data *opp, bool dynamic)
+>
+> The name `opp` is mostly used for instances of `struct dev_pm_opp`. Can we use a
+> different name here please for the data ?
 
-Such idle states stays disabled and can be enabled using below command.
+Certainly, what do you suggest?
 
-echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>
+> > +/**
+> > + * dev_pm_opp_add()  - Add an OPP table from a table definitions
+> > + * @dev:     device for which we do this operation
+> > + * @freq:    Frequency in Hz for this OPP
+> > + * @u_volt:  Voltage in uVolts for this OPP
+> > + *
+> > + * This function adds an opp definition to the opp table and returns status.
+> > + * The opp is made available by default and it can be controlled using
+> > + * dev_pm_opp_enable/disable functions.
+> > + *
+> > + * Return:
+> > + * 0         On success OR
+> > + *           Duplicate OPPs (both freq and volt are same) and opp->available
+> > + * -EEXIST   Freq are same and volt are different OR
+> > + *           Duplicate OPPs (both freq and volt are same) and !opp->available
+> > + * -ENOMEM   Memory allocation failure
+> > + */
+> > +int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+>
+> Maybe move this to include/linux/pm_opp.h and mark it static inline and get rid
+> of documentation too.
 
-Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
----
- drivers/cpuidle/dt_idle_states.c | 3 +++
- 1 file changed, 3 insertions(+)
+Good idea!
 
-diff --git a/drivers/cpuidle/dt_idle_states.c b/drivers/cpuidle/dt_idle_states.c
-index 12fec92a85fd..3d50181512a3 100644
---- a/drivers/cpuidle/dt_idle_states.c
-+++ b/drivers/cpuidle/dt_idle_states.c
-@@ -79,6 +79,9 @@ static int init_state_node(struct cpuidle_state *idle_state,
- 	idle_state->flags = CPUIDLE_FLAG_RCU_IDLE;
- 	if (of_property_read_bool(state_node, "local-timer-stop"))
- 		idle_state->flags |= CPUIDLE_FLAG_TIMER_STOP;
-+
-+	if (of_property_read_bool(state_node, "idle-state-disabled"))
-+		idle_state->flags |= CPUIDLE_FLAG_OFF;
- 	/*
- 	 * TODO:
- 	 *	replace with kstrdup and pointer assignment when name
--- 
-2.17.1
+>
+> > +{
+> > +     struct dev_pm_opp_data opp;
+> > +
+> > +     memset(&opp, 0, sizeof(opp));
+>
+> What about
+>         struct dev_pm_opp_data data = {0};
+>
+> I think it is guaranteed that all the fields will be 0 now, not the padding of
+> course, but we don't care about that here.
+>
+> > +     opp.freq = freq;
+> > +     opp.u_volt = u_volt;
+>
+> Or maybe just
+>
+>         struct dev_pm_opp_data data = {
+>                 .freq = freq,
+>                 .u_volt = u_volt,
+>         };
+>
+> Rest must be 0.
 
+Good suggestions both, I will change to whatever is best suitable!
+
+Thanks for reviewing!
+
+Kind regards
+Uffe
