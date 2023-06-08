@@ -2,113 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8B1727BC1
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E98E727BF3
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbjFHJoh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 05:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
+        id S234268AbjFHJyZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 05:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236043AbjFHJog (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:44:36 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279D22719
-        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 02:44:24 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30c55d2b9f3so278071f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 02:44:24 -0700 (PDT)
+        with ESMTP id S235017AbjFHJyZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:54:25 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C885E62
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 02:54:24 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba8afcc82c0so470570276.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 02:54:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20221208.gappssmtp.com; s=20221208; t=1686217463; x=1688809463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7UW1P1+u4z8C1yYHhcCc7D6z205h5xRpA4Pis0U9UMY=;
-        b=yaY1SeETpr1491wAArwoEz9AJZvZ5z5Oelfq8FTwZjv5Pt/tYo5/JbhJmlnsdXccgT
-         rV+izm1qoxfwqsvCOevTNpa9AXiPp34leL/teWpFI8DnWj2gT9oTkJf5RM1JedYJsqOR
-         dOTz2gvKJANj4eEOoND3rs/e3YQmKzzRMznHOfQHFfxuyaer9zt098pnWbKtUtWgrjpL
-         rngkJTI/oyNl1h5w6WjYslic/vZHxQYsDYNvUly4Suef2mFO3KaGuI4pOX3o87LWbC1v
-         fP5qRuJh7sd0u5OqO4m/B3exo8izpU2YK4CbQWdtPhbZm6I3/7vshaMygPH9B4aEMU3h
-         0vHQ==
+        d=linaro.org; s=google; t=1686218063; x=1688810063;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o0ba9DNkSY4/DucgUWvAeaHUG2A2JOR/Yvq1EwvyCGo=;
+        b=PvrqaK1/kX1GZWYJfA7CicJo63zMlQ6/mCMec4FvBwqcpI23YdywuXvaYywxpXoVAt
+         fh+jOZqYZ/YwptXtLy+cR0dVNTruCXj0dQMldKBD49hQ4ZyxPkxkMkVMp5vJhV4kB58V
+         X2nOulJrWA/WpAOmg8EmidVRjaUHdL6w7vd1al+jmlqHcALAlFpXlxIiyuoLVI7oHPjD
+         dBK82ifo17E+pFRt4GbQN4CA7jy75ipE922hLl7V2V4Xcg0eNlwSgv673SEwq9YOEKDw
+         nI/U9R2Rwj/XvfEKcaBw7f+RlemPwY4n+uCHUpf2LvxIG7PHX9ZfP4RYnhxtz9ClrZMK
+         yVvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686217463; x=1688809463;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7UW1P1+u4z8C1yYHhcCc7D6z205h5xRpA4Pis0U9UMY=;
-        b=VkosC7LObckRRMgKFhb4BOzg/BAQ/dN2D4OqH64IpGvHNFCNKv7pH4rPHzz3xsoyzA
-         nxL+GK+eQtOKBEyZXoO4MaJBX+R6bPc/fi1YRoxk+JMb/kT8djM79SK3pI9Zfy35z2m7
-         p3ebMbbwousRCFKt2N7mqn0CyRS59V1Ipqpp3h1SX8IJrHp9Qpa0mOOdeDQ9uAYshIMk
-         Ab2f4iGdgOBK1LOJsMKKhgOZ58pIRgL9W1+tSB9JkTlflktUEjINSqvKVV9Aeagq7k6S
-         /Jztouoxiz5KEHOQ+glg1z86FkaSxXfbjUIHnL/873gpvfCHGX86f41AQmbzm8x/i1t/
-         5uYA==
-X-Gm-Message-State: AC+VfDwQLJP57vos2wDnmhD/tybo9hq6inIPTDBnugcnZFeJaRcYrM4r
-        w9TsvuCgzGYGGfprZzIEorK+Gg==
-X-Google-Smtp-Source: ACHHUZ55+QiuKZDDVF2xerotwpMLkKmO7qQkxSxt7AJ+yBOXmT5EW03OqeXuJJ7vWtahwa0aPclqwA==
-X-Received: by 2002:adf:e60c:0:b0:30a:e3da:efe5 with SMTP id p12-20020adfe60c000000b0030ae3daefe5mr6178509wrm.32.1686217463182;
-        Thu, 08 Jun 2023 02:44:23 -0700 (PDT)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id c17-20020adffb51000000b00307bc4e39e5sm1027878wrs.117.2023.06.08.02.44.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 02:44:22 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 10:44:20 +0100
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Richard Weinberger <richard@nod.at>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@suse.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-btrfs@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 06/31] cdrom: remove the unused mode argument to
- cdrom_release
-Message-ID: <ZIGi9GMGeKruSrrW@equinox>
-References: <20230606073950.225178-1-hch@lst.de>
- <20230606073950.225178-7-hch@lst.de>
- <ZH+6qd1W75G49P7p@equinox>
- <20230608084129.GA14689@lst.de>
- <ZIGVn9E9ME26V0Gn@equinox>
- <20230608090444.GA15075@lst.de>
+        d=1e100.net; s=20221208; t=1686218063; x=1688810063;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o0ba9DNkSY4/DucgUWvAeaHUG2A2JOR/Yvq1EwvyCGo=;
+        b=OCvZfjklTRja59K/1tbWZ3E2VjgPVm8BuchNH9cJJo6kyLdW2Zmma2x8TxlgR+WH99
+         lr03ED8UX4rEYC5my8Qt81AC/Ys0u1BkY0HACPeNaYjvq8Kclb2J7+pWAL5kMHutSdkK
+         gRy5/JBamHg7i40CGVFQkrsQK7w6kJunyDQhnROzl3bL0BdvCxoIyNctATXPprZlgPbm
+         fs4PkH3OgF95Ygt8KfWdnf1QVBD8cj83QoAVN7KK7PfNYHHYApg7h7SgNlCLo/Jk2C/G
+         je3pG+WMuXO8V6NDS9RNjNeINgEmRyZbJm8BsuAuYomwMg+lullW6Cpktj5aH5N+EntO
+         W7eQ==
+X-Gm-Message-State: AC+VfDyVMu+OxLApDA9/lR/p6wL4BRnGt1ikat/mmg7CrBWGwe7+DEh2
+        fkzLhObcbHDSAUaMpEODnh6M84EE3aG+l6lW6FQiBg==
+X-Google-Smtp-Source: ACHHUZ5a1sWdYHtcKgG2yKf8VeE8kNtZPQc7G/LZ+GLdMKmpWFnaDoLh/zKdSQaBoJ7nTto8hrjlXqozJ7J92leT9lo=
+X-Received: by 2002:a81:86c7:0:b0:561:429e:acd2 with SMTP id
+ w190-20020a8186c7000000b00561429eacd2mr10650706ywf.35.1686218063254; Thu, 08
+ Jun 2023 02:54:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608090444.GA15075@lst.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230607124628.157465-1-ulf.hansson@linaro.org> <ZICXjExmCRwcQ3BA@e120937-lin>
+In-Reply-To: <ZICXjExmCRwcQ3BA@e120937-lin>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jun 2023 11:53:47 +0200
+Message-ID: <CAPDyKFoQv1wue122umZo4W3YNTQb4ic8bnJq_nrWZ7bu8dzKUQ@mail.gmail.com>
+Subject: Re: [PATCH 00/16] arm_scmi/opp/dvfs: Add generic performance scaling support
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 11:04:44AM +0200, Christoph Hellwig wrote:
-> On Thu, Jun 08, 2023 at 09:47:27AM +0100, Phillip Potter wrote:
-> > Yes indeed - I was under the impression it was appropriate for a
-> > maintainer to signal their approval of a patch to maintained code using
-> > a Signed-off-by tag due to their involvement in the submission process?
-> > Apologies if I've got this wrong, happy to send Reviewed-bys by all
-> > means.
-> 
-> Signed-off-by is for the chain that the patches pass through.  You add
-> it when you apply or forward the patch.  Just give me a Reviewed-by
-> tag and say it shold apply to patches 1 to 6 and I'll add it.
+On Wed, 7 Jun 2023 at 16:43, Cristian Marussi <cristian.marussi@arm.com> wrote:
+>
+> On Wed, Jun 07, 2023 at 02:46:12PM +0200, Ulf Hansson wrote:
+> > The current SCMI performance scaling support is limited to cpufreq. This series
+> > extends the support, so it can be used for all kind of devices and not only for
+> > CPUs.
+> >
+> > The changes are spread over a couple of different subsystems, although the
+> > changes that affects the other subsystems than the arm_scmi directory are
+> > mostly smaller. The series is based upon v6.4-rc5. That said, let's figure out
+> > on how to best move forward with this. I am of course happy to help in any way.
+> >
+> > Note that, so far this is only be tested on the Qemu virt platform with Optee
+> > running an SCMI server. If you want some more details about my test setup, I am
+> > certainly open to share that with you!
+> >
+> > Looking forward to get your feedback!
+> >
+>
+> Hi Ulf,
+>
+> thanks for this first of all.
+>
+> I'll have a look at this properly in the next weeks, in the meantime
+> just a small minor remark after having had a quick look.
+>
+> You expose a few new perf_ops to fit your needs and in fact PERF was
+> still not exposing those data for (apparent) lack of users needing
+> those. (and/or historical reason I think)
+>
+> My concern is that this would lead to a growing number of ops as soon as
+> more data will be needed by future users; indeed other protocols do
+> expose more data but use a different approach: instead of custom ops
+> they let the user access a common static info structure like
+>
+>
+> +       int (*num_domains_get)(const struct scmi_protocol_handle *ph);
+> +       const struct scmi_perf_dom_info __must_check *(*info_get)
+> +               (const struct scmi_protocol_handle *ph, u32 domain);
+>
+> and expose the related common info struct in scmi_protocol.h too.
+> Another reason to stick to this aproach would be consistency with other
+> protos (even though I think PERF is not the only lacking info_get)
+>
+> Now, since really there was already a hidden user for this perf data
+> (that would be me :P ... in terms of an unpublished SCMI test-driver),
+> I happen to have a tested patch that just expose those 2 above ops and
+> exports scmi_perf_dom_info and related structures to scmi_protocol.h
+>
+> If you (and Sudeep) agree with this approach of limiting the number of
+> exposed ops in favour of sharing upfront some static info data, I can
+> quickly cleanup and post this patch for you to pick it up in your next
+> iteration.
 
-Thanks for the guidance. Please apply the following to the block patch
-(1) and the CD-ROM patches (2-6) of your series, all looks good to me:
+I think your suggestions make perfect sense to me too.
 
-Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
+While I was adding the new ops in scmi_perf_proto_ops, I was merely
+trying to get inspiration from the scmi_power_proto_ops, it seems like
+those need an update too.
 
-Regards,
-Phil
+Although, there is no need for you to send a patch for "perf" at this
+moment - as this piece of code is easy for me to put together myself.
+I will simply replace a few of the patches in the series with a new
+one, no problem at all.
+
+>
+> (really I'd have more conversion of this kind also for other remaining
+>  protos but these are unrelated to your series and I'd post it later)
+
+Yes, that can be handled separately, and I leave that for you to manage.
+
+Kind regards
+Uffe
