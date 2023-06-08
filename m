@@ -2,87 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E81772A707
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 02:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DA272862F
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 19:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjFJAab convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 9 Jun 2023 20:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
+        id S236984AbjFHRTq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 13:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjFJAaa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 20:30:30 -0400
-X-Greylist: delayed 996 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 09 Jun 2023 17:30:29 PDT
-Received: from es.pcb.gov.my (es.pcb.gov.my [202.75.7.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC43EBF
-        for <linux-pm@vger.kernel.org>; Fri,  9 Jun 2023 17:30:29 -0700 (PDT)
-X-ASG-Debug-ID: 1686355197-1488a971c0069f000e-MQbzy6
-Received: from mail.pcb.gov.my (mail.pcb.gov.my [10.28.173.47]) by es.pcb.gov.my with ESMTP id APUBZpuymQ6NgdWl for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 08:13:11 +0800 (+08)
-X-Barracuda-Envelope-From: herdayu@pcb.gov.my
-Received: from [193.169.254.61] (193.169.254.61) by EXCHANGE01.BPA.pcb.gov.my
- (10.28.173.47) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.721.2; Fri, 9 Jun 2023
- 01:18:55 +0800
-Reply-To: <alicewalt63@gmail.com>
-X-Barracuda-Effective-Source-IP: UNKNOWN[193.169.254.61]
-X-Barracuda-Apparent-Source-IP: 193.169.254.61
-From:   Alice Walton <herdayu@pcb.gov.my>
-To:     <linux-pm@vger.kernel.org>
-Subject: =?UTF-8?B?xI1lc3RpdGFt?=
-Date:   Thu, 8 Jun 2023 10:18:48 -0700
-X-ASG-Orig-Subj: =?UTF-8?B?xI1lc3RpdGFt?=
-Message-ID: <20230608101848.D7D5BD9231E56953@pcb.gov.my>
+        with ESMTP id S236934AbjFHRTo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 13:19:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A762733;
+        Thu,  8 Jun 2023 10:19:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D19ED64FCD;
+        Thu,  8 Jun 2023 17:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DFDFC433EF;
+        Thu,  8 Jun 2023 17:19:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686244779;
+        bh=jVlKyMFufGCHlZkmMNuunClFNKP+T7ofi0jXzgtrTD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=doce8hIRJB6dZQNaJxkYXuCr8PvIPHT5XfQXwRvtsRKUrt6mSENxR9smISl9Qts37
+         YoWdffdY0CRrwSqxAoYTby1eMN2kKHmepYtgzCU5z/5wXxH7FsvqCmH3lbZ3hP7C/+
+         DtBDFV7iKL7sa3qqtytcNN74IuWeIvED0beA2QQ0pED0JECCcne+y9MIOWPa2D6zEf
+         SJg+T/ZOJvm7kjhWCnvvxkWZFB7GbU+9nTqa+kYhFM+CY1q+PJse7qam2riRrUVyMX
+         6k82RPM+ce7LT8A7fR0fFK0plbvuS+DQg7YrsnFMwFLOHSPEC4bfIkPja/ixTE/y4U
+         twSDGNiDululA==
+Date:   Thu, 8 Jun 2023 18:19:32 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Jakob Hauser <jahau@rocketmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH v6 00/10 RESEND] Add RT5033 charger device driver
+Message-ID: <20230608171932.GG3572061@google.com>
+References: <cover.1684182964.git.jahau.ref@rocketmail.com>
+ <cover.1684182964.git.jahau@rocketmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8BIT
-X-ClientProxiedBy: EXCHANGE01.BPA.pcb.gov.my (10.28.173.47) To
- EXCHANGE01.BPA.pcb.gov.my (10.28.173.47)
-X-Barracuda-Connect: mail.pcb.gov.my[10.28.173.47]
-X-Barracuda-Start-Time: 1686355986
-X-Barracuda-URL: https://10.28.173.25:443/cgi-mod/mark.cgi
-X-Barracuda-License: Expired
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at pcb.gov.my
-X-Barracuda-Scan-Msg-Size: 570
-X-Spam-Status: Yes, score=7.4 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,
-        MONEY_FREEMAIL_REPTO,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [193.169.254.61 listed in zen.spamhaus.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [alicewalt63[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.7 SPF_SOFTFAIL SPF: sender does not match SPF record (softfail)
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.2 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1684182964.git.jahau@rocketmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-čestitam,
+On Mon, 15 May 2023, Jakob Hauser wrote:
 
-      Vaša e-pošta osvojila je 5.000.000,00 USD od strane Alice 
-Walton 2023 humanitarnog programa podrške donacijama. 
-Kontaktirajte nas za više pojedinosti o tome kako možete 
-zatražiti svoj donacijski fond.
+> This patchset adds the charger driver "rt5033-charger". It is part of the
+> multifunction device rt5033. The patchset is based on an older version by
+> Beomho Seo of March 2015. For more information on the history and setup of
+> the patchset see the cover sheet of version v1, there is a link further down
+> below the changelog.
+> 
+> RESEND: Sorry for spamming. The first try of sending v6 got interrupted and
+> was split into two threads on the lore list. Therefore sending it again.
+> 
+> Changes in v6:
+>  - Patch 5: In function rt5033_charger_probe() after
+>    calling rt5033_charger_dt_init() replaced the return value from "-ENODEV"
+>    to "PTR_ERR(charger->chg)", as suggested by Christophe.
+>  - Patch 9: Changed the patch from adding "power-supplies: true" to replacing
+>    "additionalProperties: false" by "unevaluatedProperties: false", as
+>    suggested by Krzysztof.
+> 
+> v1: https://lore.kernel.org/linux-pm/cover.1677620677.git.jahau@rocketmail.com/T/#t
+> v2: https://lore.kernel.org/linux-pm/cover.1681646904.git.jahau@rocketmail.com/T/#t
+> v3: https://lore.kernel.org/linux-pm/cover.1682636929.git.jahau@rocketmail.com/T/#t
+> v4: https://lore.kernel.org/linux-pm/20230506155435.3005-1-jahau@rocketmail.com/T/#t
+> v5: https://lore.kernel.org/linux-pm/20230514123130.41172-1-jahau@rocketmail.com/T/#t
+> 
+> The result of the patchset v6 can be seen at:
+> https://github.com/Jakko3/linux/blob/rt5033-charger_v6/drivers/power/supply/rt5033_charger.c
+> 
+> Jakob Hauser (9):
+>   mfd: rt5033: Fix chip revision readout
+>   mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
+>   mfd: rt5033: Apply preparatory changes before adding rt5033-charger
+>     driver
+>   power: supply: rt5033_charger: Add RT5033 charger device driver
+>   power: supply: rt5033_charger: Add cable detection and USB OTG supply
+>   power: supply: rt5033_battery: Move struct rt5033_battery to battery
+>     driver
+>   power: supply: rt5033_battery: Adopt status property from charger
+>   dt-bindings: power: supply: rt5033-battery: Apply
+>     unevaluatedProperties
+>   dt-bindings: Add rt5033 mfd, regulator and charger
+> 
+> Stephan Gerhold (1):
+>   mfd: rt5033: Drop rt5033-battery sub-device
+> 
+>  .../bindings/mfd/richtek,rt5033.yaml          | 138 ++++
+>  .../power/supply/richtek,rt5033-battery.yaml  |   2 +-
+>  .../power/supply/richtek,rt5033-charger.yaml  |  65 ++
+>  drivers/mfd/rt5033.c                          |   8 +-
+>  drivers/power/supply/Kconfig                  |   8 +
+>  drivers/power/supply/Makefile                 |   1 +
+>  drivers/power/supply/rt5033_battery.c         |  38 +-
+>  drivers/power/supply/rt5033_charger.c         | 744 ++++++++++++++++++
+>  include/linux/mfd/rt5033-private.h            |  64 +-
+>  include/linux/mfd/rt5033.h                    |  24 -
+>  10 files changed, 1034 insertions(+), 58 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+>  create mode 100644 drivers/power/supply/rt5033_charger.c
 
-Hvala i Bog blagoslovio
-Zaklada Alice Walton
-=========================================
-Congratulation,
+All applied.  Sent for build testing.
 
-     Your email has won $5,000,000.00 USD by Alice Walton 2023 
-humanitarian donation support program. Contact us for more 
-details on how you can claim your donation fund.
+I'll follow-up with a PR soon.
 
-Thanks And God Bless
-Alice Walton Foundation
+-- 
+Lee Jones [李琼斯]
