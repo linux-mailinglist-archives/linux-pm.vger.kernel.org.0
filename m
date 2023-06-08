@@ -2,88 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658F6727B9E
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8B1727BC1
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbjFHJku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 05:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S236062AbjFHJoh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 05:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234587AbjFHJkt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:40:49 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C572210B
-        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 02:40:45 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-565c9109167so3455757b3.2
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 02:40:45 -0700 (PDT)
+        with ESMTP id S236043AbjFHJog (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:44:36 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279D22719
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 02:44:24 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-30c55d2b9f3so278071f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 02:44:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686217244; x=1688809244;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kT/4ERLhvhoaB2/3pcmd2QrnNqXZyt9hB0faS7bbTAE=;
-        b=JQWwvt4SW0ZHoc1UTQ/dMF3PvHa7Dt6eir0xAu8c0vS081G2qf9Jws1/lY9qbiTJX2
-         +gWjMQJs56riC/BRdtictohM2wJ9OLu6FgloOIQzwed62coe2jwySn/gJ8wBwnlsw106
-         ZUq4Dy1gJGCJGxkkTgNtdc+JzbCRwKCtFENp9CJQDmwBB4EY6eKqoEVhMti1xqwaG3xc
-         Gu76Ghco31hYIpNU0lpM5DL+hBgSua3N60APuXes4eMGg9ESPuO+pJpih0ahKgA0ERBs
-         7mJAnCzPyee6l+xMlfDGgfxiOuROO3/8Vwat/iEb9PBtYGI8LxiluEowXYW9rVJdSbL4
-         nvOA==
+        d=philpotter-co-uk.20221208.gappssmtp.com; s=20221208; t=1686217463; x=1688809463;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7UW1P1+u4z8C1yYHhcCc7D6z205h5xRpA4Pis0U9UMY=;
+        b=yaY1SeETpr1491wAArwoEz9AJZvZ5z5Oelfq8FTwZjv5Pt/tYo5/JbhJmlnsdXccgT
+         rV+izm1qoxfwqsvCOevTNpa9AXiPp34leL/teWpFI8DnWj2gT9oTkJf5RM1JedYJsqOR
+         dOTz2gvKJANj4eEOoND3rs/e3YQmKzzRMznHOfQHFfxuyaer9zt098pnWbKtUtWgrjpL
+         rngkJTI/oyNl1h5w6WjYslic/vZHxQYsDYNvUly4Suef2mFO3KaGuI4pOX3o87LWbC1v
+         fP5qRuJh7sd0u5OqO4m/B3exo8izpU2YK4CbQWdtPhbZm6I3/7vshaMygPH9B4aEMU3h
+         0vHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686217244; x=1688809244;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kT/4ERLhvhoaB2/3pcmd2QrnNqXZyt9hB0faS7bbTAE=;
-        b=LoJps6+EfD31WxY4haRQ7t7XbRwtPQVin9NiFxrHKg43ERhmCg+BrxVEy2hVPwuGlP
-         QO0rVEfOhm4G+sj+h5Elp13ZuuPRJJM7QebXiAjEJ2e37xmI9OZhMj15sF8xVn7Wmhss
-         pOpjKLPCm0pdM/Ja+xaGAImWCaucTqr2ztnypKJ3OH5nm3IwXT2bHG0zwy/R+8lTFqLv
-         bAhSv7/f69x7qC8E7iiP+0+ko4m/27wlIPfHZTC2bueFfACZhJsK4dS67F5r7wrz1FEr
-         gTX10/4hgsIOqXQfTB+KTsu8CyrpgFDJ2fUhJbN7y4bdhOu0CehmSleswEQ1s3pc/wYt
-         BEyw==
-X-Gm-Message-State: AC+VfDztG1tU3SoJLABQYtMhORiP3NxsPDdn2a9OUh84y89bp+Hm83oO
-        QGOPbu61ch2T0pTOWMOd4WanGJ09pkh+Vtpg4wwmsQ==
-X-Google-Smtp-Source: ACHHUZ4KvRi/dHX0SUu44hlf/6b3eJqA97g2u+OP4mTyY+DaM/novQI/e+r7uKvE/9LaO2LJ5i5YWSE9L936C+LApdA=
-X-Received: by 2002:a81:750b:0:b0:568:a55a:47eb with SMTP id
- q11-20020a81750b000000b00568a55a47ebmr7861504ywc.7.1686217244551; Thu, 08 Jun
- 2023 02:40:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686217463; x=1688809463;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7UW1P1+u4z8C1yYHhcCc7D6z205h5xRpA4Pis0U9UMY=;
+        b=VkosC7LObckRRMgKFhb4BOzg/BAQ/dN2D4OqH64IpGvHNFCNKv7pH4rPHzz3xsoyzA
+         nxL+GK+eQtOKBEyZXoO4MaJBX+R6bPc/fi1YRoxk+JMb/kT8djM79SK3pI9Zfy35z2m7
+         p3ebMbbwousRCFKt2N7mqn0CyRS59V1Ipqpp3h1SX8IJrHp9Qpa0mOOdeDQ9uAYshIMk
+         Ab2f4iGdgOBK1LOJsMKKhgOZ58pIRgL9W1+tSB9JkTlflktUEjINSqvKVV9Aeagq7k6S
+         /Jztouoxiz5KEHOQ+glg1z86FkaSxXfbjUIHnL/873gpvfCHGX86f41AQmbzm8x/i1t/
+         5uYA==
+X-Gm-Message-State: AC+VfDwQLJP57vos2wDnmhD/tybo9hq6inIPTDBnugcnZFeJaRcYrM4r
+        w9TsvuCgzGYGGfprZzIEorK+Gg==
+X-Google-Smtp-Source: ACHHUZ55+QiuKZDDVF2xerotwpMLkKmO7qQkxSxt7AJ+yBOXmT5EW03OqeXuJJ7vWtahwa0aPclqwA==
+X-Received: by 2002:adf:e60c:0:b0:30a:e3da:efe5 with SMTP id p12-20020adfe60c000000b0030ae3daefe5mr6178509wrm.32.1686217463182;
+        Thu, 08 Jun 2023 02:44:23 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id c17-20020adffb51000000b00307bc4e39e5sm1027878wrs.117.2023.06.08.02.44.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 02:44:22 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 10:44:20 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Richard Weinberger <richard@nod.at>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>, Coly Li <colyli@suse.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-btrfs@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 06/31] cdrom: remove the unused mode argument to
+ cdrom_release
+Message-ID: <ZIGi9GMGeKruSrrW@equinox>
+References: <20230606073950.225178-1-hch@lst.de>
+ <20230606073950.225178-7-hch@lst.de>
+ <ZH+6qd1W75G49P7p@equinox>
+ <20230608084129.GA14689@lst.de>
+ <ZIGVn9E9ME26V0Gn@equinox>
+ <20230608090444.GA15075@lst.de>
 MIME-Version: 1.0
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-12-ulf.hansson@linaro.org> <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
- <CAPDyKFodvtRE5DHeMSSG5o4iJw07TjFHSeAoTuugH9OAmE8bMQ@mail.gmail.com> <20230608092253.yeuzlz5bn2iqihuk@vireshk-i7>
-In-Reply-To: <20230608092253.yeuzlz5bn2iqihuk@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 8 Jun 2023 11:40:08 +0200
-Message-ID: <CAPDyKFrWCOinNPC_F1+D566j_a=-7d+DAcvO5qH3Sq_TX4dx0A@mail.gmail.com>
-Subject: Re: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more flexibility
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608090444.GA15075@lst.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 8 Jun 2023 at 11:22, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 08-06-23, 10:59, Ulf Hansson wrote:
-> > Certainly, what do you suggest?
->
-> `data` :)
+On Thu, Jun 08, 2023 at 11:04:44AM +0200, Christoph Hellwig wrote:
+> On Thu, Jun 08, 2023 at 09:47:27AM +0100, Phillip Potter wrote:
+> > Yes indeed - I was under the impression it was appropriate for a
+> > maintainer to signal their approval of a patch to maintained code using
+> > a Signed-off-by tag due to their involvement in the submission process?
+> > Apologies if I've got this wrong, happy to send Reviewed-bys by all
+> > means.
+> 
+> Signed-off-by is for the chain that the patches pass through.  You add
+> it when you apply or forward the patch.  Just give me a Reviewed-by
+> tag and say it shold apply to patches 1 to 6 and I'll add it.
 
-I thought you meant renaming the struct. :-)
+Thanks for the guidance. Please apply the following to the block patch
+(1) and the CD-ROM patches (2-6) of your series, all looks good to me:
 
-Yes, I move to data instead!
+Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
 
-Uffe
+Regards,
+Phil
