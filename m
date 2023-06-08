@@ -2,73 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15215727692
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 07:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900F27276AC
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 07:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbjFHFSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 01:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35158 "EHLO
+        id S234342AbjFHF37 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 01:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233519AbjFHFSV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 01:18:21 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD3826B5
-        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 22:18:20 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-38ede2e0e69so161401b6e.2
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 22:18:20 -0700 (PDT)
+        with ESMTP id S231320AbjFHF36 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 01:29:58 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F420526B6
+        for <linux-pm@vger.kernel.org>; Wed,  7 Jun 2023 22:29:56 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-33b1e83e204so401975ab.1
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jun 2023 22:29:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686201499; x=1688793499;
+        d=linaro.org; s=google; t=1686202196; x=1688794196;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cero/nNmUyyTgbddJ18ROOGs9bd2i20p7IPIh5GwALY=;
-        b=sJAzPiDAKc2OSCHZVzx3H0wpsmp/FJHYaIIEZAgwY1kpL4alxyP3pc7oBnw4k/dz+V
-         NWTEyv1Jy+Et3u3kOB0JZexCi/0r6WUvAE4vlpfSrCJzOvvgvYuf7MURiLKlL998U8LB
-         PykSgw36P4KLWwnlUwneNMoJDVqyQQFrubVe7J1nW1hODvl/+qOKlMuVaUcowBj3o7SO
-         b3MyLJprq2jFSmqH5p8zgE+8vrf7TLtg1T4I2POirHBL/pOvtLavAFZPVQUGM0LHWzRP
-         Fhww+p+MbEl4yBZBYE2zxtLh3R6821S3ZW0x81figdxQbBPJknY6vW54gsQ80khr3gEa
-         ADDw==
+        bh=DE7OrFeNWC7NT42z/fRgG9LWd8ypqqUWEnKJtZerNBA=;
+        b=uZ/e30b1I3gC7oNBD9ef+9VYhMIXL4LiNnJraXSUHTeFWpER9LTP5EAjtj0ylaZdxd
+         uZTBI/sndU0Xr921yVKqdP0aIl33kJqFKnuIaRZ97zn6/UQch8HEPOUt1PmZJYc7Q+pJ
+         gfl+PGnIw9j6zc0vUxgzpFSsUFQ1BcsdkseRTExFmWsIgu22DSsu94ZFs2u5oxboMftz
+         YTUoqmE5jLXmAhKm6zMbVaE4IYi52QitHthsLJAQcpn0M3/oPvTquX+ZdsoW5rfqPPp4
+         RNpMEvJ2A+iB6b63Ge4kMF+v1BvQTqDn4dqR5TPg9hAe3H5ak2uA9SUKSRbs6128gsWN
+         vZww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686201499; x=1688793499;
+        d=1e100.net; s=20221208; t=1686202196; x=1688794196;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cero/nNmUyyTgbddJ18ROOGs9bd2i20p7IPIh5GwALY=;
-        b=iY4A60hBFL4lz4QCskQBR1RD6AcRwE1X3f++3wKFpcz095LYdSe/MbOcKH50DARYxN
-         NKh17yRi79itcQfx72peNVthNwh0LgCLXNCyYQdwWUE9w56zkXGp7ulrc79OEILZPVZc
-         jH/crgCNrYUc/ZwgJyRICS4SuBJegMNgM8wpfNvsqHHKLqFO8YmaL7RtS7aHynEMSy3y
-         +aLZ2o/2nC7O9ExH1XeTgrvnAnvdNYS92/wtSMfQk+YrJJUStFB9InfH3j6x5ohY93dd
-         JuFdDFdAqI9aMxJnIj/5kwov5HaBPdevTqaLBoRwEt94SZ0SynxOU7LxP/CP1s9FPCOj
-         F1+g==
-X-Gm-Message-State: AC+VfDyneaQ655Fft1qYdxFjA7xg7TZk6+EJe80SaJww+04EZpZitmiY
-        dCIjqoGAISumkGckkAUJhXjfSw==
-X-Google-Smtp-Source: ACHHUZ5rn21cbWOU6lHWA9Ma4Ci1eR/2PI2FFfCu7VnVX/7t5MXa1P6VbXK9vLrFVhvjiq4AU48z4Q==
-X-Received: by 2002:a05:6808:a96:b0:39a:babe:a7e with SMTP id q22-20020a0568080a9600b0039ababe0a7emr4581980oij.35.1686201499410;
-        Wed, 07 Jun 2023 22:18:19 -0700 (PDT)
+        bh=DE7OrFeNWC7NT42z/fRgG9LWd8ypqqUWEnKJtZerNBA=;
+        b=jz9hwKsMBanIBRwZ0LVEdndTsFWL2HEX/OZJZr7Hw+5QL3IG0bfNnW9NXP85Uq0K/i
+         0PzYmMg6ei33gns0rap8H/8wxgjD17SljPazLDpZZneIdghzfGvig0R5FezouK1/pZGf
+         T6oXYCHy4XG0Ywb9kno2Og0ggwmXAIC4wU9q3vVw05BRPHkKB0AQ9FZn1u4DkCbREWIV
+         aHC8pr9bUQR4eQ3GMOFNf3mgJcDJclIQdBt93Ca6DTvWG2IVFU5SOXllchMBy3Pl7G/p
+         sqpQtJe7Yi6uW1pD58dacdDS6Zuek1HBh1m0cK6Gx1Uf3mnwiYbUsUKP+OwZwcvb55wA
+         bHHA==
+X-Gm-Message-State: AC+VfDztseodT1/RgHqZEqCnDz3Y0lSUSUtEMia29HagMm8wTDkkzTdS
+        vuK9E1ZiaxAHdz0OXtHfEyMkpw==
+X-Google-Smtp-Source: ACHHUZ6qL/mjH4DcEc+/LspZAtJUP9Q8wg5tprU2IcEGsixo18RFI63Tt/3aBPlpI47U3xM+WDcJUA==
+X-Received: by 2002:a92:d089:0:b0:325:b002:89b4 with SMTP id h9-20020a92d089000000b00325b00289b4mr7837299ilh.25.1686202196369;
+        Wed, 07 Jun 2023 22:29:56 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id m4-20020a17090a71c400b0025671de4606sm2192660pjs.4.2023.06.07.22.18.18
+        by smtp.gmail.com with ESMTPSA id e21-20020a62aa15000000b0065014c15a57sm271206pff.35.2023.06.07.22.29.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jun 2023 22:18:18 -0700 (PDT)
-Date:   Thu, 8 Jun 2023 10:48:16 +0530
+        Wed, 07 Jun 2023 22:29:55 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 10:59:53 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Beata Michalska <beata.michalska@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        sudeep.holla@arm.com, ionela.voinescu@arm.com, sumitg@nvidia.com,
-        yang@os.amperecomputing.com, Len Brown <len.brown@intel.com>,
-        vincent.guittot@linaro.org
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <20230608051816.2ww7ncg65qo7kcuk@vireshk-i7>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
- <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more
+ flexibility
+Message-ID: <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-12-ulf.hansson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
+In-Reply-To: <20230607124628.157465-12-ulf.hansson@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,112 +79,75 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Vincent
+On 07-06-23, 14:46, Ulf Hansson wrote:
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 954c94865cf5..0e6ee2980f88 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1921,8 +1921,7 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+>   * _opp_add_v1() - Allocate a OPP based on v1 bindings.
+>   * @opp_table:	OPP table
+>   * @dev:	device for which we do this operation
+> - * @freq:	Frequency in Hz for this OPP
+> - * @u_volt:	Voltage in uVolts for this OPP
+> + * @opp:	The OPP to add
+>   * @dynamic:	Dynamically added OPPs.
+>   *
+>   * This function adds an opp definition to the opp table and returns status.
+> @@ -1940,10 +1939,10 @@ int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
+>   * -ENOMEM	Memory allocation failure
+>   */
+>  int _opp_add_v1(struct opp_table *opp_table, struct device *dev,
+> -		unsigned long freq, long u_volt, bool dynamic)
+> +		struct dev_pm_opp_data *opp, bool dynamic)
 
-On 08-06-23, 10:45, Viresh Kumar wrote:
-> +Len
-> 
-> On 06-06-23, 16:57, Beata Michalska wrote:
-> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > +unsigned int arch_freq_get_on_cpu(int cpu)
-> > +{
-> > +	unsigned int freq;
-> > +	u64 scale;
-> > +
-> > +	if (!cpumask_test_cpu(cpu, amu_fie_cpus))
-> > +		return 0;
-> > +
-> > +	if (!housekeeping_cpu(cpu, HK_TYPE_TICK)) {
-> 
-> I am not sure what we are doing in the `if` block here, at least a comment would
-> be useful.
-> 
-> > +		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> > +		int ref_cpu = nr_cpu_ids;
-> > +
-> > +		if (cpumask_intersects(housekeeping_cpumask(HK_TYPE_TICK),
-> > +				       policy->cpus))
-> > +			ref_cpu = cpumask_nth_and(cpu, policy->cpus,
-> > +						  housekeeping_cpumask(HK_TYPE_TICK));
-> > +		cpufreq_cpu_put(policy);
-> > +		if (ref_cpu >= nr_cpu_ids)
-> > +			return 0;
-> > +		cpu = ref_cpu;
-> > +	}
-> 
-> A blank line here please.
-> 
-> > +	/*
-> > +	 * Reversed computation to the one used to determine
-> > +	 * the arch_freq_scale value
-> > +	 * (see amu_scale_freq_tick for details)
-> > +	 */
-> > +	scale = per_cpu(arch_freq_scale, cpu);
-> > +	scale *= cpufreq_get_hw_max_freq(cpu);
-> > +	freq = scale >> SCHED_CAPACITY_SHIFT;
-> > +
-> > +	return freq;
-> > +}
-> > +
-> >  #ifdef CONFIG_ACPI_CPPC_LIB
-> >  #include <acpi/cppc_acpi.h>
-> >  
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 6b52ebe5a890..9f2cf45bf190 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -710,7 +710,8 @@ static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> >  	ssize_t ret;
-> >  	unsigned int freq;
-> >  
-> > -	freq = arch_freq_get_on_cpu(policy->cpu);
-> > +	freq = !cpufreq_driver->get ? arch_freq_get_on_cpu(policy->cpu)
-> > +				    : 0;
-> 
-> You may have changed the logic for X86 parts as well here. For a x86 platform
-> with setpolicy() and get() callbacks, we will not call arch_freq_get_on_cpu()
-> anymore ?
-> 
-> >  	if (freq)
-> >  		ret = sprintf(buf, "%u\n", freq);
-> >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-> > @@ -747,7 +748,11 @@ store_one(scaling_max_freq, max);
-> >  static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
-> >  					char *buf)
-> >  {
-> > -	unsigned int cur_freq = __cpufreq_get(policy);
-> > +	unsigned int cur_freq;
-> > +
-> > +	cur_freq = arch_freq_get_on_cpu(policy->cpu);
-> > +	if (!cur_freq)
-> > +		cur_freq = __cpufreq_get(policy);
-> 
-> For this and the above change, I am not sure what is the right thing to do.
-> 
-> >From Len's commit [1]:
-> 
->     Here we provide an x86 routine to make this calculation
->     on supported hardware, and use it in preference to any
->     driver driver-specific cpufreq_driver.get() routine.
-> 
-> I am not sure why Len updated `show_scaling_cur_freq()` and not
-> `show_cpuinfo_cur_freq()` ? Maybe we should update both these routines ?
-> 
-> Also, I don't think this is something that should have different logic for ARM
-> and X86, we should be consistent here as a cpufreq decision. Since both these
-> routines are reached via a read operation to a sysfs file, we shouldn't be
-> concerned about performance too.
-> 
-> What about doing this for both the routines, for all platforms now:
-> 
-> 	cur_freq = arch_freq_get_on_cpu(policy->cpu);
-> 	if (!cur_freq)
->                 ... get freq via policy->get() or policy->cur;
-> 
-> -- 
-> viresh
-> 
-> [1] commit f8475cef9008 ("x86: use common aperfmperf_khz_on_cpu() to calculate KHz using APERF/MPERF")
+The name `opp` is mostly used for instances of `struct dev_pm_opp`. Can we use a
+different name here please for the data ?
+
+> +/**
+> + * dev_pm_opp_add()  - Add an OPP table from a table definitions
+> + * @dev:	device for which we do this operation
+> + * @freq:	Frequency in Hz for this OPP
+> + * @u_volt:	Voltage in uVolts for this OPP
+> + *
+> + * This function adds an opp definition to the opp table and returns status.
+> + * The opp is made available by default and it can be controlled using
+> + * dev_pm_opp_enable/disable functions.
+> + *
+> + * Return:
+> + * 0		On success OR
+> + *		Duplicate OPPs (both freq and volt are same) and opp->available
+> + * -EEXIST	Freq are same and volt are different OR
+> + *		Duplicate OPPs (both freq and volt are same) and !opp->available
+> + * -ENOMEM	Memory allocation failure
+> + */
+> +int dev_pm_opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
+
+Maybe move this to include/linux/pm_opp.h and mark it static inline and get rid
+of documentation too.
+
+> +{
+> +	struct dev_pm_opp_data opp;
+> +
+> +	memset(&opp, 0, sizeof(opp));
+
+What about
+        struct dev_pm_opp_data data = {0};
+
+I think it is guaranteed that all the fields will be 0 now, not the padding of
+course, but we don't care about that here.
+
+> +	opp.freq = freq;
+> +	opp.u_volt = u_volt;
+
+Or maybe just
+
+        struct dev_pm_opp_data data = {
+                .freq = freq,
+                .u_volt = u_volt,
+        };
+
+Rest must be 0.
 
 -- 
 viresh
