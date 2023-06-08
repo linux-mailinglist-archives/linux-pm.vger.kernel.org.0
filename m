@@ -2,67 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 613FA727B14
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44407727B21
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jun 2023 11:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbjFHJU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 05:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S235352AbjFHJXA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 05:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjFHJU0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:20:26 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ACF718F;
-        Thu,  8 Jun 2023 02:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686216025; x=1717752025;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ImvKob1XLuKksnBkKdSIUMhiZFOJa0LRyXm3owOpFFY=;
-  b=wSerHhqUUwjM2WcctY2xGwEUuasUaqJf95a+HKK7r8y4TpObR+lVuqMs
-   auFPKlYHj4gaf+YDTFKVu/axF2hoZDRerFjMuLVBZ2hAPlEOO2lUbIh2g
-   BtK6GLme3CBJduKIIzLF2T32us/4U+HXLjyG+DJb9y5ruzu/NkvGDOHcf
-   RbPNfsHCwK/ZSznmirYTsJm4NJbfe5pQFhQ0fOTeGJOW7hkrUcNynw5Ve
-   i05UYidO8ZX6zU6spc/0ILzgqT3Fmcj2Lnp8NXBYurUsYI3jg8lbljNF5
-   Uvu9LteoHzzqR5Z164W2nizvXBz25i1s99wOtigWsx7g/SMV9f/bUODV9
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,226,1681196400"; 
-   d="asc'?scan'208";a="216828071"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Jun 2023 02:20:24 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 8 Jun 2023 02:20:24 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 8 Jun 2023 02:20:22 -0700
-Date:   Thu, 8 Jun 2023 10:19:58 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
- idle-state-disabled property
-Message-ID: <20230608-steadying-idealism-1f8a97db1491@wendy>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+        with ESMTP id S235418AbjFHJW7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 05:22:59 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0286E268E
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 02:22:57 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-75d4b85b3ccso33912485a.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 02:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686216176; x=1688808176;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8b/gDQIXaNM5IiqWISzfBNlaVliL6eQ4AIhMEo3dIDY=;
+        b=YjeQGOzbCH5qau22ZC0F2gMDzwvlxXi0tiirBhhpalzQvqUDgNAyRfRwrCfUXt8Nm8
+         7Kg0GqUEYqrjWcS9jQddVyEKNtc5P50TTuMfVfTh1Be8rfw14CFUsQxTTbxeJzXXf06R
+         C/LpOR9qBbjS+abaiCMg7dxe+87PZDuqNyjoOe5TB3D//bugZEI7zqrVEvdTXUqFNfKb
+         4uj2FQ1L05ZobFErPZefp/Lb/QIyCrXTIg0BFevcPR2kHr95dqCrGXeu+CoUNrK/Poyw
+         /Pj/Xdmsc76GsBB0MDk30wtfPJAfZLS7+RTp974PqcT5IdQ7JVTrB1CUi1CVR027PbPz
+         ojSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686216176; x=1688808176;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8b/gDQIXaNM5IiqWISzfBNlaVliL6eQ4AIhMEo3dIDY=;
+        b=QXYWlTogdKicmcpUMhV1SXZIpmDmMdfCo2CjdcY3nFCdZrZaXej8n0MwM6mgzw48iD
+         1vVtl2HoZSWPJMWUEJqWAtX1US2anFed0jTMbMlZrNrijPv4QhWBdPmi1lOHnd9pqjdt
+         mpHth+pc2odCe1sxY3rNquMTvpx9Ntylk57ynadq7OsNDanjIsojeAhflEkgpecXBq/n
+         SU4H6/KsN34DADNDb4ipzktiywSJiaLR1SZutqXhSHptnHa4CRIjs0gTLLeBRPtNOe0V
+         TlKif0YcVeLCIfQEQycTxaIELGXkZ6AT+5hjOAnm4crunImJp4lM05OfOxyhWIUIzb/7
+         Rkug==
+X-Gm-Message-State: AC+VfDxIpy5IpLGJkF9tsRnUzffLdfZvQNdDcLEiUm0YLa+vcVoAPr9U
+        MGPE+Q2IP1hTiR1EJCzDQDhZkA==
+X-Google-Smtp-Source: ACHHUZ4KD11Xdm9UvxthlbmqDsuW5Z50Xfc1jh+dzZ0XYsPZoV57r4t/qCllEDTyGxbK98jXak1GsA==
+X-Received: by 2002:a05:620a:a02:b0:75e:ba6e:be65 with SMTP id i2-20020a05620a0a0200b0075eba6ebe65mr4345752qka.55.1686216176101;
+        Thu, 08 Jun 2023 02:22:56 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id 22-20020a17090a19d600b0024c1ac09394sm929652pjj.19.2023.06.08.02.22.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 02:22:55 -0700 (PDT)
+Date:   Thu, 8 Jun 2023 14:52:53 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 11/16] OPP: Add dev_pm_opp_add_dynamic() to allow more
+ flexibility
+Message-ID: <20230608092253.yeuzlz5bn2iqihuk@vireshk-i7>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-12-ulf.hansson@linaro.org>
+ <20230608052953.l44dwb6n62kx4umk@vireshk-i7>
+ <CAPDyKFodvtRE5DHeMSSG5o4iJw07TjFHSeAoTuugH9OAmE8bMQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vtCTEnlvLCD5pXov"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230608085544.16211-2-quic_tnimkar@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAPDyKFodvtRE5DHeMSSG5o4iJw07TjFHSeAoTuugH9OAmE8bMQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,80 +81,10 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---vtCTEnlvLCD5pXov
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 08-06-23, 10:59, Ulf Hansson wrote:
+> Certainly, what do you suggest?
 
-Hey Tushar,
+`data` :)
 
-On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
-> This change adds idle-state-disabled property using which certain or all
-> idle-states can be kept disabled during boot-up. Once boot-up is completed
-> same can be enabled using below command.
->=20
-> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
->=20
-> Cc: devicetree@vger.kernel.org
-
-Firstly, you should CC the dt-bindings maintainers like
-get_maintainer.pl would tell you.
-Secondly, there are two 1/2 patches in this series.
-
-> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/cpu/idle-states.yaml b/Doc=
-umentation/devicetree/bindings/cpu/idle-states.yaml
-> index b8cc826c9501..f999bc666bbd 100644
-> --- a/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> +++ b/Documentation/devicetree/bindings/cpu/idle-states.yaml
-> @@ -358,6 +358,13 @@ patternProperties:
->            systems entry-latency-us + exit-latency-us will exceed
->            wakeup-latency-us by this duration.
-> =20
-> +      idle-state-disabled:
-> +        description: |
-> +          If present the idle state stays disabled.
-
-> It can be enabled back from
-> +          shell using below command.
-> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
-
-Thirdly, this is operating system specific behaviour, tied to Linux, and
-has no place in a binding.
-
-Cheers,
-Conor.
-
-> +        type: boolean
-> +
->        idle-state-name:
->          $ref: /schemas/types.yaml#/definitions/string
->          description:
-> @@ -548,6 +555,7 @@ examples:
->              CPU_SLEEP_0_0: cpu-sleep-0-0 {
->                  compatible =3D "arm,idle-state";
->                  local-timer-stop;
-> +                idle-state-disabled;
->                  arm,psci-suspend-param =3D <0x0010000>;
->                  entry-latency-us =3D <250>;
->                  exit-latency-us =3D <500>;
-> --=20
-> 2.17.1
->=20
-
---vtCTEnlvLCD5pXov
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIGdPgAKCRB4tDGHoIJi
-0jYeAQD2vq8CAZyZPfQBYO0XGcZgS5CZfIokwYmVJvMluNX5FgD/VKSusjjBHh15
-cAJDaI7n/Zxpka9ImfjHO1sN2deJHgs=
-=tiyx
------END PGP SIGNATURE-----
-
---vtCTEnlvLCD5pXov--
+-- 
+viresh
