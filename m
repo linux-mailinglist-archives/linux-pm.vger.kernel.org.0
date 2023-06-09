@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA08728DDA
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 04:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CDE728DDD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 04:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237714AbjFIC0G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 22:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42742 "EHLO
+        id S237812AbjFIC0J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 22:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236243AbjFIC0E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 22:26:04 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2BD30F3
-        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 19:25:58 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b1badb8f9bso13151891fa.1
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 19:25:58 -0700 (PDT)
+        with ESMTP id S237555AbjFIC0F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 22:26:05 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F93E30FF
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 19:25:59 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f6370ddd27so1554257e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 19:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686277557; x=1688869557;
+        d=linaro.org; s=google; t=1686277558; x=1688869558;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N12gfFtx2uUrPiE+zEwFxqEuTlfoHWgM0ZbjtW5pSzo=;
-        b=SVsN58Z0t+JlJ+I5tvxA4qNE///PF/a2ISpvmYGAOkppa0MWJk6bN6PUEE9lMMOqBr
-         ZBtlFGZRqDBrYhxwxCW7ZciJCbih0GxhgFIgH+VPdalqgujoGDdJ5ezlXSSt9kEvCT4Q
-         iUWoCUIkudi2n5hRHO2RruIIxZBB+wOafQW4G4lnmvPVld4z5qXARKKlGIJfOXq697jO
-         4v5QDfXN96ikPG03PX8AXnMVxS4flh5sUhhf1/vAmE/kvexYVFmqkXX7Wk+24rXHaTJl
-         Rh/LfkTw//eG5jhNJl8SYzG+3+yfXEs90dWeeC/QP+Lm10xdnEGYSYHZ0ieSnQhzwfWL
-         79LA==
+        bh=Zx8vlVFOYPoBRf3/7QVPvJM9NkCsM7ZSm+3sIzim6r0=;
+        b=OzqK4bRFx5xgl3jC8ZPEud/vcTiMIGNnjTfZW++y3Pk1VBMleSTBaL5YF+Mh5Kt4FO
+         dJRNMA2bmp2uGj4Yk9y8lbUYFtjkGjaiLW6C+ms4v6uOK6Z2Kog7rr5XMb3WOZ7jGEGa
+         UUSKq32plaQ/u7oSzfsLIWSLiaIlCyXukI+IOGENm2gwnZFO1LlPm6HfLzTclLM5oKRO
+         Zc7Ih+ooLcz/YDewWz2kMJU9B8RMO/t0DW+XAppZFeyAfm1VjYitAx7lYAoJ+HgTjATb
+         xchbPff2sQ3defShS51uJlGgrcShjiCa+8LcFK3iaaNLwj+OGsRUp1dSAXYCT9qi7UDY
+         RRLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686277557; x=1688869557;
+        d=1e100.net; s=20221208; t=1686277558; x=1688869558;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N12gfFtx2uUrPiE+zEwFxqEuTlfoHWgM0ZbjtW5pSzo=;
-        b=h+ZtVa2xyTCTjA8XBaVWcaNfvqcncdGRjbyVw7aep1EYhqcgumlgS7/VY69AwifkDi
-         8S1VFJ3JlePXa5K8yaNg0NXMp9fn95jN5/cuMqN3nMjT9aXU93h/JWcYuRPCpIVLQtgp
-         4XtFOXxiyqitYcTY2DBIisal8q7V0AJUeo9m1PZmlH2/xe4wzcvA0GnSDtuFFOgHMXkU
-         yza1+Nd6sJAs85G3SHoS3RBp6HpwLzk+rNMs01mEKKYCcRaKzF9nVMrlKoch4rm9cT+c
-         BYKyT6Ps/VVucSILck8ZH5cm3aeA3nWlgXIfmeVTKn4rhsRc65p0yt6dMtj6dwtGKqZ2
-         ENkA==
-X-Gm-Message-State: AC+VfDzaP3lIbISQNrngaJVp5graErjasvRUfU2Clpm1xdxhmwIWb1gE
-        DCF5R0avBsodN01oytX9CbPE/g==
-X-Google-Smtp-Source: ACHHUZ7OgnE6kLJ+gfqjJ7iKAmImzEnuOgACazcfTQmu6NFSD1RYTDk/CmxXUnJFA3veyhf1psZD3g==
-X-Received: by 2002:a2e:9792:0:b0:2b1:c0b9:61af with SMTP id y18-20020a2e9792000000b002b1c0b961afmr134973lji.52.1686277557108;
+        bh=Zx8vlVFOYPoBRf3/7QVPvJM9NkCsM7ZSm+3sIzim6r0=;
+        b=C+1EM3dNxkFKxRRgLINt8maQIULMz/CgG463xl6cZDUrTara0y7NOm1GiWqmoZMLxZ
+         zpEoFxmyBgS0MTKB/8j/l+H9e8Z/qwCdaXhGBwy/VtoPHBJ8wl1rlUWVF9V1Gj/7YeEe
+         40uX1gnNA4aAkFwIJNt+PTG5QE2GYUvqvXzRMkxS1ACMtTmLzidiVAIzEt4a3d8w7zo4
+         tLvQa8BPNYVG3l0R3glrLIbTMGAuGe3mGDS+NUfrlTgIwtLsI7aUx/5B9t4c8nz40t4Z
+         HvmgDM8joUWBzRoTBTYCqaP0idSqyaLjLrT78W+m0s5eRhAxkHpvq6Bn59a4TGKP77xT
+         qqFQ==
+X-Gm-Message-State: AC+VfDyOxMoBxGNXE+tmhXTlNiVB2anGXK3QE5Px2csg8ven98bfceMS
+        XE5soW0FQR6GBiCfiD60v1BFuA==
+X-Google-Smtp-Source: ACHHUZ6zikMFOOH6trhKWp1UILouE9b5IDWqCaPz1YHNv44N5d0uokEFyYvyPU0adE/+LDhw5QX+/g==
+X-Received: by 2002:a05:651c:20c:b0:2b1:fdcc:14e7 with SMTP id y12-20020a05651c020c00b002b1fdcc14e7mr130689ljn.35.1686277557845;
         Thu, 08 Jun 2023 19:25:57 -0700 (PDT)
 Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
-        by smtp.gmail.com with ESMTPSA id x20-20020a2e9dd4000000b002b21089f747sm167429ljj.89.2023.06.08.19.25.56
+        by smtp.gmail.com with ESMTPSA id x20-20020a2e9dd4000000b002b21089f747sm167429ljj.89.2023.06.08.19.25.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jun 2023 19:25:56 -0700 (PDT)
+        Thu, 08 Jun 2023 19:25:57 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,9 +60,9 @@ To:     Sebastian Reichel <sre@kernel.org>,
         Vinod Koul <vkoul@kernel.org>
 Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
-Subject: [PATCH v4 3/4] ARM: dts: qcom-pm8941: add resin support
-Date:   Fri,  9 Jun 2023 05:25:52 +0300
-Message-Id: <20230609022553.1775844-4-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v4 4/4] ARM: dts: qcom: apq8074-dragonboard: add resin
+Date:   Fri,  9 Jun 2023 05:25:53 +0300
+Message-Id: <20230609022553.1775844-5-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230609022553.1775844-1-dmitry.baryshkov@linaro.org>
 References: <20230609022553.1775844-1-dmitry.baryshkov@linaro.org>
@@ -78,49 +78,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Wrap existing pwrkey and new resin nodes into the new pon node to enable
-volume-down key support on platforms using pm8941 PMIC.
+Add device nodes for resin (reset, volume-down) device node.
 
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm/boot/dts/qcom-pm8941.dtsi | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ arch/arm/boot/dts/qcom-apq8074-dragonboard.dts | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
-index a821f0368a28..cf1fcf97fa88 100644
---- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-@@ -19,12 +19,24 @@ rtc@6000 {
- 			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
- 		};
+diff --git a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+index 72f7e09a5bbf..34258cf84a23 100644
+--- a/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
++++ b/arch/arm/boot/dts/qcom-apq8074-dragonboard.dts
+@@ -90,6 +90,11 @@ &mdss {
+ 	status = "okay";
+ };
  
--		pwrkey@800 {
--			compatible = "qcom,pm8941-pwrkey";
-+		pon@800 {
-+			compatible = "qcom,pm8941-pon";
- 			reg = <0x800>;
--			interrupts = <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
--			debounce = <15625>;
--			bias-pull-up;
++&pm8941_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
++};
 +
-+			pwrkey {
-+				compatible = "qcom,pm8941-pwrkey";
-+				interrupts = <0x0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
-+				debounce = <15625>;
-+				bias-pull-up;
-+			};
-+
-+			pm8941_resin: resin {
-+				compatible = "qcom,pm8941-resin";
-+				interrupts = <0x0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
-+				debounce = <15625>;
-+				bias-pull-up;
-+				status = "disabled";
-+			};
- 		};
- 
- 		usb_id: usb-detect@900 {
+ &pm8941_wled {
+ 	qcom,cs-out;
+ 	qcom,switching-freq = <3200>;
 -- 
 2.39.2
 
