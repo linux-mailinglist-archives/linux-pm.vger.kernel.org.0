@@ -2,53 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9994F729875
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 13:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C005D72988D
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 13:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238667AbjFILt3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 07:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
+        id S238158AbjFILvf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 07:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjFILtZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 07:49:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C201A2;
-        Fri,  9 Jun 2023 04:49:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AF1365737;
-        Fri,  9 Jun 2023 11:49:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F7F5C433D2;
-        Fri,  9 Jun 2023 11:49:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686311362;
-        bh=8m5SdlBC7FRvkgWHZjLAbuvPA0s4TaAdUTFNpUQF9dw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jeffyEdTEmeL1RFHQJ2xngOj718ZhYtjLJxGAuszORuYSyvR0MjDxGppJVsMtHKRx
-         ZitOvwyDCM+Qz+ewskbsszRKKh9+Ar5fJvCNUbEr77qyKcvKapkfrxRwOlh+G1TUrb
-         lPv8WORks+LlFmRCWnFC2QMqvlAig1v1zA+OFztJULMK32D42nnkW4YJB3oxYGST/T
-         AJFVMkpZevv9VTjDonrD1V9yY/dGSj4dWr/RBThdQjiG69/Ca1tS6bEzM3k02ll52k
-         tTLVtPmktP9qvO7Pp9y7LBzOGLzK7rOqDqgtoeognpZnb4YAKsWfvL76BjCfMhG04F
-         bas2KaB6haLJw==
-Date:   Fri, 9 Jun 2023 06:49:20 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zhiren Chen <zhiren.chen@mediatek.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PCI:PM: Support platforms that do not implement ACPI
-Message-ID: <20230609114920.GA1242120@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609023038.61388-1-zhiren.chen@mediatek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S238947AbjFILva (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 07:51:30 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF2535A7;
+        Fri,  9 Jun 2023 04:50:52 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 359BN8LN022324;
+        Fri, 9 Jun 2023 11:50:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=WKbDxd8L8ISCDrL4/pwMcGwoEU9qmC7+747cxLc0jnI=;
+ b=CX5oROG1Jr9TfqUtD7q7cPBL+UyiY+59uzPK1QzKyQFTxyKYKHIJowUGC9sxgdmB3RfL
+ r+8YwVzGICiJantvLyTSwRjYpALuR1pxSe/7SulH+2dMTzVT1kzAV7MJv0bvGJ6gEOpI
+ Qw8BTflfZ6OHMbP21vsCI11CmqgiUBZFgxmv5YxirCg+xoncgxpJOlAzpb+Rc89kYcVi
+ SnTAWuIJOxQb3aUX3dLRTE7ayhu3VVC990WFdriqXM/q0N4oufrqCE7lk/Jefw0s027I
+ 0Q9vmcZulv+s1eVQGrms1GFtIWg9WzirvAol+vPbdDBSHsJKSa4BGaBA2mLESn4rLA4D uQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3nwesd2a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Jun 2023 11:50:45 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 359BoeuP019488;
+        Fri, 9 Jun 2023 11:50:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3r2g35rh4w-1;
+        Fri, 09 Jun 2023 11:50:40 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 359Boelu019475;
+        Fri, 9 Jun 2023 11:50:40 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 359BodTV019472;
+        Fri, 09 Jun 2023 11:50:40 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 47F8D5F1A; Fri,  9 Jun 2023 17:20:39 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        tglx@linutronix.de, maz@kernel.org, mani@kernel.org,
+        robimarko@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v4 0/5] Add devicetree support for SDX75 Modem and IDP
+Date:   Fri,  9 Jun 2023 17:20:33 +0530
+Message-Id: <1686311438-24177-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: SvpVtmEuWJbIVHthEpXTdoY8avObjHWg
+X-Proofpoint-ORIG-GUID: SvpVtmEuWJbIVHthEpXTdoY8avObjHWg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-09_08,2023-06-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxlogscore=536 phishscore=0 priorityscore=1501
+ suspectscore=0 clxscore=1015 spamscore=0 adultscore=0 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306090100
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,189 +80,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, linux-pm]
+Hi,
 
-On Fri, Jun 09, 2023 at 10:30:38AM +0800, Zhiren Chen wrote:
-> From: Zhiren Chen <Zhiren.Chen@mediatek.com>
-> 
-> The platform_pci_choose_state function and other low-level platform
-> interfaces used by PCI power management processing did not take into
-> account non-ACPI-supported platforms. This shortcoming can result in
-> limitations and issues.
-> 
-> For example, in embedded systems like smartphones, a PCI device can be
-> shared by multiple processors for different purposes. The PCI device and
-> some of the processors are controlled by Linux, while the rest of the
-> processors runs its own operating system.
-> When Linux initiates system-level sleep, if it does not consider the
-> working state of the shared PCI device and forcefully sets the PCI device
-> state to D3, it will affect the functionality of other processors that
-> are currently using the PCI device.
-> 
-> To address this problem, an interface should be created for PCI devices
-> that don't support ACPI to enable accurate reporting of the power state
-> during the PCI PM handling process.
-> 
-> Signed-off-by: Zhiren Chen <Zhiren.Chen@mediatek.com>
-> ---
->  drivers/pci/pci.c   | 24 ++++++++++++++++++++++++
->  drivers/pci/pci.h   | 40 ++++++++++++++++++++++++++++++++++++++++
->  include/linux/pci.h |  1 +
->  3 files changed, 65 insertions(+)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index 5ede93222bc1..9f03406f3081 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -1014,6 +1014,9 @@ static void pci_restore_bars(struct pci_dev *dev)
->  
->  static inline bool platform_pci_power_manageable(struct pci_dev *dev)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->is_manageable)
-> +		return dev->platform_pm_ops->is_manageable(dev);
-> +
->  	if (pci_use_mid_pm())
->  		return true;
->  
-> @@ -1023,6 +1026,9 @@ static inline bool platform_pci_power_manageable(struct pci_dev *dev)
->  static inline int platform_pci_set_power_state(struct pci_dev *dev,
->  					       pci_power_t t)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->set_state)
-> +		return dev->platform_pm_ops->set_state(dev, t);
-> +
->  	if (pci_use_mid_pm())
->  		return mid_pci_set_power_state(dev, t);
->  
-> @@ -1031,6 +1037,9 @@ static inline int platform_pci_set_power_state(struct pci_dev *dev,
->  
->  static inline pci_power_t platform_pci_get_power_state(struct pci_dev *dev)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->get_state)
-> +		return dev->platform_pm_ops->get_state(dev);
-> +
->  	if (pci_use_mid_pm())
->  		return mid_pci_get_power_state(dev);
->  
-> @@ -1039,12 +1048,18 @@ static inline pci_power_t platform_pci_get_power_state(struct pci_dev *dev)
->  
->  static inline void platform_pci_refresh_power_state(struct pci_dev *dev)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->refresh_state)
-> +		dev->platform_pm_ops->refresh_state(dev);
-> +
->  	if (!pci_use_mid_pm())
->  		acpi_pci_refresh_power_state(dev);
->  }
->  
->  static inline pci_power_t platform_pci_choose_state(struct pci_dev *dev)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->choose_state)
-> +		return dev->platform_pm_ops->choose_state(dev);
-> +
->  	if (pci_use_mid_pm())
->  		return PCI_POWER_ERROR;
->  
-> @@ -1053,6 +1068,9 @@ static inline pci_power_t platform_pci_choose_state(struct pci_dev *dev)
->  
->  static inline int platform_pci_set_wakeup(struct pci_dev *dev, bool enable)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->set_wakeup)
-> +		return dev->platform_pm_ops->set_wakeup(dev, enable);
-> +
->  	if (pci_use_mid_pm())
->  		return PCI_POWER_ERROR;
->  
-> @@ -1061,6 +1079,9 @@ static inline int platform_pci_set_wakeup(struct pci_dev *dev, bool enable)
->  
->  static inline bool platform_pci_need_resume(struct pci_dev *dev)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->need_resume)
-> +		return dev->platform_pm_ops->need_resume(dev);
-> +
->  	if (pci_use_mid_pm())
->  		return false;
->  
-> @@ -1069,6 +1090,9 @@ static inline bool platform_pci_need_resume(struct pci_dev *dev)
->  
->  static inline bool platform_pci_bridge_d3(struct pci_dev *dev)
->  {
-> +	if (dev->platform_pm_ops && dev->platform_pm_ops->bridge_d3)
-> +		return dev->platform_pm_ops->bridge_d3(dev);
-> +
->  	if (pci_use_mid_pm())
->  		return false;
->  
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index 2475098f6518..85154470c083 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -71,6 +71,42 @@ struct pci_cap_saved_state *pci_find_saved_ext_cap(struct pci_dev *dev,
->   */
->  #define PCI_RESET_WAIT		1000	/* msec */
->  
-> +/**
-> + * struct pci_platform_pm_ops - Firmware PM callbacks
-> + *
-> + * @is_manageable: returns 'true' if given device is power manageable by the
-> + *                 platform firmware
-> + *
-> + * @set_state: invokes the platform firmware to set the device's power state
-> + *
-> + * @get_state: queries the platform firmware for a device's current power state
-> + *
-> + * @choose_state: returns PCI power state of given device preferred by the
-> + *                platform; to be used during system-wide transitions from a
-> + *                sleeping state to the working state and vice versa
-> + *
-> + * @set_wakeup: enables/disables wakeup capability for the device
-> + *
-> + * @need_resume: returns 'true' if the given device (which is currently
-> + *		suspended) needs to be resumed to be configured for system
-> + *		wakeup.
-> + *
-> + * @bridge_d3: return 'true' if given device supoorts D3 when it is a bridge
-> + *
-> + * @refresh_state: refresh the given device's power state
-> + *
-> + */
-> +struct pci_platform_pm_ops {
-> +	bool (*is_manageable)(struct pci_dev *dev);
-> +	int (*set_state)(struct pci_dev *dev, pci_power_t state);
-> +	pci_power_t (*get_state)(struct pci_dev *dev);
-> +	pci_power_t (*choose_state)(struct pci_dev *dev);
-> +	int (*set_wakeup)(struct pci_dev *dev, bool enable);
-> +	bool (*need_resume)(struct pci_dev *dev);
-> +	bool (*bridge_d3)(struct pci_dev *dev);
-> +	void (*refresh_state)(struct pci_dev *dev);
-> +};
-> +
->  void pci_update_current_state(struct pci_dev *dev, pci_power_t state);
->  void pci_refresh_power_state(struct pci_dev *dev);
->  int pci_power_up(struct pci_dev *dev);
-> @@ -96,6 +132,10 @@ void pci_bridge_d3_update(struct pci_dev *dev);
->  void pci_bridge_reconfigure_ltr(struct pci_dev *dev);
->  int pci_bridge_wait_for_secondary_bus(struct pci_dev *dev, char *reset_type);
->  
-> +static inline void pci_set_platform_pm(struct pci_dev *dev, struct pci_platform_pm_ops *ops)
-> +{
-> +	dev->platform_pm_ops = ops;
-> +}
->  static inline void pci_wakeup_event(struct pci_dev *dev)
->  {
->  	/* Wait 100 ms before the system can be put into a sleep state. */
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 60b8772b5bd4..a0171f1abf2f 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -327,6 +327,7 @@ struct pci_dev {
->  	void		*sysdata;	/* Hook for sys-specific extension */
->  	struct proc_dir_entry *procent;	/* Device entry in /proc/bus/pci */
->  	struct pci_slot	*slot;		/* Physical slot this device is in */
-> +	struct pci_platform_pm_ops *platform_pm_ops;
->  
->  	unsigned int	devfn;		/* Encoded device & function index */
->  	unsigned short	vendor;
-> -- 
-> 2.17.0
-> 
+Changes in v4:
+ - Addressed some of the dt bindings check mentioned by Krzysztof.
+
+Changes in v3:
+ - Clubbed all the dt node into a single patch as suggested by Krzysztof.
+ - Removed the applied patch.
+ - Addressed some comments from Konrad and Dmitry.
+
+Changes in v2:
+ - Added the CPUFreq support patch.
+ - Collected the Acked by tags.
+ - Addressed some minor comments from Konrad.
+
+This series adds devicetree support for Qualcomm SDX75 platform and IDP
+board. This series functionally depends on GCC and RPMh Clock support
+series [1], and pinctrl support for SDX75 [2] which are under review.
+
+With this current devicetree support, the IDP can boot into initramfsshell.
+
+[1] https://lore.kernel.org/lkml/20230419133013.2563-3-quic_tdas@quicinc.com/
+[2] https://lore.kernel.org/all/1684409015-25196-1-git-send-email-quic_rohiagar@quicinc.com/
+
+Thanks,
+Rohit.
+
+
+Rohit Agarwal (5):
+  dt-bindings: arm: qcom: Document SDX75 platform and boards
+  dt-bindings: firmware: scm: Add compatible for SDX75
+  dt-bindings: interrupt-controller: Add SDX75 PDC compatible
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75 compatible
+  arm64: dts: qcom: Add SDX75 platform and IDP board support
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |   7 +
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |   1 +
+ .../devicetree/bindings/firmware/qcom,scm.yaml     |   1 +
+ .../bindings/interrupt-controller/qcom,pdc.yaml    |   1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |   1 +
+ arch/arm64/boot/dts/qcom/sdx75-idp.dts             |  33 +
+ arch/arm64/boot/dts/qcom/sdx75.dtsi                | 670 +++++++++++++++++++++
+ 7 files changed, 714 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdx75-idp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdx75.dtsi
+
+-- 
+2.7.4
+
