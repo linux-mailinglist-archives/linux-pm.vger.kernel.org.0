@@ -2,194 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC527297AB
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 13:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B2C7297BA
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 13:05:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjFILA5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 07:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50648 "EHLO
+        id S229715AbjFILFO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 07:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238795AbjFILAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 07:00:35 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5642685
-        for <linux-pm@vger.kernel.org>; Fri,  9 Jun 2023 04:00:34 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba8151a744fso1642226276.2
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jun 2023 04:00:34 -0700 (PDT)
+        with ESMTP id S230094AbjFILEn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 07:04:43 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E43210D;
+        Fri,  9 Jun 2023 04:04:42 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b24b34b59fso6667645ad.3;
+        Fri, 09 Jun 2023 04:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686308433; x=1688900433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4Y48r3j1MQPLlV/kjC9yfsXr4I31wdq934Y1dJ0Nsk=;
-        b=Bq0+pzwMrRaOH2aSm04bqk6dDxzo7qINbAi33GZ7y6PikMkHTdzyGsUbVtNyBGkfKu
-         XbJLppmitzUnNRUYBC2L+BI8p03SqtbhvCa6fOnF9uZRj0TSC9LoivAn0TkDxoD0E8Sj
-         yk7nnh5LQmwaM6GKwI7y8T50m7+g4L3BUH6OCb9O3R3N24ThjsP4udl1ISI7k00FwWhG
-         t+keiDdmVTnPz1k+YiXJbYfYEHS020ohkT8i8RpfUjq5pUQX0zxRQ73bVmnC0BvBPJul
-         q2zN4voQg2fIszHR1GDhnvwcCFz6NnyxXeGIZ9IUUXAyVL0KhfhVbWLQ0rf5m3OzKg8F
-         cvZQ==
+        d=gmail.com; s=20221208; t=1686308682; x=1688900682;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aEZPAeIV/OtWRVRtfhWloaaTiFQRpVuQ6c3hWe/ckak=;
+        b=YaA7FMxKN+7vfMRVRCcEnnj7qFuw1UrPnx42VMlRMLMiKtKScyF2LosWNEBAlz9G84
+         oN/JbLD1ts2NmctqUJM380hZjHyjBEPjKpVyTWBEIOHIV/86tkGDqM/XIPJaVxHhBMRk
+         +1T4+NpQ/PKA05JzfA4KDADEa7jKcgvYdJNUuOtH0SbUvtqqRVBIE8PZ8elR26asbV4M
+         uqK7Uyij+97rzlSYEvJhWDoNa4BoL+qRp/nTUCrEb8YZm0rBy3QlixtBs58DFj2kY214
+         hp1O9ZiRMZ4JWBwKtTFhe/VOyKOlyZDTXSFnP97NqMkcPkoDFq9rdjQ9lqiClv59wi53
+         ffqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686308433; x=1688900433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K4Y48r3j1MQPLlV/kjC9yfsXr4I31wdq934Y1dJ0Nsk=;
-        b=aLsNmvCDSh9h/e95Ts4lf27+dhuZnR0Gl4RJfu8ydhHtKG2o7Y1R/0pSOLTAo16AJl
-         WKS1v/P6CIJR+uLSCqsoO84XUA6IhJuIZqm6hXJV3PZqwz96ZQE3aN88dsIlKbpdHrf3
-         l24ybesve+cnhqsErCLiuqe9F+DmZ7j1KVe/XJReMfFdWmUrJ0K/O7IU9Iep3G9QpdKW
-         xz28kOyQEwvKhHxdqanOnbvrnSxLsu4NllSqRj1kKqk6K7tb+ICJq4vMOwnVeSomkNkW
-         LtkAnaOl5zTIzo39OZMOI2thc0QzfU3HTlA3EJF7LCNhM20g3WL+PQykY+JweHwnmg4B
-         Eoww==
-X-Gm-Message-State: AC+VfDzrFosJa1DM/TXb/q9nn5JdHVwwx/7TWpIyauclW834ucZtffur
-        VACAuXMTVLAawdy93kfdzTlZSb9E2xvzmPk0EoFOmg==
-X-Google-Smtp-Source: ACHHUZ7tJfEx3W5/3301HQ0zS8Igb3M5tusRxraMhy4mbwMtzbL2oMSIfqUeiAMPzKKjwpGEgDq1PmpMtn28IjP0fGY=
-X-Received: by 2002:a0d:f944:0:b0:55a:c62:3a92 with SMTP id
- j65-20020a0df944000000b0055a0c623a92mr749035ywf.29.1686308433306; Fri, 09 Jun
- 2023 04:00:33 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686308682; x=1688900682;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aEZPAeIV/OtWRVRtfhWloaaTiFQRpVuQ6c3hWe/ckak=;
+        b=Uca+hI9Z8WuYC56jcLYXlNaNlQ84+1taNuF2r3NbZKN6l1X7kNvquEtsJKzCdXbfY3
+         OSyA9NAzLmd49maLTodPB3zcT9qmdVcKPf7RodRUCPUoECpN5vdLRv1RSsnhxx9slACE
+         M9UEWLtLC3+kpdY0JzUA7b7wrNYocs+17CRqxINFwp8MzhM7qUoU813H35prmOcA9RvI
+         /SfMl524BtVsQ0Vx8iPEVA2yQYIT7A6F48rYuxe8q4xnCGn7ItvclnnpvPDLiTkHQnSC
+         Zk99vlPzei53WEhmLlmFK9d8hF7CF545qqz1FYTk9X9PQhu6e8jrrtWMvkwxkFVkE+lD
+         rLmw==
+X-Gm-Message-State: AC+VfDyog+WCTchaovEnCmmwIgwVBBa/qVIx90J2PVOUlryqdKqaqc7g
+        A3Q+cfLb4ApyLDGTr3i0rk4=
+X-Google-Smtp-Source: ACHHUZ4PedxoYr1YVS117Tj0fzkFfE6nw0uZj3KY70eFDjoP9uhOO4uoh/QfIhve0hKdM1mR8BV7eA==
+X-Received: by 2002:a17:902:704a:b0:1b3:8862:2403 with SMTP id h10-20020a170902704a00b001b388622403mr709032plt.36.1686308681966;
+        Fri, 09 Jun 2023 04:04:41 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-88.three.co.id. [180.214.232.88])
+        by smtp.gmail.com with ESMTPSA id p17-20020a170902ead100b001b06f7f5333sm3042080pld.1.2023.06.09.04.04.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 04:04:41 -0700 (PDT)
+Message-ID: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+Date:   Fri, 9 Jun 2023 18:04:31 +0700
 MIME-Version: 1.0
-References: <20230607124628.157465-1-ulf.hansson@linaro.org>
- <20230607124628.157465-14-ulf.hansson@linaro.org> <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
- <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com>
- <20230608104540.tykxtvwhoyogthw5@vireshk-i7> <CAPDyKFrbpm0W1Hdv+85MqMAC2-UbPOE6qp26L0UvVF0sSL2ayA@mail.gmail.com>
- <20230609051005.fxuvp4ilcjvhhrkc@vireshk-i7>
-In-Reply-To: <20230609051005.fxuvp4ilcjvhhrkc@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 9 Jun 2023 12:59:57 +0200
-Message-ID: <CAPDyKFobvMr0LBr0PW3L-A=dtE2jnd2RxHktN85Z9dLsi8u3TQ@mail.gmail.com>
-Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider support
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>
+Cc:     Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: Waking up from resume locks up on sr device
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 9 Jun 2023 at 07:10, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 08-06-23, 13:45, Ulf Hansson wrote:
-> > Okay, if I understand your point you want to avoid creating OPPs for
-> > each device, but rather coupling them with the genpd provider's OPP
-> > table. Right?
->
-> Not exactly :)
->
-> > Note that, there is no such thing as a "required opp" in the SCMI
-> > performance protocol case. A device is compatible to use all of the
-> > OPPs that its corresponding SCMI performance domain provides. Should
-> > we rename the required opp things in the OPP core to better reflect
-> > this too?
->
-> Not really :)
+Hi,
 
-I think it may be confusing, but okay, let's leave it as is.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
->
-> > That said, we still need to be able to add OPPs dynamically when not
-> > based on DT. The difference would be that we add the OPPs when
-> > initializing the genpd provider instead of when attaching the devices.
-> > In other words, we still need something along the lines of the new
-> > dev_pm_opp_add_dynamic() API that $subject series is introducing, I
-> > think.
->
-> That's fine.
->
-> > Moreover, to tie the consumer device's OPP table to their genpd
-> > provider's OPP table (call it required-opp or whatever), we need
-> > another OPP helper function that we can call from the genpd provider's
-> > ->attach_dev() callback. Similarly, we need to be able to remove this
-> > connection when genpd's ->detach_dev() callback is invoked. I will
-> > think of something here.
->
-> Something like set/link/config_required_opp()..
->
-> > Finally, I want to point out that there is work going on in parallel
-> > with this, that is adding performance state support for the ACPI PM
-> > domain. The ACPI PM domain, isn't a genpd provider but implements it's
-> > own PM domain. The important point is, that it will have its own
-> > variant of the dev_pm_genpd_set_performance_state() that we may need
-> > to call from the OPP library.
->
-> Okay.
->
-> Let me explain how structures are linked currently with help of below (badly
-> made) drawing. The 'level' fields are only set for Genpd's OPP entries and not
-> devices. The genpd OPP table normally has only this information, where it
-> presents all the possible level values, separate OPP for each of them.
->
-> Now the devices don't have `level` set in their OPP table, DT or in C
-> structures. All they have are links for required OPPs, which help us find the
-> required level or performance state for a particular genpd.
->
->   +-----------------+                    +------------------+
->   |  Device A       |                    | GENPD OPP Table  |
->   +-----------------+  required-opps     +------------------+   required-opps
->   |OPP1: freq: x1   +--------------------+ OPP1:            +--------------+
->   +-----------------+                    |      level: 1    |              |
->   |OPP2: freq: y1   +-----------+        +------------------+              |
->   +-----------------+           |        | OPP2:            +---------+    |
->   |OPP3: freq: z1   +--------+  +--------+      level: 2    |         |    |
->   +-----------------+        |           +------------------+         |    |
->                              |           | OPP3:            +--+      |    |
->                              |           |      level: 3    |  |      |    |
->                              |           +------------------+  |      |    |
->   +-----------------+        |           | OPP4:            |  |      |    |
->   |  Device B       |        +-----------+      level: 4    |  |      |    |
->   +-----------------+                    +------------------+  |      |    |
->   |OPP1: freq: x2   +------------------------------------------+      |    |
->   +-----------------+                                                 |    |
->   |OPP2: freq: y2   +-------------------------------------------------+    |
->   +-----------------+                                                      |
->   |OPP3: freq: z2   +------------------------------------------------------+
->   +-----------------+
->
+> I'm running LibreELEC.tv on an x86_64 machine that, following a (kernel) update, now locks up hard while trying to device_resume() => device_lock() on sr 2:0:0:0 (the only sr device in the system).
+> 
+> Through some digging of my own, I can pretty much isolate the fault in this device_lock() call:
+> https://elixir.bootlin.com/linux/v6.3.4/source/drivers/base/power/main.c#L919
+> 
+> I put an additional debug line exactly before the device_lock(dev) call, like this:
+> dev_info(dev, "device_lock() in device_resume()");
+> 
+> This is the last diagnostic I see, that device_lock() call never returns, ie line 920 in main.c is never reached (confirmed via TRACE_RESUME).
+> The device, in my case, is printed as sr 2:0:0:0.
+> 
+> Knowing this, as a workaround, booting with libata.force=3:disable (libata port 3 corresponds to the SATA channel that sr 2:0:0:0 is attached to) allows suspend/resume to work correctly (but the optical drive is not accessible, obviously).
+> 
+> When resume hangs, the kernel is not _completely_ locked, interestingly the machine responds to pings and I see the e1000e 'link up' message a couple seconds after the hanging sr2 device_lock().
+> Magic SysRq, however, does NOT work in that state; possibly because not enough of USB is resumed yet. Resuming devices seems to broadly follow a kind of breadth-first order; I see USB ports getting resumed closely before the lockup, but no USB (target) devices.
+> 
+> This is a regression, earlier kernels would work correctly on the exact same hardware. Since it's an 'embedded' type (LibreELEC.tv) install that overwrites its system parts completely on each update, I don't have a clear historical record of kernel versions. From the timeline and my memory, moving from 5.x to 6.x would make sense. Due to the nature of the system, it's somewhat inconvenient for me to try numerous kernel versions blindly for a bisection; I will try to test against some current 5.x soon, however.
+> 
+> I do have the hope that this information already might give someone with more background a strong idea about the issue.
+> 
+> Next, I will try to put debug_show_all_locks() before device_lock(), since I can't Alt+SysRq+d.
 
-Thanks for taking the time to explain things further! It's not
-entirely easy to follow all the things in the OPP library.
+See Bugzilla for the full thread.
 
-However, I think you are mixing up the "level" field with the "pstate"
-field in the struct dev_pm_opp. The pstate field is solely for genpd
-and the required opps, while level is *generic* for all types of
-devices. Right?
+Anyway, I'm adding it to regzbot (with rough version range since the reporter
+only knows major kernel version numbers):
 
-More precisely, _read_opp_key() parses for the "opp-level" property
-from DT to set the ->level field. Additionally, the generic OPP
-helpers functions, like dev_pm_opp_get_level(),
-dev_pm_opp_find_level_exact(), dev_pm_opp_find_level_ceil() allows any
-type of consumer driver to operate on the level for an OPP for its
-device. Please have a look at the apple-soc-cpufreq, for example.
+#regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
+#regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
 
->
-> What I am asking you to do now is, create an OPP table for the Genpd first, with
-> OPPs for each possible level. Now the Genpd layer creates the OPP table for
-> Device A, where it won't fill the levels, but all other fields and then use a
-> new API to add required OPPs for the device's OPP, which will point into Genpd's
-> OPP entries. And with that the existing code will work fine without any other
-> modifications.
->
-> Does this help ?
+Thanks.
 
-Well, I think what you propose may be doable, but I fail to understand
-the benefit of implementing it like that.
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217530
 
-As I said earlier, there is no such thing as a required OPP for the
-SCMI performance domain and neither are the OPP tables described in
-DT.
-
-Moreover, as I understand it, we already have the generic "level" to
-use, why not use it here?
-
-Kind regards
-Uffe
+-- 
+An old man doll... just what I always wanted! - Clara
