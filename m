@@ -2,232 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB61728FB7
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 08:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0518729013
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 08:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjFIGQt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 02:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S238366AbjFIGiG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 02:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjFIGQr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 02:16:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF911FE6;
-        Thu,  8 Jun 2023 23:16:46 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3595OXsu025494;
-        Fri, 9 Jun 2023 06:16:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=0NNL8p570P0R9lfym8qfsuEoZQdVGNgJ+2pCYiXHF1E=;
- b=p7a74TLFFy/3EN9dzr30PoYVT21nEmM41gxwkuTS7W8PlKhWRhKRRInFyWNNbdk7QhXc
- HINpPjbFRw07Hj54WkwUbgwHvydPxqc9k9GcF23Tcovjs3IdchjydHbhGpDz+Mqcl/bu
- e62I8Xg3+eO6449QXLJJCD+U26Epyjh5H9xtWuCVJoYs7S8CYbkJcVzC3qlpwCu6Rfk2
- sb7TAs/wbMKFu5La5gj/Tvm6bK1BWCESE160FxIan8g8diE6XCu+SPunTqSEFyxRZu3R
- H996WkKMQe5oKDhKOk7GFwILplQCcXfPmTfgfMfClaFju5A+An8OPTGS0hM8Vy7kzcrm eQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3w7dr5ff-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 06:16:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3596GbIP009276
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 06:16:37 GMT
-Received: from [10.216.61.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 8 Jun 2023
- 23:16:30 -0700
-Message-ID: <e18284a4-fb80-9d79-dfe4-bfdfb3ced7e0@quicinc.com>
-Date:   Fri, 9 Jun 2023 11:46:25 +0530
+        with ESMTP id S238396AbjFIGhr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 02:37:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5903A90;
+        Thu,  8 Jun 2023 23:37:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C5AB621A53;
+        Fri,  9 Jun 2023 06:37:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686292659; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AuLuFfaUhqZIlvqsrBqFCILQNfB9NBh4XQJqJuwBaak=;
+        b=DfWcezE02xLifKYApRh/Add62cFaOcxnW3wNSvzD8w9yj5YaSZ2IJzFtcqTHWC93xEcGoZ
+        5DIcDvnUzc7+rHwW+tvz398fOf28mmIhzoloOpuJ13hG/Af4ypuqo9UbqAddu8da4BuPJ6
+        Ej17itybE9m84CucOtrfNyhxobciHic=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686292659;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AuLuFfaUhqZIlvqsrBqFCILQNfB9NBh4XQJqJuwBaak=;
+        b=+5Awe/+aCoJv+pwVztOJIiCyAnb6pTZHwYvv7sP4i5Gc34IqAOSTrhZJJYJOAhtGbr6s8I
+        YS3t00UaYTmcZuDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2374A139C8;
+        Fri,  9 Jun 2023 06:37:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Jna4BrPIgmRfNwAAMHmgww
+        (envelope-from <hare@suse.de>); Fri, 09 Jun 2023 06:37:39 +0000
+Message-ID: <f398627e-f69f-de42-d55d-2d497d208ae5@suse.de>
+Date:   Fri, 9 Jun 2023 08:37:38 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: Add SDX75 platform and IDP board
- support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 05/30] cdrom: track if a cdrom_device_info was opened for
+ data
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <mani@kernel.org>,
-        <robimarko@gmail.com>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <1686138469-1464-1-git-send-email-quic_rohiagar@quicinc.com>
- <1686138469-1464-6-git-send-email-quic_rohiagar@quicinc.com>
- <e45d3d3b-a31d-5ad0-b43f-7193add4ee66@linaro.org>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <e45d3d3b-a31d-5ad0-b43f-7193add4ee66@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: NkiC9T4jtkayDcTNClO2E3hO5fVrZIq9
-X-Proofpoint-ORIG-GUID: NkiC9T4jtkayDcTNClO2E3hO5fVrZIq9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_03,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- spamscore=0 impostorscore=0 phishscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 clxscore=1015 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090054
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Josef Bacik <josef@toxicpanda.com>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Coly Li <colyli@suse.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
+        linux-btrfs@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20230608110258.189493-1-hch@lst.de>
+ <20230608110258.189493-6-hch@lst.de>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <20230608110258.189493-6-hch@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/8/23 13:02, Christoph Hellwig wrote:
+> Set a flag when a cdrom_device_info is opened for writing, instead of
+> trying to figure out this at release time.  This will allow to eventually
+> remove the mode argument to the ->release block_device_operation as
+> nothing but the CDROM drivers uses that argument.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Phillip Potter <phil@philpotter.co.uk>
+> Acked-by: Christian Brauner <brauner@kernel.org>
+> ---
+>   drivers/cdrom/cdrom.c | 12 +++++-------
+>   include/linux/cdrom.h |  1 +
+>   2 files changed, 6 insertions(+), 7 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-On 6/7/2023 5:43 PM, Krzysztof Kozlowski wrote:
-> On 07/06/2023 13:47, Rohit Agarwal wrote:
->> Add basic devicetree support for SDX75 platform and IDP board from
->> Qualcomm. The SDX75 platform features an ARM Cortex A55 CPU which forms
->> the Application Processor Sub System (APSS) along with standard Qualcomm
->> peripherals like GCC, TLMM, UART, QPIC, and BAM etc... Also, there
->> exists the networking parts such as IPA, MHI, PCIE-EP, EMAC, and Modem
->> etc..
->>
->> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/Makefile      |   1 +
->>   arch/arm64/boot/dts/qcom/sdx75-idp.dts |  33 ++
->>   arch/arm64/boot/dts/qcom/sdx75.dtsi    | 660 +++++++++++++++++++++++++++++++++
->>   3 files changed, 694 insertions(+)
->>   create mode 100644 arch/arm64/boot/dts/qcom/sdx75-idp.dts
->>   create mode 100644 arch/arm64/boot/dts/qcom/sdx75.dtsi
->>
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index d42c595..4fd5a18 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -173,6 +173,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-xiaomi-polaris.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm845-shift-axolotl.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-lenovo-yoga-c630.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sdm850-samsung-w737.dtb
->> +dtb-$(CONFIG_ARCH_QCOM)	+= sdx75-idp.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sm4250-oneplus-billie2.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6115p-lenovo-j606f.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= sm6125-sony-xperia-seine-pdx201.dtb
->> diff --git a/arch/arm64/boot/dts/qcom/sdx75-idp.dts b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
->> new file mode 100644
->> index 0000000..cbe5cdf
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/sdx75-idp.dts
->> @@ -0,0 +1,33 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +/*
->> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +/dts-v1/;
->> +
->> +#include "sdx75.dtsi"
->> +
->> +/ {
->> +	model = "Qualcomm Technologies, Inc. SDX75 IDP";
->> +	compatible = "qcom,sdx75-idp", "qcom,sdx75";
->> +
->> +	aliases {
->> +		serial0 = &uart1;
->> +	};
->> +};
->> +
->> +&chosen {
->> +	stdout-path = "serial0:115200n8";
->> +};
->> +
->> +&qupv3_id_0 {
->> +	status = "okay";
->> +};
->> +
->> +&tlmm {
->> +	gpio-reserved-ranges = <110 6>;
->> +};
->> +
->> +&uart1 {
->> +	status = "okay";
->> +};
->> diff --git a/arch/arm64/boot/dts/qcom/sdx75.dtsi b/arch/arm64/boot/dts/qcom/sdx75.dtsi
->> new file mode 100644
->> index 0000000..40fa579
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/qcom/sdx75.dtsi
->> @@ -0,0 +1,660 @@
->> +// SPDX-License-Identifier: BSD-3-Clause
->> +/*
->> + * SDX75 SoC device tree source
->> + *
->> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
->> + *
->> + */
->> +
->> +#include <dt-bindings/clock/qcom,rpmh.h>
->> +#include <dt-bindings/clock/qcom,sdx75-gcc.h>
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
->> +
->> +/ {
->> +	#address-cells = <2>;
->> +	#size-cells = <2>;
->> +	interrupt-parent = <&intc>;
->> +
->> +	chosen: chosen { };
->> +
->> +	clocks {
->> +		xo_board: xo-board {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <76800000>;
->> +			#clock-cells = <0>;
->> +		};
->> +
->> +		sleep_clk: sleep-clk {
->> +			compatible = "fixed-clock";
->> +			clock-frequency = <32000>;
->> +			#clock-cells = <0>;
->> +		};
->> +	};
->> +
->> +	cpus {
->> +		#address-cells = <2>;
->> +		#size-cells = <0>;
->> +
->> +		CPU0: cpu@0 {
->> +			device_type = "cpu";
->> +			compatible = "arm,cortex-a55";
->> +			reg = <0x0 0x0>;
->> +			clocks = <&cpufreq_hw 0>;
->> +			enable-method = "psci";
->> +			power-domains = <&CPU_PD0>;
->> +			power-domain-names = "psci";
->> +			qcom,freq-domain = <&cpufreq_hw 0>;
->> +			capacity-dmips-mhz = <1024>;
->> +			dynamic-power-coefficient = <100>;
->> +			next-level-cache = <&L2_0>;
->> +
->> +			L2_0: l2-cache {
->> +				compatible = "cache";
->> +				next-level-cache = <&L3_0>;
-> You miss properties like level and unified. Maybye you tested it with
-> some old (half year ago) dtschema?
->
-> It does not look like you tested the DTS against bindings. Please run
-> `make dtbs_check` (see
-> Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Let me check the latest bindings and update.
+Cheers,
 
-Thanks,
-Rohit.
->
-> Best regards,
-> Krzysztof
->
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
