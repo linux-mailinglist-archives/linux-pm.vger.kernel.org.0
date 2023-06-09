@@ -2,119 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A052E728F31
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 07:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF0F728F3A
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 07:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjFIFBX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 01:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52538 "EHLO
+        id S229975AbjFIFKL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 01:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjFIFBW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 01:01:22 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CE5136;
-        Thu,  8 Jun 2023 22:01:20 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3594074K012343;
-        Fri, 9 Jun 2023 05:01:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=+lmLllNdpZLu18mucRy7I3nW1cwVeUd63T3A8mGUx+w=;
- b=Kgd0c5DD842ECMv1JX+CtRJFfWtZ1j2aSHLLrfxny0lSa+JMSM5CAmHISZMArrcOMZ9Q
- fKPzFyiO4pXVVsi7nmn65bbFUNugjNfN7vGPnIUUib2zJDAncgP/rJz0np6qaJoJxl7V
- uvBm950LloW8ajN42VE4kB+P0w9/e+1zU46cFcYTvgCRBnj3rW9SNO3vpO7vVpkwvEP2
- Akwno2mAqOtTt/GZ/KGhCyeFs+tqBloQ4Ub5ti/Uq9wsnc6NmBbKkV8/Pbk0XayC40wq
- jz9KyfydBvIj4EJ+kB3L/8vKHJF30HQXdlhK/ysu7GG/13s2EuZylJlBiVC7ane6u0Rb +A== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r3dkc9xda-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 09 Jun 2023 05:01:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 359511I3032557
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 9 Jun 2023 05:01:01 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 8 Jun 2023 22:00:56 -0700
-Date:   Fri, 9 Jun 2023 10:30:52 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>, <mani@kernel.org>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 4/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75
- compatible
-Message-ID: <20230609050052.GA472607@hu-pkondeti-hyd.qualcomm.com>
-References: <1686138469-1464-1-git-send-email-quic_rohiagar@quicinc.com>
- <1686138469-1464-5-git-send-email-quic_rohiagar@quicinc.com>
+        with ESMTP id S229726AbjFIFKJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 01:10:09 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D241199D
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 22:10:08 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-52c30fa5271so283209a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 22:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686287408; x=1688879408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F32J5EQyGM5sr7NBbMoJM1nRy1dBiIUJo1x8SMu+nBU=;
+        b=zB5Ijip6uCx/v57hjO6khTEBIGPhpDdiKszzs1mSw9Z+GWcVEe58+58etMY6ln16St
+         4Eq3e73HFeQ+3rYaAdjjC/9MImefcdJs4CNfAey3/VFj4on9qtIXvMoMv+1CJqsT8UJS
+         +P/oDOLJf4v/uGNNJ890CtZC1Zhp4R2Zb+Ci2gAkBpViUtI14rhS+wKiyQcQobtL6Wfh
+         l+g4WIMsWRhw2pjBGwkCTmPzO5LrxSHQweueUY90fh5oWRlM1yWGF9r+hm7brcSQ6JUV
+         ZPpMUhiLG0IlbD1jTjWb3EG0jBzEIzvqMwoJvoaI+q49hijyTo9NWC0y5ZZOH5MXdZ+L
+         8qpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686287408; x=1688879408;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F32J5EQyGM5sr7NBbMoJM1nRy1dBiIUJo1x8SMu+nBU=;
+        b=ko/UiRtEwQVflk5G2lS42mN0GKD+JEZ8/tiBVLSqj+/2yTkeDs+uj1anfQEY+wl+MV
+         c1fNHuGVoluncgpaSSzAqUwxN1JVaB5GKAMH4FCtvHjTa2DI1OzIUyw12Y3NpZB+6x5o
+         +VGVoYmarP09dvBoHbV2tjcGTIeZhUIJo1Ft1KJS1k6djrfpjGlUuilWXr2jceqRw1v4
+         z3phxqnRwj8Bs52r40L/uWoknK6F/Vr4JFLex50FACJjrLyjlcr1jSaYzmouIGBxAs4S
+         6rjiDK/1OcwIGAw0MvK2baqK1CIwGMSAhAs5kvq9kdw0UdvuZGqkJ53gSYYwFe9RLkSm
+         Yl/g==
+X-Gm-Message-State: AC+VfDxS7wU5E9dFfhH0ElAbuawZprU3uIVCi2sKnzDAJ49viZwDZ7dn
+        NVrk+BctvK1dGQotJjGhgHFHkQ==
+X-Google-Smtp-Source: ACHHUZ4UrPVCYTWiuYlc0WjJ4KaCUIbKd8nmtQqdMQWcs0QJhycoV1PmGIkULujef3qbIDzKtrEWgQ==
+X-Received: by 2002:a17:902:b713:b0:1b1:bf4c:868a with SMTP id d19-20020a170902b71300b001b1bf4c868amr198802pls.42.1686287407868;
+        Thu, 08 Jun 2023 22:10:07 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b001ae8b4dc49bsm2279971plh.13.2023.06.08.22.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 22:10:07 -0700 (PDT)
+Date:   Fri, 9 Jun 2023 10:40:05 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 13/16] OPP: Extend dev_pm_opp_data with OPP provider
+ support
+Message-ID: <20230609051005.fxuvp4ilcjvhhrkc@vireshk-i7>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-14-ulf.hansson@linaro.org>
+ <20230608053446.ngoxh7zo7drnr32z@vireshk-i7>
+ <CAPDyKFqUWhdmctKRpQoqwZ2nsx_P2FiWvLzfm_d39QdECWoytA@mail.gmail.com>
+ <20230608104540.tykxtvwhoyogthw5@vireshk-i7>
+ <CAPDyKFrbpm0W1Hdv+85MqMAC2-UbPOE6qp26L0UvVF0sSL2ayA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1686138469-1464-5-git-send-email-quic_rohiagar@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: FOUsi5DUvSVpyvRY35Si6-6ltUglUcSS
-X-Proofpoint-GUID: FOUsi5DUvSVpyvRY35Si6-6ltUglUcSS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-09_02,2023-06-08_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- impostorscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- mlxlogscore=999 clxscore=1015 spamscore=0 lowpriorityscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306090043
+In-Reply-To: <CAPDyKFrbpm0W1Hdv+85MqMAC2-UbPOE6qp26L0UvVF0sSL2ayA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 05:17:48PM +0530, Rohit Agarwal wrote:
-> Add compatible for EPSS CPUFREQ-HW on SDX75.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> index a6b3bb8..866ed2d 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-> @@ -36,6 +36,7 @@ properties:
->                - qcom,sa8775p-cpufreq-epss
->                - qcom,sc7280-cpufreq-epss
->                - qcom,sc8280xp-cpufreq-epss
-> +              - qcom,sdx75-cpufreq-epss
->                - qcom,sm6375-cpufreq-epss
->                - qcom,sm8250-cpufreq-epss
->                - qcom,sm8350-cpufreq-epss
+On 08-06-23, 13:45, Ulf Hansson wrote:
+> Okay, if I understand your point you want to avoid creating OPPs for
+> each device, but rather coupling them with the genpd provider's OPP
+> table. Right?
 
-This is a very basic question, not completely related to this patch.
-Apologies in advance.
+Not exactly :)
 
-What is the rationale for adding a new soc string under compatible and
-using it in the new soc device tree? Is it meant for documentation purpose?
-i.e one know what all SoCs / boards supported by this device node.
+> Note that, there is no such thing as a "required opp" in the SCMI
+> performance protocol case. A device is compatible to use all of the
+> OPPs that its corresponding SCMI performance domain provides. Should
+> we rename the required opp things in the OPP core to better reflect
+> this too?
 
-I ask this because, we don't add these compatible strings in the driver
-[1] which means there is not SoC specific handling and there is no
-module load assist (module alias matching by user space based on device
-presence).
+Not really :)
 
-Thanks,
-Pavan
+> That said, we still need to be able to add OPPs dynamically when not
+> based on DT. The difference would be that we add the OPPs when
+> initializing the genpd provider instead of when attaching the devices.
+> In other words, we still need something along the lines of the new
+> dev_pm_opp_add_dynamic() API that $subject series is introducing, I
+> think.
+
+That's fine.
+
+> Moreover, to tie the consumer device's OPP table to their genpd
+> provider's OPP table (call it required-opp or whatever), we need
+> another OPP helper function that we can call from the genpd provider's
+> ->attach_dev() callback. Similarly, we need to be able to remove this
+> connection when genpd's ->detach_dev() callback is invoked. I will
+> think of something here.
+
+Something like set/link/config_required_opp()..
+
+> Finally, I want to point out that there is work going on in parallel
+> with this, that is adding performance state support for the ACPI PM
+> domain. The ACPI PM domain, isn't a genpd provider but implements it's
+> own PM domain. The important point is, that it will have its own
+> variant of the dev_pm_genpd_set_performance_state() that we may need
+> to call from the OPP library.
+
+Okay.
+
+Let me explain how structures are linked currently with help of below (badly
+made) drawing. The 'level' fields are only set for Genpd's OPP entries and not
+devices. The genpd OPP table normally has only this information, where it
+presents all the possible level values, separate OPP for each of them.
+
+Now the devices don't have `level` set in their OPP table, DT or in C
+structures. All they have are links for required OPPs, which help us find the
+required level or performance state for a particular genpd.
+
+  +-----------------+                    +------------------+
+  |  Device A       |                    | GENPD OPP Table  |
+  +-----------------+  required-opps     +------------------+   required-opps
+  |OPP1: freq: x1   +--------------------+ OPP1:            +--------------+
+  +-----------------+                    |      level: 1    |              |
+  |OPP2: freq: y1   +-----------+        +------------------+              |
+  +-----------------+           |        | OPP2:            +---------+    |
+  |OPP3: freq: z1   +--------+  +--------+      level: 2    |         |    |
+  +-----------------+        |           +------------------+         |    |
+                             |           | OPP3:            +--+      |    |
+                             |           |      level: 3    |  |      |    |
+                             |           +------------------+  |      |    |
+  +-----------------+        |           | OPP4:            |  |      |    |
+  |  Device B       |        +-----------+      level: 4    |  |      |    |
+  +-----------------+                    +------------------+  |      |    |
+  |OPP1: freq: x2   +------------------------------------------+      |    |
+  +-----------------+                                                 |    |
+  |OPP2: freq: y2   +-------------------------------------------------+    |
+  +-----------------+                                                      |
+  |OPP3: freq: z2   +------------------------------------------------------+
+  +-----------------+
+
+
+What I am asking you to do now is, create an OPP table for the Genpd first, with
+OPPs for each possible level. Now the Genpd layer creates the OPP table for
+Device A, where it won't fill the levels, but all other fields and then use a
+new API to add required OPPs for the device's OPP, which will point into Genpd's
+OPP entries. And with that the existing code will work fine without any other
+modifications.
+
+Does this help ?
+
+--
+
+viresh
