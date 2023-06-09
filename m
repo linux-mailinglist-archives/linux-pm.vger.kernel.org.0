@@ -2,176 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD2972A308
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 21:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7E972A448
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 22:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjFITX6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 15:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
+        id S231449AbjFIUTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 16:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjFITX6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 15:23:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C91F2D7C;
-        Fri,  9 Jun 2023 12:23:56 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3FD816606F38;
-        Fri,  9 Jun 2023 20:23:55 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686338635;
-        bh=uNTdM2/xyHQurNyBydk0D8bRTklQBpCB7QRkvhxIhZM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A6uBwzc2Tw6hkIJ2ucux0Wfi6fySWCgVQMs0d9KqWIazDq+ejYD3IFNU0lYhFBM8x
-         9blGkuwanOn/RYGeYgfC1sBORK8vBJR4d4jiHpLBErBuExnE7qTIU9TL3BmwK7iJRn
-         v6X6hIIaQM1yqspOdlcRdtRqV1caHaSot3DrnSCszeeXSX8H1ILYl04k3sIw2mIATc
-         +J39ouBEFuy5YCjr/UyTujJtf0yyyb1RwFlJeubLJtteBOnYnsMlRx3/pINAxtFpAW
-         77hX3Qs0FZCK3iR7x6AzXC4NmRrNgMfNO1lMpRXKcrNyGdAfv46cqfHkORE/qlb5G2
-         LQpjfOhUsWhiA==
-Received: by mercury (Postfix, from userid 1000)
-        id 7BF3B106118A; Fri,  9 Jun 2023 21:23:52 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 21:23:52 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] power: reset: qcom-pon: add support for pm8941-pon
-Message-ID: <20230609192352.h4e5zxwuhoaq77lc@mercury.elektranox.org>
-References: <20230609022553.1775844-1-dmitry.baryshkov@linaro.org>
- <20230609022553.1775844-3-dmitry.baryshkov@linaro.org>
+        with ESMTP id S231439AbjFIUTT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 16:19:19 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC7D30C0
+        for <linux-pm@vger.kernel.org>; Fri,  9 Jun 2023 13:19:17 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f5f728c4aaso2686953e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jun 2023 13:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686341955; x=1688933955;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sdIYwlKceBgYC+N9fRwUszhw4BX6aPSp6RBZQ9P/Ti0=;
+        b=lj8wWKoQnVy/VhgfQD/y/wYw3AIRhMFsHIMX4SLLjnph/cUMDy1gGhn/LnWEPsMZw2
+         eWVMTliGbNF12XEfXd5tJItarl4M+G+X9Z2FgkQIE4xunFwVw3Qk9XMHiht6lqNJCB+w
+         u1sXE+AMQvlGG6mukyut4YMt3+c3Ci40IjCzQC3oVuLbX0STxJQJxWIpH43Bed/1xNmk
+         HV1a4njPusA/VMPNoSFJWD9spQN8Uv9tKXBCJDrUpZZIvtfqHo5JDKHBHl1lJurwoEfZ
+         jL+y18fEuHRvqx8/qdJupdMSWNhomR5aqiPD1HrstjSBNBxjamPLhKOzNIR+guRq+Pum
+         UYEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686341955; x=1688933955;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sdIYwlKceBgYC+N9fRwUszhw4BX6aPSp6RBZQ9P/Ti0=;
+        b=hRGb2Xg/k65OhYbWiftvEmhHwbaTAf7n31lRr+4o6TCavgj1hsEs4Rf370hL82Gs1O
+         fW1oUQD5TY1Akx7pdUGI5670Dgs4Y/24OHlQ86WHkvhqakgwzKn9UPva0QKzPk9aJnxo
+         LAUxJK4ucQniX4y3wqQiZGOYAJP3SljpKjbA9NEpC34Qtjbp+W1oM08XqKLTPh5prKFU
+         6xE8t6x8o4lloRCSfrb5nuRImhVo5RdD+vC98x3GFHTAmuXgNhUBpc+m0FW7UU3eQJmd
+         bnjmOu0N5f7tLSXhCk1GAVAKWGPnbyigdXnwzVQbGlXivR08fzDmZWTISwPHfCcSGi+p
+         QlNg==
+X-Gm-Message-State: AC+VfDzcUnDFziOWyHjrexlv6Wt1/mJuR1e05rBxuLzSqW7Mz5DaxTBJ
+        cs2hC2Wkm7B21tlCaylgzAKXkbDdbnpj+iC7HcA=
+X-Google-Smtp-Source: ACHHUZ729FgVImbP3+bzW2KIwIhxOihS91E/smBNxVZQRhhzqLQMpg2ARlb0bzpFKIOZ/D5ZXZKIjg==
+X-Received: by 2002:a05:6512:3e15:b0:4f3:a526:6fd2 with SMTP id i21-20020a0565123e1500b004f3a5266fd2mr949318lfv.16.1686341955299;
+        Fri, 09 Jun 2023 13:19:15 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id b18-20020ac25632000000b004f628eb7884sm641349lff.232.2023.06.09.13.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Jun 2023 13:19:14 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 00/22] Restructure RPM SMD ICC
+Date:   Fri, 09 Jun 2023 22:19:05 +0200
+Message-Id: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rjht7i27hto4iruo"
-Content-Disposition: inline
-In-Reply-To: <20230609022553.1775844-3-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADmJg2QC/3WNQQ6CMBBFr0JmbQ0t0KAr72GIacsAk2BLpkg0p
+ He3snf5XvL/2yEiE0a4FjswbhQp+AzqVICbjB9RUJ8ZVKmqslFarGEhJ+Kzf5BzwrZKVpe6NQ3
+ 2kDfWRBSWjXdTXvnXPGe5MA70PiL3LvNEcQ38OZqb/Nl/95sUpZB2aFFrXbkabzN5w+EceIQup
+ fQF8a0zZ8AAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686341953; l=4861;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=vFiP9vIROTYaXe+Eii+OPNiUwBo8phYnrkzg7uqdXO4=;
+ b=aQb1MqVaJPPweVfLXQf5tt30v5CfFPMcwoUcfa4luWwSvMgeZNgEgQad7bnKDHw0uDdopSDd3
+ d8nB+ab8YGyCKKn5yXSwvEvho0dNxxQbaLGldKqGZkblbx2boPGEk+u
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This series reshuffles things around, moving the management of SMD RPM
+bus clocks to the interconnect framework where they belong. This helps
+us solve a couple of issues:
 
---rjht7i27hto4iruo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+1. We can work towards unused clk cleanup of RPMCC without worrying
+   about it killing some NoC bus, resulting in the SoC dying.
+   Deasserting actually unused RPM clocks (among other things) will
+   let us achieve "true SoC-wide power collapse states", also known as
+   VDD_LOW and VDD_MIN.
 
-Hi,
+2. We no longer have to keep tons of quirky bus clock ifs in the icc
+   driver. You either have a RPM clock and call "rpm set rate" or you
+   have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
 
-On Fri, Jun 09, 2023 at 05:25:51AM +0300, Dmitry Baryshkov wrote:
-> For PM8941 we don't have a defined field to store the reset reason.
-> Support wrapping pwrkey and resin, but without writing the reset
-> reason.
->=20
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
+3. There's less overhead - instead of going through layers and layers of
+   the CCF, ratesetting comes down to calling max() and sending a single
+   RPM message. ICC is very very dynamic so that's a big plus.
 
-Thanks, queued.
+The clocks still need to be vaguely described in the clk-smd-rpm driver,
+as it gives them an initial kickoff, before actually telling RPM to
+enable DVFS scaling.  After RPM receives that command, all clocks that
+have not been assigned a rate are considered unused and are shut down
+in hardware, leading to the same issue as described in point 1.
 
--- Sebastian
+We can consider marking them __initconst in the future, but this series
+is very fat even without that..
 
->  drivers/power/reset/qcom-pon.c | 22 +++++++++++++++-------
->  1 file changed, 15 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-po=
-n.c
-> index ebdcfb28c4a0..1344b361a475 100644
-> --- a/drivers/power/reset/qcom-pon.c
-> +++ b/drivers/power/reset/qcom-pon.c
-> @@ -17,6 +17,8 @@
->  #define GEN1_REASON_SHIFT		2
->  #define GEN2_REASON_SHIFT		1
-> =20
-> +#define NO_REASON_SHIFT			0
-> +
->  struct pm8916_pon {
->  	struct device *dev;
->  	struct regmap *regmap;
-> @@ -45,6 +47,7 @@ static int pm8916_reboot_mode_write(struct reboot_mode_=
-driver *reboot,
->  static int pm8916_pon_probe(struct platform_device *pdev)
->  {
->  	struct pm8916_pon *pon;
-> +	long reason_shift;
->  	int error;
-> =20
->  	pon =3D devm_kzalloc(&pdev->dev, sizeof(*pon), GFP_KERNEL);
-> @@ -64,13 +67,17 @@ static int pm8916_pon_probe(struct platform_device *p=
-dev)
->  	if (error)
->  		return error;
-> =20
-> -	pon->reboot_mode.dev =3D &pdev->dev;
-> -	pon->reason_shift =3D (long)of_device_get_match_data(&pdev->dev);
-> -	pon->reboot_mode.write =3D pm8916_reboot_mode_write;
-> -	error =3D devm_reboot_mode_register(&pdev->dev, &pon->reboot_mode);
-> -	if (error) {
-> -		dev_err(&pdev->dev, "can't register reboot mode\n");
-> -		return error;
-> +	reason_shift =3D (long)of_device_get_match_data(&pdev->dev);
-> +
-> +	if (reason_shift !=3D NO_REASON_SHIFT) {
-> +		pon->reboot_mode.dev =3D &pdev->dev;
-> +		pon->reason_shift =3D reason_shift;
-> +		pon->reboot_mode.write =3D pm8916_reboot_mode_write;
-> +		error =3D devm_reboot_mode_register(&pdev->dev, &pon->reboot_mode);
-> +		if (error) {
-> +			dev_err(&pdev->dev, "can't register reboot mode\n");
-> +			return error;
-> +		}
->  	}
-> =20
->  	platform_set_drvdata(pdev, pon);
-> @@ -80,6 +87,7 @@ static int pm8916_pon_probe(struct platform_device *pde=
-v)
-> =20
->  static const struct of_device_id pm8916_pon_id_table[] =3D {
->  	{ .compatible =3D "qcom,pm8916-pon", .data =3D (void *)GEN1_REASON_SHIF=
-T },
-> +	{ .compatible =3D "qcom,pm8941-pon", .data =3D (void *)NO_REASON_SHIFT =
-},
->  	{ .compatible =3D "qcom,pms405-pon", .data =3D (void *)GEN1_REASON_SHIF=
-T },
->  	{ .compatible =3D "qcom,pm8998-pon", .data =3D (void *)GEN2_REASON_SHIF=
-T },
->  	{ .compatible =3D "qcom,pmk8350-pon", .data =3D (void *)GEN2_REASON_SHI=
-FT },
-> --=20
-> 2.39.2
->=20
+Apart from that, it squashes a couple of bugs that really need fixing..
 
---rjht7i27hto4iruo
-Content-Type: application/pgp-signature; name="signature.asc"
+--- MERGING STRATEGY ---
+If Stephen and Georgi agree, it would be best to take all of this through
+the qcom tree, as it touches on heavily intertwined components and
+introduces compile-time dependencies between icc and clk drivers.
 
------BEGIN PGP SIGNATURE-----
+Tested on SM6375 (OOT), MSM8998 (OOT), MSM8996.
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSDfEcACgkQ2O7X88g7
-+prtKQ/+LbeZ/SUCga7U/ISplAr/bCuxuef8r3j1a8LLHc7nDtjjFvmJKdcmTEak
-BdTn/zBDJPRPUzXE9qwdgjMusZhXstKQNJrV3k86Ev+jBBdg8fKqIupfnnw8Dmh8
-izc8k0H2qL0VTNo9449CkHzZRv/RijVPmPcl2OL3VwCMR84mGWpigPH5ytOK1Rvs
-PWj6Emj7MWDqTAZolQSI1b+K+fG3W2eCcLyMQg4xORfft2gdupl5dLtG5lQUjFyT
-4M+H12PkJoF10TmF0CO4pJiFnQq8Mns0LFwOcxQGroBX5KFF0VUmEBvZh4sg1taM
-z/3iis7pZBu18g00gFr4tiIPNqFajOXY+ad8ZOQWyxcMWF8fsxmMC03mJfITsk6z
-QxBVvLTVl9SajjZ50MhXLTGpkwLHlaEfnoc7OoN8HZPSuHW3UrusgDbwWCTPyqkL
-xULZ+JcRjRuRPCx2fO7CmE03B+QyGbCXip+0AVMI4rUwxgkyYhd5ldzTmcIp+v9s
-rxWJKEHJw+EV15sN1etZVCNpPLKFBvFwvIUpjGXIHSWAurW3Cn4NS7lMq/8lt/gM
-0WGakRKjG+CtuiP3IkQZstfzC1yI+lzVTc/eqZqE/+P0hmsA8wI/YXMkWbTXmnbK
-MXHnXTxqvEft2NzEVaNw6DIU7XAvcwiaTRlnZFW4TfqD8eh5Z+U=
-=at7v
------END PGP SIGNATURE-----
+MSM8974 conversion to common code and modernization will be handled separately.
 
---rjht7i27hto4iruo--
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- Sort entries properly in "Add missing headers in icc-rpm.h"
+- Fix the check for no clocks on a given provider
+- Replace "Divide clk rate by src node bus width" with a proper fix
+- Add "Set correct bandwidth through RPM bw req"
+- Split "Add QCOM_SMD_RPM_STATE_NUM" into 2 logical changes
+- Move "Separate out interconnect bus clocks" a bit later in the series
+- Link to v1: https://lore.kernel.org/r/20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org
+
+---
+Konrad Dybcio (22):
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      soc: qcom: smd-rpm: Use tabs for defines
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      clk: qcom: smd-rpm: Export clock scaling availability
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: icc-rpm: Allow negative QoS offset
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: icc-rpm: Set correct bandwidth through RPM bw req
+      interconnect: qcom: icc-rpm: Fix bandwidth calculations
+
+ drivers/clk/qcom/clk-smd-rpm.c             | 300 ++++++++++++-----------------
+ drivers/interconnect/qcom/Makefile         |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c |  66 +++++++
+ drivers/interconnect/qcom/icc-rpm.c        | 212 ++++++++++----------
+ drivers/interconnect/qcom/icc-rpm.h        |  55 ++++--
+ drivers/interconnect/qcom/msm8916.c        |   4 +-
+ drivers/interconnect/qcom/msm8939.c        |   5 +-
+ drivers/interconnect/qcom/msm8974.c        |   2 +-
+ drivers/interconnect/qcom/msm8996.c        |   9 +-
+ drivers/interconnect/qcom/qcm2290.c        |   7 +-
+ drivers/interconnect/qcom/qcs404.c         |   4 +-
+ drivers/interconnect/qcom/sdm660.c         |   7 +-
+ drivers/interconnect/qcom/smd-rpm.c        |  39 +++-
+ drivers/interconnect/qcom/smd-rpm.h        |  15 --
+ include/linux/soc/qcom/smd-rpm.h           |  22 ++-
+ 15 files changed, 427 insertions(+), 322 deletions(-)
+---
+base-commit: 53ab6975c12d1ad86c599a8927e8c698b144d669
+change-id: 20230526-topic-smd_icc-b8213948a5ed
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
