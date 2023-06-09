@@ -2,218 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DFA72A4AA
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 22:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3096E72A575
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 23:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbjFIUVn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 16:21:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32974 "EHLO
+        id S230418AbjFIVm3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 17:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbjFIUVN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 16:21:13 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C83044AF
-        for <linux-pm@vger.kernel.org>; Fri,  9 Jun 2023 13:20:18 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f122ff663eso2739164e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jun 2023 13:20:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686341984; x=1688933984;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gseMZqiQentYyRaHcHEHjEO4uvoAd0TikjxuZU3oPHc=;
-        b=lOsTID+U5Hfbj3U97uR6HDXz5WxN0aXxTydWG0SfmWCDY4hRs9MC3OOD05luTpoFwA
-         Lx6mTr881vNwuhAfjuYKenvHFshoUXNmRWx0b43/oK/ffqzmIm4KXBza4hCZhqu5uN1Z
-         T87/6a93Y40OqulKH8nCWcAJ0ruSsf/4GwXDus5oklG1hTYKX6AOTbrfte2EwVJKCZCy
-         BANzpZuEpApNrgxMPZ3rD2cSlt4oZrI4RnejbiMRk/ybZbeiJ8syS61bTYtNADLOcnE0
-         lk6/dUFriCAYPerG1KuPHKQWD9yrmzrmndAKzIkKqUXuY46luIgPi+NDON6HLXPxc8lm
-         myRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686341984; x=1688933984;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gseMZqiQentYyRaHcHEHjEO4uvoAd0TikjxuZU3oPHc=;
-        b=Hbw0YjFRJE++25TpKHYyDm0UUe3ymRXc3+xxjQVtmhHQ6xG0wOe+uB8WD9TDGoKCjQ
-         rFZs7i+SQlNRcsq45PhLNcRTPH+DQ8cO87/hfaQshi/8AjeWo+j1gXmlBWug+vqr5ks0
-         FAk4yaOgzWh5iZz6yANPnvQguHGnGnzDk2iclULh0XdJQAb07diU91dFJwo4D7SJ1gIt
-         3mbOVUWD2+ZVrRvzzuOKfIHATlyXVaUikb2IteFYQIcp0lo8UJsrSQOeP4AaGKFYYfG8
-         8ZIlqvmf/ZhRa33LDahJBXwmwQMhMHJ6GpPMuobZ1+tP7cNb2N/oiFRX3HSo5b4kHNvH
-         wpMA==
-X-Gm-Message-State: AC+VfDxBjVMieMqKT6umuXM2H39l0Pf+St4KP9XU+sV4fQoJcj3dYXVj
-        32pNMKwM+JO6ikYD7Gtt0Iv9ApEXbj36Asi9gJo=
-X-Google-Smtp-Source: ACHHUZ4tVmuUiVo+jQcB8cq/Jdhj6B3J+7IdTt4y3MXNwGWde9Oz0MqtxrBavvqqQTElst0GQDPVQw==
-X-Received: by 2002:a19:9115:0:b0:4f6:10e9:c507 with SMTP id t21-20020a199115000000b004f610e9c507mr1445654lfd.23.1686341984248;
-        Fri, 09 Jun 2023 13:19:44 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id b18-20020ac25632000000b004f628eb7884sm641349lff.232.2023.06.09.13.19.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jun 2023 13:19:43 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 09 Jun 2023 22:19:27 +0200
-Subject: [PATCH v2 22/22] interconnect: qcom: icc-rpm: Fix bandwidth
- calculations
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229599AbjFIVm2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 17:42:28 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2076.outbound.protection.outlook.com [40.107.93.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BDE210E;
+        Fri,  9 Jun 2023 14:42:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CRlXdZutnIgg5yeJasPfvf+pibElhj+m7d2olXKCs7p1ixFOSltaq5uhqWyZMpfOCtg5Vau+HhNb8ee4FF3iHxKUyg2TfLczDWLUFnhj3Kb4xHk3Y48YpZ27ng5HpoaoibZt2ozTWi+6Rcl1YMl6z19GDCAPqEuXWmNtiMrcFz1gbqXqZZaZAFxBsqWl86dUKqE7IomV7HYkRQNT6i7RrO3g8CTMdYXrsBDmLz9PlD83xUSkO6IdCJiZKJ26NodhXWSJSuIdCw2ROhrYreF4B46+yTMNTmTv30os7C2aqzaW1pKFLTxx+etb91ctqM8k8cH3yQeCbkTCUXWQPOUPbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1mZ/lHDNYu1dq7Yp/J9HZmjygw4cWS5U+hgXxzhqA7Q=;
+ b=cDP3j8DRR63b6RobgduY2XfB5mjx2RT1bej0jFEXSmuSeJlZy25Z6bEhQNzSwp+G3c61SPGLcMl5oivE2HW1CTOjx0LLyff19SXxVoFpB6p3Pd4UT/7FnvN7s999IMrTaDBO6G/tz+4osowLa6qsng5GOVDMHYg0TIpc9KJFNAgHuZqG5eoyvyYNLlgu2ZXVrPuczfGGNHpMBcGXwFOkpEpomWKZ15s8W657P6fjXzhmmL3zkP2HUWTgBYjkIVTAzM4cmIZVyr+LtLMD1P+JVq+NqbvgiimaMu3tkeq+WHV0uAm7bXvJW1xpJMdEIRkgzsdwsemDEosmbJF60QmQJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1mZ/lHDNYu1dq7Yp/J9HZmjygw4cWS5U+hgXxzhqA7Q=;
+ b=hcz78jLirgrNxanrX730fOH6CXSX6ChSI5xWlPr4b8yydDXotAp1DfAyvvCl2EaEtY7qOG9eJRSGf4kBmKoaei/d15HrhHobd2eLmkTvLWyXd74kTZa0nA0g5jJIBzNRqQFhEj7ycFNkQflOG3cs07jpubhSpF1zPd6nv7XNOqQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com (2603:10b6:5:39f::7) by
+ BY5PR12MB4162.namprd12.prod.outlook.com (2603:10b6:a03:201::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.42; Fri, 9 Jun
+ 2023 21:42:24 +0000
+Received: from DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::1a81:77c7:9126:e215]) by DM4PR12MB5311.namprd12.prod.outlook.com
+ ([fe80::1a81:77c7:9126:e215%4]) with mapi id 15.20.6455.037; Fri, 9 Jun 2023
+ 21:42:24 +0000
+Message-ID: <30ff8a49-d3ab-63b7-1c9d-fbbea7a4b565@amd.com>
+Date:   Fri, 9 Jun 2023 17:42:21 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] cpufreq: amd-pstate: Set default governor to schedutil
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perry.yuan@amd.com, Ray.Huang@amd.com, Wyes.Karny@amd.com,
+        gautham.shenoy@amd.com
+References: <20230608095358.30548-1-mario.limonciello@amd.com>
+From:   Leo Li <sunpeng.li@amd.com>
+In-Reply-To: <20230608095358.30548-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-topic-smd_icc-v2-22-e5934b07d813@linaro.org>
-References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>, Evan Green <evgreen@chromium.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686341954; l=4975;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=T/6tws0nrW+rpOcnKnwLBuObiHFQRWQ5v+dHRcZBGwI=;
- b=vc+ZslG3iL81K4cl4YIvChfumOGREIWbFrTNU35OBSyYpVixdi0d53TBbCYxVphUGLTezSqTH
- cqNBeV7/oqvDiWxvPjVlEMUcVl+6ozJg4C3uc4ngJXEFgPfOm2QfhWt
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YQBPR01CA0120.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:1::20) To DM4PR12MB5311.namprd12.prod.outlook.com
+ (2603:10b6:5:39f::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5311:EE_|BY5PR12MB4162:EE_
+X-MS-Office365-Filtering-Correlation-Id: d537376a-40a5-473b-5150-08db6932695b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NWoozBii1mVruld8p7xz6WY7bVJPr7uMbf4zSv51v3B1lmDJDs2NCF28AtTurTjR6nvHDlhebHlJZIC3pIv5rG4ehB1vWRPvWp5ekR0QC1/RBBrm5C4+M5+3l/adDK5gaP13p7DbmdKl8y/OCZjn1ZuMYGnoZz/jtlr6W4zpgxk+iInO2o21ymf7XlWbE2uJsicAlhD1Vmkv5UWjIQ9nuhxF2mqPErK2zWESN0Vb0U4auQ/RemXfkBKWUT47Ql4rGi0io1Hl8cjYMEKhtdmNbeC32sodt/r0bQMdKIrXz2mleCQHaTq2O5Cy5n8/e3+DUACyDKNXnabyApyA7HL+nfnQ69+8o3zV6SZdvNDT/R9N4NQZQr3lY8YRywUyPWxvx+9JDQqbkts1G/4lCmKoW6bXHHN+Mk1F2b8igbQNQA2Dg1lbjEquzA+c8jLfRk37YkIiNeSuHDZbbVHThQpVNIIZy03MZaq961QGCj5Z1FPpt7wwdEaZspb0nsS6maa8RdZOekEXFvliQYFryT0HMwocBNEZeXKIP9TomovS81psdC1U+tjc8vOcAImnZzGpy5wSi5mjXg9ObOrQan0dpPFMMHgSyVmWz08wI00mvhakOgIHbTwglRaIMVvw/Q5JssiD+AYS0yZaIkpiMe3JBw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5311.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(366004)(346002)(136003)(451199021)(31686004)(66556008)(66476007)(66946007)(8676002)(5660300002)(8936002)(36756003)(4326008)(6666004)(478600001)(41300700001)(316002)(6486002)(38100700002)(6512007)(53546011)(26005)(6506007)(186003)(2616005)(83380400001)(86362001)(31696002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b1ZXdkNNVmp6Zi9FbFlTdkhVOURzR3AyNFJmN2ZEK3l2UWNSVUl0ZGw2OUow?=
+ =?utf-8?B?SnhRNEtuYWFnYzBKSktZK0NUUWhBd25renplMHhWSXk5RjQrQWJNcUVCSHZj?=
+ =?utf-8?B?SnRGSzAvcVJyNTdoNGo1VDNicWxlL2MzQjB1OWJiOE1GdUJreFlnUUxkRVhx?=
+ =?utf-8?B?TDY4MDBIaTBkUlp6RWNyVG4rYklvNytxMjZQc0hKWDFhYWxOT3Yxb2FPZG5D?=
+ =?utf-8?B?dnhKZVplenRhbGxFcVRMYThqZ0ZHMHJRcXc0RExvYUs4TzZYU0ZkRmJQdzBJ?=
+ =?utf-8?B?QWhsbGtWWTlmY1lkbWpycThSNU1iSXcyN0dtYzR0WFNGZDQrUkhjWjJoWll4?=
+ =?utf-8?B?cnF4Ymd5SXFPa21lU0FFdWNFSnkxMjF6SEU3ajdrZnRYU1dPaVJNeHZEMjlj?=
+ =?utf-8?B?NWsxazI0M2ZvVzFHMjI5M1cwZnV5TFJWY3FwM1E2Um5vUngrQ0xOdWhtZ2hs?=
+ =?utf-8?B?c0gxbkhIVlZLQnBTYjhEU3poOUd5KzJHVCtxUnlUdkt3a3o2NjNOVm90eEQw?=
+ =?utf-8?B?Z0NpRDZ6dWdiNzViZGxCZlVOME5tWTVJWHNOQkdjOU9HR3lsTU9jWUxRanF2?=
+ =?utf-8?B?a1BtOEgzcGF3cE1MK0xKVnp0TVBTMy9BVlp4TWh5R1JneWYxSEFORVNUVWY2?=
+ =?utf-8?B?UThMMkxYb1JVMUdRSWtFL1lCb0Y4V0kwTkJzelIwM3JHcGxKQ2NJNHNOVlgy?=
+ =?utf-8?B?MUdrMmtSSUxyank3UFpOdnlGeVg4MmVDa3dmcVMzSjhFamZPZTFuZFJwV09N?=
+ =?utf-8?B?Q3lBaU5OWmZMMDNSOVpSOXhvOWsvamJReG9Ec3FvV3QxSi9VMXFJcitRTXRN?=
+ =?utf-8?B?dFdlb1lBVDFldGpUZWxFY043NE9NL0lwOFEydE9Za2dsdGM1MEtBQ3h1NUVv?=
+ =?utf-8?B?dHlXQzdOMHAxc0RiY2Vkd0NEaGErNG9uc1FyOVJLTm4veFJmTWVtODd3NDB6?=
+ =?utf-8?B?QmtzTlkvc0M4T3FLS1dhYWVRaTRFY05TVnBGQW8zaFhodHNsbVFiOVBydWl1?=
+ =?utf-8?B?am95TXZWL0NNbHlzZkpTdk5WbEtHRGpQbWlHM291T0FXRkVuUXUrdFkzRjN2?=
+ =?utf-8?B?elh5cERGUzJlbGo3S1R1dlhJNzF4NWFzS1FaR1hSbU1qakpjejFoRnZZQzNi?=
+ =?utf-8?B?Rkdjc0ZGakdHMG1rcGdZWDZzWjBkWWdJUkU4NkxaajEwOTdhYm5UT2REUGJH?=
+ =?utf-8?B?ZDlFRVNrMkNVb0dkSWhsZ3E3VmZldVVLQWNSdjFodVE0SXBiazRWRC9IQUJ4?=
+ =?utf-8?B?aWx1Qlk1SkUyd2J3bXhLOGtiMkRQa1ErR0pGTS9GWXZFaC9yd3lMUklIeUtP?=
+ =?utf-8?B?WGdWSXc0ZlA5bFR1K0pRNTdPdGJpd3ZiallJWmdGTWV3QldHTVkxOXpxWUxT?=
+ =?utf-8?B?MEkwc3FZZVlMV0JBZUZoOSs1QU1IRlNIY3VUc05UOXpqd0lEMWYvM1FvZ0kw?=
+ =?utf-8?B?NkFOeVpZSDNWQXVMb1ZGbHBZRWVtaS8vUUNXSjZvYmxFNGorTTFZQlhtcHV2?=
+ =?utf-8?B?ZU5BbXl3cUh1TVlBWUJyU21LNTd5UFVRRlNISENkb3ZvMUV5RmNaMjBpdURr?=
+ =?utf-8?B?ZjBkQkE1djVLdnUwTzN3ZmRGMzcwMkRBbCtxZG5Jd2FyYXdxOGgvdEkzRUhJ?=
+ =?utf-8?B?TGVuNmhwWlpYZ25XVW95YUJmN0FBOXdreTdrVmRxOEZiTk9YZGpqd1pacUZY?=
+ =?utf-8?B?WGV5RHp1dTRmUk05eUJMMWNvMDNtL3JINkdFL2MzcERTUWlmOC9mMUFJMEor?=
+ =?utf-8?B?Q0Jxbzd1Ty9IUmtBbkw5ZmJiUmpyTzJ5MzBaUzlSR205M2J3dnFqcVBzSmJy?=
+ =?utf-8?B?R21mQVpSaVMwdllXT2ZqK2VPSkNlMmdIZWhaWXVoQWlGRWloNmdHS3U3WEFy?=
+ =?utf-8?B?MUpNbEtTZXZLVkFtN0xSY3F6cDFMcWZPUTNqT0lXMnEzUkkrOWdyV3BKNHF2?=
+ =?utf-8?B?YktiMHhQaDB1MjMvVStuaGRpdFB2akFkd01PUnBLZjFyMEFVUjlteFBWQXJH?=
+ =?utf-8?B?T2VVZHludStjd1B5d1BhMytoaW83eHp6YzcxWlpMUFI1dzVwdWw3L1FlM09O?=
+ =?utf-8?B?SDk3YWY4c1I5MDJKWXdWMWFTM2tmSXdGV09NUWJla0xLZmhya2RGWWJYUWF0?=
+ =?utf-8?Q?EW8fmTAwpF2ubXHJuN4YiYUBf?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d537376a-40a5-473b-5150-08db6932695b
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5311.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jun 2023 21:42:24.3269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UokAsCMXmpRcF/z22NK6ahIVyHOWwseVIUORn1LDZVzOzXiAZXaO+mPd+kQXydKA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4162
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Up until now, we've been aggregating the bandwidth values and only
-dividing them by the bus width of the source node. This was completely
-wrong, as different nodes on a given path may (and usually do) have
-varying bus widths.  That in turn, resulted in the calculated clock rates
-being completely bogus - usually they ended up being much higher, as
-NoC_A<->NoC_B links are very wide.
 
-Since we're not using the aggregate bandwidth value for anything other
-than clock rate calculations, remodel qcom_icc_bus_aggregate() to
-calculate the per-context clock rate for a given provider, taking into
-account the bus width of every individual node.
 
-Fixes: 30c8fa3ec61a ("interconnect: qcom: Add MSM8916 interconnect provider driver")
-Reported-by: Stephan Gerhold <stephan@gerhold.net>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/icc-rpm.c | 59 ++++++++++++-------------------------
- 1 file changed, 19 insertions(+), 40 deletions(-)
+On 6/8/23 05:53, Mario Limonciello wrote:
+> The Kconfig currently defaults the governor to schedutil on x86_64
+> only when intel-pstate and SMP have been selected.
+> 
+> If the kernel is built only with amd-pstate, the default governor
+> should also be schedutil.
+> 
+> Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 1508233632f6..d177a76abe2a 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -293,58 +293,44 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- }
- 
- /**
-- * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * qcom_icc_bus_aggregate - calculate bus clock rates by traversing all nodes
-  * @provider: generic interconnect provider
-- * @agg_avg: an array for aggregated average bandwidth of buckets
-- * @agg_peak: an array for aggregated peak bandwidth of buckets
-- * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ * @agg_clk_rate: array containing the aggregated clock rates in kHz
-  */
--static void qcom_icc_bus_aggregate(struct icc_provider *provider,
--				   u64 *agg_avg, u64 *agg_peak,
--				   u64 *max_agg_avg)
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_rate)
- {
--	struct icc_node *node;
-+	u64 agg_avg_rate, agg_rate;
- 	struct qcom_icc_node *qn;
--	u64 sum_avg[QCOM_SMD_RPM_STATE_NUM];
-+	struct icc_node *node;
- 	int i;
- 
--	/* Initialise aggregate values */
--	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
--		agg_avg[i] = 0;
--		agg_peak[i] = 0;
--	}
--
--	*max_agg_avg = 0;
--
- 	/*
--	 * Iterate nodes on the interconnect and aggregate bandwidth
--	 * requests for every bucket.
-+	 * Iterate nodes on the provider, aggregate bandwidth requests for
-+	 * every bucket and convert them into bus clock rates.
- 	 */
- 	list_for_each_entry(node, &provider->nodes, node_list) {
- 		qn = node->data;
- 		for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
- 			if (qn->channels)
--				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
-+				agg_avg_rate = div_u64(qn->sum_avg[i], qn->channels);
- 			else
--				sum_avg[i] = qn->sum_avg[i];
--			agg_avg[i] += sum_avg[i];
--			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+				agg_avg_rate = qn->sum_avg[i];
-+
-+			agg_rate = max_t(u64, agg_avg_rate, qn->max_peak[i]);
-+			do_div(agg_rate, qn->buswidth);
-+
-+			agg_clk_rate[i] = max_t(u64, agg_clk_rate[i], agg_rate);
- 		}
- 	}
--
--	/* Find maximum values across all buckets */
--	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++)
--		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
- }
- 
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- {
--	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
-+	u64 agg_clk_rate[QCOM_SMD_RPM_STATE_NUM] = { 0 };
- 	struct icc_provider *provider;
-+	struct qcom_icc_provider *qp;
- 	u64 active_rate, sleep_rate;
--	u64 agg_avg[QCOM_SMD_RPM_STATE_NUM], agg_peak[QCOM_SMD_RPM_STATE_NUM];
--	u64 max_agg_avg;
- 	int ret;
- 
- 	src_qn = src->data;
-@@ -353,7 +339,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
- 
--	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
-+	qcom_icc_bus_aggregate(provider, agg_clk_rate);
-+	active_rate = agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE];
-+	sleep_rate = agg_clk_rate[QCOM_SMD_RPM_SLEEP_STATE];
- 
- 	ret = qcom_icc_rpm_set(src_qn, src_qn->sum_avg);
- 	if (ret)
-@@ -369,15 +357,6 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	if (!qp->bus_clk_desc && !qp->bus_clk)
- 		return 0;
- 
--	/* Intentionally keep the rates in kHz as that's what RPM accepts */
--	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
--			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
--	do_div(active_rate, src_qn->buswidth);
--
--	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
--			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
--	do_div(sleep_rate, src_qn->buswidth);
--
- 	/*
- 	 * Downstream checks whether the requested rate is zero, but it makes little sense
- 	 * to vote for a value that's below the lower threshold, so let's not do so.
+Reviewed-by: Leo Li <sunpeng.li@amd.com>
 
--- 
-2.41.0
+Thanks!
 
+> ---
+>   drivers/cpufreq/Kconfig | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> index 2c839bd2b051..a1c51abddbc5 100644
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -38,7 +38,7 @@ choice
+>   	prompt "Default CPUFreq governor"
+>   	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
+>   	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
+> -	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
+> +	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
+>   	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+>   	help
+>   	  This option sets which CPUFreq governor shall be loaded at
