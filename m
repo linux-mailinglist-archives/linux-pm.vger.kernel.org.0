@@ -2,88 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF157290D4
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 09:20:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC027294E0
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 11:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbjFIHUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 03:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S241519AbjFIJYN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 05:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238333AbjFIHUY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 03:20:24 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 299F31712
-        for <linux-pm@vger.kernel.org>; Fri,  9 Jun 2023 00:20:23 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so1423737276.3
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jun 2023 00:20:23 -0700 (PDT)
+        with ESMTP id S239234AbjFIJXr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 05:23:47 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3913D49F9
+        for <linux-pm@vger.kernel.org>; Fri,  9 Jun 2023 02:18:04 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f6370ddd27so1877223e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jun 2023 02:18:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686295222; x=1688887222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cNZBVVP7JndHPOZxf9bAlKS1XeMLsUa6gJUiQeAwW6I=;
-        b=zCcyyvSukjhEDwNuBb6wmktcq/UDITOEvfnI8PyYQjcRhKV4srphoHFwiCxqrhVA5q
-         VHVcwlCC0/Zv/Zb+Ii3wa/0kMlRQrLokAb9uyiIXjoIwF/Cn8mab3BHWBjmWhwX3VqZq
-         QV32sIRVJadgcxMNUrtK92NVEXeddFeOV6fEUB84dnHxyFmLNmYYUeF1TVOW7cerOKv9
-         y9I9HtfV6i3bpjy/FUr4YRNJYGEolnhCpsx4vxs3C5Pp8g+FtI8X+vlqoAo7lTkAN/CI
-         vMX6xZjsL9yslYEJi8YlLQT6hWzbBsQbtX66q7bm6xjzDAMH21t/fpO8Y4UwlV8MK5iF
-         DuyQ==
+        d=linaro.org; s=google; t=1686302230; x=1688894230;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cdOMZOFFK46XMQWHJQR/JNKfoVWF5Xuwowhgn1zGCvg=;
+        b=Mm8gNGYpStPF+iQ4QjxKSa39Z4C7KdUmTYszNraI0kz4arWFCaIRAnq3VhMvXAQ/0D
+         PHhpTweQN70rwWxlAzsyhhnrIKryeGmB0ndZi7/9me0OYJO4oM3SdCMrSuiDNIQ7iUJs
+         Gr3iDmjY03z8cErtzS8upas+avQS2iyGcw5iOP4FfbnICHGwCBIrFy6pE5vR+V5LYKtL
+         06mOqO4O56AA5UklVoDStlMbxqVsTBmIPRyD155Lyj8m0DLTya3JadOnuYbMKQfh3rI/
+         w4qRF1xkFRVa8olthy96IVSyUB1mDa+fTsnd7CEQZEHrWOqia4i8lIiTekY0mFEsuZxC
+         Psmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686295222; x=1688887222;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cNZBVVP7JndHPOZxf9bAlKS1XeMLsUa6gJUiQeAwW6I=;
-        b=inGE9JthuzBT/U0Fxu66iZ1FOQ2P85R+IXiNar2LS1KM3xweobfrWWrOclGwI9ziTB
-         aDjLbgUKnZZHWX4ZY2qL71bnEspsbLoxqjV6MhK8M4A8dVICvvOxNXDT5ixfP+UmqZJp
-         WK22Pi8WQXIdVTJ/m6i4v0r83fkmkuSLyibwEYqVNhnlBQxgxSkAR8LVR4yiLnY+xyXQ
-         B4a9NSWsNoDfxwpDlJOHoh3L+FMHigKQE+XIZsD/bJUwtyohs1wOCIIi8RM1FBlkHDSw
-         W5iIFcE0xGdePQrN6NbEOsM5/JX32uSh8MTJti/G1BdnGPPKsrfAuirFjpkBcfqWfT1+
-         O5mw==
-X-Gm-Message-State: AC+VfDx/7roYr9GZFBPoGT1ToDerChZuVJaaaor4+KoOSs4FjKROeQPa
-        kx6eXWSexHOzrvQMMnGi/ipAv+zNa2O/u2zZ8Qalgw==
-X-Google-Smtp-Source: ACHHUZ5BLm8h+zwKDubwqcGeuDV0Th4rhBNr2usnCf58DvcB3K79R2ksO2UJa1K05qt+BlvxUQlBsxuinEOngdQz0yw=
-X-Received: by 2002:a25:1f57:0:b0:bb3:8f5d:23f9 with SMTP id
- f84-20020a251f57000000b00bb38f5d23f9mr323386ybf.22.1686295222340; Fri, 09 Jun
- 2023 00:20:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686302230; x=1688894230;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cdOMZOFFK46XMQWHJQR/JNKfoVWF5Xuwowhgn1zGCvg=;
+        b=GLRATZ8VcVYnoCY7K4vUD+PLr0KevEw3WV+WpkApWJmA7zavk6+aTnV1iWo+KghF0Q
+         93szL4+qy44TSkKO0OulJsUNe87dCxYZDlYnxwejOd3oV/j7gP6BYHyOtLDQEJiaqXhf
+         wIEJFdghBl5j0waSYyesR9SrfU3HH2t56RsrOc+WmBqxh3KnZva59iRjuh1A6gzGCWVo
+         1wQQJ8O7qnIBKEqcHk/AQ+rwMgGGZytdId3jg+BbJMtObhD6QTNwKA9Sfaz19coCTYAx
+         HCqEwM6d+tZYH/T90M7hZwG+5IINEcwFzDrlvgutQkKIVPxdCJmMO3s3DYc6RLmuCVHC
+         HxvA==
+X-Gm-Message-State: AC+VfDwXPZYkdPaZ/xyUuUNwWNwHe/QPH7m+I9mi75xudOZb4qXH3UkF
+        WUBND4EvHUJVHs3bCNL/ciwY7g==
+X-Google-Smtp-Source: ACHHUZ5z73R2zFNnCer+RMV1zZqn9H/fLIsIv+bZQWOcA7XTkZ3bXhfJq9Jda7zGqPuFoVUM9SDfNQ==
+X-Received: by 2002:a05:6512:521:b0:4f3:bbe1:34fc with SMTP id o1-20020a056512052100b004f3bbe134fcmr565962lfc.38.1686302230232;
+        Fri, 09 Jun 2023 02:17:10 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id j8-20020ac25508000000b004eb44c2ab6bsm477216lfk.294.2023.06.09.02.17.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jun 2023 02:17:09 -0700 (PDT)
+Message-ID: <f44293c7-fce9-e7a3-2a02-7ad5f7980e81@linaro.org>
+Date:   Fri, 9 Jun 2023 11:17:08 +0200
 MIME-Version: 1.0
-References: <20230602073025.22884-1-mario.limonciello@amd.com> <20230602073025.22884-3-mario.limonciello@amd.com>
-In-Reply-To: <20230602073025.22884-3-mario.limonciello@amd.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Jun 2023 09:20:11 +0200
-Message-ID: <CACRpkdaefaapvdn3pw8dUJ_JOb-wE3kF0WM1C8XYUZVEqyd6EA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] pinctrl: amd: Use pm_pr_dbg to show debugging messages
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Rafael Wysocki <rafael@kernel.org>, hdegoede@redhat.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, Basavaraj.Natikar@amd.com,
-        Shyam-sundar.S-k@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 4/5] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SDX75
+ compatible
+Content-Language: en-US
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, tglx@linutronix.de,
+        maz@kernel.org, mani@kernel.org, robimarko@gmail.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <1686138469-1464-1-git-send-email-quic_rohiagar@quicinc.com>
+ <1686138469-1464-5-git-send-email-quic_rohiagar@quicinc.com>
+ <20230609050052.GA472607@hu-pkondeti-hyd.qualcomm.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230609050052.GA472607@hu-pkondeti-hyd.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 9:32=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
 
-> To make the GPIO tracking around suspend easier for end users to
-> use, link it with pm_debug_messages.  This will make discovering
-> sources of spurious GPIOs around suspend easier.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+On 9.06.2023 07:00, Pavan Kondeti wrote:
+> On Wed, Jun 07, 2023 at 05:17:48PM +0530, Rohit Agarwal wrote:
+>> Add compatible for EPSS CPUFREQ-HW on SDX75.
+>>
+>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> ---
+>>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>> index a6b3bb8..866ed2d 100644
+>> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+>> @@ -36,6 +36,7 @@ properties:
+>>                - qcom,sa8775p-cpufreq-epss
+>>                - qcom,sc7280-cpufreq-epss
+>>                - qcom,sc8280xp-cpufreq-epss
+>> +              - qcom,sdx75-cpufreq-epss
+>>                - qcom,sm6375-cpufreq-epss
+>>                - qcom,sm8250-cpufreq-epss
+>>                - qcom,sm8350-cpufreq-epss
+> 
+> This is a very basic question, not completely related to this patch.
+> Apologies in advance.
+> 
+> What is the rationale for adding a new soc string under compatible and
+> using it in the new soc device tree? Is it meant for documentation purpose?
+> i.e one know what all SoCs / boards supported by this device node.
+It's two-fold:
 
-If the PM people merge the other patches they can take this too because
-of the dependency.
+1. The device tree describes the hardware, and for lack of better terms (e.g.
+   an SoC-specific version number of the block that is identical to all other
+   implementations of that revision on all SoCs that use it), we tend to
+   associate it with the SoC it's been (first) found on.
 
-Yours,
-Linus Walleij
+2. In case we ever needed to introduce a SoC-specific quirk, we can just add
+   an of_is_compatible-sorta check to the driver and not have to update the
+   device trees. This is very important for keeping backwards compatibility,
+   as it's assumed that not everybody may be running the latest one. This
+   means we have to avoid ABI breaks (unless we have *very* good reasons, like
+   "this would have never worked anyway" or "it was not described properly
+   and worked on this occasion by pure luck")
+
+Konrad
+> 
+> I ask this because, we don't add these compatible strings in the driver
+> [1] which means there is not SoC specific handling and there is no
+> module load assist (module alias matching by user space based on device
+> presence).
+> 
+> Thanks,
+> Pavan
