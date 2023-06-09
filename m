@@ -2,142 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5CC6728BB4
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 01:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CBC728DCB
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jun 2023 04:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjFHXY6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Jun 2023 19:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
+        id S229582AbjFIC0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Jun 2023 22:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjFHXY6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 19:24:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE2D30D6;
-        Thu,  8 Jun 2023 16:24:30 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 753836606F1D;
-        Fri,  9 Jun 2023 00:24:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686266664;
-        bh=mCFzt9Y8896kdcxmhKQPvHOnPkcXSRatB/HlXjIKGQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HcSfKi7LayIU/v34zNkIEAO6QPFs20sykANJIiRceDpKRd4hBFyrlKfBYal9/3iIr
-         5rvtCnsvrR8Ta18JeX7S0pkSdvFl/iJwv+QYkGizxbrD+0dnQQ1vPOTcb7h9uMaZKP
-         N0KFG+JJc0i6PRfIffG8SDw+EROmPehrb56fXbhnxQBFJuSZuCL7S/Xkj6n4edo1Yo
-         +G0ew41QMVPpyrzOs91GRBeMrMKaMa3kB19Q5dnfFJsZ/1ukC7e2ydRG51aqBPeZcd
-         6+VXsmfU4oyTvEQnzvqo5BKme0Nzlcb0o1ZeX7nsg+tfoW/+arro/nm7rJHew23KZp
-         ofFBskKzAUpgA==
-Received: by mercury (Postfix, from userid 1000)
-        id 29AFB1060A24; Fri,  9 Jun 2023 01:24:22 +0200 (CEST)
-Date:   Fri, 9 Jun 2023 01:24:22 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S238518AbjFIC0A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Jun 2023 22:26:00 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE3A30F2
+        for <linux-pm@vger.kernel.org>; Thu,  8 Jun 2023 19:25:56 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1a6a8e851so12910981fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jun 2023 19:25:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686277555; x=1688869555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N1i8s5d5YkSHs6Ggw62o5jRROVt2oF8voOd8NTFgAH4=;
+        b=AnHHOPfgTDCJ6xYNjH2MRl7VtMqTUsCfez5IzujeOZJX3qs3F3lx4G4jIYxg2R+Hnz
+         zpET7aqhEmxwfvQuBpGEEZDKNCzlivq2m8VJa2fwYD95kPcAyv7jRTpbelhe3P5MK5pz
+         e4p3E/9VBcXnJn46tOHTuZHcnzFhTgkv8hhioJ0wkmVKI2xf64+ucQ63lTtCsj3gnIZy
+         BAgmslYb7/p3qJZrhcqqplBqUKJmMnD7xtzsjBwnZLNVKiPWP2R8DqGWWJe5jCSG0PqP
+         7HtTHx1HqF19WQrn35WNmTKn2B+XAU+qEWsl7fEDnMDw65WasDsxBVhx7liGBXflL6bz
+         6Djw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686277555; x=1688869555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N1i8s5d5YkSHs6Ggw62o5jRROVt2oF8voOd8NTFgAH4=;
+        b=VwUB3bHqDB5LzgrfouUY9RvYS/htJysX7S8GW0aTUCKn7FWeZjmy/oaCiZnIrWAaw5
+         KKAUo7HPE7g7aHJ4szZrP41lMkUSMlPyf6J5gcUu1G731idgvRUwjV1hcz5LWnulkRZQ
+         I+5xjsx/yWtnHpjZUjIGtuQovUftzdAB5wDrMEnPo+kfOB9aXRrMu63XN3sI8hrntSy/
+         UZ4WQfRxXdaeSpWIFkeK9qlZJIy5pF45h9xcK638g/9c3ArcoONsBt8l42YwU68EVOdT
+         3QWt+dxKgyDsb0kPH+HfMtY6xTt0eCKLIyKBcftn8Urjia/RlUzBveiZRBTsZjSB0Zle
+         WJDg==
+X-Gm-Message-State: AC+VfDx3ZKb0qhb0LUb7xatUesEbSc/kim3GYNb4pCMvoxDuI5bYztb8
+        fWaKK+Y3H9aicLnqymnZQJfVeQ==
+X-Google-Smtp-Source: ACHHUZ4L27Klo5Ib4GxvHr2AFNLUGfjwCgnBSg4Pf6G/5FjC8CAZG3vdJ+satx13PpWeecKJYzx9KQ==
+X-Received: by 2002:a2e:87d9:0:b0:2ac:8283:b67d with SMTP id v25-20020a2e87d9000000b002ac8283b67dmr140100ljj.25.1686277554671;
+        Thu, 08 Jun 2023 19:25:54 -0700 (PDT)
+Received: from lothlorien.lan (dzdqv0yyyyyyyyyyybm5y-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::ab2])
+        by smtp.gmail.com with ESMTPSA id x20-20020a2e9dd4000000b002b21089f747sm167429ljj.89.2023.06.08.19.25.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jun 2023 19:25:54 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        phone-devel@vger.kernel.org,
-        Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Subject: Re: [PATCH v9 0/2] power: supply: introduce support for the Qualcomm
- smb2 charger
-Message-ID: <20230608232422.ikckij5m4adwnrap@mercury.elektranox.org>
-References: <20230524-pmi8998-charger-v9-0-cd7f6d03c0ab@linaro.org>
+        Vinod Koul <vkoul@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v4 0/4] ARM: dts: qcom: apq8074-dragonboard: enable resin device
+Date:   Fri,  9 Jun 2023 05:25:49 +0300
+Message-Id: <20230609022553.1775844-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cv4aioka2xke3d7y"
-Content-Disposition: inline
-In-Reply-To: <20230524-pmi8998-charger-v9-0-cd7f6d03c0ab@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Add support for reset / volume-down button found on the APQ8074
+dragonboard device.
 
---cv4aioka2xke3d7y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For PM8941 we don't have a defined field to store the reset reason.
+Support wrapping pwrkey and resin, but without writing the reset
+reason.
 
-Hi,
+Changes since v3:
+ - Rebased on linux-next to solve the conflict
 
-On Fri, May 26, 2023 at 10:44:13PM +0100, Caleb Connolly wrote:
-> Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
-> This is the second generation SMB charger, and replaces the previous
-> SMBB hardware found in older PMICs.
->=20
-> Changes since v8:
->  * Add charger bindings reference to qcom,spmi-pmic.yaml
-> V8: https://lore.kernel.org/all/20230524-pmi8998-charger-v8-0-b87ffcd9864=
-d@linaro.org/
->=20
-> Changes since v7:
->  * Implement fixes suggested by Sebastian
->  * Fix format warning
-> V7: https://lore.kernel.org/linux-arm-msm/20230127230506.3140297-1-caleb.=
-connolly@linaro.org/
->=20
-> To: Sebastian Reichel <sre@kernel.org>
-> To: Rob Herring <robh+dt@kernel.org>
-> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> To: Conor Dooley <conor+dt@kernel.org>
-> To: Caleb Connolly <caleb.connolly@linaro.org>
-> To: Andy Gross <agross@kernel.org>
-> To: Bjorn Andersson <andersson@kernel.org>
-> To: Konrad Dybcio <konrad.dybcio@linaro.org>
-> To: Nathan Chancellor <nathan@kernel.org>
-> To: Nick Desaulniers <ndesaulniers@google.com>
-> To: Tom Rix <trix@redhat.com>
-> ---
-> Caleb Connolly (2):
->       dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for =
-smb2 driver
->       power: supply: add Qualcomm PMI8998 SMB2 Charger driver
->=20
->  .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |    1 +
->  .../power/supply/qcom,pmi8998-charger.yaml         |   82 ++
->  drivers/power/supply/Kconfig                       |    9 +
->  drivers/power/supply/Makefile                      |    1 +
->  drivers/power/supply/qcom_pmi8998_charger.c        | 1059 ++++++++++++++=
-++++++
->  5 files changed, 1152 insertions(+)
-> ---
+Changes since v2:
+ - Split non-pon patches to separate patchset
+ - Changed schema to disallow reboot modes for pm8941-pon (Konrad)
 
-Thanks, queued.
+Changes since v1 (noted by Konrad):
+ - Changed to use freshly defined qcom,pm8941-pon compat
+ - Fixed indentiation for LEDs definition
+ - Reverted the order of pinctrl fields
+ - Moved status field to the last position
+ - Removed unnecessary pinconf indirection
 
--- Sebastian
+Dmitry Baryshkov (4):
+  dt-bindings: power: reset: qcom-pon: define pm8941-pon
+  power: reset: qcom-pon: add support for pm8941-pon
+  ARM: dts: qcom-pm8941: add resin support
+  ARM: dts: qcom: apq8074-dragonboard: add resin
 
---cv4aioka2xke3d7y
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../bindings/power/reset/qcom,pon.yaml        | 12 ++++++++++
+ .../arm/boot/dts/qcom-apq8074-dragonboard.dts |  5 +++++
+ arch/arm/boot/dts/qcom-pm8941.dtsi            | 22 ++++++++++++++-----
+ drivers/power/reset/qcom-pon.c                | 22 +++++++++++++------
+ 4 files changed, 49 insertions(+), 12 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.39.2
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSCYyEACgkQ2O7X88g7
-+ppw6w//Zzu/r/8Xz5uRQd7GSe12Dh9LxYrMQSBlUvnx7kDxgozjcNN+g34yd0aQ
-sRewvvYQy3jh5ssfNhTWI3uNp0TIeEtk+t1kJE2iTSry5wH7QikVOdydzd6+9CT1
-8TEEzUQBywONL3GxSMUeN05Wb72hTKWUeQgoLiSbeogp9G5oBcWKvimG8mEM0jIB
-yEazx6NM1SOdCMkA8LH89KoLo2xgXILpL6f2wFpCO3xYeKAa7n4+ifqweyOyvtjH
-JMK21eCrP1Zp3LHLYOQNrf+I535Geqh8QpSl4joqm3xfBWE3WqMUFVRhRucyQXPa
-k7PNzSwmmuf08w1unEXFImu5zSL1IvYwFRX+9dVPdxle2RmJnPjW3DJpCSyd+Zwk
-6NqL6q+4jU7VwrZHwSGEqXS1EDJXcEfIFdEKyZHTIJ8HaUfREmzeVIihUwOsGu00
-ifTffm90ySSeaZTIcQ0jZmNDryfF+hRTiNx5FgffjEqds/ppGmhackacJ86iefsu
-o6c6fhBbMJPSzc3oHfBrMz8sfQlu6AJw0wDq1PJp8SNpqLoFSOVc3rL6ksJAaXJj
-kmjYzOsfXiI+j5qN0aq+fac6uF875psA0DQFpjJSv4Qq01WhQAyxg4aLLKug2vyO
-blz63/fj3Qmq9fZA8axOy+JJpylYjkqX3WaQsZSvRGYh2Se/vr0=
-=F7Hh
------END PGP SIGNATURE-----
-
---cv4aioka2xke3d7y--
