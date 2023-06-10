@@ -2,83 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD1F72AE2E
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFF172AE41
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 21:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbjFJSxL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 14:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S232210AbjFJTEq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 15:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjFJSxK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:53:10 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C0330E3
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:53:09 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f6170b1486so3617488e87.0
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:53:09 -0700 (PDT)
+        with ESMTP id S229552AbjFJTEk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 15:04:40 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9761993;
+        Sat, 10 Jun 2023 12:04:39 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30aebe2602fso1943026f8f.3;
+        Sat, 10 Jun 2023 12:04:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686423187; x=1689015187;
-        h=content-transfer-encoding:in-reply-to:subject:references:cc:to:from
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4W3qXQBYLfvcOcHPwLf5dnUaJ1dWHnwvnx/YrwlI4M4=;
-        b=iIXy+xM1Ri4iImRDYsrKmb7D4h8wFMuXYnw1T9OLhXI7ik6L7zBKci/6+NlEnL5I6B
-         UpL5KVEAfCO8BRMHLC378WQHoMekUBNYtshZzhSpr4OsogNlpcxCSZGAvarENdg6Sn0z
-         kWS2ZeyTQEoYMSRbv87efvP3PE1quMaWrbEwOGmIpWubHdMEUfNOEIPFX/UNN/9h2pS9
-         7ojUyN4CNder2JVTn6gxgLSWE69AeWSXAfyAmOqdmPCyP3iViQwfNRl2zASK7WOu34TW
-         1SJqZtIXCt+yrUa3MXEZtWwCg/8LRh8lqpp5ZpfDjYPkZdXvBRi1pBbIpiVLdRxojJ+l
-         YDCg==
+        d=gmail.com; s=20221208; t=1686423878; x=1689015878;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P+YjzUo1B2S2csqhYjgytz5WXmvhzS96d+qxUFRdrfc=;
+        b=FiZkOzgUV4WCSgew0MvSsd/J2ST7V62H/PbPxj6U9tz3f2mwkjLLt3zw1HbDLtjF1W
+         O/shoVGScGEQ0UwqJTyWX/8EFv0CmSl15OH4qwVDN5umIYmpMyRs6A29TBgQTr6ITLk5
+         Z0h3jDWIJuCVp3hjL4rufQHX9lpEz45mPdFILSqbPM1q2cc/asJKuImPV2Nq16Fywuzl
+         DajsNuquw8QvP7Rh1m2qCXNj641jxEvMrTMxnNMNdGg+yZua95BioqffM5VNGhP4miZw
+         uzSKUmDWIkjSdDqkWT+Qb5tyiP1dCIlkTdt0+PMr8IMb/dTiudd0u1YfmH9E1C+us7X/
+         fj3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686423187; x=1689015187;
-        h=content-transfer-encoding:in-reply-to:subject:references:cc:to:from
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4W3qXQBYLfvcOcHPwLf5dnUaJ1dWHnwvnx/YrwlI4M4=;
-        b=VhnuH3uFHtAEE5DUrxYSCISP6FzOa4PTIZlER/ka7ljeH+1k1708xH/8dnZltSLpTf
-         P4y1yegvyghWrB7cP9ymwc1RtOhMPR0g4PszwM4yApf85UyIKGowDgi68WgkljyPIQSt
-         GL/jgQGvtUsCxQ6zKycgH+t1ridbeAeyea4E2/dMpA2msorctjuV/njff7faXAQRxGJ+
-         kDBp24m9V1iX4pj2GVVWmC0OK/084QQPsyJz3CELnYJ9JpAG+LXP6ZKqXkmxF5ZXt2O+
-         0j7USdLKl8rI9Y7qXJD38j5DqV1XAzpDd0PDN3fVJIaxKzFcMC6oJmHXP75ngawKh5C0
-         fbdg==
-X-Gm-Message-State: AC+VfDyMk33IeD+Stn6TLdPc9+QaItv4pxvh16eGO/GYTbmVHw6xVE3m
-        ETkSlE0HLkCoxr/IBKuVKXr7jQ==
-X-Google-Smtp-Source: ACHHUZ7mKB7lGRSqxZ50JKFb5GXFXrGSchRahf1U72h4atAMla4ilUk9lrxPcVX7Jxz/Yg7uzHAAWA==
-X-Received: by 2002:a19:9202:0:b0:4f3:b242:aa98 with SMTP id u2-20020a199202000000b004f3b242aa98mr1746402lfd.30.1686423187420;
-        Sat, 10 Jun 2023 11:53:07 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id d17-20020ac25ed1000000b004db508326c0sm919441lfq.90.2023.06.10.11.53.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 11:53:07 -0700 (PDT)
-Message-ID: <b7b1d19c-b87d-b3fd-36aa-374065a45ede@linaro.org>
-Date:   Sat, 10 Jun 2023 20:53:05 +0200
+        d=1e100.net; s=20221208; t=1686423878; x=1689015878;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P+YjzUo1B2S2csqhYjgytz5WXmvhzS96d+qxUFRdrfc=;
+        b=FCMvDzA33dJ07Na9BMemc4ibjVMvZ81xLARlTGYxV3LVvDUfffddTZd7WTfwT0/rSc
+         /+UYOWhDAL2IF+y0sIGGQXxYRs2ivokda3OUwU/7ZQQtDGcZ28sLtuvLtxz6qBJ0/+Kk
+         77rz+ytqfDNPD61jtnYomriP7UTIXGwYNfCva2S5l+tsGaBRuwoSG5UOu22qV4Vk6YL/
+         Nlp1Df0HdRJjl54EcH0js/paht3FRj/01DZNkhE8igB5I+NYQEw2Ul2p38N/PBWzOF+h
+         3EG3cZmLEVaJf3v6xhH/YdiUj4oWD2zlmRHrOBY5T+qLTGMSHBYSWrniKUCI9ul6AjfW
+         pr8A==
+X-Gm-Message-State: AC+VfDw1la0pGh+vvEdDnp1GFEYgg1NwSBNt3OuuYgZowORlAryAM6YK
+        wSsDmaW7ye6sjwtE95MZ6+Z7X8QshmncbECC
+X-Google-Smtp-Source: ACHHUZ7+FwyXPExmCGfTdhBoc8oJvU/zTiio5BdCHihsSEDTYpwdfYxIiMhA0liy4/BsVzbnEHqTuw==
+X-Received: by 2002:a5d:448a:0:b0:30d:8490:58 with SMTP id j10-20020a5d448a000000b0030d84900058mr1191214wrq.9.1686423877776;
+        Sat, 10 Jun 2023 12:04:37 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id i1-20020adff301000000b002f28de9f73bsm7764607wro.55.2023.06.10.12.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Jun 2023 12:04:37 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Maksim Kiselev <bigunclemax@gmail.com>
+Cc:     Maksim Kiselev <bigunclemax@gmail.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v1 0/3] Add D1/T113s thermal sensor controller support
+Date:   Sat, 10 Jun 2023 21:04:34 +0200
+Message-ID: <4275249.ejJDZkT8p0@jernej-laptop>
+In-Reply-To: <20230610141739.999268-1-bigunclemax@gmail.com>
+References: <20230610141739.999268-1-bigunclemax@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
- <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
- <ZIRgGXwKD6mcgTRY@gerhold.net>
- <40f937bb-0d7e-a237-1672-5905983622ce@linaro.org>
-Subject: Re: [PATCH v2 04/22] clk: qcom: smd-rpm: Export clock scaling
- availability
-In-Reply-To: <40f937bb-0d7e-a237-1672-5905983622ce@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,90 +90,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 10.06.2023 14:15, Konrad Dybcio wrote:
+Dne sobota, 10. junij 2023 ob 16:17:31 CEST je Maksim Kiselev napisal(a):
+> This series adds support for Allwinner D1/T113s thermal sensor controller.
+> THIS controller is similar to the one on H6, but with only one sensor and
+> uses a different scale and offset values.
 > 
-> 
-> On 10.06.2023 13:35, Stephan Gerhold wrote:
->> On Fri, Jun 09, 2023 at 10:19:09PM +0200, Konrad Dybcio wrote:
->>> Before we issue a call to RPM through clk_smd_rpm_enable_scaling() the
->>> clock rate requests will not be commited in hardware. This poses a
->>> race threat since we're accessing the bus clocks directly from within
->>> the interconnect framework.
->>>
->>> Add a marker to indicate that we're good to go with sending new requests
->>> and export it so that it can be referenced from icc.
->>>
->>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>> ---
->>>  drivers/clk/qcom/clk-smd-rpm.c   | 9 +++++++++
->>>  include/linux/soc/qcom/smd-rpm.h | 2 ++
->>>  2 files changed, 11 insertions(+)
->>>
->>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->>> index 937cb1515968..482fe30ee6f0 100644
->>> --- a/drivers/clk/qcom/clk-smd-rpm.c
->>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->>> @@ -151,6 +151,7 @@
->>>  #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
->>>  
->>>  static struct qcom_smd_rpm *rpmcc_smd_rpm;
->>> +static bool smd_rpm_clk_scaling;
->>>  
->>>  struct clk_smd_rpm {
->>>  	const int rpm_res_type;
->>> @@ -385,6 +386,12 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
->>>  	return r->rate;
->>>  }
->>>  
->>> +bool qcom_smd_rpm_scaling_available(void)
->>> +{
->>> +	return smd_rpm_clk_scaling;
->>> +}
->>> +EXPORT_SYMBOL_GPL(qcom_smd_rpm_scaling_available);
->>> +
->>>  static int clk_smd_rpm_enable_scaling(void)
->>>  {
->>>  	int ret;
->>> @@ -410,6 +417,8 @@ static int clk_smd_rpm_enable_scaling(void)
->>>  		return ret;
->>>  	}
->>>  
->>> +	smd_rpm_clk_scaling = true;
->>> +
->>
->> If you move the platform_device_register_data(&rpdev->dev,
->> "icc_smd_rpm", ...) from drivers/soc/qcom/smd-rpm.c to here you can
->> avoid the race completely and drop this API. I think that would be
->> cleaner. And it will likely probe much faster because probe deferral
->> is slow. :)
-> Sounds like an idea.. especially since it's pretty much the only
-> dependency other than SMDRPM itself!
-It sounds great, but to not break bisecting one has to:
+> Maxim Kiselev (3):
+>   thermal: sun8i: Add D1/T113s THS controller support
+>   riscv: dts: allwinner: d1: Add thermal sensor and thermal zone
+>   dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controller
 
-1. change the registration in soc/smd-rpm to store rpm ptr in driver
-   data, in addition to parent driver data
+As mentioned elsewhere, please fix SoB tags. Also binding patch should
+come before driver changes.
 
-2. change icc/smd-rpm to use the device and not parent data
-
-3. add a platform_device_register_data call in clk-smd-rpm that will
-   always fail because the device is always registered
-
-4. remove the registration from soc/smd-rpm
-
-
-I know you'd love to see me break my [PATCH xx/42] record, but I'd say
-that deserves its own series and *this* patch could be a good transition
-middleground :P
-
-Hopefully Stephen, Bjorn and Georgi won't send a hitman after me for
-abusing atomic cross-subsystem merges..
-
-Konrad
+Best regards,
+Jernej
 
 > 
-> Konrad
->>
->> Thanks,
->> Stephan
+>  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 +++++++++++++-
+>  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 26 +++++++++++++++++++
+>  drivers/thermal/sun8i_thermal.c               | 13 ++++++++++
+>  3 files changed, 58 insertions(+), 1 deletion(-)
+> 
+> 
+
+
+
+
