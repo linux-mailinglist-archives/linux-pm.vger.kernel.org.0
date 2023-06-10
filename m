@@ -2,67 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D531F72AB43
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 13:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8303472AB49
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 14:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjFJL6p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 07:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S232365AbjFJMCX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 08:02:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjFJL6o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 07:58:44 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B6A26B2;
-        Sat, 10 Jun 2023 04:58:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1686398320; cv=none;
+        with ESMTP id S232895AbjFJMCR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 08:02:17 -0400
+X-Greylist: delayed 1571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 10 Jun 2023 05:02:15 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC1E2717;
+        Sat, 10 Jun 2023 05:02:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686398533; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=ZuOvu58Ao0jzrlv2fZ27qBJaelH2eWzfvIP41z0l7xK/FgstuXK4jX9MJB7YLYPZko
-    Csjmu/DC53lLPfxrGCSOXPZ8AZ2yqmk+NjSU6yCKfHZv/uC8RKpUHwewjbLPmHs2KGiE
-    H0WbR2alwg0amB8kYQOeT6g09CDFD7zp7aN+0vSefom7qXlbD0aNfbnxJvsBtQOR6ltX
-    e5vCTppgU1h6+zdU5iLzcYO11uh2NrTGffIJQNKcrYK/6yN1FXCr6m7nBmKNdWRDzZxO
-    GoQfZclPXX4PU4iHVPxHaQ3xp6R/JsSSVZZ8hrM8FliUGeAT78VY70LcdfIqD92HEZC6
-    h0ZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398320;
+    b=bWwdnwJbBzj5AJX0yCgscYYEsrjTahpeHZIdd70Vl9mxvheOHGUW99kKhWsSdmMhv3
+    CZRX8sGZdfQd+Gp+yNh/WBQgOZ4TxQ0JLy+6X43zb6YULrTmV4nFsuGjR8AnVmJEnLsE
+    dYET0f44XESAZrThv7pJo/46HF37Md63hnKtfNjIda02RLicjDZM8tZBFR+7tdHIk3Ks
+    On4kamvGzXiJ2EozDLvEqwpUSCF1VdOB8sM3n0wrUUHh6mFBRTZBmLsxa8H7CKUgdEjm
+    crlmOsvvGVZPuaG1WF+TVvhBEl2CXUSNnGaqUTBXoLVOVvSp49TGd3H7cS8sb2N97ZzX
+    kR3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398533;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=kTSb4VgNfKJxcHdVBzLF5HYwpgArnYykpI5cWhr4QCo=;
-    b=jqIUFlHyNeymdmRDMAE5j/FwRwuNiEKBR06qCYcT59aOLDtSzU6IO5Rd0wPjpLFey5
-    jsCBZkeRa+HM7zPF0vN5EgYhR4R4jfIrzo31j+ih/zR/xotMurAu+57+FB72O6GTxxmL
-    kjn929Y3RNMdfz+arEv/YzLrlVNuNu5PWmc/hpmj20jUXfAPoTrxQE3UUmpcpmrHgGmg
-    EkCClBzpwN08am3VVG36NXaiRVNWnN3oFAF8dUkItKSq/fFy1YGwEusFR4ArBRZaVoSI
-    iaU4BvTas1RtuvbX0lpCkQWqvS/ZdNvedJnZQeJq/XgBPH3WxQiM7CthDmdN+NWfYCWD
-    8azw==
+    bh=2CyJ2drS2+919WaSyFsd5Wjnc820kxeHESHi+WoEhTw=;
+    b=s2qZVKy139YACl18y33kop/q24FuAdE+FPtaYQqAaRXo+8tKRz5n3XE295xl2PXctf
+    M/vhZvAG/Rp1ZMdQta/PGFsQh1uhdUVgglYcjeBl0LECIebzam4UjbDi0w1YC8Dam3lW
+    YjzGN0PrP0naHIibbyKohWFLyvMTCYEuu6Ko8UuMCJAXdsvqsiIOh7D4xiXmsEZUk55Z
+    x7pqM3U3b49FPCsp0hy6ucp29EFoHHKqjHP0WfHs55dO1TS2v8qYfCZKm2AKTSSfSoTM
+    onR+3OD5BymC+uh3WK5zVeRn1PVbesAJwh/iF7KXZ9KplvFgDQ7y42hggIU1cth/Eohf
+    /mEA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398320;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686398533;
     s=strato-dkim-0002; d=gerhold.net;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=kTSb4VgNfKJxcHdVBzLF5HYwpgArnYykpI5cWhr4QCo=;
-    b=U55HB3H9amJF8Ovk8dcXLavj0M90rAZ12YEs1l/fuz+wA7YgrOvi2hI1RGf0hkvxMB
-    MBU9u6bgdZDwXPMuru3y31ccFocqtq3K5xTWRt/gPQuW7BSVA7PBViRJSIDUm7nA/PGY
-    8OV3SzHYsERU/GQ3M227dcNTPFnXoVEnbWNP9+0OapJGtYw7ZLd0D762k95uOPRk7dMl
-    59ECmaVbSLZRrch7cfw4Efc5KGvaF/SlR1popVyDUJIrJJeuac7Y2m2J9eH9rTJRaK+J
-    29EpA9iMtFtiljj+4QXHfnW6L7bitOmbh0oTOhbXMzOOIl8Cus3Ot6C9M6cJw9y46gDM
-    Hmvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686398320;
+    bh=2CyJ2drS2+919WaSyFsd5Wjnc820kxeHESHi+WoEhTw=;
+    b=Rd4M3nHOA4HBI2aooUQWbDVjbmRTiadccFM4og74s6CQ5pVSJOM2EKGkQ/x9AADgx2
+    7o91Tez9+EywKFdJxlIe0oWqAAKt3nJ1CCxrgTe72yaAqeDdKU0nd6WIUAP5l+C7KuHy
+    9QaGr9b9AaymLSCXwgFoaat+uynHazR2OkwvMl2Ee6HcQzot01IM9AEd/ns24UshevOV
+    5RoSK8MG62XNV0p1Wn7MrIiE2INJ074qWYHRl0WbzHfcQmtiGnkVwk/1RYdFWZVmEUxJ
+    lLRQaG/V5oL1Cp6Uqxwnunsua7L/CXhsS/wRgcqULuXxcHiDDYGM/6yaKcBapYcTiy0u
+    AO6Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686398533;
     s=strato-dkim-0003; d=gerhold.net;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=kTSb4VgNfKJxcHdVBzLF5HYwpgArnYykpI5cWhr4QCo=;
-    b=r1c9h2NT3sVeF7stUm//hBkKxgSIfjOwJErPtWnHLOZOMe9pZNrecmy/80RFx1/Ncj
-    TidwmNg30oonLRwP/NDw==
+    bh=2CyJ2drS2+919WaSyFsd5Wjnc820kxeHESHi+WoEhTw=;
+    b=6cT9jG/3dHBXj+yt+l38ZD1LsiELz7dRF9XWMjl6ibpVrxJ0zB5FWw9rxtjO84KISU
+    NmWJ1E9loKPkxzfpyTCQ==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
 Received: from gerhold.net
     by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
-    with ESMTPSA id Z82ec2z5ABwdQFs
+    with ESMTPSA id Z82ec2z5AC2CQG2
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Sat, 10 Jun 2023 13:58:39 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 13:58:38 +0200
+    Sat, 10 Jun 2023 14:02:12 +0200 (CEST)
+Date:   Sat, 10 Jun 2023 14:02:11 +0200
 From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -74,224 +75,71 @@ Cc:     Andy Gross <agross@kernel.org>,
         Evan Green <evgreen@chromium.org>,
         Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 17/22] interconnect: qcom: icc-rpm: Control bus rpmcc
- from icc
-Message-ID: <ZIRlbi_BXyuUWs-8@gerhold.net>
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 15/22] interconnect: qcom: msm8916: Hook up RPM bus
+ clk definitions
+Message-ID: <ZIRmQ-qUDHZWcGjw@gerhold.net>
 References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
- <20230526-topic-smd_icc-v2-17-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-15-e5934b07d813@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230526-topic-smd_icc-v2-17-e5934b07d813@linaro.org>
+In-Reply-To: <20230526-topic-smd_icc-v2-15-e5934b07d813@linaro.org>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:19:22PM +0200, Konrad Dybcio wrote:
-> The sole purpose of bus clocks that were previously registered with
-> rpmcc was to convey the aggregated bandwidth to RPM. There's no good
-> reason to keep them outside the interconnect framework, as it only
-> adds to the plentiful complexity.
+On Fri, Jun 09, 2023 at 10:19:20PM +0200, Konrad Dybcio wrote:
+> Assign the necessary definitions to migrate to the new bus clock
+> handling mechanism.
 > 
-> Add the required code to handle these clocks from within SMD RPM ICC.
-> 
-> RPM-owned bus clocks are no longer considered a thing, but sadly we
-> have to allow for the existence of HLOS-owned bus clocks, as some
-> (mostly older) SoCs (ab)use these for bus scaling (e.g. MSM8998 and
-> &mmcc AHB_CLK_SRC).
-> 
-> This in turn is trivially solved with a single *clk, which is filled
-> and used iff qp.bus_clk_desc is absent and we have a "bus" clock-names
-> entry in the DT node.
-> 
-> This change should(tm) be fully compatible with all sorts of old
-> Device Trees as far as the interconnect functionality goes (modulo
-> abusing bus clock handles, but that's a mistake in and of itself).
-> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+
 > ---
->  drivers/interconnect/qcom/icc-rpm.c | 116 +++++++++++++++++++-----------------
->  drivers/interconnect/qcom/icc-rpm.h |  13 ++--
->  drivers/interconnect/qcom/msm8996.c |   1 -
->  drivers/interconnect/qcom/sdm660.c  |   1 -
->  4 files changed, 66 insertions(+), 65 deletions(-)
+>  drivers/interconnect/qcom/msm8916.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index b8ecf9538ab9..6d40815c5401 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> [...]
-> @@ -364,49 +363,50 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->  			return ret;
->  	}
->  
-> -	for (i = 0; i < qp->num_bus_clks; i++) {
-> -		/*
-> -		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
-> -		 * for other clocks.  If a platform doesn't set interconnect
-> -		 * path tags, by default use sleep bucket for all clocks.
-> -		 *
-> -		 * Note, AMC bucket is not supported yet.
-> -		 */
-> -		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
-> -			bucket = QCOM_ICC_BUCKET_WAKE;
-> -		else
-> -			bucket = QCOM_ICC_BUCKET_SLEEP;
-> -
-> -		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
-> -		do_div(rate, src_qn->buswidth);
-> -		rate = min_t(u64, rate, LONG_MAX);
-
-^
-
-> -
-> -		/*
-> -		 * Downstream checks whether the requested rate is zero, but it makes little sense
-> -		 * to vote for a value that's below the lower threshold, so let's not do so.
-> -		 */
-> -		if (bucket == QCOM_ICC_BUCKET_WAKE && qp->keep_alive)
-> -			rate = max(ICC_BUS_CLK_MIN_RATE, rate);
-> -
-> -		if (qp->bus_clk_rate[i] == rate)
-> -			continue;
-> -
-> -		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
-> -		if (ret) {
-> -			pr_err("%s clk_set_rate error: %d\n",
-> -			       qp->bus_clks[i].id, ret);
-> +	/* Some providers don't have a bus clock to scale */
-> +	if (!qp->bus_clk_desc && !qp->bus_clk)
-> +		return 0;
-> +
-> +	/* Intentionally keep the rates in kHz as that's what RPM accepts */
-> +	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
-> +			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
-> +	do_div(active_rate, src_qn->buswidth);
-> +
-> +	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
-> +			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
-> +	do_div(sleep_rate, src_qn->buswidth);
-> +
-> +	/*
-> +	 * Downstream checks whether the requested rate is zero, but it makes little sense
-> +	 * to vote for a value that's below the lower threshold, so let's not do so.
-> +	 */
-> +	if (qp->keep_alive)
-> +		active_rate = max(ICC_BUS_CLK_MIN_RATE, active_rate);
-> +
-> +	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
-> +	if (qp->bus_clk)
-> +		return clk_set_rate(qp->bus_clk, 1000ULL * max(active_rate, sleep_rate));
-
-Something like the min_t(u64, rate, LONG_MAX)* that was there in the old
-code is still needed for the clk_set_rate(). The reason is that the rate
-parameter in clk_set_rate() is unsigned long (32-bit on ARM32) while you
-do the calculation in fixed u64. This can easily overflow and then the
-higher bits will just be cut off.
-
-Consider the following on ARM32:
-
-	u64 rate = 1ULL << 32 = 4294967296ULL;
-	clk_set_rate(clk, rate);
-
-This actually does clk_set_rate(clk, 0) because the upper 32-bit will
-just be truncated. So the min() is needed to ensure that we really set
-the highest possible.
-
-Also see commit a7d9436a6c85 ("interconnect: qcom: rpm: Prevent integer
-overflow in rate") [1].
-
-* I'm not sure why I used LONG_MAX instead of ULONG_MAX back then.
-
-[1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a7d9436a6c85fcb8843c910fd323dcd7f839bf63
-
-> [...]
->  int qnoc_probe(struct platform_device *pdev)
->  {
->  	struct device *dev = &pdev->dev;
-> @@ -448,6 +448,18 @@ int qnoc_probe(struct platform_device *pdev)
->  	if (!qp->intf_clks)
->  		return -ENOMEM;
->  
-> +	if (desc->bus_clk_desc) {
-> +		qp->bus_clk_desc = devm_kzalloc(dev, sizeof(*qp->bus_clk_desc),
-> +						GFP_KERNEL);
-> +		if (!qp->bus_clk_desc)
-> +			return -ENOMEM;
-> +
-> +		qp->bus_clk_desc = desc->bus_clk_desc;
-> +	} else if (!IS_ERR(devm_clk_get(dev, "bus"))) {
-> +		/* Some older SoCs may have a single non-RPM-owned bus clock. */
-> +		qp->bus_clk = devm_clk_get(dev, "bus");
-> +	}
-
-Hm, looks like you're requesting the clock twice? devm_clk_get()
-allocates memory internally so that's not ideal. It would be better to
-call it just once and store the result. Or do you actually want
-devm_clk_get_optional(dev, "bus") maybe? The error handling is a bit
-weird here.
-
-> [...]
-> @@ -490,13 +498,11 @@ int qnoc_probe(struct platform_device *pdev)
->  	}
->  
->  regmap_done:
-> -	ret = devm_clk_bulk_get(dev, qp->num_bus_clks, qp->bus_clks);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = clk_bulk_prepare_enable(qp->num_bus_clks, qp->bus_clks);
-> -	if (ret)
-> -		return ret;
-
-I guess we need dt-binding updates so we can drop the clocks from the
-device tree? They're not valid anymore after you remove them from
-clk-smd-rpm.c so it would be good to drop them from the DTs to avoid
-confusion.
-
-> +	if (qp->bus_clk) {
-> +		ret = clk_prepare_enable(qp->bus_clk);
-> +		if (ret)
-> +			return ret;
-> +	}
-
-The clk_* APIs have internal NULL checks for optional clocks so you
-could also omit the if statement and call it unconditionally.
-
->  
->  	ret = devm_clk_bulk_get(dev, qp->num_intf_clks, qp->intf_clks);
->  	if (ret)
-> @@ -566,7 +572,8 @@ int qnoc_probe(struct platform_device *pdev)
->  	icc_provider_deregister(provider);
->  err_remove_nodes:
->  	icc_nodes_remove(provider);
-> -	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
-> +	if (qp->bus_clk)
-> +		clk_disable_unprepare(qp->bus_clk);
->  
-
-Same here.
-
->  	return ret;
->  }
-> @@ -578,7 +585,8 @@ int qnoc_remove(struct platform_device *pdev)
->  
->  	icc_provider_deregister(&qp->provider);
->  	icc_nodes_remove(&qp->provider);
-> -	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
-> +	if (qp->bus_clk)
-> +		clk_disable_unprepare(qp->bus_clk);
->  
-
-And here.
-
-Thanks,
-Stephan
+> diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+> index 196b05879896..be2a190a8b52 100644
+> --- a/drivers/interconnect/qcom/msm8916.c
+> +++ b/drivers/interconnect/qcom/msm8916.c
+> @@ -1231,6 +1231,7 @@ static const struct qcom_icc_desc msm8916_snoc = {
+>  	.type = QCOM_ICC_NOC,
+>  	.nodes = msm8916_snoc_nodes,
+>  	.num_nodes = ARRAY_SIZE(msm8916_snoc_nodes),
+> +	.bus_clk_desc = &bus_1_clk,
+>  	.regmap_cfg = &msm8916_snoc_regmap_config,
+>  	.qos_offset = 0x7000,
+>  };
+> @@ -1259,6 +1260,7 @@ static const struct qcom_icc_desc msm8916_bimc = {
+>  	.type = QCOM_ICC_BIMC,
+>  	.nodes = msm8916_bimc_nodes,
+>  	.num_nodes = ARRAY_SIZE(msm8916_bimc_nodes),
+> +	.bus_clk_desc = &bimc_clk,
+>  	.regmap_cfg = &msm8916_bimc_regmap_config,
+>  	.qos_offset = 0x8000,
+>  };
+> @@ -1328,6 +1330,7 @@ static const struct qcom_icc_desc msm8916_pcnoc = {
+>  	.type = QCOM_ICC_NOC,
+>  	.nodes = msm8916_pcnoc_nodes,
+>  	.num_nodes = ARRAY_SIZE(msm8916_pcnoc_nodes),
+> +	.bus_clk_desc = &bus_0_clk,
+>  	.regmap_cfg = &msm8916_pcnoc_regmap_config,
+>  	.qos_offset = 0x7000,
+>  };
+> 
+> -- 
+> 2.41.0
+> 
