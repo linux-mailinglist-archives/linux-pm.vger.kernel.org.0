@@ -2,75 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AE372AE06
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933CE72AE18
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjFJSBk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 14:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231716AbjFJS23 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 14:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjFJSBj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:01:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CDA2139;
-        Sat, 10 Jun 2023 11:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A30B619F9;
-        Sat, 10 Jun 2023 18:01:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D94C433D2;
-        Sat, 10 Jun 2023 18:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686420098;
-        bh=lklu6izAOiwJ8VmIzzbqh8xtnkfI9N34tzyzoxGqvxY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FPUaIb2hwDOg/DAOeQYvD/9TjqUSW0Vlr6Su35DH5dxGtBiqUH/L8tY3BFeiq5SRJ
-         610Fc4ELRP0WLrYcNL3eubINLJdiUZaULSZNxu0HxEFTzvdrR0gsrZHAjGp5dfCBCb
-         Y0cFQmNPYtSasBbtF8t38jPGEwBPlVR6XtTjzFaNkIbOhu1KmvTpLPHiOTpZxnPo3h
-         1u8VZj2b3ltxYEi4VNLmgSSrH/3/GkUb67M4VKGHmZf+53Lmnwjy0S5j9sYK4p7ASv
-         u7Af0BBPnHAKg1WCa4O5odTGRRpMfrcl/Kp1IkxTyu244Oa1A1GjTkvfUG3BZ0ZmZU
-         0xf4lftXbfFlw==
-Date:   Sat, 10 Jun 2023 19:01:31 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maxim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Message-ID: <20230610-crumpet-spender-4133090a4728@spud>
-References: <20230610141739.999268-1-bigunclemax@gmail.com>
- <20230610141739.999268-4-bigunclemax@gmail.com>
- <20230610-rehire-amid-2517f43504c0@spud>
- <CALHCpMiEmc8L=O86_x7-KkBHFwf2QpuP0M7ugz7dNPr71cpJmQ@mail.gmail.com>
- <20230610-enlarged-agonize-0e9219f9921d@spud>
+        with ESMTP id S231698AbjFJS22 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:28:28 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EC230D0
+        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:28:26 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f61735676fso3539385e87.2
+        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:28:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686421704; x=1689013704;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TyzR9JQPltEJ2GJHuJYpmnHMC8wOXLunYdfke4NYE4w=;
+        b=EcYR44CVGwjd66FBvHukTDKxl9SKdFqCmTFoTRvs9LsX0qV9PssdKNMIlMX8HMFt7S
+         ewN0skVU7Ca9dsoon3DQgJBD3+iqV6lu4/jFNdO0t3rmtLiMQfyXe4+Tz8j8KWhDTKGj
+         Bodk89xZW4bHOrQghCHnBubuUJRYWv70oTqaBqEh0yucNEmtp/nISbNRXqvW3uhMXrua
+         8rU62O9icCL4sWdgVmqtxjniZMc4DsASQ5AKKndhcn9XlLx98FxtQ7Uzo1lMFdzqmnVz
+         f0lgt64ugIpFxT0dFUY6emKyOl+jYS12HeosgQPuoFylYLto5PXxxmwPvEdNwbgChCKe
+         wUfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686421704; x=1689013704;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TyzR9JQPltEJ2GJHuJYpmnHMC8wOXLunYdfke4NYE4w=;
+        b=ZEa0f1T+RPIHkfsjRFAvWfwZdDMPhrhmmoq2Yre2c+S7pctt3ukeTDBPSRk9igdeon
+         saSeyqi19CACcWXMt1Qj4KIHOBKP+7UqEf4uhyS1OTmbftECIv3dkWVHYzb82d/PQTmG
+         BjgrtmPW3PNY/nEgEYcCvVUUA2eigFRHi+k6HfPaz4+T2S7DD22ryPHEpCMkHjUUXzAg
+         JMzDtxk5HU5ye4/zVrTBHo+sKSuYIvYC7lFbzMXBfUmAb3zFlr/wyUKLTmHAuPP0VT50
+         LKo07LP73shBS2M9Us3QnkYGKPoeGOL22wESieJinLHLaWi3DFsnwWD1J3NfCrVp+MmP
+         6z7A==
+X-Gm-Message-State: AC+VfDzdK1LarOghxlY7QzRPBg+JtbJMs2q8ITnJH/bPR0NKMQQS7Gw8
+        SMala8cLMUfQ2NvD9TdJrpFb+Q==
+X-Google-Smtp-Source: ACHHUZ6e+6jU119Cl/DhehI15gLw2xwLhfpwuoyWIygcorio5vPFgUBytS2gZ/w9BUfmJ5qiowAa1A==
+X-Received: by 2002:a19:671a:0:b0:4f1:458c:c4c with SMTP id b26-20020a19671a000000b004f1458c0c4cmr1950029lfc.43.1686421704210;
+        Sat, 10 Jun 2023 11:28:24 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id u25-20020a056512041900b004f629e7689asm919670lfk.135.2023.06.10.11.28.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 11:28:23 -0700 (PDT)
+Message-ID: <e9855fca-cd90-202f-aab3-caa323c33ec0@linaro.org>
+Date:   Sat, 10 Jun 2023 20:28:22 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Y9leMd3iPIBr4SeW"
-Content-Disposition: inline
-In-Reply-To: <20230610-enlarged-agonize-0e9219f9921d@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 20/22] interconnect: qcom: icc-rpm: Set bandwidth on
+ both contexts
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-20-e5934b07d813@linaro.org>
+ <ZIS6LK2lnlnNygX7@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZIS6LK2lnlnNygX7@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,65 +86,133 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---Y9leMd3iPIBr4SeW
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jun 10, 2023 at 06:59:29PM +0100, Conor Dooley wrote:
-> On Sat, Jun 10, 2023 at 06:30:48PM +0300, Maxim Kiselev wrote:
-> > =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 17:52,=
- Conor Dooley <conor@kernel.org>:
-> >=20
-> > ...
-> >=20
-> > >
-> > > Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-> > > Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> > >
-> > >> Why do you have 2 sign-offs that are both you w/ different spellings?
-> >=20
-> > Sorry for that. I accidentally signed it twice.
-> >=20
-> > ...
-> >=20
-> > > +  - |
-> > > +    thermal-sensor@2009400 {
-> > > +          compatible =3D "allwinner,sun20i-d1-ths";
-> > > +          reg =3D <0x02009400 0x400>;
-> > > +          interrupts =3D <0 90 0>;
-> > > +          clocks =3D <&ccu 0>;
-> > > +          clock-names =3D "bus";
-> > > +          resets =3D <&ccu 2>;
-> > > +          nvmem-cells =3D <&ths_calibration>;
-> > > +          nvmem-cell-names =3D "calibration";
-> > > +          #thermal-sensor-cells =3D <0>;
-> > >
-> > >> Is this calibration required, or optional, for the d1?
-> >=20
-> > Calibration data for the D1 is optional as for the H6.
-> > (But without it, the sensor data will be inaccurate).
->=20
-> Okay. Modulo the signoff:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+On 10.06.2023 20:00, Stephan Gerhold wrote:
+> On Fri, Jun 09, 2023 at 10:19:25PM +0200, Konrad Dybcio wrote:
+>> Up until now, for some reason we've only been setting bandwidth values
+>> on the active-only context. That pretty much meant that RPM could lift
+>> all votes when entering sleep mode. Or never sleep at all.
+>>
+>> That in turn could potentially break things like USB wakeup, as the
+>> connection between APSS and SNoC/PNoC would simply be dead.
+>>
+> 
+> Nitpick: Apparently an "active" vote is applied during both active+sleep
+> until the first "sleep" vote is sent. It's documented only for
+> regulators [1] but I would expect the same applies to the bandwidths.
+> This means actual breakage shouldn't have been possible.
+..unless some part of the boot chain voted for the sleep set!
 
-Wait, that's not what I meant to say... Clearly turned my brain off for
-a moment. If it is not going to function correctly without the
-calibration data, why not make the calibration data required for the
-d1's ths?
+I'm not sure whether the regulator comment also holds for bw, but I
+also don't really have a great way to check it.. Would you want me to
+alter this commit message somehow?
 
-Cheers,
-Conor.
-
---Y9leMd3iPIBr4SeW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIS6ewAKCRB4tDGHoIJi
-0rexAP9jASDb8H99wbQ++SNJJrD6f2j8d4daxWokKAsYNldy5gEAlK+BUZY0DFLe
-BHRNoCoB9c0U6VXpkEMipQbMB/UvsgI=
-=6tgd
------END PGP SIGNATURE-----
-
---Y9leMd3iPIBr4SeW--
+Konrad
+> 
+> The patch itself is still the right thing to do to have the sleep state
+> correct during deep cpuidle/suspend.
+> 
+> [1]: https://git.codelinaro.org/clo/la/kernel/msm-3.10/-/blob/LA.BR.1.2.9.c26-04700-8x09.0/drivers/regulator/rpm-smd-regulator.c#L199-209
+> 
+>> Set the values appropriately.
+>>
+>> Fixes: 30c8fa3ec61a ("interconnect: qcom: Add MSM8916 interconnect provider driver")
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/interconnect/qcom/icc-rpm.c | 54 +++++++++++++++++++------------------
+>>  1 file changed, 28 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index 3ac47b818afe..ac719013077e 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>> @@ -205,34 +205,39 @@ static int qcom_icc_qos_set(struct icc_node *node)
+>>  	}
+>>  }
+>>  
+>> -static int qcom_icc_rpm_set(struct qcom_icc_node *qn, u64 sum_bw)
+>> +static int qcom_icc_rpm_set(struct qcom_icc_node *qn, u64 *bw)
+>>  {
+>> -	int ret = 0;
+>> +	int ret, rpm_ctx = 0;
+>> +	u64 bw_bps;
+>>  
+>>  	if (qn->qos.ap_owned)
+>>  		return 0;
+>>  
+>> -	if (qn->mas_rpm_id != -1) {
+>> -		ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
+>> -					    RPM_BUS_MASTER_REQ,
+>> -					    qn->mas_rpm_id,
+>> -					    sum_bw);
+>> -		if (ret) {
+>> -			pr_err("qcom_icc_rpm_smd_send mas %d error %d\n",
+>> -			       qn->mas_rpm_id, ret);
+>> -			return ret;
+>> +	for (rpm_ctx = 0; rpm_ctx < QCOM_SMD_RPM_STATE_NUM; rpm_ctx++) {
+>> +		bw_bps = icc_units_to_bps(bw[rpm_ctx]);
+>> +
+>> +		if (qn->mas_rpm_id != -1) {
+>> +			ret = qcom_icc_rpm_smd_send(rpm_ctx,
+>> +						    RPM_BUS_MASTER_REQ,
+>> +						    qn->mas_rpm_id,
+>> +						    bw_bps);
+>> +			if (ret) {
+>> +				pr_err("qcom_icc_rpm_smd_send mas %d error %d\n",
+>> +				qn->mas_rpm_id, ret);
+>> +				return ret;
+>> +			}
+>>  		}
+>> -	}
+>>  
+>> -	if (qn->slv_rpm_id != -1) {
+>> -		ret = qcom_icc_rpm_smd_send(QCOM_SMD_RPM_ACTIVE_STATE,
+>> -					    RPM_BUS_SLAVE_REQ,
+>> -					    qn->slv_rpm_id,
+>> -					    sum_bw);
+>> -		if (ret) {
+>> -			pr_err("qcom_icc_rpm_smd_send slv %d error %d\n",
+>> -			       qn->slv_rpm_id, ret);
+>> -			return ret;
+>> +		if (qn->slv_rpm_id != -1) {
+>> +			ret = qcom_icc_rpm_smd_send(rpm_ctx,
+>> +						    RPM_BUS_SLAVE_REQ,
+>> +						    qn->slv_rpm_id,
+>> +						    bw_bps);
+>> +			if (ret) {
+>> +				pr_err("qcom_icc_rpm_smd_send slv %d error %d\n",
+>> +				qn->slv_rpm_id, ret);
+>> +				return ret;
+>> +			}
+>>  		}
+>>  	}
+>>  
+>> @@ -337,7 +342,6 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>  	struct qcom_icc_provider *qp;
+>>  	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
+>>  	struct icc_provider *provider;
+>> -	u64 sum_bw;
+>>  	u64 active_rate, sleep_rate;
+>>  	u64 agg_avg[QCOM_SMD_RPM_STATE_NUM], agg_peak[QCOM_SMD_RPM_STATE_NUM];
+>>  	u64 max_agg_avg;
+>> @@ -351,14 +355,12 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>  
+>>  	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
+>>  
+>> -	sum_bw = icc_units_to_bps(max_agg_avg);
+>> -
+>> -	ret = qcom_icc_rpm_set(src_qn, sum_bw);
+>> +	ret = qcom_icc_rpm_set(src_qn, agg_avg);
+>>  	if (ret)
+>>  		return ret;
+>>  
+>>  	if (dst_qn) {
+>> -		ret = qcom_icc_rpm_set(dst_qn, sum_bw);
+>> +		ret = qcom_icc_rpm_set(dst_qn, agg_avg);
+>>  		if (ret)
+>>  			return ret;
+>>  	}
+>>
+>> -- 
+>> 2.41.0
+>>
