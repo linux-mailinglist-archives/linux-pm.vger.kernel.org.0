@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE6D72AE1E
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E47C72AE20
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbjFJSf3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 14:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S231156AbjFJSfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 14:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjFJSf2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:35:28 -0400
+        with ESMTP id S229772AbjFJSf3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:35:29 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A8E30E8
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:35:27 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="356683686"
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C00130ED
+        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:35:28 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="356683690"
 X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="356683686"
+   d="scan'208";a="356683690"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 11:35:21 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 11:35:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="688116106"
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="688116115"
 X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="688116106"
+   d="scan'208";a="688116115"
 Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jun 2023 11:35:19 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Jun 2023 11:35:21 -0700
 From:   Artem Bityutskiy <dedekind1@gmail.com>
 To:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
         Arjan van de Ven <arjan@linux.intel.com>,
         Artem Bityutskiy <dedekind1@gmail.com>
-Subject: [PATCH v3 0/3] Sapphire Rapids C0.x idle states support
-Date:   Sat, 10 Jun 2023 21:35:16 +0300
-Message-Id: <20230610183518.4061159-1-dedekind1@gmail.com>
+Subject: [PATCH v3 1/2] x86/mwait: Add support for idle via umwait
+Date:   Sat, 10 Jun 2023 21:35:17 +0300
+Message-Id: <20230610183518.4061159-2-dedekind1@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230610183518.4061159-1-dedekind1@gmail.com>
+References: <20230610183518.4061159-1-dedekind1@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
         FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
         NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -49,136 +50,105 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Background
-----------
+On Intel platforms, C-states are requested using the 'monitor/mwait'
+instructions pair, as implemented in 'mwait_idle_with_hints()'. This
+mechanism allows for entering C1 and deeper C-states.
 
-Idle states reduce power consumption when a CPU has no work to do. The most
-shallow CPU idle state is "POLL". It has lowest wake up latency, but saves
-little power. The next idle state on Intel platforms is "C1". It has has higher
-latency, but saves more power than "POLL".
+Sapphire Rapids Xeon supports new idle states - C0.1 and C0.2 (later C0.x).
+These idle states have lower latency comparing to C1, and can be requested
+with either 'tpause' and 'umwait' instructions.
 
-Sapphire Rapids Xeons add new C0.1 and C0.2 idle states which conceptually sit
-between "POLL" and "C1". These provide a very attractive midpoint: near-POLL
-wake-up latency and power consumption halfway between "POLL" and "C1".
+Linux already uses the 'tpause' instruction in delay functions like
+'udelay()'. This patch adds 'umwait' and 'umonitor' instructions support.
 
-In other words, we expect all but the most latency-sensitive users to prefer
-these idle state over POLL.
+'umwait' and 'tpause' instructions are very similar - both send the CPU to
+C0.x and have the same break out rules. But unlike 'tpause', 'umwait' works
+together with 'umonitor' and exits the C0.x when the monitored memory
+address is modified (similar idea as with 'monitor/mwait').
 
-This patch-set enables C0.2 idle state support on Sapphire Rapids Xeon (later -
-SPR). The new idle state is added between POLL and C1.
+This patch implements the 'umwait_idle()' function, which works very
+similarly to existing 'mwait_idle_with_hints()', but requests C0.x. The
+intention is to use it from the 'intel_idle' driver.
 
-Patch-set overview
-------------------
-
-This patch-set is based on the "linux-next" branch of the "linux-pm" plus
-patches from Arjan van de Ven, submitted to linux-pm mailing list
-on Jun 5, 2023:
- * Cover letter: [PATCH 0/4 v2] Add support for running in VM guests to intel_idle
- * https://patchwork.kernel.org/project/linux-pm/patch/20230605154716.840930-2-arjan@linux.intel.com/
-
-In other words, the base commit is 'e8195eaff86fd2ddb5f00646b5f76e40cd1164a8',
-then Arjan's patches should be applied, and then these patches on top.
-
-Patch #1 does not depend on Arjan's patches, but patch #2 requires the cleanups
-from Arjan's patch-set.
-
-Changelog
----------
-
-* v3
-  - Dropped patch 'x86/umwait: Increase tpause and umwait quanta' after, as
-    suggested by Andy Lutomirski.
-  - Followed Peter Zijlstra's suggestion and removed explicit 'umwait'
-    deadline. Rely on the global implicit deadline instead.
-  - Rebased on top of Arjan's patches.
-  - C0.2 was tested in a VM by Arjan van de Ven.
-  - Re-measured on 2S and 4S Sapphire Rapids Xeon.
-* v2
-  - Do not mix 'raw_local_irq_enable()' and 'local_irq_disable()'. I failed to
-    directly verify it, but I believe it'll address the '.noinstr.text' warning.
-  - Minor kerneldoc commentary fix.
-
-C0.2 vs POLL latency and power
-------------------------------
-
-I compared POLL to C0.2 using 'wult' tool (https://github.com/intel/wult),
-which measures idle states latency.
-
-* In "POLL" experiments, all C-states except for POLL were disabled.
-* In "C0.2" experiments, all C-states except for POLL and C0.2 were disabled.
-
-Here are the measurement results. The numbers are percent change from POLL to
-C0.2.
-
------------|-----------|----------|-----------
- Median IR | 99th % IR | AC Power | RAPL power
------------|-----------|----------|-----------
- 24%       | 12%       | -13%     | -18%
------------------------|----------|-----------
-
-* IR stands for interrupt latency. The table provides the median and 99th
-  percentile. Wult measures it as the delay between the moment a timer
-  interrupt fires to the moment the CPU reaches the interrupt handler.
-* AC Power is the wall socket AC power.
-* RAPL power is the CPU package power, measured using the 'turbostat' tool.
-
-Hackbench measurements
-----------------------
-
-I ran the 'hackbench' benchmark using the following commands:
-
-# 4 groups, 200 threads
-hackbench -s 128 -l 100000000 -g4 -f 25 -P
-# 8 groups, 400 threads.
-hackbench -s 128 -l 100000000 -g8 -f 25 -P
-
-My SPR system has 224 CPUs, so the first command did not use all CPUs, the
-second command used all of them. However, in both cases CPU power reached TDP.
-
-I ran hackbench 5 times for every configuration and compared hackbench "score"
-averages.
-
-In case of 4 groups, C0.2 improved the score by about 4%, and in case of 8
-groups by about 0.6%.
-
-Q&A
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 ---
-
-1. Can C0.2 be disabled?
-
-C0.2 can be disabled via sysfs and with the following kernel boot option:
-
-  intel_idle.states_off=2
-
-2. Why C0.2, not C0.1?
-
-I measured both C0.1 and C0.2, but did not notice a clear C0.1 advantage in
-terms of latency, but did notice that C0.2 saves more power.
-
-But if users want to try using C0.1 instead of C0.2, they can do this:
-
-echo 0 > /sys/devices/system/cpu/umwait_control/enable_c02
-
-This will make sure that C0.2 requests from 'intel_idle' are automatically
-converted to C0.1 requests.
-
-3. How did you verify that system enters C0.2?
-
-I used 'perf' to read the corresponding PMU counters:
-
-perf stat -e CPU_CLK_UNHALTED.C01,CPU_CLK_UNHALTED.C02,cycles -a sleep 1
-
-4. Ho to change the global explicit 'umwait' deadline?
-
-Via '/sys/devices/system/cpu/umwait_control/max_time'
-
-Artem Bityutskiy (2):
-  x86/mwait: Add support for idle via umwait
-  intel_idle: add C0.2 state for Sapphire Rapids Xeon
-
  arch/x86/include/asm/mwait.h | 65 ++++++++++++++++++++++++++++++++++++
- drivers/idle/intel_idle.c    | 44 +++++++++++++++++++++++-
- 2 files changed, 108 insertions(+), 1 deletion(-)
+ 1 file changed, 65 insertions(+)
 
+diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
+index 778df05f8539..681c281eeaa7 100644
+--- a/arch/x86/include/asm/mwait.h
++++ b/arch/x86/include/asm/mwait.h
+@@ -141,4 +141,69 @@ static inline void __tpause(u32 ecx, u32 edx, u32 eax)
+ 	#endif
+ }
+ 
++#ifdef CONFIG_X86_64
++/*
++ * Monitor a memory address at 'rcx' using the 'umonitor' instruction.
++ */
++static inline void __umonitor(const void *rcx)
++{
++	/* "umonitor %rcx" */
++#ifdef CONFIG_AS_TPAUSE
++	asm volatile("umonitor %%rcx\n"
++		     :
++		     : "c"(rcx));
++#else
++	asm volatile(".byte 0xf3, 0x0f, 0xae, 0xf1\t\n"
++		     :
++		     : "c"(rcx));
++#endif
++}
++
++/*
++ * Same as '__tpause()', but uses the 'umwait' instruction. It is very
++ * similar to 'tpause', but also breaks out if the data at the address
++ * monitored with 'umonitor' is modified.
++ */
++static inline void __umwait(u32 ecx, u32 edx, u32 eax)
++{
++	/* "umwait %ecx, %edx, %eax;" */
++#ifdef CONFIG_AS_TPAUSE
++	asm volatile("umwait %%ecx\n"
++		     :
++		     : "c"(ecx), "d"(edx), "a"(eax));
++#else
++	asm volatile(".byte 0xf2, 0x0f, 0xae, 0xf1\t\n"
++		     :
++		     : "c"(ecx), "d"(edx), "a"(eax));
++#endif
++}
++
++/*
++ * Enter C0.1 or C0.2 state and stay there until an event happens (an interrupt
++ * or the 'need_resched()'), the explicit deadline is reached, or the implicit
++ * global limit is reached.
++ *
++ * The deadline is the absolute TSC value to exit the idle state at. If it
++ * exceeds the global limit in the 'IA32_UMWAIT_CONTROL' register, the global
++ * limit prevails, and the idle state is exited earlier than the deadline.
++ */
++static inline void umwait_idle(u64 deadline, u32 state)
++{
++	if (!current_set_polling_and_test()) {
++		u32 eax, edx;
++
++		eax = lower_32_bits(deadline);
++		edx = upper_32_bits(deadline);
++
++		__umonitor(&current_thread_info()->flags);
++		if (!need_resched())
++			__umwait(state, edx, eax);
++	}
++	current_clr_polling();
++}
++#else
++#define umwait_idle(deadline, state) \
++		WARN_ONCE(1, "umwait CPU instruction is not supported")
++#endif /* CONFIG_X86_64 */
++
+ #endif /* _ASM_X86_MWAIT_H */
 -- 
 2.40.1
+
