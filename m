@@ -2,151 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958AF72AE1F
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:35:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA8D72AE25
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbjFJSfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 14:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S231287AbjFJSn7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 14:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231704AbjFJSf3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:35:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD9230F1
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:35:28 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="356683696"
-X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="356683696"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 11:35:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="688116121"
-X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="688116121"
-Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jun 2023 11:35:23 -0700
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>,
-        Artem Bityutskiy <dedekind1@gmail.com>
-Subject: [PATCH v3 2/2] intel_idle: add C0.2 state for Sapphire Rapids Xeon
-Date:   Sat, 10 Jun 2023 21:35:18 +0300
-Message-Id: <20230610183518.4061159-3-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230610183518.4061159-1-dedekind1@gmail.com>
-References: <20230610183518.4061159-1-dedekind1@gmail.com>
+        with ESMTP id S229710AbjFJSn6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:43:58 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4213A80;
+        Sat, 10 Jun 2023 11:43:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686422634; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=asBfk+JTn3kmbbKzvLwZZkt+t+hUl+8Rp9teCSFRKkXTcfJdAAne0bD+ZZHeQNv9XB
+    yBEgmD4tsX0nfh/CCMk5MK9FtsQdvEV1uQr4tDX3EV5l0MibytA5FhJ8zGv7V6syb4aT
+    QbcQo4AJfRACV1A1hyvPsW5UiPyLMXpC7R9IbtAl2+TWXe/nvm+SEpNB8NrM8rDkp4kk
+    EszIpfeygxlyjbrPmXaHwg1GOZ2/WQxUI1XwavVvlqLBiAoxbrmx/AFNAXF1tjKYEjIM
+    JBdqlfdZ8c2pDRND5w6e3ZN0M2D5CLJRp7uaXjbt7a6kjhwP09WECc5Rr2L+zSe2EXHF
+    r7OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686422634;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=S7/IDhnf4V6vN7TW7QvV+Hg95m/AA8lfZgRn14G6IEk=;
+    b=Wu6p/he0znPWIGktuHRwwvwzm+7fn8v7N/wOCXeoE0uoM30pT7iIJx1kSbFJOsmIif
+    cJWqSX/ZSFFZRafxyxj+RYH28opYp9GvmsoF/ZSU/kDmSjHi4N1XLi8YB1tA3YuGTLhX
+    /cqmej4zu66Q7eQwAKuDlPQsH9lyMFQsZ29hZtV0pJPjH+9fZoYS9UzoDnvEBL6Fi43u
+    Uv2I3Pwh6ovT8DhBAu4HVN+W7AtPADiwBQ8T+ejIwdip0Sm1Y0MY1QqkyUrhp5lvO5Wo
+    K+Ti+8g3bha/q4fT3LDwMMWhQNiR64S5z9uBk6tkNoN9J0ZZmADnApGwDRaqwqJuilch
+    9D/w==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686422634;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=S7/IDhnf4V6vN7TW7QvV+Hg95m/AA8lfZgRn14G6IEk=;
+    b=FHa2iAmKqKH5gj8F1eho5DxAm03wIs3t1/NJMQ5HuB7lv+Y+Iyn1nJSOvsMeSjvmiB
+    WqvCEm/MUF2jfp+OXYEdfyv1WiBcV/gItaiSYi2wKNxNGH1yTxEGSNU6K03fW6Z6Qot4
+    /YSvkNMqZJSN+kTEnX5KYa9bkmBxN/Io2jdTLj5EhVriXBP7IfHEJ3BHay9EYdvNnfp4
+    Axv7wgnxuK+8S7IeWVrURuvogZgoe3qAqJJABpO724B67mgVZvVYvmLSQnhAQBuvU21z
+    GQWH9Jyo42BLIghcPMRWdR8bxS9QH1goWnQ1+y6zNWXcQqehYLqmjAgvrYrzKTlm8DVl
+    D72g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686422634;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=S7/IDhnf4V6vN7TW7QvV+Hg95m/AA8lfZgRn14G6IEk=;
+    b=a9p/de1o9mg/6v1sNoU8iqn58cKzLRWecUKhbUAw0FQJE85HAHKOfbwIJ1FGsRhNsq
+    eST8dmACihnRPd2oCfBw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5AIhsQd1
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 10 Jun 2023 20:43:54 +0200 (CEST)
+Date:   Sat, 10 Jun 2023 20:43:53 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 20/22] interconnect: qcom: icc-rpm: Set bandwidth on
+ both contexts
+Message-ID: <ZITEacAtcaZRY6ib@gerhold.net>
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-20-e5934b07d813@linaro.org>
+ <ZIS6LK2lnlnNygX7@gerhold.net>
+ <e9855fca-cd90-202f-aab3-caa323c33ec0@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9855fca-cd90-202f-aab3-caa323c33ec0@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+On Sat, Jun 10, 2023 at 08:28:22PM +0200, Konrad Dybcio wrote:
+> 
+> 
+> On 10.06.2023 20:00, Stephan Gerhold wrote:
+> > On Fri, Jun 09, 2023 at 10:19:25PM +0200, Konrad Dybcio wrote:
+> >> Up until now, for some reason we've only been setting bandwidth values
+> >> on the active-only context. That pretty much meant that RPM could lift
+> >> all votes when entering sleep mode. Or never sleep at all.
+> >>
+> >> That in turn could potentially break things like USB wakeup, as the
+> >> connection between APSS and SNoC/PNoC would simply be dead.
+> >>
+> > 
+> > Nitpick: Apparently an "active" vote is applied during both active+sleep
+> > until the first "sleep" vote is sent. It's documented only for
+> > regulators [1] but I would expect the same applies to the bandwidths.
+> > This means actual breakage shouldn't have been possible.
+> ..unless some part of the boot chain voted for the sleep set!
+> 
+> I'm not sure whether the regulator comment also holds for bw, but I
+> also don't really have a great way to check it.. Would you want me to
+> alter this commit message somehow?
+> 
 
-Add Sapphire Rapids Xeon C0.2 state support. This state has a lower exit
-latency comparing to C1, and saves energy comparing to POLL.
+Hm. Well, on a second look you used "could" instead of "definitely does"
+everywhere in your commit message. There is a indeed a slight chance
+so feel free to just keep it as-is. :D
 
-C0.2 may also improve performance (e.g., as measured by 'hackbench'), because
-idle CPU power savings in C0.2 increase busy CPU power budget and therefore,
-improve turbo boost of the busy CPU.
-
-Suggested-by: Len Brown <len.brown@intel.com>
-Suggested-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
----
- drivers/idle/intel_idle.c | 44 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 0bf5e9f5bed8..51f56001e2cd 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -130,6 +130,11 @@ static unsigned int mwait_substates __initdata;
- #define flg2MWAIT(flags) (((flags) >> 24) & 0xFF)
- #define MWAIT2flg(eax) ((eax & 0xFF) << 24)
- 
-+/*
-+ * The maximum possible 'umwait' deadline value.
-+ */
-+#define UMWAIT_MAX_DEADLINE (~((u64)0))
-+
- static __always_inline int __intel_idle(struct cpuidle_device *dev,
- 					struct cpuidle_driver *drv, int index)
- {
-@@ -263,6 +268,32 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
- 	return 0;
- }
- 
-+/**
-+ * intel_idle_umwait_irq - Request C0.x using the 'umwait' instruction.
-+ * @dev: cpuidle device of the target CPU.
-+ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
-+ * @index: Target idle state index.
-+ *
-+ * Request C0.1 or C0.2 using 'umwait' instruction with interrupts enabled.
-+ */
-+static __cpuidle int intel_idle_umwait_irq(struct cpuidle_device *dev,
-+					   struct cpuidle_driver *drv,
-+					   int index)
-+{
-+	u32 state = flg2MWAIT(drv->states[index].flags);
-+
-+	raw_local_irq_enable();
-+	/*
-+	 * Use the maximum possible deadline value. This means that 'C0.x'
-+	 * residency will be limited by the global limit in
-+	 * 'IA32_UMWAIT_CONTROL'.
-+	 */
-+	umwait_idle(UMWAIT_MAX_DEADLINE, state);
-+	raw_local_irq_disable();
-+
-+	return index;
-+}
-+
- /*
-  * States are indexed by the cstate number,
-  * which is also the index into the MWAIT hint array.
-@@ -1006,6 +1037,13 @@ static struct cpuidle_state adl_n_cstates[] __initdata = {
- };
- 
- static struct cpuidle_state spr_cstates[] __initdata = {
-+	{
-+		.name = "C0.2",
-+		.desc = "UMWAIT C0.2",
-+		.flags = MWAIT2flg(TPAUSE_C02_STATE) | CPUIDLE_FLAG_IRQ_ENABLE,
-+		.exit_latency_ns = 200,
-+		.target_residency_ns = 200,
-+		.enter = &intel_idle_umwait_irq, },
- 	{
- 		.name = "C1",
- 		.desc = "MWAIT 0x00",
-@@ -1904,7 +1942,9 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
- 		}
- 		return;
- 	}
--	if (state->enter == intel_idle_hlt_irq_on)
-+
-+	if (state->enter == intel_idle_hlt_irq_on ||
-+	    state->enter == intel_idle_umwait_irq)
- 		return; /* no update scenarios */
- 
- 	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
-@@ -1959,6 +1999,8 @@ static bool should_verify_mwait(struct cpuidle_state *state)
- 		return false;
- 	if (state->enter == intel_idle_hlt_irq_on)
- 		return false;
-+	if (state->enter == intel_idle_umwait_irq)
-+		return false;
- 
- 	return true;
- }
--- 
-2.40.1
-
+Thanks,
+Stephan
