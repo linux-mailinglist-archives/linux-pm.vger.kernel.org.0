@@ -2,192 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E95972A6C9
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 01:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9111F72A6F8
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 02:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjFIXhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Jun 2023 19:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S229900AbjFJAOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Jun 2023 20:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFIXhG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 19:37:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6491BE4;
-        Fri,  9 Jun 2023 16:37:04 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S230027AbjFJAOt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Jun 2023 20:14:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2D335BE;
+        Fri,  9 Jun 2023 17:14:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2272A6606E97;
-        Sat, 10 Jun 2023 00:37:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686353823;
-        bh=rerBhfdBx0PDQHgVWkdYCkE9CpCyDdB+5HtthB+KSHQ=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 157FC6424C;
+        Sat, 10 Jun 2023 00:14:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B54C433EF;
+        Sat, 10 Jun 2023 00:14:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686356087;
+        bh=KrcLbB7SmNUxRy8U/TG329U42wcgeQxwfCDRJvUdGZQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TcErX0+qWR1QbayaLj8+AIhbVe3zisI+Z9CVdl6aRiwxtA+R+92rDoeR6WwaeKB8x
-         UizGJutbqXdZc66zsWK7/dKHElwvHvGYuUqG/eqgnhUQsAP0mUdBRqUREZL77IGhJ8
-         Zfky/7l4ckHYZepkZGdWHv0tprMhT+SB0XU5JeC+dOsGhGW1Jkr3e9xZWk97ZJOUCF
-         A5Z4T8wuXKwaAqJwNt3c7SHjMP5q3LscU8TpLKtn4c2PwdeH8t+MNcHtmbDxuUtnkV
-         n1uT8QMxaUzlqrnqfmmI9K5ffxNpPMiFy0qSvwIS4VZFvnHG8lMJgKxSVuzHO5Ds4v
-         CshkE0lEKQ/hA==
-Received: by mercury (Postfix, from userid 1000)
-        id BAA311061184; Sat, 10 Jun 2023 01:36:59 +0200 (CEST)
-Date:   Sat, 10 Jun 2023 01:36:59 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Kamel Bouhara <kamel.bouhara@bootlin.com>
-Subject: Re: [PATCH 2/2] power: reset: at91-reset: add sysfs interface to the
- power on reason
-Message-ID: <20230609233659.tduea4ls5raaf76e@mercury.elektranox.org>
-References: <20230609143912.849995-1-miquel.raynal@bootlin.com>
- <20230609143912.849995-3-miquel.raynal@bootlin.com>
+        b=haDeLcPr+E8CC4ALAD5S2uv95JaoCGIqMbin6vpwdRsLnceynLBVRZ4LvvyenTn2u
+         CugzsmgfBi9UmIdWjfINm0TwQVNQrRgr7xaqNflvBYkVl2SaoLpo5/1ZuD49HB5rPS
+         p6VysZs0gT06hXaMDusxt3QSqPBCcZNOmB/hoepYVYvMLqLdmrVUoUdxzcKiE/iMIR
+         E9yC/qGeT2C3iz/j/ESjiQd4HOJgEH6KCf69QBOfFEegYj2NDSBSCKV+0Z03HPqZIY
+         dE2PcT5nhT7Yd9J6dAeso8YRH9+yJiCneH8pKJO8qxbKrvagHIac9Ah9VDJsd7PRrU
+         EaKCaWljvKG3A==
+Date:   Fri, 9 Jun 2023 17:18:15 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-arm-msm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 3/4] clk: qcom: cbf-msm8996: scale CBF clock according
+ to the CPUfreq
+Message-ID: <20230610001815.zgo23zlwo3z6e3y6@ripper>
+References: <20230512001334.2983048-1-dmitry.baryshkov@linaro.org>
+ <20230512001334.2983048-4-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="go2oi2cf3km2tgoq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230609143912.849995-3-miquel.raynal@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230512001334.2983048-4-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, May 12, 2023 at 03:13:33AM +0300, Dmitry Baryshkov wrote:
+> Turn CBF into the interconnect provider. Scale CBF frequency (bandwidth)
+> according to CPU frequencies.
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Tested-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
---go2oi2cf3km2tgoq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Georgi,
 
-Hi,
+Dmitry tells me that you picked up the interconnect patches, I don't see
+an immutable branch in your tree with them, but this patch has a build
+time dependency on them. Could you please pick this through your tree as
+well?
 
-On Fri, Jun 09, 2023 at 04:39:12PM +0200, Miquel Raynal wrote:
-> From: Kamel Bouhara <kamel.bouhara@bootlin.com>
->=20
-> Introduce a list of generic reset sources and use them to export the
-> power on reason through sysfs. Update the ABI documentation to describe
-> this new interface.
->=20
-> Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> [Miquel Raynal: Follow-up on Kamel's work, 4 years later]
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Acked-by: Bjorn Andersson <andersson@kernel.org>
+
+Regards,
+Bjorn
+
 > ---
->  .../testing/sysfs-platform-power-on-reason    | 10 +++++
->  drivers/power/reset/at91-reset.c              | 42 +++++++++++++------
->  include/linux/power/power_on_reason.h         | 19 +++++++++
->  3 files changed, 59 insertions(+), 12 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-platform-power-on-rea=
-son
->  create mode 100644 include/linux/power/power_on_reason.h
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-platform-power-on-reason b/D=
-ocumentation/ABI/testing/sysfs-platform-power-on-reason
-> new file mode 100644
-> index 000000000000..12020d017543
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-platform-power-on-reason
-> @@ -0,0 +1,10 @@
-> +What:		/sys/devices/platform/.../power_on_reason
-> +Date:		October 2019
-> +KernelVersion:	5.4
-
-That needs to be updated :)
-
-> +Contact:	Kamel Bouhara <kamel.bouhara@bootlin.com>
-> +Description:	This file shows system power on reason. Possible sources ar=
-e:
-> +		General system power-on, RTC wakeup, watchdog timeout, software
-> +		reset, user pressed reset button, CPU clock failure, oscillator
-> +		failure, low power mode exit, unknown.
+>  drivers/clk/qcom/Kconfig        |  1 +
+>  drivers/clk/qcom/clk-cbf-8996.c | 60 ++++++++++++++++++++++++++++++++-
+>  2 files changed, 60 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 12be3e2371b3..85869e7a9f16 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -48,6 +48,7 @@ config QCOM_CLK_APCS_MSM8916
+>  config QCOM_CLK_APCC_MSM8996
+>  	tristate "MSM8996 CPU Clock Controller"
+>  	select QCOM_KRYO_L2_ACCESSORS
+> +	select INTERCONNECT_CLK if INTERCONNECT
+>  	depends on ARM64
+>  	help
+>  	  Support for the CPU clock controller on msm8996 devices.
+> diff --git a/drivers/clk/qcom/clk-cbf-8996.c b/drivers/clk/qcom/clk-cbf-8996.c
+> index cfd567636f4e..1e23b734abb3 100644
+> --- a/drivers/clk/qcom/clk-cbf-8996.c
+> +++ b/drivers/clk/qcom/clk-cbf-8996.c
+> @@ -5,11 +5,15 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/clk.h>
+>  #include <linux/clk-provider.h>
+> +#include <linux/interconnect-clk.h>
+> +#include <linux/interconnect-provider.h>
+>  #include <linux/of.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  
+> +#include <dt-bindings/interconnect/qcom,msm8996-cbf.h>
 > +
-> +		The file is read only.
-
-This should list the exact strings generated by the kernel. They are
-ABI. Also it should be mentioned, that the list might be extended in
-the future.
-
-> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-=
-reset.c
-
-[...]
-
-> diff --git a/include/linux/power/power_on_reason.h b/include/linux/power/=
-power_on_reason.h
-> new file mode 100644
-> index 000000000000..4b92eb0519c4
-> --- /dev/null
-> +++ b/include/linux/power/power_on_reason.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Author: Kamel Bouhra <kamel.bouhara@bootlin.com>
-> + */
+>  #include "clk-alpha-pll.h"
+>  #include "clk-regmap.h"
+>  
+> @@ -223,6 +227,49 @@ static const struct regmap_config cbf_msm8996_regmap_config = {
+>  	.val_format_endian	= REGMAP_ENDIAN_LITTLE,
+>  };
+>  
+> +#ifdef CONFIG_INTERCONNECT
 > +
-> +#ifndef POWER_ON_REASON_H
-> +#define POWER_ON_REASON_H
+> +/* Random ID that doesn't clash with main qnoc and OSM */
+> +#define CBF_MASTER_NODE 2000
 > +
-> +#define POWER_ON_REASON_GENERAL "general"
-
-What's the difference between "general" and "unknown"?
-
-> +#define POWER_ON_REASON_RTC "RTC wakeup"
-> +#define POWER_ON_REASON_WATCHDOG "watchdog timeout"
-> +#define POWER_ON_REASON_SOFTWARE "software"
-
-"software reset"
-
-> +#define POWER_ON_REASON_USER "user"
-
-user is quite confusing. This should be something like
-
-#define POWER_ON_REASON_RST_BTN "reset button"
-
-> +#define POWER_ON_REASON_CPU_FAIL "CPU clock failure"
-
-POWER_ON_REASON_CPU_CLK_FAIL
-
-> +#define POWER_ON_REASON_XTAL_FAIL "crystal oscillator failure"
-> +#define POWER_ON_REASON_LOW_POWER "low power exit"
-
-when is this reported?
-
-> +#define POWER_ON_REASON_UNKNOWN "unknown"
+> +static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev, struct clk_hw *cbf_hw)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct clk *clk = devm_clk_hw_get_clk(dev, cbf_hw, "cbf");
+> +	const struct icc_clk_data data[] = {
+> +		{ .clk = clk, .name = "cbf", },
+> +	};
+> +	struct icc_provider *provider;
 > +
-> +#endif /* POWER_ON_REASON_H */
-
-Greetings,
-
--- Sebastian
-
---go2oi2cf3km2tgoq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSDt5gACgkQ2O7X88g7
-+poqyxAAglUk7rJHfWfLQ//weA/l1ReEJ7Nyf2ijitYaFFMyoFnmq/wZuQhWp7Eh
-8IwUrrAY/LZIPFOar9uz0jXOYzTELwkoiAYwTFdRvSFW2tFnNfdHYzX1ftutE39E
-XUZSytW70KbdJFKIJEd0A1gR+mKlSoRj8r6jPWHKeGHijBZaDIwpCXmQdRsjNmnc
-N+ky3hSJHo8hCdpS4YlDE+FL2ghxYWWK6KjOzNsqUSElu6IYUdzzlmL+hawpXWwd
-7GKb/Ie7MVzWkdID18NEztcdf3lNnbItr8exnIovCk3DeU5xMfAT1f9Z+tJtuxY9
-7ksJkevf7hApgu97EZsa2Khb3eQ+QFb7BFJaDEJXf3iwFG+hUj5aa40O1KhI5AYn
-liUbUqSbWshZ7tUf429msyNBWfHR+xYuBQXGHiNS2tI60/mjTE9HyuuDg488Dcjv
-2WtraBKOoGbpHjYIfZXcaDlaCK0ktJD9i4hypUN7a9d/rMrZgKHHqju44FKqtUa8
-RYKYIv5PC50m9eUU1cd3KWh3rhja/zD/gPl9V8D5OXLI1XiQ+TBiozeQZja9Kkow
-Vw0BePJO88SQzzGqESlXZpYgzRl9BEwBg1k8fZCyNweslj11vptnQ1HSxhU3La/O
-5hAcmf0NvH/64ZxuNjifNGm2sOpsuYYz41X2v+IxRrjZfm9u538=
-=o6+/
------END PGP SIGNATURE-----
-
---go2oi2cf3km2tgoq--
+> +	provider = icc_clk_register(dev, CBF_MASTER_NODE, ARRAY_SIZE(data), data);
+> +	if (IS_ERR(provider))
+> +		return PTR_ERR(provider);
+> +
+> +	platform_set_drvdata(pdev, provider);
+> +
+> +	return 0;
+> +}
+> +
+> +static int qcom_msm8996_cbf_icc_remove(struct platform_device *pdev)
+> +{
+> +	struct icc_provider *provider = platform_get_drvdata(pdev);
+> +
+> +	icc_clk_unregister(provider);
+> +
+> +	return 0;
+> +}
+> +#define qcom_msm8996_cbf_icc_sync_state icc_sync_state
+> +#else
+> +static int qcom_msm8996_cbf_icc_register(struct platform_device *pdev,  struct clk_hw *cbf_hw)
+> +{
+> +	dev_warn(&pdev->dev, "CONFIG_INTERCONNECT is disabled, CBF clock is fixed\n");
+> +
+> +	return 0;
+> +}
+> +#define qcom_msm8996_cbf_icc_remove(pdev) (0)
+> +#define qcom_msm8996_cbf_icc_sync_state NULL
+> +#endif
+> +
+>  static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
+>  {
+>  	void __iomem *base;
+> @@ -281,7 +328,16 @@ static int qcom_msm8996_cbf_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		return ret;
+>  
+> -	return devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, &cbf_mux.clkr.hw);
+> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, &cbf_mux.clkr.hw);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return qcom_msm8996_cbf_icc_register(pdev, &cbf_mux.clkr.hw);
+> +}
+> +
+> +static int qcom_msm8996_cbf_remove(struct platform_device *pdev)
+> +{
+> +	return qcom_msm8996_cbf_icc_remove(pdev);
+>  }
+>  
+>  static const struct of_device_id qcom_msm8996_cbf_match_table[] = {
+> @@ -292,9 +348,11 @@ MODULE_DEVICE_TABLE(of, qcom_msm8996_cbf_match_table);
+>  
+>  static struct platform_driver qcom_msm8996_cbf_driver = {
+>  	.probe = qcom_msm8996_cbf_probe,
+> +	.remove = qcom_msm8996_cbf_remove,
+>  	.driver = {
+>  		.name = "qcom-msm8996-cbf",
+>  		.of_match_table = qcom_msm8996_cbf_match_table,
+> +		.sync_state = qcom_msm8996_cbf_icc_sync_state,
+>  	},
+>  };
+>  
+> -- 
+> 2.39.2
+> 
