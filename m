@@ -2,75 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D58172ADAA
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 19:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DE272ADDB
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 19:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbjFJRYp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 13:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S230168AbjFJRqe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 13:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjFJRYo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 13:24:44 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B373589;
-        Sat, 10 Jun 2023 10:24:42 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-6260e771419so15016086d6.1;
-        Sat, 10 Jun 2023 10:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686417881; x=1689009881;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zk1WLJV5QkFB4QM7WPYN5iwoIW9xxUosdBEEitZ4V5A=;
-        b=ZIp6jCT06zpNehaXWiaJDD5KCKoT5CThszCmRg4veyX891C8qsjnRr/S7UdOFdsfS7
-         mwqzyHMrE/Nu9XC779XaSG6zncWapMtwdZUUuZ5Yvzk4Hef9HbhPvQfPNdamIZ/UQ/wF
-         YJjUKjAvVAGrnYvUGmAstrF1qnFk/bob36UWeWpiZrq8/YSh5uoebAjVCKAQnm6ZqOFr
-         D+ZsOQTIqM38LEFrwTjIbdNqtHFDK+2pyiX5gW3jnLFmPJtleutQsuoi8KDUEd6aMmp/
-         XTmOxS8yqt9Jm5W1tPCpPkhoRWCS4uRbtr7qyR0fhsN2Yp1riC5woor5Ro2jMsebHHpR
-         Pz6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686417881; x=1689009881;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zk1WLJV5QkFB4QM7WPYN5iwoIW9xxUosdBEEitZ4V5A=;
-        b=g5uEesN1FibHFj6VzUCO76atJknUelfte9sJ0F5IiahE/HMeMGp4gQtdsf0FNWNGyI
-         v5fX+y2bQRTBHc4UxpBij+hkwJZH+tv3LSuzP7ZKBimOddkGI0OKCAoWa65KoS5aFMa3
-         IJsDHmwrfFFGMSECo0TlrJb4/7RXGIFAK1qNhx9gmLJDzg1x/bEJdTty5hIExizXKOsX
-         kd7Spp7tldHH2HyMtHF/tJ1iI6pqRWgalJk0fxSYbG5xYhX6CRgdxoqn6kVeT+4a/jhs
-         HrSLVqvktcN8Q5rmJVqN2IafinP5TFUppIAjMWEPbjx6ZTxjmayDSq/BICh6m6EZm9L7
-         fZYw==
-X-Gm-Message-State: AC+VfDxCK3yYxE7oMlDGQJ0Tnu5UUGOtd9NSrbcYda6qF/vSnRusNzi1
-        6HJ4FOvg6TqwPRBPlnp+e54=
-X-Google-Smtp-Source: ACHHUZ4jvqgsA1HufGLT8w1uSy08WFo0kLcE1pb0iEUMiabgGNfL03a0nPDs7x0qTX/ZxAjqEpnrow==
-X-Received: by 2002:a05:6214:2488:b0:56e:c066:3cd2 with SMTP id gi8-20020a056214248800b0056ec0663cd2mr5967750qvb.2.1686417881293;
-        Sat, 10 Jun 2023 10:24:41 -0700 (PDT)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id a20-20020a0ca994000000b0062de1ed9d15sm196600qvb.102.2023.06.10.10.24.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 10:24:41 -0700 (PDT)
-Message-ID: <f6d023e4-c22b-32fe-f7c6-51a988c43864@gmail.com>
-Date:   Sat, 10 Jun 2023 12:24:39 -0500
+        with ESMTP id S229735AbjFJRqd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 13:46:33 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39C23592;
+        Sat, 10 Jun 2023 10:46:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686419187; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=fUeeLWR7YnRTKnToU7natYqSH5ieWF82K2mSOSnL8fjXZELFDMkOSKiJ4s3n49SyG6
+    1SS7eoStzQqStrHwvmONYJWxrPn1lU1uv2GmhID27XaCcs52jqJvbdRUpMdCMqNDg4CQ
+    pBgE365xVAdpGYk+j3y4UhquddgR2XuREs+4hIICohPe9FJfZfu7fTZkfAbFonZbu59V
+    +pTVHMHP61F8tkZx+qLwi+EJtrxbiMeql5vt30uz9Veb5qRBw1A4eG1ZK/ZBhEgytrN4
+    SlGC8wkNLfegvUzVNempFXXStCy5kn7hx3NbQ8Kkl34hwhPDOfnr9Wi8+QdghIQu234S
+    iCvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686419187;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=oH0BizfUqIgRQXEwNc0Sz7uUUantI/rz95IfbtW4CCY=;
+    b=UIwEkX4rbnQ5XOMvX0lnTQL/b3Q5pqNx2rD/SirWP1DImDNkCSq/Tv3h48dFoqDhpZ
+    josn0KbeJmYkTvzzyBXu5VoG1w+H2Yp0jvxFiceUopx6Gz74Z9R+GC20OpQUEmNYMQUi
+    NgUqAK7+hRGnWCETi4DlPlUUryaJIY+3M1AsbRVJLrByKwLPVJWpR7ZzfESrWHGNXVs+
+    QEMzX7U9QZKvR2r6uDSHtCO+DGg1of5ugRSZ+q6/u1qDb1fPAS5rdOgNmboK1U1uclIp
+    vBXjvhUPO4pg01fDyBBIwlZ4ftxM7a6gnKrgRO/rnjtLwSg1bkcLCaOrmn6RoajKpXfs
+    pphA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686419187;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=oH0BizfUqIgRQXEwNc0Sz7uUUantI/rz95IfbtW4CCY=;
+    b=D2oa5zsiirWQyzRZHTEJFTfn1CqEbaDAPCT5K08CJUl8TOjpaTOoQbDPjFePBtyiVt
+    4lWZZcrB5XNZNM+RsC+R41IyeNEcjJ9BVuiTEiz+6cjEFmKx/V9nhX3bFerhj3br64oy
+    +o+UMFWHwmX/l5X3kjv3XwnWWB+ab6wJA4Q5in3rcZaeyTZ0UoyD5gF0Wf7hfTnXaL1V
+    Ty3jNFYmC6m8xvpA7LTUyEjqQifxkEcOb3CmiJfOUq8DYY+wNMwi/cJnhqmNAH3plwbv
+    P7dlqFtz5IazG+1hsED/n8kcQ3BXmkY/8ZvaYVqyusUDhSWbuUgKvr3gYSg/AyoQDOCu
+    u5UA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686419187;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=oH0BizfUqIgRQXEwNc0Sz7uUUantI/rz95IfbtW4CCY=;
+    b=PoK9ULrn+np78Qiop0zEDKZxLPrXA9MXDJt2WZU4q51xlOU64hOd0Vs2a8745WEfc4
+    D7uLdwko/+ontrwAYjCg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA9J/h"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5AHkRQaE
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sat, 10 Jun 2023 19:46:27 +0200 (CEST)
+Date:   Sat, 10 Jun 2023 19:46:25 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 19/22] interconnect: qcom: icc-rpm: Fix bucket number
+Message-ID: <ZIS28eN1JEuXV2AT@gerhold.net>
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-19-e5934b07d813@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     eduval@amazon.com, rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <20230607003721.834038-1-evalenti@kernel.org>
- <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
- <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-From:   Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526-topic-smd_icc-v2-19-e5934b07d813@linaro.org>
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,28 +95,75 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/7/23 11:38, Eduardo Valentin wrote:
->> Can you elaborate 'the timing requirement for the governors' ? I'm
->> missing the point
+On Fri, Jun 09, 2023 at 10:19:24PM +0200, Konrad Dybcio wrote:
+> SMD RPM only provides two buckets, one each for the active-only and
+> active-sleep RPM contexts. Use the correct constant to allocate and
+> operate on them.
 > 
+> Fixes: dcbce7b0a79c ("interconnect: qcom: icc-rpm: Support multiple buckets")
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/interconnect/qcom/icc-rpm.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
-> The point is to avoid contention on the device update path.
-> Governor that use differential equations on temperature over time
-> will be very time sensitive. Step wise, power allocator, or any
-> PID will be very sensitive to time. So, If userspace is hitting
-> this API too often we can see cases where the updates needed to
-> service userspace may defer/delay the execution of the governor
-> logic.
-> 
-> Despite that, there is really no point to have more updates than
-> what was configured for the thermal zone to support. Say that
-> we configure a thermal zone to update itself every 500ms, yet
-> userspace keeps sending reads every 100ms, we do not need necessarily
-> to do a trip to the device every single time to update the temperature,
-> as per the design for the thermal zone.
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 6d40815c5401..3ac47b818afe 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> [...]
+> @@ -275,7 +275,7 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>  	if (!tag)
+>  		tag = QCOM_ICC_TAG_ALWAYS;
+>  
+> -	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> +	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
+>  		if (tag & BIT(i)) {
 
-A userspace governor might *also* use PID or filter multiple samples
-taken at high rate. I specifically switched my python fan control script
-from the Intel coretemp hwmon to the x86_pkg_tmp thermal zone because of
-the coretemp driver's annoying 1-second caching behavior.
+Hm, I think QCOM_ICC_NUM_BUCKETS is actually intentional here. There is
+a hint about this in the description of the commit in your Fixes line:
 
+> This patch studies the implementation from interconnect rpmh driver to
+> support multiple buckets.  The rpmh driver provides three buckets for
+> AMC, WAKE, and SLEEP; this driver only needs to use WAKE and SLEEP
+> buckets, but we keep the same way with rpmh driver, this can allow us
+> to reuse the DT binding and avoid to define duplicated data structures.
+
+As far as I understand, the idea was to reuse the definitions in
+qcom,icc.h and just ignore the AMC bucket for now. AFAIU AMC (or rather
+the lack thereof) is basically caching: Sending requests without AMC bit
+set is delayed until the next rpmh_flush() call that happens when
+entering a deep idle state. It requires some work but I guess
+theoretically one could implement exactly the same for RPM.
+
+What you're actually doing here is not fixing the commit but changing
+the bindings. On MSM8909 I defined the ICC path for CPU<->RAM like this:
+
+	interconnects = <&bimc MAS_APPS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+			 &bimc SLV_EBI QCOM_ICC_TAG_ACTIVE_ONLY>;
+
+Per definition in qcom,icc.h:
+
+	QCOM_ICC_TAG_ACTIVE_ONLY = (AMC | WAKE) = (BIT(0) | BIT(1))
+
+Without your patch series this behaves correctly. It results in an
+active-only vote.
+
+The change of behavior is in PATCH 17/22 "interconnect: qcom: icc-rpm:
+Control bus rpmcc from icc". It silently switches from
+QCOM_ICC_BUCKET_WAKE (1) and QCOM_ICC_BUCKET_SLEEP (2) to
+QCOM_SMD_RPM_ACTIVE_STATE (0) and QCOM_SMD_RPM_SLEEP_STATE (1).
+
+In other words, QCOM_ICC_TAG_ACTIVE_ONLY (BIT(0) | BIT(1)) now results
+in an active+sleep vote, not an active-only one. :)
+
+There doesn't seem to be an upstream user of the ICC tags/buckets for
+icc-rpm yet so personally I would be fine with changing it. However,
+then qcom,icc.h should get a clear comment that it's rpmh-only and we
+should define a new qcom,icc-rpm.h.
+
+Or perhaps we should just drop this patch and continue using
+QCOM_ICC_BUCKET_WAKE and QCOM_ICC_BUCKET_SLEEP as before?
+
+Thanks,
+Stephan
