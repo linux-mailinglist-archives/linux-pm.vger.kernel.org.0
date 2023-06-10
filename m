@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E47C72AE20
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958AF72AE1F
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 20:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231156AbjFJSfb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 14:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S231709AbjFJSfa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 14:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbjFJSf3 (ORCPT
+        with ESMTP id S231704AbjFJSf3 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 14:35:29 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C00130ED
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD9230F1
         for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 11:35:28 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="356683690"
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="356683696"
 X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="356683690"
+   d="scan'208";a="356683696"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 11:35:22 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2023 11:35:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="688116115"
+X-IronPort-AV: E=McAfee;i="6600,9927,10737"; a="688116121"
 X-IronPort-AV: E=Sophos;i="6.00,232,1681196400"; 
-   d="scan'208";a="688116115"
+   d="scan'208";a="688116121"
 Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga006.jf.intel.com with ESMTP; 10 Jun 2023 11:35:21 -0700
+  by orsmga006.jf.intel.com with ESMTP; 10 Jun 2023 11:35:23 -0700
 From:   Artem Bityutskiy <dedekind1@gmail.com>
 To:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
         Arjan van de Ven <arjan@linux.intel.com>,
         Artem Bityutskiy <dedekind1@gmail.com>
-Subject: [PATCH v3 1/2] x86/mwait: Add support for idle via umwait
-Date:   Sat, 10 Jun 2023 21:35:17 +0300
-Message-Id: <20230610183518.4061159-2-dedekind1@gmail.com>
+Subject: [PATCH v3 2/2] intel_idle: add C0.2 state for Sapphire Rapids Xeon
+Date:   Sat, 10 Jun 2023 21:35:18 +0300
+Message-Id: <20230610183518.4061159-3-dedekind1@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230610183518.4061159-1-dedekind1@gmail.com>
 References: <20230610183518.4061159-1-dedekind1@gmail.com>
@@ -50,105 +50,103 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-On Intel platforms, C-states are requested using the 'monitor/mwait'
-instructions pair, as implemented in 'mwait_idle_with_hints()'. This
-mechanism allows for entering C1 and deeper C-states.
+Add Sapphire Rapids Xeon C0.2 state support. This state has a lower exit
+latency comparing to C1, and saves energy comparing to POLL.
 
-Sapphire Rapids Xeon supports new idle states - C0.1 and C0.2 (later C0.x).
-These idle states have lower latency comparing to C1, and can be requested
-with either 'tpause' and 'umwait' instructions.
+C0.2 may also improve performance (e.g., as measured by 'hackbench'), because
+idle CPU power savings in C0.2 increase busy CPU power budget and therefore,
+improve turbo boost of the busy CPU.
 
-Linux already uses the 'tpause' instruction in delay functions like
-'udelay()'. This patch adds 'umwait' and 'umonitor' instructions support.
-
-'umwait' and 'tpause' instructions are very similar - both send the CPU to
-C0.x and have the same break out rules. But unlike 'tpause', 'umwait' works
-together with 'umonitor' and exits the C0.x when the monitored memory
-address is modified (similar idea as with 'monitor/mwait').
-
-This patch implements the 'umwait_idle()' function, which works very
-similarly to existing 'mwait_idle_with_hints()', but requests C0.x. The
-intention is to use it from the 'intel_idle' driver.
-
+Suggested-by: Len Brown <len.brown@intel.com>
+Suggested-by: Arjan Van De Ven <arjan.van.de.ven@intel.com>
 Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 ---
- arch/x86/include/asm/mwait.h | 65 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+ drivers/idle/intel_idle.c | 44 ++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 43 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
-index 778df05f8539..681c281eeaa7 100644
---- a/arch/x86/include/asm/mwait.h
-+++ b/arch/x86/include/asm/mwait.h
-@@ -141,4 +141,69 @@ static inline void __tpause(u32 ecx, u32 edx, u32 eax)
- 	#endif
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 0bf5e9f5bed8..51f56001e2cd 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -130,6 +130,11 @@ static unsigned int mwait_substates __initdata;
+ #define flg2MWAIT(flags) (((flags) >> 24) & 0xFF)
+ #define MWAIT2flg(eax) ((eax & 0xFF) << 24)
+ 
++/*
++ * The maximum possible 'umwait' deadline value.
++ */
++#define UMWAIT_MAX_DEADLINE (~((u64)0))
++
+ static __always_inline int __intel_idle(struct cpuidle_device *dev,
+ 					struct cpuidle_driver *drv, int index)
+ {
+@@ -263,6 +268,32 @@ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 	return 0;
  }
  
-+#ifdef CONFIG_X86_64
-+/*
-+ * Monitor a memory address at 'rcx' using the 'umonitor' instruction.
-+ */
-+static inline void __umonitor(const void *rcx)
-+{
-+	/* "umonitor %rcx" */
-+#ifdef CONFIG_AS_TPAUSE
-+	asm volatile("umonitor %%rcx\n"
-+		     :
-+		     : "c"(rcx));
-+#else
-+	asm volatile(".byte 0xf3, 0x0f, 0xae, 0xf1\t\n"
-+		     :
-+		     : "c"(rcx));
-+#endif
-+}
-+
-+/*
-+ * Same as '__tpause()', but uses the 'umwait' instruction. It is very
-+ * similar to 'tpause', but also breaks out if the data at the address
-+ * monitored with 'umonitor' is modified.
-+ */
-+static inline void __umwait(u32 ecx, u32 edx, u32 eax)
-+{
-+	/* "umwait %ecx, %edx, %eax;" */
-+#ifdef CONFIG_AS_TPAUSE
-+	asm volatile("umwait %%ecx\n"
-+		     :
-+		     : "c"(ecx), "d"(edx), "a"(eax));
-+#else
-+	asm volatile(".byte 0xf2, 0x0f, 0xae, 0xf1\t\n"
-+		     :
-+		     : "c"(ecx), "d"(edx), "a"(eax));
-+#endif
-+}
-+
-+/*
-+ * Enter C0.1 or C0.2 state and stay there until an event happens (an interrupt
-+ * or the 'need_resched()'), the explicit deadline is reached, or the implicit
-+ * global limit is reached.
++/**
++ * intel_idle_umwait_irq - Request C0.x using the 'umwait' instruction.
++ * @dev: cpuidle device of the target CPU.
++ * @drv: cpuidle driver (assumed to point to intel_idle_driver).
++ * @index: Target idle state index.
 + *
-+ * The deadline is the absolute TSC value to exit the idle state at. If it
-+ * exceeds the global limit in the 'IA32_UMWAIT_CONTROL' register, the global
-+ * limit prevails, and the idle state is exited earlier than the deadline.
++ * Request C0.1 or C0.2 using 'umwait' instruction with interrupts enabled.
 + */
-+static inline void umwait_idle(u64 deadline, u32 state)
++static __cpuidle int intel_idle_umwait_irq(struct cpuidle_device *dev,
++					   struct cpuidle_driver *drv,
++					   int index)
 +{
-+	if (!current_set_polling_and_test()) {
-+		u32 eax, edx;
++	u32 state = flg2MWAIT(drv->states[index].flags);
 +
-+		eax = lower_32_bits(deadline);
-+		edx = upper_32_bits(deadline);
++	raw_local_irq_enable();
++	/*
++	 * Use the maximum possible deadline value. This means that 'C0.x'
++	 * residency will be limited by the global limit in
++	 * 'IA32_UMWAIT_CONTROL'.
++	 */
++	umwait_idle(UMWAIT_MAX_DEADLINE, state);
++	raw_local_irq_disable();
 +
-+		__umonitor(&current_thread_info()->flags);
-+		if (!need_resched())
-+			__umwait(state, edx, eax);
-+	}
-+	current_clr_polling();
++	return index;
 +}
-+#else
-+#define umwait_idle(deadline, state) \
-+		WARN_ONCE(1, "umwait CPU instruction is not supported")
-+#endif /* CONFIG_X86_64 */
 +
- #endif /* _ASM_X86_MWAIT_H */
+ /*
+  * States are indexed by the cstate number,
+  * which is also the index into the MWAIT hint array.
+@@ -1006,6 +1037,13 @@ static struct cpuidle_state adl_n_cstates[] __initdata = {
+ };
+ 
+ static struct cpuidle_state spr_cstates[] __initdata = {
++	{
++		.name = "C0.2",
++		.desc = "UMWAIT C0.2",
++		.flags = MWAIT2flg(TPAUSE_C02_STATE) | CPUIDLE_FLAG_IRQ_ENABLE,
++		.exit_latency_ns = 200,
++		.target_residency_ns = 200,
++		.enter = &intel_idle_umwait_irq, },
+ 	{
+ 		.name = "C1",
+ 		.desc = "MWAIT 0x00",
+@@ -1904,7 +1942,9 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+ 		}
+ 		return;
+ 	}
+-	if (state->enter == intel_idle_hlt_irq_on)
++
++	if (state->enter == intel_idle_hlt_irq_on ||
++	    state->enter == intel_idle_umwait_irq)
+ 		return; /* no update scenarios */
+ 
+ 	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
+@@ -1959,6 +1999,8 @@ static bool should_verify_mwait(struct cpuidle_state *state)
+ 		return false;
+ 	if (state->enter == intel_idle_hlt_irq_on)
+ 		return false;
++	if (state->enter == intel_idle_umwait_irq)
++		return false;
+ 
+ 	return true;
+ }
 -- 
 2.40.1
 
