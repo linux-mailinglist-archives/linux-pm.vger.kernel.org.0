@@ -2,148 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5453172AB66
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 14:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138C172ABAC
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 15:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232366AbjFJMPO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 08:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S232114AbjFJN1O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 09:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjFJMPM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 08:15:12 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E276735BB
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 05:15:10 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b1af9ef7a9so29771431fa.1
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jun 2023 05:15:10 -0700 (PDT)
+        with ESMTP id S230200AbjFJN1N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 09:27:13 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D429DF;
+        Sat, 10 Jun 2023 06:27:11 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b1806264e9so14561055ad.0;
+        Sat, 10 Jun 2023 06:27:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686399309; x=1688991309;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1686403630; x=1688995630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4AamuwXwyb3NBK1JZt4SqfKXGSRl4csVWF1Q9Qma/rA=;
-        b=Zm+33gZqVkQP+H2rd+2hVYpMNUl69pvQZWEOFzMMWKGgeFt+pMC3WdWgkncAOLy0Re
-         5bBPxXlUdyZuqCQ9aMnDcwQjKfaz1FxrX2pgKI9lx1i26vq8UhhnOYKnRr6iw+plr318
-         tB4OOHAypw2Q3ocXa85FO6lMHr+0JmrKzBUvTllxJGxPjgTOgvcdV4y+a5Ae1mPu0oEr
-         pgxpRHe34h0ERh6Hz8gG/QiC6SDIxkP4B0tPFqftz/FIbkLM5iMUK/iyHijKIDYcA6e8
-         Nhym0OugygH9NfzPC7h9Jp5+alYUqfff5tn7vb3WCjPQgdN8XtEV9NCKjLcqRLQs80vS
-         ZgOQ==
+        bh=feLkklU8QQo6+CqnfmR65iwQdI4nch86pSzF7/Ejl1U=;
+        b=d+9Gb4VoEz660buLe8D3IQUStOHnr0qf5rzb4NuYvReJxjuEjo7JPU16c8GAL/RPSB
+         SzSt/zLU5MsWlHMDKcF9p73jL0uW2vDG2+ilx4s1dnRM7eyGtUWlZgIAG5B03Cz6WQBt
+         BnbQHXaR8tc7+uOG11ya7AR7INdnqsIlVSxAqwNnWKrX2Wc1oqR41ZamiAfSTDCxZMvt
+         m+LbdqEregcxUowQ52mjQCh0uzC96qBEf52jZWbsykBJ2UBBUqC3fD5YHAzJs4EcPVqO
+         8FpAkz4xntPNx76IMn+FjKx1LvANjko+a80Bph4QWBBZOke27nhJv1sJGjmn69KyYU72
+         ZCBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686399309; x=1688991309;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686403630; x=1688995630;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4AamuwXwyb3NBK1JZt4SqfKXGSRl4csVWF1Q9Qma/rA=;
-        b=PLUi6Y1aYkRkmi4BCKz0lXXKhOdEaURacBsqxTYag7CjDvnwNTErlvB2L8XCjw07eO
-         9swtL7bU05s8XhNu2Ynzpy2EVeref5Uv7rMIUaM1KYOAXt0hCm6EZlTPr6NAYBo76qtR
-         bO9Y/RYaHOmkQNdB1yi/6w5Ry3ZIKl93TdeMvYiesk8kt4qV1dHfXFGgcvG1/LvCxAWU
-         CbSVX26GSIPSiqONZR9Owvsd+1wAaujjmJjqZpHSATuynXeBxduyJsJbA+4c4o1Rl8UQ
-         YdMPAuhKs4mBZ7q0HES6UGgU8iMF8slY6UlMLnnyqIj0Fd3OIPFYkVkPF0FhnQaOIAkf
-         Eg9g==
-X-Gm-Message-State: AC+VfDyphyCjS+rLKc8vGQOMHa3cRs4MpA0hG849gYoTjfb8k8tuFrQI
-        5VU6WKN+l4JMWG6m0llTi4zUAQ==
-X-Google-Smtp-Source: ACHHUZ6wpmqIIvEIUC+34R3+IdZ2T7tJJdv1EJsBcAWcf83NNyj1DG5z27VSYWt41nrwvviA+IxDtw==
-X-Received: by 2002:a2e:9b11:0:b0:2b1:c0f6:e955 with SMTP id u17-20020a2e9b11000000b002b1c0f6e955mr597321lji.43.1686399309286;
-        Sat, 10 Jun 2023 05:15:09 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id u24-20020a2e8558000000b002b161e6c7basm794034ljj.108.2023.06.10.05.15.08
+        bh=feLkklU8QQo6+CqnfmR65iwQdI4nch86pSzF7/Ejl1U=;
+        b=aSfd+LUIsqmauVYhqLk6z3AI6s/jQG5KGbRsAdMd4+LZ5SYtgvLEHL3nafDLlN7g9N
+         TCJvzBz+b+S70x2S4HXM59ZlHz0jlK3wYJ0Yg1/MHUr3mxVpI/wBBnXOBfMHBTOGugyS
+         hjIH18HjRucZ37nivY0TRr1nIjac5WqBjuaToL4l7+J6xxy6yirtipmrGur2tMOkTzXv
+         lXUA10k4CV0VRyHJB8oW1UZVy8HDmX+w+McyIaogpKhhtiPP/IQyMs3RB0lIqpRLhhSC
+         JoNNGDyf8lAz3OhOCcwFrnnTACCb9mpR/Itoyp/ptTKS2j1UfiDspe4Jr2hYuQKAoLEr
+         eOSQ==
+X-Gm-Message-State: AC+VfDz5GwVt/SE7HmEiRNKT6J7OkGiAaJPz4pHiBwa8eQCiP/3Cj4sc
+        gZWyKkDyZ9q5I+U+U+8dgKA=
+X-Google-Smtp-Source: ACHHUZ6HWDnN7NK+GM1TTa2LKHZOI2WxhV2/acudKOcg0T+xt4IlT9Dkj6c33tsA7jPnRZNWXsxcBw==
+X-Received: by 2002:a17:903:1208:b0:1af:aafb:64c8 with SMTP id l8-20020a170903120800b001afaafb64c8mr2118223plh.21.1686403630429;
+        Sat, 10 Jun 2023 06:27:10 -0700 (PDT)
+Received: from [192.168.43.80] (subs09b-223-255-225-238.three.co.id. [223.255.225.238])
+        by smtp.gmail.com with ESMTPSA id y20-20020a170902b49400b001a980a23804sm5010765plr.4.2023.06.10.06.27.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jun 2023 05:15:08 -0700 (PDT)
-Message-ID: <40f937bb-0d7e-a237-1672-5905983622ce@linaro.org>
-Date:   Sat, 10 Jun 2023 14:15:07 +0200
+        Sat, 10 Jun 2023 06:27:09 -0700 (PDT)
+Message-ID: <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+Date:   Sat, 10 Jun 2023 20:27:02 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v2 04/22] clk: qcom: smd-rpm: Export clock scaling
- availability
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>, bvanassche@acm.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
- <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
- <ZIRgGXwKD6mcgTRY@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZIRgGXwKD6mcgTRY@gerhold.net>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <ZIQ6bkau3j6qGef8@duo.ucw.cz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 10.06.2023 13:35, Stephan Gerhold wrote:
-> On Fri, Jun 09, 2023 at 10:19:09PM +0200, Konrad Dybcio wrote:
->> Before we issue a call to RPM through clk_smd_rpm_enable_scaling() the
->> clock rate requests will not be commited in hardware. This poses a
->> race threat since we're accessing the bus clocks directly from within
->> the interconnect framework.
->>
->> Add a marker to indicate that we're good to go with sending new requests
->> and export it so that it can be referenced from icc.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/clk/qcom/clk-smd-rpm.c   | 9 +++++++++
->>  include/linux/soc/qcom/smd-rpm.h | 2 ++
->>  2 files changed, 11 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->> index 937cb1515968..482fe30ee6f0 100644
->> --- a/drivers/clk/qcom/clk-smd-rpm.c
->> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->> @@ -151,6 +151,7 @@
->>  #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
->>  
->>  static struct qcom_smd_rpm *rpmcc_smd_rpm;
->> +static bool smd_rpm_clk_scaling;
->>  
->>  struct clk_smd_rpm {
->>  	const int rpm_res_type;
->> @@ -385,6 +386,12 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
->>  	return r->rate;
->>  }
->>  
->> +bool qcom_smd_rpm_scaling_available(void)
->> +{
->> +	return smd_rpm_clk_scaling;
->> +}
->> +EXPORT_SYMBOL_GPL(qcom_smd_rpm_scaling_available);
->> +
->>  static int clk_smd_rpm_enable_scaling(void)
->>  {
->>  	int ret;
->> @@ -410,6 +417,8 @@ static int clk_smd_rpm_enable_scaling(void)
->>  		return ret;
->>  	}
->>  
->> +	smd_rpm_clk_scaling = true;
->> +
+On 6/10/23 15:55, Pavel Machek wrote:
+> Hi!
 > 
-> If you move the platform_device_register_data(&rpdev->dev,
-> "icc_smd_rpm", ...) from drivers/soc/qcom/smd-rpm.c to here you can
-> avoid the race completely and drop this API. I think that would be
-> cleaner. And it will likely probe much faster because probe deferral
-> is slow. :)
-Sounds like an idea.. especially since it's pretty much the only
-dependency other than SMDRPM itself!
-
-Konrad
 > 
-> Thanks,
-> Stephan
+>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
+>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
+>>>
+>> The reporter had found the culprit (via bisection), so:
+>>
+>> #regzbot introduced: a19a93e4c6a98c
+> Maybe cc the authors of that commit?
+> 
+
+Ah! I forgot to do that! Thanks anyway.
+
+-- 
+An old man doll... just what I always wanted! - Clara
+
