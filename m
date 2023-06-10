@@ -2,179 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6663772AC62
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 16:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9772572AC71
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jun 2023 17:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjFJOxA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 10:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44686 "EHLO
+        id S233213AbjFJPEE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Jun 2023 11:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbjFJOw6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 10:52:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FA630F5;
-        Sat, 10 Jun 2023 07:52:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B251260BC9;
-        Sat, 10 Jun 2023 14:52:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F6BC433D2;
-        Sat, 10 Jun 2023 14:52:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686408776;
-        bh=OzWir0L/faofH0wFxhfFc9Ju6SnxPtP2Z/T/v66ar6A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HbjqcWOfsPHzuDV2DHbosqFH7qWOxIu3pfd+g/fa9y1dXEEz984da0S1n/PNw14Tu
-         oZs4LUq+AF+KGNO/NVO7nAeZuDumg9Hclgu/oIXsV3cBIvw4DvE6YNnIMXyz7bbusd
-         cQ2YmxnmumNFfzA0l+MzlRXs0PhBPxXiOGFApjPOJqPLvUtP01J8v6bJpxOTkUm4Of
-         vkbYqht8Y00StTqCQWAjM2JEG8nrMjX9gtGe1GQhg7UG9P2aq8auv49G3FXNdyxqg6
-         eMX5W2w2d3XV6F7vOx4Qd3D9Qaf7Ub74NOIqanhx+eUmpVqfkTODBNzSMLLq0leGII
-         XJ7FsnHM0cAvg==
-Date:   Sat, 10 Jun 2023 15:52:49 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Message-ID: <20230610-rehire-amid-2517f43504c0@spud>
-References: <20230610141739.999268-1-bigunclemax@gmail.com>
- <20230610141739.999268-4-bigunclemax@gmail.com>
+        with ESMTP id S232738AbjFJPED (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 11:04:03 -0400
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623923588;
+        Sat, 10 Jun 2023 08:04:02 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-53fbb3a013dso1698367a12.1;
+        Sat, 10 Jun 2023 08:04:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686409442; x=1689001442;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A+2DK6e0ExwNggdgQrYc3qCt4Ssgi+vxV8OCcu+bbSs=;
+        b=lPMithFBpiUQDFD5jZ5tlqr+fJOn87UxuGVH/+yaJA431UMlh8E4iusRY5K8XO16mH
+         n5fV3FVH2ryQxk75E3jAKqNz92oWUFBnBfjYi83YsjEXn9V6SYwJ/7WRA7uME3mB60ov
+         lYmmqHZJEpXPNaD2neYgHkDlwPcAA1zs75EDX58Ls0bQeZIV+vvhD5zbLjNDITxlazbd
+         /J5szCblSNbw5CebTLgAIY13JrCqsd4+ECeU76cYo6xT3tzbLFbh06ra/GA32RDV/NYE
+         gGiIoAg426p0LrCAWw7A39UXvUw9CAeDYq6+Zx/hwD4eEaH5eSBUv2cmxa2JnJU9SOjG
+         PJjA==
+X-Gm-Message-State: AC+VfDzY+/NXzZrueNXLr2g5T+bF2ZqLpiILg4WpcJtHvtgN0TkwYfro
+        mNNwXtqbInBdj1a7o0osZko=
+X-Google-Smtp-Source: ACHHUZ5t/ck9Yx8w0Ts2mCKfu3UlWc1gun1eU3jLZdNKvdus7uTM+1aYKzQpak5qo25X7YqamCyyBg==
+X-Received: by 2002:a17:903:3293:b0:1af:9b8a:9c79 with SMTP id jh19-20020a170903329300b001af9b8a9c79mr2086591plb.34.1686409441578;
+        Sat, 10 Jun 2023 08:04:01 -0700 (PDT)
+Received: from [192.168.3.219] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902bf4a00b001b2063d43a7sm5073944pls.249.2023.06.10.08.03.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Jun 2023 08:04:01 -0700 (PDT)
+Message-ID: <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+Date:   Sat, 10 Jun 2023 08:03:59 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="H0Cwx1inMVbzJjEQ"
-Content-Disposition: inline
-In-Reply-To: <20230610141739.999268-4-bigunclemax@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Damien Le Moal <dlemoal@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/10/23 06:27, Bagas Sanjaya wrote:
+> On 6/10/23 15:55, Pavel Machek wrote:
+>>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
+>>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
+>>>>
+>>> The reporter had found the culprit (via bisection), so:
+>>>
+>>> #regzbot introduced: a19a93e4c6a98c
+>> Maybe cc the authors of that commit?
+> 
+> Ah! I forgot to do that! Thanks anyway.
 
---H0Cwx1inMVbzJjEQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Damien,
 
-On Sat, Jun 10, 2023 at 05:17:34PM +0300, Maksim Kiselev wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
->=20
-> Add a binding for D1/T113s thermal sensor controller.
->=20
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+Why does the ATA code call scsi_rescan_device() before system resume has
+finished? Would ATA devices still work with the patch below applied?
 
-Why do you have 2 sign-offs that are both you w/ different spellings?
-Content looks fine to me, other than one commit below.
+Thanks,
 
-> ---
->  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 ++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a8=
-3t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83=
-t-ths.yaml
-> index fbd4212285e2..001faa37fc27 100644
-> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.=
-yaml
-> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.=
-yaml
-> @@ -16,6 +16,7 @@ properties:
->        - allwinner,sun8i-a83t-ths
->        - allwinner,sun8i-h3-ths
->        - allwinner,sun8i-r40-ths
-> +      - allwinner,sun20i-d1-ths
->        - allwinner,sun50i-a64-ths
->        - allwinner,sun50i-a100-ths
->        - allwinner,sun50i-h5-ths
-> @@ -61,6 +62,7 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - allwinner,sun20i-d1-ths
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h6-ths
-> =20
-> @@ -84,7 +86,9 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: allwinner,sun8i-h3-ths
-> +            enum:
-> +              - allwinner,sun8i-h3-ths
-> +              - allwinner,sun20i-d1-ths
-> =20
->      then:
->        properties:
-> @@ -103,6 +107,7 @@ allOf:
->              enum:
->                - allwinner,sun8i-h3-ths
->                - allwinner,sun8i-r40-ths
-> +              - allwinner,sun20i-d1-ths
->                - allwinner,sun50i-a64-ths
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h5-ths
-> @@ -159,4 +164,17 @@ examples:
->           #thermal-sensor-cells =3D <1>;
->      };
-> =20
-> +  - |
-> +    thermal-sensor@2009400 {
-> +          compatible =3D "allwinner,sun20i-d1-ths";
-> +          reg =3D <0x02009400 0x400>;
-> +          interrupts =3D <0 90 0>;
-> +          clocks =3D <&ccu 0>;
-> +          clock-names =3D "bus";
-> +          resets =3D <&ccu 2>;
-> +          nvmem-cells =3D <&ths_calibration>;
-> +          nvmem-cell-names =3D "calibration";
-> +          #thermal-sensor-cells =3D <0>;
+Bart.
 
-Is this calibration required, or optional, for the d1?
 
-Cheers,
-Conor.
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index 6a959c993dd8..be3971b7fd27 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1629,6 +1629,20 @@ void scsi_rescan_device(struct device *dev)
+  {
+  	struct scsi_device *sdev = to_scsi_device(dev);
 
-> +    };
-> +
->  ...
-> --=20
-> 2.39.2
->=20
++#ifdef CONFIG_PM_SLEEP
++	/*
++	 * The ATA subsystem may call scsi_rescan_device() before resuming has
++	 * finished. If this happens, prevent a deadlock on the device_lock()
++	 * call by skipping rescanning.
++	 */
++	if (dev->power.is_suspended)
++		return;
++#endif
++
++	/*
++	 * Serialize scsi_driver.rescan() calls and scsi_driver.gendrv.remove()
++	 * calls.
++	 */
+  	device_lock(dev);
 
---H0Cwx1inMVbzJjEQ
-Content-Type: application/pgp-signature; name="signature.asc"
+  	scsi_attach_vpd(sdev);
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZISOLgAKCRB4tDGHoIJi
-0oiQAQD0e1/NNmNVXU79UTT9xgswzUE0nkSKgBA12mUl1HHeRQEAz+80y9RHNKcb
-U9PFIasihnSHDbwri3kPol5LaFM7Tg4=
-=eh+H
------END PGP SIGNATURE-----
-
---H0Cwx1inMVbzJjEQ--
