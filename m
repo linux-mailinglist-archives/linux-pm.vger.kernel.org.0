@@ -2,38 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C149E72AF78
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 00:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C4E972B0A9
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 09:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231552AbjFJWWG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 10 Jun 2023 18:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S233060AbjFKHyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Jun 2023 03:54:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231463AbjFJWWG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Jun 2023 18:22:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44CFA3584;
-        Sat, 10 Jun 2023 15:22:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE62061B5A;
-        Sat, 10 Jun 2023 22:22:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0A29C433EF;
-        Sat, 10 Jun 2023 22:21:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686435724;
-        bh=3G3f8N5bw9bPZuUwFvkGw5TpAvDPD5mrCfUFG44YYu8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kZmRw6nJZmmJ3oB1R9o7fjsIjUNKxvqYmiANiWgX+JFujKMSWN6+5RLD5wp8Z8qq2
-         Rwbk8inB0HFKfzbjZkRs6FK3aX84bAFlXvImKdNEnnDgdyjhWB6t2PwNsyoPUf0qfz
-         JlcTU4OYKLdgXyrYs55Ek0ziOGHUgF1aTB/f+YTnmxtDmvfgF4em3TcObTSBg0+Ckh
-         vteZDpHcjgGTfLI+Fn8aDcoi4UhtTOXSmnjDRvzWoI7GUqcQeZX7FwV9hRvKb6mlEI
-         86q76+kP5j4LvybWodauHSN21Gub5ZPZEjnRTmjvbyorGpNqh+AsNJn8Yvbl1W1P3x
-         c9OPUeAUdxZ5A==
-Date:   Sat, 10 Jun 2023 23:21:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maksim Kiselev <bigunclemax@gmail.com>
+        with ESMTP id S232753AbjFKHyM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 03:54:12 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698952D4B;
+        Sun, 11 Jun 2023 00:54:11 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97458c97333so548259866b.2;
+        Sun, 11 Jun 2023 00:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686470050; x=1689062050;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v2bYmU9gOFw7prawoSArqsjj7q30vNelMkCTOp3DUZA=;
+        b=ZIEOX3tJHJOzGLZrKAdQ+Em+CgSdACZ6I8FnuJaC4jYMStxwz09k1IUU5ZVNT1dW2v
+         ogPNUK7ZS+3BABiwD25+IzvvjnBLi493MzDiM/IR6p3MMAwZt7gXj55mTTsPuV1GhUnB
+         iq6nxosD3itFoqyejgow+y2d+JcxEim7S9fh42peyFKgPu1KbhgXG/+edgWI+9mRGdCA
+         yCU+aQjqgUZYEEPCg7Xt6cnvbidmIInJNEc58JumOG7Xe0aO208JhTCnXrR+QlWi1wMM
+         tRieArJ9twGrAHIA7Zobx4X3k4JDjR7avO4YwD1ezT3hNQ7OM9N1Ahi5W08doshMsRBk
+         2skQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686470050; x=1689062050;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v2bYmU9gOFw7prawoSArqsjj7q30vNelMkCTOp3DUZA=;
+        b=I+ttrntzS2C14wJErvLh6A0742Xvi0NCeQS3UqRRtZ+cqSe9qNKU41gM9bTXbtskiG
+         O6uyZd2LFqdSdamROVyawlpe3OZX6dCHI0pej4OZe7qnzMPP9DNvSYqF9lP51CPyeKPs
+         LZ6Uno9HEc/xufPG5XhQZ1vF9vxlphlnmTDr2ARMFjiAguSm2NQI4XSXk2cG9i6TlvW+
+         MMiy90BUBlzZ9//mwFe0nk6iDlGItr+KsJ/cvVJePgkCHc6GEQEPU9kS3PBCTD1yxH6S
+         Bunn81P+I1JvL73kYlIGUiLI0oiQJCRcII67dwlWpqBInR2VT/f/ESBPD31hhvJoXvui
+         IdVg==
+X-Gm-Message-State: AC+VfDzOoW+HNJi0lhatKq4CUfXsvaNrYJAKj+f3cmmv+fbD0ook5giV
+        O1gXC0MgGKbkpma5bqKMadWlJgBKx9cOWmpvnm8MNqL2tjJmRaKT
+X-Google-Smtp-Source: ACHHUZ5ja8bZ3Ma/lzFyJGdan7jkXrsKOmmJXjhxvrXILS4V+ZNLzwM/6ID9I2oXbI3TE6BVuXmHvV/daKEMgKQnrEw=
+X-Received: by 2002:a17:907:7f09:b0:973:a30d:b264 with SMTP id
+ qf9-20020a1709077f0900b00973a30db264mr6940129ejc.46.1686470049410; Sun, 11
+ Jun 2023 00:54:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230610141739.999268-1-bigunclemax@gmail.com>
+ <20230610141739.999268-4-bigunclemax@gmail.com> <20230610-rehire-amid-2517f43504c0@spud>
+ <CALHCpMiEmc8L=O86_x7-KkBHFwf2QpuP0M7ugz7dNPr71cpJmQ@mail.gmail.com>
+ <20230610-enlarged-agonize-0e9219f9921d@spud> <20230610-crumpet-spender-4133090a4728@spud>
+ <CALHCpMjFNvJAnd2_3-1n_L3QRz4eNc-Egm-BD6jcS6H694dSyg@mail.gmail.com> <20230610-whimsical-unrushed-2f5b30349588@spud>
+In-Reply-To: <20230610-whimsical-unrushed-2f5b30349588@spud>
+From:   Maxim Kiselev <bigunclemax@gmail.com>
+Date:   Sun, 11 Jun 2023 10:53:56 +0300
+Message-ID: <CALHCpMhQ8XxffHr_f=AtO-HoWadBQb1mSvojELctdwMKnF1tbw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
+ D1/T113s THS controller
+To:     Conor Dooley <conor@kernel.org>
 Cc:     linux-kernel@vger.kernel.org,
         Vasily Khoruzhick <anarsoul@gmail.com>,
         Yangtao Li <tiny.windzz@gmail.com>,
@@ -54,56 +79,118 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 1/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Message-ID: <20230610-shaky-candy-5114b855e2eb@spud>
-References: <20230610204225.1133473-1-bigunclemax@gmail.com>
- <20230610204225.1133473-2-bigunclemax@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tsbDwtX3UkzIgwos"
-Content-Disposition: inline
-In-Reply-To: <20230610204225.1133473-2-bigunclemax@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+=D0=B2=D1=81, 11 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 01:14, Con=
+or Dooley <conor@kernel.org>:
+>
+> On Sat, Jun 10, 2023 at 11:31:03PM +0300, Maxim Kiselev wrote:
+> > =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 21:01,=
+ Conor Dooley <conor@kernel.org>:
+> >
+> > ...
+> >
+> > > > > > +  - |
+> > > > > > +    thermal-sensor@2009400 {
+> > > > > > +          compatible =3D "allwinner,sun20i-d1-ths";
+> > > > > > +          reg =3D <0x02009400 0x400>;
+> > > > > > +          interrupts =3D <0 90 0>;
+> > > > > > +          clocks =3D <&ccu 0>;
+> > > > > > +          clock-names =3D "bus";
+> > > > > > +          resets =3D <&ccu 2>;
+> > > > > > +          nvmem-cells =3D <&ths_calibration>;
+> > > > > > +          nvmem-cell-names =3D "calibration";
+> > > > > > +          #thermal-sensor-cells =3D <0>;
+> > > > > >
+> > > > > >> Is this calibration required, or optional, for the d1?
+> > > > >
+> > > > > Calibration data for the D1 is optional as for the H6.
+> > > > > (But without it, the sensor data will be inaccurate).
+> > > >
+> > > > Okay. Modulo the signoff:
+> > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > >
+> > > Wait, that's not what I meant to say... Clearly turned my brain off f=
+or
+> > > a moment. If it is not going to function correctly without the
+> > > calibration data, why not make the calibration data required for the
+> > > d1's ths?
+> >
+> > I don't really know why, but the calibration data is optional for
+> > other controllers.
+> > So I just did it the same way.
+> > Here is explanation comment about it from the driver:
+> >         /*
+> >          * Even if the external calibration data stored in sid is
+> >          * not accessible, the THS hardware can still work, although
+> >          * the data won't be so accurate.
+> >          *
+> >          * The default value of calibration register is 0x800 for
+> >          * every sensor, and the calibration value is usually 0x7xx
+> >          * or 0x8xx, so they won't be away from the default value
+> >          * for a lot.
+> >          *
+> >          * So here we do not return error if the calibration data is
+> >          * not available, except the probe needs deferring.
+> >          */
+>
+> Wait, so if there is no calibration data then this thing will just defer
+> probing, ad infinitum? Looks like everything other than the a33 has the
+> cells in the dts, and the software seems to expect the cells.
+> What am I missing?
 
---tsbDwtX3UkzIgwos
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Not quite. If we don't have a calibration cell in the dts, then we
+just skip the calibration.
+We will only get EPROBE_DEFER if we have calibration in the dts.
+Here is the whole function code:
 
-On Sat, Jun 10, 2023 at 11:42:18PM +0300, Maksim Kiselev wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
->=20
-> Add a binding for D1/T113s thermal sensor controller.
->=20
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+static int sun8i_ths_calibrate(struct ths_device *tmdev)
+{
+    struct nvmem_cell *calcell;
+    struct device *dev =3D tmdev->dev;
+    u16 *caldata;
+    size_t callen;
+    int ret =3D 0;
 
-btw, please try not to resubmit patches while there's still some
-discussion on the previous version, as things are likely to get
-lost/muddled.
-One of the downsides of email!
+    calcell =3D devm_nvmem_cell_get(dev, "calibration");
+    if (IS_ERR(calcell)) {
+        if (PTR_ERR(calcell) =3D=3D -EPROBE_DEFER)
+            return -EPROBE_DEFER;
+        /*
+         * Even if the external calibration data stored in sid is
+         * not accessible, the THS hardware can still work, although
+         * the data won't be so accurate.
+         *
+         * The default value of calibration register is 0x800 for
+         * every sensor, and the calibration value is usually 0x7xx
+         * or 0x8xx, so they won't be away from the default value
+         * for a lot.
+         *
+         * So here we do not return error if the calibration data is
+         * not available, except the probe needs deferring.
+         */
+        goto out;
+    }
 
-Cheers,
-Conor.
+    caldata =3D nvmem_cell_read(calcell, &callen);
+    if (IS_ERR(caldata)) {
+        ret =3D PTR_ERR(caldata);
+        goto out;
+    }
 
---tsbDwtX3UkzIgwos
-Content-Type: application/pgp-signature; name="signature.asc"
+    tmdev->chip->calibrate(tmdev, caldata, callen);
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIT3hQAKCRB4tDGHoIJi
-0pqaAP9XIUE94BjJUfjdeVAqkpCWVHs0k1o4amUxgGuGEWCJPgEA+CKVVZxSDEQm
-j92laT4D1unIJ2y7+HMuphbA7JSAvQ4=
-=mHXG
------END PGP SIGNATURE-----
-
---tsbDwtX3UkzIgwos--
+    kfree(caldata);
+out:
+    return ret;
+}
