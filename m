@@ -2,64 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CADA72B13A
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 11:47:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDD672B14F
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 12:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbjFKJr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Jun 2023 05:47:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
+        id S231268AbjFKKSo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Jun 2023 06:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232871AbjFKJr0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 05:47:26 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955A8E75
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jun 2023 02:47:24 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5147f4bbfdaso4627104a12.0
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jun 2023 02:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686476843; x=1689068843;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IntEEcMbVJXLbajRNOwZboTq/1i67BALysa6LjImK+s=;
-        b=aBYnS+VThRez9lznNmoyJRFgygrq8pGrQtYTP/2GSODlt++DFrf7QTtCV1GdBevEvj
-         DqvDObSCdV/2fD4UyafoyrBFjfP3Ryj1C99E18MCyqA8g46ZoiruZwhi2Z+3PtLIIhbX
-         cofRXISLK6gF3HEjLKFOdYxqnTFNe5OUveppumV9AWEwdvXwHoT45DP9dRhaHg6WlNNF
-         yATbwjNlWE1Ys9fOtfczxaLCiYqRfuOVOtEbx7FPhX/yWM0dZsT7kaLTCQcouA9jod0W
-         NOcy8JRNWESNDbj1q6JLTK+++II9rL8G1zpcbhrJAa903x3QJgodNE6yuC4jog6xWPl/
-         +hOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686476843; x=1689068843;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IntEEcMbVJXLbajRNOwZboTq/1i67BALysa6LjImK+s=;
-        b=UFl5vSef6BUuvXhHDH8MJqU2jE6VE416FmHmhnDyJ3mLZyuLjfIBg41XVjeFsYuJfR
-         /2Xns9m39wVG36rfbxorisR06dTRtCqmTr3IinDwTejyIPjnyWuEC0sMe0JAG3NeebKv
-         meve6BM4t74hzcL5m2dXmZ1dN+RKpzZYIPDPspXXRYLzLId++3sjFT3rIq7A3Mxr8hMo
-         BQDM7G5fnw08MPkXvBSJJfzPPwNOYc0iAgI7WbLFUfJgcAthScB7pzMyphb4Jz1AxwZu
-         Udj+7Sj2mZKhmfGm3mV5w+tqcKKxwMhRRtgFSmmdLOgEmdT6+c69d92KxxD8Wzt3cuO3
-         zXOA==
-X-Gm-Message-State: AC+VfDxF1TDavkwXEv6foAP/6uGV3qX5TW7DGS9QyFXYGLc6HULi0giX
-        Bc6ZtB2xrvxveo9eL8OCX1PbAw==
-X-Google-Smtp-Source: ACHHUZ5lJ/s3LKjtd4cT7LjyGksIdUWZcHMOoBQ9KT88hyWBydYv1BVEo+MbrlPqC8iBaXlZBZlkZA==
-X-Received: by 2002:aa7:dcc8:0:b0:50c:2215:317e with SMTP id w8-20020aa7dcc8000000b0050c2215317emr2727440edu.15.1686476843126;
-        Sun, 11 Jun 2023 02:47:23 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id f9-20020a056402068900b0051495ce23absm3696998edy.10.2023.06.11.02.47.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 11 Jun 2023 02:47:22 -0700 (PDT)
-Message-ID: <7e1c9011-241c-71e2-7318-499114d66218@linaro.org>
-Date:   Sun, 11 Jun 2023 11:47:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 1/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-Content-Language: en-US
-To:     Maksim Kiselev <bigunclemax@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        with ESMTP id S229483AbjFKKSn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 06:18:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C2C1A4;
+        Sun, 11 Jun 2023 03:18:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B29626068C;
+        Sun, 11 Jun 2023 10:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C623BC433D2;
+        Sun, 11 Jun 2023 10:18:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686478721;
+        bh=iL8+Wfk6U1lb4E3L5Gwm0eLKEumoATlhkMpwqZDCeb0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dxymkbMxLeyjfETRfmMatpcBdFvRFF076NYf2uu/zdHiYZ30DdEh8bk07QdPgJdOW
+         Am/zuC6Z1T1EiQzl39vqdWDCrenPdoVor0QNY7liDaeVmYGRSZ/HUvRIE1/Z41Tp4T
+         z4/hnKeejU+L3jBpq8nEEIQPL/Ku7UGLpjOn6YGfTCGX17vDTx2Amtv3hdN1l29ZCE
+         LO/i2pl1DT3gEdlrF1JjR7QaaDC5VOGF9KmQljJ64kNReNCM3W2kRpn6qV9YqHjqFF
+         aERZjUWbWVFYTGxWJs0hbGjEZ6jNznEq8LKlLbmgGGo0AuDQMjmSAk3QRMj9AKi+px
+         9MLVUCdRMvYPw==
+Date:   Sun, 11 Jun 2023 11:18:34 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Maxim Kiselev <bigunclemax@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
         Yangtao Li <tiny.windzz@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -78,15 +54,26 @@ Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-riscv@lists.infradead.org
-References: <20230610204225.1133473-1-bigunclemax@gmail.com>
- <20230610204225.1133473-2-bigunclemax@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230610204225.1133473-2-bigunclemax@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
+ D1/T113s THS controller
+Message-ID: <20230611-confront-expectant-aa5da832541c@spud>
+References: <20230610141739.999268-1-bigunclemax@gmail.com>
+ <20230610141739.999268-4-bigunclemax@gmail.com>
+ <20230610-rehire-amid-2517f43504c0@spud>
+ <CALHCpMiEmc8L=O86_x7-KkBHFwf2QpuP0M7ugz7dNPr71cpJmQ@mail.gmail.com>
+ <20230610-enlarged-agonize-0e9219f9921d@spud>
+ <20230610-crumpet-spender-4133090a4728@spud>
+ <CALHCpMjFNvJAnd2_3-1n_L3QRz4eNc-Egm-BD6jcS6H694dSyg@mail.gmail.com>
+ <20230610-whimsical-unrushed-2f5b30349588@spud>
+ <CALHCpMhQ8XxffHr_f=AtO-HoWadBQb1mSvojELctdwMKnF1tbw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Tn8RUJUS/1xFx029"
+Content-Disposition: inline
+In-Reply-To: <CALHCpMhQ8XxffHr_f=AtO-HoWadBQb1mSvojELctdwMKnF1tbw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,70 +81,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/06/2023 22:42, Maksim Kiselev wrote:
-> From: Maxim Kiselev <bigunclemax@gmail.com>
-> 
-> Add a binding for D1/T113s thermal sensor controller.
-> 
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
 
-One patchset per day, not multiple within 15 minutes.
+--Tn8RUJUS/1xFx029
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  .../thermal/allwinner,sun8i-a83t-ths.yaml     | 20 ++++++++++++++++++-
->  1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> index fbd4212285e2..001faa37fc27 100644
-> --- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
-> @@ -16,6 +16,7 @@ properties:
->        - allwinner,sun8i-a83t-ths
->        - allwinner,sun8i-h3-ths
->        - allwinner,sun8i-r40-ths
-> +      - allwinner,sun20i-d1-ths
->        - allwinner,sun50i-a64-ths
->        - allwinner,sun50i-a100-ths
->        - allwinner,sun50i-h5-ths
-> @@ -61,6 +62,7 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> +              - allwinner,sun20i-d1-ths
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h6-ths
->  
-> @@ -84,7 +86,9 @@ allOf:
->        properties:
->          compatible:
->            contains:
-> -            const: allwinner,sun8i-h3-ths
-> +            enum:
-> +              - allwinner,sun8i-h3-ths
-> +              - allwinner,sun20i-d1-ths
->  
->      then:
->        properties:
-> @@ -103,6 +107,7 @@ allOf:
->              enum:
->                - allwinner,sun8i-h3-ths
->                - allwinner,sun8i-r40-ths
-> +              - allwinner,sun20i-d1-ths
->                - allwinner,sun50i-a64-ths
->                - allwinner,sun50i-a100-ths
->                - allwinner,sun50i-h5-ths
-> @@ -159,4 +164,17 @@ examples:
->           #thermal-sensor-cells = <1>;
->      };
->  
-> +  - |
-> +    thermal-sensor@2009400 {
-> +          compatible = "allwinner,sun20i-d1-ths";
+On Sun, Jun 11, 2023 at 10:53:56AM +0300, Maxim Kiselev wrote:
+> =D0=B2=D1=81, 11 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 01:14, C=
+onor Dooley <conor@kernel.org>:
+> >
+> > On Sat, Jun 10, 2023 at 11:31:03PM +0300, Maxim Kiselev wrote:
+> > > =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 21:0=
+1, Conor Dooley <conor@kernel.org>:
+> > >
+> > > ...
+> > >
+> > > > > > > +  - |
+> > > > > > > +    thermal-sensor@2009400 {
+> > > > > > > +          compatible =3D "allwinner,sun20i-d1-ths";
+> > > > > > > +          reg =3D <0x02009400 0x400>;
+> > > > > > > +          interrupts =3D <0 90 0>;
+> > > > > > > +          clocks =3D <&ccu 0>;
+> > > > > > > +          clock-names =3D "bus";
+> > > > > > > +          resets =3D <&ccu 2>;
+> > > > > > > +          nvmem-cells =3D <&ths_calibration>;
+> > > > > > > +          nvmem-cell-names =3D "calibration";
+> > > > > > > +          #thermal-sensor-cells =3D <0>;
+> > > > > > >
+> > > > > > >> Is this calibration required, or optional, for the d1?
+> > > > > >
+> > > > > > Calibration data for the D1 is optional as for the H6.
+> > > > > > (But without it, the sensor data will be inaccurate).
+> > > > >
+> > > > > Okay. Modulo the signoff:
+> > > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > > >
+> > > > Wait, that's not what I meant to say... Clearly turned my brain off=
+ for
+> > > > a moment. If it is not going to function correctly without the
+> > > > calibration data, why not make the calibration data required for the
+> > > > d1's ths?
+> > >
+> > > I don't really know why, but the calibration data is optional for
+> > > other controllers.
+> > > So I just did it the same way.
+> > > Here is explanation comment about it from the driver:
+> > >         /*
+> > >          * Even if the external calibration data stored in sid is
+> > >          * not accessible, the THS hardware can still work, although
+> > >          * the data won't be so accurate.
+> > >          *
+> > >          * The default value of calibration register is 0x800 for
+> > >          * every sensor, and the calibration value is usually 0x7xx
+> > >          * or 0x8xx, so they won't be away from the default value
+> > >          * for a lot.
+> > >          *
+> > >          * So here we do not return error if the calibration data is
+> > >          * not available, except the probe needs deferring.
+> > >          */
+> >
+> > Wait, so if there is no calibration data then this thing will just defer
+> > probing, ad infinitum? Looks like everything other than the a33 has the
+> > cells in the dts, and the software seems to expect the cells.
+> > What am I missing?
+>=20
+> Not quite. If we don't have a calibration cell in the dts, then we
+> just skip the calibration.
+> We will only get EPROBE_DEFER if we have calibration in the dts.
 
+Ah that makes a lot more sense, thanks.
 
-New compatible does not warrant new example. It's the same as previous.
-Drop it.
+--Tn8RUJUS/1xFx029
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIWfegAKCRB4tDGHoIJi
+0qihAP9HKfX8HQ1OLKp48vaSuFjSDi02/6HbWAQPyhr2PgYl3QD/dm6k35G/worO
+6PPEW0RXIotdTjgDXDh+Q0dGZZhhXAs=
+=9EIT
+-----END PGP SIGNATURE-----
+
+--Tn8RUJUS/1xFx029--
