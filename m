@@ -2,195 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C4E972B0A9
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 09:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E060D72B10B
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 11:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233060AbjFKHyN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Jun 2023 03:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S231248AbjFKJG5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Jun 2023 05:06:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjFKHyM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 03:54:12 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698952D4B;
-        Sun, 11 Jun 2023 00:54:11 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-97458c97333so548259866b.2;
-        Sun, 11 Jun 2023 00:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686470050; x=1689062050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v2bYmU9gOFw7prawoSArqsjj7q30vNelMkCTOp3DUZA=;
-        b=ZIEOX3tJHJOzGLZrKAdQ+Em+CgSdACZ6I8FnuJaC4jYMStxwz09k1IUU5ZVNT1dW2v
-         ogPNUK7ZS+3BABiwD25+IzvvjnBLi493MzDiM/IR6p3MMAwZt7gXj55mTTsPuV1GhUnB
-         iq6nxosD3itFoqyejgow+y2d+JcxEim7S9fh42peyFKgPu1KbhgXG/+edgWI+9mRGdCA
-         yCU+aQjqgUZYEEPCg7Xt6cnvbidmIInJNEc58JumOG7Xe0aO208JhTCnXrR+QlWi1wMM
-         tRieArJ9twGrAHIA7Zobx4X3k4JDjR7avO4YwD1ezT3hNQ7OM9N1Ahi5W08doshMsRBk
-         2skQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686470050; x=1689062050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v2bYmU9gOFw7prawoSArqsjj7q30vNelMkCTOp3DUZA=;
-        b=I+ttrntzS2C14wJErvLh6A0742Xvi0NCeQS3UqRRtZ+cqSe9qNKU41gM9bTXbtskiG
-         O6uyZd2LFqdSdamROVyawlpe3OZX6dCHI0pej4OZe7qnzMPP9DNvSYqF9lP51CPyeKPs
-         LZ6Uno9HEc/xufPG5XhQZ1vF9vxlphlnmTDr2ARMFjiAguSm2NQI4XSXk2cG9i6TlvW+
-         MMiy90BUBlzZ9//mwFe0nk6iDlGItr+KsJ/cvVJePgkCHc6GEQEPU9kS3PBCTD1yxH6S
-         Bunn81P+I1JvL73kYlIGUiLI0oiQJCRcII67dwlWpqBInR2VT/f/ESBPD31hhvJoXvui
-         IdVg==
-X-Gm-Message-State: AC+VfDzOoW+HNJi0lhatKq4CUfXsvaNrYJAKj+f3cmmv+fbD0ook5giV
-        O1gXC0MgGKbkpma5bqKMadWlJgBKx9cOWmpvnm8MNqL2tjJmRaKT
-X-Google-Smtp-Source: ACHHUZ5ja8bZ3Ma/lzFyJGdan7jkXrsKOmmJXjhxvrXILS4V+ZNLzwM/6ID9I2oXbI3TE6BVuXmHvV/daKEMgKQnrEw=
-X-Received: by 2002:a17:907:7f09:b0:973:a30d:b264 with SMTP id
- qf9-20020a1709077f0900b00973a30db264mr6940129ejc.46.1686470049410; Sun, 11
- Jun 2023 00:54:09 -0700 (PDT)
+        with ESMTP id S229455AbjFKJG4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 05:06:56 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA81BD;
+        Sun, 11 Jun 2023 02:06:53 -0700 (PDT)
+Received: from mars.fo.jb.local ([188.174.4.245]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis) id
+ 1MZSJa-1qcdQz3uqM-00WaA4; Sun, 11 Jun 2023 11:05:40 +0200
+Received: from localhost (unknown [127.0.0.1])
+        by mars.fo.jb.local (Postfix) with ESMTP id C763417F700;
+        Sun, 11 Jun 2023 09:05:34 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at jmbreuer.net
+Received: from mars.fo.jb.local ([127.0.0.1])
+        by localhost (mars.jmbreuer.net [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 8p5VEtgeCkTo; Sun, 11 Jun 2023 11:05:28 +0200 (CEST)
+Received: from sol.fo.jb.local (sol.fo.jb.local [192.168.23.1])
+        by mars.fo.jb.local (Postfix) with ESMTP id 209A117F413;
+        Sun, 11 Jun 2023 11:05:28 +0200 (CEST)
+Received: from [192.168.23.25] (mars.fo.jb.local [192.168.23.254])
+        by sol.fo.jb.local (Postfix) with ESMTPSA id D8535604E111;
+        Sun, 11 Jun 2023 11:05:27 +0200 (CEST)
+Message-ID: <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+Date:   Sun, 11 Jun 2023 11:05:27 +0200
 MIME-Version: 1.0
-References: <20230610141739.999268-1-bigunclemax@gmail.com>
- <20230610141739.999268-4-bigunclemax@gmail.com> <20230610-rehire-amid-2517f43504c0@spud>
- <CALHCpMiEmc8L=O86_x7-KkBHFwf2QpuP0M7ugz7dNPr71cpJmQ@mail.gmail.com>
- <20230610-enlarged-agonize-0e9219f9921d@spud> <20230610-crumpet-spender-4133090a4728@spud>
- <CALHCpMjFNvJAnd2_3-1n_L3QRz4eNc-Egm-BD6jcS6H694dSyg@mail.gmail.com> <20230610-whimsical-unrushed-2f5b30349588@spud>
-In-Reply-To: <20230610-whimsical-unrushed-2f5b30349588@spud>
-From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Sun, 11 Jun 2023 10:53:56 +0300
-Message-ID: <CALHCpMhQ8XxffHr_f=AtO-HoWadBQb1mSvojELctdwMKnF1tbw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] dt-bindings: thermal: sun8i: Add binding for
- D1/T113s THS controller
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Damien Le Moal <dlemoal@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+From:   Joe Breuer <linux-kernel@jmbreuer.net>
+Organization: Joachim Breuer EDV
+In-Reply-To: <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:GuseqWr4gMONF06rsnM6AiOEXCkR/Cv44Upar/c5EOonR0Jf6Hq
+ w86W4ACYVsGhV48P0yuUxXkClARNSuVZc+BaegKZ2vTmY1I8oeztd7KC1cpSSOo8OXMWres
+ +LDD4DisXFNhpAJrA/DEybPUVbje5HkqNGXx/kekJvWCzwnas/Irpi9fwbL2SUeSJfcIgKf
+ gViTPsz32HjQZNWeKbhpg==
+UI-OutboundReport: notjunk:1;M01:P0:qcZsypbWK7s=;yakvpRY7qzxSMXRhppYJuzX0cLd
+ DT7i1Jc9kBxkWkEMb20eplGhqWfn1pxPGwOVq/ygBAv7xqmTKjzb3dyEK6XbBRCJDUwJsIfE3
+ pQW9vAstekoEZtPs9ys3guIZHaWQ2Ov02k1DfidPST6GbhYsZMdEe2CgZV5mbNCll7cvvbSLe
+ qxA/+p3ZJ9LnRhr2+ven419CD6PZDYBDUaS8vr/KcFQF/Gd7ksig0RnaKVz8uTpVCJTG+GXIL
+ U5CuF76mf0p3GbwCk9+JC57N5BWunyWsRx8jE6t0ZWvmgPMVXs2rq2ftmf5gZp19H+8LRXXpg
+ xtIExACfDBAPMNCPVvy7bYKZhCZzj4OuuxVjMoKoIOp/hWGXQzd1nVxaSTZ++g59brCwBAR4T
+ LQH5ruvgA94L+oao5AmLWwxNPa57YTo3bQceqKbiVeT9lFT9hWeYGRigc4iD7Yei4mzDYBgn8
+ f1dhAhkuCiNDmQg0THzt+CElUikvBR9URlnVAcn7rn/3Te9ciirECiKFWE9Lp4khlHjzYTURp
+ lZpkyFLHwtl6LBwXrfS7AoCSucbzXaNg3o2BcpdFP7W8sEvyCI/ltt1AOXWYcWU9cag6Ygefn
+ 4tP6KqTod+sOZKsZBzRU886X/Bm+nd/Y2lx6PxZE2d6xzzoBtcnamBrch+7Mif/TTtDX8MJmz
+ x6rsHNmeDUVr/y1dKlsq/JledutLsIWtgmrX7TsanQ==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=D0=B2=D1=81, 11 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 01:14, Con=
-or Dooley <conor@kernel.org>:
->
-> On Sat, Jun 10, 2023 at 11:31:03PM +0300, Maxim Kiselev wrote:
-> > =D1=81=D0=B1, 10 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 21:01,=
- Conor Dooley <conor@kernel.org>:
-> >
-> > ...
-> >
-> > > > > > +  - |
-> > > > > > +    thermal-sensor@2009400 {
-> > > > > > +          compatible =3D "allwinner,sun20i-d1-ths";
-> > > > > > +          reg =3D <0x02009400 0x400>;
-> > > > > > +          interrupts =3D <0 90 0>;
-> > > > > > +          clocks =3D <&ccu 0>;
-> > > > > > +          clock-names =3D "bus";
-> > > > > > +          resets =3D <&ccu 2>;
-> > > > > > +          nvmem-cells =3D <&ths_calibration>;
-> > > > > > +          nvmem-cell-names =3D "calibration";
-> > > > > > +          #thermal-sensor-cells =3D <0>;
-> > > > > >
-> > > > > >> Is this calibration required, or optional, for the d1?
-> > > > >
-> > > > > Calibration data for the D1 is optional as for the H6.
-> > > > > (But without it, the sensor data will be inaccurate).
-> > > >
-> > > > Okay. Modulo the signoff:
-> > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > >
-> > > Wait, that's not what I meant to say... Clearly turned my brain off f=
-or
-> > > a moment. If it is not going to function correctly without the
-> > > calibration data, why not make the calibration data required for the
-> > > d1's ths?
-> >
-> > I don't really know why, but the calibration data is optional for
-> > other controllers.
-> > So I just did it the same way.
-> > Here is explanation comment about it from the driver:
-> >         /*
-> >          * Even if the external calibration data stored in sid is
-> >          * not accessible, the THS hardware can still work, although
-> >          * the data won't be so accurate.
-> >          *
-> >          * The default value of calibration register is 0x800 for
-> >          * every sensor, and the calibration value is usually 0x7xx
-> >          * or 0x8xx, so they won't be away from the default value
-> >          * for a lot.
-> >          *
-> >          * So here we do not return error if the calibration data is
-> >          * not available, except the probe needs deferring.
-> >          */
->
-> Wait, so if there is no calibration data then this thing will just defer
-> probing, ad infinitum? Looks like everything other than the a33 has the
-> cells in the dts, and the software seems to expect the cells.
-> What am I missing?
+I'm the reporter of this issue.
 
-Not quite. If we don't have a calibration cell in the dts, then we
-just skip the calibration.
-We will only get EPROBE_DEFER if we have calibration in the dts.
-Here is the whole function code:
+I just tried this patch against 6.3.4, and it completely fixes my 
+suspend/resume issue.
 
-static int sun8i_ths_calibrate(struct ths_device *tmdev)
-{
-    struct nvmem_cell *calcell;
-    struct device *dev =3D tmdev->dev;
-    u16 *caldata;
-    size_t callen;
-    int ret =3D 0;
+The optical drive stays usable after resume, even suspending/resuming 
+during playback of CDDA content works flawlessly and playback resumes 
+seamlessly after system resume.
 
-    calcell =3D devm_nvmem_cell_get(dev, "calibration");
-    if (IS_ERR(calcell)) {
-        if (PTR_ERR(calcell) =3D=3D -EPROBE_DEFER)
-            return -EPROBE_DEFER;
-        /*
-         * Even if the external calibration data stored in sid is
-         * not accessible, the THS hardware can still work, although
-         * the data won't be so accurate.
-         *
-         * The default value of calibration register is 0x800 for
-         * every sensor, and the calibration value is usually 0x7xx
-         * or 0x8xx, so they won't be away from the default value
-         * for a lot.
-         *
-         * So here we do not return error if the calibration data is
-         * not available, except the probe needs deferring.
-         */
-        goto out;
-    }
+So, from my perspective: Good one!
 
-    caldata =3D nvmem_cell_read(calcell, &callen);
-    if (IS_ERR(caldata)) {
-        ret =3D PTR_ERR(caldata);
-        goto out;
-    }
 
-    tmdev->chip->calibrate(tmdev, caldata, callen);
+So long,
+    Joe
 
-    kfree(caldata);
-out:
-    return ret;
-}
+
+On 10.06.23 17:03, Bart Van Assche wrote:
+> On 6/10/23 06:27, Bagas Sanjaya wrote:
+>> On 6/10/23 15:55, Pavel Machek wrote:
+>>>>> #regzbot introduced: v5.0..v6.4-rc5 
+>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=217530
+>>>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
+>>>>>
+>>>> The reporter had found the culprit (via bisection), so:
+>>>>
+>>>> #regzbot introduced: a19a93e4c6a98c
+>>> Maybe cc the authors of that commit?
+>>
+>> Ah! I forgot to do that! Thanks anyway.
+> 
+> Hi Damien,
+> 
+> Why does the ATA code call scsi_rescan_device() before system resume has
+> finished? Would ATA devices still work with the patch below applied?
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index 6a959c993dd8..be3971b7fd27 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1629,6 +1629,20 @@ void scsi_rescan_device(struct device *dev)
+>   {
+>       struct scsi_device *sdev = to_scsi_device(dev);
+> 
+> +#ifdef CONFIG_PM_SLEEP
+> +    /*
+> +     * The ATA subsystem may call scsi_rescan_device() before resuming has
+> +     * finished. If this happens, prevent a deadlock on the device_lock()
+> +     * call by skipping rescanning.
+> +     */
+> +    if (dev->power.is_suspended)
+> +        return;
+> +#endif
+> +
+> +    /*
+> +     * Serialize scsi_driver.rescan() calls and 
+> scsi_driver.gendrv.remove()
+> +     * calls.
+> +     */
+>       device_lock(dev);
+> 
+>       scsi_attach_vpd(sdev);
+> 
+
