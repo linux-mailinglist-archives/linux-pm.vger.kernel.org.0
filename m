@@ -2,154 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08E672B1A8
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jun 2023 13:31:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AB572B858
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 08:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230453AbjFKLby (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Jun 2023 07:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38554 "EHLO
+        id S234671AbjFLGx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 02:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjFKLbx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 07:31:53 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053E7BD;
-        Sun, 11 Jun 2023 04:31:52 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3c0c476d1so3131785ad.1;
-        Sun, 11 Jun 2023 04:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686483111; x=1689075111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ET+8jv1Sr4c8KNb9UT3DWTBXEn+DrM0MENG4Vij4uyQ=;
-        b=ByLAexixDGYoAAbP+TdnYMa5G8F/VvOmM2T7/k+wQ3cghFSNw4Kj2IASok17J7GtyC
-         pCfzHh4wSayC2NXfPUYE5UTGZGAvsxY0hoesHUUjSvY+EXJAg9ApMd/ncGMQ8Zpt2zo5
-         2dWmy69/WS7xsoZGYIbNEeHU1wTzK9gHgmOHmK5TVmSO//bspmX9a+Q4oiBHTTJIybS5
-         oLsqXrllscjmhjrL7peXQSqiWz/CugCFIORxjrW1urVFQzRXSdzR2nNPxSfGRevYccb6
-         jvg/uAW9JNITn/Y2P/ySuDZpDuzJQnuAIaagbCQMyiIaIeG1iJzNxF5hkMtCzUQG2zy5
-         Yiig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686483111; x=1689075111;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ET+8jv1Sr4c8KNb9UT3DWTBXEn+DrM0MENG4Vij4uyQ=;
-        b=F25x8/9q6RvQzI5mpZMUirrQIWMaerufuyOkn3jVNhaxqin9zviZvTYc/GXb5/vUwB
-         ozd067vNTRMo3tf+itxhcD18YzpdAVfUyLG9sQJQXG1ewPuuzctpCUjGuTixOFCiBmkY
-         vToCJM2Y/uH/iXAa2mXsqikqT3GxYR8xECv3K/CoSyDff89m5agd8o0BsDf0N1Ew9RHY
-         WYq2wWUR8iGsnWeLLfmgH1B9pc+VgNYFgfkZpVHz5htOfi0hYqDSnWEPVtKEEoAZzMRw
-         VsPtuM9z2lO4papvOtkbu+DExHuYSpPVkbRUzbA2XNnan7M1SIF2zJe9h3+FrF6kVS8V
-         RAuA==
-X-Gm-Message-State: AC+VfDwCtHyr3ZTu+nsOro4GEhvuZPy8iA5Iqg3jMhZii+hLsR7M+6Kn
-        MZ6GZQACepJKtYSX3nJipRg=
-X-Google-Smtp-Source: ACHHUZ7cRXXUiwx/VGfZs4Qirpj+wNLdNsY/9ynhNKhbPawe6sObhyNHGvcYnjCovYAKTibn3tXS+Q==
-X-Received: by 2002:a17:902:8642:b0:1b0:348:2498 with SMTP id y2-20020a170902864200b001b003482498mr3561999plt.2.1686483111258;
-        Sun, 11 Jun 2023 04:31:51 -0700 (PDT)
-Received: from debian.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id jd4-20020a170903260400b001b3b83b7d4esm1417503plb.211.2023.06.11.04.31.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 04:31:50 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 18522106A3A; Sun, 11 Jun 2023 18:31:34 +0700 (WIB)
-Date:   Sun, 11 Jun 2023 18:31:34 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Damien Le Moal <dlemoal@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-Message-ID: <ZIWwlptfVphjGz9u@debian.me>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+        with ESMTP id S234600AbjFLGx1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 02:53:27 -0400
+X-Greylist: delayed 9006 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 11 Jun 2023 23:48:22 PDT
+Received: from mail1.ceniai.inf.cu (mail1.ceniai.inf.cu [169.158.128.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B615A10C2;
+        Sun, 11 Jun 2023 23:48:22 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail1.ceniai.inf.cu (Postfix) with ESMTP id 57EC14E8137;
+        Mon, 12 Jun 2023 00:09:26 -0400 (EDT)
+X-Virus-Scanned: amavisd-new at mail1.ceniai.inf.cu
+Received: from mail1.ceniai.inf.cu ([127.0.0.1])
+        by localhost (mail1.ceniai.inf.cu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WSVsOis4rone; Mon, 12 Jun 2023 00:09:26 -0400 (EDT)
+Received: from mail.vega.inf.cu (mail.vega.inf.cu [169.158.143.34])
+        by mail1.ceniai.inf.cu (Postfix) with ESMTP id 9A3994E8D46;
+        Mon, 12 Jun 2023 00:00:28 -0400 (EDT)
+Received: from mx1.ecovida.cu (unknown [169.158.179.26])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        by mail.vega.inf.cu (Postfix) with ESMTPS id D54B5565B0A;
+        Sun, 11 Jun 2023 11:40:11 -0400 (CDT)
+Received: from mx1.ecovida.cu (localhost [127.0.0.1])
+        by mx1.ecovida.cu (Proxmox) with ESMTP id 6A2B9240CE7;
+        Sun, 11 Jun 2023 15:23:52 -0400 (CDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ecovida.cu; h=cc
+        :content-description:content-transfer-encoding:content-type
+        :content-type:date:from:from:message-id:mime-version:reply-to
+        :reply-to:subject:subject:to:to; s=ecovida20; bh=eJCLj5LjLfltOUH
+        QwbhnEIM71NnOqC+k0uTJlyqNYA0=; b=DcRsVnh8PwZgs7y+XuOKXZsVaQBR/H6
+        XoACm7D3Yogbb1byEspwmAO2qEbTBHMBRjokBnHhowQEK0u5DCx6Q+DJuM4aPAGQ
+        m1IUL3Jrxhpnx1mha+204x7zV997W+a7qgttKpEZNEYo1zNd4bwr6JrPxUXBrvVV
+        rNjSKjASF1PcwDaH5VBWrFOfNBj+nT7kFyp1MNWVPoL6pgZtGf5rPwhdx6IMsT4C
+        /ezCQy3gmtNplW3691klQbMXXvf9m8f2STt41mJQnysXmxFaUi6AC3GMnQMOII6B
+        u4191nZxATn9FePP1IhGYMxqmuczU0qatcarBodAiiGfygRm1/JQUFA==
+Received: from correoweb.ecovida.cu (correoweb.ecovida.cu [192.168.100.7])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mx1.ecovida.cu (Proxmox) with ESMTPS id 5C4AE240A32;
+        Sun, 11 Jun 2023 15:23:52 -0400 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by correoweb.ecovida.cu (Postfix) with ESMTP id 8253F50575F;
+        Sun, 11 Jun 2023 13:20:22 -0400 (CDT)
+Received: from correoweb.ecovida.cu ([127.0.0.1])
+        by localhost (correoweb.ecovida.cu [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 4y-7DLKV7ivg; Sun, 11 Jun 2023 13:20:22 -0400 (CDT)
+Received: from localhost (localhost [127.0.0.1])
+        by correoweb.ecovida.cu (Postfix) with ESMTP id 091644AD4E2;
+        Sun, 11 Jun 2023 12:35:34 -0400 (CDT)
+X-Virus-Scanned: amavisd-new at ecovida.cu
+Received: from correoweb.ecovida.cu ([127.0.0.1])
+        by localhost (correoweb.ecovida.cu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 4IrgkPfrbOHY; Sun, 11 Jun 2023 12:35:33 -0400 (CDT)
+Received: from [192.168.100.9] (unknown [45.88.97.218])
+        by correoweb.ecovida.cu (Postfix) with ESMTPSA id 5E2674B2B1D;
+        Sun, 11 Jun 2023 10:29:39 -0400 (CDT)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pJUn/uCZg2bV7nGQ"
-Content-Disposition: inline
-In-Reply-To: <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE:
+To:     Recipients <lazaroluis@ecovida.cu>
+From:   Aldi Albrecht <lazaroluis@ecovida.cu>
+Date:   Sun, 11 Jun 2023 15:33:46 +0100
+Reply-To: aldiheister@gmail.com
+X-Antivirus: Avast (VPS 230611-4, 6/11/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230611142940.5E2674B2B1D@correoweb.ecovida.cu>
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hallo gesch=E4tzter Beg=FCnstigter, Sie wurden f=FCr eine gro=DFe Geldsumme=
+ f=FCr humanit=E4re und Investitionszwecke jeglicher Art ausgew=E4hlt. F=FC=
+r weitere Details antworten Sie bitte.
 
---pJUn/uCZg2bV7nGQ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Gr=FC=DFe
+ 
+Beate Heister
+Eigent=FCmer
+Aldi Albrecht-TRUST
 
-On Sun, Jun 11, 2023 at 11:05:27AM +0200, Joe Breuer wrote:
-> I'm the reporter of this issue.
->=20
-> I just tried this patch against 6.3.4, and it completely fixes my
-> suspend/resume issue.
->=20
-> The optical drive stays usable after resume, even suspending/resuming dur=
-ing
-> playback of CDDA content works flawlessly and playback resumes seamlessly
-> after system resume.
->=20
-> So, from my perspective: Good one!
->=20
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
 
-Thanks for trying the fix and telling the result. But tl;dr:
-
-> A: http://en.wikipedia.org/wiki/Top_post
-> Q: Were do I find info about this thing called top-posting?
-> A: Because it messes up the order in which people normally read text.
-> Q: Why is top-posting such a bad thing?
-> A: Top-posting.
-> Q: What is the most annoying thing in e-mail?
->=20
-> A: No.
-> Q: Should I include quotations after my reply?
->=20
-> http://daringfireball.net/2007/07/on_top
-
-(while I'm removing the quoted context below your reply after the fact).
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---pJUn/uCZg2bV7nGQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZIWwkAAKCRD2uYlJVVFO
-o0dcAQDBLvOwhF7MNiLJ3qtN+3ezvWqHj9xZ1JeN01prxbawGgD+NSKtGG1O0leF
-rjwIYm0dINVegT1HRoIZQ0flawMzpAg=
-=j2UP
------END PGP SIGNATURE-----
-
---pJUn/uCZg2bV7nGQ--
