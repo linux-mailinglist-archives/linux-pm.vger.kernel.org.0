@@ -2,74 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBCE72BBD1
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 11:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2361472BF62
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 12:43:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjFLJOQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 05:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39468 "EHLO
+        id S232770AbjFLKnN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 06:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbjFLJNp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 05:13:45 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF91510E3
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 02:07:21 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-30fbf6603d2so885231f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 02:07:21 -0700 (PDT)
+        with ESMTP id S232749AbjFLKm5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 06:42:57 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B26A85B
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 03:27:27 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-56cf32f5bf8so21402947b3.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 03:27:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686560829; x=1689152829;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ALIq+EfBjjDuq9C6qScccN3SzZCAcSKnABbFzkS/tA=;
-        b=jUQCmi8C9INCz6PusbgHt8ozZvFHq+MkPgx7w99W4qdxMwkqzIwQrAgZX10wHogWs+
-         MWqQAbhHBX+xg/ZvKkgKnt/qT2htAo0Q/Lz/giT7tXbLvrY60RsRkyJrFFx1iwBbmFIf
-         7OSzNbu/aQ6B2qg3Ks4Cz8UsWIfaMACUoAW9EZEYdA9voeXu+M925i5D9RZ793o155aZ
-         OYZQs5LfjoTjIYefaKaClzFCSD6CO9f4HaFBjAaZgi75KLYfS2IgTsg8Ofha0xuEqVGl
-         gFUBi5OhX+evzMPkextYpITqK5+4MlD/S2nuEZYFzR/CJlbn89iAKBaEvWELDGNrN1A6
-         IgPg==
+        d=linaro.org; s=google; t=1686565646; x=1689157646;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7e8+yY+6VnFiyn20cskN6gGyYmdrhPGpnmg4w6IEwoQ=;
+        b=VziyCl8bSsxE2IVLUDm9vBcTw5I2pmEjfat9V2goKs5pJ0/4q2FCW9Rrz/Wp98sHXF
+         kNu0OKvOPqTH4a4tpfgCv+o+rbVUN37lcboXRO0RFcu196iJYg3aIrw3RIS8sBO1fJlj
+         lANsaM9N0pbhsf15bXS4GyzNKr5Xo4u/FiPuP+R7/elVAug4WurJ0umpr3eIDOeLEZ4C
+         +zwIL1nWFUvFTW6weUbXIiGvyvY1zIdtYyh5VuwvHf+D36QR5h4WtLdyOTz13a8cIWJH
+         TDi1UaiYyZ55xgg329ExCDDe9etCss6PMrOc9v35UKzROWS+1MCtWSMbnZ9VqP2vU+3j
+         wpjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686560829; x=1689152829;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ALIq+EfBjjDuq9C6qScccN3SzZCAcSKnABbFzkS/tA=;
-        b=CZ6AMlk9c/mGK0u4Fe2u2eHCsUCZlZAdn5kwcYGN4QdPGlPDYXTtx3ORmtLu/iD2t5
-         A5LmXEI8jorUVgs1dHUyPdD8C3gOC9+bbCqR7hlGoCKLwn0IP+/UXPxAU2JtmSQJ/nXm
-         2bv6bixy+O2ac3QaxxsM9iEPEXuwee9nPXEQW9QcuUe9Cf5XMZuoyS6tLhcTSm0Nc9hy
-         xJtR2PoEsfupSruyvjq+LyOUknJ8axxbYY03DyBicedExbw/Pf1ecdUrBkKLP1XCDY87
-         vwp0RZG4wJg40AA/zqyb9yN1j9p4oRbRh4BIPP8eXtjgW/8+nIdfVL3oJVdC52De0cQL
-         S5NA==
-X-Gm-Message-State: AC+VfDyK0FpPNllDBkF8Q5/I/ZJTUStnfaY8wEh7Qc8nkZr+RMBy8lIt
-        IYE6c8M5zDA+Xg+pEcUis2rAlw==
-X-Google-Smtp-Source: ACHHUZ7zgf6EwcNan6tjDOVOTBgZ8Y8StQPZIaCrQwu+Z8SzaRmyK4CUlJlcW4Lvqec79vSW7GduCA==
-X-Received: by 2002:a5d:5050:0:b0:30f:c56c:b5a6 with SMTP id h16-20020a5d5050000000b0030fc56cb5a6mr887326wrt.4.1686560828937;
-        Mon, 12 Jun 2023 02:07:08 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:bb02:9baa:82d1:2486? ([2a05:6e02:1041:c10:bb02:9baa:82d1:2486])
-        by smtp.googlemail.com with ESMTPSA id u8-20020adfeb48000000b003062b2c5255sm11875361wrn.40.2023.06.12.02.07.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jun 2023 02:07:08 -0700 (PDT)
-Message-ID: <3c501536-2620-0022-df93-415d490fc1a5@linaro.org>
-Date:   Mon, 12 Jun 2023 11:07:07 +0200
+        d=1e100.net; s=20221208; t=1686565646; x=1689157646;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7e8+yY+6VnFiyn20cskN6gGyYmdrhPGpnmg4w6IEwoQ=;
+        b=H3v3yVGLNaRdx10Q2r66pKtb2cQNdhXsbT8WPSpQwUJd7SFJwLo7tfvd9XLHDNoM/c
+         mU71mDteeaqmmYGxqzAtjAPTYwnsMYaXtnJIOrxzpFbwCy99dieVCoLTFA+Uy4YUQysf
+         jIdoN2YN2SpqJBCYkjJ8L/VQjRFUnjIdH/2eFDQbeenp4w0df1JaMZtILLVU5jsIP5P4
+         KsX8HJj5jQ2yeQ6r+vgRlOHqMceQzLpquYmmCBrzadY3PjRRvX17U9qhCXvE0vX4aSl/
+         AMxQJ2zDCYECRzEym4Fm5o0R3n5FJR2m9/J1ZVha1WAFd2RV1kCiBQG8TdStCM5m+V5L
+         JrLg==
+X-Gm-Message-State: AC+VfDzEOAn7/Ie3U1djcgttC/LlgNjlGIBNHraFZZvbrA7XjkLoSubh
+        2bYbWd5tJxAM5JNupSKHT7dM2RtvSnhun1j0ufhD2g==
+X-Google-Smtp-Source: ACHHUZ7qTSAphNLSxe8ogbKj8du2SJ+2Z4Qs8asZ1CvsBg8d8HrcWsNIeMaTVM7S7IhHs94tK072MwXgnWl37n3oopo=
+X-Received: by 2002:a0d:d3c5:0:b0:569:770d:c9be with SMTP id
+ v188-20020a0dd3c5000000b00569770dc9bemr10380583ywd.41.1686565646687; Mon, 12
+ Jun 2023 03:27:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] thermal: Allow selecting the bang-bang governor as
- default
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230609124408.3788680-1-thierry.reding@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230609124408.3788680-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+In-Reply-To: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 12 Jun 2023 12:26:50 +0200
+Message-ID: <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add provision to keep idle state disabled
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_lsrao@quicinc.com,
+        quic_mkshah@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,77 +69,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 8 Jun 2023 at 10:56, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
+>
+> CPUidle already has CPUIDLE_FLAG_OFF to keep idle state disabled,
+> Lets extend the support to set this flag using device tree.
+>
+> This allows to keep an idle state disabled and they can be enabled back using
+> sysfs after certain point using below command.
+>
+> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>
+> This helps in cases where vendors want to keep cpuidle off until home
+> screen comes up. In the past attempt was done at [1] but it was not considered
+> safe option to export cpu_idle_poll_ctrl().
+>
+> [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com/
 
-Hi Thierry,
+Before considering this, I don't recall if I ever received a reply to
+my earlier suggestion to the above thread. So, let me repeat my
+question.
 
-On 09/06/2023 14:44, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> For many setups the bang-bang governor is exactly what we want. Many
-> ARM SoC-based devices use fans to cool down the entire SoC and that
-> works well only with the bang-bang governor because it uses the
-> hysteresis in order to let the fan run for a while to cool the SoC
-> down below the trip point before switching it off again.
+I am wondering if a similar improvement can be achieved by
+modularizing the cpuidle-psci driver. If insmodding it after the
+homescreen, we allow only ARM WFI during boot. This should achieve the
+similar results as we get with $subject series, right?
 
-Yeah, that trip point detection is screwed up at the moment, but we are 
-on the way to solve that. From there, we should be able to have the 
-step_wise governor working as the bang-bang governor and remove this one.
+[...]
 
-Meanwhile, the change sounds ok for me.
+>
+> Thanks,
+> Tushar Nimkar.
+>
+> Tushar Nimkar (2):
+>   dt-bindings: cpu: idle-states: Add idle-state-disabled property
+>   cpuidle: dt: Add support to keep idle state disabled
+>
+>  Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
+>  drivers/cpuidle/dt_idle_states.c                       | 3 +++
+>  2 files changed, 11 insertions(+)
+>
 
-Rafael, may I pick this change?
-
-
-
-> The step-wise governor will behave strangely in these situations. It
-> doesn't use the hysteresis, so it can lead to situations where the fan
-> is turned on for only a very brief period and then is switched back off,
-> only to get switched back on again very quickly because the SoC hasn't
-> cooled down very much.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->   drivers/thermal/Kconfig        | 8 ++++++++
->   drivers/thermal/thermal_core.h | 2 ++
->   2 files changed, 10 insertions(+)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 4cd7ab707315..19a4b33cb564 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -130,6 +130,14 @@ config THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
->   	  system and device power allocation. This governor can only
->   	  operate on cooling devices that implement the power API.
->   
-> +config THERMAL_DEFAULT_GOV_BANG_BANG
-> +	bool "bang_bang"
-> +	depends on THERMAL_GOV_BANG_BANG
-> +	help
-> +	  Use the bang_bang governor as default. This throttles the
-> +	  devices one step at the time, taking into account the trip
-> +	  point hysteresis.
-> +
->   endchoice
->   
->   config THERMAL_GOV_FAIR_SHARE
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index 3d4a787c6b28..17c1bbed734d 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -23,6 +23,8 @@
->   #define DEFAULT_THERMAL_GOVERNOR       "user_space"
->   #elif defined(CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR)
->   #define DEFAULT_THERMAL_GOVERNOR       "power_allocator"
-> +#elif defined(CONFIG_THERMAL_DEFAULT_GOV_BANG_BANG)
-> +#define DEFAULT_THERMAL_GOVERNOR       "bang_bang"
->   #endif
->   
->   /* Initial state of a cooling device during binding */
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Kind regards
+Uffe
