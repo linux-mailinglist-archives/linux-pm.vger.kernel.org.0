@@ -2,230 +2,326 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D61D72C35B
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 13:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8481172C4F7
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 14:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234745AbjFLLqs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 07:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S235548AbjFLMvV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 08:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjFLLqb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 07:46:31 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20624.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::624])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5EF4210;
-        Mon, 12 Jun 2023 04:41:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L0ugB7WKvRebMEpx3s+94brAplwclReg4EsJiQCCdAYqCR9SRC8yKtWOoUpvD+iDSKtOwftDKIeAvVa78e24apmlFFdl8fmgCtVLNYsgPWWbUBOqc0oUCPp7qttZjvOqQs8CPLwBjzQ9Ecz4tCl788hDsc5hlgHudKlutylueNIDCNRVD3qscf8veviB8o3hy55a5oC6w1UKRnKCXZq2dMQ3mmdvgdzA9QONlWfmooRczopZO3I1ZF3/U0rdfLPIatwcFBELbXubOeS6dlwLqm8I9GTUmGFAB3fr77puxi3IHGKOk+MVGq1A/lpKSIiKSOYzH59jxi34zKsr99kyug==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S/OfkqtXHGtnTQ41FrSv3qvkmd08vd5RMmzrq1BhSY0=;
- b=C+QVFCF0ZdQ+/aZjaujXpHIjXAAbpyAv/U+jxZW0q+GYN1VAc4g2VwS6WRGAfENfIsqQtRMGUzhRsM9aHtYPKYkrHP3SuKUB9N8N56d25tTlK01rPYjobV8xx2mMLVmuH5qJ9JrqYVaDyOVxBPtV3d+ERSiFMv5fodrJv4/aiwNsGkY0P7eh3ghjD5BvXixX4nwzxF4cCvh13Yhkd3gtLNm9jv2HGWQvQwlyBhgmmGDR7CIz5RjhodW8Pt8+swCoYrQVYwU5DYtHIPJGShXfb/wpIQytJj5bBBMk2D6oZRSTVFjy07Kenp2ozPZmDyHUZ8JMJsoNr7A6orhyr6sQ0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S/OfkqtXHGtnTQ41FrSv3qvkmd08vd5RMmzrq1BhSY0=;
- b=uPBxP9rWT5bG6JFNQflLk1ZEFule1JVJ38G7TkumLyKVNSf4sStnzosgot46ascrUUl0yf84wJ4C4+DY4mXYnq7/ukbTI+YEGB9WvmLH5j1xryh6dbk1X/i0wXnPSD8cMrzzWqyZ1DVZpyIcSdaHcBECQOli47fp7PhQ1pQ51M0=
-Received: from BN7PR06CA0046.namprd06.prod.outlook.com (2603:10b6:408:34::23)
- by CO6PR12MB5443.namprd12.prod.outlook.com (2603:10b6:303:13a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.46; Mon, 12 Jun
- 2023 11:39:26 +0000
-Received: from BN8NAM11FT079.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:34:cafe::1b) by BN7PR06CA0046.outlook.office365.com
- (2603:10b6:408:34::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.34 via Frontend
- Transport; Mon, 12 Jun 2023 11:39:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT079.mail.protection.outlook.com (10.13.177.61) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6477.29 via Frontend Transport; Mon, 12 Jun 2023 11:39:25 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 12 Jun
- 2023 06:39:22 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <rafael@kernel.org>, <ray.huang@amd.com>,
-        <viresh.kumar@linaro.org>, <trenn@suse.com>, <shuah@kernel.org>
-CC:     <gautham.shenoy@amd.com>, <Mario.Limonciello@amd.com>,
-        <Perry.Yuan@amd.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH 6/6] cpupower: Add turbo-boost support in cpupower
-Date:   Mon, 12 Jun 2023 11:36:15 +0000
-Message-ID: <20230612113615.205353-7-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230612113615.205353-1-wyes.karny@amd.com>
-References: <20230612113615.205353-1-wyes.karny@amd.com>
+        with ESMTP id S235503AbjFLMvU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 08:51:20 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88548E6E
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 05:51:17 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f63ea7bfb6so4754842e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 05:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686574276; x=1689166276;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zgwZC/fxj61d9KTBgFP5Kn5ATX0ChBWpqER31ij5MWs=;
+        b=iKkMVv1gMGAM4M647rTVushhgFRLCOWK0KKXHS/OiM+lyUNxctDtJcexd397dLnHKq
+         lH94LVZUgAsw3oTpddRbOfgCXmVKW821Ol76UVrhGrzCr07yc6Iyb+ATBN8u9aAMYI/t
+         Mz6hgETo0r2hzAEv0O3zZVTGoTm1zb2mG5itZLlsmQrL/UDhXl5Z31y5FiNveyn6giKN
+         8MwD7Gjhly94rfiOnsn7k8ZQ2jbWByyPdNRCDrik5/3SaKO23SUjxhSGghQCHUFCMIRh
+         03iAhx59I4vV3BUwzJZZx/EX4C0qbkoT9AK80VPsIzZE8TV0JV7bchMWBBUAepsgDqXM
+         XJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686574276; x=1689166276;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zgwZC/fxj61d9KTBgFP5Kn5ATX0ChBWpqER31ij5MWs=;
+        b=JhYldKbOTdBeGaDnx78pSEXDbf/Y2p2Lg0R9spyGuewzoeFhn9rMQfinXQK0rIfVFP
+         qGxApApXSFYGg5NBvs9PL6WvwX4GTAR2l19T1ymN8d0Hksc+ij1cAO1iw9awJ0JOuX+O
+         9dvANf9fKvwbYdFMUMGkFka6PK5DL1Xm+XvP2ryZezq0yuZEKZfAZ1kv4i5GDa1D5x4p
+         rhOADikPVLwsbu+B0qnO9MbsikOd07DYmkzI0sIe1ByuHE3FV/8UoW+I9K0dBCZBKdmU
+         hGKr8irQUP42dFfec5caZL18nlorSzLSdSk4lwoFUIr4TY4w7HW/cTC5DhwFqO4gtT1p
+         TQ4g==
+X-Gm-Message-State: AC+VfDyPKlcWekgczZ6wPu10zhBXblzy2tL20mP9DxzGsVqBM3yNECtW
+        Q/AWkZ5VW3BBOSG5hrCOcqJtOA==
+X-Google-Smtp-Source: ACHHUZ4wtBMALjIQGGhGnVpzvKtRatNMeWKK/mFRat5tb6NMydba02+WNqzcPJHf21TB5rWzKql3xg==
+X-Received: by 2002:ac2:465b:0:b0:4f6:4f9a:706e with SMTP id s27-20020ac2465b000000b004f64f9a706emr4471143lfo.15.1686574275777;
+        Mon, 12 Jun 2023 05:51:15 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id d18-20020ac25452000000b004f4ce1d4df6sm1443390lfn.47.2023.06.12.05.51.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 05:51:15 -0700 (PDT)
+Message-ID: <b700b444-0b14-7cee-4edc-d2f1183c66bb@linaro.org>
+Date:   Mon, 12 Jun 2023 14:51:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT079:EE_|CO6PR12MB5443:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7728e7c0-0bf4-4f0f-2cb1-08db6b39acd5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9dYneIIAK8dfcz+p24E0U2eseAkQuJG0CuSGYal+CKCd2sOtFFtHLnZJrDXGh/b3cE5qnSSZuMDIkXPMYhsbdgrucdVdCWb+tyVqkZd7/sGQt5ivyWmeWnr3DDt5wR7Tehwr2BtdepoaOzYKHtTCTV749/VZGEiY/ugQkYXGhb42Dfw9d6rDDj26luf1itE0642okP7K4BjU2TZSP5n1D/3eZDuA0FqfNGWM9H+YjtuY2nYemgE4YmOiFR9fEHf4IkxR9GSKHjx2KS9qdcZqnFvjoWWTfMeWZs2j3MeDPzXa56Ld8057Pr9lq14ouTqjNGiPNBPOe0iaJM1HTcjFkGLItkWmSEM6wmsKVxntnhCnLZ0I/SVPSQIbbqkyEMusKjqJeXFZTwEJGhK/ia0VtaxbEn198zqmNo5oT3dj0LQN2mMvCA5leK4IRXBi54alS5AMNcAjqV9q1a4VSZ3Y1dZeJGKqhZU3QxzCX8byEsCHWlcpSdmJApq+ff3y46ZsPbaD3E4eEHePxE/gxQqdPS7D9kkkEO6mYBk/DY1QkWU53QSX/BAtt1nUtreAixt60eZLYBYIGRgn4ezjR5vS/F0+QZ/sX6xfezeIaL93/R+ktU3ZtgeWwtN/G1CB8bDQY8Um5MqdYaloU2sl6Q6rXcoD9EAgEGg5/n1l1/VWMO8Lf+U017sn8wuFM+4sTeOvquIj7X4VBdU7+yijGa3rDyEaEwpUwYzf/AXehaPflAzA+uiZ1KolKe1GLfT3ylSEUSRtZS4czmmGAghijLXe9oqoEs0grA29PTfaLmgk+/E=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(44832011)(4326008)(70586007)(70206006)(41300700001)(316002)(5660300002)(110136005)(54906003)(8676002)(8936002)(2906002)(6666004)(40460700003)(478600001)(7696005)(82740400003)(40480700001)(1076003)(26005)(16526019)(186003)(426003)(2616005)(336012)(83380400001)(36860700001)(47076005)(356005)(81166007)(36756003)(86362001)(82310400005)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 11:39:25.9548
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7728e7c0-0bf4-4f0f-2cb1-08db6b39acd5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT079.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5443
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
+ <ZIRgGXwKD6mcgTRY@gerhold.net>
+ <40f937bb-0d7e-a237-1672-5905983622ce@linaro.org>
+ <b7b1d19c-b87d-b3fd-36aa-374065a45ede@linaro.org>
+ <ZITOR3Y25Bv4msdm@gerhold.net>
+ <c52f0311-a8a0-79af-2a08-51a8564a8b25@linaro.org>
+ <ZIWR7uVHJ-eJWhHw@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2 04/22] clk: qcom: smd-rpm: Export clock scaling
+ availability
+In-Reply-To: <ZIWR7uVHJ-eJWhHw@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If boost sysfs (/sys/devices/system/cpu/cpufreq/boost) file is present
-turbo-boost is feature is supported in the hardware. By default this
-feature should be enabled. But to disable/enable it write to the sysfs
-file. Use the same to control this feature via cpupower.
+On 11.06.2023 11:20, Stephan Gerhold wrote:
+> On Sat, Jun 10, 2023 at 09:39:00PM +0200, Konrad Dybcio wrote:
+>> On 10.06.2023 21:25, Stephan Gerhold wrote:
+>>> On Sat, Jun 10, 2023 at 08:53:05PM +0200, Konrad Dybcio wrote:
+>>>> On 10.06.2023 14:15, Konrad Dybcio wrote:
+>>>>> On 10.06.2023 13:35, Stephan Gerhold wrote:
+>>>>>> On Fri, Jun 09, 2023 at 10:19:09PM +0200, Konrad Dybcio wrote:
+>>>>>>> Before we issue a call to RPM through clk_smd_rpm_enable_scaling() the
+>>>>>>> clock rate requests will not be commited in hardware. This poses a
+>>>>>>> race threat since we're accessing the bus clocks directly from within
+>>>>>>> the interconnect framework.
+>>>>>>>
+>>>>>>> Add a marker to indicate that we're good to go with sending new requests
+>>>>>>> and export it so that it can be referenced from icc.
+>>>>>>>
+>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>>> ---
+>>>>>>>  drivers/clk/qcom/clk-smd-rpm.c   | 9 +++++++++
+>>>>>>>  include/linux/soc/qcom/smd-rpm.h | 2 ++
+>>>>>>>  2 files changed, 11 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>> index 937cb1515968..482fe30ee6f0 100644
+>>>>>>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>> @@ -151,6 +151,7 @@
+>>>>>>>  #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
+>>>>>>>  
+>>>>>>>  static struct qcom_smd_rpm *rpmcc_smd_rpm;
+>>>>>>> +static bool smd_rpm_clk_scaling;
+>>>>>>>  
+>>>>>>>  struct clk_smd_rpm {
+>>>>>>>  	const int rpm_res_type;
+>>>>>>> @@ -385,6 +386,12 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
+>>>>>>>  	return r->rate;
+>>>>>>>  }
+>>>>>>>  
+>>>>>>> +bool qcom_smd_rpm_scaling_available(void)
+>>>>>>> +{
+>>>>>>> +	return smd_rpm_clk_scaling;
+>>>>>>> +}
+>>>>>>> +EXPORT_SYMBOL_GPL(qcom_smd_rpm_scaling_available);
+>>>>>>> +
+>>>>>>>  static int clk_smd_rpm_enable_scaling(void)
+>>>>>>>  {
+>>>>>>>  	int ret;
+>>>>>>> @@ -410,6 +417,8 @@ static int clk_smd_rpm_enable_scaling(void)
+>>>>>>>  		return ret;
+>>>>>>>  	}
+>>>>>>>  
+>>>>>>> +	smd_rpm_clk_scaling = true;
+>>>>>>> +
+>>>>>>
+>>>>>> If you move the platform_device_register_data(&rpdev->dev,
+>>>>>> "icc_smd_rpm", ...) from drivers/soc/qcom/smd-rpm.c to here you can
+>>>>>> avoid the race completely and drop this API. I think that would be
+>>>>>> cleaner. And it will likely probe much faster because probe deferral
+>>>>>> is slow. :)
+>>>>> Sounds like an idea.. especially since it's pretty much the only
+>>>>> dependency other than SMDRPM itself!
+>>>> It sounds great, but to not break bisecting one has to:
+>>>>
+>>>> 1. change the registration in soc/smd-rpm to store rpm ptr in driver
+>>>>    data, in addition to parent driver data
+>>>>
+>>>> 2. change icc/smd-rpm to use the device and not parent data
+>>>>
+>>>> 3. add a platform_device_register_data call in clk-smd-rpm that will
+>>>>    always fail because the device is always registered
+>>>>
+>>>> 4. remove the registration from soc/smd-rpm
+>>>>
+>>>
+>>> Logically the icc_smd_rpm device still fits better as child of
+>>> smd-rpm and not clk-smd-rpm. So I would probably just continue
+>>> registering it on the parent device from clk-smd-rpm.
+>>> Then there are no changes necessary in icc_smd_rpm.
+>>>
+>>> You could use this. Both touched files are Bjorn-maintained so should be
+>>> manageable to have it in one commit. (note: compile-tested only)
+>>>
+>>> Thanks,
+>>> Stephan
+>>>
+>>> From a2610adb2551b01e76b9de8e4cbcc89853814a8f Mon Sep 17 00:00:00 2001
+>>> From: Stephan Gerhold <stephan@gerhold.net>
+>>> Date: Sat, 10 Jun 2023 21:19:48 +0200
+>>> Subject: [PATCH] soc: qcom: smd-rpm: Move icc_smd_rpm registration to
+>>>  clk-smd-rpm
+>>>
+>>> icc_smd_rpm will do bus clock votes itself rather than taking the
+>>> unnecessary detour through the clock subsystem. However, it can only
+>>> do that after the clocks have been handed off and scaling has been
+>>> enabled in the RPM in clk-smd-rpm.
+>>>
+>>> Move the icc_smd_rpm registration from smd-rpm.c to clk-smd-rpm.c
+>>> to avoid any possible races. icc_smd_rpm gets the driver data from
+>>> the smd-rpm device, so still register the platform device on the
+>>> smd-rpm parent device.
+>>>
+>>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+>>> ---
+>> Generally it looks good.. I'll give it a spin next week. One
+>> thing below.
+>>
+>>>  drivers/clk/qcom/clk-smd-rpm.c | 21 +++++++++++++++++++++
+>>>  drivers/soc/qcom/smd-rpm.c     | 23 +----------------------
+>>>  2 files changed, 22 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>>> index e4de74b68797..91adb16889b3 100644
+>>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>>> @@ -1302,12 +1302,20 @@ static struct clk_hw *qcom_smdrpm_clk_hw_get(struct of_phandle_args *clkspec,
+>>>  	return desc->clks[idx] ? &desc->clks[idx]->hw : ERR_PTR(-ENOENT);
+>>>  }
+>>>  
+>>> +static void rpm_smd_unregister_icc(void *data)
+>>> +{
+>>> +	struct platform_device *icc_pdev = data;
+>>> +
+>>> +	platform_device_unregister(icc_pdev);
+>>> +}
+>>> +
+>>>  static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>>  {
+>>>  	int ret;
+>>>  	size_t num_clks, i;
+>>>  	struct clk_smd_rpm **rpm_smd_clks;
+>>>  	const struct rpm_smd_clk_desc *desc;
+>>> +	struct platform_device *icc_pdev;
+>>>  
+>>>  	rpmcc_smd_rpm = dev_get_drvdata(pdev->dev.parent);
+>>>  	if (!rpmcc_smd_rpm) {
+>>> @@ -1357,6 +1365,19 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>>  	if (ret)
+>>>  		goto err;
+>>>  
+>>> +	icc_pdev = platform_device_register_data(pdev->dev.parent,
+>>> +						 "icc_smd_rpm", -1, NULL, 0);
+>>> +	if (IS_ERR(icc_pdev)) {
+>>> +		dev_err(&pdev->dev, "Failed to register icc_smd_rpm device: %pE\n",
+>>> +			icc_pdev);
+>>> +		/* No need to unregister clocks because of this */
+>>> +	} else {
+>>> +		ret = devm_add_action_or_reset(&pdev->dev, rpm_smd_unregister_icc,
+>>> +					       icc_pdev);
+>>> +		if (ret)
+>>> +			goto err;
+>>> +	}
+>>> +
+>>>  	return 0;
+>>>  err:
+>>>  	dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
+>>> diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
+>>> index 0c1aa809cc4e..427dd5392b82 100644
+>>> --- a/drivers/soc/qcom/smd-rpm.c
+>>> +++ b/drivers/soc/qcom/smd-rpm.c
+>>> @@ -19,7 +19,6 @@
+>>>  /**
+>>>   * struct qcom_smd_rpm - state of the rpm device driver
+>>>   * @rpm_channel:	reference to the smd channel
+>>> - * @icc:		interconnect proxy device
+>>>   * @dev:		rpm device
+>>>   * @ack:		completion for acks
+>>>   * @lock:		mutual exclusion around the send/complete pair
+>>> @@ -27,7 +26,6 @@
+>>>   */
+>>>  struct qcom_smd_rpm {
+>>>  	struct rpmsg_endpoint *rpm_channel;
+>>> -	struct platform_device *icc;
+>>>  	struct device *dev;
+>>>  
+>>>  	struct completion ack;
+>>> @@ -197,7 +195,6 @@ static int qcom_smd_rpm_callback(struct rpmsg_device *rpdev,
+>>>  static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>>>  {
+>>>  	struct qcom_smd_rpm *rpm;
+>>> -	int ret;
+>>>  
+>>>  	rpm = devm_kzalloc(&rpdev->dev, sizeof(*rpm), GFP_KERNEL);
+>>>  	if (!rpm)
+>>> @@ -210,24 +207,7 @@ static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>>>  	rpm->rpm_channel = rpdev->ept;
+>>>  	dev_set_drvdata(&rpdev->dev, rpm);
+>>>  
+>>> -	rpm->icc = platform_device_register_data(&rpdev->dev, "icc_smd_rpm", -1,
+>>> -						 NULL, 0);
+>>> -	if (IS_ERR(rpm->icc))
+>>> -		return PTR_ERR(rpm->icc);
+>>> -
+>>> -	ret = of_platform_populate(rpdev->dev.of_node, NULL, NULL, &rpdev->dev);
+>>> -	if (ret)
+>>> -		platform_device_unregister(rpm->icc);
+>>> -
+>>> -	return ret;
+>>> -}
+>>> -
+>>> -static void qcom_smd_rpm_remove(struct rpmsg_device *rpdev)
+>>> -{
+>>> -	struct qcom_smd_rpm *rpm = dev_get_drvdata(&rpdev->dev);
+>>> -
+>>> -	platform_device_unregister(rpm->icc);
+>>> -	of_platform_depopulate(&rpdev->dev);
+>>> +	return devm_of_platform_populate(&rpdev->dev);
+>>>  }
+>>>  
+>>>  static const struct of_device_id qcom_smd_rpm_of_match[] = {
+>>> @@ -256,7 +236,6 @@ MODULE_DEVICE_TABLE(of, qcom_smd_rpm_of_match);
+>>>  
+>>>  static struct rpmsg_driver qcom_smd_rpm_driver = {
+>>>  	.probe = qcom_smd_rpm_probe,
+>>> -	.remove = qcom_smd_rpm_remove,
+>> This reaches over the removal of the icc registration, the depopulate
+>> call should stay.
+>>
+> 
+> I switched the of_platform_populate() to devm_of_platform_populate(),
+> that's why the remove callback is no longer necessary. It's a bit
+> hidden, perhaps it would be enough to add to the commit message:
+> 
+> "While at it, switch the remaining of_platform_populate() call to the
+>  devm variant and remove the remove callback."
+> 
+> Or maybe it should be split into two patches.
+Gave it a spin, I think it ends up being worse if an IPA rpm clock is
+consumed by one of the icc providers, and that's sadly the case
+for almost all platforms (or supposed to be).. :/ Only qcm2290 doesn't
+seem to care if we poke the network interface units with half the soc
+off :P
 
-To enable:
-cpupower set --turbo-boost 1
-
-To disable:
-cpupower set --turbo-boost 0
-
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- tools/power/cpupower/utils/cpupower-set.c    | 22 +++++++++++++++++++-
- tools/power/cpupower/utils/helpers/helpers.h |  3 +++
- tools/power/cpupower/utils/helpers/misc.c    | 18 ++++++++++++++++
- 3 files changed, 42 insertions(+), 1 deletion(-)
-
-diff --git a/tools/power/cpupower/utils/cpupower-set.c b/tools/power/cpupower/utils/cpupower-set.c
-index c2ba69b7ea54..0677b58374ab 100644
---- a/tools/power/cpupower/utils/cpupower-set.c
-+++ b/tools/power/cpupower/utils/cpupower-set.c
-@@ -20,6 +20,7 @@ static struct option set_opts[] = {
- 	{"perf-bias", required_argument, NULL, 'b'},
- 	{"epp", required_argument, NULL, 'e'},
- 	{"amd-pstate-mode", required_argument, NULL, 'm'},
-+	{"turbo-boost", required_argument, NULL, 't'},
- 	{ },
- };
- 
-@@ -41,10 +42,11 @@ int cmd_set(int argc, char **argv)
- 			int perf_bias:1;
- 			int epp:1;
- 			int mode:1;
-+			int turbo_boost:1;
- 		};
- 		int params;
- 	} params;
--	int perf_bias = 0;
-+	int perf_bias = 0, turbo_boost = 1;
- 	int ret = 0;
- 	char epp[30], mode[20];
- 
-@@ -94,6 +96,18 @@ int cmd_set(int argc, char **argv)
- 			}
- 			params.mode = 1;
- 			break;
-+		case 't':
-+			if (params.turbo_boost)
-+				print_wrong_arg_exit();
-+			turbo_boost = atoi(optarg);
-+			if (turbo_boost < 0 || turbo_boost > 1) {
-+				printf("--turbo-boost param out of range [0-1]\n");
-+				print_wrong_arg_exit();
-+			}
-+			params.turbo_boost = 1;
-+			break;
-+
-+
- 		default:
- 			print_wrong_arg_exit();
- 		}
-@@ -108,6 +122,12 @@ int cmd_set(int argc, char **argv)
- 			fprintf(stderr, "Error setting mode\n");
- 	}
- 
-+	if (params.turbo_boost) {
-+		ret = cpupower_set_turbo_boost(turbo_boost);
-+		if (ret)
-+			fprintf(stderr, "Error setting turbo-boost\n");
-+	}
-+
- 	/* Default is: set all CPUs */
- 	if (bitmask_isallclear(cpus_chosen))
- 		bitmask_setall(cpus_chosen);
-diff --git a/tools/power/cpupower/utils/helpers/helpers.h b/tools/power/cpupower/utils/helpers/helpers.h
-index d35596631eef..95749b8ee475 100644
---- a/tools/power/cpupower/utils/helpers/helpers.h
-+++ b/tools/power/cpupower/utils/helpers/helpers.h
-@@ -118,6 +118,7 @@ extern unsigned long long msr_intel_get_turbo_ratio(unsigned int cpu);
- 
- extern int cpupower_set_epp(unsigned int cpu, char *epp);
- extern int cpupower_set_amd_pstate_mode(char *mode);
-+extern int cpupower_set_turbo_boost(int turbo_boost);
- 
- /* Read/Write msr ****************************/
- 
-@@ -180,6 +181,8 @@ static inline int cpupower_set_epp(unsigned int cpu, char *epp)
- { return -1; };
- static inline int cpupower_set_amd_pstate_mode(char *mode)
- { return -1; };
-+static inline int cpupower_set_turbo_boost(int turbo_boost)
-+{ return -1; };
- 
- /* Read/Write msr ****************************/
- 
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index 9df9af8a969e..fc822a0e6b7b 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -124,6 +124,24 @@ int cpupower_set_amd_pstate_mode(char *mode)
- 	return 0;
- }
- 
-+int cpupower_set_turbo_boost(int turbo_boost)
-+{
-+	char path[SYSFS_PATH_MAX];
-+	char linebuf[2] = {};
-+
-+	snprintf(path, sizeof(path), PATH_TO_CPU "cpufreq/boost");
-+
-+	if (!is_valid_path(path))
-+		return -1;
-+
-+	snprintf(linebuf, sizeof(linebuf), "%d", turbo_boost);
-+
-+	if (cpupower_write_sysfs(path, linebuf, 2) <= 0)
-+		return -1;
-+
-+	return 0;
-+}
-+
- bool cpupower_amd_pstate_enabled(void)
- {
- 	char *driver = cpufreq_get_driver(0);
--- 
-2.34.1
-
+Konrad
+> 
+> Thanks,
+> Stephan
