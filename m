@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F7A72B7AE
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 07:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E4672B7B5
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 07:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236167AbjFLFkT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 01:40:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40680 "EHLO
+        id S236102AbjFLFkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 01:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235986AbjFLFjz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 01:39:55 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD444172D
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jun 2023 22:39:45 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so4511165e87.3
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jun 2023 22:39:45 -0700 (PDT)
+        with ESMTP id S236127AbjFLFkA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 01:40:00 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639F81986
+        for <linux-pm@vger.kernel.org>; Sun, 11 Jun 2023 22:39:51 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f655293a38so4112689e87.0
+        for <linux-pm@vger.kernel.org>; Sun, 11 Jun 2023 22:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686548380; x=1689140380;
+        d=linaro.org; s=google; t=1686548381; x=1689140381;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2COHoS0iCE7QlZQECIs2qMw+k4Ux9D95krl1smHPEhw=;
-        b=vQtQ+YLvQaTeDMhfogpkzaIizdumMXgl+SwKny0ktMYFLMvzj5QzSSoHCBZgwdMhxe
-         Pzg8JZjmdDDa28Mvp723hEtP41NXATAzox+CURgRFTRgRsTaaZDYKQ1rTC7soqgmJV7w
-         ovKdjHvXwI1MQo/wxBQtIGI9juYnCPvDcJMrNP87DlwhuTbBkjJOrE6jabGUo6xf0aHI
-         WDHFmJ+IrUMM7iNaMu7FFn/M86EnWnCQ1WG122UZdq01E2+8kUjLlhKa1c8veTDsCTnI
-         VpdJD+merSWMi5vrJIpkegtGSWsJwc5RnGrkAwgHE35EGVbcqzzkAlqP+PAo4mjR02oc
-         VeIg==
+        bh=w3KfhKRM2Bpo1zmKLCtOCcwF4OmfBaYvC1ZALMgeIRg=;
+        b=blRhZQakA5n+RjIiR5NEcHL6LC6qslAhKpdeuaIHkvHQHfK6rIxzbBvzdRLu0qfWri
+         OlCCQKAaJLC48lhY5LKbcmD3PAcA1Xjs5MFh913/Nu5NUTY7Cd+E7YUnvMzygVxLy3HI
+         lw0tAtNXQiZjlziW5WJZsABt+WJrSAda2DlBPYCe83hZH/amcIdKnPZohdMrwqAVsj2W
+         Ne8OSXV3sOqgtNQ8jkX6/z62UUVucMiNdTvI3NClcd5QPrB0He430+yeLN+fbH007zc0
+         ZdGrQMpb5r8f5re/FK17rhtUBoEQGX/Exa2haOZhXDodwDTGmYpf3dcm+v7hNoB2Cfj9
+         GvRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686548380; x=1689140380;
+        d=1e100.net; s=20221208; t=1686548381; x=1689140381;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2COHoS0iCE7QlZQECIs2qMw+k4Ux9D95krl1smHPEhw=;
-        b=TpV0gXUrq0DaQJJUJ2veaghctqLtixpZeRqH1X6/HZFfTzx+/XD51tHO/RzC2dUEkB
-         KqwEqPoOM0rRq3SP6bz+PBdAZoXeDY6BYGSWaGKLDDxm3/ubTpz6AZcCo6WbQarS0Zma
-         D5Yh1q4VD7bkf+qoiMQKzsjCczDJDy+4ooJjpQsHfoKAq1C11FGq+zAcUVRNbu0/WdSi
-         jhzxkpiAAq5iOq3zegQ9bNZQsQlLgwypC9AGfowL4Khiz1hyLyLqTUmwjv/TG17d3K0p
-         iUmec5MgPhNvHEw707aPM8z31Rz6r1xFJkJMRofjLd4m8R+boh/IoPn7H/o+0JQdIEBP
-         prpg==
-X-Gm-Message-State: AC+VfDwOkKiNGu1U8a9CoiGcBP1Q1owVyZfhFwc8qkBaF8dp3vWV7nbR
-        d71OUnbvoMuR7cbFmNL7oe9CS8kAH043ECurdTw=
-X-Google-Smtp-Source: ACHHUZ7jZf3YWi3Bhcxzz1FPeGdaumoZrreHjOvXVIwrZeVhijRftpqHNrSzCPUKmYTkPYHQrW2K2A==
-X-Received: by 2002:a05:6512:32b7:b0:4f4:e3fa:73d8 with SMTP id q23-20020a05651232b700b004f4e3fa73d8mr3408928lfe.62.1686548380316;
-        Sun, 11 Jun 2023 22:39:40 -0700 (PDT)
+        bh=w3KfhKRM2Bpo1zmKLCtOCcwF4OmfBaYvC1ZALMgeIRg=;
+        b=MRM8RcPEixkCGfrjwUkf8+D5W+mf1ZY3V/bkK3GBdgz322dTXDqVm5ngqFARgjgSYe
+         DmUx6s00As2mfy5lF/J1gziqwi+9aRLq044lK6iy6p16AFDLXMLsu7htjwyeOkXeYJBt
+         qHDMAn05baUXJXddSv634r0oKWVg1p67TZSbKWqBgekYYEejG2o5VB0teckiJjcVIHcE
+         fLQGPtN/daIXTwbXYyH5u7YMOiBO58EPqaMfp5NnuhQl6fjjEMDat6fwzQ/Jev2PgDZe
+         3PX+EhuqU2ATUkVy+/bJIhcxafgxEZXlfzK5ihTtsPqGgUAEjbSDIh9V2JKw2+6byiM9
+         Q/JQ==
+X-Gm-Message-State: AC+VfDwFs9jWKyYpg+M4FVRVvoevZxaPrc6zl+TJu1iMhlQDBVD8K9SV
+        ILQVTfeSiB2FDirtx+X83ZxTAaiILtRjFsrp+Yw=
+X-Google-Smtp-Source: ACHHUZ7dBv7Ysw90aWXg/I3haPn5OIJokEnhwINFdBVz7hcuwd+ValiA2gmIiVcr/UwxlLUo1Pj4Zw==
+X-Received: by 2002:a19:5059:0:b0:4e9:59cd:416c with SMTP id z25-20020a195059000000b004e959cd416cmr3083458lfj.0.1686548381226;
+        Sun, 11 Jun 2023 22:39:41 -0700 (PDT)
 Received: from eriador.lan (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id n6-20020a195506000000b004f38260f196sm1324125lfe.218.2023.06.11.22.39.39
+        by smtp.gmail.com with ESMTPSA id n6-20020a195506000000b004f38260f196sm1324125lfe.218.2023.06.11.22.39.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jun 2023 22:39:39 -0700 (PDT)
+        Sun, 11 Jun 2023 22:39:40 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -64,9 +64,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH 17/18] ARM: dts: qcom: apq8064-asus-nexus7-flo: constraint cpufreq regulators
-Date:   Mon, 12 Jun 2023 08:39:21 +0300
-Message-Id: <20230612053922.3284394-18-dmitry.baryshkov@linaro.org>
+Subject: [PATCH 18/18] ARM: dts: qcom: apq8064-ifc6410: constraint cpufreq regulators
+Date:   Mon, 12 Jun 2023 08:39:22 +0300
+Message-Id: <20230612053922.3284394-19-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
 References: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
@@ -74,7 +74,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,51 +87,52 @@ better be safe than sorry there.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/qcom-apq8064-ifc6410.dts | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-index c57c27cd8a20..9f5d72727356 100644
---- a/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-+++ b/arch/arm/boot/dts/qcom-apq8064-asus-nexus7-flo.dts
-@@ -218,9 +218,9 @@ s1 {
- 			bias-pull-down;
+diff --git a/arch/arm/boot/dts/qcom-apq8064-ifc6410.dts b/arch/arm/boot/dts/qcom-apq8064-ifc6410.dts
+index 96307550523a..ad3cd45362df 100644
+--- a/arch/arm/boot/dts/qcom-apq8064-ifc6410.dts
++++ b/arch/arm/boot/dts/qcom-apq8064-ifc6410.dts
+@@ -215,8 +215,8 @@ s1 {
  		};
  
--		/* msm otg HSUSB_VDDCX */
-+		/* msm otg HSUSB_VDDCX and VDD_DIG */
  		s3 {
--			regulator-min-microvolt = <500000>;
+-			regulator-min-microvolt = <1000000>;
+-			regulator-max-microvolt = <1400000>;
 +			regulator-min-microvolt = <950000>;
- 			regulator-max-microvolt = <1150000>;
++			regulator-max-microvolt = <1150000>;
  			qcom,switch-mode-frequency = <4800000>;
  		};
-@@ -301,6 +301,12 @@ l23 {
+ 
+@@ -262,6 +262,12 @@ l23 {
  			bias-pull-down;
  		};
  
-+		/* VDD_MEM */
 +		l24 {
 +			regulator-min-microvolt = <1050000>;
 +			regulator-max-microvolt = <1150000>;
++			bias-pull-down;
 +		};
 +
- 		/*
- 		 * tabla2x-slim-CDC_VDDA_A_1P2V
- 		 * tabla2x-slim-VDDD_CDC_D
-@@ -329,8 +335,12 @@ lvs6 {
- 		/*
- 		 * mipi_dsi.1-dsi1_vddio
- 		 * pil_riva-pll_vdd
-+		 * HFPLL regulator
- 		 */
- 		lvs7 {
+ 		lvs1 {
+ 			bias-pull-down;
+ 		};
+@@ -269,6 +275,14 @@ lvs1 {
+ 		lvs6 {
+ 			bias-pull-down;
+ 		};
++
++		/* HFPLL regulator */
++		lvs7 {
 +			regulator-min-microvolt = <1800000>;
 +			regulator-max-microvolt = <1800000>;
 +			regulator-boot-on;
- 			bias-pull-down;
- 		};
++			regulator-always-on;
++		};
  	};
+ };
+ 
 -- 
 2.39.2
 
