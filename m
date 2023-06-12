@@ -2,126 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CBD72CC86
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 19:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6A872CD19
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 19:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjFLR1n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 13:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37894 "EHLO
+        id S234208AbjFLRng convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 12 Jun 2023 13:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237060AbjFLR1T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 13:27:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D2E130;
-        Mon, 12 Jun 2023 10:27:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46533615A9;
-        Mon, 12 Jun 2023 17:27:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFA9FC4339B;
-        Mon, 12 Jun 2023 17:27:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686590832;
-        bh=F/xfsUaVL/B3Qc4E2prwYl5t9MVB1CSnSrmP09x8b5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mzTPTpPTd1To2ISnxdmYL8ef9TJZSAU9PdNRTmq/k9VtENcockLRuxRDPcn5NPxky
-         +zFFOaM8mFfDezhQPlKMNQ794b98mqyxxbYjjDmM211ai4i6uAsjYj3u9/r9XXQbSG
-         5boDRT4BO0vgX/nLPtzD4+L7AC9NI/Sclrq86Cn3oeaqm83Q7eKMkhSX8raJTWpp77
-         ofJLljmbbsdvCMYM7s8hkr0AmvajAn1P2Nsfl1PjyjwDpYUn8qXTFSbL83/iEA2R8d
-         ORGGVnJOC2Vkv72Hu8YqLkRMwhntgG6JRFJUJCQb3u6+WC/2WcHbGbv6goIdrv0UsT
-         3XFgo4p7+BTlg==
-Date:   Mon, 12 Jun 2023 18:27:05 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Maxim Kiselev <bigunclemax@gmail.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 3/3] riscv: dts: allwinner: d1: Add thermal sensor and
- thermal zone
-Message-ID: <20230612-manhole-awoke-599b8ff72edb@spud>
-References: <20230612063429.3343061-1-bigunclemax@gmail.com>
- <20230612063429.3343061-4-bigunclemax@gmail.com>
- <20230612-wriggle-remindful-89d5105c94ee@wendy>
- <CALHCpMjxboLn2eTjOJkE2JAzH3S8OB3v9fWqDOdeipAmLvLx2Q@mail.gmail.com>
+        with ESMTP id S234187AbjFLRnf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 13:43:35 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2023C10D8;
+        Mon, 12 Jun 2023 10:43:32 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-974539fd9f0so90599366b.0;
+        Mon, 12 Jun 2023 10:43:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686591810; x=1689183810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cYgR5nhDdiJqEt5pcKq1yS5d2OMv5QXdG3YbAcYBSDM=;
+        b=ZYLfKd33Ahmm1d17XHAx+fjFlNI9bJjS1Ob/HSGkYNLp++DniPGee7K+45UAgyojRB
+         bEz3J5+zwGogw04O4oUzGJMIDPCtCjddeM0NYTMMKKSxF8V9mmEIam3xzFcsTGYv9oNX
+         mGsYe7Z5C/NZyyW2EYHS9do7nyKE6Pq5CJo8BkD5OqtOn/S5XM+1qQBw/wIX3XVIgVsT
+         DtmMyIkzWuSwHNbgQh0XvsDaNox7sN2Bp+EbSfUOUe0vhxUV/w5roUWdKqnsbrrYjevy
+         icaTI2v8RUUGfDAq74eUwG19Ji6lUgAAbMLQh6xporbeXmqg2PXCOJETq8c4PnSeA70/
+         SFMQ==
+X-Gm-Message-State: AC+VfDzcvd65fktlH1EGzdsI9leirZh4FKj8Pnrx7ARoFcT3BHs6lsIT
+        9RkhbVwijmbpWuTW4ZPceqdveXdCZbLNPaL+U4o=
+X-Google-Smtp-Source: ACHHUZ6MMjBs8FmD68ZIaJWus2HTgfbsYkWlMOyf0sDaOjoXLWJBzjaCHTN62Mw8MBKC2rTmGyz6x8JYIUKaGP1v1r0=
+X-Received: by 2002:a17:906:748a:b0:975:bb7:5dc3 with SMTP id
+ e10-20020a170906748a00b009750bb75dc3mr8451381ejl.7.1686591810435; Mon, 12 Jun
+ 2023 10:43:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="YndCLQNRUhwsHafT"
-Content-Disposition: inline
-In-Reply-To: <CALHCpMjxboLn2eTjOJkE2JAzH3S8OB3v9fWqDOdeipAmLvLx2Q@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230609124408.3788680-1-thierry.reding@gmail.com> <3c501536-2620-0022-df93-415d490fc1a5@linaro.org>
+In-Reply-To: <3c501536-2620-0022-df93-415d490fc1a5@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 12 Jun 2023 19:43:19 +0200
+Message-ID: <CAJZ5v0jwZt3HOJi3sBGR50G01K+pHSAsJd1UVBfZofpWBAvnVA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Allow selecting the bang-bang governor as default
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jun 12, 2023 at 11:07 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Thierry,
+>
+> On 09/06/2023 14:44, Thierry Reding wrote:
+> > From: Thierry Reding <treding@nvidia.com>
+> >
+> > For many setups the bang-bang governor is exactly what we want. Many
+> > ARM SoC-based devices use fans to cool down the entire SoC and that
+> > works well only with the bang-bang governor because it uses the
+> > hysteresis in order to let the fan run for a while to cool the SoC
+> > down below the trip point before switching it off again.
+>
+> Yeah, that trip point detection is screwed up at the moment, but we are
+> on the way to solve that. From there, we should be able to have the
+> step_wise governor working as the bang-bang governor and remove this one.
+>
+> Meanwhile, the change sounds ok for me.
+>
+> Rafael, may I pick this change?
 
---YndCLQNRUhwsHafT
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jun 12, 2023 at 11:17:20AM +0300, Maxim Kiselev wrote:
-> Hi, Conor
->=20
-> =D0=BF=D0=BD, 12 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 10:55, C=
-onor Dooley <conor.dooley@microchip.com>:
->=20
-> ...
->=20
-> > The RISC-V patchwork automation is complaining about this patch while
-> > running dtbs_check:
-> > arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dtb: thermal-zones:=
- cpu-thermal: 'trips' is a required property
-> >         From schema: Documentation/devicetree/bindings/thermal/thermal-=
-zones.yaml
->=20
-> I didn't add 'trips' because I'm not sure if they should be the same
-> for the D1 and the T113s.
-
-I'm sorry, but I am of no help there. Perhaps some of the Allwinner devs
-can help you on that front.
-
-> Maybe it's better to drop 'thermal-zones' from this patch and add them
-> later in separate patches
-> for T113s and D1?
-
-Does it pass dtbs_check with the thermal-zones removed?
-
-Cheers,
-Conor.
-
---YndCLQNRUhwsHafT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIdVaQAKCRB4tDGHoIJi
-0icUAQDwugDXiKIix1q9MpKsiXdSHj6OKofB7WNjaX+WRaIpQwEAkCWK9ab2/bj7
-4IMW9hBtFvXjJov/I8+GOF9h4yNFVgM=
-=fE32
------END PGP SIGNATURE-----
-
---YndCLQNRUhwsHafT--
+Please do, thank you!
