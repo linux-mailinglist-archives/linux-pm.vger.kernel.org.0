@@ -2,133 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A066872B5A2
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 05:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C9F72B5BE
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 05:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232431AbjFLDEi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Jun 2023 23:04:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42482 "EHLO
+        id S234433AbjFLDLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Jun 2023 23:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234118AbjFLDER (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 23:04:17 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF10E6D;
-        Sun, 11 Jun 2023 20:03:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fbRSl/1esxCmAWzoa0HruxM6hsL4XfWERLnNKKXD6jMbzRs7rhTa+YjBUgaXUegnvl2IEXUDwX22vTnH09NfVWnnw+g6J6sGvQiNcirhJHUZLirMElDPTdjH6F5AMtD1JGi3tibQTe1BT1FYZxFZPdOyLTmETH1lknqJ5BqnzyE51d32gjrpSpta5TU7Ng7KKGOFhX3faCckt0ElNpbIICuZYDi3m0t1R+4Miy3UpvkXHFWENzjXz2lNZ4w2yimgHc5XwFXh5saoLRgKI0znDGd6LfyD4Qs4fcP7D9P/1DhZ1QmArGZm+CxgNU79vFO6GUNRYVqQADAkmSgSUq36/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JoJNc7OGaEcJoJ78c/kXk7BWZcWtLCfsDyvP5r7Ioyg=;
- b=BQeCYnUgqwT/K8UuveszFLPYlItD5DNN+ef4xTuI/sdESBGx1KIyaHRBGqPXo63aQeSF8JPCuk5Zkerw3NzB6xVtMuLfp3THr1hcep3iT/h+s6u0lfppErpCmrzZ4evHmIU+05N2HhPjpSyFYGk7McJi0j0y/yZhEJ7RV8ixYsfsdgcVMElVNQGkcli/yuYAhdcNlWbj9Nn152IPXO4f6F2odb79OQGr/iqfIdr863hgKargOxlQUJIBGtlwNHn8mga69Bt4AvCEEST36m4hNc16OucYJkbro5jj1y7rwr89FkIIOc8iPivdW595IAACZf8XtIRkLMgPhWrl9UK1jQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JoJNc7OGaEcJoJ78c/kXk7BWZcWtLCfsDyvP5r7Ioyg=;
- b=uozANHeFhquwHmNZ90XVssPFLGb4BoTGlqKlfNFssiN8inPd1wf5pC0/rwJM7diUf0qG00nw6rqlrA8y1HfxJWmgkLP7Tf9WCCbw5VuvYbT6E50YrK/v2W+bkefie9QQ4NJ6Rhm0rkxDwlEPPlQLv72sg+EH9yNElJX5PP0IZ64=
-Received: from DM6PR07CA0095.namprd07.prod.outlook.com (2603:10b6:5:337::28)
- by BY5PR12MB4260.namprd12.prod.outlook.com (2603:10b6:a03:206::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Mon, 12 Jun
- 2023 03:03:33 +0000
-Received: from CY4PEPF0000E9D9.namprd05.prod.outlook.com
- (2603:10b6:5:337:cafe::ca) by DM6PR07CA0095.outlook.office365.com
- (2603:10b6:5:337::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.33 via Frontend
- Transport; Mon, 12 Jun 2023 03:03:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9D9.mail.protection.outlook.com (10.167.241.77) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.21 via Frontend Transport; Mon, 12 Jun 2023 03:03:32 +0000
-Received: from pyuan-Splinter.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Sun, 11 Jun
- 2023 22:03:29 -0500
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <viresh.kumar@linaro.org>,
-        <Ray.Huang@amd.com>, <Mario.Limonciello@amd.com>
-CC:     <Deepak.Sharma@amd.com>, <Wyes.Karny@amd.com>,
-        <gautham.shenoy@amd.com>, <Sunpeng.Li@amd.com>,
-        <Xinmei.Huang@amd.com>, <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] cpufreq: amd-pstate: Set default governor to schedutil
-Date:   Sun, 11 Jun 2023 23:03:21 -0400
-Message-ID: <20230612030321.3097627-1-perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S234443AbjFLDKt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Jun 2023 23:10:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672E4170B;
+        Sun, 11 Jun 2023 20:09:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0003C60B67;
+        Mon, 12 Jun 2023 03:09:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C3DC433D2;
+        Mon, 12 Jun 2023 03:09:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686539373;
+        bh=m7heADEhyArv8WhRnVIeKrsbQux5pXrM8PZQfuvp/1I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=igo6QEWLIt9O3QrvGCvgaUhH0LpB2exG9vZLb1FpGB7+B3lpunb1oOGvciTN9PaXb
+         nU2vEka/mpnDgv2o6PM1h535AMc0fpeSc4Mn2rnJTuhxwfpV8z1bCqYUSyc8ZsgIf9
+         tlMQdzGIr6QmhXuVOg/7ZvvVPjEfCyHctG9gS2vODHAjBSP1/E5dm1QJj+eQD8/zKN
+         gJudIir1oDDNEZ+d4Q7vIIi3T9UgW4ByTCiOBW7SMbWJFQWlC41wkJWOdc57S5RzE1
+         SPY9HgWQAgvzoEa0KU7E2BYIaM9ZtfE5iIpO3ezmG4bDM/eQmaanP4wV7dQ04fsmv7
+         e1MWLKbLyjEYA==
+Message-ID: <4005a768-9e45-0707-509d-98ce0d2769bd@kernel.org>
+Date:   Mon, 12 Jun 2023 12:09:29 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D9:EE_|BY5PR12MB4260:EE_
-X-MS-Office365-Filtering-Correlation-Id: b5c7c8ac-bcd8-43bf-ca03-08db6af19b5d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lf5rQ78Bz3eYlRiqtjpvkitEvMGY6hzsSmt/hLtg8t/BwUdeboSQz1KdPrPGmRxd2Hs2yYby0FWPE5BnrE0q+1IEVhNTJqVl302W+Tkvh6OS40VJv8ICRy3T/yO1S13hJxioOHyvFF3M49nrO0TFtY2hwqhzwEBgKXxnK2dscTj9DE5QpeGIDqXoV//1kwbejAy7O61DMWVEE0zYmuPSHMk6yfZ6C4cmC2w456xny6HRsHI35CJCZA4CC1VbVPfUGBaT3wbFvo/p2ViHirKYhWAsru/3C1xfNx+ShB6P6a1aQLzUMeiXIL46Q8tG6Nb5EJgA5B0/KIsX3Ys448J7tg89ZxgRDpd+A15NSTQmr+eoCzfRBng12s97SAme47ngZN0M/w8mG01neKZe4+dNAF1kehpp9ZpGz3s1/vaD1P6PX3OGvkk2dMOpsiU4ebJ86DSlalUMnRotUYs0BOc5TQ6EJraYW97L4dsfrL4cHfx2x8UhD/MNHQXmaqq0drhw64xzb55zWAytx4ZNbg8ko9KAoFnJ02mFWcjTrDrd7wbgJVMuddBpCfINyl/q/axUZvZwms6JIdwf/YgMRCwYooYNXU+N6K/09n8L4fXV5kN1crJFp9wDWC+6fYFYOyLd8VtcQv/T04b1QeqmkPyGHkj2khTlpsHqo9eZEPJOzK0WHbXuwzG4YqfV0XgyjbKW/s/E653NKwoQfhz0tWfR+rBT0WM/4wRaaJgVAzV2jJ0cPfgUtrdsc6vwX1JfE7mCtsGad2UGR9sF2bszw0A6Ig==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39850400004)(136003)(346002)(396003)(451199021)(46966006)(40470700004)(36840700001)(7696005)(316002)(40460700003)(41300700001)(83380400001)(426003)(336012)(2616005)(86362001)(82310400005)(16526019)(186003)(1076003)(26005)(44832011)(36860700001)(47076005)(2906002)(81166007)(82740400003)(356005)(40480700001)(36756003)(5660300002)(8936002)(8676002)(4326008)(70206006)(70586007)(6636002)(478600001)(110136005)(54906003)(6666004)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jun 2023 03:03:32.8241
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5c7c8ac-bcd8-43bf-ca03-08db6af19b5d
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4260
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+Content-Language: en-US
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On 6/11/23 00:03, Bart Van Assche wrote:
+> On 6/10/23 06:27, Bagas Sanjaya wrote:
+>> On 6/10/23 15:55, Pavel Machek wrote:
+>>>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/show_bug.cgi?id=217530
+>>>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD drive
+>>>>>
+>>>> The reporter had found the culprit (via bisection), so:
+>>>>
+>>>> #regzbot introduced: a19a93e4c6a98c
+>>> Maybe cc the authors of that commit?
+>>
+>> Ah! I forgot to do that! Thanks anyway.
+> 
+> Hi Damien,
+> 
+> Why does the ATA code call scsi_rescan_device() before system resume has
+> finished? Would ATA devices still work with the patch below applied?
 
-The Kconfig currently defaults the governor to schedutil on x86_64
-only when intel-pstate and SMP have been selected.
+I do not know the PM code well at all, need to dig into it. But your patch
+worries me as it seems it would prevent rescan of the device on a resume, which
+can be an issue if the device has changed.
 
-If the kernel is built only with amd-pstate, the default governor
-should also be schedutil.
+I am not yet 100% clear on the root cause for this, but I think it comes from
+the fact that ata_port_pm_resume() runs before the sci device resume is done, so
+with scsi_dev->power.is_suspended still true. And ata_port_pm_resume() calls
+ata_port_resume_async() which triggers EH (which will do reset + rescan)
+asynchronously. So it looks like we have scsi device resume and libata EH for
+rescan fighting each others for the scan mutex and device lock, leading to deadlock.
 
-Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Leo Li <sunpeng.li@amd.com>
-Acked-by: Huang Rui <ray.huang@amd.com>
-Tested-by: Perry Yuan <Perry.Yuan@amd.com>
----
- drivers/cpufreq/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Trying to recreate this issue now to confirm and debug further. But I suspect
+the solution to this may be best implemented in libata, not in scsi.
+This looks definitely related to this thread:
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 2c839bd2b051..a1c51abddbc5 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -38,7 +38,7 @@ choice
- 	prompt "Default CPUFreq governor"
- 	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
- 	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
--	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
-+	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
- 	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
- 	help
- 	  This option sets which CPUFreq governor shall be loaded at
+https://lore.kernel.org/linux-scsi/7b553268-69d3-913a-f9de-28f8d45bdb1e@acm.org/
+
+Similaraly to your comment on that thread, having to look at
+dev->power.is_suspended is not ideal I think. What we need is to have ata and
+scsi pm resume be synchronized, but I am not yet 100% clear on the scsi layer side.
+
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index 6a959c993dd8..be3971b7fd27 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1629,6 +1629,20 @@ void scsi_rescan_device(struct device *dev)
+>   {
+>   	struct scsi_device *sdev = to_scsi_device(dev);
+> 
+> +#ifdef CONFIG_PM_SLEEP
+> +	/*
+> +	 * The ATA subsystem may call scsi_rescan_device() before resuming has
+> +	 * finished. If this happens, prevent a deadlock on the device_lock()
+> +	 * call by skipping rescanning.
+> +	 */
+> +	if (dev->power.is_suspended)
+> +		return;
+> +#endif
+> +
+> +	/*
+> +	 * Serialize scsi_driver.rescan() calls and scsi_driver.gendrv.remove()
+> +	 * calls.
+> +	 */
+>   	device_lock(dev);
+> 
+>   	scsi_attach_vpd(sdev);
+> 
+
 -- 
-2.34.1
+Damien Le Moal
+Western Digital Research
 
