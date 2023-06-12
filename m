@@ -2,192 +2,340 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1DE72CB17
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 18:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540C372CBFA
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 19:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232230AbjFLQMB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 12:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S236949AbjFLRDM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 13:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFLQMA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 12:12:00 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2046.outbound.protection.outlook.com [40.107.94.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2249BC5;
-        Mon, 12 Jun 2023 09:11:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NifpRgHX60LhIljyg6+n3DJTes5Wkdkzq3InHMH4ltEXzhgWZBoDJ8zHUIRwzqMf/5MIZOZlURRXuldt2YxmKCig/k4qBOQVbPl/Gl+29b1ROFyOBOU49dcFOIb29TD9g9Hq4B8OcEfXo7z+/B3Q+M34tAuTtMYZKJxU7zjMCIzT3+ED8Zw6pmABcIw3bUypb7jQHxtAvl+D8dRhcMvMe5Gl6lw/ADAnnVZVIimtJ9qS6y3MVRfkvZ22mkKgKoieBG1XR52Y3bQEfKZJxwcKpw3i43lYZqTwtfi8xH208dy7OjDPy565fuQ8amTv1Vabdma7F3eKrd7oN0mtJ+VmNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NeCxhMiEZdxUWFaQ+Rg1KqWSmMu3u/ZOcany21BhDOs=;
- b=LWJeR603prpJMGkuewEUaq0ojsHP8BAFKHGXrh1ONjvSqI7wOmgBhCwq/s0wqV22tvxaZD03uAAH4KXDTGkbKAFETsPHrTb8KN+gTuNr27EPSnI00zHxTUZJvMdvPNAjPhlo+NiRu5xhqPEyz6neizsSdmftYHnaOuRvvBz1wsOH+QRVP1D92v5UsIVsSxbmkGkXxyOpf3i3qwCzyCnV8aztMQLNEr4gaIb0Uq8KHXWmj+8iXf45repM+pFGvhNwfjmfTnHBn+HvOPO5MFieTIrDC2RCrghtQgAcUNhwhmJkQr7Donf2ILrEzdbYEV2u5WT+Z8/OW8W22m5xroL84w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NeCxhMiEZdxUWFaQ+Rg1KqWSmMu3u/ZOcany21BhDOs=;
- b=ph0mA5HoBCgK8WRLfp2wZhioSXUbzTr3gGtgLH1USHasngIiiUqCuz+mdQu+B4Tb0YEqDkxhjbiz7aX0W0XdH+hHZ4JOUkjXLjlnnps8L77VouIN7SICXhq9s5I95/9MjeDzNsyv0K2keHUd3VCwNS8yhE0zI6h8oq+98enzfqY=
-Received: from CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19)
- by DM4PR12MB5326.namprd12.prod.outlook.com (2603:10b6:5:39a::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.33; Mon, 12 Jun
- 2023 16:11:56 +0000
-Received: from CYYPR12MB8655.namprd12.prod.outlook.com
- ([fe80::8d99:5e7c:3ab:a882]) by CYYPR12MB8655.namprd12.prod.outlook.com
- ([fe80::8d99:5e7c:3ab:a882%7]) with mapi id 15.20.6477.028; Mon, 12 Jun 2023
- 16:11:56 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] cpufreq: amd-pstate: Set default governor to schedutil
-Thread-Topic: [PATCH v2] cpufreq: amd-pstate: Set default governor to
- schedutil
-Thread-Index: AQHZnNpxmlVNkY+7oky3diCKzMikhK+GxLGAgACSkFA=
-Date:   Mon, 12 Jun 2023 16:11:56 +0000
-Message-ID: <CYYPR12MB86556045C209552FF99C47C89C54A@CYYPR12MB8655.namprd12.prod.outlook.com>
-References: <20230612030321.3097627-1-perry.yuan@amd.com>
- <20230612072627.5wzmsfp64jho3bdj@vireshk-i7>
-In-Reply-To: <20230612072627.5wzmsfp64jho3bdj@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=cc280909-9e92-4fbd-aa53-87d143ce5135;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-12T16:11:01Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CYYPR12MB8655:EE_|DM4PR12MB5326:EE_
-x-ms-office365-filtering-correlation-id: 8e75b9d8-2c7c-41e0-b0a0-08db6b5fbeb1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iUvmC19tcZUlIFwnLIfDT78qoV/CHtjR9Cu3fQlCYR1x1cgwgj/2Vtafp0lfUafJgvUqtFxB4ip4LSNc6P/F986iXZp2mK9NtK8qNf0BsWvG5132Bbg5Ikazu2kC4dzTyb0FHJ3msS+a0h76d2zGAbfZGuB0l6yQKUjCSqP+r/hZgqiwWTFrMbyiZjvQolLoiu9Pv9f1mc7uR3NbfOiUIQRq2jAOLBXEgtxhK5Roy9dborUJbtMql9U9b7ZEqxXXAcZPu46J4gaUkHKsomDzhb38beW6RGLyTirhF2EtlawfCPwu3QiZpw0gKQ417IoRvBJvSYPFcTo7g4u9IV5m5jPqBFSzHqu5x1Ihylb9v4xnJD237vweD9gyLfUlU0JCq+EYLhZkjNFXXn27ySp5BV6SZcMI9l5VljdtXVn75iDrD/WERY70vhdkiySKOwnunUAks0Aq8UOoef5E7SyFlKSBcfLgSBstdYEySVZi4HG5lCRtlQ2Sn3L7f1OX3s0x2xpLnPWANgE5lLrO1cuCYmLoDvwYmzvV+qBmIJ7r7IpxkUBRJLty8I4pzhJnB5ImFikTX3V+MrI1/QaeKvzTLN9cYyBmpxgcz5XPzYltOyYiepcWRlEu8udSV4eOmX9n
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8655.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(39860400002)(396003)(136003)(451199021)(478600001)(2906002)(83380400001)(38070700005)(53546011)(186003)(6506007)(26005)(9686003)(86362001)(122000001)(38100700002)(33656002)(7696005)(55016003)(71200400001)(52536014)(5660300002)(8936002)(8676002)(41300700001)(66446008)(66476007)(66946007)(76116006)(6916009)(316002)(64756008)(66556008)(4326008)(54906003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?azqoC9/rsvv9jYY4dA97h9lcISyIuSPsIE0fo4rWwI8x93i18kKCawkmT7Dy?=
- =?us-ascii?Q?r9Xfd2lKkOTJtsHd+IC/Jp1nIKGv3lWC7Su/6sfypaE0qPVCMerTAzHQWDsb?=
- =?us-ascii?Q?Y3wqP4iUxuK9s2CWlrZ9tuF03M05Ea8U0y+meoGMu1BY0RpcrRbQ/44qvznQ?=
- =?us-ascii?Q?l/QTBMlabIAd66ESzpRv6htzGmsucgye7HVnPf7NhW2ALDVNHfZADcikamSG?=
- =?us-ascii?Q?Qk2/qKFMhww8HEEm8b+xmqoDi1+62KbYlTC4E1asI/1gz/+zBdHM4frT/2fZ?=
- =?us-ascii?Q?sso5a8pUvxKKl4jbbgtKyROdbLRESUhZH2u0QRRkRa5lasqczyArO/19+AoW?=
- =?us-ascii?Q?SNIdDbUGAyAub1oKQi56X5zNUvCyaD38PzUXcSRK1G3KW5jmbUVl19x6kWL2?=
- =?us-ascii?Q?bcWozuWNyqdv/mwbKLno1I8UgTfdpdrEaLD3PXtMgkhrZOyYRd2DjrWeuzib?=
- =?us-ascii?Q?mAjz9vAPlzRyq87eAU7RGSe/1s+JemKQsoW7rs0HeA6bG6lr+wjdHxVAVyfd?=
- =?us-ascii?Q?/CCE/z88wfmOD9333dJBUQrISU56jkRxJ9oigApAmwROpwTLeQ5+SF6dlmGG?=
- =?us-ascii?Q?rV/RVS28FpxRvw9pe7zcsWesMOEgGqaIWHt9SZnWVIr93rpr8qD81aB2r4UG?=
- =?us-ascii?Q?tg62UIUqSJOmqdVkatufR3krWuXs1Je51wxwgTl7605DKIuKP7CWI9SF8evu?=
- =?us-ascii?Q?nCFafqAFhoYjtDKsn5EBj35zY9GCW3WN6I2O0ZosZ7kxKPaDh+IKd7ave9KD?=
- =?us-ascii?Q?lGekOf4/idSrgfGK2XxP2l0SjC5BVcTnCYad1DC9zueO+o2jzBP86hyvfpjL?=
- =?us-ascii?Q?Ifc7/MiO+OF25poC/HMesvXBkfHgAVyUs3/Cq7Z7MN0LTEPN3kBYs7fBuuHR?=
- =?us-ascii?Q?4axiPdRgv6htcmstGWuv3FuTZU8dWXax/0Rsd7BqL8i3DxQFGvlPSfbxhpEu?=
- =?us-ascii?Q?vNtV1BcEih4mNirmf+AsLT/ZeSv+TKcTn2dN8mpav5SnzOq5CiVKcT1cvYGu?=
- =?us-ascii?Q?TkuvPQ2fS3UR9e8sEBN313VcYOsvr3tcmyadTVJLd/ly9bFgODuGzjossIuX?=
- =?us-ascii?Q?bl9eEyMouuQrU2d5BNluDKfjc99RF6wXg7xJFuD05G+jvS/a9Z9p3jBawe71?=
- =?us-ascii?Q?p96aNXeWYgXE+SwhCaBtBu+Df7xuiRF/I80+pX6E2uhfLfnwVVRd6SZ7BA4G?=
- =?us-ascii?Q?m3vJhCfyQzI0BqSlKxW2x1/LXf/vNomx7ozhucgprGEyE5EW7v5zd+GD5KHy?=
- =?us-ascii?Q?fjlslpER6Xsrb1dhNGGCPVewmgNdi1GdaxELlBwqIwV4E8e4TTysSUJyd9SL?=
- =?us-ascii?Q?s/ymupZdVIdW9r21JO1sa3LBNCKa5oIGcSiDK5lWaKwBrXKCGozYou2VfZNi?=
- =?us-ascii?Q?CHowZopq+yHu2afjVP/+xGbNPufkvzFMy9GzIOB1HzR7b4a7d/aq1bI3IcC8?=
- =?us-ascii?Q?i2PZZ6w+FJS3FVtEyBgwErkqY/jDK8S7Ibtb7bk1W1/Hgk2JJ1hRdUBI9pkN?=
- =?us-ascii?Q?Vu/zFLdswvwczoGHhI15EI5OySlD2vKLzcJRTG3ypJ1eY4gSUfQGqwkbJL+Y?=
- =?us-ascii?Q?psAEo7QCW0BTaC4RAuk=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S236626AbjFLRDL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 13:03:11 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12000E7D
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 10:03:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f65779894eso4509952e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 10:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686589386; x=1689181386;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n/2ZB5BiuPmDVQYwRR2+GIOAeOu1Mqoq+C+KfOecmuk=;
+        b=PrWo5yYQm3aA1KbMC1HgwnoEpRrCGwvbVBKZtPrjijP3eKHwkMKTluLTtnd3C4Krf7
+         bfiZDp/tGA8T6OapJ55RgwKZ9LwL5XXXWgHveb2I/7DB7zRNuLvHP7wDve6puievelK0
+         McQI6sLCOUYGVOx01zjYQG0yEEFMM0NztOf8td8AO1Omacld1N/nsRvXFGQVIMtphuJC
+         J52KZg2c2HbQP6zgmXTl6XYoVxfDcHDJzqxxuuBRsGzq+KKIht1W3r8rjIDGHWMFex4e
+         6v3txStvu+RW1Wb7hXM4omuK1Xec60N6S0Diy07c4CDfXmZo5U00rbi38ee8WWRoGvYY
+         MUdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686589386; x=1689181386;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n/2ZB5BiuPmDVQYwRR2+GIOAeOu1Mqoq+C+KfOecmuk=;
+        b=C+QyRuHdMG6Klyi+TH2bcfJbYJ5aQ8HYtxTSV68sXPUnW79No623hf5PF85QBQs8Ks
+         2oz/Q5pjH1AmxMbRSgD65UUhCqpMATixKzHKQ/lG4j7b5sfc6rlWdudqAQmJd8unWptR
+         ZApK8m3cDZNArjl7BlZRx/yIr9qzj/71j1hXKEjSp3Jp4HvbvvtX3aiGfNl77EDD1vOP
+         17d2Tu7gzh3vEALRlxj6xKz8SNw644eh95H4jBxm3VTuaSJmdwSZa0LW9pvFP9EQZQfQ
+         OZm2uROCjLWBoY5Yt0pG6nviSphXSTryPE5Z+kZhMf5xG0E49wt2M3AM2XgFbXnLzKD3
+         m/9w==
+X-Gm-Message-State: AC+VfDzwdY0xGI7MHB9deXkf5cVaM5JAi/Wkch5qEkfRS/1C4VyWvZoV
+        Sdm3iganK3gW03+b8RZZyUxIqQ==
+X-Google-Smtp-Source: ACHHUZ6F3uloCkMgpiymHDH0jwCx9f9HppT1U79o12pyC+gLNrovURXtZFy2Qp9rPHczrW8TJiStSQ==
+X-Received: by 2002:a19:770e:0:b0:4eb:e8e:4139 with SMTP id s14-20020a19770e000000b004eb0e8e4139mr3139208lfc.2.1686589386257;
+        Mon, 12 Jun 2023 10:03:06 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004f5bc4e80easm1497296lfd.171.2023.06.12.10.03.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jun 2023 10:03:05 -0700 (PDT)
+Message-ID: <ffd2df1e-71fa-ada1-ed95-69612f3b5072@linaro.org>
+Date:   Mon, 12 Jun 2023 19:03:04 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8655.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e75b9d8-2c7c-41e0-b0a0-08db6b5fbeb1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jun 2023 16:11:56.8039
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: f+kDM3O8xpRpyZpjWAFLzvDkR7ULjcD/yTsbJPWA22d5kLMuKGalX2QmIAhHdSFPmaXUcNHSQTVHOcW4qZTYqA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5326
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 04/22] clk: qcom: smd-rpm: Export clock scaling
+ availability
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org>
+ <20230526-topic-smd_icc-v2-4-e5934b07d813@linaro.org>
+ <ZIRgGXwKD6mcgTRY@gerhold.net>
+ <40f937bb-0d7e-a237-1672-5905983622ce@linaro.org>
+ <b7b1d19c-b87d-b3fd-36aa-374065a45ede@linaro.org>
+ <ZITOR3Y25Bv4msdm@gerhold.net>
+ <c52f0311-a8a0-79af-2a08-51a8564a8b25@linaro.org>
+ <ZIWR7uVHJ-eJWhHw@gerhold.net>
+ <b700b444-0b14-7cee-4edc-d2f1183c66bb@linaro.org>
+In-Reply-To: <b700b444-0b14-7cee-4edc-d2f1183c66bb@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[AMD Official Use Only - General]
 
-Hi Viresh.
 
-> -----Original Message-----
-> From: Viresh Kumar <viresh.kumar@linaro.org>
-> Sent: Monday, June 12, 2023 3:26 PM
-> To: Yuan, Perry <Perry.Yuan@amd.com>
-> Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>;
-> Limonciello, Mario <Mario.Limonciello@amd.com>; Sharma, Deepak
-> <Deepak.Sharma@amd.com>; Karny, Wyes <Wyes.Karny@amd.com>;
-> Shenoy, Gautham Ranjal <gautham.shenoy@amd.com>; Li, Sun peng (Leo)
-> <Sunpeng.Li@amd.com>; Huang, Shimmer <Shimmer.Huang@amd.com>;
-> Du, Xiaojian <Xiaojian.Du@amd.com>; Meng, Li (Jassmine)
-> <Li.Meng@amd.com>; linux-pm@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: Re: [PATCH v2] cpufreq: amd-pstate: Set default governor to
-> schedutil
->
-> On 11-06-23, 23:03, Perry Yuan wrote:
-> > From: Mario Limonciello <mario.limonciello@amd.com>
-> >
-> > The Kconfig currently defaults the governor to schedutil on x86_64
-> > only when intel-pstate and SMP have been selected.
-> >
-> > If the kernel is built only with amd-pstate, the default governor
-> > should also be schedutil.
-> >
-> > Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > Reviewed-by: Leo Li <sunpeng.li@amd.com>
-> > Acked-by: Huang Rui <ray.huang@amd.com>
-> > Tested-by: Perry Yuan <Perry.Yuan@amd.com>
-> > ---
-> >  drivers/cpufreq/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig index
-> > 2c839bd2b051..a1c51abddbc5 100644
-> > --- a/drivers/cpufreq/Kconfig
-> > +++ b/drivers/cpufreq/Kconfig
-> > @@ -38,7 +38,7 @@ choice
-> >     prompt "Default CPUFreq governor"
-> >     default CPU_FREQ_DEFAULT_GOV_USERSPACE if
-> ARM_SA1110_CPUFREQ
-> >     default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
-> > -   default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE
-> && SMP
-> > +   default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if
-> (X86_INTEL_PSTATE ||
-> > +X86_AMD_PSTATE) && SMP
-> >     default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
-> >     help
-> >       This option sets which CPUFreq governor shall be loaded at
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->
-> --
-> Viresh
+On 12.06.2023 14:51, Konrad Dybcio wrote:
+> On 11.06.2023 11:20, Stephan Gerhold wrote:
+>> On Sat, Jun 10, 2023 at 09:39:00PM +0200, Konrad Dybcio wrote:
+>>> On 10.06.2023 21:25, Stephan Gerhold wrote:
+>>>> On Sat, Jun 10, 2023 at 08:53:05PM +0200, Konrad Dybcio wrote:
+>>>>> On 10.06.2023 14:15, Konrad Dybcio wrote:
+>>>>>> On 10.06.2023 13:35, Stephan Gerhold wrote:
+>>>>>>> On Fri, Jun 09, 2023 at 10:19:09PM +0200, Konrad Dybcio wrote:
+>>>>>>>> Before we issue a call to RPM through clk_smd_rpm_enable_scaling() the
+>>>>>>>> clock rate requests will not be commited in hardware. This poses a
+>>>>>>>> race threat since we're accessing the bus clocks directly from within
+>>>>>>>> the interconnect framework.
+>>>>>>>>
+>>>>>>>> Add a marker to indicate that we're good to go with sending new requests
+>>>>>>>> and export it so that it can be referenced from icc.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>>>>> ---
+>>>>>>>>  drivers/clk/qcom/clk-smd-rpm.c   | 9 +++++++++
+>>>>>>>>  include/linux/soc/qcom/smd-rpm.h | 2 ++
+>>>>>>>>  2 files changed, 11 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>>> index 937cb1515968..482fe30ee6f0 100644
+>>>>>>>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>>>>>>>> @@ -151,6 +151,7 @@
+>>>>>>>>  #define to_clk_smd_rpm(_hw) container_of(_hw, struct clk_smd_rpm, hw)
+>>>>>>>>  
+>>>>>>>>  static struct qcom_smd_rpm *rpmcc_smd_rpm;
+>>>>>>>> +static bool smd_rpm_clk_scaling;
+>>>>>>>>  
+>>>>>>>>  struct clk_smd_rpm {
+>>>>>>>>  	const int rpm_res_type;
+>>>>>>>> @@ -385,6 +386,12 @@ static unsigned long clk_smd_rpm_recalc_rate(struct clk_hw *hw,
+>>>>>>>>  	return r->rate;
+>>>>>>>>  }
+>>>>>>>>  
+>>>>>>>> +bool qcom_smd_rpm_scaling_available(void)
+>>>>>>>> +{
+>>>>>>>> +	return smd_rpm_clk_scaling;
+>>>>>>>> +}
+>>>>>>>> +EXPORT_SYMBOL_GPL(qcom_smd_rpm_scaling_available);
+>>>>>>>> +
+>>>>>>>>  static int clk_smd_rpm_enable_scaling(void)
+>>>>>>>>  {
+>>>>>>>>  	int ret;
+>>>>>>>> @@ -410,6 +417,8 @@ static int clk_smd_rpm_enable_scaling(void)
+>>>>>>>>  		return ret;
+>>>>>>>>  	}
+>>>>>>>>  
+>>>>>>>> +	smd_rpm_clk_scaling = true;
+>>>>>>>> +
+>>>>>>>
+>>>>>>> If you move the platform_device_register_data(&rpdev->dev,
+>>>>>>> "icc_smd_rpm", ...) from drivers/soc/qcom/smd-rpm.c to here you can
+>>>>>>> avoid the race completely and drop this API. I think that would be
+>>>>>>> cleaner. And it will likely probe much faster because probe deferral
+>>>>>>> is slow. :)
+>>>>>> Sounds like an idea.. especially since it's pretty much the only
+>>>>>> dependency other than SMDRPM itself!
+>>>>> It sounds great, but to not break bisecting one has to:
+>>>>>
+>>>>> 1. change the registration in soc/smd-rpm to store rpm ptr in driver
+>>>>>    data, in addition to parent driver data
+>>>>>
+>>>>> 2. change icc/smd-rpm to use the device and not parent data
+>>>>>
+>>>>> 3. add a platform_device_register_data call in clk-smd-rpm that will
+>>>>>    always fail because the device is always registered
+>>>>>
+>>>>> 4. remove the registration from soc/smd-rpm
+>>>>>
+>>>>
+>>>> Logically the icc_smd_rpm device still fits better as child of
+>>>> smd-rpm and not clk-smd-rpm. So I would probably just continue
+>>>> registering it on the parent device from clk-smd-rpm.
+>>>> Then there are no changes necessary in icc_smd_rpm.
+>>>>
+>>>> You could use this. Both touched files are Bjorn-maintained so should be
+>>>> manageable to have it in one commit. (note: compile-tested only)
+>>>>
+>>>> Thanks,
+>>>> Stephan
+>>>>
+>>>> From a2610adb2551b01e76b9de8e4cbcc89853814a8f Mon Sep 17 00:00:00 2001
+>>>> From: Stephan Gerhold <stephan@gerhold.net>
+>>>> Date: Sat, 10 Jun 2023 21:19:48 +0200
+>>>> Subject: [PATCH] soc: qcom: smd-rpm: Move icc_smd_rpm registration to
+>>>>  clk-smd-rpm
+>>>>
+>>>> icc_smd_rpm will do bus clock votes itself rather than taking the
+>>>> unnecessary detour through the clock subsystem. However, it can only
+>>>> do that after the clocks have been handed off and scaling has been
+>>>> enabled in the RPM in clk-smd-rpm.
+>>>>
+>>>> Move the icc_smd_rpm registration from smd-rpm.c to clk-smd-rpm.c
+>>>> to avoid any possible races. icc_smd_rpm gets the driver data from
+>>>> the smd-rpm device, so still register the platform device on the
+>>>> smd-rpm parent device.
+>>>>
+>>>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+>>>> ---
+>>> Generally it looks good.. I'll give it a spin next week. One
+>>> thing below.
+>>>
+>>>>  drivers/clk/qcom/clk-smd-rpm.c | 21 +++++++++++++++++++++
+>>>>  drivers/soc/qcom/smd-rpm.c     | 23 +----------------------
+>>>>  2 files changed, 22 insertions(+), 22 deletions(-)
+>>>>
+>>>> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
+>>>> index e4de74b68797..91adb16889b3 100644
+>>>> --- a/drivers/clk/qcom/clk-smd-rpm.c
+>>>> +++ b/drivers/clk/qcom/clk-smd-rpm.c
+>>>> @@ -1302,12 +1302,20 @@ static struct clk_hw *qcom_smdrpm_clk_hw_get(struct of_phandle_args *clkspec,
+>>>>  	return desc->clks[idx] ? &desc->clks[idx]->hw : ERR_PTR(-ENOENT);
+>>>>  }
+>>>>  
+>>>> +static void rpm_smd_unregister_icc(void *data)
+>>>> +{
+>>>> +	struct platform_device *icc_pdev = data;
+>>>> +
+>>>> +	platform_device_unregister(icc_pdev);
+>>>> +}
+>>>> +
+>>>>  static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>>>  {
+>>>>  	int ret;
+>>>>  	size_t num_clks, i;
+>>>>  	struct clk_smd_rpm **rpm_smd_clks;
+>>>>  	const struct rpm_smd_clk_desc *desc;
+>>>> +	struct platform_device *icc_pdev;
+>>>>  
+>>>>  	rpmcc_smd_rpm = dev_get_drvdata(pdev->dev.parent);
+>>>>  	if (!rpmcc_smd_rpm) {
+>>>> @@ -1357,6 +1365,19 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
+>>>>  	if (ret)
+>>>>  		goto err;
+>>>>  
+>>>> +	icc_pdev = platform_device_register_data(pdev->dev.parent,
+>>>> +						 "icc_smd_rpm", -1, NULL, 0);
+>>>> +	if (IS_ERR(icc_pdev)) {
+>>>> +		dev_err(&pdev->dev, "Failed to register icc_smd_rpm device: %pE\n",
+>>>> +			icc_pdev);
+>>>> +		/* No need to unregister clocks because of this */
+>>>> +	} else {
+>>>> +		ret = devm_add_action_or_reset(&pdev->dev, rpm_smd_unregister_icc,
+>>>> +					       icc_pdev);
+>>>> +		if (ret)
+>>>> +			goto err;
+>>>> +	}
+>>>> +
+>>>>  	return 0;
+>>>>  err:
+>>>>  	dev_err(&pdev->dev, "Error registering SMD clock driver (%d)\n", ret);
+>>>> diff --git a/drivers/soc/qcom/smd-rpm.c b/drivers/soc/qcom/smd-rpm.c
+>>>> index 0c1aa809cc4e..427dd5392b82 100644
+>>>> --- a/drivers/soc/qcom/smd-rpm.c
+>>>> +++ b/drivers/soc/qcom/smd-rpm.c
+>>>> @@ -19,7 +19,6 @@
+>>>>  /**
+>>>>   * struct qcom_smd_rpm - state of the rpm device driver
+>>>>   * @rpm_channel:	reference to the smd channel
+>>>> - * @icc:		interconnect proxy device
+>>>>   * @dev:		rpm device
+>>>>   * @ack:		completion for acks
+>>>>   * @lock:		mutual exclusion around the send/complete pair
+>>>> @@ -27,7 +26,6 @@
+>>>>   */
+>>>>  struct qcom_smd_rpm {
+>>>>  	struct rpmsg_endpoint *rpm_channel;
+>>>> -	struct platform_device *icc;
+>>>>  	struct device *dev;
+>>>>  
+>>>>  	struct completion ack;
+>>>> @@ -197,7 +195,6 @@ static int qcom_smd_rpm_callback(struct rpmsg_device *rpdev,
+>>>>  static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>>>>  {
+>>>>  	struct qcom_smd_rpm *rpm;
+>>>> -	int ret;
+>>>>  
+>>>>  	rpm = devm_kzalloc(&rpdev->dev, sizeof(*rpm), GFP_KERNEL);
+>>>>  	if (!rpm)
+>>>> @@ -210,24 +207,7 @@ static int qcom_smd_rpm_probe(struct rpmsg_device *rpdev)
+>>>>  	rpm->rpm_channel = rpdev->ept;
+>>>>  	dev_set_drvdata(&rpdev->dev, rpm);
+>>>>  
+>>>> -	rpm->icc = platform_device_register_data(&rpdev->dev, "icc_smd_rpm", -1,
+>>>> -						 NULL, 0);
+>>>> -	if (IS_ERR(rpm->icc))
+>>>> -		return PTR_ERR(rpm->icc);
+>>>> -
+>>>> -	ret = of_platform_populate(rpdev->dev.of_node, NULL, NULL, &rpdev->dev);
+>>>> -	if (ret)
+>>>> -		platform_device_unregister(rpm->icc);
+>>>> -
+>>>> -	return ret;
+>>>> -}
+>>>> -
+>>>> -static void qcom_smd_rpm_remove(struct rpmsg_device *rpdev)
+>>>> -{
+>>>> -	struct qcom_smd_rpm *rpm = dev_get_drvdata(&rpdev->dev);
+>>>> -
+>>>> -	platform_device_unregister(rpm->icc);
+>>>> -	of_platform_depopulate(&rpdev->dev);
+>>>> +	return devm_of_platform_populate(&rpdev->dev);
+>>>>  }
+>>>>  
+>>>>  static const struct of_device_id qcom_smd_rpm_of_match[] = {
+>>>> @@ -256,7 +236,6 @@ MODULE_DEVICE_TABLE(of, qcom_smd_rpm_of_match);
+>>>>  
+>>>>  static struct rpmsg_driver qcom_smd_rpm_driver = {
+>>>>  	.probe = qcom_smd_rpm_probe,
+>>>> -	.remove = qcom_smd_rpm_remove,
+>>> This reaches over the removal of the icc registration, the depopulate
+>>> call should stay.
+>>>
+>>
+>> I switched the of_platform_populate() to devm_of_platform_populate(),
+>> that's why the remove callback is no longer necessary. It's a bit
+>> hidden, perhaps it would be enough to add to the commit message:
+>>
+>> "While at it, switch the remaining of_platform_populate() call to the
+>>  devm variant and remove the remove callback."
+>>
+>> Or maybe it should be split into two patches.
+> Gave it a spin, I think it ends up being worse if an IPA rpm clock is
+> consumed by one of the icc providers, and that's sadly the case
+> for almost all platforms (or supposed to be).. :/ Only qcm2290 doesn't
+> seem to care if we poke the network interface units with half the soc
+> off :P
+Actually it's more complex and that rings the same tons-of-probe-deferrals
+bell that we have to get rid of.. The icc_smd_rpm driver actually does
+probe faster with your patch, but that's not the case with the SoC icc
+provider driver which does probe later :/
 
-Thank you help to provide the ack flag.
-I have added it to the V3.
+Don't think either solution is perfect, but I'm willing to take your
+solution, as the one I proposed is a bit of a dead end for future
+improvements.
 
-Perry.
+Konrad
+> 
+> Konrad
+>>
+>> Thanks,
+>> Stephan
