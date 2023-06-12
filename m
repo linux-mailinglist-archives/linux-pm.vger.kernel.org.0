@@ -2,64 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFBE72CFC1
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 21:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A5772D070
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 22:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235872AbjFLTlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 15:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S232547AbjFLU1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 16:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbjFLTlO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 15:41:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2CF1E3;
-        Mon, 12 Jun 2023 12:41:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EB2662A34;
-        Mon, 12 Jun 2023 19:41:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD92C433D2;
-        Mon, 12 Jun 2023 19:41:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686598872;
-        bh=ypv+gyJwNwSUgPETR4NAO9nAIr4u13bdnbf1twzQM5U=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=bT+ELkhv4EygXW2ziAy5/A+P59C7eybbx9f4V1tMSpxgIaS72KfFmjWiAySCqgSDN
-         A7EcOgZjWttjdVn8AQJ5mTPi+/AQ8w3y9yJkG8foeu1jLkmpF/8+OiRdorR8DEZmHS
-         zWTDTNFDM9EI9zATgzXTPMVdjh2YePkkUeDY4vuh7dtEDPpXx10j1WIy+VoGH/uhMR
-         RmKIBCTys9bNNXSzxCQ4AicdIkVjq14H4sFXCW6g5mgWPVLgJGWS3VXQS3z1IbgnKY
-         UnELHXTvroXG5Wu78JvLbJ1OzZQpZFj5uo0NKC1Mzy+thEbHLTr8xfrRQnLQ56xFkR
-         tlEZAYJJEAAAw==
-Message-ID: <92f2e7260dd017154cbe5bc5590742a3.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230526-topic-smd_icc-v3-5-5fb7d39b874f@linaro.org>
-References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org> <20230526-topic-smd_icc-v3-5-5fb7d39b874f@linaro.org>
-Subject: Re: [PATCH v3 05/23] soc: qcom: smd-rpm: Move icc_smd_rpm registration to clk-smd-rpm
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        with ESMTP id S229604AbjFLU1d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 16:27:33 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8D210CE;
+        Mon, 12 Jun 2023 13:27:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686601648; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=dKK6kjE1B9fmBToDUA2Af/B1GpTk1veKlKpNTto1m4ynYjY0yFQkpmHseD//1KTuF0
+    r9qt1IUJAcvkx3nA/5EGZ3SmYITvXQbIXrcaL7N5wqeC30HL/FVhRzuJokBzfaxCMGWP
+    c8kZUWccP13DlGPpuTS7ldPeTYMgZZvs7oJWqJe/yKAHsdcAfTlcCyjv9s8YW9os4Jh5
+    tv8jLWaKSKoXgT6RO4NGZ95xU1SmE6PfxuNdrJg4plWx2aLiXF3Hsi3bpdjHLFJ9Q062
+    rLV3jPIs4H7gDeyus5aWcsi23ytqDr+pC50GJElzaXu+sXE3HuUn6mp3pYFIp8FXHVfP
+    Mf5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686601648;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+/8pzuF1RImyxQe66AcePgrM+A8lzFkbVzl6+XoBoOY=;
+    b=kBjyXkWOpnWADPjnl4OFtW/eMTVANOKXEuhK1gc/nXZQ5cVEZYRH0tsUGI9m8N9aWx
+    V4P0y3LA9CyRmA0AW5KOOkjZtFZIk4HNW7erxJLUf5nQ2774hTe9z6SC5BkBZYyawgKR
+    XtxZjm/bEBb1X8DeRpo9zVar6RudAuthqurfNbnNERFr3evKiyrJQf8I5btVI8mIJday
+    ofYbQAFxBnexKG5K1E9lU2SlITqNxTDPKrohO2laybB7Y4VEEhfBrUAAkpnogvUKK7I7
+    Aqd/5pwv/qh/YHwsC37LwQxbBU1YgTAQezoCvnjh3JPyuDF/6XI1M+ch49eKcbLQVPZz
+    cvdQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686601648;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+/8pzuF1RImyxQe66AcePgrM+A8lzFkbVzl6+XoBoOY=;
+    b=pKjldxal4PRRIJ+9ul9M6EeretRV+TYTtRw3kcITbSUonTvsSUVZLxC4W/ZFAG92A/
+    x+7AnDxKqmo2EfKPVSQ/5shuGvkorvViLkn9ZSI0E2GWiP61n0YkBYfxdR7I+4BgC1NL
+    yVCEE0KmNJX6LKGHOkfRO0ZkiUTGLt0gpdnMg1TF0WFpL1QiYNGfWUGL2mGoytf+JAGx
+    YPbugP++A1FXH5rpWzjEHmGpWccK31gf2QTyBXJn45kuOmdqeoI9xGgfW/3rpcv+pasb
+    eQp3fuNnz+ut1tz3aggEg+2ysNCtiM+i1cFENZi9BvfbNOqMGVw1gQBtzhKfSgL6p7M8
+    wi3A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686601648;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=+/8pzuF1RImyxQe66AcePgrM+A8lzFkbVzl6+XoBoOY=;
+    b=PL8zx/bkOEbcc6BWEnW8D/sGpkdcfIjr/oBX8siNMwvdaso5zth69I7c1G6y1EaSya
+    HrQou0LEwrGk7Ha5NmBQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8peN1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.5.3 DYNA|AUTH)
+    with ESMTPSA id Z82ec2z5CKRSVyQ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 12 Jun 2023 22:27:28 +0200 (CEST)
+Date:   Mon, 12 Jun 2023 22:27:20 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 12 Jun 2023 12:41:10 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 07/23] interconnect: qcom: icc-rpm: Allow negative QoS
+ offset
+Message-ID: <ZId_qIAL8dvJOwai@gerhold.net>
+References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
+ <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,22 +99,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Konrad Dybcio (2023-06-12 11:24:22)
-> From: Stephan Gerhold <stephan@gerhold.net>
->=20
-> icc_smd_rpm will do bus clock votes itself rather than taking the
-> unnecessary detour through the clock subsystem. However, it can only
-> do that after the clocks have been handed off and scaling has been
-> enabled in the RPM in clk-smd-rpm.
->=20
-> Move the icc_smd_rpm registration from smd-rpm.c to clk-smd-rpm.c
-> to avoid any possible races. icc_smd_rpm gets the driver data from
-> the smd-rpm device, so still register the platform device on the
-> smd-rpm parent device.
->=20
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> [Konrad: remove unrelated cleanups]
+On Mon, Jun 12, 2023 at 08:24:24PM +0200, Konrad Dybcio wrote:
+> In some very very very very unfortunate cases, the correct offset of
+> the QoS registers will be.. negative. One such case is MSM8998, where
+> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
+> take into account with the register calculation, making the actual
+> BIMC node start at what-would-be-the-BIMC-base+0x300.
+> 
+> In order to keep the calculation code sane, the simplest - however
+> ugly it may be - solution is to allow the offset to be negative.
+> 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+I'm a bit confused why this patch is part of this series. It doesn't
+seem to be directly related.
+
+Can you send it as part of the series that adds the MSM8998 interconnect
+driver?
+
+Thanks,
+Stephan
+
+> ---
+>  drivers/interconnect/qcom/icc-rpm.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+> index d2c04c400cad..ba840a436cc0 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.h
+> +++ b/drivers/interconnect/qcom/icc-rpm.h
+> @@ -29,10 +29,10 @@ enum qcom_icc_type {
+>   * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
+>   * @type: the ICC provider type
+>   * @regmap: regmap for QoS registers read/write access
+> - * @qos_offset: offset to QoS registers
+>   * @bus_clk_rate: bus clock rate in Hz
+>   * @bus_clks: the clk_bulk_data table of bus clocks
+>   * @intf_clks: a clk_bulk_data array of interface clocks
+> + * @qos_offset: offset to QoS registers
+>   * @keep_alive: whether to always keep a minimum vote on the bus clocks
+>   * @is_on: whether the bus is powered on
+>   */
+> @@ -42,7 +42,7 @@ struct qcom_icc_provider {
+>  	int num_intf_clks;
+>  	enum qcom_icc_type type;
+>  	struct regmap *regmap;
+> -	unsigned int qos_offset;
+> +	int qos_offset;
+>  	u64 bus_clk_rate[NUM_BUS_CLKS];
+>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
+>  	struct clk_bulk_data *intf_clks;
+> @@ -108,7 +108,7 @@ struct qcom_icc_desc {
+>  	bool no_clk_scaling;
+>  	enum qcom_icc_type type;
+>  	const struct regmap_config *regmap_cfg;
+> -	unsigned int qos_offset;
+> +	int qos_offset;
+>  };
+>  
+>  /* Valid for all bus types */
+> 
+> -- 
+> 2.41.0
+> 
