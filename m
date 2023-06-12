@@ -2,70 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F41C72B8B8
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 09:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B56ED72BA62
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 10:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjFLHiN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 03:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S233978AbjFLIZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 04:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234634AbjFLHiL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 03:38:11 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278B10E6
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 00:37:21 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-56cf6f4211aso19314937b3.1
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 00:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686555220; x=1689147220;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZM8cSNzatRt7iVDLhS9loK+hrwWt39XACb17rH3wM/U=;
-        b=A5iqi7eDMfsR11wBrVQ3xDUG4wrXOFIb8FWkS/iuiJET3uBbwXH0qEtFkGf88b0BQQ
-         FhKKDxy77SoLu/xE/Fa9xuh9kBwOjRSEtglgEdKL/Ii+O0AydAJCrSkjG/E2HF2ZFKyO
-         HVKACR/TchHmdPZiMTKdgxuFGKjrODjxOR7IoChG/ZPoaXx/8Q1PW6qC3fSHRO7u+yUl
-         2oaTalH715J88KZzzjYX2H4u7gwtD/ejvge28Y+rFq0m45GUkLgIEv9jMUXjquqdM5+J
-         dWrBk/weo0fjhbAy/lVEIBsk6eaPNdMRq6uZkypzWMXV2cCh4NncxRO1mBTus39TLRZ/
-         Gp4w==
+        with ESMTP id S232239AbjFLIYK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 04:24:10 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F039C2108
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 01:23:56 -0700 (PDT)
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 004C23F484
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 07:37:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1686555429;
+        bh=SARDuX0ozM1dSrw1r+XdZ1aSpyhQuZmUUG6i83rAkzc=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=dv7qEN2/+WBE3GlPnw4MQ3232hxQg4S0dQyNzEJPE6PQFKPP7962beOG33up0ALs8
+         /Ap/VIWHJUUla0gxKWN4OkiT2+R2OxiPkTu0v66NuNNXT+Mmbho+ARfL4/d7KiS8Ae
+         34QqowCwT1HW35PR1fU8YhsOeqnjPmHUDgc0S5VlbJ9b44WQsO83EdOqBvbVK7BRdy
+         Zf+E7KNmRlrgNuq46leC58Ix/uY0k/neBMAh2A29WQ5EfK//sxxDd5gbQiyMgNeGgm
+         fSe18FZgPMDD7mwA4SwbzI178qhXt07DF6XncR2piZsfSCMjaNeUcHpRtI4dCwl6C7
+         sVrjltHaT779A==
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-528ab71c95cso1716337a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 00:37:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686555220; x=1689147220;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZM8cSNzatRt7iVDLhS9loK+hrwWt39XACb17rH3wM/U=;
-        b=QtWXrKT9sqY76aEVho3MlVXUgerEjKx52pMDKcCCDKBk0RbQak5Irs2loUThjhToqW
-         4iq/UCcaW12AcZ/Hxl2xt/8bQ6kWzbp28DqhA781iDlC4K+dUYXgh4wqmsJLNE8t+aoQ
-         Ov5M4jpgCpUz67xS0pglY+de8KKIoipF3QUZdNJQpvrZfrSHFJimHo7L6NJVSUx7//wH
-         YX+fFP/aSqzwv9uRBnN0xuEFq6Ty8KCrkkcz0hp9iRKxZmNyFyiMWu1iziK5G2fMk5MM
-         E02twnpl54ly++CM/3jqF1nMznLGnTiVvDAv6N21G+Fi87koUxP34HGWjx8yqU/K0w88
-         pIfg==
-X-Gm-Message-State: AC+VfDwwj2ahUfXP07tcx9BQ1Y1lJTxA3damuLQ1eMfcQfyxa4PPV+NT
-        N0BxeULyhX7Z4pSF6E02Ut94ihfaKKxdjH2E034=
-X-Google-Smtp-Source: ACHHUZ6WULGFh7chtEHb1ZkZQmmJTBWrb+YD5bXXWBH3s//Zr0f4h/gIzkRgc7zjKizyLWEJh8ckSg==
-X-Received: by 2002:a05:6a20:a20d:b0:10b:d70d:f96b with SMTP id u13-20020a056a20a20d00b0010bd70df96bmr6884057pzk.3.1686554790361;
-        Mon, 12 Jun 2023 00:26:30 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id j1-20020aa78d01000000b0065418efa5ebsm6259308pfe.155.2023.06.12.00.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 00:26:29 -0700 (PDT)
-Date:   Mon, 12 Jun 2023 12:56:27 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Perry Yuan <perry.yuan@amd.com>
-Cc:     rafael.j.wysocki@intel.com, Ray.Huang@amd.com,
-        Mario.Limonciello@amd.com, Deepak.Sharma@amd.com,
-        Wyes.Karny@amd.com, gautham.shenoy@amd.com, Sunpeng.Li@amd.com,
-        Xinmei.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: amd-pstate: Set default governor to schedutil
-Message-ID: <20230612072627.5wzmsfp64jho3bdj@vireshk-i7>
-References: <20230612030321.3097627-1-perry.yuan@amd.com>
+        d=1e100.net; s=20221208; t=1686555427; x=1689147427;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SARDuX0ozM1dSrw1r+XdZ1aSpyhQuZmUUG6i83rAkzc=;
+        b=LVtz0waBbYhLMG+uYKsd/S9qMQclOn12oufBJh+jgY0gEa2eYGPMCHc/VtykY0reX3
+         MgK7xkNbu4QPqGCRlfg2MoqFvmbalDq6kzltugaSF82VDApWmPN5vo3JyZ2qVeQKfDB2
+         NDihRQQuEokcpg6tJkmYSvU0jYuVnCuhb+8QZmna+PT7jo7qCiDDt7KXBPX6Zyqp2fCw
+         rnvlVoIuXDY6eFyj5nYurWlBJB+pa3+ktX2ir8c3XN77tivAC+Fy0ILr90U6vfU7uJ8Z
+         8DOS6kT5N1f49OUBAMNSx2olq4Mgil1PeBPbCz0Z7i5YKxu8s7PLNSG369QMfujbx9pV
+         2AHQ==
+X-Gm-Message-State: AC+VfDy186fOToh4329/E/hRobsjxTZ60PN9rK5PnEqDYpRNM7WGGz1n
+        XE8iLWuFRwTClu2/BayKx4a96z4ei+cewkp3EHn9AT548Ps6N0vmO/fkmInSE8LGoDhqbPXGnU7
+        LdH7/WERXp6694YcYkOfaMDOUquu35Aaa2+rT4VRdowpIj/ch42ud
+X-Received: by 2002:a17:90a:1a0a:b0:258:996c:a2e8 with SMTP id 10-20020a17090a1a0a00b00258996ca2e8mr7314697pjk.5.1686555427237;
+        Mon, 12 Jun 2023 00:37:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Yj42CeU0uWY/ySQzUq50P4dnzJCgR3Qa5gLWoMOBy2SUVIWUXgk6mm5OGuSpj2WelHyVYhxK439rub4Zew/w=
+X-Received: by 2002:a17:90a:1a0a:b0:258:996c:a2e8 with SMTP id
+ 10-20020a17090a1a0a00b00258996ca2e8mr7314672pjk.5.1686555426671; Mon, 12 Jun
+ 2023 00:37:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230612030321.3097627-1-perry.yuan@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com> <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com> <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <4005a768-9e45-0707-509d-98ce0d2769bd@kernel.org> <0505654c-e487-6b91-57cf-fa7996f5c738@suse.de>
+ <6957a93c-b933-9b08-2f9f-901c4782cd40@kernel.org>
+In-Reply-To: <6957a93c-b933-9b08-2f9f-901c4782cd40@kernel.org>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Mon, 12 Jun 2023 15:36:55 +0800
+Message-ID: <CAAd53p5CsAAX5G1J2WH5N5JT5dZB_BD2AW8WL-S=pHZtGXr1sw@mail.gmail.com>
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,39 +103,120 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-06-23, 23:03, Perry Yuan wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> The Kconfig currently defaults the governor to schedutil on x86_64
-> only when intel-pstate and SMP have been selected.
-> 
-> If the kernel is built only with amd-pstate, the default governor
-> should also be schedutil.
-> 
-> Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> Reviewed-by: Leo Li <sunpeng.li@amd.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Tested-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/cpufreq/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-> index 2c839bd2b051..a1c51abddbc5 100644
-> --- a/drivers/cpufreq/Kconfig
-> +++ b/drivers/cpufreq/Kconfig
-> @@ -38,7 +38,7 @@ choice
->  	prompt "Default CPUFreq governor"
->  	default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
->  	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
-> -	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
-> +	default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
->  	default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
->  	help
->  	  This option sets which CPUFreq governor shall be loaded at
+On Mon, Jun 12, 2023 at 3:22=E2=80=AFPM Damien Le Moal <dlemoal@kernel.org>=
+ wrote:
+>
+> On 6/12/23 15:09, Hannes Reinecke wrote:
+> > On 6/12/23 05:09, Damien Le Moal wrote:
+> >> On 6/11/23 00:03, Bart Van Assche wrote:
+> >>> On 6/10/23 06:27, Bagas Sanjaya wrote:
+> >>>> On 6/10/23 15:55, Pavel Machek wrote:
+> >>>>>>> #regzbot introduced: v5.0..v6.4-rc5 https://bugzilla.kernel.org/s=
+how_bug.cgi?id=3D217530
+> >>>>>>> #regzbot title: Waking up from resume locks up on SCSI CD/DVD dri=
+ve
+> >>>>>>>
+> >>>>>> The reporter had found the culprit (via bisection), so:
+> >>>>>>
+> >>>>>> #regzbot introduced: a19a93e4c6a98c
+> >>>>> Maybe cc the authors of that commit?
+> >>>>
+> >>>> Ah! I forgot to do that! Thanks anyway.
+> >>>
+> >>> Hi Damien,
+> >>>
+> >>> Why does the ATA code call scsi_rescan_device() before system resume =
+has
+> >>> finished? Would ATA devices still work with the patch below applied?
+> >>
+> >> I do not know the PM code well at all, need to dig into it. But your p=
+atch
+> >> worries me as it seems it would prevent rescan of the device on a resu=
+me, which
+> >> can be an issue if the device has changed.
+> >>
+> >> I am not yet 100% clear on the root cause for this, but I think it com=
+es from
+> >> the fact that ata_port_pm_resume() runs before the sci device resume i=
+s done, so
+> >> with scsi_dev->power.is_suspended still true. And ata_port_pm_resume()=
+ calls
+> >> ata_port_resume_async() which triggers EH (which will do reset + resca=
+n)
+> >> asynchronously. So it looks like we have scsi device resume and libata=
+ EH for
+> >> rescan fighting each others for the scan mutex and device lock, leadin=
+g to deadlock.
+> >>
+> >> Trying to recreate this issue now to confirm and debug further. But I =
+suspect
+> >> the solution to this may be best implemented in libata, not in scsi.
+> >> This looks definitely related to this thread:
+> >>
+> >> https://lore.kernel.org/linux-scsi/7b553268-69d3-913a-f9de-28f8d45bdb1=
+e@acm.org/
+> >>
+> >> Similaraly to your comment on that thread, having to look at
+> >> dev->power.is_suspended is not ideal I think. What we need is to have =
+ata and
+> >> scsi pm resume be synchronized, but I am not yet 100% clear on the scs=
+i layer side.
+> >>
+> > Which is my feeling, too.
+> > libata runs rescan as part of the device discovery, so really it will
+> > run after resume. And consequently resume really cannot wait for rescan
+> > to finish.
+> >
+> > What I would be looking at is to decouple resume from libata device
+> > rescan, and have resume to complete before libata EH runs.
+>
+> That is the case now, for the ata port at least, even though that is not =
+super
+> explicit, and not reliable. See ata_port_pm_resume(): I think that the ca=
+ll to
+> EH in ata_port_pm_resume() -> ata_port_resume_async() -> ata_port_request=
+_pm()
+> -> ata_port_schedule_eh() should instead use a sync resume, leading to a =
+sync EH
+> call.
+>
+> That EH execution essentially does ata_eh_handle_port_resume(), which cal=
+ls into
+> the adapter resume operation. That in itself does not do much beside some
+> registers accesses to wakeup the port. There should be no issues doing th=
+at
+> synchronously.
+>
+> The problem is that after that is done, ata EH calls ata_std_error_handle=
+r() ->
+> ata_do_eh() -> ata_eh_recover() -> ata_eh_revalidate_and_attach() ->
+> schedule_work(&(ap->scsi_rescan_task)). And the rescan work calls
+> scsi_rescan_device() (yet in another context than EH) which causes the pr=
+oblem
+> when the scsi disk device has not been resumed yet (dev->power_is_suspend=
+ed
+> still true).
+>
+> So it really looks like the solution should be to have ata_scsi_dev_resca=
+n()
+> wait for the scsi device to resume first, but not sure how to do that wit=
+h the
+> pm API. Digging...
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Probably use dpm_wait_for_children()? Right now it's an internal PM API.
 
--- 
-viresh
+Rafael,
+What do you think?
+
+Kai-Heng
+
+>
+> >
+> > Cheers,
+> >
+> > Hannes
+>
+> --
+> Damien Le Moal
+> Western Digital Research
+>
