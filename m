@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F6072CE60
+	by mail.lfdr.de (Postfix) with ESMTP id EADAE72CE63
 	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 20:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237650AbjFLSa5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 14:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44662 "EHLO
+        id S235459AbjFLSa6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 14:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237714AbjFLSYu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 14:24:50 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9DCE69
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 11:24:49 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so5516629e87.1
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 11:24:49 -0700 (PDT)
+        with ESMTP id S237732AbjFLSYx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 14:24:53 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8FDE6F
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 11:24:50 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f62b552751so5451759e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 11:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686594287; x=1689186287;
+        d=linaro.org; s=google; t=1686594289; x=1689186289;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FsjjWN/3ExrWWr4Y2ppq6JQGmoO1NTS4jkjNM8tw+cY=;
-        b=K54KstXCd6kINZFUtZ3Smsy8fneDRssP9Duv/nwy9dWQ1mXbMw0Q3xn6fqjKVhyoRW
-         UbP7QxyL4lzL2aiI4funWx4hQgIvgF1V6h3uBe2mC0aYxzG3AGgCocZpqXGrSZmvs9LY
-         vlMIs6saA8UijChiRSWqs/UGCdQtuvgjdp4N7XXAEEmHQ7fUWyYSJu95z3E05avM+Imy
-         KQgWoI13E96ZiKo6Kc+aAtb4KPHSdxxhMufzksEc272v5eA0/AAQLtbSnJPbIuZqGU8m
-         dN3+gcPe3Wt0DSJhacABEX51q8dZWDNty7clvVR6d45SQ2zlBRZj5dp2WTPyuIlvDa2A
-         Qq2A==
+        bh=6yqoaw1SJxAVA4zfoNJA8WPzYaF2aeMvPE6QC7WXXuk=;
+        b=HXx7O95G/RxZlr/mrQToR+gmTUHWaPGJXfTN9fxyN8X6+pDD5XFk7ZBOdetoZwk2GY
+         C701tdr+7Pnbadb50ClG5RbxTUX7K0cT7ieko+Thqfjxi25oyUbOqsBAvLg2Mvk5SCR0
+         17vmvdnynmfojyUzQcYbftj9KbksPukOyZPq+Aru6WQrxkHF+WwCmbCYCtw1ndVWz7Nk
+         Q+fnoDKK3TMoMPqB7Hjwenqh+rsTK6K1kiwaeJFwQ+m/gE/UYqhpEd0m8/NHBUjgTfyL
+         /rABWTTFXBfA9NEce6Ge0F3QuGq7Y2UvnkFKNMGx5C4fjDbsXKqxo91VUg+VVTIfedwB
+         T9mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686594287; x=1689186287;
+        d=1e100.net; s=20221208; t=1686594289; x=1689186289;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FsjjWN/3ExrWWr4Y2ppq6JQGmoO1NTS4jkjNM8tw+cY=;
-        b=fYpdHH0us85QZDZAhlNAW5gQ9eQUyl+UmdL6JjC4IGiaEpeakY9tMU680wAJxL7HaM
-         d+yz6TZf+wNIar7tY7AZp8wNjfutCbBt5KEUe2HQ6NHxh4/AiYbz3PEAkY6Y9100lNAO
-         kLoMU0la0jD+4125S8bhshDdI6eByRYkgHQS50Iu4GtrNs1HBD4c31lbv2U6r/Skszax
-         I7vINTe+2Q3LY9WbzkEydA3301VjOof7bOn0K/Pubr8tTvOZVjW6oyYEqDZ/6IA6hqAm
-         jerInuhceL3L5yNOGeksXWpRZr5fAg6PDLYfCXWJ4PMYFEibEiKydqvqBNHMYFWEOff3
-         lyMQ==
-X-Gm-Message-State: AC+VfDxgyjZdkk7UoSfuMT+sNSexSzoEtEskgZQwpkg6P0Ghf5E5cMD1
-        wmDAdIcU3vZTyBnY0Fpev0VJcg==
-X-Google-Smtp-Source: ACHHUZ5gh2WUgM3aKwlGzRs6m3JPDYp0MPUlhlGg74/eA25lZuz77rG1nbz0YBbUX9rHLBusN3lBYQ==
-X-Received: by 2002:a19:9101:0:b0:4f6:1863:6b47 with SMTP id t1-20020a199101000000b004f618636b47mr4603716lfd.42.1686594287470;
-        Mon, 12 Jun 2023 11:24:47 -0700 (PDT)
+        bh=6yqoaw1SJxAVA4zfoNJA8WPzYaF2aeMvPE6QC7WXXuk=;
+        b=dFWUdKy2N2XFlGXVixP5k07tMp4x/KzBLElE7buixUX2BU51nzMPFYDDqD/s2DW+cO
+         n1df0sRneo3ppfs7qpju+f+12/B+ZUbytVWu01/Qm4Pq0+2Xx2ObuD+1ywGOhroRKgKZ
+         36yFZBKOxN7NzYJNKR2xIYYhfmF2dt9aoSxuLroUzBU38XpR/ArCm7Z7Y0niKUKbOpg+
+         FJoabCi5V71OvI2U/vpfOzQKudHDJKnajF36er6mOCt874mA4bkkouHW0xjwRF1AuJ6C
+         2shpWE0xUVaQpqpRsjOgXJveU5oLvFhqcEGBTN1d1b6c1/PTq92VEYiwvh17P2qJyGIT
+         xV1w==
+X-Gm-Message-State: AC+VfDxJoFlFVFzNIDc/C5PSRjq5B0iclvVTnJFK6+tRs2SQ8+xxIFDO
+        Fk9D0mN0ImK9/upHny4vWOwcrw==
+X-Google-Smtp-Source: ACHHUZ7QVCtnOpRHt45jv+/FBKpGTq/JjWgwl8IzJy/lgsNd4zuzY1U6PAcArV5GUzuInlXKlImvWQ==
+X-Received: by 2002:a19:4412:0:b0:4f3:872d:10ff with SMTP id r18-20020a194412000000b004f3872d10ffmr3873606lfa.64.1686594288899;
+        Mon, 12 Jun 2023 11:24:48 -0700 (PDT)
 Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id v24-20020ac25938000000b004f64073a252sm1502035lfi.96.2023.06.12.11.24.46
+        by smtp.gmail.com with ESMTPSA id v24-20020ac25938000000b004f64073a252sm1502035lfi.96.2023.06.12.11.24.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 11:24:47 -0700 (PDT)
+        Mon, 12 Jun 2023 11:24:48 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 12 Jun 2023 20:24:24 +0200
-Subject: [PATCH v3 07/23] interconnect: qcom: icc-rpm: Allow negative QoS
- offset
+Date:   Mon, 12 Jun 2023 20:24:25 +0200
+Subject: [PATCH v3 08/23] interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
+Message-Id: <20230526-topic-smd_icc-v3-8-5fb7d39b874f@linaro.org>
 References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
 In-Reply-To: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -73,18 +72,19 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686594276; l=1945;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686594276; l=5451;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=rgTDM+URKWJ36SFNnllBnyQwiFYuxKTtmuTacUJ+85U=;
- b=7UiBzS0n4xsdfHTqQtldUSL1Fr4X4ozDE1+IvyrfLr7nbeJycdVlDkurmHFJcs6oCBEdTQKJS
- fsyt6fTKUY8DDiVa5bFEWu8qEZXRBe/GT8V7EuZ9RnxlbiJiTJftXed
+ bh=byYAlps9wH1OSJiblDOBqmeTnt9HlHHvwOPwDsuq8eU=;
+ b=I+JaIJ0OO3wATvn/WbOE5vZyifDRhakulgD5utYH8IUJJb37PWyxiWYbJcxxhbc+mEubpEaxC
+ tJYhhXuRjnNBOSC11lMB/zedkTjSZHFJxX/+X4WecOL/aCZmh/TWH4u
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,54 +92,177 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In some very very very very unfortunate cases, the correct offset of
-the QoS registers will be.. negative. One such case is MSM8998, where
-The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
-take into account with the register calculation, making the actual
-BIMC node start at what-would-be-the-BIMC-base+0x300.
+smd-rpm.h is not very useful as-is and both files are always included
+anyway.. Combine them.
 
-In order to keep the calculation code sane, the simplest - however
-ugly it may be - solution is to allow the offset to be negative.
-
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/interconnect/qcom/icc-rpm.c |  1 -
+ drivers/interconnect/qcom/icc-rpm.h |  5 +++++
+ drivers/interconnect/qcom/msm8916.c |  1 -
+ drivers/interconnect/qcom/msm8939.c |  1 -
+ drivers/interconnect/qcom/msm8974.c |  2 +-
+ drivers/interconnect/qcom/msm8996.c |  1 -
+ drivers/interconnect/qcom/qcm2290.c |  1 -
+ drivers/interconnect/qcom/qcs404.c  |  1 -
+ drivers/interconnect/qcom/sdm660.c  |  1 -
+ drivers/interconnect/qcom/smd-rpm.c |  2 +-
+ drivers/interconnect/qcom/smd-rpm.h | 15 ---------------
+ 11 files changed, 7 insertions(+), 24 deletions(-)
 
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index 863e8ba1daa2..b8ecf9538ab9 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -14,7 +14,6 @@
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+-#include "smd-rpm.h"
+ #include "icc-common.h"
+ #include "icc-rpm.h"
+ 
 diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index d2c04c400cad..ba840a436cc0 100644
+index ba840a436cc0..9b4ea4e39b9f 100644
 --- a/drivers/interconnect/qcom/icc-rpm.h
 +++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -29,10 +29,10 @@ enum qcom_icc_type {
-  * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
-  * @type: the ICC provider type
-  * @regmap: regmap for QoS registers read/write access
-- * @qos_offset: offset to QoS registers
-  * @bus_clk_rate: bus clock rate in Hz
-  * @bus_clks: the clk_bulk_data table of bus clocks
-  * @intf_clks: a clk_bulk_data array of interface clocks
-+ * @qos_offset: offset to QoS registers
-  * @keep_alive: whether to always keep a minimum vote on the bus clocks
-  * @is_on: whether the bus is powered on
-  */
-@@ -42,7 +42,7 @@ struct qcom_icc_provider {
- 	int num_intf_clks;
- 	enum qcom_icc_type type;
- 	struct regmap *regmap;
--	unsigned int qos_offset;
-+	int qos_offset;
- 	u64 bus_clk_rate[NUM_BUS_CLKS];
- 	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
- 	struct clk_bulk_data *intf_clks;
-@@ -108,7 +108,7 @@ struct qcom_icc_desc {
- 	bool no_clk_scaling;
- 	enum qcom_icc_type type;
- 	const struct regmap_config *regmap_cfg;
--	unsigned int qos_offset;
-+	int qos_offset;
- };
+@@ -6,6 +6,8 @@
+ #ifndef __DRIVERS_INTERCONNECT_QCOM_ICC_RPM_H
+ #define __DRIVERS_INTERCONNECT_QCOM_ICC_RPM_H
  
- /* Valid for all bus types */
++#include <linux/soc/qcom/smd-rpm.h>
++
+ #include <dt-bindings/interconnect/qcom,icc.h>
+ 
+ #define RPM_BUS_MASTER_REQ	0x73616d62
+@@ -121,4 +123,7 @@ enum qos_mode {
+ int qnoc_probe(struct platform_device *pdev);
+ int qnoc_remove(struct platform_device *pdev);
+ 
++bool qcom_icc_rpm_smd_available(void);
++int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val);
++
+ #endif
+diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+index 5c4ba2f37c8e..196b05879896 100644
+--- a/drivers/interconnect/qcom/msm8916.c
++++ b/drivers/interconnect/qcom/msm8916.c
+@@ -15,7 +15,6 @@
+ 
+ #include <dt-bindings/interconnect/qcom,msm8916.h>
+ 
+-#include "smd-rpm.h"
+ #include "icc-rpm.h"
+ 
+ enum {
+diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
+index caf0aefad668..639566dce45a 100644
+--- a/drivers/interconnect/qcom/msm8939.c
++++ b/drivers/interconnect/qcom/msm8939.c
+@@ -16,7 +16,6 @@
+ 
+ #include <dt-bindings/interconnect/qcom,msm8939.h>
+ 
+-#include "smd-rpm.h"
+ #include "icc-rpm.h"
+ 
+ enum {
+diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
+index 1828deaca443..968162213d40 100644
+--- a/drivers/interconnect/qcom/msm8974.c
++++ b/drivers/interconnect/qcom/msm8974.c
+@@ -38,7 +38,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+-#include "smd-rpm.h"
++#include "icc-rpm.h"
+ 
+ enum {
+ 	MSM8974_BIMC_MAS_AMPSS_M0 = 1,
+diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+index 20340fb62fe6..1f7e88a37acd 100644
+--- a/drivers/interconnect/qcom/msm8996.c
++++ b/drivers/interconnect/qcom/msm8996.c
+@@ -18,7 +18,6 @@
+ #include <dt-bindings/interconnect/qcom,msm8996.h>
+ 
+ #include "icc-rpm.h"
+-#include "smd-rpm.h"
+ #include "msm8996.h"
+ 
+ static const char * const mm_intf_clocks[] = {
+diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
+index a29cdb4fac03..cb636e67a5a4 100644
+--- a/drivers/interconnect/qcom/qcm2290.c
++++ b/drivers/interconnect/qcom/qcm2290.c
+@@ -19,7 +19,6 @@
+ #include <linux/slab.h>
+ 
+ #include "icc-rpm.h"
+-#include "smd-rpm.h"
+ 
+ enum {
+ 	QCM2290_MASTER_APPSS_PROC = 1,
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index fae155344332..938283ddd0e3 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -13,7 +13,6 @@
+ #include <linux/of_device.h>
+ 
+ 
+-#include "smd-rpm.h"
+ #include "icc-rpm.h"
+ 
+ enum {
+diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
+index 7ffaf70d62d3..003fc7d110a7 100644
+--- a/drivers/interconnect/qcom/sdm660.c
++++ b/drivers/interconnect/qcom/sdm660.c
+@@ -17,7 +17,6 @@
+ #include <linux/slab.h>
+ 
+ #include "icc-rpm.h"
+-#include "smd-rpm.h"
+ 
+ enum {
+ 	SDM660_MASTER_IPA = 1,
+diff --git a/drivers/interconnect/qcom/smd-rpm.c b/drivers/interconnect/qcom/smd-rpm.c
+index dc8ff8d133a9..b0183262ba66 100644
+--- a/drivers/interconnect/qcom/smd-rpm.c
++++ b/drivers/interconnect/qcom/smd-rpm.c
+@@ -13,7 +13,7 @@
+ #include <linux/platform_device.h>
+ #include <linux/soc/qcom/smd-rpm.h>
+ 
+-#include "smd-rpm.h"
++#include "icc-rpm.h"
+ 
+ #define RPM_KEY_BW		0x00007762
+ 
+diff --git a/drivers/interconnect/qcom/smd-rpm.h b/drivers/interconnect/qcom/smd-rpm.h
+deleted file mode 100644
+index ca9d0327b8ac..000000000000
+--- a/drivers/interconnect/qcom/smd-rpm.h
++++ /dev/null
+@@ -1,15 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * Copyright (c) 2019, Linaro Ltd.
+- * Author: Georgi Djakov <georgi.djakov@linaro.org>
+- */
+-
+-#ifndef __DRIVERS_INTERCONNECT_QCOM_SMD_RPM_H
+-#define __DRIVERS_INTERCONNECT_QCOM_SMD_RPM_H
+-
+-#include <linux/soc/qcom/smd-rpm.h>
+-
+-bool qcom_icc_rpm_smd_available(void);
+-int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val);
+-
+-#endif
 
 -- 
 2.41.0
