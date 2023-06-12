@@ -2,117 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1B9772CD2B
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 19:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB9672CD34
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 19:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235027AbjFLRrB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 12 Jun 2023 13:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52284 "EHLO
+        id S235962AbjFLRuh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 12 Jun 2023 13:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbjFLRrA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 13:47:00 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1F298;
-        Mon, 12 Jun 2023 10:46:59 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-974604c1394so128467166b.0;
-        Mon, 12 Jun 2023 10:46:58 -0700 (PDT)
+        with ESMTP id S234475AbjFLRug (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 13:50:36 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D8A1;
+        Mon, 12 Jun 2023 10:50:32 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9787d11a410so98279666b.0;
+        Mon, 12 Jun 2023 10:50:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686592017; x=1689184017;
+        d=1e100.net; s=20221208; t=1686592231; x=1689184231;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cjJbSwslWkQldlYMFCzjVzvCkhaWvNh1QgWklkyhORc=;
-        b=bdYQk16wd1vJ8w4HlCbcCaGXJh4Avvsh3VbJDzsAzx6djTLFt94/Na8nZc8x93hu70
-         bcWg8nS5b6K4L+x8/5c1vcDKsl9vcuicv0BMDNwYJfcJcurbiXM8v27cMVNkck8jtHYH
-         VTqsj7oeJnyr4hnc7KxGHFCrU+d01ocpT8ByGbF+6+iV1S2deaBvKqWgZ4l7lICsi7nu
-         JRYmXInl7Hxv7tdOydMKJLPnRG+UEK57eEFrPHPfQtwSHHIZYIPYNVxJEc7l0aqLfSxZ
-         ElEyhCVDDFQWqXxKqY6zaYjMZ8fQJedgwWHbICU4xI+8hlqZVU6Dk2/x1mhOwrg67rcg
-         is9g==
-X-Gm-Message-State: AC+VfDxQgjPlvMNfx/LUXTZ+199OvFQLrCKVhzsS50PjzPdM7LKcbqpg
-        yLf47uqIjDb1UiGR0SdEtMizle+qReZTbXXeeDY=
-X-Google-Smtp-Source: ACHHUZ4WB6ovXzy+ZcFdfAJDvy8rRi41eejRTXep9+in6f8BE0dfI8JEVZNzXbr8LL9mWN9CMaDtLcAqNmH5DzpcYv4=
-X-Received: by 2002:a17:906:535e:b0:974:571f:23f3 with SMTP id
- j30-20020a170906535e00b00974571f23f3mr8498378ejo.0.1686592017089; Mon, 12 Jun
- 2023 10:46:57 -0700 (PDT)
+        bh=Wvyyw0RH8M6wqUGKw3iOenKs+/MxXTFepExt8iHfBqM=;
+        b=iA39MQU5re4n+sweXAr064qhrHr+XJx8jIhpRZJ3dnBFZaohWC/DqAAnPYP/mWxZTK
+         dti6XmXam9QQtoXae7slArIVhS+/LvvallbUfTGjWdGiN4acAyTjsXZlshL8GYbJ5U3q
+         aa12I422OCK/YvpbgsKzV+D82jVMuX3EMARHG94qvFj4Ki4KcyoMm5h5sP6a1jXsjrJq
+         InkU5C6nUYpC4zRK1flBCHNsjmBEDtAP9d1rcGHEPk/4+FOY+FpZOkUlv4b2Gl0k9rs6
+         b2doU5nlQlrvkzVxyVI7u6EbUwOrZsJ4ouOFUvqNJbtYQQ66sJ/YfU55L1ZAVp35nFxi
+         RcUg==
+X-Gm-Message-State: AC+VfDyEoReiC/U7vUwIZWvUBTe7AfJZ3tk3bSS7fXu8/EawpQWq4USn
+        zDs4R7eaOxt/1dbE3xkxkR43nFDEe7Wuv3VPHfLyWIt8
+X-Google-Smtp-Source: ACHHUZ48EwYeJ/hSMZnwj4sh7Sw3R37wzvPOsSt8Oh7LDPDCuTIxgM51IrMmr4+YgLo/RDdy9XTvKwb38fBxVT1NRiM=
+X-Received: by 2002:a17:906:7a03:b0:977:cbc4:5d8 with SMTP id
+ d3-20020a1709067a0300b00977cbc405d8mr8767410ejo.4.1686592230594; Mon, 12 Jun
+ 2023 10:50:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230608023006.12836-1-sumeet.r.pawnikar@intel.com>
-In-Reply-To: <20230608023006.12836-1-sumeet.r.pawnikar@intel.com>
+References: <20230606140000.385223-1-rui.zhang@intel.com> <202306062334.5Z1NkD1F-lkp@intel.com>
+ <62b7e97ede85927cd523578be0b702723043d92b.camel@intel.com>
+In-Reply-To: <62b7e97ede85927cd523578be0b702723043d92b.camel@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 12 Jun 2023 19:46:46 +0200
-Message-ID: <CAJZ5v0hYQ77JZPa_X8+v6UW3tPT3MWun=wReDeCOpc7Hb=zqQg@mail.gmail.com>
-Subject: Re: [PATCH] powercap: RAPL: fix invalid initialization for
- pl4_supported field
-To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Dave Hansen <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>
+Date:   Mon, 12 Jun 2023 19:50:19 +0200
+Message-ID: <CAJZ5v0higwL64NP4tFfOwVog1daSBsUTdh+M5ocZqDi14cYVDQ@mail.gmail.com>
+Subject: Re: [PATCH] powercap: intel_rapl: Fix CONFIG_IOSF_MBI dependency
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        lkp <lkp@intel.com>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "arnd@arndb.de" <arnd@arndb.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+Dave and the x86 maintainers
+On Wed, Jun 7, 2023 at 4:23 AM Zhang, Rui <rui.zhang@intel.com> wrote:
+>
+> On Tue, 2023-06-06 at 23:45 +0800, kernel test robot wrote:
+> > Hi Zhang,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on rafael-pm/linux-next]
+> > [also build test ERROR on next-20230606]
+> > [cannot apply to linus/master v6.4-rc5]
+> > [If your patch is applied to the wrong git tree, kindly drop us a
+> > note.
+> > And when submitting patch, we suggest to use '--base' as documented
+> > in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:
+> > https://github.com/intel-lab-lkp/linux/commits/Zhang-Rui/powercap-intel_rapl-Fix-CONFIG_IOSF_MBI-dependency/20230606-220222
+>
+> This is a false alarm from the robot.
+> It applied Arnd' patch first and then applied this patch on top.
+>
+> I think we can ignore the lkp robot warnings for this thread.
 
-On Thu, Jun 8, 2023 at 4:44 AM Sumeet Pawnikar
-<sumeet.r.pawnikar@intel.com> wrote:
->
-> The current initialization of the struct x86_cpu_id via
-> pl4_support_ids[] is partial and wrong. It is initializing
-> "stepping" field with "X86_FEATURE_ANY" instead of "feature" field.
->
-> Use X86_MATCH_INTEL_FAM6_MODEL macro instead of initializing
-> each field of the struct x86_cpu_id for pl4_supported list of CPUs.
-> This X86_MATCH_INTEL_FAM6_MODEL macro internally uses another macro
-> X86_MATCH_VENDOR_FAM_MODEL_FEATURE for X86 based CPU matching with
-> appropriate initialized values.
->
-> Reported-by: Dave Hansen <dave.hansen@intel.com>
-> Closes: https://lore.kernel.org/lkml/28ead36b-2d9e-1a36-6f4e-04684e420260@intel.com/
-> Fixes: eb52bc2ae5b8 ("powercap: RAPL: Add Power Limit4 support for Meteor Lake SoC")
-> Fixes: b08b95cf30f5 ("powercap: RAPL: Add Power Limit4 support for Alder Lake-N and Raptor Lake-P")
-> Fixes: 515755906921 ("powercap: RAPL: Add Power Limit4 support for RaptorLake")
-> Fixes: 1cc5b9a411e4 ("powercap: Add Power Limit4 support for Alder Lake SoC")
-> Fixes: 8365a898fe53 ("powercap: Add Power Limit4 support")
-> Signed-off-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-> ---
->  drivers/powercap/intel_rapl_msr.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-> index a27673706c3d..7be7561f5ad6 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -137,14 +137,14 @@ static int rapl_msr_write_raw(int cpu, struct reg_action *ra)
->
->  /* List of verified CPUs. */
->  static const struct x86_cpu_id pl4_support_ids[] = {
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_TIGERLAKE_L, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_L, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_N, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE_P, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_METEORLAKE, X86_FEATURE_ANY },
-> -       { X86_VENDOR_INTEL, 6, INTEL_FAM6_METEORLAKE_L, X86_FEATURE_ANY },
-> +       X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, NULL),
->         {}
->  };
->
-> --
+OK
 
-Tentatively applied as 6.5 material, thanks!
+Applied as 6.5 material, thanks!
