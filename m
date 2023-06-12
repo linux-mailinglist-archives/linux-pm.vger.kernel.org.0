@@ -2,59 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFEC72CE7C
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 20:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B5D72CED8
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jun 2023 20:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236654AbjFLSea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 14:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S232474AbjFLS6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Jun 2023 14:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237125AbjFLSeZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 14:34:25 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19B7171F;
-        Mon, 12 Jun 2023 11:34:10 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977d6aa3758so846760366b.0;
-        Mon, 12 Jun 2023 11:34:10 -0700 (PDT)
+        with ESMTP id S234539AbjFLS6d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 14:58:33 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD551114;
+        Mon, 12 Jun 2023 11:58:32 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9745c5fed21so687774066b.3;
+        Mon, 12 Jun 2023 11:58:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686594849; x=1689186849;
+        d=gmail.com; s=20221208; t=1686596311; x=1689188311;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HjxKYpDykfJHHAFMlYnHgt/KtNfNEauymoXHInEP4vM=;
-        b=fdYVg3CrHfYmOH+yQnThlmPuy5K7Ec9e+rHetrmfAE8U3jCTdYy30Lz22r6JK/dUWO
-         fGXiUbALgxdGn2lw2KSzhZYVZ1cEYH6M8+p8bbAR5d7mr/T2LqrOGv2cmf/Rt8SPBagW
-         zIVLfGcnCEGk0C/e6R76r6ovMDsRaFgQmgmwLTtA1i3UzQHEfQHkqdSwYK6fLpm4xFgE
-         mjrdut3xCamDSyzfp1xFRAs+hmGZ5wKc+D5rE7joQF4E8WiovvkeVt8Wq0Ce7QoKtd00
-         f50SP5YRSF2zVFRDJ/jPYFMRfoITlONYXDYUSNMbdOm8fFNXBrZBWelj/LNME/yZlee8
-         3uBw==
+        bh=+mUonJgToHCgnd4NYbM2VauxjgcAH9HX59bsPeQrQF8=;
+        b=BKUK/UGgH4F6ItSoTC+5ps+xppzuLOpyrcR53EjxUGgzeHXMBcF6vsGuNsjG7ZivrH
+         LekCx1Km0THyBN8bIKbqbWDqyZxhiTiOdOercO6BylOYa6hpuFOEehSonUcrZcsSt4kQ
+         OjKHo+W0jG1y6wc9o1xvg0NnMlkwpFFY2v1CL3/aXF9Pq/LuoKawFzAgzg5GwHG1nmn3
+         TKPo9zygdYCWnn64A1xNjn8TkxybrmhOKvGnV+x1gUDxIzPYSDGMpjx3eNStBTt2qGEQ
+         VeFKtYmpTEBAzrieyZVHGaTgJwjQHQ5JBDDasJH6TmES73QcPhRkEDd5pxYeIRWIpmBW
+         eNfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686594849; x=1689186849;
+        d=1e100.net; s=20221208; t=1686596311; x=1689188311;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HjxKYpDykfJHHAFMlYnHgt/KtNfNEauymoXHInEP4vM=;
-        b=ZtZ4lEcyxBElQb655qg0t2JRlbeh84ONsPYPDgY5B7nr+BNX/FHwCo0B0HWNrlo+yN
-         P7jE6/bXZaJPLrHSs3MlSj2iEQM+rRJuXJDhoblJ89KhrLmUA3T3IhsDgVpJPPj82Qsu
-         V9z2uJGhW0B7WlEZ1W/RdFS+zfoX9qop7uNpZ4U/ieMBtV5tc6LkExY+nyb81pho66Zb
-         9AYUmmGaCj8Ub7aFHEi4ZIqdTryQmETjZWyza5+dqYIc3COxk1kOWofywY1wzqfIiXMx
-         Q6zNf5AFVICBqDLfvWFcjaUZ6TErMaTjdM2/0ofWDHVtXq2Zhp6nGWSdo3nNa0i94UF3
-         pYEg==
-X-Gm-Message-State: AC+VfDw4R83fE5hNIiqQkAe+rL98y0egt4+oF51HjlHXelqn/MiUNtaj
-        YXoRnpJtzuIG12D0TwaoD6VxAOb8W3cmtPjl4TY=
-X-Google-Smtp-Source: ACHHUZ6HVJPNDxoxp2Cvdq8Nf48yX+kPMvxENdK/HbCk4P4iVuj89/INjrfgS3cZ3HvNthb6VJXM7cJI0toaf9QtkR0=
-X-Received: by 2002:a17:907:320a:b0:975:942e:81d5 with SMTP id
- xg10-20020a170907320a00b00975942e81d5mr10759652ejb.1.1686594848974; Mon, 12
- Jun 2023 11:34:08 -0700 (PDT)
+        bh=+mUonJgToHCgnd4NYbM2VauxjgcAH9HX59bsPeQrQF8=;
+        b=PE+gUWHsHFD18MHy3wI5HYe2D6NNLllHYbbvNL5lv2DB7YdEpsdNIEoG7XxkcG4k9U
+         n5l0Gc85ma7yREwLKNTAZQfM2QxbBm6IIFl79wsWL9lGWWtFahEdRG/qhxdHp/rs29N2
+         bIrmt0n055yK+NgL9hUf3h7d4TyrdDT7mXJhkGXy/jnouHBH/KiL/r8i84LNREqvL0Kh
+         eYqIqu0do8me+sW1dUtYv/Z2f81ThkaT3R3+DTobOE3vtdo++MOGTFBDB71gtHEHfaZT
+         aZ1m/KEQKLk5J+sAJs/BiTK1nhqieqEnCI/P+8FZmOPbVTaHpixffh9z6lJ8QRs2MpkW
+         xYWQ==
+X-Gm-Message-State: AC+VfDwiYBocFxkWqWdZc4nIyJPWgHs+PE5jIc1DXwy/4PK+yyp2eX1Z
+        Yds7f0N4InjSHptyxpbdTSCJwEjl7D7B93orK18=
+X-Google-Smtp-Source: ACHHUZ72gaCwCv6ASH5Fi/IBsI0MrQyJpEiRZoZuE7BfM5lJamwPMGfN+SlUgNamlTwETDeAHAdCKuU7RSaB2DGEdcI=
+X-Received: by 2002:a17:907:3f82:b0:97a:e496:c121 with SMTP id
+ hr2-20020a1709073f8200b0097ae496c121mr10409439ejc.69.1686596310880; Mon, 12
+ Jun 2023 11:58:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230610203549.1127334-1-bigunclemax@gmail.com> <13282074.uLZWGnKmhe@jernej-laptop>
-In-Reply-To: <13282074.uLZWGnKmhe@jernej-laptop>
+References: <20230612063429.3343061-1-bigunclemax@gmail.com>
+ <20230612063429.3343061-4-bigunclemax@gmail.com> <20230612-wriggle-remindful-89d5105c94ee@wendy>
+ <CALHCpMjxboLn2eTjOJkE2JAzH3S8OB3v9fWqDOdeipAmLvLx2Q@mail.gmail.com> <20230612-manhole-awoke-599b8ff72edb@spud>
+In-Reply-To: <20230612-manhole-awoke-599b8ff72edb@spud>
 From:   Maxim Kiselev <bigunclemax@gmail.com>
-Date:   Mon, 12 Jun 2023 21:33:57 +0300
-Message-ID: <CALHCpMi9h_KGJKJ4qH44kypePsMpqjgDke-A1LiBgiSOnXjXLA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Add D1/T113s thermal sensor controller support
-To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
+Date:   Mon, 12 Jun 2023 21:58:18 +0300
+Message-ID: <CALHCpMjY8urNAVFhnBaK1Png1yY3UAQOG8u=W4-v=GiJ8TjZEw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] riscv: dts: allwinner: d1: Add thermal sensor and
+ thermal zone
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-kernel@vger.kernel.org,
         Vasily Khoruzhick <anarsoul@gmail.com>,
         Yangtao Li <tiny.windzz@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -65,12 +69,12 @@ Cc:     linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
         Samuel Holland <samuel@sholland.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
         Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Andre Przywara <andre.przywara@arm.com>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-riscv@lists.infradead.org
@@ -86,20 +90,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=D0=BF=D0=BD, 12 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 21:22, Jer=
-nej =C5=A0krabec <jernej.skrabec@gmail.com>:
+=D0=BF=D0=BD, 12 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 20:27, Con=
+or Dooley <conor@kernel.org>:
 >
-> Dne sobota, 10. junij 2023 ob 22:35:41 CEST je Maksim Kiselev napisal(a):
-> > This series adds support for Allwinner D1/T113s thermal sensor controll=
-er.
-> > THIS controller is similar to the one on H6, but with only one sensor a=
-nd
-> > uses a different scale and offset values.
+> On Mon, Jun 12, 2023 at 11:17:20AM +0300, Maxim Kiselev wrote:
+> > Hi, Conor
 > >
-> > v2:
-> > - Fixed SoB tag
+> > =D0=BF=D0=BD, 12 =D0=B8=D1=8E=D0=BD. 2023=E2=80=AF=D0=B3. =D0=B2 10:55,=
+ Conor Dooley <conor.dooley@microchip.com>:
+> >
+> > ...
+> >
+> > > The RISC-V patchwork automation is complaining about this patch while
+> > > running dtbs_check:
+> > > arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dtb: thermal-zone=
+s: cpu-thermal: 'trips' is a required property
+> > >         From schema: Documentation/devicetree/bindings/thermal/therma=
+l-zones.yaml
+> >
+> > I didn't add 'trips' because I'm not sure if they should be the same
+> > for the D1 and the T113s.
 >
-> It doesn't seems you fixed that.
+> I'm sorry, but I am of no help there. Perhaps some of the Allwinner devs
+> can help you on that front.
+>
+> > Maybe it's better to drop 'thermal-zones' from this patch and add them
+> > later in separate patches
+> > for T113s and D1?
+>
+> Does it pass dtbs_check with the thermal-zones removed?
 
-Sorry for that. I accidentally sent the wrong version of patches . And
-immediately after that I sent v3.
+Yes, it passes.
