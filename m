@@ -2,87 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5171772E28C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 14:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29C172E36B
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 14:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234563AbjFMMNG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 08:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S235545AbjFMM4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 08:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239418AbjFMMNF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 08:13:05 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61F310C2
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 05:13:01 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f62d93f38aso6780401e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 05:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686658380; x=1689250380;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6CMlQba2o43/QiP5kbF00C5SMM+pc3bqKwMdZ4o71Wg=;
-        b=jM2BdMoNCbF74BgGgRDVYE6LKUcsY3HAYxwagM7IqNQFDHyA50WMO364I8ZuLvp9v2
-         qGs2ogbEf4zfjDoEPz0k4SbACIKnBKeIiIbl2KvH80pi+vzd5qOkPP5s4xlkhj+omVsY
-         Fda5TdW3CDeMJ1S+ETpk01VHjri3rDZvXPmReSFUWb3CKvBXoQ7CHvP0ADadNSMQvNXq
-         GHb7DJ5uGPve8Yb61BMTRIQgCsLJzAsT7XypLTm7vQOIfHTMUGXr8V4TRJHEUupLOi5z
-         Sy7JgxGVPqzsucyCgYlz42JPFMkpeynHYwsNMvKT/PqSPAfou+yAxlxlLZKOFub+XpaR
-         1eAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686658380; x=1689250380;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6CMlQba2o43/QiP5kbF00C5SMM+pc3bqKwMdZ4o71Wg=;
-        b=hrEld7b614Fc96oaFGabCmtGnMMY88AAi6cU4Y9CAPsyN4RjgyRUTxsCU6/vk4z8lb
-         OUYsR+X8pxWcnYBg0DOElWKALRVlSteyk+KLVZ6c0JqB+0jeM9QSqlQGhTISOmcv6oDS
-         0VNJT06JMGkM4jNI3q5I6EMEl6Ir9Tvan+i1IRu5SISIDiKgl8ZDVwvYlAiIng4AC4gB
-         0/JGYS2AnjcoynJj74HnxzQivMfFfvW7KcmwWbduH4kOhMYl0ZL4ZH/6Vo7G9cCIvXTZ
-         LsSCMIEGKT4kCLIpiF1zMTfyT4CVKbt4Cazt8i+u4xmSBli8koTWC9PNee0zwZHkAD3q
-         UFgg==
-X-Gm-Message-State: AC+VfDw4uS1WuIve4MozpxLbnlhbkeRapQMu+cHQ73QAeYYVvUqRJjgN
-        cirlGegR4y6Y7h5RxC50srFufA==
-X-Google-Smtp-Source: ACHHUZ7v2g+t0UCuMLHeHfZftjO5zEOcIpmanWsJpdQFoH7LGbqE71Kf4m1iAu+cL1lUPxg/TiXWWg==
-X-Received: by 2002:ac2:5b83:0:b0:4f7:5a42:6af with SMTP id o3-20020ac25b83000000b004f75a4206afmr1024268lfn.37.1686658379752;
-        Tue, 13 Jun 2023 05:12:59 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id w28-20020ac2599c000000b004f61a57797fsm1759751lfn.60.2023.06.13.05.12.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 05:12:59 -0700 (PDT)
-Message-ID: <a04f8089-0117-7c22-c6cc-97f5bd42a7d8@linaro.org>
-Date:   Tue, 13 Jun 2023 14:12:57 +0200
+        with ESMTP id S239139AbjFMM4c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 08:56:32 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135EF1734;
+        Tue, 13 Jun 2023 05:56:30 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35DCtlqE086407;
+        Tue, 13 Jun 2023 07:55:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1686660947;
+        bh=m3aWRYVccVyv3TBm3CQBhQSLQ8Afh0rwU1mPnybKOSM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=YbXTTZrIY+UGenKDmM/cnVARAJ7p9b2bkDm1ar7gDhRT7bIkCvpkwibosjYvgjLae
+         63bZObWKZFTzLmbfN45ZlZJrDJ8wPl/j5e2se5bX19Uned4epzQ4Vb8vWd/pz3VDRN
+         bBdHMeZYl0QWiJWF/oAMLaC8k8N6YWMk5xGFlFcU=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35DCtlO3121434
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 13 Jun 2023 07:55:47 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 13
+ Jun 2023 07:55:47 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 13 Jun 2023 07:55:47 -0500
+Received: from [10.250.64.104] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35DCtZPm112555;
+        Tue, 13 Jun 2023 07:55:36 -0500
+Message-ID: <4ee9c4dc-7dfc-3cb8-089d-c1535ab2531c@ti.com>
+Date:   Tue, 13 Jun 2023 18:25:34 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
-Subject: Re: [PATCH v3 07/23] interconnect: qcom: icc-rpm: Allow negative QoS
- offset
+Subject: Re: [PATCH v3 08/12] thermal/drivers/ti-soc: remove redundant msg in
+ ti_thermal_expose_sensor()
+To:     Yangtao Li <frank.li@vivo.com>, <glaroque@baylibre.com>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>, <shawnguo@kernel.org>,
+        <s.hauer@pengutronix.de>, <kernel@pengutronix.de>,
+        <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <thara.gopinath@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <anarsoul@gmail.com>, <tiny.windzz@gmail.com>, <wens@csie.org>,
+        <jernej.skrabec@gmail.com>, <samuel@sholland.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <edubezval@gmail.com>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <bchihi@baylibre.com>,
+        <niklas.soderlund+renesas@ragnatech.se>, <wenst@chromium.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        <linux-tegra@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+References: <20230613114904.15749-1-frank.li@vivo.com>
+ <20230613114904.15749-8-frank.li@vivo.com>
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
- <20230526-topic-smd_icc-v3-7-5fb7d39b874f@linaro.org>
- <ZId_qIAL8dvJOwai@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZId_qIAL8dvJOwai@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
+From:   "J, KEERTHY" <j-keerthy@ti.com>
+In-Reply-To: <20230613114904.15749-8-frank.li@vivo.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,70 +85,28 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 12.06.2023 22:27, Stephan Gerhold wrote:
-> On Mon, Jun 12, 2023 at 08:24:24PM +0200, Konrad Dybcio wrote:
->> In some very very very very unfortunate cases, the correct offset of
->> the QoS registers will be.. negative. One such case is MSM8998, where
->> The DDR BWMON occupies what-would-be-the-BIMC-base which we usually
->> take into account with the register calculation, making the actual
->> BIMC node start at what-would-be-the-BIMC-base+0x300.
->>
->> In order to keep the calculation code sane, the simplest - however
->> ugly it may be - solution is to allow the offset to be negative.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> I'm a bit confused why this patch is part of this series. It doesn't
-> seem to be directly related.
-> 
-> Can you send it as part of the series that adds the MSM8998 interconnect
-> driver?
-Ack
+On 6/13/2023 5:19 PM, Yangtao Li wrote:
+> The upper-layer devm_thermal_add_hwmon_sysfs() function can directly
+> print error information.
 
-Konrad
+Acked-by: Keerthy <j-keerthy@ti.com>
+
 > 
-> Thanks,
-> Stephan
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>   drivers/thermal/ti-soc-thermal/ti-thermal-common.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
->> ---
->>  drivers/interconnect/qcom/icc-rpm.h | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index d2c04c400cad..ba840a436cc0 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -29,10 +29,10 @@ enum qcom_icc_type {
->>   * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
->>   * @type: the ICC provider type
->>   * @regmap: regmap for QoS registers read/write access
->> - * @qos_offset: offset to QoS registers
->>   * @bus_clk_rate: bus clock rate in Hz
->>   * @bus_clks: the clk_bulk_data table of bus clocks
->>   * @intf_clks: a clk_bulk_data array of interface clocks
->> + * @qos_offset: offset to QoS registers
->>   * @keep_alive: whether to always keep a minimum vote on the bus clocks
->>   * @is_on: whether the bus is powered on
->>   */
->> @@ -42,7 +42,7 @@ struct qcom_icc_provider {
->>  	int num_intf_clks;
->>  	enum qcom_icc_type type;
->>  	struct regmap *regmap;
->> -	unsigned int qos_offset;
->> +	int qos_offset;
->>  	u64 bus_clk_rate[NUM_BUS_CLKS];
->>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
->>  	struct clk_bulk_data *intf_clks;
->> @@ -108,7 +108,7 @@ struct qcom_icc_desc {
->>  	bool no_clk_scaling;
->>  	enum qcom_icc_type type;
->>  	const struct regmap_config *regmap_cfg;
->> -	unsigned int qos_offset;
->> +	int qos_offset;
->>  };
->>  
->>  /* Valid for all bus types */
->>
->> -- 
->> 2.41.0
->>
+> diff --git a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> index 6a5335931f4d..d414a4b7a94a 100644
+> --- a/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> +++ b/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
+> @@ -182,8 +182,7 @@ int ti_thermal_expose_sensor(struct ti_bandgap *bgp, int id,
+>   	ti_bandgap_write_update_interval(bgp, data->sensor_id,
+>   					 TI_BANDGAP_UPDATE_INTERVAL_MS);
+>   
+> -	if (devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal))
+> -		dev_warn(bgp->dev, "failed to add hwmon sysfs attributes\n");
+> +	devm_thermal_add_hwmon_sysfs(bgp->dev, data->ti_thermal); >
+>   	return 0;
+>   }
