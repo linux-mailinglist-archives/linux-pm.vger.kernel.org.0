@@ -2,190 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F7972D83D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 05:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B35672D84A
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 06:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjFMDuE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Jun 2023 23:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S233700AbjFMEF4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 00:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236930AbjFMDt0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Jun 2023 23:49:26 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7AD10EA
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 20:49:21 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-39ca48cd4c6so2629798b6e.0
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 20:49:21 -0700 (PDT)
+        with ESMTP id S230073AbjFMEFz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 00:05:55 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFD1F0
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 21:05:54 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-650bacd6250so3975525b3a.2
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jun 2023 21:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1686628160; x=1689220160;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=EhyEyaRzw8vmUlYau12G7d6TigO6ud1X5eeR8Pj+WCk=;
-        b=3WOLOv3lkSMJFzJlb2aJCw/jt9FPKQAk3FiEwCnMgpUPTo5FWLXuxOg0ofdWwFqBkD
-         S8HJhiuzBaKixmmQ71d+DVC2SL9Vybl7gOr+7E2gUQLLCOPxAL5a5BZIJ+rgMCkxEc4H
-         +duebaHYNIZC35ikBJNeC8uGoof6no+PdIxQp0SfspU0L3NIxODjBrnXuFV7d/dSTXlR
-         6I9HbEH3FEVIyLjyrI2IE3gJABLnhKsYFlftlKdl0V2IIl5Vw78hlKodAm7AZG4TaD37
-         mGS4nrV5LmM+Hd22rITyN/7PLPfbaZxbw7mB6SqNHoDV5meZoNKy1FEHOiiffhEg/z61
-         sbBw==
+        d=linaro.org; s=google; t=1686629153; x=1689221153;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kfTL1pm53OB2rrP9dgQfJUkf2zAW6WKCt7VbeD4MNBg=;
+        b=NSFI1xpdWBza+uSPuSdOAiDw6VF7uRiWJCGoE3/ROna8JqKen7P25T8JVoFc/E4rrC
+         TLILfhmgjCi8v5TlWs7RjtRp+CxU+wh79M7nWjfOScB/E+nYLUanE2E+hS0KKILCZRb0
+         OXBXmU4QuIEo8GQs6RoFdUb/L/abxVYvNfH4mepbiw7bDPXPEn8V5Qb5dzPYDWEGZQeA
+         qKDqnIR32eijoixBAFDY0CpiuBeviEUmTtsCbuzTDwCJ+FBMGkuMyZCy6C5nnpdEDTkt
+         NXqj1IWLshbw80qwHinsT6sIzTatUrM/n4Z0aDo/AsB/uzcEWZBrpu63n8mXG4GrH9xT
+         rGww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686628160; x=1689220160;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EhyEyaRzw8vmUlYau12G7d6TigO6ud1X5eeR8Pj+WCk=;
-        b=VUj4xztxMmvL0cwSG8Xol8cKJyUJmHvhQeFLz2yY8PntM3RAtHJqBjkFUpu5NxyBbg
-         dko+J06GNj94KC6JrSzXvsHh1MsIiPf7RB6onz5Adwka1RSynOfWis0FQb4639UuuOkx
-         9o+esNYe/lo/ShYceq2fFbPwCjXRSQzX4ADYY9V5uUYf9JC0IUi7WErUlPsCTzRNdijq
-         3ErpipESi9cMw8Oc85ry0SkvUiW8ffC2lAU6ADj40J57mkO9KUoOJAxnW0Es7wbkUV7O
-         N2zjXp4lXuARASbwnWxDsKmB+AUs1exMh3MCiOumpHiZW/XpDLdt0XSl5Q0HHZzeV0Oq
-         obgw==
-X-Gm-Message-State: AC+VfDw137rbbfcHzVciZRGwv4Nz8QI8jLVA4MO81XdOnB50c+ijdXn4
-        ql9FCHw2zUdOElfWzD5KCuSDONHA59ioS4QBf1BLcg==
-X-Google-Smtp-Source: ACHHUZ6nIRrC1Q55qtjUcd0rCopmvQ1rM/J+KoaG6XnDiXYImAYlV3KLTqm5LQA3FE2CWzogfRSqHA==
-X-Received: by 2002:a05:6808:aab:b0:39c:40f4:5bde with SMTP id r11-20020a0568080aab00b0039c40f45bdemr5929546oij.41.1686628160667;
-        Mon, 12 Jun 2023 20:49:20 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a195700b0024e37e0a67dsm8841493pjh.20.2023.06.12.20.49.19
+        d=1e100.net; s=20221208; t=1686629153; x=1689221153;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kfTL1pm53OB2rrP9dgQfJUkf2zAW6WKCt7VbeD4MNBg=;
+        b=cQLvptZwDozf+0R3mgblzQcA1Py5vTmSPaCWNGCRu7E+JNkWMi/iI9VCr4wydQlAPZ
+         uejk6VIia87QQZKGCc6VFor2loIos8tcFbgNT4OWuUMZggLGMAjOs482KzeaNHwjtZUH
+         DHVX/TzzUwNEPzV+fmBIPk2UCC4MtOwg7JDIOf8jNeB63fikFFnO3usWlRoT0gcQoqwl
+         I0NctimC3xCGwhrO1czOD2m3eFq+GUs2OTkHp+P+EYFUGBrP+DrhjrEGAsdDRxIv1iaP
+         vtCOrtAWAuEXA7TC2VHgjinSIvlnCOzjoMC1Cq1ueQpmxVIhQpFVSOZOufqU433nCwcg
+         MQEA==
+X-Gm-Message-State: AC+VfDx+EYqVtDiLSSN/bvM1GFK4/uv12AInhY3vwOAzSWDZjGmuECXd
+        0CHea1wOt/G/Z7lC675K6nQkeA==
+X-Google-Smtp-Source: ACHHUZ7GJmHpQ8tt053WOPM06grblEbOGewnRdwM4b54cATGEBorvGaXp3cT0WC14a2VXED68f4j+Q==
+X-Received: by 2002:a05:6a20:7fa6:b0:11d:162d:bb7 with SMTP id d38-20020a056a207fa600b0011d162d0bb7mr665538pzj.41.1686629153578;
+        Mon, 12 Jun 2023 21:05:53 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id t12-20020a62ea0c000000b00643355ff6a6sm7798198pfh.99.2023.06.12.21.05.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jun 2023 20:49:19 -0700 (PDT)
-Message-ID: <6487e73f.170a0220.1a48f.2165@mx.google.com>
-Date:   Mon, 12 Jun 2023 20:49:19 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 12 Jun 2023 21:05:53 -0700 (PDT)
+Date:   Tue, 13 Jun 2023 09:35:50 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] cpufreq: amd-pstate: Set default governor to schedutil
+Message-ID: <20230613040550.6mwktq7cyv32wfd5@vireshk-i7>
+References: <20230612030321.3097627-1-perry.yuan@amd.com>
+ <20230612072627.5wzmsfp64jho3bdj@vireshk-i7>
+ <CYYPR12MB86556045C209552FF99C47C89C54A@CYYPR12MB8655.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.4-rc6-36-g7796be1562e2
-Subject: pm/testing baseline: 48 runs,
- 2 regressions (v6.4-rc6-36-g7796be1562e2)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CYYPR12MB86556045C209552FF99C47C89C54A@CYYPR12MB8655.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 48 runs, 2 regressions (v6.4-rc6-36-g7796be1562e2)
+On 12-06-23, 16:11, Yuan, Perry wrote:
+> Thank you help to provide the ack flag.
+> I have added it to the V3.
 
-Regressions Summary
--------------------
+Normally you aren't required to resend a patch just to add a tag. The maintainer
+can pick those while applying the patch. Of course, if you are required to
+update the patch and resend, then you must include all the provided tags by
+yourself.
 
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.4-rc6=
--36-g7796be1562e2/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.4-rc6-36-g7796be1562e2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      7796be1562e27d8b9441fe1c2c2ecfc1ebdea55d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6487d8d819bf33007530619d
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc6-36-g7796be=
-1562e2/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc6-36-g7796be=
-1562e2/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6487d8d819bf3300753061a2
-        failing since 136 days (last pass: v6.1-rc8-156-g0a9e32afe717, firs=
-t fail: acpi-6.2-rc6-146-g628c61874ffd)
-
-    2023-06-13T02:47:30.885845  + set +x
-    2023-06-13T02:47:30.886032  [   13.139853] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-975017_1.5.2.3.1>
-    2023-06-13T02:47:30.993529  / # #
-    2023-06-13T02:47:31.095307  export SHELL=3D/bin/sh
-    2023-06-13T02:47:31.095797  #
-    2023-06-13T02:47:31.197035  / # export SHELL=3D/bin/sh. /lava-975017/en=
-vironment
-    2023-06-13T02:47:31.197532  =
-
-    2023-06-13T02:47:31.298940  / # . /lava-975017/environment/lava-975017/=
-bin/lava-test-runner /lava-975017/1
-    2023-06-13T02:47:31.299748  =
-
-    2023-06-13T02:47:31.302950  / # /lava-975017/bin/lava-test-runner /lava=
--975017/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6487dd75edfd290a38306188
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc6-36-g7796be=
-1562e2/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-=
-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc6-36-g7796be=
-1562e2/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all-=
-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6487dd75edfd290a38306=
-189
-        failing since 55 days (last pass: v6.3-rc6-135-g5235219c59f8, first=
- fail: v6.3-rc7-153-gbc538c8be4bd) =
-
- =20
+-- 
+viresh
