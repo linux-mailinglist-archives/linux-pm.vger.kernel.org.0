@@ -2,139 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165DE72DD45
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF5372DD49
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241548AbjFMJGw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 05:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
+        id S239675AbjFMJHf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 05:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240748AbjFMJGt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:06:49 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAD51B3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:06:47 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f65779894eso5298810e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:06:47 -0700 (PDT)
+        with ESMTP id S238711AbjFMJHe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:07:34 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610341A1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:07:33 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b2b6910facso3139057a34.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686647205; x=1689239205;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k24Lafsnyyipy4bbdfe0wwTh9zApI1J6ii/T/AgJk2Q=;
-        b=yTGx/fLt7Qp+oiLbviwb5H1L4TejgbG24LlseJOOnCI2aStf8k0cLLLpVtodVKwS0T
-         9FQLyrjzjaVZYZk5LI2d89M23GMQKO7LVe3zUYzTOCpkhkYHsHKAJHTAYREU0vFUljE6
-         h4YVyAhT6S+q50CEbnhQ9M5n5Rsx2zK7PjOJlcp5ZdgkHhwDBu0M8/C3pctIHKJRo3Dl
-         ql/8HnWA+ShqpJdHXS7BbXFPjBYvSXsmaLphcMLCOKaDz8kcbtgQZj5OCSM9OgB7RvoO
-         PB6MA5ztb82/vtjXFwYiUR8VSs0UTz5NbV+G9VE0iTqPkDUldQS4qwA2Iygv5w0DIh2H
-         jMzw==
+        d=chromium.org; s=google; t=1686647252; x=1689239252;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8VTC85npxbzTTiz7J8vOT5R1AzDbAm+HI0G+zkP/+g=;
+        b=oFDfAjtzgx+It0GmNANydXBDbXDmgfg1rGAD4/w5jl+0V0GiACq5OE38w2/M8vsMzs
+         FkfTvlHL82Gfrg8QSruKL9gtrnUCC9TTH1OgzcDqtulJ0lEWgLwwiO5HwA1BclJKktxk
+         ieFm0spML0ubRNiPzEfH2JowNoyC9bPWKmz6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686647205; x=1689239205;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k24Lafsnyyipy4bbdfe0wwTh9zApI1J6ii/T/AgJk2Q=;
-        b=cITj44fw6862KmkgngeOqU6YXxLkhS/75jHH1F927ONsdEp5BgcO53mEsGQfbwJsDa
-         HT3+rv/X51gNHg/hnihj/Z0IkneITRrA8wvE9MPD78KF+zywI35YOAamZnGvrpRs0Aal
-         jnHZaWC11d4zm1Dumqn6dmccZ1HIyVawT0e/qRsLkesX1nhev3VFg9eLzu8tD6LG+Q6H
-         8VDOFvjyecRc+K380nlL2YOAatvtfNZh4RgrkxNI0ZYDwXwEbDTB+BoC7qexqQrdlNi5
-         THg4jsDv4dZmU7egFc7tuLTxE6za50Yh49kvgmIcc57ja/XgHPlPQwE07Yg+swfHD3r5
-         Cj5g==
-X-Gm-Message-State: AC+VfDxZhvgY8ZhfKC47i86LUcRubko1nnih5WW2w0NS8mNXDqZtQnKN
-        +oNcvl2HwnJ1vpI2uYY1M+cOWQ==
-X-Google-Smtp-Source: ACHHUZ4kGtn5iyYh44KfD7k/afWcN7Di/N0xVMwtASdAptlWTKfnyJmL3XYi3+US9VxHmcWPg9rrFA==
-X-Received: by 2002:a2e:81ca:0:b0:295:d7a8:559b with SMTP id s10-20020a2e81ca000000b00295d7a8559bmr3237895ljg.10.1686647205174;
-        Tue, 13 Jun 2023 02:06:45 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id r10-20020a2e94ca000000b002b0488ef239sm2067426ljh.93.2023.06.13.02.06.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 02:06:44 -0700 (PDT)
-Message-ID: <d90b350f-0068-4ce1-014d-0c35f26abe54@linaro.org>
-Date:   Tue, 13 Jun 2023 11:06:43 +0200
+        d=1e100.net; s=20221208; t=1686647252; x=1689239252;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z8VTC85npxbzTTiz7J8vOT5R1AzDbAm+HI0G+zkP/+g=;
+        b=fFFebkfdBDVIj4Z467qUMjBxdomv+EDptGYgjCO7t2w1HJAzJTnEbTA62jPBp8BUcw
+         ZyQHtRyFvmMrSduEsh2FSVvavYhmY83fTEL8r455z2qDJUobOOeBuRTn2L2j+yuZg60y
+         OYPwbufeyGA24FMiwjXmrfhV7YS8kYy16N9kqvK0qGQtxw8raqRD25qk/8KEi8CDDsgZ
+         t2gGLRgJ9n6xrQbCZJ71mlo+3q60tKGlCPUjY1ATFiY7w6JM/xjoKAiGChA1kyDlr/Is
+         T9QpO8NOawIRD68jZWQRhAIdSBNVuo0gZkHfRlFlJKj9IKBAwm7pb89UFmxgqolovetA
+         1Z1Q==
+X-Gm-Message-State: AC+VfDwbYCMg0avTTrzbT0QpWSGilZGfOVxoPKH0n5WjCdSAjAomviqa
+        6mAu4yE3DA1bh2u/Oj5IAnyMeg==
+X-Google-Smtp-Source: ACHHUZ63A1yCDwHmmn69d8YPbxPDTz1rKrVi7mU2CU9rWpKWYlEVJjQo7HsKTV5K90CJDyEPYHL0MQ==
+X-Received: by 2002:a9d:7559:0:b0:6b1:1f0a:80e3 with SMTP id b25-20020a9d7559000000b006b11f0a80e3mr8590848otl.20.1686647252706;
+        Tue, 13 Jun 2023 02:07:32 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:2d00:6d98:ebb3:585])
+        by smtp.gmail.com with ESMTPSA id h5-20020a63e145000000b00528513c6bbcsm8902821pgk.28.2023.06.13.02.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 02:07:32 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] power: supply: core: Avoid duplicate hwmon device from thermal framework
+Date:   Tue, 13 Jun 2023 17:07:23 +0800
+Message-ID: <20230613090726.1358199-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v3 20/23] interconnect: qcom: icc-rpm: Fix bucket number
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org>
- <20230526-topic-smd_icc-v3-20-5fb7d39b874f@linaro.org>
- <ZIeGrCj2bk2nVvIc@gerhold.net>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZIeGrCj2bk2nVvIc@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+When the power supply device being registered supports a temperature
+readout, the core registers a thermal zone for it. The thermal core
+would register a hwmon device for that unless told otherwise.
 
+When CONFIG_POWER_SUPPLY_HWMON is enabled, the power supply core creates
+a hwmon device. This results in a second entry, one which has a better
+name than the one registered through the thermal framework. It could
+potentially have readouts other than temperature.
 
-On 12.06.2023 22:57, Stephan Gerhold wrote:
-> On Mon, Jun 12, 2023 at 08:24:37PM +0200, Konrad Dybcio wrote:
->> SMD RPM only provides two buckets, one each for the active-only and
->> active-sleep RPM contexts. Use the correct constant to allocate and
->> operate on them.
->>
->> This will make the qcom,icc.h header no longer work with this driver,
->> mostly because.. it was never meant to! The commit that introduced
->> bucket support to SMD RPM was trying to shove a square into a round
->> hole and it did not work out very well. That said, there are no
->> active users of SMD RPM ICC + qcom,icc.h, so that doesn't hurt.
->>
->> Fixes: dcbce7b0a79c ("interconnect: qcom: icc-rpm: Support multiple buckets")
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/interconnect/qcom/icc-rpm.c | 14 +++++++-------
->>  drivers/interconnect/qcom/icc-rpm.h |  4 ++--
->>  2 files changed, 9 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->> index 5ffcf5ca8914..54a9999fe55d 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.c
->> +++ b/drivers/interconnect/qcom/icc-rpm.c
->> @@ -249,7 +249,7 @@ static void qcom_icc_pre_bw_aggregate(struct icc_node *node)
->>  	size_t i;
->>  
->>  	qn = node->data;
->> -	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->> +	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
->>  		qn->sum_avg[i] = 0;
->>  		qn->max_peak[i] = 0;
->>  	}
->> @@ -275,7 +275,7 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->>  	if (!tag)
->>  		tag = QCOM_ICC_TAG_ALWAYS;
-> 
-> We should replace this with the RPM variant. Also, can you check which
-> header/file still includes qcom,icc.h? Don't think we should have it
-> included at all for RPM so that referencing the wrong things cannot
-> happen.
-Nice catch
+To simplify the result, tell the thermal framework to not register a
+hwmon device if CONFIG_POWER_SUPPLY_HWMON is enabled. The result is
+one hwmon device with all the readings the device supports.
 
-Konrad
-> 
-> Thanks,
-> Stephan
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+ drivers/power/supply/power_supply_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 3791aec69ddc..4aa466c945e2 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1305,8 +1305,12 @@ static int psy_register_thermal(struct power_supply *psy)
+ 
+ 	/* Register battery zone device psy reports temperature */
+ 	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
++		/* Prefer our hwmon device and avoid duplicates */
++		struct thermal_zone_params tzp = {
++			.no_hwmon = IS_ENABLED(CONFIG_POWER_SUPPLY_HWMON)
++		};
+ 		psy->tzd = thermal_zone_device_register(psy->desc->name,
+-				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
++				0, 0, psy, &psy_tzd_ops, &tzp, 0, 0);
+ 		if (IS_ERR(psy->tzd))
+ 			return PTR_ERR(psy->tzd);
+ 		ret = thermal_zone_device_enable(psy->tzd);
+-- 
+2.41.0.162.gfafddb0af9-goog
+
