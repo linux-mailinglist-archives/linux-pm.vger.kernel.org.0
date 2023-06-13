@@ -2,122 +2,219 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D85972E3A2
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 15:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328F872E4C9
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 16:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242479AbjFMNBm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 09:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S240290AbjFMODM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 10:03:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242501AbjFMNBe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 09:01:34 -0400
-Received: from mx.kernkonzept.com (serv1.kernkonzept.com [IPv6:2a01:4f8:1c1c:b490::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7806019B1;
-        Tue, 13 Jun 2023 06:01:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:Reply-To:
-        Content-ID:Content-Description;
-        bh=xL3SKjwiHCpd8kLBPoRyAkV9GFKfhsegjy/weRwTSYw=; b=TMoFAiN5y9di+xneXdNc+1XQyA
-        Oebum0Mk/l6qXAeAGIeqG01E6iM+kAZpnABB0/jimSicC2ILv1Dp0YQaNxVMJ9+y/5GikO646vewT
-        6UovqZo+xJL3b0fHB3FqTM2StsR8WVwaIgnV/ybjbSUVUyrRb6nw7G2Vxzrx9Zh9mf4nKReYZPrX2
-        ZSk7X7UzwxkRXTyAI0OF0wS4JwtoucggNdajvWHsuTCmI+0TtHwFR9UY6JxuMpvQdUu2ENS2LjqgJ
-        AhdMxPfpws8vMFJYmprFE/xRVJ4pkV56pnhD4c21aLjoIiZXiUvaoebtgxHqZdxT9Ar9niur5MxKa
-        t0MT18zg==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
-        by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.94.2)
-        id 1q93e2-000zHL-NE; Tue, 13 Jun 2023 15:01:10 +0200
-Date:   Tue, 13 Jun 2023 15:01:02 +0200
-From:   Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] OPP: Protect `lazy_opp_tables` list with
- `opp_table_lock`
-Message-ID: <ZIhojuakyEUct7YN@kernkonzept.com>
-References: <167eb2bd947d9c04b0f6f1a5495ce4a99eeab598.1686210112.git.viresh.kumar@linaro.org>
- <c0bac65236cf77fa8ac17c2645449544b73a0104.1686210112.git.viresh.kumar@linaro.org>
+        with ESMTP id S235247AbjFMODL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 10:03:11 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE205EC
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 07:03:09 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b1b8593263so68036071fa.2
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 07:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686664988; x=1689256988;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fgkWRSFPd0yuD0FGNaR13nds2yAxVTwu7JL5XkNXpyk=;
+        b=zHRXGuIuBd+yORTqRycH2QnjeEOxY2V7UnUyoRU01wMPDcAx3F1buHnlmfPm0uOy2N
+         6f8vCg/96QYp7+M9m8cVxHbr8m5kkkXMjub5BvRNov0Lg2OL18nUhqtPy9ZoMK3x6l7o
+         9H9NuFEtjDhNUOE7Ly3X64OT+MMlIu9zCOHihcabAfZwYqpEbHOnNiZyxZd92urL3yH0
+         k8SfpVvmrS4tqu2470z1qpe/7zPMZo+eHrUhR9RS2thNnsksRB1AN4dlrjI4nK/SHCPM
+         imGT5XGydOjhpeFjmz4O5l28uyhU637HwYZ1mJDN9YLizOXB9EVhhx3hb7y/0SDDA4lB
+         0GAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686664988; x=1689256988;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fgkWRSFPd0yuD0FGNaR13nds2yAxVTwu7JL5XkNXpyk=;
+        b=KHZTbLOtmL2qKpjL1aQ/7zSBiLFOre8sLvToKqs7j01VgbMtC+pMs1WEt1SFzlow/i
+         Xd/iKJ+QzZ1vYhYqId8D4KAnEMuniOmscSlhTzNdVcJFS5hjIP23vyMDx/LbD8Tfdb4i
+         1MT1OIXE9BD6mlxF17/X6qZChJ2lvOsXtVeMPSn8k/5ajTogaFp/BGVXWQr4beClqeAy
+         xdpgGHy5rBLIXg5KXKACWHg+hWF62dbFlnHKVPnuRoQx+TqMiWtajy15kiEay2tP6lrI
+         LP4ZN0DIz+RgYT1lLu1TCNnkQwq7mKOoNBhZObr3r32cAdi8wsAxDIwwgSDnl9ciljdw
+         T4jQ==
+X-Gm-Message-State: AC+VfDxrciDxQ8jongBvy9o0S/dAYJxmwrGm++ZsyWpGKtmOK2UuiMJ9
+        /PDKzbXmALCTPRChf1DbuSiIlQ==
+X-Google-Smtp-Source: ACHHUZ6zTU5wN3YPGfxLYadXb5CUKxNEAqCy7iL6N7ZCNbxg6Ynd/e9WzAiE+zpbR9yKsCfY2xEUiQ==
+X-Received: by 2002:a2e:6a09:0:b0:2b1:ecac:91d3 with SMTP id f9-20020a2e6a09000000b002b1ecac91d3mr4570823ljc.25.1686664987908;
+        Tue, 13 Jun 2023 07:03:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id a18-20020a05651c011200b002b32af2e9c6sm901490ljb.116.2023.06.13.07.03.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jun 2023 07:03:07 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v4 00/22] Restructure RPM SMD ICC
+Date:   Tue, 13 Jun 2023 16:03:00 +0200
+Message-Id: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0bac65236cf77fa8ac17c2645449544b73a0104.1686210112.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABR3iGQC/33NywrCMBQE0F+RrI00j7apK/9DRPK4tRdqUpIal
+ NJ/N7oT0eUMnJmFJIgIiew3C4mQMWHwJcjththB+wtQdCUTXnFR1byhc5jQ0nR1Z7SWGsWZ6KT
+ SNThSjNEJqIna26EofxvHUk4Rery/T46nkgdMc4iP92dmr/bXfGa0osz0CpqmEVbCYUSvY9iFe
+ CGvqcz/cl441J2QpmqdYuKLi79cFF73pnWiM6qV/Qdf1/UJcZ4+kj4BAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686664985; l=6104;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=f4ve/r5dOx6VGwd2ZbygUbCzlofyl0BUKmt3Opqvf44=;
+ b=2ywBgLO92trnU5XePfddi6Ac6Xr37EsS/ZjMv8v03lI4L7b66oU2vmCijK3IQHzZg/qS8W0FR
+ OhBh3P95LsbBkxQ6PcJzeop4KXcVbTyGQbj6skmFziRj8SCwW1ryzLK
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 01:13:23PM +0530, Viresh Kumar wrote:
-> The `opp_table_lock` lock is already used to protect the list elsewhere,
-> use it while adding or removing entries from it.
-> 
-> Reported-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> Stephan: Can you please give this a try ?
+This series reshuffles things around, moving the management of SMD RPM
+bus clocks to the interconnect framework where they belong. This helps
+us solve a couple of issues:
 
-Thanks, works fine for me. (Note that I don't have any races or
-corruption without this patch either so the testing result might
-not mean too much.) The patch also looks good!
+1. We can work towards unused clk cleanup of RPMCC without worrying
+   about it killing some NoC bus, resulting in the SoC dying.
+   Deasserting actually unused RPM clocks (among other things) will
+   let us achieve "true SoC-wide power collapse states", also known as
+   VDD_LOW and VDD_MIN.
 
-Tested-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+2. We no longer have to keep tons of quirky bus clock ifs in the icc
+   driver. You either have a RPM clock and call "rpm set rate" or you
+   have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
 
-> 
->  drivers/opp/of.c | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index c740a907ef76..ac2179d5da4c 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -21,7 +21,7 @@
->  
->  #include "opp.h"
->  
-> -/* OPP tables with uninitialized required OPPs */
-> +/* OPP tables with uninitialized required OPPs, protected by opp_table_lock */
->  static LIST_HEAD(lazy_opp_tables);
->  
->  /*
-> @@ -148,7 +148,10 @@ static void _opp_table_free_required_tables(struct opp_table *opp_table)
->  
->  	opp_table->required_opp_count = 0;
->  	opp_table->required_opp_tables = NULL;
-> +
-> +	mutex_lock(&opp_table_lock);
->  	list_del(&opp_table->lazy);
-> +	mutex_unlock(&opp_table_lock);
->  }
->  
->  /*
-> @@ -197,8 +200,15 @@ static void _opp_table_alloc_required_tables(struct opp_table *opp_table,
->  	}
->  
->  	/* Let's do the linking later on */
-> -	if (lazy)
-> +	if (lazy) {
-> +		/*
-> +		 * The OPP table is not held while allocating the table, take it
-> +		 * now to avoid corruption to the lazy_opp_tables list.
-> +		 */
-> +		mutex_lock(&opp_table_lock);
->  		list_add(&opp_table->lazy, &lazy_opp_tables);
-> +		mutex_unlock(&opp_table_lock);
-> +	}
->  	else
->  		_update_set_required_opps(opp_table);
->  
-> -- 
-> 2.31.1.272.g89b43f80a514
-> 
+3. There's less overhead - instead of going through layers and layers of
+   the CCF, ratesetting comes down to calling max() and sending a single
+   RPM message. ICC is very very dynamic so that's a big plus.
 
+The clocks still need to be vaguely described in the clk-smd-rpm driver,
+as it gives them an initial kickoff, before actually telling RPM to
+enable DVFS scaling.  After RPM receives that command, all clocks that
+have not been assigned a rate are considered unused and are shut down
+in hardware, leading to the same issue as described in point 1.
+
+We can consider marking them __initconst in the future, but this series
+is very fat even without that..
+
+Apart from that, it squashes a couple of bugs that really need fixing..
+
+--- MERGING STRATEGY ---
+If Stephen and Georgi agree, it would be best to take all of this through
+the qcom tree, as it touches on heavily intertwined components and
+introduces compile-time dependencies between icc and clk drivers.
+
+Tested on SM6375 (OOT), MSM8998 (OOT), MSM8996.
+
+MSM8974 conversion to common code and modernization will be handled separately.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v4:
+- Only set clk rate on a context if necessary
+- Mention qcom,icc.h is not the correct header in "Control bus rpmcc form icc"
+- Fix the bindings (BIT vs 1<<)
+- Fix one more wrong use of qcom,icc.h in "Fix bucket numer" and uninclude it
+- Drop "Allow negative QoS offset" (will be handled separately)
+- Export icc clocks descriptions to unbreak =m builds
+- Pick up tags
+- Link to v3: https://lore.kernel.org/r/20230526-topic-smd_icc-v3-0-5fb7d39b874f@linaro.org
+
+Changes in v3:
+- Use devm_clk_get_optional and only get() the clock once
+- Drop unnecessary NULL-checks for qp->bus_clk
+- Handle ARM32 CCF limitations, add an explicit comment about them
+- Use Stephan's alternative rpmcc readiness check
+- Fix one more wrong usage of QCOM_ICC_NUM_BUCKETS in icc-rpm.h
+- Introduce new dt-bindings for icc rpm tags
+- Mention the rpm tags situation in the commit message of
+  "Fix bucket number"
+- Pick up tags
+- Link to v2: https://lore.kernel.org/r/20230526-topic-smd_icc-v2-0-e5934b07d813@linaro.org
+
+Changes in v2:
+- Sort entries properly in "Add missing headers in icc-rpm.h"
+- Fix the check for no clocks on a given provider
+- Replace "Divide clk rate by src node bus width" with a proper fix
+- Add "Set correct bandwidth through RPM bw req"
+- Split "Add QCOM_SMD_RPM_STATE_NUM" into 2 logical changes
+- Move "Separate out interconnect bus clocks" a bit later in the series
+- Link to v1: https://lore.kernel.org/r/20230526-topic-smd_icc-v1-0-1bf8e6663c4e@linaro.org
+
+---
+Konrad Dybcio (21):
+      dt-bindings: interconnect: Add Qcom RPM ICC bindings
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      soc: qcom: smd-rpm: Use tabs for defines
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: icc-rpm: Set correct bandwidth through RPM bw req
+      interconnect: qcom: icc-rpm: Fix bandwidth calculations
+
+Stephan Gerhold (1):
+      soc: qcom: smd-rpm: Move icc_smd_rpm registration to clk-smd-rpm
+
+ drivers/clk/qcom/clk-smd-rpm.c                  | 312 +++++++++++-------------
+ drivers/interconnect/qcom/Makefile              |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c      |  77 ++++++
+ drivers/interconnect/qcom/icc-rpm.c             | 217 ++++++++--------
+ drivers/interconnect/qcom/icc-rpm.h             |  55 ++++-
+ drivers/interconnect/qcom/msm8916.c             |   4 +-
+ drivers/interconnect/qcom/msm8939.c             |   5 +-
+ drivers/interconnect/qcom/msm8974.c             |   2 +-
+ drivers/interconnect/qcom/msm8996.c             |   9 +-
+ drivers/interconnect/qcom/qcm2290.c             |   7 +-
+ drivers/interconnect/qcom/qcs404.c              |   4 +-
+ drivers/interconnect/qcom/sdm660.c              |   7 +-
+ drivers/interconnect/qcom/smd-rpm.c             |  24 +-
+ drivers/interconnect/qcom/smd-rpm.h             |  15 --
+ drivers/soc/qcom/smd-rpm.c                      |  17 +-
+ include/dt-bindings/interconnect/qcom,rpm-icc.h |  13 +
+ include/linux/soc/qcom/smd-rpm.h                |  20 +-
+ 17 files changed, 453 insertions(+), 337 deletions(-)
+---
+base-commit: 1f6ce8392d6ff486af5ca96df9ded5882c4b6977
+change-id: 20230526-topic-smd_icc-b8213948a5ed
+
+Best regards,
 -- 
-Stephan Gerhold
-Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
