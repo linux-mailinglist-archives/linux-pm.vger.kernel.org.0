@@ -2,81 +2,307 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694CA72EF72
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 00:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D5F72EF91
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 00:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241188AbjFMW3J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 18:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S229580AbjFMWkT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 18:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241070AbjFMW2k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 18:28:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8D26A8;
-        Tue, 13 Jun 2023 15:27:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A828463BAA;
-        Tue, 13 Jun 2023 22:27:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF5D1C433C0;
-        Tue, 13 Jun 2023 22:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686695255;
-        bh=UtC7UcQ/hyUlLBdUbZmK4L7JcHDTE+ooivJIEWVvdVA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h49pmsQsKYJfsGw5PAtl0HSY0l/4Am2otZYq5oSgl2/7LTDCQlgvsGBoeFWNA6pBi
-         KkmreFSbMJ5YvmO3hTFOlAtLc9ow74JwbdhHOZMbzxRRZdIokQdicIAyrzYzE8W0He
-         WBONsTU6veuNkDsmFdzFQohUf7h4RT6D6vBcuiRROp5gnTvBYw7FfM3205G6qC4fQU
-         gr1JnhzeFX/NZQhuoP8zhl+82yjy6OGr5ruyaB8stoFCxCZ0v1JXm5Z7oqhcxRk3EB
-         LJboTeOm836bff98ZO+XcBdyLXR0BP7uLOUQgzXz/BjnjMQJ0fzoBETofa39JDC4r1
-         dAN98JsBf365w==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     robimarko@gmail.com, agross@kernel.org, tglx@linutronix.de,
-        viresh.kumar@linaro.org, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
-        mani@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v4 0/5] Add devicetree support for SDX75 Modem and IDP
-Date:   Tue, 13 Jun 2023 15:30:31 -0700
-Message-Id: <168669542894.1315701.1987302610815486412.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1686311438-24177-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1686311438-24177-1-git-send-email-quic_rohiagar@quicinc.com>
+        with ESMTP id S230358AbjFMWkS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 18:40:18 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E36129
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 15:40:16 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f649db9b25so7559839e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 15:40:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686696014; x=1689288014;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2SJLE4n9hE/ILmBDFAKRk7xeXVExUEd4XwQM6TgQA5M=;
+        b=Up6lN2v68+kYZ8sT0l0BahoaWGelgnQhewQZLU3L7Buy4xRbYaAPcBTCRS6movUudf
+         CRC+hvqbY1PLoHS7IVrNZ0iIP6AiyzGvO/cLhZqoj+l0Dcb27xqJ2wwxYsTKlPlhgJ+n
+         fX03Bw2XFcUjZ8mvMpG87rcQWeeDGlDD2QUZyhnnn4oUSSeuW63KLtl763P72Jk4uMhf
+         8FX2RJ1AWXgGyJRbSeoSBjVw5lU/YmWDaXWHcXuVX4yjgLKZr/WStY+d02JozQSR3Jqf
+         dpdxg9ZwCip4AdUW9OanCbnS47pPoVEtwhVZRa8ToI5w23Bj9/8VvRb12OVG/bSwZ9Vm
+         6ZZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686696014; x=1689288014;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2SJLE4n9hE/ILmBDFAKRk7xeXVExUEd4XwQM6TgQA5M=;
+        b=TYP3vMHl3lQySbR5ugm+E8WQ0wsLXzznl0eUC7PX3u18uVuFplvEKvBs1OLtSnKOOx
+         pJ+xLXzm/VggcSzWFBbHkNwUBXiFvwChk8wgm0Pf8wpAokK9BC+NI30/ShbrjxeBa7hC
+         QF1qjPjcqF7PyxRGBiJT1G+0ouCLjdOHyAuNzmjK83goqULEFj5gMDJeW4fj9YOv7LHd
+         9lTnkmICvBAY4HsTCKwFsD17JyS4YZaThTOXCp/XGmGGMhyXjqnD+exG3Rsb7toRM3IY
+         UUT83LDUkC5sGuTrr63zpnTC4qVlGWD+2X1gb/fYiGDaG6ojksaQ2KStkX9LwONX+9TA
+         7K8A==
+X-Gm-Message-State: AC+VfDyvhef6AS1wq1vLtYk1uZQKBLAH6YRepm0wQPUpl2762o4rbtLZ
+        2SLB8eBR3siK4LxMqsCn9XDp4Q==
+X-Google-Smtp-Source: ACHHUZ5+wHRAOkTQe7kfApwRwpoFgapjDD5XJDBtnt5jWThtxMhG0994z4uKrkBq1MWJe3omlwGIyQ==
+X-Received: by 2002:a19:9145:0:b0:4f6:4bf6:59a1 with SMTP id y5-20020a199145000000b004f64bf659a1mr6691086lfj.34.1686696013774;
+        Tue, 13 Jun 2023 15:40:13 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id k4-20020ac24564000000b004f37aac79f4sm1928103lfm.185.2023.06.13.15.40.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 15:40:13 -0700 (PDT)
+Message-ID: <4417edef-5d4d-e802-69fb-feeeb2304e44@linaro.org>
+Date:   Wed, 14 Jun 2023 00:40:11 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4 17/22] interconnect: qcom: icc-rpm: Control bus rpmcc
+ from icc
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
+ <20230526-topic-smd_icc-v4-17-5ba82b6fbba2@linaro.org>
+ <ZIjTPyOfuVM7S1O1@gerhold.net>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <ZIjTPyOfuVM7S1O1@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 9 Jun 2023 17:20:33 +0530, Rohit Agarwal wrote:
-> Changes in v4:
->  - Addressed some of the dt bindings check mentioned by Krzysztof.
+
+
+On 13.06.2023 22:36, Stephan Gerhold wrote:
+> On Tue, Jun 13, 2023 at 04:03:17PM +0200, Konrad Dybcio wrote:
+>> The sole purpose of bus clocks that were previously registered with
+>> rpmcc was to convey the aggregated bandwidth to RPM. There's no good
+>> reason to keep them outside the interconnect framework, as it only
+>> adds to the plentiful complexity.
+>>
+>> Add the required code to handle these clocks from within SMD RPM ICC.
+>>
+>> RPM-owned bus clocks are no longer considered a thing, but sadly we
+>> have to allow for the existence of HLOS-owned bus clocks, as some
+>> (mostly older) SoCs (ab)use these for bus scaling (e.g. MSM8998 and
+>> &mmcc AHB_CLK_SRC).
+>>
+>> This in turn is trivially solved with a single *clk, which is filled
+>> and used iff qp.bus_clk_desc is absent and we have a "bus" clock-names
+>> entry in the DT node.
+>>
+>> This change should(tm) be fully compatible with all sorts of old
+>> Device Trees as far as the interconnect functionality goes (modulo
+>> abusing bus clock handles or wrongly using the qcom,icc.h binding,
+>> but that's a mistake in and of itself).
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  drivers/interconnect/qcom/icc-rpm.c | 119 ++++++++++++++++++++----------------
+>>  drivers/interconnect/qcom/icc-rpm.h |  13 ++--
+>>  drivers/interconnect/qcom/msm8996.c |   1 -
+>>  drivers/interconnect/qcom/sdm660.c  |   1 -
+>>  4 files changed, 71 insertions(+), 63 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index b8ecf9538ab9..f9d0ecba5631 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>> @@ -49,7 +49,7 @@
+>>  #define NOC_QOS_MODE_FIXED_VAL		0x0
+>>  #define NOC_QOS_MODE_BYPASS_VAL		0x2
+>>  
+>> -#define ICC_BUS_CLK_MIN_RATE		19200000ULL
+>> +#define ICC_BUS_CLK_MIN_RATE		19200ULL /* kHz */
+>>  
+>>  static int qcom_icc_set_qnoc_qos(struct icc_node *src)
+>>  {
+>> @@ -338,11 +338,10 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>  	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
+>>  	struct icc_provider *provider;
+>>  	u64 sum_bw;
+>> -	u64 rate;
+>> +	u64 active_rate, sleep_rate;
+>>  	u64 agg_avg[QCOM_ICC_NUM_BUCKETS], agg_peak[QCOM_ICC_NUM_BUCKETS];
+>>  	u64 max_agg_avg;
+>> -	int ret, i;
+>> -	int bucket;
+>> +	int ret;
+>>  
+>>  	src_qn = src->data;
+>>  	if (dst)
+>> @@ -364,49 +363,59 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
+>>  			return ret;
+>>  	}
+>>  
+>> -	for (i = 0; i < qp->num_bus_clks; i++) {
+>> -		/*
+>> -		 * Use WAKE bucket for active clock, otherwise, use SLEEP bucket
+>> -		 * for other clocks.  If a platform doesn't set interconnect
+>> -		 * path tags, by default use sleep bucket for all clocks.
+>> -		 *
+>> -		 * Note, AMC bucket is not supported yet.
+>> -		 */
+>> -		if (!strcmp(qp->bus_clks[i].id, "bus_a"))
+>> -			bucket = QCOM_ICC_BUCKET_WAKE;
+>> -		else
+>> -			bucket = QCOM_ICC_BUCKET_SLEEP;
+>> -
+>> -		rate = icc_units_to_bps(max(agg_avg[bucket], agg_peak[bucket]));
+>> -		do_div(rate, src_qn->buswidth);
+>> -		rate = min_t(u64, rate, LONG_MAX);
+>> -
+>> -		/*
+>> -		 * Downstream checks whether the requested rate is zero, but it makes little sense
+>> -		 * to vote for a value that's below the lower threshold, so let's not do so.
+>> -		 */
+>> -		if (bucket == QCOM_ICC_BUCKET_WAKE && qp->keep_alive)
+>> -			rate = max(ICC_BUS_CLK_MIN_RATE, rate);
+>> -
+>> -		if (qp->bus_clk_rate[i] == rate)
+>> -			continue;
+>> -
+>> -		ret = clk_set_rate(qp->bus_clks[i].clk, rate);
+>> -		if (ret) {
+>> -			pr_err("%s clk_set_rate error: %d\n",
+>> -			       qp->bus_clks[i].id, ret);
+>> +	/* Some providers don't have a bus clock to scale */
+>> +	if (!qp->bus_clk_desc && !qp->bus_clk)
+>> +		return 0;
+>> +
+>> +	/* Intentionally keep the rates in kHz as that's what RPM accepts */
+>> +	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
+>> +			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
+>> +	do_div(active_rate, src_qn->buswidth);
+>> +
+>> +	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
+>> +			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
+>> +	do_div(sleep_rate, src_qn->buswidth);
+>> +
+>> +	/*
+>> +	 * Downstream checks whether the requested rate is zero, but it makes little sense
+>> +	 * to vote for a value that's below the lower threshold, so let's not do so.
+>> +	 */
+>> +	if (qp->keep_alive)
+>> +		active_rate = max(ICC_BUS_CLK_MIN_RATE, active_rate);
+>> +
+>> +	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
+>> +	if (qp->bus_clk) {
+>> +		active_rate = max_t(u64, active_rate, sleep_rate);
+>> +		/* ARM32 caps clk_set_rate arg to u32.. Nothing we can do about that! */
+>> +		active_rate = min_t(u64, 1000ULL * active_rate, ULONG_MAX);
+>> +		return clk_set_rate(qp->bus_clk, active_rate);
+>> +	}
+>> +
+>> +	/* RPM only accepts <=INT_MAX rates */
+>> +	active_rate = min_t(u32, active_rate, INT_MAX);
+>> +	sleep_rate = min_t(u32, sleep_rate, INT_MAX);
 > 
-> Changes in v3:
->  - Clubbed all the dt node into a single patch as suggested by Krzysztof.
->  - Removed the applied patch.
->  - Addressed some comments from Konrad and Dmitry.
+> Realized this by coincidence while playing with the code changes for the
+> comment below: This doesn't work as intended similar to the ARM32 cap
+> above but it's broken even on ARM64:
 > 
-> [...]
+> Take this example:
+> 
+> 	u64 active_rate = 4294967296ULL;
+> 	active_rate = min_t(u32, active_rate, INT_MAX);
+> 
+> This should result into active_rate = INT_MAX.
+> But it actually results in rate = 0.
+> 
+> Why?
+> 
+> 	min_t(u32, rate, INT_MAX)
+> 	= min((u32)rate, (u32)INT_MAX)
+> 	= min((u32)4294967296ULL, (u32)INT_MAX)
+> 	= min(0, INT_MAX)
+> 	= 0
+> 
+> This needs to be min_t(u64 to work properly :)
+Yikes, right!
 
-Applied, thanks!
+> 
+>> +
+>> +	if (active_rate != qp->bus_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]) {
+>> +		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, active_rate, true);
+>> +		if (ret)
+>>  			return ret;
+>> -		}
+>> -		qp->bus_clk_rate[i] = rate;
+>> +
+>> +		/* Cache the rate after we've successfully commited it to RPM */
+>> +		qp->bus_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE] = active_rate;
+>> +	}
+>> +
+>> +	if (sleep_rate != qp->bus_clk_rate[QCOM_SMD_RPM_SLEEP_STATE]) {
+>> +		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, sleep_rate, false);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		/* Cache the rate after we've successfully commited it to RPM */
+>> +		qp->bus_clk_rate[QCOM_SMD_RPM_SLEEP_STATE] = sleep_rate;
+>>  	}
+> 
+> With my suggestion on the other patch to pass in the ctx/state number
+> directly into qcom_icc_rpm_set_bus_rate() I wonder if it would be nicer
+> to write as loop similar to the all others.
+> 
+> It's a bit shorter, although the line wrapping for the keep_alive is
+> also more ugly. I leave it up to you :)
+> 
+> Not even compile tested this time!
+I think it's more obvious when it's explicit for just two contexts.
 
-[1/5] dt-bindings: arm: qcom: Document SDX75 platform and boards
-      commit: f9a97656ace80c617df2d6003c815877c026a9e3
-[5/5] arm64: dts: qcom: Add SDX75 platform and IDP board support
-      commit: 9181bb939984f1ad4f958c2be3ea10fd67344165
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Konrad
+> 
+> Thanks,
+> Stephan
+> 
+> 	/*
+> 	 * Downstream checks whether the requested rate is zero, but it makes little sense
+> 	 * to vote for a value that's below the lower threshold, so let's not do so.
+> 	 */
+> 	if (qp->keep_alive)
+> 		agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]
+> 			= max(ICC_BUS_CLK_MIN_RATE, agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE]);
+> 
+> 	/* Some providers have a non-RPM-owned bus clock - convert kHz->Hz for the CCF */
+> 	if (qp->bus_clk) {
+> 		rate = max_t(u64, agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE],
+> 			     agg_clk_rate[QCOM_SMD_RPM_SLEEP_STATE]);
+> 		/* ARM32 caps clk_set_rate arg to u32.. Nothing we can do about that! */
+> 		reate = min_t(u64, 1000ULL * rate, ULONG_MAX);
+> 		return clk_set_rate(qp->bus_clk, rate);
+> 	}
+> 
+> 	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
+> 		/* RPM only accepts <=INT_MAX rates */
+> 		rate = min_t(u64, active_rate, INT_MAX);
+> 		if (rate == qp->bus_clk_rate[i])
+> 			continue;
+> 
+> 		ret = qcom_icc_rpm_set_bus_rate(qp->bus_clk_desc, rate, i);
+> 		if (ret)
+> 			return ret;
+> 
+> 		/* Cache the rate after we've successfully commited it to RPM */
+> 		qp->bus_clk_rate[i] = rate;
+> 	}
