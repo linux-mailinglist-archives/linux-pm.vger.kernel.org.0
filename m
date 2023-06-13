@@ -2,177 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562AA72DE3B
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B23672DE69
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241685AbjFMJtZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 05:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32938 "EHLO
+        id S241452AbjFMJ5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 05:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241707AbjFMJtB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:49:01 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E82D12964;
-        Tue, 13 Jun 2023 02:47:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686649678; x=1718185678;
-  h=date:from:to:cc:subject:message-id;
-  bh=GU5hQWrfkOYtwMjij7RqJUUQ8m93XJ9OjWCN7uRxFSw=;
-  b=R9u9ZksbJfg6ku8+6mpMzPFfqyfIx0612URFE6r5KoLYIevXxMcb38W4
-   lNgO7KENwIr2jhfSaTNhu0QR7TYgZBWedszPVCkpJYbz03gr+tSDyJFY6
-   CBQKcbdl37Gfqvtnj22dB7gzD6yCu5hAq5wnVypO5h0Law41amZheri1w
-   a0AOxGf3bylntU6hBrbgB6Azmrz/FNlHDCKm9dv1rRqgVq6MubqJgWy70
-   ZVrrQqEaOxegA5IZqK5oBi3si3TLQFHhyvopIzf5ko328TRHHHH3Q3fGy
-   IVP5KsDf250RtpS91BPBwG/qKfWTHDzltE+8ftr3WrkIG/iAizAXnPRbe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="444657858"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="444657858"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 02:47:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10739"; a="711575424"
-X-IronPort-AV: E=Sophos;i="6.00,239,1681196400"; 
-   d="scan'208";a="711575424"
-Received: from lkp-server01.sh.intel.com (HELO 211f47bdb1cb) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 13 Jun 2023 02:47:46 -0700
-Received: from kbuild by 211f47bdb1cb with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q90cr-0001Ad-1V;
-        Tue, 13 Jun 2023 09:47:45 +0000
-Date:   Tue, 13 Jun 2023 17:47:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 594c2fe7f2180a1b012a18019e363b9786e7975e
-Message-ID: <202306131714.kG5c4ZXN-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S241474AbjFMJ4z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:56:55 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2106.outbound.protection.outlook.com [40.107.255.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B570D1BD5;
+        Tue, 13 Jun 2023 02:56:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fLTSmsbhi7i4nUUWRBTmeJkGUbqqkVCyqKzX2ZKMw5hP4joOvmDePwp4CsUHXqco/pWMe6hftnr6oot6z5/0AVmJJS7LAY7wQUSNS/TccTDVCnGRpWchcxjdmwaQC6YVhesY13f5JD+iHoqAW0MW/q/g8kpUL4BbJNRTaqF39KhOL0IZte7z7kISh4ay3+5Z66e/mREDQ+9I3mxGHtJsoMFGjoy2WzR319eEbDyEUrMEN9KiTjNBNqHrVUFeFM/zxnR8ofkCKHpRDsptV1dAqjPR4kERE37ec7PndQYjjrlibPORqCb7xotWv6Vmj/NJAMK0jRaeGcDu15EWLq/O4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wgUHWTc8w9uXoZ9FmOs4xU+yjuY46oZRm/AqUHLmhp0=;
+ b=G7aWWL4FylmrzoPEMSaYOS59A1lDPFgi4TTx6xuBvdb2xE9F8voqV2dN7KliSEGexErNvsa5GFbOtm26Vb1bzLGU9K2ACMV9m3BvixTXIp04o0M+yWd1Cj+QMEJ+MPYg/ehtLHM39t6MviNK0NPZZb02N9vFlfAOLzD6hZEbhDcsLHaob+wxPJRxA109zvr+8SiHImifKJY5lf+x4nFq/pInVU/mUb+5Ekst42iEYL+z1pSdbxXtnH0WDl65IfettoCjY8PdrQuGNcJ8QibmdV1ucFR7O+4t6AlrHjcrqdjaYx5fN+053g55dlPoNiwDVBCmEN+07DJkGbnV0crCZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wgUHWTc8w9uXoZ9FmOs4xU+yjuY46oZRm/AqUHLmhp0=;
+ b=dj3M1cu7b0va+GFHEXe0G4j1uKkhHW2sdRflxUN384l4jMdZpMqyRI0KVVMGjNJihuyCzHuFDunfOACMhJrehAvUSOhbh/c1/TEl38eLHx1eIw7nAjiAQlXnJPuvtHyGOEFNOUEEnWlgkdD+6GOhhBcLtTcEV6afthQND65fKT+dUjzVGu8lya4sgm455sAOB5FXC2NNgnnED7OiS96HZZkRGH7G4nWKLAszklzzDPqe1D+O4MSsrHab3RLLXNsmrdnkLn9jVBTu6aAEpaOasqlmkBdY+a7raYR+suHc9mjzXlUflJazR0hZt+9ocBLcNaja1G2XcJEXqraG4fND8A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB4012.apcprd06.prod.outlook.com (2603:1096:4:f9::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6455.46; Tue, 13 Jun
+ 2023 09:56:39 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6455.039; Tue, 13 Jun 2023
+ 09:56:38 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     glaroque@baylibre.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thara.gopinath@gmail.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anarsoul@gmail.com, tiny.windzz@gmail.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        edubezval@gmail.com, j-keerthy@ti.com, f.fainelli@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
+        Yangtao Li <frank.li@vivo.com>
+Subject: [RESEND 1/9] thermal/hwmon: Add error information printing for devm_thermal_add_hwmon_sysfs()
+Date:   Tue, 13 Jun 2023 17:56:16 +0800
+Message-Id: <20230613095624.78789-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0033.apcprd02.prod.outlook.com
+ (2603:1096:3:18::21) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB4012:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9f0c09d-eb81-4388-4502-08db6bf47ade
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iVbodcEwfJ06GuaAFyq2QmgKS2CWgmq5KMceHodqVJPsXi/m8tXdlx1F/kO/CKjNv0LtiGIOcdvWMLuzy23pLZWpUlps0ms/QlRvjO+i+DVzGflD0M3N/a+JMvH6G6iVHij2/NOrL/b6SiBsxczFk4eWGcfbCUkgXCHErFAS2TtOGv7pJD0MIO5y5X/ZYsN3mumISuqCB0PArD+lSTBkrwbxqemTU7OngrHQghGEsf1I+NVSMudxiwJZr/JY2LpQ4/n3MFM1UZZAhU2T9I1N/AOJAW/yn5J1P5CukZGk34ORYqyKLz7y29NP4tDYDW8Alw9IYaHJGlwlqgtEb8ONquBr1ljcpgHaKFw8ZaNBXfuEJ+BA22hhC4Z9o8xWpaZ8hai34JPESBjWw4Fo6zcyUdPae4XPWonCSJnEGN1nQoS2hugYuc0zPDEvBmNGsKB4aC+lh2PpnyxApXeNZ74ZWPyX+1Q5WsyQy+is7ft0SlnKWJ9lxEA60LblkSsXb+fp46XlOV32NfQhWjh3N/j0HrugLCz9sJc7OM6TpToO9CI/tWT0UvYaxG2R+yXUQ8Md4pJcek1Nq/aQJ7W6EsyM2IXM8ic/m1J20qWj/NTrRzK2EYm3aMm39nH6+V+HVK4q
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(136003)(39860400002)(376002)(346002)(451199021)(4326008)(8936002)(66556008)(316002)(7406005)(7416002)(66476007)(41300700001)(186003)(2906002)(66946007)(478600001)(8676002)(5660300002)(6666004)(52116002)(6486002)(107886003)(1076003)(921005)(6506007)(6512007)(26005)(36756003)(83380400001)(86362001)(38100700002)(2616005)(38350700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PkovJBVBwalxUd6yVGZZ7Zc9EOhF/vgSPkmecnEeoYNW/PcG4a74d6ytOBKy?=
+ =?us-ascii?Q?WcjZToECquF8xM1UlBRXMn6f5FTdleSLoGiONAvO7U1p6w1SdsXY69Tw4TUo?=
+ =?us-ascii?Q?uTuVH1Ifsg76ccunyjfSBnEEYqY5BOjYyl0Vey3WMKV4/FvOot/r52G71aEb?=
+ =?us-ascii?Q?Lh66TPtUsLWDZAHibPvMKpU5pQlpx8qalGANLM6Uis8NlkRMMfR6AtKE/93O?=
+ =?us-ascii?Q?pH2jmDYEWNJA57m2AgYRJg7DhtkigzdaDpIekWrwz7bfm6IK03LS9PmyjF1b?=
+ =?us-ascii?Q?h4CnTaeuYd1WTf09hBbD03ffe0NmG8hRQiEfgeF6a4XaoZqe3OerYTbv6C78?=
+ =?us-ascii?Q?G2QBSGNkQsm7pEbw5WE5Yogluz5OpzUwCXJBNfT4jOUVXGI7e1jJd72MEGnk?=
+ =?us-ascii?Q?7JugLahuOFGCWJi59BmC6uIYcsCzvgalQCLWSA8pAh8tWTFfmmwiFG5ZlIhA?=
+ =?us-ascii?Q?RMxEHF7m4Xu2gusvSe+xqj6+tXhVHb8S9qVNe31FyLBlIo7nP4YqJORcO00v?=
+ =?us-ascii?Q?jwQ/csZkBygXmORc1m2TII8s5Z5gZaM89j9gfrn9f1osALX2mTPi+vPU47KR?=
+ =?us-ascii?Q?ZXGiXrm9baJqsQed6W0m02SAC287+D4megeGa9g6dX+GFM1cOTNoNIX7aN9/?=
+ =?us-ascii?Q?5oiIRAA71kiXF2xdZCW3nIdkLDQ38alx5D5zXuyT8fKcVSmlHzZTT5+TqIzj?=
+ =?us-ascii?Q?rhDqytfDdKk2Po4O26iM5khGXoxx3t3KnIgyVBag4Bd3JskAMEfw3cBNSfts?=
+ =?us-ascii?Q?3Y/qyN0yO+36e65Ffqz4DhLEJWuP12zCQTbqik6V2eFbomNiGwNnLHxL39V6?=
+ =?us-ascii?Q?JykKW+7fM4YF2duZXOV36PZ+yo4lITJxAogUY1kvm5vx9iJdZKrYHQvDgJNL?=
+ =?us-ascii?Q?cks0FuqxUf2KkRdeYjBkfmyJ5DWf5xAjyeP/ND6QxbY4N6Qo90rN7GJ4NesP?=
+ =?us-ascii?Q?K8mKYE6rUWnff3w+bMRIZwXwA0Qq+NT7M30QbdcqZ/GHDuo9LYhVgDhJpetY?=
+ =?us-ascii?Q?Rqb0XbOjEEoQJYg/2vugwD25TmEJMFVXORXDWk+EY7eVJDw7TFUu6xuCg2vg?=
+ =?us-ascii?Q?nP1rxTc1dNsgtT/ekEn1U5kqXEdLUktMCFY/Uw/YNipEqH8cTSIJaxpex7+P?=
+ =?us-ascii?Q?iHXu00+mDJwYUWBv1V3sB1QsmKuHMIMMGCm4mZdxTd0zUcUs31OJK0LRIrPV?=
+ =?us-ascii?Q?48PI4FHtj6QMQF6bCMIV0fEpUnFJgNvo3oIDvBfrOY/ozDYQWJoBs0tC45WZ?=
+ =?us-ascii?Q?6i/3SfYSze46+o/Hzn68l5ujuW0UsMx6SzRH7oiZ5ZeTH6I2WsREh1iakC7j?=
+ =?us-ascii?Q?k3ij7i+paP6M0kpKXd+x7Fl4MwPTZ0yC4tAEMSgJEyBMqvdMeZUW+eaWpxhH?=
+ =?us-ascii?Q?CmpilvXN1AaDZMB39Z74jnc+Np4kCqZza1+ECTDNvenF2CLm8qH2aSVgrsjw?=
+ =?us-ascii?Q?YakeVvQm2xi3xTdxwnsndFokYYl3kzWAIf6kq1icKA+EaPCijWd296bMTJH0?=
+ =?us-ascii?Q?ckphxHoHjH/KL/nqYnNPCt2/9SqgMu7QkAoTcobpz0YfaTFw1wXCQXYnsMpD?=
+ =?us-ascii?Q?o2JTRpj/qmkII0QAqbL2VqzRYcad5vKx/WKga3En?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9f0c09d-eb81-4388-4502-08db6bf47ade
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2023 09:56:38.3657
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LOfQ6gJ3ZWkmW0VC2s3VqfMQAqzhA23tWix5WZuZ0eXwAqa6I6NeLoyDfdzb5XOHAW7ho3veECp8JAcOspzWwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB4012
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 594c2fe7f2180a1b012a18019e363b9786e7975e  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+Ensure that all error handling branches print error information. In this
+way, when this function fails, the upper-layer functions can directly
+return an error code without missing debugging information. Otherwise,
+the error message will be printed redundantly or missing.
 
-elapsed time: 723m
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+Resend patchset so that the changes to thermal/hwmon.c are copied to everyone.
+ drivers/thermal/thermal_hwmon.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-configs tested: 100
-configs skipped: 7
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r015-20230612   gcc  
-arc                              allyesconfig   gcc  
-arc          buildonly-randconfig-r006-20230612   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r033-20230612   gcc  
-arc                  randconfig-r043-20230612   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230612   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r023-20230612   gcc  
-csky                 randconfig-r032-20230612   gcc  
-hexagon              randconfig-r021-20230612   clang
-hexagon              randconfig-r025-20230612   clang
-hexagon              randconfig-r041-20230612   clang
-hexagon              randconfig-r045-20230612   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230612   clang
-i386                 randconfig-i002-20230612   clang
-i386                 randconfig-i003-20230612   clang
-i386                 randconfig-i004-20230612   clang
-i386                 randconfig-i005-20230612   clang
-i386                 randconfig-i006-20230612   clang
-i386                 randconfig-i011-20230612   gcc  
-i386                 randconfig-i012-20230612   gcc  
-i386                 randconfig-i013-20230612   gcc  
-i386                 randconfig-i014-20230612   gcc  
-i386                 randconfig-i015-20230612   gcc  
-i386                 randconfig-i016-20230612   gcc  
-i386                 randconfig-r035-20230612   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze   buildonly-randconfig-r002-20230612   gcc  
-microblaze           randconfig-r012-20230612   gcc  
-microblaze           randconfig-r014-20230612   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r001-20230612   gcc  
-mips                 randconfig-r031-20230612   gcc  
-mips                 randconfig-r034-20230612   gcc  
-nios2        buildonly-randconfig-r004-20230612   gcc  
-nios2                               defconfig   gcc  
-openrisc             randconfig-r011-20230612   gcc  
-openrisc             randconfig-r036-20230612   gcc  
-parisc                           allyesconfig   gcc  
-parisc       buildonly-randconfig-r001-20230612   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r004-20230612   gcc  
-parisc               randconfig-r022-20230612   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r024-20230612   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r003-20230612   clang
-riscv                randconfig-r042-20230612   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230612   gcc  
-sh                               allmodconfig   gcc  
-sh                   randconfig-r002-20230612   gcc  
-sh                   randconfig-r016-20230612   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230612   clang
-x86_64               randconfig-a002-20230612   clang
-x86_64               randconfig-a003-20230612   clang
-x86_64               randconfig-a004-20230612   clang
-x86_64               randconfig-a005-20230612   clang
-x86_64               randconfig-a006-20230612   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64               randconfig-r005-20230612   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-
+diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+index fbe55509e307..a580add5a2f6 100644
+--- a/drivers/thermal/thermal_hwmon.c
++++ b/drivers/thermal/thermal_hwmon.c
+@@ -271,11 +271,14 @@ int devm_thermal_add_hwmon_sysfs(struct device *dev, struct thermal_zone_device
+ 
+ 	ptr = devres_alloc(devm_thermal_hwmon_release, sizeof(*ptr),
+ 			   GFP_KERNEL);
+-	if (!ptr)
++	if (!ptr) {
++		dev_err(dev, "Failed to allocate device resource data\n");
+ 		return -ENOMEM;
++	}
+ 
+ 	ret = thermal_add_hwmon_sysfs(tz);
+ 	if (ret) {
++		dev_err(dev, "Failed to add hwmon sysfs attributes\n");
+ 		devres_free(ptr);
+ 		return ret;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.0
+
