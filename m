@@ -2,38 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7A172E922
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 19:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7665872E92D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 19:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237109AbjFMRPZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 13:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
+        id S229807AbjFMRQf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 13:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjFMRPY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 13:15:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB30C10FE;
-        Tue, 13 Jun 2023 10:15:22 -0700 (PDT)
+        with ESMTP id S232022AbjFMRQe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 13:16:34 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B0E19BF;
+        Tue, 13 Jun 2023 10:16:27 -0700 (PDT)
 Received: from mercury (dyndsl-091-248-189-170.ewe-ip-backbone.de [91.248.189.170])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5039E66003AF;
-        Tue, 13 Jun 2023 18:15:21 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AFF5666003AC;
+        Tue, 13 Jun 2023 18:16:26 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686676521;
-        bh=ea9y0y4+Ed8zGdoUAyX2osAZo4+AuOqYHjrelnRLp1M=;
+        s=mail; t=1686676586;
+        bh=5AxaalXzVaJFUkSTDi3Tm4IeWzb4tfj/SGsHptGfdcw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LNpPgcNSj4ts6Dd0RIAzCfSOYRLGg4PkpnAXxjOLzTp5e0VtM9m2FCEJqFlEEV+jm
-         q8BL5UWF3O1BORogrx91RV9DZmCY8yaZAwcJJmAgbdO7i2J+GZzy+A6pOwuuy+ojRx
-         86/hutK3kvT04+xMews7TqWiPRVHhmZyRgFYwZYO/4DwJWK5+Qt7e+kKoM+ao9FtPy
-         G8N0wHwfon/f7bq0Y3D1UkebuxCzzxsl7DB+x47FncmXJGoU6aMXWGoUxSe6Xf4vhi
-         5xo0mh4DkS8orRYMRrOBENt38f98etBBX8n0Opfyqngrkay205KitXZJX2JZMYQqNt
-         IeXs4uJa2vXrg==
+        b=mqW70nOZWRTeu1NehigYLVIKDoDs5kENOcbMF9f0Sk19xKMpYE5PB811THrIbcmB8
+         e05QQS1DlIr6lTdPQyaGrgazfR7h41QVcP8snBVb6Vu0lxK87Hf5BcbGemt30lVnUJ
+         Gt1Or5sLzy7uAwqh1lm+43r4BmEGAl7EWKTgJMRhw06PH8I5PCwCLVkOdUxv/rmJxB
+         yj0RPZ0IHiTNcsq7zi+y8SuAuQ176tnuyGe22m6xQvmaHEhbxDBqbRYFHushn9TUoK
+         Q5yOzOAtFp/b+zWRuwJBDc27aaUdW+VeJxcYDfiUvGVSrUl9BcsdL8183/3XCyW6dT
+         +VEoAMpdcJNDw==
 Received: by mercury (Postfix, from userid 1000)
-        id E44E31066FC6; Tue, 13 Jun 2023 19:15:18 +0200 (CEST)
-Date:   Tue, 13 Jun 2023 19:15:18 +0200
+        id 1C1551066FC6; Tue, 13 Jun 2023 19:16:24 +0200 (CEST)
+Date:   Tue, 13 Jun 2023 19:16:24 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Sascha Hauer <s.hauer@pengutronix.de>
 Cc:     linux-rockchip@lists.infradead.org,
@@ -48,18 +48,17 @@ Cc:     linux-rockchip@lists.infradead.org,
         Vincent Legoll <vincent.legoll@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v5 14/25] PM / devfreq: rockchip-dfi: Prepare for
- multiple users
-Message-ID: <20230613171518.l4icucem5oq6eryu@mercury.elektranox.org>
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 15/25] PM / devfreq: rockchip-dfi: give variable a
+ better name
+Message-ID: <20230613171624.mrosctprljlz4g46@mercury.elektranox.org>
 References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230524083153.2046084-15-s.hauer@pengutronix.de>
+ <20230524083153.2046084-16-s.hauer@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ngrrzj37mxuwswuk"
+        protocol="application/pgp-signature"; boundary="pfxobpnuncen6xuh"
 Content-Disposition: inline
-In-Reply-To: <20230524083153.2046084-15-s.hauer@pengutronix.de>
+In-Reply-To: <20230524083153.2046084-16-s.hauer@pengutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -71,180 +70,119 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ngrrzj37mxuwswuk
+--pfxobpnuncen6xuh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, May 24, 2023 at 10:31:42AM +0200, Sascha Hauer wrote:
-> When adding perf support later the DFI must be enabled when
-> either of devfreq-event or perf is active. Prepare for that
-> by adding a usage counter for the DFI. Also move enabling
-> and disabling of the clock away from the devfreq-event specific
-> functions to which the perf specific part won't have access.
+On Wed, May 24, 2023 at 10:31:43AM +0200, Sascha Hauer wrote:
+> struct dmc_count_channel::total counts the clock cycles of the DDR
+> controller. Rename it accordingly to give the reader a better idea
+> what this is about. While at it, at some documentation to struct
+> dmc_count_channel.
 >=20
 > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > ---
 
 Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
->  drivers/devfreq/event/rockchip-dfi.c | 57 +++++++++++++++++++---------
->  1 file changed, 40 insertions(+), 17 deletions(-)
+>  drivers/devfreq/event/rockchip-dfi.c | 19 ++++++++++++-------
+>  1 file changed, 12 insertions(+), 7 deletions(-)
 >=20
 > diff --git a/drivers/devfreq/event/rockchip-dfi.c b/drivers/devfreq/event=
 /rockchip-dfi.c
-> index d39db5de7f19c..8a7af7c32ae0d 100644
+> index 8a7af7c32ae0d..50e497455dc69 100644
 > --- a/drivers/devfreq/event/rockchip-dfi.c
 > +++ b/drivers/devfreq/event/rockchip-dfi.c
-> @@ -68,13 +68,28 @@ struct rockchip_dfi {
->  	void __iomem *regs;
->  	struct regmap *regmap_pmu;
->  	struct clk *clk;
-> +	int usecount;
-> +	struct mutex mutex;
->  	u32 ddr_type;
->  	unsigned int channel_mask;
+> @@ -46,9 +46,14 @@
+>  #define DDRMON_CH1_COUNT_NUM		0x3c
+>  #define DDRMON_CH1_DFI_ACCESS_NUM	0x40
+> =20
+> +/**
+> + * struct dmc_count_channel - structure to hold counter values from the =
+DDR controller
+> + * @access:       Number of read and write accesses
+> + * @clock_cycles: DDR clock cycles
+> + */
+>  struct dmc_count_channel {
+>  	u32 access;
+> -	u32 total;
+> +	u32 clock_cycles;
 >  };
 > =20
-> -static void rockchip_dfi_start_hardware_counter(struct rockchip_dfi *dfi)
-> +static int rockchip_dfi_enable(struct rockchip_dfi *dfi)
->  {
->  	void __iomem *dfi_regs =3D dfi->regs;
-> +	int ret =3D 0;
-> +
-> +	mutex_lock(&dfi->mutex);
-> +
-> +	dfi->usecount++;
-> +	if (dfi->usecount > 1)
-> +		goto out;
-> +
-> +	ret =3D clk_prepare_enable(dfi->clk);
-> +	if (ret) {
-> +		dev_err(&dfi->edev->dev, "failed to enable dfi clk: %d\n", ret);
-> +		goto out;
-> +	}
-> =20
->  	/* clear DDRMON_CTRL setting */
->  	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_TIMER_CNT_EN | DDRMON_CTRL_=
-SOFTWARE_EN |
-> @@ -99,14 +114,30 @@ static void rockchip_dfi_start_hardware_counter(stru=
-ct rockchip_dfi *dfi)
->  	/* enable count, use software mode */
->  	writel_relaxed(HIWORD_UPDATE(DDRMON_CTRL_SOFTWARE_EN, DDRMON_CTRL_SOFTW=
-ARE_EN),
->  		       dfi_regs + DDRMON_CTRL);
-> +out:
-> +	mutex_unlock(&dfi->mutex);
-> +
-> +	return ret;
->  }
-> =20
-> -static void rockchip_dfi_stop_hardware_counter(struct rockchip_dfi *dfi)
-> +static void rockchip_dfi_disable(struct rockchip_dfi *dfi)
->  {
->  	void __iomem *dfi_regs =3D dfi->regs;
-> =20
-> +	mutex_lock(&dfi->mutex);
-> +
-> +	dfi->usecount--;
-> +
-> +	WARN_ON_ONCE(dfi->usecount < 0);
-> +
-> +	if (dfi->usecount > 0)
-> +		goto out;
-> +
->  	writel_relaxed(HIWORD_UPDATE(0, DDRMON_CTRL_SOFTWARE_EN),
->  		       dfi_regs + DDRMON_CTRL);
-> +	clk_disable_unprepare(dfi->clk);
-> +out:
-> +	mutex_unlock(&dfi->mutex);
->  }
-> =20
->  static void rockchip_dfi_read_counters(struct rockchip_dfi *dfi, struct =
-dmc_count *count)
-> @@ -124,29 +155,20 @@ static void rockchip_dfi_read_counters(struct rockc=
-hip_dfi *dfi, struct dmc_coun
+>  struct dmc_count {
+> @@ -150,7 +155,7 @@ static void rockchip_dfi_read_counters(struct rockchi=
+p_dfi *dfi, struct dmc_coun
+>  			continue;
+>  		count->c[i].access =3D readl_relaxed(dfi_regs +
+>  				DDRMON_CH0_DFI_ACCESS_NUM + i * 20);
+> -		count->c[i].total =3D readl_relaxed(dfi_regs +
+> +		count->c[i].clock_cycles =3D readl_relaxed(dfi_regs +
+>  				DDRMON_CH0_COUNT_NUM + i * 20);
 >  	}
 >  }
-> =20
-> -static int rockchip_dfi_disable(struct devfreq_event_dev *edev)
-> +static int rockchip_dfi_event_disable(struct devfreq_event_dev *edev)
->  {
+> @@ -182,29 +187,29 @@ static int rockchip_dfi_get_event(struct devfreq_ev=
+ent_dev *edev,
 >  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
+>  	struct dmc_count count;
+>  	struct dmc_count *last =3D &dfi->last_event_count;
+> -	u32 access =3D 0, total =3D 0;
+> +	u32 access =3D 0, clock_cycles =3D 0;
+>  	int i;
 > =20
-> -	rockchip_dfi_stop_hardware_counter(dfi);
-> -	clk_disable_unprepare(dfi->clk);
-> +	rockchip_dfi_disable(dfi);
+>  	rockchip_dfi_read_counters(dfi, &count);
 > =20
->  	return 0;
->  }
+>  	/* We can only report one channel, so find the busiest one */
+>  	for (i =3D 0; i < DMC_MAX_CHANNELS; i++) {
+> -		u32 a, t;
+> +		u32 a, c;
 > =20
-> -static int rockchip_dfi_enable(struct devfreq_event_dev *edev)
-> +static int rockchip_dfi_event_enable(struct devfreq_event_dev *edev)
->  {
->  	struct rockchip_dfi *dfi =3D devfreq_event_get_drvdata(edev);
-> -	int ret;
-> -
-> -	ret =3D clk_prepare_enable(dfi->clk);
-> -	if (ret) {
-> -		dev_err(&edev->dev, "failed to enable dfi clk: %d\n", ret);
-> -		return ret;
-> -	}
+>  		if (!(dfi->channel_mask & BIT(i)))
+>  			continue;
 > =20
-> -	rockchip_dfi_start_hardware_counter(dfi);
-> -	return 0;
-> +	return rockchip_dfi_enable(dfi);
->  }
+>  		a =3D count.c[i].access - last->c[i].access;
+> -		t =3D count.c[i].total - last->c[i].total;
+> +		c =3D count.c[i].clock_cycles - last->c[i].clock_cycles;
 > =20
->  static int rockchip_dfi_set_event(struct devfreq_event_dev *edev)
-> @@ -190,8 +212,8 @@ static int rockchip_dfi_get_event(struct devfreq_even=
-t_dev *edev,
->  }
+>  		if (a > access) {
+>  			access =3D a;
+> -			total =3D t;
+> +			clock_cycles =3D c;
+>  		}
+>  	}
 > =20
->  static const struct devfreq_event_ops rockchip_dfi_ops =3D {
-> -	.disable =3D rockchip_dfi_disable,
-> -	.enable =3D rockchip_dfi_enable,
-> +	.disable =3D rockchip_dfi_event_disable,
-> +	.enable =3D rockchip_dfi_event_enable,
->  	.get_event =3D rockchip_dfi_get_event,
->  	.set_event =3D rockchip_dfi_set_event,
->  };
-> @@ -272,6 +294,7 @@ static int rockchip_dfi_probe(struct platform_device =
-*pdev)
->  		return PTR_ERR(dfi->regmap_pmu);
+>  	edata->load_count =3D access * 4;
+> -	edata->total_count =3D total;
+> +	edata->total_count =3D clock_cycles;
 > =20
->  	dfi->dev =3D dev;
-> +	mutex_init(&dfi->mutex);
+>  	dfi->last_event_count =3D count;
 > =20
->  	desc =3D &dfi->desc;
->  	desc->ops =3D &rockchip_dfi_ops;
 > --=20
 > 2.39.2
 >=20
 
---ngrrzj37mxuwswuk
+--pfxobpnuncen6xuh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIpCYACgkQ2O7X88g7
-+pq6rw//R2cZCPEqSABeFIaVk6Gmh7baDhTAJFf+5S43NTiIuND9UU7r8bwfqoMW
-WZHfb0BhtAknPphgNwg1TN1wQKXq7v/cbgd0ZGfephnxJPQiCwCaq2GvSBq59f4N
-RU9r+u+/Wz4Da3EOrlyDoL3ypo94XD5dTIU6bgWGdUaBi+SmSdo1NBrY4P/8RRnH
-c1q56EJk4uSETMVz9qo4tuWLYRl6njfDJ1B86BZmH8Silna4HDWGU9N/6O6DapBL
-gFDZgBepyY2AVPfTd5/kRI+yyvGIFzh6wlntq5SIjHBeu/bhgvW7Zq/M228FiPYv
-/QXo26NZX01hM0+bPo3ZB7Bm693uvWmTxPagkdPcNxR19GrbAK5X456h5kGWnt8e
-CwQIR5JhXGxJ62zhK91RcFXn8I/elB0fxRa777V3PsUD+WpZW/RY5B1jCgWlJs7w
-ExgO2mqLxqgqaeF0Xdl3ByAnYiYQibkYy5vQxdVoOyW61EPjSognWBKJ8i4DoXHf
-AgbrAflMyVRHcdthoTa/p15H/TMBdwBbMTNxAhJiXkREe6rF+0jtbrhZMXlsUIOw
-MIuY6ASRa5SCfR+/s+aMypTSSwQdFuB6jJFsxiNpVsDkGD3/ex3tJCVoEMXEjXpe
-l80lYt3wlY/oD0SX5vxb2Wjmb7fuXh0rFCoKlsBoBIHUAHPw5r0=
-=pDhV
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSIpGcACgkQ2O7X88g7
++pqCyA/+LtQycD7o9vOEa1QsxI1Jhpp/ODV1N1n7SFabrVZ5oq92CcyFBpHUhTIR
+taIWvyae1XLKz6HJNoEGzA6xQqEDdGqXLCrRmfbx59QaeJOfJGt0fcIQ4t0WbhvH
+Y4KcUebYaBZnVCzdzJFCbScrpcKfk4hcSgMFHy5KAHGTRF2USYhcUBgS3wO7r8Ph
+OSOnFDmx8/styjdpVQIVpWnTrM4Jx1zs79u2TP669ddq5Fsqd0mcifUUbcYwXXws
+ySQyTDC14N1TztxQzpe5g4/IVej6TnVXB+EKbPc/B+8ZFXc0qjUQaJJNsKx08HXM
+a39Ifgbbf7qvxxx3mzGqDP+bVtU7gmGIzGBiYbyjNP4tu7fgn9nunshEzGllKCr6
+BmdAp3HIe63572BKHiMlofA60WCiewzgZhGCLlMUCUsyChB96xBfR0Sc/YZ01CIx
+02iUBC3HlscYwdcXsREd2uW5No+zjSEdlgDP+o2ecArNxDV63fPo2e7pFQdBAjle
+Jl2xtYDMCTzdERc+woA7q8aMXupEwImo1stBVMtnMyU/SRa9peApx9/s43is7aas
+SB1GSQ2/hjrcAW9HTiqVhFVpVfu7poGhtVlKouk7C7o7uf82uAnZ8trILzHdgN27
+kR0rmWM+VUx8nIDLTP5RKO4VrAVhfWCLuKCYQd95a8PTPhwIdI4=
+=HV39
 -----END PGP SIGNATURE-----
 
---ngrrzj37mxuwswuk--
+--pfxobpnuncen6xuh--
