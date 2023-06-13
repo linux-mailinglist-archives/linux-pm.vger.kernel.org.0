@@ -2,157 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1B872E572
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 16:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D40B72E5C4
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 16:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242793AbjFMON1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 10:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S240894AbjFMOax convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 13 Jun 2023 10:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242895AbjFMONX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 10:13:23 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0585EC
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 07:12:52 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f7378a75c0so42576955e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 07:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686665571; x=1689257571;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+jDLKP7QVBlzynmtRh0Z7fKYi859hQtE7sIS1qPZ6cs=;
-        b=dtlT9erKUE0lbsQ7LEI1yKuWbUzTVsV5wRCBWpPS8X555VpiVirMSJzUdCh8Rp69tm
-         5qLZ/kHUYAmmbVYDuPgqAzA52gJeePeIPb6MD2EFoYuMrBJMjksIjw6PmZaybBo2h9cp
-         1EqGJuSjMPVzEHYxweD22/d9S18gRhlaT8rC6vNAn7ssY+1PNaGhRQ1tklAm7MxzUb3g
-         ENa5DT4KijTIcsOcAv21+quK6wYCFlI+iDPZK8vH5ZOyI7E84daVcO5+L42dV+ht+mF4
-         RslDumdhsH5vEBvljoS1WuisUn0fOMGonKS4hVyYazE+MN9u3pQ77OBiBHFu9pN9YmOH
-         Pi0g==
+        with ESMTP id S242923AbjFMOav (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 10:30:51 -0400
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C68E54;
+        Tue, 13 Jun 2023 07:30:49 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-977c8baa86fso164779366b.0;
+        Tue, 13 Jun 2023 07:30:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686665571; x=1689257571;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+jDLKP7QVBlzynmtRh0Z7fKYi859hQtE7sIS1qPZ6cs=;
-        b=CHk5tE497eEHYY8IKJnP4+W2Jx27ZjfFvuqWhMpgnwg0VVYP00zOcyoReN+jp5phDl
-         OoCuklssonYZQVabXqXroQsT+GV/l2mw0qPcopEQRiJgOl/QElxok8dwWk+j/mqk4mNR
-         ruHWbWcYA414K7QklpuqTl+oBAnfFHu3yiQV6BmekN6i2J692WQDLBH/yfFjxQZxEhOE
-         lfF9H1gukWFmk20MkhJt6XYQ3L0/2S/x/S+l8q4T5m39W4QWBqOIEFX1faYSsu63b1/o
-         /n0Pua9VtEUxeS0BTUb+b+lqir1B1xFw79xF0qjGy4Y/dpjqpZMw3AR8U76E3JWZtWWy
-         MD4A==
-X-Gm-Message-State: AC+VfDwG4kalKkkQuBsMyF3fsZl4R47HDRA+hX715S2bfa3zJFEjERoG
-        pqFTWJ61Tos99PqEK483ipm22Q==
-X-Google-Smtp-Source: ACHHUZ68Vs68NTI8VIpCNTheg+R1K1xwqCim2h4KqSdzdxg7dDUaexwoEyhiksy4AYW0IcvAMELB4A==
-X-Received: by 2002:a7b:c30c:0:b0:3f4:298b:d925 with SMTP id k12-20020a7bc30c000000b003f4298bd925mr8879573wmj.41.1686665571177;
-        Tue, 13 Jun 2023 07:12:51 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:d6bf:b78b:2fff:653a? ([2a05:6e02:1041:c10:d6bf:b78b:2fff:653a])
-        by smtp.googlemail.com with ESMTPSA id t1-20020adfe101000000b0030e5a63e2dbsm15635804wrz.80.2023.06.13.07.12.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 07:12:50 -0700 (PDT)
-Message-ID: <e9d2e286-df54-1b6f-484b-afadaf594e82@linaro.org>
-Date:   Tue, 13 Jun 2023 16:12:50 +0200
+        d=1e100.net; s=20221208; t=1686666648; x=1689258648;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YURfXoA9EnnMo68ZYKa4kiRuIo5moA7Y1uftgx6iJwA=;
+        b=RCxGwVwZqxKK2xT2BmqG/yMKFvF7zFUqEc0W66xZjsvrK6xM/59T0182NoTwcgOvWC
+         5aQpxM1ocCgUAm2EsJ9QJojh2tHT6aA/8/25X8ALdSC/EAB49HKUFHPFqejR6+St1XHn
+         ycIJfYXTXunOBGHy2S0ZR3bKil9FEd6uSiBLw3u92Qrp+tsW2tfrdIJDrZ3bZ9MOOtJ9
+         7q6YKIpbpkEH4+9CvlqoFhXamUN+uLaRsRj3wnXGVQ/vUWCb61A9Ygaxi2+KF9dBbZLV
+         abUx/d4tmhRYagUFQufftF9cOqDBU9S44ojax/74uEw72S/eNZ2e5qQWP1ERi37ciIUw
+         ozVg==
+X-Gm-Message-State: AC+VfDxrbgMOm7pP9HUinAZxRPn4dW+vKBZZHwjbsOqkQJKJxrXLhPr5
+        Ptx76jnn3kk//J9GkCTb1jlQwv2jgOwtapOsokA=
+X-Google-Smtp-Source: ACHHUZ7hCEWJk93F76YlCbntVRHMehTTh0L+mXEP2lWbT0ryghEkQmiS61u5qbybIuq175LdkwHPhy73H/Ocs06GfBY=
+X-Received: by 2002:a17:906:7a41:b0:975:942b:ee43 with SMTP id
+ i1-20020a1709067a4100b00975942bee43mr11202017ejo.5.1686666647511; Tue, 13 Jun
+ 2023 07:30:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/8] Finish thermal zone structure encapsulation
-Content-Language: en-US
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230609023038.61388-1-zhiren.chen@mediatek.com>
+ <20230609114920.GA1242120@bhelgaas> <CAJZ5v0iiAGGuzjT1-ZmCaUT9CH4uXaDG9XQ1QmKbp-bnCjEF6w@mail.gmail.com>
+ <f2b93387ab364758a14774e4310c80ae8a0daeab.camel@mediatek.com>
+In-Reply-To: <f2b93387ab364758a14774e4310c80ae8a0daeab.camel@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 13 Jun 2023 16:30:34 +0200
+Message-ID: <CAJZ5v0iRY1PVbKHMpLxZozmK_hDvx+0SZrnbFWkDs_7O6D_fYw@mail.gmail.com>
+Subject: Re: [PATCH] PCI:PM: Support platforms that do not implement ACPI
+To:     =?UTF-8?B?WmhpcmVuIENoZW4gKOmZiOW/l+S7gSk=?= 
+        <Zhiren.Chen@mediatek.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        =?UTF-8?B?SGFpanVuIExpdSAo5YiY5rW35YabKQ==?= 
+        <haijun.liu@mediatek.com>, "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        =?UTF-8?B?TWluZ2NodWFuZyBRaWFvICjkuZTmmI7pl68p?= 
+        <Mingchuang.Qiao@mediatek.com>,
+        =?UTF-8?B?TGFtYmVydCBXYW5nICjnjovkvJ8p?= 
+        <Lambert.Wang@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jun 13, 2023 at 9:57 AM Zhiren Chen (陈志仁)
+<Zhiren.Chen@mediatek.com> wrote:
+>
+> On Fri, 2023-06-09 at 19:58 +0200, Rafael J. Wysocki wrote:
+> >
+> >  On Fri, Jun 9, 2023 at 1:49 PM Bjorn Helgaas <helgaas@kernel.org>
+> > wrote:
+> > >
+> > > [+cc Rafael, linux-pm]
+> > >
+> > > On Fri, Jun 09, 2023 at 10:30:38AM +0800, Zhiren Chen wrote:
+> > > > From: Zhiren Chen <Zhiren.Chen@mediatek.com>
+> > > >
+> > > > The platform_pci_choose_state function and other low-level
+> > platform
+> > > > interfaces used by PCI power management processing did not take
+> > into
+> > > > account non-ACPI-supported platforms. This shortcoming can result
+> > in
+> > > > limitations and issues.
+> > > >
+> > > > For example, in embedded systems like smartphones, a PCI device
+> > can be
+> > > > shared by multiple processors for different purposes. The PCI
+> > device and
+> > > > some of the processors are controlled by Linux, while the rest of
+> > the
+> > > > processors runs its own operating system.
+> > > > When Linux initiates system-level sleep, if it does not consider
+> > the
+> > > > working state of the shared PCI device and forcefully sets the
+> > PCI device
+> > > > state to D3, it will affect the functionality of other processors
+> > that
+> > > > are currently using the PCI device.
+> > > >
+> > > > To address this problem, an interface should be created for PCI
+> > devices
+> > > > that don't support ACPI to enable accurate reporting of the power
+> > state
+> > > > during the PCI PM handling process.
+> > > >
+> > > > Signed-off-by: Zhiren Chen <Zhiren.Chen@mediatek.com>
+> >
+> > Something like the pci_platform_pm_ops introduced here had been there
+> > for several years and the only users of it known to me were ACPI and
+> > Intel MID, which is why it was dropped.
+> >
+> > I would like to see the platform code using these new callbacks in
+> > the
+> > first place.
+> >
+> I think that more and more embedded products will use PCI devices to
+> achieve higher performance for data transfer, and these products may
+> not necessarily support ACPI.
+>
+> When developing the Mediatek T8xx modem chip driver, I found that there
+> was no good way for T8xx to skip D3 setting in certain PM scenarios.
 
-Hi Rafael,
+Well, is there any code that you are planning to add to the mainline
+Linux kernel that is going to use the proposed interface?
 
-On 25/05/2023 16:01, Daniel Lezcano wrote:
-> The series are the last changes to self-encapsulate the thermal zone device
-> structure in order to protect wild accesses to the thermal zone device
-> internals, especially the trip points and the locks.
-> 
-> Meanwhile the latest changes, a new driver has come via the network tree which
-> directly accesses the thermal zone device structure information and uses the
-> old thermal_zone_device_register function. The first patch does the change to
-> use the accessor and the new registering function. It is expected to have the
-> changes to go through the thermal tree along with the other patches.
-> 
-> The second patch adds a macro to warn at compilation time if the
-> thermal_core.h is included in a file not belonging to the thermal core
-> code. One warning will happen with the nvidia drivers but this is in
-> the way to be solved.
-> 
-> The third patch reorders the headers inclusion in the core code.
-> 
-> The fourth patch provides an API to update the thermal trips of a
-> thermal zone. This function takes care of the locking and the thermal
-> zone update.
-> 
-> The next patches makes the int340x drivers to use the thermal trip
-> update above and the different accessors for thermal zone structure.
-> 
-> Finally the last patch moves the thermal zone device structure from
-> the exported thermal.h header to the thermal core private header.
-
-I think we are all pretty busy for this cycle and that series did not 
-raised any comments (yet?).
-
-I would like to go forward with the generic trip points changes and 
-finish the conversion so we can fix the trip points monitoring once and 
-for all. This series consolidate the self-encapsulation of the thermal 
-zone device to prevent changing the trip points directly in the thermal 
-zone device structure.
-
-Most of the patches of this series don't have functional changes.
-
-If nobody has concern with it, I propose to pick them up in the next days.
-
-> Daniel Lezcano (8):
->    net/mlx5: Update the driver with the recent thermal changes
->    thermal/core: Hardening the self-encapsulation
->    thermal/core: Reorder the headers inclusion
->    thermal/core: Update the generic trip points
->    thermal/drivers/int3400: Use thermal zone device wrappers
->    thermal/drivers/int340x: Do not check the thermal zone state
->    thermal/drivers/int340x: Use thermal zone device trip update
->    thermal/core: Move the thermal zone structure to the private core
->      header
-> 
->   .../net/ethernet/mellanox/mlx5/core/thermal.c | 15 ++--
->   drivers/thermal/gov_bang_bang.c               |  1 +
->   drivers/thermal/gov_fair_share.c              |  1 +
->   drivers/thermal/gov_power_allocator.c         |  7 +-
->   drivers/thermal/gov_step_wise.c               |  1 +
->   drivers/thermal/gov_user_space.c              |  1 +
->   .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++-----
->   .../int340x_thermal/int340x_thermal_zone.c    | 17 ++--
->   drivers/thermal/thermal_acpi.c                |  1 +
->   drivers/thermal/thermal_core.c                | 47 +++++------
->   drivers/thermal/thermal_core.h                | 82 +++++++++++++++++++
->   drivers/thermal/thermal_helpers.c             |  1 +
->   drivers/thermal/thermal_hwmon.c               |  1 +
->   drivers/thermal/thermal_netlink.c             |  1 +
->   drivers/thermal/thermal_of.c                  |  1 +
->   drivers/thermal/thermal_sysfs.c               |  1 +
->   drivers/thermal/thermal_trip.c                | 79 ++++++++++++++++++
->   include/linux/thermal.h                       | 79 +-----------------
->   18 files changed, 241 insertions(+), 139 deletions(-)
-> 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+If not, the interface itself will not be useful in the mainline Linux kernel.
