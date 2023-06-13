@@ -2,112 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8957C72DCED
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 10:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E891272DCFB
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 10:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238168AbjFMIpK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 04:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        id S241712AbjFMIta (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 04:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241817AbjFMIoz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 04:44:55 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96326C0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 01:44:54 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-30fba11b1ceso2444627f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 01:44:54 -0700 (PDT)
+        with ESMTP id S240440AbjFMIt3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 04:49:29 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7BCC9
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 01:49:27 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f8cc04c2adso3631295e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 01:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686645893; x=1689237893;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1686646166; x=1689238166;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GOhgvg1tjgafIn2t+KwWYybBDc/75RdZdtgrlDL+3EA=;
-        b=REFaRKCHuUB70AGB7KYmstKdfVIkGaxUOfB7fCWdLqCESlPwK/Inb5th6qTZ1N829L
-         39wfQATFZ0c9o+w+bJMeKQLEmXA6o6QptjSjY7avQLpycOtgNvXxnBIkY8R+ANHoGTF1
-         A4aO/wt7SIO7wgJD2pPGighMiQZaGi4mXD0HsQgy+GMdmXTJRZLpVx2L5SoxQf9NEIAi
-         tMybnU+9rqmJ73d9Kzs4uG/XQbQfHTGcwujoc3r5u4d6URyHLhsBdmykeW+mZADwbHRa
-         ndlw6KFh4VcPthrarjlxoL9hTMWSsz45vnFieixcxHmDkkeWxpRW0/2d/LLOFaipTU9G
-         M8jg==
+        bh=a0I2pNeOiPYcUgKjv6OV6+sPS7erJxX4fRSV8gqz1fw=;
+        b=JVPJNR2G9K5SB+ZbY//2raud+kEc/EIAVOrsIkSCHCmc2c4Oc6QBLqmbAJj6j3hweh
+         dXw485acl4adLieocy3FOyHxXRAgmSs7fYxE/6DLnxURl8KbWfJgNdJokpDwb9gmRuxE
+         8vi0l5DYkgzMbZHMjWiPGqZIJmixY2tpz+wUZMgxmoVIYjGHIIHg9N2A/8pft+GbW14+
+         tD3UKjvjxMKY11ZJl1oYQqi7rrIoQvusSCgRULOOcpSZjoFmQoP3c7ZshW17QdSs9XKA
+         gJTHWOERR1npxo0rAFS+CBJ5UZbvkh0Ami8TVlfy6pYx70reg/k1ctOhT9JFkPDRYK5R
+         TSHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686645893; x=1689237893;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1686646166; x=1689238166;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GOhgvg1tjgafIn2t+KwWYybBDc/75RdZdtgrlDL+3EA=;
-        b=i0ldd8RccoZTfHmq6DVlFQG9NJFo8KkPzBsKbvScgLiZvMNd7JpdlT3P8IXeqN7czD
-         wv8O/l4oPx2rCpYzliyqI8mRc1LtNDLU8/L2GFG/2yYqn7KMaXPSdN3x76TN2gWdHE68
-         WP3m9hlXU43+dE0owxY20NjzA6pwQn6nPUrsezJBpOQ978p7GBDNp1WyU/SWx3fjkWMa
-         mY33mLPw2GPsGI5Va/rw3oAX3PGU/wNqUPU38+jJtl76AsNd3nnKb3yLJA2vSrAyWKFa
-         lFQpgCblK7hsphnFSgLkJsLZtVLBuq13Vtf+6/bKTTV9xlhlAFw/iyGPjPcs7/cpUHdu
-         UNxg==
-X-Gm-Message-State: AC+VfDz8i2aL/rtn3sEhc08gqJ5nNneK8WPIhrowHOa0wQCCDqjd5pej
-        eBVaC27HPb8GdBsretTRHUf5tg==
-X-Google-Smtp-Source: ACHHUZ7hNYq/zghQXR6ERx3XAR0do/qjH3nprDgDS+u5UZCPAMy0t1gAr0y3xtWkgtSF1gecspk6Vw==
-X-Received: by 2002:a5d:40c2:0:b0:30f:ce0e:c819 with SMTP id b2-20020a5d40c2000000b0030fce0ec819mr804311wrq.12.1686645892885;
-        Tue, 13 Jun 2023 01:44:52 -0700 (PDT)
+        bh=a0I2pNeOiPYcUgKjv6OV6+sPS7erJxX4fRSV8gqz1fw=;
+        b=PU9YrCni2Q9rmx85GxeVb4K9Fv0CHEiE+rjhBYERMG437OtBPwCRSMkaRVh/1SQjaM
+         xeyV3zZZiV3oyZ1LkYl0Ld/7GraJMkwG/GhWC7u8HB72Bf1eTQ9ysJs11e7SbZrUlOQa
+         ImWsRSuyz568x2Xf/1dwpA48sk9jidYcy+42Zbf2aW6EbpdmN2K+Nx6ekYyMS68ELCu1
+         a1Du8GXmi7IFE77e+va8DtXWNVh0xx2TUyia1aatT8KqMeaXYLh8MNwxjOdYtO7rcFbG
+         d5KYWD0z4w3etcYwPQLg8Ks1F1snQ85zTG1dCxOd24kSRq14PSsdP73mXph8RoOak2NQ
+         /aoQ==
+X-Gm-Message-State: AC+VfDySyfjUYenCzaJUBh8WgA394zKVmOcUmBts2aEKiPsOrRbV8Jrh
+        gqRYEGwafDR7m0NfHIIXjJ/D/g==
+X-Google-Smtp-Source: ACHHUZ42xf9bgppziC+evXWZEQ23sTzyp1CSrHHwD55tNkhkvnVJMtZkpVFyXvbIV1n6bLMqRSDXhg==
+X-Received: by 2002:a7b:c7d8:0:b0:3f6:1474:905 with SMTP id z24-20020a7bc7d8000000b003f614740905mr9375762wmk.29.1686646165959;
+        Tue, 13 Jun 2023 01:49:25 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:b5a8:28ff:af00:a97f? ([2a05:6e02:1041:c10:b5a8:28ff:af00:a97f])
-        by smtp.googlemail.com with ESMTPSA id u13-20020adfeb4d000000b00301a351a8d6sm14664217wrn.84.2023.06.13.01.44.52
+        by smtp.googlemail.com with ESMTPSA id z15-20020a7bc7cf000000b003f6129d2e30sm13796467wmk.1.2023.06.13.01.49.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 01:44:52 -0700 (PDT)
-Message-ID: <40546a57-27ac-8bf9-a2d8-77f7d4ab4aad@linaro.org>
-Date:   Tue, 13 Jun 2023 10:44:51 +0200
+        Tue, 13 Jun 2023 01:49:25 -0700 (PDT)
+Message-ID: <ad78c18e-13dd-fca3-1aff-5b8e68a91c90@linaro.org>
+Date:   Tue, 13 Jun 2023 10:49:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 0/2] thermal/drivers/mediatek: fix a regression affecting
- other subsystems
+Subject: Re: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths
+ in sun8i_ths_probe()
 Content-Language: en-US
-To:     Icenowy Zheng <uwu@icenowy.me>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Kang Chen <void0red@hust.edu.cn>,
-        Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230529162056.3786301-1-uwu@icenowy.me>
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+References: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
+ <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
+ <u7mmywm63bm5q4zlsbnooeplscn4rrd3qnslkfq2xnquxgnkkd@n3tsnrutmfjp>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230529162056.3786301-1-uwu@icenowy.me>
+In-Reply-To: <u7mmywm63bm5q4zlsbnooeplscn4rrd3qnslkfq2xnquxgnkkd@n3tsnrutmfjp>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/05/2023 18:20, Icenowy Zheng wrote:
-> In the commit I reverted as the first commit of this patchset, the
-> of_iomap function call, which allows multiple mapping of the same
-> physical memory space, is replaced to calling devm_of_iomap, which
-> registers exclusivity, and on my system (mt8173-elm), preventing display
-> from working.
+On 15/05/2023 14:33, Ondřej Jirman wrote:
+> Hi Maxime,
 > 
-> So I reverted it, and to really solve the problem that the original
-> commit wants to solve, I read the source of auxadc-thermal and realized
-> that the address of these two memory blocks are not saved after probe,
-> and they're only used when initializing the thermal sensors. This leads
-> to my final fix, which is the second commit here, that adds of_iounmap
-> just to the probe function.
+> On Mon, May 15, 2023 at 01:54:41PM +0200, Maxime Ripard wrote:
+>> Hi,
+>>
+>> On Sun, May 14, 2023 at 08:46:05PM +0200, Christophe JAILLET wrote:
+>>> Should an error occur after calling sun8i_ths_resource_init() in the probe
+>>> function, some resources need to be released, as already done in the
+>>> .remove() function.
+>>>
+>>> Switch to the devm_clk_get_enabled() helper and add a new devm_action to
+>>> turn sun8i_ths_resource_init() into a fully managed function.
+>>>
+>>> Move the place where reset_control_deassert() is called so that the
+>>> recommended order of reset release/clock enable steps is kept.
+>>> A64 manual states that:
+>>>
+>>> 	3.3.6.4. Gating and reset
+>>>
+>>> 	Make sure that the reset signal has been released before the release of
+>>> 	module clock gating;
+>>>
+>>> This fixes the issue and removes some LoC at the same time.
+>>
+>> It should really be three different patches:
+>>   - One to fix the resource release, that can be backported to stable
+>>     releases
+>>   - One to switch to devm_clk_get_enabled
+>>   - and one to change the order of clock enable vs reset deassertion
 > 
-> Icenowy Zheng (2):
->    Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid resource
->      leak in mtk_thermal_probe"
->    thermal/drivers/mediatek: unmap foreign MMIO after probing
-> 
->   drivers/thermal/mediatek/auxadc_thermal.c | 46 ++++++++++++-----------
->   1 file changed, 24 insertions(+), 22 deletions(-)
+> The order was correct before this patch. I don't think an incorrect order
+> should be intorduced, even if temporarily between two patches.
 
-I'll apply only the revert and let you revisit the patch 2 which could 
-be improved.
+Maxime ?
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
