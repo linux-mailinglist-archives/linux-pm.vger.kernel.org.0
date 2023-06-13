@@ -2,136 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC88072DD81
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E9772DD88
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241871AbjFMJSI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 05:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S241860AbjFMJTf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 05:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241901AbjFMJR7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:17:59 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3527919A7
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:17:50 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f8cec6641bso3099085e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:17:50 -0700 (PDT)
+        with ESMTP id S241868AbjFMJTe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:19:34 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3538EE47
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:19:33 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f7a8089709so55087975e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:19:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686647868; x=1689239868;
+        d=linaro.org; s=google; t=1686647971; x=1689239971;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DcUX4fDs7iSlQ+LnL3iJyOLoCOfttwzDzADNkHi9/UQ=;
-        b=wE7DBOHqnnNYn0JdlNZUMAi/IfQEQdPUAEbjSX8isNwHRmldZ6YyaKSsgn3OMuDejJ
-         8sW04YcS18wT7UKNqDklWAHGQh87GS+qy4ckHY+X1Cecc0cbPgW5LdMM4kOLHes19lU/
-         bOnTd//CbkKIH3PtJkIDj+Z6BqFplONDOXCcY4dnjYrP/sas6jvJJXID1kRSulqzx+a9
-         JVRzLcfB1fb5nr41OQAOJ8jVs+suQ8AgtMIw2A/f1ejS8QqCDdl8BfLQUIQw0IKamERh
-         milN0sjKNKnosNuU4flCo2TB8C9znO4syyBO1HE5+z24kMvOSxRHjsmxCsltrqlMIhSV
-         ssBw==
+        bh=85h3cBiBNVC64etO4MoXxUSwuanSFultgefQOTEuL4w=;
+        b=aP7wu7PqoUhTitgvxiazJdC0gQUWdtj6ghI8C/XKnQrm6udF1Y2P1591QhK5by6AZC
+         XWbtLCDD299KLNRGKTHTzM7eQxJZMqYoKHQTUZfJqH7TmOjtSm8AAQtMeG7N+ZBeBvyV
+         ahBqCM2fG0BXwxMGAh/ae5VWevZa4KaPVH1DXrQbVq8p5RE3p7qtvnbnq2v3wowrHd03
+         8L7IG3Es1RaryRAuLZoLnIf7n0sRp//vKk4k3FXWVRjLselzcKcwatHwNrjag+fnzaYF
+         FSCjSrAa1tfa63AEjy52IVRb2G4wediAsD/iRH0VcocTkbX2PSDBtgVC5XWbraeg9DAp
+         ZpJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686647868; x=1689239868;
+        d=1e100.net; s=20221208; t=1686647971; x=1689239971;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DcUX4fDs7iSlQ+LnL3iJyOLoCOfttwzDzADNkHi9/UQ=;
-        b=BT/p/3IuTaoyIYOnEJ4VQoqyG/q92prHj9HO7ussw/z5zIISUlTj9CpmJZCR7KdEbJ
-         GcUMgoZw5gVuiuw4M07T9ricdrkjdCHp8o9BIOxU8nshOf8ADFy+pxplrfAx2VOKIRoz
-         x6nrK38rWEYxVqIrWZOwehN1Ut5VRNWLvXMDm67tC/kzSi8URbsPCuuidv1Y/rrZ7gHW
-         LT58m+nKnFR+0i488qL+cCItW2PyzC20/O1m6BgJswpxzD0oERx9BQyAOhdX0vsPa46f
-         y0bJBWPNxQxmCvpjSk61mjN8z2bQkhgCgVOKylX5lqNCZHNOstoPieqs/fGEeC/EuO1H
-         ZCMA==
-X-Gm-Message-State: AC+VfDy3pjsZdXoE1ViLgtw7n9qPUkvGtq6HKKQUKG+uIQ1FhWAxXShc
-        Tl7zVmEVpYVKnm1kiMBzpaXZQw==
-X-Google-Smtp-Source: ACHHUZ7PRirIG4e4ODfmZ78TSJJS4MY/py9QOzKFtnX3RLZe7Upxx7koRp4/SWWhSVvtEj7n/D1VUw==
-X-Received: by 2002:a7b:c394:0:b0:3f8:f5d:52ee with SMTP id s20-20020a7bc394000000b003f80f5d52eemr6890301wmj.23.1686647868566;
-        Tue, 13 Jun 2023 02:17:48 -0700 (PDT)
+        bh=85h3cBiBNVC64etO4MoXxUSwuanSFultgefQOTEuL4w=;
+        b=RoG8nKmrXBXuwI+vdG+biOwVGnF8O6mqe5wyhnWUyu5G9rgoeDgs39ZovFqxkkUjsI
+         E21HcZBa7rOEZzHTO1od1XIKYOcx+zsgcUD25NT0Q+DK0fYe1fkoYhQhgod6E9iBFCvc
+         kLA1NldUpieRFGD3glyXg4h/jKkCAiLbZS8Mz4NPrmqhAr2RhIGKZgIYYx/5nIu93JWh
+         GXOsfLsrpDGWFlm3BZekA32I+rTeq+SJAyumDFNsKQ/1UOIVUGEnE0qjIZjSQisksPj0
+         Y7XoMq8GZ1IF5Y+9hugvtqHw8hAGWReWaEPKReJOe3KDWG9BVvdvbPbgQtUW1jW3d7Kl
+         c9Ng==
+X-Gm-Message-State: AC+VfDySRZlRMpMtxWGpQ4M1uy7CgBmG3Jo+N/hLmxS//bMegTzerjlF
+        LiCG9ByT9weA0cfI0SMZh9fptg==
+X-Google-Smtp-Source: ACHHUZ413zhzKv18Vi3+GAmUiNoP2SFNamiwUJslNmUrmfdr2gkL892xPE21dUAL3Lv0juaLsX9EoQ==
+X-Received: by 2002:a7b:cc84:0:b0:3f6:476:915 with SMTP id p4-20020a7bcc84000000b003f604760915mr9169425wma.6.1686647971564;
+        Tue, 13 Jun 2023 02:19:31 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:b5a8:28ff:af00:a97f? ([2a05:6e02:1041:c10:b5a8:28ff:af00:a97f])
-        by smtp.googlemail.com with ESMTPSA id q25-20020a7bce99000000b003f17848673fsm13769141wmj.27.2023.06.13.02.17.47
+        by smtp.googlemail.com with ESMTPSA id v5-20020a05600c214500b003f819faff25sm6523480wml.13.2023.06.13.02.19.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 02:17:48 -0700 (PDT)
-Message-ID: <3613a4fb-5c68-4316-0983-7bfeb5755041@linaro.org>
-Date:   Tue, 13 Jun 2023 11:17:47 +0200
+        Tue, 13 Jun 2023 02:19:31 -0700 (PDT)
+Message-ID: <318837d7-72fd-00cd-d57e-03aabc24f506@linaro.org>
+Date:   Tue, 13 Jun 2023 11:19:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths
- in sun8i_ths_probe()
+Subject: Re: [PATCH RESEND] thermal/drivers/mediatek/lvts_thermal: Register
+ thermal zones as hwmon sensors
 Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
+To:     Chen-Yu Tsai <wenst@chromium.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-References: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
- <ucnnixemxbpkjlbyenboydicslozt5jpyjjfbd4gjk4oye52et@fgyd3zqdqsh2>
- <u7mmywm63bm5q4zlsbnooeplscn4rrd3qnslkfq2xnquxgnkkd@n3tsnrutmfjp>
- <ad78c18e-13dd-fca3-1aff-5b8e68a91c90@linaro.org>
- <4j74jv53tdf4n6txibl6xjh63dzzjr3ku3uoxhv3rzodthqbqy@25eho3f7wh6y>
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230613091317.1691247-1-wenst@chromium.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4j74jv53tdf4n6txibl6xjh63dzzjr3ku3uoxhv3rzodthqbqy@25eho3f7wh6y>
+In-Reply-To: <20230613091317.1691247-1-wenst@chromium.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/06/2023 11:16, Maxime Ripard wrote:
-> On Tue, Jun 13, 2023 at 10:49:24AM +0200, Daniel Lezcano wrote:
->> On 15/05/2023 14:33, Ondřej Jirman wrote:
->>> Hi Maxime,
->>>
->>> On Mon, May 15, 2023 at 01:54:41PM +0200, Maxime Ripard wrote:
->>>> Hi,
->>>>
->>>> On Sun, May 14, 2023 at 08:46:05PM +0200, Christophe JAILLET wrote:
->>>>> Should an error occur after calling sun8i_ths_resource_init() in the probe
->>>>> function, some resources need to be released, as already done in the
->>>>> .remove() function.
->>>>>
->>>>> Switch to the devm_clk_get_enabled() helper and add a new devm_action to
->>>>> turn sun8i_ths_resource_init() into a fully managed function.
->>>>>
->>>>> Move the place where reset_control_deassert() is called so that the
->>>>> recommended order of reset release/clock enable steps is kept.
->>>>> A64 manual states that:
->>>>>
->>>>> 	3.3.6.4. Gating and reset
->>>>>
->>>>> 	Make sure that the reset signal has been released before the release of
->>>>> 	module clock gating;
->>>>>
->>>>> This fixes the issue and removes some LoC at the same time.
->>>>
->>>> It should really be three different patches:
->>>>    - One to fix the resource release, that can be backported to stable
->>>>      releases
->>>>    - One to switch to devm_clk_get_enabled
->>>>    - and one to change the order of clock enable vs reset deassertion
->>>
->>> The order was correct before this patch. I don't think an incorrect order
->>> should be intorduced, even if temporarily between two patches.
->>
->> Maxime ?
+On 13/06/2023 11:13, Chen-Yu Tsai wrote:
+> Register thermal zones as hwmon sensors to let userspace read
+> temperatures using standard hwmon interface.
 > 
-> I agree with Ondřej
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Thanks, I applied the patch
-
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
