@@ -2,56 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF5372DD49
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E0D72DD60
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbjFMJHf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 05:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37528 "EHLO
+        id S241337AbjFMJNm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 05:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238711AbjFMJHe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:07:34 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610341A1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:07:33 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b2b6910facso3139057a34.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:07:33 -0700 (PDT)
+        with ESMTP id S238665AbjFMJNj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:13:39 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859DF1A5
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:13:38 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b3c5389fa2so14251445ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686647252; x=1689239252;
+        d=chromium.org; s=google; t=1686647618; x=1689239618;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8VTC85npxbzTTiz7J8vOT5R1AzDbAm+HI0G+zkP/+g=;
-        b=oFDfAjtzgx+It0GmNANydXBDbXDmgfg1rGAD4/w5jl+0V0GiACq5OE38w2/M8vsMzs
-         FkfTvlHL82Gfrg8QSruKL9gtrnUCC9TTH1OgzcDqtulJ0lEWgLwwiO5HwA1BclJKktxk
-         ieFm0spML0ubRNiPzEfH2JowNoyC9bPWKmz6w=
+        bh=pVLgKJ+/ztP6rDlzmBLCpa1S2OTaKrSyjSOif3HUkaI=;
+        b=OEwpsXiIRJmlz9qFFdRDZwkcpEPjkg3TUNJzZ8ZXpYV9ZY48SV9zcgypnqrY8zQHNd
+         iXZA3Wk9/rE6OJvOXrQr84mxlwSnekzTyJU+R55wn8RBXjog5DNG635LhlOO+f/AloEv
+         Krm9dbFHnuMZrF1OH1egYVBhAE5kTCqvbLDtc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686647252; x=1689239252;
+        d=1e100.net; s=20221208; t=1686647618; x=1689239618;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z8VTC85npxbzTTiz7J8vOT5R1AzDbAm+HI0G+zkP/+g=;
-        b=fFFebkfdBDVIj4Z467qUMjBxdomv+EDptGYgjCO7t2w1HJAzJTnEbTA62jPBp8BUcw
-         ZyQHtRyFvmMrSduEsh2FSVvavYhmY83fTEL8r455z2qDJUobOOeBuRTn2L2j+yuZg60y
-         OYPwbufeyGA24FMiwjXmrfhV7YS8kYy16N9kqvK0qGQtxw8raqRD25qk/8KEi8CDDsgZ
-         t2gGLRgJ9n6xrQbCZJ71mlo+3q60tKGlCPUjY1ATFiY7w6JM/xjoKAiGChA1kyDlr/Is
-         T9QpO8NOawIRD68jZWQRhAIdSBNVuo0gZkHfRlFlJKj9IKBAwm7pb89UFmxgqolovetA
-         1Z1Q==
-X-Gm-Message-State: AC+VfDwbYCMg0avTTrzbT0QpWSGilZGfOVxoPKH0n5WjCdSAjAomviqa
-        6mAu4yE3DA1bh2u/Oj5IAnyMeg==
-X-Google-Smtp-Source: ACHHUZ63A1yCDwHmmn69d8YPbxPDTz1rKrVi7mU2CU9rWpKWYlEVJjQo7HsKTV5K90CJDyEPYHL0MQ==
-X-Received: by 2002:a9d:7559:0:b0:6b1:1f0a:80e3 with SMTP id b25-20020a9d7559000000b006b11f0a80e3mr8590848otl.20.1686647252706;
-        Tue, 13 Jun 2023 02:07:32 -0700 (PDT)
+        bh=pVLgKJ+/ztP6rDlzmBLCpa1S2OTaKrSyjSOif3HUkaI=;
+        b=NJi9YUpsMtVvAvpWpG/U1oJHELrfLV2RmY7zEcXo2J8LFdMvDAjZFGkCr+xaQiTe2F
+         UDUk19ShQLE5tBMRewVd8gX8Q5vM5V9AvuPb0Pxf+qqFncZMUSxWSYIBmsduZjk3ypBt
+         StTE+E7A8FyKQ/NDBWC9dEKBYp2fH6cShDbT+ju76hweX0wKm6xn9yRi5GtSiGGDxYNJ
+         v5Lt2OxNZlUl7bTvoctST4NSQxRWm/qIhNf6RNuqAEby5D2yO340RVpjRJ9wstyI+aok
+         3McH47S8CvoMwW2kGl3JeXL/8/ZlXx0WIsBIbbVJqigjLQBrspE7awnZ32L0UVP/1Ip/
+         yUGQ==
+X-Gm-Message-State: AC+VfDxOD5INEmnwyBImtcD4VaE9sVlBWCCQfyLAAMpCAxiZDEjPE5oF
+        LvWCo2k/vgfPANC8pCtNmcwND+Tw/YENL1MGLKk=
+X-Google-Smtp-Source: ACHHUZ6VUb27J4x8NhmcoQRMvuZKEbUnF9eZx4ZCmSz/2hmzSN0Crm2A/KZzVy0DdOiIAR5OuuefOA==
+X-Received: by 2002:a17:903:248:b0:1b2:4e00:a3a9 with SMTP id j8-20020a170903024800b001b24e00a3a9mr7971761plh.41.1686647617753;
+        Tue, 13 Jun 2023 02:13:37 -0700 (PDT)
 Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:2d00:6d98:ebb3:585])
-        by smtp.gmail.com with ESMTPSA id h5-20020a63e145000000b00528513c6bbcsm8902821pgk.28.2023.06.13.02.07.31
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902b60a00b001ae6e270d8bsm9686796pls.131.2023.06.13.02.13.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 02:07:32 -0700 (PDT)
+        Tue, 13 Jun 2023 02:13:37 -0700 (PDT)
 From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Sebastian Reichel <sre@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
 Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: core: Avoid duplicate hwmon device from thermal framework
-Date:   Tue, 13 Jun 2023 17:07:23 +0800
-Message-ID: <20230613090726.1358199-1-wenst@chromium.org>
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH RESEND] thermal/drivers/mediatek/lvts_thermal: Register thermal zones as hwmon sensors
+Date:   Tue, 13 Jun 2023 17:13:16 +0800
+Message-ID: <20230613091317.1691247-1-wenst@chromium.org>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -65,42 +74,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the power supply device being registered supports a temperature
-readout, the core registers a thermal zone for it. The thermal core
-would register a hwmon device for that unless told otherwise.
-
-When CONFIG_POWER_SUPPLY_HWMON is enabled, the power supply core creates
-a hwmon device. This results in a second entry, one which has a better
-name than the one registered through the thermal framework. It could
-potentially have readouts other than temperature.
-
-To simplify the result, tell the thermal framework to not register a
-hwmon device if CONFIG_POWER_SUPPLY_HWMON is enabled. The result is
-one hwmon device with all the readings the device supports.
+Register thermal zones as hwmon sensors to let userspace read
+temperatures using standard hwmon interface.
 
 Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- drivers/power/supply/power_supply_core.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/thermal/mediatek/lvts_thermal.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 3791aec69ddc..4aa466c945e2 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -1305,8 +1305,12 @@ static int psy_register_thermal(struct power_supply *psy)
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index d0a3f95b7884..1e11defe4f35 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -19,6 +19,8 @@
+ #include <linux/thermal.h>
+ #include <dt-bindings/thermal/mediatek,lvts-thermal.h>
  
- 	/* Register battery zone device psy reports temperature */
- 	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
-+		/* Prefer our hwmon device and avoid duplicates */
-+		struct thermal_zone_params tzp = {
-+			.no_hwmon = IS_ENABLED(CONFIG_POWER_SUPPLY_HWMON)
-+		};
- 		psy->tzd = thermal_zone_device_register(psy->desc->name,
--				0, 0, psy, &psy_tzd_ops, NULL, 0, 0);
-+				0, 0, psy, &psy_tzd_ops, &tzp, 0, 0);
- 		if (IS_ERR(psy->tzd))
- 			return PTR_ERR(psy->tzd);
- 		ret = thermal_zone_device_enable(psy->tzd);
++#include "../thermal_hwmon.h"
++
+ #define LVTS_MONCTL0(__base)	(__base + 0x0000)
+ #define LVTS_MONCTL1(__base)	(__base + 0x0004)
+ #define LVTS_MONCTL2(__base)	(__base + 0x0008)
+@@ -996,6 +998,9 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+ 			return PTR_ERR(tz);
+ 		}
+ 
++		if (devm_thermal_add_hwmon_sysfs(dev, tz))
++			dev_warn(dev, "zone %d: Failed to add hwmon sysfs attributes\n", dt_id);
++
+ 		/*
+ 		 * The thermal zone pointer will be needed in the
+ 		 * interrupt handler, we store it in the sensor
 -- 
 2.41.0.162.gfafddb0af9-goog
 
