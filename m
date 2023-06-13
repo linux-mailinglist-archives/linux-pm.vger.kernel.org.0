@@ -2,66 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2B2272DDB4
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E43472DDFE
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jun 2023 11:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240322AbjFMJbO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 05:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S239724AbjFMJoI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 05:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238261AbjFMJbN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:31:13 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5394B13E
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:31:11 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-65311774e52so4049238b3a.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:31:11 -0700 (PDT)
+        with ESMTP id S237959AbjFMJoH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 05:44:07 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20DF8EC
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:44:05 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f8d1eb535eso2160175e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 02:44:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1686648671; x=1689240671;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gc080pZonONkhSsubLG/knzeXyUNBhLK5ILmHhWW6gY=;
-        b=F5lwH/cp1FKK1VmvuKHlk391kR8oaI/Gw53UTVgdZp4Bvu5DWRhyYKwbhIxte7QsXo
-         aTcMjBXzirBtr5LzsxRvjqXnou8A4EvWuAx0Ja+JVeLThbN63hlwoXfUnnl/PX7XnIZf
-         pn9NbU31FXmX9FA0w1O/4zA0Y8vTxsnMH9MSo=
+        d=linaro.org; s=google; t=1686649443; x=1689241443;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GS4ZDwPdVKcB752SYSIB+ydV97yO49nogAsemi0GPWI=;
+        b=nVGmNwy9Q14ecN48btygx3eRBRvrmo4+1pPDbypMH4BxMQNYdA5EkjKJ4s0lC2QDSw
+         k/bXRsogPeCkrmnhBYZr+lnnEGoh75fOrgq3bexsZPPmY820jmPnh53VanLJqZx8u3If
+         /NmAgA6kpQnJ5ERxrPWpYwm+f7vLjn1ib49YWx5HWoBON8uOxpgmZL6o2h5HXVshe58X
+         fVaoIRnJ1Peb9NhKedgJv9t/M5uHPbryFV+NeXU6Rg+va9iPw1Ws7Ab7Ep94BPhWEdIH
+         GQO1yd10DSdWYdsmJoL9YUM82DYjWzwhrdOBdej8JjUjiPCquTAqB3dcPh2D6h7jpBvI
+         bkXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686648671; x=1689240671;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gc080pZonONkhSsubLG/knzeXyUNBhLK5ILmHhWW6gY=;
-        b=UQIMyNIfOVlLAy8kwBE1DtnOjf3MQmOIJnO6j4zVjNu01rbq29/je2Zbh2SfWrrqzq
-         D/6MjnR0dlp52UAJwty13VWKNL/yRBuUUumoocYiKvdlYVT2qJIvGdnx+CddI1afnObz
-         vHa4ZAsdguiyLIFs12OZ6rkSGED7DLDzB1WZ9MT2H1KLq1/SjQ8MQ4/OEvwhgxy6PyMX
-         EivRjAzAbOI2xMs7DzPRLARql/AmUOHGBE+3fiK6HDnt63t3Irn8xV5QuHl82PjafsOs
-         QXZhIrSeGq3e17kZfxyk8V/7gmFkiPya3XZqYFgQrE1gINQs4LXsL5eeePNObPilSAIw
-         Asyg==
-X-Gm-Message-State: AC+VfDxeWpsX3rxuP75lIe50yC/XJMVZgc7389kyrwjt0zjWpQde24b1
-        Gv51+PhFGhzFBtswNF4uSYQi6Q==
-X-Google-Smtp-Source: ACHHUZ6x1E9VGgJFIYX58bAoFbw/BYTrc7hIUdhOm9wToy03SWtIstRj+QyZ89bKldxsz8tk+tRqgg==
-X-Received: by 2002:a05:6a21:99aa:b0:114:6f3c:4332 with SMTP id ve42-20020a056a2199aa00b001146f3c4332mr13451371pzb.24.1686648670764;
-        Tue, 13 Jun 2023 02:31:10 -0700 (PDT)
-Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:2d00:6d98:ebb3:585])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170902c18500b001b3df3ae3f8sm2160680pld.281.2023.06.13.02.31.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jun 2023 02:31:10 -0700 (PDT)
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        d=1e100.net; s=20221208; t=1686649443; x=1689241443;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GS4ZDwPdVKcB752SYSIB+ydV97yO49nogAsemi0GPWI=;
+        b=ZDlIUgB/dI7izWpuxVjwg6mZfXPkksO8W1cqgmEtATSyEvPOl+6kG+RxJoErGuqyrM
+         MjZbF0wmUuKbH8Mk0uLVgOJiFBalLGCd0bg6z+GFgDmvypGgHkyAPdqzLjdpd6k8MhTw
+         CTeKevnbtyo9J3e6r9DWhNQm6NKStdPCRgVUDo++O80HSmxg44OgrjWygRYTRK4GO8mi
+         LlMkiCTW7mSjvRKqoCOT7LACSMQXdDE2zWCoq/9HK9eO493dNo2pCCVnLExpdGF9/e6Q
+         4AYUVoTwoMdJ0yGlwSZUfbXexOGgsjm4ys421kk9vt92OGt6Bw4Q3imKlgeJgeKjYhLU
+         azjQ==
+X-Gm-Message-State: AC+VfDzQykaHyLFC/cwuCgxuGFZClGmEL7FB24xUZ+KZ1/mS8J3RyYkD
+        gbrAT0NUoNFZCv39NScFFxBTIg==
+X-Google-Smtp-Source: ACHHUZ5aRKh3Ud2ou9GmjJW8cZ863CitZMIdu+JB0o8GhAQucSHx3tjIG0Oz9oZoA0/TYAOPtEEXeg==
+X-Received: by 2002:a1c:7203:0:b0:3f7:f584:579b with SMTP id n3-20020a1c7203000000b003f7f584579bmr7364121wmc.9.1686649443481;
+        Tue, 13 Jun 2023 02:44:03 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d6bf:b78b:2fff:653a? ([2a05:6e02:1041:c10:d6bf:b78b:2fff:653a])
+        by smtp.googlemail.com with ESMTPSA id c18-20020a7bc852000000b003f42158288dsm13853752wml.20.2023.06.13.02.44.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jun 2023 02:44:03 -0700 (PDT)
+Message-ID: <3a840fbf-8250-9870-3caa-3e12c468aa24@linaro.org>
+Date:   Tue, 13 Jun 2023 11:44:02 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] thermal/drivers/generic-adc: Register thermal zones as
+ hwmon sensors
+Content-Language: en-US
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
-Date:   Tue, 13 Jun 2023 17:30:52 +0800
-Message-ID: <20230613093054.2067340-1-wenst@chromium.org>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-MIME-Version: 1.0
+References: <20230613093054.2067340-1-wenst@chromium.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230613093054.2067340-1-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,40 +79,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Register thermal zones as hwmon sensors to let userspace read
-temperatures using standard hwmon interface.
+On 13/06/2023 11:30, Chen-Yu Tsai wrote:
+> Register thermal zones as hwmon sensors to let userspace read
+> temperatures using standard hwmon interface.
+> 
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+> ---
+>   drivers/thermal/thermal-generic-adc.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
+> index 017b0ce52122..e95dc354f192 100644
+> --- a/drivers/thermal/thermal-generic-adc.c
+> +++ b/drivers/thermal/thermal-generic-adc.c
+> @@ -13,6 +13,8 @@
+>   #include <linux/slab.h>
+>   #include <linux/thermal.h>
+>   
+> +#include "thermal_hwmon.h"
+> +
+>   struct gadc_thermal_info {
+>   	struct device *dev;
+>   	struct thermal_zone_device *tz_dev;
+> @@ -153,6 +155,12 @@ static int gadc_thermal_probe(struct platform_device *pdev)
+>   		return ret;
+>   	}
+>   
+> +	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
+> +		return ret;
+> +	}
 
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
----
- drivers/thermal/thermal-generic-adc.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Usually, if the hwmon registering fails this is not fatal.
 
-diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-index 017b0ce52122..e95dc354f192 100644
---- a/drivers/thermal/thermal-generic-adc.c
-+++ b/drivers/thermal/thermal-generic-adc.c
-@@ -13,6 +13,8 @@
- #include <linux/slab.h>
- #include <linux/thermal.h>
- 
-+#include "thermal_hwmon.h"
-+
- struct gadc_thermal_info {
- 	struct device *dev;
- 	struct thermal_zone_device *tz_dev;
-@@ -153,6 +155,12 @@ static int gadc_thermal_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
-+	ret = devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
-+		return ret;
-+	}
-+
- 	return 0;
- }
- 
+> +
+>   	return 0;
+>   }
+>   
+
 -- 
-2.41.0.162.gfafddb0af9-goog
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
