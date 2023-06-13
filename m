@@ -2,87 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFF172EF9A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 00:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1D1672F00A
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 01:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjFMWlK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 18:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42466 "EHLO
+        id S237037AbjFMXjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 19:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239093AbjFMWlJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 18:41:09 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87FDB127
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 15:41:07 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f63ab1ac4aso7591305e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 15:41:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686696066; x=1689288066;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mM2+93Chwu7bwUwshRRZL1JMaegUn5yKzga2WzqyZzI=;
-        b=rtI5EpOAy3camCvRJE8ovAjNX2hMd20MLGU+rC8tbMqtbmb7qlZ9uunnMKzmAjWzP9
-         n3UzZyEDBBv4lS5vJi2cXN2JDzL4Cb1eh+IJZKn8EWWEEuNiO3a3ywaR6GUTt/Cu3lmY
-         gvlqHFd/RgXYdu0HpQE0KPUYVp7atrtx8VHl/uWSdz9oT8zEH0TnCzwEnU7wIUrHm/77
-         e38RU2H2qPVe41PYtLJ/QMkCzGt8Zuf/wwtCdoATm2IF/1HF3ztDGEoEgY91Xmqk7Plh
-         XeSQ2gjRox/flrYotHz6esVkP4rwgIVCFzKMfmT36NnG/8o2Cr/QtiRzrre+uNk55ykF
-         2xPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686696066; x=1689288066;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mM2+93Chwu7bwUwshRRZL1JMaegUn5yKzga2WzqyZzI=;
-        b=ffybH/EE2h6YfO01sOFImuSivJhGPGgc9oSt2uaoxYPI49Ojh9C071su1eMC+x/fYL
-         cCNxhLabmOOWdro4mbBL6++AldKj8iBRAoWccID5f8+bXoBW5y3lIl6qlDT35qOooiXV
-         kcrvr3xMb2/+3d5/Y/LGDpun2SvqE5usyIcIRTdvj94Or69AQSMrayNttBPVWt9EJaH3
-         hFh/qN6LSY9h1HC8wBMfSw9Pq4TZAP1GHDHbl7r69QjMMQ8Eba8ZnfBlooPuLT5uxf+i
-         Ef0M8dRNDWwwShxDuFCpmMmzpDTAzaCCCYcOn01Dl0NpZvzTDD8iAiLdceBRPyy/EGFj
-         Tznw==
-X-Gm-Message-State: AC+VfDyw37c2xjDqKCLSiFWQIIVW4npkcmdmpixBjcHeWpys6gpWzHrw
-        HzSAWytAar8yvC2BWCn+xA4z7A==
-X-Google-Smtp-Source: ACHHUZ43oO1BCBYbrneX5Pa5lN5HOMz0cCRafq3HWi4SGTpLsQJ08prrNngm4wYYitPJEJ+jgI/8Og==
-X-Received: by 2002:a05:6512:539:b0:4f6:1462:9985 with SMTP id o25-20020a056512053900b004f614629985mr6327871lfc.21.1686696065284;
-        Tue, 13 Jun 2023 15:41:05 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id w13-20020a05651204cd00b004eefdd8b37fsm1885609lfq.194.2023.06.13.15.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jun 2023 15:41:04 -0700 (PDT)
-Message-ID: <ad3b3233-b1d6-781e-16e5-9faaaf14fc7a@linaro.org>
-Date:   Wed, 14 Jun 2023 00:41:03 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v4 08/22] interconnect: qcom: smd-rpm: Add rpmcc handling
- skeleton code
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
+        with ESMTP id S231341AbjFMXjN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 19:39:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D371727;
+        Tue, 13 Jun 2023 16:39:11 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 06CBD6606EF9;
+        Wed, 14 Jun 2023 00:39:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686699550;
+        bh=IKYgT2kpzwm26VrHhP6ovXhCybkwMBtlj3qr8WiFGbo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k6Z8PSNSJkj4IA9XxLF1dVbJynR/k5304D5jZaNwmxcG8cBsNDlRLm5oAoXzgyCf0
+         w8uALy6UV3NlqUnG/ED4DkXdl4mz/UtWSLi+Yyf4yjzScb9AqjZCP9U40+RPACuYTH
+         31kindpdAEOOJPydLidvKe+USIxnIHCAlv3xUkTBCtKbeYEsv0qNCUvyhuYHShlY9E
+         W9Vd9c+2Vkb9ey4GW/uDIevQYWvfJdOeZkK27kuaFmPaf5XOQk9Ji4E4LF0Th9guLe
+         rTCaOu5hA56IodBvpuVv40u7UzdnqbMAEG1eztn7LdGztaZj6C604dMa8YBKqSaTeY
+         VAk+KbbS+aZLg==
+Received: by mercury (Postfix, from userid 1000)
+        id 50F631060A57; Wed, 14 Jun 2023 01:39:07 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 01:39:07 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230526-topic-smd_icc-v4-0-5ba82b6fbba2@linaro.org>
- <20230526-topic-smd_icc-v4-8-5ba82b6fbba2@linaro.org>
- <ZIjNLJQwYQGj3piA@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZIjNLJQwYQGj3piA@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v5 20/25] dt-bindings: devfreq: event: convert Rockchip
+ DFI binding to yaml
+Message-ID: <20230613233907.a5t4ckpmbqip7iue@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+ <20230524083153.2046084-21-s.hauer@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="igsprmquqpwnps2m"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-21-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,93 +71,174 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
+--igsprmquqpwnps2m
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 13.06.2023 22:10, Stephan Gerhold wrote:
-> On Tue, Jun 13, 2023 at 04:03:08PM +0200, Konrad Dybcio wrote:
->> Introduce qcom_icc_rpm_set_bus_rate() in preparation for handling RPM
->> clock resources within the interconnect framework. This lets us greatly
->> simplify all of the code handling, as setting the rate comes down to:
->>
->> u32 rate_khz = max(clk.sleep_rate, clk.active_rate, clk_a.active_rate)
->> write_to_rpm(clock.description, rate_khz);
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/interconnect/qcom/icc-rpm.h | 15 +++++++++++++++
->>  drivers/interconnect/qcom/smd-rpm.c | 22 ++++++++++++++++++++++
->>  2 files changed, 37 insertions(+)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index 9ec90e13bfbd..13ca0818ffbd 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -22,6 +22,18 @@ enum qcom_icc_type {
->>  	QCOM_ICC_QNOC,
->>  };
->>  
->> +/**
->> + * struct rpm_clk_resource - RPM bus clock resource
->> + * @resource_type: RPM resource type of the clock resource
->> + * @clock_id: index of the clock resource of a specific resource type
->> + * @branch: whether the resource represents a branch clock
->> +*/
->> +struct rpm_clk_resource {
->> +	u32 resource_type;
->> +	u32 clock_id;
->> +	bool branch;
->> +};
->> +
->>  #define NUM_BUS_CLKS	2
->>  
->>  /**
->> @@ -47,6 +59,7 @@ struct qcom_icc_provider {
->>  	unsigned int qos_offset;
->>  	u64 bus_clk_rate[NUM_BUS_CLKS];
->>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
->> +	const struct rpm_clk_resource *bus_clk_desc;
->>  	struct clk_bulk_data *intf_clks;
->>  	bool keep_alive;
->>  	bool is_on;
->> @@ -104,6 +117,7 @@ struct qcom_icc_desc {
->>  	struct qcom_icc_node * const *nodes;
->>  	size_t num_nodes;
->>  	const char * const *bus_clocks;
->> +	const struct rpm_clk_resource *bus_clk_desc;
->>  	const char * const *intf_clocks;
->>  	size_t num_intf_clocks;
->>  	bool keep_alive;
->> @@ -125,5 +139,6 @@ int qnoc_remove(struct platform_device *pdev);
->>  
->>  bool qcom_icc_rpm_smd_available(void);
->>  int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val);
->> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, u32 rate, bool set_active);
->>  
->>  #endif
->> diff --git a/drivers/interconnect/qcom/smd-rpm.c b/drivers/interconnect/qcom/smd-rpm.c
->> index b0183262ba66..c5ab00051447 100644
->> --- a/drivers/interconnect/qcom/smd-rpm.c
->> +++ b/drivers/interconnect/qcom/smd-rpm.c
->> @@ -16,6 +16,7 @@
->>  #include "icc-rpm.h"
->>  
->>  #define RPM_KEY_BW		0x00007762
->> +#define QCOM_RPM_SMD_KEY_RATE	0x007a484b
->>  
->>  static struct qcom_smd_rpm *icc_smd_rpm;
->>  
->> @@ -44,6 +45,27 @@ int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val)
->>  }
->>  EXPORT_SYMBOL_GPL(qcom_icc_rpm_smd_send);
->>  
->> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, u32 rate, bool set_active)
->> +{
->> +	int state = set_active ? QCOM_SMD_RPM_ACTIVE_STATE : QCOM_SMD_RPM_SLEEP_STATE;
-> 
-> Why not just pass in the ctx/state directly as parameter instead of this
-> boolean? That's what the function directly above does.
-Ooohh.. obviously...
+Hi,
 
-Konrad
-> 
-> Thanks,
-> Stephan
+On Wed, May 24, 2023 at 10:31:48AM +0200, Sascha Hauer wrote:
+> Convert the Rockchip DFI binding to yaml.
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> ---
+
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>=20
+> Notes:
+>     Changes since v4:
+>    =20
+>     - Revert to state of v3 (changes were lost in v4)
+>=20
+>  .../bindings/devfreq/event/rockchip,dfi.yaml  | 61 +++++++++++++++++++
+>  .../bindings/devfreq/event/rockchip-dfi.txt   | 18 ------
+>  .../rockchip,rk3399-dmc.yaml                  |  2 +-
+>  3 files changed, 62 insertions(+), 19 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
+hip,dfi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
+hip-dfi.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi=
+=2Eyaml b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+> new file mode 100644
+> index 0000000000000..7a82f6ae0701e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml
+> @@ -0,0 +1,61 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/devfreq/event/rockchip,dfi.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip DFI
+> +
+> +maintainers:
+> +  - Sascha Hauer <s.hauer@pengutronix.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3399-dfi
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: pclk_ddr_mon
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  rockchip,pmu:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Phandle to the syscon managing the "PMU general register files".
+> +
+> +required:
+> +  - compatible
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/rk3308-cru.h>
+> +
+> +    bus {
+> +      #address-cells =3D <2>;
+> +      #size-cells =3D <2>;
+> +
+> +      dfi: dfi@ff630000 {
+> +        compatible =3D "rockchip,rk3399-dfi";
+> +        reg =3D <0x00 0xff630000 0x00 0x4000>;
+> +        interrupts =3D <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
+> +        rockchip,pmu =3D <&pmugrf>;
+> +        clocks =3D <&cru PCLK_DDR_MON>;
+> +        clock-names =3D "pclk_ddr_mon";
+> +      };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi=
+=2Etxt b/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> deleted file mode 100644
+> index 148191b0fc158..0000000000000
+> --- a/Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -
+> -* Rockchip rk3399 DFI device
+> -
+> -Required properties:
+> -- compatible: Must be "rockchip,rk3399-dfi".
+> -- reg: physical base address of each DFI and length of memory mapped reg=
+ion
+> -- rockchip,pmu: phandle to the syscon managing the "pmu general register=
+ files"
+> -- clocks: phandles for clock specified in "clock-names" property
+> -- clock-names : the name of clock used by the DFI, must be "pclk_ddr_mon=
+";
+> -
+> -Example:
+> -	dfi: dfi@ff630000 {
+> -		compatible =3D "rockchip,rk3399-dfi";
+> -		reg =3D <0x00 0xff630000 0x00 0x4000>;
+> -		rockchip,pmu =3D <&pmugrf>;
+> -		clocks =3D <&cru PCLK_DDR_MON>;
+> -		clock-names =3D "pclk_ddr_mon";
+> -	};
+> diff --git a/Documentation/devicetree/bindings/memory-controllers/rockchi=
+p,rk3399-dmc.yaml b/Documentation/devicetree/bindings/memory-controllers/ro=
+ckchip,rk3399-dmc.yaml
+> index fb4920397d08e..aba8649aaeb10 100644
+> --- a/Documentation/devicetree/bindings/memory-controllers/rockchip,rk339=
+9-dmc.yaml
+> +++ b/Documentation/devicetree/bindings/memory-controllers/rockchip,rk339=
+9-dmc.yaml
+> @@ -18,7 +18,7 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/phandle
+>      description:
+>        Node to get DDR loading. Refer to
+> -      Documentation/devicetree/bindings/devfreq/event/rockchip-dfi.txt.
+> +      Documentation/devicetree/bindings/devfreq/event/rockchip,dfi.yaml.
+> =20
+>    clocks:
+>      maxItems: 1
+> --=20
+> 2.39.2
+>=20
+
+--igsprmquqpwnps2m
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSI/hQACgkQ2O7X88g7
++pruyw/+PclczDdjsGUjLjCBWzHU1CIdodfMwJfKjcmX+gJhGxbklOg+VyjnxF+R
+BBcnoYB6lmSEUIGQmEz9AJ/8dQoTB9mSENw8tKimVPLSdiRO/qdLxsspTZJ5OSQE
+fIn/+MoVkW6Xvv7a14oumTvrZGNjPhD/OQMRcMY5mfdLsIi0E9UMIob9ow8r6Qqj
+0M1YUBp9YenTWD8J/e5mOafaJ6E7EoDoEQSytRppQHiFN4E7EjNQr5hduOChlyoP
+BAIPj1jz2HhVUJdTwgdlxhOUmhjpKLewcFdZSB7hTjY5SrYhMEUlByRog3ILiSO8
+mNvPhN+VHnumvv+8KkSm2sgpZ7FvUjjxfRobydFoXWnlb5Z5GQtuJiz65bVzI57v
+vzf/QWAXQ9dey+Q2Q+FQh4nPAmovV3KQ07GUR4bfL3ofMsUJZaT+tpGbqvpRklTh
+unG/PDWK1WSPBLxN09V3+5aiXm12hHw0/JJIxZWPXL7CvwOuhKj8vO6mrXlabdy9
+H5H3jcPE8MCcN7c6ZhOV4H8Lbt1VwqhjBY16Z8etzIOMaq8uL2Cg9hbZTbFbL/Q8
+gnS+7wY+t1VYP9+1XWnoIverBeCd3Q/jixTGXs7bMZxwOXqWHHqgwsj00zWBU6ns
+yInon6jNb03nDPpygcL7EKVeTBmKyeFJKgL3CaoLCYF7LneOZqo=
+=k0al
+-----END PGP SIGNATURE-----
+
+--igsprmquqpwnps2m--
