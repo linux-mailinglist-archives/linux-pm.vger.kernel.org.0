@@ -2,115 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F24573048D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 18:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B74730540
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 18:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjFNQGA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 12:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57530 "EHLO
+        id S231945AbjFNQnP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 12:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbjFNQF7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 12:05:59 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1F971FC8
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 09:05:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-519c0ad1223so765611a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 09:05:57 -0700 (PDT)
+        with ESMTP id S235249AbjFNQnL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 12:43:11 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338AD268A
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 09:43:08 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-519274f7b05so981411a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 09:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686758756; x=1689350756;
+        d=linaro.org; s=google; t=1686760986; x=1689352986;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=tBboY0bdYrdeQOHKC09XaZuxefgFR2fXkH5uFS/N1UM=;
-        b=T9YRgaE3TfN/AeQZJiFg6Yuvsr5a9iZoRVG51qhPhFGE0a7pV4BoLDSY205XjZgpo9
-         WSW1sBJJnHCzDV2YDNdzeFtfEdqfHNUlEKVSRcYOrv+LjRwAwI/Z8fcvi6Sqo4KktxE6
-         ZslN1klEOjK2WilOFUtS63YxPYY5PXpqmM7UHsAcMEguGCeZxQUpJFwmjwQ5fnXIZwzx
-         MKX1B0EP+dBt5S0B3v4eN32/aqaBOhW9YoO2ZtQF3GmiG0aY0NMjP9k3oyiuw6hfzX9K
-         TXn4tlXSsg+F/jnBLJDerXWyh1mIlMefS64HJU1G93r2UxWo/LX3PMrGkI0wnbSfFRUC
-         +whg==
+        bh=LYxZyCq/Gi1HReykhrZJhQ1TogVgVoGsHy6LMM70L8w=;
+        b=FIuBtH75LaI9ryaFI5mUy3gYiBMBakvXdP6X6Ekvml1P4vgJTz7YdUbY4a/Wp7SiNA
+         noNFfrZK3LCbd1LaxblbkvU3S9quAs5U4u2L7zkXZG9CVwMc2kDitIe6X70OfAaAanov
+         77cEY6ZLUsFYpJgredh1jHzjZZxI9oJ44pOMZ+1xieFMGyqvTK6Ah20uqTIEIEYuztUL
+         w3nfY7ZUSXK1vB25NHQC4oLNm+fuDmTD6c03R44iH32aosVgHZoB+xohijBHPneBMlrF
+         kIFNXCtRkWV0e/7LnBiXEin0WYCS961zBIns0D8x/m1zg5+t7l0/I01ZFPxOea8sLePQ
+         28yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686758756; x=1689350756;
+        d=1e100.net; s=20221208; t=1686760986; x=1689352986;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tBboY0bdYrdeQOHKC09XaZuxefgFR2fXkH5uFS/N1UM=;
-        b=AkEIQQChKYy1KiHl4Qn47+dQgY8U/B1ZQKUJcm0j1j/2JHBsSyb4lvHPY4/ipnlDX3
-         B16rKDjr+FKj4DZhapq0NR8lHYS1BPVXPJj+NHd96gZ6gkz1kYuYU3R/LjF7N/qm+JrL
-         fSLDlBqqJqHPUqqWsydqgHWiQW1Xz3DZIh6xhYv2dtbijPnUAD+5yJ7duOf0kj71jKjZ
-         g/oUfpDwYsoLii/tlDqMbV5yzBKotOn+rs88OSj07M8LOvazCVRfcc2HiWR118/y0fIj
-         /m0yAfNID8f51zGuGsYZT46Qq+tVPwGs4RJxdvFFc7p0uPje3FELEooyowVputJiY0MS
-         sU2w==
-X-Gm-Message-State: AC+VfDycpqEn37JXEoJqQf/l39ZEkTe6jouG8MD/vmEB9tUPNI69ZWQz
-        OnfkkxJHlH3szjO5UyC7Xf6t0g==
-X-Google-Smtp-Source: ACHHUZ6xxmoCev7+3moOInDw8sUm78Icrrw6bYb9TBUSDdgK8VTZNEi6AcPSCY8OEDpi+iU+SjvFqg==
-X-Received: by 2002:a05:6402:1147:b0:50b:c085:1991 with SMTP id g7-20020a056402114700b0050bc0851991mr9018172edw.19.1686758756213;
-        Wed, 14 Jun 2023 09:05:56 -0700 (PDT)
+        bh=LYxZyCq/Gi1HReykhrZJhQ1TogVgVoGsHy6LMM70L8w=;
+        b=ibFJE1kICcEE1to9tgVl2l65mGQNqaiIVwtiaYmjlr/1+dM36x8LG1yTUu/u5aYhf0
+         yT7ocvkK2rf2vu1Ut7QRfWiYsdwqnLHLwKSh8WCotcNsc9DUu+5RTLe423/QBmQaUCod
+         6Hc3vL7y5rD6fslxkgiChToh+moMjIwoDcOrMDmg9R5jDj85ZZMt5kPdqyR8u9UnRu5i
+         qZMR285C837MrtRP+vxUPcX0ONgb7Ck6seaRtATlfpztJvItGYn/mFfs2zVXph221KWU
+         AOKI01tvYrySC50wkZq404g1c8a2030VOHR9+eQG6MjmUQ04MYSoRjqEV//zhH9/obKn
+         wU/Q==
+X-Gm-Message-State: AC+VfDyxaY2DvqhgX5oHV7iptpZAiKRBC+0J+tB9SMWxJfXsHNb2lahr
+        fiWiae9csuOYt3EC9JViNGBmeA==
+X-Google-Smtp-Source: ACHHUZ42yJBCaEfV+oEONTiEyCMpQDPxB+8Mz3jsy4GV3UBDckUu0IrqOZ2cT1BdD0r/sqSYm5xdGw==
+X-Received: by 2002:a17:907:3e9f:b0:976:c9a6:4857 with SMTP id hs31-20020a1709073e9f00b00976c9a64857mr20032169ejc.57.1686760986667;
+        Wed, 14 Jun 2023 09:43:06 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z4-20020aa7cf84000000b005187a57fba1sm1964383edx.77.2023.06.14.09.05.54
+        by smtp.gmail.com with ESMTPSA id u16-20020a1709064ad000b009828e26e519sm255352ejt.122.2023.06.14.09.43.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 09:05:55 -0700 (PDT)
-Message-ID: <e48f6153-0485-9fb9-5fe0-145251a8b367@linaro.org>
-Date:   Wed, 14 Jun 2023 18:05:52 +0200
+        Wed, 14 Jun 2023 09:43:06 -0700 (PDT)
+Message-ID: <c8573d08-d4e2-41a8-f0b1-e1d7a0c9ce17@linaro.org>
+Date:   Wed, 14 Jun 2023 18:43:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 03/18] dt-bindings: soc: qcom: qcom,saw2: define optional
- regulator node
+Subject: Re: [PATCH v5 01/22] dt-bindings: interconnect: Add Qcom RPM ICC
+ bindings
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>
-References: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
- <20230612053922.3284394-4-dmitry.baryshkov@linaro.org>
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
+ <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230612053922.3284394-4-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230526-topic-smd_icc-v5-1-eeaa09d0082e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/06/2023 07:39, Dmitry Baryshkov wrote:
-> The SAW2 device can optionally provide a voltage regulator supplying the
-> CPU core, cluster or L2 cache. Describe it in the device bindings.
+On 14/06/2023 12:22, Konrad Dybcio wrote:
+> The SMD RPM interconnect driver requires different icc tags to the
+> RPMh driver. Add bindings to reflect that.
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../devicetree/bindings/soc/qcom/qcom,saw2.yaml | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>  include/dt-bindings/interconnect/qcom,rpm-icc.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml
-> index a016242367b9..b809a9cc0916 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml
-> @@ -47,6 +47,10 @@ properties:
->        - description: Base address and size of the alias register region
->      minItems: 1
->  
-> +  regulator:
-> +    $ref: /schemas/regulator/regulator.yaml#
+> diff --git a/include/dt-bindings/interconnect/qcom,rpm-icc.h b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+> new file mode 100644
+> index 000000000000..2cd56f91e5c5
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,rpm-icc.h
+> @@ -0,0 +1,13 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+> +#define __DT_BINDINGS_INTERCONNECT_QCOM_RPM_ICC_H
+> +
+> +#define RPM_ACTIVE_TAG		(1 << 0)
+> +#define RPM_SLEEP_TAG		(1 << 1)
+> +#define RPM_ALWAYS_TAG		(RPM_ACTIVE_TAG | RPM_SLEEP_TAG)
 
-There was such property in the binding (and DTS!) but a bool. Previous
-patch silently dropped it, so re-introducing it with different type is
-confusing.
+Where are these used? I don't see any DTS in your patchset. Did you send
+it separately?
 
 Best regards,
 Krzysztof
