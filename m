@@ -2,226 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A43E73021F
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 16:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C129730237
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 16:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243149AbjFNOk3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 14 Jun 2023 10:40:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60330 "EHLO
+        id S244661AbjFNOr0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 10:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbjFNOk2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 10:40:28 -0400
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FD6E4D;
-        Wed, 14 Jun 2023 07:40:27 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-4f14e14dc00so1371921e87.1;
-        Wed, 14 Jun 2023 07:40:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686753625; x=1689345625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g894SGD07dfqJJ+MtGFhfdGTCWqxxXM/s25cbYKPMv8=;
-        b=Ay1m8eau4lXXcGFuPkGmIguKWh2m2bdEqeNPZ+OMGKWzhW4KN8yjj/jzVVHtbmEPlZ
-         7aSMsabKtVOeNX6ahFYwj5lcNPtAWPVmjWhnzzhAkqq0/cQvlTg8IohL166NuicaFYyJ
-         fImlmxKZMg7mkPz0C0lr0BD+1bkSZPGTyigjYnxR0rd/Ga1CsrxygbEb/e53/hH79yHy
-         sHojmwXCIYT6VHfIInOJO7vEA+NtadR/2iTJrIZmFNR/8jLaA9P37l8RGNuPs4oovGIM
-         6fSnMsNXT7NRALaykQkfZMKC+RdkhVSoEziH5oIcZhvXBCuHtEedTv2EYvsMGJeDTLkc
-         z+Sw==
-X-Gm-Message-State: AC+VfDx4vAuVevi57LDuZ9ydGui8fwuiajs82k9foNubPuu9FXnkOleg
-        JLWgoR8Sd7RTqkYyR+iOYsekqcTgGSpVN1KzUfE=
-X-Google-Smtp-Source: ACHHUZ4o73V3wQze63bDqYQ3KTcFZJXRWIPaSoYNRjWPeQCkTYyLLlGkBjPM1R34bqfc6bfFM40T34R1JGMAikSPPco=
-X-Received: by 2002:ac2:4101:0:b0:4f6:a2f:beb with SMTP id b1-20020ac24101000000b004f60a2f0bebmr6476641lfi.5.1686753625036;
- Wed, 14 Jun 2023 07:40:25 -0700 (PDT)
+        with ESMTP id S236347AbjFNOrW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 10:47:22 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35641FC4;
+        Wed, 14 Jun 2023 07:47:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1686754037; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=PN5G6p9nT1I5K3QU/LnVRpP0YqTm2P7kBudunV8RoCPD553UiQ0PQZLXoCxzwYKDUp
+    R14+IYNnzQhZci3r3bJ/vfULD+b2V7YATO1v8eUz70hly5DJH3Oxs2oACAfdnDDmLIgh
+    vpwT9msnfRIg/xFyvfZ1LJMKeeXcDSGYVFerdQe5BzotyMjcD2Og3Fuj+nGBPxT0Pt3K
+    zs/jmRB5bo9s6HSwLWKsdbvABZbF7hCLKNdi+AIWBfzV//2lTngQE1JclQvVQb5RRWlX
+    K7BtXmk5FnCxEJOdpJcpV+GycSq/LOJMeaF1dIksWRA71lRTeOdZsaR5Sd9+ANJ55z6K
+    gNOQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1686754037;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=tvjm14jd1ncXpS8wy9Ap/UHaf91N1jU9h4aEC4kP+J4=;
+    b=Vj7Oh7Mi6yLaatmQWo67Urp/sQ8jWXKpB1ZJCQKBcXvE5ZDtsAGQEJeUIb1ka4vTHi
+    pwYYEVjtun/+QcGCdQ9yGBSfBZHtT+I/0WGO/H3xAGFTAEOzTI0CbVBszjFeY/d9TdXe
+    /XvQOrAEiXYdTOfSV3NJpDIOukArIHXcU8Rf7OGrKyN1YVrbOb2KysBQzT11Yz+BdYBn
+    hiMbe+Bi4LpJvw7Xmk893M9JMJuRQZb07TzT/a2rk2a+WOgXj4GptDNr9s1pUeN5P5LV
+    dn3ft1GNBS9LtKXKwMYXssBzYV+HSt18uoR3FXLH0G71xuvG4BgsMV7ZK9XIJ93WlE/u
+    BA5A==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1686754037;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=tvjm14jd1ncXpS8wy9Ap/UHaf91N1jU9h4aEC4kP+J4=;
+    b=TgZMMO6H5aBIKTvEJM153rnqiIL8f16ImDmI0vyDlwynTHFovpmQx9Yv1pq9mM0Vnx
+    bVfQyIwic6FTXChJHj07Y4aY6FADHRHR7bez0ojx2uGgqNKM4UG3popUqZYguwMlfyrx
+    Plkp12fhZartMu2v6O2PNkI8a6I6tF1Z+Ilpl1JasnwhH0kdWrGulIp9hy2S797iMRtV
+    vuxUos4TbPdwBTLM+WYVHGrBg39WubKrPariwwneJriO3vhySgrpCrzXI+xlWRgVOuWn
+    fa3mg17eYijKqt7W+V6mtpLsXFamk5SwmTkBMovsUc4sQoTDri9FZx5eHsUMna22ls3J
+    RDig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1686754037;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=tvjm14jd1ncXpS8wy9Ap/UHaf91N1jU9h4aEC4kP+J4=;
+    b=VOuS6XTktD89w6yqG9lJcjgsHlYNQbOVuZ/2iy3LhayOz7yMO0nEL11HyiArIaawGH
+    hMXYT9I7UZXZ/2TVEyBw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA95nh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
+    with ESMTPSA id D0d0a8z5EElG0FX
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 14 Jun 2023 16:47:16 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 16:47:09 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 08/22] interconnect: qcom: smd-rpm: Add rpmcc handling
+ skeleton code
+Message-ID: <ZInS7WZ_-02iZiKp@gerhold.net>
+References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
+ <20230526-topic-smd_icc-v5-8-eeaa09d0082e@linaro.org>
 MIME-Version: 1.0
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com> <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com> <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net> <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
- <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de> <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
- <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu>
-In-Reply-To: <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 14 Jun 2023 16:40:13 +0200
-Message-ID: <CAJZ5v0hLkVLfWLRgU1HLjWZ_wxtUTECNHB_W_ab3KHKQz_U8-Q@mail.gmail.com>
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Damien Le Moal <dlemoal@kernel.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230526-topic-smd_icc-v5-8-eeaa09d0082e@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 4:26 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Wed, Jun 14, 2023 at 04:35:50PM +0900, Damien Le Moal wrote:
-> > On 6/14/23 15:57, Hannes Reinecke wrote:
-> > > On 6/14/23 06:49, Damien Le Moal wrote:
-> > >> On 6/11/23 18:05, Joe Breuer wrote:
-> > >>> I'm the reporter of this issue.
-> > >>>
-> > >>> I just tried this patch against 6.3.4, and it completely fixes my
-> > >>> suspend/resume issue.
-> > >>>
-> > >>> The optical drive stays usable after resume, even suspending/resuming
-> > >>> during playback of CDDA content works flawlessly and playback resumes
-> > >>> seamlessly after system resume.
-> > >>>
-> > >>> So, from my perspective: Good one!
-> > >>
-> > >> In place of Bart's fix, could you please try this patch ?
-> > >>
-> > >> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-> > >> index b80e68000dd3..a81eb4f882ab 100644
-> > >> --- a/drivers/ata/libata-eh.c
-> > >> +++ b/drivers/ata/libata-eh.c
-> > >> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
-> > >> ata_port *ap)
-> > >>          /* tell ACPI that we're resuming */
-> > >>          ata_acpi_on_resume(ap);
-> > >>
-> > >> -       /* update the flags */
-> > >>          spin_lock_irqsave(ap->lock, flags);
-> > >> +
-> > >> +       /* Update the flags */
-> > >>          ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
-> > >> +
-> > >> +       /*
-> > >> +        * Resuming the port will trigger a rescan of the ATA device(s)
-> > >> +        * connected to it. Before scheduling the rescan, make sure that
-> > >> +        * the associated scsi device(s) are fully resumed as well.
-> > >> +        */
-> > >> +       ata_for_each_link(link, ap, HOST_FIRST) {
-> > >> +               ata_for_each_dev(dev, link, ENABLED) {
-> > >> +                       struct scsi_device *sdev = dev->sdev;
-> > >> +
-> > >> +                       if (!sdev)
-> > >> +                               continue;
-> > >> +                       if (scsi_device_get(sdev))
-> > >> +                               continue;
-> > >> +
-> > >> +                       spin_unlock_irqrestore(ap->lock, flags);
-> > >> +                       device_pm_wait_for_dev(&ap->tdev,
-> > >> +                                              &sdev->sdev_gendev);
-> > >> +                       scsi_device_put(sdev);
-> > >> +                       spin_lock_irqsave(ap->lock, flags);
-> > >> +               }
-> > >> +       }
-> > >>          spin_unlock_irqrestore(ap->lock, flags);
-> > >>   }
-> > >>   #endif /* CONFIG_PM */
-> > >>
-> > >> Thanks !
-> > >>
-> > > Well; not sure if that'll work out.
-> > > The whole reason why we initial a rescan is that we need to check if the
-> > > ports are still connected, and whether the devices react.
-> > > So we can't iterate the ports here as this is the very thing which gets
-> > > checked during EH.
-> >
-> > Hmmm... Right. So we need to move that loop into ata_scsi_dev_rescan(),
-> > which itself already loops over the port devices anyway.
-> >
-> > > We really should claim resume to be finished as soon as we can talk with
-> > > the HBA, and kick off EH asynchronously to let it finish the job after
-> > > resume has completed.
-> >
-> > That is what's done already:
-> >
-> > static int ata_port_pm_resume(struct device *dev)
-> > {
-> >       ata_port_resume_async(to_ata_port(dev), PMSG_RESUME);
-> >       pm_runtime_disable(dev);
-> >       pm_runtime_set_active(dev);
-> >       pm_runtime_enable(dev);
-> >       return 0;
-> > }
-> >
-> > EH is kicked by ata_port_resume_async() -> ata_port_request_pm() and it
-> > is async. There is no synchronization in EH with the PM side though. We
-> > probably should have EH check that the port resume is done first, which
-> > can be done in ata_eh_handle_port_resume() since that is the first thing
-> > done when entering EH.
-> >
-> > The problem remains though that we *must* wait for the scsi device
-> > resume to be done before calling scsi_rescan_device(), which is done
-> > asynchronously from EH, as a different work. So that one needs to wait
-> > for the scsi side resume to be done.
-> >
-> > I also thought of trigerring the rescan from the scsi side, but since
-> > the resume may be asynchronous, we could endup trigerring it with the
-> > ata side not yet resumed... That would only turn the problem around
-> > instead of solving it.
->
-> The order in which devices get resumed isn't arbitrary.  If the system
-> is set up not to use async suspends/resumes then the order is always the
-> same as the order in which the devices were originally registered (for
-> resume, that is -- suspend obviously takes place in the reverse order).
->
-> So if you're trying to perform an action that requires two devices to be
-> active, you must not do it in the resume handler for the device that was
-> registered first.  I don't know how the ATA and SCSI pieces interact
-> here, but regardless, this is a pretty strict requirement.
->
-> It should be okay to perform the action in the resume handler for the
-> device that was registered second.  But if the two devices aren't in an
-> ancestor-descendant relationship then you also have to call
-> device_pm_wait_for_dev() (or use device links as Rafael mentioned) to
-> handle the async case properly.
+On Wed, Jun 14, 2023 at 12:22:19PM +0200, Konrad Dybcio wrote:
+> Introduce qcom_icc_rpm_set_bus_rate() in preparation for handling RPM
+> clock resources within the interconnect framework. This lets us greatly
+> simplify all of the code handling, as setting the rate comes down to:
+> 
+> u32 rate_khz = max(clk.sleep_rate, clk.active_rate, clk_a.active_rate)
+> write_to_rpm(clock.description, rate_khz);
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/interconnect/qcom/icc-rpm.h | 15 +++++++++++++++
+>  drivers/interconnect/qcom/smd-rpm.c | 21 +++++++++++++++++++++
+>  2 files changed, 36 insertions(+)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+> index 9ec90e13bfbd..d857fb1efb75 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.h
+> +++ b/drivers/interconnect/qcom/icc-rpm.h
+> @@ -22,6 +22,18 @@ enum qcom_icc_type {
+>  	QCOM_ICC_QNOC,
+>  };
+>  
+> +/**
+> + * struct rpm_clk_resource - RPM bus clock resource
+> + * @resource_type: RPM resource type of the clock resource
+> + * @clock_id: index of the clock resource of a specific resource type
+> + * @branch: whether the resource represents a branch clock
+> +*/
+> +struct rpm_clk_resource {
+> +	u32 resource_type;
+> +	u32 clock_id;
+> +	bool branch;
+> +};
+> +
+>  #define NUM_BUS_CLKS	2
+>  
+>  /**
+> @@ -47,6 +59,7 @@ struct qcom_icc_provider {
+>  	unsigned int qos_offset;
+>  	u64 bus_clk_rate[NUM_BUS_CLKS];
+>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
+> +	const struct rpm_clk_resource *bus_clk_desc;
+>  	struct clk_bulk_data *intf_clks;
+>  	bool keep_alive;
+>  	bool is_on;
+> @@ -104,6 +117,7 @@ struct qcom_icc_desc {
+>  	struct qcom_icc_node * const *nodes;
+>  	size_t num_nodes;
+>  	const char * const *bus_clocks;
+> +	const struct rpm_clk_resource *bus_clk_desc;
+>  	const char * const *intf_clocks;
+>  	size_t num_intf_clocks;
+>  	bool keep_alive;
+> @@ -125,5 +139,6 @@ int qnoc_remove(struct platform_device *pdev);
+>  
+>  bool qcom_icc_rpm_smd_available(void);
+>  int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val);
+> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, int rsc_type, u32 rate);
+>  
+>  #endif
+> diff --git a/drivers/interconnect/qcom/smd-rpm.c b/drivers/interconnect/qcom/smd-rpm.c
+> index b0183262ba66..b06374340eeb 100644
+> --- a/drivers/interconnect/qcom/smd-rpm.c
+> +++ b/drivers/interconnect/qcom/smd-rpm.c
+> @@ -16,6 +16,7 @@
+>  #include "icc-rpm.h"
+>  
+>  #define RPM_KEY_BW		0x00007762
+> +#define QCOM_RPM_SMD_KEY_RATE	0x007a484b
+>  
+>  static struct qcom_smd_rpm *icc_smd_rpm;
+>  
+> @@ -44,6 +45,26 @@ int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val)
+>  }
+>  EXPORT_SYMBOL_GPL(qcom_icc_rpm_smd_send);
+>  
+> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, int rsc_type, u32 rate)
+> +{
+> +	struct clk_smd_rpm_req req = {
+> +		.key = cpu_to_le32(QCOM_RPM_SMD_KEY_RATE),
+> +		.nbytes = cpu_to_le32(sizeof(u32)),
+> +	};
+> +
+> +	/* Branch clocks are only on/off */
+> +	if (clk->branch)
+> +		rate = !!rate;
+> +
+> +	req.value = cpu_to_le32(rate);
+> +	return qcom_rpm_smd_write(icc_smd_rpm,
+> +				  rsc_type,
+> +				  clk->resource_type,
 
-Note that the bare device_pm_wait_for_dev() is a bit risky though,
-because in the sync case it will deadlock if dpm_list is not ordered
-properly.
+Sorry to have more minor comments but as you can see here the resource
+type is taken from the rpm_clk_resource. The parameter that you are
+describing as "rsc_type" is actually the "ctx" in the other function. :')
 
-One of the things taken care of by device_link_add() is to ensure that
-the ordering of dpm_list will reflect the dependency represented by
-the given new device link.
+If you fix this feel free to add my:
 
-> > Or... Why the heck scsi_rescan_device() is calling device_lock() ? This
-> > is the only place in scsi code I can see that takes this lock. I suspect
-> > this is to serialize either rescans, or serialize with resume, or both.
-> > For serializing rescans, we can use another lock. For serializing with
-> > PM, we should wait for PM transitions...
-> > Something is not right here.
->
-> Here's what commit e27829dc92e5 ("scsi: serialize ->rescan against
-> ->remove", written by Christoph Hellwig) says:
->
->     Lock the device embedded in the scsi_device to protect against
->     concurrent calls to ->remove.
->
-> That's the commit which added the device_lock() call.
->
-> Alan Stern
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+
+Thanks,
+Stephan
