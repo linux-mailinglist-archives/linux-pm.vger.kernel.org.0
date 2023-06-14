@@ -2,65 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E547303D7
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 17:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24E27303E1
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 17:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236315AbjFNP1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 11:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34664 "EHLO
+        id S233272AbjFNP31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 11:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245099AbjFNP10 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 11:27:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A7DC3;
-        Wed, 14 Jun 2023 08:27:25 -0700 (PDT)
-Received: from mercury (dyndsl-091-248-213-214.ewe-ip-backbone.de [91.248.213.214])
+        with ESMTP id S235361AbjFNP30 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 11:29:26 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D1FC7;
+        Wed, 14 Jun 2023 08:29:24 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id fa9909d605947cc3; Wed, 14 Jun 2023 17:29:22 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 43DED6606F4F;
-        Wed, 14 Jun 2023 16:27:24 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1686756444;
-        bh=GZ8Sf33JazmMkxEGjgJU5duB85Yb8pBBWqBGBBUZx94=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RaegutL4WL1b4gvUQkqIFcNre+qhwMQ6dYMcSeoDrwpk72yLm3RDAJR8IspFh0KtL
-         mYkkP3sFKEzhd3NuSc8cmgyEad5uXGDqg/6qjPGATCJ5Sjeneo69n8ET9HhtFSm1tS
-         ZBOEAjj0w8rARWE1/u0Q27E7pWDWi73CaRVM4zhrmHJm+cPqkqu6veTins9FaEqetE
-         FPZMcNqPGCq612IIKU4UQm2fSXzEf9DgHGWl11E83BSyfbaZE/P/5ICfrDLzn/MSFh
-         n9FofDXAfTomszqDsWqPcnIKrZwsNvgZhpp72DJhUVx2jnJt+yNWuIKdOpS2/YI/ZF
-         uKyQ8sKw3U2zA==
-Received: by mercury (Postfix, from userid 1000)
-        id 604561060A61; Wed, 14 Jun 2023 17:27:21 +0200 (CEST)
-Date:   Wed, 14 Jun 2023 17:27:21 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        by v370.home.net.pl (Postfix) with ESMTPSA id 31C8569DA2F;
+        Wed, 14 Jun 2023 17:29:22 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
-Message-ID: <20230614152721.eep5ip726ump2kpe@mercury.elektranox.org>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+        Saket Dumbre <saket.dumbre@intel.com>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+Subject: [PATCH v2] ACPI: sleep: Avoid breaking S3 wakeup due to might_sleep()
+Date:   Wed, 14 Jun 2023 17:29:21 +0200
+Message-ID: <12252058.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zyjzybui6e7gqjye"
-Content-Disposition: inline
-In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgedvtddgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghl
+ rdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepfihilhhlsehkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,45 +53,96 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---zyjzybui6e7gqjye
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The addition of might_sleep() to down_timeout() caused the latter to
+enable interrupts unconditionally in some cases, which in turn broke
+the ACPI S3 wakeup path in acpi_suspend_enter(), where down_timeout()
+is called by acpi_disable_all_gpes() via acpi_ut_acquire_mutex().
 
-Hi,
+Namely, if CONFIG_DEBUG_ATOMIC_SLEEP is set, might_sleep() causes
+might_resched() to be used and if CONFIG_PREEMPT_VOLUNTARY is set,
+this triggers __cond_resched() which may call preempt_schedule_common(),
+so __schedule() gets invoked and it ends up with enabled interrupts (in
+the prev == next case).
 
-On Wed, Jun 14, 2023 at 03:40:34PM +0200, Sebastian Reichel wrote:
-> I tested the series on RK3588 EVB1. The read/write byts looks
-> sensible. Sometimes cycles reads unrealistic values, though:
->=20
-> 18446744070475110400      rockchip_ddr/cycles/
+Now, enabling interrupts early in the S3 wakeup path causes the kernel
+to crash.
 
-I have seen this going off a few times with and without memory
-pressure. If it's way off, it always seems to follow the same
-pattern: The upper 32 bits are 0xffffffff instead of 0x00000000
-with the lower 32 bits containing sensible data.
+Address this by modifying acpi_suspend_enter() to disable GPEs without
+attempting to acquire the sleeping lock which is not needed in that code
+path anyway.
 
--- Sebastian
+Fixes: 99409b935c9a ("locking/semaphore: Add might_sleep() to down_*() family")
+Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
 
---zyjzybui6e7gqjye
-Content-Type: application/pgp-signature; name="signature.asc"
+v1 -> v2:
+   * Rephrase the comment in acpi_suspend_enter() (Peter)
+   * Fix up the Fixes tag (Peter)
+   * Add Peter's ACK
 
------BEGIN PGP SIGNATURE-----
+---
+ drivers/acpi/acpica/achware.h |    2 --
+ drivers/acpi/sleep.c          |   16 ++++++++++++----
+ include/acpi/acpixf.h         |    1 +
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSJ3FQACgkQ2O7X88g7
-+pp2JA//SCpiw2slHYpTU8N4bPFSUT9ITBtddLnikjBs/LlWM9rDQV08dDBqnR1o
-Eyyn11zHNQ49a145uEWthUM/j04gSR7n698ALsIJiCwEhglNB9maSJGFC2KjUISi
-XqPkAcMfTXFuxWiRjuxGdcByP1XGbt2PUEmOL3ttATV4fsa+CBOqSRRCRFubufQ0
-AVaDyNljEyMtvan5cgEq29iWXLL5LvQD15XZVWYiqhq0I8TTvZ/meQSTY7n2566G
-WuYHXFWBnUQ/UhfKcTm1EHp+E43xPjaW+OTocMcijL4CqKXdj53rITNTZl0yBb5r
-lvDlndiH2c9tgrxWtxGaEisdoeUEkc15N/OXubemWTXAnNF9Er5cImnP6H2zgc3r
-IZNgiZnxcbqVcbXRsMvv6G9x2rgR1qrT7a8gfW+6XeKiTXMxhgfCyX12n++IMUWf
-pfBezTJ9p4wa4sUW7xSNd7HL0AU0Lmb9LVDD1rFuNOEYKgeaOW+n5x3PIfjcqjgJ
-1+HCmYklpAAdki85cEUZEuyf7D7C84j27uUUuOnlO670JpxQKvYndt022J69zZB0
-UO3iDHemOx8Vwg8gkIcmCwsm7gopQOfhD4DjmOYQ6JddnuwwXlnOXRTLnBm9pzBw
-hNPrd7KmbNw1nqhTDXc7OIT7iwOVmvJm5lj1GJ1m0gCnA8ZhVjg=
-=xSXO
------END PGP SIGNATURE-----
+Index: linux-pm/drivers/acpi/acpica/achware.h
+===================================================================
+--- linux-pm.orig/drivers/acpi/acpica/achware.h
++++ linux-pm/drivers/acpi/acpica/achware.h
+@@ -101,8 +101,6 @@ acpi_status
+ acpi_hw_get_gpe_status(struct acpi_gpe_event_info *gpe_event_info,
+ 		       acpi_event_status *event_status);
+ 
+-acpi_status acpi_hw_disable_all_gpes(void);
+-
+ acpi_status acpi_hw_enable_all_runtime_gpes(void);
+ 
+ acpi_status acpi_hw_enable_all_wakeup_gpes(void);
+Index: linux-pm/include/acpi/acpixf.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpixf.h
++++ linux-pm/include/acpi/acpixf.h
+@@ -761,6 +761,7 @@ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_sta
+ 						     acpi_event_status
+ 						     *event_status))
+ ACPI_HW_DEPENDENT_RETURN_UINT32(u32 acpi_dispatch_gpe(acpi_handle gpe_device, u32 gpe_number))
++ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_hw_disable_all_gpes(void))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_disable_all_gpes(void))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_runtime_gpes(void))
+ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_wakeup_gpes(void))
+Index: linux-pm/drivers/acpi/sleep.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/sleep.c
++++ linux-pm/drivers/acpi/sleep.c
+@@ -636,11 +636,19 @@ static int acpi_suspend_enter(suspend_st
+ 	}
+ 
+ 	/*
+-	 * Disable and clear GPE status before interrupt is enabled. Some GPEs
+-	 * (like wakeup GPE) haven't handler, this can avoid such GPE misfire.
+-	 * acpi_leave_sleep_state will reenable specific GPEs later
++	 * Disable all GPE and clear their status bits before interrupts are
++	 * enabled. Some GPEs (like wakeup GPEs) have no handlers and this can
++	 * prevent them from producing spurious interrups.
++	 *
++	 * acpi_leave_sleep_state() will reenable specific GPEs later.
++	 *
++	 * Because this code runs on one CPU with disabled interrupts (all of
++	 * the other CPUs are offline at this time), it need not acquire any
++	 * sleeping locks which may trigger an implicit preemption point even
++	 * if there is no contention, so avoid doing that by using a low-level
++	 * library routine here.
+ 	 */
+-	acpi_disable_all_gpes();
++	acpi_hw_disable_all_gpes();
+ 	/* Allow EC transactions to happen. */
+ 	acpi_ec_unblock_transactions();
+ 
 
---zyjzybui6e7gqjye--
+
+
