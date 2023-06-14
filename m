@@ -2,145 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F49572F8C3
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 11:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02F372F8DD
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 11:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243099AbjFNJNU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 05:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54516 "EHLO
+        id S243942AbjFNJRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 05:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234645AbjFNJNT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 05:13:19 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC9A19A;
-        Wed, 14 Jun 2023 02:13:17 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1a69a593245so2868707fac.0;
-        Wed, 14 Jun 2023 02:13:17 -0700 (PDT)
+        with ESMTP id S243927AbjFNJRf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 05:17:35 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF76E1FCE
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 02:17:33 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so408406276.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 02:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686733996; x=1689325996;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Iyn4Imh8C+Bmc0NBF5Csz90N/HTVVr12fkAQs9kcqjs=;
-        b=gkAx9epTkee2UgGEHPc8r5l+uoRTbeJiCyMWDOMIZot7ANZ+/mwCP4431eeY8cx4/v
-         2utt/ZlfwIzHTm+B3XRWiTuuXwt+2qBm0F4YurXKkSjjgIpKKCPivkN4CM3CvIDob6N3
-         8i5FkmjxZyGtGBbrAU3Qf22svNHOVP1yewHxQ8HM0HTqgs8Ab9/AHV1nLzn+EKIlCUO3
-         GAgIs3b9ulSnkfi3P4ou+mzeY56o8a/yi/517ly/kgSc8xrpXKzPaUWmL3iIU6+InF+w
-         PTsgK4GPqCmlxTZLQHxyG+aHrk5RGrfdw5j4cDSbE+70pxTKKNKhc82Y2WABfvCzKH3i
-         Rl5A==
+        d=linaro.org; s=google; t=1686734253; x=1689326253;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PTBVmOmDMzb6HOpg6itSeV5ALgSNkSQSXEOkc+hECJ8=;
+        b=BB9fyBqmXlKZDGNoU7VNBFDrTJ46l95A4aSDynBQlfQwrIIb/XObfpZH8bWZltwpn4
+         iCMJWJVPZs0mwYyN1FoOREZr6D4/A0xgewxT/lAACHKWra1NBmZZh32yLyjRDcH/cr6i
+         gyj1oRwdQ0qNkQfDrnmputbtxN5selufbM3sR94Jd80HCMlmrAsPjD98hUzNqvCzhyNh
+         Z/Ipm/wE7d6HJWGT9cCGgzdWtuyT7zNZDQhdpXGXLIx8xsHqwabioVkU1LD894/rN04p
+         Xd0lWbeGaaplMeTLWHGWoLIS2om/niNhaPLsSU7x6w97gPat/IF3U63ltp8b1wf3pblX
+         I2kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686733996; x=1689325996;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iyn4Imh8C+Bmc0NBF5Csz90N/HTVVr12fkAQs9kcqjs=;
-        b=ecD0TK0FOkkQvg+uxUtuKAea30FJy8DcR7VcMv6fsBljWWeX/W7Dq/N2ZQ4ffi9nFM
-         O4gdWloCLQwTGsve3Ko4DhVX6iMwnA5i26eRSDoPL2tqI3Lwg80yLqTH/RUq1MZl4Vv6
-         /oyjCN2uh2ONa+9mONJsyFYXxmD4ACgLmyD05iXBu0PL/p3OZO2jDoHX4J95C5ncPeUH
-         veyXjfE6ZXvMz9A7GxZBh0HErtB4iXmM8kYUK8e+BfUoU++qhpQ4/AeUznNQFDjbowjG
-         d3rpgNjspWvtya6YOCGLGCQV2MrlKhzyPaT2KDlnO1aizMOu8PvGJNincoIuLYjxZOce
-         antA==
-X-Gm-Message-State: AC+VfDw0NI5B7k4UlGCEA71VX+KHbyExheyXyEOf03+LFj3LcOiN0rpI
-        Klq/Z0U6wsTbINV7CCRgDj4Y2pnk9HhrUeqqkDc=
-X-Google-Smtp-Source: ACHHUZ5+ZHli1VEWhgLDEyeSuhsWZu+OYDedFMRGcR87LykJFOwwXC20QZ34hrhyZqj8qaRn5YcpFa+yJ75846/AggU=
-X-Received: by 2002:a05:6871:40e:b0:19f:5c37:abb9 with SMTP id
- d14-20020a056871040e00b0019f5c37abb9mr10124276oag.12.1686733996401; Wed, 14
- Jun 2023 02:13:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1686734253; x=1689326253;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PTBVmOmDMzb6HOpg6itSeV5ALgSNkSQSXEOkc+hECJ8=;
+        b=hydmF1KAjhZv/U/aFIYIC7i3rWV/FVyuQ0t6vi800H4b33u768LtLyvb1rDjqbHvpX
+         KFFehqotvDWaOp7nNKtp5w9zJsvpi6wgQSMvVNw5ggTrF3SH0/Z4s0sWnpJ7+7Wcmf+8
+         rpk4jiiqka8pLwnFlu+EL8L21/th4BjcdhC866K6Qkpli+IVmDXg3r5jZQiq5cIJCpeC
+         7o4KbT/eLmFdZgE56qwvDLxuFJzSEwqe8cYRqDdCSQgTn16EEknsJSj0xXk65MBqOdPT
+         SMUXwSv/BouXmZJdFNDLeLivbXmTnoG3Q8HnbzG0T2qdPzNLXvDPd/VlXcG0iSYXYgc5
+         rNqg==
+X-Gm-Message-State: AC+VfDxnkx0qvG21E0s2YFFTECcQWVsL1dEznYH4GNt8HOg8ccD4JQi2
+        1Cd4CT9zb1M9eLoLpmgmXhV4AHZi1RoX9uxXXrbifg==
+X-Google-Smtp-Source: ACHHUZ5K3Z1ZY2o1DME5MRP1AC+d8PZOTVwaEBC/JSKMbOui3OhK7Bm2pYMA5+S0TcqZAtYuucWIid+8eww9cMezAsc=
+X-Received: by 2002:a25:d381:0:b0:bb1:6e29:a84d with SMTP id
+ e123-20020a25d381000000b00bb16e29a84dmr1285988ybf.53.1686734253076; Wed, 14
+ Jun 2023 02:17:33 -0700 (PDT)
 MIME-Version: 1.0
-From:   Mithil <bavishimithil@gmail.com>
-Date:   Wed, 14 Jun 2023 14:43:03 +0530
-Message-ID: <CAGzNGR=BkOMtw2PhudUs_b4ffk3B+x==9dtWuA-kcqnePaHVYA@mail.gmail.com>
-Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for twl6030-power
-To:     "robh@kernel.org" <robh@kernel.org>
-Cc:     "bavishimithil@gmail.com" <bavishimithil@gmail.com>,
-        "contact@paulk.fr" <contact@paulk.fr>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "tony@atomide.com" <tony@atomide.com>
+References: <8f4574ab6c334dfe1d76c567062e43d751af2457.1686729428.git.viresh.kumar@linaro.org>
+In-Reply-To: <8f4574ab6c334dfe1d76c567062e43d751af2457.1686729428.git.viresh.kumar@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 14 Jun 2023 11:16:56 +0200
+Message-ID: <CAPDyKFprofLjxuBjF6HG8Ja3tG-d0YtAjFD2rPXEODcWxeX3_A@mail.gmail.com>
+Subject: Re: [PATCH] OPP: don't drop performance constraint on OPP table removal
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for
-twl6030-power
+On Wed, 14 Jun 2023 at 09:57, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> This code was added (long back) by commit 009acd196fc8 ("PM / OPP:
+> Support updating performance state of device's power domain") and at
+> that time the `opp->pstate` field was used to store the performance
+> state required by a device's OPP.
+>
+> Over time that changed and the `->pstate` field is now used only for
+> genpd devices and consumer devices access that via the required-opps
+> instead.
+>
+> Because of all these changes, _opp_table_kref_release() now drops the
+> constraint only when the genpd's OPP table gets freed and not the
+> device's. Which is definitely not what we wanted. And dropping the
+> constraint doesn't have much meaning as the genpd itself is going away.
+>
+> Moreover, if we want to drop constraints here, then just dropping the
+> performance constraint alone isn't sufficient as there are other
+> resource constraints like clk, regulator, etc. too, which must be
+> handled.
+>
+> Probably the right thing to do here is to leave this decision to the
+> consumers, which can call `dev_pm_opp_set_rate(dev, 0)` or similar APIs
+> to drop all constraints properly. Which many of the consumers already
+> do.
+>
+> Remove the special code, which is broken anyway.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-On Tue, Aug 23, 2022 at 12:54 AM Rob Herring <robh@kernel.org> wrote:
->
-> On Sat, Aug 20, 2022 at 12:46:55PM +0530, Mithil Bavishi wrote:
-> > Adds documentation for the twl6030 power driver.
-> >
-> > Signed-off-by: Paul Kocialkowski <contact@paulk.fr>
-> > Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
-> > ---
-> >  .../bindings/power/reset/twl6030-power.txt    | 31 +++++++++++++++++++
->
-> New bindings must be DT schema format.
->
-> >  1 file changed, 31 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/power/reset/twl6030-power.txt
-> >
-> > diff --git a/Documentation/devicetree/bindings/power/reset/twl6030-power.txt b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
-> > new file mode 100644
-> > index 000000000..946bb3d9f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
-> > @@ -0,0 +1,31 @@
-> > +Texas Instruments TWL family (twl6030) reset and power management module
-> > +
-> > +For now, the binding only supports the complete shutdown of the system after
-> > +poweroff.
-> > +
-> > +Required properties:
-> > +- compatible : must be
-> > +       "ti,twl6030-power"
-> > +
-> > +Optional properties:
-> > +
-> > +- ti,system-power-controller: This indicates that TWL6030 is the
->
-> We have a generic property for this.
->
+One good step to clean up the mess. Thanks!
 
-What is property is that? And how would it get implemented here?
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> > +  power supply master of the system. With this flag, the chip will
-> > +  initiate an ACTIVE-to-OFF or SLEEP-to-OFF transition when the
-> > +  system poweroffs.
-> > +
-> > +Example:
-> > +&i2c1 {
-> > +       clock-frequency = <2600000>;
-> > +
-> > +       twl: twl@48 {
-> > +               reg = <0x48>;
-> > +               interrupts = <7>; /* SYS_NIRQ cascaded to intc */
-> > +               interrupt-parent = <&intc>;
-> > +
-> > +               twl_power: power {
-> > +                       compatible = "ti,twl6030-power";
-> > +                       ti,system-power-controller;
+> ---
+>  drivers/opp/core.c | 10 +---------
+>  drivers/opp/of.c   |  8 --------
+>  drivers/opp/opp.h  |  2 --
+>  3 files changed, 1 insertion(+), 19 deletions(-)
 >
-> Why do you need a child node here? There aren't any resources for the
-> sub-block.
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 9f918077cd62..7290168ec806 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -1522,16 +1522,8 @@ static void _opp_table_kref_release(struct kref *kref)
 >
-
-Just an example and how it is used on a device as well, is it fine if
-just the block is as-is?
-
-Mithil
+>         WARN_ON(!list_empty(&opp_table->opp_list));
+>
+> -       list_for_each_entry_safe(opp_dev, temp, &opp_table->dev_list, node) {
+> -               /*
+> -                * The OPP table is getting removed, drop the performance state
+> -                * constraints.
+> -                */
+> -               if (opp_table->genpd_performance_state)
+> -                       dev_pm_genpd_set_performance_state((struct device *)(opp_dev->dev), 0);
+> -
+> +       list_for_each_entry_safe(opp_dev, temp, &opp_table->dev_list, node)
+>                 _remove_opp_dev(opp_dev, opp_table);
+> -       }
+>
+>         mutex_destroy(&opp_table->genpd_virt_dev_lock);
+>         mutex_destroy(&opp_table->lock);
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index ac2179d5da4c..943c7fb7402b 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -1034,14 +1034,6 @@ static int _of_add_opp_table_v2(struct device *dev, struct opp_table *opp_table)
+>                 goto remove_static_opp;
+>         }
+>
+> -       list_for_each_entry(opp, &opp_table->opp_list, node) {
+> -               /* Any non-zero performance state would enable the feature */
+> -               if (opp->pstate) {
+> -                       opp_table->genpd_performance_state = true;
+> -                       break;
+> -               }
+> -       }
+> -
+>         lazy_link_required_opp_table(opp_table);
+>
+>         return 0;
+> diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
+> index eb71385d96c1..3805b92a6100 100644
+> --- a/drivers/opp/opp.h
+> +++ b/drivers/opp/opp.h
+> @@ -182,7 +182,6 @@ enum opp_table_access {
+>   * @paths: Interconnect path handles
+>   * @path_count: Number of interconnect paths
+>   * @enabled: Set to true if the device's resources are enabled/configured.
+> - * @genpd_performance_state: Device's power domain support performance state.
+>   * @is_genpd: Marks if the OPP table belongs to a genpd.
+>   * @set_required_opps: Helper responsible to set required OPPs.
+>   * @dentry:    debugfs dentry pointer of the real device directory (not links).
+> @@ -233,7 +232,6 @@ struct opp_table {
+>         struct icc_path **paths;
+>         unsigned int path_count;
+>         bool enabled;
+> -       bool genpd_performance_state;
+>         bool is_genpd;
+>         int (*set_required_opps)(struct device *dev,
+>                 struct opp_table *opp_table, struct dev_pm_opp *opp, bool scaling_down);
+> --
+> 2.31.1.272.g89b43f80a514
+>
