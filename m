@@ -2,84 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24FA72F4E4
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 08:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D02D072F511
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 08:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243207AbjFNGdt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 02:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S230123AbjFNGnn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 02:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233971AbjFNGdZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 02:33:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B471FC9;
-        Tue, 13 Jun 2023 23:31:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98AFA6304E;
-        Wed, 14 Jun 2023 06:31:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A3AC433C0;
-        Wed, 14 Jun 2023 06:31:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686724313;
-        bh=U3PE7SCQ1RxmKERA37xeQi0YnSmGXq/InAGZE9u2dUg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ba63IBzLXf4v1BRJlu0Aery8nmHq4ZxH63PyyGkxlUNZSWJqBkTKv7wf/kO3KB3UG
-         2IEh8nKDRrjkjXhwUNSwp1kTIbq6fEVimy41dBu4bjRLG57V73MRcOnr/AISqi4Lux
-         EEHm4j7cSnQ2+qzYaUJfJIH+b2/ILC83y3qfsdH9zB+0d8RZHqMAKI+/7ZlmqI130L
-         WTA5mONXSvdWQ4+Xn0ZukvhF7DX9TtcYtgT2ZX3ZxndN8HIsXcB17kSng8Ee8QCRRo
-         s/FrS9aYRuvf0HbW545P1InaKsRjsvwynmBgiCSTR3ZnwQh2oDHdsCeZRdd0S9al3Z
-         X9Kcf9w1IZ7hw==
-Message-ID: <e7fce935-68ac-6e8f-072f-87e6271c2f96@kernel.org>
-Date:   Wed, 14 Jun 2023 15:31:49 +0900
+        with ESMTP id S233721AbjFNGnn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 02:43:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DE41A3;
+        Tue, 13 Jun 2023 23:43:42 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E6hRFs028347;
+        Wed, 14 Jun 2023 06:43:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OHJVjMCHbOTg9z9Hw3Zobx6VP/+k/cKz+YRT4tNpl4A=;
+ b=ZOIfFzxycPj5wZiFJb6+A5sttY3rEjPOe55zWFuAzThhjMGOF3q2pA+Sjyhmyd9/SGWL
+ pfdWFHzaWglpRpVLS38Vo4aoLxgLfBKsF9KlO5I4zD2hltshYo0eczhC2cryw+GZZ3Cp
+ lYnosQkf+jS73nrFeNzR9A1kh3y3NexUBMCLbOWRsQywcaaOcM4uLPjiORvCGwdU0IOS
+ yNTCcz+Mt+iatSrefx9180w26sSCw093ayR6zeVBTBdZMhRxBQ4vuJ2mkDF3Lvd6X/N+
+ KtUtSmq24BrAo2CCSXulfs3SXj4/bDLib/dVZOZAw0vrYwbzZtqj99R+U/Dcnm1DaDvW Hw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6q4r27g6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 06:43:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E6hbc0026999
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 14 Jun 2023 06:43:37 GMT
+Received: from [10.217.198.86] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
+ 2023 23:43:34 -0700
+Message-ID: <443b00b1-76b8-c31d-53d3-42e3592d26e8@quicinc.com>
+Date:   Wed, 14 Jun 2023 12:13:19 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: Fwd: Waking up from resume locks up on sr device
+Subject: Re: [PATCH 0/2] Add provision to keep idle state disabled
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <quic_mkshah@quicinc.com>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
 Content-Language: en-US
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
- <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
- <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
- <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
- <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: H5mFTQsSmriRQmg1VqrrhotXgjuuIHsw
+X-Proofpoint-ORIG-GUID: H5mFTQsSmriRQmg1VqrrhotXgjuuIHsw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-06-14_03,2023-06-12_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ spamscore=0 mlxscore=0 mlxlogscore=753 clxscore=1015 priorityscore=1501
+ adultscore=0 bulkscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306140057
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,80 +82,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/14/23 14:37, Kai-Heng Feng wrote:
-> On Wed, Jun 14, 2023 at 12:49 PM Damien Le Moal <dlemoal@kernel.org> wrote:
+Thanks for response Ulf.
+
+On 6/12/2023 3:56 PM, Ulf Hansson wrote:
+> On Thu, 8 Jun 2023 at 10:56, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
 >>
->> On 6/11/23 18:05, Joe Breuer wrote:
->>> I'm the reporter of this issue.
->>>
->>> I just tried this patch against 6.3.4, and it completely fixes my
->>> suspend/resume issue.
->>>
->>> The optical drive stays usable after resume, even suspending/resuming
->>> during playback of CDDA content works flawlessly and playback resumes
->>> seamlessly after system resume.
->>>
->>> So, from my perspective: Good one!
+>> CPUidle already has CPUIDLE_FLAG_OFF to keep idle state disabled,
+>> Lets extend the support to set this flag using device tree.
 >>
->> In place of Bart's fix, could you please try this patch ?
+>> This allows to keep an idle state disabled and they can be enabled back using
+>> sysfs after certain point using below command.
+>>
+>> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>>
+>> This helps in cases where vendors want to keep cpuidle off until home
+>> screen comes up. In the past attempt was done at [1] but it was not considered
+>> safe option to export cpu_idle_poll_ctrl().
+>>
+>> [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com/
 > 
-> Issue still persists at my end, when /sys/power/pm_async is 0.
-> device_pm_wait_for_dev() in its current form is only usable for async case.
-
-OK. Thanks for checking. Let me dig further.
-
+> Before considering this, I don't recall if I ever received a reply to
+> my earlier suggestion to the above thread. So, let me repeat my
+> question.
 > 
-> Kai-Heng
+> I am wondering if a similar improvement can be achieved by
+> modularizing the cpuidle-psci driver. If insmodding it after the
+> homescreen, we allow only ARM WFI during boot. This should achieve the
+> similar results as we get with $subject series, right?
 > 
->>
->> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
->> index b80e68000dd3..a81eb4f882ab 100644
->> --- a/drivers/ata/libata-eh.c
->> +++ b/drivers/ata/libata-eh.c
->> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
->> ata_port *ap)
->>         /* tell ACPI that we're resuming */
->>         ata_acpi_on_resume(ap);
->>
->> -       /* update the flags */
->>         spin_lock_irqsave(ap->lock, flags);
->> +
->> +       /* Update the flags */
->>         ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
->> +
->> +       /*
->> +        * Resuming the port will trigger a rescan of the ATA device(s)
->> +        * connected to it. Before scheduling the rescan, make sure that
->> +        * the associated scsi device(s) are fully resumed as well.
->> +        */
->> +       ata_for_each_link(link, ap, HOST_FIRST) {
->> +               ata_for_each_dev(dev, link, ENABLED) {
->> +                       struct scsi_device *sdev = dev->sdev;
->> +
->> +                       if (!sdev)
->> +                               continue;
->> +                       if (scsi_device_get(sdev))
->> +                               continue;
->> +
->> +                       spin_unlock_irqrestore(ap->lock, flags);
->> +                       device_pm_wait_for_dev(&ap->tdev,
->> +                                              &sdev->sdev_gendev);
->> +                       scsi_device_put(sdev);
->> +                       spin_lock_irqsave(ap->lock, flags);
->> +               }
->> +       }
->>         spin_unlock_irqrestore(ap->lock, flags);
->>  }
->>  #endif /* CONFIG_PM */
->>
->> Thanks !
->>
->> --
->> Damien Le Moal
->> Western Digital Research
->>
+> [...]
+> 
+This will not work for targets which does not have DLKM support.
 
--- 
-Damien Le Moal
-Western Digital Research
+>>
+>> Thanks,
+>> Tushar Nimkar.
+>>
+>> Tushar Nimkar (2):
+>>    dt-bindings: cpu: idle-states: Add idle-state-disabled property
+>>    cpuidle: dt: Add support to keep idle state disabled
+>>
+>>   Documentation/devicetree/bindings/cpu/idle-states.yaml | 8 ++++++++
+>>   drivers/cpuidle/dt_idle_states.c                       | 3 +++
+>>   2 files changed, 11 insertions(+)
+>>
+> 
+> Kind regards
+> Uffe
 
+Thanks,
+Tushar
