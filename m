@@ -2,87 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A2A72FABC
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 12:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CDD72FB32
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 12:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243918AbjFNKY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 06:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36022 "EHLO
+        id S235705AbjFNKhh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 06:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243577AbjFNKXX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 06:23:23 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4541D2719
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:22:51 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1badb8f9bso7032451fa.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:22:51 -0700 (PDT)
+        with ESMTP id S235592AbjFNKhe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 06:37:34 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D221732
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:37:32 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1b3dd3ca7adso21343095ad.3
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:37:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686738169; x=1689330169;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q5jMi4yB5xRipw+kSFiWjcxeJA+ox3eKVfPbvkx2gqs=;
-        b=aFQmIVXIbZIZkW27XzgM3oK1Cbw9GzcmQqyRJi0MVOlEFIxpQ16p80YaSy/nEI1hqz
-         LGDtSD66pjCZHP7tOQhPzkTyFQbEf6NWSHPKAq1bxci449w5M8gGmwpAl/71SJlCzaOb
-         uxj4HqrPatWLjJTuD/AeP650NqCM40kQM8R0zCKEela+Eg0WkRDS0cWzVvg9mph23Uaj
-         ncsVb+tK/0+prz3H4WhCzQ2cbyTAntEaR+WOkh7OYB8wEVDOYBLWyzOU96eJFozUS7+N
-         eEY9PpY3SpDo/EH3LHEXc7oeWwhkRTb5rjBojQS36bURYnAv6lY3gYX8WdVf0lsoI8EV
-         B7ZA==
+        d=linaro.org; s=google; t=1686739051; x=1689331051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0UJGMihjTj1hAjbmHZ6/JGiIPUmZ9LnZE7xgM/0VXOU=;
+        b=mvOOi2pysANY+XAjid4/FlGD4AKXH5Ah/zFubhD1VbJI2jUrrbWcZ59q2tD8Ppibpo
+         nPDCLEVGB+HMycGAfGsvRTPP6+Nxf2NinPMiL56X1sdqy6LXvtC03+nrltA6gRfMkYdP
+         L/6ZiL0Rdb+Qdtd5cJm2Qc0VEFuXu2n8RkZctsQOIJX8VrK2m4DCoxBksfKZxeJfbeqH
+         ViFmR2iPUUFufXbDpmw2raqGvoDKEu226XMRtVIe2yP7QLlqlxyKs25fVGHvLUMNpuVa
+         m9rfT0/l3EVH6a9InjY0rBimeUJJRXTkFnRf2KwN3DlcAwnsyV5OmKYBjjgICm30Mnxv
+         D81g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686738169; x=1689330169;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q5jMi4yB5xRipw+kSFiWjcxeJA+ox3eKVfPbvkx2gqs=;
-        b=FzumvreadnjJ4B6KS/xtscpamIS3Hw8Pn7gNYJmfcQpGN/tu9Gh02shva5t/7aXXyg
-         FthGxxpoWCeB2IeUXAgiTb6xvbRDcz7msn4RMI4xjK9lJzFyFx1qvvR+BCZ4S2dR7JC6
-         bIgN1L8W5rdQv9ycxEnC2fnsPOl4Cn2GRlFNSis9Mkdryk0l7PQsdXDdJHlJ/1q5LYJa
-         7PvwvS7Kk9oNhLcTg/Xdzn2RXtiSO+usXwBvqTGMaTJIfraPiUl2FBGl40CJ6XYo/qZY
-         Nm2zfvFT37aTaJ9lzWRowHtU7SmXEFft+ydT2FsxFRbQp+DGI5p/OYK2VYd/RqoNwV3a
-         A4qg==
-X-Gm-Message-State: AC+VfDzf+XCOXsG+erT3WcHZ8Q9ZyKI9bN5YG3ktLjQqF5dw9HIBHE1d
-        scAcB41CA0nfMHaWEv3e1xc+rg==
-X-Google-Smtp-Source: ACHHUZ4rNxbYlxD4D1e8ic1iqett9Ik0RtzDT2jOJ15sneHH61t6fU7iZZn4fgy5F401CB1k6c5OzQ==
-X-Received: by 2002:a2e:9891:0:b0:2b3:4cff:60c5 with SMTP id b17-20020a2e9891000000b002b34cff60c5mr462417ljj.2.1686738169630;
-        Wed, 14 Jun 2023 03:22:49 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id m2-20020a2eb6c2000000b002b20d8f270asm2520057ljo.74.2023.06.14.03.22.48
+        d=1e100.net; s=20221208; t=1686739051; x=1689331051;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0UJGMihjTj1hAjbmHZ6/JGiIPUmZ9LnZE7xgM/0VXOU=;
+        b=X8vEj+2Hqs8V1ZmtsJE54dcmn4qnyyIsDD6S2P717XuSmqJy/nxjrcpm5s4Me3ChtE
+         vzm4AM4HvECFeFLSSjlFKQQ01YT/OmP8TWT5I2VYnkeNTbu8ZzS0gfi3vNHlYPVh/ke8
+         LIpgjlc5IRJwFgCAQylxyDnpAfDuliEw8/XIjOiekbVM81PSoCY2ciNHLfJZUnorH5Q8
+         o9Vy66jDcMqAXwL3Ujj7Ois5wShqY35fNElANsKCdPW20wqz/gcs6TLHxPZjNYjjDz38
+         MsFBMKLEgxGlVnj1PyAwg0HaU6VYl9UN19M/0etFDMlH70pSlljzGoBwa9JjoWDYS5ce
+         pR+g==
+X-Gm-Message-State: AC+VfDzakpabYbT/e/holu0aZ7aabxqoNTVcApsU+hCpwZBTOahrq+7S
+        IjA3MEAPfBLzb7h58PHVsAB5kQ==
+X-Google-Smtp-Source: ACHHUZ7G6M362gZBo1XpHgAsxT45uBPwO0hp3bfI6761xauQ3K+uJ6CQ/i4/fw5QNPGONrZ2VKS58w==
+X-Received: by 2002:a17:902:6ac7:b0:1af:d724:63ed with SMTP id i7-20020a1709026ac700b001afd72463edmr11808868plt.42.1686739051243;
+        Wed, 14 Jun 2023 03:37:31 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id az4-20020a170902a58400b001b1c3542f57sm11854863plb.103.2023.06.14.03.37.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 03:22:49 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 14 Jun 2023 12:22:33 +0200
-Subject: [PATCH v5 22/22] interconnect: qcom: icc-rpm: Fix bandwidth
- calculations
+        Wed, 14 Jun 2023 03:37:30 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] OPP: pstate is only valid for genpd OPP tables
+Date:   Wed, 14 Jun 2023 16:07:25 +0530
+Message-Id: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230526-topic-smd_icc-v5-22-eeaa09d0082e@linaro.org>
-References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
-In-Reply-To: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686738136; l=5027;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Y6xOksmJ4mLZEd7yKDwUFVfxkWIq2Zds5gCs+rlOv40=;
- b=NYN1utIToJqOpynv4MfxledDji90pHdIJZVykGWzq3UsyI8id0Rk1b1Hhk1g5KBD53JSF4rr/
- B71Z7Cup3hBBBdGiwOhmGsuQYnAqLZRH4NQZbsti0DQYTvOZflKu6VX
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -93,133 +72,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Up until now, we've been aggregating the bandwidth values and only
-dividing them by the bus width of the source node. This was completely
-wrong, as different nodes on a given path may (and usually do) have
-varying bus widths.  That in turn, resulted in the calculated clock rates
-being completely bogus - usually they ended up being much higher, as
-NoC_A<->NoC_B links are very wide.
+It is not very clear right now that the `pstate` field is only valid for
+genpd OPP tables and not consumer tables. And there is no checking for
+the same at various places.
 
-Since we're not using the aggregate bandwidth value for anything other
-than clock rate calculations, remodel qcom_icc_bus_aggregate() to
-calculate the per-context clock rate for a given provider, taking into
-account the bus width of every individual node.
+Add checks in place to verify that and make it clear to the reader.
 
-Fixes: 30c8fa3ec61a ("interconnect: qcom: Add MSM8916 interconnect provider driver")
-Reported-by: Stephan Gerhold <stephan@gerhold.net>
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 59 ++++++++++++-------------------------
- 1 file changed, 19 insertions(+), 40 deletions(-)
+ drivers/opp/core.c    | 18 ++++++++++++++++--
+ drivers/opp/debugfs.c |  4 +++-
+ drivers/opp/of.c      |  6 ++++++
+ 3 files changed, 25 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index b7e0dfbdd26d..4ab410e477ce 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -293,58 +293,44 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
- }
- 
- /**
-- * qcom_icc_bus_aggregate - aggregate bandwidth by traversing all nodes
-+ * qcom_icc_bus_aggregate - calculate bus clock rates by traversing all nodes
-  * @provider: generic interconnect provider
-- * @agg_avg: an array for aggregated average bandwidth of buckets
-- * @agg_peak: an array for aggregated peak bandwidth of buckets
-- * @max_agg_avg: pointer to max value of aggregated average bandwidth
-+ * @agg_clk_rate: array containing the aggregated clock rates in kHz
-  */
--static void qcom_icc_bus_aggregate(struct icc_provider *provider,
--				   u64 *agg_avg, u64 *agg_peak,
--				   u64 *max_agg_avg)
-+static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_rate)
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 7290168ec806..bfb012f5383c 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -227,16 +227,24 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_level);
+ unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
+ 					    unsigned int index)
  {
--	struct icc_node *node;
-+	u64 agg_avg_rate, agg_rate;
- 	struct qcom_icc_node *qn;
--	u64 sum_avg[QCOM_SMD_RPM_STATE_NUM];
-+	struct icc_node *node;
- 	int i;
- 
--	/* Initialise aggregate values */
--	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
--		agg_avg[i] = 0;
--		agg_peak[i] = 0;
--	}
--
--	*max_agg_avg = 0;
--
- 	/*
--	 * Iterate nodes on the interconnect and aggregate bandwidth
--	 * requests for every bucket.
-+	 * Iterate nodes on the provider, aggregate bandwidth requests for
-+	 * every bucket and convert them into bus clock rates.
- 	 */
- 	list_for_each_entry(node, &provider->nodes, node_list) {
- 		qn = node->data;
- 		for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
- 			if (qn->channels)
--				sum_avg[i] = div_u64(qn->sum_avg[i], qn->channels);
-+				agg_avg_rate = div_u64(qn->sum_avg[i], qn->channels);
- 			else
--				sum_avg[i] = qn->sum_avg[i];
--			agg_avg[i] += sum_avg[i];
--			agg_peak[i] = max_t(u64, agg_peak[i], qn->max_peak[i]);
-+				agg_avg_rate = qn->sum_avg[i];
++	struct opp_table *opp_table = opp->opp_table;
 +
-+			agg_rate = max_t(u64, agg_avg_rate, qn->max_peak[i]);
-+			do_div(agg_rate, qn->buswidth);
-+
-+			agg_clk_rate[i] = max_t(u64, agg_clk_rate[i], agg_rate);
- 		}
+ 	if (IS_ERR_OR_NULL(opp) || !opp->available ||
+-	    index >= opp->opp_table->required_opp_count) {
++	    index >= opp_table->required_opp_count) {
+ 		pr_err("%s: Invalid parameters\n", __func__);
+ 		return 0;
  	}
--
--	/* Find maximum values across all buckets */
--	for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++)
--		*max_agg_avg = max_t(u64, *max_agg_avg, agg_avg[i]);
- }
  
- static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- {
--	struct qcom_icc_provider *qp;
- 	struct qcom_icc_node *src_qn = NULL, *dst_qn = NULL;
-+	u64 agg_clk_rate[QCOM_SMD_RPM_STATE_NUM] = { 0 };
- 	struct icc_provider *provider;
-+	struct qcom_icc_provider *qp;
- 	u64 active_rate, sleep_rate;
--	u64 agg_avg[QCOM_SMD_RPM_STATE_NUM], agg_peak[QCOM_SMD_RPM_STATE_NUM];
--	u64 max_agg_avg;
- 	int ret;
- 
- 	src_qn = src->data;
-@@ -353,7 +339,9 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	provider = src->provider;
- 	qp = to_qcom_provider(provider);
- 
--	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
-+	qcom_icc_bus_aggregate(provider, agg_clk_rate);
-+	active_rate = agg_clk_rate[QCOM_SMD_RPM_ACTIVE_STATE];
-+	sleep_rate = agg_clk_rate[QCOM_SMD_RPM_SLEEP_STATE];
- 
- 	ret = qcom_icc_rpm_set(src_qn, src_qn->sum_avg);
- 	if (ret)
-@@ -369,15 +357,6 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
- 	if (!qp->bus_clk_desc && !qp->bus_clk)
+ 	/* required-opps not fully initialized yet */
+-	if (lazy_linking_pending(opp->opp_table))
++	if (lazy_linking_pending(opp_table))
  		return 0;
  
--	/* Intentionally keep the rates in kHz as that's what RPM accepts */
--	active_rate = max(agg_avg[QCOM_SMD_RPM_ACTIVE_STATE],
--			  agg_peak[QCOM_SMD_RPM_ACTIVE_STATE]);
--	do_div(active_rate, src_qn->buswidth);
--
--	sleep_rate = max(agg_avg[QCOM_SMD_RPM_SLEEP_STATE],
--			 agg_peak[QCOM_SMD_RPM_SLEEP_STATE]);
--	do_div(sleep_rate, src_qn->buswidth);
--
++	/* The required OPP table must belong to a genpd */
++	if (unlikely(!opp_table->required_opp_tables[index]->is_genpd)) {
++		pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++		return 0;
++	}
++
+ 	return opp->required_opps[index]->pstate;
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_opp_get_required_pstate);
+@@ -2686,6 +2694,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+ 	int dest_pstate = -EINVAL;
+ 	int i;
+ 
++	/* Both OPP tables must belong to genpds */
++	if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
++		pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++		return -EINVAL;
++	}
++
  	/*
- 	 * Downstream checks whether the requested rate is zero, but it makes little sense
- 	 * to vote for a value that's below the lower threshold, so let's not do so.
-
+ 	 * Normally the src_table will have the "required_opps" property set to
+ 	 * point to one of the OPPs in the dst_table, but in some cases the
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 2c7fb683441e..0cc21e2b42ff 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -152,11 +152,13 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+ 	debugfs_create_bool("dynamic", S_IRUGO, d, &opp->dynamic);
+ 	debugfs_create_bool("turbo", S_IRUGO, d, &opp->turbo);
+ 	debugfs_create_bool("suspend", S_IRUGO, d, &opp->suspend);
+-	debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
+ 	debugfs_create_u32("level", S_IRUGO, d, &opp->level);
+ 	debugfs_create_ulong("clock_latency_ns", S_IRUGO, d,
+ 			     &opp->clock_latency_ns);
+ 
++	if (opp_table->is_genpd)
++		debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
++
+ 	opp->of_name = of_node_full_name(opp->np);
+ 	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
+ 
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 943c7fb7402b..e23ce6e78eb6 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -1392,6 +1392,12 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+ 		goto put_required_np;
+ 	}
+ 
++	/* The OPP tables must belong to a genpd */
++	if (unlikely(!opp_table->is_genpd)) {
++		pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++		goto put_required_np;
++	}
++
+ 	opp = _find_opp_of_np(opp_table, required_np);
+ 	if (opp) {
+ 		pstate = opp->pstate;
 -- 
-2.41.0
+2.31.1.272.g89b43f80a514
 
