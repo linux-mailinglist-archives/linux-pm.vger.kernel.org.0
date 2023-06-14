@@ -2,71 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B8C72FB33
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 12:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9056172FBC9
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 12:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235592AbjFNKhi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 06:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S235907AbjFNK7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 06:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235661AbjFNKhg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 06:37:36 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204F419AC
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:37:35 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-543cc9541feso3532346a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:37:35 -0700 (PDT)
+        with ESMTP id S234356AbjFNK7N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 06:59:13 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2131BC3
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:59:10 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30e4eec95c8so6127799f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686739054; x=1689331054;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uYcdmfInIY4iLHsu2ifmhCLSrZeHago4AwSaJYKqWeU=;
-        b=GmPyR06c8WP0576PRGOpYS8J4G8kICYSimUk0m0JJI7EUlZlfjoEIwW3E1ot0fXUoD
-         LAjgEI03sw+vCF83/PXxLTOyMsN4HK2oEUm6BRyqGFIIsj65lKARGTW/pAyT6bC+udgL
-         iyCC5IWAaS1L/PfyAxsbetS8XjRC4U2jxq3Ui33zSg2BQAN3fc0SnV4LIIrMXkhCC2a5
-         Bc5YMgD1xXRSc4p8JrXujhmYNAHLJT4ZMAZSWCMo5Y9+i+UlKSW0uLL24OfwG+23zu/v
-         a2BC5mKxeRVUrECK93DBlYyJ2OR1PLCA8WH5Fubfzzs5ECdn1xA7LSNh5kLuNs+XojeF
-         i4ZQ==
+        d=linaro.org; s=google; t=1686740349; x=1689332349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X76GkVQmm233Ef9CD45/5gbsHuJzJYm1L85f82G9R4o=;
+        b=YC6D/9YorHI2DGemUAj/35LGIrIk1d7W7kFw5L0NFtynGJLSkwhdHBHTSkjoAWF6Hw
+         pId1fTQQnxrw3IOIqwOPq4EYitLlCm4eclIXFwsCwdUT42yWTcdUPCNPSqVSLogvk1iU
+         xduZ2AUrOfBKMsWgPwR20HTGWegtCwfw5LRXu0ASMVU6Gl/0ltjm7D9BezzW72ukdkUj
+         vMiMK+9R2Qry+vuJ+0zUaYnKowG7HXx3jvRvpsXxISRg5C6jmrZ+zK0qBpdjVpM33kY0
+         fqFpfi058mntucNZ7KuAVG+aRmJWOKJxK2XdB2gecXB08r68rF+/Y/Rfxr6iVsBI6grQ
+         zhXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686739054; x=1689331054;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uYcdmfInIY4iLHsu2ifmhCLSrZeHago4AwSaJYKqWeU=;
-        b=Nzxh0mm5s447Tu9SRgO1WqlV2NzTx53Ge5ZPq3IpCs8GJ5NKe4u0IXj72mjPVQxiIq
-         0bRGDzsWImOHN8YzoEvWC51h9+lGg6j0KzQN0CDZkTpyH+mqzclqJ+yLu/+JEIUExGVV
-         y/IXnoql23eYYE4ksTNX+kqHrwbX9iZ8r0mNbRjd2VCfZ4VfwKUxQKYhbuzEGgWeDTz/
-         dcNY8Of2+Bh/i86apKi4E82FvpJL661G+xbpryqN/9cj6G1DNYgC7Ij4B9soG6/k7Jtp
-         Np86Yz0Tiv9xH6SdQG4QTboI2K3QszAK9i7W+sfNGl86yf9lynE426W5xPzLx173foo5
-         sEnQ==
-X-Gm-Message-State: AC+VfDzdWBUyZ/fFQkKCiJn0Cb/9fyGdFGQMKh/eYtjhl/Tt7pywuCNB
-        vdA5zd+nVMd3j4RW/IQsgNH2RA==
-X-Google-Smtp-Source: ACHHUZ589iilNr7Jek4O5EuZFXNy9wIqySycd47hoKvnzu2cB+DDblm4K/08MehqjtdZv4i9oNxdIg==
-X-Received: by 2002:a05:6a20:12c8:b0:10c:9773:5e6 with SMTP id v8-20020a056a2012c800b0010c977305e6mr1025269pzg.47.1686739054531;
-        Wed, 14 Jun 2023 03:37:34 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id t4-20020a170902a5c400b001ab0159b9edsm11827247plq.250.2023.06.14.03.37.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jun 2023 03:37:34 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] OPP: Simplify the over-designed pstate <-> level dance
-Date:   Wed, 14 Jun 2023 16:07:26 +0530
-Message-Id: <af0fd0fd64f33809875335a9cc2761085c3bd66f.1686739018.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
-References: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+        d=1e100.net; s=20221208; t=1686740349; x=1689332349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X76GkVQmm233Ef9CD45/5gbsHuJzJYm1L85f82G9R4o=;
+        b=XcI6sQ2AzTxkM/OoeLAnuyX4ZERXSleQ+MXz76AnobufBZgis5BMnWyL0JKSpWW2JA
+         uGdF5B1cRYotf5G+Jd76c4oUD8NmXM4TX0nms/UzbkxybByu5xz+QFf6PKPe5MFXQrDa
+         J7QYERR+31sCUWprSqfKMygyadu/IuIuvZuWndgEFxa3iHn06ITe7f8AANqVYPADBmro
+         JmYn09B7DVZraBUWx5Z9Ba/hAsu4PQ4eEV2fmZkZADqJ8it4h+lCnQIQz6jqQW/f8ihW
+         m1jqMbXxhqU1jwxSyneNXrtt6HAY/uUSyfugCkMwYdRfFH15Ee9PjIUVIDi4ttT9sULA
+         gfDA==
+X-Gm-Message-State: AC+VfDwDePqbB9pRa/+2nDq/TMpkprHCtiBTWlw69eKYjqHsLNXeNo7A
+        xF7jcSiGh1Pcu4BldSp02B32NA==
+X-Google-Smtp-Source: ACHHUZ4osks2idP8nFHnF77UpFY2nhvaTzkrwZUVtXTupb7ex/nT+3I5JfmY4knyoi0MhzfpCxOZhg==
+X-Received: by 2002:adf:e4c8:0:b0:30f:c9bf:de69 with SMTP id v8-20020adfe4c8000000b0030fc9bfde69mr4851063wrm.46.1686740349081;
+        Wed, 14 Jun 2023 03:59:09 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:d8c4:17ec:c49d:215e? ([2a05:6e02:1041:c10:d8c4:17ec:c49d:215e])
+        by smtp.googlemail.com with ESMTPSA id n7-20020adff087000000b0030ae5a0516csm17816540wro.17.2023.06.14.03.59.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jun 2023 03:59:08 -0700 (PDT)
+Message-ID: <d652acef-ab25-7d5e-6af0-584dacfbbd8d@linaro.org>
+Date:   Wed, 14 Jun 2023 12:59:07 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
+ support
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        zhanghongchen <zhanghongchen@loongson.cn>
+References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
+ <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
+ <ac5b3982-a658-e05b-1b5c-3aeeda1585ed@loongson.cn>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ac5b3982-a658-e05b-1b5c-3aeeda1585ed@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,119 +86,131 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-While adding support for "performance states" in the OPP and genpd core,
-it was decided to set the `pstate` field via genpd's
-pm_genpd_opp_to_performance_state() helper, to allow platforms to set
-`pstate` even if they don't have a corresponding `level` field in the DT
-OPP tables (More details are present in commit 6e41766a6a50 ("PM /
-Domain: Implement of_genpd_opp_to_performance_state()")).
 
-Revisiting that five years later clearly suggests that it was
-over-designed as all current users are eventually using the `level`
-value only.
+Hi Yinbo,
 
-The previous commit already added necessary checks to make sure pstate
-is only used for genpd tables. Lets now simplify this a little, and use
-`level` directly and remove `pstate` field altogether.
 
-Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c    | 8 ++++----
- drivers/opp/debugfs.c | 2 +-
- drivers/opp/of.c      | 5 +----
- drivers/opp/opp.h     | 2 --
- 4 files changed, 6 insertions(+), 11 deletions(-)
+On 14/06/2023 10:03, zhuyinbo wrote:
+> 
+> Hi Daniel,
+> 
+> Thank you very much for your feedback and suggestions. Below, I have
+> some comments, please review.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index bfb012f5383c..48ddd72d2c71 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -245,7 +245,7 @@ unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
- 		return 0;
- 	}
- 
--	return opp->required_opps[index]->pstate;
-+	return opp->required_opps[index]->level;
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_required_pstate);
- 
-@@ -943,7 +943,7 @@ static int _set_opp_bw(const struct opp_table *opp_table,
- static int _set_performance_state(struct device *dev, struct device *pd_dev,
- 				  struct dev_pm_opp *opp, int i)
- {
--	unsigned int pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
-+	unsigned int pstate = likely(opp) ? opp->required_opps[i]->level: 0;
- 	int ret;
- 
- 	if (!pd_dev)
-@@ -2728,8 +2728,8 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
- 	mutex_lock(&src_table->lock);
- 
- 	list_for_each_entry(opp, &src_table->opp_list, node) {
--		if (opp->pstate == pstate) {
--			dest_pstate = opp->required_opps[i]->pstate;
-+		if (opp->level == pstate) {
-+			dest_pstate = opp->required_opps[i]->level;
- 			goto unlock;
- 		}
- 	}
-diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
-index 0cc21e2b42ff..954ea31a2ff3 100644
---- a/drivers/opp/debugfs.c
-+++ b/drivers/opp/debugfs.c
-@@ -157,7 +157,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
- 			     &opp->clock_latency_ns);
- 
- 	if (opp_table->is_genpd)
--		debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
-+		debugfs_create_u32("performance_state", S_IRUGO, d, &opp->level);
- 
- 	opp->of_name = of_node_full_name(opp->np);
- 	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index e23ce6e78eb6..e6d1155d0990 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -945,9 +945,6 @@ static struct dev_pm_opp *_opp_add_static_v2(struct opp_table *opp_table,
- 	if (ret)
- 		goto free_required_opps;
- 
--	if (opp_table->is_genpd)
--		new_opp->pstate = pm_genpd_opp_to_performance_state(dev, new_opp);
--
- 	ret = _opp_add(dev, new_opp, opp_table);
- 	if (ret) {
- 		/* Don't return error for duplicate OPPs */
-@@ -1400,7 +1397,7 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
- 
- 	opp = _find_opp_of_np(opp_table, required_np);
- 	if (opp) {
--		pstate = opp->pstate;
-+		pstate = opp->level;
- 		dev_pm_opp_put(opp);
- 	}
- 
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 3805b92a6100..8a5ea38f3a3d 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -78,7 +78,6 @@ struct opp_config_data {
-  * @turbo:	true if turbo (boost) OPP
-  * @suspend:	true if suspend OPP
-  * @removed:	flag indicating that OPP's reference is dropped by OPP core.
-- * @pstate: Device's power domain's performance state.
-  * @rates:	Frequencies in hertz
-  * @level:	Performance level
-  * @supplies:	Power supplies voltage/current values
-@@ -101,7 +100,6 @@ struct dev_pm_opp {
- 	bool turbo;
- 	bool suspend;
- 	bool removed;
--	unsigned int pstate;
- 	unsigned long *rates;
- 	unsigned int level;
- 
+[ ... ]
+
+>>> +
+>>> +    low += 100;
+>>> +    high += 100;
+
+Literals -> macros
+
+>>> +    reg_ctrl = low;
+>>> +    reg_ctrl |= enable ? 0x100 : 0;
+>>> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+>>> +
+>>> +    reg_ctrl = high;
+>>> +    reg_ctrl |= enable ? 0x100 : 0;
+>>> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+>>
+>> Is the 'enable' boolean really useful?
+> 
+> 
+> Yes, this 'enable' was to enable thermal irq.
+> 
+>>
+>> Wouldn't be the sensor trip points disabled by default at reset time?
+>>
+> 
+> 
+> Only here will thermal irq be enabled throughout the entire driver, and
+> actual testing has shown that interrupts are valid, so this is
+> meaningful.
+
+Ok.
+
+>> If it is the case then we can get ride of this variable and make the 
+>> routine simpler
+>>
+>>> +    return 0;
+>>> +}
+>>> +
+>>> +static int loongson2_thermal_get_temp(struct thermal_zone_device 
+>>> *tz, int *temp)
+>>> +{
+>>> +    u32 reg_val;
+>>> +    struct loongson2_thermal_data *data = tz->devdata;
+>>> +
+>>> +    reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
+>>
+>> Seems like there is no offset for the sensor id here ?
+> 
+> 
+> There is no need for a sensor ID here.
+> 
+> There are some things that I didn't describe clearly, which made you
+> misunderstand. Actually, the temperature sensor of 2K1000 is like this:
+> 
+> There are 4 sets of temperature interrupt controllers, only one set of
+> temperature sampling registers. a sets of temperature interrupt
+> controllers was considered a sensor, which sensor include 3 register as
+> follows, where "SEL" represents which sensor is referenced, In 2k1000
+> datasheet, which "SEL" must be 0.
+
+I'm not sure to understand. Let me rephrase it and know what is wrong.
+
+1. The thermal controller has 4 sensors. The interrupt can be set for 
+these 4 sensors.
+
+2. When reading a temperature, we have to select the sensor via the 
+'SEL' register.
+
+3. The 2k1000 has one sensor with an id = 0.
+
+4. In the future, more Loongson platform can be submitted with more than 
+one sensor
+
+If this is correct, then my comments are about the inconsistency of the 
+proposed changes. Guessing in the future Loongson board there will be 
+more than one sensor, the existing code mixes support for one and 
+multiple sensors as well as assuming id is 0.
+
+So if you add in the of_loongson2_thermal_match table a new platform 
+with several sensors, the current code will be broken because:
+
+  - the initialization loop does exit when the first thermal zone 
+registration succeed
+
+  - the interrupt handler does not figure out which sensor crossed the 
+low/high limit
+
+  - the get_temp is not selecting the right sensor
+
+
+That is my point:
+
+  - write the code to support one sensor with id=0 only
+
+    *or*
+
+  - write the code to support multiple sensors
+
+If I'm not wrong the code is closer to support multiple sensors ;)
+
+Let me know if these deductions are correct
+
+   -- Daniel
+
+ps : is there an English translation for the 2k1000 datasheet ?
+
+
+
+
+
 -- 
-2.31.1.272.g89b43f80a514
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
