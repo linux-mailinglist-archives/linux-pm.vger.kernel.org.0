@@ -2,122 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C6D730AF4
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 00:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC5F730B15
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 01:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235600AbjFNWtv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 18:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S230523AbjFNXAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 19:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbjFNWtu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 18:49:50 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F18E1FE2
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 15:49:48 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b1b30445cfso18690741fa.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 15:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686782987; x=1689374987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SLDzJSxQZskr0Cl4XkH1ZSWbdavJeb1yjH9huK60JGU=;
-        b=iFNpS9TkjHbDcvpZX8+Kh6A/ZKdU0v8OccZXmYrctkpTbWirXpm74PxldYCTNEf79q
-         uBI/OPJQjWU+k6qvYvOEaAuWfmX+8h2K5+mJgxmVqXlT0oWB++ZgFmSU92hg6z708TDD
-         fRpAvQErMSVxFiED7s2t3lVr1jd/y3Je4i7GrLmBmqpzH5AOyvwaJX3mA+2IdMxq/+D0
-         Gpz7t/6DsFpARW3dGvjihmwJUGxkuZwwYIzhzUB6USvtbyjoSzRU11XuN5QNB6VJl+SB
-         t3PM0Cdbq3yAHMcMrXFucWy4yjAyPI1lvlGmKR5fJJ+PmyHvSH0US8YV+Cy0YH+PkLMh
-         taOw==
+        with ESMTP id S229453AbjFNXAt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 19:00:49 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F30211D;
+        Wed, 14 Jun 2023 16:00:48 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-33cb82122c7so30244025ab.1;
+        Wed, 14 Jun 2023 16:00:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686782987; x=1689374987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SLDzJSxQZskr0Cl4XkH1ZSWbdavJeb1yjH9huK60JGU=;
-        b=gYbtcM7LLbo1/rkhIINsMp1Ccf3wrZ1ssxwwaxTxlEQeMVFT7br6ODtw13P7j2GNxS
-         ZMztvQ0Ql2OVjW+Xg/3N6LmDq+ggnSaa/bHYPdXnnf6jPeEMmiQHtIxn9r7RBJNctPFz
-         IW2D7gIxJgrE36EGIKwvexf4M9OJhvboMWR/CjJMJxW0zpdjGNcp0oOn0wWN4NBp048o
-         ypKj/W6+hqWbAVnjPYxuzjmLm3dnHG2XLyvjNPouK/2b/qNcJuHbiAEVwusyJGnaL7is
-         aSFEhrRkgKWGa8VW5ry5D9TuotCi2UCk3I/ZgJ8kScQLSEtfqD/1buKZMcvxeJ989haW
-         eV7g==
-X-Gm-Message-State: AC+VfDx6DRfsnnERv9/lboAiGHQ3+RxcKFDswNfZJcodqrNtwNZEm5RT
-        gO91+o2BtJzcBFHeVIaByHn7ww==
-X-Google-Smtp-Source: ACHHUZ4+0MirKpPxCOYertoARVhJCSV5Rvf1vp9RpZH7q+j92Tud1zhaLDAPPNMsAEIXsHfR0m5mcw==
-X-Received: by 2002:a2e:3305:0:b0:2af:2466:1c18 with SMTP id d5-20020a2e3305000000b002af24661c18mr7682604ljc.18.1686782986787;
-        Wed, 14 Jun 2023 15:49:46 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id j14-20020a2e824e000000b002b1a4238c96sm2765969ljh.128.2023.06.14.15.49.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 15:49:45 -0700 (PDT)
-Message-ID: <e70520a9-6c97-07b3-326a-6fa80aad0d6a@linaro.org>
-Date:   Thu, 15 Jun 2023 01:49:45 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 03/18] dt-bindings: soc: qcom: qcom,saw2: define optional
- regulator node
-Content-Language: en-GB
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
+        d=1e100.net; s=20221208; t=1686783647; x=1689375647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6RZOm4/qsqljNAn5DDwj0i4QvMF+OH3D+Yj42xVFIXE=;
+        b=d1zvGT9BplMBk5wTJbptGMXHEDbfe7m1yCG9dhf1fMBXsAqVPWWuGRM1ANR0jf5V/f
+         xWf5O7Zdi/YZoqT6w/SSVJQ6lzZNHu9VWa1Cq/xcLf1sxWwz2MbA6HzHxPA8/liipGv2
+         VrV78cagO1s+FjOSavsbORrtPyEtIv8AcjT4gzUNobx2Q4RrdXUAOYy7a0L/vxU/4R5Z
+         g77EqlSwnM0x5PZXAUXhHrljluFRubsyoOHo0ArLPXzie+z28BiMX+9FJOVlUgkQkTsy
+         U0hxpT/5j7HyPtsGJdbdwS+qrZygBx4cZYO2yotPsVkfuy4rhlD3M/YJJbg4D3fRue6C
+         Gr3A==
+X-Gm-Message-State: AC+VfDzbuk/64DmuMHn23r8mUbggesN3V23Qj7D9zeqwGgAtkVLoTaNU
+        QnFNyMTxadZCGUFrAIHHiA==
+X-Google-Smtp-Source: ACHHUZ5Shx7XgX4uzqxXwfrN69JGCNYVb1kQNCoGU85ystsCfK9wt6w4QE572JyzEsAzoFIVsH48TQ==
+X-Received: by 2002:a92:cd06:0:b0:33b:1635:359f with SMTP id z6-20020a92cd06000000b0033b1635359fmr14095451iln.22.1686783647471;
+        Wed, 14 Jun 2023 16:00:47 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id q15-20020a02c8cf000000b0040f7db6a264sm5228754jao.114.2023.06.14.16.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jun 2023 16:00:46 -0700 (PDT)
+Received: (nullmailer pid 3022170 invoked by uid 1000);
+        Wed, 14 Jun 2023 23:00:44 -0000
+Date:   Wed, 14 Jun 2023 17:00:44 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>
-References: <20230612053922.3284394-1-dmitry.baryshkov@linaro.org>
- <20230612053922.3284394-4-dmitry.baryshkov@linaro.org>
- <e48f6153-0485-9fb9-5fe0-145251a8b367@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <e48f6153-0485-9fb9-5fe0-145251a8b367@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH 09/16] dt-bindings: firmware: arm,scmi: Extend bindings
+ for protocol@13
+Message-ID: <20230614230044.GA3019052-robh@kernel.org>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-10-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230607124628.157465-10-ulf.hansson@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/06/2023 19:05, Krzysztof Kozlowski wrote:
-> On 12/06/2023 07:39, Dmitry Baryshkov wrote:
->> The SAW2 device can optionally provide a voltage regulator supplying the
->> CPU core, cluster or L2 cache. Describe it in the device bindings.
->>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>   .../devicetree/bindings/soc/qcom/qcom,saw2.yaml | 17 +++++++++++++++++
->>   1 file changed, 17 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml
->> index a016242367b9..b809a9cc0916 100644
->> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,saw2.yaml
->> @@ -47,6 +47,10 @@ properties:
->>         - description: Base address and size of the alias register region
->>       minItems: 1
->>   
->> +  regulator:
->> +    $ref: /schemas/regulator/regulator.yaml#
+On Wed, Jun 07, 2023 at 02:46:21PM +0200, Ulf Hansson wrote:
+> The protocol@13 node is describing the performance scaling option for the
+> ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
+> performance scaling is in many cases not limited to switching a clock's
+> frequency.
 > 
-> There was such property in the binding (and DTS!) but a bool. Previous
-> patch silently dropped it, so re-introducing it with different type is
-> confusing.
+> Therefore, let's extend the binding so the interface can be modelled as a
+> generic "performance domain" too. The common way to describe this, is to
+> use the "power-domain" bindings, so let's use that.
 
-Could you please propose a better name here? saw-regulator? Or maybe 
-regulator-saw? (as we might get regulator-avs at some point).
+What's wrong with the performance-domain binding?
 
--- 
-With best wishes
-Dmitry
-
+> 
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Cc: Conor Dooley <conor+dt@kernel.org>
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/firmware/arm,scmi.yaml | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> index 5824c43e9893..cff9d1e4cea1 100644
+> --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> @@ -145,8 +145,8 @@ properties:
+>        '#clock-cells':
+>          const: 1
+>  
+> -    required:
+> -      - '#clock-cells'
+> +      '#power-domain-cells':
+> +        const: 1
+>  
+>    protocol@14:
+>      $ref: '#/$defs/protocol-node'
+> -- 
+> 2.34.1
+> 
