@@ -2,196 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CAC73062E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 19:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EB9730659
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 19:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238477AbjFNRkP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 13:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
+        id S231384AbjFNRyg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 13:54:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235839AbjFNRkO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 13:40:14 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E3B1BCE
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 10:40:11 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f60a27c4a2so8593691e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 10:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686764410; x=1689356410;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M7ewiUSnCS3rNCPsoJCYT5f68i4M3iIUicklGo7JmxE=;
-        b=cxKWNJzbvcvHplxwGHO9tu2JAcUmf8AMQCehGwFdhHLi0QYmM951++Im7lizzvQoXR
-         lvJgfLkVO6Y1LfS4dVQotxYgdCoXpx8YFRSZCN+tCLdjjK5gMQSXZ113Yh0Lx3Pgf9jh
-         bFGM01yBa3oisci3WDjbkrJKIzh0dQquhEg2tv0SaIC6jTsFR3BjWSwTWCqr1YKozVIm
-         V2DjrHSn/p/IeW9yWsGjfgRnoWvNmwE6Q0hvWpWJ1S7CoP7Jw2a4Kzbw+bxQimGiDD0M
-         MGzTqC5GcO3PwY4xbNLLRf8NLAvjzGLCXEzZD9Y0aTZIh1YRt8ZioqGq8SdldALq9ofP
-         ubfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686764410; x=1689356410;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M7ewiUSnCS3rNCPsoJCYT5f68i4M3iIUicklGo7JmxE=;
-        b=OOOr0E7U2tBN57cnc+LdhZD9DwOcZlUgT08FS3TsivydZQEhwV4ifXrX/ArGxrR5yR
-         CSxdDgYPC0o5/5RpHwrUlN12m1NN0L645KBlD03Z7VnBEsy8DPnJ/0mA6ZTJyI1NHX7Z
-         os12+jsmtAOd0sqH6JJG13VhlrxmBJYfGKIM7FqJIlNo0T3pkaHqqcGsZguX1tkZiGzp
-         d/HR1NeeeuIdb9GXH2Kw5TL439X90IV6lvn3cJJVWIeIxyyDWtQBOAR3jDbV05ib+ITU
-         Qi+xBSy2Kvgmop7dS4P7APdxDAf1lZAPytec44r/+qzJM1Y/YM4SQiuBR229CuCIP9Fm
-         1g8g==
-X-Gm-Message-State: AC+VfDwE/MxTph7TtXzWvtV2U+PwF61sO4z5UV95u9JxpGsvXH2hcVut
-        NfJ8BkzhuDWmLUY2yITeq2F04A==
-X-Google-Smtp-Source: ACHHUZ42uaXU6+8DZVhsw4tg5ChgANQZ7OV1TTRlzA7XRCTwEtkTBTBAp0iTmvbHQcrQ5C1tdujs/g==
-X-Received: by 2002:a19:9113:0:b0:4f7:68c6:e352 with SMTP id t19-20020a199113000000b004f768c6e352mr1218978lfd.38.1686764409711;
-        Wed, 14 Jun 2023 10:40:09 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id a8-20020a19f808000000b004f14ecc03f1sm2205264lff.100.2023.06.14.10.40.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 10:40:09 -0700 (PDT)
-Message-ID: <eb39cef0-7e1c-f0dc-12fa-6a5a746d17d1@linaro.org>
-Date:   Wed, 14 Jun 2023 19:40:06 +0200
+        with ESMTP id S229943AbjFNRyg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 13:54:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF891FCA;
+        Wed, 14 Jun 2023 10:54:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2442B63BC8;
+        Wed, 14 Jun 2023 17:54:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FD7C433C9;
+        Wed, 14 Jun 2023 17:54:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686765274;
+        bh=LFs3KEZ5mEDZ0GKDFGF6FsGRPB1VvFwyU8SZxXVA1jQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OGKEksRtQMIQsiEhIMdy1AQENzhlaMyT8TuTUHNjyWoO1YxlYsVpOnmiOrW2/6WKi
+         W3DfsnpaNM4Zyz9CAi4TNCTC3PAeUuvseGgogMKeb0REh/X6IrXM8cj4KHY7byTj4V
+         vaNUtGhXO2ncwSEtIDMMkGka+rlbGyNQxooRik/i0mpBIKONx8lvy39LHmk5bQOR1W
+         kGvEVPEAYMfVoowJwaq4JR4VKzNuCOnLQzkZLbsa9MPsw89dqO/jU/Ap97Wu9EfOt1
+         4SN+8fn1gj7/oGp8BPnppp9ctL3MOFkZZoJkEsx4BcwAVNkEvLU6NjRqkQniPfNe4N
+         +0xphPJf44Djg==
+Date:   Wed, 14 Jun 2023 12:54:31 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ondrej Zary <linux@zary.sk>
+Cc:     rjw@rjwysocki.net, gottwald@igel.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        mika.westerberg@linux.intel.com
+Subject: Re: [PATCH] PCI/PM: Extend Elo i2 quirk to all systems using
+ Continental Z2 board
+Message-ID: <20230614175431.GA1395151@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v5 08/22] interconnect: qcom: smd-rpm: Add rpmcc handling
- skeleton code
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230526-topic-smd_icc-v5-0-eeaa09d0082e@linaro.org>
- <20230526-topic-smd_icc-v5-8-eeaa09d0082e@linaro.org>
- <ZInS7WZ_-02iZiKp@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <ZInS7WZ_-02iZiKp@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614074253.22318-1-linux@zary.sk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14.06.2023 16:47, Stephan Gerhold wrote:
-> On Wed, Jun 14, 2023 at 12:22:19PM +0200, Konrad Dybcio wrote:
->> Introduce qcom_icc_rpm_set_bus_rate() in preparation for handling RPM
->> clock resources within the interconnect framework. This lets us greatly
->> simplify all of the code handling, as setting the rate comes down to:
->>
->> u32 rate_khz = max(clk.sleep_rate, clk.active_rate, clk_a.active_rate)
->> write_to_rpm(clock.description, rate_khz);
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/interconnect/qcom/icc-rpm.h | 15 +++++++++++++++
->>  drivers/interconnect/qcom/smd-rpm.c | 21 +++++++++++++++++++++
->>  2 files changed, 36 insertions(+)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
->> index 9ec90e13bfbd..d857fb1efb75 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.h
->> +++ b/drivers/interconnect/qcom/icc-rpm.h
->> @@ -22,6 +22,18 @@ enum qcom_icc_type {
->>  	QCOM_ICC_QNOC,
->>  };
->>  
->> +/**
->> + * struct rpm_clk_resource - RPM bus clock resource
->> + * @resource_type: RPM resource type of the clock resource
->> + * @clock_id: index of the clock resource of a specific resource type
->> + * @branch: whether the resource represents a branch clock
->> +*/
->> +struct rpm_clk_resource {
->> +	u32 resource_type;
->> +	u32 clock_id;
->> +	bool branch;
->> +};
->> +
->>  #define NUM_BUS_CLKS	2
->>  
->>  /**
->> @@ -47,6 +59,7 @@ struct qcom_icc_provider {
->>  	unsigned int qos_offset;
->>  	u64 bus_clk_rate[NUM_BUS_CLKS];
->>  	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
->> +	const struct rpm_clk_resource *bus_clk_desc;
->>  	struct clk_bulk_data *intf_clks;
->>  	bool keep_alive;
->>  	bool is_on;
->> @@ -104,6 +117,7 @@ struct qcom_icc_desc {
->>  	struct qcom_icc_node * const *nodes;
->>  	size_t num_nodes;
->>  	const char * const *bus_clocks;
->> +	const struct rpm_clk_resource *bus_clk_desc;
->>  	const char * const *intf_clocks;
->>  	size_t num_intf_clocks;
->>  	bool keep_alive;
->> @@ -125,5 +139,6 @@ int qnoc_remove(struct platform_device *pdev);
->>  
->>  bool qcom_icc_rpm_smd_available(void);
->>  int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val);
->> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, int rsc_type, u32 rate);
->>  
->>  #endif
->> diff --git a/drivers/interconnect/qcom/smd-rpm.c b/drivers/interconnect/qcom/smd-rpm.c
->> index b0183262ba66..b06374340eeb 100644
->> --- a/drivers/interconnect/qcom/smd-rpm.c
->> +++ b/drivers/interconnect/qcom/smd-rpm.c
->> @@ -16,6 +16,7 @@
->>  #include "icc-rpm.h"
->>  
->>  #define RPM_KEY_BW		0x00007762
->> +#define QCOM_RPM_SMD_KEY_RATE	0x007a484b
->>  
->>  static struct qcom_smd_rpm *icc_smd_rpm;
->>  
->> @@ -44,6 +45,26 @@ int qcom_icc_rpm_smd_send(int ctx, int rsc_type, int id, u32 val)
->>  }
->>  EXPORT_SYMBOL_GPL(qcom_icc_rpm_smd_send);
->>  
->> +int qcom_icc_rpm_set_bus_rate(const struct rpm_clk_resource *clk, int rsc_type, u32 rate)
->> +{
->> +	struct clk_smd_rpm_req req = {
->> +		.key = cpu_to_le32(QCOM_RPM_SMD_KEY_RATE),
->> +		.nbytes = cpu_to_le32(sizeof(u32)),
->> +	};
->> +
->> +	/* Branch clocks are only on/off */
->> +	if (clk->branch)
->> +		rate = !!rate;
->> +
->> +	req.value = cpu_to_le32(rate);
->> +	return qcom_rpm_smd_write(icc_smd_rpm,
->> +				  rsc_type,
->> +				  clk->resource_type,
+On Wed, Jun 14, 2023 at 09:42:53AM +0200, Ondrej Zary wrote:
+> The quirk for Elo i2 introduced in commit 92597f97a40b ("PCI/PM: Avoid
+> putting Elo i2 PCIe Ports in D3cold") is also needed by EloPOS E2/S2/H2
+> which uses the same Continental Z2 board.
 > 
-> Sorry to have more minor comments but as you can see here the resource
-> type is taken from the rpm_clk_resource. The parameter that you are
-> describing as "rsc_type" is actually the "ctx" in the other function. :')
-Meh I fixed it too fast.. thanks
+> Change the quirk to match the board instead of system.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215715
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> Cc: stable@vger.kernel.org
 
-Konrad
+Thanks, I applied this to pci/pm for v6.5 with the following subject
+to try to make it easier to connect to product names:
+
+  PCI/PM: Avoid putting EloPOS E2/S2/H2 PCIe Ports in D3cold
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index 578bf0d3ec3c..0fb0116ae69f 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -2956,13 +2956,13 @@ static const struct dmi_system_id bridge_d3_blacklist[] = {
+ 	{
+ 		/*
+ 		 * Downstream device is not accessible after putting a root port
+-		 * into D3cold and back into D0 on Elo i2.
++		 * into D3cold and back into D0 on Elo Continental Z2 board
+ 		 */
+-		.ident = "Elo i2",
++		.ident = "Elo Continental Z2",
+ 		.matches = {
+-			DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
+-			DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
++			DMI_MATCH(DMI_BOARD_VENDOR, "Elo Touch Solutions"),
++			DMI_MATCH(DMI_BOARD_NAME, "Geminilake"),
++			DMI_MATCH(DMI_BOARD_VERSION, "Continental Z2"),
+ 		},
+ 	},
+ #endif
+
+> ---
+>  drivers/pci/pci.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> If you fix this feel free to add my:
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 5ede93222bc1..c779eb4d7fb8 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2949,13 +2949,13 @@ static const struct dmi_system_id bridge_d3_blacklist[] = {
+>  	{
+>  		/*
+>  		 * Downstream device is not accessible after putting a root port
+> -		 * into D3cold and back into D0 on Elo i2.
+> +		 * into D3cold and back into D0 on Elo Continental Z2 board
+>  		 */
+> -		.ident = "Elo i2",
+> +		.ident = "Elo Continental Z2",
+>  		.matches = {
+> -			DMI_MATCH(DMI_SYS_VENDOR, "Elo Touch Solutions"),
+> -			DMI_MATCH(DMI_PRODUCT_NAME, "Elo i2"),
+> -			DMI_MATCH(DMI_PRODUCT_VERSION, "RevB"),
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Elo Touch Solutions"),
+> +			DMI_MATCH(DMI_BOARD_NAME, "Geminilake"),
+> +			DMI_MATCH(DMI_BOARD_VERSION, "Continental Z2"),
+>  		},
+>  	},
+>  #endif
+> -- 
+> 2.39.2
 > 
-> Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
-> 
-> Thanks,
-> Stephan
