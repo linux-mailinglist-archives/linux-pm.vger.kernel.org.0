@@ -2,170 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8DF730010
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 15:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76BF1730044
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 15:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244999AbjFNNaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 09:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43918 "EHLO
+        id S236495AbjFNNkj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 09:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244824AbjFNNaL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 09:30:11 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D751BFD
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 06:30:09 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9827109c6e9so81336366b.3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 06:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686749408; x=1689341408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FANL57ecbIxqC2s7WVdfFkY/wb9kISO9tnMy6zPKsiU=;
-        b=txhaf/go51p1KpK+q8iErRvGq64ClFPXTsTwzV/xtf4DM3J/d5VanUzyzEoAhZIxeL
-         BLcZ1uzi2tf5aXjBBEfezBYP70SNdDmOfeCMxaBmLcu6Oga7uNYqrOiZLiXuQu4/IH0g
-         ubyrjSv5YxAPkZ+4LzAsdv4zqgWB6Mcoi5rTDRsF0VaZ9qSmZoQBC8mAXvs/PW5orUAz
-         Wqafo4wCZxiQ8iIO/GCE3UlfhzmDoli6/AHnncISYWtyJxmBbg3JfInTBj+n8vOTs07Y
-         f6yzWrgXw1qKSx4BU9m4B1M7E9OpzgRZZXZbH7NBGbsGUlbn5VlLnkmUqfS99+NN8WOt
-         26BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686749408; x=1689341408;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FANL57ecbIxqC2s7WVdfFkY/wb9kISO9tnMy6zPKsiU=;
-        b=KjF4evYpMjNKqvFye7aL1D6bKuz8XaB4IVJ+qNAVd/01Pj4LvXdFEdWCUWSO5OYD9i
-         ApD7PWsLwfvE7/WbDYXahJco+nCNUqIjRs5/ARKL2MQ1hI/7tsRHH4K+1T8gmR8OsVj8
-         COWtUmVz+IwowTavuC2ZtGdjFJSMGT/TdHxrN+inDyvIieHHi9EGmIl+QgwNXQPMm4Od
-         vepaqCGWWlb872GWYgLsMrGqJu/z5eKuckTvqw/B11U0LjqeN+LSF8LHkQetexP8S8pQ
-         wxDWZnxPRwpSXwxKfxYNjFIJvb8E5nlzo/Dozt71/VBcVK+Ph7nYe+4JcLtdeur5dDxI
-         UeFA==
-X-Gm-Message-State: AC+VfDy+XrQa/8J/riiMOa41ZB6z/HEfUkxDJpT/M5T9fK0EQTDzXie2
-        hbh8hsABiAo8AZp7NQAvYMUfUw==
-X-Google-Smtp-Source: ACHHUZ6iLbCBVSbhZKUrRJIYPwu+LuxmhaU9ojfe0LqSVK+C4pp2Gte8t2lMU7Bb5ACI02/YTHkJuQ==
-X-Received: by 2002:a17:907:728d:b0:96f:afe9:25c4 with SMTP id dt13-20020a170907728d00b0096fafe925c4mr14390331ejc.50.1686749408420;
-        Wed, 14 Jun 2023 06:30:08 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id lv16-20020a170906bc9000b00965a52d2bf6sm8013335ejb.88.2023.06.14.06.30.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 06:30:07 -0700 (PDT)
-Message-ID: <45f91d55-7a98-b300-f81c-30f9009519b0@linaro.org>
-Date:   Wed, 14 Jun 2023 15:30:05 +0200
+        with ESMTP id S235356AbjFNNki (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 09:40:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEEA10FE;
+        Wed, 14 Jun 2023 06:40:37 -0700 (PDT)
+Received: from mercury (dyndsl-091-248-213-214.ewe-ip-backbone.de [91.248.213.214])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DBD206606F20;
+        Wed, 14 Jun 2023 14:40:35 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686750036;
+        bh=PBYQcUFjQMg4J0fJHCjFD2l4P5QvWdlw692+eiww3G4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=arFK4HIV6P8nM46DlbdXlMJuYDrRy5fRJxQF3mPt1ytPQvXsE6J4VmNVAGwoB6KtE
+         Gl3Z7np7uwlhbbWxD6yltL2Q3M1yUNrGBrwmGSQbK/ONj8bPLvQzzkomOZMO0l4BWt
+         x2BbrB8akghj0wD7OdIlYWjv8q8e8zHllbAL6XGnoMdT/LtknA/GXfCtZ2BtxygnnR
+         rAfJWwZVz0hFRp3N20y53Trjavb0daJ19sOST6iuCTZ7TcGO4SW+hxZzZc4unCPZPh
+         v5O4bG+zKyD8UQq/6elZx39/OrQbZMnaWZ5j7JBIDt/CvMPNOukrkT46FMKat/jIl3
+         XsXhxkzE5XQ9w==
+Received: by mercury (Postfix, from userid 1000)
+        id 0F7C31060A04; Wed, 14 Jun 2023 15:40:34 +0200 (CEST)
+Date:   Wed, 14 Jun 2023 15:40:34 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+Message-ID: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for
- twl6030-power
-Content-Language: en-US
-To:     Mithil <bavishimithil@gmail.com>,
-        "robh@kernel.org" <robh@kernel.org>
-Cc:     "contact@paulk.fr" <contact@paulk.fr>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-omap@vger.kernel.org" <linux-omap@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "sre@kernel.org" <sre@kernel.org>,
-        "tony@atomide.com" <tony@atomide.com>
-References: <CAGzNGR=BkOMtw2PhudUs_b4ffk3B+x==9dtWuA-kcqnePaHVYA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAGzNGR=BkOMtw2PhudUs_b4ffk3B+x==9dtWuA-kcqnePaHVYA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o7ugbz6dwi4olws4"
+Content-Disposition: inline
+In-Reply-To: <20230524083153.2046084-1-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/06/2023 11:13, Mithil wrote:
-> Subject: Re: [PATCH 05/10] dt-bindings: power: reset: Add bindings for
-> twl6030-power
-> 
-> On Tue, Aug 23, 2022 at 12:54 AM Rob Herring <robh@kernel.org> wrote:
->>
->> On Sat, Aug 20, 2022 at 12:46:55PM +0530, Mithil Bavishi wrote:
->>> Adds documentation for the twl6030 power driver.
->>>
->>> Signed-off-by: Paul Kocialkowski <contact@paulk.fr>
->>> Signed-off-by: Mithil Bavishi <bavishimithil@gmail.com>
->>> ---
->>>  .../bindings/power/reset/twl6030-power.txt    | 31 +++++++++++++++++++
->>
->> New bindings must be DT schema format.
->>
->>>  1 file changed, 31 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/power/reset/twl6030-power.txt
->>>
->>> diff --git a/Documentation/devicetree/bindings/power/reset/twl6030-power.txt b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
->>> new file mode 100644
->>> index 000000000..946bb3d9f
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/power/reset/twl6030-power.txt
->>> @@ -0,0 +1,31 @@
->>> +Texas Instruments TWL family (twl6030) reset and power management module
->>> +
->>> +For now, the binding only supports the complete shutdown of the system after
->>> +poweroff.
->>> +
->>> +Required properties:
->>> +- compatible : must be
->>> +       "ti,twl6030-power"
->>> +
->>> +Optional properties:
->>> +
->>> +- ti,system-power-controller: This indicates that TWL6030 is the
->>
->> We have a generic property for this.
->>
-> 
-> What is property is that? And how would it get implemented here?
 
-Easy to guess...
+--o7ugbz6dwi4olws4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-git grep system-power-controller
+Hi,
 
+On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
+> This is v5 of the series adding perf support to the rockchip DFI driver.
+>=20
+> A lot has changed in the perf driver since v4. First of all the review
+> feedback from Robin and Jonathan has been integrated. The perf driver
+> now not only supports monitoring the total DDR utilization, but also the
+> individual channels. I also reworked the way the raw 32bit counter
+> values are summed up to 64bit perf values, so hopefully the code is
+> easier to follow now.
+>=20
+> lockdep found out that that locking in the perf driver was broken, so I
+> reworked that as well. None of the perf hooks allows locking with
+> mutexes or spinlocks, so in perf it's not possible to enable the DFI
+> controller when needed. Instead I now unconditionally enable the DFI
+> controller during probe when perf is enabled.
+>=20
+> Furthermore the hrtimer I use for reading out the hardware counter
+> values before they overflow race with perf. Now a seqlock is used to
+> prevent that.
+>=20
+> The RK3588 device tree changes for the DFI were not part of v4. As
+> Vincent Legoll showed interest in testing this series the necessary
+> device tree changes are now part of this series.
 
+I tested the series on RK3588 EVB1. The read/write byts looks
+sensible. Sometimes cycles reads unrealistic values, though:
 
-> 
->>> +  power supply master of the system. With this flag, the chip will
->>> +  initiate an ACTIVE-to-OFF or SLEEP-to-OFF transition when the
->>> +  system poweroffs.
->>> +
->>> +Example:
->>> +&i2c1 {
->>> +       clock-frequency = <2600000>;
->>> +
->>> +       twl: twl@48 {
->>> +               reg = <0x48>;
->>> +               interrupts = <7>; /* SYS_NIRQ cascaded to intc */
->>> +               interrupt-parent = <&intc>;
->>> +
->>> +               twl_power: power {
->>> +                       compatible = "ti,twl6030-power";
->>> +                       ti,system-power-controller;
->>
->> Why do you need a child node here? There aren't any resources for the
->> sub-block.
->>
-> 
-> Just an example and how it is used on a device as well, is it fine if
-> just the block is as-is?
+ Performance counter stats for 'system wide':
 
-The question is not about example. Question was why do you need child
-node at all. Children without resources are usually useless.
+18446744070475110400      rockchip_ddr/cycles/                             =
+                 =20
+            828.63 MB   rockchip_ddr/read-bytes/                           =
+               =20
+            207.19 MB   rockchip_ddr/read-bytes0/                          =
+               =20
+            207.15 MB   rockchip_ddr/read-bytes1/                          =
+               =20
+            207.14 MB   rockchip_ddr/read-bytes2/                          =
+               =20
+            207.15 MB   rockchip_ddr/read-bytes3/                          =
+               =20
+              1.48 MB   rockchip_ddr/write-bytes/                          =
+               =20
+              0.37 MB   rockchip_ddr/write-bytes0/                         =
+               =20
+              0.37 MB   rockchip_ddr/write-bytes1/                         =
+               =20
+              0.37 MB   rockchip_ddr/write-bytes2/                         =
+               =20
+              0.38 MB   rockchip_ddr/write-bytes3/                         =
+               =20
+            830.12 MB   rockchip_ddr/bytes/                                =
+               =20
 
-Best regards,
-Krzysztof
+       1.004239766 seconds time elapsed
 
+(This is with memdump running in parallel)
+
+Otherwise the series is
+
+Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+> Changes since v4:
+> - Add device tree changes for RK3588
+> - Use seqlock to protect perf counter values from hrtimer
+> - Unconditionally enable DFI when perf is enabled
+> - Bring back changes to dts/binding patches that were lost in v4
+>=20
+> Changes since v3:
+> - Add RK3588 support
+>=20
+> Changes since v2:
+> - Fix broken reference to binding
+> - Add Reviewed-by from Rob
+>=20
+> Changes since v1:
+> - Fix example to actually match the binding and fix the warnings resulted=
+ thereof
+> - Make addition of rockchip,rk3568-dfi an extra patch
+>=20
+> Sascha Hauer (25):
+>   PM / devfreq: rockchip-dfi: Make pmu regmap mandatory
+>   PM / devfreq: rockchip-dfi: Embed desc into private data struct
+>   PM / devfreq: rockchip-dfi: use consistent name for private data
+>     struct
+>   PM / devfreq: rockchip-dfi: Add SoC specific init function
+>   PM / devfreq: rockchip-dfi: dfi store raw values in counter struct
+>   PM / devfreq: rockchip-dfi: Use free running counter
+>   PM / devfreq: rockchip-dfi: introduce channel mask
+>   PM / devfreq: rk3399_dmc,dfi: generalize DDRTYPE defines
+>   PM / devfreq: rockchip-dfi: Clean up DDR type register defines
+>   PM / devfreq: rockchip-dfi: Add RK3568 support
+>   PM / devfreq: rockchip-dfi: Handle LPDDR2 correctly
+>   PM / devfreq: rockchip-dfi: Handle LPDDR4X
+>   PM / devfreq: rockchip-dfi: Pass private data struct to internal
+>     functions
+>   PM / devfreq: rockchip-dfi: Prepare for multiple users
+>   PM / devfreq: rockchip-dfi: give variable a better name
+>   PM / devfreq: rockchip-dfi: Add perf support
+>   PM / devfreq: rockchip-dfi: make register stride SoC specific
+>   PM / devfreq: rockchip-dfi: account for multiple DDRMON_CTRL registers
+>   PM / devfreq: rockchip-dfi: add support for RK3588
+>   dt-bindings: devfreq: event: convert Rockchip DFI binding to yaml
+>   dt-bindings: devfreq: event: rockchip,dfi: Add rk3568 support
+>   dt-bindings: devfreq: event: rockchip,dfi: Add rk3588 support
+>   arm64: dts: rockchip: rk3399: Enable DFI
+>   arm64: dts: rockchip: rk356x: Add DFI
+>   arm64: dts: rockchip: rk3588s: Add DFI
+>=20
+>  .../bindings/devfreq/event/rockchip,dfi.yaml  |  84 ++
+>  .../bindings/devfreq/event/rockchip-dfi.txt   |  18 -
+>  .../rockchip,rk3399-dmc.yaml                  |   2 +-
+>  arch/arm64/boot/dts/rockchip/rk3399.dtsi      |   1 -
+>  arch/arm64/boot/dts/rockchip/rk356x.dtsi      |   7 +
+>  arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  16 +
+>  drivers/devfreq/event/rockchip-dfi.c          | 796 +++++++++++++++---
+>  drivers/devfreq/rk3399_dmc.c                  |  10 +-
+>  include/soc/rockchip/rk3399_grf.h             |   9 +-
+>  include/soc/rockchip/rk3568_grf.h             |  13 +
+>  include/soc/rockchip/rk3588_grf.h             |  18 +
+>  include/soc/rockchip/rockchip_grf.h           |  18 +
+>  12 files changed, 854 insertions(+), 138 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
+hip,dfi.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/devfreq/event/rockc=
+hip-dfi.txt
+>  create mode 100644 include/soc/rockchip/rk3568_grf.h
+>  create mode 100644 include/soc/rockchip/rk3588_grf.h
+>  create mode 100644 include/soc/rockchip/rockchip_grf.h
+>=20
+> --=20
+> 2.39.2
+>=20
+
+--o7ugbz6dwi4olws4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSJw00ACgkQ2O7X88g7
++pqqmg//ZLfOtGMx2p1VeLXg8eFmo95vhmxSFozhTnnAQYb5Zay290jo4HZyard5
+JQjWZuCa+4yxDg1H0r2i/4Ba8UT6BXGfYi0nVOM/Jc61TTYXlypIwTyb8t0O9PnW
+RwGiUF6ftkO2B+J29AvgTzDDXYCIOnUgcutXJoKChkTN25oFq5D88XPn2jy6crmg
+jXRlWQO4hi1Znh3IyQ1bY93Kui4JzrU3qXgi+06aCf8ADmDgjYxu33pJMkqXzJSx
+7EErhr77XvssrnPcJCc/EEfsGOjOOOVaAIFRUr7qhSI/us3K8/Ghnb6ZIDnvnXXp
+SEL7f2JvZknXvhAILe4xmPBfqqP7cGoh5W9IPQpTPz48sPWGhLxqZdfWfwjR+RJg
+6zycFqoOyFtZOucNR0BUQhLdj/R9ouc6Ya1uq1zupL3BoGNd815jpWqjlHV+qu/S
+2Jr8NvyTg4SwWiggYyRydLPESJka06AAwkHFFvBxajQwsRECt6DZMF46Jsfbj69l
+dzp7g5l9e79GQJ4jF8OTjQkZC05CdKLzIy7rKYsiEQt9HScCww2r6Er9mjj+i3PA
+6d3aKUZ1mf3ERcIBSHmtSGJDr2mYT0Q3wr3QBcALKcKPkb7qk5temqjI67fknOzi
+eS4cpLgRj38ZT4+0dJYsAVZe8XNbtw+i+/7ges94PAZEttg+iHk=
+=nxkL
+-----END PGP SIGNATURE-----
+
+--o7ugbz6dwi4olws4--
