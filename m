@@ -2,54 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B1F472F087
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 01:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B4A72F0DC
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 02:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241708AbjFMXro (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 19:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S231713AbjFNAQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 20:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232646AbjFMXrZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 19:47:25 -0400
+        with ESMTP id S232518AbjFNAQl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 20:16:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFA72D54;
-        Tue, 13 Jun 2023 16:46:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7561739;
+        Tue, 13 Jun 2023 17:16:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03C0562EF7;
-        Tue, 13 Jun 2023 23:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514A5C433D9;
-        Tue, 13 Jun 2023 23:45:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54DCA63BEF;
+        Wed, 14 Jun 2023 00:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D8C433C8;
+        Wed, 14 Jun 2023 00:16:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686699955;
-        bh=o4AIqGTNBOdVmrdJEKcPDcLQEjkhm6E0B/4K9xnHkXs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=eosRzgDdP+haRL72z9fUoaHVfLIx1OH1dJk8pCA0eP+OBH/rP17wWMgfCDk3nkAUw
-         M8rFIC0cjhQ0xecllgjAXq7LdU4hQ/G1rkuyYDTXEcXsshVAgr+vStSx0UfqF+9WrY
-         lvLRi/aqEBscRrkX3+o01/EPW0XyI/Mo1wn5nMcYmPAXMaT0z4iWKCvfbxYGWXbI07
-         fiATR/EriokFHQPZXaNQI2SLWbzUe/lueyOYIfetHlKYTwbIoKlnHADc/8+80w4hN1
-         dZcdfOyrq6JLL2rBBT1a6tirR+3B0eN8K3T81erFT7csNeblYWo0gZ75RgtCCArDKs
-         mBuB/jrQ0GaBQ==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     devicetree@vger.kernel.org, rafael@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        thara.gopinath@gmail.com, linux-arm-msm@vger.kernel.org,
-        conor+dt@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, robh+dt@kernel.org, rui.zhang@intel.com,
-        amitk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        agross@kernel.org
-Subject: Re: (subset) [PATCH v6 0/3] Enable IPQ9574 TSENS support
-Date:   Tue, 13 Jun 2023 16:48:57 -0700
-Message-Id: <168670013501.1400697.3289506817774430976.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1686125196.git.quic_varada@quicinc.com>
-References: <cover.1686125196.git.quic_varada@quicinc.com>
+        s=k20201202; t=1686701789;
+        bh=kj9Ya7IV2GrY8S1ZmVY2sjyy1iwtpsSoYAouFrgDpLw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BUqgYQRYma4PsE5pRtQr/DfNgQmVbQwUn/N1SkJ6TNEuJE9girQHlOuLbAifF3lA7
+         Xn4JCt/UTJX2ThcxOnZUrs3jMotcUhYZ1XNitI4tg4e4r/65P4wny11o9pyHJw2yz/
+         A/KnfqscJXCVkogfi6WiI6xeooXq4MMEdId2iLG5QDJZgz6ybBVtYF3ZW6rikLUunr
+         4ndYgZnqGQmpApXdoi8MeyhxK2+k8AoDIN1lGWlcKr76SfnoVoxC7/ZHl87oZqvn1L
+         SUSfvZ3TtSamzsBuZXAxioGNqk+TZH7+HfblfrNTqp6GQb22WgG6gneZAXVtHmGZI7
+         uNyw+bRqNrb1g==
+Date:   Wed, 14 Jun 2023 02:16:21 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
+        Sanket.Goswami@amd.com
+Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
+Message-ID: <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
+References: <20230518161150.92959-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518161150.92959-1-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,25 +57,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 7 Jun 2023 14:23:07 +0530, Varadarajan Narayanan wrote:
-> This patch set enables tsens in IPQ9574
+Hi Mario,
+
+On Thu, May 18, 2023 at 11:11:50AM -0500, Mario Limonciello wrote:
+> power_supply_is_system_supplied() checks whether any power
+> supplies are present that aren't batteries to decide whether
+> the system is running on DC or AC.  Downstream drivers use
+> this to make performance decisions.
 > 
-> Depends on
-> 	https://lore.kernel.org/linux-arm-msm/20230406061314.10916-1-quic_devipriy@quicinc.com/
-> [v6]:
-> 	Remove comments from tsens node in dtsi
-> [v5]:
-> 	Fix make DT_CHECKER_FLAGS=-m dt_binding_check and make dtbs_check errors without removing existing entries
+> Navi dGPUs include an UCSI function that has been exported
+> since commit 17631e8ca2d3 ("i2c: designware: Add driver
+> support for AMD NAVI GPU").
 > 
-> [...]
+> This UCSI function registers a power supply since commit
+> 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
+> but this is not a system power supply.
+> 
+> As the power supply for a dGPU is only for powering devices connected
+> to dGPU, create a device property to indicate that the UCSI endpoint
+> is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
+> 
+> Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
+> Reviewed-by: Evan Quan <evan.quan@amd.com>
+> Tested-by: Evan Quan <evan.quan@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Applied, thanks!
+Acked-by: Andi Shyti <andi.shyti@kernel.org> 
 
-[2/3] arm64: dts: qcom: ipq9574: add tsens node
-      commit: 2e0580e10e919b544d7be1b2b8fc48fc7dff1322
-[3/3] arm64: dts: qcom: ipq9574: add thermal zone nodes
-      commit: 581dcbe60b6390c633f318a29db41d1df642e6d8
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Thanks,
+Andi
