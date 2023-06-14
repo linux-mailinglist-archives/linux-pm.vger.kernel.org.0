@@ -2,171 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B3E730175
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 16:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0861A73018C
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 16:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244718AbjFNOQH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 14 Jun 2023 10:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
+        id S245568AbjFNOT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 10:19:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245510AbjFNOP5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 10:15:57 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1841721;
-        Wed, 14 Jun 2023 07:15:55 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-982777bf157so15722166b.0;
-        Wed, 14 Jun 2023 07:15:55 -0700 (PDT)
+        with ESMTP id S245551AbjFNOTV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 10:19:21 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464E212B;
+        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-56cfce8862aso8801027b3.1;
+        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1686752358; x=1689344358;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
+        b=i6gIt2eixifwvL/xKy/LTVOmXLGJXu83F20GOpWUc+DfdS9FpLot9sLufvFkUNociJ
+         SR52ir+xMVHqmu/T+1dncFHrybZWnFKA3fI2lbYco5HZgQzsLBI6JsLUJi8GfLrjMqtH
+         L80OvDo3uxbVTqLBLpyAJdL90rnuu1wHoy1VrfUWG6twpll4h4p2VSno8fC0YhCKIYkb
+         Lt4mUX/3VIr9BSFjlGv+PFuI03s0vrPwSKpwFF9RzzOH2UPpHan1BFuAQEN55v95TojU
+         TFHcdpLrJxZrFjl4PWPcV4GT9CTcpdGR1T1F25T+gfYDHVCVzR/LnJdg6DGcS+eNPXI9
+         3olw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686752154; x=1689344154;
+        d=1e100.net; s=20221208; t=1686752358; x=1689344358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DTER5f5XTlC8X6NXqMj8tbNb+e//nPKPLWvBEp8cBrc=;
-        b=aimGgRURmn3k+rnaJ73dFkUtaqKR2ggPVJ35aIIh+i4p3LK3mkrrmuS9+SuFMRI89O
-         Uej58JphOApwQi+2ps9j/NLwmXkob2mEoiFwI5l+4YvVitn/eJxJhqo16or5mg8Pyqak
-         ooSNJ6ts9ySU4OCBREkrNai2jkBeNh0JsnJ5tztf7wLEB9JIL4gy1BePHj+R3U19Ut+E
-         tmjubku1UwgFU1JO6nUnroGknT7RwF8XcBcMAwZLjo1SxQoOGk17DwsDJguq6ZML5iPT
-         NCjQDK6zdb8frUC76PlbaTveJu11Jabo60ypLCIcn7FEZdq5btBLsXIVMyMaVYbjWlY0
-         450g==
-X-Gm-Message-State: AC+VfDyNbvfbF3x1yypxTmEGNV/1vq6qkGlFD1jcJXr1q/cQamH6XQBJ
-        egmZuMlotLMCENfLWxCS1/ZuPDppKnfWIh1wxBE=
-X-Google-Smtp-Source: ACHHUZ7sToZuVvzl24vIPOmhUom4heAy6fxlazGTOkPr//gjXp8g2bw574QxNNlE0Kh1HWW0xzh2q8dn8ANldSv3b4M=
-X-Received: by 2002:a17:906:72c4:b0:974:ae1d:ad0b with SMTP id
- m4-20020a17090672c400b00974ae1dad0bmr12756809ejl.3.1686752153796; Wed, 14 Jun
- 2023 07:15:53 -0700 (PDT)
+        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
+        b=En3hniD8WzWEqAVa431q/FIlQIpX0kAMf6Rk6khWxRcvNzkHw3HTZmZBK1MLwOboXe
+         IGcDpaC1/XtHZ6ng2UYgz34kDy1wQ/opiQpy43T42uS6jjGl3SyCCQZR8lz7hi2Rd7AT
+         t7/0CwkptgL5fH5EjjuACCREX0GB/oxUyYVzTwPHs1bgsGMLjAUvxJknyvBOaU2GuNFw
+         Pzs/mqUF/lFyBZPN9PiWV/dB1r9L+YXstv53LSC2+yuTtEMXDtoiLJNbMM31kwRay/Av
+         JZoAg68PCaoayfOc19GFp4Aho1dW4FOWUHTZrbVS1SHiNvqxUa3KCX6lyEkfREawf1cH
+         Vhvw==
+X-Gm-Message-State: AC+VfDwnfE1GVQAZDor5Vx7vfPRAUEo0+YTsLZgCEii4pAQzVpX1PCPK
+        5OZIdNGyMAJqlvWqwzwUDnlq4aY9SoMgJUc+yOE=
+X-Google-Smtp-Source: ACHHUZ4x6WLud45wPegG2Lh8Ea6ssDXfxMlRzpQJzqGV7rINz/e9/iuzIawfj4+fKglV3jau7YuGI9MaoBNqtSycOK4=
+X-Received: by 2002:a81:6e8a:0:b0:56d:24c:8896 with SMTP id
+ j132-20020a816e8a000000b0056d024c8896mr1866564ywc.7.1686752357816; Wed, 14
+ Jun 2023 07:19:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <12237421.O9o76ZdvQC@kreacher> <20230614084734.GD1639749@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230614084734.GD1639749@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 14 Jun 2023 16:15:41 +0200
-Message-ID: <CAJZ5v0gK4ZCx04yidYvUJLKmT8rn-+CicPTgD0-Qvupn2y9fCQ@mail.gmail.com>
-Subject: Re: [PATCH v1] ACPI: sleep: Avoid breaking S3 wakeup due to might_sleep()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+References: <20230524083153.2046084-1-s.hauer@pengutronix.de> <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+From:   Vincent Legoll <vincent.legoll@gmail.com>
+Date:   Wed, 14 Jun 2023 14:19:06 +0000
+Message-ID: <CAEwRq=rUUatDp0JePkDPRkx81c9=sO6ZoW+V=g2S7B8_s-R3uA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
         Will Deacon <will@kernel.org>,
-        Saket Dumbre <saket.dumbre@intel.com>,
-        Xiaoming Ni <nixiaoming@huawei.com>
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 10:48 AM Peter Zijlstra <peterz@infradead.org> wrote:
+Hello Sascha, Sebastian,
+
+On Wed, Jun 14, 2023 at 1:40=E2=80=AFPM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+> On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
+> > This is v5 of the series adding perf support to the rockchip DFI driver=
+.
+> > [...]
+> > The RK3588 device tree changes for the DFI were not part of v4. As
+> > Vincent Legoll showed interest in testing this series the necessary
+> > device tree changes are now part of this series.
 >
-> On Tue, Jun 13, 2023 at 05:25:07PM +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The addition of might_sleep() to down_timeout() caused the latter to
-> > enable interrupts unconditionally in some cases, which in turn broke
-> > the ACPI S3 wakeup path in acpi_suspend_enter(), where down_timeout()
-> > is called by acpi_disable_all_gpes() via acpi_ut_acquire_mutex().
-> >
-> > Namely, if CONFIG_DEBUG_ATOMIC_SLEEP is set, might_sleep() causes
-> > might_resched() to be used and if CONFIG_PREEMPT_VOLUNTARY is set,
-> > this triggers __cond_resched() which may call preempt_schedule_common(),
-> > so __schedule() gets invoked and it ends up with enabled interrupts (in
-> > the prev == next case).
+> I tested the series on RK3588 EVB1. The read/write byts looks
+> sensible. Sometimes cycles reads unrealistic values, though:
+> [...]
+> Otherwise the series is
 >
-> Urgh, so that code was relying on the lack of contention to not trigger
-> the schedule path -- with the added might_sleep() it triggers a
-> preemption point.
-
-Right.
-
-> > Now, enabling interrupts early in the S3 wakeup path causes the kernel
-> > to crash.
-> >
-> > Address this by modifying acpi_suspend_enter() to disable GPEs without
-> > attempting to acquire the sleeping lock which is not needed in that code
-> > path anyway.
-> >
-> > Fixes: 99409b935c9a locking/semaphore: Add might_sleep() to down_*() family
+> Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 >
-> $ git show -s --pretty='format:%h ("%s")' 99409b935c9a
-> 99409b935c9a ("locking/semaphore: Add might_sleep() to down_*() family")
+> -- Sebastian
 
-Right, thanks!
+I also tested this new version of the series on a Pine64 QuartzPro64 dev bo=
+ard.
 
-> > Reported-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+I applied the series on top of my local branch, which is based on Collabora=
+'s
+rockchip-3588 plus some QP64 DTS patches, and your V5 patch series.
 
-Thanks!
+Looks like this is still working properly:
 
-> > ---
-> >  drivers/acpi/acpica/achware.h |    2 --
-> >  drivers/acpi/sleep.c          |   16 ++++++++++++----
-> >  include/acpi/acpixf.h         |    1 +
-> >  3 files changed, 13 insertions(+), 6 deletions(-)
-> >
-> > Index: linux-pm/drivers/acpi/acpica/achware.h
-> > ===================================================================
-> > --- linux-pm.orig/drivers/acpi/acpica/achware.h
-> > +++ linux-pm/drivers/acpi/acpica/achware.h
-> > @@ -101,8 +101,6 @@ acpi_status
-> >  acpi_hw_get_gpe_status(struct acpi_gpe_event_info *gpe_event_info,
-> >                      acpi_event_status *event_status);
-> >
-> > -acpi_status acpi_hw_disable_all_gpes(void);
-> > -
-> >  acpi_status acpi_hw_enable_all_runtime_gpes(void);
-> >
-> >  acpi_status acpi_hw_enable_all_wakeup_gpes(void);
-> > Index: linux-pm/include/acpi/acpixf.h
-> > ===================================================================
-> > --- linux-pm.orig/include/acpi/acpixf.h
-> > +++ linux-pm/include/acpi/acpixf.h
-> > @@ -761,6 +761,7 @@ ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_sta
-> >                                                    acpi_event_status
-> >                                                    *event_status))
-> >  ACPI_HW_DEPENDENT_RETURN_UINT32(u32 acpi_dispatch_gpe(acpi_handle gpe_device, u32 gpe_number))
-> > +ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_hw_disable_all_gpes(void))
-> >  ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_disable_all_gpes(void))
-> >  ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_runtime_gpes(void))
-> >  ACPI_HW_DEPENDENT_RETURN_STATUS(acpi_status acpi_enable_all_wakeup_gpes(void))
-> > Index: linux-pm/drivers/acpi/sleep.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/acpi/sleep.c
-> > +++ linux-pm/drivers/acpi/sleep.c
-> > @@ -636,11 +636,19 @@ static int acpi_suspend_enter(suspend_st
-> >       }
-> >
-> >       /*
-> > -      * Disable and clear GPE status before interrupt is enabled. Some GPEs
-> > -      * (like wakeup GPE) haven't handler, this can avoid such GPE misfire.
-> > -      * acpi_leave_sleep_state will reenable specific GPEs later
-> > +      * Disable all GPE and clear their status bits before interrupts are
-> > +      * enabled. Some GPEs (like wakeup GPEs) have no handlers and this can
-> > +      * prevent them from producing spurious interrups.
-> > +      *
-> > +      * acpi_leave_sleep_state() will reenable specific GPEs later.
-> > +      *
-> > +      * Because this code runs on one CPU with disabled interrupts (all of
-> > +      * the other CPUs are offline at that time), it need not acquire any
-> > +      * sleeping locks which maybe harmful due to instrumentation even if
-> > +      * those locks are not contended, so avoid doing that by using a low-
-> > +      * level library routine here.
->
-> I'm not sure I'd call the implicit preemption point 'instrumentation'
-> but yeah, fair enough I suppose.
+-bash-5.1# uname -a
+Linux qp64 6.4.0-rc1-00140-g658dd2200e2a #24 SMP PREEMPT Wed Jun 14
+15:50:34 CEST 2023 aarch64 GNU/Linux
 
-OK, I'll send a v2 with this clarified.
+-bash-5.1# zgrep -i _dfi /proc/config.gz
+CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=3Dy
 
-> >        */
-> > -     acpi_disable_all_gpes();
-> > +     acpi_hw_disable_all_gpes();
-> >       /* Allow EC transactions to happen. */
-> >       acpi_ec_unblock_transactions();
+-bash-5.1# perf list | grep rockchip_ddr
+  rockchip_ddr/bytes/                                [Kernel PMU event]
+  rockchip_ddr/cycles/                               [Kernel PMU event]
+  rockchip_ddr/read-bytes/                           [Kernel PMU event]
+  rockchip_ddr/read-bytes0/                          [Kernel PMU event]
+  rockchip_ddr/read-bytes1/                          [Kernel PMU event]
+  rockchip_ddr/read-bytes2/                          [Kernel PMU event]
+  rockchip_ddr/read-bytes3/                          [Kernel PMU event]
+  rockchip_ddr/write-bytes/                          [Kernel PMU event]
+  rockchip_ddr/write-bytes0/                         [Kernel PMU event]
+  rockchip_ddr/write-bytes1/                         [Kernel PMU event]
+  rockchip_ddr/write-bytes2/                         [Kernel PMU event]
+  rockchip_ddr/write-bytes3/                         [Kernel PMU event]
+
+# With no memory load
+-bash-5.1# perf stat -a -e
+rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
+kchip_ddr/bytes/
+sleep 1
+
+ Performance counter stats for 'system wide':
+
+        1058691047      rockchip_ddr/cycles/
+              9.35 MB   rockchip_ddr/read-bytes/
+              0.57 MB   rockchip_ddr/write-bytes/
+              9.90 MB   rockchip_ddr/bytes/
+
+       1.002616498 seconds time elapsed
+
+# With a hog
+-bash-5.1# memtester 4G > /dev/null 2>&1 &
+-bash-5.1# perf stat -a -e
+rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
+kchip_ddr/bytes/
+sleep 10
+
+ Performance counter stats for 'system wide':
+
+       10561540038      rockchip_ddr/cycles/
+          60212.59 MB   rockchip_ddr/read-bytes/
+          31313.03 MB   rockchip_ddr/write-bytes/
+          91525.60 MB   rockchip_ddr/bytes/
+
+      10.001651886 seconds time elapsed
+
+You can add my T-B, for the whole series:
+
+Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
+
+Or is there something else you want me to test ?
+
+Thanks for your work
+Regards
+
+--
+Vincent Legoll
