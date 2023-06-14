@@ -2,69 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFED72F433
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 07:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24FA72F4E4
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 08:33:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242900AbjFNFh0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 01:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S243207AbjFNGdt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 02:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233043AbjFNFhZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 01:37:25 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D679F198D
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 22:37:24 -0700 (PDT)
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+        with ESMTP id S233971AbjFNGdZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 02:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B471FC9;
+        Tue, 13 Jun 2023 23:31:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2AEB33F26D
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 05:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1686721040;
-        bh=L700u4JHszhgKkjQdfFwXH0svBOHFooI3nofINxb84U=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=J8IR/UxZxnrMUz/OAv3XXvPm/4AplucihaWNCEeMJtGEtiY7NfzqJo94cgJpEVvBF
-         uffa5xuZKao1NmrVvu6ewpNcRBAsvoqqbJNEkp+jnsqK2pm80VY+uq84zvV4WNpBPR
-         vP2JdnDq8BtdJi6NFHmkIWmFxaC17gwjZX5iWjpAOLeYu91bnliqDfPaE9l9U6nOlN
-         i1/fJTj3Ey9MSm0WoOhwRpZOVFBocTba16yOWHmT0lvfdiwZiCpG+fp20WPu9imn6W
-         yoFdr8XzZTBl/EOXL3UquEEwXKnil6F9FWVXolpmbAKhG3aryXbrKLLiwWLtQibI76
-         aGJS2xJ6NVudg==
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-39c7f76d816so4681334b6e.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jun 2023 22:37:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686721039; x=1689313039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L700u4JHszhgKkjQdfFwXH0svBOHFooI3nofINxb84U=;
-        b=hLMtH5+RYKhNXvLStdsIQCVTCj71MNwlbpfCDnnHJkSQACU8tJ2+JcuRauFrgUHIfg
-         aT9FReErkWezpyNi2HEfxk4vH0cPPWe6VIU3XV7xsVNuHn/i6PI1vsj3R+4sDWOPs+Ui
-         PaLjGVwHH3KSQKETzSjWr4KrOy04fq8AcRoCV0Ut58C5OrPa4VpWXGz4Cq/Zed3bumDd
-         0pag2gnNFSmnAWaxfmWZm7Tgo6U4SgiUWBb0pJrd2MLPJb/ypJ6D1AYmWzWVWG5a93IM
-         UN7bNUw5t/+S3X4qoR9e58M87gX5/gAajZRbtXA3PFKGHrVc1Y0bhfRyJFHhmsDsD9ap
-         d+GQ==
-X-Gm-Message-State: AC+VfDx/KjwjwyV5nvy88oJQGKI600c8bQVnrzUhbxV6hzY6YwwYoJVw
-        YTuAZd85rBNV13nS66gNLZjNKeKF/Su65n//uA71ZlViSnP3mNUyqE7xeOGeiypmzeRtz08n2Fd
-        +cz7ftZwlHo1nK7S2XaX3ovXGp4QzBA70vs0GAu14KwdpryfVztd7
-X-Received: by 2002:aca:2301:0:b0:398:19e6:56a9 with SMTP id e1-20020aca2301000000b0039819e656a9mr9458908oie.2.1686721039178;
-        Tue, 13 Jun 2023 22:37:19 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4ZCvNJFhBXY5DTwt5hF4ORUgqFO+d5WsQ0PVogShHgfbbdYyTneKVBelaRsDRX0hSU0EGW4U4/NdJvc7kGFqw=
-X-Received: by 2002:aca:2301:0:b0:398:19e6:56a9 with SMTP id
- e1-20020aca2301000000b0039819e656a9mr9458892oie.2.1686721038957; Tue, 13 Jun
- 2023 22:37:18 -0700 (PDT)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98AFA6304E;
+        Wed, 14 Jun 2023 06:31:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A3AC433C0;
+        Wed, 14 Jun 2023 06:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686724313;
+        bh=U3PE7SCQ1RxmKERA37xeQi0YnSmGXq/InAGZE9u2dUg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ba63IBzLXf4v1BRJlu0Aery8nmHq4ZxH63PyyGkxlUNZSWJqBkTKv7wf/kO3KB3UG
+         2IEh8nKDRrjkjXhwUNSwp1kTIbq6fEVimy41dBu4bjRLG57V73MRcOnr/AISqi4Lux
+         EEHm4j7cSnQ2+qzYaUJfJIH+b2/ILC83y3qfsdH9zB+0d8RZHqMAKI+/7ZlmqI130L
+         WTA5mONXSvdWQ4+Xn0ZukvhF7DX9TtcYtgT2ZX3ZxndN8HIsXcB17kSng8Ee8QCRRo
+         s/FrS9aYRuvf0HbW545P1InaKsRjsvwynmBgiCSTR3ZnwQh2oDHdsCeZRdd0S9al3Z
+         X9Kcf9w1IZ7hw==
+Message-ID: <e7fce935-68ac-6e8f-072f-87e6271c2f96@kernel.org>
+Date:   Wed, 14 Jun 2023 15:31:49 +0900
 MIME-Version: 1.0
-References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
- <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com> <ZIQ6bkau3j6qGef8@duo.ucw.cz>
- <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com> <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
- <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net> <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
-In-Reply-To: <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 14 Jun 2023 13:37:07 +0800
-Message-ID: <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
 Subject: Re: Fwd: Waking up from resume locks up on sr device
-To:     Damien Le Moal <dlemoal@kernel.org>
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
 Cc:     Joe Breuer <linux-kernel@jmbreuer.net>,
         Bart Van Assche <bvanassche@acm.org>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
@@ -89,84 +64,103 @@ Cc:     Joe Breuer <linux-kernel@jmbreuer.net>,
         Hannes Reinecke <hare@suse.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
         Martin Kepplinger <martin.kepplinger@puri.sm>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+ <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+ <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 12:49=E2=80=AFPM Damien Le Moal <dlemoal@kernel.org=
-> wrote:
->
-> On 6/11/23 18:05, Joe Breuer wrote:
-> > I'm the reporter of this issue.
-> >
-> > I just tried this patch against 6.3.4, and it completely fixes my
-> > suspend/resume issue.
-> >
-> > The optical drive stays usable after resume, even suspending/resuming
-> > during playback of CDDA content works flawlessly and playback resumes
-> > seamlessly after system resume.
-> >
-> > So, from my perspective: Good one!
->
-> In place of Bart's fix, could you please try this patch ?
+On 6/14/23 14:37, Kai-Heng Feng wrote:
+> On Wed, Jun 14, 2023 at 12:49 PM Damien Le Moal <dlemoal@kernel.org> wrote:
+>>
+>> On 6/11/23 18:05, Joe Breuer wrote:
+>>> I'm the reporter of this issue.
+>>>
+>>> I just tried this patch against 6.3.4, and it completely fixes my
+>>> suspend/resume issue.
+>>>
+>>> The optical drive stays usable after resume, even suspending/resuming
+>>> during playback of CDDA content works flawlessly and playback resumes
+>>> seamlessly after system resume.
+>>>
+>>> So, from my perspective: Good one!
+>>
+>> In place of Bart's fix, could you please try this patch ?
+> 
+> Issue still persists at my end, when /sys/power/pm_async is 0.
+> device_pm_wait_for_dev() in its current form is only usable for async case.
 
-Issue still persists at my end, when /sys/power/pm_async is 0.
-device_pm_wait_for_dev() in its current form is only usable for async case.
+OK. Thanks for checking. Let me dig further.
 
-Kai-Heng
+> 
+> Kai-Heng
+> 
+>>
+>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+>> index b80e68000dd3..a81eb4f882ab 100644
+>> --- a/drivers/ata/libata-eh.c
+>> +++ b/drivers/ata/libata-eh.c
+>> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+>> ata_port *ap)
+>>         /* tell ACPI that we're resuming */
+>>         ata_acpi_on_resume(ap);
+>>
+>> -       /* update the flags */
+>>         spin_lock_irqsave(ap->lock, flags);
+>> +
+>> +       /* Update the flags */
+>>         ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
+>> +
+>> +       /*
+>> +        * Resuming the port will trigger a rescan of the ATA device(s)
+>> +        * connected to it. Before scheduling the rescan, make sure that
+>> +        * the associated scsi device(s) are fully resumed as well.
+>> +        */
+>> +       ata_for_each_link(link, ap, HOST_FIRST) {
+>> +               ata_for_each_dev(dev, link, ENABLED) {
+>> +                       struct scsi_device *sdev = dev->sdev;
+>> +
+>> +                       if (!sdev)
+>> +                               continue;
+>> +                       if (scsi_device_get(sdev))
+>> +                               continue;
+>> +
+>> +                       spin_unlock_irqrestore(ap->lock, flags);
+>> +                       device_pm_wait_for_dev(&ap->tdev,
+>> +                                              &sdev->sdev_gendev);
+>> +                       scsi_device_put(sdev);
+>> +                       spin_lock_irqsave(ap->lock, flags);
+>> +               }
+>> +       }
+>>         spin_unlock_irqrestore(ap->lock, flags);
+>>  }
+>>  #endif /* CONFIG_PM */
+>>
+>> Thanks !
+>>
+>> --
+>> Damien Le Moal
+>> Western Digital Research
+>>
 
->
-> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-> index b80e68000dd3..a81eb4f882ab 100644
-> --- a/drivers/ata/libata-eh.c
-> +++ b/drivers/ata/libata-eh.c
-> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
-> ata_port *ap)
->         /* tell ACPI that we're resuming */
->         ata_acpi_on_resume(ap);
->
-> -       /* update the flags */
->         spin_lock_irqsave(ap->lock, flags);
-> +
-> +       /* Update the flags */
->         ap->pflags &=3D ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
-> +
-> +       /*
-> +        * Resuming the port will trigger a rescan of the ATA device(s)
-> +        * connected to it. Before scheduling the rescan, make sure that
-> +        * the associated scsi device(s) are fully resumed as well.
-> +        */
-> +       ata_for_each_link(link, ap, HOST_FIRST) {
-> +               ata_for_each_dev(dev, link, ENABLED) {
-> +                       struct scsi_device *sdev =3D dev->sdev;
-> +
-> +                       if (!sdev)
-> +                               continue;
-> +                       if (scsi_device_get(sdev))
-> +                               continue;
-> +
-> +                       spin_unlock_irqrestore(ap->lock, flags);
-> +                       device_pm_wait_for_dev(&ap->tdev,
-> +                                              &sdev->sdev_gendev);
-> +                       scsi_device_put(sdev);
-> +                       spin_lock_irqsave(ap->lock, flags);
-> +               }
-> +       }
->         spin_unlock_irqrestore(ap->lock, flags);
->  }
->  #endif /* CONFIG_PM */
->
-> Thanks !
->
-> --
-> Damien Le Moal
-> Western Digital Research
->
+-- 
+Damien Le Moal
+Western Digital Research
+
