@@ -2,81 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BD872F516
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 08:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A0072F53E
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 08:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbjFNGpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 02:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S230303AbjFNG5R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 02:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233721AbjFNGpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 02:45:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012B91A3;
-        Tue, 13 Jun 2023 23:45:10 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35E4GfjX011094;
-        Wed, 14 Jun 2023 06:45:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Jr5jIEmZwqk5/vqIbzjrfUS9+c47/9L9q13IlgbuhxI=;
- b=QDuJKcQvEg3++mOt83KenN3UHuvhVZ1+jxwRcN8/GRRDZ/d7yUFP1MLP+Nk2eG4iwp0A
- Tq4jLXOm96J5MOAKEpqmt+oXO1EF/Gy6Rt6e6ic5fHT/69O54FONmzlEwLIymrJ2+tkm
- LnAiFJQzwgBO+UC7zOGobxhWJtO3nY7be13VazhrlM0/5WVxIO2XOQRh+UmF5FFVUEJW
- XVZP+tdpZMzc6rZbP+w8RnRTbo/UbwsK1rr/RFe2gXg7TE7RKIiANQZGyPdUrxEdkVly
- EcsQ46N6eeat14vpyYyO6VhvQhYvlDRRpL75GTlrPfRV0A91eE8Ve4XcD9bdUrG/iC29 NQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r6t0bst3p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 06:45:07 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35E6j71O020146
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 14 Jun 2023 06:45:07 GMT
-Received: from [10.217.198.86] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 13 Jun
- 2023 23:45:04 -0700
-Message-ID: <0b66dc99-7c88-f980-b91c-ac5d1f1301b3@quicinc.com>
-Date:   Wed, 14 Jun 2023 12:15:01 +0530
+        with ESMTP id S229943AbjFNG5Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 02:57:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B91984;
+        Tue, 13 Jun 2023 23:57:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 227072188D;
+        Wed, 14 Jun 2023 06:57:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1686725834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bWmUJHf0Ey81BHg4FfOq6OnR1lg1RZH8qrzAxru/q4U=;
+        b=Ae78GTKgCZZmGqmGNhaYT00kHkTw7C22ZCo648dDhJ5Hznq86Qcl4UTSqguQZZMN1B5u2+
+        fQVBGbjxDDMK3J4Kzj8D6BBud5Y3rlLwToB8VxsOCRc7c/N6CwY8KWxXUaXM7B2YMc+n2m
+        zamjj2L8XPwxE1yYbor492aRMNRvVtg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1686725834;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bWmUJHf0Ey81BHg4FfOq6OnR1lg1RZH8qrzAxru/q4U=;
+        b=IhtnPGz1B/nlr8hDByMU5YnbQ+jLtCqO6A1zC0rheblThcV4vMvhPDAZGiCZqV2PEaAj7a
+        eyODkgpoYD5GMNDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F30541357F;
+        Wed, 14 Jun 2023 06:57:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TXZdOshkiWS9DAAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 14 Jun 2023 06:57:12 +0000
+Message-ID: <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
+Date:   Wed, 14 Jun 2023 08:57:12 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
- idle-state-disabled property
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <20230608085544.16211-2-quic_tnimkar@quicinc.com>
- <9ae34dcc-0022-8097-7c86-8b11811ac2e1@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
 Content-Language: en-US
-In-Reply-To: <9ae34dcc-0022-8097-7c86-8b11811ac2e1@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 7Wvuk5GCLUBVFRb4f7y2Olehcr3iZHwi
-X-Proofpoint-ORIG-GUID: 7Wvuk5GCLUBVFRb4f7y2Olehcr3iZHwi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-06-14_02,2023-06-12_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 clxscore=1011 mlxlogscore=892 spamscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306140057
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+ <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,48 +102,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks Krzysztof for reviewing,
-
-On 6/9/2023 6:44 PM, Krzysztof Kozlowski wrote:
-> On 08/06/2023 10:55, Tushar Nimkar wrote:
->> This change adds idle-state-disabled property using which certain or all
-> 
-> Please do not use "This commit/patch", but imperative mood. See longer
-> explanation here:
-> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-> 
-Sure, will update in next version.
->> idle-states can be kept disabled during boot-up. Once boot-up is completed
->> same can be enabled using below command.
+On 6/14/23 06:49, Damien Le Moal wrote:
+> On 6/11/23 18:05, Joe Breuer wrote:
+>> I'm the reporter of this issue.
 >>
-> 
-> I don't understand and you did not explain here, why this is useful and
-> why this is needed.
-> 
-I will update commit text to why this is useful in new version.
->> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
-> 
-> 
+>> I just tried this patch against 6.3.4, and it completely fixes my
+>> suspend/resume issue.
 >>
->> Cc: devicetree@vger.kernel.org
->> Signed-off-by: Tushar Nimkar <quic_tnimkar@quicinc.com>
+>> The optical drive stays usable after resume, even suspending/resuming
+>> during playback of CDDA content works flawlessly and playback resumes
+>> seamlessly after system resume.
+>>
+>> So, from my perspective: Good one!
 > 
-> Please use scripts/get_maintainers.pl to get a list of necessary people
-> and lists to CC.  It might happen, that command when run on an older
-> kernel, gives you outdated entries.  Therefore please be sure you base
-> your patches on recent Linux kernel.
+> In place of Bart's fix, could you please try this patch ?
 > 
-Yes, In new version will take care.
->> ---
+> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+> index b80e68000dd3..a81eb4f882ab 100644
+> --- a/drivers/ata/libata-eh.c
+> +++ b/drivers/ata/libata-eh.c
+> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+> ata_port *ap)
+>          /* tell ACPI that we're resuming */
+>          ata_acpi_on_resume(ap);
+> 
+> -       /* update the flags */
+>          spin_lock_irqsave(ap->lock, flags);
+> +
+> +       /* Update the flags */
+>          ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
+> +
+> +       /*
+> +        * Resuming the port will trigger a rescan of the ATA device(s)
+> +        * connected to it. Before scheduling the rescan, make sure that
+> +        * the associated scsi device(s) are fully resumed as well.
+> +        */
+> +       ata_for_each_link(link, ap, HOST_FIRST) {
+> +               ata_for_each_dev(dev, link, ENABLED) {
+> +                       struct scsi_device *sdev = dev->sdev;
+> +
+> +                       if (!sdev)
+> +                               continue;
+> +                       if (scsi_device_get(sdev))
+> +                               continue;
+> +
+> +                       spin_unlock_irqrestore(ap->lock, flags);
+> +                       device_pm_wait_for_dev(&ap->tdev,
+> +                                              &sdev->sdev_gendev);
+> +                       scsi_device_put(sdev);
+> +                       spin_lock_irqsave(ap->lock, flags);
+> +               }
+> +       }
+>          spin_unlock_irqrestore(ap->lock, flags);
+>   }
+>   #endif /* CONFIG_PM */
+> 
+> Thanks !
+> 
+Well; not sure if that'll work out.
+The whole reason why we initial a rescan is that we need to check if the 
+ports are still connected, and whether the devices react.
+So we can't iterate the ports here as this is the very thing which gets 
+checked during EH.
 
->> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
-> 
-> This is Linux specific command, so does not fit the bindings.
-Will remove in new version.
-> 
-> Best regards,
-> Krzysztof
-> 
+We really should claim resume to be finished as soon as we can talk with 
+the HBA, and kick off EH asynchronously to let it finish the job after 
+resume has completed.
 
-Thanks,
-Tushar
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
