@@ -2,57 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188D072F3A1
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 06:38:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 134DC72F3BD
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 06:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242610AbjFNEiV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 00:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
+        id S234121AbjFNEti (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 00:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242611AbjFNEhr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 00:37:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BA41BE9;
-        Tue, 13 Jun 2023 21:37:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1686717466; x=1718253466;
-  h=date:from:to:cc:subject:message-id;
-  bh=Dc5J6vgoUund0/bZhi4iHo9o4Nlh+HFU0g9W1sCUV08=;
-  b=LD7INkka5Jd2XQkJv+cF5ThU63oThVpAtn/2YQZ4dqLnQmzs87s1PKZp
-   e3tPPXN6TYBCBw/c2UCZhBkvkhSVDNkRg11oB4I+Daw6gTSIxLtBWxr8z
-   GTDdK5w+NR6qfEZw0XmX6DUcfCxHKJUcN0hZwjQ6EmCDRsFRCqfzVq2Mx
-   LuG+MFNNpd9yfZwtqomtrzUDiUpeXG8op8dgcP6Iz0fcPbU8LbOo1kjIy
-   9AJ6dBd7hVmuSGDgyrbWcjta/bMFzHHeSUGjprZB+65DLKGEBza2bepVv
-   Sh056Ifek15/Q6v9TheJ4wgGuGeK11iCvINAZKRpaxhDyJvkV2Trpp1XF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="361889859"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="361889859"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 21:37:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="741696660"
-X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
-   d="scan'208";a="741696660"
-Received: from lkp-server02.sh.intel.com (HELO d59cacf64e9e) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Jun 2023 21:37:43 -0700
-Received: from kbuild by d59cacf64e9e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q9IGN-0000BF-0L;
-        Wed, 14 Jun 2023 04:37:43 +0000
-Date:   Wed, 14 Jun 2023 12:36:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 569f57f6b2dcc8be30eb8714be89b1692e84ece6
-Message-ID: <202306141206.1Cb4emmM-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        with ESMTP id S231937AbjFNEth (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 00:49:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C7F10CC;
+        Tue, 13 Jun 2023 21:49:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2D361466;
+        Wed, 14 Jun 2023 04:49:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CA4CC433C0;
+        Wed, 14 Jun 2023 04:49:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686718175;
+        bh=pbzb0xFNNW0u7m7s+rM8lFJaPjyJzD071PFKZTs/J/A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UM+oe/97PR4O1Hi+cZGwPwSNt6JUCfiE0bw7oltchUs+diqjB6VVn5/4KeuRMLMW5
+         eUFtHPKWelJK+r2aHwtBq09I25HiWUdOozz+lP6D5dllb/jaFQiUFmVnE4JGDX3i7O
+         V9Guu6jdin8C0KNJLS6+pY8ZRnyiuS6MPiFbSVd5tgODhFUFx4VI7awcPZHsPi5EOn
+         gY9GM4zxSgnsFeejG8HRUT5k9I8EyDII6Jb6Maxp1kYDsWXm2+ggVd3W1as3saiYXU
+         ZlG8QGUno+oWcR/VCGccifklYfE0TVqlQMWERcIFK172T/QTr44xLm54qIkWnD0EHU
+         th6NT0EiQQ/Dg==
+Message-ID: <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+Date:   Wed, 14 Jun 2023 13:49:31 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+To:     Joe Breuer <linux-kernel@jmbreuer.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+Content-Language: en-US
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,126 +85,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 569f57f6b2dcc8be30eb8714be89b1692e84ece6  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On 6/11/23 18:05, Joe Breuer wrote:
+> I'm the reporter of this issue.
+> 
+> I just tried this patch against 6.3.4, and it completely fixes my
+> suspend/resume issue.
+> 
+> The optical drive stays usable after resume, even suspending/resuming
+> during playback of CDDA content works flawlessly and playback resumes
+> seamlessly after system resume.
+> 
+> So, from my perspective: Good one!
 
-elapsed time: 727m
+In place of Bart's fix, could you please try this patch ?
 
-configs tested: 107
-configs skipped: 5
+diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+index b80e68000dd3..a81eb4f882ab 100644
+--- a/drivers/ata/libata-eh.c
++++ b/drivers/ata/libata-eh.c
+@@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+ata_port *ap)
+        /* tell ACPI that we're resuming */
+        ata_acpi_on_resume(ap);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+-       /* update the flags */
+        spin_lock_irqsave(ap->lock, flags);
++
++       /* Update the flags */
+        ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
++
++       /*
++        * Resuming the port will trigger a rescan of the ATA device(s)
++        * connected to it. Before scheduling the rescan, make sure that
++        * the associated scsi device(s) are fully resumed as well.
++        */
++       ata_for_each_link(link, ap, HOST_FIRST) {
++               ata_for_each_dev(dev, link, ENABLED) {
++                       struct scsi_device *sdev = dev->sdev;
++
++                       if (!sdev)
++                               continue;
++                       if (scsi_device_get(sdev))
++                               continue;
++
++                       spin_unlock_irqrestore(ap->lock, flags);
++                       device_pm_wait_for_dev(&ap->tdev,
++                                              &sdev->sdev_gendev);
++                       scsi_device_put(sdev);
++                       spin_lock_irqsave(ap->lock, flags);
++               }
++       }
+        spin_unlock_irqrestore(ap->lock, flags);
+ }
+ #endif /* CONFIG_PM */
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r025-20230612   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r012-20230612   gcc  
-arc                  randconfig-r043-20230612   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r005-20230612   gcc  
-arm                  randconfig-r026-20230612   clang
-arm                  randconfig-r046-20230612   clang
-arm64                            alldefconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64        buildonly-randconfig-r001-20230612   clang
-arm64                               defconfig   gcc  
-arm64                randconfig-r002-20230612   clang
-arm64                randconfig-r011-20230612   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r003-20230612   gcc  
-csky                 randconfig-r015-20230612   gcc  
-hexagon              randconfig-r041-20230612   clang
-hexagon              randconfig-r045-20230612   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230612   clang
-i386                 randconfig-i002-20230612   clang
-i386                 randconfig-i003-20230612   clang
-i386                 randconfig-i004-20230612   clang
-i386                 randconfig-i005-20230612   clang
-i386                 randconfig-i006-20230612   clang
-i386                 randconfig-i011-20230612   gcc  
-i386                 randconfig-i012-20230612   gcc  
-i386                 randconfig-i013-20230612   gcc  
-i386                 randconfig-i014-20230612   gcc  
-i386                 randconfig-i015-20230612   gcc  
-i386                 randconfig-i016-20230612   gcc  
-i386                 randconfig-r036-20230612   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips         buildonly-randconfig-r002-20230612   gcc  
-mips                 randconfig-r024-20230612   clang
-mips                          rm200_defconfig   clang
-nios2                               defconfig   gcc  
-openrisc                  or1klitex_defconfig   gcc  
-openrisc             randconfig-r001-20230612   gcc  
-openrisc             randconfig-r006-20230612   gcc  
-openrisc             randconfig-r014-20230612   gcc  
-openrisc             randconfig-r035-20230612   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r005-20230612   gcc  
-powerpc                         wii_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv        buildonly-randconfig-r006-20230612   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230612   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r021-20230612   gcc  
-s390                 randconfig-r044-20230612   gcc  
-sh                               allmodconfig   gcc  
-sh                           se7724_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc        buildonly-randconfig-r004-20230612   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r022-20230612   gcc  
-sparc                randconfig-r023-20230612   gcc  
-sparc64              randconfig-r004-20230612   gcc  
-sparc64              randconfig-r033-20230612   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   clang
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230612   clang
-x86_64               randconfig-a002-20230612   clang
-x86_64               randconfig-a003-20230612   clang
-x86_64               randconfig-a004-20230612   clang
-x86_64               randconfig-a005-20230612   clang
-x86_64               randconfig-a006-20230612   clang
-x86_64               randconfig-a011-20230612   gcc  
-x86_64               randconfig-a012-20230612   gcc  
-x86_64               randconfig-a013-20230612   gcc  
-x86_64               randconfig-a014-20230612   gcc  
-x86_64               randconfig-a015-20230612   gcc  
-x86_64               randconfig-a016-20230612   gcc  
-x86_64               randconfig-r032-20230612   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r013-20230612   gcc  
-xtensa               randconfig-r031-20230612   gcc  
+Thanks !
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Damien Le Moal
+Western Digital Research
+
