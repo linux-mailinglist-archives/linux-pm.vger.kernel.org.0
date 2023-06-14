@@ -2,215 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9056172FBC9
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 12:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF8572FECF
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 14:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235907AbjFNK7P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 06:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S244721AbjFNMfX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 08:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbjFNK7N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 06:59:13 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2131BC3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:59:10 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30e4eec95c8so6127799f8f.3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 03:59:10 -0700 (PDT)
+        with ESMTP id S244684AbjFNMek (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 08:34:40 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E941FF5
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 05:34:15 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-bb3a77abd7bso600788276.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 05:34:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686740349; x=1689332349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X76GkVQmm233Ef9CD45/5gbsHuJzJYm1L85f82G9R4o=;
-        b=YC6D/9YorHI2DGemUAj/35LGIrIk1d7W7kFw5L0NFtynGJLSkwhdHBHTSkjoAWF6Hw
-         pId1fTQQnxrw3IOIqwOPq4EYitLlCm4eclIXFwsCwdUT42yWTcdUPCNPSqVSLogvk1iU
-         xduZ2AUrOfBKMsWgPwR20HTGWegtCwfw5LRXu0ASMVU6Gl/0ltjm7D9BezzW72ukdkUj
-         vMiMK+9R2Qry+vuJ+0zUaYnKowG7HXx3jvRvpsXxISRg5C6jmrZ+zK0qBpdjVpM33kY0
-         fqFpfi058mntucNZ7KuAVG+aRmJWOKJxK2XdB2gecXB08r68rF+/Y/Rfxr6iVsBI6grQ
-         zhXQ==
+        d=linaro.org; s=google; t=1686746054; x=1689338054;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AmaCG8wwkPgqKuy/gWiutPSgcWxKbYO9M1ONN9J1v+g=;
+        b=jjd4xAK8n4pf0djwvRf5YCsMafONwk+2eU3ZK0GN+dgzSF9TQ26mCZxJfZuDyrtV+M
+         uVw7K369kgZovOdbdkhHiic51pCUBM8kykif3ilDYx9uVdzsty1ovEUClzey5tL17YMF
+         lMkntonM4fyD/0MoUkUp4ikKbB+TX1EZPezkQBItp8KojDocR6vpVRmRA8XAL4T7Xb/b
+         SmAblZvq6gCKc8AoYUT2m0eUrs74PUizKYlhFlAMon2Zr0l3e4BYvJOQlL8xhM/0+hXc
+         BuKXF5p5DYKsUIVL2nqGNrG7RX6KAh8UrCisEHU1XVgGjrajKQsq7AthU+daN2UG1a7l
+         6b2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686740349; x=1689332349;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X76GkVQmm233Ef9CD45/5gbsHuJzJYm1L85f82G9R4o=;
-        b=XcI6sQ2AzTxkM/OoeLAnuyX4ZERXSleQ+MXz76AnobufBZgis5BMnWyL0JKSpWW2JA
-         uGdF5B1cRYotf5G+Jd76c4oUD8NmXM4TX0nms/UzbkxybByu5xz+QFf6PKPe5MFXQrDa
-         J7QYERR+31sCUWprSqfKMygyadu/IuIuvZuWndgEFxa3iHn06ITe7f8AANqVYPADBmro
-         JmYn09B7DVZraBUWx5Z9Ba/hAsu4PQ4eEV2fmZkZADqJ8it4h+lCnQIQz6jqQW/f8ihW
-         m1jqMbXxhqU1jwxSyneNXrtt6HAY/uUSyfugCkMwYdRfFH15Ee9PjIUVIDi4ttT9sULA
-         gfDA==
-X-Gm-Message-State: AC+VfDwDePqbB9pRa/+2nDq/TMpkprHCtiBTWlw69eKYjqHsLNXeNo7A
-        xF7jcSiGh1Pcu4BldSp02B32NA==
-X-Google-Smtp-Source: ACHHUZ4osks2idP8nFHnF77UpFY2nhvaTzkrwZUVtXTupb7ex/nT+3I5JfmY4knyoi0MhzfpCxOZhg==
-X-Received: by 2002:adf:e4c8:0:b0:30f:c9bf:de69 with SMTP id v8-20020adfe4c8000000b0030fc9bfde69mr4851063wrm.46.1686740349081;
-        Wed, 14 Jun 2023 03:59:09 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:d8c4:17ec:c49d:215e? ([2a05:6e02:1041:c10:d8c4:17ec:c49d:215e])
-        by smtp.googlemail.com with ESMTPSA id n7-20020adff087000000b0030ae5a0516csm17816540wro.17.2023.06.14.03.59.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jun 2023 03:59:08 -0700 (PDT)
-Message-ID: <d652acef-ab25-7d5e-6af0-584dacfbbd8d@linaro.org>
-Date:   Wed, 14 Jun 2023 12:59:07 +0200
+        d=1e100.net; s=20221208; t=1686746054; x=1689338054;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AmaCG8wwkPgqKuy/gWiutPSgcWxKbYO9M1ONN9J1v+g=;
+        b=KVBoJ+GQSavqfyBYdDlsnHdiD1puVPN0Amt4Ya7jnhfqQ9VdIxmyP2R0J+nu9y379u
+         2FhrrZ6c4PC1UJ+iyH5fBRDkkHLVgbg4VFvCS3XOjBiNnxrtzdhDITL7NbfFZqmXMsab
+         P2/ISwhhA7r8svtbO8kvuHqSFwy4/qrOyHIm8T/NGtrMM7vgxaqRU6Pq0EwloZx+qEYA
+         JrUWdRLC+scwypMnEUb4z44C6uyJx232I5R1++n6oEeqqrSdhaW1MSrGOqVU/fcG4DlK
+         81M1Xgoaoyb/cqCsv/VZxtYroMWjQFlAU+4cDmnJonuxhi12umD6PqqexsARRNKFRngi
+         vjiA==
+X-Gm-Message-State: AC+VfDw8X8qBGssdJTAzgs+eESWJ/aRuegkGBypVGq1Z+fT5zTKbYbGO
+        WXzv5MXyOZ41j1YIyl6/BOlYoeyC2o5JKSPV/i/oZw==
+X-Google-Smtp-Source: ACHHUZ7TowxaGnMjVfEzcInM3wJF5eRSh+d3y888fZ12Kw8EYEVPfJtUseNdJ6ndPtgacp3mgGVHf+9l6hHIfpL5eXE=
+X-Received: by 2002:a25:504b:0:b0:b6e:8979:2f58 with SMTP id
+ e72-20020a25504b000000b00b6e89792f58mr1760805ybb.63.1686746054071; Wed, 14
+ Jun 2023 05:34:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
- support
-Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+References: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+In-Reply-To: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 14 Jun 2023 14:33:38 +0200
+Message-ID: <CAPDyKFoXW65mzNnuZD+Zcjg6dTdWWNqOO6TB+685EAG1x9P8iQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] OPP: pstate is only valid for genpd OPP tables
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>
-References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
- <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
- <ac5b3982-a658-e05b-1b5c-3aeeda1585ed@loongson.cn>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ac5b3982-a658-e05b-1b5c-3aeeda1585ed@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 14 Jun 2023 at 12:37, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> It is not very clear right now that the `pstate` field is only valid for
+> genpd OPP tables and not consumer tables. And there is no checking for
+> the same at various places.
+>
+> Add checks in place to verify that and make it clear to the reader.
+>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Hi Yinbo,
+Yes, this makes the code more clear!
 
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-On 14/06/2023 10:03, zhuyinbo wrote:
-> 
-> Hi Daniel,
-> 
-> Thank you very much for your feedback and suggestions. Below, I have
-> some comments, please review.
+Kind regards
+Uffe
 
-[ ... ]
-
->>> +
->>> +    low += 100;
->>> +    high += 100;
-
-Literals -> macros
-
->>> +    reg_ctrl = low;
->>> +    reg_ctrl |= enable ? 0x100 : 0;
->>> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
->>> +
->>> +    reg_ctrl = high;
->>> +    reg_ctrl |= enable ? 0x100 : 0;
->>> +    writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
->>
->> Is the 'enable' boolean really useful?
-> 
-> 
-> Yes, this 'enable' was to enable thermal irq.
-> 
->>
->> Wouldn't be the sensor trip points disabled by default at reset time?
->>
-> 
-> 
-> Only here will thermal irq be enabled throughout the entire driver, and
-> actual testing has shown that interrupts are valid, so this is
-> meaningful.
-
-Ok.
-
->> If it is the case then we can get ride of this variable and make the 
->> routine simpler
->>
->>> +    return 0;
->>> +}
->>> +
->>> +static int loongson2_thermal_get_temp(struct thermal_zone_device 
->>> *tz, int *temp)
->>> +{
->>> +    u32 reg_val;
->>> +    struct loongson2_thermal_data *data = tz->devdata;
->>> +
->>> +    reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
->>
->> Seems like there is no offset for the sensor id here ?
-> 
-> 
-> There is no need for a sensor ID here.
-> 
-> There are some things that I didn't describe clearly, which made you
-> misunderstand. Actually, the temperature sensor of 2K1000 is like this:
-> 
-> There are 4 sets of temperature interrupt controllers, only one set of
-> temperature sampling registers. a sets of temperature interrupt
-> controllers was considered a sensor, which sensor include 3 register as
-> follows, where "SEL" represents which sensor is referenced, In 2k1000
-> datasheet, which "SEL" must be 0.
-
-I'm not sure to understand. Let me rephrase it and know what is wrong.
-
-1. The thermal controller has 4 sensors. The interrupt can be set for 
-these 4 sensors.
-
-2. When reading a temperature, we have to select the sensor via the 
-'SEL' register.
-
-3. The 2k1000 has one sensor with an id = 0.
-
-4. In the future, more Loongson platform can be submitted with more than 
-one sensor
-
-If this is correct, then my comments are about the inconsistency of the 
-proposed changes. Guessing in the future Loongson board there will be 
-more than one sensor, the existing code mixes support for one and 
-multiple sensors as well as assuming id is 0.
-
-So if you add in the of_loongson2_thermal_match table a new platform 
-with several sensors, the current code will be broken because:
-
-  - the initialization loop does exit when the first thermal zone 
-registration succeed
-
-  - the interrupt handler does not figure out which sensor crossed the 
-low/high limit
-
-  - the get_temp is not selecting the right sensor
-
-
-That is my point:
-
-  - write the code to support one sensor with id=0 only
-
-    *or*
-
-  - write the code to support multiple sensors
-
-If I'm not wrong the code is closer to support multiple sensors ;)
-
-Let me know if these deductions are correct
-
-   -- Daniel
-
-ps : is there an English translation for the 2k1000 datasheet ?
-
-
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> ---
+>  drivers/opp/core.c    | 18 ++++++++++++++++--
+>  drivers/opp/debugfs.c |  4 +++-
+>  drivers/opp/of.c      |  6 ++++++
+>  3 files changed, 25 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 7290168ec806..bfb012f5383c 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -227,16 +227,24 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_level);
+>  unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
+>                                             unsigned int index)
+>  {
+> +       struct opp_table *opp_table = opp->opp_table;
+> +
+>         if (IS_ERR_OR_NULL(opp) || !opp->available ||
+> -           index >= opp->opp_table->required_opp_count) {
+> +           index >= opp_table->required_opp_count) {
+>                 pr_err("%s: Invalid parameters\n", __func__);
+>                 return 0;
+>         }
+>
+>         /* required-opps not fully initialized yet */
+> -       if (lazy_linking_pending(opp->opp_table))
+> +       if (lazy_linking_pending(opp_table))
+>                 return 0;
+>
+> +       /* The required OPP table must belong to a genpd */
+> +       if (unlikely(!opp_table->required_opp_tables[index]->is_genpd)) {
+> +               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
+> +               return 0;
+> +       }
+> +
+>         return opp->required_opps[index]->pstate;
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_opp_get_required_pstate);
+> @@ -2686,6 +2694,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+>         int dest_pstate = -EINVAL;
+>         int i;
+>
+> +       /* Both OPP tables must belong to genpds */
+> +       if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
+> +               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
+> +               return -EINVAL;
+> +       }
+> +
+>         /*
+>          * Normally the src_table will have the "required_opps" property set to
+>          * point to one of the OPPs in the dst_table, but in some cases the
+> diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> index 2c7fb683441e..0cc21e2b42ff 100644
+> --- a/drivers/opp/debugfs.c
+> +++ b/drivers/opp/debugfs.c
+> @@ -152,11 +152,13 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+>         debugfs_create_bool("dynamic", S_IRUGO, d, &opp->dynamic);
+>         debugfs_create_bool("turbo", S_IRUGO, d, &opp->turbo);
+>         debugfs_create_bool("suspend", S_IRUGO, d, &opp->suspend);
+> -       debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
+>         debugfs_create_u32("level", S_IRUGO, d, &opp->level);
+>         debugfs_create_ulong("clock_latency_ns", S_IRUGO, d,
+>                              &opp->clock_latency_ns);
+>
+> +       if (opp_table->is_genpd)
+> +               debugfs_create_u32("performance_state", S_IRUGO, d, &opp->pstate);
+> +
+>         opp->of_name = of_node_full_name(opp->np);
+>         debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
+>
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 943c7fb7402b..e23ce6e78eb6 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -1392,6 +1392,12 @@ int of_get_required_opp_performance_state(struct device_node *np, int index)
+>                 goto put_required_np;
+>         }
+>
+> +       /* The OPP tables must belong to a genpd */
+> +       if (unlikely(!opp_table->is_genpd)) {
+> +               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
+> +               goto put_required_np;
+> +       }
+> +
+>         opp = _find_opp_of_np(opp_table, required_np);
+>         if (opp) {
+>                 pstate = opp->pstate;
+> --
+> 2.31.1.272.g89b43f80a514
+>
