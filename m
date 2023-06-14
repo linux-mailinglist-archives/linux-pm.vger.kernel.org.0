@@ -2,87 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B4A72F0DC
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 02:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B947172F0F2
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 02:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjFNAQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Jun 2023 20:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S232258AbjFNA0V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Jun 2023 20:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjFNAQl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 20:16:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D7561739;
-        Tue, 13 Jun 2023 17:16:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54DCA63BEF;
-        Wed, 14 Jun 2023 00:16:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C11D8C433C8;
-        Wed, 14 Jun 2023 00:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686701789;
-        bh=kj9Ya7IV2GrY8S1ZmVY2sjyy1iwtpsSoYAouFrgDpLw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BUqgYQRYma4PsE5pRtQr/DfNgQmVbQwUn/N1SkJ6TNEuJE9girQHlOuLbAifF3lA7
-         Xn4JCt/UTJX2ThcxOnZUrs3jMotcUhYZ1XNitI4tg4e4r/65P4wny11o9pyHJw2yz/
-         A/KnfqscJXCVkogfi6WiI6xeooXq4MMEdId2iLG5QDJZgz6ybBVtYF3ZW6rikLUunr
-         4ndYgZnqGQmpApXdoi8MeyhxK2+k8AoDIN1lGWlcKr76SfnoVoxC7/ZHl87oZqvn1L
-         SUSfvZ3TtSamzsBuZXAxioGNqk+TZH7+HfblfrNTqp6GQb22WgG6gneZAXVtHmGZI7
-         uNyw+bRqNrb1g==
-Date:   Wed, 14 Jun 2023 02:16:21 +0200
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
-        andriy.shevchenko@linux.intel.com, linux-i2c@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Evan.Quan@amd.com, Lijo.Lazar@amd.com,
-        Sanket.Goswami@amd.com
-Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
-Message-ID: <20230614001621.iyxi2khz4hmcbl3x@intel.intel>
-References: <20230518161150.92959-1-mario.limonciello@amd.com>
+        with ESMTP id S230496AbjFNA0U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Jun 2023 20:26:20 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9966E172A;
+        Tue, 13 Jun 2023 17:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686702379; x=1718238379;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b7UDhenxOy+WQBPj33/WSkU/4Hiv+kSwOlsYlkmSy7I=;
+  b=hImMA3Y/teTwWYIz1ZOe5TG4ATkRAh7qPmDB2vrRGf8yI5eMwcTBWBDZ
+   nFnLcWrdYJl/Vxqg4a4I85grHzLoziBfZ6a9Wi9jDgbsCmutm4PXiehDg
+   aUvV0dSq43kLeS3FdjGV05bjAp6C0QJNWBG8L9kJj+4JaLvaQg97sHZ3f
+   OtxFNu3cRVMjVDaYR9IE2aK6yu+RCuv2Ds5v0Lt+Y8dM1RfJloH2W+dvl
+   8DxyxWRxCLqXFofwB/DtVhENrNGHnOKBRzby3CqUv4ZzOygmLPj2N6g2V
+   EG4lsRYpwlfjGaSICBzuTcDq0OBAtMXXU2Of5UKC+qJ5zjAEJYlWba1aA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="348139934"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="348139934"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2023 17:26:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10740"; a="958603898"
+X-IronPort-AV: E=Sophos;i="6.00,241,1681196400"; 
+   d="scan'208";a="958603898"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Jun 2023 17:26:17 -0700
+Date:   Tue, 13 Jun 2023 17:29:08 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
+ IPC classes
+Message-ID: <20230614002908.GA7443@ranerica-svr.sc.intel.com>
+References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230518161150.92959-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Mario,
+On Mon, Jun 12, 2023 at 09:24:04PM -0700, Ricardo Neri wrote:
+> +static int rq_last_task_ipcc(int dst_cpu, struct rq *rq, unsigned short *ipcc)
+> +{
+> +	struct list_head *tasks = &rq->cfs_tasks;
+> +	struct task_struct *p;
+> +	struct rq_flags rf;
+> +	int ret = -EINVAL;
+> +
+> +	rq_lock_irqsave(rq, &rf);
+> +	if (list_empty(tasks))
+> +		goto out;
+> +
+> +	p = list_last_entry(tasks, struct task_struct, se.group_node);
+> +	if (p->flags & PF_EXITING || is_idle_task(p) ||
+> +	    !cpumask_test_cpu(dst_cpu, p->cpus_ptr))
+> +		goto out;
+> +
+> +	ret = 0;
+> +	*ipcc = p->ipcc;
+> +out:
+> +	rq_unlock(rq, &rf);
 
-On Thu, May 18, 2023 at 11:11:50AM -0500, Mario Limonciello wrote:
-> power_supply_is_system_supplied() checks whether any power
-> supplies are present that aren't batteries to decide whether
-> the system is running on DC or AC.  Downstream drivers use
-> this to make performance decisions.
-> 
-> Navi dGPUs include an UCSI function that has been exported
-> since commit 17631e8ca2d3 ("i2c: designware: Add driver
-> support for AMD NAVI GPU").
-> 
-> This UCSI function registers a power supply since commit
-> 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-> but this is not a system power supply.
-> 
-> As the power supply for a dGPU is only for powering devices connected
-> to dGPU, create a device property to indicate that the UCSI endpoint
-> is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
-> 
-> Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
-> Reviewed-by: Evan Quan <evan.quan@amd.com>
-> Tested-by: Evan Quan <evan.quan@amd.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-
-Acked-by: Andi Shyti <andi.shyti@kernel.org> 
-
-Thanks,
-Andi
+This should be rq_unlock_irqrestore(). I will correct it in the next version.
