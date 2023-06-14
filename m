@@ -2,173 +2,200 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0861A73018C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 16:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B207301C6
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 16:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245568AbjFNOT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 10:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46108 "EHLO
+        id S245601AbjFNO0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 10:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245551AbjFNOTV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 10:19:21 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D464E212B;
-        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-56cfce8862aso8801027b3.1;
-        Wed, 14 Jun 2023 07:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686752358; x=1689344358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
-        b=i6gIt2eixifwvL/xKy/LTVOmXLGJXu83F20GOpWUc+DfdS9FpLot9sLufvFkUNociJ
-         SR52ir+xMVHqmu/T+1dncFHrybZWnFKA3fI2lbYco5HZgQzsLBI6JsLUJi8GfLrjMqtH
-         L80OvDo3uxbVTqLBLpyAJdL90rnuu1wHoy1VrfUWG6twpll4h4p2VSno8fC0YhCKIYkb
-         Lt4mUX/3VIr9BSFjlGv+PFuI03s0vrPwSKpwFF9RzzOH2UPpHan1BFuAQEN55v95TojU
-         TFHcdpLrJxZrFjl4PWPcV4GT9CTcpdGR1T1F25T+gfYDHVCVzR/LnJdg6DGcS+eNPXI9
-         3olw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686752358; x=1689344358;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KX5YO1WYul949jFQhaP2hJUbrdTDjTdGLvHcfir61kc=;
-        b=En3hniD8WzWEqAVa431q/FIlQIpX0kAMf6Rk6khWxRcvNzkHw3HTZmZBK1MLwOboXe
-         IGcDpaC1/XtHZ6ng2UYgz34kDy1wQ/opiQpy43T42uS6jjGl3SyCCQZR8lz7hi2Rd7AT
-         t7/0CwkptgL5fH5EjjuACCREX0GB/oxUyYVzTwPHs1bgsGMLjAUvxJknyvBOaU2GuNFw
-         Pzs/mqUF/lFyBZPN9PiWV/dB1r9L+YXstv53LSC2+yuTtEMXDtoiLJNbMM31kwRay/Av
-         JZoAg68PCaoayfOc19GFp4Aho1dW4FOWUHTZrbVS1SHiNvqxUa3KCX6lyEkfREawf1cH
-         Vhvw==
-X-Gm-Message-State: AC+VfDwnfE1GVQAZDor5Vx7vfPRAUEo0+YTsLZgCEii4pAQzVpX1PCPK
-        5OZIdNGyMAJqlvWqwzwUDnlq4aY9SoMgJUc+yOE=
-X-Google-Smtp-Source: ACHHUZ4x6WLud45wPegG2Lh8Ea6ssDXfxMlRzpQJzqGV7rINz/e9/iuzIawfj4+fKglV3jau7YuGI9MaoBNqtSycOK4=
-X-Received: by 2002:a81:6e8a:0:b0:56d:24c:8896 with SMTP id
- j132-20020a816e8a000000b0056d024c8896mr1866564ywc.7.1686752357816; Wed, 14
- Jun 2023 07:19:17 -0700 (PDT)
+        with ESMTP id S236251AbjFNO0Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 10:26:24 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 488D11BE5
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jun 2023 07:26:22 -0700 (PDT)
+Received: (qmail 462530 invoked by uid 1000); 14 Jun 2023 10:26:20 -0400
+Date:   Wed, 14 Jun 2023 10:26:20 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Joe Breuer <linux-kernel@jmbreuer.net>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Hardening <linux-hardening@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux SCSI <linux-scsi@vger.kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: Fwd: Waking up from resume locks up on sr device
+Message-ID: <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu>
+References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
+ <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
+ <ZIQ6bkau3j6qGef8@duo.ucw.cz>
+ <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com>
+ <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
+ <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
+ <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
+ <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
+ <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
 MIME-Version: 1.0
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de> <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-From:   Vincent Legoll <vincent.legoll@gmail.com>
-Date:   Wed, 14 Jun 2023 14:19:06 +0000
-Message-ID: <CAEwRq=rUUatDp0JePkDPRkx81c9=sO6ZoW+V=g2S7B8_s-R3uA@mail.gmail.com>
-Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Sascha, Sebastian,
+On Wed, Jun 14, 2023 at 04:35:50PM +0900, Damien Le Moal wrote:
+> On 6/14/23 15:57, Hannes Reinecke wrote:
+> > On 6/14/23 06:49, Damien Le Moal wrote:
+> >> On 6/11/23 18:05, Joe Breuer wrote:
+> >>> I'm the reporter of this issue.
+> >>>
+> >>> I just tried this patch against 6.3.4, and it completely fixes my
+> >>> suspend/resume issue.
+> >>>
+> >>> The optical drive stays usable after resume, even suspending/resuming
+> >>> during playback of CDDA content works flawlessly and playback resumes
+> >>> seamlessly after system resume.
+> >>>
+> >>> So, from my perspective: Good one!
+> >>
+> >> In place of Bart's fix, could you please try this patch ?
+> >>
+> >> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+> >> index b80e68000dd3..a81eb4f882ab 100644
+> >> --- a/drivers/ata/libata-eh.c
+> >> +++ b/drivers/ata/libata-eh.c
+> >> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+> >> ata_port *ap)
+> >>          /* tell ACPI that we're resuming */
+> >>          ata_acpi_on_resume(ap);
+> >>
+> >> -       /* update the flags */
+> >>          spin_lock_irqsave(ap->lock, flags);
+> >> +
+> >> +       /* Update the flags */
+> >>          ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
+> >> +
+> >> +       /*
+> >> +        * Resuming the port will trigger a rescan of the ATA device(s)
+> >> +        * connected to it. Before scheduling the rescan, make sure that
+> >> +        * the associated scsi device(s) are fully resumed as well.
+> >> +        */
+> >> +       ata_for_each_link(link, ap, HOST_FIRST) {
+> >> +               ata_for_each_dev(dev, link, ENABLED) {
+> >> +                       struct scsi_device *sdev = dev->sdev;
+> >> +
+> >> +                       if (!sdev)
+> >> +                               continue;
+> >> +                       if (scsi_device_get(sdev))
+> >> +                               continue;
+> >> +
+> >> +                       spin_unlock_irqrestore(ap->lock, flags);
+> >> +                       device_pm_wait_for_dev(&ap->tdev,
+> >> +                                              &sdev->sdev_gendev);
+> >> +                       scsi_device_put(sdev);
+> >> +                       spin_lock_irqsave(ap->lock, flags);
+> >> +               }
+> >> +       }
+> >>          spin_unlock_irqrestore(ap->lock, flags);
+> >>   }
+> >>   #endif /* CONFIG_PM */
+> >>
+> >> Thanks !
+> >>
+> > Well; not sure if that'll work out.
+> > The whole reason why we initial a rescan is that we need to check if the
+> > ports are still connected, and whether the devices react.
+> > So we can't iterate the ports here as this is the very thing which gets
+> > checked during EH.
+> 
+> Hmmm... Right. So we need to move that loop into ata_scsi_dev_rescan(),
+> which itself already loops over the port devices anyway.
+> 
+> > We really should claim resume to be finished as soon as we can talk with
+> > the HBA, and kick off EH asynchronously to let it finish the job after
+> > resume has completed.
+> 
+> That is what's done already:
+> 
+> static int ata_port_pm_resume(struct device *dev)
+> {
+> 	ata_port_resume_async(to_ata_port(dev), PMSG_RESUME);
+> 	pm_runtime_disable(dev);
+> 	pm_runtime_set_active(dev);
+> 	pm_runtime_enable(dev);
+> 	return 0;
+> }
+> 
+> EH is kicked by ata_port_resume_async() -> ata_port_request_pm() and it
+> is async. There is no synchronization in EH with the PM side though. We
+> probably should have EH check that the port resume is done first, which
+> can be done in ata_eh_handle_port_resume() since that is the first thing
+> done when entering EH.
+> 
+> The problem remains though that we *must* wait for the scsi device
+> resume to be done before calling scsi_rescan_device(), which is done
+> asynchronously from EH, as a different work. So that one needs to wait
+> for the scsi side resume to be done.
+> 
+> I also thought of trigerring the rescan from the scsi side, but since
+> the resume may be asynchronous, we could endup trigerring it with the
+> ata side not yet resumed... That would only turn the problem around
+> instead of solving it.
 
-On Wed, Jun 14, 2023 at 1:40=E2=80=AFPM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
-> On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
-> > This is v5 of the series adding perf support to the rockchip DFI driver=
-.
-> > [...]
-> > The RK3588 device tree changes for the DFI were not part of v4. As
-> > Vincent Legoll showed interest in testing this series the necessary
-> > device tree changes are now part of this series.
->
-> I tested the series on RK3588 EVB1. The read/write byts looks
-> sensible. Sometimes cycles reads unrealistic values, though:
-> [...]
-> Otherwise the series is
->
-> Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->
-> -- Sebastian
+The order in which devices get resumed isn't arbitrary.  If the system 
+is set up not to use async suspends/resumes then the order is always the 
+same as the order in which the devices were originally registered (for 
+resume, that is -- suspend obviously takes place in the reverse order).
 
-I also tested this new version of the series on a Pine64 QuartzPro64 dev bo=
-ard.
+So if you're trying to perform an action that requires two devices to be 
+active, you must not do it in the resume handler for the device that was 
+registered first.  I don't know how the ATA and SCSI pieces interact 
+here, but regardless, this is a pretty strict requirement.
 
-I applied the series on top of my local branch, which is based on Collabora=
-'s
-rockchip-3588 plus some QP64 DTS patches, and your V5 patch series.
+It should be okay to perform the action in the resume handler for the 
+device that was registered second.  But if the two devices aren't in an 
+ancestor-descendant relationship then you also have to call 
+device_pm_wait_for_dev() (or use device links as Rafael mentioned) to 
+handle the async case properly.
 
-Looks like this is still working properly:
+> Or... Why the heck scsi_rescan_device() is calling device_lock() ? This
+> is the only place in scsi code I can see that takes this lock. I suspect
+> this is to serialize either rescans, or serialize with resume, or both.
+> For serializing rescans, we can use another lock. For serializing with
+> PM, we should wait for PM transitions...
+> Something is not right here.
 
--bash-5.1# uname -a
-Linux qp64 6.4.0-rc1-00140-g658dd2200e2a #24 SMP PREEMPT Wed Jun 14
-15:50:34 CEST 2023 aarch64 GNU/Linux
+Here's what commit e27829dc92e5 ("scsi: serialize ->rescan against 
+->remove", written by Christoph Hellwig) says:
 
--bash-5.1# zgrep -i _dfi /proc/config.gz
-CONFIG_DEVFREQ_EVENT_ROCKCHIP_DFI=3Dy
+    Lock the device embedded in the scsi_device to protect against
+    concurrent calls to ->remove.
 
--bash-5.1# perf list | grep rockchip_ddr
-  rockchip_ddr/bytes/                                [Kernel PMU event]
-  rockchip_ddr/cycles/                               [Kernel PMU event]
-  rockchip_ddr/read-bytes/                           [Kernel PMU event]
-  rockchip_ddr/read-bytes0/                          [Kernel PMU event]
-  rockchip_ddr/read-bytes1/                          [Kernel PMU event]
-  rockchip_ddr/read-bytes2/                          [Kernel PMU event]
-  rockchip_ddr/read-bytes3/                          [Kernel PMU event]
-  rockchip_ddr/write-bytes/                          [Kernel PMU event]
-  rockchip_ddr/write-bytes0/                         [Kernel PMU event]
-  rockchip_ddr/write-bytes1/                         [Kernel PMU event]
-  rockchip_ddr/write-bytes2/                         [Kernel PMU event]
-  rockchip_ddr/write-bytes3/                         [Kernel PMU event]
+That's the commit which added the device_lock() call.
 
-# With no memory load
--bash-5.1# perf stat -a -e
-rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
-kchip_ddr/bytes/
-sleep 1
-
- Performance counter stats for 'system wide':
-
-        1058691047      rockchip_ddr/cycles/
-              9.35 MB   rockchip_ddr/read-bytes/
-              0.57 MB   rockchip_ddr/write-bytes/
-              9.90 MB   rockchip_ddr/bytes/
-
-       1.002616498 seconds time elapsed
-
-# With a hog
--bash-5.1# memtester 4G > /dev/null 2>&1 &
--bash-5.1# perf stat -a -e
-rockchip_ddr/cycles/,rockchip_ddr/read-bytes/,rockchip_ddr/write-bytes/,roc=
-kchip_ddr/bytes/
-sleep 10
-
- Performance counter stats for 'system wide':
-
-       10561540038      rockchip_ddr/cycles/
-          60212.59 MB   rockchip_ddr/read-bytes/
-          31313.03 MB   rockchip_ddr/write-bytes/
-          91525.60 MB   rockchip_ddr/bytes/
-
-      10.001651886 seconds time elapsed
-
-You can add my T-B, for the whole series:
-
-Tested-by: Vincent Legoll <vincent.legoll@gmail.com>
-
-Or is there something else you want me to test ?
-
-Thanks for your work
-Regards
-
---
-Vincent Legoll
+Alan Stern
