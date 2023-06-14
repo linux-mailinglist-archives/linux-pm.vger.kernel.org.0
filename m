@@ -2,65 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A0072F53E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 08:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3672B72F62D
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jun 2023 09:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjFNG5R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 02:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S243373AbjFNHYX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 03:24:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjFNG5Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 02:57:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1B91984;
-        Tue, 13 Jun 2023 23:57:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S243385AbjFNHYC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 03:24:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F0B2695;
+        Wed, 14 Jun 2023 00:22:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 227072188D;
-        Wed, 14 Jun 2023 06:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1686725834; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bWmUJHf0Ey81BHg4FfOq6OnR1lg1RZH8qrzAxru/q4U=;
-        b=Ae78GTKgCZZmGqmGNhaYT00kHkTw7C22ZCo648dDhJ5Hznq86Qcl4UTSqguQZZMN1B5u2+
-        fQVBGbjxDDMK3J4Kzj8D6BBud5Y3rlLwToB8VxsOCRc7c/N6CwY8KWxXUaXM7B2YMc+n2m
-        zamjj2L8XPwxE1yYbor492aRMNRvVtg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1686725834;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bWmUJHf0Ey81BHg4FfOq6OnR1lg1RZH8qrzAxru/q4U=;
-        b=IhtnPGz1B/nlr8hDByMU5YnbQ+jLtCqO6A1zC0rheblThcV4vMvhPDAZGiCZqV2PEaAj7a
-        eyODkgpoYD5GMNDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F30541357F;
-        Wed, 14 Jun 2023 06:57:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id TXZdOshkiWS9DAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 14 Jun 2023 06:57:12 +0000
-Message-ID: <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de>
-Date:   Wed, 14 Jun 2023 08:57:12 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C544E63977;
+        Wed, 14 Jun 2023 07:22:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D310C433C0;
+        Wed, 14 Jun 2023 07:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686727339;
+        bh=zoDKwNuSi/WFCZHCKcTWLq6hrK6UkUDQwvKKAJ9CRsY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JA4MbC9ERGTdEIm21iXXtPvlajP1/Jk/eEu0aRX+kigqccieTpp9GWaIyi0/ItOTb
+         o5JbLWTlyqoDTFpOZTbOAolpTtlnyc/wjPbAmcE30musmC4b84C3t/LujoVfTWt8d3
+         /vW93mvs4tdPxwMRhgO7luSqLX3XLf6W6D/+vidN5VFX5NHDR4lDkv4OZPGgUx7gSh
+         dK260Qeu9AxkFj7TUDhSS2wkuCcShf5a2B9Rp4ptLSD97cy3oCsfI4CqRS0Bpe80mA
+         omxLzzZsiLJqzQcYDliBpra5BrrC7nu2vNOBSIONNfhYQPryNc+lphg3AcVB26+3rt
+         Ng5JhxIL2kXHQ==
+Message-ID: <b6d95ada-8988-f4ea-6eb3-ea2f3ac2362d@kernel.org>
+Date:   Wed, 14 Jun 2023 16:22:15 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+ Thunderbird/102.12.0
 Subject: Re: Fwd: Waking up from resume locks up on sr device
 Content-Language: en-US
-To:     Damien Le Moal <dlemoal@kernel.org>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Joe Breuer <linux-kernel@jmbreuer.net>,
         Bart Van Assche <bvanassche@acm.org>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kees Cook <keescook@chromium.org>,
@@ -79,8 +63,7 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Hannes Reinecke <hare@suse.com>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
+        Martin Kepplinger <martin.kepplinger@puri.sm>
 References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
  <5513e29d-955a-f795-21d6-ec02a2e2e128@gmail.com>
  <ZIQ6bkau3j6qGef8@duo.ucw.cz>
@@ -88,13 +71,15 @@ References: <2d1fdf6d-682c-a18d-2260-5c5ee7097f7d@gmail.com>
  <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org>
  <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net>
  <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CAAd53p665S+dfOvWZt2UwTs=VrxE=FtpqjzUrSuLKR5tBpAa9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,80 +87,107 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/14/23 06:49, Damien Le Moal wrote:
-> On 6/11/23 18:05, Joe Breuer wrote:
->> I'm the reporter of this issue.
+On 6/14/23 14:37, Kai-Heng Feng wrote:
+> On Wed, Jun 14, 2023 at 12:49 PM Damien Le Moal <dlemoal@kernel.org> wrote:
 >>
->> I just tried this patch against 6.3.4, and it completely fixes my
->> suspend/resume issue.
+>> On 6/11/23 18:05, Joe Breuer wrote:
+>>> I'm the reporter of this issue.
+>>>
+>>> I just tried this patch against 6.3.4, and it completely fixes my
+>>> suspend/resume issue.
+>>>
+>>> The optical drive stays usable after resume, even suspending/resuming
+>>> during playback of CDDA content works flawlessly and playback resumes
+>>> seamlessly after system resume.
+>>>
+>>> So, from my perspective: Good one!
 >>
->> The optical drive stays usable after resume, even suspending/resuming
->> during playback of CDDA content works flawlessly and playback resumes
->> seamlessly after system resume.
+>> In place of Bart's fix, could you please try this patch ?
+> 
+> Issue still persists at my end, when /sys/power/pm_async is 0.
+> device_pm_wait_for_dev() in its current form is only usable for async case.
+
+Can you try this horrible hack to see if it works:
+
+diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+index 9e79998e3958..87c093775a90 100644
+--- a/drivers/ata/libata-scsi.c
++++ b/drivers/ata/libata-scsi.c
+@@ -4590,6 +4590,7 @@ void ata_scsi_dev_rescan(struct work_struct *work)
+        ata_for_each_link(link, ap, EDGE) {
+                ata_for_each_dev(dev, link, ENABLED) {
+                        struct scsi_device *sdev = dev->sdev;
++                       struct device *sgdev;
+
+                        if (!sdev)
+                                continue;
+@@ -4597,7 +4598,10 @@ void ata_scsi_dev_rescan(struct work_struct *work)
+                                continue;
+
+                        spin_unlock_irqrestore(ap->lock, flags);
+-                       scsi_rescan_device(&(sdev->sdev_gendev));
++
++                       sgdev = &sdev->sdev_gendev;
++                       wait_for_completion(&sgdev->power.completion);
++                       scsi_rescan_device(sgdev);
+                        scsi_device_put(sdev);
+                        spin_lock_irqsave(ap->lock, flags);
+                }
+
+
+
+> 
+> Kai-Heng
+> 
 >>
->> So, from my perspective: Good one!
-> 
-> In place of Bart's fix, could you please try this patch ?
-> 
-> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
-> index b80e68000dd3..a81eb4f882ab 100644
-> --- a/drivers/ata/libata-eh.c
-> +++ b/drivers/ata/libata-eh.c
-> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
-> ata_port *ap)
->          /* tell ACPI that we're resuming */
->          ata_acpi_on_resume(ap);
-> 
-> -       /* update the flags */
->          spin_lock_irqsave(ap->lock, flags);
-> +
-> +       /* Update the flags */
->          ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
-> +
-> +       /*
-> +        * Resuming the port will trigger a rescan of the ATA device(s)
-> +        * connected to it. Before scheduling the rescan, make sure that
-> +        * the associated scsi device(s) are fully resumed as well.
-> +        */
-> +       ata_for_each_link(link, ap, HOST_FIRST) {
-> +               ata_for_each_dev(dev, link, ENABLED) {
-> +                       struct scsi_device *sdev = dev->sdev;
-> +
-> +                       if (!sdev)
-> +                               continue;
-> +                       if (scsi_device_get(sdev))
-> +                               continue;
-> +
-> +                       spin_unlock_irqrestore(ap->lock, flags);
-> +                       device_pm_wait_for_dev(&ap->tdev,
-> +                                              &sdev->sdev_gendev);
-> +                       scsi_device_put(sdev);
-> +                       spin_lock_irqsave(ap->lock, flags);
-> +               }
-> +       }
->          spin_unlock_irqrestore(ap->lock, flags);
->   }
->   #endif /* CONFIG_PM */
-> 
-> Thanks !
-> 
-Well; not sure if that'll work out.
-The whole reason why we initial a rescan is that we need to check if the 
-ports are still connected, and whether the devices react.
-So we can't iterate the ports here as this is the very thing which gets 
-checked during EH.
+>> diff --git a/drivers/ata/libata-eh.c b/drivers/ata/libata-eh.c
+>> index b80e68000dd3..a81eb4f882ab 100644
+>> --- a/drivers/ata/libata-eh.c
+>> +++ b/drivers/ata/libata-eh.c
+>> @@ -4006,9 +4006,32 @@ static void ata_eh_handle_port_resume(struct
+>> ata_port *ap)
+>>         /* tell ACPI that we're resuming */
+>>         ata_acpi_on_resume(ap);
+>>
+>> -       /* update the flags */
+>>         spin_lock_irqsave(ap->lock, flags);
+>> +
+>> +       /* Update the flags */
+>>         ap->pflags &= ~(ATA_PFLAG_PM_PENDING | ATA_PFLAG_SUSPENDED);
+>> +
+>> +       /*
+>> +        * Resuming the port will trigger a rescan of the ATA device(s)
+>> +        * connected to it. Before scheduling the rescan, make sure that
+>> +        * the associated scsi device(s) are fully resumed as well.
+>> +        */
+>> +       ata_for_each_link(link, ap, HOST_FIRST) {
+>> +               ata_for_each_dev(dev, link, ENABLED) {
+>> +                       struct scsi_device *sdev = dev->sdev;
+>> +
+>> +                       if (!sdev)
+>> +                               continue;
+>> +                       if (scsi_device_get(sdev))
+>> +                               continue;
+>> +
+>> +                       spin_unlock_irqrestore(ap->lock, flags);
+>> +                       device_pm_wait_for_dev(&ap->tdev,
+>> +                                              &sdev->sdev_gendev);
+>> +                       scsi_device_put(sdev);
+>> +                       spin_lock_irqsave(ap->lock, flags);
+>> +               }
+>> +       }
+>>         spin_unlock_irqrestore(ap->lock, flags);
+>>  }
+>>  #endif /* CONFIG_PM */
+>>
+>> Thanks !
+>>
+>> --
+>> Damien Le Moal
+>> Western Digital Research
+>>
 
-We really should claim resume to be finished as soon as we can talk with 
-the HBA, and kick off EH asynchronously to let it finish the job after 
-resume has completed.
-
-Cheers,
-
-Hannes
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
-Myers, Andrew McDonald, Martje Boudien Moerman
+Damien Le Moal
+Western Digital Research
 
