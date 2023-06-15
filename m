@@ -2,61 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0C07319E8
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 15:27:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFF27319FA
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 15:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241354AbjFON1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 09:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S245473AbjFONa3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 09:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241229AbjFON1k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 09:27:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B340271F
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 06:27:39 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1q9n0Q-0006nm-HG; Thu, 15 Jun 2023 15:27:18 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1q9n0N-0002KD-VC; Thu, 15 Jun 2023 15:27:15 +0200
-Date:   Thu, 15 Jun 2023 15:27:15 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S245369AbjFONa2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 09:30:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD7112948;
+        Thu, 15 Jun 2023 06:30:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC0781FB;
+        Thu, 15 Jun 2023 06:31:08 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 920DE3F64C;
+        Thu, 15 Jun 2023 06:30:22 -0700 (PDT)
+Date:   Thu, 15 Jun 2023 14:30:20 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 00/25] Add perf support to the rockchip-dfi driver
-Message-ID: <20230615132715.GF18491@pengutronix.de>
-References: <20230524083153.2046084-1-s.hauer@pengutronix.de>
- <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
+Subject: Re: [PATCH 09/16] dt-bindings: firmware: arm,scmi: Extend bindings
+ for protocol@13
+Message-ID: <20230615133020.pomw53jrzehbwahd@bogus>
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-10-ulf.hansson@linaro.org>
+ <20230615084430.boamsz56kqqi3n6h@bogus>
+ <CAPDyKFoiL47wadabh1jcOr4q4uwJm1UyhHHMnmVcys=bBBVcXQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614134034.3p3p75a3jophi2eu@mercury.elektranox.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <CAPDyKFoiL47wadabh1jcOr4q4uwJm1UyhHHMnmVcys=bBBVcXQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,47 +54,87 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 03:40:34PM +0200, Sebastian Reichel wrote:
-> Hi,
+On Thu, Jun 15, 2023 at 11:39:06AM +0200, Ulf Hansson wrote:
+> On Thu, 15 Jun 2023 at 10:44, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Wed, Jun 07, 2023 at 02:46:21PM +0200, Ulf Hansson wrote:
+> > > The protocol@13 node is describing the performance scaling option for the
+> > > ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
+> > > performance scaling is in many cases not limited to switching a clock's
+> > > frequency.
+> > >
+> > > Therefore, let's extend the binding so the interface can be modelled as a
+> > > generic "performance domain" too. The common way to describe this, is to
+> > > use the "power-domain" bindings, so let's use that.
+> > >
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> > > Cc: Conor Dooley <conor+dt@kernel.org>
+> > > Cc: devicetree@vger.kernel.org
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  Documentation/devicetree/bindings/firmware/arm,scmi.yaml | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > index 5824c43e9893..cff9d1e4cea1 100644
+> > > --- a/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > +++ b/Documentation/devicetree/bindings/firmware/arm,scmi.yaml
+> > > @@ -145,8 +145,8 @@ properties:
+> > >        '#clock-cells':
+> > >          const: 1
+> > >
+> > > -    required:
+> > > -      - '#clock-cells'
+> >
+> > I am yet to look at the patches, just looked at this binding changes for now.
+> >
+> > Won't this break compatibility with existing DTBs. IMO, this is strict
+> > no no, you can't drop #clock-cells. I wanted to add performance-domains
+> > here as alternative but decided to not as I knew you were working on this.
 > 
-> On Wed, May 24, 2023 at 10:31:28AM +0200, Sascha Hauer wrote:
-> > This is v5 of the series adding perf support to the rockchip DFI driver.
-> > 
-> > A lot has changed in the perf driver since v4. First of all the review
-> > feedback from Robin and Jonathan has been integrated. The perf driver
-> > now not only supports monitoring the total DDR utilization, but also the
-> > individual channels. I also reworked the way the raw 32bit counter
-> > values are summed up to 64bit perf values, so hopefully the code is
-> > easier to follow now.
-> > 
-> > lockdep found out that that locking in the perf driver was broken, so I
-> > reworked that as well. None of the perf hooks allows locking with
-> > mutexes or spinlocks, so in perf it's not possible to enable the DFI
-> > controller when needed. Instead I now unconditionally enable the DFI
-> > controller during probe when perf is enabled.
-> > 
-> > Furthermore the hrtimer I use for reading out the hardware counter
-> > values before they overflow race with perf. Now a seqlock is used to
-> > prevent that.
-> > 
-> > The RK3588 device tree changes for the DFI were not part of v4. As
-> > Vincent Legoll showed interest in testing this series the necessary
-> > device tree changes are now part of this series.
+> Thanks for reviewing!
 > 
-> I tested the series on RK3588 EVB1. The read/write byts looks
-> sensible. Sometimes cycles reads unrealistic values, though:
-> 
->  Performance counter stats for 'system wide':
-> 
-> 18446744070475110400      rockchip_ddr/cycles/
+> The point with the suggested change was to allow any kind of
+> combination of using #clock-cells and/or #power-domain-cells. Honestly
+> I didn't really know how to best express that in the binding, but
+> maybe someone can help me out here?
+>
 
-This goes down to missing initialization of &dfi->last_perf_count, see
-my other mail. Will fix this in the next round.
+Even I don't know exact details, but there are rules like if this
+property is present, some other property can't be there or something
+on the similar lines. I have vague idea/recollection from my previous
+experiments which probably was not needed then and hence I can't just
+point to any examples unless I go and search myself.
 
-Sascha
+> I think enforcing #clock-cells to be used is unnecessary. Making it
+> optional should not break existing DTBs, right?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Correct. That is what I meant, it is either #clock-cells or
+#power-domain-cells
+
+>
+> Moreover, currently it seems to be only Juno that uses "protocol@13"
+> and the "#clock-cells" (at least by looking at the DTSes in-kernel).
+
+Yes only one that has upstream DTS changes, but for sure it is used on
+couple of other platforms. So for we are still far away from deprecate it
+but we can eventually once users of it are ready to use new binding.
+
+> So, I wonder if it's really such a big deal to update the DT bindings
+> for "protocol@13" at this point, but I may not have the complete
+> picture.
+>
+
+Yes it does break compatibility. Yes I know Juno is not a production
+platform, but associating DT with kernel change makes is hard to switch
+to older stable kernel versions without DT change which I really hate as
+I will be wondering which SCMI perf is not working with stable kernel few
+months down the line. So yes, we are not dropping the support for old
+bindings even if it just for Juno(though I am sure it is not the only one).
+I have spent time on such silly things when we were in the process of
+pushing these bindings initially upstream. I prefer not to repeat that.
+
+--
+Regards,
+Sudeep
