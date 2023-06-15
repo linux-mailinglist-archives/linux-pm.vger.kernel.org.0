@@ -2,54 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1ED27323B5
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2747323CC
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbjFOXf7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 19:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56072 "EHLO
+        id S240217AbjFOXq0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 19:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjFOXf6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:35:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF2EB3;
-        Thu, 15 Jun 2023 16:35:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F23F61A74;
-        Thu, 15 Jun 2023 23:35:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC689C433C0;
-        Thu, 15 Jun 2023 23:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686872156;
-        bh=Fvk5Dc9K0rFsG6EAHYFj3OY5iRKxvUDW3ss1RR11yBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mH15AYzP+pzlTa81fcWg4skrONtIm9GVkLZfw26IH0TX44xUAUc0ROJ60Vcw12I1P
-         3/q1yqlwaNnx254o4igPuRwhViIhXZ7l/QHYkKKwbAv4aZxB1cMr/prUS+VtFf+Gzo
-         nG5igMmC1IIwp0pVTCC5/jf6hxJhbAP8ig+AwMW7y1kipwycUIyOCpR0HTjoWQ1Sup
-         CBz0J8BaccwXzC53F6JiCdnjWkPm4TC7w3j5If8pnZYt1DPW7tSDM5qWBiIgB6nZI4
-         oMGyRtLjKP45CJBSb3295Li4zaki16jnM4ex55TvoEiImsnqVSulPYAp4EbqmcdRlA
-         TmRJPSK/HE0mg==
-Date:   Thu, 15 Jun 2023 18:35:53 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] OPP: pstate is only valid for genpd OPP tables
-Message-ID: <lmdbpkttrawedkozfo5exh27jlj3hisulnk4zj6s2mv66yzr6n@zegr4pdzz3pn>
-References: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+        with ESMTP id S240079AbjFOXqX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:46:23 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D532D42
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b4146fbadeso592351fa.0
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686872778; x=1689464778;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nSmSYkeq+QNcZQ7h8FW75deWm/CDvZRtWyO4MTWmeIk=;
+        b=NLfcD8fqHiliXE/BMbuQEW4m9tLQzhH/jJ9uQ7w/z8TkQFHxvlrtS4zaj+RcrTZJyq
+         HtYrwbtrW3SVXth+g3CozCwYakIhmLQ7zeefXedsa/+cahWf5nlgxtPI3iMvtmQRuefz
+         YoIjg4JSp1LRwP2tBDQ9ux1AS4v3FXDBY0K8T4i44bJDAS0DyE3+L++0y1hXKW6v6FzR
+         qJIA7HaurBB9VA1VnvuDPa4putqP4mwYvcxid0W15EIgTuLkW7KcUoCo4vx65Vl+dvIE
+         jVBOzk30J2Q4FuLN+OD7afnOyI75hEGgbZ3OVQ5YVxfAbKhBMWqEJMSEDjQkTEjSx0Sp
+         ++pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686872778; x=1689464778;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nSmSYkeq+QNcZQ7h8FW75deWm/CDvZRtWyO4MTWmeIk=;
+        b=Gb/fiyGnhWbzFLtGUNQMSyDj5vgu7qpRCGZ197mCTHtvC/93zIIhguvEgomldCFRng
+         19e9ui8YC3zoLBM2E3rE7ISbm1R60GYZhG/dmSGgP9QAUTG61KSRlSHcRianrBnJTfav
+         7uRRjHjue9irlgeypdM6PrzybJQIauN2StzIeYi3EJT3AnR0x/g1/s6Oce4+aumuPsQT
+         5vnThrZLZTVQtw8wIGutu5AVfYITWEmgD2/ib2vtro4XEV0WPvlIpcrFMocW0sdjJsEF
+         4JDoisQxVPckcASGYrMZ0tRmbjU+Dk+CI1nFyEh/T2hCFOOy2MHGJzBDRAJXRfyhfFKC
+         9vkQ==
+X-Gm-Message-State: AC+VfDy2oFbouycftR/zqmzvLuIuA/7XDWud6oRQBsmHbNuWvbn0JOFr
+        AjB7Qv+3Zq+enaVCPdB56tLJAA==
+X-Google-Smtp-Source: ACHHUZ4XsUbmUKnRxW2zlp21UO1PTkx/Pup2CEYgq1AcMTbWpRmE3jkIsEUHw5pglRHBXE2EYh1F2Q==
+X-Received: by 2002:a2e:9297:0:b0:2b3:451c:5998 with SMTP id d23-20020a2e9297000000b002b3451c5998mr572190ljh.18.1686872777858;
+        Thu, 15 Jun 2023 16:46:17 -0700 (PDT)
+Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
+        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 16:46:17 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/2] SC7180 BWMONs
+Date:   Fri, 16 Jun 2023 01:46:08 +0200
+Message-Id: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMCii2QC/x2N0QrCMAwAf2Xk2UA7pTp/RYa0WXSBmY5GN2Hs3
+ y0+3sFxGxgXYYNrs0HhRUyyVvCHBmiM+mSUoTK0rj264AO+8yyERmd/cfe0vrIaUtcNiRwFOkW
+ oZYrGmEpUGmurn2mqci78kO9/dev3/Qe5+PtDegAAAA==
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=792;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=kNYhWdb44I3voqaX2T/WN7kLO+5rpettsuRmGA3+XnY=;
+ b=YOtAevNgRb65QMjUw+sro0h2INGn0CtITRqFMUr0KJhjjYB4kMR/MHTnWR5w+RP5f0YyrDM8i
+ uhdGVFwtNpsCeo5ocL1EX9mri6RaYwVD8U6cycloep/preez+9QLS2A
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,38 +89,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 04:07:25PM +0530, Viresh Kumar wrote:
-> It is not very clear right now that the `pstate` field is only valid for
-> genpd OPP tables and not consumer tables. And there is no checking for
-> the same at various places.
-> 
-> Add checks in place to verify that and make it clear to the reader.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/opp/core.c    | 18 ++++++++++++++++--
->  drivers/opp/debugfs.c |  4 +++-
->  drivers/opp/of.c      |  6 ++++++
->  3 files changed, 25 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-[..]
-> @@ -2686,6 +2694,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
->  	int dest_pstate = -EINVAL;
->  	int i;
->  
-> +	/* Both OPP tables must belong to genpds */
-> +	if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
+SC7180 has been using static DDR votes for the longest time. Time to
+switch to BWMON (which accidentally results in up to 50% perf gains in
+glmark2)!
 
-I have a platform_device, with a required-opps and with an associated
-genpd which does not implement set_performance_state(), but its parent
-genpd does.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (2):
+      dt-bindings: interconnect: qcom,bwmon: Document SC7180 BWMONs
+      arm64: dts: qcom: sc7180: Hook up BWMONs
 
-This results in me arriving here with src_table of NULL, and boom...
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |   2 +
+ arch/arm64/boot/dts/qcom/sc7180-lite.dtsi          |  10 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi               | 161 +++++++++++++++------
+ 3 files changed, 126 insertions(+), 47 deletions(-)
+---
+base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
+change-id: 20230616-topic-sc7180_bwmons-c99dbc0c6c4a
 
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Looking at the very next statement in this function, it seems arriving
-here without src_table was valid up until this change.
-
-Regards,
-Bjorn
