@@ -2,89 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38596730E8C
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 07:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6809673109F
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 09:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbjFOFKJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 01:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S243958AbjFOHar (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 03:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243096AbjFOFKA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 01:10:00 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1272697;
-        Wed, 14 Jun 2023 22:09:53 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 7450167373; Thu, 15 Jun 2023 07:09:47 +0200 (CEST)
-Date:   Thu, 15 Jun 2023 07:09:47 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Damien Le Moal <dlemoal@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hannes Reinecke <hare@suse.de>,
-        Joe Breuer <linux-kernel@jmbreuer.net>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Hardening <linux-hardening@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux SCSI <linux-scsi@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: Fwd: Waking up from resume locks up on sr device
-Message-ID: <20230615050947.GA5053@lst.de>
-References: <07d6e2e7-a50a-8cf4-5c5d-200551bd6687@gmail.com> <02e4f87a-80e8-dc5d-0d6e-46939f2c74ac@acm.org> <b2cf6d96-a55a-d444-d22e-e9b3945ba43f@jmbreuer.net> <84f1c51c-86f9-04b3-0cd1-f685ebee7592@kernel.org> <37ed36f0-6f72-115c-85fb-62ef5ad72e76@suse.de> <b0fdf454-b2f7-c273-66f5-efe42fbc2807@kernel.org> <859f0eda-4984-4489-9851-c9f6ec454a88@rowland.harvard.edu> <41b069c7-8723-4507-3e5a-1d1878db9002@kernel.org> <20230615044015.GA4720@lst.de> <9633f1a6-2e33-4a40-3fdb-0c1c4e4cd720@kernel.org>
+        with ESMTP id S244613AbjFOHap (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 03:30:45 -0400
+X-Greylist: delayed 10270 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 00:30:43 PDT
+Received: from mail.sitirkam.com (mail.aurorateknoglobal.com [103.126.10.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5455E69;
+        Thu, 15 Jun 2023 00:30:43 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id 16CDD4E7BE8D;
+        Thu, 15 Jun 2023 08:32:17 +0700 (WIB)
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Ese7-pAPUxzt; Thu, 15 Jun 2023 08:32:16 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.sitirkam.com (Postfix) with ESMTP id 29E3C4E7BA8C;
+        Thu, 15 Jun 2023 08:32:05 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.sitirkam.com 29E3C4E7BA8C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sitirkam.com;
+        s=B8AB377C-ED3B-11EA-8736-9248CAEF674E; t=1686792725;
+        bh=q7vDHy+gLAr4GKZUDI+hjt8I93kvW09nNmGJORUTyfg=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=Xb++C53IX6it0NRdJ6KCI6lXfhAKCq8P8Ks4ohctCBfc2WvkzaYUrDEbpIjtMfZM6
+         gwATCPxfO+XYuxJPNqaezrRwlrrZFnDgM3A1BLcJqYJVx+8XBBtXz2vL5vF0AE1l6G
+         guIKrbBV8tBP0pQEYkK8JYl/PGU1zWqrdVasxD98/swdJ2VGyaUPe0DtY1e4zV7gmW
+         3QR7PzCVRhGpRjm4sUM22RfpoasHalob+LUPqOlS+Wl/vP12LSG1XoiSThFLP72YM5
+         GLpk+2HNVmRN72yYrA3XTeCiRT10hIqpfMlnd6eUpWmOZ5Q/kW2WB+mXltuqM9dtz0
+         9/VdXlfQ6bf9Q==
+X-Virus-Scanned: amavisd-new at mail.sitirkam.com
+Received: from mail.sitirkam.com ([127.0.0.1])
+        by localhost (mail.sitirkam.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id EtD8e92cZ5a5; Thu, 15 Jun 2023 08:32:04 +0700 (WIB)
+Received: from [185.169.4.111] (unknown [185.169.4.111])
+        by mail.sitirkam.com (Postfix) with ESMTPSA id 21E5C4E7BA81;
+        Thu, 15 Jun 2023 08:31:55 +0700 (WIB)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9633f1a6-2e33-4a40-3fdb-0c1c4e4cd720@kernel.org>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <admin@sitirkam.com>
+From:   "Maria-Elisabeth Schaeffler" <admin@sitirkam.com>
+Date:   Wed, 14 Jun 2023 18:34:03 -0700
+Reply-To: schaefflermariaelisabeth1941@gmail.com
+Message-Id: <20230615013156.21E5C4E7BA81@mail.sitirkam.com>
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,NIXSPAM_IXHASH,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.0 NIXSPAM_IXHASH http://www.nixspam.org/
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [schaefflermariaelisabeth1941[at]gmail.com]
+        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 01:57:37PM +0900, Damien Le Moal wrote:
-> > No.  scsi_device_get just increments a reference count, and thus
-> > prevents ->release from beeing called.  ->remove is not in any way
-> > affected by the refcount.
-> 
-> What ->remove cb are you talking about ? The gendev one ?
+Your email account has been selected for a donation of =E2=82=AC1,700,000. =
+Please contact me for more information.
 
-The one for the device locked.
-
-> I am trying to understand why the use of device_lock() helps in any way given
-> that this is not used by any other functions in scsi. And given that
-
-The device model locks the device before calling ->remove.
-
-> scsi_rescan_device() should always be called with a ref on the scsi device (and
-> so on the gendev as well) held, why would this function be racy with device remove ?
-
-Because ->remove ould otherwise be called at the same time as ->rescan.
-
-> Note that I did find a couple of places where scsi_rescan_device() seems to not
-> be called with a reference to the scsi dev held, e.g.  store_rescan_field() and
-> store_state_field().
-
-You need both a valid reference and ensure ->remove is not called at the
-same time.
+Mrs Maria Elisabeth Schaeffler
+CEO SCHAEFFLER.
