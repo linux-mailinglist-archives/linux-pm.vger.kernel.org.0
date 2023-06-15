@@ -2,56 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA68A7316C7
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 13:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C65A7317EC
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 13:55:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343865AbjFOLhC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 07:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52296 "EHLO
+        id S1344719AbjFOLzr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 07:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343839AbjFOLhB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 07:37:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274E2212C;
-        Thu, 15 Jun 2023 04:37:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFB1760FBB;
-        Thu, 15 Jun 2023 11:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D8DBC433CA;
-        Thu, 15 Jun 2023 11:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686829020;
-        bh=TSMZG/xuzOy0gtSH82t4A/sO7mRB9P1pq+TZ65ZAxbE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K4J3Cl8jdpWTTsZPLZhJiTF13tjKwwnhWJxQ/ygPimWEnLtxXNPjak3s6Q8W1BrSs
-         rSV8ZFeTbx4+zNp8Fd/k5DjsAJSDvf9GaitNNLGWW402+Nol8ryC4OWAh+FWojn6EH
-         X7xtUDbGC2rbwuoZ3V0MxiYSjvNphkSTae0xIPpGOhX8I1GjCxVm8ahFdWlMVkwuFS
-         8WwCyQmSg+IzMeCcgiPdtQreWwu1VVFfO8rUd/sP+yo16fn8GyKw4FU4khb9TIus7f
-         3Ywd1VdxRhELFWu9Ij9sB7QlQpCypBAnMRY7oss6Xc6Eyeok8t24rFT4fGtQe4AbSb
-         KdlcahqoBrlxg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 03/37] power: supply: bq27xxx: Use mod_delayed_work() instead of cancel() + schedule()
-Date:   Thu, 15 Jun 2023 07:36:20 -0400
-Message-Id: <20230615113654.648702-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230615113654.648702-1-sashal@kernel.org>
-References: <20230615113654.648702-1-sashal@kernel.org>
+        with ESMTP id S1344934AbjFOLz2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 07:55:28 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E734D4C22
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 04:50:08 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f8d61cb36cso17604845e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 04:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686829731; x=1689421731;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ru2kY8wr09+4ygjN8vpjUnmo2WcmrcVqvM+LC/LqClo=;
+        b=RJs4tRfh991y8kou8camFaZ8Te5e7Ipcz8pfRaCmjrIxrJDwRazj4F1lQUQH+LR7p/
+         Cdat8ROquOeFdYXojuI2CIqdM32JaicSA4kfXkDfziwogTDA9rh0BLZsKidMdMzcERdv
+         DN/7aLCTgeDxKNEhUNME0Qcc4Ukuf4X8Z1LWBeIFXEFSGKyJTNcliqc0o2VFDacR84GH
+         jtemaLtSC3JNpJK13/FfCDJMRkpyYm8yTW7Auq1sZFnSRihZpWwOskktwPel6qCAaKvO
+         c/XOszDSztEywNwMGUB1oRUGLujbS2xXax0AMGDAgYv9ZrRkXG7JWnAUGDkHDQBMpf7E
+         KevA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686829731; x=1689421731;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ru2kY8wr09+4ygjN8vpjUnmo2WcmrcVqvM+LC/LqClo=;
+        b=C3d9JJf2N6xSVhw43FTt95aElLtp664Y+Ki1tfaN/ONBwHYGk8EqaZJv0y3c6y2j+k
+         LxL6AQlAL9zq+hA7SmCojn8M3m+Iw/0KpVImADmr5DJ2/scWWsz5OHuns8gXeWaK0ni/
+         w5ZTlxnJlI0DJFgj0Z++70Gtjk1GZLi2d610OQ8gIp8fK0v/vkPVQgKUT2WSnNYiNPMV
+         LDdbzotdqQydzkmn9XEqidaoup9GiyjKwFyksA0V7WsQarzmQecqZcLv04gu3CIk+0jS
+         V61i7G9MvhDJpA4GusVk1u9Ilu4wbvX9DUpnAFl19TZMMzUe2Mr3Vc6KANvCZmSGJ7RH
+         JnPw==
+X-Gm-Message-State: AC+VfDy/5i4o0j6ftj2/L20jBF2xLK1Es9cIOaukXzqNs5s6hjcycCGp
+        9rb4/jKAx3zm8wr/XwsxImTrHax8GWk6QkHOaYY=
+X-Google-Smtp-Source: ACHHUZ6V61eGA9Jko2/8as5sLv4OlzdY23zKd022ouq6CVLScfCWucl7Nj0Cufly2/p7KJ8VPw/BEg==
+X-Received: by 2002:a7b:c391:0:b0:3f6:e42:8f85 with SMTP id s17-20020a7bc391000000b003f60e428f85mr14647676wmj.37.1686829730963;
+        Thu, 15 Jun 2023 04:48:50 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:331d:4ff0:1778:3425? ([2a05:6e02:1041:c10:331d:4ff0:1778:3425])
+        by smtp.googlemail.com with ESMTPSA id y10-20020a1c4b0a000000b003f5ffba9ae1sm20395228wma.24.2023.06.15.04.48.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jun 2023 04:48:50 -0700 (PDT)
+Message-ID: <3e397cf5-0ca3-fa10-b5d8-bbc7b1038a37@linaro.org>
+Date:   Thu, 15 Jun 2023 13:48:49 +0200
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.3.8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
+To:     Peng Fan <peng.fan@oss.nxp.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Peng Fan <peng.fan@nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alice Guo <alice.guo@nxp.com>
+References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
+ <507b5daa-73e7-8d21-4f73-c56f88c6bf77@linaro.org>
+ <2e57d14a-214e-c3e0-e011-e804ce8c9b39@oss.nxp.com>
+ <4844567.31r3eYUQgx@pliszka>
+ <3518a2e7-806d-ad46-a439-ff4a57ed8158@oss.nxp.com>
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3518a2e7-806d-ad46-a439-ff4a57ed8158@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +92,145 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+On 15/06/2023 06:04, Peng Fan wrote:
+> 
+> 
+> On 6/15/2023 10:53 AM, Sebastian Krzyszkowiak wrote:
+>> Caution: This is an external email. Please take care when clicking 
+>> links or opening attachments. When in doubt, report the message using 
+>> the 'Report this email' button
+>>
+>>
+>> On czwartek, 15 czerwca 2023 04:29:01 CEST Peng Fan wrote:
+>>> On 6/8/2023 3:10 AM, Daniel Lezcano wrote:
+>>>>
+>>>> [...]
+>>>>
+>>>> Ok, I misunderstood. I thought that was for failing registered thermal
+>>>> zone.
+>>>>
+>>>> Would enabling the site in ops->change_mode do the trick ?
+>>>
+>>> No. ops->change_mode not able to do the trick.
+>>>
+>>> devm_thermal_of_zone_register->thermal_zone_device_enable
+>>> ->thermal_zone_device_set_mode->__thermal_zone_device_update.part.0
+>>> ->__thermal_zone_get_temp
+>>>
+>>> The thermal_zone_device_set_mode will call change_mode, if return
+>>> fail here, the thermal zone will fail to be registered.
+>>>
+>>> Thanks,
+>>> Peng.
+>>
+>> I think the idea is not to return a failure in ops->change_mode, but 
+>> to move
+>> enabling the site in REGS_TMR/REGS_V2_TMSR register from
+>> qoriq_tmu_register_tmu_zone to ops->change_mode. 
+> 
+> But qoriq_tmu_register_tmu_zone will finally call ops->change_mode.
+> 
+> And it is per zone, so we not able to enable TMR_ME here.
+> 
+> This way the site will be
+>> enabled only for actually existing thermal zones, since those not 
+>> described in
+>> the device tree won't reach thermal_zone_device_enable.
+> 
+> No. The TMR_ME is the gate for all sites.
 
-[ Upstream commit 59dddea9879713423c7b2ade43c423bb71e0d216 ]
+What about the following change on top of your series:
 
-Use mod_delayed_work() instead of separate cancel_delayed_work_sync() +
-schedule_delayed_work() calls.
+diff --git a/drivers/thermal/qoriq_thermal.c 
+b/drivers/thermal/qoriq_thermal.c
+index c710449b0c50..ecf88bf13762 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -107,8 +107,6 @@ static int tmu_get_temp(struct thermal_zone_device 
+*tz, int *temp)
+  	 */
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/supply/bq27xxx_battery.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+  	regmap_read(qdata->regmap, REGS_TMR, &val);
+-	if (!(val & TMR_ME))
+-		return -EAGAIN;
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 5ff6f44fd47b2..1cc3c4cff8ca4 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1083,10 +1083,8 @@ static int poll_interval_param_set(const char *val, const struct kernel_param *k
- 		return ret;
- 
- 	mutex_lock(&bq27xxx_list_lock);
--	list_for_each_entry(di, &bq27xxx_battery_devices, list) {
--		cancel_delayed_work_sync(&di->work);
--		schedule_delayed_work(&di->work, 0);
+  	if (regmap_read_poll_timeout(qdata->regmap,
+  				     REGS_TRITSR(qsensor->id),
+@@ -131,14 +129,40 @@ static int tmu_get_temp(struct thermal_zone_device 
+*tz, int *temp)
+  	return 0;
+  }
+
++static int qoriq_tmu_change_mode(struct thermal_zone_device *tz,
++				 enum thermal_device_mode mode)
++{
++	struct qoriq_sensor *qsensor = thermal_zone_device_priv(tz);
++	struct qoriq_tmu_data *qdata = qoriq_sensor_to_data(qsensor);
++	unsigned int site;
++	unsigned int value;
++	unsigned int mask;
++
++	if (qdata->ver == TMU_VER1) {
++		site = BIT(15 - qsensor->id);
++		mask = TMR_ME | TMR_ALPF | site;
++		value = mode == THERMAL_DEVICE_ENABLED ? mask : mask & ~site;
++		regmap_update_bits(qdata->regmap, REGS_TMR, mask, value);
++	} else {
++		site = BIT(qsensor->id);
++		mask = TMR_ME | TMR_ALPF_V2 | site;
++		value = mode == THERMAL_DEVICE_ENABLED ? mask : mask & ~site;
++		regmap_update_bits(qdata->regmap, REGS_V2_TMSR, mask, value);
++		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
++	}
++
++	return 0;
++}
++
+  static const struct thermal_zone_device_ops tmu_tz_ops = {
+  	.get_temp = tmu_get_temp,
++	.change_mode = qoriq_tmu_change_mode,
+  };
+
+  static int qoriq_tmu_register_tmu_zone(struct device *dev,
+  				       struct qoriq_tmu_data *qdata)
+  {
+-	int id, sites = 0;
++	int id;
+
+  	for (id = 0; id < SITES_MAX; id++) {
+  		struct thermal_zone_device *tzd;
+@@ -158,25 +182,11 @@ static int qoriq_tmu_register_tmu_zone(struct 
+device *dev,
+  			return ret;
+  		}
+
+-		if (qdata->ver == TMU_VER1)
+-			sites |= 0x1 << (15 - id);
+-		else
+-			sites |= 0x1 << id;
+-
+  		if (devm_thermal_add_hwmon_sysfs(dev, tzd))
+  			dev_warn(dev,
+  				 "Failed to add hwmon sysfs attributes\n");
+  	}
+
+-	if (sites) {
+-		if (qdata->ver == TMU_VER1) {
+-			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF | sites);
+-		} else {
+-			regmap_write(qdata->regmap, REGS_V2_TMSR, sites);
+-			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
+-		}
 -	}
-+	list_for_each_entry(di, &bq27xxx_battery_devices, list)
-+		mod_delayed_work(system_wq, &di->work, 0);
- 	mutex_unlock(&bq27xxx_list_lock);
- 
- 	return ret;
+-
+  	return 0;
+  }
+
+
 -- 
-2.39.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
