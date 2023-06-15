@@ -2,134 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0783731F4C
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 19:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4FD731F72
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 19:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjFORh2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 13:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48072 "EHLO
+        id S238152AbjFORnL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 13:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjFORh1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 13:37:27 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFC22711
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 10:37:25 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f642a24555so11099441e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 10:37:25 -0700 (PDT)
+        with ESMTP id S235826AbjFORnJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 13:43:09 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3A0B1BDB
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 10:43:03 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b512309d18so10801395ad.3
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 10:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686850643; x=1689442643;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sS/MT18TbbX2jMpeAwwA0bIb+s3HEO/Echw+aOl6/GU=;
-        b=B8mvzhf5WuhVLMVRcYuGUdxnA8Ti5Zs8skswNJ4NaD7+LQGIONc31ByGCSjGiQ9hfE
-         wgjCbIIyb/KExyzgjkkVdiv3XZ3DzGRyTuDIPAGSYJRO7kSgxRzgfdzIx4eMg+FsrBnC
-         pGnT4R4qlqPJ/PYbgHsbquU+PZz7f3te2xiNOlwOzR8mzkbbUaIUkrqdhDl1LsLv+0UC
-         MUlx/7H83JDlPDytp20YRpeFRUs98jRdAK96EU+5HkT5bbodsPT+WbnPK+amgdY/F4JQ
-         AtXT/AsqvkiI9f6KyxEOQJXmzmJFVjGL1JHIiAsTbK8QZPf06/zNcaTRL/jLOwIHhveO
-         sNTw==
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1686850983; x=1689442983;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=qLpeAehfQ+AAX0YVMvdMifpMuL79tb5eQODiRXIAv7M=;
+        b=luXcQvxFv0IxePi5yO7PbjpMgMFXO4u3bBbyXnzjKJid9TI93K/fTSn79PidBzoc0J
+         2cxMU7Unsp0y+dBQuYIR7PD3GTen6CsmKyYkgtjr7zPVFQryD4pNkyumk4Ea1Jxn6DHY
+         ZOZ3+kv6NkRGZneTll/4Iu+MOSskxBPnYghQX0MGuWkRcr5E5nwRO2k4RH6/+2kZORhx
+         xLIV4jiAFLDmFH7X3Z+3Cr2bP0an6J1IO5HWq1K0sDPlm1pP/BlzHqEXU4m+XL73xH5L
+         L2yx19t9MDC/xfrCj/jw7AsTxOZTiOajNLrhvPp/OuSuynr81DAXhUnHlD0CbtoRekFa
+         Wklg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850643; x=1689442643;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sS/MT18TbbX2jMpeAwwA0bIb+s3HEO/Echw+aOl6/GU=;
-        b=B8ZHEt05zHQGewJ2BxO8wP3s9Scie9ETAhyzHdwQl1RzPLiIO4Mg+uuUb2Ynbf6D7w
-         d+QLk8rLdfqa0i+blH/EdyDNiO3yzhTN6WZZ/vVskeFa6mpY/wXKTLQhS302cCaCPB6u
-         egq/+Az17h/+pZKfrhOPpnrP9AtUeVw9+UhNIhYDfRpn0dUNwqfkgbmhOJ5umMv+ae0c
-         jQEJXAuQkpNmMS17Ze2UGpS/QJgI4YnNc4zuvdQfqnS7kZXQYPRFtqroS1ptPQVUdLDY
-         W+VzqWfUwcM78FuxaSSWpShQLDjex/zaZ7joCVE84A/Vtu02LsxpivHpaHe4oyGE0QFH
-         DyKg==
-X-Gm-Message-State: AC+VfDx2T72FJQE8Gseef+sQ7CCHG6lxf8Nsk8oz38ele3YE+fV2SypV
-        wGgo0Vt4fw4SgPdcpGRhlf+NIg==
-X-Google-Smtp-Source: ACHHUZ4mhfg3B13M94QZSA5qHf8c5YQMAaQuggxJYcxAikF/BlUuKxfN4HG+SuiCSv61fgVkxwkFnQ==
-X-Received: by 2002:ac2:5b1b:0:b0:4f7:69ca:4e71 with SMTP id v27-20020ac25b1b000000b004f769ca4e71mr3957509lfn.34.1686850643464;
-        Thu, 15 Jun 2023 10:37:23 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac244ba000000b004ec8b638115sm2640405lfm.193.2023.06.15.10.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 10:37:23 -0700 (PDT)
-Message-ID: <278f3baa-a760-18cf-1a43-2814793af987@linaro.org>
-Date:   Thu, 15 Jun 2023 19:37:21 +0200
+        d=1e100.net; s=20221208; t=1686850983; x=1689442983;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qLpeAehfQ+AAX0YVMvdMifpMuL79tb5eQODiRXIAv7M=;
+        b=Nk91lw3huxUk09eKottQ8Tic1yKhx16s5EYAqBTv17ud2ASMg3MWneNqMtzoaQ8/+B
+         BKVg2C6vZU/Dxv4TiJWU1PVTP8XetCohSFneE0OCWpcVQ6uHsjxdTxXmLR0qvUc6JLRp
+         s1787bdJThqBkvPAxzUKHSpXDKXJItol/OicfeG5wnvb6cEHZ/6sObi30pZph/gcv9kw
+         JjLiJo+0TqxU/zHGhLV6vSjF+e/OYtsI+a24GlaS6GZczpfEskRtnv/keTa8M7dHhtvy
+         30QJOegPCbhJx0cp/EIW/ZlQ5wuo+XrmUUuWBNvI9ljfgnA0s2nElh69CEgxpVeWZ2Bs
+         sQhQ==
+X-Gm-Message-State: AC+VfDxYBvo+jfj9B7m/ZzVhOZ3t9lVv29xXMUKYl/zIj8vkKKTR8wiX
+        RoqrmjcUS/p7EE89UuhZ2ljs5w==
+X-Google-Smtp-Source: ACHHUZ6+t4m3D7z81hz4yONkBxWRhhunOwz+vFt0otJm6waUsiGgPE150gl0yxZAHQdf8yHn0GATlg==
+X-Received: by 2002:a17:902:a983:b0:1b3:e6ba:1575 with SMTP id bh3-20020a170902a98300b001b3e6ba1575mr6903948plb.16.1686850983389;
+        Thu, 15 Jun 2023 10:43:03 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id c16-20020a170903235000b001b0395c3ffasm14383100plh.180.2023.06.15.10.43.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 10:43:02 -0700 (PDT)
+Message-ID: <648b4da6.170a0220.1e46f.db62@mx.google.com>
+Date:   Thu, 15 Jun 2023 10:43:02 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v6 00/22] Restructure RPM SMD ICC
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
- <0764b5fda92acb995ffbd05c4b3d2b2f.sboyd@kernel.org>
- <8568eead-90f6-ce15-d483-4d72dbab6294@linaro.org>
- <f526046568e6bbc8dc567109e6911f65.sboyd@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <f526046568e6bbc8dc567109e6911f65.sboyd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.4-rc6-65-g06c8e224e0039
+Subject: pm/testing baseline: 59 runs,
+ 2 regressions (v6.4-rc6-65-g06c8e224e0039)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15.06.2023 19:35, Stephen Boyd wrote:
-> Quoting Konrad Dybcio (2023-06-15 00:52:07)
->> On 15.06.2023 02:49, Stephen Boyd wrote:
->>> Quoting Konrad Dybcio (2023-06-14 11:04:19)
->>>> This series reshuffles things around, moving the management of SMD RPM
->>>> bus clocks to the interconnect framework where they belong. This helps
->>>> us solve a couple of issues:
->>>>
->>>> 1. We can work towards unused clk cleanup of RPMCC without worrying
->>>>    about it killing some NoC bus, resulting in the SoC dying.
->>>>    Deasserting actually unused RPM clocks (among other things) will
->>>>    let us achieve "true SoC-wide power collapse states", also known as
->>>>    VDD_LOW and VDD_MIN.
->>>>
->>>> 2. We no longer have to keep tons of quirky bus clock ifs in the icc
->>>>    driver. You either have a RPM clock and call "rpm set rate" or you
->>>>    have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
->>>>
->>>> 3. There's less overhead - instead of going through layers and layers of
->>>>    the CCF, ratesetting comes down to calling max() and sending a single
->>>>    RPM message. ICC is very very dynamic so that's a big plus.
->>>>
->>>> The clocks still need to be vaguely described in the clk-smd-rpm driver,
->>>> as it gives them an initial kickoff, before actually telling RPM to
->>>> enable DVFS scaling.  After RPM receives that command, all clocks that
->>>> have not been assigned a rate are considered unused and are shut down
->>>> in hardware, leading to the same issue as described in point 1.
->>>
->>> Why can't we move the enable of DVFS scaling call to the interconnect
->>> driver as well? We want the clk driver to not reference the interconnect
->>> resources at all.
->> That would result in no rpmcc ratesetting on platforms without a functional
->> interconnect driver. The DVFS call concerns both bus and !bus clocks.
->>
-> 
-> That's the intent. Probe the interconnect driver to get bus clk rate
-> setting.
-> 
-> What are the !bus clocks managed by RPM?
-Depending on the platform, that includes IPA, GPU, OCMEM, RF.. everything
-that's not been separated out in patch 18.
+pm/testing baseline: 59 runs, 2 regressions (v6.4-rc6-65-g06c8e224e0039)
 
-Konrad
+Regressions Summary
+-------------------
+
+platform                     | arch  | lab             | compiler | defconf=
+ig          | regressions
+-----------------------------+-------+-----------------+----------+--------=
+------------+------------
+imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig | 1          =
+
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
+ig          | 1          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.4-rc6=
+-65-g06c8e224e0039/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.4-rc6-65-g06c8e224e0039
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      06c8e224e003919993b1ea1c7ef6fd648725b004 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig          | regressions
+-----------------------------+-------+-----------------+----------+--------=
+------------+------------
+imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
+7_defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/648b444bdc5f9d905430616b
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc6-65-g06c8e2=
+24e0039/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
+xt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc6-65-g06c8e2=
+24e0039/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
+tml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230609.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/648b444bdc5f9d9054306170
+        failing since 138 days (last pass: v6.1-rc8-156-g0a9e32afe717, firs=
+t fail: acpi-6.2-rc6-146-g628c61874ffd)
+
+    2023-06-15T17:02:44.909964  + set +x
+    2023-06-15T17:02:44.910141  [   13.162086] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+978695_1.5.2.3.1>
+    2023-06-15T17:02:45.017720  / # #
+    2023-06-15T17:02:45.119411  export SHELL=3D/bin/sh
+    2023-06-15T17:02:45.119836  #
+    2023-06-15T17:02:45.221098  / # export SHELL=3D/bin/sh. /lava-978695/en=
+vironment
+    2023-06-15T17:02:45.221555  =
+
+    2023-06-15T17:02:45.322866  / # . /lava-978695/environment/lava-978695/=
+bin/lava-test-runner /lava-978695/1
+    2023-06-15T17:02:45.323583  =
+
+    2023-06-15T17:02:45.326959  / # /lava-978695/bin/lava-test-runner /lava=
+-978695/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig          | regressions
+-----------------------------+-------+-----------------+----------+--------=
+------------+------------
+sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
+ig          | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/648b4516dad72fd7b1306157
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc6-65-g06c8e2=
+24e0039/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
+-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc6-65-g06c8e2=
+24e0039/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
+-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230609.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/648b4516dad72fd7b1306=
+158
+        failing since 58 days (last pass: v6.3-rc6-135-g5235219c59f8, first=
+ fail: v6.3-rc7-153-gbc538c8be4bd) =
+
+ =20
