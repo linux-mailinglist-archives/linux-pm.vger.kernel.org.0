@@ -2,160 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE11C732041
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 21:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76553732049
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 21:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjFOTFK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 15:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S229927AbjFOTRU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 15:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjFOTFJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 15:05:09 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0B42137;
-        Thu, 15 Jun 2023 12:05:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZw+xuzYpIV+7yKF0aAYMNuTKTjyaKSfZJTDbSlCjtsKEyzD8v290psPdCCmdjrcbUNVNVdIAbHOPD0OYgALhAdJ73/72Q9UDEPXI4vXDWtd88Y5+RqnSz97KXDRUsn1E+hIm4P2cHoAPYVXY4QahGuVPkGgKzO3FAlSsYd1XvXmgzuUyIHb2FHMM5f06D4AsIg4D6W14/f1+GKKhx7Zx4BIQkrsDFBNzvu5awstY0VaGSenVY1kgvFZM9zyA0/CjTbTip+1QwbOa/frN1Dvw5t/4898Y5YqUMXqaI5qcLlOFy8+3hyENaOhcwNsLmdyo9nlhFXj54Bp5n5ZrtYDJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/SIHScrXhKrZeiy/U3K8olxZKan2QHj7mQffe37XYdo=;
- b=QjuXEOSfsV8ZFCA/O2Lw8gkleVh7nHFWdM7bby2Uck9WZgOZ5qnlV0q6cR5kIlN+4pJ+8MO6ChCykp+0BB/AqLThk7wXBY/+GaY4jaiAeGk35MxQKb80u5gse2zOhyZ3TXpm/BbiABiozg1qZh0SUxmyYJq2cDOTnvn2zfCKnZGqrrHas95ajWzOFS8RHo2h6fx03AQxRAUomhMgCgVdwH/II66kl1sHIqTSZ6U8mq8u9ah5Ngsd4u5ktZLLwaGKmAHlw2TIZJKunQR+Vp7YcyKQhn70WvKESMeyc+TC/jcVy2LbninP/TVMw8Iz6UsdTTNB2bO1wf1iXl7hMtcs6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/SIHScrXhKrZeiy/U3K8olxZKan2QHj7mQffe37XYdo=;
- b=AESyWivlQmczdCRNy1rbNT4Em6/qAS4Uhp3FTmq3P4lla/QtillGIKTZBcXKkD/M7oZVMDb3vBjVRu9V4vVRUcRDHNFGtBamdmPT/6g4Fx3xVX5eK65Nndq6MsN9c3LG3Pdd6TkiTvYZAGIWOcafwuykkdbqDrXWOSmFp5bfqhc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by PH7PR12MB7332.namprd12.prod.outlook.com (2603:10b6:510:20f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.37; Thu, 15 Jun
- 2023 19:05:05 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::aeb:7ad3:2f4a:f218]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::aeb:7ad3:2f4a:f218%4]) with mapi id 15.20.6477.028; Thu, 15 Jun 2023
- 19:05:04 +0000
-Date:   Fri, 16 Jun 2023 00:34:51 +0530
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     ray.huang@amd.com, viresh.kumar@linaro.org, trenn@suse.com,
-        shuah@kernel.org, gautham.shenoy@amd.com,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/6] amd-pstate: Make amd-pstate epp driver name
- hyphenated
-Message-ID: <ZItg07DCRiUet+mj@BLR-5CG13462PL.amd.com>
-References: <20230612113615.205353-1-wyes.karny@amd.com>
- <20230612113615.205353-2-wyes.karny@amd.com>
- <CAJZ5v0gfqGj9X=3bdf6X4HqQDxg+gCJN10DXLruYD5p3kZ59Uw@mail.gmail.com>
- <ZItQmjQHe/I9CXJh@BLR-5CG13462PL.amd.com>
- <CAJZ5v0iKokaEo6ANPO1cHUzM2UL3guf3WcWoVbRH0iNo8D_kDQ@mail.gmail.com>
+        with ESMTP id S229503AbjFOTRS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 15:17:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F384E2949;
+        Thu, 15 Jun 2023 12:17:16 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 759EC6606F6E;
+        Thu, 15 Jun 2023 20:17:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1686856634;
+        bh=9cTy5OERyS6fSukY4Y7e/rJNoBkgA7xxcx6sGhsLmvw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BLORdI1jvMSd1l9WTLUIXNOfllE+7dt7phxDZ4YMYAAkCgDXB5RDYvTymg2KYXPQK
+         JA95UWbC6wUGDyYQ/K0rFepR1V6jHIBuCzJUkn3bMhDwSLlAuk3CUluFaYfQmCT+UB
+         In3zvXANJWAXNCmwm+9meZM+pxge9KPKpLDTU343P37pj47P0vKtgV7AfpYIGzaFhm
+         FjXLUZER/Xxd+KFTWsyC6KV7cQfpWchW+cdfcPXiWEHhjWSQaoyyMCLhonvJE3MsnI
+         XkZl4XSwOC+40bozt9+EYB0ST/qA7f48WN8G95pF+evobp2swipBXCWazZpyyx9vSx
+         vMwGmsfZjq0CQ==
+Date:   Thu, 15 Jun 2023 15:17:07 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Bernhard =?utf-8?Q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
+        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
+Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
+Message-ID: <2206a438-8187-4b17-a96c-3affc9552c05@notapiano>
+References: <20230530195132.2286163-1-bero@baylibre.com>
+ <CAGXv+5EVfgEBDm=7MmQ=OsP322KmE23PwycJ-0LjU+3dEZygUQ@mail.gmail.com>
+ <572f5a88-8c2e-4324-b477-836a5024ec67@notapiano>
+ <59c7c90c-50f2-5a77-af12-b266c6e6e0b1@linaro.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iKokaEo6ANPO1cHUzM2UL3guf3WcWoVbRH0iNo8D_kDQ@mail.gmail.com>
-X-ClientProxiedBy: PN2PR01CA0103.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:27::18) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|PH7PR12MB7332:EE_
-X-MS-Office365-Filtering-Correlation-Id: 571b516d-8c02-4640-962e-08db6dd36d76
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1d+x1LhOSzX/Nn6X5q8SMNDdekmUNAgiJr2RBkPlhYSg83k0pdUVw2WgQ42V5cwFHWI68EHA6Bog2+Q+80RGSX5izOiEnSW2UiVD41b0am/XlcbugSz7MHE1j4eviWV9+ekGmjTSidYFUv00Kw2icYaVYC5561MaMkZzRUyJsNRiTh8Zih+L8ShoctE5kb7jpHlYrcYmELMH6YCTEfXJ1ewIDW0ZrEMv8NTdAk4BjWy1hfbo1HFrO+5vHf1XyPUN1zNy6EcfB5v51PdNbAt3MEG7FKSOEyiqonugBlYy0667EamAT5T6d7r2jCcUxjVl/FjGDRDbp6doaR1EW7XmIVXY0mU3VnpEho9VtU2I0RBiLL/s6DSB7+DFYOvx0m6IxwNcBlFfJlrDoUk7Fu1XSdr0VHKO9XmhW7sxPg3cZnjcEtFX3DHqXspiU59wdcdHGu6W4fPY7yd0NhfRkwAu1Q5eGV/TSSABLwZAFfQP0gtrxRubiV0w878M1EftQygxtQvJ2+J+wVPGQlaUBrMDyFc8EVxr4Tae2uJa2fsXG6TyQ4yAe3jWZMDBfVGSsSYaHpIjj3rSHKyc7b797MrJjHsLmz9d1lKstd4GGe0GXQc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199021)(86362001)(186003)(38100700002)(53546011)(26005)(6506007)(6512007)(478600001)(5660300002)(6666004)(8936002)(8676002)(6486002)(44832011)(2906002)(316002)(6916009)(4326008)(66476007)(66946007)(66556008)(41300700001)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dzR3OEU2Q2Qwa1JTR1hWU3JjVkd3VEo2YXRjU3RPSU1QOXZHV1BDZXhrT1Z3?=
- =?utf-8?B?SU5PTFIrSCtvM2pKVzJoaUdIRzBDZ2t6YjBKK0RvZWJzTWJQMnd4VkR2blQz?=
- =?utf-8?B?WGRPakRrK1pNc3ZqNmlpakI1WlZHODBDRDhrS0pSZDBRM3dDUGFBZzlVWS82?=
- =?utf-8?B?WTZMY1FxVWtzTWFNSEw5OFpSeUs5dG9Bdnp6QnNrTjhhZVVEbkdPRkFaVWRt?=
- =?utf-8?B?UGJhQ1BrODA5aC9VYVU1ZkxGMTlad2NWVkRpZFN2MDNiRWd0WVJZVGFsdC8z?=
- =?utf-8?B?L2FUajlwdUUxOGg0M1RERENEN2kyS2d4MksySDQvZ04zRTJmNXdTS21naTNN?=
- =?utf-8?B?YW1UUDJ2cHpueHRqN3dVRGNQZ1UzVkdZRnBBR0NoYW5rV3g3V1dHd2crT1Ny?=
- =?utf-8?B?cDFjTXQzdGsyUmlyb1lMYXpDbVd2Z2VlTjJpaFRSajgvc2RCc3hPdi9vM05S?=
- =?utf-8?B?MlZGWTd2dEpkbWpHZHZoVmYwWW1PNmNzbFNKaWk0T2NoUFNDS0N4eng4cFNO?=
- =?utf-8?B?MDF3Q29qajBmUDBTM0pCQ0wvU0F2SnovenEySjhQUzBONFhETE1DWTVHd3JQ?=
- =?utf-8?B?M3VmV3BuRVd2RHUrQ2pwdjJGYXYzeGxxeWRsMkE4WTg1MHNJa0ZUcExRR1F1?=
- =?utf-8?B?UkVBaktydWdISjdmNFA4cE5Mb0ZML05uMVgvaDRqT1k5U00yNDNnbzhaN3NQ?=
- =?utf-8?B?ZUhoam11VzVHcVA4YXV5K1JWTXp2TnM4V0hxRDE1VlhyTkpHVmhMVnZ3Rjdk?=
- =?utf-8?B?VFA4bWdHL1Z3ZlVzanJzaFVpaFpJbkZlWEVMcld0L3phRVVWWDZJdjJEMytn?=
- =?utf-8?B?V3FFTWtWeFV4V0YyRzFMYmxobEtnWjdla0EvWkM0RlF2VmpOSTk0Vi9wZFhF?=
- =?utf-8?B?dUQrVnExZUJHSWl0OGMxUXo4bzc3Z09UZnJqTkxCYUlueEZYdGlUTXY2YlBE?=
- =?utf-8?B?ampYN0hRcE9ubVVpU2ovMmNsNUZHY0JhUlE3dzlWWlg2VXFZUFkrRHhBaGRO?=
- =?utf-8?B?RWs0TTBHblNoYkJiSHAxNm9GVHJkMHdCVUtzS0wraHJ6V1NyaHpLTDdFeHpC?=
- =?utf-8?B?Sy93Wkx1OVJJVHJjNE4rM0YyWU16bnhaQnAyMGVyWTZXVEVPVnR5OTRUQnU3?=
- =?utf-8?B?alArZmpvcHc5RURDYzR4N216b3VlT3dQYU9vRGRzNS9mYzJVTWxMNGlkcHZN?=
- =?utf-8?B?YUJ4S0JlaHJCL28wZGJyaUZTVTRQMmxDdndvd3JxcG5aWDc2TnplY0VuQVdO?=
- =?utf-8?B?dUNZWVE3TFRFRkVTazJrcFY5ZUpiNjMyWjN2VnNWSzhPZlRNSW01OFF3RzhZ?=
- =?utf-8?B?Q3Mzc09nMjRiRlc5bWd0UzQ5SjliTDU4S3RUNkl1RkFOUjdORjErYVRkS2hH?=
- =?utf-8?B?bDhDQW44eXlUOUdQT3RrYUtYdUtlWitwRUIxeDM1SWx2eXFJQ2pFeEtsdk9M?=
- =?utf-8?B?cUwxbmh3b2dIeSs1TjNxSjVIbVJrTGkzQ2ZISkpnakxIeWlreHM1S3kxODBK?=
- =?utf-8?B?SENHYlpoTHJxa0J6KzJkTUoyODRrbDlwV0ZCdjRVRVliSi9YL0laSjg2SFZJ?=
- =?utf-8?B?dEMweENvY2V6THhyaGRVSVM1VG11YlRpU0w1dk5JL0l1TjdiS1p3M2V6NkZz?=
- =?utf-8?B?K0dTaWFhMURWZS9MYVlseSt1MnZCdE9GaUdxcW5yOGNDMzgrR3Z3aWMyMnRt?=
- =?utf-8?B?VFcvb0dpQytyQzdZR2U5Vks0SnU5ZSt1aHdpTmMrUUxPYmh5NDhBZ0Vzb0VQ?=
- =?utf-8?B?K25YNml1QTJQYllMdUpUREpzVVVOb2YxYjBwU2FhN2JLSHhUN1JpMVN1NGNP?=
- =?utf-8?B?ZTZ0S1pFbDFORExTTkdGNEJLc1AzSTZGaFFKZFNLZThCSEJPRE9XMDIwVmI3?=
- =?utf-8?B?SStOZ05yWFpPMlNPWjdLQ0p1a2Z1bVdhY2hETTBFVGpmbTlCZkJWT0Z3UnJ5?=
- =?utf-8?B?Q0NxcStac0E2QkhVMnl2ZlVSUmJEaTBobWpWMXZDUlk5K2dzMFlOT2VNOHV3?=
- =?utf-8?B?Z1plOWdUZ0VGWXRWalQ4aGgrV1JseHdkc2w4NzF2ODdlSGFzcDhyVTZ3TmZF?=
- =?utf-8?B?T21jdktGanhvOExVSmVJakcrVHpMTTMvOU43WjQ0ZVp3dmpGL20wN1UweEhO?=
- =?utf-8?Q?kyOZ9qtpW8efhRWizP2LT6dk8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 571b516d-8c02-4640-962e-08db6dd36d76
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2023 19:05:04.6929
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: T/rAbRAUPVpjIuobg4gOZo5ATyhbFYTr0JH4aWl3ARuOi8aRS0JQrroeJsZbBZ58BlLl++Z9IzsV5hxgBdVVwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7332
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <59c7c90c-50f2-5a77-af12-b266c6e6e0b1@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15 Jun 20:30, Rafael J. Wysocki wrote:
-> On Thu, Jun 15, 2023 at 7:55 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On 15 Jun 19:31, Rafael J. Wysocki wrote:
-> > > On Mon, Jun 12, 2023 at 1:37 PM Wyes Karny <wyes.karny@amd.com> wrote:
-> > > >
-> > > > amd-pstate passive mode driver is hyphenated. So make amd-pstate active
-> > > > mode driver consistent with that rename "amd_pstate_epp" to
-> > > > "amd-pstate-epp".
-> > > >
-> > > > Cc: stable@vger.kernel.org
-> > > > Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
-> > > > Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> > > > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-> > >
-> > > How much does the rest of the series depend on this patch?
-> >
-> > The rest of the series is independent of this patch.
+On Thu, Jun 08, 2023 at 11:39:27AM +0200, Daniel Lezcano wrote:
+> On 01/06/2023 19:09, Nícolas F. R. A. Prado wrote:
+> > On Wed, May 31, 2023 at 12:49:43PM +0800, Chen-Yu Tsai wrote:
+> > > On Wed, May 31, 2023 at 3:51 AM Bernhard Rosenkränzer <bero@baylibre.com> wrote:
+> > > > 
+> > > > From: Balsam CHIHI <bchihi@baylibre.com>
+> > > > 
+> > > > Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
+> > > > Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+> > > > and update the documentation that describes the Calibration Data Offsets.
+> > > > 
+> > > > Changelog:
+> > > >      v4 :
+> > > >          - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
+> > > >            room for SVS support, pointed out by
+> > > >            AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> > > > 
+> > > >      v3 :
+> > > >          - Rebased :
+> > > >              base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+> > > >          - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
+> > > >            Use filtered mode to make sure threshold interrupts are triggered,
+> > > 
+> > > I'm seeing sensor readout (either through sysfs/thermal/<x>/temp or hwmon)
+> > > fail frequently on MT8192. If I run `sensors` (lm-sensors), at least a couple
+> > > of the LVTS sensors would be N/A. Not sure if this is related to this change.
+> > 
+> > Yes, it is. Filtered mode has some delay associated with reading, meaning most
+> > of the time the value isn't ready, while immediate mode is, well, pretty much
+> > immediate and the read always succeeds.
+> > 
+> > For temperature monitoring, filtered mode should be used. It supports triggering
+> > interrupts when crossing the thresholds. Immediate mode is meant for one-off
+> > readings of the temperature. This is why I suggested using filtered mode.
+> > 
+> > As far as the thermal framework goes, it's ok that filtered mode doesn't always
+> > return a value, as it will keep the old one. But of course, having the
+> > temperature readout always work would be a desired improvement.
+> > 
+> > As for ways to achieve that, I think the intended way would be to enable the
+> > interrupts that signal data ready on filtered mode (bits 19, 20, 21, 28), read
+> > the temperature and cache it so it is always available when the get_temp()
+> > callback is called. The issue with this is that it would cause *a lot* of
+> > interrupts, which doesn't seem worth it.
+> > 
+> > Another option that comes to mind would be to enable immediate mode only during
+> > the get_temp() callback, to immediately read a value, and return to filtered
+> > mode at the end. That might work, but I haven't tried yet.
 > 
-> So it should have been posted separately as an individual fix.
+> Why not understand why the filtered mode is unable to return temperature
+> values most of the time?
 > 
-> Please resend the rest of the series without it to avoid confusion and
-> I'll apply it for 6.5 tomorrow.
+> I tried with the filtered mode and I can see 90% of the time it is not
+> possible to read the temperature.
+> 
+> IIUC there are timings which can be setup, may be understand how to set them
+> up in order to read the temperature correctly?
+> 
+> Caching values, switching the mode or whatever is hackish :/
 
-Sure, I'll send rest of the series separately.
+So this is what I've found after some more testing.
+
+With the current settings, using filtered mode, only about 30% of the
+measurement reads return valid results:
+rate: 29%   (success: 293, fail: 707)
+
+While, as observed, in immediate mode, the reads always succeed:
+rate: 100%   (success: 1000, fail: 0)
+
+Changing the configurations so that the measurements take less time improve the
+rate (and analogously increasing the time worsens the rate). That is, with
+PERIOD_UNIT = 0, GROUP_INTERVAL = 0, FILTER_INTERVAL = 0, SENSOR_INTERVAL = 0,
+HW_FILTER = 0 (ie single sample) the rate is much improved:
+rate: 91%   (success: 918, fail: 82)
+
+Though note that even though we're sampling as fast as possible and sampling
+only once each time, so supposedly what immediate mode does, it's still not at
+100% like in immediate mode.
+
+Enabling the sensor 0 filter IRQ (bit 19) I've observed that it is triggered
+about every 3500us (on the controller with all four sensors) with the current
+settings, but after changing those timing registers, it happens every 344us.
+With that in mind, in addition to those timing changes, if we also read the
+register more than once with a timeout longer than that 344, that is,
+
+rc = readl_poll_timeout(msr, value, value & BIT(16), 240, 400);
+
+it's enough to get
+rate: 100%   (success: 1000, fail: 0)
+and even better:
+rate: 100%   (success: 10000, fail: 0)
+
+So it's still not exactly clear what's the relation of the VALID bit with the
+timings in the hardware, but this at least gives us a way to get valid reads
+without sacrificing interrupts.
+
+Meanwhile, I've also tried reading the measurement during handling of the sensor
+0 filter IRQ (bit 19), and while it definitely works much better than the
+current 30%, giving a rate of 92%, it's still not 100%, which is intriguing
+given this IRQ is supposed to signal the data is ready... I thought this might
+be caused by timing issues, but increasing the timing of the measurements (by
+setting PERIOD_UNIT = 120), lowered the rate to 84%.
+Simply enabling this interrupt (and not reading the data in the IRQ), gives a
+drastically worse rate:
+rate: 3%   (success: 32, fail: 968)
+Which I understand to mean that whenever the IRQ is cleared, the hardware
+invalidates the previous measurement. So this IRQ is definitely related to the
+VALID bit, but it also is unexpectedly influenced by the timings.
+
+The VALID bit is also updated when read, and it tends to take the same time
+between IRQs to be reset, so my understanding is that on every IRQ the VALID
+bit is re-set to 1, and reading it clears it. But this does not explain why with
+smaller intervals a single read has more chance of succeeding.
+
+At this point, though, I feel like if it is possible to guarantee that readings
+in filtered mode will always be valid, it must be some hidden setting in
+LVTS_CONFIG. But with what we have access to, the best we can hope for is to
+make the invalid reads extremely unlikely, which is what shrinking the intervals
+and polling the register as shown above gives us, so it's what I suggest us to
+do.
 
 Thanks,
-Wyes
+Nícolas
