@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DB4731643
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 13:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0E97316C1
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 13:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343660AbjFOLPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 07:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S244783AbjFOLhA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 07:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241646AbjFOLPh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 07:15:37 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8809B2705;
-        Thu, 15 Jun 2023 04:15:33 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxTuvU8opkf4kFAA--.11776S3;
-        Thu, 15 Jun 2023 19:15:32 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG8rT8opkwuobAA--.4915S3;
-        Thu, 15 Jun 2023 19:15:31 +0800 (CST)
-Subject: Re: [PATCH v3 3/3] soc: loongson2_pm: add power management support
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
- <968b7c81-a24e-1e0d-31a4-f633a82d17b0@loongson.cn>
- <CAAhV-H4Z13wpOsj5GxkuwMK1D6N6=sArQ52yHjcdiEen=dUpjg@mail.gmail.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <9edfe58a-7901-c2d1-8e01-5f10b3a51287@loongson.cn>
-Date:   Thu, 15 Jun 2023 19:15:31 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S241149AbjFOLg7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 07:36:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF0C212C;
+        Thu, 15 Jun 2023 04:36:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 331D96387A;
+        Thu, 15 Jun 2023 11:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2571C433C8;
+        Thu, 15 Jun 2023 11:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686829017;
+        bh=8qjRqN0gKdO2Kze4Y40EjpeRbQoGwjmMEnwxWgVYtLE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=H4Sghg5omg9tdtMLz6O9EFOmQVJPdP7Q8Aet1nb1WPZPIlkC04jnnUd3KPiSF0hgi
+         re2tWE3nZwkq0gprmu710hn7wT3XnFaUMxx3tKYpS+lCAO7l/OVarjn751FSWIkYZK
+         ygPHlg+th9RCVlvMf6GLKksJLcPsKaacmFgKCh0GjybxG4GYb1AeaGZa0RXpifURs+
+         1kSyZeUldNiwnVsMMArRqMrNgSnSA1iBWxRsb5nTrXUjh27FZjMnEuphVn1hZUNyJ7
+         geeLZNOYCjHRNtyTIvtHfKnTE0eUhffFRwgrvb9OqXg6m7sBIXSFpRoaXtQXihadD9
+         xjNY9+X8xOOGA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, sre@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix external_power_changed race
+Date:   Thu, 15 Jun 2023 07:36:18 -0400
+Message-Id: <20230615113654.648702-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H4Z13wpOsj5GxkuwMK1D6N6=sArQ52yHjcdiEen=dUpjg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.3.8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxG8rT8opkwuobAA--.4915S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,49 +58,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Hans de Goede <hdegoede@redhat.com>
 
+[ Upstream commit a5299ce4e96f3e8930e9c051b28d8093ada87b08 ]
 
-在 2023/6/15 下午6:00, Huacai Chen 写道:
+ab8500_btemp_external_power_changed() dereferences di->btemp_psy,
+which gets sets in ab8500_btemp_probe() like this:
 
->> +static void loongson2_pm_status_clear(void)
->> +{
->> +       u16 value;
->> +
->> +       value = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
->> +       value |= (LOONGSON2_PM1_PWRBTN_STS | LOONGSON2_PM1_PCIEXP_WAKE_STS |
->> +                 LOONGSON2_PM1_WAKE_STS);
->> +       loongson2_pm_writew(value, LOONGSON2_PM1_STS_REG);
->> +       loongson2_pm_writel(loongson2_pm_readl(LOONGSON2_GPE0_STS_REG),
->> +                           LOONGSON2_GPE0_STS_REG);
-> Long-line warnings is removed in latest kernel, so you don't need to split here.
+        di->btemp_psy = devm_power_supply_register(dev, &ab8500_btemp_desc,
+                                                   &psy_cfg);
 
+As soon as devm_power_supply_register() has called device_add()
+the external_power_changed callback can get called. So there is a window
+where ab8500_btemp_external_power_changed() may get called while
+di->btemp_psy has not been set yet leading to a NULL pointer dereference.
 
-okay, I got it.
+Fixing this is easy. The external_power_changed callback gets passed
+the power_supply which will eventually get stored in di->btemp_psy,
+so ab8500_btemp_external_power_changed() can simply directly use
+the passed in psy argument which is always valid.
 
-> 
->> +}
->> +
->> +static void loongson2_power_button_irq_enable(void)
-> 
-> Using loongson2_pm_irq_enable is a little better.
+And the same applies to ab8500_fg_external_power_changed().
 
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/ab8500_btemp.c | 6 ++----
+ drivers/power/supply/ab8500_fg.c    | 6 ++----
+ 2 files changed, 4 insertions(+), 8 deletions(-)
 
-Indeed, this looks better!  I will use it.
-
-...
-
->> +static int loongson2_suspend_valid_state(suspend_state_t state)
->> +{
->> +       if (state == PM_SUSPEND_MEM)
->> +               return 1;
->> +
->> +       return 0;
-> "return (state == PM_SUSPEND_MEM)" is enough.
-
-
-okay, I got it.
-
-
-Thanks,
-Yinbo
+diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
+index 307ee6f71042e..6f83e99d2eb72 100644
+--- a/drivers/power/supply/ab8500_btemp.c
++++ b/drivers/power/supply/ab8500_btemp.c
+@@ -624,10 +624,8 @@ static int ab8500_btemp_get_ext_psy_data(struct device *dev, void *data)
+  */
+ static void ab8500_btemp_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_btemp *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->btemp_psy, ab8500_btemp_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_btemp_get_ext_psy_data);
+ }
+ 
+ /* ab8500 btemp driver interrupts and their respective isr */
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index 41a7bff9ac376..53560fbb6dcd3 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2407,10 +2407,8 @@ static int ab8500_fg_init_hw_registers(struct ab8500_fg *di)
+  */
+ static void ab8500_fg_external_power_changed(struct power_supply *psy)
+ {
+-	struct ab8500_fg *di = power_supply_get_drvdata(psy);
+-
+-	class_for_each_device(power_supply_class, NULL,
+-		di->fg_psy, ab8500_fg_get_ext_psy_data);
++	class_for_each_device(power_supply_class, NULL, psy,
++			      ab8500_fg_get_ext_psy_data);
+ }
+ 
+ /**
+-- 
+2.39.2
 
