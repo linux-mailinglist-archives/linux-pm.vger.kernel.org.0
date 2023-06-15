@@ -2,97 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15FE731F13
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 19:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BDF731F35
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 19:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjFORbn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 15 Jun 2023 13:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
+        id S237697AbjFORfS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 13:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233801AbjFORbm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 13:31:42 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6ABAC;
-        Thu, 15 Jun 2023 10:31:41 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98273ae42d0so57085866b.0;
-        Thu, 15 Jun 2023 10:31:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686850300; x=1689442300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9/sM9ZKm/nCF0lklmf7m/glMFLEBBKkwZOUnhWahQng=;
-        b=ZcH9gBAG1hwg9GZTic3ULAexuFQ4oT8P7PnH/iaJQ8OjgrkDOXKCr5tUmYzBTdhtlX
-         SZULnf8vZnrcMesc3fT7xiPPoJtKSPbuaV/+20REf3QtQDQSwCNMjho7IhSyBY7DMb90
-         MMeFsBrRCyqHmdx7SCRTlsm8sLVsziDdV1Lx8WxPRhfhS2Yzed4/SESUOEaesZjhTg+c
-         aeUjHVVnq6IxsyTBGGl+sn8a5DYjxRQZf3onpDkrW5S9MUha01DBxN5fsp/i+pepmVsH
-         9Y58kMsG6btwz8OT24eT44j0ADROd2wrssblU9utOkeXTp09qUEkmDOMhH9krgrvmM75
-         yDOQ==
-X-Gm-Message-State: AC+VfDwpIzrpITPWBRCGjKewFckSQWL7zZOcSsn8lnllQzE+I918snNL
-        Fe5rEw8Gb3+nfp51Bcfi4j64KKxHf8ByDtraYlM=
-X-Google-Smtp-Source: ACHHUZ6adQi8fGgJOzHknwPKsDDZSenpotWOuhMkM7ceH6A7bDrFr0ABlMEtuwlurHkAZ1mOwDhNPv/jd3otEPYL2AE=
-X-Received: by 2002:a17:906:5185:b0:976:50a4:ac40 with SMTP id
- y5-20020a170906518500b0097650a4ac40mr14038604ejk.0.1686850299719; Thu, 15 Jun
- 2023 10:31:39 -0700 (PDT)
+        with ESMTP id S230392AbjFORfR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 13:35:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F1E1FDD;
+        Thu, 15 Jun 2023 10:35:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E037E63974;
+        Thu, 15 Jun 2023 17:35:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F052C433C8;
+        Thu, 15 Jun 2023 17:35:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686850515;
+        bh=MRH2gBGbTm6Nfz0Le3aIme9e/tvq/PhgScHQ4D5E9Z0=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Lz+GZOxNuTy/88ASn7yaHQLEjS8IJ8PcCqlKzfQV4y67dWEiq2AbdK2aeuVYURTj7
+         xQmwR0hGKKuTAtjCcbmSQ5C3yjS7Qw8uV7cA1meILJ45yl8TnB4PYghKuuf24p5FNM
+         ex7DTia6S85aEtAOWFqixnYSdG6YuoEySjWN4q1NzGACwP5s2ssAL/AnJF8R+23Clm
+         rpdgJWhq7sqrynlaFkIQCh31olY2CYTAvNnFE7IFlSCw3XVonbTnKfNfRyjsv22thD
+         Yu2AQDJffYWyRkT6nUbZokdMFG/gN5LYgVTnmOB3DYj+ZDi/dsbgVp6WpNaEmqYdTO
+         5SKSVaGapc0lA==
+Message-ID: <f526046568e6bbc8dc567109e6911f65.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230612113615.205353-1-wyes.karny@amd.com> <20230612113615.205353-2-wyes.karny@amd.com>
-In-Reply-To: <20230612113615.205353-2-wyes.karny@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 15 Jun 2023 19:31:28 +0200
-Message-ID: <CAJZ5v0gfqGj9X=3bdf6X4HqQDxg+gCJN10DXLruYD5p3kZ59Uw@mail.gmail.com>
-Subject: Re: [PATCH 1/6] amd-pstate: Make amd-pstate epp driver name hyphenated
-To:     Wyes Karny <wyes.karny@amd.com>
-Cc:     rafael@kernel.org, ray.huang@amd.com, viresh.kumar@linaro.org,
-        trenn@suse.com, shuah@kernel.org, gautham.shenoy@amd.com,
-        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8568eead-90f6-ce15-d483-4d72dbab6294@linaro.org>
+References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org> <0764b5fda92acb995ffbd05c4b3d2b2f.sboyd@kernel.org> <8568eead-90f6-ce15-d483-4d72dbab6294@linaro.org>
+Subject: Re: [PATCH v6 00/22] Restructure RPM SMD ICC
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 15 Jun 2023 10:35:12 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 1:37 PM Wyes Karny <wyes.karny@amd.com> wrote:
->
-> amd-pstate passive mode driver is hyphenated. So make amd-pstate active
-> mode driver consistent with that rename "amd_pstate_epp" to
-> "amd-pstate-epp".
->
-> Cc: stable@vger.kernel.org
-> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
-> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+Quoting Konrad Dybcio (2023-06-15 00:52:07)
+> On 15.06.2023 02:49, Stephen Boyd wrote:
+> > Quoting Konrad Dybcio (2023-06-14 11:04:19)
+> >> This series reshuffles things around, moving the management of SMD RPM
+> >> bus clocks to the interconnect framework where they belong. This helps
+> >> us solve a couple of issues:
+> >>
+> >> 1. We can work towards unused clk cleanup of RPMCC without worrying
+> >>    about it killing some NoC bus, resulting in the SoC dying.
+> >>    Deasserting actually unused RPM clocks (among other things) will
+> >>    let us achieve "true SoC-wide power collapse states", also known as
+> >>    VDD_LOW and VDD_MIN.
+> >>
+> >> 2. We no longer have to keep tons of quirky bus clock ifs in the icc
+> >>    driver. You either have a RPM clock and call "rpm set rate" or you
+> >>    have a single non-RPM clock (like AHB_CLK_SRC) or you don't have an=
+y.
+> >>
+> >> 3. There's less overhead - instead of going through layers and layers =
+of
+> >>    the CCF, ratesetting comes down to calling max() and sending a sing=
+le
+> >>    RPM message. ICC is very very dynamic so that's a big plus.
+> >>
+> >> The clocks still need to be vaguely described in the clk-smd-rpm drive=
+r,
+> >> as it gives them an initial kickoff, before actually telling RPM to
+> >> enable DVFS scaling.  After RPM receives that command, all clocks that
+> >> have not been assigned a rate are considered unused and are shut down
+> >> in hardware, leading to the same issue as described in point 1.
+> >=20
+> > Why can't we move the enable of DVFS scaling call to the interconnect
+> > driver as well? We want the clk driver to not reference the interconnect
+> > resources at all.
+> That would result in no rpmcc ratesetting on platforms without a function=
+al
+> interconnect driver. The DVFS call concerns both bus and !bus clocks.
+>=20
 
-How much does the rest of the series depend on this patch?
+That's the intent. Probe the interconnect driver to get bus clk rate
+setting.
 
-I can apply it right away and push it out to a forward-only branch if
-that helps.
-
-> ---
->  drivers/cpufreq/amd-pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index ddd346a239e0..a5764946434c 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1356,7 +1356,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
->         .online         = amd_pstate_epp_cpu_online,
->         .suspend        = amd_pstate_epp_suspend,
->         .resume         = amd_pstate_epp_resume,
-> -       .name           = "amd_pstate_epp",
-> +       .name           = "amd-pstate-epp",
->         .attr           = amd_pstate_epp_attr,
->  };
->
-> --
-> 2.34.1
->
+What are the !bus clocks managed by RPM?
