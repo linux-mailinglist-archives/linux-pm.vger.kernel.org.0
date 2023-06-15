@@ -2,184 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C3F731E91
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 18:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B15FE731F13
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 19:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjFOQ7Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 12:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56626 "EHLO
+        id S229629AbjFORbn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 15 Jun 2023 13:31:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjFOQ7P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 12:59:15 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C735511C
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 09:59:14 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-66615629689so2418746b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 09:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1686848354; x=1689440354;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=p8eJqGDDZQQkpVTH7Qi6O0PKLIL+YaaevCASUEfH9dI=;
-        b=HX2sI+ZXoO4yLMkvS8dLjzuf3DIpV59xzvcJmhOZ2kzBDhTy4Hy6EuG2l1jJLb9mEV
-         5vSnD6t+nPx+n6r3HC2oPkXaW/RCQVGpAULVvzphrIhGv9N7YBhVSLMf2p6X+UnzNUFX
-         nukXBrMI3/d1gHLrIIlsBq4A3+0n6PtS723FL2vQvZTKsXBn7wNT5CB3OBSqY+tu83PU
-         RnRcn8m8yLLWCTQc0GV0cNHXoa52xe5aQ13OUJYbXSUFAP6ElsDzkgL0z4IlS1s+NjX5
-         +ooti0R+5ymM01aKdfTbAdGGvokLnLaBnRIEiGySF/WVMaUQHIcgCZeaoEv6B6Vvsgw7
-         qBjg==
+        with ESMTP id S233801AbjFORbm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 13:31:42 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6ABAC;
+        Thu, 15 Jun 2023 10:31:41 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98273ae42d0so57085866b.0;
+        Thu, 15 Jun 2023 10:31:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686848354; x=1689440354;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p8eJqGDDZQQkpVTH7Qi6O0PKLIL+YaaevCASUEfH9dI=;
-        b=S0Zr4cI7OFoXAhFBz66MmwGsQw+79WMkMPytVFrcn1SHg/UgFqusxKhmPnNpTCMKGZ
-         L/RsqWi98wCywLD54TsvHEH29E9/yRKzhkvdy1OydWXjvAH1URT8C1Y4IuwgWUhc9pVt
-         igi5hDPdfzBte0L7T6agDWUCnmQ3jk7IHtv29us6zDF5NI3kTgJNK4QK1X44IzDbrPou
-         P9QGFUKIpXpshI2VkW31OP2wdQ6M5UwXO3zxDDSSZXhiklbKue5tqSeCz5/U5bFvqOYe
-         +JU9NFBQofY8USXfQAD4Z/tEOrVe0tUXk2Xo7MVipRzW66KhwAZ6KtA6gHwN9ffnpFtH
-         vc2Q==
-X-Gm-Message-State: AC+VfDyMGaji9I1O4bem4Sc3LbFe78LsUz+uRUXvAqs2Wjgzfn0cEIwg
-        Zcd9aG0YrVMOgxPXPTidYorpyQ==
-X-Google-Smtp-Source: ACHHUZ5NYpxxjc7oQzj4im7S3yc9VVP2bUeHJ/nTSRxTuIQw14qhOkftJHaDYRW7uN98wtg61ZdNJg==
-X-Received: by 2002:a05:6a00:1405:b0:665:cbe7:b2e0 with SMTP id l5-20020a056a00140500b00665cbe7b2e0mr7278070pfu.0.1686848354172;
-        Thu, 15 Jun 2023 09:59:14 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id c9-20020aa78c09000000b0065fd8075ba0sm1164241pfd.212.2023.06.15.09.59.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 09:59:13 -0700 (PDT)
-Message-ID: <648b4361.a70a0220.999fd.1fe5@mx.google.com>
-Date:   Thu, 15 Jun 2023 09:59:13 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1686850300; x=1689442300;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9/sM9ZKm/nCF0lklmf7m/glMFLEBBKkwZOUnhWahQng=;
+        b=ZcH9gBAG1hwg9GZTic3ULAexuFQ4oT8P7PnH/iaJQ8OjgrkDOXKCr5tUmYzBTdhtlX
+         SZULnf8vZnrcMesc3fT7xiPPoJtKSPbuaV/+20REf3QtQDQSwCNMjho7IhSyBY7DMb90
+         MMeFsBrRCyqHmdx7SCRTlsm8sLVsziDdV1Lx8WxPRhfhS2Yzed4/SESUOEaesZjhTg+c
+         aeUjHVVnq6IxsyTBGGl+sn8a5DYjxRQZf3onpDkrW5S9MUha01DBxN5fsp/i+pepmVsH
+         9Y58kMsG6btwz8OT24eT44j0ADROd2wrssblU9utOkeXTp09qUEkmDOMhH9krgrvmM75
+         yDOQ==
+X-Gm-Message-State: AC+VfDwpIzrpITPWBRCGjKewFckSQWL7zZOcSsn8lnllQzE+I918snNL
+        Fe5rEw8Gb3+nfp51Bcfi4j64KKxHf8ByDtraYlM=
+X-Google-Smtp-Source: ACHHUZ6adQi8fGgJOzHknwPKsDDZSenpotWOuhMkM7ceH6A7bDrFr0ABlMEtuwlurHkAZ1mOwDhNPv/jd3otEPYL2AE=
+X-Received: by 2002:a17:906:5185:b0:976:50a4:ac40 with SMTP id
+ y5-20020a170906518500b0097650a4ac40mr14038604ejk.0.1686850299719; Thu, 15 Jun
+ 2023 10:31:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.4-rc6-65-g06c8e224e0039
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 7 warnings (v6.4-rc6-65-g06c8e224e0039)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230612113615.205353-1-wyes.karny@amd.com> <20230612113615.205353-2-wyes.karny@amd.com>
+In-Reply-To: <20230612113615.205353-2-wyes.karny@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 15 Jun 2023 19:31:28 +0200
+Message-ID: <CAJZ5v0gfqGj9X=3bdf6X4HqQDxg+gCJN10DXLruYD5p3kZ59Uw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] amd-pstate: Make amd-pstate epp driver name hyphenated
+To:     Wyes Karny <wyes.karny@amd.com>
+Cc:     rafael@kernel.org, ray.huang@amd.com, viresh.kumar@linaro.org,
+        trenn@suse.com, shuah@kernel.org, gautham.shenoy@amd.com,
+        Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 7 warnings (v6.4-rc6-65-g06=
-c8e224e0039)
+On Mon, Jun 12, 2023 at 1:37 PM Wyes Karny <wyes.karny@amd.com> wrote:
+>
+> amd-pstate passive mode driver is hyphenated. So make amd-pstate active
+> mode driver consistent with that rename "amd_pstate_epp" to
+> "amd-pstate-epp".
+>
+> Cc: stable@vger.kernel.org
+> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-4-rc6-65-g06c8e224e0039/
+How much does the rest of the series depend on this patch?
 
-Tree: pm
-Branch: testing
-Git Describe: v6.4-rc6-65-g06c8e224e0039
-Git Commit: 06c8e224e003919993b1ea1c7ef6fd648725b004
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+I can apply it right away and push it out to a forward-only branch if
+that helps.
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 3 warnings
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redunda=
-nt UACCESS disable
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x17a8: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----
-For more info write to <info@kernelci.org>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index ddd346a239e0..a5764946434c 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1356,7 +1356,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
+>         .online         = amd_pstate_epp_cpu_online,
+>         .suspend        = amd_pstate_epp_suspend,
+>         .resume         = amd_pstate_epp_resume,
+> -       .name           = "amd_pstate_epp",
+> +       .name           = "amd-pstate-epp",
+>         .attr           = amd_pstate_epp_attr,
+>  };
+>
+> --
+> 2.34.1
+>
