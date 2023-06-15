@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2747323CC
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D919E7323D3
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240217AbjFOXq0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 19:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        id S240293AbjFOXq3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 19:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240079AbjFOXqX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:46:23 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D532D42
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b4146fbadeso592351fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
+        with ESMTP id S240231AbjFOXq2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:46:28 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADB82D43
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b349703e90so575431fa.0
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686872778; x=1689464778;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nSmSYkeq+QNcZQ7h8FW75deWm/CDvZRtWyO4MTWmeIk=;
-        b=NLfcD8fqHiliXE/BMbuQEW4m9tLQzhH/jJ9uQ7w/z8TkQFHxvlrtS4zaj+RcrTZJyq
-         HtYrwbtrW3SVXth+g3CozCwYakIhmLQ7zeefXedsa/+cahWf5nlgxtPI3iMvtmQRuefz
-         YoIjg4JSp1LRwP2tBDQ9ux1AS4v3FXDBY0K8T4i44bJDAS0DyE3+L++0y1hXKW6v6FzR
-         qJIA7HaurBB9VA1VnvuDPa4putqP4mwYvcxid0W15EIgTuLkW7KcUoCo4vx65Vl+dvIE
-         jVBOzk30J2Q4FuLN+OD7afnOyI75hEGgbZ3OVQ5YVxfAbKhBMWqEJMSEDjQkTEjSx0Sp
-         ++pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686872778; x=1689464778;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1686872779; x=1689464779;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nSmSYkeq+QNcZQ7h8FW75deWm/CDvZRtWyO4MTWmeIk=;
-        b=Gb/fiyGnhWbzFLtGUNQMSyDj5vgu7qpRCGZ197mCTHtvC/93zIIhguvEgomldCFRng
-         19e9ui8YC3zoLBM2E3rE7ISbm1R60GYZhG/dmSGgP9QAUTG61KSRlSHcRianrBnJTfav
-         7uRRjHjue9irlgeypdM6PrzybJQIauN2StzIeYi3EJT3AnR0x/g1/s6Oce4+aumuPsQT
-         5vnThrZLZTVQtw8wIGutu5AVfYITWEmgD2/ib2vtro4XEV0WPvlIpcrFMocW0sdjJsEF
-         4JDoisQxVPckcASGYrMZ0tRmbjU+Dk+CI1nFyEh/T2hCFOOy2MHGJzBDRAJXRfyhfFKC
-         9vkQ==
-X-Gm-Message-State: AC+VfDy2oFbouycftR/zqmzvLuIuA/7XDWud6oRQBsmHbNuWvbn0JOFr
-        AjB7Qv+3Zq+enaVCPdB56tLJAA==
-X-Google-Smtp-Source: ACHHUZ4XsUbmUKnRxW2zlp21UO1PTkx/Pup2CEYgq1AcMTbWpRmE3jkIsEUHw5pglRHBXE2EYh1F2Q==
-X-Received: by 2002:a2e:9297:0:b0:2b3:451c:5998 with SMTP id d23-20020a2e9297000000b002b3451c5998mr572190ljh.18.1686872777858;
-        Thu, 15 Jun 2023 16:46:17 -0700 (PDT)
+        bh=SbdXjGGYla4F0pPJ42Y59vJ6FZ0EYdukkWCDyraTvpI=;
+        b=T32E3Xbo9exkv3Fed/IcEq1xalB3XCXZumvyj+C9hv5vrhdIkfxb4H/YGo2D9bmomq
+         Z467tN2ycoJl6Wh/5IWm+y2BzztFinMh07PlCHpqovew/X1gSIK8VJnAqqjkVVcOYPEQ
+         GNzvZgxtwxHNWrpRzNlafA6fQtAq/sSoMLXi9PKBzFrZIq0qsx65v1sqFGPCJGpi2/wE
+         yliuNUWogskVJnQDXHEgFoWNQW9eB0f7ADwmmpPdM/gXumBHByoT7WP7IoDVKDRuGVpw
+         JGKlpyMr6Onx2WEDosSn1mZamiKidzWME3+7hgr/HlVsCn1wdan8XeJkC3Ta/kWN0/H4
+         grmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686872779; x=1689464779;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SbdXjGGYla4F0pPJ42Y59vJ6FZ0EYdukkWCDyraTvpI=;
+        b=MQSJNd/cNEgsrE9kPttJgiZuN70wI3hZXoLD0gGDmANhF9+kxRul0jTTCA9POhGhpG
+         f1wG8C5z4qi+G/q1zCCqtcIOs/fsD0ip7N2ZnZaT0iGbUFYOp91JiV7G86klgTILPs1A
+         dQCTKoNutuXUtCb09Lf7iKSCU7vy6DUAQ+atVc2h0ZQu1+faMVQCj2S4oFAjz1OrEiHJ
+         fP/YpZckZ9MKmO00eIy/NkcP22GROunfZHwy7LwebeQEbC4myv+M92uzhs4tVnm6Wn9G
+         xlvENPYFB4jsTOQ3RPH6tunbsHeNDG2Ntd1OHcEZBXZtzdHcvOeRRCoN6U/Z8rFKIUxi
+         lTvg==
+X-Gm-Message-State: AC+VfDyjB6RWYmzqy8Yi6dqDuCvXP8xn52mnpstE5ZKyl3vVp/1b84pg
+        PRineAmD9/Wdl9WKTLJNBdSihw==
+X-Google-Smtp-Source: ACHHUZ7WQOPqyZ1IAUTwJ047pFSSwcdmzCfJvw2uS0b7L0ucKsWGS3NwZ5tWEYPZYQPvWFoA6sVQ4g==
+X-Received: by 2002:a2e:9083:0:b0:2b1:af36:93d9 with SMTP id l3-20020a2e9083000000b002b1af3693d9mr532454ljg.26.1686872779071;
+        Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
 Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.16
+        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 16:46:17 -0700 (PDT)
+        Thu, 15 Jun 2023 16:46:18 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH 0/2] SC7180 BWMONs
-Date:   Fri, 16 Jun 2023 01:46:08 +0200
-Message-Id: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
+Date:   Fri, 16 Jun 2023 01:46:09 +0200
+Subject: [PATCH 1/2] dt-bindings: interconnect: qcom,bwmon: Document SC7180
+ BWMONs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAMCii2QC/x2N0QrCMAwAf2Xk2UA7pTp/RYa0WXSBmY5GN2Hs3
- y0+3sFxGxgXYYNrs0HhRUyyVvCHBmiM+mSUoTK0rj264AO+8yyERmd/cfe0vrIaUtcNiRwFOkW
- oZYrGmEpUGmurn2mqci78kO9/dev3/Qe5+PtDegAAAA==
+Message-Id: <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
+References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
+In-Reply-To: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -72,16 +73,16 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=792;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=1253;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=kNYhWdb44I3voqaX2T/WN7kLO+5rpettsuRmGA3+XnY=;
- b=YOtAevNgRb65QMjUw+sro0h2INGn0CtITRqFMUr0KJhjjYB4kMR/MHTnWR5w+RP5f0YyrDM8i
- uhdGVFwtNpsCeo5ocL1EX9mri6RaYwVD8U6cycloep/preez+9QLS2A
+ bh=9Ia/HdtpIFxRb4vkGgGEIUMHoYeDyZM3fazS/Ch4LyQ=;
+ b=njNKy2Hyd3DMkIqVyxCfLljekbLcVjBUovQJEyMqlca7fTcHS+DnMZ7eSNE2NP/O/Cbezs1ws
+ 8bBskoFpsVUBItgKuqlO+EkCegJqryIeVDsccqfsn/povFC3H2D9Jxx
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,25 +90,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SC7180 has been using static DDR votes for the longest time. Time to
-switch to BWMON (which accidentally results in up to 50% perf gains in
-glmark2)!
+SC7180 - just like SC7280 - has a BWMONv4 for CPU-LLCC and a BWMONv5
+for DDR-LLCC paths. Document them.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (2):
-      dt-bindings: interconnect: qcom,bwmon: Document SC7180 BWMONs
-      arm64: dts: qcom: sc7180: Hook up BWMONs
+ Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
- .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |   2 +
- arch/arm64/boot/dts/qcom/sc7180-lite.dtsi          |  10 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi               | 161 +++++++++++++++------
- 3 files changed, 126 insertions(+), 47 deletions(-)
----
-base-commit: 925294c9aa184801cc0a451b69a18dd0fe7d847d
-change-id: 20230616-topic-sc7180_bwmons-c99dbc0c6c4a
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+index 5d17bdcfdf70..b63db9098345 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+@@ -25,6 +25,7 @@ properties:
+       - const: qcom,msm8998-bwmon       # BWMON v4
+       - items:
+           - enum:
++              - qcom,sc7180-cpu-bwmon
+               - qcom,sc7280-cpu-bwmon
+               - qcom,sc8280xp-cpu-bwmon
+               - qcom,sdm845-cpu-bwmon
+@@ -32,6 +33,7 @@ properties:
+           - const: qcom,sdm845-bwmon    # BWMON v4, unified register space
+       - items:
+           - enum:
++              - qcom,sc7180-llcc-bwmon
+               - qcom,sc8280xp-llcc-bwmon
+               - qcom,sm8550-llcc-bwmon
+           - const: qcom,sc7280-llcc-bwmon
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.41.0
 
