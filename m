@@ -2,136 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77F41731A69
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 15:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCC6731AC5
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 16:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240594AbjFONuC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 09:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S1344678AbjFOOFN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 10:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344521AbjFONtx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 09:49:53 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E10193
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 06:49:51 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30fc42fcbc7so3646387f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 06:49:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686836990; x=1689428990;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PPpmcFOud6NSZysOaTCzx4AGcA84UMpGqpX58kQo8EI=;
-        b=TqyaX7guuoPDBwsfWjLf6D9FCngXqB0SYyZpcK0HbN5G5mkq7p1pDqRXw0FqLcth2M
-         Au4IWrje3awMH17yl/fOv0rTvnIFyoYOaEoVvPYMZYVaqeX/J4jcZANUtDdDQf3whnGa
-         5mZ4iRnv+Bnrvlvt/kw748YPFQp0Z9ziDjKcWMO2AFMVFt+963BW0zDPn6QM+Uii3lRr
-         DhFV7a1IDXBBe2LdMme4WGr4KJauolzLKpp/bufISWpG9AK0nUxrMiNjffvWUlImqSEZ
-         CapdXe/U1zlen8E0GSk24x6bEwXU+YQBkL4eAiYj4sH6U8BKnHoWqCu+5GS4DP75fG3g
-         uNOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686836990; x=1689428990;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PPpmcFOud6NSZysOaTCzx4AGcA84UMpGqpX58kQo8EI=;
-        b=A/tVToslO5CKJQmlKJf4cSCQeTdYRy/oGXd/hUw7XT3juW0tpzuBMwyslryZXP13Uv
-         4cdtO30Aptpe6fxNBsASUazVVggVJsS8LGFHzsonwnaq4Eh02w4Obc9tV1cDbpRBhTON
-         MSSAXcFBfk6pVTuvyisG59p316YU44e2sIS4nvFoK7/DvWBvx8dtUX6jz2ZMTUS8AB8m
-         UjBD01HJD/bj6yqNFa7H5n1xzQ6g71i3y8E2OJVlU52fPKqlwSXMhJnX+7UDxHS+3mZv
-         X9KP3Ifkey9SCgyRNzGYkRVxf0Vq9cnTzbUeCj/LJYR+0zvHhdnTscYEtv7sOvbZNu+2
-         o4JA==
-X-Gm-Message-State: AC+VfDxDclu+/b1kgJ9BBTVFrCR/uxUFvKqJ/4WKAqkEJX6j1SbSyhzc
-        hCmcBKg1Fu5gD68I6W26FhTgBQ==
-X-Google-Smtp-Source: ACHHUZ68iA8remZL5nXw7Ofgfc6bT8MuEK+ySF7H4TqrKH/J2jv/+AhmuMLuqrwDcTVkoFYnVaowFQ==
-X-Received: by 2002:adf:fb07:0:b0:30f:b3d1:8f99 with SMTP id c7-20020adffb07000000b0030fb3d18f99mr9693572wrr.38.1686836989994;
-        Thu, 15 Jun 2023 06:49:49 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:331d:4ff0:1778:3425? ([2a05:6e02:1041:c10:331d:4ff0:1778:3425])
-        by smtp.googlemail.com with ESMTPSA id c2-20020a5d5282000000b002fae7408544sm21152969wrv.108.2023.06.15.06.49.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 06:49:49 -0700 (PDT)
-Message-ID: <7e843caa-8369-1fb0-36c4-a4482d37b211@linaro.org>
-Date:   Thu, 15 Jun 2023 15:49:48 +0200
+        with ESMTP id S1344716AbjFOOEw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 10:04:52 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FE41FCC;
+        Thu, 15 Jun 2023 07:04:49 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686837888;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hCDagffXM08ITBYbD5wJrdDy47fDn0stQukREXmzgL0=;
+        b=jbeW/3yG2DUBLu9x31tH0lJY7Uyd78NZALXo/IB9de7RpWpkk0lm4ti70wM2OAUZ0Qhr2J
+        zYaoJrgKe8h5amn/hvsBHiC4hDeMgU24NDWjoJZfEV5N94tYcyhKkaFKdrr2GC8mkn6Dg6
+        jBryGFMkdQ9wFy7vBbp+MxP3H566TFPbdfY3Jxi0vt2bdExwSLuhTjnvW+aLnapXvUUVu/
+        fN4qv0krzD+ixksPvGhPqU0FcPSVYwKHzFJBoCo+OyJqVt1MGQ9PqWfRzd2/R/8uoTWbev
+        YHGRGFtQZ3t3O99J9INi3zs+Qtm5ArbZR5gaH8SfvZRJvFDuzBh0d3GyIynCYw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 696F3240003;
+        Thu, 15 Jun 2023 14:04:47 +0000 (UTC)
+Date:   Thu, 15 Jun 2023 16:04:46 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 1/2] power: reset: at91-reset: use driver structure as
+ status parameter
+Message-ID: <20230615160446.60625339@xps-13>
+In-Reply-To: <20230609231422.taqokbmxojbfdn2v@mercury.elektranox.org>
+References: <20230609143912.849995-1-miquel.raynal@bootlin.com>
+        <20230609143912.849995-2-miquel.raynal@bootlin.com>
+        <20230609231422.taqokbmxojbfdn2v@mercury.elektranox.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
-Content-Language: en-US
-To:     Peng Fan <peng.fan@nxp.com>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alice Guo <alice.guo@nxp.com>
-References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
- <507b5daa-73e7-8d21-4f73-c56f88c6bf77@linaro.org>
- <2e57d14a-214e-c3e0-e011-e804ce8c9b39@oss.nxp.com>
- <4844567.31r3eYUQgx@pliszka>
- <3518a2e7-806d-ad46-a439-ff4a57ed8158@oss.nxp.com>
- <3e397cf5-0ca3-fa10-b5d8-bbc7b1038a37@linaro.org>
- <DU0PR04MB9417A508A757AF8964CDAEA6885BA@DU0PR04MB9417.eurprd04.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <DU0PR04MB9417A508A757AF8964CDAEA6885BA@DU0PR04MB9417.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/06/2023 14:07, Peng Fan wrote:
+Hi Sebastian,
 
-[ ... ]
+sebastian.reichel@collabora.com wrote on Sat, 10 Jun 2023 01:14:22
++0200:
 
-> Per i.MX8MQ Reference manual:
-> MSITE:
-> Monitoring site select 0 - 2. By setting the select bit for a temperature sensor site,
->   it is enabled and included in all monitoring functions. For proper operation, this
-> field should only change when monitoring is
-> disabled. If no site is selected, site 0 is monitored by default.
-> 
-> ME: Before enabling the TMU for monitoring, the TMU must be configured,
-> see section Initialization Information. Failure to properly initialize the
-> configuration table may result in boundedly undefined
-> behavior.
-> 
-> So we must set the SITEs bits before enabling ME bit. So set TMR_ME when
-> each time call invoke mode violates the spec.
-> 
-> As I understand, change_mode is per zone, which means per msite for TMU,
-> but TMU_ME is a global gating bit which should not be set before all msites
-> are set.
+> Hi,
+>=20
+> On Fri, Jun 09, 2023 at 04:39:11PM +0200, Miquel Raynal wrote:
+> > It is quite uncommon to use a driver helper with parameters like *pdev
+> > and __iomem *base. It is much cleaner and close to today's standards to
+> > provide the per-device driver structure and then access its
+> > internals. Let's do this with at91_resete_status() before making more
+> > modifications to this helper.
+> >=20
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> > ---
+> >  drivers/power/reset/at91-reset.c | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> >=20
+> > diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at9=
+1-reset.c
+> > index 741e44a017c3..a8a6f3997768 100644
+> > --- a/drivers/power/reset/at91-reset.c
+> > +++ b/drivers/power/reset/at91-reset.c
+> > @@ -149,11 +149,10 @@ static int at91_reset(struct notifier_block *this=
+, unsigned long mode,
+> >  	return NOTIFY_DONE;
+> >  }
+> > =20
+> > -static void __init at91_reset_status(struct platform_device *pdev,
+> > -				     void __iomem *base)
+> > +static void __init at91_reset_status(struct at91_reset *reset)
+> >  {
+> > +	u32 reg =3D readl(reset->rstc_base + AT91_RSTC_SR);
+> >  	const char *reason;
+> > -	u32 reg =3D readl(base + AT91_RSTC_SR);
+> > =20
+> >  	switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
+> >  	case RESET_TYPE_GENERAL: =20
+>=20
+> You also need to update the code calling this functions, otherwise
+> the series is not bisectable.
 
-Mmh, IIUC correctly the documentation, it says the monitoring must be 
-disabled when changing the sites. So in the proposed code, we shall 
-disable the TMU, update the site and then enable the TMU.
+Of course, I was not paying enough attention here, sorry about that.
 
-Can you give a try to see if that works? If yes, then can you submit a 
-patch on top of this series. Meanwhile, I'll pick those changes.
-
-Thanks
-   -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks,
+Miqu=C3=A8l
