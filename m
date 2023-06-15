@@ -2,58 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F06F731151
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 09:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95755731163
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 09:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245138AbjFOHu1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 03:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33588 "EHLO
+        id S236392AbjFOHwm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 03:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245342AbjFOHuG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 03:50:06 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDBF26AA
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 00:50:03 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f6170b1486so633607e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 00:50:03 -0700 (PDT)
+        with ESMTP id S236884AbjFOHwd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 03:52:33 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D93326B6
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 00:52:12 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f74cda5f1dso5590629e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 00:52:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686815402; x=1689407402;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J2qg/OhTZMxFrneoAf57EQq0qnVlyXa5i01t43MlX9w=;
-        b=e4u3NTu/pqU31uuPTG/eKpW/QMItHv1uBLmHN+OELfnX1s9Mil6RX5ENuCEd+YZnhG
-         7OUhGO22mHvfSKxtVEmzTjhrKYa2shwfgLFcP1F1bsr57fY9WXdGpU8PEa1qmV+/UOso
-         rmHHLXWa5BrPA+jFwFbHBl9kFvdSv6dsJlBQlBRHU5F/6UNHerM+drMF9Bn8JUFM6n8n
-         d88djVnlSmR10vM+lao15yr875PzITrl+A8BRXhuhvPs/ko0IXtMGODa7qTaaMkjRSEM
-         utKbYzRpfW42pN4JgTL7b4NDD/62ayF+SVwxOQrq4dNQFDCEldZ2/Wf7Z2pkHZgSLy5e
-         WoyQ==
+        d=linaro.org; s=google; t=1686815529; x=1689407529;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OnLAb/o5l2EuhHYqpE8y7BrnGhDNpYQ/A+Vx7BWAr88=;
+        b=wp56Ds3X9nkSr0F9ISHqBFM4O4uRWA1NeoaGxPwb6kiQi+kk/eQZdCCTtv3Nsm1OSB
+         6sUSNcaqWAmbQO6qBPjhrlbTIhIVOnOdsdscPQD7utiRhUsQktfmZmsJ4a52zMWauGX2
+         zgghpDCVOZDmQOs2TVaW3irBNAbVz+tErqkdOvYu0/pHwviwCdcJsHbTf21gd1/JyPPR
+         fkxUPmXDEVjk4bjx+tlRH3+sgrOY7L5x+Xu23R44MwyWa+Dt/yEYCwOH6Ie3uP2GfZeY
+         y/vxaIj/CtXOIEoGzjaUJ/UiJexwcqhdzmB+XwPMQjeFbKMSyyuBCXFDV/9bJnq4CJuh
+         XbjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686815402; x=1689407402;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1686815529; x=1689407529;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J2qg/OhTZMxFrneoAf57EQq0qnVlyXa5i01t43MlX9w=;
-        b=jKf9QhFMWx/kbiOlOyp7aHC+4KFgHYzCjYB+ls/3IBXWG0LeaeIFAC2BgREyKXjfi9
-         tkLXzZWYusbNuXtVBGUQLBxshPVXXmuXHIYjEdGAzupd6P0eLFmW1VvHAa+0CigAr66V
-         JZ//Ztk/I+1WlrSl5awzaGXEseIitbBml7dv8m5WGQ9kEZb8KuGkjUB5ve24KUqAnR8n
-         JRaRWt9NKBRwMHJhJZxnpLqt+7vs+5QxjqniVYv67DMayeNBWkg07ESGPyAP7JuojPNZ
-         twNh5TJGfFb7HChjp1lFSeAylawLvxvQMa0VLz/K80fGmb2IZDfZKKysuG98fC+lZ0/7
-         V0uA==
-X-Gm-Message-State: AC+VfDxUobyZJnyv41fMhP6pSJFg3F1s3QClw3xxFRU/BATv3iuIfPGQ
-        ocLT9vGVtNmHgRQ7Rd72VP+OgA==
-X-Google-Smtp-Source: ACHHUZ7U+ZUkuF8q6VsyYsmqbxyJo+bKxv0x5R1kei09Xwyk3EU60144Jc9nNsH0GhPbxK3PfwyqiQ==
-X-Received: by 2002:a19:9118:0:b0:4f2:147b:7ee with SMTP id t24-20020a199118000000b004f2147b07eemr1305042lfd.20.1686815401899;
-        Thu, 15 Jun 2023 00:50:01 -0700 (PDT)
+        bh=OnLAb/o5l2EuhHYqpE8y7BrnGhDNpYQ/A+Vx7BWAr88=;
+        b=Q25TRvQvjBCQCUBopcQDQ1sRtE6yEqIhK0Zf3r3U/8zeJ8a9digwXNfCht8EXdu0Fl
+         LCc0fle7BYEQ1/3D4Vm+CvDtqEsjQuwUv2OJCxyrce4DStk6eJNXk8cktchQsUKldU/Y
+         AzokF4522oraXrOFRb+7QfsP8Y1ugN/8X16s6RpaXzb/ZPSVIl/WlD1+9mfS291l3xki
+         o0qhv1kE4zx/chTt4flC+qzBKkfxWoK28o3Koaw3Ofm7nUjioQAq93Ri/ezJMt/tkwcv
+         w+wZw1QhuREt388DkKTqqeylUiA5z/MONcZVIuKp48wv0/hCBOxOFgkM2HY3Bkh3dRo0
+         20Xw==
+X-Gm-Message-State: AC+VfDxWMyEY+bkNQVEzrEaF0C3NKO9QNafAP3QurbTSjIa9mHi/xN9V
+        B1OGRhs9qyW2w/T5JM4cCDqdcQ==
+X-Google-Smtp-Source: ACHHUZ6byeATepKDfRbb48D1WYuexmYDvekDU3GjrZKiJbCCViAjaUqDxWYYkI3TFgnr+axOqZQCiw==
+X-Received: by 2002:a05:6512:1cd:b0:4f4:dd51:aec7 with SMTP id f13-20020a05651201cd00b004f4dd51aec7mr8412115lfp.54.1686815529466;
+        Thu, 15 Jun 2023 00:52:09 -0700 (PDT)
 Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id p20-20020a19f014000000b004f749b64bbcsm1243348lfc.69.2023.06.15.00.50.00
+        by smtp.gmail.com with ESMTPSA id w15-20020ac2598f000000b004f138ecab11sm2482805lfn.24.2023.06.15.00.52.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jun 2023 00:50:01 -0700 (PDT)
-Message-ID: <825f06c1-cf87-c0e3-a9fc-f4ec0edaa0f8@linaro.org>
-Date:   Thu, 15 Jun 2023 09:49:59 +0200
+        Thu, 15 Jun 2023 00:52:09 -0700 (PDT)
+Message-ID: <8568eead-90f6-ce15-d483-4d72dbab6294@linaro.org>
+Date:   Thu, 15 Jun 2023 09:52:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.2
+Subject: Re: [PATCH v6 00/22] Restructure RPM SMD ICC
 Content-Language: en-US
 To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -67,14 +68,14 @@ To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
 References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
- <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
- <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
+ <0764b5fda92acb995ffbd05c4b3d2b2f.sboyd@kernel.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH v6 18/22] clk: qcom: smd-rpm: Separate out interconnect
- bus clocks
-In-Reply-To: <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
+In-Reply-To: <0764b5fda92acb995ffbd05c4b3d2b2f.sboyd@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,56 +88,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15.06.2023 02:48, Stephen Boyd wrote:
-> Quoting Konrad Dybcio (2023-06-14 11:04:37)
->> The interconnect bus clocks are now handled within the ICC framework.
->> They still however need to get a kickstart *before* we call
->> clk_smd_rpm_enable_scaling(), or RPM will assume that they should all
->> be running at 0 kHz and the system will inevitably die.
+On 15.06.2023 02:49, Stephen Boyd wrote:
+> Quoting Konrad Dybcio (2023-06-14 11:04:19)
+>> This series reshuffles things around, moving the management of SMD RPM
+>> bus clocks to the interconnect framework where they belong. This helps
+>> us solve a couple of issues:
 >>
->> Separate them out to ensure such a kickstart can still take place.
+>> 1. We can work towards unused clk cleanup of RPMCC without worrying
+>>    about it killing some NoC bus, resulting in the SoC dying.
+>>    Deasserting actually unused RPM clocks (among other things) will
+>>    let us achieve "true SoC-wide power collapse states", also known as
+>>    VDD_LOW and VDD_MIN.
 >>
->> As a happy accident, the file got smaller:
+>> 2. We no longer have to keep tons of quirky bus clock ifs in the icc
+>>    driver. You either have a RPM clock and call "rpm set rate" or you
+>>    have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
 >>
->> Total: Before=41951, After=41555, chg -0.94%
+>> 3. There's less overhead - instead of going through layers and layers of
+>>    the CCF, ratesetting comes down to calling max() and sending a single
+>>    RPM message. ICC is very very dynamic so that's a big plus.
 >>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/clk/qcom/clk-smd-rpm.c | 278 +++++++++++++++++------------------------
->>  1 file changed, 115 insertions(+), 163 deletions(-)
->>
->> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
->> index 6e7f0438e8b8..0d1d97659d59 100644
->> --- a/drivers/clk/qcom/clk-smd-rpm.c
->> +++ b/drivers/clk/qcom/clk-smd-rpm.c
->> @@ -498,13 +506,69 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk1, 11, 19200000);
->>  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk2, 12, 19200000);
->>  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
->>  
->> +static struct clk_smd_rpm *bimc_pcnoc_icc_clks[] = {
+>> The clocks still need to be vaguely described in the clk-smd-rpm driver,
+>> as it gives them an initial kickoff, before actually telling RPM to
+>> enable DVFS scaling.  After RPM receives that command, all clocks that
+>> have not been assigned a rate are considered unused and are shut down
+>> in hardware, leading to the same issue as described in point 1.
 > 
-> Can these be const arrays?
-Sorta, look below.
-
-> 
->> +       &clk_smd_rpm_bimc_clk,
->> +       &clk_smd_rpm_bus_0_pcnoc_clk,
->> +};
->> +
-> [...]
->> @@ -1332,6 +1275,15 @@ static int rpm_smd_clk_probe(struct platform_device *pdev)
->>                         goto err;
->>         }
->>  
->> +       for (i = 0; i < desc->num_icc_clks; i++) {
->> +               if (!desc->icc_clks[i])
->> +                       continue;
->> +
->> +               ret = clk_smd_rpm_handoff(desc->icc_clks[i]);
-> 
-> This API can probably take a const struct clk_smd_rpm pointer as well.
-It would be great, but ideally we want to set r->enabled in that func
-for !bus clocks (for unused clk cleanup). I could probably introduce a
-separate function for the icc clocks that takes const.
+> Why can't we move the enable of DVFS scaling call to the interconnect
+> driver as well? We want the clk driver to not reference the interconnect
+> resources at all.
+That would result in no rpmcc ratesetting on platforms without a functional
+interconnect driver. The DVFS call concerns both bus and !bus clocks.
 
 Konrad
