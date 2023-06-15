@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D919E7323D3
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBE677323D6
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240293AbjFOXq3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 19:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
+        id S240298AbjFOXqd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 19:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240231AbjFOXq2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:46:28 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADB82D43
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b349703e90so575431fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
+        with ESMTP id S230138AbjFOXq3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:46:29 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A27A2D4B
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:22 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b445512846so400491fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686872779; x=1689464779;
+        d=linaro.org; s=google; t=1686872780; x=1689464780;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SbdXjGGYla4F0pPJ42Y59vJ6FZ0EYdukkWCDyraTvpI=;
-        b=T32E3Xbo9exkv3Fed/IcEq1xalB3XCXZumvyj+C9hv5vrhdIkfxb4H/YGo2D9bmomq
-         Z467tN2ycoJl6Wh/5IWm+y2BzztFinMh07PlCHpqovew/X1gSIK8VJnAqqjkVVcOYPEQ
-         GNzvZgxtwxHNWrpRzNlafA6fQtAq/sSoMLXi9PKBzFrZIq0qsx65v1sqFGPCJGpi2/wE
-         yliuNUWogskVJnQDXHEgFoWNQW9eB0f7ADwmmpPdM/gXumBHByoT7WP7IoDVKDRuGVpw
-         JGKlpyMr6Onx2WEDosSn1mZamiKidzWME3+7hgr/HlVsCn1wdan8XeJkC3Ta/kWN0/H4
-         grmg==
+        bh=q+PvbIyvHRl4FSoE9uzVYKxRDamiFRuOsnGAUc6cVuo=;
+        b=O+8oOs0mQPAOyXRuNb9vDh0IzKIxHksY00MsMvG+yA0lKdP/tsB/k0lIp2jEmLNBO1
+         ByQVOMp+T/0PZFSx61lAlVTHn9UeQwc/f87BvH8i6jv0FD48cZCeKT5kfPw+NQTG2JWQ
+         25ZhX8QpThKd5ES1atQhySHxB64cSxCvrRBl9UZLwPtxAwYN9/EEaFkzy/cSoJI1OygA
+         jypk862Uor7EQ3vwrlBDE4Y5aK9EzC332aQV6j6fxiur/KEkfxsnAB3urUeTImMxkQNC
+         C4hoaCoKPBUO5J+WiOp0R8ofk8bYA07yVN5o+CQjHxMF01hsMx5kyscf55JcIr3jJ1D3
+         e6Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686872779; x=1689464779;
+        d=1e100.net; s=20221208; t=1686872780; x=1689464780;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SbdXjGGYla4F0pPJ42Y59vJ6FZ0EYdukkWCDyraTvpI=;
-        b=MQSJNd/cNEgsrE9kPttJgiZuN70wI3hZXoLD0gGDmANhF9+kxRul0jTTCA9POhGhpG
-         f1wG8C5z4qi+G/q1zCCqtcIOs/fsD0ip7N2ZnZaT0iGbUFYOp91JiV7G86klgTILPs1A
-         dQCTKoNutuXUtCb09Lf7iKSCU7vy6DUAQ+atVc2h0ZQu1+faMVQCj2S4oFAjz1OrEiHJ
-         fP/YpZckZ9MKmO00eIy/NkcP22GROunfZHwy7LwebeQEbC4myv+M92uzhs4tVnm6Wn9G
-         xlvENPYFB4jsTOQ3RPH6tunbsHeNDG2Ntd1OHcEZBXZtzdHcvOeRRCoN6U/Z8rFKIUxi
-         lTvg==
-X-Gm-Message-State: AC+VfDyjB6RWYmzqy8Yi6dqDuCvXP8xn52mnpstE5ZKyl3vVp/1b84pg
-        PRineAmD9/Wdl9WKTLJNBdSihw==
-X-Google-Smtp-Source: ACHHUZ7WQOPqyZ1IAUTwJ047pFSSwcdmzCfJvw2uS0b7L0ucKsWGS3NwZ5tWEYPZYQPvWFoA6sVQ4g==
-X-Received: by 2002:a2e:9083:0:b0:2b1:af36:93d9 with SMTP id l3-20020a2e9083000000b002b1af3693d9mr532454ljg.26.1686872779071;
-        Thu, 15 Jun 2023 16:46:19 -0700 (PDT)
+        bh=q+PvbIyvHRl4FSoE9uzVYKxRDamiFRuOsnGAUc6cVuo=;
+        b=YHRWb8faHnRLBdX8YVhmocrLlV8XyeReadE/vVQWpybpoSZOoK2dAtZopyXx2498CL
+         NJzekN83D/lymbAr2M4e29lJpWiNR8ut0BCfxbdpar18mqADMjJ3YmISjG5QEhk5ArTR
+         S7QlD6Bey1smfhvgGV7Q3QpArQ5mAoci+/q52TiEp0Kfm9RjWo7yiQ9oGILU2WQhSbip
+         wfkaodzd0t97KApC1eDkQhi2CMN5/4gZ3fx8EQP3cPaoIeknih/q/x1M/DMqkHjsKIZx
+         JKFrWMRvutMUemVVPqRkFKOnSAqqzQNTa6lL2xzp9ahxjaaFrtjDvuCEQa1kipzDI90y
+         VEFw==
+X-Gm-Message-State: AC+VfDz7xcBuUU8D+lQraNoy1HQ0vpSHo0ySefph9VLbo2LmSZsttRez
+        4+CFvajv9Ek8C5hlQF7RgpdeqQ==
+X-Google-Smtp-Source: ACHHUZ5mOBNnISBEh7eq/utV46UY4kVc3L5dlVGF6K10qOA7ZbsZlqbBi0MADJe11jhJn79CvPxpKg==
+X-Received: by 2002:a2e:88d0:0:b0:2b3:46ec:8014 with SMTP id a16-20020a2e88d0000000b002b346ec8014mr481970ljk.47.1686872780352;
+        Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
 Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.17
+        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 16:46:18 -0700 (PDT)
+        Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 16 Jun 2023 01:46:09 +0200
-Subject: [PATCH 1/2] dt-bindings: interconnect: qcom,bwmon: Document SC7180
- BWMONs
+Date:   Fri, 16 Jun 2023 01:46:10 +0200
+Subject: [PATCH 2/2] arm64: dts: qcom: sc7180: Hook up BWMONs
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
+Message-Id: <20230616-topic-sc7180_bwmons-v1-2-4ddb96f9a6cd@linaro.org>
 References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
 In-Reply-To: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -73,11 +72,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=1253;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=11455;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=9Ia/HdtpIFxRb4vkGgGEIUMHoYeDyZM3fazS/Ch4LyQ=;
- b=njNKy2Hyd3DMkIqVyxCfLljekbLcVjBUovQJEyMqlca7fTcHS+DnMZ7eSNE2NP/O/Cbezs1ws
- 8bBskoFpsVUBItgKuqlO+EkCegJqryIeVDsccqfsn/povFC3H2D9Jxx
+ bh=Gy0nc/M3o6MCmy28Sto0NlhJAaM2QOc7qKiXiWyzZ+U=;
+ b=CWK4DgIVGzvs+VSmow7gqwmVDXhtNIk+kmE8beYgdxIsVwVDCr2/HGnZGGktAK1E4Pntln/O1
+ ihfI4/tsMgeCTZ7dOK85LiU9OHcATAEk66GEHlTrkmcvRfTOSUDooHj
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,34 +89,391 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SC7180 - just like SC7280 - has a BWMONv4 for CPU-LLCC and a BWMONv5
-for DDR-LLCC paths. Document them.
+Hook up 2 out of 4 (the rest are for NPU) BWMONs exposed on the SC7180.
+This allows for scaling DDR and LLCC independently from cpufreq.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7180-lite.dtsi |  10 +-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi      | 161 ++++++++++++++++++++++--------
+ 2 files changed, 124 insertions(+), 47 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-index 5d17bdcfdf70..b63db9098345 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-@@ -25,6 +25,7 @@ properties:
-       - const: qcom,msm8998-bwmon       # BWMON v4
-       - items:
-           - enum:
-+              - qcom,sc7180-cpu-bwmon
-               - qcom,sc7280-cpu-bwmon
-               - qcom,sc8280xp-cpu-bwmon
-               - qcom,sdm845-cpu-bwmon
-@@ -32,6 +33,7 @@ properties:
-           - const: qcom,sdm845-bwmon    # BWMON v4, unified register space
-       - items:
-           - enum:
-+              - qcom,sc7180-llcc-bwmon
-               - qcom,sc8280xp-llcc-bwmon
-               - qcom,sm8550-llcc-bwmon
-           - const: qcom,sc7280-llcc-bwmon
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
+index 4b306a59d9be..975d4422f27b 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
+@@ -6,21 +6,21 @@
+  */
+ 
+ &cpu6_opp10 {
+-	opp-peak-kBps = <7216000 22425600>;
++	opp-peak-kBps = <22425600>;
+ };
+ 
+ &cpu6_opp11 {
+-	opp-peak-kBps = <7216000 22425600>;
++	opp-peak-kBps = <22425600>;
+ };
+ 
+ &cpu6_opp12 {
+-	opp-peak-kBps = <8532000 23347200>;
++	opp-peak-kBps = <23347200>;
+ };
+ 
+ &cpu6_opp13 {
+-	opp-peak-kBps = <8532000 23347200>;
++	opp-peak-kBps = <23347200>;
+ };
+ 
+ &cpu6_opp14 {
+-	opp-peak-kBps = <8532000 23347200>;
++	opp-peak-kBps = <23347200>;
+ };
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 34eff97f8630..e0c5881d8eb8 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -11,6 +11,7 @@
+ #include <dt-bindings/clock/qcom,lpasscorecc-sc7180.h>
+ #include <dt-bindings/clock/qcom,rpmh.h>
+ #include <dt-bindings/clock/qcom,videocc-sc7180.h>
++#include <dt-bindings/interconnect/qcom,icc.h>
+ #include <dt-bindings/interconnect/qcom,osm-l3.h>
+ #include <dt-bindings/interconnect/qcom,sc7180.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+@@ -84,8 +85,7 @@ &LITTLE_CPU_SLEEP_1
+ 			capacity-dmips-mhz = <415>;
+ 			dynamic-power-coefficient = <137>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			next-level-cache = <&L2_0>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+@@ -115,8 +115,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_100>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_100: l2-cache {
+@@ -140,8 +139,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_200>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_200: l2-cache {
+@@ -165,8 +163,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_300>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_300: l2-cache {
+@@ -190,8 +187,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_400>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_400: l2-cache {
+@@ -215,8 +211,7 @@ &LITTLE_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <137>;
+ 			next-level-cache = <&L2_500>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			L2_500: l2-cache {
+@@ -240,8 +235,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <480>;
+ 			next-level-cache = <&L2_600>;
+ 			operating-points-v2 = <&cpu6_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			L2_600: l2-cache {
+@@ -265,8 +259,7 @@ &BIG_CPU_SLEEP_1
+ 			dynamic-power-coefficient = <480>;
+ 			next-level-cache = <&L2_700>;
+ 			operating-points-v2 = <&cpu6_opp_table>;
+-			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
+-					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
++			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
+ 			#cooling-cells = <2>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			L2_700: l2-cache {
+@@ -386,52 +379,52 @@ cpu0_opp_table: opp-table-cpu0 {
+ 
+ 		cpu0_opp1: opp-300000000 {
+ 			opp-hz = /bits/ 64 <300000000>;
+-			opp-peak-kBps = <1200000 4800000>;
++			opp-peak-kBps = <4800000>;
+ 		};
+ 
+ 		cpu0_opp2: opp-576000000 {
+ 			opp-hz = /bits/ 64 <576000000>;
+-			opp-peak-kBps = <1200000 4800000>;
++			opp-peak-kBps = <4800000>;
+ 		};
+ 
+ 		cpu0_opp3: opp-768000000 {
+ 			opp-hz = /bits/ 64 <768000000>;
+-			opp-peak-kBps = <1200000 4800000>;
++			opp-peak-kBps = <4800000>;
+ 		};
+ 
+ 		cpu0_opp4: opp-1017600000 {
+ 			opp-hz = /bits/ 64 <1017600000>;
+-			opp-peak-kBps = <1804000 8908800>;
++			opp-peak-kBps = <8908800>;
+ 		};
+ 
+ 		cpu0_opp5: opp-1248000000 {
+ 			opp-hz = /bits/ 64 <1248000000>;
+-			opp-peak-kBps = <2188000 12902400>;
++			opp-peak-kBps = <12902400>;
+ 		};
+ 
+ 		cpu0_opp6: opp-1324800000 {
+ 			opp-hz = /bits/ 64 <1324800000>;
+-			opp-peak-kBps = <2188000 12902400>;
++			opp-peak-kBps = <12902400>;
+ 		};
+ 
+ 		cpu0_opp7: opp-1516800000 {
+ 			opp-hz = /bits/ 64 <1516800000>;
+-			opp-peak-kBps = <3072000 15052800>;
++			opp-peak-kBps = <15052800>;
+ 		};
+ 
+ 		cpu0_opp8: opp-1612800000 {
+ 			opp-hz = /bits/ 64 <1612800000>;
+-			opp-peak-kBps = <3072000 15052800>;
++			opp-peak-kBps = <15052800>;
+ 		};
+ 
+ 		cpu0_opp9: opp-1708800000 {
+ 			opp-hz = /bits/ 64 <1708800000>;
+-			opp-peak-kBps = <3072000 15052800>;
++			opp-peak-kBps = <15052800>;
+ 		};
+ 
+ 		cpu0_opp10: opp-1804800000 {
+ 			opp-hz = /bits/ 64 <1804800000>;
+-			opp-peak-kBps = <4068000 22425600>;
++			opp-peak-kBps = <22425600>;
+ 		};
+ 	};
+ 
+@@ -441,82 +434,82 @@ cpu6_opp_table: opp-table-cpu6 {
+ 
+ 		cpu6_opp1: opp-300000000 {
+ 			opp-hz = /bits/ 64 <300000000>;
+-			opp-peak-kBps = <2188000 8908800>;
++			opp-peak-kBps = <8908800>;
+ 		};
+ 
+ 		cpu6_opp2: opp-652800000 {
+ 			opp-hz = /bits/ 64 <652800000>;
+-			opp-peak-kBps = <2188000 8908800>;
++			opp-peak-kBps = <8908800>;
+ 		};
+ 
+ 		cpu6_opp3: opp-825600000 {
+ 			opp-hz = /bits/ 64 <825600000>;
+-			opp-peak-kBps = <2188000 8908800>;
++			opp-peak-kBps = <8908800>;
+ 		};
+ 
+ 		cpu6_opp4: opp-979200000 {
+ 			opp-hz = /bits/ 64 <979200000>;
+-			opp-peak-kBps = <2188000 8908800>;
++			opp-peak-kBps = <8908800>;
+ 		};
+ 
+ 		cpu6_opp5: opp-1113600000 {
+ 			opp-hz = /bits/ 64 <1113600000>;
+-			opp-peak-kBps = <2188000 8908800>;
++			opp-peak-kBps = <8908800>;
+ 		};
+ 
+ 		cpu6_opp6: opp-1267200000 {
+ 			opp-hz = /bits/ 64 <1267200000>;
+-			opp-peak-kBps = <4068000 12902400>;
++			opp-peak-kBps = <12902400>;
+ 		};
+ 
+ 		cpu6_opp7: opp-1555200000 {
+ 			opp-hz = /bits/ 64 <1555200000>;
+-			opp-peak-kBps = <4068000 15052800>;
++			opp-peak-kBps = <15052800>;
+ 		};
+ 
+ 		cpu6_opp8: opp-1708800000 {
+ 			opp-hz = /bits/ 64 <1708800000>;
+-			opp-peak-kBps = <6220000 19353600>;
++			opp-peak-kBps = <19353600>;
+ 		};
+ 
+ 		cpu6_opp9: opp-1843200000 {
+ 			opp-hz = /bits/ 64 <1843200000>;
+-			opp-peak-kBps = <6220000 19353600>;
++			opp-peak-kBps = <19353600>;
+ 		};
+ 
+ 		cpu6_opp10: opp-1900800000 {
+ 			opp-hz = /bits/ 64 <1900800000>;
+-			opp-peak-kBps = <6220000 22425600>;
++			opp-peak-kBps = <22425600>;
+ 		};
+ 
+ 		cpu6_opp11: opp-1996800000 {
+ 			opp-hz = /bits/ 64 <1996800000>;
+-			opp-peak-kBps = <6220000 22425600>;
++			opp-peak-kBps = <22425600>;
+ 		};
+ 
+ 		cpu6_opp12: opp-2112000000 {
+ 			opp-hz = /bits/ 64 <2112000000>;
+-			opp-peak-kBps = <6220000 22425600>;
++			opp-peak-kBps = <22425600>;
+ 		};
+ 
+ 		cpu6_opp13: opp-2208000000 {
+ 			opp-hz = /bits/ 64 <2208000000>;
+-			opp-peak-kBps = <7216000 22425600>;
++			opp-peak-kBps = <22425600>;
+ 		};
+ 
+ 		cpu6_opp14: opp-2323200000 {
+ 			opp-hz = /bits/ 64 <2323200000>;
+-			opp-peak-kBps = <7216000 22425600>;
++			opp-peak-kBps = <22425600>;
+ 		};
+ 
+ 		cpu6_opp15: opp-2400000000 {
+ 			opp-hz = /bits/ 64 <2400000000>;
+-			opp-peak-kBps = <8532000 23347200>;
++			opp-peak-kBps = <23347200>;
+ 		};
+ 
+ 		cpu6_opp16: opp-2553600000 {
+ 			opp-hz = /bits/ 64 <2553600000>;
+-			opp-peak-kBps = <8532000 23347200>;
++			opp-peak-kBps = <23347200>;
+ 		};
+ 	};
+ 
+@@ -2773,6 +2766,90 @@ dp_phy: dp-phy@88ea200 {
+ 			};
+ 		};
+ 
++		pmu@90b6300 {
++			compatible = "qcom,sc7180-cpu-bwmon", "qcom,sdm845-bwmon";
++			reg = <0 0x090b6300 0 0x600>;
++			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
++
++			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
++					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
++			operating-points-v2 = <&cpu_bwmon_opp_table>;
++
++			cpu_bwmon_opp_table: opp-table {
++				compatible = "operating-points-v2";
++
++				opp-0 {
++					opp-peak-kBps = <2288000>;
++				};
++
++				opp-1 {
++					opp-peak-kBps = <4577000>;
++				};
++
++				opp-2 {
++					opp-peak-kBps = <7110000>;
++				};
++
++				opp-3 {
++					opp-peak-kBps = <9155000>;
++				};
++
++				opp-4 {
++					opp-peak-kBps = <12298000>;
++				};
++
++				opp-5 {
++					opp-peak-kBps = <14236000>;
++				};
++			};
++		};
++
++		pmu@90cd000 {
++			compatible = "qcom,sc7180-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
++			reg = <0 0x090cd000 0 0x1000>;
++			interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
++
++			interconnects = <&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
++					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>;
++			operating-points-v2 = <&llcc_bwmon_opp_table>;
++
++			llcc_bwmon_opp_table: opp-table {
++				compatible = "operating-points-v2";
++
++				opp-0 {
++					opp-peak-kBps = <1144000>;
++				};
++
++				opp-1 {
++					opp-peak-kBps = <1720000>;
++				};
++
++				opp-2 {
++					opp-peak-kBps = <2086000>;
++				};
++
++				opp-3 {
++					opp-peak-kBps = <2929000>;
++				};
++
++				opp-4 {
++					opp-peak-kBps = <3879000>;
++				};
++
++				opp-5 {
++					opp-peak-kBps = <5931000>;
++				};
++
++				opp-6 {
++					opp-peak-kBps = <6881000>;
++				};
++
++				opp-7 {
++					opp-peak-kBps = <8137000>;
++				};
++			};
++		};
++
+ 		dc_noc: interconnect@9160000 {
+ 			compatible = "qcom,sc7180-dc-noc";
+ 			reg = <0 0x09160000 0 0x03200>;
 
 -- 
 2.41.0
