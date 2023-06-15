@@ -2,49 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CB9730C59
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 02:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B727F730C62
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jun 2023 02:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234019AbjFOAsL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Jun 2023 20:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S236809AbjFOAuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Jun 2023 20:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFOAsK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 20:48:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975FF1BC9;
-        Wed, 14 Jun 2023 17:48:09 -0700 (PDT)
+        with ESMTP id S236439AbjFOAuD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Jun 2023 20:50:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F111BE3;
+        Wed, 14 Jun 2023 17:50:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A9CF61F4F;
-        Thu, 15 Jun 2023 00:48:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A82DC433C0;
-        Thu, 15 Jun 2023 00:48:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 123DB63516;
+        Thu, 15 Jun 2023 00:50:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC5FC433C0;
+        Thu, 15 Jun 2023 00:50:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686790088;
-        bh=ljTHxAt2/H9b6qwb5RfqtZnhtJZN2CPWpT6t2q4z+44=;
+        s=k20201202; t=1686790201;
+        bh=OnZsw9VGDNW6KuY0k3YjEaktjmpS1FKjNJp4If98TW8=;
         h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=L10bqQ2XIuTNsKR/DVIaAOmKRB34mM779Gb5ukrZ/YtRbXXOzWwwEyxvAnbDVf8Cl
-         V5jHQGhiqRCUw3qNbJa1QCoU4e8Ks050IjZYaywOEXfqdzFBFWRa9tDzsGr4Cayzd1
-         W+TszLJXjmiRJUIFmowq9MNMxuN2anui4gnkHZ8vqtdWB6U4E0Yl3hNn1+q5ciqk/z
-         +AiLHvblE9HxILjr+10y93R2M8853VZziuQt2FLcTDnPy0ALahEabJy0AAVMLIRLJm
-         hGrfjUe776bD17fxL9EuQyQV9e0+BKSkT/+rbFPDK54riiT6YYabTL3sFIBLE1PB+5
-         RsHk4IWAogE2Q==
-Message-ID: <e2afd4bde3e85db358d50553a60a744f.sboyd@kernel.org>
+        b=UDrmucUciHwXzwjWwArsQuCkffUdTOgVRhSqtnrPIRZvOFFsVLsPsD9QkFw7DKtMJ
+         SH3uIpaDkQpyhWlLAK2RaB675mcPTmkn7dP7O5yn4CTL2J1jhCEyCIu22+AsHw7zio
+         ZrHMm6dAK2VZpbPBgOicl3oWAm0CPkvF/XzCLnLxzdHgJvghqgadwheEgECf5bsasn
+         GgjLXruMqUQ0A19R6kk9ENHc25Ev8pI1dutg4emORyHtAmlOlMRnOkdqKJ2cMVbuoE
+         iCmeE+jJpz2AxkX/1W5EYBZ5y6mVSzLHMCARPpCk4vOE6Etm4+eav2huj9QtbnnmJN
+         RkgFI22hVSnCQ==
+Message-ID: <0764b5fda92acb995ffbd05c4b3d2b2f.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
-References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org> <20230526-topic-smd_icc-v6-18-263283111e66@linaro.org>
-Subject: Re: [PATCH v6 18/22] clk: qcom: smd-rpm: Separate out interconnect bus clocks
+In-Reply-To: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
+References: <20230526-topic-smd_icc-v6-0-263283111e66@linaro.org>
+Subject: Re: [PATCH v6 00/22] Restructure RPM SMD ICC
 From:   Stephen Boyd <sboyd@kernel.org>
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
@@ -55,10 +58,10 @@ To:     Andy Gross <agross@kernel.org>,
         Leo Yan <leo.yan@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 14 Jun 2023 17:48:06 -0700
+Date:   Wed, 14 Jun 2023 17:49:59 -0700
 User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,52 +70,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Konrad Dybcio (2023-06-14 11:04:37)
-> The interconnect bus clocks are now handled within the ICC framework.
-> They still however need to get a kickstart *before* we call
-> clk_smd_rpm_enable_scaling(), or RPM will assume that they should all
-> be running at 0 kHz and the system will inevitably die.
+Quoting Konrad Dybcio (2023-06-14 11:04:19)
+> This series reshuffles things around, moving the management of SMD RPM
+> bus clocks to the interconnect framework where they belong. This helps
+> us solve a couple of issues:
 >=20
-> Separate them out to ensure such a kickstart can still take place.
+> 1. We can work towards unused clk cleanup of RPMCC without worrying
+>    about it killing some NoC bus, resulting in the SoC dying.
+>    Deasserting actually unused RPM clocks (among other things) will
+>    let us achieve "true SoC-wide power collapse states", also known as
+>    VDD_LOW and VDD_MIN.
 >=20
-> As a happy accident, the file got smaller:
+> 2. We no longer have to keep tons of quirky bus clock ifs in the icc
+>    driver. You either have a RPM clock and call "rpm set rate" or you
+>    have a single non-RPM clock (like AHB_CLK_SRC) or you don't have any.
 >=20
-> Total: Before=3D41951, After=3D41555, chg -0.94%
+> 3. There's less overhead - instead of going through layers and layers of
+>    the CCF, ratesetting comes down to calling max() and sending a single
+>    RPM message. ICC is very very dynamic so that's a big plus.
 >=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/clk/qcom/clk-smd-rpm.c | 278 +++++++++++++++++------------------=
-------
->  1 file changed, 115 insertions(+), 163 deletions(-)
->=20
-> diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rp=
-m.c
-> index 6e7f0438e8b8..0d1d97659d59 100644
-> --- a/drivers/clk/qcom/clk-smd-rpm.c
-> +++ b/drivers/clk/qcom/clk-smd-rpm.c
-> @@ -498,13 +506,69 @@ DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk1, 11, 19200000=
-);
->  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk2, 12, 19200000);
->  DEFINE_CLK_SMD_RPM_XO_BUFFER(div_clk3, 13, 19200000);
-> =20
-> +static struct clk_smd_rpm *bimc_pcnoc_icc_clks[] =3D {
+> The clocks still need to be vaguely described in the clk-smd-rpm driver,
+> as it gives them an initial kickoff, before actually telling RPM to
+> enable DVFS scaling.  After RPM receives that command, all clocks that
+> have not been assigned a rate are considered unused and are shut down
+> in hardware, leading to the same issue as described in point 1.
 
-Can these be const arrays?
-
-> +       &clk_smd_rpm_bimc_clk,
-> +       &clk_smd_rpm_bus_0_pcnoc_clk,
-> +};
-> +
-[...]
-> @@ -1332,6 +1275,15 @@ static int rpm_smd_clk_probe(struct platform_devic=
-e *pdev)
->                         goto err;
->         }
-> =20
-> +       for (i =3D 0; i < desc->num_icc_clks; i++) {
-> +               if (!desc->icc_clks[i])
-> +                       continue;
-> +
-> +               ret =3D clk_smd_rpm_handoff(desc->icc_clks[i]);
-
-This API can probably take a const struct clk_smd_rpm pointer as well.
+Why can't we move the enable of DVFS scaling call to the interconnect
+driver as well? We want the clk driver to not reference the interconnect
+resources at all.
