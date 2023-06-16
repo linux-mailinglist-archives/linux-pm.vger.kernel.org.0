@@ -2,103 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E99733A39
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 21:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC55F733A50
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 22:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345649AbjFPT4k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 15:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43002 "EHLO
+        id S229928AbjFPUDH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 16:03:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPT4j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 15:56:39 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4AE2359D;
-        Fri, 16 Jun 2023 12:56:38 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-77ac2eb07a3so39207639f.2;
-        Fri, 16 Jun 2023 12:56:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686945398; x=1689537398;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qS/HVMvqz+3lSoqw9RtE/dO2ukSdMAzMn+pgkdvUh6w=;
-        b=QEGDNs6bloovdRE9Vnx9fVwOXd/Ih0hFt3VejJyexUtf331RonA4c2IbJsVussc/U+
-         KLm0ALZW4EzC9kSrLNifgNyYhEDi308TQE3runAWS/TwK8njLdE/NDnrtv+7Y1qdU6k2
-         Rk8koAd2t06IdsauXjEG3Nxl9TH41kS7qPdhgKVAaMpIPUfGPZXIrxngfH+mBO9sspMF
-         QHfxR9MhWMv+xhdJVVby9e3DSz1g6fvNo3MStYsdNgTOuIVNuBcZC1sWz1YwqupGY93H
-         R6+cNcurC9yJBicknmdtPibMuy7uJGE5/S+ZMIkf3D8MSYXmENI8UGJ3He24DtEgHGoA
-         wVdA==
-X-Gm-Message-State: AC+VfDyLyl4uXjCRgYb8nmU1N4B25NInStqnOtbZeS8DKbHS+JabOggz
-        +FZCwU2D63A79fXL6SIFxA==
-X-Google-Smtp-Source: ACHHUZ6huIxB7TX+/DLvdKdc8mYNTXyBGF99Ajc4+Uni1wbszykli1jrwEBBrzCBaNSbKvMS1cO2lA==
-X-Received: by 2002:a05:6602:29b1:b0:76c:6674:243b with SMTP id u17-20020a05660229b100b0076c6674243bmr123367ios.15.1686945397889;
-        Fri, 16 Jun 2023 12:56:37 -0700 (PDT)
-Received: from robh_at_kernel.org ([2605:ef80:80c2:7a4a:82c2:d6b3:423e:4a47])
-        by smtp.gmail.com with ESMTPSA id q20-20020a02c8d4000000b0040fa0f43777sm6420098jao.161.2023.06.16.12.56.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Jun 2023 12:56:37 -0700 (PDT)
-Received: (nullmailer pid 934772 invoked by uid 1000);
-        Fri, 16 Jun 2023 19:56:21 -0000
-Date:   Fri, 16 Jun 2023 13:56:21 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     =?iso-8859-1?Q?Fern=E1ndez?= Rojas <noltari@gmail.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marek Vasut <marex@denx.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Suman Anna <s-anna@ti.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-remoteproc@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-clk@vger.kernel.org, Abel Vesa <abelvesa@kernel.org>,
-        devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        - <devicetree-spec@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
- in titles
-Message-ID: <168694537949.934680.13323062117489358147.robh@kernel.org>
-References: <20230615213154.1753313-1-robh@kernel.org>
+        with ESMTP id S1345984AbjFPUC4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 16:02:56 -0400
+Received: from sonic301-22.consmr.mail.ir2.yahoo.com (sonic301-22.consmr.mail.ir2.yahoo.com [77.238.176.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30AA93C1E
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 13:02:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1686945768; bh=7VIg2OskWnaHeGIh2/02xDBsEiU6cbaw6bxetVSvniY=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=XSfgOm84t1Q/PF7baXtE1kq3V6DUz/ew03bL6jFy++3hBk5KW88cgxRVHqaYwtjPBmfZznKRHoWcST2jOKs7zQwMfWRFqlYTzM7guJLblMyHiqmehEkix/TkyOdBuDAhDluu8erboUXU5twjPHfesopNY1lutRPIrOYdcSnu4uok+kEy3+RfFfqB7TagES8I2qF3HVOPwYBSDOKCNKaHpZO0wopEKABlBDEvPiGn1U3kvZSLpw5t5aLarHiykdw2KjdI2xxCiGzQeBYz6wlenlOMVrDuWMRhQXsdZtrwE4SGf3SlBKxeGOp8zTvui/PK9ilrXNvVaSAL3ADy5nJ4lA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1686945768; bh=CB0V2BCA4hR4eBIB8o/GC/QgYjnmsr4ogI6UW55EfX4=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=VNpD57dVPLk3Jft4Wlh/K34jU8w+uJBPC7MyIMqPomcOGv0y0asF2oo4IcmMNY1SIceY7vlV04tdv/T5eD5V9fZb7x4y8fsAazEiFY/A+8eDX3fChfJy4S53fIlP8kof59pbOi/Rfpl1HSkUQXAsMhbxQR5SeimOrXIXXhd/fyN4ffGeszH2f7eXaTX+X0LO0xtFU1zEB/ei2GbrVkio3EaLBFDsxNN0b1K+jy29f2rHUYzpS8jdp+VlJPZGNAwsbupcL8xxM+fRcjtcg8gi8zhwK3+JjU3u0gkMqyjBFmGZq4WDC3JjTJOt56RIT9xZMqemofXPzxVorGgcxjubIg==
+X-YMail-OSG: kOllkm8VM1m8IHFgxV.hizl2LUrDP7Tp1uRkTyzYIovcwM_ATgBilsQ3EORS.zW
+ czQKCrXvnPqLoBCrPd8wwgpk_o7PRnFqw5Y_Z2h7OrNV3qV5004VND4bjGd0vx5PMjsgotn3S.HT
+ gGn94Az9sBGyQY7B3L0QMw1kcldLpfCo.3HhlmwB.YYu31sv8eItFdw3NnM7aMKSd.vG7RdkyTRe
+ noLkqqCBh_LyQQeaATg8vakclMId0V_.rGPtwMyVAM1_GqL0cP98NSSPaXLvbdE9IeLnsalsE8rM
+ 1rZitsm4TSomLZYtrE3YXO.dWJhHsBzhLtSVLAqnQEUbTzGsO._jKmqUXt1HY2UoAhvfzGEFJWsP
+ 83mdU90kpJr_yr92lYC.dAf57gBVnqEMuGzE7eJZhym8BBPCwU1Itj_DYb6dZ5V6.4GEMH_6RVVU
+ qap0wUcblIS607qT4idHQC7_wO_JwVvkmvUDeGnzB1AYcWKW7xRr_vNXIqEUfyIyqdF_xiO79D3D
+ qYiwHKNnpxp9GU1tay3a221YdaOBp6RkF3BSNK7y6Z4gVeABIRKu1EPQVob5VcxUkWO8D6Q.9gWJ
+ kjmSvnhnQQcOUOV4y5XuaFq8prdCa8kxzGPVyxmovHQxjzCksvBzG1fDxiJPu8AeOjakA3N7UQu9
+ .DDNrL9OmPDvPW1mZ2MA1xVkIYIzf4PFRHKPZaeE3T9tdMVjGIiUrGvjpjaYJ4E6pnUURBteGofG
+ wrfqhH2t7suskI2n3GCoH0uoCRFvpHzaLnJxu2e5Cj7sHXGSRVt_7FGsPRSxF9SSb8UOTr4cV9Ve
+ lQcgZL1PnnbhbRFl0vIktQfXDIoUImh4ZvNitiHkanBEY3UKntSwjVnIgEc0C5tx17RPe505uZwT
+ UTrNZ853aya9sbDGHO9d1VPlNxxjKYGx6VRVYbM2iiNvMBE6Hjq0TBxnU4WyBM_zXtW5lBtEFopG
+ ZUtfFbeE24zLezZRG5eSRqqwP9gaRFKSAJcvauUcH4FM3qr_eP5YO3kak1uFaFKgn0aePGSNXoNo
+ dP9NYSmJe4q3SXu4_OViFeAGgBVMMTnBgwgQV25tjOtXlAiiWSt1KIEJLyQUSM30HBq_5DAEszoF
+ 59uwn02rQ08VqtoMCPatoz18jlqr3Tlx4YMz0aHAKuuwfNIhpgM3jKV.aPstjT4CAtAvuRfDB3cb
+ CeVz.BIQjYqa9ZkYblQx_utd3elL4DQjcNGcI3r7P30ZcHZQLeCOVOSi_I_YrXOVVqst48XttI0h
+ dCjEN7HVIRFURhsVfc2K1dUUt2Z6Ewr92UZcDF8L2jplUjNP3EJ.awdnncEw4n8IxXDEZ0hlfyb9
+ TsYYi0uKAqWHzinH10bIHYBrPrcwBvLEKpUZW6HJQr6xOrT9.K0woN7ra6jYwun0xRWxMCxYzEOS
+ tVPorHV36yOX3bOaW35hqraCCcwuTtiTgKy7qoxt_IUJVuJVwjI6pFUY855_D2.drFO3s84B7NIa
+ u6Hzh_3zyjDO3gSXVR5aGwGkR8AU5lv7KG4._Jwtl4qtFDyEbZdNDpeAM8NUeQi8TQ42plu9.mdL
+ NFfELDr1nUNQTZbAAKnzfTbfGycOn1L3fm_J2QdVIbXyAwXRwQk4_8KUL5CZbkUbiLJyxtWxu94d
+ Sae3e2vr60mKbVRAGIUL38WpiD7m4vo7..MZ8am4OCNkG0LtRwJAaqhXFE5R2Uq5FvV4xWndAZGp
+ 8s.wjpFa1TyzuuVehZ62fvUQEyri51KWmOWSfd5kJFB7_lhLWxmXmjo_8mr9AxyQkJvOr1jmSs_R
+ bZNyHbKctM_vdIXpUwEk1GWOUvQ25RKRWfm6LyKT5Q79BMFvUnLjGB8GgXcvqWsi6L4JcN8DpK8a
+ s79w3mZ5R1VgHF7nc3zmWo3q0.X.9Yo8u5_3mFYAM7LwB_JBs11TnN74xVLQ3shLTx9WXpgPCvEa
+ U0xH_6ZTy..qOa5ck1SNM57Ulix__KSh6h1vCGpwJaYSyTEDH3gj5mzaqOyhhgid.8vXiiLjU3c2
+ fLafXkF6gCMU3.av8VIHKuFblYj_cEZbvLeUOdf.iGr7q75CFVKtYATjgWfDJhyScosTNOumQIIJ
+ ary3dryfhHUu4upw9RxcpMlEdB3yQywtH4ltJHMVfNbo2ujEEip8ZfDzruO04aJzty4FJPluJkLl
+ avUnbZtsJRPB32wm78eJ0Ws53YdwvLH8ONjm1ZoM_xwQMnrkqHiivoxr7AvXB6Sl.4Zf24UUcOZx
+ 8gNmShH45jJjHudbOaEm48gTk1u1fxIs0qukvg9aqLo_fynwr3Jq2Togc7nN5O1RA6gN6MHw-
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: a147aced-bc38-408b-b8c0-f83847a401c3
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ir2.yahoo.com with HTTP; Fri, 16 Jun 2023 20:02:48 +0000
+Received: by hermes--production-ir2-7867f454fc-z6m77 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 4c9e8265e02e87a162885ce9dfef0a17;
+          Fri, 16 Jun 2023 20:02:43 +0000 (UTC)
+Message-ID: <faff027d-2a6a-22ca-2487-2ae05223fabd@rocketmail.com>
+Date:   Fri, 16 Jun 2023 22:02:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [GIT PULL] Immutable branch between MFD and Power due for the
+ v6.5 merge window
+To:     Lee Jones <lee@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1684182964.git.jahau.ref@rocketmail.com>
+ <cover.1684182964.git.jahau@rocketmail.com>
+ <20230609064753.GL3635807@google.com>
+Content-Language: en-US
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <20230609064753.GL3635807@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21557 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Lee,
 
-On Thu, 15 Jun 2023 15:31:54 -0600, Rob Herring wrote:
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
+On 09.06.23 08:47, Lee Jones wrote:
+> Enjoy!
 > 
-> Most of these have been fixed already, so fix the handful that snuck in.
-> With this, a meta-schema check can be enabled to catch these
-> automatically.
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml   | 2 +-
->  Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml    | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
->  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
->  .../devicetree/bindings/reserved-memory/framebuffer.yaml        | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
+>    Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+> 
+> are available in the Git repository at:
+> 
+>    git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-power-v6.5
+> 
+> for you to fetch changes up to b54185c1e3b02c91e4a190ac5c346ea7bfb0de93:
+> 
+>    dt-bindings: Add rt5033 MFD, Regulator and Charger (2023-06-08 18:18:13 +0100)
+> 
+> ----------------------------------------------------------------
+> Immutable branch between MFD and Power due for the v6.5 merge window
+> 
+> ----------------------------------------------------------------
+> Jakob Hauser (8):
+>        mfd: rt5033: Fix chip revision readout
+>        mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
+>        mfd: rt5033: Apply preparatory changes before adding rt5033-charger driver
+>        power: supply: rt5033_charger: Add RT5033 charger device driver
+>        power: supply: rt5033_battery: Move struct rt5033_battery to battery driver
+>        power: supply: rt5033_battery: Adopt status property from charger
+>        dt-bindings: power: supply: rt5033-battery: Apply unevaluatedProperties
+>        dt-bindings: Add rt5033 MFD, Regulator and Charger
+> 
+> Stephan Gerhold (1):
+>        mfd: rt5033: Drop rt5033-battery sub-device
+> 
+>   .../devicetree/bindings/mfd/richtek,rt5033.yaml    | 138 ++++++
+>   .../power/supply/richtek,rt5033-battery.yaml       |   2 +-
+>   .../power/supply/richtek,rt5033-charger.yaml       |  65 +++
+>   drivers/mfd/rt5033.c                               |   8 +-
+>   drivers/power/supply/Kconfig                       |   8 +
+>   drivers/power/supply/Makefile                      |   1 +
+>   drivers/power/supply/rt5033_battery.c              |  38 +-
+>   drivers/power/supply/rt5033_charger.c              | 472 +++++++++++++++++++++
+>   include/linux/mfd/rt5033-private.h                 |  64 ++-
+>   include/linux/mfd/rt5033.h                         |  24 --
+>   10 files changed, 762 insertions(+), 58 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
+>   create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
+>   create mode 100644 drivers/power/supply/rt5033_charger.c
 > 
 
-Applied, thanks!
+I just realized that there is one patch missing in the immutable branch 
+"ib-mfd-power-v6.5" [1]. Unfortunately I haven't noticed earlier. The 
+immutable branch holds 9 patches, the patchset has 10 patches [2]. The 
+missing patch is No. 6 "power: supply: rt5033_charger: Add cable 
+detection and USB OTG supply".
 
+As this patch No. 6 affects only the file 
+drivers/power/supply/rt5033_charger.c and is the last patch on that 
+file, it's no problem to add this patch on top of the other patches.
+
+Could you submit another pull request for the v6.5 merge window to add 
+this patch?
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=ib-mfd-power-6.5
+[2] 
+https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
+
+Kind regards,
+Jakob
