@@ -2,87 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA700732AF1
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 11:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9167F732AFE
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 11:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245760AbjFPJEK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 05:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S241613AbjFPJFg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 05:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244790AbjFPJDu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 05:03:50 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AA84482
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 02:02:03 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30fb7be435dso271915f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 02:02:03 -0700 (PDT)
+        with ESMTP id S233252AbjFPJEJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 05:04:09 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085934694
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 02:02:16 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-311183ef595so275118f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 02:02:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686906121; x=1689498121;
+        d=linaro.org; s=google; t=1686906134; x=1689498134;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BR1FrCtHH9AcQAwZRNbs0qHZeJ7fa75O3YybSaX975M=;
-        b=viJXITiRsw+2I7ENSPHa7PamsTgeUUksl6Wk7EqFynn+345OV79Ci8ZMTJxU/nPeR6
-         j4MuMmeVfNNoa5hoxMBD9pEvyd28n0Y9e+Qdxl5BLmLqZaq8IYEgzhWi3FUNS36BUh33
-         7WKujaxLoiogk/2vBy9Dq+4StwnUAwLU79Fz317gPJVnFwEX0eYoG3TR72KwRZezyJFR
-         k2zAuGTjqGSgKK9f9vCAODthWnUJjIbS3O14Y7KV6xX8s/Tn7VpI5BIDc2YSc21BcJ3z
-         60JOezzX8xUY3wN33LVjK1JyhN9lJMvwvkivSJVu017F8iqrYk5g/0RvcDwk0j7a0KU1
-         nSZg==
+        bh=FUNnoPNkuiFRrjF8T9ixweyGU11L7PSo9N7Nhno60LU=;
+        b=pzKhrKpXuNfd4MwuRVW+1dik2HMLv+JL5MQRqhO8LZHzVNOx3fQ7mbBFAq5NpOXS3W
+         EIOSJyChiTol1xRaIbb0fiOowERNnfli3pRfzmgPClGBBXSznVBfRSdty6TdglucEh/G
+         5VJ3cVa1qQD4YEQgQ1+HgCwzb7E9NGa1J0YkxRBP4aWlB4UBxGXrrFp/oDFrKjFQ7GbJ
+         ZDsMCfXnwuyulyRsrWH6y3mcilhVmg8CcN7lEHW/yyPd43UYDS8loMSWLCoLUreYnGva
+         NKoJSmACORRXz1F19IbDLBusTVFpFhpIQzK2kP8WwiJRfNwXStQ4IJfYF2B+vvv7rBQI
+         93Ew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686906121; x=1689498121;
+        d=1e100.net; s=20221208; t=1686906134; x=1689498134;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BR1FrCtHH9AcQAwZRNbs0qHZeJ7fa75O3YybSaX975M=;
-        b=aTEp9oSs6ubLnXl2YTy9Hsz+ocUmV8HXMHW74Fytqev9gwxIj16AY7heeYpNmQNhXO
-         4XZG1CHhBMZDYVCKL8U4WauonEYWfyEU9ESUFK6ThW1z+e3HbkxKCxg1HRGGlBKDLjYK
-         l0B+D8ccwN9RvEPt+csN+gu+s0nbw3O0cXx0IWPrZn92KtbnKn/8QVD+as06P5Q1BTZT
-         zs0d60K5bymyR8VnL3V+xIr4gDGo8c+JevGQzgFWYoWWSb3BoHWXiBXmLcnOicEBgLtm
-         0yrTpJF6qV1o+3G3e8l6m1BuLg9/IcJRk3cnH0ZsmAyIOKqT1IRRIJaHXgpibs5GO9tE
-         a7dg==
-X-Gm-Message-State: AC+VfDxYEpGYInzDP9m785o5fofSp9FtZJxQ+Q9kk2p9haEPL6lv+wAo
-        I1KpJTQNFKcWJJoU2MmPEzcy0A==
-X-Google-Smtp-Source: ACHHUZ7Z+Qj9nzLK2MdxQhEpGKNId+ygHcs+6kNDfxumfYnqZ7O5mxfvSzNPzRH5/17HgJYEMGLi0w==
-X-Received: by 2002:a7b:c4d3:0:b0:3f7:e35d:b2c3 with SMTP id g19-20020a7bc4d3000000b003f7e35db2c3mr1071663wmk.40.1686906120776;
-        Fri, 16 Jun 2023 02:02:00 -0700 (PDT)
+        bh=FUNnoPNkuiFRrjF8T9ixweyGU11L7PSo9N7Nhno60LU=;
+        b=dp/6o13BXLex7HDwQC71O2aZJi4YU/zACocmFX+XqXpp9vWWzaxIl6JuIS5zTzafUw
+         CYk9xPFD85NoRxWAa64EY3Xol7usH4llt1RzE8b2qu9YZjq8J35osgWT0Pl/WtBvzPcZ
+         ejtVL6S2E5glTZiq9hUFyX9UxxwsoV+iY5ryvx7+H3aNFZWxfATC5mLYd6C2U1WiWhS4
+         VpqBArovXJwAA/lT5DmDGw/KvvSGNMPXFdftqxBTUa5f/XfqfE7AIjBtIZQ8uRhBdq0X
+         dFpN93wVbdoaWvkkwlNiwR3DAUtDpdIpY5uMpErmFcoU3HaixSwVVFfBhTiTsfUFm3tM
+         APSw==
+X-Gm-Message-State: AC+VfDwySDZi29nRJuLIJR1saQlPlc8sugTH3sEE5MhjtuSAIkVC8HtO
+        b9MSFy8z35MN4BwHFBl3bD+NgQ==
+X-Google-Smtp-Source: ACHHUZ5pUTNj0PujN1w6Q0Ci+RaPMj7Jwsu/CGS8stq7wUe0fqSyYpyB/dPhk00Bd1Jz7pzhhg/FOg==
+X-Received: by 2002:adf:ec45:0:b0:30f:af06:7320 with SMTP id w5-20020adfec45000000b0030faf067320mr768376wrn.23.1686906133994;
+        Fri, 16 Jun 2023 02:02:13 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:331d:4ff0:1778:3425? ([2a05:6e02:1041:c10:331d:4ff0:1778:3425])
-        by smtp.googlemail.com with ESMTPSA id k17-20020a05600c0b5100b003f7ec896cefsm1644501wmr.8.2023.06.16.02.01.59
+        by smtp.googlemail.com with ESMTPSA id s2-20020adfecc2000000b0030aed4223e0sm22878418wro.105.2023.06.16.02.02.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 02:02:00 -0700 (PDT)
-Message-ID: <be625ba9-f490-9bf0-5f15-4f403aad10d5@linaro.org>
-Date:   Fri, 16 Jun 2023 11:01:59 +0200
+        Fri, 16 Jun 2023 02:02:13 -0700 (PDT)
+Message-ID: <dbf97703-1cdd-ebc8-325d-c5ce22e3d44f@linaro.org>
+Date:   Fri, 16 Jun 2023 11:02:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
+Subject: Re: [PATCH 0/3] thermal: qoriq_thermal: support TMU 2.1
 Content-Language: en-US
-To:     Peng Fan <peng.fan@oss.nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
-Cc:     "amitk@kernel.org" <amitk@kernel.org>,
-        "rui.zhang@intel.com" <rui.zhang@intel.com>,
-        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        Alice Guo <alice.guo@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, rafael@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     amitk@kernel.org, rui.zhang@intel.com, andrew.smirnov@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, alice.guo@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
 References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
- <507b5daa-73e7-8d21-4f73-c56f88c6bf77@linaro.org>
- <2e57d14a-214e-c3e0-e011-e804ce8c9b39@oss.nxp.com>
- <4844567.31r3eYUQgx@pliszka>
- <3518a2e7-806d-ad46-a439-ff4a57ed8158@oss.nxp.com>
- <3e397cf5-0ca3-fa10-b5d8-bbc7b1038a37@linaro.org>
- <DU0PR04MB9417A508A757AF8964CDAEA6885BA@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <7e843caa-8369-1fb0-36c4-a4482d37b211@linaro.org>
- <60c95298-68cd-0f6c-38cc-745da7b2a6ed@oss.nxp.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <60c95298-68cd-0f6c-38cc-745da7b2a6ed@oss.nxp.com>
+In-Reply-To: <20230516083746.63436-1-peng.fan@oss.nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,65 +78,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2023 03:06, Peng Fan wrote:
+On 16/05/2023 10:37, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
+> i.MX93 use same TMU IP as Qoriq, but with version 2.1, so update
+> the driver to support 2.1.
 > 
-> On 6/15/2023 9:49 PM, Daniel Lezcano wrote:
->> Caution: This is an external email. Please take care when clicking 
->> links or opening attachments. When in doubt, report the message using 
->> the 'Report this email' button
->>
->>
->> On 15/06/2023 14:07, Peng Fan wrote:
->>
->> [ ... ]
->>
->>> Per i.MX8MQ Reference manual:
->>> MSITE:
->>> Monitoring site select 0 - 2. By setting the select bit for a 
->>> temperature sensor site,
->>>   it is enabled and included in all monitoring functions. For proper 
->>> operation, this
->>> field should only change when monitoring is
->>> disabled. If no site is selected, site 0 is monitored by default.
->>>
->>> ME: Before enabling the TMU for monitoring, the TMU must be configured,
->>> see section Initialization Information. Failure to properly 
->>> initialize the
->>> configuration table may result in boundedly undefined
->>> behavior.
->>>
->>> So we must set the SITEs bits before enabling ME bit. So set TMR_ME when
->>> each time call invoke mode violates the spec.
->>>
->>> As I understand, change_mode is per zone, which means per msite for TMU,
->>> but TMU_ME is a global gating bit which should not be set before all 
->>> msites
->>> are set.
->>
->> Mmh, IIUC correctly the documentation, it says the monitoring must be
->> disabled when changing the sites. So in the proposed code, we shall
->> disable the TMU, update the site and then enable the TMU.
->>
->> Can you give a try to see if that works? If yes, then can you submit a
->> patch on top of this series. Meanwhile, I'll pick those changes.
+> This patch also includes a fix for i.MX8MQ
 > 
+> Pankit Garg (1):
+>    thermal: qoriq_thermal: No need to program site adjustment register
 > 
-> I did a basic test on i.MX8MQ, it seems work. But I still have concern
-> because it volitates the spec, need disable TMU before updating MSITE.
+> Peng Fan (2):
+>    thermal: qoriq_thermal: only enable supported sensors
+>    thermal: qoriq: support version 2.1
 > 
-> And if we disable TMU when updating MSITE in your patch, there is 
-> potential risk that zone0 is reading temperature, while we disable TMU
-> and update MSITE for zone1. So zone0 may get invalid temperature because
-> TMU is disabled at this window.
-> 
-> no good idea from my side, unless we keep check TMU_ME when
-> getting temperature.
+>   drivers/thermal/qoriq_thermal.c | 48 ++++++++++++++++++++-------------
+>   1 file changed, 29 insertions(+), 19 deletions(-)
 
-Yeah, that is a good point. We are ending up to do the TMU check in the 
-get_temp() any. Thanks for taking the time to look it up.
+Applied, thanks
 
-   -- Daniel
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
