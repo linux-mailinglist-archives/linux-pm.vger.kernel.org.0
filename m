@@ -2,68 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D621973382F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 20:34:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD9F7338B0
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 21:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjFPSeI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 14:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55796 "EHLO
+        id S1344031AbjFPTBw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 15:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232025AbjFPSeI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 14:34:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5671FD5;
-        Fri, 16 Jun 2023 11:34:07 -0700 (PDT)
+        with ESMTP id S1345700AbjFPTB3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 15:01:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245543C12;
+        Fri, 16 Jun 2023 12:01:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDBF9623D5;
-        Fri, 16 Jun 2023 18:34:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 257A3C433C0;
-        Fri, 16 Jun 2023 18:34:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD690625A9;
+        Fri, 16 Jun 2023 19:01:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855ADC433C0;
+        Fri, 16 Jun 2023 19:01:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1686940446;
-        bh=UmQb6FNQc3kZycxaRrEf208LD6H0d3VHH/7wjn/eZgs=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=sSoW856XRyhhdpubOu3eCtjd9oQuJCLRRSOTHJ64BN7eYjN110eUBx5J29lBoRd6v
-         VdB7I6tExsuxllymfO3U9Z8/PTbOP34HVvgN5JJqS7sB77KgUrmZfzXWkHA5cLqFXQ
-         63Wl7L4yiHa3u7Hw1du1K5igyEh2uvZXsvhKOfu8a+BTc4OH2cCswgcZZLrP23DH/Y
-         QtZSmuhMbDgzrtCN8u8IIfOh7P1Xbym/QN+md+32n2KnvCbmDZ6wboNmch1SckcLB6
-         fxaHWx+Ns4yZGnRwnVJWmkE4qpjUQLCFpsUMON+lAhPy8/x73cR8gqaMLwnENSAYyw
-         hBL9QTb9Hza+A==
-Message-ID: <6f5220ef3ec3c05f32b5d6085d2e8adf.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-References: <20230615213154.1753313-1-robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema" in titles
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-remoteproc@vger.kernel.org
-To:     - <devicetree-spec@vger.kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        =?utf-8?q?Fern=C3=A1ndez?= Rojas <noltari@gmail.com>,
+        s=k20201202; t=1686942068;
+        bh=k7TL4/bEtYnlDoFIRBngv3fhHMXqUW4iN9W+YmmLUhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aodvJaD58Y+8lUTMXpB+bGwpR4phhlnX+6Oh5PnMDn3MAiV5RYJFIv+KjZLQnAY0Y
+         IEW69W3BETBuIJatjMnz/A/Xeb6JidIvdDB2zGceX2LdWxPw5XDyD/HoZiae83A5EA
+         rFCGHggp6UO8oX+zbaJM1Pumsr4gBAT2YdfGbHTGf/T/5pVYFvOPZafZYn3PEUbc5w
+         Lk8k0PvJbAojM73H786e7KeJk75vSEh9JxatHIJTFPqnDB3RXNIW+DUN7rdHfem7Oi
+         68KrV5zWDb13L1BqzBWAplwxLJMFaRY9EMj4ejW3DLmU3QU8IZY8vwz/dexGHxzsQ2
+         spuA6P6lAoz9A==
+Date:   Fri, 16 Jun 2023 20:01:02 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Vincent Legoll <vincent.legoll@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Vasut <marex@denx.de>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sebastian Reichel <sre@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Suman Anna <s-anna@ti.com>
-Date:   Fri, 16 Jun 2023 11:34:03 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v6 23/26] dt-bindings: soc: rockchip: grf: add
+ rockchip,rk3588-pmugrf
+Message-ID: <20230616-gargle-spotless-9d04000106b0@spud>
+References: <20230616062101.601837-1-s.hauer@pengutronix.de>
+ <20230616062101.601837-24-s.hauer@pengutronix.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="NpVXOp9NH7FQ7UcR"
+Content-Disposition: inline
+In-Reply-To: <20230616062101.601837-24-s.hauer@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,15 +69,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Quoting Rob Herring (2023-06-15 14:31:54)
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
->=20
-> Most of these have been fixed already, so fix the handful that snuck in.
-> With this, a meta-schema check can be enabled to catch these
-> automatically.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+--NpVXOp9NH7FQ7UcR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jun 16, 2023 at 08:20:58AM +0200, Sascha Hauer wrote:
+> Add rockchip,rk3588-pmugrf compatible string.
+>=20
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--NpVXOp9NH7FQ7UcR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZIyxbgAKCRB4tDGHoIJi
+0hRCAPwIBYDKio6eKwjALxf7btC6cRpqymJvrXVISsExsJ2rGgD/ZsjJuro0F/cO
+PcC1ID8rsPY3eXz6PZ75Cx2uYr3Dogo=
+=NrG2
+-----END PGP SIGNATURE-----
+
+--NpVXOp9NH7FQ7UcR--
