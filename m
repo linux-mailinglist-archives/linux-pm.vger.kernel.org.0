@@ -2,58 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70FA732A3D
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 10:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA700732AF1
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 11:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244058AbjFPIvR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 04:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S245760AbjFPJEK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 05:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343804AbjFPIvN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 04:51:13 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20D0530D0;
-        Fri, 16 Jun 2023 01:51:09 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxzOp8IoxkjegFAA--.12616S3;
-        Fri, 16 Jun 2023 16:51:08 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxluR4IoxknxIdAA--.17041S3;
-        Fri, 16 Jun 2023 16:51:05 +0800 (CST)
-Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
- <20230615091757.24686-3-zhuyinbo@loongson.cn>
- <efdd8e66-a8dc-1a7e-6ac3-fdbe0ba45204@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <5f50f83d-52f4-276b-1e99-6fef461df80a@loongson.cn>
-Date:   Fri, 16 Jun 2023 16:51:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S244790AbjFPJDu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 05:03:50 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AA84482
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 02:02:03 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30fb7be435dso271915f8f.1
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 02:02:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686906121; x=1689498121;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BR1FrCtHH9AcQAwZRNbs0qHZeJ7fa75O3YybSaX975M=;
+        b=viJXITiRsw+2I7ENSPHa7PamsTgeUUksl6Wk7EqFynn+345OV79Ci8ZMTJxU/nPeR6
+         j4MuMmeVfNNoa5hoxMBD9pEvyd28n0Y9e+Qdxl5BLmLqZaq8IYEgzhWi3FUNS36BUh33
+         7WKujaxLoiogk/2vBy9Dq+4StwnUAwLU79Fz317gPJVnFwEX0eYoG3TR72KwRZezyJFR
+         k2zAuGTjqGSgKK9f9vCAODthWnUJjIbS3O14Y7KV6xX8s/Tn7VpI5BIDc2YSc21BcJ3z
+         60JOezzX8xUY3wN33LVjK1JyhN9lJMvwvkivSJVu017F8iqrYk5g/0RvcDwk0j7a0KU1
+         nSZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686906121; x=1689498121;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BR1FrCtHH9AcQAwZRNbs0qHZeJ7fa75O3YybSaX975M=;
+        b=aTEp9oSs6ubLnXl2YTy9Hsz+ocUmV8HXMHW74Fytqev9gwxIj16AY7heeYpNmQNhXO
+         4XZG1CHhBMZDYVCKL8U4WauonEYWfyEU9ESUFK6ThW1z+e3HbkxKCxg1HRGGlBKDLjYK
+         l0B+D8ccwN9RvEPt+csN+gu+s0nbw3O0cXx0IWPrZn92KtbnKn/8QVD+as06P5Q1BTZT
+         zs0d60K5bymyR8VnL3V+xIr4gDGo8c+JevGQzgFWYoWWSb3BoHWXiBXmLcnOicEBgLtm
+         0yrTpJF6qV1o+3G3e8l6m1BuLg9/IcJRk3cnH0ZsmAyIOKqT1IRRIJaHXgpibs5GO9tE
+         a7dg==
+X-Gm-Message-State: AC+VfDxYEpGYInzDP9m785o5fofSp9FtZJxQ+Q9kk2p9haEPL6lv+wAo
+        I1KpJTQNFKcWJJoU2MmPEzcy0A==
+X-Google-Smtp-Source: ACHHUZ7Z+Qj9nzLK2MdxQhEpGKNId+ygHcs+6kNDfxumfYnqZ7O5mxfvSzNPzRH5/17HgJYEMGLi0w==
+X-Received: by 2002:a7b:c4d3:0:b0:3f7:e35d:b2c3 with SMTP id g19-20020a7bc4d3000000b003f7e35db2c3mr1071663wmk.40.1686906120776;
+        Fri, 16 Jun 2023 02:02:00 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:331d:4ff0:1778:3425? ([2a05:6e02:1041:c10:331d:4ff0:1778:3425])
+        by smtp.googlemail.com with ESMTPSA id k17-20020a05600c0b5100b003f7ec896cefsm1644501wmr.8.2023.06.16.02.01.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jun 2023 02:02:00 -0700 (PDT)
+Message-ID: <be625ba9-f490-9bf0-5f15-4f403aad10d5@linaro.org>
+Date:   Fri, 16 Jun 2023 11:01:59 +0200
 MIME-Version: 1.0
-In-Reply-To: <efdd8e66-a8dc-1a7e-6ac3-fdbe0ba45204@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] thermal: qoriq_thermal: only enable supported sensors
 Content-Language: en-US
+To:     Peng Fan <peng.fan@oss.nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Cc:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "andrew.smirnov@gmail.com" <andrew.smirnov@gmail.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        Alice Guo <alice.guo@nxp.com>
+References: <20230516083746.63436-1-peng.fan@oss.nxp.com>
+ <507b5daa-73e7-8d21-4f73-c56f88c6bf77@linaro.org>
+ <2e57d14a-214e-c3e0-e011-e804ce8c9b39@oss.nxp.com>
+ <4844567.31r3eYUQgx@pliszka>
+ <3518a2e7-806d-ad46-a439-ff4a57ed8158@oss.nxp.com>
+ <3e397cf5-0ca3-fa10-b5d8-bbc7b1038a37@linaro.org>
+ <DU0PR04MB9417A508A757AF8964CDAEA6885BA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <7e843caa-8369-1fb0-36c4-a4482d37b211@linaro.org>
+ <60c95298-68cd-0f6c-38cc-745da7b2a6ed@oss.nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <60c95298-68cd-0f6c-38cc-745da7b2a6ed@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxluR4IoxknxIdAA--.17041S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,90 +95,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-在 2023/6/16 下午4:03, Krzysztof Kozlowski 写道:
-> On 15/06/2023 11:17, Yinbo Zhu wrote:
->> Add the Loongson-2 SoC Power Management Controller binding with DT
->> schema format using json-schema.
+On 16/06/2023 03:06, Peng Fan wrote:
+> 
+> 
+> On 6/15/2023 9:49 PM, Daniel Lezcano wrote:
+>> Caution: This is an external email. Please take care when clicking 
+>> links or opening attachments. When in doubt, report the message using 
+>> the 'Report this email' button
 >>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->>   .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
->>   MAINTAINERS                                   |  6 +++
->>   2 files changed, 59 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
 >>
->> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->> new file mode 100644
->> index 000000000000..32499bd10f8c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
->> @@ -0,0 +1,53 @@
->> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Loongson-2 Power Manager controller
->> +
->> +maintainers:
->> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
+>> On 15/06/2023 14:07, Peng Fan wrote:
+>>
+>> [ ... ]
+>>
+>>> Per i.MX8MQ Reference manual:
+>>> MSITE:
+>>> Monitoring site select 0 - 2. By setting the select bit for a 
+>>> temperature sensor site,
+>>>   it is enabled and included in all monitoring functions. For proper 
+>>> operation, this
+>>> field should only change when monitoring is
+>>> disabled. If no site is selected, site 0 is monitored by default.
+>>>
+>>> ME: Before enabling the TMU for monitoring, the TMU must be configured,
+>>> see section Initialization Information. Failure to properly 
+>>> initialize the
+>>> configuration table may result in boundedly undefined
+>>> behavior.
+>>>
+>>> So we must set the SITEs bits before enabling ME bit. So set TMR_ME when
+>>> each time call invoke mode violates the spec.
+>>>
+>>> As I understand, change_mode is per zone, which means per msite for TMU,
+>>> but TMU_ME is a global gating bit which should not be set before all 
+>>> msites
+>>> are set.
+>>
+>> Mmh, IIUC correctly the documentation, it says the monitoring must be
+>> disabled when changing the sites. So in the proposed code, we shall
+>> disable the TMU, update the site and then enable the TMU.
+>>
+>> Can you give a try to see if that works? If yes, then can you submit a
+>> patch on top of this series. Meanwhile, I'll pick those changes.
 > 
-> Drop oneOf, you don't have here many choices.
-
-
-okay, I got it.
-
 > 
->> +      - items:
->> +          - enum:
->> +              - loongson,ls2k1000-pmc
->> +              - loongson,ls2k0500-pmc
->> +          - const: syscon
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  suspend-address:
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    description:
->> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
->> +      firmware entry address which was jumped from kernel and it's
->> +      value was dependent on specific platform firmware code. In
->> +      addition, the PM need according to it to indicate that current
->> +      SoC whether support Suspend To RAM.
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +
->> +    pmc: pm@1fe27000 {
+> I did a basic test on i.MX8MQ, it seems work. But I still have concern
+> because it volitates the spec, need disable TMU before updating MSITE.
 > 
-> Node name: system-controller or power-pamanagement
+> And if we disable TMU when updating MSITE in your patch, there is 
+> potential risk that zone0 is reading temperature, while we disable TMU
+> and update MSITE for zone1. So zone0 may get invalid temperature because
+> TMU is disabled at this window.
 > 
-> With these two:
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> no good idea from my side, unless we keep check TMU_ME when
+> getting temperature.
 
+Yeah, that is a good point. We are ending up to do the TMU check in the 
+get_temp() any. Thanks for taking the time to look it up.
 
-okay, I will do it.
+   -- Daniel
 
-Thanks,
-Yinbo
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
