@@ -2,42 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE44732C7F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 11:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15877732C8A
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 11:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231782AbjFPJxZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 05:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60242 "EHLO
+        id S232489AbjFPJ5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 05:57:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjFPJxY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 05:53:24 -0400
+        with ESMTP id S230420AbjFPJ5X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 05:57:23 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72A26297E;
-        Fri, 16 Jun 2023 02:53:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59F47194;
+        Fri, 16 Jun 2023 02:57:22 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D4E41FB;
-        Fri, 16 Jun 2023 02:54:07 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AA7A1FB;
+        Fri, 16 Jun 2023 02:58:06 -0700 (PDT)
 Received: from e120325.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1817B3F5A1;
-        Fri, 16 Jun 2023 02:53:19 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 10:53:11 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CDA603F5A1;
+        Fri, 16 Jun 2023 02:57:18 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 10:57:15 +0100
 From:   Beata Michalska <beata.michalska@arm.com>
-To:     Sumit Gupta <sumitg@nvidia.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
         mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, sudeep.holla@arm.com,
-        ionela.voinescu@arm.com, yang@os.amperecomputing.com,
-        linux-tegra@vger.kernel.org
+        sudeep.holla@arm.com, ionela.voinescu@arm.com, sumitg@nvidia.com,
+        yang@os.amperecomputing.com, Len Brown <len.brown@intel.com>,
+        vincent.guittot@linaro.org
 Subject: Re: [PATCH] arm64: Provide an AMU-based version of
  arch_freq_get_on_cpu
-Message-ID: <ZIwxB5ao96pVPaCc@e120325.cambridge.arm.com>
+Message-ID: <ZIwx+4zVzgKGLcS3@e120325.cambridge.arm.com>
 References: <20230606155754.245998-1-beata.michalska@arm.com>
- <8e755438-4b1f-b3d6-b2b8-a5efcca813bc@nvidia.com>
+ <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
+ <20230608051816.2ww7ncg65qo7kcuk@vireshk-i7>
+ <ZIHpd6unkOtYVEqP@e120325.cambridge.arm.com>
+ <20230609043922.eyyqutbwlofqaddz@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8e755438-4b1f-b3d6-b2b8-a5efcca813bc@nvidia.com>
+In-Reply-To: <20230609043922.eyyqutbwlofqaddz@vireshk-i7>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -47,69 +50,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 12:29:57AM +0530, Sumit Gupta wrote:
+On Fri, Jun 09, 2023 at 10:09:22AM +0530, Viresh Kumar wrote:
+> On 08-06-23, 15:45, Beata Michalska wrote:
+> > For those CPUs that are in full dynticks mode , the arch_freq_scale_factor will
+> > be basically useless (as there will be no regular sched_tick which eventually
+> > calls topology_scale_freq_tick()), so the code below will look for any other
+> > available CPU within current policy that could server as the source of the
+> > counters. If there is none it will fallback to cpufreq driver to provide
+> > current frequency.
 > 
+> Understood.
 > 
-> On 06/06/23 21:27, Beata Michalska wrote:
-> > External email: Use caution opening links or attachments
-> > 
-> > 
-> > With the Frequency Invariance Engine (FIE) being already wired up with
-> > sched tick and making use of relevant (core counter and constant
-> > counter) AMU counters, getting the current frequency for a given CPU
-> > on supported platforms, can be achieved by utilizing the frequency scale
-> > factor which reflects an average CPU frequency for the last tick period
-> > length.
-> > 
-> > With that at hand, arch_freq_get_on_cpu dedicated implementation
-> > gets enrolled into cpuinfo_cur_freq policy sysfs attribute handler,
-> > which is expected to represent the current frequency of a given CPU,
-> > as obtained by the hardware. This is exactly the type of feedback that
-> > cycle counters provide.
-> > 
-> > In order to avoid calling arch_freq_get_on_cpu from the scaling_cur_freq
-> > attribute handler for platforms that do provide cpuinfo_cur_freq, and
-> > yet keeping things intact for those platform that do not, its use gets
-> > conditioned on the presence of cpufreq_driver (*get) callback (which also
-> > seems to be the case for creating cpuinfo_cur_freq attribute).
-> > 
+> > There is a little bit of ambiguity around both 'cpuinfo_cur_freq' and
+> > 'scaling_cur_freq' and how those two are being handled on different platforms.
+> > If I got things right, the first one is supposed to reflect the frequency as
+> > obtained from  the hardware,
 > 
-> Tested the change with frequency switch stress test but was getting big
-> delta between set and get freq.
-Would you mind sharing some more data re your testing ?
-The arch_freq_get_on_cpu will provided an average freq for last tick period,
-with an updated occurring on each sched tick so the differences between set
-and get might show up. With your stress testing, if the frequency change comes
-at the end of current tick period, it might not be reflected until next one
-elapses.
-In case of idle states - if the CPU for which the current frequency is being
-requested is in idle mode, the frequency returned will be the last one before
-entering idle, which seems reasonable (?).
-I guess the question here would be what is your tolerance level for those
-differences.
-> After passing "nohz=off" and commenting "wfi" in "cpu_do_idle()", the
-> delta is less. This confirms that more delta is due to AMU counters
-> stopping at "WFI".
+> Yes, this must be accurate, as much as possible.
 > 
->   +++ b/arch/arm64/kernel/idle.c
->   @@ -27,7 +27,7 @@ void noinstr cpu_do_idle(void)
->           arm_cpuidle_save_irq_context(&context);
+> > whereas the latter is more of a sw point of view on that,
 > 
->           dsb(sy);
->   -       wfi();
->   +//     wfi();
+> Historically, it was more about the last frequency requested by the software.
+> But that has changed, for example for X86 and now there is no limitation here
+> which disallows one to report the more accurate one.
+>
+That's my observation as well - thank you for clarifying.
+> > That could work, I guess. But then we would have 'cpuinfo_cur_freq' ==
+> > 'scaling_cur_freq' for platforms that do provide arch_freq_get_on_cpu,
+> > which might lead to more confusion as per what is the actual difference between
+> > the two (?)
 > 
-> I am not sure if the expected behavior here is right.
-Both CPU_CYCLES and CNT_CYCLES are not incremented in WFI.
-> In our tests, we compare the last set frequency against the re-generated
-> value from counters to confirm that the CPU is actually running at the
-> requested frequency and the counters are working correct. But that won't
-> happen with this change.
+> The behavior should be same for all platforms. That's my primary concern here.
+> If getting same freq from both these files is okay for X86, then it should be
+> for ARM as well.
 > 
-> In [1] and later in the updated patch within [2], we are busy looping
-> on the target CPU and avoid WFI to get the actual frequency.
+I agree it would be good to align the behaviour here.
+I guess we should wait for more input on what we can and cannot do for x86.
+
+---
+BR
+B.
+> If the X86 commit (f8475cef9008) wasn't already merged, I would have suggested
+> to do this aperf/mperf thing only in cpuinfo_cur_freq() and not
+> scaling_cur_freq().
 > 
-> Please share what you think is the right expected behavior.
+> Maybe we can still revert back if there is no hard dependency here.
 > 
-> [1] https://lore.kernel.org/lkml/20230418113459.12860-7-sumitg@nvidia.com/
-> [2] https://lore.kernel.org/lkml/cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com/T/#mb898a75fd0c72d166b26b04da3ad162afe068a82
+> Len / Rafael ?
+> 
+> The question is if we should make scaling_cur_freq() to always return the last
+> requested frequency and make cpuinfo_cur_freq() to return the most accurate one,
+> preferably using aperf/mperf ?
+> 
+> -- 
+> viresh
