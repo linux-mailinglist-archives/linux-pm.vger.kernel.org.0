@@ -2,76 +2,147 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43CBE73270D
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 08:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652EA732734
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 08:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242079AbjFPGGh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 02:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S242991AbjFPGSf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 02:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjFPGGg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 02:06:36 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C4682D5F;
-        Thu, 15 Jun 2023 23:06:34 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Dx_+vo+4tkkNsFAA--.12435S3;
-        Fri, 16 Jun 2023 14:06:32 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTMrm+4tkLfAcAA--.7600S3;
-        Fri, 16 Jun 2023 14:06:31 +0800 (CST)
-Subject: Re: [PATCH v3 1/3] loongarch: export some arch-specific pm interfaces
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
- <20230615091757.24686-2-zhuyinbo@loongson.cn>
- <CAAhV-H5XxxGd_+NMRJKUCtk24dBQF0Fzdsg_5mZEWh1hs_u0qg@mail.gmail.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <437633c4-b5fc-6e6d-2711-f2abd420936b@loongson.cn>
-Date:   Fri, 16 Jun 2023 14:06:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S229526AbjFPGSe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 02:18:34 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460F610E9
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 23:18:33 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6667a2c1ab3so373291b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 23:18:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686896313; x=1689488313;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=33axWVpAdkybJSty7OAw0pClQ78I+2x7otiVEbb6t44=;
+        b=ZnfE0GV4mcmm7BP3JOS+Ma0UW+aZBWS0f8J1N4j3bZnOPgsK1X7zTehNC6OJMuJr52
+         2rfqpjXI7MlNp6IevG5WE5WuiO/RvLI+VRD2elw3ZUtoPp8fk+TJOHaH+tQm1K8JlOY7
+         ig4+bQ5sO3EakzS6U1jie8BdEDZzlR7ElAIwW68V214j+SdiA2J802W80wK65Z0R2zsr
+         572JiurWUWq83O+KPH9SDHvE776a+12lIz5zIH2YX1BsVLszkZRoLbretycn4VLFgsi2
+         6n5dp+U4S9eH3bB0C7fq8BAhtSbNh5fTVMvjgtQF7JXejfPi9NbmqyAE++ctVkecU+Sx
+         D38Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686896313; x=1689488313;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=33axWVpAdkybJSty7OAw0pClQ78I+2x7otiVEbb6t44=;
+        b=UnkKCMWX+cPn4wAXTF8jBEygWUwLz0SjjRnplBLDhYPOKFhHCOnbIamX+zZRBVmsln
+         OOL/k9zMHzW/r34tKhp8Vz5aJ7WEIc3DbytPcMBKH+3nhx50wGMRSGBMRM5DPS74PU3C
+         fha37R7oGxce6zZiuGNEgiTL9h6Cf2oOHZhTGVwDtoowwSXtVr+MsXnNgF9CmtpqL4dE
+         KSE0e3Gu/1SBR/NaKRFUIY7Hza77rvBKnjupgwj6ZLS1FWhK4MGQpt1bFIXF/CzQPbhP
+         m8WzqLT/x2G/vx9k8Q/Dmo7C/cBU3hFbjKgTY1geNDj81K8N8QVRVpAc5mFzjGUCsQXc
+         Vklg==
+X-Gm-Message-State: AC+VfDzKpGCnwUapUXlhVUfDnAX5GF9qOqfS9IsRcc3m3smtXv1+40Bp
+        jNtP566fwNTTUpvkpKGMmUYWCJ8qO9HtDX+uZ5o=
+X-Google-Smtp-Source: ACHHUZ75bqm5EWIC3SKzc9Dh4zfPc3BeEpOPtZp+Ot3ohaui5+DjVGihPR2W5pqWl2nsHyzIwRiJXA==
+X-Received: by 2002:a05:6a00:1ace:b0:634:7ba3:d142 with SMTP id f14-20020a056a001ace00b006347ba3d142mr1077339pfv.10.1686896312736;
+        Thu, 15 Jun 2023 23:18:32 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id m13-20020aa7900d000000b0064d2ad04cccsm511264pfo.175.2023.06.15.23.18.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jun 2023 23:18:32 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 11:48:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] OPP: pstate is only valid for genpd OPP tables
+Message-ID: <20230616061830.fysc7l7jxymmhb3m@vireshk-i7>
+References: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+ <lmdbpkttrawedkozfo5exh27jlj3hisulnk4zj6s2mv66yzr6n@zegr4pdzz3pn>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H5XxxGd_+NMRJKUCtk24dBQF0Fzdsg_5mZEWh1hs_u0qg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxTMrm+4tkLfAcAA--.7600S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <lmdbpkttrawedkozfo5exh27jlj3hisulnk4zj6s2mv66yzr6n@zegr4pdzz3pn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-在 2023/6/16 下午12:04, Huacai Chen 写道:
-> Hi, Yinbo,
+On 15-06-23, 18:35, Bjorn Andersson wrote:
+> On Wed, Jun 14, 2023 at 04:07:25PM +0530, Viresh Kumar wrote:
+> > It is not very clear right now that the `pstate` field is only valid for
+> > genpd OPP tables and not consumer tables. And there is no checking for
+> > the same at various places.
+> > 
+> > Add checks in place to verify that and make it clear to the reader.
+> > 
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> >  drivers/opp/core.c    | 18 ++++++++++++++++--
+> >  drivers/opp/debugfs.c |  4 +++-
+> >  drivers/opp/of.c      |  6 ++++++
+> >  3 files changed, 25 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> [..]
+> > @@ -2686,6 +2694,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+> >  	int dest_pstate = -EINVAL;
+> >  	int i;
+> >  
+> > +	/* Both OPP tables must belong to genpds */
+> > +	if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
 > 
-> I think this patch should go through the loongarch tree and the others
-> to go through the soc tree, so I just applied this one. The next
-> version you can only send the other two, thanks. 
+> I have a platform_device, with a required-opps and with an associated
+> genpd which does not implement set_performance_state(), but its parent
+> genpd does.
+> 
+> This results in me arriving here with src_table of NULL, and boom...
+> 
+> 
+> Looking at the very next statement in this function, it seems arriving
+> here without src_table was valid up until this change.
 
+Fixed as:
 
-okay, I got it.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 48ddd72d2c71..3f46e499d615 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -2694,12 +2694,6 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+        int dest_pstate = -EINVAL;
+        int i;
 
-Thanks,
-Yinbo
+-       /* Both OPP tables must belong to genpds */
+-       if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
+-               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
+-               return -EINVAL;
+-       }
+-
+        /*
+         * Normally the src_table will have the "required_opps" property set to
+         * point to one of the OPPs in the dst_table, but in some cases the
+@@ -2710,6 +2704,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+        if (!src_table || !src_table->required_opp_count)
+                return pstate;
 
++       /* Both OPP tables must belong to genpds */
++       if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
++               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
++               return -EINVAL;
++       }
++
+        /* required-opps not fully initialized yet */
+        if (lazy_linking_pending(src_table))
+                return -EBUSY;
+
+Thanks.
+
+-- 
+viresh
