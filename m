@@ -2,479 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE677323D6
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 01:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CDD73244B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 02:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbjFOXqd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Jun 2023 19:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        id S229680AbjFPAhQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Jun 2023 20:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjFOXq3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 19:46:29 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A27A2D4B
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:22 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b445512846so400491fa.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 16:46:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686872780; x=1689464780;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=q+PvbIyvHRl4FSoE9uzVYKxRDamiFRuOsnGAUc6cVuo=;
-        b=O+8oOs0mQPAOyXRuNb9vDh0IzKIxHksY00MsMvG+yA0lKdP/tsB/k0lIp2jEmLNBO1
-         ByQVOMp+T/0PZFSx61lAlVTHn9UeQwc/f87BvH8i6jv0FD48cZCeKT5kfPw+NQTG2JWQ
-         25ZhX8QpThKd5ES1atQhySHxB64cSxCvrRBl9UZLwPtxAwYN9/EEaFkzy/cSoJI1OygA
-         jypk862Uor7EQ3vwrlBDE4Y5aK9EzC332aQV6j6fxiur/KEkfxsnAB3urUeTImMxkQNC
-         C4hoaCoKPBUO5J+WiOp0R8ofk8bYA07yVN5o+CQjHxMF01hsMx5kyscf55JcIr3jJ1D3
-         e6Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686872780; x=1689464780;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q+PvbIyvHRl4FSoE9uzVYKxRDamiFRuOsnGAUc6cVuo=;
-        b=YHRWb8faHnRLBdX8YVhmocrLlV8XyeReadE/vVQWpybpoSZOoK2dAtZopyXx2498CL
-         NJzekN83D/lymbAr2M4e29lJpWiNR8ut0BCfxbdpar18mqADMjJ3YmISjG5QEhk5ArTR
-         S7QlD6Bey1smfhvgGV7Q3QpArQ5mAoci+/q52TiEp0Kfm9RjWo7yiQ9oGILU2WQhSbip
-         wfkaodzd0t97KApC1eDkQhi2CMN5/4gZ3fx8EQP3cPaoIeknih/q/x1M/DMqkHjsKIZx
-         JKFrWMRvutMUemVVPqRkFKOnSAqqzQNTa6lL2xzp9ahxjaaFrtjDvuCEQa1kipzDI90y
-         VEFw==
-X-Gm-Message-State: AC+VfDz7xcBuUU8D+lQraNoy1HQ0vpSHo0ySefph9VLbo2LmSZsttRez
-        4+CFvajv9Ek8C5hlQF7RgpdeqQ==
-X-Google-Smtp-Source: ACHHUZ5mOBNnISBEh7eq/utV46UY4kVc3L5dlVGF6K10qOA7ZbsZlqbBi0MADJe11jhJn79CvPxpKg==
-X-Received: by 2002:a2e:88d0:0:b0:2b3:46ec:8014 with SMTP id a16-20020a2e88d0000000b002b346ec8014mr481970ljk.47.1686872780352;
-        Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
-Received: from [192.168.1.101] (abyj190.neoplus.adsl.tpnet.pl. [83.9.29.190])
-        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002ac82a995fcsm3344596ljn.23.2023.06.15.16.46.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jun 2023 16:46:20 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 16 Jun 2023 01:46:10 +0200
-Subject: [PATCH 2/2] arm64: dts: qcom: sc7180: Hook up BWMONs
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230616-topic-sc7180_bwmons-v1-2-4ddb96f9a6cd@linaro.org>
-References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
-In-Reply-To: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229509AbjFPAhP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Jun 2023 20:37:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82672962;
+        Thu, 15 Jun 2023 17:37:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BC85611DD;
+        Fri, 16 Jun 2023 00:37:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E836C433C0;
+        Fri, 16 Jun 2023 00:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1686875833;
+        bh=J55ESfNtGwwnrR+cNXZIBNS0rU9QKWNkSjf07aIrJEQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iyfDZSJFtZ2hl+gEx08XuqQZYJbKs9nmgyKESWbNzvnUE1dtWMAwRPLIP/D4VMvuO
+         9KxIfRXXj7amb7jFeM7ZDcfzoRxKw7f/TsjJ9bU5l3fLJyoM3SgsCtQnIghCizTVDv
+         ztQB7PTqMLmx1tNFAIVuxOMU6FZbMPpHa8IslPLPIVoc5Tdc0sFhfLcIHgVVBpe01e
+         NA0v1+/orrFhyqNr5ePIaEZyn10l7ml8gMoh/74Fq4sgqd6eALMeFpL0FCnPRkiBbJ
+         Ydvn9Nk0yFeGtMUFlAt71Myl/R/I4Ai4UXTUm8f1yqdjkTGLlaZ545d8PwsgOvm0pe
+         167t8SGNre9rA==
+Received: by mercury (Postfix, from userid 1000)
+        id D47AD1060EDC; Fri, 16 Jun 2023 02:37:10 +0200 (CEST)
+Date:   Fri, 16 Jun 2023 02:37:10 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1686872776; l=11455;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Gy0nc/M3o6MCmy28Sto0NlhJAaM2QOc7qKiXiWyzZ+U=;
- b=CWK4DgIVGzvs+VSmow7gqwmVDXhtNIk+kmE8beYgdxIsVwVDCr2/HGnZGGktAK1E4Pntln/O1
- ihfI4/tsMgeCTZ7dOK85LiU9OHcATAEk66GEHlTrkmcvRfTOSUDooHj
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        =?utf-8?Q?Fern=C3=A1ndez?= Rojas <noltari@gmail.com>,
+        Marek Vasut <marex@denx.de>, Suman Anna <s-anna@ti.com>,
+        - <devicetree-spec@vger.kernel.org>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
+ in titles
+Message-ID: <20230616003710.arsee2k3732kdhfk@mercury.elektranox.org>
+References: <20230615213154.1753313-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="po5r3akfx43ntm5u"
+Content-Disposition: inline
+In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hook up 2 out of 4 (the rest are for NPU) BWMONs exposed on the SC7180.
-This allows for scaling DDR and LLCC independently from cpufreq.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc7180-lite.dtsi |  10 +-
- arch/arm64/boot/dts/qcom/sc7180.dtsi      | 161 ++++++++++++++++++++++--------
- 2 files changed, 124 insertions(+), 47 deletions(-)
+--po5r3akfx43ntm5u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-index 4b306a59d9be..975d4422f27b 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-@@ -6,21 +6,21 @@
-  */
- 
- &cpu6_opp10 {
--	opp-peak-kBps = <7216000 22425600>;
-+	opp-peak-kBps = <22425600>;
- };
- 
- &cpu6_opp11 {
--	opp-peak-kBps = <7216000 22425600>;
-+	opp-peak-kBps = <22425600>;
- };
- 
- &cpu6_opp12 {
--	opp-peak-kBps = <8532000 23347200>;
-+	opp-peak-kBps = <23347200>;
- };
- 
- &cpu6_opp13 {
--	opp-peak-kBps = <8532000 23347200>;
-+	opp-peak-kBps = <23347200>;
- };
- 
- &cpu6_opp14 {
--	opp-peak-kBps = <8532000 23347200>;
-+	opp-peak-kBps = <23347200>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 34eff97f8630..e0c5881d8eb8 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -11,6 +11,7 @@
- #include <dt-bindings/clock/qcom,lpasscorecc-sc7180.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/clock/qcom,videocc-sc7180.h>
-+#include <dt-bindings/interconnect/qcom,icc.h>
- #include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interconnect/qcom,sc7180.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
-@@ -84,8 +85,7 @@ &LITTLE_CPU_SLEEP_1
- 			capacity-dmips-mhz = <415>;
- 			dynamic-power-coefficient = <137>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			next-level-cache = <&L2_0>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-@@ -115,8 +115,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <137>;
- 			next-level-cache = <&L2_100>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_100: l2-cache {
-@@ -140,8 +139,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <137>;
- 			next-level-cache = <&L2_200>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_200: l2-cache {
-@@ -165,8 +163,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <137>;
- 			next-level-cache = <&L2_300>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_300: l2-cache {
-@@ -190,8 +187,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <137>;
- 			next-level-cache = <&L2_400>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_400: l2-cache {
-@@ -215,8 +211,7 @@ &LITTLE_CPU_SLEEP_1
- 			dynamic-power-coefficient = <137>;
- 			next-level-cache = <&L2_500>;
- 			operating-points-v2 = <&cpu0_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
- 			L2_500: l2-cache {
-@@ -240,8 +235,7 @@ &BIG_CPU_SLEEP_1
- 			dynamic-power-coefficient = <480>;
- 			next-level-cache = <&L2_600>;
- 			operating-points-v2 = <&cpu6_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			L2_600: l2-cache {
-@@ -265,8 +259,7 @@ &BIG_CPU_SLEEP_1
- 			dynamic-power-coefficient = <480>;
- 			next-level-cache = <&L2_700>;
- 			operating-points-v2 = <&cpu6_opp_table>;
--			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
--					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-+			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			#cooling-cells = <2>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
- 			L2_700: l2-cache {
-@@ -386,52 +379,52 @@ cpu0_opp_table: opp-table-cpu0 {
- 
- 		cpu0_opp1: opp-300000000 {
- 			opp-hz = /bits/ 64 <300000000>;
--			opp-peak-kBps = <1200000 4800000>;
-+			opp-peak-kBps = <4800000>;
- 		};
- 
- 		cpu0_opp2: opp-576000000 {
- 			opp-hz = /bits/ 64 <576000000>;
--			opp-peak-kBps = <1200000 4800000>;
-+			opp-peak-kBps = <4800000>;
- 		};
- 
- 		cpu0_opp3: opp-768000000 {
- 			opp-hz = /bits/ 64 <768000000>;
--			opp-peak-kBps = <1200000 4800000>;
-+			opp-peak-kBps = <4800000>;
- 		};
- 
- 		cpu0_opp4: opp-1017600000 {
- 			opp-hz = /bits/ 64 <1017600000>;
--			opp-peak-kBps = <1804000 8908800>;
-+			opp-peak-kBps = <8908800>;
- 		};
- 
- 		cpu0_opp5: opp-1248000000 {
- 			opp-hz = /bits/ 64 <1248000000>;
--			opp-peak-kBps = <2188000 12902400>;
-+			opp-peak-kBps = <12902400>;
- 		};
- 
- 		cpu0_opp6: opp-1324800000 {
- 			opp-hz = /bits/ 64 <1324800000>;
--			opp-peak-kBps = <2188000 12902400>;
-+			opp-peak-kBps = <12902400>;
- 		};
- 
- 		cpu0_opp7: opp-1516800000 {
- 			opp-hz = /bits/ 64 <1516800000>;
--			opp-peak-kBps = <3072000 15052800>;
-+			opp-peak-kBps = <15052800>;
- 		};
- 
- 		cpu0_opp8: opp-1612800000 {
- 			opp-hz = /bits/ 64 <1612800000>;
--			opp-peak-kBps = <3072000 15052800>;
-+			opp-peak-kBps = <15052800>;
- 		};
- 
- 		cpu0_opp9: opp-1708800000 {
- 			opp-hz = /bits/ 64 <1708800000>;
--			opp-peak-kBps = <3072000 15052800>;
-+			opp-peak-kBps = <15052800>;
- 		};
- 
- 		cpu0_opp10: opp-1804800000 {
- 			opp-hz = /bits/ 64 <1804800000>;
--			opp-peak-kBps = <4068000 22425600>;
-+			opp-peak-kBps = <22425600>;
- 		};
- 	};
- 
-@@ -441,82 +434,82 @@ cpu6_opp_table: opp-table-cpu6 {
- 
- 		cpu6_opp1: opp-300000000 {
- 			opp-hz = /bits/ 64 <300000000>;
--			opp-peak-kBps = <2188000 8908800>;
-+			opp-peak-kBps = <8908800>;
- 		};
- 
- 		cpu6_opp2: opp-652800000 {
- 			opp-hz = /bits/ 64 <652800000>;
--			opp-peak-kBps = <2188000 8908800>;
-+			opp-peak-kBps = <8908800>;
- 		};
- 
- 		cpu6_opp3: opp-825600000 {
- 			opp-hz = /bits/ 64 <825600000>;
--			opp-peak-kBps = <2188000 8908800>;
-+			opp-peak-kBps = <8908800>;
- 		};
- 
- 		cpu6_opp4: opp-979200000 {
- 			opp-hz = /bits/ 64 <979200000>;
--			opp-peak-kBps = <2188000 8908800>;
-+			opp-peak-kBps = <8908800>;
- 		};
- 
- 		cpu6_opp5: opp-1113600000 {
- 			opp-hz = /bits/ 64 <1113600000>;
--			opp-peak-kBps = <2188000 8908800>;
-+			opp-peak-kBps = <8908800>;
- 		};
- 
- 		cpu6_opp6: opp-1267200000 {
- 			opp-hz = /bits/ 64 <1267200000>;
--			opp-peak-kBps = <4068000 12902400>;
-+			opp-peak-kBps = <12902400>;
- 		};
- 
- 		cpu6_opp7: opp-1555200000 {
- 			opp-hz = /bits/ 64 <1555200000>;
--			opp-peak-kBps = <4068000 15052800>;
-+			opp-peak-kBps = <15052800>;
- 		};
- 
- 		cpu6_opp8: opp-1708800000 {
- 			opp-hz = /bits/ 64 <1708800000>;
--			opp-peak-kBps = <6220000 19353600>;
-+			opp-peak-kBps = <19353600>;
- 		};
- 
- 		cpu6_opp9: opp-1843200000 {
- 			opp-hz = /bits/ 64 <1843200000>;
--			opp-peak-kBps = <6220000 19353600>;
-+			opp-peak-kBps = <19353600>;
- 		};
- 
- 		cpu6_opp10: opp-1900800000 {
- 			opp-hz = /bits/ 64 <1900800000>;
--			opp-peak-kBps = <6220000 22425600>;
-+			opp-peak-kBps = <22425600>;
- 		};
- 
- 		cpu6_opp11: opp-1996800000 {
- 			opp-hz = /bits/ 64 <1996800000>;
--			opp-peak-kBps = <6220000 22425600>;
-+			opp-peak-kBps = <22425600>;
- 		};
- 
- 		cpu6_opp12: opp-2112000000 {
- 			opp-hz = /bits/ 64 <2112000000>;
--			opp-peak-kBps = <6220000 22425600>;
-+			opp-peak-kBps = <22425600>;
- 		};
- 
- 		cpu6_opp13: opp-2208000000 {
- 			opp-hz = /bits/ 64 <2208000000>;
--			opp-peak-kBps = <7216000 22425600>;
-+			opp-peak-kBps = <22425600>;
- 		};
- 
- 		cpu6_opp14: opp-2323200000 {
- 			opp-hz = /bits/ 64 <2323200000>;
--			opp-peak-kBps = <7216000 22425600>;
-+			opp-peak-kBps = <22425600>;
- 		};
- 
- 		cpu6_opp15: opp-2400000000 {
- 			opp-hz = /bits/ 64 <2400000000>;
--			opp-peak-kBps = <8532000 23347200>;
-+			opp-peak-kBps = <23347200>;
- 		};
- 
- 		cpu6_opp16: opp-2553600000 {
- 			opp-hz = /bits/ 64 <2553600000>;
--			opp-peak-kBps = <8532000 23347200>;
-+			opp-peak-kBps = <23347200>;
- 		};
- 	};
- 
-@@ -2773,6 +2766,90 @@ dp_phy: dp-phy@88ea200 {
- 			};
- 		};
- 
-+		pmu@90b6300 {
-+			compatible = "qcom,sc7180-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0 0x090b6300 0 0x600>;
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <2288000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <4577000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <7110000>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <9155000>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <12298000>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <14236000>;
-+				};
-+			};
-+		};
-+
-+		pmu@90cd000 {
-+			compatible = "qcom,sc7180-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-+			reg = <0 0x090cd000 0 0x1000>;
-+			interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>;
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <1144000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <1720000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <2086000>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <2929000>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <3879000>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <5931000>;
-+				};
-+
-+				opp-6 {
-+					opp-peak-kBps = <6881000>;
-+				};
-+
-+				opp-7 {
-+					opp-peak-kBps = <8137000>;
-+				};
-+			};
-+		};
-+
- 		dc_noc: interconnect@9160000 {
- 			compatible = "qcom,sc7180-dc-noc";
- 			reg = <0 0x09160000 0 0x03200>;
+Hi,
 
--- 
-2.41.0
+On Thu, Jun 15, 2023 at 03:31:54PM -0600, Rob Herring wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "Devicetree binding", but instead just describe the hardware.
+>=20
+> Most of these have been fixed already, so fix the handful that snuck in.
+> With this, a meta-schema check can be enabled to catch these
+> automatically.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml   | 2 +-
+>  Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml    | 2 +-
+>  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
+>  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
+>  .../devicetree/bindings/reserved-memory/framebuffer.yaml        | 2 +-
+>  5 files changed, 5 insertions(+), 5 deletions(-)
 
+=2E..
+
+> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handle=
+r.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> index 1f9a2aac53c0..f2ffdd29d52a 100644
+> --- a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+> @@ -4,7 +4,7 @@
+>  $id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+> -title: Restart and shutdown handler generic binding
+> +title: Restart and shutdown handler Common Properties
+> =20
+>  maintainers:
+>    - Sebastian Reichel <sre@kernel.org>
+
+Acked-by: Sebastian Reichel <sre@kernel.org>
+
+-- Sebastian
+
+--po5r3akfx43ntm5u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSLrrAACgkQ2O7X88g7
++ppshA//WlBWN4mcN0Kg9SD3Ko+IPfh7SzWZCTvjwXzfW1GBH5T5FIJDYgGMesO1
+YIq0TI4Afr3wWEQxYbNR4PBDnflE/gtkrK7Pwr59d1ft4yid54na8T0Ax6S8R3Ru
+FTW1dufmjQ7pT0QuqIyOH5GPTt5VPZNOGrh0ph9Un09PO2y3IzJ3BJ4XO8vEB4sc
+cN2UebftqaC6UcsHKl5Ux9BdrS8bI83/e7SbvMwdsaGN6CPrGgyZdmroD5MKRw/4
+SgswJZkElUnUlAisaO9h9ii7WlTlD1L90mr8xrNAfvuMg46HtRWP1z8xEkfsnj+N
+cnwBW+hhCXUq7jEW4Yw9ShgAYvxi74gxKGglnBNCdSjEFxMOQWqCeGlzg1ta+AAm
+bpVzc7M9OG1I/qjUVWlAQm4jgPSo9Vy7M55rwjzkxdXe2UsKeCxxbqx1gZsEgg/C
+e7QHGixSMhh1Q+UagP2UF1M15qdHL+gV2FoAyU9Al4oPIb/+N+tcM1yVbdf2oAJk
+8esyAD88tMZant9M6musxltBcaqS67X8xR7j44nFTnp3sbN5Y8WX9B6IyKOc6p9F
+xhH70cEACDHpbNQBpv70U51dR36gnf4UIFoDKHMqqIUsG0muvKldcu596zu/IR96
+xYrnu+5SUIla3pxG2ZJ5nhmLjoToTOHPSNduRFArX4EYNr+hwaM=
+=bwes
+-----END PGP SIGNATURE-----
+
+--po5r3akfx43ntm5u--
