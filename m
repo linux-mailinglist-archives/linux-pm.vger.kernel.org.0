@@ -2,454 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEBA7326B7
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 07:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920837326EA
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 07:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjFPFlq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 01:41:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38572 "EHLO
+        id S232942AbjFPF4i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 01:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFPFlp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 01:41:45 -0400
-X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 15 Jun 2023 22:41:43 PDT
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62399123
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 22:41:43 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 512824F65E;
-        Fri, 16 Jun 2023 10:34:10 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1686893650; bh=8MmRuUqlIxaIlq083JWzBiolpaoXQyQt2uo2sD1uGek=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=C7+3mSmwOGbtTpfNi+jGCtMAWtpDht9WKg/dUnxDg9nnl2tk3D6Ti1PL6j2zR9o8J
-         JzMy63ePt43VNw/hBBOga3H1gEBg9yJXfA9OZOwj2Kq19mMMGKpHbu4Q+zATIQH/h6
-         5QBC0/OL/jnDRCOGp7X5oqWBitvK3uTn9bVRLRdnRia3oEbEQs/A1gqjwrHYoltHll
-         rTzwAS5I+lJgUxI5zDGRGaM1ixjEZZzO+oQ1Z1iDXvm7kAgHjwWb322X7bvHgMO71T
-         5jAYVK+6lBHznczl7h7HX423Z3/iiIgMp//kIHYYyLT0KtYWyPelRZZGSC/8oe4HlA
-         OVxOs3EkuBzBA==
+        with ESMTP id S240784AbjFPF4g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 01:56:36 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFB52D50;
+        Thu, 15 Jun 2023 22:56:31 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35G5FkcU024268;
+        Fri, 16 Jun 2023 05:56:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=+9HBRmd5eI7voSotvO83qQ9bZ7jS8TilhDrz5QR9rxs=;
+ b=NYzUjzP+8405lrtCK5MbUGAbE4wtv4XjjGPX7mZ7UZ08C+hnKLq8b1UkCXvBKNr9hIDo
+ ApMYuvgriMoSG8r+bf06Az88TkPfH+ZXtsXNO4iBESENog1U8R3pCaFBW/lqT7UjV6/h
+ kpP6bDC9QrbyQKAsLoTLGaJsOmBHmvBUGCpRmer4iNPfreD4nYM4/KiGS3EKrc4t1aKD
+ 8KRd/F2VxhMwmOLVSQDqdqGjz54gC+XUxMw4s8JDrbb1Pt5Ec4pP++z+a44NrLQxtqey
+ wILLM15WnnPgoprHaBi1bT2DlTiMjKouuSgLyzMpJ0K/HIdxpSwN5v/PdDw4hFtn4nER 3w== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r8g2y867x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 05:56:25 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35G5uPoc017983
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 05:56:25 GMT
+Received: from [10.216.51.142] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 15 Jun
+ 2023 22:56:21 -0700
+Message-ID: <5820345a-4207-3b12-87eb-098bac4ef4e8@quicinc.com>
+Date:   Fri, 16 Jun 2023 11:26:18 +0530
 MIME-Version: 1.0
-Date:   Fri, 16 Jun 2023 10:34:09 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc7180: Hook up BWMONs
-In-Reply-To: <20230616-topic-sc7180_bwmons-v1-2-4ddb96f9a6cd@linaro.org>
-References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
- <20230616-topic-sc7180_bwmons-v1-2-4ddb96f9a6cd@linaro.org>
-Message-ID: <35acfed85263d7775a92284778e125dd@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
+ idle-state-disabled property
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+ <20230615085629.b2aaumhq7yqhs5lf@bogus>
+Content-Language: en-US
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <20230615085629.b2aaumhq7yqhs5lf@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: fLu7cBxhv2Rb6IwloqXpXoK0PdC4kvRr
+X-Proofpoint-GUID: fLu7cBxhv2Rb6IwloqXpXoK0PdC4kvRr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_02,2023-06-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 clxscore=1011 mlxscore=0 bulkscore=0
+ mlxlogscore=933 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306160052
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Konrad Dybcio писал(а) 16.06.2023 04:46:
-> Hook up 2 out of 4 (the rest are for NPU) BWMONs exposed on the SC7180.
-> This allows for scaling DDR and LLCC independently from cpufreq.
+
+Thanks for review Sundeep,
+
+On 6/15/2023 2:26 PM, Sudeep Holla wrote:
+> On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
+>> +      idle-state-disabled:
+>> +        description: |
+>> +          If present the idle state stays disabled. It can be enabled back from
+>> +          shell using below command.
+>> +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+>> +        type: boolean
+>> +
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-I indeed can see significant increase in glmark2 score, thanks!
-
-Tested-by: Nikita Travkin <nikita@trvn.ru> # Aspire 1
-
-> ---
->  arch/arm64/boot/dts/qcom/sc7180-lite.dtsi |  10 +-
->  arch/arm64/boot/dts/qcom/sc7180.dtsi      | 161 ++++++++++++++++++++++--------
->  2 files changed, 124 insertions(+), 47 deletions(-)
+> This is clearly a policy and not a hardware or firmware feature to expose
+> in the device tree. So NACK, why can't you load it modules if you don't want
+> idle states in the boot.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-> index 4b306a59d9be..975d4422f27b 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-lite.dtsi
-> @@ -6,21 +6,21 @@
->   */
->  
->  &cpu6_opp10 {
-> -	opp-peak-kBps = <7216000 22425600>;
-> +	opp-peak-kBps = <22425600>;
->  };
->  
->  &cpu6_opp11 {
-> -	opp-peak-kBps = <7216000 22425600>;
-> +	opp-peak-kBps = <22425600>;
->  };
->  
->  &cpu6_opp12 {
-> -	opp-peak-kBps = <8532000 23347200>;
-> +	opp-peak-kBps = <23347200>;
->  };
->  
->  &cpu6_opp13 {
-> -	opp-peak-kBps = <8532000 23347200>;
-> +	opp-peak-kBps = <23347200>;
->  };
->  
->  &cpu6_opp14 {
-> -	opp-peak-kBps = <8532000 23347200>;
-> +	opp-peak-kBps = <23347200>;
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 34eff97f8630..e0c5881d8eb8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -11,6 +11,7 @@
->  #include <dt-bindings/clock/qcom,lpasscorecc-sc7180.h>
->  #include <dt-bindings/clock/qcom,rpmh.h>
->  #include <dt-bindings/clock/qcom,videocc-sc7180.h>
-> +#include <dt-bindings/interconnect/qcom,icc.h>
->  #include <dt-bindings/interconnect/qcom,osm-l3.h>
->  #include <dt-bindings/interconnect/qcom,sc7180.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> @@ -84,8 +85,7 @@ &LITTLE_CPU_SLEEP_1
->  			capacity-dmips-mhz = <415>;
->  			dynamic-power-coefficient = <137>;
->  			operating-points-v2 = <&cpu0_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			next-level-cache = <&L2_0>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 0>;
-> @@ -115,8 +115,7 @@ &LITTLE_CPU_SLEEP_1
->  			dynamic-power-coefficient = <137>;
->  			next-level-cache = <&L2_100>;
->  			operating-points-v2 = <&cpu0_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 0>;
->  			L2_100: l2-cache {
-> @@ -140,8 +139,7 @@ &LITTLE_CPU_SLEEP_1
->  			dynamic-power-coefficient = <137>;
->  			next-level-cache = <&L2_200>;
->  			operating-points-v2 = <&cpu0_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 0>;
->  			L2_200: l2-cache {
-> @@ -165,8 +163,7 @@ &LITTLE_CPU_SLEEP_1
->  			dynamic-power-coefficient = <137>;
->  			next-level-cache = <&L2_300>;
->  			operating-points-v2 = <&cpu0_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 0>;
->  			L2_300: l2-cache {
-> @@ -190,8 +187,7 @@ &LITTLE_CPU_SLEEP_1
->  			dynamic-power-coefficient = <137>;
->  			next-level-cache = <&L2_400>;
->  			operating-points-v2 = <&cpu0_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 0>;
->  			L2_400: l2-cache {
-> @@ -215,8 +211,7 @@ &LITTLE_CPU_SLEEP_1
->  			dynamic-power-coefficient = <137>;
->  			next-level-cache = <&L2_500>;
->  			operating-points-v2 = <&cpu0_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 0>;
->  			L2_500: l2-cache {
-> @@ -240,8 +235,7 @@ &BIG_CPU_SLEEP_1
->  			dynamic-power-coefficient = <480>;
->  			next-level-cache = <&L2_600>;
->  			operating-points-v2 = <&cpu6_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 1>;
->  			L2_600: l2-cache {
-> @@ -265,8 +259,7 @@ &BIG_CPU_SLEEP_1
->  			dynamic-power-coefficient = <480>;
->  			next-level-cache = <&L2_700>;
->  			operating-points-v2 = <&cpu6_opp_table>;
-> -			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &mc_virt SLAVE_EBI1 3>,
-> -					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
-> +			interconnects = <&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
->  			#cooling-cells = <2>;
->  			qcom,freq-domain = <&cpufreq_hw 1>;
->  			L2_700: l2-cache {
-> @@ -386,52 +379,52 @@ cpu0_opp_table: opp-table-cpu0 {
->  
->  		cpu0_opp1: opp-300000000 {
->  			opp-hz = /bits/ 64 <300000000>;
-> -			opp-peak-kBps = <1200000 4800000>;
-> +			opp-peak-kBps = <4800000>;
->  		};
->  
->  		cpu0_opp2: opp-576000000 {
->  			opp-hz = /bits/ 64 <576000000>;
-> -			opp-peak-kBps = <1200000 4800000>;
-> +			opp-peak-kBps = <4800000>;
->  		};
->  
->  		cpu0_opp3: opp-768000000 {
->  			opp-hz = /bits/ 64 <768000000>;
-> -			opp-peak-kBps = <1200000 4800000>;
-> +			opp-peak-kBps = <4800000>;
->  		};
->  
->  		cpu0_opp4: opp-1017600000 {
->  			opp-hz = /bits/ 64 <1017600000>;
-> -			opp-peak-kBps = <1804000 8908800>;
-> +			opp-peak-kBps = <8908800>;
->  		};
->  
->  		cpu0_opp5: opp-1248000000 {
->  			opp-hz = /bits/ 64 <1248000000>;
-> -			opp-peak-kBps = <2188000 12902400>;
-> +			opp-peak-kBps = <12902400>;
->  		};
->  
->  		cpu0_opp6: opp-1324800000 {
->  			opp-hz = /bits/ 64 <1324800000>;
-> -			opp-peak-kBps = <2188000 12902400>;
-> +			opp-peak-kBps = <12902400>;
->  		};
->  
->  		cpu0_opp7: opp-1516800000 {
->  			opp-hz = /bits/ 64 <1516800000>;
-> -			opp-peak-kBps = <3072000 15052800>;
-> +			opp-peak-kBps = <15052800>;
->  		};
->  
->  		cpu0_opp8: opp-1612800000 {
->  			opp-hz = /bits/ 64 <1612800000>;
-> -			opp-peak-kBps = <3072000 15052800>;
-> +			opp-peak-kBps = <15052800>;
->  		};
->  
->  		cpu0_opp9: opp-1708800000 {
->  			opp-hz = /bits/ 64 <1708800000>;
-> -			opp-peak-kBps = <3072000 15052800>;
-> +			opp-peak-kBps = <15052800>;
->  		};
->  
->  		cpu0_opp10: opp-1804800000 {
->  			opp-hz = /bits/ 64 <1804800000>;
-> -			opp-peak-kBps = <4068000 22425600>;
-> +			opp-peak-kBps = <22425600>;
->  		};
->  	};
->  
-> @@ -441,82 +434,82 @@ cpu6_opp_table: opp-table-cpu6 {
->  
->  		cpu6_opp1: opp-300000000 {
->  			opp-hz = /bits/ 64 <300000000>;
-> -			opp-peak-kBps = <2188000 8908800>;
-> +			opp-peak-kBps = <8908800>;
->  		};
->  
->  		cpu6_opp2: opp-652800000 {
->  			opp-hz = /bits/ 64 <652800000>;
-> -			opp-peak-kBps = <2188000 8908800>;
-> +			opp-peak-kBps = <8908800>;
->  		};
->  
->  		cpu6_opp3: opp-825600000 {
->  			opp-hz = /bits/ 64 <825600000>;
-> -			opp-peak-kBps = <2188000 8908800>;
-> +			opp-peak-kBps = <8908800>;
->  		};
->  
->  		cpu6_opp4: opp-979200000 {
->  			opp-hz = /bits/ 64 <979200000>;
-> -			opp-peak-kBps = <2188000 8908800>;
-> +			opp-peak-kBps = <8908800>;
->  		};
->  
->  		cpu6_opp5: opp-1113600000 {
->  			opp-hz = /bits/ 64 <1113600000>;
-> -			opp-peak-kBps = <2188000 8908800>;
-> +			opp-peak-kBps = <8908800>;
->  		};
->  
->  		cpu6_opp6: opp-1267200000 {
->  			opp-hz = /bits/ 64 <1267200000>;
-> -			opp-peak-kBps = <4068000 12902400>;
-> +			opp-peak-kBps = <12902400>;
->  		};
->  
->  		cpu6_opp7: opp-1555200000 {
->  			opp-hz = /bits/ 64 <1555200000>;
-> -			opp-peak-kBps = <4068000 15052800>;
-> +			opp-peak-kBps = <15052800>;
->  		};
->  
->  		cpu6_opp8: opp-1708800000 {
->  			opp-hz = /bits/ 64 <1708800000>;
-> -			opp-peak-kBps = <6220000 19353600>;
-> +			opp-peak-kBps = <19353600>;
->  		};
->  
->  		cpu6_opp9: opp-1843200000 {
->  			opp-hz = /bits/ 64 <1843200000>;
-> -			opp-peak-kBps = <6220000 19353600>;
-> +			opp-peak-kBps = <19353600>;
->  		};
->  
->  		cpu6_opp10: opp-1900800000 {
->  			opp-hz = /bits/ 64 <1900800000>;
-> -			opp-peak-kBps = <6220000 22425600>;
-> +			opp-peak-kBps = <22425600>;
->  		};
->  
->  		cpu6_opp11: opp-1996800000 {
->  			opp-hz = /bits/ 64 <1996800000>;
-> -			opp-peak-kBps = <6220000 22425600>;
-> +			opp-peak-kBps = <22425600>;
->  		};
->  
->  		cpu6_opp12: opp-2112000000 {
->  			opp-hz = /bits/ 64 <2112000000>;
-> -			opp-peak-kBps = <6220000 22425600>;
-> +			opp-peak-kBps = <22425600>;
->  		};
->  
->  		cpu6_opp13: opp-2208000000 {
->  			opp-hz = /bits/ 64 <2208000000>;
-> -			opp-peak-kBps = <7216000 22425600>;
-> +			opp-peak-kBps = <22425600>;
->  		};
->  
->  		cpu6_opp14: opp-2323200000 {
->  			opp-hz = /bits/ 64 <2323200000>;
-> -			opp-peak-kBps = <7216000 22425600>;
-> +			opp-peak-kBps = <22425600>;
->  		};
->  
->  		cpu6_opp15: opp-2400000000 {
->  			opp-hz = /bits/ 64 <2400000000>;
-> -			opp-peak-kBps = <8532000 23347200>;
-> +			opp-peak-kBps = <23347200>;
->  		};
->  
->  		cpu6_opp16: opp-2553600000 {
->  			opp-hz = /bits/ 64 <2553600000>;
-> -			opp-peak-kBps = <8532000 23347200>;
-> +			opp-peak-kBps = <23347200>;
->  		};
->  	};
->  
-> @@ -2773,6 +2766,90 @@ dp_phy: dp-phy@88ea200 {
->  			};
->  		};
->  
-> +		pmu@90b6300 {
-> +			compatible = "qcom,sc7180-cpu-bwmon", "qcom,sdm845-bwmon";
-> +			reg = <0 0x090b6300 0 0x600>;
-> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-> +					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-> +			operating-points-v2 = <&cpu_bwmon_opp_table>;
-> +
-> +			cpu_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
-> +					opp-peak-kBps = <2288000>;
-> +				};
-> +
-> +				opp-1 {
-> +					opp-peak-kBps = <4577000>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-peak-kBps = <7110000>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-peak-kBps = <9155000>;
-> +				};
-> +
-> +				opp-4 {
-> +					opp-peak-kBps = <12298000>;
-> +				};
-> +
-> +				opp-5 {
-> +					opp-peak-kBps = <14236000>;
-> +				};
-> +			};
-> +		};
-> +
-> +		pmu@90cd000 {
-> +			compatible = "qcom,sc7180-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-> +			reg = <0 0x090cd000 0 0x1000>;
-> +			interrupts = <GIC_SPI 241 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +			interconnects = <&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-> +					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>;
-> +			operating-points-v2 = <&llcc_bwmon_opp_table>;
-> +
-> +			llcc_bwmon_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-0 {
-> +					opp-peak-kBps = <1144000>;
-> +				};
-> +
-> +				opp-1 {
-> +					opp-peak-kBps = <1720000>;
-> +				};
-> +
-> +				opp-2 {
-> +					opp-peak-kBps = <2086000>;
-> +				};
-> +
-> +				opp-3 {
-> +					opp-peak-kBps = <2929000>;
-> +				};
-> +
-> +				opp-4 {
-> +					opp-peak-kBps = <3879000>;
-> +				};
-> +
-> +				opp-5 {
-> +					opp-peak-kBps = <5931000>;
-> +				};
-> +
-> +				opp-6 {
-> +					opp-peak-kBps = <6881000>;
-> +				};
-> +
-> +				opp-7 {
-> +					opp-peak-kBps = <8137000>;
-> +				};
-> +			};
-> +		};
-> +
->  		dc_noc: interconnect@9160000 {
->  			compatible = "qcom,sc7180-dc-noc";
->  			reg = <0 0x09160000 0 0x03200>;
+Attempt of making cpuidle governors to modular was rejected in past [2]
+
+[2] 
+https://lore.kernel.org/lkml/1637830481-21709-1-git-send-email-quic_mkshah@quicinc.com/#t
+
+> It is same as choosing any default governor or performance states, will you
+> add those next ? It is simply policy not a feature/property to be exposed
+> in the device tree.
+> 
+> --
+> Regards,
+> Sudeep
+
+Thanks,
+Tushar
