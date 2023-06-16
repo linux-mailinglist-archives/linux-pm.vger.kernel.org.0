@@ -2,135 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 711E77333B2
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 16:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1211733485
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 17:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345539AbjFPOfR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 10:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S1345225AbjFPPRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 11:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345402AbjFPOfN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 10:35:13 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A44F30E7
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 07:35:12 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f8d2bfec9bso7030135e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 07:35:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686926111; x=1689518111;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YTmK7Yo9kOdMiFpI4ABNY0faae2/HSfAxiI+PtYHiC8=;
-        b=A9jJzABZw2QMnOVwswzAgH2NzPjhWBi1MIrHPxQWt1X9oKMFiioJZrhgP7sbhqfnMO
-         7NV2ETpGP45ubS7Wi4FpeCN4ucSIEvggOjj6zSAdjoIgIDMMMzBqLvDn2JC1/hstYoke
-         aX/AW65KCOo+xeZvCoAy1IkMapB3sWLrya1tAS6ESVABrXlnyiVCoVVl1T2lAjTrLtAR
-         JHQ1g+aXqVb82IfVhxqkUlv0ROkc/KWDb0/JbFZyF1ZraEWPgvH0QfY4FKbpI1PRRn8q
-         aslzS41Zud/Glmwd1AX8Buig639YkGrks+u5iOvdo0Q+95d1/BczmMt4P34/+MzSK7u8
-         Pb1Q==
+        with ESMTP id S232085AbjFPPRl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 11:17:41 -0400
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE7B2D4E;
+        Fri, 16 Jun 2023 08:17:40 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-77af8476cd4so29525439f.1;
+        Fri, 16 Jun 2023 08:17:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686926111; x=1689518111;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YTmK7Yo9kOdMiFpI4ABNY0faae2/HSfAxiI+PtYHiC8=;
-        b=Oms/L+Rg7IQJg/DFhqpekCpp6IMMAbtCOVHV8hJvy437dVRUUcB7B+Sd3By1VdMoyD
-         THX9hdbNzsKgvFe/A1M+Ecgc40a6PNlgCXs5c8PIR3VqLzFAoAzcye6R0TpwsBcXCzXS
-         LNjLo9UtrhJRwMXrZFcz5UEtuQ3/gVTugE+c16lE1cS1Hm/lpfdNZ4lF7UarRCyZKm9F
-         KhprNxu3NMnA78s6Z+SxYwBntMRldc7ntOvIfrPKaC9VsaMWZbwwbJQZYsFkRMBVJdwN
-         ZuhwBxqpdd2HpsqMB0KXYgzS3iCeOFFkUGyDc2R3rHlIGP4KCX7eNLk3xnrKEW4PjiO9
-         57hw==
-X-Gm-Message-State: AC+VfDynEwzxfxULKUgVMOpHrGUexBoh7ElAv4+94J4TUSpzs6vrosU4
-        d2OaL7rvA2dhmxYxD81d3oFpjg==
-X-Google-Smtp-Source: ACHHUZ7J6rlw+Fu3K5IsLp/iIjwzEW1tdtEmQfR2zgPHjO4vSOqCrrPckqYA5PhhXFfkmkRDMo1ybA==
-X-Received: by 2002:a1c:7204:0:b0:3f7:e8e2:f377 with SMTP id n4-20020a1c7204000000b003f7e8e2f377mr2117276wmc.12.1686926110725;
-        Fri, 16 Jun 2023 07:35:10 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c? ([2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c])
-        by smtp.googlemail.com with ESMTPSA id n20-20020a1c7214000000b003f78fd2cf5esm2328344wmc.40.2023.06.16.07.35.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 07:35:10 -0700 (PDT)
-Message-ID: <9c12ece8-3a85-105b-d8d3-208fe816734a@linaro.org>
-Date:   Fri, 16 Jun 2023 16:35:09 +0200
+        d=1e100.net; s=20221208; t=1686928659; x=1689520659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8hr09IJTZlwSUbPk2/1Wb+ALEzpCoAzJqAu6w5jI53E=;
+        b=b+zF8Q34ZWFpfYUM+E9qTvFtxDT4PJBeVhAnGOmFH5rBw/tEX6iLPPBceRl0ZyDRr0
+         h9dRF2q16KdesvE4camH9zuZQXbohjQJT+W//cg/mOZanhiPX26/O0YAt1wivzqk3/BG
+         WA4lVq9Yz9vpf6jOCOuve7GqImMJnxA8JX0QUtvSgLeFfXlKM09a+4YSQVkBx94tfOfO
+         MvXLGWpofd1z6LF7pa438WtkdfVYCXkpxzbE+2KuxlSEGxvsSIdloV6P539oFBhvQXkA
+         TomPTINTD0jAHPOTfd14cjUEJH9yVjImi1dlZG3+NsGb0hCBqK8XGuXpztl+dlTJkQci
+         tg3g==
+X-Gm-Message-State: AC+VfDxu8hzrTputLcF70G9iFwsdRqCq//teROMYi6ybNj1F3JysrdO8
+        wp1UAcUdNACKHgl/WN/QDA==
+X-Google-Smtp-Source: ACHHUZ4yyc48/MBGsIaSwJMSrIIBOVmk5aGfk0RJg9fKb9qWkHVh8375Ybh7RxU7l93EBjwdqgAong==
+X-Received: by 2002:a6b:dd16:0:b0:77a:d862:242f with SMTP id f22-20020a6bdd16000000b0077ad862242fmr2380653ioc.21.1686928659358;
+        Fri, 16 Jun 2023 08:17:39 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id ed4-20020a056638290400b00424e5091bf8sm211022jab.94.2023.06.16.08.17.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jun 2023 08:17:38 -0700 (PDT)
+Received: (nullmailer pid 431745 invoked by uid 1000);
+        Fri, 16 Jun 2023 15:17:36 -0000
+Date:   Fri, 16 Jun 2023 09:17:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+Subject: Re: [PATCH v3 2/3] soc: dt-bindings: add loongson-2 pm
+Message-ID: <20230616151736.GA296030-robh@kernel.org>
+References: <20230615091757.24686-1-zhuyinbo@loongson.cn>
+ <20230615091757.24686-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] thermal/drivers/loongson2: Fix thermal zone private data
- access
-Content-Language: en-US
-To:     zhuyinbo@loongson.cn
-Cc:     rafael@kernel.org, loongson-kernel@lists.loongnix.cn,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <8ca44091-35fd-cc24-9896-0317772c5620@loongson.cn>
- <20230616143407.689515-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230616143407.689515-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615091757.24686-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2023 16:34, Daniel Lezcano wrote:
-> The thermal zone device won't be accessible directly anymore.
+On Thu, Jun 15, 2023 at 05:17:56PM +0800, Yinbo Zhu wrote:
+> Add the Loongson-2 SoC Power Management Controller binding with DT
+> schema format using json-schema.
 > 
-> Use the private data accessor.
-
-To be folded with your next version
-
-Thanks
-
-> Cc: zhuyinbo <zhuyinbo@loongson.cn>
-> Cc: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->   drivers/thermal/loongson2_thermal.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+>  .../soc/loongson/loongson,ls2k-pmc.yaml       | 53 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 59 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
 > 
-> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
-> index 6a338e6e490e..9a07409c3bd2 100644
-> --- a/drivers/thermal/loongson2_thermal.c
-> +++ b/drivers/thermal/loongson2_thermal.c
-> @@ -56,7 +56,7 @@ static int loongson2_thermal_set(struct loongson2_thermal_data *data,
->   static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
->   {
->   	u32 reg_val;
-> -	struct loongson2_thermal_data *data = tz->devdata;
-> +	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
->   
->   	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
->   	*temp = ((reg_val & 0xff) - 100) * 1000;
-> @@ -67,7 +67,7 @@ static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
->   static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
->   {
->   	struct thermal_zone_device *tzd = dev;
-> -	struct loongson2_thermal_data *data = tzd->devdata;
-> +	struct loongson2_thermal_data *data = thermal_zone_device_priv(tzd);
->   
->   	/* clear interrupt */
->   	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
-> @@ -79,7 +79,7 @@ static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
->   
->   static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
->   {
-> -	struct loongson2_thermal_data *data = tz->devdata;
-> +	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
->   
->   	return loongson2_thermal_set(data, low/1000, high/1000, true);
->   }
+> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> new file mode 100644
+> index 000000000000..32499bd10f8c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson-2 Power Manager controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - loongson,ls2k1000-pmc
+> +              - loongson,ls2k0500-pmc
+> +          - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  suspend-address:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+loongson,suspend-address
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
+Isn't this a 64-bit platform? Probably better if this is a 64-bit value 
+in case that's needed in the future.
+
+> +    description:
+> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+> +      firmware entry address which was jumped from kernel and it's
+> +      value was dependent on specific platform firmware code. In
+> +      addition, the PM need according to it to indicate that current
+> +      SoC whether support Suspend To RAM.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    pmc: pm@1fe27000 {
+> +        compatible = "loongson,ls2k1000-pmc", "syscon";
+> +        reg = <0x1fe27000 0x58>;
+> +        interrupt-parent = <&liointc1>;
+> +        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
+> +        suspend-address = <0x1c000500>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7a91f14cad2e..bcd05f1fa5c1 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12190,6 +12190,12 @@ S:	Maintained
+>  F:	Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
+>  F:	drivers/soc/loongson/loongson2_guts.c
+>  
+> +LOONGSON-2 SOC SERIES PM DRIVER
+> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> +
+>  LOONGSON-2 SOC SERIES PINCTRL DRIVER
+>  M:	zhanghongchen <zhanghongchen@loongson.cn>
+>  M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+> -- 
+> 2.20.1
+> 
