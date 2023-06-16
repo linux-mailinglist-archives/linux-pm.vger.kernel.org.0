@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DA8732786
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 08:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44567732741
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 08:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244151AbjFPGXs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 02:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S232101AbjFPGWS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 02:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243795AbjFPGXE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 02:23:04 -0400
+        with ESMTP id S232704AbjFPGWO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 02:22:14 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175FD35AC
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 23:22:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA46269E
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jun 2023 23:22:13 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q9-0006qr-Mz; Fri, 16 Jun 2023 08:21:45 +0200
+        id 1qA2q8-0006ne-Ct; Fri, 16 Jun 2023 08:21:44 +0200
 Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q8-007kyb-Rx; Fri, 16 Jun 2023 08:21:44 +0200
+        id 1qA2q7-007kxq-FE; Fri, 16 Jun 2023 08:21:43 +0200
 Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <sha@pengutronix.de>)
-        id 1qA2q5-003FVp-LV; Fri, 16 Jun 2023 08:21:41 +0200
+        id 1qA2q5-003FVw-Mc; Fri, 16 Jun 2023 08:21:41 +0200
 From:   Sascha Hauer <s.hauer@pengutronix.de>
 To:     linux-rockchip@lists.infradead.org
 Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
@@ -42,9 +42,9 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v6 24/26] arm64: dts: rockchip: rk3399: Enable DFI
-Date:   Fri, 16 Jun 2023 08:20:59 +0200
-Message-Id: <20230616062101.601837-25-s.hauer@pengutronix.de>
+Subject: [PATCH v6 25/26] arm64: dts: rockchip: rk356x: Add DFI
+Date:   Fri, 16 Jun 2023 08:21:00 +0200
+Message-Id: <20230616062101.601837-26-s.hauer@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230616062101.601837-1-s.hauer@pengutronix.de>
 References: <20230616062101.601837-1-s.hauer@pengutronix.de>
@@ -63,28 +63,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-the DFI unit can provide useful data for measuring DDR utilization
-and works without any configuration from the board, so enable it in the
-dtsi file directly.
+The DFI unit can be used to measure DRAM utilization using perf. Add the
+node to the device tree.
 
-Link: https://lore.kernel.org/r/20230524083153.2046084-24-s.hauer@pengutronix.de
+Link: https://lore.kernel.org/r/20230524083153.2046084-25-s.hauer@pengutronix.de
 Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
 ---
- arch/arm64/boot/dts/rockchip/rk3399.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-index 928948e7c7bbb..fa0a5dbd1b0ec 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
-@@ -1331,7 +1331,6 @@ dfi: dfi@ff630000 {
- 		interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH 0>;
- 		clocks = <&cru PCLK_DDR_MON>;
- 		clock-names = "pclk_ddr_mon";
--		status = "disabled";
+diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+index f62e0fd881a95..910d8a84ea8f2 100644
+--- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
+@@ -948,6 +948,13 @@ qos_vop_m1: qos@fe1a8100 {
+ 		reg = <0x0 0xfe1a8100 0x0 0x20>;
  	};
  
- 	vpu: video-codec@ff650000 {
++	dfi: dfi@fe230000 {
++		compatible = "rockchip,rk3568-dfi";
++		reg = <0x00 0xfe230000 0x00 0x400>;
++		interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
++		rockchip,pmu = <&pmugrf>;
++	};
++
+ 	pcie2x1: pcie@fe260000 {
+ 		compatible = "rockchip,rk3568-pcie";
+ 		reg = <0x3 0xc0000000 0x0 0x00400000>,
 -- 
 2.39.2
 
