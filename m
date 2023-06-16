@@ -2,111 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7726A73334F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 16:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E36733397
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 16:31:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345201AbjFPORr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 10:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S1343743AbjFPObv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 10:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343743AbjFPORq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 10:17:46 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41B930ED
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 07:17:43 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f8d86db375so6744155e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 07:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686925062; x=1689517062;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VyMWuiSxNpIh+CPo5oTuEbTcEvXceTJP2UE4A3DBpwU=;
-        b=LcMMyAr2yczp/lbeisdfgGj8u+kX8GYwGxnndDKhP1asIoM5Bf5a67UPPaISs+y8rY
-         RNoCcRe9pQyKoSTrhEvLVH84cc7aWVEPRUzGKf8KC0kTmmwR8Cinb8Kst/hLOrgwSEjZ
-         GXEJvkSXmgPO6AljWMbRbn3ydlWj0sfR/OuMt9IQbk5buSDQwf5Ga2od5fDdzF+UIpVI
-         KG0lR5V08kBwUCQlpXKS/ckuVRQNBZgwIhfi5B/wA5cn4iBY+8X1ZbZ1KsTXG9uVISaC
-         J0nqUNmZ5BeBRbib3JSr48KFR1hbuP/vtOq0nmpZyq60oP1JALIoRjwKwvJOV+KXDnqH
-         NpxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686925062; x=1689517062;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VyMWuiSxNpIh+CPo5oTuEbTcEvXceTJP2UE4A3DBpwU=;
-        b=UekXwabMw5MFOMWcXgS8kJN0bFncglpqfsLUOb5o6eBRvBaVUBnGjf/Ax51Hl3l8JD
-         /2VtkulngnxRuO8LlUKcEZk/ocVzRObpIe5AuGf2bpCscRVVm1s7ish8GX+O/JeoRfoT
-         ZffA22OtBiRBzTN3yUDs3Mb4jZMawmXX3h/6/1vhX/+zz6vN6R24D9xNRGPO6IaHccLH
-         sWxDztOcKlkP6QXhovdjxGWkCAQS+U+aJInz7kLuAwVkzydjAp6vuCDcLoKBGmlocP8P
-         /VQkGFrnwWIWgCiTES2vMsbnQ8ZZShI7Cjp1n86g2gQZSkgZnMOYbsq3igJC1tERDiGr
-         0kOQ==
-X-Gm-Message-State: AC+VfDyw/dmx+zbYvxKaBEqMRmY0TDM9MhtGXuwGKSc966c5eYh/66Od
-        i8g9Fl7bAzce+MzXkjvK8nK7zN062nF8o2VR88U=
-X-Google-Smtp-Source: ACHHUZ4YZBU+ttE9cOhYYujjEYAtw4Mfmg4nhTqCiQHz1FDASnApM4TJRa5/WodPXxBbELx9ROFIrg==
-X-Received: by 2002:a7b:ce8c:0:b0:3f8:1d6c:4585 with SMTP id q12-20020a7bce8c000000b003f81d6c4585mr1801223wmj.36.1686925062161;
-        Fri, 16 Jun 2023 07:17:42 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c? ([2a05:6e02:1041:c10:4aa0:8c56:eebe:c05c])
-        by smtp.googlemail.com with ESMTPSA id t18-20020adfeb92000000b003093a412310sm23772885wrn.92.2023.06.16.07.17.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 07:17:41 -0700 (PDT)
-Message-ID: <c1309e46-21b1-73ce-3d47-058588afd4bf@linaro.org>
-Date:   Fri, 16 Jun 2023 16:17:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/3] Update for AP807 thermal data
-Content-Language: en-US
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Amit Kucheria <amitk@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        with ESMTP id S1345504AbjFPObu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 10:31:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E9A30EA;
+        Fri, 16 Jun 2023 07:31:49 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35GBxSw8010503;
+        Fri, 16 Jun 2023 14:31:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=QRmknCCl0lyR6k6/V1KGpl6AoQ4ICI5UlwGTrZvz4To=;
+ b=pE/KKLIhPKKiLUJlYeVVT3elSWg1+23LzAmu9rP7A7hfsv94qgLKDm4RAIIhtBM7vNBy
+ jLN8ZeuhyC/WdRYDLdsBX9HrNum99vyh6jIGdwhl+NxutJ3ApqrgXZisp7pDIFlJ7KN/
+ Cs6I/nl4Ninpl3uyX8HnZ/Jkb2lENFPUsp4P5qIqkf0QWfHlTwBfzC9bAcwZtS3xpzNy
+ 2hYzhQRMD6eADIcCa24lEO5TOEl4UtHKR+1JTD/E2E5A34yYhO+4oYBmXc9Ma8AHMvX+
+ CkrvP7sH0uuZlrFe65SEPh3K38dNzKnI9rCFqHkMu/p3Or4huW5Ekq1S6WN/qEZhGY/g aw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3r8axuhm56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 14:31:44 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35GEVhQ5016770
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Jun 2023 14:31:43 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 16 Jun 2023 07:31:42 -0700
+Date:   Fri, 16 Jun 2023 07:31:41 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-References: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] OPP: pstate is only valid for genpd OPP tables
+Message-ID: <20230616143141.GA4034918@hu-bjorande-lv.qualcomm.com>
+References: <5437756c65c79f9520886bc54321d39c022c8638.1686739018.git.viresh.kumar@linaro.org>
+ <lmdbpkttrawedkozfo5exh27jlj3hisulnk4zj6s2mv66yzr6n@zegr4pdzz3pn>
+ <20230616061830.fysc7l7jxymmhb3m@vireshk-i7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230616061830.fysc7l7jxymmhb3m@vireshk-i7>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AEyPOpUW9-w_HsjkonvDjZ9RZxiG1_M3
+X-Proofpoint-GUID: AEyPOpUW9-w_HsjkonvDjZ9RZxiG1_M3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-16_08,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ mlxscore=0 suspectscore=0 impostorscore=0 adultscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1011 phishscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306160131
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2023 13:49, Russell King (Oracle) wrote:
-> Hi,
+On Fri, Jun 16, 2023 at 11:48:30AM +0530, Viresh Kumar wrote:
+> On 15-06-23, 18:35, Bjorn Andersson wrote:
+> > On Wed, Jun 14, 2023 at 04:07:25PM +0530, Viresh Kumar wrote:
+> > > It is not very clear right now that the `pstate` field is only valid for
+> > > genpd OPP tables and not consumer tables. And there is no checking for
+> > > the same at various places.
+> > > 
+> > > Add checks in place to verify that and make it clear to the reader.
+> > > 
+> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > ---
+> > >  drivers/opp/core.c    | 18 ++++++++++++++++--
+> > >  drivers/opp/debugfs.c |  4 +++-
+> > >  drivers/opp/of.c      |  6 ++++++
+> > >  3 files changed, 25 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> > [..]
+> > > @@ -2686,6 +2694,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+> > >  	int dest_pstate = -EINVAL;
+> > >  	int i;
+> > >  
+> > > +	/* Both OPP tables must belong to genpds */
+> > > +	if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
+> > 
+> > I have a platform_device, with a required-opps and with an associated
+> > genpd which does not implement set_performance_state(), but its parent
+> > genpd does.
+> > 
+> > This results in me arriving here with src_table of NULL, and boom...
+> > 
+> > 
+> > Looking at the very next statement in this function, it seems arriving
+> > here without src_table was valid up until this change.
 > 
-> This series updates the thermal data for the AP807 die, which has
-> different coefficients to the AP806.
+> Fixed as:
 > 
-> These patches have come from the SolidRun CN913x build repository
-> which can be found at:
-> https://github.com/SolidRun/cn913x_build/tree/master/patches/linux
+> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+> index 48ddd72d2c71..3f46e499d615 100644
+> --- a/drivers/opp/core.c
+> +++ b/drivers/opp/core.c
+> @@ -2694,12 +2694,6 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+>         int dest_pstate = -EINVAL;
+>         int i;
 > 
->   .../devicetree/bindings/thermal/armada-thermal.txt |  1 +
->   arch/arm64/boot/dts/marvell/armada-ap807.dtsi      |  3 ++
->   drivers/thermal/armada_thermal.c                   | 32 ++++++++++++++++++++--
->   3 files changed, 34 insertions(+), 2 deletions(-)
+> -       /* Both OPP tables must belong to genpds */
+> -       if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
+> -               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
+> -               return -EINVAL;
+> -       }
+> -
+>         /*
+>          * Normally the src_table will have the "required_opps" property set to
+>          * point to one of the OPPs in the dst_table, but in some cases the
+> @@ -2710,6 +2704,12 @@ int dev_pm_opp_xlate_performance_state(struct opp_table *src_table,
+>         if (!src_table || !src_table->required_opp_count)
+>                 return pstate;
+> 
+> +       /* Both OPP tables must belong to genpds */
+> +       if (unlikely(!src_table->is_genpd || !dst_table->is_genpd)) {
+> +               pr_err("%s: Performance state is only valid for genpds.\n", __func__);
+> +               return -EINVAL;
+> +       }
+> +
+>         /* required-opps not fully initialized yet */
+>         if (lazy_linking_pending(src_table))
+>                 return -EBUSY;
+> 
+> Thanks.
+> 
 
-Applied, patch 1 and 2.
+Looks good, thanks for the quick response.
 
-Dropped the sa_ip-sw-jenkins Tested-by tag
+Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Tested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Thanks
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Regards,
+Bjorn
