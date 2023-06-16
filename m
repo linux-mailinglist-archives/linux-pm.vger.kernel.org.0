@@ -2,184 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F14733496
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 17:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3C973350A
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 17:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343945AbjFPPVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 11:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
+        id S1345381AbjFPPjj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 11:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjFPPU7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 11:20:59 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90312D4E
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 08:20:57 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30fceb009faso1574993f8f.0
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 08:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686928856; x=1689520856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nwl0LNhJUMmewFF0gr0xbjGPARcgwNZ+TwWnvyZN5TM=;
-        b=y6d7G/bcZeVfhtOwzWnupZfcpOIbpWqUETtVqEcRoO7agztBlbsJ6YPPP9rYTnGqzZ
-         GaMK7QstokUuhf97rxF7jzZwOYgriGRPuzTUvT48ELnphBNOYsBb9D1DTICnOs6M8OKE
-         afYvikew/Y7RqAZhLpRwdqewU9DxCRMUyvx1k9copwZaX3/AxPMwFqa4eAl8AmUC6O/L
-         MYjLAIxrTSG/+UJT2GjtFggqqIRQGnBl/iecVw42bxB5r48bywnIAXXWp/0rTY8uKtm7
-         ke1QekA/keSjnmIm/uc4gQQ3Nlc4tvOymz/gtGs1v9pBcUMWaFozL8jLveLpXomgA4m+
-         ONAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686928856; x=1689520856;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nwl0LNhJUMmewFF0gr0xbjGPARcgwNZ+TwWnvyZN5TM=;
-        b=jiEeFVFF/kKLFS5Xd5oaudfIdr0vEO7s9W8PHyff/JOa67otvvFO0Tp2MVdz58iiKz
-         8BSMCT/qKrvZwQgs9rwtYNnkXCQVzFjr5qCWwZFlnmnVLzjRB6sMan7eicWg2BXC0gne
-         Vs8DeTt44Jf+IExzi6TxqHRVTSCg/lUTxLSaQEK4TIPYru3D5+YXH4BkcedkKUogiTI1
-         VUX6V2RC1nmTj2LiPzsJEQtFw+SZOtEkHOu3+9qqW2dlCmBasKDHPMgXytHBIwY/zlyy
-         AwgTDK1qG28OinMzUJXe0rwtHxerKrBqZ+jW4+eFZRjvsD5Hz2eH+7hy5UEf7+8srgzJ
-         W/mA==
-X-Gm-Message-State: AC+VfDxVHTa41h1LSyAoD9ZLkKb8TdR14oXdtaA80QErAP8znFRXKnTk
-        o4hhh7+TsIpDDj84qs6YZPUoCNsWsb6pPFMX+XKhQg==
-X-Google-Smtp-Source: ACHHUZ7Wieql98Qo7JahSqyBzgeFyTeWSzVEw0p2WQO9ukcNU4vWKZ3JzJ0l9v2deSmbwPenZ18DpHRCFahcErhiCN0=
-X-Received: by 2002:adf:e4cb:0:b0:311:f11:4c55 with SMTP id
- v11-20020adfe4cb000000b003110f114c55mr2252797wrm.13.1686928856105; Fri, 16
- Jun 2023 08:20:56 -0700 (PDT)
+        with ESMTP id S230022AbjFPPjh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 11:39:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABF2930D1;
+        Fri, 16 Jun 2023 08:39:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 447E11FB;
+        Fri, 16 Jun 2023 08:40:13 -0700 (PDT)
+Received: from bogus (unknown [10.57.96.87])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 905A23F71E;
+        Fri, 16 Jun 2023 08:39:26 -0700 (PDT)
+Date:   Fri, 16 Jun 2023 16:39:24 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_lsrao@quicinc.com, quic_mkshah@quicinc.com,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
+ idle-state-disabled property
+Message-ID: <20230616153924.2wtvgr7lvjcul6to@bogus>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+ <20230615085629.b2aaumhq7yqhs5lf@bogus>
+ <5820345a-4207-3b12-87eb-098bac4ef4e8@quicinc.com>
 MIME-Version: 1.0
-References: <20230615213154.1753313-1-robh@kernel.org>
-In-Reply-To: <20230615213154.1753313-1-robh@kernel.org>
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-Date:   Fri, 16 Jun 2023 09:20:45 -0600
-Message-ID: <CANLsYkx_cd7QxMpE8OKe+jJT-tSt23Ub0p8ceAuKbchLtQmKcg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Remove last usage of "binding" or "schema"
- in titles
-To:     Rob Herring <robh@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        =?UTF-8?Q?Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
-        Marek Vasut <marex@denx.de>, Suman Anna <s-anna@ti.com>,
-        - <devicetree-spec@vger.kernel.org>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5820345a-4207-3b12-87eb-098bac4ef4e8@quicinc.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 15 Jun 2023 at 15:32, Rob Herring <robh@kernel.org> wrote:
->
-> The Devicetree bindings document does not have to say in the title that
-> it is a "Devicetree binding", but instead just describe the hardware.
->
-> Most of these have been fixed already, so fix the handful that snuck in.
-> With this, a meta-schema check can be enabled to catch these
-> automatically.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/clock/brcm,bcm63268-timer-clocks.yaml   | 2 +-
->  Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml    | 2 +-
->  .../devicetree/bindings/power/reset/restart-handler.yaml        | 2 +-
->  .../devicetree/bindings/remoteproc/ti,pru-consumer.yaml         | 2 +-
->  .../devicetree/bindings/reserved-memory/framebuffer.yaml        | 2 +-
->  5 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-=
-clocks.yaml b/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-c=
-locks.yaml
-> index 199818b2fb6d..cd0d763ce2f3 100644
-> --- a/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.=
-yaml
-> +++ b/Documentation/devicetree/bindings/clock/brcm,bcm63268-timer-clocks.=
-yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/clock/brcm,bcm63268-timer-clocks.yaml=
-#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: Broadcom BCM63268 Timer Clock and Reset Device Tree Bindings
-> +title: Broadcom BCM63268 Timer Clock and Reset
->
->  maintainers:
->    - =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
-> diff --git a/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml=
- b/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml
-> index ff9600474df2..0a6dc1a6e122 100644
-> --- a/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml
-> +++ b/Documentation/devicetree/bindings/clock/imx8mp-audiomix.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/clock/imx8mp-audiomix.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: NXP i.MX8MP AudioMIX Block Control Binding
-> +title: NXP i.MX8MP AudioMIX Block Control
->
->  maintainers:
->    - Marek Vasut <marex@denx.de>
-> diff --git a/Documentation/devicetree/bindings/power/reset/restart-handle=
-r.yaml b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> index 1f9a2aac53c0..f2ffdd29d52a 100644
-> --- a/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> +++ b/Documentation/devicetree/bindings/power/reset/restart-handler.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/power/reset/restart-handler.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: Restart and shutdown handler generic binding
-> +title: Restart and shutdown handler Common Properties
->
->  maintainers:
->    - Sebastian Reichel <sre@kernel.org>
-> diff --git a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer=
-.yaml b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> index c6d86964b72a..35f0bb38f7b2 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/ti,pru-consumer.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/remoteproc/ti,pru-consumer.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: Common TI PRU Consumer Binding
-> +title: TI PRU Consumer Common Properties
+On Fri, Jun 16, 2023 at 11:26:18AM +0530, Tushar Nimkar wrote:
+> 
+> Thanks for review Sundeep,
+> 
+> On 6/15/2023 2:26 PM, Sudeep Holla wrote:
+> > On Thu, Jun 08, 2023 at 02:25:42PM +0530, Tushar Nimkar wrote:
+> > > +      idle-state-disabled:
+> > > +        description: |
+> > > +          If present the idle state stays disabled. It can be enabled back from
+> > > +          shell using below command.
+> > > +          echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+> > > +        type: boolean
+> > > +
+> > 
+> > This is clearly a policy and not a hardware or firmware feature to expose
+> > in the device tree. So NACK, why can't you load it modules if you don't want
+> > idle states in the boot.
+> > 
+> Attempt of making cpuidle governors to modular was rejected in past [2]
 >
 
-Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+OK try command line approach to disable all states(you can't get partial
+on/off in that case). I don't think the build config is of any use as we
+end up enabling it which will affect other platforms.
 
->  maintainers:
->    - Suman Anna <s-anna@ti.com>
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/framebuffe=
-r.yaml b/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
-> index 05b6648b3458..851ec24d6142 100644
-> --- a/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
-> +++ b/Documentation/devicetree/bindings/reserved-memory/framebuffer.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/reserved-memory/framebuffer.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->
-> -title: /reserved-memory framebuffer node bindings
-> +title: /reserved-memory framebuffer node
->
->  maintainers:
->    - devicetree-spec@vger.kernel.org
-> --
-> 2.39.2
->
+> [2] https://lore.kernel.org/lkml/1637830481-21709-1-git-send-email-quic_mkshah@quicinc.com/#t
+> 
+> > It is same as choosing any default governor or performance states, will you
+> > add those next ? It is simply policy not a feature/property to be exposed
+> > in the device tree.
+> > 
+
+The above still holds, so still NACK. It is a policy and not a
+hardware/firmware property or feature.
+
+-- 
+Regards,
+Sudeep
