@@ -2,98 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F0B73298E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 10:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009397329AC
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 10:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244582AbjFPILG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 04:11:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53674 "EHLO
+        id S233557AbjFPIXX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 04:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243890AbjFPILF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 04:11:05 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBF3295C
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 01:11:03 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-977d4a1cf0eso51891966b.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 01:11:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1686903062; x=1689495062;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+nb5C/fzCmkNH4tFkgENtFMDkmGCOR2QUSuKVrANoM=;
-        b=a2Mlb03zrr9JJo0Q+0A43GCTfWHuVRjCiS/gF7JyjDz88V4vbA0ia7lc9aFr+zYAHP
-         mjZnYFtMIAX7sTsI8nHAhX3q4+3tc8qfOgLpnZ5uKhQN9Jkq1eEQioOZ1VTLmszIuQAC
-         5hyXUj7UplGMDJtzrRggEETAHM3bbWJ6ppB3SbWH13IHZxy9I71Sc3EWKKwH2eUxukg4
-         0Qe1Xp900MGM5mJ573ZkonCWD9YDBkcLMkkDq8ezH38qSJAHTrJtPNP78nKBiPYRyySw
-         vSxPwvarRlNopMoccbz9uYqn4ihPdbAiqcaMvIPPjlCa0d3eBD0qcyFU1QVrRPoGYrt9
-         a89w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686903062; x=1689495062;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+nb5C/fzCmkNH4tFkgENtFMDkmGCOR2QUSuKVrANoM=;
-        b=MUNcMOPQ/tw1aXky7n+llNsnBlRN7SG0BbiP7w3wF0iMKY+i/SiuAYJEI25E95mUia
-         Z7a1b2ITAZ9ONI5bbopQZljkon1+tnL8weF2+oA+t+IPNYXBNHX8BJovuyk3VRAxtxHh
-         j1TGzCvhUSIYkOOSsCFo1UpkqQL4oXNS9VcGqJittrWGCs33WEnek8Mq7c6YM7j6wXG7
-         bY/kHMTlBhknDVV3F9ZqjxZ/8/MR/vPL9Wj7F12SQI2VDf/8GBPIFM8O2ZTgoaRVVSMg
-         xKL9hhNUIqQdTiY2IkLnTNvuohaYuaAaYG/nM5FsOJe5IHxzBdNsi4J+H5e7n5M3r58q
-         DfTA==
-X-Gm-Message-State: AC+VfDzAZ4i3+IZtIlltS/5HOvAvaG4hACEnuOAShJeGXpIkYm9yA92J
-        TfizZ5F0j5+UG5ZcToGm2YLhZg==
-X-Google-Smtp-Source: ACHHUZ6DK25zXtnnsSAW02R2ilsBGImwvgHJkzYxnvXxZVHh9u1UxrheNHyrTDscWNmMYQ0v4zqmVw==
-X-Received: by 2002:a17:907:928b:b0:973:cc48:f19c with SMTP id bw11-20020a170907928b00b00973cc48f19cmr1002834ejc.56.1686903062144;
-        Fri, 16 Jun 2023 01:11:02 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s24-20020a1709060c1800b00969f25b96basm10347260ejf.204.2023.06.16.01.11.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jun 2023 01:11:01 -0700 (PDT)
-Message-ID: <de774e98-0ae1-28b4-c0e1-6dc79905498f@linaro.org>
-Date:   Fri, 16 Jun 2023 10:10:59 +0200
+        with ESMTP id S233192AbjFPIXW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 04:23:22 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1C2212B;
+        Fri, 16 Jun 2023 01:23:21 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id B394F1C0E6E; Fri, 16 Jun 2023 10:23:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1686903799;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uwqz7xaKAqzIwowJQBfMPTshEu7P5aPh8FrMKIEdGvM=;
+        b=sEmhATV/S6WM4B8Ta+dZo2CGYgFmBq01wuDJpjgmdWQs/K8Il8SAF4gGU3UX6GfYUZ/c0Q
+        1+57GmJmxCELS3Sdc/eQ1Kmp50Vl+VgJD3AJUX4zUo3f6f4wrFsuiH05MeaSMSCKACCGsY
+        MEtjVRfS16moMkaloaT1UIuY7jZKN7M=
+Date:   Fri, 16 Jun 2023 10:23:19 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        sre@kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix
+ external_power_changed race
+Message-ID: <ZIwb98ptaEb01MC4@duo.ucw.cz>
+References: <20230615113654.648702-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom,bwmon: Document
- SC7180 BWMONs
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230616-topic-sc7180_bwmons-v1-0-4ddb96f9a6cd@linaro.org>
- <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230616-topic-sc7180_bwmons-v1-1-4ddb96f9a6cd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="b+zKUwoCEUgmSd1B"
+Content-Disposition: inline
+In-Reply-To: <20230615113654.648702-1-sashal@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2023 01:46, Konrad Dybcio wrote:
-> SC7180 - just like SC7280 - has a BWMONv4 for CPU-LLCC and a BWMONv5
-> for DDR-LLCC paths. Document them.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--b+zKUwoCEUgmSd1B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+I do not see complete series in my inbox (only see patches 1-6).
+
+But then I see another thread which seems to be complete.
+
+Date: Wed, 31 May 2023 09:39:43 -0400
+Subject: [PATCH AUTOSEL 6.3 01/37] power: supply: ab8500: Fix external_powe=
+r_changed race
 
 Best regards,
-Krzysztof
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
+--b+zKUwoCEUgmSd1B
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZIwb9wAKCRAw5/Bqldv6
+8uh+AJsElO3pROJOHxyIrhQQLDNZKJimtgCghG4XlUIrXuqEWAjN+fwC+/m3tCE=
+=+NFY
+-----END PGP SIGNATURE-----
+
+--b+zKUwoCEUgmSd1B--
