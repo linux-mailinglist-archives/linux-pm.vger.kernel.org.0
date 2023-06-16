@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688A2733068
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 13:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1912473306B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 13:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344232AbjFPLuQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 07:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S1344439AbjFPLum (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 07:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345405AbjFPLuF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 07:50:05 -0400
+        with ESMTP id S1344620AbjFPLul (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 07:50:41 -0400
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6347295B;
-        Fri, 16 Jun 2023 04:50:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBAB2D5D;
+        Fri, 16 Jun 2023 04:50:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=MbwrDoAUbff9Hrh1LZWVBAun+O4wMXvNsZ8kJJGYQ04=; b=dX6xJdkQx3/pcMqBP7FPTXn4Py
-        08+1Pgj0Lo4jlvTikx25qxu4fWQ60EuhPw3tMLIRDUc/qbSDsudEawq+9LIWsGNlzaqYgJ+qey00B
-        1RH9XIvEns+FzDI3GG//N6EpcK6Rg+iKFFNKYKyJdYzwkzHw1tJlNukZ87I1QzC8KA5fAkNTcpkTv
-        3SAwSrYxFUknAK6hKziG0ZaUdWbksDHF5at9fWKad3P5EfEhnyrIbMwBl9zl7wJPX+nePz9KsJh5b
-        Mi2Jql+dP6MBJjblCsnDJm1llsz+2avxWSqCYtCdTxpYFxNSs+LJ3bloCHSoAIZ0Yc4dEK3Jy1Hpd
-        MQRXXlMA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43656)
+        d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+        Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+        In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=zF7xNAIZVyD+SHJ7ElUd/V4yfLSKIRVfGcSZbSIiZHU=; b=ZYSyTn+vawQRG09DHEa6aEUqCk
+        j5WQuEaX3feZ4Ubfvxh2ri6l6WMfCkxj8IBSz5rE65Hv8Ha2YynlVhtKKjYmQ//V23wLSBTpFAQNL
+        jomY+k6+wMGUNBLwOiwugW9CJD4QPN6jmUE0fGjBi6DACHKcww4Etwx23bjHOq2wsFm5078jZMgNM
+        FYdqx44+PBXIJpRfBYsFowTLQgOtM9db90ZO8DdPX8WJvZsQvXnxKCS9osC5NSvsGSc7VkLEE5e6t
+        lDBaZAUn0SIL1+WN3UxDIy672QpstyezVZ/4b4KOPnZXUbPEii/iMCESN+T0H4CSS5/pNkbq8Rvsw
+        8qG5TmeA==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:48892 helo=rmk-PC.armlinux.org.uk)
         by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qA7xj-0004xg-JI; Fri, 16 Jun 2023 12:49:55 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qA7xh-0002U8-8p; Fri, 16 Jun 2023 12:49:53 +0100
-Date:   Fri, 16 Jun 2023 12:49:53 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+        (envelope-from <rmk@armlinux.org.uk>)
+        id 1qA7yQ-0004xw-3x; Fri, 16 Jun 2023 12:50:38 +0100
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+        id 1qA7yP-00Ea4o-FS; Fri, 16 Jun 2023 12:50:37 +0100
+In-Reply-To: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
+References: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
+From:   Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 To:     Amit Kucheria <amitk@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Gregory Clement <gregory.clement@bootlin.com>,
@@ -45,14 +46,17 @@ To:     Amit Kucheria <amitk@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH 0/3] Update for AP807 thermal data
-Message-ID: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
+Cc:     Josua Mayer <josua@solid-run.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: armada-thermal: add armada-ap807-thermal
+ compatible
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1qA7yP-00Ea4o-FS@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date:   Fri, 16 Jun 2023 12:50:37 +0100
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -63,20 +67,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+From: Alex Leibovich <alexl@marvell.com>
 
-This series updates the thermal data for the AP807 die, which has
-different coefficients to the AP806.
+Add marvell,armada-ap807-thermal compatible for the AP807 die.
 
-These patches have come from the SolidRun CN913x build repository
-which can be found at:
-https://github.com/SolidRun/cn913x_build/tree/master/patches/linux
+Signed-off-by: Alex Leibovich <alexl@marvell.com>
+Tested-by: sa_ip-sw-jenkins <sa_ip-sw-jenkins@marvell.com>
+Reviewed-by: Stefan Chulski <stefanc@marvell.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ Documentation/devicetree/bindings/thermal/armada-thermal.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../devicetree/bindings/thermal/armada-thermal.txt |  1 +
- arch/arm64/boot/dts/marvell/armada-ap807.dtsi      |  3 ++
- drivers/thermal/armada_thermal.c                   | 32 ++++++++++++++++++++--
- 3 files changed, 34 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/thermal/armada-thermal.txt b/Documentation/devicetree/bindings/thermal/armada-thermal.txt
+index b0bee7e42038..ab8b8fccc7af 100644
+--- a/Documentation/devicetree/bindings/thermal/armada-thermal.txt
++++ b/Documentation/devicetree/bindings/thermal/armada-thermal.txt
+@@ -8,6 +8,7 @@
+     * marvell,armada380-thermal
+     * marvell,armadaxp-thermal
+     * marvell,armada-ap806-thermal
++    * marvell,armada-ap807-thermal
+     * marvell,armada-cp110-thermal
+ 
+ Note: these bindings are deprecated for AP806/CP110 and should instead
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.30.2
+
