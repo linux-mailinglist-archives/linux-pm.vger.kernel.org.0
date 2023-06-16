@@ -2,94 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1238733284
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 15:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48461733289
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 15:53:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjFPNuz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 09:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S229770AbjFPNxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 09:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFPNuy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 09:50:54 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D277B30E0;
-        Fri, 16 Jun 2023 06:50:53 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25e836b733eso536358a91.0;
-        Fri, 16 Jun 2023 06:50:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1686923453; x=1689515453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DZSMsfjHYkbv48QukJ7afwamMn5a+T7mg3WCsl3VYqo=;
-        b=pJEAs8F20r47QcdjnJY4KALVQvbGF86ucToy9Jp3IZXEn7edd5IdyV10zYoYBxW4RK
-         n303rc21hGLzLafU6pVBA5c6oCPF9vBPdVcA6b5IDGgH7g5xqqdmwnON0wtHRsoy8vlC
-         SlKw8XKBGX9Zh3eNhze9D0+Mcin+0iHqjyP8Ed4L298pa/TiY/NhSoNtmdBsrSKnvQ3S
-         mYyIrH7hzgxeEO0ICUZ12H4GP/Pho0D5S6BjzuPJBI7Yzw90avLkl5beM+hAlT7D2vB6
-         DQ1rpUASmrgucFfojxJ63xqGUZNWyNUnJ/9fhO6PuF2NAajFr6F46mIdiyg+C9FmE7Qq
-         VrCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1686923453; x=1689515453;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DZSMsfjHYkbv48QukJ7afwamMn5a+T7mg3WCsl3VYqo=;
-        b=GLNwsLK3Q3GfO936PJpArFJ3BU9sPMFz2TxifmGIh2y5SvhhzkRy2oqEE6OkXDswB4
-         PADIkyzFxHkqI0E9hlJvWrvnp+S4qfsnBNycFgvImvjm5qgDe8e5Gci6bVOaEHlXiNur
-         FMI1Hvsb4zs4pa/TyFJ7cc8IA5wdyaK1GbsKquS1z6AO0yUfTlduhRyeagj1wrg3Cql9
-         ofaALOUFGlcHcaC2e985gNE5JkrsXzg4lZaW+zM0D1V1SAmCF4hGrnrJsYRpDmalF+PI
-         wD2ctxcosOwRWhKvzdH/AZd14eeMR4MBAZT00zqxCIJSpeqSPc+wiw3CZ1fL5ZqsvOxN
-         Mg4Q==
-X-Gm-Message-State: AC+VfDzerkoyFYUpJsAsBZF2L5uh3vE8TpfiliTLS29y2Dn/IyarWwht
-        aovpLuFAv/M72hoS7N8XC5h8dAUMtwcHR6/z/vg=
-X-Google-Smtp-Source: ACHHUZ5K5CXGV94bxSHgTvSnRBnDdUt2EDVt6IkdoIxbkSmxIlctam5o5kYMV7oHVLeLb78IbPkgIqT9eHVcxVZEC6U=
-X-Received: by 2002:a17:90a:1999:b0:25b:cccb:4b8f with SMTP id
- 25-20020a17090a199900b0025bcccb4b8fmr1473411pji.44.1686923453255; Fri, 16 Jun
- 2023 06:50:53 -0700 (PDT)
+        with ESMTP id S229471AbjFPNxA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 09:53:00 -0400
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5949B2702
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 06:52:56 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1686923574;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=nbku+YnB5H9MPK26K0KvbKk71EIPTIq7b5qzzY44c58=;
+        b=jfBuzTqcE1ZKPnC3/UebYfv2CEcRJ0HXZvFJBw+b7/935cOM23ELTYkpev1RIOFEwVMTSF
+        VqOOI82JUkGLIxKZsFQOZ4yMd1SA3LO2HWChQDx8L/muyA56waqExf8+ctgqqRJkHiAWR/
+        Jzptt5XbJ9lVQBm2mbICBSnFI3cdW5EdzE9gOVFZDi2g+Wh+oqvKU8mibC0DaigZVyiKcb
+        5TgCIoZBcmE7sTpAP/rFVKvKGcqzNHrCOEzuB1OxHjDZC7pCAyFljokX5mmD4xxEvKdGI6
+        nQ8sD7eb/s6P3ExQ8ijtKL/JZQKx971Cw2XkOB8MwZr6FPBsBKRSI5BaCc2g3A==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4279C40009;
+        Fri, 16 Jun 2023 13:52:53 +0000 (UTC)
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: [PATCH v3 0/2] Expose reset reason through sysfs
+Date:   Fri, 16 Jun 2023 15:52:50 +0200
+Message-Id: <20230616135252.2787679-1-miquel.raynal@bootlin.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230616062101.601837-1-s.hauer@pengutronix.de>
-In-Reply-To: <20230616062101.601837-1-s.hauer@pengutronix.de>
-From:   Vincent Legoll <vincent.legoll@gmail.com>
-Date:   Fri, 16 Jun 2023 13:50:42 +0000
-Message-ID: <CAEwRq=qze2NV5emMdohTPKK_UfSVMa2wmPNS2c2zzNqFVdmK+w@mail.gmail.com>
-Subject: Re: [PATCH v6 00/26] Add perf support to the rockchip-dfi driver
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Sascha,
+Hello,
 
-On Fri, Jun 16, 2023 at 6:22=E2=80=AFAM Sascha Hauer <s.hauer@pengutronix.d=
-e> wrote:
-> - Add more reviewed-by tags
+Back in 2019, my colleague Kamel did try to upstream a small change in
+the at91 reset driver, in order to expose the reset reason through sysfs
+instead of expecting userland to grep through dmesg to get it. There was
+basically no strong reason opposed to it, besides minor changes which
+needed fixing. 4 years ago I am seeing again the need for such exposure,
+so here is Kamel's patch with the minor comments addressed, as well as a
+small cleanup just before.
 
-Can you explain how the Tested-Bys are handled, I don't see any patch
-with those tags, not Sebastians, nor mine. Is the testing useful ? Should I
-retest the new patchset ?
+Link: https://lore.kernel.org/lkml/00f4e9a2-f6bd-9242-cafd-9c0c4f4dc619@microchip.com/T/
 
-Regards
+Cheers,
+Miquèl
 
---=20
-Vincent Legoll
+Changes in v3:
+* Made the series bisectable.
+* Updated the date and kernel version for this new feature.
+* Changed a few definitions as discussed with Sebastian.
+
+Changes in v2:
+* Collected Nicolas' Acked-by
+* Dropped the Xtal frequency information (as this may change between
+  platforms of course).
+
+Kamel Bouhara (1):
+  power: reset: at91-reset: add sysfs interface to the power on reason
+
+Miquel Raynal (1):
+  power: reset: at91-reset: change the power on reason prototype
+
+ .../testing/sysfs-platform-power-on-reason    | 12 +++++
+ drivers/power/reset/at91-reset.c              | 44 +++++++++++++------
+ include/linux/power/power_on_reason.h         | 19 ++++++++
+ 3 files changed, 61 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-power-on-reason
+ create mode 100644 include/linux/power/power_on_reason.h
+
+-- 
+2.34.1
+
