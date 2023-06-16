@@ -2,105 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15877732C8A
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 11:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D9B732D38
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 12:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232489AbjFPJ5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 05:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
+        id S232710AbjFPKRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 06:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjFPJ5X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 05:57:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59F47194;
-        Fri, 16 Jun 2023 02:57:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AA7A1FB;
-        Fri, 16 Jun 2023 02:58:06 -0700 (PDT)
-Received: from e120325.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CDA603F5A1;
-        Fri, 16 Jun 2023 02:57:18 -0700 (PDT)
-Date:   Fri, 16 Jun 2023 10:57:15 +0100
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, will@kernel.org, rafael@kernel.org,
-        sudeep.holla@arm.com, ionela.voinescu@arm.com, sumitg@nvidia.com,
-        yang@os.amperecomputing.com, Len Brown <len.brown@intel.com>,
-        vincent.guittot@linaro.org
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <ZIwx+4zVzgKGLcS3@e120325.cambridge.arm.com>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
- <20230608051509.h4a6gn572mjgdusv@vireshk-i7>
- <20230608051816.2ww7ncg65qo7kcuk@vireshk-i7>
- <ZIHpd6unkOtYVEqP@e120325.cambridge.arm.com>
- <20230609043922.eyyqutbwlofqaddz@vireshk-i7>
+        with ESMTP id S245746AbjFPKRM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 06:17:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A086137;
+        Fri, 16 Jun 2023 03:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1686910625; x=1718446625;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+yZ1J9TkgeUwFYSmwgGhVFWjrw27DTlM8sQsMjgV3EI=;
+  b=iZo0eA5WrEXvrGcwLdFvX54VznAgI+HcsJ3nKs4Y6B03NzH64U505pE2
+   s/yjndYVBj1Z7f6fHVLAH1sTPcvamzS//Rj421B/W1Gkl76hzQueYeo99
+   Syt/NWGt496VX3ZWhcTDEUFP6P04X28yY4TlfYGsuwgJPZwD8pv5ZE60Z
+   5XnK4J47JZpx6Z1rWUPIDe+CpGLS5sOqcHjhof1613jcnpxuou3hbOCvr
+   HELztu8b7UOjSKmWj/DGEpUz7RGOZcaCuszhmZyDK0sK8gb8f7VrHgmxN
+   7i3fnXCaoYqGK/X5PSpyil2vbDHjmvoGqQiVBz8h6qcDQJ52K+vFGvI1H
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
+   d="scan'208";a="218860839"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 03:17:04 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 16 Jun 2023 03:17:03 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 16 Jun 2023 03:17:00 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <sre@kernel.org>, <conor+dt@kernel.org>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH v3 0/4] dt-bindings: power: reset: at91: convert to YAML
+Date:   Fri, 16 Jun 2023 13:16:42 +0300
+Message-ID: <20230616101646.879480-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230609043922.eyyqutbwlofqaddz@vireshk-i7>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 09, 2023 at 10:09:22AM +0530, Viresh Kumar wrote:
-> On 08-06-23, 15:45, Beata Michalska wrote:
-> > For those CPUs that are in full dynticks mode , the arch_freq_scale_factor will
-> > be basically useless (as there will be no regular sched_tick which eventually
-> > calls topology_scale_freq_tick()), so the code below will look for any other
-> > available CPU within current policy that could server as the source of the
-> > counters. If there is none it will fallback to cpufreq driver to provide
-> > current frequency.
-> 
-> Understood.
-> 
-> > There is a little bit of ambiguity around both 'cpuinfo_cur_freq' and
-> > 'scaling_cur_freq' and how those two are being handled on different platforms.
-> > If I got things right, the first one is supposed to reflect the frequency as
-> > obtained from  the hardware,
-> 
-> Yes, this must be accurate, as much as possible.
-> 
-> > whereas the latter is more of a sw point of view on that,
-> 
-> Historically, it was more about the last frequency requested by the software.
-> But that has changed, for example for X86 and now there is no limitation here
-> which disallows one to report the more accurate one.
->
-That's my observation as well - thank you for clarifying.
-> > That could work, I guess. But then we would have 'cpuinfo_cur_freq' ==
-> > 'scaling_cur_freq' for platforms that do provide arch_freq_get_on_cpu,
-> > which might lead to more confusion as per what is the actual difference between
-> > the two (?)
-> 
-> The behavior should be same for all platforms. That's my primary concern here.
-> If getting same freq from both these files is okay for X86, then it should be
-> for ARM as well.
-> 
-I agree it would be good to align the behaviour here.
-I guess we should wait for more input on what we can and cannot do for x86.
+Hi,
 
----
-BR
-B.
-> If the X86 commit (f8475cef9008) wasn't already merged, I would have suggested
-> to do this aperf/mperf thing only in cpuinfo_cur_freq() and not
-> scaling_cur_freq().
-> 
-> Maybe we can still revert back if there is no hard dependency here.
-> 
-> Len / Rafael ?
-> 
-> The question is if we should make scaling_cur_freq() to always return the last
-> requested frequency and make cpuinfo_cur_freq() to return the most accurate one,
-> preferably using aperf/mperf ?
-> 
-> -- 
-> viresh
+Series convert AT91 shutdown controllers documentation to YAML.
+Along with it device trees were updated and also entries to
+MAINTAINERS with documentation files.
+
+Thank you,
+Claudiu
+
+Changes in v3:
+- do not define properties in allOf section
+- used additionalProperties instead of unevaluatedProperties
+- fixed compatible list of patch 3/4
+- s/Atmel/Microchip AT91/g in title and description sections of YAML files
+  and in commit description
+- collected tags
+
+Changes in v2:
+- use minimum, maximum on uint32 enums instead of all possible values
+- change commit description for patch 3/4 to explain why there is a
+  syscon along with microchip,sama7g5-shdwc
+- remove | near description entries
+
+Claudiu Beznea (4):
+  ARM: dts: at91: use generic name for shutdown controller
+  dt-bindings: power: reset: atmel,at91sam9260-shdwc: convert to yaml
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: convert to yaml
+  MAINTAINERS: add documentation file for Microchip SAMA5D2 shutdown
+    controller
+
+ .../devicetree/bindings/arm/atmel-sysregs.txt |  94 ---------------
+ .../power/reset/atmel,at91sam9260-shdwc.yaml  |  82 +++++++++++++
+ .../power/reset/atmel,sama5d2-shdwc.yaml      | 114 ++++++++++++++++++
+ MAINTAINERS                                   |   1 +
+ arch/arm/boot/dts/at91-qil_a9260.dts          |   2 +-
+ arch/arm/boot/dts/at91-sama5d27_som1_ek.dts   |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_ptc_ek.dts     |   2 +-
+ arch/arm/boot/dts/at91-sama5d2_xplained.dts   |   2 +-
+ arch/arm/boot/dts/at91sam9260.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9260ek.dts           |   2 +-
+ arch/arm/boot/dts/at91sam9261.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9263.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9g20ek_common.dtsi   |   2 +-
+ arch/arm/boot/dts/at91sam9g45.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9n12.dtsi            |   2 +-
+ arch/arm/boot/dts/at91sam9rl.dtsi             |   2 +-
+ arch/arm/boot/dts/at91sam9x5.dtsi             |   2 +-
+ arch/arm/boot/dts/sam9x60.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d2.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d3.dtsi                |   2 +-
+ arch/arm/boot/dts/sama5d4.dtsi                |   2 +-
+ arch/arm/boot/dts/sama7g5.dtsi                |   2 +-
+ arch/arm/boot/dts/usb_a9260.dts               |   2 +-
+ arch/arm/boot/dts/usb_a9263.dts               |   2 +-
+ 24 files changed, 217 insertions(+), 114 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,at91sam9260-shdwc.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
+
+-- 
+2.34.1
+
