@@ -2,63 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491CD732D3E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 12:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC17732F56
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jun 2023 13:02:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244319AbjFPKRk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 06:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S245687AbjFPLC1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Jun 2023 07:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243664AbjFPKRU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 06:17:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986B72120;
-        Fri, 16 Jun 2023 03:17:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1686910640; x=1718446640;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1EF0J3XTU84QK19mrIrzhm1/XzHKeM/G1C/GTKLV/tc=;
-  b=myxlqNmzSTi3FP3Sc4joHpFxR5Ifk22fbKxsTnFL1VPx07CMRqdZbEZE
-   G5Ot0LmE+O9ldwGAxFk5x/5CRjdtH9no4CPAHDpu1WuRWN5kIlnw9Z3jj
-   jKY1992YtBBHxjFjbOn1fBhXIv7uCri4uBFmfzVnSI5WOh2Pm/n/XyXCc
-   RrXCIS6wdZwkdEDf0Gy+rTidXUwPgOrX5wPDsbwoBrBlFhmK9m6uvNcAS
-   buUR+lJwQxK0/sZgdU8zRFIxN/f6EOs5wtdHNYXAJN7MzohJYEQ7UWDRr
-   59UfGgezBKVkyzU5C3JCwr07Mq4fyaDye5zM2a8BvnC+ZVx/yKALr8a8s
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,247,1681196400"; 
-   d="scan'208";a="218860857"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Jun 2023 03:17:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 16 Jun 2023 03:17:18 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 16 Jun 2023 03:17:14 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <sre@kernel.org>, <conor+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH v3 4/4] MAINTAINERS: add documentation file for Microchip SAMA5D2 shutdown controller
-Date:   Fri, 16 Jun 2023 13:16:46 +0300
-Message-ID: <20230616101646.879480-5-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230616101646.879480-1-claudiu.beznea@microchip.com>
-References: <20230616101646.879480-1-claudiu.beznea@microchip.com>
+        with ESMTP id S1345563AbjFPLB5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 07:01:57 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BBF30C1
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 03:56:15 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-bd5f59fb71dso499594276.3
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jun 2023 03:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1686912975; x=1689504975;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=O2Zy7CoVcqMDXci8OmLm4vJBu+rnnNU0phz7Y/ATkHY=;
+        b=VeWtNlBwXRH9Ch7y9OUM1BwWjuuflpYYIPrMfj7JErWYUr2W4MmNIcBad4zfjRqgNO
+         +MRm0vJskSw4uAtrmfVb18aS9vIbwpCWg3qG7s1GBe5jZ0LyFTweLhadX2WMK6W5bwxL
+         ZbwleeAeXbV79ZkXuJDIOErFb+gANsS92Hmsx2c38C2XuO7h/1+gLY/oipeZZ/5yw+nf
+         nDwb5IovvVhaGL2jxj8tUKR2Rn5xy8MsylK94P/M6E2fzJJgvN2NYunK1eWagKXWdiqU
+         7p7GUkIFxQaE7PKjB1ovnkfSoQtk8G4XjAPAxgI9g8KXjkBvERt0sM0oPfMzBvGU4vPO
+         Winw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1686912975; x=1689504975;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O2Zy7CoVcqMDXci8OmLm4vJBu+rnnNU0phz7Y/ATkHY=;
+        b=eyDYnWsnk+5+BLXveBksbp+oLcSs5mB6uVvC27khnZZWUTJ27G/Av4C6a26MB3M5au
+         wCwNg0/4Ymu0a5J5lkJMaFMeU0G6isUsJXasZrN3ts3AsKXX9LStrdsnq747G5LtHJhv
+         dNQ5OJoo0hBEPdtAP+PMQwj3JeQnayz5LEzVAKp+jHJYHSuSJ8myA6IGnYCmKhWUc/+i
+         sZKnZs/WDe0UDakpmI6OYdashKvcBl6MjUmHsz5+JfaX+0DBVr9VV2tEs2WRehrvmMa+
+         4gqp5zOkoMGi7csMn6HhpQaiOlrBui0F2ulVPKQPBnMuodvVlSsyr3WNshP7+bHrDJPJ
+         Y1xQ==
+X-Gm-Message-State: AC+VfDxDZ4Ri195/QupVazy7NLjnm4mJdjBl0SJT7zOXVS5/MAqmp0LA
+        rAABqkkFEuFV+MCv02h76+JPgrRJtxZNt4I6BaclGg==
+X-Google-Smtp-Source: ACHHUZ5E+CaVkhJm2AG7yUy2sLJOiC4AvbjLzFg83siZWHq/g+J54sMfsssifxbK5idpZdHWRlU6wZg5slVckJkJETE=
+X-Received: by 2002:a25:198a:0:b0:ba8:3613:76a8 with SMTP id
+ 132-20020a25198a000000b00ba8361376a8mr1598385ybz.41.1686912974945; Fri, 16
+ Jun 2023 03:56:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com> <443b00b1-76b8-c31d-53d3-42e3592d26e8@quicinc.com>
+In-Reply-To: <443b00b1-76b8-c31d-53d3-42e3592d26e8@quicinc.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 16 Jun 2023 12:55:39 +0200
+Message-ID: <CAPDyKFp5L454WmTPo2eYnBuZ=ZMKEtinLgYU09n=J=3DA1FSJQ@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add provision to keep idle state disabled
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_lsrao@quicinc.com,
+        quic_mkshah@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,26 +70,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add documentation file for SAMA5D2 shutdown controller.
+On Wed, 14 Jun 2023 at 08:43, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
+>
+> Thanks for response Ulf.
+>
+> On 6/12/2023 3:56 PM, Ulf Hansson wrote:
+> > On Thu, 8 Jun 2023 at 10:56, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
+> >>
+> >> CPUidle already has CPUIDLE_FLAG_OFF to keep idle state disabled,
+> >> Lets extend the support to set this flag using device tree.
+> >>
+> >> This allows to keep an idle state disabled and they can be enabled back using
+> >> sysfs after certain point using below command.
+> >>
+> >> echo N > /sys/devices/system/cpu/cpuX/cpuidle/stateX/disable
+> >>
+> >> This helps in cases where vendors want to keep cpuidle off until home
+> >> screen comes up. In the past attempt was done at [1] but it was not considered
+> >> safe option to export cpu_idle_poll_ctrl().
+> >>
+> >> [1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1637831676-32737-1-git-send-email-quic_mkshah@quicinc.com/
+> >
+> > Before considering this, I don't recall if I ever received a reply to
+> > my earlier suggestion to the above thread. So, let me repeat my
+> > question.
+> >
+> > I am wondering if a similar improvement can be achieved by
+> > modularizing the cpuidle-psci driver. If insmodding it after the
+> > homescreen, we allow only ARM WFI during boot. This should achieve the
+> > similar results as we get with $subject series, right?
+> >
+> > [...]
+> >
+> This will not work for targets which does not have DLKM support.
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Right. I am not saying it's the perfect solution, but it seems like it
+could potentially solve the problem for many cases.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 74a6b6b13d84..cdf4b41cf62b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -13811,6 +13811,7 @@ F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
- MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
- M:	Claudiu Beznea <claudiu.beznea@microchip.com>
- S:	Supported
-+F:	Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
- F:	drivers/power/reset/at91-sama5d2_shdwc.c
- 
- MICROCHIP SPI DRIVER
--- 
-2.34.1
+If you want some help to turn the cpuidle-psci driver into a loadable
+module, just reach out, I am happy to help.
 
+[...]
+
+Kind regards
+Uffe
