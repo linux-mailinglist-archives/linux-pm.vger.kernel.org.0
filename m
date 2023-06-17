@@ -2,111 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3B8734090
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jun 2023 13:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A1F73414F
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jun 2023 15:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbjFQLja (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jun 2023 07:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
+        id S236051AbjFQNhK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jun 2023 09:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbjFQLj3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jun 2023 07:39:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6331BF8
-        for <linux-pm@vger.kernel.org>; Sat, 17 Jun 2023 04:38:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687001923;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=e4oaFvu+oLj9clZTX2+t/9r2R/dvlWv5GxKJkZqu9ZE=;
-        b=fzcx5UiN6Gt9YSWLG7K8CU//PFGhBgEvvwL9E6OGpKq/A1szHHlPr7fJVdhAr7iBJPiJqf
-        e2MbhMnxcBPANV9qXjVdnHvi23h3xWRXrqFJQe3KkatLXpgzBKd/7ajmdFSMeCSctxnL65
-        AWBxtZmThUf/8xzfIqBJlBVt7i381BA=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-133-b0qIhLH6ObGH8BdgodyPWw-1; Sat, 17 Jun 2023 07:38:41 -0400
-X-MC-Unique: b0qIhLH6ObGH8BdgodyPWw-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-62ffc101d72so22850916d6.3
-        for <linux-pm@vger.kernel.org>; Sat, 17 Jun 2023 04:38:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687001921; x=1689593921;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e4oaFvu+oLj9clZTX2+t/9r2R/dvlWv5GxKJkZqu9ZE=;
-        b=J0xpUzfIzMkK49H+h+ClC3IdM6CenoHXs7snipuV0CuIfnNz11ECsnmYS03/gKGOQy
-         lzg/6POOlyKX+LD9BAo2aoozg1ul2BH3VWkb7VcEp8uJG6pT8C4VLKlDImuAJ/6W2NIW
-         g6luFBrC7gmgYjE+arrWaL3LvEp2k5yWoR58r955DORseBo+YelO+LdjSkImeM31X4ip
-         +tyXCuRHiKjl2zQaVlNRU8Q3SQ7FjopuxNd2RSihKJSqRfZx+RwCTYVLlmdIezQFGv+M
-         tsNABSP1nU/dKQFEhxI+a9eIwCH1zBZQRCrn0w80Fqv+v7oYqxQ6WxdzsYcI0D+3Y41K
-         +fNw==
-X-Gm-Message-State: AC+VfDwmzzAm+4SCBsuZaR4Uy3/GhR8h2mtUAR87QbrtH5KugnmNVupc
-        BQFpCSASCb03sTAv/z9Qlb+8FzMKAUgS3v2vpD1y9diLDgAp/oqOn2yJZ0uXd7uXCVAEcaUOC71
-        TqLV9LMo7xsRDz1SH0Ec=
-X-Received: by 2002:a05:6214:2484:b0:62f:ff5c:6b3e with SMTP id gi4-20020a056214248400b0062fff5c6b3emr5080933qvb.34.1687001921374;
-        Sat, 17 Jun 2023 04:38:41 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7kAPxY0P/+pHsf5eYAttHB/VT0n+7jpgTnH2PyzRpW3fTXbo/JyZj81xki2cMCorIp/25kfQ==
-X-Received: by 2002:a05:6214:2484:b0:62f:ff5c:6b3e with SMTP id gi4-20020a056214248400b0062fff5c6b3emr5080918qvb.34.1687001921169;
-        Sat, 17 Jun 2023 04:38:41 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id s15-20020a0cdc0f000000b006300e1db3ecsm363670qvk.141.2023.06.17.04.38.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jun 2023 04:38:40 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] thermal/drivers/tsens: remove unused variable ops_v0_1
-Date:   Sat, 17 Jun 2023 07:38:37 -0400
-Message-Id: <20230617113837.3224912-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        with ESMTP id S234012AbjFQNhI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jun 2023 09:37:08 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B270AE72;
+        Sat, 17 Jun 2023 06:37:06 -0700 (PDT)
+Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MCsLo-1qJHWx2N3Q-008rdh; Sat, 17 Jun 2023 15:36:39 +0200
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-pm@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Subject: [PATCH V2 0/7] ARM: dts: bcm283x: Improve device-trees and bindings
+Date:   Sat, 17 Jun 2023 15:36:13 +0200
+Message-Id: <20230617133620.53129-1-stefan.wahren@i2se.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:YcK/WR3T6hRaLw1AnRYEOWbBdCZO9EhCjZdqdqs73nVdKHWNmCZ
+ 20NQGWbCY/hqlHi3SeaUojIUqSFa4Zp6DkL7MTtmuyaro5Z0MGjEd2SOK7KkLRSUl+pJQVo
+ vhKkfgNjXl56DrXFxTBMKAF0aaqicxN8CLwL/u+Afz89D8nChAO6OTEK1sMlQEs/Tbiz6IV
+ HfyVn1YxUq8qCgMf71InA==
+UI-OutboundReport: notjunk:1;M01:P0:WRpEgt448HQ=;Jrx4hK3B7Q3em0TSzh5wtA+CGrh
+ x5IVkZUABea9X6Ymu3965wxvZwVk6bzg5CJC3GpRtVdZs0yAJvJJuRmLQgb6RdBgY7u9yftA3
+ JadzRKSiEIcXX7DZGHN8YbxhU2tWn+k6vugMS+kRF9Y2M1wVdd68wT4igPjydHir0pDkT3FgR
+ FnimddScYqvul10fN05NYrjQuNbZ+Izd5Z7pSjX3nPlWpi+a1PdLu+piSUXMXu4+8qMfcPXIm
+ PvkmsEkhM48Nef7MObzLGcKVzAtgdy3dwqu+1uGiz/5guJM5zY6Ju6XDNat2EjGwW45vKjp/7
+ lm2yMqXiedbMX38XwhfRcJqyfuAoGmE1PwyJDeZE8migVNlC4Iv0ZFay86jd+oyZ+gQo26Rjy
+ rCwKbjat3YcvZlfX1AYjK5IlPPpk+JOvuZeAerP7K5VyLprj3J7wj1Uym+SyImJZ9/809uv1G
+ UCnTWrgqHUN3deThwTuR1t1rh+qkwBtkLjrhDKdF41TpHvyWePcZzGOgcxan+SOczFDZ+DtOG
+ u27BWXSESaUJdxvGSTw0Hh41bJwqvxVY986XgzkVTIRal2SV1cTOPcd9oCR+RoVUD0xpuDflt
+ eDUkzlY3f8W1qdkMwO22qRZlBcGewAeeum+ryOFpy0vtYdssiHWNsYsCdm0i0QLwssiVscG4W
+ u0CfwhSWbkgnmfwXUKcpxJKUodnNmNriu5vxZ1X1eA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-gcc with W=1 reports
-drivers/thermal/qcom/tsens-v0_1.c:328:31: error:
-  ‘ops_v0_1’ defined but not used [-Werror=unused-const-variable=]
-  328 | static const struct tsens_ops ops_v0_1 = {
-      |                               ^~~~~~~~
+This series fix some dtbs_check warning for the Raspberry Pi boards
+and convert 4 txt DT bindings for BCM2835 to YAML.
 
-This variable is not used, so remove it.
+Changes in V2:
+- drop already applied patches (bcm2835-sdhost, bcm2835-thermal)
+- drop patch "dmaengine: bcm2835: also support generic dma-channel-mask"
+- keep brcm,bcm2835-dma for ABI compatibility which also resolve
+  dependency between patch 2 and 3
+- drop quotes in patch 2 as noted by Rob Herring
+- add interrupt description as suggested by Rob
+- add Rob's and Uwe's Reviewed-by
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/thermal/qcom/tsens-v0_1.c | 6 ------
- 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
-index a941b4241b0a..0caf4628582c 100644
---- a/drivers/thermal/qcom/tsens-v0_1.c
-+++ b/drivers/thermal/qcom/tsens-v0_1.c
-@@ -325,12 +325,6 @@ static const struct reg_field tsens_v0_1_regfields[MAX_REGFIELDS] = {
- 	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
- };
- 
--static const struct tsens_ops ops_v0_1 = {
--	.init		= init_common,
--	.calibrate	= tsens_calibrate_common,
--	.get_temp	= get_temp_common,
--};
--
- static const struct tsens_ops ops_8226 = {
- 	.init		= init_8226,
- 	.calibrate	= tsens_calibrate_common,
+Stefan Wahren (7):
+  ARM: dts: bcm283x: Fix pinctrl groups
+  dt-bindings: dma: convert bcm2835-dma bindings to YAML
+  ARM: dts: bcm2835: adjust DMA node names
+  dt-bindings: pwm: convert pwm-bcm2835 bindings to YAML
+  ARM: dts: bcm283x: Increase pwm-cells
+  dt-bindings: mailbox: convert bcm2835-mbox bindings to YAML
+  dt-bindings: timer: convert bcm2835-system-timer bindings to YAML
+
+ .../bindings/dma/brcm,bcm2835-dma.txt         |  83 --------------
+ .../bindings/dma/brcm,bcm2835-dma.yaml        | 102 ++++++++++++++++++
+ .../bindings/mailbox/brcm,bcm2835-mbox.txt    |  26 -----
+ .../bindings/mailbox/brcm,bcm2835-mbox.yaml   |  40 +++++++
+ .../devicetree/bindings/pwm/pwm-bcm2835.txt   |  30 ------
+ .../devicetree/bindings/pwm/pwm-bcm2835.yaml  |  43 ++++++++
+ .../timer/brcm,bcm2835-system-timer.txt       |  22 ----
+ .../timer/brcm,bcm2835-system-timer.yaml      |  48 +++++++++
+ arch/arm/boot/dts/bcm2711.dtsi                |   4 +-
+ arch/arm/boot/dts/bcm2835-common.dtsi         |   2 +-
+ arch/arm/boot/dts/bcm2835-rpi-a-plus.dts      |   1 +
+ arch/arm/boot/dts/bcm2835-rpi-a.dts           |   1 +
+ arch/arm/boot/dts/bcm2835-rpi-b-plus.dts      |   1 +
+ arch/arm/boot/dts/bcm2835-rpi-b-rev2.dts      |   1 +
+ arch/arm/boot/dts/bcm2835-rpi-b.dts           |   1 +
+ arch/arm/boot/dts/bcm2835-rpi-cm1-io1.dts     |   1 +
+ arch/arm/boot/dts/bcm2835-rpi-zero-w.dts      |   2 +
+ arch/arm/boot/dts/bcm2835-rpi-zero.dts        |   1 +
+ arch/arm/boot/dts/bcm2835-rpi.dtsi            |   2 -
+ arch/arm/boot/dts/bcm2836-rpi-2-b.dts         |   1 +
+ arch/arm/boot/dts/bcm2837-rpi-cm3-io3.dts     |   1 +
+ arch/arm/boot/dts/bcm2837-rpi-zero-2-w.dts    |   2 +
+ arch/arm/boot/dts/bcm283x.dtsi                |   2 +-
+ 23 files changed, 250 insertions(+), 167 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/dma/brcm,bcm2835-dma.txt
+ create mode 100644 Documentation/devicetree/bindings/dma/brcm,bcm2835-dma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mailbox/brcm,bcm2835-mbox.txt
+ create mode 100644 Documentation/devicetree/bindings/mailbox/brcm,bcm2835-mbox.yaml
+ delete mode 100644 Documentation/devicetree/bindings/pwm/pwm-bcm2835.txt
+ create mode 100644 Documentation/devicetree/bindings/pwm/pwm-bcm2835.yaml
+ delete mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
+ create mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
+
 -- 
-2.27.0
+2.34.1
 
