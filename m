@@ -2,88 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D19B0733DC9
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jun 2023 05:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7F1733E98
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Jun 2023 08:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjFQDZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Jun 2023 23:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60218 "EHLO
+        id S229687AbjFQGNW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 17 Jun 2023 02:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjFQDZp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Jun 2023 23:25:45 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC9082D5D;
-        Fri, 16 Jun 2023 20:25:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cx8Oi1J41kVTIGAA--.11243S3;
-        Sat, 17 Jun 2023 11:25:41 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG8q0J41kmtwdAA--.10184S3;
-        Sat, 17 Jun 2023 11:25:40 +0800 (CST)
-Subject: Re: [PATCH v14 1/2] thermal: loongson-2: add thermal management
- support
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>, zhuyinbo@loongson.cn
-References: <20230426062018.19755-1-zhuyinbo@loongson.cn>
- <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <bc081559-e6f5-7ac8-7ae1-3cfbbee51697@loongson.cn>
-Date:   Sat, 17 Jun 2023 11:25:40 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <af4d1e00-76d6-b71a-2ed1-562e6405306b@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxG8q0J41kmtwdAA--.10184S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229493AbjFQGNW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jun 2023 02:13:22 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B3119;
+        Fri, 16 Jun 2023 23:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1686982400; x=1718518400;
+  h=date:from:to:cc:subject:message-id;
+  bh=RtCs7Vqi+okeg46V7hlD4LcnOBwJN1VYJIAr3/UF6vw=;
+  b=njBx3KT3n+uw2w294FERlGQyUWwNrOJBTVow95Lubnpfip2KLtuh8Kea
+   ZL43RLKhS8Lue6BlZOAJXRgyKof8XP05Tr0LDlvc5S5VX3fI1y6AY44KD
+   QO9RzLi5qQD/5LC7FG+uD9i5Py4HThkU/RKVCJEHI5MF/nfG3DJw892o8
+   ZlHNsCgOrLsn08xz+AeAW4vNEV0Ixrj1Hv1bA2DhpdVkov6Eyjll/rkCq
+   LNT7fCwkUoguSve2YoFmjcVfgKZNlwuj+LIvHCMYgH9HXA80MVMENv4CG
+   fQ/NNPnIF8j/dJAqLOEnYeL2DYGBIopNerWet2WMyhdiOXNopthZweiDZ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="388223425"
+X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
+   d="scan'208";a="388223425"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2023 23:13:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10743"; a="778400768"
+X-IronPort-AV: E=Sophos;i="6.00,249,1681196400"; 
+   d="scan'208";a="778400768"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 16 Jun 2023 23:13:19 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qAPBW-0002Me-1P;
+        Sat, 17 Jun 2023 06:13:18 +0000
+Date:   Sat, 17 Jun 2023 14:12:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ ffad264a7f15f9bfaad50621b3657e72193c79ee
+Message-ID: <202306171435.71ofktNM-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: ffad264a7f15f9bfaad50621b3657e72193c79ee  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-Hi Daniel,
+elapsed time: 729m
 
-在 2023/6/12 下午10:22, Daniel Lezcano 写道:
+configs tested: 52
+configs skipped: 2
 
-...
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->>
->> +#define LOONGSON2_SOC_MAX_SENSOR_NUM            4
->> +
->> +#define LOONGSON2_TSENSOR_CTRL_HI            0x0
->> +#define LOONGSON2_TSENSOR_CTRL_LO            0x8
->> +#define LOONGSON2_TSENSOR_STATUS            0x10
->> +#define LOONGSON2_TSENSOR_OUT                0x14
-> 
-> Please use BIT() macros
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r032-20230616   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+hexagon              randconfig-r033-20230616   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r035-20230616   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r036-20230616   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r031-20230616   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r034-20230616   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
-
-I learn about that BIT() is generally used to describe the functional
-bit or control bit or status bits of a register, but these register was
-some different register offset and not some control bit or status bit
-So using BIT() here seems a bit inappropriate, Do you think so?
-
-
-Thanks,
-Yinbo
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
