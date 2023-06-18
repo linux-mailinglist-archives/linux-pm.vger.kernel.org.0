@@ -2,167 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8380E734173
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Jun 2023 15:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CB0734501
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Jun 2023 07:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346132AbjFQNma (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 17 Jun 2023 09:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42912 "EHLO
+        id S229546AbjFRF4H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 18 Jun 2023 01:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236455AbjFQNm1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 17 Jun 2023 09:42:27 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA1E819A2;
-        Sat, 17 Jun 2023 06:42:22 -0700 (PDT)
-Received: from stefanw-SCHENKER ([37.4.248.58]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1M2fDr-1q7UlX1Vhn-0048wI; Sat, 17 Jun 2023 15:36:44 +0200
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-pm@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH V2 7/7] dt-bindings: timer: convert bcm2835-system-timer bindings to YAML
-Date:   Sat, 17 Jun 2023 15:36:20 +0200
-Message-Id: <20230617133620.53129-8-stefan.wahren@i2se.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230617133620.53129-1-stefan.wahren@i2se.com>
-References: <20230617133620.53129-1-stefan.wahren@i2se.com>
+        with ESMTP id S229456AbjFRF4G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 18 Jun 2023 01:56:06 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A184310D0;
+        Sat, 17 Jun 2023 22:56:04 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so2260807f8f.2;
+        Sat, 17 Jun 2023 22:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687067762; x=1689659762;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+NX5ZV664S/3sQaZAuC+xeosJghTMxUMI70alZxPa5Y=;
+        b=paCHA7pjmnWe/IxKblZOvVLJCQMFIcAb2uKzUfv6t5CZ3G1g9hXPWQ58MUXkuXmstv
+         O6R1T7qbyg22aeMnmfS9GKuJZkCptCgv8gl02U7bx3vOy2jTgX9WGMkbt+o0JvCUs+kW
+         bA+mts79t+1rkGlZnKT8v1xPOjTDI1mljmSht/lqTrAYza1MktBdvcCYHnJBJ3J90SAU
+         firfpBvpMPctU6fXBfPySyg6YIq2gUqqEkiphtZ3ZvVVDwpz2lqwWwcsITHzvTMXTJzj
+         W+8jF/PwHqlykUASb2AVCXVaYe1soMWghMN1QCjmmR0zFF3GU948sIjFP62ppXVd7WfZ
+         ffYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687067762; x=1689659762;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+NX5ZV664S/3sQaZAuC+xeosJghTMxUMI70alZxPa5Y=;
+        b=XTEPlWfZmGQJqteKwDhh3yd9fDvZKL6BlNYC7dZbN9tG3GPSZbyyL+aGJMyFtIGg4o
+         3RDNpWAteFnrXJ5yLDVcORZO2fKTjXjIEY5dt2bho042NxNGhvH2eCejxh9fK/yeXu9j
+         I01H5wQRVp4ClgIl0SmZBYjdNkJuhtOHuE8tHpokWKeTLTJM+HWpdq8wLTdABoY8ZZ2R
+         ojSHqojuEOwWfGfjKlmjAtPpGF1edcCjNngvqSCqEn8bGvSGiO/pukV5lDUrz1s3KeNB
+         1REGn6k22jzap3BCWqiWaleRlJLZKzlI9jMhcZAM5WNHtor2dixkhOQscSa1fqauB+q7
+         L0pQ==
+X-Gm-Message-State: AC+VfDydmw0oDciI9oFayGSNQis3NpHBTMGZICbezHJn5aXzMlHxxdAl
+        2gsRd3//jKXH7vav6MRsN24=
+X-Google-Smtp-Source: ACHHUZ6BOZ2LQ6J+Y8YIuDzGK/TfPStSIUARP0Kxc41zdevAjVxrE87pnYjBbRb1udZcUfffG4tAww==
+X-Received: by 2002:adf:f5c8:0:b0:307:9473:fe26 with SMTP id k8-20020adff5c8000000b003079473fe26mr4901839wrp.26.1687067762314;
+        Sat, 17 Jun 2023 22:56:02 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id s14-20020a170906354e00b009888b71c368sm154616eja.152.2023.06.17.22.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Jun 2023 22:56:01 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     glaroque@baylibre.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, thara.gopinath@gmail.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anarsoul@gmail.com, tiny.windzz@gmail.com, wens@csie.org,
+        samuel@sholland.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, edubezval@gmail.com, j-keerthy@ti.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, niklas.soderlund+renesas@ragnatech.se,
+        wenst@chromium.org, Yangtao Li <frank.li@vivo.com>
+Cc:     linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, Yangtao Li <frank.li@vivo.com>
+Subject: Re: [PATCH v3 02/12] thermal/drivers/sun8i: remove redundant msg in
+ sun8i_ths_register()
+Date:   Sun, 18 Jun 2023 07:55:59 +0200
+Message-ID: <2684470.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20230613114904.15749-2-frank.li@vivo.com>
+References: <20230613114904.15749-1-frank.li@vivo.com>
+ <20230613114904.15749-2-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:mVFiliFboW4LEd+X1TQBa6vvRmi7USdo/RW69BmRyNa/pJtjGzS
- tVQ6dwdnHEHr/ZHHezkQhqcYQeI6DcMTENVHZf6OczxoEATjvn8NKf1lIAxB1OpX4zWvY08
- 1sP8GK5j5nAf4xocAOTABS5MDo/6bn++VaK84cFyxqD07Z80Bj2+pOq//rMnClwhW6nUT7s
- OL/kAvNBJ4QbODLW9ofkQ==
-UI-OutboundReport: notjunk:1;M01:P0:inw7a/j3P4k=;k+yIdptIj0BhoNOoxCn068igPV4
- pOdv6vS4XPRfjQPY+0tiABzI5rL/li6o7aLPUKu0+vnm8sELegztndB4AWp6kSatbYEMVl/Rl
- dmofJCZDR+0nNYJ9IA2zvBFjwmKZJ5OuZfKbMf54zg4R6piKdgtKxhXpc5dm4pPql2k58PHVZ
- MMits6+0gfWFcw8fFgH6aKYjupSOMbvR491t7i7m5SQqtlS5Cj7eb6vcdFO06EFOo3w55uVVO
- 8J5z1G5S+4GfED4nhRqqf94urrlTa5f+FqLnLMHF73PYePsrxL2WpIFbsVgYrTDYQk+4JUKH/
- 9M19uFHpSDk96dBA8DOV9ktUAn1r5dnO/wH9Z+3ttGfXf/6pTlmhutwTuRH2t6D2r/5gm1TmX
- JoS8p5nbkFSJI659bjrpCLQZWTYSYA1/+BYsXm6R65xipi9S0hggFPy5ZwP+5cVo11d1XiZg9
- 3onxo7vKD4LHGnh4XO6ErFtxx0pWJcOd81KBgamDmYK4mDiQCSMj6VdrEn0qCu0HsG70DNuly
- jIh1kUSbQQI5+fc+DT6/0cXStqt92tYgZ3JtJULUALmWsLBTcP4wlLXecp4zzsacdr26kbmYb
- nVYOgJAc/+f9OSjjr/h1Mb9pKaMbM6hvj/W/PhoGLVZyjdaR5RscxMlAxqEVlZNj8q59uUy5V
- A8XOBwuZyW1K2+/+sN8OspHzNhiHDiJMZdxhjJjkhQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Convert the DT binding document for bcm2835-system-timer from .txt
-to YAML.
+Dne torek, 13. junij 2023 ob 13:48:54 CEST je Yangtao Li napisal(a):
+> The upper-layer devm_thermal_add_hwmon_sysfs() function can directly
+> print error information.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../timer/brcm,bcm2835-system-timer.txt       | 22 ---------
- .../timer/brcm,bcm2835-system-timer.yaml      | 48 +++++++++++++++++++
- 2 files changed, 48 insertions(+), 22 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
- create mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-diff --git a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
-deleted file mode 100644
-index 844bd5fbd04c..000000000000
---- a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
-+++ /dev/null
-@@ -1,22 +0,0 @@
--BCM2835 System Timer
--
--The System Timer peripheral provides four 32-bit timer channels and a
--single 64-bit free running counter. Each channel has an output compare
--register, which is compared against the 32 least significant bits of the
--free running counter values, and generates an interrupt.
--
--Required properties:
--
--- compatible : should be "brcm,bcm2835-system-timer"
--- reg : Specifies base physical address and size of the registers.
--- interrupts : A list of 4 interrupt sinks; one per timer channel.
--- clock-frequency : The frequency of the clock that drives the counter, in Hz.
--
--Example:
--
--timer {
--	compatible = "brcm,bcm2835-system-timer";
--	reg = <0x7e003000 0x1000>;
--	interrupts = <1 0>, <1 1>, <1 2>, <1 3>;
--	clock-frequency = <1000000>;
--};
-diff --git a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
-new file mode 100644
-index 000000000000..227b44788a48
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/brcm,bcm2835-system-timer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: BCM2835 System Timer
-+
-+maintainers:
-+  - Stefan Wahren <stefan.wahren@i2se.com>
-+
-+description:
-+  The System Timer peripheral provides four 32-bit timer channels and a
-+  single 64-bit free running counter. Each channel has an output compare
-+  register, which is compared against the 32 least significant bits of the
-+  free running counter values, and generates an interrupt.
-+
-+properties:
-+  compatible:
-+    const: brcm,bcm2835-system-timer
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    items:
-+      - description: System Timer Compare 0 match (used by VideoCore GPU)
-+      - description: System Timer Compare 1 match (usable for ARM core)
-+      - description: System Timer Compare 2 match (used by VideoCore GPU)
-+      - description: System Timer Compare 3 match (usable for ARM core)
-+
-+  clock-frequency: true
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    timer@7e003000 {
-+      compatible = "brcm,bcm2835-system-timer";
-+      reg = <0x7e003000 0x1000>;
-+      interrupts = <1 0>, <1 1>, <1 2>, <1 3>;
-+      clock-frequency = <1000000>;
-+    };
--- 
-2.34.1
+Best regards,
+Jernej
+
+> ---
+>  drivers/thermal/sun8i_thermal.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+> index 793ddce72132..066f9fed9b86 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -475,9 +475,7 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+>  		if (IS_ERR(tmdev->sensor[i].tzd))
+>  			return PTR_ERR(tmdev->sensor[i].tzd);
+>  
+> -		if (devm_thermal_add_hwmon_sysfs(tmdev->dev, tmdev->sensor[i].tzd))
+> -			dev_warn(tmdev->dev,
+> -				 "Failed to add hwmon sysfs attributes\n");
+> +		devm_thermal_add_hwmon_sysfs(tmdev->dev, tmdev->sensor[i].tzd);
+>  	}
+>  
+>  	return 0;
+> 
+
+
+
 
