@@ -2,66 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 127D67350A9
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 11:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1836A7350B2
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 11:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbjFSJoZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jun 2023 05:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34770 "EHLO
+        id S230110AbjFSJpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jun 2023 05:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjFSJoZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 05:44:25 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CC5110
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 02:44:23 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31126037f41so2884316f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 02:44:23 -0700 (PDT)
+        with ESMTP id S231615AbjFSJpM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 05:45:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BAE1A6
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 02:45:09 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f8467e39cfso3962775e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 02:45:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687167862; x=1689759862;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google; t=1687167908; x=1689759908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2bH2JT5shA1ZCFvcaglwjqW7UABD2qxQkB1KrAzjhl8=;
-        b=S0wMhyjgBOGreIIxEfZAfOkUYsWWm56FbYluy+MS0mHDnGqEmORtrD1sILTTPkJYjC
-         TCE2oCwWwx2C5A6DKnYH2sTKxBcyxTTaTXnviNSueMoHfe1B5f4FVJ4CbUEZDgibOxO8
-         VzeOXer6JBwIyFV2r4wQcPHPX+HBCwElGNZudZt7nPYSIfVza4yQ2Wms1q8qYqPXc+Kh
-         SKSASspv/IdZ/Tr2z7V9R+pZIKj79tfWblTRdBIprWygn+C/1/mmdJVAW+ygtU3lxCB+
-         AL7x5JHSNfgCoE5Ov3YKmMMRwmJzHuS0pkVFXmCQXS7tQHNlz7UX1pSh0wGOOW3TB3eJ
-         Q49A==
+        bh=VVP/pUDXtLdUgoAxy1tfvAzLhw5MZG/sIJ+AbfxkcTY=;
+        b=QGXoqIdMO+enjF727yqG2zusjrFhlifxAoGCITnJJfQhHq35L3YiZD/4qcYnnb99mb
+         TlzgStRwvsFoivNO69ub5C/jqDT1WLDTrvNBJFFvgn5ZI0dlLQjGqh+1CqwToXkh+da3
+         yirpTpZdjMxtyU29t6y3Jmak3Pgj/+gT66ahxoANPgJcq/s3DmSAx6r82WBrTTLbrgRp
+         vq8Up40HiZLO+nACVkyK1eyHT8PDFurHE1tmi/PA8dI5ItNADiEu486Z6x8u/en8wcJX
+         L7gDIsf6pZ7dyM+gohfi02O1rtu4W091uAq6hqJx7mjr/JyXNufQiCuSNBiqlXDZjXYX
+         wOQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687167862; x=1689759862;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1687167908; x=1689759908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2bH2JT5shA1ZCFvcaglwjqW7UABD2qxQkB1KrAzjhl8=;
-        b=NYn6TQV14eqZZHDRg2/72vWotyvzS2FfbVJIQMyy+++YizJRKSZ2Td6rvFQmABJUXE
-         3csXFwOBiFQpCeQ+53DoeAOd45AFuaG2h9jgxvig8JDQwSmv7IerSR5fN1Q6+jkgMxvm
-         Qfhgg6VMCeoWVzv0ptnG8cVe6VBMdNT4cGamIRe71qCN+9D3+Zi5V1iZM4+kOfG9MFE3
-         FHErnQcZD8CW8whrxk/obKp7CZmgo6Mjpltf8qr6U9+sOqjorccc/cUgc7X63ULyAZby
-         7K2/+LdrN1a7gQtuECd/UUMu/WV11E1FR5SKnndeqoLapwVqiHEDcd4MO5G1NjnrPf1Z
-         65eA==
-X-Gm-Message-State: AC+VfDzsjD65krVySDyf/jAcN31InnF1B3NkLGvNq1lcwc7/aPGjZXIY
-        I0D8M34VYjTG+S/LRX74Yx6aRw==
-X-Google-Smtp-Source: ACHHUZ5MCCrMybm9Rw8Luk/2SxvFgO16uZEWMQ1yDMM964v2WNceij9RJswUQNdSdPnMz0KwY26Ojg==
-X-Received: by 2002:a5d:590c:0:b0:30a:8995:1dbc with SMTP id v12-20020a5d590c000000b0030a89951dbcmr6605706wrd.26.1687167862345;
-        Mon, 19 Jun 2023 02:44:22 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id m6-20020adfdc46000000b0030e5bd253aasm31035025wrj.39.2023.06.19.02.44.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 02:44:21 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 12:44:17 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] power: supply: ucs1002: fix error code in
- ucs1002_get_property()
-Message-ID: <687f64a4-4c6e-4536-8204-98ad1df934e5@moroto.mountain>
+        bh=VVP/pUDXtLdUgoAxy1tfvAzLhw5MZG/sIJ+AbfxkcTY=;
+        b=ZzOSZgglip8/ju9UlPzerh5EjqBONzHl+OeaV9L2GqmXpc4b11gohyTxEB96EV75Rm
+         qY/tDOz56EzHEtTQJgc3CBRRtLYkFNhMzlCZvetpiDQRyXWocxOMkNzIXuM7/gO8G9WZ
+         2IIT5ZjfFhkWBrkvR8H9rgW/9DGRcmAIAfhwnCVwXs8PjD96w9T9z1DxYkKzxDUENdZl
+         Q2EYX1SsdH9qZNyjmjPyxfBSWEubqSZORv1HhvZasCWEHHujNg5taln+HjVg5qpMLMGI
+         g92MPv1FX/0B4vQ+vihHUnlctfialdn9dlC0wX34tKuTx9+HsqKvTnnZCaRP+GcvKGjL
+         KxIQ==
+X-Gm-Message-State: AC+VfDzVUakWwv9hQ1xIhU47V6IRjphAtknFovEamBTtNI0WNjLceGb/
+        eqC7Hz7L1FcHUA5AHN8e29TQ2uz+oLk1vuxe5BM=
+X-Google-Smtp-Source: ACHHUZ7mo2jbiTXNbEp1T4Qh05oNT1imtkieFd0Ropw/bbl2lsEraDw4RZ56MIGDHwhiaGdmxwnevw==
+X-Received: by 2002:a05:6512:2f4:b0:4f8:57c2:3936 with SMTP id m20-20020a05651202f400b004f857c23936mr4407428lfq.26.1687167907672;
+        Mon, 19 Jun 2023 02:45:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
+        by smtp.gmail.com with ESMTPSA id b6-20020ac25e86000000b004f842e58d08sm1886506lfq.84.2023.06.19.02.45.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 02:45:07 -0700 (PDT)
+Message-ID: <9e890ca0-396d-fb97-a7d5-db13b8fdbb92@linaro.org>
+Date:   Mon, 19 Jun 2023 11:45:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] interconnect: qcom: rpmh: add optional mask to send
+ as vote
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org>
+ <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-1-66663c0aa592@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-1-66663c0aa592@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +79,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This function is supposed to return 0 for success instead of returning
-the val->intval.  This makes it the same as the other case statements
-in this function.
+On 19.06.2023 10:24, Neil Armstrong wrote:
+> On the SM8550 SoC, some nodes requires a specific bit mark
+> instead of a bandwidth when voting.
+> 
+> Add an enable_mask variable to be used to vote when a node
+> is enabled in an aggregate loop.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+Would be nice to mention that it's literally this commit:
 
-Fixes: 81196e2e57fc ("power: supply: ucs1002: fix some health status issues")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
-From code review.  Untested.
+https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/2d1573e0206998151b342e6b52a4c0f7234d7e36
 
- drivers/power/supply/ucs1002_power.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+For the code:
 
-diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
-index 954feba6600b..7970843a4f48 100644
---- a/drivers/power/supply/ucs1002_power.c
-+++ b/drivers/power/supply/ucs1002_power.c
-@@ -384,7 +384,8 @@ static int ucs1002_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_USB_TYPE:
- 		return ucs1002_get_usb_type(info, val);
- 	case POWER_SUPPLY_PROP_HEALTH:
--		return val->intval = info->health;
-+		val->intval = info->health;
-+		return 0;
- 	case POWER_SUPPLY_PROP_PRESENT:
- 		val->intval = info->present;
- 		return 0;
--- 
-2.39.2
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  drivers/interconnect/qcom/bcm-voter.c | 5 +++++
+>  drivers/interconnect/qcom/icc-rpmh.h  | 2 ++
+>  2 files changed, 7 insertions(+)
+> 
+> diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
+> index 8f385f9c2dd3..d5f2a6b5376b 100644
+> --- a/drivers/interconnect/qcom/bcm-voter.c
+> +++ b/drivers/interconnect/qcom/bcm-voter.c
+> @@ -83,6 +83,11 @@ static void bcm_aggregate(struct qcom_icc_bcm *bcm)
+>  
+>  		temp = agg_peak[bucket] * bcm->vote_scale;
+>  		bcm->vote_y[bucket] = bcm_div(temp, bcm->aux_data.unit);
+> +
+> +		if (bcm->enable_mask && (bcm->vote_x[bucket] || bcm->vote_y[bucket])) {
+> +			bcm->vote_x[bucket] = 0;
+> +			bcm->vote_y[bucket] = bcm->enable_mask;
+> +		}
+>  	}
+>  
+>  	if (bcm->keepalive && bcm->vote_x[QCOM_ICC_BUCKET_AMC] == 0 &&
+> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+> index 04391c1ba465..7843d8864d6b 100644
+> --- a/drivers/interconnect/qcom/icc-rpmh.h
+> +++ b/drivers/interconnect/qcom/icc-rpmh.h
+> @@ -81,6 +81,7 @@ struct qcom_icc_node {
+>   * @vote_x: aggregated threshold values, represents sum_bw when @type is bw bcm
+>   * @vote_y: aggregated threshold values, represents peak_bw when @type is bw bcm
+>   * @vote_scale: scaling factor for vote_x and vote_y
+> + * @enable_mask: optional mask to send as vote instead of vote_x/vote_y
+>   * @dirty: flag used to indicate whether the bcm needs to be committed
+>   * @keepalive: flag used to indicate whether a keepalive is required
+>   * @aux_data: auxiliary data used when calculating threshold values and
+> @@ -97,6 +98,7 @@ struct qcom_icc_bcm {
+>  	u64 vote_x[QCOM_ICC_NUM_BUCKETS];
+>  	u64 vote_y[QCOM_ICC_NUM_BUCKETS];
+>  	u64 vote_scale;
+> +	u32 enable_mask;
+>  	bool dirty;
+>  	bool keepalive;
+>  	struct bcm_db aux_data;
+> 
