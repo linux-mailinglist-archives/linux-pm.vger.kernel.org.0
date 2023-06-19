@@ -2,73 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88F57355DB
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 13:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE03D73577A
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 15:00:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjFSLaV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jun 2023 07:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49092 "EHLO
+        id S231365AbjFSNAS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jun 2023 09:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjFSLaN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 07:30:13 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07A6E63
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 04:29:38 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f8f3786f1dso36611685e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 04:29:38 -0700 (PDT)
+        with ESMTP id S231607AbjFSNAJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 09:00:09 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BEC1AC
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 06:00:07 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-5704ddda6dfso40812427b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 06:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687174169; x=1689766169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wLqkDUhOM58cxbBxnu/hyC38pz5+u7v4rctjX5PZ1kk=;
-        b=yFMm8XUICQJ8I5rYUu+lYCCxbFfIGzjTYMQEJaT985vnIWHoUvgBE3AP9stgP/cxi5
-         TwzQWVLIxQkBkfoEWZ3lxRYNzuw5EY0DtQmp5ZwPzqtxskJaXvUIAp0DMrFbW0zQid4d
-         snzY/bx0zwBn+ZtT2OeYsgnu0M/d38xNFaHMC+S/KI9zpokfz568ZbiRkKWo8VW7kmnr
-         HnoSDjX7aWx9rZ9yz5lFmWDES9N21tIyHIxAKzQdnwmXljsQ9V8G4LoOQIDrfU19f2VZ
-         Y5v6JYBlRkm5eUznSK+Vj5333zrMoCqLD+gnomRb6D3gOEm2jC8L5CXv1DYLQl5xXiA2
-         UR9Q==
+        d=linaro.org; s=google; t=1687179606; x=1689771606;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BrFNh+rb4LdBzypQ3oE3U7czB9G2st4YddEl5A8gEaY=;
+        b=AcLO1dlzV/QVWRg/8clGarbCG079gBcurJW/W6CcT2EYBNX1Mdi6XhpPcfKjlWRNJs
+         150f2yxY+ezdT19RgBcJcTPYkNLvvHhtz5K7xu3dCl5w/RzoK/qzz+Vxwo4+Q2jPtcrZ
+         HS8kB3KaXUzdl/vWhP0mMQR5Lukh4YZm9WtHLmBkCrjhqCmpl/NgF3AAm9VvZYgfXURP
+         yh2fKtc0/IZUxfH9U9c/R4Dx7ivShYziW8os7ti3T8vF+gy7gu9OPc17VlfB3AEeRZXz
+         CCxcBZ4gmcIaEH3TRl7pLWjN90R6KnskwtLXoIylzOvA95O+DCPZXtCvyB3YaZO5z1Io
+         zVaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687174169; x=1689766169;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wLqkDUhOM58cxbBxnu/hyC38pz5+u7v4rctjX5PZ1kk=;
-        b=HnFvocoz5QSe8tMHrrfCwt/aRY0iGjiPhbVsuZs8Sx1oSGZHCoIOiuiAl6Y8A84erf
-         gtg/XYagyBwJOr/LWdhuDG8pgVG2l5ae5573vYb56rOzGlTebO7PE6SXiJ+sCu/uWDzQ
-         7k5VdjSsGcmcAsRoHQ8/KSG+F+XIlQQAJ9BwtzXHR9KvG+6eOhEUEj9PYOhVOnfnPPnS
-         c+y8Ty2iFSsiY9V67Mqw3behW0bxiDHV3Aom4RxCu+cIrjvgphg+GuPelpy1v1qml6QF
-         fxdt0ziiBNPimgbE1m245TlL6S2wM9BKVTsD7thOTaFggD9IujvgOPTz0FI2JGT6rntR
-         59yg==
-X-Gm-Message-State: AC+VfDwFL0sFGq5A3jVGR3OJoZEm+Ye/f6/5HhOThuU7dz2rqgHeCTk4
-        9Fb5osDXKg6iQJq8Z/u3A4k4lg==
-X-Google-Smtp-Source: ACHHUZ6MKC3sxe3z5Hb6e/JbduVA5LHQQz3xvf4OR7eMVT8FkOxxUoRx9lpKhkkq8E+z0gnQf7cXsw==
-X-Received: by 2002:a05:600c:2182:b0:3f9:b2db:88e5 with SMTP id e2-20020a05600c218200b003f9b2db88e5mr1013177wme.32.1687174169451;
-        Mon, 19 Jun 2023 04:29:29 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
-        by smtp.googlemail.com with ESMTPSA id n18-20020a05600c4f9200b003f9b3829269sm1670550wmq.2.2023.06.19.04.29.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 04:29:29 -0700 (PDT)
-Message-ID: <498bfa83-8ba8-14f1-2da2-27d0793f762f@linaro.org>
-Date:   Mon, 19 Jun 2023 13:29:28 +0200
+        d=1e100.net; s=20221208; t=1687179606; x=1689771606;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BrFNh+rb4LdBzypQ3oE3U7czB9G2st4YddEl5A8gEaY=;
+        b=EyhCf745Hm1fyx5zfvykP/23hauRzWG5ijVy0rUiIC/twZ0BC/wiLJyQQ2XieSLmt4
+         m6piDAKLmFV2HyrzFwi0n/WWDSEoaD4KHXHvghAOo9y4cBz8HwYEUJ8Yi+nOYEmKiFrL
+         BXvC+WTQ+vO6D83lS4RiveEOVqeRH9/DzglyJgmQlJP7tnfhCy2s7oGdBKWBmsnbGs9M
+         i0KZv41/3IcjAWvbuO6FImg9Vw0/oxMk0TnCA9PyC3TdMJsNykKwFxhdOiY521Gqn5Eu
+         U1ps4wMREGmK+oaxmD9BT9Y6u1AQlMAxMg/ZS74YYpGhg68ALYxCP4bYj0OQAp0C4uvO
+         fixg==
+X-Gm-Message-State: AC+VfDzYcX1WXMStydGuDEfmylh2HAW6x7TOqSingPbmGBgvA8e3J2YE
+        hrSz3yNl01DGTJwAQ6ksC7K3n8TMv+LFL81Bc5yRThK+xfcrBV0HQ1c=
+X-Google-Smtp-Source: ACHHUZ7NX/vqgH3ffxXPw663ikrTwhwKINh+/6Hmi0nIZlGdFPtC6e7u2O1Jmi6XRQgudeLbnadfLd7uXozIb05IinQ=
+X-Received: by 2002:a25:ac92:0:b0:bca:2ef0:9db with SMTP id
+ x18-20020a25ac92000000b00bca2ef009dbmr6836918ybi.5.1687179606141; Mon, 19 Jun
+ 2023 06:00:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] thermal: stm32: Convert to platform remove callback
- returning void
-Content-Language: en-US
-To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, kernel@pengutronix.de
-References: <20230616165641.1055854-1-u.kleine-koenig@pengutronix.de>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230616165641.1055854-1-u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org>
+ <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-1-66663c0aa592@linaro.org>
+ <9e890ca0-396d-fb97-a7d5-db13b8fdbb92@linaro.org> <a3a7f840-eb74-dc32-dd8b-5f74a484b765@linaro.org>
+In-Reply-To: <a3a7f840-eb74-dc32-dd8b-5f74a484b765@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 19 Jun 2023 15:59:55 +0300
+Message-ID: <CAA8EJpoUo+8==4bOfv-V8fD6Wmng8GON4XMVWR4DkNtekMbtLA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] interconnect: qcom: rpmh: add optional mask to send
+ as vote
+To:     neil.armstrong@linaro.org
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,26 +73,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2023 18:56, Uwe Kleine-König wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code.  However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
-> 
-> st_thermal_unregister() always returned zero, so convert it to return void
-> without any loss and then just drop the return from st_mmap_remove().
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+On Mon, 19 Jun 2023 at 12:47, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Hi,
+>
+> On 19/06/2023 11:45, Konrad Dybcio wrote:
+> > On 19.06.2023 10:24, Neil Armstrong wrote:
+> >> On the SM8550 SoC, some nodes requires a specific bit mark
+> >> instead of a bandwidth when voting.
+> >>
+> >> Add an enable_mask variable to be used to vote when a node
+> >> is enabled in an aggregate loop.
+> >>
+> >> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> >> ---
+> > Would be nice to mention that it's literally this commit:
+> >
+> > https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/2d1573e0206998151b342e6b52a4c0f7234d7e36
+>
+> Good catch, I just copied the bits but yeah in fine it's the same...
 
-Applied, thanks
+And probably it also requires copying SoB (and Author?) from the
+original commit.
+
+>
+> I'll refer to it in a v2.
+>
+> >
+> > For the code:
+> >
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>
+> Thanks,
+> Neil
+>
+> >
+> > Konrad
+> >>   drivers/interconnect/qcom/bcm-voter.c | 5 +++++
+> >>   drivers/interconnect/qcom/icc-rpmh.h  | 2 ++
+> >>   2 files changed, 7 insertions(+)
+> >>
+> >> diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
+> >> index 8f385f9c2dd3..d5f2a6b5376b 100644
+> >> --- a/drivers/interconnect/qcom/bcm-voter.c
+> >> +++ b/drivers/interconnect/qcom/bcm-voter.c
+> >> @@ -83,6 +83,11 @@ static void bcm_aggregate(struct qcom_icc_bcm *bcm)
+> >>
+> >>              temp = agg_peak[bucket] * bcm->vote_scale;
+> >>              bcm->vote_y[bucket] = bcm_div(temp, bcm->aux_data.unit);
+> >> +
+> >> +            if (bcm->enable_mask && (bcm->vote_x[bucket] || bcm->vote_y[bucket])) {
+> >> +                    bcm->vote_x[bucket] = 0;
+> >> +                    bcm->vote_y[bucket] = bcm->enable_mask;
+> >> +            }
+> >>      }
+> >>
+> >>      if (bcm->keepalive && bcm->vote_x[QCOM_ICC_BUCKET_AMC] == 0 &&
+> >> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
+> >> index 04391c1ba465..7843d8864d6b 100644
+> >> --- a/drivers/interconnect/qcom/icc-rpmh.h
+> >> +++ b/drivers/interconnect/qcom/icc-rpmh.h
+> >> @@ -81,6 +81,7 @@ struct qcom_icc_node {
+> >>    * @vote_x: aggregated threshold values, represents sum_bw when @type is bw bcm
+> >>    * @vote_y: aggregated threshold values, represents peak_bw when @type is bw bcm
+> >>    * @vote_scale: scaling factor for vote_x and vote_y
+> >> + * @enable_mask: optional mask to send as vote instead of vote_x/vote_y
+> >>    * @dirty: flag used to indicate whether the bcm needs to be committed
+> >>    * @keepalive: flag used to indicate whether a keepalive is required
+> >>    * @aux_data: auxiliary data used when calculating threshold values and
+> >> @@ -97,6 +98,7 @@ struct qcom_icc_bcm {
+> >>      u64 vote_x[QCOM_ICC_NUM_BUCKETS];
+> >>      u64 vote_y[QCOM_ICC_NUM_BUCKETS];
+> >>      u64 vote_scale;
+> >> +    u32 enable_mask;
+> >>      bool dirty;
+> >>      bool keepalive;
+> >>      struct bcm_db aux_data;
+> >>
+>
+
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+With best wishes
+Dmitry
