@@ -2,120 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 170D6735F68
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 23:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54649735FEC
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 00:49:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjFSVyV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jun 2023 17:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57556 "EHLO
+        id S229749AbjFSWtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jun 2023 18:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjFSVyU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 17:54:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BB3E76;
-        Mon, 19 Jun 2023 14:54:14 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DB116606F13;
-        Mon, 19 Jun 2023 22:54:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687211653;
-        bh=iX1WsP52rvu8TUG/hr+rCxY7LacBt13DuItmHpip29E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TrkY2SKYM46DhmM8O7nYasLX5BjBSNtXCZhZCVbhkBLP5geLMHMVacQakqp6ZCFRa
-         LDHECS6Y7wucE2IxLIItibj8crNn5HZHXM1hcNHb9Iue0nddIAiU0D2ct7ykBTuxvL
-         NoshC0Gh2Y/PLq9sFIY2Vf+/FtSXfiwYl47AL0CE4hc+JuJ6oO+8CbUoi104WRSMAg
-         N1zl2+X2kXxm6M0cKYPlwcLXBu1Gd2Y4Y/xj+YKR2KbLyUoRTdlmGtV+UVxrzl0/if
-         zyDjK815DlqZFlrxdhsz8+OWxn9opajoT8NGncd1ed4RmoMLr+PVeG5vGxlo7RjKPe
-         C4/8RYi3r0NNA==
-Received: by mercury (Postfix, from userid 1000)
-        id DD5331060A6A; Mon, 19 Jun 2023 23:54:10 +0200 (CEST)
-Date:   Mon, 19 Jun 2023 23:54:10 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        conor+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] MAINTAINERS: add documentation file for Microchip
- SAMA5D2 shutdown controller
-Message-ID: <20230619215410.cw52rjbjenjifvcx@mercury.elektranox.org>
-References: <20230616101646.879480-1-claudiu.beznea@microchip.com>
- <20230616101646.879480-5-claudiu.beznea@microchip.com>
+        with ESMTP id S229462AbjFSWtU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 18:49:20 -0400
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68B2E55;
+        Mon, 19 Jun 2023 15:49:19 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-77797beb42dso143980439f.2;
+        Mon, 19 Jun 2023 15:49:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687214959; x=1689806959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XC5lpbRInQ/+5gWZrsaA+KqscUlYl6sjL8GyEzFCglg=;
+        b=AdZhKelKh/g8u40VH6vVJymf5NCG1IzEnDiO/6+7Mj3/7jtrUaGxjjHChsMsFrciJ2
+         754nOfGunzAV+VwT7DPwNofUlztqoPSTheUYHw2vV4RINONZjBlY9z23e7M9+Br/HiBD
+         DJN17atoa7YKyO6KRPYiK9XOGJXdeGQR5mIpEuX9m4R7msx13m2fZxqe51Uz2hb+YYpz
+         IQnqcjWBiaVwehHSh9w/PhDnJJhn3jCh8fmiuBg8iJrqQ2yF0H63JNYppdhDxmPkIFmH
+         FiMkqEdofW/acAsuom520r/W8IEdqAc8lpZiRQ+q0dN1IKRlEdi/Helr7RivhjttZR3z
+         2dgg==
+X-Gm-Message-State: AC+VfDzFOuWJv/fx6eEwcrlqHHtkf2rLtsXhJOmK3mygt9AP5A5RB5ad
+        8iALzJw4URet3sbl1CIx4Q==
+X-Google-Smtp-Source: ACHHUZ6aHzKiHI6j0pGyABhICGpFbZYq4LbWxeN/Z7bW9EdQkXxO4vMuOqgS+UoLXk9bYuI+u4Zypw==
+X-Received: by 2002:a5e:9802:0:b0:77a:c315:75b6 with SMTP id s2-20020a5e9802000000b0077ac31575b6mr2055139ioj.5.1687214959178;
+        Mon, 19 Jun 2023 15:49:19 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id y22-20020a5ec816000000b0077ac32a5de8sm213979iol.26.2023.06.19.15.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 15:49:18 -0700 (PDT)
+Received: (nullmailer pid 1675447 invoked by uid 1000);
+        Mon, 19 Jun 2023 22:49:16 -0000
+Date:   Mon, 19 Jun 2023 16:49:16 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        bcm-kernel-feedback-list@broadcom.com, dmaengine@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        devicetree@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-mmc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH V2 2/7] dt-bindings: dma: convert bcm2835-dma bindings to
+ YAML
+Message-ID: <168721491312.1673983.7120570846265839418.robh@kernel.org>
+References: <20230617133620.53129-1-stefan.wahren@i2se.com>
+ <20230617133620.53129-3-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5gzjbh54lkf3rfdd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230616101646.879480-5-claudiu.beznea@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230617133620.53129-3-stefan.wahren@i2se.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---5gzjbh54lkf3rfdd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Fri, Jun 16, 2023 at 01:16:46PM +0300, Claudiu Beznea wrote:
-> Add documentation file for SAMA5D2 shutdown controller.
->=20
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+On Sat, 17 Jun 2023 15:36:15 +0200, Stefan Wahren wrote:
+> Convert the DT binding document for bcm2835-dma from .txt to YAML.
+> 
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 > ---
+>  .../bindings/dma/brcm,bcm2835-dma.txt         |  83 --------------
+>  .../bindings/dma/brcm,bcm2835-dma.yaml        | 102 ++++++++++++++++++
+>  2 files changed, 102 insertions(+), 83 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/dma/brcm,bcm2835-dma.txt
+>  create mode 100644 Documentation/devicetree/bindings/dma/brcm,bcm2835-dma.yaml
+> 
 
-Thanks, queued.
 
--- Sebastian
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 74a6b6b13d84..cdf4b41cf62b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13811,6 +13811,7 @@ F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
->  MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
->  M:	Claudiu Beznea <claudiu.beznea@microchip.com>
->  S:	Supported
-> +F:	Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
->  F:	drivers/power/reset/at91-sama5d2_shdwc.c
-> =20
->  MICROCHIP SPI DRIVER
-> --=20
-> 2.34.1
->=20
+If a tag was not added on purpose, please state why and what changed.
 
---5gzjbh54lkf3rfdd
-Content-Type: application/pgp-signature; name="signature.asc"
+Missing tags:
 
------BEGIN PGP SIGNATURE-----
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmSQzoIACgkQ2O7X88g7
-+prvsQ//ZolFWiSJZtyR3LPZn7Mmq9cwerjY1feOPQoyiV9Sm9MSr1cx9lWDRzAK
-7fLCt9ZibihWYzFnpGgBmPsjVMSwmQSC8mYmqt1kyinDBYI5W/isjXyGKFdRowhz
-cdHejnBqPOwskKjjcQeNfxkgOfsoRmmVTYw5iFjVvsn68Se/1Wnwfq2S/dTXzVcU
-n8xx7R6c5Q800rdZtCWcQi//kB9+regOG653+vdHrzLwbBv9RndzbOZN42NYQlNx
-KkFCMMc7N1yYg7IPXriZtgfTzL9KSqSAYQN8u0EeUax6oSktIpbdRVpW+SnUxos+
-K/ByH/DNeTsvw2jDT5DtbS2wirrI98c1ARnCZ4mV0eVJ/St1MqmUEPUdzGoZvU9c
-I419JDACOnER6kTbecJeDYu+acZa9bXrgOIkVaQJnv9pgRse7qoqBQb1vjugDTZr
-LolBhpt9kkJptmL0UdTml8enM1MToMVDehEbXEjYiGvbcUfT9hvGgD+oLE1+wGzG
-gOyk5BUYQPNan1zl7UsLdqtgfU12pEi5JOHk7lEF+xzriqV/JmOwcH5EHv3wfm+Z
-lHypVzRtbPr/cyeqx20qVNsltgmqAt6RdNkT1ODNFnqJhOkTiFV99PLReh1SZgsO
-9VbT9MMhk8xxT6pYLbQk4zcFcny9DGirGC/yAWlqghLQyKMq9Ts=
-=MKQh
------END PGP SIGNATURE-----
 
---5gzjbh54lkf3rfdd--
+
