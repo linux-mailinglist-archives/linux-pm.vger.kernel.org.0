@@ -2,70 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8771573528A
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 12:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657477352A3
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 12:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjFSKgL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jun 2023 06:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S231450AbjFSKhB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jun 2023 06:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231245AbjFSKfj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 06:35:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B3173D;
-        Mon, 19 Jun 2023 03:35:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0CAE60B6D;
-        Mon, 19 Jun 2023 10:35:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FC56C433C9;
-        Mon, 19 Jun 2023 10:35:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687170931;
-        bh=5dt6l3lx8FHqgt+yEGvI0hRPuTRkjicnDuM52S/ToEU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZektIom2LsRtOyxwQz8sOmWcQciXT8JR4ZjkunidMtKtQvHPoKihYbDXYj7jb8/vU
-         hPNrYAL0YBaU3WLs0kYtWu+mwxs/owBgjD3NNWW8lgIWnbFSRFYNXZ9drkrNS/EGqV
-         g1XzT83U7UMZ7vH1hzwvYbcih25AMOhSnfOWGTQueLHP2klGaqI81AUmvZlhb7A3ld
-         11BHHDw733l04et6x9BJwan0nQ0019Z1TQJ81ni18nKLyKxWGtxvG20zPDonFh5MGF
-         0P/gCyZ2aDF9HXTlpWTWffoh0r3YT5XW/jGQg1Evijre2cX8IagbSdg53Z2EQXJ3je
-         N36FmOjONZjXA==
-Date:   Mon, 19 Jun 2023 11:35:24 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Jakob Hauser <jahau@rocketmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Beomho Seo <beomho.seo@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Raymond Hackley <raymondhackley@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Henrik Grimler <henrik@grimler.se>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [GIT PULL] Immutable branch between MFD and Power due for the
- v6.5 merge window
-Message-ID: <20230619103524.GA1472962@google.com>
-References: <cover.1684182964.git.jahau.ref@rocketmail.com>
- <cover.1684182964.git.jahau@rocketmail.com>
- <20230609064753.GL3635807@google.com>
- <faff027d-2a6a-22ca-2487-2ae05223fabd@rocketmail.com>
+        with ESMTP id S231646AbjFSKgk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 06:36:40 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBAF210D8
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 03:36:35 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-30e3caa6aa7so3264696f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 03:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687170994; x=1689762994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ejTbf4LoKogG/Ln74Pk82fARkIEkMJUQlIgg7+Wp5uA=;
+        b=cZQ+XdV0cjSiIJUue049gOJ63z1o+Bm5BMwN6K6EFzSIeJ2SA4ke+YkuxraSHYmD0l
+         GS3bEUP9EtuBl1eb2X6tCSnGoII1m/WAJz06o4ET91pEjInQeQ42DiNbxpC/twP9V+/4
+         3Gj8yMNImEbdRJJwLeisOgfI/NoxFJuCHxF+VALOIrOzuhzEqhEIFBplsYCjF/a10tnI
+         93KH7LnGYk/4r4aEFokFTEp+oClEb9EyG5/Cu7axXD4WnV3YngObv9H6xS1EVDVCWXEg
+         JqEgrW4F7TutEVFS2z8zooJ30Ze8SDHs0hicd8RmpwFoOTWTm5I87VesPwdguUs099q/
+         0mFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687170994; x=1689762994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ejTbf4LoKogG/Ln74Pk82fARkIEkMJUQlIgg7+Wp5uA=;
+        b=lqpgwLEfzd3cLbW0Djefs8qt3j/vi1GrjfAccHWdbXX284RyOWqLwYNYuxR2WGFBsE
+         68aMsQ/DxK1IvSPb2vM+8dAgeWMiSPi0SgTr2s5SJXIPjTvIWdR34DGh+RI9//Xmcuch
+         nvbNKGbl8xnBjhWdsRhEblUqGnGOhYExwkKgszBgnTfX52HEWW8cYw1YQ4dFcFqFj2JP
+         gReEKRi/ERjmQTBkV5sjjX45ZTMlRuoAf7tHPwVq5suS8DGrcLPTHpKC1biwz7S4tfGE
+         teRNKR+hG4IaArRvSF1VPM6j1lwcFmBPu9094SMyQTXE1TerhpgOLx+sqgsNuQrvXT+A
+         2oSQ==
+X-Gm-Message-State: AC+VfDy//Hgbq1UlAYdyl8/E8s3cO9rPPHZIr7BWyqPb0rw9tlxEQZbF
+        LmFwSlRe6bmxPoRzAcfVyfh4CA==
+X-Google-Smtp-Source: ACHHUZ77/vPLkGtrYJe9RkVK0QQ5x+vBGoIstm3Y3I16fnaPGyjwJGTc1YvxW4AFSsIPL8eUKmuIaw==
+X-Received: by 2002:a05:600c:21d6:b0:3f9:a4e:190b with SMTP id x22-20020a05600c21d600b003f90a4e190bmr3629171wmj.7.1687170994150;
+        Mon, 19 Jun 2023 03:36:34 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
+        by smtp.googlemail.com with ESMTPSA id l17-20020a1c7911000000b003f9b0f640b1sm2558593wme.22.2023.06.19.03.36.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 03:36:33 -0700 (PDT)
+Message-ID: <e69ada00-dd2b-4b95-b639-346929832910@linaro.org>
+Date:   Mon, 19 Jun 2023 12:36:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 00/10] thermal: tegra: Do not register cooling device
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20230414125721.1043589-1-thierry.reding@gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230414125721.1043589-1-thierry.reding@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <faff027d-2a6a-22ca-2487-2ae05223fabd@rocketmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,77 +78,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Sebastian,
 
-On Fri, 16 Jun 2023, Jakob Hauser wrote:
-> On 09.06.23 08:47, Lee Jones wrote:
-> > Enjoy!
-> > 
-> > The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-> > 
-> >    Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-> > 
-> > are available in the Git repository at:
-> > 
-> >    git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-power-v6.5
-> > 
-> > for you to fetch changes up to b54185c1e3b02c91e4a190ac5c346ea7bfb0de93:
-> > 
-> >    dt-bindings: Add rt5033 MFD, Regulator and Charger (2023-06-08 18:18:13 +0100)
-> > 
-> > ----------------------------------------------------------------
-> > Immutable branch between MFD and Power due for the v6.5 merge window
-> > 
-> > ----------------------------------------------------------------
-> > Jakob Hauser (8):
-> >        mfd: rt5033: Fix chip revision readout
-> >        mfd: rt5033: Fix STAT_MASK, HZ_MASK and AICR defines
-> >        mfd: rt5033: Apply preparatory changes before adding rt5033-charger driver
-> >        power: supply: rt5033_charger: Add RT5033 charger device driver
-> >        power: supply: rt5033_battery: Move struct rt5033_battery to battery driver
-> >        power: supply: rt5033_battery: Adopt status property from charger
-> >        dt-bindings: power: supply: rt5033-battery: Apply unevaluatedProperties
-> >        dt-bindings: Add rt5033 MFD, Regulator and Charger
-> > 
-> > Stephan Gerhold (1):
-> >        mfd: rt5033: Drop rt5033-battery sub-device
-> > 
-> >   .../devicetree/bindings/mfd/richtek,rt5033.yaml    | 138 ++++++
-> >   .../power/supply/richtek,rt5033-battery.yaml       |   2 +-
-> >   .../power/supply/richtek,rt5033-charger.yaml       |  65 +++
-> >   drivers/mfd/rt5033.c                               |   8 +-
-> >   drivers/power/supply/Kconfig                       |   8 +
-> >   drivers/power/supply/Makefile                      |   1 +
-> >   drivers/power/supply/rt5033_battery.c              |  38 +-
-> >   drivers/power/supply/rt5033_charger.c              | 472 +++++++++++++++++++++
-> >   include/linux/mfd/rt5033-private.h                 |  64 ++-
-> >   include/linux/mfd/rt5033.h                         |  24 --
-> >   10 files changed, 762 insertions(+), 58 deletions(-)
-> >   create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5033.yaml
-> >   create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt5033-charger.yaml
-> >   create mode 100644 drivers/power/supply/rt5033_charger.c
-> > 
+Hi Thierry,
+
+are you planning to send a new version ?
+
+
+On 14/04/2023 14:57, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> I just realized that there is one patch missing in the immutable branch
-> "ib-mfd-power-v6.5" [1]. Unfortunately I haven't noticed earlier. The
-> immutable branch holds 9 patches, the patchset has 10 patches [2]. The
-> missing patch is No. 6 "power: supply: rt5033_charger: Add cable detection
-> and USB OTG supply".
-
-Did you take this pull-request?
-
-If so, would you like to apply the missing patch or would you like me to
-take it via MFD (without a subsequent PR)?
-
-> As this patch No. 6 affects only the file
-> drivers/power/supply/rt5033_charger.c and is the last patch on that file,
-> it's no problem to add this patch on top of the other patches.
+> Hi,
 > 
-> Could you submit another pull request for the v6.5 merge window to add this
-> patch?
+> this set of patches removes the registration of the SOCTHERM internal
+> throttling mechanism as cooling device. Since this throttling starts
+> automatically once a certain temperature threshold is crossed, it
+> doesn't make sense to represent it as a cooling device, which are
+> typically "manually" activated by the thermal framework when thermal
+> sensors report temperature thresholds being crossed.
 > 
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=ib-mfd-power-6.5
-> [2] https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
+> Instead of using the cooling device mechanism, this statically programs
+> the throttling mechanism when it is configured in device tree. In order
+> to do this, an additional device tree property is needed to replace the
+> information that was previously contained in trip points.
+> 
+> There's a few preparatory patches to make the removal a bit simpler and
+> also some follow up cleanups included as well.
+> 
+> Thierry
+> 
+> Thierry Reding (10):
+>    dt-bindings: thermal: tegra: Document throttle temperature
+>    thermal: tegra: Use driver-private data consistently
+>    thermal: tegra: Constify SoC-specific data
+>    thermal: tegra: Do not register cooling device
+>    thermal: tegra: Use unsigned int where appropriate
+>    thermal: tegra: Avoid over-allocation of temporary array
+>    thermal: tegra: Remove gratuitous error assignment
+>    thermal: tegra: Minor stylistic cleanups
+>    arm64: tegra: Rework SOCTHERM on Tegra132 and Tegra210
+>    ARM: tegra: Rework SOCTHERM on Tegra124
+> 
+>   .../thermal/nvidia,tegra124-soctherm.yaml     |   7 +
+>   arch/arm/boot/dts/tegra124.dtsi               |  65 +--
+>   arch/arm64/boot/dts/nvidia/tegra132.dtsi      |  63 +--
+>   arch/arm64/boot/dts/nvidia/tegra210.dtsi      |  83 +---
+>   drivers/thermal/tegra/soctherm.c              | 392 ++++++------------
+>   drivers/thermal/tegra/soctherm.h              |   1 +
+>   drivers/thermal/tegra/tegra124-soctherm.c     |   4 +
+>   drivers/thermal/tegra/tegra132-soctherm.c     |   4 +
+>   drivers/thermal/tegra/tegra210-soctherm.c     |   4 +
+>   9 files changed, 208 insertions(+), 415 deletions(-)
+> 
 
 -- 
-Lee Jones [李琼斯]
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
