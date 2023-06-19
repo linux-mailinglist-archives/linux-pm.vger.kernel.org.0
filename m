@@ -2,143 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CCDE734D38
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 10:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772A0734D9E
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 10:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230053AbjFSIK6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jun 2023 04:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S230264AbjFSI0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jun 2023 04:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjFSIKd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 04:10:33 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8905E7D
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 01:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687162226; x=1718698226;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5RLQM3xUpr9GqCaneuDTYz/ymBlFLtLlT1OGK3DqPRw=;
-  b=QET6SpDRjvFnUiFqz2nOvMmbr5cPVve0J3T0ocSsIz29FR8oGOPIDiuo
-   bXgR5qXPKt95+l69all/NYyE0/K+4L2ceT+1czQNpl546tJinVgjsSi8v
-   mA33eIAhfPhc5rKjSfwuiWYW6PIRUrxhpY07Z0pyLSbLkVkK/jjkwAGUW
-   oIBll8r8hA4uH/XgkOuxzelJFjoHVoMvvbxryxK3Xyj2jWV5Qdn0A50Wu
-   X4SdDgvNyzSd+xcJaI8je8yzQV3ZnhffjU9CHzFeAiv6qP3jXu1pc3nVl
-   MlIQ2u/lnrENIjpDcHeJb+cl1MA9zb+VCgOz7WTEczyKQtBnpG9hei2sq
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="220875485"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 01:10:25 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 19 Jun 2023 01:10:25 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 19 Jun 2023 01:10:23 -0700
-Message-ID: <9cb6cebf-80ff-7ca1-6acf-41f58fd831f8@microchip.com>
-Date:   Mon, 19 Jun 2023 10:10:05 +0200
+        with ESMTP id S230287AbjFSIYv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 04:24:51 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D043E58
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 01:24:46 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f871c93a5fso760335e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 01:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687163085; x=1689755085;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xKU5IWIJcAiDaFMH+yk9PdlcdpcsDuWuz875QJDE1Ic=;
+        b=aoiUrCH+tY/MlUC5TlbeXguMNjDxr2gjA+8lreflX5gFHqhWk2ci+Eaj06hmV0u4tA
+         7A3GGNc6x7MzEm4uh8EaBFr+diu70Gf1mW9GMUuab13p5lBgVdRx7zb+Nyq8B84UAft4
+         t03OBx2Y2+FzhmfDk/CLNLe2C2+HoC7SLCrp78I18+6YNowkrVVH272oGYHAe+Gjftbt
+         Z4mWpLvsw/8WZqYj26S21elgnwVbbzCUeHa5EvXMR2llCfhMDzxXeJzVUNTQX6/fUlYZ
+         QpW2/K/oZ/qIlPIPpFlC1W7uF18+IOP4UBDZIDU64jazOaZr4RvG3kal3m6Eo7wW71Wm
+         CrTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687163085; x=1689755085;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xKU5IWIJcAiDaFMH+yk9PdlcdpcsDuWuz875QJDE1Ic=;
+        b=cOMKVrjL8+fq7wGGRN2qWGWDe5KXj98xZSaxi0WADheADTGoE7F0lmx6Z8DDfIT7+n
+         XyimBuPmBwXdsWuLY3tE7tPimqc6GyG+LxW5FISeo5wB67/o5Vrn2blF8WDOr0rc1Ppv
+         MW5tAJF2rjpPJ4A9+8PIHitK8+RV2TVczQd86NML71wGFGPW3buYA+1ZGm/jdlYih4p8
+         JrMhgSAvNL86klYJUxKaoxDqyuP1qhISCybM0H3m6eF+hMkiJ7tIM23+dI6c8hBGqclZ
+         Oqu6OneJy4eV/bBlvCV0uA07Btqw+cqJQox9lCAwjs9iDfZ8Nfx3kMSHiI5dRRarWXdW
+         N9TA==
+X-Gm-Message-State: AC+VfDxP+ChR+5vmMsvlkEk7B80Dh59Vi+GyTap2L3SytGK+wVAV3Y8v
+        eoZJMGokP98hK9oD6ZyHw7ipJw==
+X-Google-Smtp-Source: ACHHUZ4+jX4FZlnXtL5k8LMKv4z6b140MPERZ25kaWntoayBugDhzpzca4nEamExOP4gUyh0AoMaBw==
+X-Received: by 2002:a19:6450:0:b0:4f8:7503:203f with SMTP id b16-20020a196450000000b004f87503203fmr461458lfj.48.1687163084694;
+        Mon, 19 Jun 2023 01:24:44 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id i1-20020adff301000000b002f28de9f73bsm30781262wro.55.2023.06.19.01.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 01:24:44 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/2] interconnect: qcom: rpmh: sm8550: mask to send as vote
+Date:   Mon, 19 Jun 2023 10:24:39 +0200
+Message-Id: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/2] power: reset: at91-reset: change the power on
- reason prototype
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sebastian Reichel <sre@kernel.org>
-CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230616135252.2787679-1-miquel.raynal@bootlin.com>
- <20230616135252.2787679-2-miquel.raynal@bootlin.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230616135252.2787679-2-miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAMcQkGQC/x2OQQqDMBAAvyI5dyFGItqvlB7WdFuX6iZkowji3
+ xt6nDkMcxqlzKTm3pwm087KUSq0t8aEGeVDwK/KxlnX2b4docTEAXQdvLewJS2ZcAWWQjlEEQo
+ FVtQv7LEQjD2is533rR9MTU6oBFNGCXONyrYsVaZMbz7+D4/ndf0Alku7opMAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=785;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=jxHmmhC9d4Z9enBTmPuFaWJ3U1NZC+tBuwIvmiogVDM=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkkBDKdL2vGCCMSnuuemOWGGLAn4xQrJCH1SqAY9Hr
+ J1g+27WJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJAQygAKCRB33NvayMhJ0XNoEA
+ C6VaI//dxGtogZTiixUo+DhhWDLE4ykWQWFnpA50Cm48d2y+DEQhH5SzhaBboIXxNpdhAgZZ0GloEU
+ owe87Uvrd1zh2wGalDMNFeY8ZXT/4oUkQngZQYlqaZeTqi8KiharT46YCiKM0uXt6OW9XT0XhAker/
+ t5diU9q39IvUp/MQxrTO4o1yq/mddKtuIKFaAMphhwzgfpfLr+wBH+c2LxWp9WEBOzCI6B9N3t+Ibr
+ aZTBeqVSBKJJxNXJ9XAk3WG0yuGS+4xQZhFtPCQ9Ytq3XyL8qNitMOgMqClfX5xQJ/I9biVqCoCxIk
+ 9suyiI8sq8JflDh7LBSXz8niUx+998SrLhTT0tFNUcQqrp7hcDYslTWF+KTt/JdypqX/enjnGqTdcZ
+ xXvXvEjCYFCgkJvDauZSeWtuS2MEw6j7bh6PkiCX55UjMdPJUF5Xff3cJUpJRUjLIibNkgzAY4wopC
+ TS0RrsQX9GZqTudIdCSG4Tp9mOSbH1Tu5ltTj+Am0es3lm0NCkKS1Y3xRzh6lkLFK5UJWqLc/MT+Aa
+ Joas8PfU0P5gJwSMAt3lPcXN9unRgRAy5Q2QVU0WT513jINC9WvyLxHmLzovEpGisF2/kIFES1M8YG
+ 0VDXZdbL2ZAmDCJubklogNrheC0h/nmG+UGFchUAl4cwnC3CYL6ZhmgJFM/A==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/06/2023 at 15:52, Miquel Raynal wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> It is quite uncommon to use a driver helper with parameters like *pdev
-> and __iomem *base. It is much cleaner and close to today's standards to
-> provide the per-device driver structure and then access its
-> internals. Let's do this with the helper which returns the power on
-> reason. While we change the parameters, we can as well rename the
-> function from at91_reset_status() to at91_reset_reason() to be more
-> accurate with what the helper actually does, and finally because we don't
-> really need the pdev argument in this helper besides for printing the
-> reset reason, we can move the dev_info() call into the probe.
-> 
-> All these modifications prepare the introduction of a sysfs entry to
-> access this information. This way the diff will be much smaller. Thus,
-> there is no intended functional change.
-> 
-> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+On the SM8550 SoC, some nodes requires a specific bit mark
+instead of a bandwidth when voting.
 
-Thanks Miquel:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Add an enable_mask variable to be used instead of bandwidth.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (2):
+      interconnect: qcom: rpmh: add optional mask to send as vote
+      interconnect: qcom: sm8550: add enable_mask for bcm nodes
+
+ drivers/interconnect/qcom/bcm-voter.c |  5 +++++
+ drivers/interconnect/qcom/icc-rpmh.h  |  2 ++
+ drivers/interconnect/qcom/sm8550.c    | 17 +++++++++++++++++
+ 3 files changed, 24 insertions(+)
+---
+base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+change-id: 20230619-topic-sm8550-upstream-interconnect-mask-vote-96aa20355158
 
 Best regards,
-   Nicolas
-
-> ---
->   drivers/power/reset/at91-reset.c | 9 ++++-----
->   1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
-> index 741e44a017c3..d6884841a6dc 100644
-> --- a/drivers/power/reset/at91-reset.c
-> +++ b/drivers/power/reset/at91-reset.c
-> @@ -149,11 +149,10 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
->          return NOTIFY_DONE;
->   }
-> 
-> -static void __init at91_reset_status(struct platform_device *pdev,
-> -                                    void __iomem *base)
-> +static const char * __init at91_reset_reason(struct at91_reset *reset)
->   {
-> +       u32 reg = readl(reset->rstc_base + AT91_RSTC_SR);
->          const char *reason;
-> -       u32 reg = readl(base + AT91_RSTC_SR);
-> 
->          switch ((reg & AT91_RSTC_RSTTYP) >> 8) {
->          case RESET_TYPE_GENERAL:
-> @@ -185,7 +184,7 @@ static void __init at91_reset_status(struct platform_device *pdev,
->                  break;
->          }
-> 
-> -       dev_info(&pdev->dev, "Starting after %s\n", reason);
-> +       return reason;
->   }
-> 
->   static const struct of_device_id at91_ramc_of_match[] = {
-> @@ -392,7 +391,7 @@ static int __init at91_reset_probe(struct platform_device *pdev)
->          if (ret)
->                  goto disable_clk;
-> 
-> -       at91_reset_status(pdev, reset->rstc_base);
-> +       dev_info(&pdev->dev, "Starting after %s\n", at91_reset_reason(reset));
-> 
->          return 0;
-> 
-> --
-> 2.34.1
-> 
-
 -- 
-Nicolas Ferre
+Neil Armstrong <neil.armstrong@linaro.org>
 
