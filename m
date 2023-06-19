@@ -2,120 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D906D735C95
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 19:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40A2735D0B
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jun 2023 19:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjFSRAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Jun 2023 13:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S231675AbjFSRbV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Jun 2023 13:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjFSRAd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 13:00:33 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4073198
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 10:00:31 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3113dabc549so1928353f8f.1
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jun 2023 10:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687194030; x=1689786030;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b9cC6PmdgFB3dmV/UgdM6HFPYJf6kvpGv+r5GF+eElo=;
-        b=pyYJ0ecrVQtXpGNU+ZRJZg3+hbL28pf71ya83iW44CI4j0NNoqmbIrbRrlow45S9lA
-         vSPJrD2X5CLDvKHSEKLFvN5yR/vVcwXyitzWLhz8tBvhD+yWTdQK6VvH9bp5vpEezzxx
-         sCQM4+SCWwbgAV/ZKNdZDhzC78vKAC12Slsi3TkSOJ65PYzE43P1z2q4/b225YCrktze
-         vlpBiCKmaS+4Ibssg9zV3Ap9UlzhIpzbXqriPN4hXJi//cKpvXd7PRgfRP/HEwm1Nn1F
-         uY8zKHIhkBEPZmxqi3A8zr2DBF8dN89gm5ObqNvmxJ3SsB3jMNeQ8GbvOnaYDrjIakNT
-         GAcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687194030; x=1689786030;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b9cC6PmdgFB3dmV/UgdM6HFPYJf6kvpGv+r5GF+eElo=;
-        b=JAGhxGfQlk59ip3/uUvbk75tdv0YQSdNjl2kt65gW12QIlmfXpG8kKbalQEKdPG3c+
-         ZRVADz2VJpEierpV/1VyvTBKkn4AaC2NSEDSChjt0syRPGGs/4pzN7GOYSFIx8aLQV95
-         Mm5hfBmBzeKYmThKoI7aRP44PyF1b3U8j02qBImKBewFfQaIeaq6BbHQpKipeTzjDfke
-         82Z2m/esJcTBq738uqazsjoB5EQEn8kIraaDSuNH6lEqQFRaEuGBJlgqivaF1TmLj/Nt
-         IgzSoEcOsxVvyn+4GbwtpMTG055hf3toeuvN0SgXQlKDh+QXUqqTGJEitC/0I2laClPE
-         ii0Q==
-X-Gm-Message-State: AC+VfDw9JSbg0VzyiXu20eZAJeoBLKbCrSxsWKD62nYwsWHaf/JR7kh6
-        eQZyaPvXxypwu9Xokvq3+c4Bpw==
-X-Google-Smtp-Source: ACHHUZ57ZuumhzoQNKjArX+8R9YWVwcao74uXIcV2RWHv3gkjItsMeBZphaKz+rx/tzNZrXtw46azw==
-X-Received: by 2002:a5d:444b:0:b0:30a:e619:3a71 with SMTP id x11-20020a5d444b000000b0030ae6193a71mr8985866wrr.23.1687194030283;
-        Mon, 19 Jun 2023 10:00:30 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
-        by smtp.googlemail.com with ESMTPSA id v4-20020a5d6b04000000b003047dc162f7sm6308wrw.67.2023.06.19.10.00.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 10:00:29 -0700 (PDT)
-Message-ID: <02d1d74a-1476-41c8-6d94-3eb477352309@linaro.org>
-Date:   Mon, 19 Jun 2023 19:00:28 +0200
+        with ESMTP id S230228AbjFSRbT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Jun 2023 13:31:19 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CBD19A;
+        Mon, 19 Jun 2023 10:31:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g6CBNAKJQSJ2VY0s8j9sThuAZ0GrTURbZuPx8Wjmwv1bqDnpOFx5Elg13fD2ymgAamjwSND2J9lVm7Bxi1zZ6gHfxp8Mall2R8+X+k5poX97TCGTJnKjcVUxhkwYDXVsGTKhFzfCk/Ju5c+UiBkVzSrIT3MFlY9un1OQ+PwKGuDak1+XizDomE6T6+9Ry1EW/zHk9U7CGIwv6CzYWWriAZlEUUIJagTHwwO0rr6zs7m4dXZ+R1ot1DW6QjA2T+3+HT0B6/oWgNwR6KbFhxz+i3EE4LbtoI9erzivgkulL5wroOaWcLOb2Ox9orhENqJxs7bTgAdsl3QLVHWbYST+vQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sYG+/Mi1CAnHMbyZmV6RZd/aQycP8VJ1FMXVr/ngiYk=;
+ b=S4iSR0E1zBstMZ2j87DPA/rz6Ge3m4gL69+5eO/izb3VeDqDKQU7rrJo23uRBt1wtCm5xRx7+wMuTtakVyxgrSIN30K3RtbC3SqzUHUF1gvjmO5iotdcMIT1j6hhZhocZFHajYCXIRFhlPOX2u+Bi61Wrg21IjmTUbtXCgSXw2ySLgfHyNOqfXozyvgnbZ/7+IpY5C9ZlXa9UkzN4xxdflpftxwhYDYt7/1XRPs2q5Ht4sSbONIbTzv6+NmD/hZUXh1Jcv0sxi6OIUxmZEHcPR0bCjAy36dFDvNr1LHajEd+s4MdagZrcqQkQFKfBGalGFAm7/YDH2bgOvVGdNTmhw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sYG+/Mi1CAnHMbyZmV6RZd/aQycP8VJ1FMXVr/ngiYk=;
+ b=nuPTYOCCs6XmVXaW34Qofkbw+LrApZGdXywJwj+NfnMTz3GF9mQeBECapYWjuqKcU/K/HAs3baHzVtaz8h9qm/sqqmyEcIghLwm8PAQ0P23F5FU/MJlW3U2SQlndN0C2Gech+gikP797jvFWGxhEFdBlkr9G86AW53dmYjcr5uA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by MW4PR12MB5641.namprd12.prod.outlook.com (2603:10b6:303:186::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
+ 2023 17:31:16 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::aeb:7ad3:2f4a:f218%4]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
+ 17:31:16 +0000
+Date:   Mon, 19 Jun 2023 23:01:07 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     trenn@suse.com, shuah@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        gautham.shenoy@amd.com, Ray.Huang@amd.com, Perry.Yuan@amd.com
+Subject: Re: [PATCH v2 1/5] cpupower: Recognise amd-pstate active mode driver
+Message-ID: <ZJCQ2ypbQgZOOjt3@BLR-5CG13462PL.amd.com>
+References: <20230616120620.147643-1-wyes.karny@amd.com>
+ <20230616120620.147643-2-wyes.karny@amd.com>
+ <348fbe1a-6c2d-68d2-b4fc-278407ede33c@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <348fbe1a-6c2d-68d2-b4fc-278407ede33c@amd.com>
+X-ClientProxiedBy: MA1PR01CA0170.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:d::20) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V2 7/7] dt-bindings: timer: convert bcm2835-system-timer
- bindings to YAML
-Content-Language: en-US
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-pm@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh@kernel.org>
-References: <20230617133620.53129-1-stefan.wahren@i2se.com>
- <20230617133620.53129-8-stefan.wahren@i2se.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230617133620.53129-8-stefan.wahren@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|MW4PR12MB5641:EE_
+X-MS-Office365-Filtering-Correlation-Id: f41c2630-bd81-4482-5450-08db70eafc30
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NPmRiTPcMkSoDba5uBTlQu00iZ4SQy5C+B9zx03BhaqzbOn5KsTEizN29/3olLtntGTTg3obNNQRrAJpLa6qz6bzQlkV/kAz0+GSELWyBkx+KmYkIsGhfcV3XfKg6fCIeEXJEll7tLqHPjDc6xT4p6BiJm60HeZO9tH/NzfNENjPHzWyOjon+KbLZsJ/1Rm/DETO106jETfOHWOf0lGskQNw541Rrm7wIIjuzdIYdOGLexGLLxgB2BnkgF+XO1IHsOCp4oOqvVnJQ5sGvvtvpTTqljzEtyTjGjntZfLiKK4EkVjhcSSBZ4fY3O30GHsHlRZeAUILajcV8w/UDCDavXQwdeiHmFsy2MJWHHEceboaB9Nwz/TPohUACEA5eJZweTX9nysPbJqko+LjEhhDlL6L5aPiVKk1GzcpEOwWfJr2Rpn5qToEu5Y+1Hbc/A5ptsH+/uOFix+Wl4dLWyZGQ7EMbBCK6mrcImnVGArU6Pd18gvB6AyPYwTHeTkCUORRGwDMPaeOayi0IlVCKY0Skh1HEuA56hVsP3FZSPBPU6Lg9NaY9gfw4/yjTJTQ9Li9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(346002)(39860400002)(136003)(366004)(451199021)(478600001)(2906002)(6666004)(6486002)(86362001)(26005)(186003)(6506007)(6512007)(8936002)(53546011)(8676002)(66476007)(66556008)(66946007)(6862004)(38100700002)(5660300002)(44832011)(316002)(6636002)(4326008)(83380400001)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HY+tjgZwOEQFhIPEl3TOXFKOdtqUhyThahEB6Oam+HJToqcLNwqEfRm7juGp?=
+ =?us-ascii?Q?ysMk1/BenOH9X+QtuoZ9Nmvu7XVKOTkJLgVhBpEfoweLG+OEwkS9TNEcngzk?=
+ =?us-ascii?Q?ynlnE9KNcIwVBMHn8py1ECy0NLdKFkIR+sISNuSIGAIA2BZOoDZqtJ2G4fu9?=
+ =?us-ascii?Q?KdOfFCdPTUE0x5TGv52fQcB71JJ2qi4PaYppp7d2RCBf8qJZAtbGRXoXh1DF?=
+ =?us-ascii?Q?ruTfhgatNAO6YaR41s2c0JBPb3OGSf3mEXoDyuM0mQDdIT3Pw2ucGs/HdhIL?=
+ =?us-ascii?Q?5/8LgAKTGCOjxptkw0jix1fm8P7ada52zT7ifmyUSRlLvPIyxB1CTuu9yY8V?=
+ =?us-ascii?Q?0vwyqg9Mapd+OBfyenIHGMTjHl/vJHjHnPctrSB+SGKAaNLT3ztRqwV2WyLG?=
+ =?us-ascii?Q?XMYMVxWTnlOnqBKCtpf030ni8J/qnDJblq0GoCyXA66YicHE6SZPig3X9CG1?=
+ =?us-ascii?Q?266d9tWZ0klrTdDvvTA7BWF5iw5xzgzV+3b5pnqa/8OQBup3uken63QvyMtR?=
+ =?us-ascii?Q?EQxfes6uNoFJyCLpAbRLrswvIsF0+IcIEKi2BNKgtcsBUArTHHEUaRZqEXAn?=
+ =?us-ascii?Q?TXnMKLzhSPWUbToV0uIY3ie2Vy6//D3HDaHP4gLosuQJG2cwU+5vkfGYW8B9?=
+ =?us-ascii?Q?lpq3GZvKsmo1qaogzcKlZPO3/yQUlERCmwayDfzIYpewitTvE5+0N02qPrur?=
+ =?us-ascii?Q?9AQDRp7wvWmLuntoti3VE4cf/agx4CRV7/S25db6audcC2W6sBGpU9qZcQ1+?=
+ =?us-ascii?Q?LUIf7ZtPIZMNbxPFsm7IqRFHJ0nb2f2yKbAnlaJD0k5oWSykBFFvk5rB4MbF?=
+ =?us-ascii?Q?iCtP8Z9Win6YrQf9v9oin0+75rXOierwWOb7s8J7wfH9hClh+ysqGq7vNcCO?=
+ =?us-ascii?Q?QaoWD8T86PBNNMKNAd7g0QPrtDu2Oid0cv2trSjq/1gUfn8hSXlzkBhobzPL?=
+ =?us-ascii?Q?7Rp8AK91MLS+nuQl1OITH394s/1LRJRez0Cvdx8oF7aE7U30jZzT07Ka7cu0?=
+ =?us-ascii?Q?r90tWYqqCKZ4NUQyUA9e78BTQHZ8Um5mMo8znLee7BReU4N8eo/ipU79J04f?=
+ =?us-ascii?Q?l8eFLREGjLyS+wgcpq/CnrlxdbAdGH0KnCmo7YfGgOgiV7Ru+C6bm10+DJcU?=
+ =?us-ascii?Q?0QVAOehwp3xfAtdZK5XESeKF8x2+uG2ho4x+ZUn3A0RFQ4tSFSOFEqlGBn/2?=
+ =?us-ascii?Q?z4bBYimmLdDgnXgeeHAUi6QYMM4jEFqYyEGHRKsORWHYksmzzaCnDxMcuklr?=
+ =?us-ascii?Q?8j2Tc/NFvgQ6mml/uKnqj814PJAWCZkMGWhRu5RAJKMtq104aI9zt5diuP3V?=
+ =?us-ascii?Q?Mbu3iSXIWdaCa7aDhlHCYrDgw8baQ8Y5de32hqjdmf5VMKVWN88PcAWBzOhV?=
+ =?us-ascii?Q?f3ex0FJUUxo7JRFtCms42Yc0Upizy9NbOfwmsITb6hEsB3dsF/99TiXsI3hV?=
+ =?us-ascii?Q?ZUUEniCtficw+vVB3IYFs36tsFGzQn13Zf9eHM9lWCKlq8vOJMj5rqIcr0b9?=
+ =?us-ascii?Q?buikO+NNGdLm4hmfhJgD4bGGoBsUD901pEeB3fEPNELorPEK98mJJoMb8gWU?=
+ =?us-ascii?Q?XPGOP2SIGYg+zxAR7fFzzg8G8XQgDtbTYlM+GbDn?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f41c2630-bd81-4482-5450-08db70eafc30
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 17:31:16.0659
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XcWCZ9b0wOWg33gzJreRXh+JKYlvWLf99GN0LwJkLhaE0zRdoRxojEA97XkVHQc9juO2isoPbGpvF81xFqyvWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5641
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/06/2023 15:36, Stefan Wahren wrote:
-> Convert the DT binding document for bcm2835-system-timer from .txt
-> to YAML.
+Hi Mario,
+
+On 18 Jun 20:58, Mario Limonciello wrote:
+> On 6/16/23 07:06, Wyes Karny wrote:
+> > amd-pstate active mode driver name is "amd-pstate-epp".  Add this to the
+> > string matching condition to recognise amd-pstate active mode driver.
+> > 
+> > Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> > ---
+> >   tools/power/cpupower/utils/helpers/misc.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+> > index 9547b29254a7..21f653cd472c 100644
+> > --- a/tools/power/cpupower/utils/helpers/misc.c
+> > +++ b/tools/power/cpupower/utils/helpers/misc.c
+> > @@ -95,7 +95,7 @@ bool cpupower_amd_pstate_enabled(void)
+> >   	if (!driver)
+> >   		return ret;
+> > -	if (!strcmp(driver, "amd-pstate"))
+> > +	if (!strcmp(driver, "amd-pstate") || !strcmp(driver, "amd-pstate-epp"))
 > 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->   .../timer/brcm,bcm2835-system-timer.txt       | 22 ---------
->   .../timer/brcm,bcm2835-system-timer.yaml      | 48 +++++++++++++++++++
->   2 files changed, 48 insertions(+), 22 deletions(-)
->   delete mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
->   create mode 100644 Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
+> To avoid getting caught in the case that a kernel didn't have the patch
+> separated from this series (for example if a distro missed it in a backport
+> from separate directories), how about using strncmp() instead and just look
+> for the prefix?
+
+Sure, I'll update the patch.
+I'm thinking of using strncmp(driver, "amd", 3), because in the above
+case the epp driver would be "amd_pstate_epp" therefore common prefix is
+only "amd".
+
+Thanks,
+Wyes
 > 
-> diff --git a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
-> deleted file mode 100644
-> index 844bd5fbd04c..000000000000
-> --- a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
-
-Appliedp patch #7
-
-Thanks
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> This would also let the tool be more future proofed in the case another
+> amd-pstate driver was introduced later down the road as long as it stuck to
+> "amd-pstate*"
+> 
+> >   		ret = true;
+> >   	cpufreq_put_driver(driver);
+> 
