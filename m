@@ -2,46 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B17737267
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 19:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BCA73728A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 19:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjFTRNH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 20 Jun 2023 13:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S230213AbjFTRR0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 20 Jun 2023 13:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjFTRNG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 13:13:06 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49C10E2;
-        Tue, 20 Jun 2023 10:13:05 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-94ea38c90ccso150016366b.1;
-        Tue, 20 Jun 2023 10:13:05 -0700 (PDT)
+        with ESMTP id S230231AbjFTRRZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 13:17:25 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1777E1710;
+        Tue, 20 Jun 2023 10:17:22 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-987f13f8d21so106901966b.0;
+        Tue, 20 Jun 2023 10:17:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281184; x=1689873184;
+        d=1e100.net; s=20221208; t=1687281440; x=1689873440;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2wpSEuA3rvhtFPmWePbVbFfYSViTlY0ARfPzV78qlSI=;
-        b=fGpHMn6gMeGt5GHwp3S7yFkxbGl8RC3lKJL4yaWadkJlSIZ5GEWE/Xpi/C0brDfoVS
-         kefo9fTkv2DI65Xc8E0N9jy237cbcFG/WEfu595fPIHjQVXj2tfi18hpRGINnNDyCQFi
-         fiHCB2jsKygYHI+xMTnbxqKDavvF2X9/cqxdCNgJIx/oc5P/QTMgcIso11W0Vq3wIvqP
-         3wMTGykuNB6zcoyJSzA7G2O62UuA5hr7ZpYavC8ntXExazu907cAt7AbXnHXmINyFw0R
-         XeC7qumeJxEwl8Ya+ZPu3FjcW3+pSnz687dTpFUNedi2y0Bp0by6xIuLA/nVkdsuuR3C
-         Q0Kw==
-X-Gm-Message-State: AC+VfDyvkd5hLlrXdzWVpUxptEV/DCzRdXk5AoCTpIxUjNtv/54I8L13
-        Y8JMgLw2baaby+ar+YQh8f1NeAybkgk66v3B8qx7nDi4
-X-Google-Smtp-Source: ACHHUZ5Cp5VAoojuV31TdQKDdiFw4tokCaWIr0LxImR2c45d0B43ugelgE4B3SQphadMWv1xWpva89hY+8QNPm4OlTM=
-X-Received: by 2002:a17:906:77ca:b0:989:1ed3:d010 with SMTP id
- m10-20020a17090677ca00b009891ed3d010mr2006867ejn.2.1687281183627; Tue, 20 Jun
- 2023 10:13:03 -0700 (PDT)
+        bh=kCU3E02m6ju/0TXJ6baw1sJty3puMTXr+sZagM9mSPU=;
+        b=hA3s7NUXyX2T1a5g49xLCh6vkHJyqL9oK3UXSdVIXOQqcr8IxWR2qCgUO2Mi5qBsf0
+         m5zneaJkCSjPrL4c4fFb2FGCdb32UyuTekazzxEYhKcARX4uO1RnG1XI8C+fYEx+yzms
+         GbqKo4HD4pxrU6UvP8DjwFJgVakfEMCQRM2ULZK7VVMnrUiSLpFMQjRfHCdct4wtebcT
+         n3qItkGsuq+YMaOlz/cjLRSjX8PUT1j9anKLwuXxxFEb8hveaR1JcIwDhnKxXVD0NaPr
+         N9gdwymS5llS720jMNdK9ci43WYSypdZksVaG9H2524e/AUCdL1z/2C9XqCFG58hAr2U
+         f05g==
+X-Gm-Message-State: AC+VfDziUo+EKesPZ7jPLYq1hfbAvxU8W6ivbVOonR3igXTqZMWWQYQf
+        9nSMYW4T2UmkgcwA2UPDc8u27Ou7ZWnI4m8InAQ=
+X-Google-Smtp-Source: ACHHUZ7Er9JkdZMGk9wrHGUnyshKtbpIg5WLO6EtfUQI2HZ/BkLmDgcCZNRPgohpa+k9Zi/YlpOaEkQU8ICt6ZP+Fbo=
+X-Received: by 2002:a17:906:7a52:b0:988:9dea:ab9c with SMTP id
+ i18-20020a1709067a5200b009889deaab9cmr4817988ejo.1.1687281440413; Tue, 20 Jun
+ 2023 10:17:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-3-evalenti@kernel.org>
-In-Reply-To: <20230519032719.2581689-3-evalenti@kernel.org>
+References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-5-evalenti@kernel.org>
+In-Reply-To: <20230519032719.2581689-5-evalenti@kernel.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Jun 2023 19:12:52 +0200
-Message-ID: <CAJZ5v0hqGg9h+iOpKDLr=BXGk3p6sBTMM3nVok97yhRj5EdQ3g@mail.gmail.com>
-Subject: Re: [PATCH 2/7] thermal: stats: track number of change requests due
- to tz
+Date:   Tue, 20 Jun 2023 19:17:09 +0200
+Message-ID: <CAJZ5v0iSgC4LQMX6XsquaVbFX30SArfWGYtNGXsLaet00kzknw@mail.gmail.com>
+Subject: Re: [PATCH 4/7] thermal: stats: introduce thermal zone stats/min_gradient
 To:     Eduardo Valentin <evalenti@kernel.org>
 Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -54,8 +53,9 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,34 +66,20 @@ On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
 >
 > From: Eduardo Valentin <eduval@amazon.com>
 >
-> This patch improves the current cooling device
-> statistics by adding a new file under
-> cdev/stats/requests_of_thermal_zone
->
-> to represent the number of times each thermal zone
-> requested the cooling device to effectively change.
-> If the request associated was not serviced because
-> another thermal zone asked for a higher cooling level,
-> this counter does not increase.
-
-What if the cdev is associated with two thermal zones asking for the
-same state of it?
-
-> The file format is:
-> thermal_zone: <type> <count>
+> The patch adds a statistic to track
+> the minimum gradient (dT/dt) to the thermal zone
+> stats/ folder.
 >
 > Samples:
-> $ cat cdev0/stats/requests_of_thermal_zone
-> thermal_zone: amb0      2
-
-The "one value per attribute" sysfs rule violation.
-
 >
-> In this example, it means the thermal zone 'amb0' has requested
-> 2 times for cdev0 to change state.
-
-Like in the previous patch, it would be good to explain the use case.
-
+> $ echo 1000 > emul_temp
+> $ cat stats/min_gradient
+> 0
+> $ echo 2000 > emul_temp
+> $ echo 1000 > emul_temp
+> $ cat stats/min_gradient
+> -3460
+>
 > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
 > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
 > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
@@ -104,140 +90,92 @@ Like in the previous patch, it would be good to explain the use case.
 > Cc: linux-kernel@vger.kernel.org (open list)
 >
 > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+
+This can be easily folded into the previous patch IMO.
+
 > ---
->  .../driver-api/thermal/sysfs-api.rst          |  2 +
->  drivers/thermal/thermal_core.h                |  1 +
->  drivers/thermal/thermal_sysfs.c               | 52 +++++++++++++++++++
->  3 files changed, 55 insertions(+)
+>  .../driver-api/thermal/sysfs-api.rst          |  1 +
+>  drivers/thermal/thermal_sysfs.c               | 23 +++++++++++++++++++
+>  2 files changed, 24 insertions(+)
 >
 > diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> index caa50d61a5bc..75309a51d9b3 100644
+> index 18140dbb1ce1..ed5e6ba4e0d7 100644
 > --- a/Documentation/driver-api/thermal/sysfs-api.rst
 > +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> @@ -369,6 +369,8 @@ Thermal cooling device sys I/F, created once it's registered::
->      |---stats/trans_table:     Cooling state transition table
->      |---stats/time_in_thermal_zone_ms: Time that this cooling device was driven
->                                  each associated thermal zone.
-> +    |---stats/requests_of_thermal_zone:        Total number of times this cooling device
-> +                                changed due to each associated thermal zone.
-
-The meaning of the above description is not clear to me.
-
+> @@ -358,6 +358,7 @@ Thermal zone device sys I/F, created once it's registered::
+>      |---stats:                 Directory containing thermal zone device's stats
+>      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
+>      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
+> +    |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
 >
+>  Thermal cooling device sys I/F, created once it's registered::
 >
->  Then next two dynamic attributes are created/removed in pairs. They represent
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index 3cce60c6e065..ed6511c3b794 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -103,6 +103,7 @@ struct thermal_instance {
->         unsigned int weight; /* The weight of the cooling device */
->         bool upper_no_limit;
->  #if IS_ENABLED(CONFIG_THERMAL_STATISTICS)
-> +       unsigned long total_requests;
->         ktime_t time_in; /* time spent in this instance */
->  #endif
->  };
 > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index a3b71f03db75..0bce1415f7e8 100644
+> index aa28c1cae916..f89ec9a7e8c8 100644
 > --- a/drivers/thermal/thermal_sysfs.c
 > +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -723,6 +723,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
->         stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
->         stats->state = new_state;
->         stats->total_trans++;
-> +       stats->curr_instance->total_requests++;
+> @@ -542,6 +542,7 @@ static void destroy_trip_attrs(struct thermal_zone_device *tz)
+>  struct thermal_zone_device_stats {
+>         spinlock_t lock; /* protects this struct */
+>         s64 max_gradient;
+> +       s64 min_gradient;
+>         ktime_t last_time;
+>  };
 >
->  unlock:
->         spin_unlock(&stats->lock);
-> @@ -867,6 +868,54 @@ time_in_thermal_zone_ms_show(struct device *dev, struct device_attribute *attr,
->         return ret < 0 ? ret : len;
+> @@ -569,6 +570,10 @@ static void temperature_stats_update(struct thermal_zone_device *tz)
+>         /* update fastest temperature rise from our perspective */
+>         if (cur_gradient > stats->max_gradient)
+>                 stats->max_gradient = cur_gradient;
+> +
+> +       /* update fastest temperature decay from our perspective */
+> +       if (cur_gradient < stats->min_gradient)
+> +               stats->min_gradient = cur_gradient;
 >  }
 >
-> +static ssize_t
-> +requests_of_thermal_zone_show(struct device *dev, struct device_attribute *attr,
-> +                             char *buf)
+>  void thermal_zone_device_stats_update(struct thermal_zone_device *tz)
+> @@ -595,6 +600,21 @@ static ssize_t max_gradient_show(struct device *dev,
+>         return ret;
+>  }
+>
+> +static ssize_t min_gradient_show(struct device *dev,
+> +                                struct device_attribute *attr, char *buf)
 > +{
-> +       LIST_HEAD(cdev_thermal_zone_list);
-> +       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> +       struct cooling_dev_stats *stats = cdev->stats;
-> +       struct cdev_thermal_zone_residency *res, *next;
-> +       struct thermal_instance *instance;
-> +       ssize_t len = 0, ret = 0;
-> +
-> +       mutex_lock(&cdev->lock);
+> +       struct thermal_zone_device *tz = to_thermal_zone(dev);
+> +       struct thermal_zone_device_stats *stats = tz->stats;
+> +       int ret;
 > +
 > +       spin_lock(&stats->lock);
-> +       update_time_in_state(stats, stats->curr_instance);
+> +       temperature_stats_update(tz);
+> +       ret = snprintf(buf, PAGE_SIZE, "%lld\n", stats->min_gradient);
 > +       spin_unlock(&stats->lock);
 > +
-> +       build_cdev_thermal_zone_residency(&cdev_thermal_zone_list, cdev);
-> +
-> +       list_for_each_entry(instance, &cdev->thermal_instances, cdev_node)
-> +               list_for_each_entry(res, &cdev_thermal_zone_list, node)
-> +                       if (strncmp(res->thermal_zone, instance->tz->type,
-> +                                   THERMAL_NAME_LENGTH) == 0)
-> +                               res->counter += instance->total_requests;
-> +
-> +       mutex_unlock(&cdev->lock);
-> +
-> +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-
-Why is the _safe variant needed here?
-
-> +               ret = sprintf(buf + len, "thermal_zone: %s\t%lu\n",
-> +                             res->thermal_zone, res->counter);
-> +
-> +               if (ret == 0)
-> +                       ret = -EOVERFLOW;
-> +
-> +               if (ret < 0)
-> +                       break;
-> +
-> +               len += ret;
-> +       }
-> +
-> +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-> +               list_del(&res->node);
-> +               kfree(res);
-> +       }
-> +
-> +       return ret < 0 ? ret : len;
-
-I would prefer
-
-if (ret < 0)
-        return ret;
-
-return len;
-
+> +       return ret;
 > +}
 > +
 >  static ssize_t
->  reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
->             size_t count)
-> @@ -897,6 +946,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
+>  reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
+>                      const char *buf, size_t count)
+> @@ -604,6 +624,7 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
 >
->         /* Make sure we reset all counters per instance */
->         list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
-> +               instance->total_requests = 0;
->                 instance->time_in = ktime_set(0, 0);
->         }
+>         spin_lock(&stats->lock);
 >
-> @@ -971,6 +1021,7 @@ static ssize_t trans_table_show(struct device *dev,
->  static DEVICE_ATTR_RO(total_trans);
->  static DEVICE_ATTR_RO(time_in_state_ms);
->  static DEVICE_ATTR_RO(time_in_thermal_zone_ms);
-> +static DEVICE_ATTR_RO(requests_of_thermal_zone);
->  static DEVICE_ATTR_WO(reset);
->  static DEVICE_ATTR_RO(trans_table);
+> +       stats->min_gradient = 0;
+>         stats->max_gradient = 0;
+>         stats->last_time = ktime_get();
 >
-> @@ -978,6 +1029,7 @@ static struct attribute *cooling_device_stats_attrs[] = {
->         &dev_attr_total_trans.attr,
->         &dev_attr_time_in_state_ms.attr,
->         &dev_attr_time_in_thermal_zone_ms.attr,
-> +       &dev_attr_requests_of_thermal_zone.attr,
->         &dev_attr_reset.attr,
->         &dev_attr_trans_table.attr,
+> @@ -612,10 +633,12 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
+>         return count;
+>  }
+>
+> +static DEVICE_ATTR_RO(min_gradient);
+>  static DEVICE_ATTR_RO(max_gradient);
+>  static DEVICE_ATTR_WO(reset_tz_stats);
+>
+>  static struct attribute *thermal_zone_device_stats_attrs[] = {
+> +       &dev_attr_min_gradient.attr,
+>         &dev_attr_max_gradient.attr,
+>         &dev_attr_reset_tz_stats.attr,
 >         NULL
 > --
+> 2.34.1
+>
