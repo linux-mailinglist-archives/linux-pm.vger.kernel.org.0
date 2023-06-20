@@ -2,52 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA316736F52
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 16:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3E5736F84
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 16:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232160AbjFTO4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jun 2023 10:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59162 "EHLO
+        id S231396AbjFTO7l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jun 2023 10:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233196AbjFTO42 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 10:56:28 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2071.outbound.protection.outlook.com [40.107.237.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 961381A5;
-        Tue, 20 Jun 2023 07:56:26 -0700 (PDT)
+        with ESMTP id S233450AbjFTO72 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 10:59:28 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on20603.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e88::603])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8AB1726;
+        Tue, 20 Jun 2023 07:59:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nxd8hacJZoQ5dX637LWqNEIhi9UlLJvUZK6SSVJZ3xBpkFrSwyBzfW8rimD+1YXjWhV5MxTpGqLZyQaoK3RwWuywt7ofUXLAEGgOf4ay1K9TojouCq9Ue0vjLR45wPVQnqxfk8BLju4fB/VBIwqlpB5uV7+1MIVRdAbKxsd/DJfpzduRifQKEh5vfZpGffeOAzPxXHd4ZeD8GRTZDed/3UgyHJziS0okaLbs9QmUdkuC+2ecAc7MwLWhpnhebBm/oftOWGEWOi2yjZWjgcNhm2zeW6lAJGTsC5i7Ojz4zco1UQlX/48kte/htPqsAAf2M5F3BNzmq5r/s8MHi04t2w==
+ b=P8qgPVdC/KjcKuNOfwH2omVDcZ6nGVOpKcWxBkMkNdqDUHJSG1O2z6ZN/Jq5ZfDjqSHxuRFjrTLl90JxzpXgLrsNxJANg2DjRca2B7cE6vBeCgWA6rIbX/bLNRlryIuvM6euKvQviAPGfRJIMZzzrZejiVJAg1HC+DwFplcEBKv4ns8O9L/oc6gtLgHh0upcaD/n6IfZAzzoStGQ7q4gSkGspTNWEybAEhNRRTDaERh5QLeYNtiKxKfFxMrmjtnl9Tk+7jg1v5X2suG4GdY6UuRpnR2adLTW0b/LuMBwo+gMhrYLisM2nLgs+aly6mPteeH3/5rhWHGXii1WhnWuNw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R1ZQpq3S0PXe7Wqh47CNPb5srEkXZ7oGg3Ulg2X1e1c=;
- b=kli565t1fre/5KVfeCDQverVPAzB3g/VYyDy2WwwZoZsxGrx9V583O7vxUF5SMGBX/Z2uBgCm/e983OlnTdPrkjukCh7mDLTMUiEM7cwCf+39WGqGpl6Siwjv8PIIMdeU2ROuSInxdJqb3DgrSeXawb1Cnun+qSJDxbwFIJycaD5ZIEweRLvy6lv5aBO3x9f2c9Rdan0mmrCyXgd1gKd67JoJhcF9wWs+9NfaKwFO2ctzUxcnGj6TPZ3eDWYSgvjKtcrkxtfUvEFyGHBYqDRhcOWAlv8oaE1rsfffleDHBSJIIxyIhHIjFOvh1nA6ZJalQ0yOzyATT7kNoMDtzwjbg==
+ bh=lizlpu8P4g8KuBHEdxlGL67hc7WVqL8KK93wawM1BAU=;
+ b=WlxCjC+ZsL7UUo6yaUcaZ+6qGfAdfK0teVFyD/FtXO5gKz330NdFLh17e0f14g7Joa1UtaeG1XCh9nGMxiNWoveFziYqSOexKgFKsj6X1+88L27d11n1TYH4hI3UaIR5GeTcKbifXXH+FLPS8pw7UfhM7vSF1Y/p0OI3/u8CadqAZTRqNmmo0/jaI5IYK61Fz/hISxQjAD0qrhCxbFpgW+TsBWq7FDo3mdztBFg/J/2KB8Snuu3+iGcnveVzVLa4iYYHqJQ41lT8jDSzcDE3ABrs6EJ3MIMyo6mIZAbzLmVsDred0j2GMYAvlrXYxZgiSrqAsmjsmQd769K2cVdHqQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R1ZQpq3S0PXe7Wqh47CNPb5srEkXZ7oGg3Ulg2X1e1c=;
- b=xQmZ7tvbBS1s9y456R+iqqIrbKzuSNfwlG1g8V2F0VJz4W6dt4W5NYL4eCgswjfPldjEuw1YN2nS8oytqZ0X9bk3I8oTzGera+eLdURR3kr1YzTb//y8gR6d6tpEVQr6OT9LcEjlXSpy6+i6z6irWnwKdvy9ZCX4fUs7uUcd8yo=
+ bh=lizlpu8P4g8KuBHEdxlGL67hc7WVqL8KK93wawM1BAU=;
+ b=VdNJk1JrUytCWmuBrdYDpZpTxT3QCzxCKPhM+zFuIIFXH7IsOzf5/7uCHbF+XGEU1OZZeoMKm0BmgYMmMcOzjSPamhglwcgd+he0QkraVKUs2t0BS7rrcBUaDrGpJk6QijoeM7M7r9B1Dy97zTgxqdl3QCeT46DX0a336tO17f0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CY8PR12MB7708.namprd12.prod.outlook.com (2603:10b6:930:87::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 14:56:23 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.020; Tue, 20 Jun 2023
- 14:56:22 +0000
-Message-ID: <45a43152-fdf1-5f1e-1a46-0d9798c4090b@amd.com>
-Date:   Tue, 20 Jun 2023 09:56:18 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 1/4] ACPI: CPPC: Add a symbol to check if the preferred
- profile is a server
-To:     Huang Rui <ray.huang@amd.com>, "Yuan, Perry" <Perry.Yuan@amd.com>
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
+ SJ2PR12MB7963.namprd12.prod.outlook.com (2603:10b6:a03:4c1::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.37; Tue, 20 Jun 2023 14:58:39 +0000
+Received: from DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8a7:d4dc:7ac8:9017]) by DM5PR12MB2504.namprd12.prod.outlook.com
+ ([fe80::8a7:d4dc:7ac8:9017%5]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
+ 14:58:39 +0000
+Date:   Tue, 20 Jun 2023 22:58:14 +0800
+From:   Huang Rui <ray.huang@amd.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
 Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
         "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
         "Sharma, Deepak" <Deepak.Sharma@amd.com>,
         "Karny, Wyes" <Wyes.Karny@amd.com>,
         "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
@@ -57,208 +53,119 @@ Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
         "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230615063200.4029760-1-perry.yuan@amd.com>
- <ZJG8w8le9AyRWKzO@amd.com>
-Content-Language: en-US
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <ZJG8w8le9AyRWKzO@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DS7PR03CA0193.namprd03.prod.outlook.com
- (2603:10b6:5:3b6::18) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+Subject: Re: [PATCH v2 2/4] cpufreq: amd-pstate: Set a fallback policy based
+ on preferred_profile
+Message-ID: <ZJG+Xhun1Ltw9ox/@amd.com>
+References: <20230615063225.4029929-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615063225.4029929-1-perry.yuan@amd.com>
+X-ClientProxiedBy: SG2PR06CA0204.apcprd06.prod.outlook.com (2603:1096:4:1::36)
+ To DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CY8PR12MB7708:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9991e76a-aff6-4f7d-b92e-08db719e8351
+X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|SJ2PR12MB7963:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0680caab-c8f8-4506-d11c-08db719ed4da
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hBAjgrwSrZbCchob+gx7OPAbag9eBuRzz93qydyEUM8nh1XabhYEV2qE0uIUFp5dK5hYSnyuOQR7MGyhwfFkC0hUrO4lBIDsflyTxd50N3J4o+Q0XU5Uk2fnU+AGIU2Fah3wU1S5pIT+9IkqAAyu9tXUwl7B/rK9mrdio7bF5sW0tQ48p8P6W8sR43OJG03DkRQIAQ+L8nQi7txFSx7dEI5xpkI7bgl5bi5gjGvkR/TzDTDcSsmBbINIEYmsF2FZZHvdhppP5/pfVaKHerYAY8NcblBh7PMLzuVKSKv6LPXJqfPeAXx1ldF8UUUeTo/77sf45VBXjVeni46YTkX5oRuIeujVJg2p09C1+rexAxZdqfhvEzWDEI30u3NI/k9/emoOHgPKYsU5ts+IXtTkdoVrEnN0sK49EOsTzfZHIAmGmPNRsXksjni8e62j40lrSvM8X7mpsHdGkSHjPkSH59p+prwTlgSwudY+dA3DEdscTW8kdkGLdrmUfll7YkC+tOuAiVtNW8oFPdkJXhmHzAYHKB/lVhLne+wTxcqzZoA4sT11DX06wyycA6HWgB3vo6IgLRduhIn4ZISzUYGnP00FVb4oOlnW38VtLBw/MwFRrVwNiLEYPnUDgF8PTj9rYw9g15tarwv0RiefIuS2aA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(39860400002)(396003)(366004)(451199021)(41300700001)(31686004)(5660300002)(6666004)(54906003)(966005)(2906002)(316002)(8936002)(8676002)(66946007)(66556008)(66476007)(6636002)(4326008)(36756003)(478600001)(110136005)(6486002)(31696002)(38100700002)(53546011)(86362001)(2616005)(83380400001)(26005)(186003)(6512007)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: /hgTTP6Me6xQW/F2xwrVxtE+4K+ER1JhFTvZwrrWAheo/Nys4JPGKyxzMxk5MkQsonfyvLbLb0PRoiHicZCGgNn/az3542qJNMHFdw2BMNPe+W7GeU6Ly/FiWuBEoWF43Rxi4OTXmbMfWAoOe3EKPI1hmUAKDuAv6MCBlATIU2rf/A/9cU+Ssi4Os4yTkn3cjbWH6T8+P4rq90Fje6ebi3etLRu39pELCmqzLcqPXeavW3C7zqj+D5bW5UDxUUrhKnxK2ece46xdrhvInHXTqlRO1UjKtkM8z0B6EBOuBE5XX2vnx8acJYY5ggO+qlOOvb7zcdXO5L1XnahU/FQaUs+q87hSHb7M97DXczO+8mqHHtpmgru+Dl5Uvt/XBUxUr4+8rUl0pYUZQsxiXgChzGk1eaOHFA028Q/mhf2Bx9B2HUObYALqS4EyippoHi2Rwf9nbhrNh2acu2Gb8BOKTnf/jnIAJyWQ8ELTlMIepLkRAiwOlNqQ9XESG5GV3A7L17x1gndVRlj9dlKRxdb5vfpJ2k8ebHWhSgTTbzpr15g=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199021)(37006003)(54906003)(186003)(966005)(6666004)(6486002)(86362001)(26005)(6506007)(478600001)(6512007)(2616005)(38100700002)(316002)(83380400001)(66946007)(66476007)(66556008)(6636002)(4326008)(5660300002)(41300700001)(6862004)(8936002)(8676002)(2906002)(36756003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STBENnViM1Y0b2hIMWVlejMvTTVOZkNnUHhGTGNTVDNHUVVwZDExRUR6V1FC?=
- =?utf-8?B?dnprRE1vR1BtL3VaZEpiVHd2bjNRYkloWmJQaVZUME03YVlRZVVTZlYzMmk1?=
- =?utf-8?B?elhTOWprR0RhMnNxbURYMDlZTUZYZG9aamd2M2ZJdjJrRFBaSFFXUElYTE1U?=
- =?utf-8?B?SmtsM1hORHh6UGhuS0JkckRCZDNxWkZEYWFnQjArVC9JZndwV3p0NHAzVnBH?=
- =?utf-8?B?WmpIdXlGblAxY2d3Yit3ejk4SnVQVmd6anBzblp2NjNGckFNZ2RSbXM2TXpi?=
- =?utf-8?B?SUdvZ0t1dkEwYjVPdnVYTjNjODJrSTJHN1M4WHVmcTZ5VFp6eU5Makg4TXFS?=
- =?utf-8?B?TkZDQXJPQjB2YjQ0Nm81NWFQM0JsMGJ1dzBJL2lNUXRENEI5eHB0UmlVako4?=
- =?utf-8?B?QU5Zcm5YV0szT2JKWUxHTzlSVm53ajR2SUFvL1NYa1VqbnA4U0hrT1FmSTl3?=
- =?utf-8?B?WUM2cEQzemlMYnpxcXpiVDd0REk2QXpNSzJ4TlUrc1AzMlJ1cXNBQjdYd081?=
- =?utf-8?B?ZmZPZ3RJekQzazRKcDZZUFozanc4SCtrQmF0WVFLZlZJSzhSYmwrU1RPWjg5?=
- =?utf-8?B?MW00V2VDWTcvS3Y0WG9UVjU3b0hZM2dlVkQ2M0NQZCtoaVBmRTdVL21tY01H?=
- =?utf-8?B?d2poSXNtOHIyc2drR3BYU1dseHpwRjVzQWN1Q25BaFR1NUFURm9oZmd2dDhF?=
- =?utf-8?B?Q0laNTNrQUFna0tvVEhBajRwRVpMNEFGMHZmU0tGd3dRTzBjNjB5U2Q5TmpX?=
- =?utf-8?B?dUZWck0zcHpRM0owUkliVXFsS0g1MGN6OVRFODlIanZEcE4rWklFblBtVmhU?=
- =?utf-8?B?V2dmaWJPUmo2dFYxcHpBTFVFVUZEZHZVT1JiT0YzN3NxK2FBdFdMbnQ0YWpO?=
- =?utf-8?B?cGVlVm1IdkgwcE4wUHRRNmlNWHhoMDlPMlpPWEJTQ2tFOEVrOG5mdWJxcFRk?=
- =?utf-8?B?ZW9mZXM3NG45c3plQS9YZDdJazBZWlppMTA4NzFjTVY5emRHVTVuenJHTFpQ?=
- =?utf-8?B?R1BJTmFtaVh0M3cyc2hFWHdYVXF5Y3Zsd0JzRkhPalB5QkIxZG1GenQxSTNY?=
- =?utf-8?B?Ly9BMWZ1YXlMUjdHS0lyODcvVUJyWWI3YXRibnlJRDdlVzNKTjNzc3JrRy9F?=
- =?utf-8?B?cE9rcXlWTlpoNWpsLy9HVCtUUmdudTJvR1BRazdlKzQvY3RkelVIcXdLWkQ2?=
- =?utf-8?B?Zm41NUZhazVKMDFydUZ2aTNBQnJhOW1KOS94Sm5zek95TGJEYzgyTHBia0I2?=
- =?utf-8?B?MEtOd2hxY2RyVk15V0NhU1NMdXI3NDg0K3B2M1N3N21Uam0wVmovWXNHQklX?=
- =?utf-8?B?WE5aNFVrY2VWWXNTQUhodWNXVVU3SzlNUy95VjVVc204QllPZ0djS0ZGYjBV?=
- =?utf-8?B?ay9ud2ZkYmFWTDdJa3NnM3ZhZ2I0MWZsKzRNNWdNdkluOTNvTXd0TU1jT0d3?=
- =?utf-8?B?Njc5eWJHbWEzT08rRTBTT2dwd3RDMUdBb3ZDNm1SQ0xxYUdHdlN5alZhL05M?=
- =?utf-8?B?QjQ1eDcwNlAxUGIxeHBiMGo4REdwNmFNRU13NnVWMThaUG9GdVFMYXltU1lE?=
- =?utf-8?B?ZUI1Yy9lbVBSZzlkQTdLakdzOXNRSlNEcUw2dGQycHlPRVl5WGJQcmV6RWNk?=
- =?utf-8?B?QWg0bFdWK0NUdnRxRS8zZHkrR28xd1dOeVovM216VUlPdWFQQzQ1TWJSbDQ5?=
- =?utf-8?B?eHZyaHkvYTJZM0h1d3BOSWE3Qjl4WGJRNlU2NmZHa3Z4LzJCemhSeE5SZENV?=
- =?utf-8?B?bENNbDBvMHo5YVVsRDNEVzlTbXVUaVI5WnVJa2lQOFBNcEUzR1krZk5SbkVI?=
- =?utf-8?B?RGdCOUNOeUhNTmFoNnZCS3BLbFc5ZTZubStpOFZRVkErK3o0TW5ZMk95ZVRJ?=
- =?utf-8?B?dkMrU1lTeHBLcDBSY1JBY1Nad1JSQjh6aWFSc3BqVndNVFFTVkhVZ0RuUEJW?=
- =?utf-8?B?ZVZJY0hXRXVrS3cyYmtCWUlOL3FmUjBoa3U0Ni9wTm9BOHFWNUozQjNtdXZG?=
- =?utf-8?B?TUM0Rnc4c3BiYlVIbjlXRzlZUG9aNWd3S2JTVGZhV0NGSi9UL0pkdlNqSGRT?=
- =?utf-8?B?N3ZNdnZDU0loRXNOaHJsaS9LdFp2WFN3alhkNE40bmFwUkFodGk3UU5BV2hU?=
- =?utf-8?Q?4jHYEKgrIVHaNLPCw8G4zyb5o?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?54n1QVrsK+i31x03jEeKsKGBCASLxiM1u3x+Ldxv/L8efYcWdOhHo1OcahWC?=
+ =?us-ascii?Q?PopuzIDKNigLCftdSJ/XKxDMwofTD34JqNu5gcPGBd7pbW3Ak74fT0cE6aFT?=
+ =?us-ascii?Q?4y4yNyCwk+kvVBzyQmR2FUgssIWIYOZ51kjdHky91yXbW1M/kQI/Q+GdGRUP?=
+ =?us-ascii?Q?4Mn1f9okATJWzNOW9y73uvUAFAQL/16/NcNkrMvCa8WOnM3/F8ChlEQtJNnX?=
+ =?us-ascii?Q?kFtlWJinztFmgZccU2UVHInldWNbv3jchzlAi511kT68wHiZpr2nyTyjVfks?=
+ =?us-ascii?Q?gPZoxyHz5bjxiSbHm5ApubL28wBStrOlinhtylRvMZcR8mG44i8m/DjkfHmi?=
+ =?us-ascii?Q?kGpkP9WBAfKweUlZlrVI0WlTLzT4dW3CHbnT8A1CE5AsNBBRZUGoN0slBI61?=
+ =?us-ascii?Q?jo+IQrGIDbV0ekvZ9+/V9CEp+xQ+FOFg0D4qHOm5rrBc0R6rV0gIVJGEaKK9?=
+ =?us-ascii?Q?C1SrYqmfCwNp86Lmr4USonZs/K3I11A4QIqY65q+nODsS1TVqcYTUQNk3aWg?=
+ =?us-ascii?Q?VYlw2PXc8FvZ0plSvm1KAQqkctDT4pdnAnhmgtc7mp0xPrM9zzMC6WL2/wmG?=
+ =?us-ascii?Q?ek+kLn5nUM+qqQDbAGFUf65MD/LFWJ3CUdznaHdaecPGpnaYC8KjbqVMw5/n?=
+ =?us-ascii?Q?EBehqlCvnWaJBUQr4lJ8FJqJf0kfMChP7OEu+7M/SZE+nJwHIFviFbW6jO1d?=
+ =?us-ascii?Q?7/twq/NGhqjA1wH6v9DmQQRmvu64pSi5uUIzy6Df37JogGMZ4WoT8VNwagxK?=
+ =?us-ascii?Q?7FQh/vPbEUiRfuSTwqDGYgt+KG61EGjPaisCvn7F0FYhSoQ13YvRYHlVnziX?=
+ =?us-ascii?Q?k044+ykYgSNwgep/OS8BfYIDs4wJe82HyIPL5vixc1PZ6Myhkpvi8Zl4ynBQ?=
+ =?us-ascii?Q?vgZ3O56O078HNF5Cffh7gFRlz8WvHWQNQxg4M6QQOzbZD9Lsb4UF4i1FBEDs?=
+ =?us-ascii?Q?nh+EEIj0isYYKCI/S6/Wdz1GR4qLwjdBYaVjAI8VyNWWcomLIRR3XatbvMNt?=
+ =?us-ascii?Q?W9Z0JZI8KUxPdY3bCCNlwjLiYPxiC57fssEc627+815ikvgnS1nI0jLNGS5K?=
+ =?us-ascii?Q?V83JrT9eXQ22ch3kRqdJ3t6aEfaJjaoBXAOKgK2wnCRQh1rU+CNGlNOjd5GF?=
+ =?us-ascii?Q?+ggde4s+CyOK3XuquGMXWh56awiemEB78QBt+zk3Ke8hYgv2E6q0D/MQUK4Y?=
+ =?us-ascii?Q?xjZDzOxY7u7Q6OFCXkhy0MgXGhVKeMUeIfyXA6YEVLgBUwb6lim//mZUHEnT?=
+ =?us-ascii?Q?QwAcmIyrqyyh+DLdO9y46VaZ5kFSo/9yt1N+t6TxZKkHxhfjNThuPEnYjAMV?=
+ =?us-ascii?Q?teAFR6evX3OQWbkZRGLlp+egzwx6YKqrcv06TDhQ5VIyYARG038WcFFnmi1o?=
+ =?us-ascii?Q?BjoGXozvwBRFVmPtR3wBURvCkvX0cRpX3uOr9xsRyhcnq4Wmw71lKyK9ykym?=
+ =?us-ascii?Q?z75/82QhxMIwXlh7+rZIZWuX7UqpHOvyF31V1mRI3At2DWkbVGHyQNwiutgv?=
+ =?us-ascii?Q?+p0J7rl6SmQQD4KJtGbJHu/LDqdzaXXkVf+ntg1+xxgooKPMMNKShScJxmEk?=
+ =?us-ascii?Q?ABNHG3u/6GYuZj0uUwYk8oA3QTV2ufrnJLUVpHk4?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9991e76a-aff6-4f7d-b92e-08db719e8351
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0680caab-c8f8-4506-d11c-08db719ed4da
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 14:56:22.6766
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 14:58:39.4716
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IbnEmckhQCCFc7ukhbseGiZ9PoLPkLcK4ZjuwNs/rhY2IedY6JIwIr60d/FgPifSZENAq8xOiZQm/LZxG5AE1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7708
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: YRmxv6gMy/STHfurq0Cv3ucbtH3apUARGWnv4Cr3VUPcTCNCdCOrqkC+OyjTDQ1fSrq1YtA0jevQSZKWb4+Z/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7963
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jun 15, 2023 at 02:32:25PM +0800, Yuan, Perry wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> If a user's configuration doesn't explicitly specify the cpufreq
+> scaling governor then the code currently explicitly falls back to
+> 'powersave'. This default is fine for notebooks and desktops, but
 
-On 6/20/2023 9:50 AM, Huang Rui wrote:
-> On Thu, Jun 15, 2023 at 02:32:00PM +0800, Yuan, Perry wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> This symbol will be used by intel-pstate and amd-pstate for making
->> decisions based on what the FADT indicates the system pm profile is.
->>
->> Suggested-by: Gautham Ranjal Shenoy <gautham.shenoy@amd.com>
->> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#fixed-acpi-description-table-fadt
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/acpi/cppc_acpi.c | 34 ++++++++++++++++++++++++++++++++++
->>   include/acpi/actbl.h     |  3 ++-
->>   include/acpi/processor.h | 10 ++++++++++
->>   3 files changed, 46 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index 7ff269a78c20..d8827eae3ba4 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -941,6 +941,40 @@ void acpi_cppc_processor_exit(struct acpi_processor *pr)
->>   }
->>   EXPORT_SYMBOL_GPL(acpi_cppc_processor_exit);
->>   
->> +
->> +/**
->> + * acpi_pm_profile_server() - Check if the system is a server.
->> + *
->> + * Return: true for server profiles, false for anything else
->> + */
->> +bool acpi_pm_profile_server(void)
->> +{
->> +	switch (acpi_gbl_FADT.preferred_profile) {
->> +	case PM_ENTERPRISE_SERVER:
->> +	case PM_SOHO_SERVER:
->> +	case PM_PERFORMANCE_SERVER:
->> +		return true;
->> +	}
->> +	return false;
->> +}
->> +EXPORT_SYMBOL_GPL(acpi_pm_profile_server);
->> +
->> +/**
->> + * acpi_pm_profile_undefined() - Check if the system is an undefined pm profile.
->> + *
->> + * Return: true for undefined profiles, false for anything else
->> + */
->> +bool acpi_pm_profile_undefined(void)
->> +{
->> +	if (acpi_gbl_FADT.preferred_profile == PM_UNSPECIFIED)
->> +		return true;
->> +	if (acpi_gbl_FADT.preferred_profile >= NR_PM_PROFILES)
->> +		return true;
-> May I know the acpi_gbl_FADT.preferred_profile value of powerful desktop
-> such as threadripper or AM4/AM5 socket types of processors?
+May I know if the processor is powerful desktop such as threadripper,
+whether it will be default to 'performance' or 'powersave'?
 
-I have a Threadripper for my workstation, and it's:
+Thanks,
+Ray
 
-[02Dh 0045   1]                   PM Profile : 01 [Desktop]
-
-> I am thinking whether we can use this way to differentiate powerful desktop
-> and mobile platforms.
-
-On a Rembrandt laptop it's:
-
-[02Dh 0045   1]                   PM Profile : 02 [Mobile]
-
-Given Raphael's comments about intel-pstate preferring not to
-match "SOHO server" as a server, I am planning to move these functions
-into amd-pstate directly and drop patch 4.
-> Thanks,
-> Ray
->
->> +	return false;
->> +}
->> +EXPORT_SYMBOL_GPL(acpi_pm_profile_undefined);
->> +
->> +
->>   /**
->>    * cpc_read_ffh() - Read FFH register
->>    * @cpunum:	CPU number to read
->> diff --git a/include/acpi/actbl.h b/include/acpi/actbl.h
->> index e5dfb6f4de52..451f6276da49 100644
->> --- a/include/acpi/actbl.h
->> +++ b/include/acpi/actbl.h
->> @@ -307,7 +307,8 @@ enum acpi_preferred_pm_profiles {
->>   	PM_SOHO_SERVER = 5,
->>   	PM_APPLIANCE_PC = 6,
->>   	PM_PERFORMANCE_SERVER = 7,
->> -	PM_TABLET = 8
->> +	PM_TABLET = 8,
->> +	NR_PM_PROFILES = 9
->>   };
->>   
->>   /* Values for sleep_status and sleep_control registers (V5+ FADT) */
->> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
->> index 94181fe9780a..05a45ebddaea 100644
->> --- a/include/acpi/processor.h
->> +++ b/include/acpi/processor.h
->> @@ -360,6 +360,8 @@ int acpi_get_cpuid(acpi_handle, int type, u32 acpi_id);
->>   #ifdef CONFIG_ACPI_CPPC_LIB
->>   extern int acpi_cppc_processor_probe(struct acpi_processor *pr);
->>   extern void acpi_cppc_processor_exit(struct acpi_processor *pr);
->> +extern bool acpi_pm_profile_server(void);
->> +extern bool acpi_pm_profile_undefined(void);
->>   #else
->>   static inline int acpi_cppc_processor_probe(struct acpi_processor *pr)
->>   {
->> @@ -369,6 +371,14 @@ static inline void acpi_cppc_processor_exit(struct acpi_processor *pr)
->>   {
->>   	return;
->>   }
->> +static inline bool acpi_pm_profile_server(void)
->> +{
->> +	return false;
->> +}
->> +static inline bool acpi_pm_profile_undefined(void)
->> +{
->> +	return true;
->> +}
->>   #endif	/* CONFIG_ACPI_CPPC_LIB */
->>   
->>   /* in processor_pdc.c */
->> -- 
->> 2.34.1
->>
+> servers and undefined machines should default to 'performance'.
+> 
+> Look at the 'preferred_profile' field from the FADT to set this
+> policy accordingly.
+> 
+> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#fixed-acpi-description-table-fadt
+> Suggested-by: Wyes Karny <Wyes.Karny@amd.com>
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index ddd346a239e0..c9d296ebf81e 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1102,10 +1102,13 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>  	policy->max = policy->cpuinfo.max_freq;
+>  
+>  	/*
+> -	 * Set the policy to powersave to provide a valid fallback value in case
+> +	 * Set the policy to provide a valid fallback value in case
+>  	 * the default cpufreq governor is neither powersave nor performance.
+>  	 */
+> -	policy->policy = CPUFREQ_POLICY_POWERSAVE;
+> +	if (acpi_pm_profile_server() || acpi_pm_profile_undefined())
+> +		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
+> +	else
+> +		policy->policy = CPUFREQ_POLICY_POWERSAVE;
+>  
+>  	if (boot_cpu_has(X86_FEATURE_CPPC)) {
+>  		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &value);
+> -- 
+> 2.34.1
+> 
