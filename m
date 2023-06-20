@@ -2,121 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C550736E58
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 16:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C86736ECD
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 16:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231710AbjFTOKf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jun 2023 10:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S232381AbjFTOiJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jun 2023 10:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjFTOK0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 10:10:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94CD610D0
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jun 2023 07:09:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687270181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VrByPcLlZJlbrBKqAsdOzQ0Sy0EOhnQ6P87fZxDadIk=;
-        b=i6OHoRugFlYo9CT4soGMlAxmnqbZa1omNDrw4yMiL75n+YOKZZ94enHs95UtBm6Kquwd7b
-        EPcoDFwBE09PWh3ETHDQ2ArvauxDlRmBXEThUvumZMrxoxie3MSG4GjaX7EB9jI2OsdDaP
-        wfqzHR1QHIF3XjKE7SsLH7v8RUmLGkw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-466-rhmpZFmgOz-Gw5i0hq2awQ-1; Tue, 20 Jun 2023 10:09:26 -0400
-X-MC-Unique: rhmpZFmgOz-Gw5i0hq2awQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BC295104D984;
-        Tue, 20 Jun 2023 14:06:35 +0000 (UTC)
-Received: from llong.com (unknown [10.22.34.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 078BD425357;
-        Tue, 20 Jun 2023 14:06:34 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
+        with ESMTP id S233333AbjFTOiG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 10:38:06 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6A5170A;
+        Tue, 20 Jun 2023 07:38:05 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-340bba768acso23832585ab.2;
+        Tue, 20 Jun 2023 07:38:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687271884; x=1689863884;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GF/VHqh9Z63hL9sa4QxWnH8XWdPzqcxDEJoIRF6jEW4=;
+        b=ilwFOcuEzGVLEAg1iNZx+kSmWXVx+D3HXwZ53v8mtN0xt2VkA+C730LckChfkJEAqJ
+         +qLk8L5fQdoDxatkMRx7LBlztfNnR8oWGuuIyLL+brRfCsqTqZhfw68cDxjTD22DODTV
+         aN4BbPHHP/6FvjusGOnETP+gbahusH+zTEgbvRaAVX8Y1oLI2576eTMjzkziz3FtoYLp
+         hbi0ulHDCtZgMt8s/Xz6Wk4ZrLPhQrnXoX7PbPkn4/4d9QoAAMguD70FztROm1AtLSeQ
+         w04XjYWPSzseYSVOfRPWsAar5LrHKTrL31wjA4VglYmpSGSc/Sn3lHkyGlyedbAC/Byz
+         Zdjg==
+X-Gm-Message-State: AC+VfDzTwphaQ/nZqfH6k7DOF59i6J73fqg5kgWdZ/qpUws8KUzzGHJz
+        Z7Hl39QRO9fYm5/BpOKEGA==
+X-Google-Smtp-Source: ACHHUZ6G1RQDYcnuhSQF4g+EA/8pLz4mpvkXiCrsobO7vcVJIqYb/GzSo7RdqK18AFihbL90RR2gFA==
+X-Received: by 2002:a6b:650c:0:b0:77e:2f33:c33 with SMTP id z12-20020a6b650c000000b0077e2f330c33mr7332406iob.3.1687271884475;
+        Tue, 20 Jun 2023 07:38:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id ep24-20020a0566384e1800b0042311795f77sm683155jab.83.2023.06.20.07.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 07:38:03 -0700 (PDT)
+Received: (nullmailer pid 3557803 invoked by uid 1000);
+        Tue, 20 Jun 2023 14:38:01 -0000
+Date:   Tue, 20 Jun 2023 08:38:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Scott Branden <sbranden@broadcom.com>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        Ray Jui <rjui@broadcom.com>, devicetree@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        linux-mmc@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        dmaengine@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pwm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
-        Joe Mario <jmario@redhat.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 5/5] x86/idle: Disable IBRS entering mwait idle and enable it on wakeup
-Date:   Tue, 20 Jun 2023 10:06:25 -0400
-Message-Id: <20230620140625.1001886-6-longman@redhat.com>
-In-Reply-To: <20230620140625.1001886-1-longman@redhat.com>
-References: <20230620140625.1001886-1-longman@redhat.com>
+        bcm-kernel-feedback-list@broadcom.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Subject: Re: [PATCH V2 2/7] dt-bindings: dma: convert bcm2835-dma bindings to
+ YAML
+Message-ID: <168727187263.3557572.9123036067040626699.robh@kernel.org>
+References: <20230617133620.53129-1-stefan.wahren@i2se.com>
+ <20230617133620.53129-3-stefan.wahren@i2se.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230617133620.53129-3-stefan.wahren@i2se.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When a user sets "intel_idle.max_cstate=0", it will disable
-intel_idle and fall back to acpi_idle instead. The acpi_idle code
-will then call mwait_idle_with_hints() to enter idle state. So when
-X86_FEATURE_KERNEL_IBRS is enabled, it is necessary to disable IBRS
-within mwait_idle_with_hints() when IRQ was disabled to avoid performance
-degradation on silbing thread running user workload.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- arch/x86/include/asm/mwait.h | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+On Sat, 17 Jun 2023 15:36:15 +0200, Stefan Wahren wrote:
+> Convert the DT binding document for bcm2835-dma from .txt to YAML.
+> 
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+> ---
+>  .../bindings/dma/brcm,bcm2835-dma.txt         |  83 --------------
+>  .../bindings/dma/brcm,bcm2835-dma.yaml        | 102 ++++++++++++++++++
+>  2 files changed, 102 insertions(+), 83 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/dma/brcm,bcm2835-dma.txt
+>  create mode 100644 Documentation/devicetree/bindings/dma/brcm,bcm2835-dma.yaml
+> 
 
-diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
-index 778df05f8539..1e36cdc21661 100644
---- a/arch/x86/include/asm/mwait.h
-+++ b/arch/x86/include/asm/mwait.h
-@@ -108,15 +108,32 @@ static __always_inline void __sti_mwait(unsigned long eax, unsigned long ecx)
- static __always_inline void mwait_idle_with_hints(unsigned long eax, unsigned long ecx)
- {
- 	if (static_cpu_has_bug(X86_BUG_MONITOR) || !current_set_polling_and_test()) {
-+		bool ibrs_disabled = false;
-+		u64 spec_ctrl;
-+
- 		if (static_cpu_has_bug(X86_BUG_CLFLUSH_MONITOR)) {
- 			mb();
- 			clflush((void *)&current_thread_info()->flags);
- 			mb();
- 		}
- 
-+		if (irqs_disabled() &&
-+		    cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
-+			/* NMI always enable IBRS on exception entry */
-+			ibrs_disabled = true;
-+			spec_ctrl = spec_ctrl_current();
-+			__this_cpu_write(x86_spec_ctrl_current, 0);
-+			native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-+		}
-+
- 		__monitor((void *)&current_thread_info()->flags, 0, 0);
- 		if (!need_resched())
- 			__mwait(eax, ecx);
-+
-+		if (ibrs_disabled) {
-+			native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-+			__this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
-+		}
- 	}
- 	current_clr_polling();
- }
--- 
-2.31.1
+Reviewed-by: Rob Herring <robh@kernel.org>
 
