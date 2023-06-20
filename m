@@ -2,155 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCCA7374E2
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 21:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A777376DD
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 23:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbjFTTFV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jun 2023 15:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S229637AbjFTV5v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jun 2023 17:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbjFTTFU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 15:05:20 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB37170D
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jun 2023 12:05:10 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f97e08b012so31606155e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jun 2023 12:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687287909; x=1689879909;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/x5qK0JZg5lh7rsy4InWDjLtme8s/Ys8njFfDN5MMo0=;
-        b=RGsFwD7lYdd63uR6B4oIifnq780QcXAQQ3iRbMWCAm21RMd28pCE+5e7YYvpWcQU6A
-         RcFLqkOqVYfbRGOYjiyBz3TgvZ+hNuaMLwzoDt6CmY0q7GSYyhmf+1KSp+KdeYlad+/n
-         HYTFlxUxvPvMhiflguPOkvHb97Uw0FeVFrRUoqioKvEbKwzST4194kM0xBOMbDv9pyRm
-         GAmmcAzKzaoHtKwYIXI8eoL6pFR8qdH3wnpbVIxhcc+OOYF9l/nnwHN+D7xWG1OhhHVH
-         4LYL6Mx8fDGB1iqzj29zP439GC+cbGDa9r7UwL8TX2H25xs4VekxzjHeIdVqBw0fw6e+
-         vqXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687287909; x=1689879909;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/x5qK0JZg5lh7rsy4InWDjLtme8s/Ys8njFfDN5MMo0=;
-        b=bvUfdC/VAUkC/XkDxdKjWqGnZpLYZJ4uAViJjMO8O+iZoBXocCl1+tHY84ppctXh3A
-         +QR42z8zVbkJnzCN8bjsI1zAUL5Bc0oEM6Ujw+bylegaAEiPgCiforRJJjY9QMRQ380x
-         +fYLCFZFhNUs3v5Xudb8j1os/E1tSctfqxXmnfmQImGhkj82AYsoEmZ0ak9YggiCQi33
-         ylueEeTmMB+OQsoOs4WAxiUBVg7NQMd6H1H9U7HsbAHy3VMgjwGDo/CpBxI3TtAx99Mn
-         R0Oqak7dCK2Wn4mctY+MKsl4JD2S1DlZzY9lOieXaA3PaQrKjkXfV5coIs0tR//5Vqda
-         bN3Q==
-X-Gm-Message-State: AC+VfDzDruXg/esMBHf2lC4nI3j7hhPtLE1i4e0gM/3kKHRqJxfuuIlu
-        QorF41b6EbHH8DYoEC463OQAhg==
-X-Google-Smtp-Source: ACHHUZ7RuSXEbFUBjQoO0NzolYYNuaEjzPWPGewLg1lD6fGwsVUakTyQ6ba1Hdujm1n5eYaQ5dpzEQ==
-X-Received: by 2002:adf:ea8b:0:b0:2f8:3225:2bc2 with SMTP id s11-20020adfea8b000000b002f832252bc2mr10313053wrm.41.1687287908640;
-        Tue, 20 Jun 2023 12:05:08 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:fae4:142d:36ed:5151? ([2a05:6e02:1041:c10:fae4:142d:36ed:5151])
-        by smtp.googlemail.com with ESMTPSA id f7-20020adff8c7000000b0030e6096afb6sm2606283wrq.12.2023.06.20.12.05.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 12:05:08 -0700 (PDT)
-Message-ID: <b2eea9c9-e74b-b28e-f6af-244801e726b8@linaro.org>
-Date:   Tue, 20 Jun 2023 21:05:07 +0200
+        with ESMTP id S229490AbjFTV5u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 17:57:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FDC107;
+        Tue, 20 Jun 2023 14:57:49 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KLvMo5004932;
+        Tue, 20 Jun 2023 21:57:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=19TJ2pJemAtAw7vnSuSEyq+CEd+TRYUzI0XXaVONu3c=;
+ b=J8VpndoeW6mOiNe9WhmKjn9euyTSmvWwvWq1XoT3KajYxM2xzgCbcT3fLqYi9LL1newo
+ FxXSnfSIFPg97gPplQcLdNDQ7WR11ChA2LgPipE4RkUpW/ikO/sw1Ab3aqpxPnEi2nRI
+ 0ne4qbsnslRwc45SmWcRfywoztyb7/sEqRfv/5hihsPYvF+yjij7ubcBAeUFXPIUBDrK
+ dXzkOdK4erT7KiJnuTH3Wzs9CsPdZD3rR/owxUi7v2vPBxnJ8BYpIjzSqNgpFmPa9l5x
+ tjHRZcfE7sCMho+kSU7XoDhX0CEGgdlaJOqk6VY6Gz3xRTWRDWMxM2QwwS0NTU3T/mIK Mw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb8f6hv7h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 21:57:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35KLvikK017749
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 21:57:44 GMT
+Received: from [10.111.161.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 20 Jun
+ 2023 14:57:43 -0700
+Message-ID: <37dcbd3c-1e41-023c-8bbd-19cf9c9f151b@quicinc.com>
+Date:   Tue, 20 Jun 2023 14:57:17 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/7] thermal: enhancements on thermal stats
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RESEND v2] interconnect: drop unused icc_get() interface
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Odelu Kukatla <quic_okukatla@quicinc.com>
+References: <20230523095248.25211-1-johan+linaro@kernel.org>
 Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230519032719.2581689-1-evalenti@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230519032719.2581689-1-evalenti@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Mike Tipton <quic_mdtipton@quicinc.com>
+In-Reply-To: <20230523095248.25211-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: c6bC6S3MzGJ0YvHkFxWGjUPqzwGhnWS-
+X-Proofpoint-ORIG-GUID: c6bC6S3MzGJ0YvHkFxWGjUPqzwGhnWS-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_16,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ mlxlogscore=626 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 clxscore=1011 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306200198
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Eduardo,
-
-On 19/05/2023 05:27, Eduardo Valentin wrote:
-> Hello Rafael and Daniel
+On 5/23/2023 2:52 AM, Johan Hovold wrote:
+> The icc_get() interface can be used to lookup an interconnect path based
+> on global node ids. There has never been any users of this interface and
+> all lookups are currently done from the devicetree.
 > 
-> After a long hiatus, I am returning to more frequent contributions
-> to the thermal subsystems, as least until I drain some of the
-> commits I have in my trees.
+> Remove the unused icc_get() interface.
 > 
-> This is a first series of several that will come as improvements
-> on the thermal subsystem that will enable using this subsystem
-> in the Baseboard Management Controller (BMC) space, as part
-> of the Nitro BMC project. To do so, there were a few improvements
-> and new features wrote.
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 > 
-> In this series in particular, I present a set of enhancements
-> on how we are handling statistics. The cooling device stats
-> are awesome, but I added a few new entries there. I also
-> introduce stats per thermal zone here too.
+> Hi Georgi,
+> 
+> I just noticed that this patch never made it into 6.4 along with the
+> rest of the series:
+> 
+> 	https://lore.kernel.org/lkml/20230306075651.2449-23-johan+linaro@kernel.org/
+> 
+> This interface is still unused in mainline and should be removed so
+> resending the patch again.
+> 
+> Johan
+> 
+> 
+>   drivers/interconnect/core.c  | 52 ++----------------------------------
+>   include/linux/interconnect.h |  8 ------
+>   2 files changed, 2 insertions(+), 58 deletions(-)
+> 
 
- From my POV, that kind of information belongs to debugfs. sysfs is not 
-suitable for that.
+We have downstream debug/test modules that removing icc_get() will 
+break. I'd like to get equivalent debug support in mainline, but until 
+then I'd prefer we not remove this.
 
-The cdev stats are a total mess because of the page size limitation of 
-sysfs and the explosion of the combination when there are a large number 
-of states (eg. display is 1024 cooling device states resulting in a 
-matrix of 1024 x 1024, so more than 4MB of memory).
+Our debug module adds debugfs files for requesting a path and voting BW 
+to it. The path is defined by supplying the raw src_id / dst_id and 
+calling icc_get() for them. This allows us to issue any request to any 
+path from debugfs without needing to recompile or reflash devicetree. We 
+use this extensively.
 
-For the record, I'm working on such of statistics [1][2], and optimized 
-this cooling device statistics in order to get ride of the existing 
-sysfs cdev stats.
+That said, I don't like the current implementation of icc_get(). It 
+should take strings for src/dst rather than integer IDs. This would be 
+similar to other interfaces like clk_get() and regulator_get(). And 
+would allow users to specify their path in debugfs using logical names 
+rather than raw integers.
 
-Actually, all the stats rely on the mitigation episodes. However, for 
-that we need to correctly identify when they begin and when they end. We 
-can have mitigation episode inside mitigation episode (eg. passive 
-mitigation@trip0 and active mitigation@trip1).
+I suspect having a mainline approach for voting paths from debugfs would 
+be useful to others as well. There are similar debugfs control 
+mechanisms in other frameworks already, e.g. clock.
 
-This is not working today because the trip point detection is incorrect, 
-thus the mitigation episodes are also incorrect, consequently the stats 
-are de facto incorrect.
-
-There is more details at [3] but the change assumes the trip points are 
-ordered in the ascending order which is wrong, that is why it was not 
-merged.
-
-The mitigation works but the detection is fuzzy, so the math is 
-inaccurate and as we are in the boundaries of a temperature limit, the 
-resulting statistics do not show us the interesting information to 
-optimize the governors when they are not totally inconsistent.
-
-All the work around the generic trip points is to fix that.
-
-There is a proposal at LPC to add statistic/debug information for 
-thermal, may be you can participate so we join our efforts?
-
-   -- Daniel
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/trip-crossed%2bdebugfs
-
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/debugfs-v2
-
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/trip-crossed%2bdebugfs&id=7d713a9128ad9a153de9c3f5b854c6f1acfb3064
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Instead of removing icc_get() immediately, can we wait for a future 
+patch series that adds debugfs as a consumer?
