@@ -2,40 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51E32736E63
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 16:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C82736E62
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 16:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbjFTOLH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S233183AbjFTOLH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Tue, 20 Jun 2023 10:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbjFTOKw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 10:10:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D6FE6C
-        for <linux-pm@vger.kernel.org>; Tue, 20 Jun 2023 07:10:05 -0700 (PDT)
+        with ESMTP id S233185AbjFTOKs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 10:10:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0615B1
+        for <linux-pm@vger.kernel.org>; Tue, 20 Jun 2023 07:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687270204;
+        s=mimecast20190719; t=1687270198;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xcoOW1ZR6wswnF4rij7hWtB4wmZnp/XX0PDU4BubJAY=;
-        b=W/yjrOamInND7VXmxB9+Uhh5BfzNuji3IjrX6L7iqBhPT0kngixyIndqWZr6/Sccx7t0Nq
-        LCQNYsp33ppHQOmmK7PaVGs3F74AmDvAtnj0+6ZnqrACRkaAT7Flh3vrKDtIOyV6bN3aza
-        n0yTfC8TftlqikOrCuPCdM0Ki8lIrA0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BqzD+6X0IKQNZN3ZvD+oTa51EhB1X9vozv9qaWAmHMs=;
+        b=KGxe2PwlkWJGYgtBytb0UyYLPDeTZSOb91vVcQXa4jL3t2gKBq7vFAhOTr6dL8ENqd2uaK
+        WDVh3S60JMX0ZmvBkfQGT/8ni6BOGqEfttQbFR6MCVlRHlBKYzyzGv5wnNcYcVxMOw63Ym
+        bspjqCM3iH1p/PIccK0psSdoW0Er23o=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-318-pSQ_-q6DO1WXmzsWOAOpSg-1; Tue, 20 Jun 2023 10:09:04 -0400
-X-MC-Unique: pSQ_-q6DO1WXmzsWOAOpSg-1
+ us-mta-306-VnIh31SuOY-wqOcCljomwQ-1; Tue, 20 Jun 2023 10:09:25 -0400
+X-MC-Unique: VnIh31SuOY-wqOcCljomwQ-1
 Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B1A5388D56E;
-        Tue, 20 Jun 2023 14:06:31 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82C6228EA712;
+        Tue, 20 Jun 2023 14:06:32 +0000 (UTC)
 Received: from llong.com (unknown [10.22.34.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AE24D425357;
-        Tue, 20 Jun 2023 14:06:30 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C7CDF425357;
+        Tue, 20 Jun 2023 14:06:31 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -49,71 +50,131 @@ To:     Peter Zijlstra <peterz@infradead.org>,
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
         Joe Mario <jmario@redhat.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 0/5] x86/speculation: Disable IBRS when idle
-Date:   Tue, 20 Jun 2023 10:06:20 -0400
-Message-Id: <20230620140625.1001886-1-longman@redhat.com>
+Subject: [PATCH v2 1/5] x86/speculation: Provide a debugfs file to dump SPEC_CTRL MSRs
+Date:   Tue, 20 Jun 2023 10:06:21 -0400
+Message-Id: <20230620140625.1001886-2-longman@redhat.com>
+In-Reply-To: <20230620140625.1001886-1-longman@redhat.com>
+References: <20230620140625.1001886-1-longman@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For Intel processors that need to turn on IBRS to protect against
-Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
-the performance of the whole core even if only one thread is turning
-it on when running in the kernel. For user space heavy applications,
-the performance impact of occasionally turning IBRS on during syscalls
-shouldn't be significant. Unfortunately, that is not the case when the
-sibling thread is idling in the kernel. In that case, the performance
-impact can be significant.
+Sometimes it is useful to know the states the SPEC_CTRL MSRs to see what
+mitigations are enabled at run time. Provide a new x86/spec_ctrl_msrs
+debugfs file to dump the cached versions of the current SPEC_CTRL MSRs.
 
-When DPDK is running on an isolated CPU thread processing network packets
-in user space while its sibling thread is idle. The performance of the
-busy DPDK thread with IBRS on and off in the sibling idle thread are:
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ arch/x86/kernel/cpu/bugs.c | 79 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
 
-                                IBRS on         IBRS off
-                                -------         --------
-  packets/second:                  7.8M           10.4M
-  avg tsc cycles/packet:         282.26          209.86
-
-This is a 25% performance degradation. The test system is a Intel Xeon
-4114 CPU @ 2.20GHz.
-
-Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
-disables IBRS when the CPU enters long idle (C6 or below). However, there
-are existing users out there who have set "intel_idle.max_cstate=1" or
-even "intel_idle.max_cstate=0" to decrease latency. Those users won't be
-able to benefit from this commit. This patch series extends this commit
-by providing a new "intel_idle.no_ibrs" module option to force disable
-IBRS even when "intel_idle.max_cstate=1" at the expense of increased IRQ
-response latency. It also includes commit to allow the disabling of IBRS
-with "intel_idle.max_cstate=0" as well as when a CPU becomes offline.
-
-The first patch adds a new x86/spec_ctrl_msrs debugfs file which display
-the current cached values of the SPEC_CTRL MSRs of all the CPUs. This
-allows us to verify that IBRS bit is correctly turned off in idle CPUs
-for various cstate values.
-
-Waiman Long (5):
-  x86/speculation: Provide a debugfs file to dump SPEC_CTRL MSRs
-  x86/idle: Disable IBRS when cpu is offline
-  intel_idle: Sync up the SPEC_CTRL MSR value to x86_spec_ctrl_current
-  intel_idle: Add no_ibrs module parameter to force disable IBRS
-  x86/idle: Disable IBRS entering mwait idle and enable it on wakeup
-
- arch/x86/include/asm/mwait.h | 17 ++++++++
- arch/x86/kernel/cpu/bugs.c   | 79 ++++++++++++++++++++++++++++++++++++
- arch/x86/kernel/smpboot.c    | 13 ++++++
- drivers/idle/intel_idle.c    | 22 ++++++++--
- 4 files changed, 127 insertions(+), 4 deletions(-)
-
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index 182af64387d0..f6e5910a4a2d 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -17,6 +17,7 @@
+ #include <linux/sched/smt.h>
+ #include <linux/pgtable.h>
+ #include <linux/bpf.h>
++#include <linux/debugfs.h>
+ 
+ #include <asm/spec-ctrl.h>
+ #include <asm/cmdline.h>
+@@ -1733,6 +1734,84 @@ void cpu_bugs_smt_update(void)
+ 	mutex_unlock(&spec_ctrl_mutex);
+ }
+ 
++#ifdef CONFIG_DEBUG_FS
++/*
++ * Provide a debugfs file to dump SPEC_CTRL MSRs of all the CPUs
++ * Consecutive MSR values are collapsed together if they are the same.
++ */
++static ssize_t spec_ctrl_msrs_read(struct file *file, char __user *user_buf,
++				   size_t count, loff_t *ppos)
++{
++	int bufsiz = min(count, PAGE_SIZE);
++	int cpu, prev_cpu, len, cnt = 0;
++	u64 val, prev_val;
++	char *buf;
++
++	/*
++	 * The MSRs info should be small enough that the whole buffer is
++	 * copied out in one call. However, user space may read it again
++	 * to see if there is any data left. Rereading the cached SPEC_CTRL
++	 * MSR values may produce a different result causing corruption in
++	 * output data. So skipping the call if *ppos is not starting from 0.
++	 */
++	if (*ppos)
++		return 0;
++
++	buf = kmalloc(bufsiz, GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++
++	for_each_possible_cpu(cpu) {
++		val = per_cpu(x86_spec_ctrl_current, cpu);
++
++		if (!cpu)
++			goto next;
++
++		if (val == prev_val)
++			continue;
++
++		if (prev_cpu == cpu - 1)
++			len = snprintf(buf + cnt, bufsiz - cnt, "CPU  %d: 0x%llx\n",
++				       prev_cpu, prev_val);
++		else
++			len = snprintf(buf + cnt, bufsiz - cnt, "CPUs %d-%d: 0x%llx\n",
++					prev_cpu, cpu - 1, prev_val);
++
++		cnt += len;
++		if (!len)
++			break;	/* Out of buffer */
++next:
++		prev_cpu = cpu;
++		prev_val = val;
++	}
++
++	if (prev_cpu == cpu - 1)
++		cnt += snprintf(buf + cnt, bufsiz - cnt, "CPU  %d: 0x%llx\n",
++			       prev_cpu, prev_val);
++	else
++		cnt += snprintf(buf + cnt, bufsiz - cnt, "CPUs %d-%d: 0x%llx\n",
++				prev_cpu, cpu - 1, prev_val);
++
++	count = simple_read_from_buffer(user_buf, count, ppos, buf, cnt);
++	kfree(buf);
++	return count;
++}
++
++static const struct file_operations fops_spec_ctrl = {
++	.read = spec_ctrl_msrs_read,
++	.llseek = default_llseek,
++};
++
++static int __init init_spec_ctrl_debugfs(void)
++{
++	if (!debugfs_create_file("spec_ctrl_msrs", 0400, arch_debugfs_dir,
++				 NULL, &fops_spec_ctrl))
++		return -ENOMEM;
++	return 0;
++}
++fs_initcall(init_spec_ctrl_debugfs);
++#endif
++
+ #undef pr_fmt
+ #define pr_fmt(fmt)	"Speculative Store Bypass: " fmt
+ 
 -- 
 2.31.1
 
