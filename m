@@ -2,59 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BCA73728A
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 19:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29197372CB
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jun 2023 19:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjFTRR0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 20 Jun 2023 13:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
+        id S229867AbjFTR1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jun 2023 13:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjFTRRZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 13:17:25 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1777E1710;
-        Tue, 20 Jun 2023 10:17:22 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-987f13f8d21so106901966b.0;
-        Tue, 20 Jun 2023 10:17:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281440; x=1689873440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kCU3E02m6ju/0TXJ6baw1sJty3puMTXr+sZagM9mSPU=;
-        b=hA3s7NUXyX2T1a5g49xLCh6vkHJyqL9oK3UXSdVIXOQqcr8IxWR2qCgUO2Mi5qBsf0
-         m5zneaJkCSjPrL4c4fFb2FGCdb32UyuTekazzxEYhKcARX4uO1RnG1XI8C+fYEx+yzms
-         GbqKo4HD4pxrU6UvP8DjwFJgVakfEMCQRM2ULZK7VVMnrUiSLpFMQjRfHCdct4wtebcT
-         n3qItkGsuq+YMaOlz/cjLRSjX8PUT1j9anKLwuXxxFEb8hveaR1JcIwDhnKxXVD0NaPr
-         N9gdwymS5llS720jMNdK9ci43WYSypdZksVaG9H2524e/AUCdL1z/2C9XqCFG58hAr2U
-         f05g==
-X-Gm-Message-State: AC+VfDziUo+EKesPZ7jPLYq1hfbAvxU8W6ivbVOonR3igXTqZMWWQYQf
-        9nSMYW4T2UmkgcwA2UPDc8u27Ou7ZWnI4m8InAQ=
-X-Google-Smtp-Source: ACHHUZ7Er9JkdZMGk9wrHGUnyshKtbpIg5WLO6EtfUQI2HZ/BkLmDgcCZNRPgohpa+k9Zi/YlpOaEkQU8ICt6ZP+Fbo=
-X-Received: by 2002:a17:906:7a52:b0:988:9dea:ab9c with SMTP id
- i18-20020a1709067a5200b009889deaab9cmr4817988ejo.1.1687281440413; Tue, 20 Jun
- 2023 10:17:20 -0700 (PDT)
+        with ESMTP id S229520AbjFTR1h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 13:27:37 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A343E95;
+        Tue, 20 Jun 2023 10:27:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RhhoD+/e/e9ClEIe07LovFKzgRtSGxtB3CPetWDk7fXu3eHToMFeAaeDule/KcEjC/a9xKf6r5PYr1EwBFK0mmlktHUVXGNnm+hM+CQPwZ0APDMDxiZ30JFFbCH1i28tHuoT6WjSvwXr1SeUclVrawWvdQoCbuE1XFVEHq3Ou9QdhrHqxRDiCOl4PHN2WLngfksmCI+hMnhMJnfoh/KSZS2MkNBkM7XGQ39Z1RyNuB4Sb3fO5Wi72ntA1qSU8QIKJQMTIy1RyxLUM3mKhz/YsZNlgFZcPIO4JTr2df5ANZAYkXAmC9n9OK4KJFlDVKgg1qc8j+gQNrJ9mXlLhPDViQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YK4Ya++DT9fnoXc3qwOg07w/mkbtsOo8oaM+F7D5Yx4=;
+ b=bRKVo31cwbh6tlc3ZSfu/Rgywnqa0ie41ppKrC7+jW0a0W+RTHOfHwHZ8zqBR7FIwvFlzcqzb4Z90tL2bv2EBxT5wLydjseWBSJlzpoBezqdEn7YRFJ+sR0/80WmSBYQ+qQ+lYxdD8Vr21Zee+7N8CsY4MPToLnk0VDuZin4AjrfLOsQEd1sD+e8z5CEp3rymUK7IEJ8rRhii1moShqI1V/rRbZPKGGNYrHssqLwF1kdV8ttkHfxa01zs8UkVOeLa4ddMp6U9YMJZEXIHfuUgUeL4JHbFqHMqdHEIQIER6+e/QWRMTlRxmWyv1Cdw7QJGasBB1oUSlwNNm1061zS2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YK4Ya++DT9fnoXc3qwOg07w/mkbtsOo8oaM+F7D5Yx4=;
+ b=lYYWW7cTzl0ST91vhmR3qQ3H4/rF0GXoFi8HikHRDigrf46rzR3M7AYV6ZQnAH4qYEOK9SBp36XNQax9NKo6N1u4JA8EMlrTBQn06kv8GF+ykFYjx/zYY+WQUP82ODtK5w4ENccNup2+TDbUJsgD4kjK5ybJ4NSDaC5zrwTVpQY=
+Received: from PH8PR02CA0024.namprd02.prod.outlook.com (2603:10b6:510:2d0::16)
+ by IA0PR12MB7529.namprd12.prod.outlook.com (2603:10b6:208:441::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 17:27:34 +0000
+Received: from SA2PEPF000015C6.namprd03.prod.outlook.com
+ (2603:10b6:510:2d0:cafe::a) by PH8PR02CA0024.outlook.office365.com
+ (2603:10b6:510:2d0::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21 via Frontend
+ Transport; Tue, 20 Jun 2023 17:27:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF000015C6.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6521.19 via Frontend Transport; Tue, 20 Jun 2023 17:27:33 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 20 Jun
+ 2023 12:27:32 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Len Brown <lenb@kernel.org>, Huang Rui <ray.huang@amd.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        Gautham Ranjal Shenoy <gautham.shenoy@amd.com>,
+        Wyes Karny <Wyes.Karny@amd.com>,
+        Perry Yuan <perry.yuan@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH v3 0/3] Enable amd-pstate active mode by default
+Date:   Tue, 20 Jun 2023 12:24:30 -0500
+Message-ID: <20230620172433.21325-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-5-evalenti@kernel.org>
-In-Reply-To: <20230519032719.2581689-5-evalenti@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Jun 2023 19:17:09 +0200
-Message-ID: <CAJZ5v0iSgC4LQMX6XsquaVbFX30SArfWGYtNGXsLaet00kzknw@mail.gmail.com>
-Subject: Re: [PATCH 4/7] thermal: stats: introduce thermal zone stats/min_gradient
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015C6:EE_|IA0PR12MB7529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fbcae36-4e6b-4ca8-7858-08db71b3a241
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +pAhJzRUBB9rkG2n89+nS31iWSnsW93NsY1gCUWN1IwCBaQ4tGCbxulbRAdj13FyDDDqEmyoqmjTQL6uim+u3/sFy9yf703BNHnClGBvuorEXxNjLDEkiVdwyBadAY9uAbOSHcnyet/QIXGBUjuwZH9rhrEUZlqdevIIdMDzQn1XfJ66AY+e1Ml9RosRTD9Fs9phKDmAhr3qqe83eFM5yb+AXp7os3G1N9AyNH1O/ixgersrA9ojrrm6rbmBbOoMhY5lYmfxuWMpUxd/BMGrmYzd0uoCq+NnhKn41yXDq2aEezhqHeh1tDAoT20dhF4ub7ZvYYCUo91dS0h7OmzqaOQAlNQBquOvQGT7o8WDIZj2EBUA5c16LucIvOU/5N2/WMz4LTZ9bDEmNYe43iYdvTbRDPOS7awFQQtDjHt+jC3ILZqew26BT6sOW5ex0Z55U+WcXL8A7V5OC8W8WAvh1RAoxT1O65c10hjzKSmFzCle9YgAfWUxqKk6OI69TJ+HAHkWzx8vf4jl2ftXmsfbX2OE3nc1MZgJndxiLUVfN5csM8BpolzcU1YnMokAnEWN9p4GETONnmbFMUzKAKTsKaa8PzTorrslzj5Q8jmDkGlWSVAbnvgRnIxY9RaQmsFaXYfxtcZRKM24CaPSxxH6kKNwNeBWahe/FC8mq1hpVNS+nOkvStqcYIs7HvUCPEvk/2nVBXNtxAZ/FYgW/eugEotD+YXFQeWRTzKXe8X8+gyNKWQMQKUev2TpHBvPdt4WIFRhaSRZxHXh1bhDia2dZQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(8676002)(8936002)(478600001)(40480700001)(41300700001)(5660300002)(4744005)(2906002)(44832011)(316002)(70206006)(4326008)(6916009)(70586007)(40460700003)(186003)(1076003)(26005)(16526019)(36756003)(54906003)(36860700001)(86362001)(82740400003)(2616005)(336012)(356005)(7696005)(426003)(83380400001)(81166007)(82310400005)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 17:27:33.7560
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fbcae36-4e6b-4ca8-7858-08db71b3a241
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C6.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7529
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,120 +102,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> From: Eduardo Valentin <eduval@amazon.com>
->
-> The patch adds a statistic to track
-> the minimum gradient (dT/dt) to the thermal zone
-> stats/ folder.
->
-> Samples:
->
-> $ echo 1000 > emul_temp
-> $ cat stats/min_gradient
-> 0
-> $ echo 2000 > emul_temp
-> $ echo 1000 > emul_temp
-> $ cat stats/min_gradient
-> -3460
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> Cc: linux-kernel@vger.kernel.org (open list)
->
-> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+Active mode for amd-pstate has shown enough success now that it makes sense
+to enable it by default on client systems.
 
-This can be easily folded into the previous patch IMO.
+This series introduces a new kernel configuration option to set the default
+policy for amd-pstate modes for a kernel.
 
-> ---
->  .../driver-api/thermal/sysfs-api.rst          |  1 +
->  drivers/thermal/thermal_sysfs.c               | 23 +++++++++++++++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> index 18140dbb1ce1..ed5e6ba4e0d7 100644
-> --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> @@ -358,6 +358,7 @@ Thermal zone device sys I/F, created once it's registered::
->      |---stats:                 Directory containing thermal zone device's stats
->      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
->      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
-> +    |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
->
->  Thermal cooling device sys I/F, created once it's registered::
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index aa28c1cae916..f89ec9a7e8c8 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -542,6 +542,7 @@ static void destroy_trip_attrs(struct thermal_zone_device *tz)
->  struct thermal_zone_device_stats {
->         spinlock_t lock; /* protects this struct */
->         s64 max_gradient;
-> +       s64 min_gradient;
->         ktime_t last_time;
->  };
->
-> @@ -569,6 +570,10 @@ static void temperature_stats_update(struct thermal_zone_device *tz)
->         /* update fastest temperature rise from our perspective */
->         if (cur_gradient > stats->max_gradient)
->                 stats->max_gradient = cur_gradient;
-> +
-> +       /* update fastest temperature decay from our perspective */
-> +       if (cur_gradient < stats->min_gradient)
-> +               stats->min_gradient = cur_gradient;
->  }
->
->  void thermal_zone_device_stats_update(struct thermal_zone_device *tz)
-> @@ -595,6 +600,21 @@ static ssize_t max_gradient_show(struct device *dev,
->         return ret;
->  }
->
-> +static ssize_t min_gradient_show(struct device *dev,
-> +                                struct device_attribute *attr, char *buf)
-> +{
-> +       struct thermal_zone_device *tz = to_thermal_zone(dev);
-> +       struct thermal_zone_device_stats *stats = tz->stats;
-> +       int ret;
-> +
-> +       spin_lock(&stats->lock);
-> +       temperature_stats_update(tz);
-> +       ret = snprintf(buf, PAGE_SIZE, "%lld\n", stats->min_gradient);
-> +       spin_unlock(&stats->lock);
-> +
-> +       return ret;
-> +}
-> +
->  static ssize_t
->  reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
->                      const char *buf, size_t count)
-> @@ -604,6 +624,7 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
->
->         spin_lock(&stats->lock);
->
-> +       stats->min_gradient = 0;
->         stats->max_gradient = 0;
->         stats->last_time = ktime_get();
->
-> @@ -612,10 +633,12 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
->         return count;
->  }
->
-> +static DEVICE_ATTR_RO(min_gradient);
->  static DEVICE_ATTR_RO(max_gradient);
->  static DEVICE_ATTR_WO(reset_tz_stats);
->
->  static struct attribute *thermal_zone_device_stats_attrs[] = {
-> +       &dev_attr_min_gradient.attr,
->         &dev_attr_max_gradient.attr,
->         &dev_attr_reset_tz_stats.attr,
->         NULL
-> --
-> 2.34.1
->
+Server systems will by identified by the PM preferred profile and still be
+set as disabled by default for now.
+
+v2->v3:
+ * Drop patch 4; Intel intentionally doesn't want intel-pstate on SOHO
+   server
+ * Move symbols from patch 1 into patch 2
+ * Add tags
+Mario Limonciello (3):
+  ACPI: CPPC: Add definition for undefined FADT preferred PM profile
+    value
+  cpufreq: amd-pstate: Set a fallback policy based on preferred_profile
+  cpufreq: amd-pstate: Add a kernel config option to set default mode
+
+ drivers/cpufreq/Kconfig.x86  |  17 ++++++
+ drivers/cpufreq/amd-pstate.c | 101 +++++++++++++++++++++++++----------
+ include/acpi/actbl.h         |   3 +-
+ include/linux/amd-pstate.h   |   4 +-
+ 4 files changed, 96 insertions(+), 29 deletions(-)
+
+-- 
+2.34.1
+
