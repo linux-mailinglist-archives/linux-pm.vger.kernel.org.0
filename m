@@ -2,60 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03617377A3
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 00:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A6A7377BA
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 01:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjFTWyC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Jun 2023 18:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S229740AbjFTXBy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Jun 2023 19:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjFTWxz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 18:53:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBF21703;
-        Tue, 20 Jun 2023 15:53:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AAC8611C3;
-        Tue, 20 Jun 2023 22:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7DFAFC433C0;
-        Tue, 20 Jun 2023 22:53:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687301633;
-        bh=18D5H1CVm5fG49x3b5x0COSDfPeJXztZr/SJmmS1t8U=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=NPeRBXgKLn7zz3VMdMWxTC/pO9pYLtOrxTfwSPMUf9qQgaAwV1ZHCJr+3TDK4sod/
-         McgH7cMWE5tI/eDrV03/IxWPTtfz4gHNkkhKEGW4JpT2lvqk4wviklkbU6b4LRVgnp
-         ICnjEZok4rp8+o1djS458KKPs4RQOU4jStAeSw+djo8IvN5tf6b9i8jRQFJ0/d9kXb
-         /liA6ReAmNbX6mpXdeayQEObL2i+DrRSup6mW1OpB4Q3KwlyaRPIwUQjSrncr8bRVA
-         ffIO8pS9Z5I5V0ZSl4yiPK0zLqjJUvhJelcf3r1ieFd1+WoY59H81YTpQ8m28AGmqG
-         DwhYX53TnOfJA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 60590C395D9;
-        Tue, 20 Jun 2023 22:53:53 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fix for v6.4-rc8
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0h7dfsyHq14pYkgWAq=chG6WWWEjU1fwe_7OCbyjKKVqA@mail.gmail.com>
-References: <CAJZ5v0h7dfsyHq14pYkgWAq=chG6WWWEjU1fwe_7OCbyjKKVqA@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0h7dfsyHq14pYkgWAq=chG6WWWEjU1fwe_7OCbyjKKVqA@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.4-rc8
-X-PR-Tracked-Commit-Id: 22db06337f590d01d79f60f181d8dfe5a9ef9085
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: e660abd551f1172e428b4e4003de887176a8a1fd
-Message-Id: <168730163338.29619.18364694365099157329.pr-tracker-bot@kernel.org>
-Date:   Tue, 20 Jun 2023 22:53:53 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S229490AbjFTXBx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Jun 2023 19:01:53 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1369DCD;
+        Tue, 20 Jun 2023 16:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687302113; x=1718838113;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3scmrHiO9Vv1GlTgKaHXVhjTGp+yDjWKCxzKgtQ9CBo=;
+  b=em8Bvp1+sR1/lj2BeIGdGBJ1MOZjKWAQKNULhedM3cFIx3QGZl6kHU9i
+   kXPP5nIhsJjHYxEFi1B5O2N+76JIEqsqEnW+7rgkq/fXlHjzXU49nIMTo
+   +AlRHnKh9fAj57T8U5qNUdS5KZpK2Lb9dvChrNZu7sO8UhTKYiu/8Twk/
+   nQANR2ZJHn/25ezcZN5KSxcixqNjw3e3WrlfG8ZssqP3Q1bRSCf6IyVx5
+   pzTf51mM8LvSb1br4SgGufMfvWfHYENUotx9F6JDzwi+p6IL9qI8d9C0h
+   WiQjfBdO4XobZhNFHMApU/s4H9cel/uDULcXupVVLPhai5JAn6Qm88qqQ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340347267"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="340347267"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:01:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="1044465303"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="1044465303"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga005.fm.intel.com with ESMTP; 20 Jun 2023 16:01:52 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 0/7] thermal: processor_thermal: Suport workload hint
+Date:   Tue, 20 Jun 2023 16:01:43 -0700
+Message-Id: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,15 +58,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Tue, 20 Jun 2023 18:12:57 +0200:
+Add support for Meteor Lake workload hints. Before adding this support,
+some reorganization and clean up is required.
+First four changes are for clean up and to reorganize code to add
+support for workload hint. The last patch adds a test program as part
+of self tests.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.4-rc8
+Srinivas Pandruvada (7):
+  thermal: int340x: processor_thermal: Move mailbox code to common
+    module
+  thermal: int340x: processor_thermal: Add interrupt configuration
+  thermal: int340x: processor_thermal: Use non MSI interrupts
+  thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
+    Meteor Lake
+  thermal: int340x: processor_thermal: Add workload type hint
+  thermal/drivers/int340x: Support workload hint interrupts
+  selftests/thermel/intel: Add test to read workload hint
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/e660abd551f1172e428b4e4003de887176a8a1fd
-
-Thank you!
+ .../driver-api/thermal/intel_dptf.rst         |  38 +++
+ .../thermal/intel/int340x_thermal/Makefile    |   2 +
+ .../processor_thermal_device.c                |  17 +-
+ .../processor_thermal_device.h                |  21 +-
+ .../processor_thermal_device_pci.c            |  76 ++++--
+ .../processor_thermal_device_pci_legacy.c     |   3 +-
+ .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
+ .../processor_thermal_wlt_hint.c              | 239 ++++++++++++++++++
+ .../processor_thermal_wlt_req.c               | 137 ++++++++++
+ .../testing/selftests/thermal/intel/Makefile  |  16 ++
+ .../thermal/intel/workload_hint_test.c        | 114 +++++++++
+ 11 files changed, 680 insertions(+), 162 deletions(-)
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_hint.c
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_req.c
+ create mode 100644 tools/testing/selftests/thermal/intel/Makefile
+ create mode 100644 tools/testing/selftests/thermal/intel/workload_hint_test.c
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.38.1
+
