@@ -2,53 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49935738636
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 16:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE45738651
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 16:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232624AbjFUOHx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 10:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
+        id S232657AbjFUOJi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 10:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjFUOHp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 10:07:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19AB1BD5
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 07:06:36 -0700 (PDT)
+        with ESMTP id S229898AbjFUOJ1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 10:09:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE871A1
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 07:08:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687356395;
+        s=mimecast20190719; t=1687356524;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TRSWaBirIMbqr4Co8ZfFUyVMNp/zcwwuITsVAzHUNt4=;
-        b=K3Vi5rO6aWL282W5On1myIuoZWYxkDv9MXD13SZExIRGWlZLZl5zlssGEfhG0yshtgtSqd
-        zK8DM/Y6YNyf0Qq0AbmO3izcRAj6DhWwex2GfvEsaHLhVj4gs1JP3i9E2O4W5dDTLz+BRT
-        6K14fXkYgevo7CNxXcCuSBMvGJRTpE4=
+        bh=+Q9msWaizyCAHka/QwGxLArVrojwbB6E5UYjjZaMbBE=;
+        b=CNXuMRlOKvE8hBIMyD6Dy77CLI+iiQOzv3tzxN/ctKfsbY8TeI2BR2Z8eD0yK/mFdpB4Ae
+        kPZoaDuHowveT+cJE9YkSQoTAkMSl1uzM5Urob2F0XSnjEzF0+zkdzUCGsltyIWka51l3d
+        IvHlhTTbTjpCYHKHXexg0gEXazDbba0=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-651-ikba25pFPVynWnHAEkub2Q-1; Wed, 21 Jun 2023 10:06:00 -0400
-X-MC-Unique: ikba25pFPVynWnHAEkub2Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+ us-mta-610-aN1_YF8kPm-a8NuBrtKb7g-1; Wed, 21 Jun 2023 10:08:39 -0400
+X-MC-Unique: aN1_YF8kPm-a8NuBrtKb7g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9B7811C16D88;
-        Wed, 21 Jun 2023 14:02:03 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B64F92835DF2;
+        Wed, 21 Jun 2023 14:05:07 +0000 (UTC)
 Received: from [10.22.17.140] (unknown [10.22.17.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F3617F41CE;
-        Wed, 21 Jun 2023 14:02:02 +0000 (UTC)
-Message-ID: <2cdb371d-7435-ff4f-c9c0-991371833ad1@redhat.com>
-Date:   Wed, 21 Jun 2023 10:02:02 -0400
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 20A1340C2063;
+        Wed, 21 Jun 2023 14:05:07 +0000 (UTC)
+Message-ID: <dcc515cd-d0cf-5a14-8b48-aa94770e50bd@redhat.com>
+Date:   Wed, 21 Jun 2023 10:05:06 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v2 1/5] x86/speculation: Provide a debugfs file to dump
- SPEC_CTRL MSRs
+Subject: Re: [PATCH v2 5/5] x86/idle: Disable IBRS entering mwait idle and
+ enable it on wakeup
 Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
@@ -58,18 +57,17 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         x86@kernel.org, linux-pm@vger.kernel.org,
         Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
 References: <20230620140625.1001886-1-longman@redhat.com>
- <20230620140625.1001886-2-longman@redhat.com>
- <20230621074105.GE2046280@hirez.programming.kicks-ass.net>
- <20230621082442.GCZJKzyjqRPMAnsWKZ@fat_crate.local>
+ <20230620140625.1001886-6-longman@redhat.com>
+ <20230621073212.GC2046280@hirez.programming.kicks-ass.net>
 From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230621082442.GCZJKzyjqRPMAnsWKZ@fat_crate.local>
+In-Reply-To: <20230621073212.GC2046280@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,26 +75,17 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/21/23 03:32, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 10:06:25AM -0400, Waiman Long wrote:
+>> When a user sets "intel_idle.max_cstate=0", it will disable
+>> intel_idle and fall back to acpi_idle instead. The acpi_idle code
+>> will then call mwait_idle_with_hints() to enter idle state. So when
+>> X86_FEATURE_KERNEL_IBRS is enabled, it is necessary to disable IBRS
+>> within mwait_idle_with_hints() when IRQ was disabled to avoid performance
+>> degradation on silbing thread running user workload.
+> Urgh, no, just no. This is nasty.
 
-On 6/21/23 04:24, Borislav Petkov wrote:
-> On Wed, Jun 21, 2023 at 09:41:05AM +0200, Peter Zijlstra wrote:
->> On Tue, Jun 20, 2023 at 10:06:21AM -0400, Waiman Long wrote:
->>> Sometimes it is useful to know the states the SPEC_CTRL MSRs to see what
->>> mitigations are enabled at run time. Provide a new x86/spec_ctrl_msrs
->>> debugfs file to dump the cached versions of the current SPEC_CTRL MSRs.
->>>
->> Pff, clearly I can't even read email anymore..
->>
->> We don't do this for any of the other MSRs, so why start now?
-> Hell no.
->
-> There's /sys/devices/system/cpu/vulnerabilities/ for that.
->
-> We are abstracting MSRs away from APIs - not do the backwards thing.
->
-OK, as I have said. This is not central to the main purpose of this 
-patch series. It is mostly there for verification purpose. I can 
-certainly take this out.
+OK, will take this out in the next version.
 
 Cheers,
 Longman
