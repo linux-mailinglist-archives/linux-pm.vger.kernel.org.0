@@ -2,159 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6D3738CF7
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 19:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BD8738D45
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 19:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjFURVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 13:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
+        id S230172AbjFURiR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 21 Jun 2023 13:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbjFURVa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 13:21:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909CF19AE;
-        Wed, 21 Jun 2023 10:21:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D1B361631;
-        Wed, 21 Jun 2023 17:21:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6411DC433C8;
-        Wed, 21 Jun 2023 17:21:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687368088;
-        bh=ImI/EoOrplWaRitID8FmoePKefv5hlzrqc5MOdwy1+c=;
-        h=From:To:Cc:Subject:Date:From;
-        b=db4bX4R2saYrT0t9pYQ2VPflY/P4nPrUt63Lg+XYCcbmQ3r0QOeFAh8McXU4q1+0a
-         arOzARG0xkowTLPsVf1KMFJ+7zZDINKa64lKRJDdCzXw7zZGB4yGT/ITWmphdSBNr2
-         tCFABQVDS7VpttHYK0yQOOhD9/iFBdrrCkTnUUb+x+peUUNcJ3YPojY3d9pHPnd+FA
-         KMY3cb+ckH7LPHuoth3uZCJ1lCKPBDPvGe6NlnIKxKAqp/EwRqPzeyhSCAmFFNqVX4
-         BinDAzQUDizS3fKukM0fVkBoTxNgloJgBznkHiZkf+8qEOV07U+ThzaJxh1gmycyzB
-         BpukG98j7U6nQ==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.5
-Date:   Wed, 21 Jun 2023 20:21:21 +0300
-Message-Id: <20230621172121.2049612-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229657AbjFURiQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 13:38:16 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAC2F1;
+        Wed, 21 Jun 2023 10:38:15 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-94ea38c90ccso180573366b.1;
+        Wed, 21 Jun 2023 10:38:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687369094; x=1689961094;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=17zx2MlePPMg0vLEZ3N7mfSj+vherVFzEhZFZJa0v8I=;
+        b=TOyaRRYjE1A37slgt+fSZ39QAttnMka4QXqxi3ZMNwE7gKHqMky592GHGwqshN2jC/
+         GhpOQ2L/nCPbrvl8rgZrpTxqzLd7NaO34EHpYPDcgcLi3E91bN/Ihb3Md8yLIVZklG7L
+         AdhVeCE1xqHc8rHMvyvsLrJTW+9k3Q+RsL8MMFxzRCMXrHd9hr+fC6hITaNyNxDLKgpQ
+         xV4sW2Rkz5uZPUZNlQu1XscdIOf6WHHdPM6ykwcSjtwKWK4H7SlNYFqR1jSq+s8f1xdf
+         yWXW4s6FMfK1r/QVlRrqo7iRSekwZ4OPj2geJF6UKnMR0uf8g/B7TlQS2YTmDRbZMOqn
+         YCTA==
+X-Gm-Message-State: AC+VfDwdt+LEPnrkm40/FUpCaOGsvQgy2tWzZglk721Y3OO8Y8c1DwS5
+        pQ+kEZ5MACA0Pk6PQ+9Zt2MZ7vluRpSMdtBZpEqQchqJ
+X-Google-Smtp-Source: ACHHUZ6Bm6hG15S7LTyOeV56HCdJoMkz9bMDRv5pgE+Nr4oKuN9NHhATCUA2In3XJopHhRtwt6YTahQA689kMhA+jU0=
+X-Received: by 2002:a17:906:64cc:b0:987:115d:ba06 with SMTP id
+ p12-20020a17090664cc00b00987115dba06mr11378234ejn.4.1687369093768; Wed, 21
+ Jun 2023 10:38:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230620172433.21325-1-mario.limonciello@amd.com>
+In-Reply-To: <20230620172433.21325-1-mario.limonciello@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 21 Jun 2023 19:38:02 +0200
+Message-ID: <CAJZ5v0hjrKS7Cb+wJu9cP8VV9DggUR+2iZ4DheFOSd0bRx-=jw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] Enable amd-pstate active mode by default
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Huang Rui <ray.huang@amd.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Gautham Ranjal Shenoy <gautham.shenoy@amd.com>,
+        Wyes Karny <Wyes.Karny@amd.com>,
+        Perry Yuan <perry.yuan@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+On Tue, Jun 20, 2023 at 7:27 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> Active mode for amd-pstate has shown enough success now that it makes sense
+> to enable it by default on client systems.
+>
+> This series introduces a new kernel configuration option to set the default
+> policy for amd-pstate modes for a kernel.
+>
+> Server systems will by identified by the PM preferred profile and still be
+> set as disabled by default for now.
+>
+> v2->v3:
+>  * Drop patch 4; Intel intentionally doesn't want intel-pstate on SOHO
+>    server
+>  * Move symbols from patch 1 into patch 2
+>  * Add tags
+> Mario Limonciello (3):
+>   ACPI: CPPC: Add definition for undefined FADT preferred PM profile
+>     value
+>   cpufreq: amd-pstate: Set a fallback policy based on preferred_profile
+>   cpufreq: amd-pstate: Add a kernel config option to set default mode
+>
+>  drivers/cpufreq/Kconfig.x86  |  17 ++++++
+>  drivers/cpufreq/amd-pstate.c | 101 +++++++++++++++++++++++++----------
+>  include/acpi/actbl.h         |   3 +-
+>  include/linux/amd-pstate.h   |   4 +-
+>  4 files changed, 96 insertions(+), 29 deletions(-)
+>
+> --
 
-This is the pull request with interconnect changes for the 6.5-rc1 merge
-window. In contains a mix of core and driver changes. The details are in
-the signed tag.
-
-All patches have been in linux-next during last 10+ days. Please pull into
-char-misc-next when possible.
-
-Thanks,
-Georgi
-
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.5-rc1
-
-for you to fetch changes up to 1400725e45152a62fa43f8275e6bee99d584c967:
-
-  Merge branch 'icc-qos' into icc-next (2023-06-10 10:43:50 +0300)
-
-----------------------------------------------------------------
-interconnect changes for 6.5
-
-This pull request contains the interconnect changes for the 6.5-rc1 merge
-window which is a mix of core and driver changes with the following highlights:
-
-- Support for configuring QoS on the Qualcomm's RPM-based platforms, that
-  required special handling of some interface (non-scaling) clocks.
-- Support for clock-based interconnect providers for cases when clock
-  corresponds to bus bandwidth. This is used to enable CPU cluster bandwidth
-  scaling on MSM8996 platforms. One patch is touching a file in the clock
-  subsystem that has been acked by the maintainer.
-
-Core changes:
-	interconnect: add clk-based icc provider support
-	interconnect: icc-clk: fix modular build
-	interconnect: drop unused icc_get() interface
-
-Driver changes:
-	interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
-	interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
-	interconnect: qcom: rpm: Drop unused parameters
-	interconnect: qcom: rpm: Set QoS registers only once
-	interconnect: qcom: rpm: Handle interface clocks
-	interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
-	interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
-	interconnect: qcom: msm8996: Promote to core_initcall
-	interconnect: qcom: rpm: allocate enough data in probe()
-	dt-bindings: interconnect/msm8996-cbf: add defines to be used by CBF
-	clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
-	dt-bindings: interconnect: fsl,imx8m-noc: drop unneeded quotes
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Dan Carpenter (1):
-      interconnect: qcom: rpm: allocate enough data in probe()
-
-Dmitry Baryshkov (4):
-      dt-bindings: interconnect/msm8996-cbf: add defines to be used by CBF
-      interconnect: add clk-based icc provider support
-      clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
-      interconnect: icc-clk: fix modular build
-
-Georgi Djakov (2):
-      Merge branch 'icc-cbf' into icc-next
-      Merge branch 'icc-qos' into icc-next
-
-Johan Hovold (1):
-      interconnect: drop unused icc_get() interface
-
-Konrad Dybcio (8):
-      interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
-      interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
-      interconnect: qcom: rpm: Drop unused parameters
-      interconnect: qcom: rpm: Set QoS registers only once
-      interconnect: qcom: rpm: Handle interface clocks
-      interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
-      interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
-      interconnect: qcom: msm8996: Promote to core_initcall
-
-Krzysztof Kozlowski (1):
-      dt-bindings: interconnect: fsl,imx8m-noc: drop unneeded quotes
-
- .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         |   2 +-
- drivers/clk/qcom/Kconfig                                        |   1 +
- drivers/clk/qcom/clk-cbf-8996.c                                 |  60 ++-
- drivers/interconnect/Kconfig                                    |   6 +
- drivers/interconnect/Makefile                                   |   2 +
- drivers/interconnect/core.c                                     |  52 +--
- drivers/interconnect/icc-clk.c                                  | 174 ++++++++
- drivers/interconnect/qcom/icc-rpm.c                             | 112 ++---
- drivers/interconnect/qcom/icc-rpm.h                             |  22 +-
- drivers/interconnect/qcom/msm8996.c                             |  35 +-
- drivers/interconnect/qcom/sdm660.c                              |  17 +-
- include/dt-bindings/interconnect/qcom,msm8996-cbf.h             |  12 +
- include/linux/interconnect-clk.h                                |  22 +
- include/linux/interconnect.h                                    |   8 -
- 14 files changed, 382 insertions(+), 143 deletions(-)
- create mode 100644 drivers/interconnect/icc-clk.c
- create mode 100644 include/dt-bindings/interconnect/qcom,msm8996-cbf.h
- create mode 100644 include/linux/interconnect-clk.h
+All applied as 6.5 material, thanks!
