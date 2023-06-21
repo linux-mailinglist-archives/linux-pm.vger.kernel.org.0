@@ -2,58 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6570F738A0A
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 17:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A930F738A8D
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 18:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231833AbjFUPph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 11:45:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S229840AbjFUQMd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 12:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjFUPpg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 11:45:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE8691;
-        Wed, 21 Jun 2023 08:45:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687362334; x=1718898334;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fShmEjl8Wh4baxLKMYHpBk3MTQgN6MNwn0v6pEROKsg=;
-  b=koFfURn08Rt6aECoS9uF0FYElM8830jbBfaxeIxKaWrndfA0y63/SA8Y
-   YYVVvhCkyI6iBDiccGsnJ+yM51u8cC65Fq6zkiKpYAtMcBMS4cN2ojdHB
-   aA/LRN2Vwrgpx0bKL17Rp4MsmGsHNpkRGTQ2GQ5ldhkvR+mdxBA2xYu4E
-   y6mDIkeT8I5K+p+gk+A5372GEhxeoDhYPD7gZ+9ZIopk16oqHZtAA+1rv
-   0AGcQq9Ef+lJpspv2eaQqvCHGxAUq6aQkKvSY8E3i92qmeZKn1bf8Gfxm
-   A0wYDIqb62qZxQB4+6HzDaoxWzC9sEwZ1Y1uLjEQktfHrZoI2v0cCxSil
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="423876538"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="423876538"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:45:10 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="748744954"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="748744954"
-Received: from lfrecald-mobl2.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.26.147])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:45:10 -0700
-Message-ID: <13fbb134dda72f979b9a02e6abec12ebac18aef8.camel@linux.intel.com>
-Subject: Re: [PATCH 0/7] thermal: processor_thermal: Suport workload hint
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 21 Jun 2023 08:45:10 -0700
-In-Reply-To: <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
-References: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S231201AbjFUQMc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 12:12:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8741981;
+        Wed, 21 Jun 2023 09:12:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEE35615D4;
+        Wed, 21 Jun 2023 16:12:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F9BC433C8;
+        Wed, 21 Jun 2023 16:12:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687363946;
+        bh=F6AWTtJIxksfHftPRfXL8xSdr4W3uoaros+jmqwGdq0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HYwWn4Yej83L0Ozvd2Lkm4OKqpaUV5ILjyBa57r0tigAcNRaod1vQaTBv/5Qu2vdV
+         H2KuOAbcz4v1xfjU0S6nXg+WcMPr5N6pPDsOnWotoM2yTqAqIe7IaXryPbI3S5Keg6
+         g+OiQGHvh2t07cRjUfgsT14zlyghI6hr3XTAU2wvaT3qXHHXCVrI5tBmWwuw1wCw2R
+         xlJwXqIsBWcO9kvBOZXWFRLFXClJ/S3e/2Qf2fqG5RJZXaJeaCut3vUen9xmzrON4h
+         Fl6uKmH52wx+Sin+NrmApBVm+w1U3GrTVv5D05qCbDIunnd8Bxi+W/OeyYBPCmgbDO
+         6TtTVB41yCT9Q==
+Date:   Wed, 21 Jun 2023 17:12:20 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-rockchip@lists.infradead.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        kernel@pengutronix.de, Vincent Legoll <vincent.legoll@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 22/26] dt-bindings: devfreq: event: rockchip,dfi: Add
+ rk3588 support
+Message-ID: <20230621-poach-amniotic-2eeb858356c8@spud>
+References: <20230616062101.601837-1-s.hauer@pengutronix.de>
+ <20230616062101.601837-23-s.hauer@pengutronix.de>
+ <20230616-swimwear-prewar-f9dce761d2ec@spud>
+ <20230621074159.GN18491@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qqJ18BUnkd3ehpaa"
+Content-Disposition: inline
+In-Reply-To: <20230621074159.GN18491@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,57 +71,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2023-06-21 at 16:58 +0200, Rafael J. Wysocki wrote:
-> On Wed, Jun 21, 2023 at 1:01 AM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > Add support for Meteor Lake workload hints. Before adding this
-> > support,
-> > some reorganization and clean up is required.
-> > First four changes are for clean up and to reorganize code to add
-> > support for workload hint. The last patch adds a test program as
-> > part
-> > of self tests.
-> > 
-> > Srinivas Pandruvada (7):
-> >   thermal: int340x: processor_thermal: Move mailbox code to common
-> >     module
-> >   thermal: int340x: processor_thermal: Add interrupt configuration
-> >   thermal: int340x: processor_thermal: Use non MSI interrupts
-> >   thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
-> >     Meteor Lake
-> >   thermal: int340x: processor_thermal: Add workload type hint
-> >   thermal/drivers/int340x: Support workload hint interrupts
-> >   selftests/thermel/intel: Add test to read workload hint
-> > 
-> >  .../driver-api/thermal/intel_dptf.rst         |  38 +++
-> >  .../thermal/intel/int340x_thermal/Makefile    |   2 +
-> >  .../processor_thermal_device.c                |  17 +-
-> >  .../processor_thermal_device.h                |  21 +-
-> >  .../processor_thermal_device_pci.c            |  76 ++++--
-> >  .../processor_thermal_device_pci_legacy.c     |   3 +-
-> >  .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
-> >  .../processor_thermal_wlt_hint.c              | 239
-> > ++++++++++++++++++
-> >  .../processor_thermal_wlt_req.c               | 137 ++++++++++
-> >  .../testing/selftests/thermal/intel/Makefile  |  16 ++
-> >  .../thermal/intel/workload_hint_test.c        | 114 +++++++++
-> >  11 files changed, 680 insertions(+), 162 deletions(-)
-> >  create mode 100644
-> > drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_hint.c
-> >  create mode 100644
-> > drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_req.c
-> >  create mode 100644 tools/testing/selftests/thermal/intel/Makefile
-> >  create mode 100644
-> > tools/testing/selftests/thermal/intel/workload_hint_test.c
-> > 
-> > --
-> 
-> Because of the timing of the first posting, I'm going to treat this
-> series as 6.6 material.
-That is fine. Just review is important, so that it can be back ported
-to Chrome kernel.
 
-Thanks,
-Srinivas
+--qqJ18BUnkd3ehpaa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jun 21, 2023 at 09:41:59AM +0200, Sascha Hauer wrote:
+> On Fri, Jun 16, 2023 at 08:05:33PM +0100, Conor Dooley wrote:
+> > On Fri, Jun 16, 2023 at 08:20:57AM +0200, Sascha Hauer wrote:
+> > > This adds rockchip,rk3588-dfi to the list of compatibles. Unlike eali=
+er
+> > > SoCs the rk3588 has four interrupts (one for each channel) instead of
+> > > only one, so increase the number of allowed interrupts to four.
+> > >=20
+> > > Link: https://lore.kernel.org/r/20230524083153.2046084-23-s.hauer@pen=
+gutronix.de
+> >=20
+> > It's unclear what the point of this link is.
+>=20
+> The link was added automatically by b4. I re-applied the series from the
+> last one I sent just to be sure that I base my work for the new series
+> on the one I sent last time. I didn't remember that b4 adds these links,
+> I should have disabled that option.
+
+Ah, I see.
+
+> > My comment still stands about whether only the new compatible should be
+> > permitted to have more than one interrupt. I don't recall a response to
+> > that question on the last version.
+>=20
+> My personal take on this is that such additions make the bindings more
+> readable by machines, but less by humans. That's why I don't have enough
+> intrinsic motivation to make this change.
+
+> Anyway, if you insist then I'll make it for the next round.
+
+No, I don't insist. I just wanted to not be ignored.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--qqJ18BUnkd3ehpaa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJMhZAAKCRB4tDGHoIJi
+0glxAP95A4qpgG0Kx3VK40STEaGwGLEnpx8i+Bqq6PpR06Bp+AD/VUNaT9byFCmy
+eld/0kBNSGMr59V6XwdGhIG5VMo5ZQk=
+=FJnF
+-----END PGP SIGNATURE-----
+
+--qqJ18BUnkd3ehpaa--
