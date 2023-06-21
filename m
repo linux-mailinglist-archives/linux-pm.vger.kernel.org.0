@@ -2,104 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404AC738BAC
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 18:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6D3738CF7
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 19:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbjFUQkg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 12:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S230235AbjFURVh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 13:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbjFUQjz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 12:39:55 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092302696
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 09:39:31 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-988aefaa44eso527307466b.2
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 09:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687365568; x=1689957568;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5y48c1wpF6+Mt2hNg3vBn4NH1hPD+Xn2/odxxkX/bS4=;
-        b=myEgp1LtAS76zbgSyQbj/EadEI1S6v7AhAdFppSTkzQGol8cFF9Yi6WqvHyFsnqAMb
-         2+9/TDpSREMD1KYMvTj1wI1VxSm1AByydiU0Qwet03iktVYztjke1sdQetFeB8y0C0Zl
-         6kk/0ozUP8KHYofh0hKQiOMwSJcX9K3cRA7cuPZEModdREvksBMTtwh1UVi37y184BCM
-         ubcWgWBrkbS6AuBd1EfFKuv91UGp5rSLXGfWpPtTXGhF75ArGbj4E2Om5oYznBeQ5+vd
-         95d2z9Qn3Go2TBqk/eFY91f2nRrdIw/tPZs2Qw1FAIquFDF+CjVCfFAPvsp5hxPTXhhj
-         Ieyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687365568; x=1689957568;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5y48c1wpF6+Mt2hNg3vBn4NH1hPD+Xn2/odxxkX/bS4=;
-        b=HjWuhXZFGgSLFE05BaEXYDaTmVCHuUB7aGuCOGF5l1+OOJ9F31nNN2OpDD/DWvkBQ8
-         xZO66UC/YvTG4JdWYKKQoDAY8uOrvCOUOUa7+54eAxri7d8J6wBPQBwaLKD3qPBXrNjD
-         dxi6CVNAqwzR8J8UHC/f7ICZGBD6a23YBNM4HYnn3AnMaBCAM82ywD2la3D1iGKyJdRj
-         s+wqISpiPR6jCQDdt0WuPjey94ktQjzMBT/Eryj9sjtsE8WLbodPCI266qRTqXU4eSHL
-         awLXiEmVKWTJtJw1BNg2zQJRwIaEBGpmQmGRUOVDpPIImyLPlrJ1gDX9GENS0v0vc1NL
-         fvDg==
-X-Gm-Message-State: AC+VfDygqU8to5X6XWMfZTN0MH/RAGLRjp81eeM2OogQlIPmc0DOrLSP
-        FBkWleML9CwrAm1sxU6hLHytUw==
-X-Google-Smtp-Source: ACHHUZ6qpdEWlOv74pmH4mmnpmMJfoU5Nu2hjjfpNN7zraQ14UmDv0ENsrB8eBMs/eimeAmgY/1XwA==
-X-Received: by 2002:a17:907:7ba4:b0:977:ecff:3367 with SMTP id ne36-20020a1709077ba400b00977ecff3367mr16818253ejc.40.1687365568223;
-        Wed, 21 Jun 2023 09:39:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090670c400b00988aff89806sm3473027ejk.14.2023.06.21.09.39.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 09:39:27 -0700 (PDT)
-Message-ID: <aa5c6184-4b64-4dfb-4d3c-93d44cbfd11e@linaro.org>
-Date:   Wed, 21 Jun 2023 18:39:26 +0200
+        with ESMTP id S230445AbjFURVa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 13:21:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909CF19AE;
+        Wed, 21 Jun 2023 10:21:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D1B361631;
+        Wed, 21 Jun 2023 17:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6411DC433C8;
+        Wed, 21 Jun 2023 17:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687368088;
+        bh=ImI/EoOrplWaRitID8FmoePKefv5hlzrqc5MOdwy1+c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=db4bX4R2saYrT0t9pYQ2VPflY/P4nPrUt63Lg+XYCcbmQ3r0QOeFAh8McXU4q1+0a
+         arOzARG0xkowTLPsVf1KMFJ+7zZDINKa64lKRJDdCzXw7zZGB4yGT/ITWmphdSBNr2
+         tCFABQVDS7VpttHYK0yQOOhD9/iFBdrrCkTnUUb+x+peUUNcJ3YPojY3d9pHPnd+FA
+         KMY3cb+ckH7LPHuoth3uZCJ1lCKPBDPvGe6NlnIKxKAqp/EwRqPzeyhSCAmFFNqVX4
+         BinDAzQUDizS3fKukM0fVkBoTxNgloJgBznkHiZkf+8qEOV07U+ThzaJxh1gmycyzB
+         BpukG98j7U6nQ==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 6.5
+Date:   Wed, 21 Jun 2023 20:21:21 +0300
+Message-Id: <20230621172121.2049612-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] power: supply: Introduce MM8013 fuel gauge driver
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
- <20230621-topic-mm8013-v1-3-4407c6260053@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621-topic-mm8013-v1-3-4407c6260053@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/06/2023 17:39, Konrad Dybcio wrote:
-> Add a driver for the Mitsumi MM8013 fuel gauge. The driver is a vastly
-> cleaned up and improved version of the one that shipped in some obscure
-> Lenovo downstream kernel [1], with some register definitions borrowed from
-> ChromeOS EC platform code [2].
-> 
+Hello Greg,
 
-...
+This is the pull request with interconnect changes for the 6.5-rc1 merge
+window. In contains a mix of core and driver changes. The details are in
+the signed tag.
 
-> +
-> +static struct i2c_driver mm8013_i2c_driver = {
-> +	.probe = mm8013_probe,
-> +	.id_table = mm8013_id_table,
-> +	.driver = {
-> +		.name = "mm8013",
-> +		.owner = THIS_MODULE,
+All patches have been in linux-next during last 10+ days. Please pull into
+char-misc-next when possible.
 
-Drop owner.
+Thanks,
+Georgi
 
-Best regards,
-Krzysztof
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.5-rc1
+
+for you to fetch changes up to 1400725e45152a62fa43f8275e6bee99d584c967:
+
+  Merge branch 'icc-qos' into icc-next (2023-06-10 10:43:50 +0300)
+
+----------------------------------------------------------------
+interconnect changes for 6.5
+
+This pull request contains the interconnect changes for the 6.5-rc1 merge
+window which is a mix of core and driver changes with the following highlights:
+
+- Support for configuring QoS on the Qualcomm's RPM-based platforms, that
+  required special handling of some interface (non-scaling) clocks.
+- Support for clock-based interconnect providers for cases when clock
+  corresponds to bus bandwidth. This is used to enable CPU cluster bandwidth
+  scaling on MSM8996 platforms. One patch is touching a file in the clock
+  subsystem that has been acked by the maintainer.
+
+Core changes:
+	interconnect: add clk-based icc provider support
+	interconnect: icc-clk: fix modular build
+	interconnect: drop unused icc_get() interface
+
+Driver changes:
+	interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+	interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
+	interconnect: qcom: rpm: Drop unused parameters
+	interconnect: qcom: rpm: Set QoS registers only once
+	interconnect: qcom: rpm: Handle interface clocks
+	interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
+	interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
+	interconnect: qcom: msm8996: Promote to core_initcall
+	interconnect: qcom: rpm: allocate enough data in probe()
+	dt-bindings: interconnect/msm8996-cbf: add defines to be used by CBF
+	clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
+	dt-bindings: interconnect: fsl,imx8m-noc: drop unneeded quotes
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      interconnect: qcom: rpm: allocate enough data in probe()
+
+Dmitry Baryshkov (4):
+      dt-bindings: interconnect/msm8996-cbf: add defines to be used by CBF
+      interconnect: add clk-based icc provider support
+      clk: qcom: cbf-msm8996: scale CBF clock according to the CPUfreq
+      interconnect: icc-clk: fix modular build
+
+Georgi Djakov (2):
+      Merge branch 'icc-cbf' into icc-next
+      Merge branch 'icc-qos' into icc-next
+
+Johan Hovold (1):
+      interconnect: drop unused icc_get() interface
+
+Konrad Dybcio (8):
+      interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+      interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
+      interconnect: qcom: rpm: Drop unused parameters
+      interconnect: qcom: rpm: Set QoS registers only once
+      interconnect: qcom: rpm: Handle interface clocks
+      interconnect: qcom: icc-rpm: Enforce 2 or 0 bus clocks
+      interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
+      interconnect: qcom: msm8996: Promote to core_initcall
+
+Krzysztof Kozlowski (1):
+      dt-bindings: interconnect: fsl,imx8m-noc: drop unneeded quotes
+
+ .../devicetree/bindings/interconnect/fsl,imx8m-noc.yaml         |   2 +-
+ drivers/clk/qcom/Kconfig                                        |   1 +
+ drivers/clk/qcom/clk-cbf-8996.c                                 |  60 ++-
+ drivers/interconnect/Kconfig                                    |   6 +
+ drivers/interconnect/Makefile                                   |   2 +
+ drivers/interconnect/core.c                                     |  52 +--
+ drivers/interconnect/icc-clk.c                                  | 174 ++++++++
+ drivers/interconnect/qcom/icc-rpm.c                             | 112 ++---
+ drivers/interconnect/qcom/icc-rpm.h                             |  22 +-
+ drivers/interconnect/qcom/msm8996.c                             |  35 +-
+ drivers/interconnect/qcom/sdm660.c                              |  17 +-
+ include/dt-bindings/interconnect/qcom,msm8996-cbf.h             |  12 +
+ include/linux/interconnect-clk.h                                |  22 +
+ include/linux/interconnect.h                                    |   8 -
+ 14 files changed, 382 insertions(+), 143 deletions(-)
+ create mode 100644 drivers/interconnect/icc-clk.c
+ create mode 100644 include/dt-bindings/interconnect/qcom,msm8996-cbf.h
+ create mode 100644 include/linux/interconnect-clk.h
