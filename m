@@ -2,127 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20394738726
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 16:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23952738742
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 16:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjFUOgY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 10:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
+        id S230369AbjFUOk1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 10:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjFUOgW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 10:36:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A421BC1;
-        Wed, 21 Jun 2023 07:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XF6WLknEk00s0CGB8SGhE9Z7BuDNsIowtmxtGqyuqs8=; b=Wklw+5s3Dy3I7wKwZAAgPkPhsg
-        sDuWCKE8eWay2uz6IPjhYpzDmX37GmUXx0To0MUxRBRMTnpGDlwfF6vdrApfKJ3VJi7AZbjyVwLtg
-        4igRqurnGpt5927uBDUa7PGOy9EG8kXRILIop2ZL252dIcblNgre9nYNET4VQkEOEr5y76PG/f5wg
-        KXrkkIpMsVrrwjYVS/RB3WuOcRtrn52ZyNzYLmXBK85qeqbMNi2YYKiBNmpBwY4KwW5ivMDfIBX+n
-        yo4MtAms6fa8bjWBN1ysZr/F05PXH2rRjmAd2qXbQpbKuvka+ZYr7zU3DjA2j77Tuw2GVnTFrYr/D
-        HW0WCLnQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qBywF-00ERUK-ML; Wed, 21 Jun 2023 14:36:03 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C2AAF3002F0;
-        Wed, 21 Jun 2023 16:36:02 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A10AE2130B4A4; Wed, 21 Jun 2023 16:36:02 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 16:36:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-Subject: Re: [PATCH v2 2/5] x86/idle: Disable IBRS when cpu is offline
-Message-ID: <20230621143602.GI2053369@hirez.programming.kicks-ass.net>
-References: <20230620140625.1001886-1-longman@redhat.com>
- <20230620140625.1001886-3-longman@redhat.com>
- <20230621072313.GA2046280@hirez.programming.kicks-ass.net>
- <7f2424df-1846-6c38-e446-b3d5aa693ecd@redhat.com>
+        with ESMTP id S229903AbjFUOk0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 10:40:26 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EC71706
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 07:40:24 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f866a3d8e4so6277943e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 07:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687358423; x=1689950423;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2ZxKH/zYUyI3Fsx259m0wKdghaf8v8UuN2CsSCojAY=;
+        b=XjrdzfFkuf4HVso51RDn3gGgScuQaf3nHVrfPPpb8Xveh/wYdDQliziltCfOK5yw9I
+         vQQ4Ww4xfPaROY9UmCwZmikI6IXEbx6O9mQ1WDXD/ZseF+yZH5acwzxFoo0r2+Llmu4n
+         mzg5O9TjnZUz6eLWAczaeEkW8fA6mVRObeuNOBzY9MqWDBYeg6HCUzb7/t43xFtUQ5ja
+         ffa9/lOntyadCiPCa/J+yA1UFq8q8cXZHGsW26KX2CmCzX9wvoFhLAxVLiIvvFSXpKBs
+         DDtD4ofIsKAAIv+Q9ibULUbRNiNI7qW66ihY3JauN9BFJvfI5rpJoeMi95/N+ILWi0gL
+         zV9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687358423; x=1689950423;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f2ZxKH/zYUyI3Fsx259m0wKdghaf8v8UuN2CsSCojAY=;
+        b=GleaEOk30d99slnsDSFiJ9LIW7/yMb9k6ctIJvuJDSqrVthQqOEwOYPjQJ6pSJ+Bz9
+         pThSyJsmiL6K3rhTB3iDilr/pC5rLMnINnpVqqZPpMseaGlAu89TEBNeby48ankuSve8
+         xbjvBx0lGOf6Q35GtQNdmpgRk+HgdfwwJJbq05o0ZONz3nhr6NJBXpmFPowrgGBj2ysf
+         rXSQtcCTeXHZRxI86ukQ34wOLVbEOmwAw5yT4muySCcRp8F/FMxGdRhNYf7RP+2sTlqp
+         McLWmRc4Rzt+d6D6qwcRiRyRuU/XGGDoLrLz6QxGM1FyumOC/n1icrw/kR288zgatbsj
+         IKpA==
+X-Gm-Message-State: AC+VfDzZUg0GTJ3rMz8p4blVYlKpT0Eo+JAzqKf4TbET/LVcYPQyjQuo
+        YzvxcyfrJlHAkg2EK9DgbEaP+A==
+X-Google-Smtp-Source: ACHHUZ55sQz7tTRRQTIxG8rd38eQ5i49fPDzAYmbaSloiQvAWYhkbcIQm8DDi3G6dFFc5XocywuLtw==
+X-Received: by 2002:a19:5619:0:b0:4f8:6b7f:c6d6 with SMTP id k25-20020a195619000000b004f86b7fc6d6mr6434056lfb.48.1687358422922;
+        Wed, 21 Jun 2023 07:40:22 -0700 (PDT)
+Received: from hackbox.lan ([82.79.124.17])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056402344d00b0051879c4f598sm2689505edc.66.2023.06.21.07.40.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 07:40:22 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [RFC PATCH v5 0/4] PM: domain: Support skiping disabling unused domains until sync state
+Date:   Wed, 21 Jun 2023 17:40:15 +0300
+Message-Id: <20230621144019.3219858-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7f2424df-1846-6c38-e446-b3d5aa693ecd@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:59:52AM -0400, Waiman Long wrote:
-> 
-> On 6/21/23 03:23, Peter Zijlstra wrote:
-> > On Tue, Jun 20, 2023 at 10:06:22AM -0400, Waiman Long wrote:
-> > > Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
-> > > disables IBRS when the CPU enters long idle. However, when a CPU becomes
-> > > offline, the IBRS bit is still set when X86_FEATURE_KERNEL_IBRS is
-> > > enabled. That will impact the performance of a sibling CPU. Mitigate
-> > > this performance impact by clearing all the mitigation bits in SPEC_CTRL
-> > > MSR when offline and restoring the value of the MSR when it becomes
-> > > online again.
-> > > 
-> > > Signed-off-by: Waiman Long <longman@redhat.com>
-> > > ---
-> > >   arch/x86/kernel/smpboot.c | 13 +++++++++++++
-> > >   1 file changed, 13 insertions(+)
-> > > 
-> > > diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-> > > index 352f0ce1ece4..5ff82fef413c 100644
-> > > --- a/arch/x86/kernel/smpboot.c
-> > > +++ b/arch/x86/kernel/smpboot.c
-> > > @@ -84,6 +84,7 @@
-> > >   #include <asm/hw_irq.h>
-> > >   #include <asm/stackprotector.h>
-> > >   #include <asm/sev.h>
-> > > +#include <asm/nospec-branch.h>
-> > >   /* representing HT siblings of each logical CPU */
-> > >   DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
-> > > @@ -1838,12 +1839,24 @@ void __noreturn hlt_play_dead(void)
-> > >   void native_play_dead(void)
-> > >   {
-> > > +	u64 spec_ctrl = spec_ctrl_current();
-> > > +
-> > > +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
-> > > +		this_cpu_write(x86_spec_ctrl_current, 0);
-> > > +		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-> > > +	}
-> > > +
-> > >   	play_dead_common();
-> > >   	tboot_shutdown(TB_SHUTDOWN_WFS);
-> > >   	mwait_play_dead();
-> > >   	if (cpuidle_play_dead())
-> > >   		hlt_play_dead();
-> > > +
-> > > +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
-> > > +		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-> > > +		this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
-> > > +	}
-> > >   }
-> > play_dead() is marked __noreturn
-> 
-> There are different versions of play_dead() in the kernel. Some of them are
-> indeed marked __noreturn like the non-SMP one in arch/x86/kernel/process.c.
-> The native_play_dead() that I am patching isn't one of those.
+This new approach drops the is_off change that was part of v4. That was
+kind of beyond the scope of this patchset. This new approach changes the
+boot_keep_on in such a way that we won't need any kind of new locking
+for a PD. This involves using the patch [1] for adding dev_set_drv_sync_state
+from Saravana for allowing the genpd core to set a default sync state
+callback for a provider that doesn't register one by itself. While at it,
+we can add another such API but this time to query a device's sync state.
+Then, we filter out each power off request in such a way that if a boot
+powered on power domain is not attached to its consumer device and
+the provider has not state synced yet, the power off request is skipped.
 
-mostly by accident I think, hlt_play_dead() is, so I'm thinking
-everybody (all compiler and objtool) managed to figure out
-native_play_dead() is __noreturn too.
+[1] https://lore.kernel.org/all/20210407034456.516204-2-saravanak@google.com/
+
+No worth mentioning what changed since v4 as this version is almost
+entirely reworked.
+
+Abel Vesa (3):
+  driver core: Add dev_is_drv_state_synced()
+  PM: domains: Ignore power off request for enabled unused domains
+  PM: domains: Add and set generic sync state callback
+
+Saravana Kannan (1):
+  driver core: Add dev_set_drv_sync_state()
+
+ drivers/base/power/domain.c | 72 +++++++++++++++++++++++++++++++++++++
+ include/linux/device.h      | 26 ++++++++++++++
+ include/linux/pm_domain.h   |  4 +++
+ 3 files changed, 102 insertions(+)
+
+-- 
+2.34.1
+
