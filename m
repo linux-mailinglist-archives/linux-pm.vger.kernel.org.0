@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D89C738D7E
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 19:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49234738D83
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 19:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjFURpV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 21 Jun 2023 13:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47814 "EHLO
+        id S229748AbjFURqQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 21 Jun 2023 13:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjFURog (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 13:44:36 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1604819B7;
-        Wed, 21 Jun 2023 10:44:25 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-98771dde617so152722466b.1;
-        Wed, 21 Jun 2023 10:44:25 -0700 (PDT)
+        with ESMTP id S230231AbjFURqP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 13:46:15 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55641BC;
+        Wed, 21 Jun 2023 10:46:13 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94ea38c90ccso180735166b.1;
+        Wed, 21 Jun 2023 10:46:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687369463; x=1689961463;
+        d=1e100.net; s=20221208; t=1687369572; x=1689961572;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HPP0mPj5nbFg1qXiSwWCfH7vtlRuQT6WtSGooLQEenE=;
-        b=dJt8mEb8pTfWU2BZviQVW+B5Noy/HU/yyvktioqCNW+7PHrv5hXx08AqHKZGWCjVcK
-         LlY3nFLQfAGmBhxWc073QHIJdh93q1EAGl0jBjY6K+iTofnSmch8Tf8M3MYtfy6sxb8F
-         bwZQTjk/e6ZoY2YfTKCM02/tOM8UMRxCGxrpU9DqkdKZ8AiRqWxkw7Qziw3CceZ7Nw8L
-         sIlyMqYPRl0A8eTteKbsgSF5SZGwv/fs6W3Odtm9/AY8Tnfi73cmSsL54hRe/0ZBx6H2
-         1RQfPK4Oa/N/riqGtyCcL9LDXQBpdenvw+285SWwuSfrfHNEZ8SLfOq/1SBdOvD6ufL9
-         3sLQ==
-X-Gm-Message-State: AC+VfDxLVdeGYi0r/pmkn6+Z8B6VO1GrmE/0bB0slrf+QH6pkbCepl12
-        P+XuivoYtYhxOIRVgFYIIPERZI4J0Hh82aoScPM=
-X-Google-Smtp-Source: ACHHUZ5dKfCgP20hTSW+uzRzj2RfHqhSIXk/XQ2ZkO3iV0NLw98udJ1Tz6fze1M62rYMh43Neqdr6diLfxGix27ZIrk=
-X-Received: by 2002:a17:906:5198:b0:987:6960:36c8 with SMTP id
- y24-20020a170906519800b00987696036c8mr10037606ejk.7.1687369463296; Wed, 21
- Jun 2023 10:44:23 -0700 (PDT)
+        bh=0DU0/sapO1YMhK1JPNASXgMnNdqT8+KgHL8xl7AnUtc=;
+        b=jTpNM6ZL6Fanh7BZftik8aXcl871m+j8eIGvfulUC67Vm+I1np3gjYi/nNDiYsJrDI
+         PZ1fOMfk2wnMKlbjrC7JVqwmo94K3lROtoVKj2z8FJiyIPHMYuB3n6g7CUET8VEE+fUp
+         CBMKAUyXvc6YkkLkspSmZCnxBX4/CekaAofWMDtmjAnn6s66QTBLdvQgFm87KXuKOQn5
+         mzpFS5mCqA1kaNJox9J12HgUP+BJxbqpARTpWXEG+BQ7sCiBeMIG/+zx2zZLHh5CNzha
+         bbu3JtZezdCNOJqUp8NUwQABC8h3q6ZaNCGjMvN7y5sWwYcbZCQE2F9kDJ7P1fZgZ5xX
+         ip3A==
+X-Gm-Message-State: AC+VfDzjGKp7qNY08bnG/NI5CLDQVMZEgF7oUA4B/qKIImuJuMDX8b9w
+        YS50SRjARQwcwtqu7AFqI2he7CxtxwO3//sRucfnGEd/
+X-Google-Smtp-Source: ACHHUZ7CsZfd+CGV1Ou+TL6ngpL5WVqDOdkw9/sKagHoOTlxTOIa8ma7r2vWgYT+kR+ltLnMe6RpuaZQ6nYoUpXDDEQ=
+X-Received: by 2002:a17:906:4e:b0:987:6960:36cb with SMTP id
+ 14-20020a170906004e00b00987696036cbmr10453604ejg.6.1687369572030; Wed, 21 Jun
+ 2023 10:46:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230621065839.635809-1-tero.kristo@linux.intel.com>
-In-Reply-To: <20230621065839.635809-1-tero.kristo@linux.intel.com>
+References: <20230620094519.15300-1-yuehaibing@huawei.com>
+In-Reply-To: <20230620094519.15300-1-yuehaibing@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 21 Jun 2023 19:44:12 +0200
-Message-ID: <CAJZ5v0j8nebEAjC3L--Dz-2UkHUDAPxMTJ5P2zAh+=yVW4ASyg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix energy_performance_preference
- for passive
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
-        srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Niklas Neronin <niklas.neronin@intel.com>
+Date:   Wed, 21 Jun 2023 19:46:01 +0200
+Message-ID: <CAJZ5v0gAsds--SYOU4EA0UPdq3TvYkHw84dKSoJx3O3MO0Me_Q@mail.gmail.com>
+Subject: Re: [PATCH -next] x86/acpi: Remove unused extern declaration acpi_copy_wakeup_routine()
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -60,36 +60,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 8:59 AM Tero Kristo <tero.kristo@linux.intel.com> wrote:
+On Tue, Jun 20, 2023 at 11:45 AM YueHaibing <yuehaibing@huawei.com> wrote:
 >
-> If the intel_pstate driver is set to passive mode, then writing the
-> same value to the energy_performance_preference sysfs twice will fail.
-> This is caused by the wrong return value used (index of the matched
-> energy_perf_string), instead of the length of the passed in parameter.
-> Fix by forcing the internal return value to zero when the same
-> preference is passed in by user. This same issue is not present when
-> active mode is used for the driver.
+> This is now unused, so can be removed.
 >
-> Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode with HWP enabled")
-> Reported-by: Niklas Neronin <niklas.neronin@intel.com>
-> Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 2548ec92faa2..f29182512b98 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -824,6 +824,8 @@ static ssize_t store_energy_performance_preference(
->                         err = cpufreq_start_governor(policy);
->                         if (!ret)
->                                 ret = err;
-> +               } else {
-> +                       ret = 0;
->                 }
->         }
->
-> --
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 
-Applied as 6.5 material, thanks!
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> ---
+>  arch/x86/kernel/acpi/sleep.h | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/acpi/sleep.h b/arch/x86/kernel/acpi/sleep.h
+> index 171a40c74db6..054c15a2f860 100644
+> --- a/arch/x86/kernel/acpi/sleep.h
+> +++ b/arch/x86/kernel/acpi/sleep.h
+> @@ -12,7 +12,6 @@ extern int wakeup_pmode_return;
+>
+>  extern u8 wake_sleep_flags;
+>
+> -extern unsigned long acpi_copy_wakeup_routine(unsigned long);
+>  extern void wakeup_long64(void);
+>
+>  extern void do_suspend_lowlevel(void);
+> --
+> 2.34.1
+>
