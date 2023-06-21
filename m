@@ -2,106 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61D1738A00
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 17:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6570F738A0A
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 17:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233696AbjFUPnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 11:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50082 "EHLO
+        id S231833AbjFUPph (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 11:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjFUPnh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 11:43:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D90198B
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 08:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687362148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v3qZ6ovJeq5tWh1iDUXLwP6mu+mEkpr462zbbeksiXQ=;
-        b=g3hhQg0F48F0Z1By0VPVOHeiaEIUfsJIrtiZ9KWyfPlsyB6NDtEHojkkvuATq2yFMx1MIB
-        zxYqFTSvMwJTyMKMM/xp5jEqDRoeSDwG0Le7e2Eg/aHYqRfjik7/fqNf14aN2xPQbbayex
-        iCe2vVORyKPFTUu+YjrOi5BMRXgxM5o=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-92-BlHZtMNEOVibyvZpBmsRGw-1; Wed, 21 Jun 2023 11:42:24 -0400
-X-MC-Unique: BlHZtMNEOVibyvZpBmsRGw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 28C99280BC80;
-        Wed, 21 Jun 2023 15:42:21 +0000 (UTC)
-Received: from [10.22.17.140] (unknown [10.22.17.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 76EB0492B02;
-        Wed, 21 Jun 2023 15:42:20 +0000 (UTC)
-Message-ID: <184ee986-340d-95f2-72c7-f63bcb703530@redhat.com>
-Date:   Wed, 21 Jun 2023 11:42:20 -0400
+        with ESMTP id S232254AbjFUPpg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 11:45:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE8691;
+        Wed, 21 Jun 2023 08:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687362334; x=1718898334;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fShmEjl8Wh4baxLKMYHpBk3MTQgN6MNwn0v6pEROKsg=;
+  b=koFfURn08Rt6aECoS9uF0FYElM8830jbBfaxeIxKaWrndfA0y63/SA8Y
+   YYVVvhCkyI6iBDiccGsnJ+yM51u8cC65Fq6zkiKpYAtMcBMS4cN2ojdHB
+   aA/LRN2Vwrgpx0bKL17Rp4MsmGsHNpkRGTQ2GQ5ldhkvR+mdxBA2xYu4E
+   y6mDIkeT8I5K+p+gk+A5372GEhxeoDhYPD7gZ+9ZIopk16oqHZtAA+1rv
+   0AGcQq9Ef+lJpspv2eaQqvCHGxAUq6aQkKvSY8E3i92qmeZKn1bf8Gfxm
+   A0wYDIqb62qZxQB4+6HzDaoxWzC9sEwZ1Y1uLjEQktfHrZoI2v0cCxSil
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="423876538"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="423876538"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:45:10 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="748744954"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="748744954"
+Received: from lfrecald-mobl2.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.26.147])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:45:10 -0700
+Message-ID: <13fbb134dda72f979b9a02e6abec12ebac18aef8.camel@linux.intel.com>
+Subject: Re: [PATCH 0/7] thermal: processor_thermal: Suport workload hint
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 21 Jun 2023 08:45:10 -0700
+In-Reply-To: <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
+References: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
+         <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/5] x86/idle: Disable IBRS when cpu is offline
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-References: <20230620140625.1001886-1-longman@redhat.com>
- <20230620140625.1001886-3-longman@redhat.com>
- <20230621072313.GA2046280@hirez.programming.kicks-ass.net>
- <7f2424df-1846-6c38-e446-b3d5aa693ecd@redhat.com>
- <20230621143602.GI2053369@hirez.programming.kicks-ass.net>
- <5cb81f3b-45a0-d566-3d63-569b5706e9fe@redhat.com>
- <20230621144848.GJ2053369@hirez.programming.kicks-ass.net>
- <309d15f5-0dd8-aee8-14a6-621a071bc363@redhat.com>
- <20230621145436.GK2053369@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230621145436.GK2053369@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/21/23 10:54, Peter Zijlstra wrote:
-> On Wed, Jun 21, 2023 at 10:51:33AM -0400, Waiman Long wrote:
->> On 6/21/23 10:48, Peter Zijlstra wrote:
->>> On Wed, Jun 21, 2023 at 10:44:23AM -0400, Waiman Long wrote:
->>>
->>>> Well, hlt_play_dead() is only called if cpuidle_play_dead() returns an error
->>>> which is not the typical case. My testing does confirm that this patch is
->>>> able to keep the IBRS bit off when a CPU is offline via its online sysfs
->>>> file.
->>> The point is; your re-enable IBRS hunk at the end is dead-code. It
->>> should never ever run and having it is confusing.
->> What I meant is that hlt_play_dead() should never be called unless there is
->> some serious problem with the system and native_play_dead() does return in
->> normal usage.
-> This is all through arch_cpu_idle_dead() which is __noreturn. And no,
-> none of this must ever return.
->
-> If you want an offline CPU to come back, you re-init.
-
-Yes, you are right. I thought it will return. I will update the patch 
-accordingly.
+On Wed, 2023-06-21 at 16:58 +0200, Rafael J. Wysocki wrote:
+> On Wed, Jun 21, 2023 at 1:01 AM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > 
+> > Add support for Meteor Lake workload hints. Before adding this
+> > support,
+> > some reorganization and clean up is required.
+> > First four changes are for clean up and to reorganize code to add
+> > support for workload hint. The last patch adds a test program as
+> > part
+> > of self tests.
+> > 
+> > Srinivas Pandruvada (7):
+> >   thermal: int340x: processor_thermal: Move mailbox code to common
+> >     module
+> >   thermal: int340x: processor_thermal: Add interrupt configuration
+> >   thermal: int340x: processor_thermal: Use non MSI interrupts
+> >   thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
+> >     Meteor Lake
+> >   thermal: int340x: processor_thermal: Add workload type hint
+> >   thermal/drivers/int340x: Support workload hint interrupts
+> >   selftests/thermel/intel: Add test to read workload hint
+> > 
+> >  .../driver-api/thermal/intel_dptf.rst         |  38 +++
+> >  .../thermal/intel/int340x_thermal/Makefile    |   2 +
+> >  .../processor_thermal_device.c                |  17 +-
+> >  .../processor_thermal_device.h                |  21 +-
+> >  .../processor_thermal_device_pci.c            |  76 ++++--
+> >  .../processor_thermal_device_pci_legacy.c     |   3 +-
+> >  .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
+> >  .../processor_thermal_wlt_hint.c              | 239
+> > ++++++++++++++++++
+> >  .../processor_thermal_wlt_req.c               | 137 ++++++++++
+> >  .../testing/selftests/thermal/intel/Makefile  |  16 ++
+> >  .../thermal/intel/workload_hint_test.c        | 114 +++++++++
+> >  11 files changed, 680 insertions(+), 162 deletions(-)
+> >  create mode 100644
+> > drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_hint.c
+> >  create mode 100644
+> > drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_req.c
+> >  create mode 100644 tools/testing/selftests/thermal/intel/Makefile
+> >  create mode 100644
+> > tools/testing/selftests/thermal/intel/workload_hint_test.c
+> > 
+> > --
+> 
+> Because of the timing of the first posting, I'm going to treat this
+> series as 6.6 material.
+That is fine. Just review is important, so that it can be back ported
+to Chrome kernel.
 
 Thanks,
-Longman
+Srinivas
 
