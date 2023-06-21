@@ -2,191 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74E227390A6
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 22:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB55739141
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 23:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjFUUTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 16:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S229733AbjFUVHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 17:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFUUTI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 16:19:08 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DBE199A
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 13:19:07 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25ee8d84b4fso3456620a91.0
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 13:19:07 -0700 (PDT)
+        with ESMTP id S229513AbjFUVHU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 17:07:20 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9818E1713;
+        Wed, 21 Jun 2023 14:07:16 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666e97fcc60so3070880b3a.3;
+        Wed, 21 Jun 2023 14:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1687378747; x=1689970747;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bahcFXqG5EiQtXHJsxeaCuzq2dj1PjiPrx6gMOtGMcY=;
-        b=JmXYq71AMhGCkg7hF8lKp2vopBB0QN+c9Blg073E3DLzdh5ekKTG7KG9ufRPi560qe
-         6avFbcGRR42cuBHfmxFVE+6fpKzGIm1QFr8BcGmjqx8Ydf85XPge5NWx+aVNhKBdWwWq
-         iSxCH1ZeF1ZqKP3MCaZTTViRZKNulTcZ3/A2QuJhnEmgfXEcdBpzMOz5m2pcsYECg9UT
-         q5M3ZRn8hIMqE98TwITjqGk8WXUecov9/Cuk2QFC1JGahhusvDblnVuiszIu28d/+VY4
-         ZH8cPIAj51cTw3RK1CaSYnkTb4zQBZQ4kMuFIMn0FaxNm4y3mu3F4Au4ZGTepmYTCDRt
-         TU6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687378747; x=1689970747;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1687381636; x=1689973636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bahcFXqG5EiQtXHJsxeaCuzq2dj1PjiPrx6gMOtGMcY=;
-        b=Z2wQqnkWsGJJ86swNr8CeQmJxdxWDp6IOwH58c8TJh9SwzBKRUKgl4bpevk/3djH2V
-         nXWqcgxzbVI41TdWw91roq5sqNbVhYj9Pv26/OUOmcCdq1ZqG5SEywdzdzoUPWmo3F5u
-         ofmETeOUjh9NagtkZaocRL1KQQAHIyRBFwRDX3LFU7eHYBRLyDVHNxtQ+WoqUZ+TxJZS
-         kq6NeDgpBnFOhqX7g/3mxaV/KKuQI42z3gCx+dTOIxzsbPIGWitqZOuC5LngZ9O/n8gP
-         Kne622ijS1umxdnenA4R3xlvd25XEaJwz0d4i9Pun0qIoBohhnmb+whuSo6EjF65Of0T
-         /DBQ==
-X-Gm-Message-State: AC+VfDwwbWxCIibxYqyibbROrO+0R5VSjFZkFMVjQ2SllRmKnEueYqzF
-        xLrdLCV3UKCYA75s8qT8o89xwA==
-X-Google-Smtp-Source: ACHHUZ5XypydbL6F6dF+ztiroWhLUgqFoLf+bjjbisWKmQmjsMXFPBnOa0ES+yfJ+S3RPKcNk+SfJw==
-X-Received: by 2002:a17:90a:199:b0:25b:d8fe:2c92 with SMTP id 25-20020a17090a019900b0025bd8fe2c92mr14606569pjc.48.1687378746778;
-        Wed, 21 Jun 2023 13:19:06 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id em18-20020a17090b015200b0025c07d07e54sm3547795pjb.50.2023.06.21.13.19.05
+        bh=zxmHl6BRr4PCuqTmBRiO+tAEIgtNXslvgtPUDDYEk5g=;
+        b=oaaQAD9cGxPEmmAEmp3xGt7xjEDHAjuq0ULgnSRpME/0jfp5uei/cX5bL8V/aTAfhH
+         hGFWO3YeJ3zlpyqmhNTJ05nkVcTO1M/HDS0v2QoCyMuns2gymjr1mbs6jmFOyRyil0qq
+         vcyzj1o2Ck1X3aVmQGLz4L9hkX9lfx6AQT24lQNjfNxQH9R4tS/AEunlf++n1awxctia
+         qJ98y1ah/MBR2KqBgpSJJANu16QO+OsiafXzPlFT+YT6hqPWe/wpX4qzCQbp6I2b6Z0s
+         6kPlRQHCX37mmmjg0xxMV8lxc1ZMwpW5fT9QS8opCIJ2BIJNlD/MCDUvxyl65Iqcm/gB
+         mk0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687381636; x=1689973636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zxmHl6BRr4PCuqTmBRiO+tAEIgtNXslvgtPUDDYEk5g=;
+        b=PRqbGXj+tPzeooTWfTT9v9jKXFF1IulAnwKM+YOJjSb28x3AFfborShfy1ewIUqDBB
+         hbiqt6Fm50mNpoUzE8zuMCCAXDMfLe0nIlWbA8pSYzMv/QIXZvEdaiEjfjH1VdjxEDXb
+         K78m7F/dwSkwzn/dYCCgbKfglRQuyS1Q1CWcIHohxPJlEWFKdS26aGtMLxWcP/7BOQ9H
+         TfEyFFCTZNRruVnW0ktXTvygq8hTMqPiwzNvkmJ1GmZJY5oPG9vUQJTTgmlh2Kr2BKHA
+         ZKLIYwA6IrZW/S1g2D2vlZZRiBXwf6oa7wYzsOQNjVA4O/FKQ8mu2jWtmMoRSP+SJFir
+         la5w==
+X-Gm-Message-State: AC+VfDx+ZGToYJptkKs5n1VSnsRYUIjBfPICexcZP4KPWvKV8xLo0Tbi
+        5p22qfbPqqA+0HxWxVLHLBs=
+X-Google-Smtp-Source: ACHHUZ7UDAN/DUH7d080Yzd19oIbDx6FPfqIcDrxG092wrfQR3eJP0wA81oUirDnxYC5Jt9r4xQd0w==
+X-Received: by 2002:a05:6a20:3d88:b0:10e:96b5:45fa with SMTP id s8-20020a056a203d8800b0010e96b545famr13704285pzi.43.1687381635960;
+        Wed, 21 Jun 2023 14:07:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g7-20020a635207000000b00528db73ed70sm3529775pgb.3.2023.06.21.14.07.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 13:19:06 -0700 (PDT)
-Message-ID: <64935b3a.170a0220.f76c.83b1@mx.google.com>
-Date:   Wed, 21 Jun 2023 13:19:06 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 21 Jun 2023 14:07:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Jun 2023 14:07:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 14/24] init: clear root_wait on all invalid root= strings
+Message-ID: <8c1992bc-110a-4dad-8643-766c14bf6fd4@roeck-us.net>
+References: <20230523074535.249802-1-hch@lst.de>
+ <20230523074535.249802-15-hch@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.4-rc7-121-g3eb3368746ef
-Subject: pm/testing baseline: 53 runs,
- 2 regressions (v6.4-rc7-121-g3eb3368746ef)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523074535.249802-15-hch@lst.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 53 runs, 2 regressions (v6.4-rc7-121-g3eb3368746ef)
+Hi,
 
-Regressions Summary
--------------------
+On Tue, May 23, 2023 at 09:45:25AM +0200, Christoph Hellwig wrote:
+> Instead of only clearing root_wait in devt_from_partuuid when the UUID
+> format was invalid, do that in parse_root_device for all strings that
+> failed to parse.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
+In linux-next, almost all of my boot tests from usb drives as well
+as a few others fail with "Disabling rootwait; root= is invalid."
+in the log. Bisect points to this patch.
 
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
+It can not easily be reverted, but the following change fixes the problem.
 
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -413,10 +413,12 @@ static dev_t __init parse_root_device(char *root_device_name)
+ 
+        error = early_lookup_bdev(root_device_name, &dev);
+        if (error) {
++#if 0
+                if (error == -EINVAL && root_wait) {
+                        pr_err("Disabling rootwait; root= is invalid.\n");
+                        root_wait = 0;
+                }
++#endif
+                return 0;
+        }
+        return dev;
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.4-rc7=
--121-g3eb3368746ef/plan/baseline/
+Debugging shows that early_lookup_bdev() indeed returns -EINVAL.
+Looking into it further, it turns out that devt_from_devname() returns
+-EINVAL for root devices such as
+	root=/dev/sda
+if the device is not found, making it impossible to rootwait for such
+a device (this might for example be a raw USB drive without partitions,
+or any qemu drive with format=raw).
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.4-rc7-121-g3eb3368746ef
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      3eb3368746efcbc37e43c73415d2ba4634d9ce87 =
+Guenter
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64934f81c5e621c689306178
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-121-g3eb33=
-68746ef/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-121-g3eb33=
-68746ef/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64934f81c5e621c689306181
-        failing since 145 days (last pass: v6.1-rc8-156-g0a9e32afe717, firs=
-t fail: acpi-6.2-rc6-146-g628c61874ffd)
-
-    2023-06-21T19:28:42.226410  + set +x
-    2023-06-21T19:28:42.226803  [   13.228451] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-984517_1.5.2.3.1>
-    2023-06-21T19:28:42.333905  / # #
-    2023-06-21T19:28:42.435572  export SHELL=3D/bin/sh
-    2023-06-21T19:28:42.435955  #
-    2023-06-21T19:28:42.537133  / # export SHELL=3D/bin/sh. /lava-984517/en=
-vironment
-    2023-06-21T19:28:42.537553  =
-
-    2023-06-21T19:28:42.638731  / # . /lava-984517/environment/lava-984517/=
-bin/lava-test-runner /lava-984517/1
-    2023-06-21T19:28:42.639391  =
-
-    2023-06-21T19:28:42.642518  / # /lava-984517/bin/lava-test-runner /lava=
--984517/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64935220d5da0b89fd30619f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-121-g3eb33=
-68746ef/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
--h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-121-g3eb33=
-68746ef/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
--h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64935220d5da0b89fd306=
-1a0
-        failing since 64 days (last pass: v6.3-rc6-135-g5235219c59f8, first=
- fail: v6.3-rc7-153-gbc538c8be4bd) =
-
- =20
+---
+# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# good: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect good e867e67cd55ae460c860ffd896c7fc96add2821c
+# bad: [0ab4015a11182e2a19c3dd52db85418f370cef39] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
+git bisect bad 0ab4015a11182e2a19c3dd52db85418f370cef39
+# good: [901bdf5ea1a836400ee69aa32b04e9c209271ec7] Merge tag 'amd-drm-next-6.5-2023-06-09' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+git bisect good 901bdf5ea1a836400ee69aa32b04e9c209271ec7
+# good: [07164956fbc26eff280f3a044a489460ae36413c] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git
+git bisect good 07164956fbc26eff280f3a044a489460ae36413c
+# good: [3067e020d361ed346957eb5e253911f7a3e18f59] add snd_soc_{of_}get_dlc()
+git bisect good 3067e020d361ed346957eb5e253911f7a3e18f59
+# bad: [0dbbd269fb6a8799f312dfc9b1ae1244a144cfc6] Merge branch 'for-6.5/block' into for-next
+git bisect bad 0dbbd269fb6a8799f312dfc9b1ae1244a144cfc6
+# good: [6c500000af037f74b66dd01b565c8ee1b501cc1b] block: mark bio_add_folio as __must_check
+git bisect good 6c500000af037f74b66dd01b565c8ee1b501cc1b
+# bad: [1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b] pktcdvd: replace sscanf() by kstrtoul()
+git bisect bad 1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b
+# good: [e3102722ffe77094ba9e7e46380792b3dd8a7abd] init: rename mount_block_root to mount_root_generic
+git bisect good e3102722ffe77094ba9e7e46380792b3dd8a7abd
+# bad: [d4a28d7defe79006e59293a4b43d518ba8483fb0] dm: remove dm_get_dev_t
+git bisect bad d4a28d7defe79006e59293a4b43d518ba8483fb0
+# good: [c0c1a7dcb6f5db4500e6574294674213bc24940c] init: move the nfs/cifs/ram special cases out of name_to_dev_t
+git bisect good c0c1a7dcb6f5db4500e6574294674213bc24940c
+# bad: [702f3189e454b3c3c2f3c99dbf30acf41aab707c] block: move the code to do early boot lookup of block devices to block/
+git bisect bad 702f3189e454b3c3c2f3c99dbf30acf41aab707c
+# bad: [079caa35f7863cd9958b4555ae873ea4d352a502] init: clear root_wait on all invalid root= strings
+git bisect bad 079caa35f7863cd9958b4555ae873ea4d352a502
+# good: [cf056a43121559d3642419917d405c3237ded90a] init: improve the name_to_dev_t interface
+git bisect good cf056a43121559d3642419917d405c3237ded90a
+# first bad commit: [079caa35f7863cd9958b4555ae873ea4d352a502] init: clear root_wait on all invalid root= strings
