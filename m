@@ -2,91 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F5E737BB4
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 09:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52E1737C5D
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 09:36:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjFUG7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 02:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47312 "EHLO
+        id S231206AbjFUHJf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 03:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjFUG67 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 02:58:59 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A41DD;
-        Tue, 20 Jun 2023 23:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687330738; x=1718866738;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CJK1itE83jES6hQvMEqU9du+Ljig8LcS2pjooxNuxPc=;
-  b=AScVIKc0RW/1RJX5jAEXpCR597hfqecElAxUIH9bt0DNkMe6yFbmhldz
-   NByC8P1AxbFy0dyoueFaudwfeE+RqOt4uDbWwNNxubPgBO4nocdvN4s9I
-   izH5+BZHBGd+RoADKk+axzXGlYG9eB8EKhvu9oJPxsuDXXJ6xcSh5PPvS
-   D9IIUCRsnqoa0dciOSFOWRzaI9HAo/9rQQN23n2Qfo3SEFUl9SAVN9Joe
-   bXwrl+v7FJJso4vO0a3WJtNI0UIyM9Kuuf77ELlA3XH3yS6n9yKkgeanY
-   zCGQBDH9l6yNiX3THDdNS16QDfddxqR1U7a1scg3SXZNr96B2Wzo2C62X
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="357583451"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="357583451"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 23:58:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="717513671"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="717513671"
-Received: from kleszczy-mobl.ger.corp.intel.com (HELO tkristo-desk.bb.dnainternet.fi) ([10.252.62.64])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 23:58:41 -0700
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-To:     rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Niklas Neronin <niklas.neronin@intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Fix energy_performance_preference for passive
-Date:   Wed, 21 Jun 2023 09:58:39 +0300
-Message-Id: <20230621065839.635809-1-tero.kristo@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230174AbjFUHJe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 03:09:34 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317C310FB
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 00:09:33 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBrxk-0000E9-HR; Wed, 21 Jun 2023 09:09:08 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBrxh-0002GJ-3o; Wed, 21 Jun 2023 09:09:05 +0200
+Date:   Wed, 21 Jun 2023 09:09:05 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Vincent Legoll <vincent.legoll@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v6 00/26] Add perf support to the rockchip-dfi driver
+Message-ID: <20230621070905.GM18491@pengutronix.de>
+References: <20230616062101.601837-1-s.hauer@pengutronix.de>
+ <CAEwRq=qze2NV5emMdohTPKK_UfSVMa2wmPNS2c2zzNqFVdmK+w@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAEwRq=qze2NV5emMdohTPKK_UfSVMa2wmPNS2c2zzNqFVdmK+w@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the intel_pstate driver is set to passive mode, then writing the
-same value to the energy_performance_preference sysfs twice will fail.
-This is caused by the wrong return value used (index of the matched
-energy_perf_string), instead of the length of the passed in parameter.
-Fix by forcing the internal return value to zero when the same
-preference is passed in by user. This same issue is not present when
-active mode is used for the driver.
+Hi Vincent,
 
-Fixes: f6ebbcf08f37 ("cpufreq: intel_pstate: Implement passive mode with HWP enabled")
-Reported-by: Niklas Neronin <niklas.neronin@intel.com>
-Signed-off-by: Tero Kristo <tero.kristo@linux.intel.com>
----
- drivers/cpufreq/intel_pstate.c | 2 ++
- 1 file changed, 2 insertions(+)
+On Fri, Jun 16, 2023 at 01:50:42PM +0000, Vincent Legoll wrote:
+> Hello Sascha,
+> 
+> On Fri, Jun 16, 2023 at 6:22 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+> > - Add more reviewed-by tags
+> 
+> Can you explain how the Tested-Bys are handled, I don't see any patch
+> with those tags, not Sebastians, nor mine. Is the testing useful ? Should I
+> retest the new patchset ?
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index 2548ec92faa2..f29182512b98 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -824,6 +824,8 @@ static ssize_t store_energy_performance_preference(
- 			err = cpufreq_start_governor(policy);
- 			if (!ret)
- 				ret = err;
-+		} else {
-+			ret = 0;
- 		}
- 	}
- 
+I really appreciate that you are testing this series. However, changes
+to the series often invlidate the testing, that's why I haven't added
+your tested-by tags when sending a new series. The tested-by tags would
+have to be collected from the person finally applying the series.
+
+Regards,
+  Sascha
+
 -- 
-2.25.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
