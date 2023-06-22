@@ -2,87 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C44739DB6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E57739E70
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 12:21:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjFVJv0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 05:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        id S231468AbjFVKVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 06:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbjFVJvI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:51:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73583AD05;
-        Thu, 22 Jun 2023 02:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=GIRkJ9xBSI9qzG3Aq2E0VHbn9jmHIdB63mJn4oOnJd4=; b=Vsylbf9yg8HFGDmU9o87kvXJFj
-        YIDeQUSpR3gmRDEb6wu2lIngamtpNoncgU7ddfm2nw7xNYMw25rqynfQwQnZqXsd/x+VEb2tR1YaP
-        +U/AFc6F4G/pVeK8F5q/B2LjcfP5praVDbvAx/4XZES8OncCKktL3v65nsZhsWpbh0KRPg2A9OKGE
-        qNI1PSjFAW9OllGkC0/Z/ygZ0SMDzWWjMd/g6lgGpkRm9iCl5Aw1pJ6s0kzYTpTo7guKRb/wATGNl
-        +w+Ji0ejwNG0RLTKU1AbbBJb6qIAN8svTx4o8nORDlMWJ/QKyxULK2QxKDqswNGDk2bDd1EekDlyJ
-        MBZUIFtA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qCGo9-00FTiX-86; Thu, 22 Jun 2023 09:40:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0577E300338;
-        Thu, 22 Jun 2023 11:40:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D6D8324216AD3; Thu, 22 Jun 2023 11:40:51 +0200 (CEST)
-Date:   Thu, 22 Jun 2023 11:40:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-Subject: Re: [PATCH v3 2/3] intel_idle: Sync up the SPEC_CTRL MSR value to
- x86_spec_ctrl_current
-Message-ID: <20230622094051.GF4253@hirez.programming.kicks-ass.net>
-References: <20230622003603.1188364-1-longman@redhat.com>
- <20230622003603.1188364-3-longman@redhat.com>
- <20230622054633.ulrurzzvzjijvdhn@treble>
+        with ESMTP id S231392AbjFVKU6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 06:20:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 019A31BC5;
+        Thu, 22 Jun 2023 03:20:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AFA81042;
+        Thu, 22 Jun 2023 03:21:33 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 433EF3F64C;
+        Thu, 22 Jun 2023 03:20:49 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 11:20:47 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH v4 18/24] sched/task_struct: Add helpers for IPC
+ classification
+Message-ID: <ZJQgf1PtrHWLA9q1@arm.com>
+References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-19-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622054633.ulrurzzvzjijvdhn@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230613042422.5344-19-ricardo.neri-calderon@linux.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:46:33PM -0700, Josh Poimboeuf wrote:
-> On Wed, Jun 21, 2023 at 08:36:02PM -0400, Waiman Long wrote:
-> > When intel_idle_ibrs() is called, it modifies the SPEC_CTRL MSR to
-> > 0 in order disable IBRS. However, the new MSR value isn't reflected
-> > in x86_spec_ctrl_current which is at odd with the other code that
-> > keep track of its state in that percpu variable. Fix that by updating
-> > x86_spec_ctrl_current percpu value to always match the content of the
-> > SPEC_CTRL MSR.
+Hi,
+
+On Monday 12 Jun 2023 at 21:24:16 (-0700), Ricardo Neri wrote:
+> The raw classification that hardware provides for a task may not
+> be directly usable by the scheduler: the classification may change too
+> frequently or architecture-specific implementations may need to consider
+> additional factors. For instance, some processors with Intel Thread
+> Director need to consider the state of the SMT siblings of a core.
 > 
-> Is this fixing an actual bug or is there some other reason for doing
-> this?
+> Provide per-task helper variables that architectures can use to
+> postprocess the classification that hardware provides.
+> 
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Perry Yuan <Perry.Yuan@amd.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v3:
+>  * None
+> 
+> Changes since v2:
+>  * None
+> 
+> Changes since v1:
+>  * Used bit-fields to fit all the IPC class data in 4 bytes. (PeterZ)
+>  * Shortened names of the helpers.
+>  * Renamed helpers with the ipcc_ prefix.
+>  * Reworded commit message for clarity
+> ---
+>  include/linux/sched.h | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 0e1c38ad09c2..719147460ca8 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -1541,7 +1541,17 @@ struct task_struct {
+>  	 * A hardware-defined classification of task that reflects but is
+>  	 * not identical to the number of instructions per cycle.
+>  	 */
+> -	unsigned short			ipcc;
+> +	unsigned int			ipcc : 9;
+> +	/*
+> +	 * A candidate classification that arch-specific implementations
+> +	 * qualify for correctness.
+> +	 */
+> +	unsigned int			ipcc_tmp : 9;
+> +	/*
+> +	 * Counter to filter out transient candidate classifications
+> +	 * of a task.
+> +	 */
+> +	unsigned int			ipcc_cntr : 14;
+>  #endif
+>  
 
-No actual bug, he did this for his debugfs file -- which is no longer
-part of the series. With that on, you can observe the
-x86_spec_ctrl_current value while idle.
+Why does this need to be split in task_struct? Isn't this architecture
+specific? IMO the scheduler should never make use of class information
+itself. It only receives the value though the call of an arch function
+and passes it as an argument to an arch function to get a performance
+score. So the way one interprets the class value (splits it in relevant
+and helper bits) should be defined and considered in the architecture
+specific code.
 
-Arguably that's not even inconsistent because we disable/enable the
-thing with IRQs disabled, so nothing can observe the difference.
+Thanks,
+Ionela.
+
+>  	/*
+> -- 
+> 2.25.1
+> 
