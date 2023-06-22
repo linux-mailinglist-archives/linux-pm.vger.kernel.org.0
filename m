@@ -2,50 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649F573A5F9
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 18:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08DE73A833
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 20:27:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjFVQWX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 22 Jun 2023 12:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56712 "EHLO
+        id S230257AbjFVS12 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 22 Jun 2023 14:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVQWW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 12:22:22 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692381BD8;
-        Thu, 22 Jun 2023 09:22:19 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-97ea801b0d0so176970066b.1;
-        Thu, 22 Jun 2023 09:22:19 -0700 (PDT)
+        with ESMTP id S230255AbjFVS12 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 14:27:28 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2009B2100;
+        Thu, 22 Jun 2023 11:27:26 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-988a4a7be58so134836866b.0;
+        Thu, 22 Jun 2023 11:27:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687450938; x=1690042938;
+        d=1e100.net; s=20221208; t=1687458444; x=1690050444;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tgv16YmnQep3zizlGt6RURSljOqXvB2ydQV/fWDluCc=;
-        b=iPjU1npHOoT5H4nemHpZ8t+rGpRMWLINky1amvOegGbb0pn0RKMW7fSyIJ4BAzLfLw
-         lB3Oqr93fo3Uda2XMaC/ukgy8m1O/VWhf3lZjaqqK/qafTGLPcy2604innQXh4VOFhow
-         15nUCWoxKsnChcdxT1nTOCWrm2vwMsp/4g6Fx85MsnwPfOt91PjFuYwQvf6CbcX6QxSo
-         O2ZMYl7b2hlynz9rzqyPGgRAqeLuiyHci+Nlj+WHT+1bw1J6qMo0ahlcjfGDmcRDok1w
-         gu4cqox9KSJxZc5O0Vn4iAPZz1h3nmNPuDcLd24h0cr3IQV0pXO2P3cKUFsS7RNkeG2B
-         rt/w==
-X-Gm-Message-State: AC+VfDxfUOzN0IvbfxzZ30GynzDGTf021k4l3TRQ5B+QM4SYbMmkRoeW
-        1ZydRQNH5L5xTQB6rrguFJItNaF8Rw8OtSPoxoJyFBJz
-X-Google-Smtp-Source: ACHHUZ5p2XNZMl8wKkU4phh0bdYyZpxkjKUiqDC7C0X5f8a9lspxE5Sq23vphSZ6zLFgWwbYQI+9xqrHmhf1/VD1ic4=
-X-Received: by 2002:a17:906:729e:b0:988:c8bb:e3ac with SMTP id
- b30-20020a170906729e00b00988c8bbe3acmr8215986ejl.7.1687450937514; Thu, 22 Jun
- 2023 09:22:17 -0700 (PDT)
+        bh=FllJ13nyodNap3hKrgtIx3uSstQ6jTk0v3dlQlAF1hY=;
+        b=lXB8hLVz3vpW9p6Wnluns/aox4xKsFwNM6ueaQ7pgDdxAkO0a9MogpvtSej2o1r2Ka
+         hFRNj9s9sq6tan3vLSOTB6oICjj41slsc9NsxguDCaU3xuOsmyvzKpkocLwudJzZkDDE
+         Po4KaMwYex0U63OBZPox+dJV6kEPjsl64t5xoTs4LVU9IOMdTx+zx0iH5XChd6vuyj2y
+         YZNOIq/tNmaVl72CLDhdYnQyCXvstjn92U7mfAhyS0pXq01oMYMVMNlB025bbBStoAMj
+         gy0Gp1OSVIxZ87x456cJxwyOHhgIzgr8+nP7W0TOPBorT22c9t9eLIHpfENcD+DglqxT
+         PQAg==
+X-Gm-Message-State: AC+VfDzZzclVr5IQ22v1UCeC/cdqIjsZQfPTYTP/M38AZisL8S4S2vtP
+        X/6NfE5RWUIeD+3H2j5kwUoCEN+JFaggVBe5pw0=
+X-Google-Smtp-Source: ACHHUZ6g8DxwNg8/efK+WrD6zAzMQtXwChsSrp1gUP5/KwIgsUzyY85CNYdCfsiGWuW7QasIk76BzolA/49LrAgHOgA=
+X-Received: by 2002:a17:906:7a5e:b0:987:6960:36c6 with SMTP id
+ i30-20020a1709067a5e00b00987696036c6mr12257854ejo.5.1687458444208; Thu, 22
+ Jun 2023 11:27:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230113193006.1320379-1-bgeffon@google.com> <20230406182005.1001883-1-bgeffon@google.com>
-In-Reply-To: <20230406182005.1001883-1-bgeffon@google.com>
+References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+ <20230619063534.12831-1-di.shen@unisoc.com> <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
+ <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
+ <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com> <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
+ <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
+In-Reply-To: <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Jun 2023 18:22:06 +0200
-Message-ID: <CAJZ5v0ictTXMePuaiyG16wX_3pv-9Hi_0jqMqtL5Ntx6+Z2VtA@mail.gmail.com>
-Subject: Re: [PATCH v4] PM: hibernate: don't store zero pages in the image file.
-To:     Brian Geffon <bgeffon@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Kaehlcke <mka@google.com>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 22 Jun 2023 20:27:12 +0200
+Message-ID: <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
+Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, Di Shen <di.shen@unisoc.com>,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -59,593 +65,206 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Apr 6, 2023 at 8:20 PM Brian Geffon <bgeffon@google.com> wrote:
+On Tue, Jun 20, 2023 at 1:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
-> On ChromeOS we've observed a considerable number of in-use pages filled with
-> zeros. Today with hibernate it's entirely possible that saveable pages are just
-> zero filled. Since we're already copying pages word-by-word in do_copy_page it
-> becomes almost free to determine if a page was completely filled with zeros.
 >
-> This change introduces a new bitmap which will track these zero pages. If a page
-> is zero it will not be included in the saved image, instead to track these zero
-> pages in the image file we will introduce a new flag which we will set on the
-> packed PFN list. When reading back in the image file we will detect these zero
-> page PFNs and rebuild the zero page bitmap.
 >
-> When the image is being loaded through calls to write_next_page if we encounter
-> a zero page we will silently memset it to 0 and then continue on to the next
-> page. Given the implementation in snapshot_read_next/snapshot_write_next this
-> change  will be transparent to non-compressed/compressed and swsusp modes of
-> operation.
+> On 6/20/23 11:39, Rafael J. Wysocki wrote:
+> > On Tue, Jun 20, 2023 at 12:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> Hi Rafael,
+> >>
+> >>
+> >> On 6/20/23 11:07, Rafael J. Wysocki wrote:
+> >>> On Tue, Jun 20, 2023 at 11:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >>>>
+> >>>> On Mon, Jun 19, 2023 at 8:36 AM Di Shen <di.shen@unisoc.com> wrote:
+> >>>>>
+> >>>>> When the thermal trip point is changed, the governor should
+> >>>>> be reset so that the policy algorithm be updated to adapt to the
+> >>>>> new trip point.
+> >>>>>
+> >>>>> This patch adds an ops for thermal the governor structure to reset
+> >>>>> the governor. The ops is called when the trip point is changed.
+> >>>>> For power allocator, the parameters of pid controller and the states
+> >>>>> of power cooling devices can be reset when the passive trip point
+> >>>>> is changed.
+> >>>>>
+> >>>>> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> >>>>>
+> >>>>> ---
+> >>>>> V4:
+> >>>>> - Compared to V3, handle it in thermal core instead of in governor.
+> >>>>>
+> >>>>> - Add an ops to the governor structure, and call it when a trip
+> >>>>>     point is changed.
+> >>>>>
+> >>>>> - Define reset ops for power allocator.
+> >>>>>
+> >>>>> V3:
+> >>>>> - Add fix tag.
+> >>>>>
+> >>>>> V2:
+> >>>>> - Compared to v1, do not revert.
+> >>>>>
+> >>>>> - Add a variable(last_switch_on_temp) in power_allocator_params
+> >>>>>     to record the last switch_on_temp value.
+> >>>>>
+> >>>>> - Adds a function to renew the update flag and update the
+> >>>>>     last_switch_on_temp when thermal trips are writable.
+> >>>>>
+> >>>>> V1:
+> >>>>> - Revert commit 0952177f2a1f.
+> >>>>> ---
+> >>>>> ---
+> >>>>>    drivers/thermal/gov_power_allocator.c | 21 +++++++++++++++++++++
+> >>>>>    drivers/thermal/thermal_trip.c        |  6 ++++++
+> >>>>>    include/linux/thermal.h               |  1 +
+> >>>>>    3 files changed, 28 insertions(+)
+> >>>>>
+> >>>>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> >>>>> index 8642f1096b91..41d155adc616 100644
+> >>>>> --- a/drivers/thermal/gov_power_allocator.c
+> >>>>> +++ b/drivers/thermal/gov_power_allocator.c
+> >>>>> @@ -729,10 +729,31 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+> >>>>>           return allocate_power(tz, trip.temperature);
+> >>>>>    }
+> >>>>>
+> >>>>> +static int power_allocator_reset(struct thermal_zone_device *tz, int trip_id)
+> >>>>> +{
+> >>>>> +       int ret = 0;
+> >>>>> +       struct thermal_trip trip;
+> >>>>> +       struct power_allocator_params *params = tz->governor_data;
+> >>>>> +
+> >>>>> +       ret = __thermal_zone_get_trip(tz, trip_id, &trip);
+> >>>>> +       if (ret)
+> >>>>> +               return ret;
+> >>>>> +
+> >>>>> +       /* Only need reset for passive trips */
+> >>>>> +       if (trip.type != THERMAL_TRIP_PASSIVE)
+> >>>>> +               return -EINVAL;
+> >>>>> +
+> >>>>> +       reset_pid_controller(params);
+> >>>>> +       allow_maximum_power(tz, true);
+> >>>>> +
+> >>>>> +       return ret;
+> >>>>> +}
+> >>>>> +
+> >>>>>    static struct thermal_governor thermal_gov_power_allocator = {
+> >>>>>           .name           = "power_allocator",
+> >>>>>           .bind_to_tz     = power_allocator_bind,
+> >>>>>           .unbind_from_tz = power_allocator_unbind,
+> >>>>>           .throttle       = power_allocator_throttle,
+> >>>>> +       .reset          = power_allocator_reset,
+> >>>>>    };
+> >>>>>    THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+> >>>>> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+> >>>>> index 907f3a4d7bc8..52eb768fada8 100644
+> >>>>> --- a/drivers/thermal/thermal_trip.c
+> >>>>> +++ b/drivers/thermal/thermal_trip.c
+> >>>>> @@ -173,6 +173,12 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> >>>>>           if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
+> >>>>>                   tz->trips[trip_id] = *trip;
+> >>>>>
+> >>>>> +       if (t.temperature != trip->temperature && tz->governor && tz->governor->reset) {
+> >>>>> +               ret = tz->governor->reset(tz, trip_id);
+> >>>>> +               if (ret)
+> >>>>> +                       pr_warn_once("Failed to reset thermal governor\n");
+> >>>>
+> >>>> I'm not really sure if it is useful to print this message here.
+> >>>>
+> >>>> First off, the governors may print more precise diagnostic messages if
+> >>>> they care.
+> >>>>
+> >>>> Second, what is the sysadmin supposed to do in response to this message?
+> >>>
+> >>> In addition to the above, trip point temperatures may be updated in
+> >>> other places too, for instance in response to notifications from
+> >>> platform firmware and IMV this new callback should be also used in
+> >>> those cases.  However, in those cases multiple trip points may change
+> >>> at a time and the critical/hot trip point temperatures may be updated
+> >>> too AFAICS.
+> >>
+> >> IIRC the critical/hot trip points are handled differently, not using the
+> >> governors. The governors' 'throttle' callback would be called only
+> >> after we pass the test of 'critical/hot' [1].
+> >
+> > OK, but is it actually useful to return an error code from the
+> > ->reset() callback when passed a non-passive trip point?
 >
-> To provide some concrete numbers from simple ad-hoc testing, on a device which
-> was lightly in use we saw that:
->
-> PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
->
-> Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero filled
-> and could be tracked entirely within the packed PFN list. The savings would
-> obviously be much lower for lzo compressed images, but even in the case of
-> compression not copying pages across to the compression threads will still
-> speed things up. It's also possible that we would see better overall compression
-> ratios as larger regions of "real data" would improve the compressibility.
->
-> Finally, such an approach could dramatically improve swsusp performance
-> as each one of those zero pages requires a write syscall to reload, by
-> handling it as part of the packed PFN list we're able to fully avoid
-> that.
->
-> Patch v3 -> v4:
-> - Suggestions from Matthias Kaehlcke:
->  - Return number of copy pages from copy_data_pages
->  - Use an explicit temporary bitmap while moving the zerm_bm
->    to safe pages.
->
-> Patch v2 -> v3:
-> - Use nr_zero_pages rather than walking each pfn to count.
-> - Make sure zero_bm is allocated in safe pages on resume.
->  When reading in the pfn list and building the zero page bm
->  we don't know which pages are unsafe yet so we will need to
->  copy this bm to safe pages after the metadata has been read.
->
-> Patch v1 -> v2:
-> - minor code mistake from rebasing corrected.
->
-> Signed-off-by: Brian Geffon <bgeffon@google.com>
-> ---
->  kernel/power/snapshot.c | 180 +++++++++++++++++++++++++++++++---------
->  1 file changed, 142 insertions(+), 38 deletions(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index cd8b7b35f1e8..43d0c45fa05c 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -404,6 +404,7 @@ struct bm_position {
->         struct mem_zone_bm_rtree *zone;
->         struct rtree_node *node;
->         unsigned long node_pfn;
-> +       unsigned long cur_pfn;
->         int node_bit;
->  };
->
-> @@ -589,6 +590,7 @@ static void memory_bm_position_reset(struct memory_bitmap *bm)
->         bm->cur.node = list_entry(bm->cur.zone->leaves.next,
->                                   struct rtree_node, list);
->         bm->cur.node_pfn = 0;
-> +       bm->cur.cur_pfn = BM_END_OF_MAP;
->         bm->cur.node_bit = 0;
->  }
->
-> @@ -799,6 +801,7 @@ static int memory_bm_find_bit(struct memory_bitmap *bm, unsigned long pfn,
->         bm->cur.zone = zone;
->         bm->cur.node = node;
->         bm->cur.node_pfn = (pfn - zone->start_pfn) & ~BM_BLOCK_MASK;
-> +       bm->cur.cur_pfn = pfn;
->
->         /* Set return values */
->         *addr = node->data;
-> @@ -850,6 +853,11 @@ static void memory_bm_clear_current(struct memory_bitmap *bm)
->         clear_bit(bit, bm->cur.node->data);
->  }
->
-> +static unsigned long memory_bm_get_current(struct memory_bitmap *bm)
-> +{
-> +       return bm->cur.cur_pfn;
-> +}
-> +
->  static int memory_bm_test_bit(struct memory_bitmap *bm, unsigned long pfn)
->  {
->         void *addr;
-> @@ -929,10 +937,12 @@ static unsigned long memory_bm_next_pfn(struct memory_bitmap *bm)
->                 if (bit < bits) {
->                         pfn = bm->cur.zone->start_pfn + bm->cur.node_pfn + bit;
->                         bm->cur.node_bit = bit + 1;
-> +                       bm->cur.cur_pfn = pfn;
->                         return pfn;
->                 }
->         } while (rtree_next_node(bm));
->
-> +       bm->cur.cur_pfn = BM_END_OF_MAP;
->         return BM_END_OF_MAP;
->  }
->
-> @@ -1371,14 +1381,18 @@ static unsigned int count_data_pages(void)
->
->  /*
->   * This is needed, because copy_page and memcpy are not usable for copying
-> - * task structs.
-> + * task structs. Returns 1 if the page was filled with only zeros, otherwise 0.
->   */
-> -static inline void do_copy_page(long *dst, long *src)
-> +static inline int do_copy_page(long *dst, long *src)
+> It will depend on the governor code. In our case the setup code
+> w.r.t. trip types is quite confusing (to fit into many possible
+> configurations). The non-passive trip point would be only
+> possible to bind when there are not other passive trip points.
+> That's is a really corner case and probably never used on any
+> device. Therefore, IMO we can just bail out in such situation
+> when then someone tries to update such single non-passive
+> trip point (probably not aware what is doing with IPA?).
 
-Make it bool, please.
+Because this is up to the governor, the core has no clue what to do
+with the return value from ->reset() and so there should be none.
 
->  {
->         int n;
-> +       long z = 0;
+As I said, governors can print whatever diagnostic messages they like
+in that callback, but returning anything from it to the core is just
+not useful IMV.
 
-Please put this above the other declaration.
+> For the rest of the governors - it's up to them what they
+> report in case non-passive trip is updated...
 
+Sure.
+
+> >
+> >> What Di is facing is in the issue under the bucket of
+> >> 'handle_non_critical_trips()' when the governor just tries to
+> >> work on stale data - old trip temp.
+> >
+> > Well, fair enough, but what about the other governors?  Is this
+> > problem limited to power_allocator?
 >
-> -       for (n = PAGE_SIZE / sizeof(long); n; n--)
-> +       for (n = PAGE_SIZE / sizeof(long); n; n--) {
-> +               z |= *src;
->                 *dst++ = *src++;
-> +       }
-> +       return !z;
->  }
+> IIUC the core fwk code - non of the governors would be needed
+> to handle the critical/hot trips. For the rest of the trip types
+> I would say it's up to the governor. In our IPA case this stale
+> data is used for power budget estimation - quite fundamental
+> step. Therefore, the reset and start from scratch would make more
+> sense.
 >
->  /**
-> @@ -1389,15 +1403,17 @@ static inline void do_copy_page(long *dst, long *src)
->   * CONFIG_ARCH_HAS_SET_DIRECT_MAP is not set. In that case kernel_page_present()
->   * always returns 'true'.
->   */
-> -static void safe_copy_page(void *dst, struct page *s_page)
-> +static int safe_copy_page(void *dst, struct page *s_page)
+> I think other governors don't try to 'estimate' such
+> abstract power headroom based on temperature - so probably
+> they don't have to even implement the 'reset()' callback
+> (I don't know their logic that well).
 
-This can be bool too.
+So there seems to be a claim that IPA is the only governor needing the
+->reset() callback, but I have not seen any solid analysis confirming
+that.  It very well may be the case, but then the changelog should
+clearly explain why this is the case IMO.
 
->  {
-> +       int ret;
-
-I'd call this "zeros_only" or similar and it can be bool.
-
->         if (kernel_page_present(s_page)) {
-> -               do_copy_page(dst, page_address(s_page));
-> +               ret = do_copy_page(dst, page_address(s_page));
->         } else {
->                 hibernate_map_page(s_page);
-> -               do_copy_page(dst, page_address(s_page));
-> +               ret = do_copy_page(dst, page_address(s_page));
->                 hibernate_unmap_page(s_page);
->         }
-> +       return ret;
->  }
+> >
+> >> For the 2nd case IIUC the code, we pass the 'trip.temperature'
+> >> and should be ready for what you said (modification of that value).
+> >
+> > Generally speaking, it needs to be prepared for a simultaneous change
+> > of multiple trip points (including active), in which case it may not
+> > be useful to invoke the ->reset() callback for each of them
+> > individually.
 >
->  #ifdef CONFIG_HIGHMEM
-> @@ -1407,17 +1423,18 @@ static inline struct page *page_is_saveable(struct zone *zone, unsigned long pfn
->                 saveable_highmem_page(zone, pfn) : saveable_page(zone, pfn);
->  }
->
-> -static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-> +static int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+> Although, that looks more cleaner IMO. Resetting one by one in
+> a temperature order would be easily maintainable, won't be?
 
-This can be bool.
+I wouldn't call it maintainable really.
 
->  {
->         struct page *s_page, *d_page;
->         void *src, *dst;
-> +       int ret;
+First of all, the trips may not be ordered.  There are no guarantees
+whatsoever that they will be ordered, so the caller may have to
+determine the temperature order in the first place.  This would be an
+extra requirement that currently is not there.
 
-And this can be bool and please rename it to something more meaningful
-like above.
+Apart from this, I don't see any fundamental difference between the
+case when trip points are updated via sysfs and when they are updated
+by the driver.  The governor should reset itself in any of those cases
+and even if one trip point changes, the temperature order of all of
+them may change, so the governor reset mechanism should be able to
+handle the case when multiple trip points are updated at the same
+time.  While you may argue that this is theoretical, the ACPI spec
+clearly states that this is allowed to happen, for example.
 
->
->         s_page = pfn_to_page(src_pfn);
->         d_page = pfn_to_page(dst_pfn);
->         if (PageHighMem(s_page)) {
->                 src = kmap_atomic(s_page);
->                 dst = kmap_atomic(d_page);
-> -               do_copy_page(dst, src);
-> +               ret = do_copy_page(dst, src);
->                 kunmap_atomic(dst);
->                 kunmap_atomic(src);
->         } else {
-> @@ -1426,30 +1443,38 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
->                          * The page pointed to by src may contain some kernel
->                          * data modified by kmap_atomic()
->                          */
-> -                       safe_copy_page(buffer, s_page);
-> +                       ret = safe_copy_page(buffer, s_page);
->                         dst = kmap_atomic(d_page);
->                         copy_page(dst, buffer);
->                         kunmap_atomic(dst);
->                 } else {
-> -                       safe_copy_page(page_address(d_page), s_page);
-> +                       ret = safe_copy_page(page_address(d_page), s_page);
->                 }
->         }
-> +       return ret;
->  }
->  #else
->  #define page_is_saveable(zone, pfn)    saveable_page(zone, pfn)
->
-> -static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-> +static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-
-This can be bool.
-
->  {
-> -       safe_copy_page(page_address(pfn_to_page(dst_pfn)),
-> +       return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
->                                 pfn_to_page(src_pfn));
->  }
->  #endif /* CONFIG_HIGHMEM */
->
-> -static void copy_data_pages(struct memory_bitmap *copy_bm,
-> -                           struct memory_bitmap *orig_bm)
-> +/*
-> + * Copy data pages will copy all pages into pages pulled from the copy_bm.
-> + * If a page was entirely filled with zeros it will be marked in the zero_bm.
-> + *
-> + * Returns the number of pages copied.
-> + */
-> +static unsigned long copy_data_pages(struct memory_bitmap *copy_bm,
-> +                           struct memory_bitmap *orig_bm,
-> +                           struct memory_bitmap *zero_bm)
->  {
->         struct zone *zone;
-> -       unsigned long pfn;
-> +       unsigned long pfn, copy_pfn, copied_pages = 0;
-
-Please put this above the other declaration.
-
->
->         for_each_populated_zone(zone) {
->                 unsigned long max_zone_pfn;
-> @@ -1462,18 +1487,30 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
->         }
->         memory_bm_position_reset(orig_bm);
->         memory_bm_position_reset(copy_bm);
-> +       copy_pfn = memory_bm_next_pfn(copy_bm);
->         for(;;) {
->                 pfn = memory_bm_next_pfn(orig_bm);
->                 if (unlikely(pfn == BM_END_OF_MAP))
->                         break;
-> -               copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
-> +               if (copy_data_page(copy_pfn, pfn)) {
-> +                       memory_bm_set_bit(zero_bm, pfn);
-> +
-> +                       /* We will reuse this copy_pfn for a real 'nonzero' page. */
-
-I'd prefer something like "This copy_pfn will be reused for a page
-that is not full of zeros."
-
-> +                       continue;
-> +               }
-> +               copied_pages++;
-> +               copy_pfn = memory_bm_next_pfn(copy_bm);
->         }
-> +       return copied_pages;
->  }
->
->  /* Total number of image pages */
->  static unsigned int nr_copy_pages;
->  /* Number of pages needed for saving the original pfns of the image pages */
->  static unsigned int nr_meta_pages;
-> +/* Number of zero pages */
-> +static unsigned int nr_zero_pages;
-> +
->  /*
->   * Numbers of normal and highmem page frames allocated for hibernation image
->   * before suspending devices.
-> @@ -1494,6 +1531,9 @@ static struct memory_bitmap orig_bm;
->   */
->  static struct memory_bitmap copy_bm;
->
-> +/* Memory bitmap which tracks which saveable pages were zero filled. */
-> +static struct memory_bitmap zero_bm;
-> +
->  /**
->   * swsusp_free - Free pages allocated for hibernation image.
->   *
-> @@ -1538,6 +1578,7 @@ void swsusp_free(void)
->  out:
->         nr_copy_pages = 0;
->         nr_meta_pages = 0;
-> +       nr_zero_pages = 0;
->         restore_pblist = NULL;
->         buffer = NULL;
->         alloc_normal = 0;
-> @@ -1756,8 +1797,15 @@ int hibernate_preallocate_memory(void)
->                 goto err_out;
->         }
->
-> +       error = memory_bm_create(&zero_bm, GFP_IMAGE, PG_ANY);
-> +       if (error) {
-> +               pr_err("Cannot allocate zero bitmap\n");
-> +               goto err_out;
-> +       }
-> +
->         alloc_normal = 0;
->         alloc_highmem = 0;
-> +       nr_zero_pages = 0;
->
->         /* Count the number of saveable data pages. */
->         save_highmem = count_highmem_pages();
-> @@ -2014,7 +2062,6 @@ static int swsusp_alloc(struct memory_bitmap *copy_bm,
->  asmlinkage __visible int swsusp_save(void)
->  {
->         unsigned int nr_pages, nr_highmem;
-> -
-
-Unrelated change and not needed AFAICS.
-
->         pr_info("Creating image:\n");
->
->         drain_local_pages(NULL);
-> @@ -2037,19 +2084,19 @@ asmlinkage __visible int swsusp_save(void)
->          * Kill them.
->          */
->         drain_local_pages(NULL);
-> -       copy_data_pages(&copy_bm, &orig_bm);
-> +       nr_copy_pages = copy_data_pages(&copy_bm, &orig_bm, &zero_bm);
->
->         /*
->          * End of critical section. From now on, we can write to memory,
->          * but we should not touch disk. This specially means we must _not_
->          * touch swap space! Except we must write out our image of course.
->          */
-> -
->         nr_pages += nr_highmem;
-> -       nr_copy_pages = nr_pages;
-> +       /* We don't actually copy the zero pages */
-> +       nr_zero_pages = nr_pages - nr_copy_pages;
->         nr_meta_pages = DIV_ROUND_UP(nr_pages * sizeof(long), PAGE_SIZE);
->
-> -       pr_info("Image created (%d pages copied)\n", nr_pages);
-> +       pr_info("Image created (%d pages copied, %d zero pages)\n", nr_copy_pages, nr_zero_pages);
->
->         return 0;
->  }
-> @@ -2094,15 +2141,22 @@ static int init_header(struct swsusp_info *info)
->         return init_header_complete(info);
->  }
->
-> +#define ENCODED_PFN_ZERO_FLAG ((unsigned long)1 << (BITS_PER_LONG - 1))
-> +#define ENCODED_PFN_MASK (~ENCODED_PFN_ZERO_FLAG)
-> +
->  /**
->   * pack_pfns - Prepare PFNs for saving.
->   * @bm: Memory bitmap.
->   * @buf: Memory buffer to store the PFNs in.
-> + * @zero_bm: Memory bitmap containing PFNs of zero pages.
->   *
->   * PFNs corresponding to set bits in @bm are stored in the area of memory
-> - * pointed to by @buf (1 page at a time).
-> + * pointed to by @buf (1 page at a time). Pages which were filled with only
-> + * zeros will have the highest bit set in the packed format to distinguish
-> + * them from PFNs which will be contained in the image file.
->   */
-> -static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
-> +static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm,
-> +               struct memory_bitmap *zero_bm)
->  {
->         int j;
->
-> @@ -2110,6 +2164,8 @@ static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
->                 buf[j] = memory_bm_next_pfn(bm);
->                 if (unlikely(buf[j] == BM_END_OF_MAP))
->                         break;
-> +               if (memory_bm_test_bit(zero_bm, buf[j]))
-> +                       buf[j] |= ENCODED_PFN_ZERO_FLAG;
->         }
->  }
->
-> @@ -2151,7 +2207,7 @@ int snapshot_read_next(struct snapshot_handle *handle)
->                 memory_bm_position_reset(&copy_bm);
->         } else if (handle->cur <= nr_meta_pages) {
->                 clear_page(buffer);
-> -               pack_pfns(buffer, &orig_bm);
-> +               pack_pfns(buffer, &orig_bm, &zero_bm);
->         } else {
->                 struct page *page;
->
-> @@ -2247,24 +2303,34 @@ static int load_header(struct swsusp_info *info)
->   * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
->   * @bm: Memory bitmap.
->   * @buf: Area of memory containing the PFNs.
-> + * @zero_bm: Memory bitmap with the zero PFNs marked.
->   *
->   * For each element of the array pointed to by @buf (1 page at a time), set the
-> - * corresponding bit in @bm.
-> + * corresponding bit in @bm. If the page was originally populated with only
-> + * zeros then a corresponding bit will also be set in @zero_bm.
->   */
-> -static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
-> +static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm,
-> +               struct memory_bitmap *zero_bm)
->  {
-> -       int j;
-> +       int j, zero;
-
-"zero" is a bool variable.
-
-> +       unsigned long decoded_pfn;
-
-Please put this above the other declaration.
-
->
->         for (j = 0; j < PAGE_SIZE / sizeof(long); j++) {
->                 if (unlikely(buf[j] == BM_END_OF_MAP))
->                         break;
->
-> -               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
-> -                       memory_bm_set_bit(bm, buf[j]);
-> +               zero = !!(buf[j] & ENCODED_PFN_ZERO_FLAG);
-> +               decoded_pfn = buf[j] & ENCODED_PFN_MASK;
-> +               if (pfn_valid(decoded_pfn) && memory_bm_pfn_present(bm, decoded_pfn)) {
-> +                       memory_bm_set_bit(bm, decoded_pfn);
-> +                       if (zero) {
-> +                               memory_bm_set_bit(zero_bm, decoded_pfn);
-> +                               nr_zero_pages++;
-> +                       }
->                 } else {
-> -                       if (!pfn_valid(buf[j]))
-> +                       if (!pfn_valid(decoded_pfn))
->                                 pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
-> -                                      (unsigned long long)PFN_PHYS(buf[j]));
-> +                                      (unsigned long long)PFN_PHYS(decoded_pfn));
->                         return -EFAULT;
->                 }
->         }
-> @@ -2486,6 +2552,7 @@ static inline void free_highmem_data(void) {}
->   * prepare_image - Make room for loading hibernation image.
->   * @new_bm: Uninitialized memory bitmap structure.
->   * @bm: Memory bitmap with unsafe pages marked.
-> + * @zero_bm: Memory bitmap containing the zero pages.
->   *
->   * Use @bm to mark the pages that will be overwritten in the process of
->   * restoring the system memory state from the suspend image ("unsafe" pages)
-> @@ -2496,11 +2563,16 @@ static inline void free_highmem_data(void) {}
->   * pages will be used for just yet.  Instead, we mark them all as allocated and
->   * create a lists of "safe" pages to be used later.  On systems with high
->   * memory a list of "safe" highmem pages is created too.
-> + *
-> + * Because we didn't know which pages were unsafe when we created the zero bm we
-> + * make a copy of it and recreate it within safe pages.
-
-I would prefer something like "Because it was not known which pages
-were unsafe when @zero_bm was created, make a copy of it and recreate
-it within safe pages."
-
->   */
-> -static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
-> +static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm,
-> +               struct memory_bitmap *zero_bm)
->  {
->         unsigned int nr_pages, nr_highmem;
->         struct linked_page *lp;
-> +       struct memory_bitmap tmp;
-
-Please put this above the previous declaration.
-
->         int error;
->
->         /* If there is no highmem, the buffer will not be necessary */
-> @@ -2516,6 +2588,22 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
->
->         duplicate_memory_bitmap(new_bm, bm);
->         memory_bm_free(bm, PG_UNSAFE_KEEP);
-> +
-> +       /* Make a copy of the zero bm so it can be created in safe pages */
-
-s/the zero bm/zero_bm/
-
-> +       error = memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
-> +       if (error)
-> +               goto Free;
-
-Please add empty lines after an if () without a block in all places.
-
-> +       duplicate_memory_bitmap(&tmp, zero_bm);
-> +       memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
-> +
-> +       /* Recreate zero_bm in safe pages */
-> +       error = memory_bm_create(zero_bm, GFP_ATOMIC, PG_SAFE);
-> +       if (error)
-> +               goto Free;
-> +       duplicate_memory_bitmap(zero_bm, &tmp);
-> +       memory_bm_free(&tmp, PG_UNSAFE_KEEP);
-> +       /* at this point zero_bm is in safe pages and we can use it while restoring */
-
-"At this point zero_bm is in safe pages and it can be used for restoring."
-
-> +
->         if (nr_highmem > 0) {
->                 error = prepare_highmem_image(bm, &nr_highmem);
->                 if (error)
-> @@ -2530,7 +2618,7 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
->          *
->          * nr_copy_pages cannot be less than allocated_unsafe_pages too.
->          */
-> -       nr_pages = nr_copy_pages - nr_highmem - allocated_unsafe_pages;
-> +       nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
->         nr_pages = DIV_ROUND_UP(nr_pages, PBES_PER_LINKED_PAGE);
->         while (nr_pages > 0) {
->                 lp = get_image_page(GFP_ATOMIC, PG_SAFE);
-> @@ -2543,7 +2631,7 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
->                 nr_pages--;
->         }
->         /* Preallocate memory for the image */
-> -       nr_pages = nr_copy_pages - nr_highmem - allocated_unsafe_pages;
-> +       nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
->         while (nr_pages > 0) {
->                 lp = (struct linked_page *)get_zeroed_page(GFP_ATOMIC);
->                 if (!lp) {
-> @@ -2631,8 +2719,9 @@ int snapshot_write_next(struct snapshot_handle *handle)
->         static struct chain_allocator ca;
->         int error = 0;
->
-> +next:
->         /* Check if we have already loaded the entire image */
-> -       if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages)
-> +       if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages)
->                 return 0;
->
->         handle->sync_read = 1;
-> @@ -2657,19 +2746,26 @@ int snapshot_write_next(struct snapshot_handle *handle)
->                 if (error)
->                         return error;
->
-> +               error = memory_bm_create(&zero_bm, GFP_ATOMIC, PG_ANY);
-> +               if (error)
-> +                       return error;
-> +
-> +               nr_zero_pages = 0;
-> +
->                 hibernate_restore_protection_begin();
->         } else if (handle->cur <= nr_meta_pages + 1) {
-> -               error = unpack_orig_pfns(buffer, &copy_bm);
-> +               error = unpack_orig_pfns(buffer, &copy_bm, &zero_bm);
->                 if (error)
->                         return error;
->
->                 if (handle->cur == nr_meta_pages + 1) {
-> -                       error = prepare_image(&orig_bm, &copy_bm);
-> +                       error = prepare_image(&orig_bm, &copy_bm, &zero_bm);
->                         if (error)
->                                 return error;
->
->                         chain_init(&ca, GFP_ATOMIC, PG_SAFE);
->                         memory_bm_position_reset(&orig_bm);
-> +                       memory_bm_position_reset(&zero_bm);
->                         restore_pblist = NULL;
->                         handle->buffer = get_buffer(&orig_bm, &ca);
->                         handle->sync_read = 0;
-> @@ -2686,6 +2782,14 @@ int snapshot_write_next(struct snapshot_handle *handle)
->                         handle->sync_read = 0;
->         }
->         handle->cur++;
-> +
-> +       /* Zero pages were not included in the image, memset it and move on. */
-> +       if ((handle->cur > (nr_meta_pages + 1)) &&
-> +                       memory_bm_test_bit(&zero_bm, memory_bm_get_current(&orig_bm))) {
-> +               memset(handle->buffer, 0, PAGE_SIZE);
-> +               goto next;
-> +       }
-> +
->         return PAGE_SIZE;
->  }
->
-> @@ -2702,7 +2806,7 @@ void snapshot_write_finalize(struct snapshot_handle *handle)
->         copy_last_highmem_page();
->         hibernate_restore_protect_page(handle->buffer);
->         /* Do that only if we have loaded the image entirely */
-> -       if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages) {
-> +       if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages) {
->                 memory_bm_recycle(&orig_bm);
->                 free_highmem_data();
->         }
-> --
+If you want a generic reset callback for governors, that's fine, but
+make it generic and not specific to a particular use case.
