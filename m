@@ -2,80 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCDF73941F
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 02:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC889739538
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 04:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjFVAv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 20:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S230297AbjFVCG4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 22:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFVAvz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 20:51:55 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F29197
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:51:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so9029809e87.3
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687395112; x=1689987112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JpH450RlcCBag58hjq7lxrqN2fInkuZLNQWzOYqCTD4=;
-        b=hcMVMZxr3AZmAsjOEMtaDKs1BAyffyed833lUzAWODc+ovtjuJnYZLxkY+42oIEZAk
-         g7m5ght45cAE4HpsEarBfPkPQbTJA9Y7bzRNolCz6i7SggEG8MbRygrwARgUjIziYFxN
-         BILDyzX2sAoY7G+BYa5TDmWs1iQsT0QXuUWg3lSCkT/2VIDvyX7ONLGCsPyqVA2NuhK4
-         QN/mz+GDeeu/aNQyIoyx9VsWTl/RYGVmXQd/5SQaqS3aZ2mmNtEyLsty/VQ63xd5tkrj
-         X9o0ixOlKvzjsLJ3XR2lZPoGCJjt4msI6+T82At5mC++svcB7bgLFDrTLKDSufzRizzM
-         YuFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687395112; x=1689987112;
-        h=content-transfer-encoding:in-reply-to:subject:from:content-language
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JpH450RlcCBag58hjq7lxrqN2fInkuZLNQWzOYqCTD4=;
-        b=DbaURvxRC0TtLqMqazRUkfJieTAEKx1VfpyhXv875uMIhIic5DYRK26D/mVgU2eOew
-         XRMfLKjuoTukufXGVylO93nP3uGWM1nIkZnM4xHVrybE7ycKpk/7yBsmrvMdH1smP7W0
-         rdCtKakLVyiX0hGPzIXD/UdQCO/qQVR87CauVBEj70pDYi4y5FwM9CQk1wd0vEtlSOzV
-         RZWYXL1l0aBRRomyGgG9ucqp8eXYg6HDtQ6Qxm1KNsZilmpHUyunz1nTh+bdIYKQSyy9
-         zyQ5byfK+XaFMpBSZkE8n4MHaiLgMRESgGN7ftJv6y9ez5cT1NmCCvVStdncPyLMdAiL
-         M3+g==
-X-Gm-Message-State: AC+VfDw4t1j3iKW+vNfbkzsHTCX3zaWidSCVg3KVdqafPEy4SE/VEfxx
-        d1a4Hu5fIVLi0Ptff9wiHNm9kQ==
-X-Google-Smtp-Source: ACHHUZ65QyPqBn4GlqwjOoSz+PSJNfvplML9UAIrdeTW08mFQ/X0fteOjnBCdjYy51tpPWPIo4EPKQ==
-X-Received: by 2002:a05:6512:3f0c:b0:4f9:58ed:7bba with SMTP id y12-20020a0565123f0c00b004f958ed7bbamr2736659lfa.16.1687395112337;
-        Wed, 21 Jun 2023 17:51:52 -0700 (PDT)
-Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
-        by smtp.gmail.com with ESMTPSA id a9-20020a19f809000000b004f3a71a9e72sm928156lff.102.2023.06.21.17.51.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 17:51:51 -0700 (PDT)
-Message-ID: <dc5ffed0-555b-18e5-cf96-d6a4263357af@linaro.org>
-Date:   Thu, 22 Jun 2023 02:51:50 +0200
+        with ESMTP id S229854AbjFVCGy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 22:06:54 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55455211F;
+        Wed, 21 Jun 2023 19:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=9Q+RVMxQTnESFWq3dEuCfX1ILCA2ks3wZlSRkHE8toQ=; b=cMxr7XNoPaiJJVIfeeYi7V+9mM
+        Mcfkz00jliVgU9VtZ3zSjatxeu5qxG6fkv4ORn3P8I6yBqgAGo6sK6rQSvg2VWw18rcDtXEW+dh8m
+        1EpbpqKb9IEAV1H8h/ryX8IS3kRXKCD1WqxZ7TzfJtaF3arGqwNskSb6J3oN3xhIZDJvgfr8AXY3f
+        Zp+TqdvqJgI5/b9yUptfSlsLXO2cauPK+jj0vGSkZVo1ZLkoecwCXf1eOBCJieQu0Rw7PI//1/ZKP
+        I03lcVAZnHqJugrYJDc9o4T/fk+9A67jM5AjeQt0P+msn1UQ52TpEiVqltUmYpcG8IZrUtuepsE9w
+        6zmxmPdQ==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qC9hf-00GVVa-2b;
+        Thu, 22 Jun 2023 02:05:43 +0000
+Message-ID: <8a1ba9cd-426f-dd59-bb2a-67a0f1af6de8@infradead.org>
+Date:   Wed, 21 Jun 2023 19:05:41 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
- <20230621-topic-mm8013-v1-2-4407c6260053@linaro.org>
- <da300402-d417-5646-d4c9-7c100c351db1@linaro.org>
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v3 1/3] x86/idle: Disable IBRS when cpu is offline
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: Re: [PATCH 2/3] dt-bindings: power: supply: Document Mitsumi MM8013
- fuel gauge
-In-Reply-To: <da300402-d417-5646-d4c9-7c100c351db1@linaro.org>
+To:     Waiman Long <longman@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
+        Joe Mario <jmario@redhat.com>
+References: <20230622003603.1188364-1-longman@redhat.com>
+ <20230622003603.1188364-2-longman@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230622003603.1188364-2-longman@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,57 +64,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21.06.2023 18:38, Krzysztof Kozlowski wrote:
-> On 21/06/2023 17:39, Konrad Dybcio wrote:
->> The Mitsumie MM8013 is an I2C fuel gauge for Li-Ion cells. The partial
-> 
-> Mitsumi
-> 
->> datasheet is available at [1]. Add bindings for this chip.
->>
->> [1] https://www.mitsumi.co.jp/latest-M/Catalog/pdf/battery_mm_8013_e.pdf
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  .../bindings/power/supply/mitsumi,mm8013.yaml      | 35 ++++++++++++++++++++++
->>  1 file changed, 35 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
->> new file mode 100644
->> index 000000000000..080fd44083ac
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
->> @@ -0,0 +1,35 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/mitsumi,mm8013.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Mitsumi MM8013 fuel gauge
->> +
->> +maintainers:
->> +  - Konrad Dybcio <konradybcio@kernel.org>
->> +
->> +properties:
->> +  compatible:
->> +    const: mitsumi,mm8013
->> +
->> +  reg:
->> +    maxItems: 1
-> 
-> 
-> I think you miss several properties: three power supplies (although not
-> all might be needed) and most likely monitored-battery. One regulator
-> output and output GPIO probably can be skipped.
-Looking at the example circuit, it seems like the chip's power lines are
-hardwired to the battery cell.
 
-monitored-battery does not seem useful today, as we don't have any
-information about writing values onto the chip :/ And I'm not willing
-to experiment with that! :P
 
-Konrad
+On 6/21/23 17:36, Waiman Long wrote:
+> Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+> disables IBRS when the CPU enters long idle. However, when a CPU
+> becomes offline, the IBRS bit is still set when X86_FEATURE_KERNEL_IBRS
+> is enabled. That will impact the performance of a sibling CPU. Mitigate
+> this performance impact by clearing all the mitigation bits in SPEC_CTRL
+> MSR when offline. When the CPU is online again, it will be re-initialized
+> and so restoring the SPEC_CTRL value isn't needed.
 > 
-> Best regards,
-> Krzysztof
+> Add a comment to say that native_play_dead() is a __noreturn function,
+> but it can't be marked as such to avoid confusion about the missing
+> MSR restoration code.
 > 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  arch/x86/kernel/smpboot.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+> index 352f0ce1ece4..7bc33885518c 100644
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -84,6 +84,7 @@
+>  #include <asm/hw_irq.h>
+>  #include <asm/stackprotector.h>
+>  #include <asm/sev.h>
+> +#include <asm/nospec-branch.h>
+>  
+>  /* representing HT siblings of each logical CPU */
+>  DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
+> @@ -1836,8 +1837,17 @@ void __noreturn hlt_play_dead(void)
+>  	}
+>  }
+>  
+> +/*
+> + * naitve_play_dead() is essentially a __noreturn function, but it can't
+
+typo: native_play_dead()
+
+> + * be marked as such as the compiler may complain about it.
+> + */
+>  void native_play_dead(void)
+>  {
+> +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
+> +		this_cpu_write(x86_spec_ctrl_current, 0);
+> +		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+> +	}
+> +
+>  	play_dead_common();
+>  	tboot_shutdown(TB_SHUTDOWN_WFS);
+>  
+
+-- 
+~Randy
