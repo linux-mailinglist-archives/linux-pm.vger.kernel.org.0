@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D117393E6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 02:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7967393E2
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 02:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjFVAhk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 20:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229893AbjFVAh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 20:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjFVAhf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 20:37:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FFA198E
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:36:48 -0700 (PDT)
+        with ESMTP id S229784AbjFVAh2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 20:37:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EA51981
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687394208;
+        s=mimecast20190719; t=1687394206;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZnY7DyJzG9u4tj8u43HUsl2yxKZDOEzNFGoyTY9ZN9E=;
-        b=JDLg7nKdQKg/0qSrLO2QEDbLWQGp4BimwcVoFEoMPfXVoaMx4FYSpelqQJkzTMaBCbm5pa
-        hJgkh2NWpla+DGyVaTxFPCfzbJrPwBdjv2Nl7/i3GkPAxUfwC+Dp+zyd4WhR0m0JxanbgI
-        Aib0xdpKIVBy5zHXaMrpwknFi8RBgYI=
+        bh=1r3PzJd7BfuII/LkCpH6/mpfYzdtX6yj52D21WLcU08=;
+        b=Fa6s3/82zSqlQLElrUZDKgzdIbL0dFU+80QxjfvagWhAVlce23NZt/GbILI4YRLNnSS3zN
+        kcvC4EAivNnBa2rDwGIDInsixXQ6Dk9t9YHYyhvWKnfUOWk5s2FYqGtwlgT7MMef77rRtK
+        +W94UeXvZL/rVGetD8UbPUlF/W4aGog=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-8lweGLeKPVGsRXDFNdxTew-1; Wed, 21 Jun 2023 20:36:44 -0400
-X-MC-Unique: 8lweGLeKPVGsRXDFNdxTew-1
+ us-mta-433-Wf_xTA3DNyOMMsljI4GqDw-1; Wed, 21 Jun 2023 20:36:45 -0400
+X-MC-Unique: Wf_xTA3DNyOMMsljI4GqDw-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9663B805AF6;
-        Thu, 22 Jun 2023 00:36:43 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66929800193;
+        Thu, 22 Jun 2023 00:36:44 +0000 (UTC)
 Received: from llong.com (unknown [10.22.33.143])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1D12112132C;
-        Thu, 22 Jun 2023 00:36:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A8FA8112132C;
+        Thu, 22 Jun 2023 00:36:43 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -50,9 +50,9 @@ To:     Peter Zijlstra <peterz@infradead.org>,
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
         Joe Mario <jmario@redhat.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 2/3] intel_idle: Sync up the SPEC_CTRL MSR value to x86_spec_ctrl_current
-Date:   Wed, 21 Jun 2023 20:36:02 -0400
-Message-Id: <20230622003603.1188364-3-longman@redhat.com>
+Subject: [PATCH v3 3/3] intel_idle: Add ibrs_off module parameter to force disable IBRS
+Date:   Wed, 21 Jun 2023 20:36:03 -0400
+Message-Id: <20230622003603.1188364-4-longman@redhat.com>
 In-Reply-To: <20230622003603.1188364-1-longman@redhat.com>
 References: <20230622003603.1188364-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -68,42 +68,115 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When intel_idle_ibrs() is called, it modifies the SPEC_CTRL MSR to
-0 in order disable IBRS. However, the new MSR value isn't reflected
-in x86_spec_ctrl_current which is at odd with the other code that
-keep track of its state in that percpu variable. Fix that by updating
-x86_spec_ctrl_current percpu value to always match the content of the
-SPEC_CTRL MSR.
+Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+disables IBRS when the cstate is 6 or lower. However, there are
+some use cases where a customer may want to use max_cstate=1 to
+lower latency. Such use cases will suffer from the performance
+degradation caused by the enabling of IBRS in the sibling idle thread.
+Add a "ibrs_off" module parameter to force disable IBRS and the
+CPUIDLE_FLAG_IRQ_ENABLE flag if set.
+
+In the case of a Skylake server with max_cstate=1, this new ibrs_off
+option will likely increase the IRQ response latency as IRQ will now
+be disabled.
+
+When running SPECjbb2015 with cstates set to C1 on a Skylake system.
+
+First test when the kernel is booted with: "intel_idle.ibrs_off"
+  max-jOPS = 117828, critical-jOPS = 66047
+
+Then retest when the kernel is booted without the "intel_idle.ibrs_off"
+added.
+  max-jOPS = 116408, critical-jOPS = 58958
+
+That means booting with "intel_idle.ibrs_off" improves performance by:
+  max-jOPS:   1.2%, which could be considered noise range.
+  critical-jOPS: 12%, which is definitely a solid improvement.
+
+The admin-guide/pm/intel_idle.rst file is updated to add a description
+about the new "ibrs_off" module parameter.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- drivers/idle/intel_idle.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
+ drivers/idle/intel_idle.c                   | 14 ++++++++++++--
+ 2 files changed, 28 insertions(+), 3 deletions(-)
 
+diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
+index b799a43da62e..8604e6d1fe2c 100644
+--- a/Documentation/admin-guide/pm/intel_idle.rst
++++ b/Documentation/admin-guide/pm/intel_idle.rst
+@@ -170,7 +170,7 @@ and ``idle=nomwait``.  If any of them is present in the kernel command line, the
+ ``MWAIT`` instruction is not allowed to be used, so the initialization of
+ ``intel_idle`` will fail.
+ 
+-Apart from that there are four module parameters recognized by ``intel_idle``
++Apart from that there are five module parameters recognized by ``intel_idle``
+ itself that can be set via the kernel command line (they cannot be updated via
+ sysfs, so that is the only way to change their values).
+ 
+@@ -216,6 +216,21 @@ are ignored).
+ The idle states disabled this way can be enabled (on a per-CPU basis) from user
+ space via ``sysfs``.
+ 
++The ``ibrs_off`` module parameter is a boolean flag (default to false). It is
++used to control if IBRS (Indirect Branch Restricted Speculation) should be
++turned off, if set, when the CPU enters an idle state.  This flag will not
++affect CPUs that are using Enhanced IBRS which can remain on with little
++performance impact.
++
++For some CPUs, IBRS will be selected as mitigation for Spectre v2 and Retbleed
++security vulnerabilities by default.  Leaving the IBRS mode on while idling may
++have a performance impact on its sibling CPU.  The IBRS mode will be turned off
++by default when the CPU enters into a deep idle state, but not in some
++shallower ones.  Setting the ``ibrs_off`` module parameter will force the IBRS
++mode to off when the CPU is in any one of the available idle states.  This may
++help performance of a sibling CPU at the expense of a slightly higher wakeup
++latency for the idle CPU.
++
+ 
+ .. _intel-idle-core-and-package-idle-states:
+ 
 diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index aa2d19db2b1d..07fa23707b3c 100644
+index 07fa23707b3c..8bbf1e6d845c 100644
 --- a/drivers/idle/intel_idle.c
 +++ b/drivers/idle/intel_idle.c
-@@ -181,13 +181,17 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
- 	u64 spec_ctrl = spec_ctrl_current();
- 	int ret;
+@@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
+ static unsigned int disabled_states_mask __read_mostly;
+ static unsigned int preferred_states_mask __read_mostly;
+ static bool force_irq_on __read_mostly;
++static bool ibrs_off __read_mostly;
  
--	if (smt_active)
-+	if (smt_active) {
-+		__this_cpu_write(x86_spec_ctrl_current, 0);
- 		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-+	}
+ static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
  
- 	ret = __intel_idle(dev, drv, index);
- 
--	if (smt_active)
-+	if (smt_active) {
- 		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-+		__this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
-+	}
- 
- 	return ret;
- }
+@@ -1907,12 +1908,15 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+ 			state->enter = intel_idle_xstate;
+ 		} else if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+-			   state->flags & CPUIDLE_FLAG_IBRS) {
++			  ((state->flags & CPUIDLE_FLAG_IBRS) || ibrs_off)) {
+ 			/*
+ 			 * IBRS mitigation requires that C-states are entered
+ 			 * with interrupts disabled.
+ 			 */
+-			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
++			if (ibrs_off && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
++				state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
++			else
++				WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+ 			state->enter = intel_idle_ibrs;
+ 		} else if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
+ 			state->enter = intel_idle_irq;
+@@ -2165,3 +2169,9 @@ MODULE_PARM_DESC(preferred_cstates, "Mask of preferred idle states");
+  * 'CPUIDLE_FLAG_INIT_XSTATE' and 'CPUIDLE_FLAG_IBRS' flags.
+  */
+ module_param(force_irq_on, bool, 0444);
++/*
++ * Force the disabling of IBRS when X86_FEATURE_KERNEL_IBRS is on and
++ * CPUIDLE_FLAG_IRQ_ENABLE isn't set.
++ */
++module_param(ibrs_off, bool, 0444);
++MODULE_PARM_DESC(ibrs_off, "Disable IBRS when idle");
 -- 
 2.31.1
 
