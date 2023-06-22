@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 357E3739C51
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4460739C5B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjFVJMW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 05:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S232249AbjFVJMu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 05:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbjFVJMB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:12:01 -0400
+        with ESMTP id S230013AbjFVJMd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:12:33 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B901E268F;
-        Thu, 22 Jun 2023 02:02:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1493E6E80;
+        Thu, 22 Jun 2023 02:03:19 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 132451063;
-        Thu, 22 Jun 2023 02:03:30 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90501113E;
+        Thu, 22 Jun 2023 02:04:03 -0700 (PDT)
 Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A41063F663;
-        Thu, 22 Jun 2023 02:02:45 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 10:02:44 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F6EE3F663;
+        Thu, 22 Jun 2023 02:03:19 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 10:03:17 +0100
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -44,15 +44,15 @@ Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         "Tim C . Chen" <tim.c.chen@intel.com>,
         Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
- balancing
-Message-ID: <ZJQONIinvSengWa8@arm.com>
+Subject: Re: [PATCH v4 10/24] sched/fair: Use IPCC scores to select a busiest
+ runqueue
+Message-ID: <ZJQOVUcFrqNReP1o@arm.com>
 References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-11-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230613042422.5344-11-ricardo.neri-calderon@linux.intel.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -62,25 +62,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Monday 12 Jun 2023 at 21:24:05 (-0700), Ricardo Neri wrote:
-> When using IPCC scores to break ties between two scheduling groups, it is
-> necessary to consider both the current score and the score that would
-> result after load balancing.
+On Monday 12 Jun 2023 at 21:24:08 (-0700), Ricardo Neri wrote:
+> Use IPCC scores to break a tie between two runqueues with the same priority
+> and number of running tasks: select the runqueue of which the task enqueued
+> last would get a higher IPC boost when migrated to the destination CPU.
+> (These tasks are migrated first during load balance.)
 > 
-> Compute the combined IPC class score of a scheduling group and the local
-> scheduling group. Compute both the current score and the prospective score.
-> 
-> Collect IPCC statistics only for asym_packing and fully_busy scheduling
-> groups. These are the only cases that use IPCC scores.
-> 
-> These IPCC statistics are used during idle load balancing. The candidate
-> scheduling group will have one fewer busy CPU after load balancing. This
-> observation is important for cores with SMT support.
-> 
-> The IPCC score of scheduling groups composed of SMT siblings needs to
-> consider that the siblings share CPU resources. When computing the total
-> IPCC score of the scheduling group, divide the score of each sibling by
-> the number of busy siblings.
+> For now, restrict the utilization of IPCC scores to scheduling domains
+> marked with the SD_ASYM_PACKING flag.
 > 
 > Cc: Ben Segall <bsegall@google.com>
 > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -103,139 +92,124 @@ On Monday 12 Jun 2023 at 21:24:05 (-0700), Ricardo Neri wrote:
 > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > ---
 > Changes since v3:
->  * None
+>  * Do not compute the IPCC stats using the current tasks of runqueues.
+>    Instead, use the tasks at the back of the queue. These are the tasks
+>    that will be pulled first during load balance. (Vincent)
 > 
 > Changes since v2:
->  * Also collect IPCC stats for fully_busy sched groups.
->  * Restrict use of IPCC stats to SD_ASYM_PACKING. (Ionela)
+>  * Only use IPCC scores to break ties if the sched domain uses
+>    asym_packing. (Ionela)
 >  * Handle errors of arch_get_ipcc_score(). (Ionela)
 > 
 > Changes since v1:
->  * Implemented cleanups and reworks from PeterZ. I took all his
->    suggestions, except the computation of the  IPC score before and after
->    load balancing. We are computing not the average score, but the *total*.
->  * Check for the SD_SHARE_CPUCAPACITY to compute the throughput of the SMT
->    siblings of a physical core.
+>  * Fixed a bug when selecting a busiest runqueue: when comparing two
+>    runqueues with equal nr_running, we must compute the IPCC score delta
+>    of both.
+>  * Renamed local variables to improve the layout of the code block.
+>    (PeterZ)
 >  * Used the new interface names.
->  * Reworded commit message for clarity.
 > ---
->  kernel/sched/fair.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
+>  kernel/sched/fair.c | 61 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 61 insertions(+)
 > 
 > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index c0cab5e501b6..a51c65c9335f 100644
+> index fcec791ede4f..da3e009eef42 100644
 > --- a/kernel/sched/fair.c
 > +++ b/kernel/sched/fair.c
-> @@ -9114,6 +9114,8 @@ struct sg_lb_stats {
->  	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
->  	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
->  	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
-> +	long ipcc_score_after; /* Prospective IPCC score after load balancing */
-> +	unsigned long ipcc_score_before; /* IPCC score before load balancing */
->  #endif
->  };
->  
-> @@ -9452,6 +9454,62 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
->  	}
+> @@ -9564,6 +9564,41 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
+>  	return sched_asym_ipcc_prefer(a_stats, b_stats);
 >  }
 >  
-> +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
-> +				      struct sched_group *sg,
-> +				      struct lb_env *env)
+> +/**
+> + * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
+> + * @rq:		A runqueue
+> + * @env:	Load balancing environment
+> + *
+> + * Returns: The IPCC score delta that the last task enqueued in @rq would get
+> + * if placed in the destination CPU of @env. LONG_MIN to indicate that the
+> + * delta should not be used.
+> + */
+> +static long ipcc_score_delta(struct rq *rq, struct lb_env *env)
 > +{
-> +	unsigned long score_on_dst_cpu, before;
-> +	int busy_cpus;
-> +	long after;
+> +	unsigned long score_src, score_dst;
+> +	unsigned short ipcc;
 > +
 > +	if (!sched_ipcc_enabled())
-> +		return;
+> +		return LONG_MIN;
 > +
-> +	/*
-> +	 * IPCC scores are only useful during idle load balancing. For now,
-> +	 * only asym_packing uses IPCC scores.
-> +	 */
-> +	if (!(env->sd->flags & SD_ASYM_PACKING) ||
-> +	    env->idle == CPU_NOT_IDLE)
-> +		return;
+> +	/* Only asym_packing uses IPCC scores at the moment. */
+> +	if (!(env->sd->flags & SD_ASYM_PACKING))
+> +		return LONG_MIN;
 > +
-> +	/*
-> +	 * IPCC scores are used to break ties only between these types of
-> +	 * groups.
-> +	 */
-> +	if (sgs->group_type != group_fully_busy &&
-> +	    sgs->group_type != group_asym_packing)
-> +		return;
+> +	if (rq_last_task_ipcc(env->dst_cpu, rq, &ipcc))
+> +		return LONG_MIN;
 > +
-> +	busy_cpus = sgs->group_weight - sgs->idle_cpus;
+> +	score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
+> +	if (IS_ERR_VALUE(score_dst))
+> +		return LONG_MIN;
 > +
-> +	/* No busy CPUs in the group. No tasks to move. */
-> +	if (!busy_cpus)
-> +		return;
+> +	score_src = arch_get_ipcc_score(ipcc, cpu_of(rq));
+> +	if (IS_ERR_VALUE(score_src))
+> +		return LONG_MIN;
 > +
-> +	score_on_dst_cpu = arch_get_ipcc_score(sgs->min_ipcc, env->dst_cpu);
-> +
-> +	/*
-> +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be zero
-> +	 * and not used.
-> +	 */
-> +	if (IS_ERR_VALUE(score_on_dst_cpu))
-> +		return;
-> +
-> +	before = sgs->sum_score;
-> +	after = before - sgs->min_score;
-
-I don't believe this can end up being negative as the sum of all
-scores should be higher or equal to the min score, right?
-
-I'm just wondering if ipcc_score_after can be made unsigned long as well,
-just for consistency.
-
-> +
-> +	/* SMT siblings share throughput. */
-> +	if (busy_cpus > 1 && sg->flags & SD_SHARE_CPUCAPACITY) {
-> +		before /= busy_cpus;
-> +		/* One sibling will become idle after load balance. */
-> +		after /= busy_cpus - 1;
-> +	}
-> +
-> +	sgs->ipcc_score_after = after + score_on_dst_cpu;
-> +	sgs->ipcc_score_before = before;
-
-Shouldn't the score_on_dst_cpu be added to "after" before being divided
-between the SMT siblings?
-
-Thanks,
-Ionela.
-
+> +	return score_dst - score_src;
 > +}
 > +
 >  #else /* CONFIG_IPC_CLASSES */
 >  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
 >  				    struct rq *rq)
-> @@ -9461,6 +9519,13 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
->  static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
->  {
+> @@ -9594,6 +9629,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
+>  	return false;
 >  }
-> +
-> +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
-> +				      struct sched_group *sg,
-> +				      struct lb_env *env)
+>  
+> +static long ipcc_score_delta(struct rq *rq, struct lb_env *env)
 > +{
+> +	return LONG_MIN;
 > +}
 > +
 >  #endif /* CONFIG_IPC_CLASSES */
 >  
 >  /**
-> @@ -9620,6 +9685,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+> @@ -10769,6 +10809,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+>  {
+>  	struct rq *busiest = NULL, *rq;
+>  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
+> +	long busiest_ipcc_delta = LONG_MIN;
+>  	unsigned int busiest_nr = 0;
+>  	int i;
 >  
->  	sgs->group_type = group_classify(env->sd->imbalance_pct, group, sgs);
->  
-> +	if (!local_group)
-> +		update_sg_lb_stats_scores(sgs, group, env);
+> @@ -10885,6 +10926,26 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+>  			if (busiest_nr < nr_running) {
+>  				busiest_nr = nr_running;
+>  				busiest = rq;
 > +
->  	/* Computing avg_load makes sense only when group is overloaded */
->  	if (sgs->group_type == group_overloaded)
->  		sgs->avg_load = (sgs->group_load * SCHED_CAPACITY_SCALE) /
+> +				/*
+> +				 * Remember the IPCC score of the busiest
+> +				 * runqueue. We may need it to break a tie with
+> +				 * other queues with equal nr_running.
+> +				 */
+> +				busiest_ipcc_delta = ipcc_score_delta(busiest, env);
+> +			/*
+> +			 * For ties, select @rq if doing would give its last
+> +			 * queued task a bigger IPC boost when migrated to
+> +			 * dst_cpu.
+> +			 */
+> +			} else if (busiest_nr == nr_running) {
+> +				long delta = ipcc_score_delta(rq, env);
+> +
+> +				if (busiest_ipcc_delta < delta) {
+> +					busiest_ipcc_delta = delta;
+> +					busiest_nr = nr_running;
+
+nit: there's no need as busiest_nr is already equal to nr_running.
+
+Ionela.
+
+> +					busiest = rq;
+> +				}
+>  			}
+>  			break;
+>  
 > -- 
 > 2.25.1
 > 
