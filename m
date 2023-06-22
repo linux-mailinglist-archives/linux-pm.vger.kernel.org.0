@@ -2,80 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F464739772
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 08:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0C57397F3
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 09:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjFVGZG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 02:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S229961AbjFVHN7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 03:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjFVGYe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 02:24:34 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA7419B5
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 23:24:11 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fa74d06d72so1103895e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 23:24:11 -0700 (PDT)
+        with ESMTP id S229542AbjFVHN6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 03:13:58 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96AFB2113
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jun 2023 00:13:31 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5700401acbeso72219307b3.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jun 2023 00:13:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687415044; x=1690007044;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eH8Jr142ntLel/7gLS1oZ1Nz56TZasAa577P+okAIvw=;
-        b=Qhk4+G/vUb59EiStnxM1IvO/IzZ51ii4b1HymApYEhCeaBxA0YMbxE5YsVsF6c8Q3z
-         pWeKr5HYwG3KzFEl4hK686UK8L7u9lAEkU+HbqwyXsrlsv1x5KVchS4TjwhoCqWEKZFn
-         i4Ro0mEocafLppA3jOsRtFLu+eDg4XaaZxLBVkLtldbHDtorhe8oZoto2E2GW2Ks5NP+
-         VpV4ZYk7YpZHfJl3EMpMHW2LjuMuowug3IJ8WZXtNDkH3/miXK7mSR+cG/uRlGeEFZan
-         2GTd0L9isK+frNFvjSNT5M6EOTz539wYjDxf+8CqNHDehMTGRUNYprcsBhzK850D07lF
-         BBLg==
+        d=linaro.org; s=google; t=1687418008; x=1690010008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9hUliAdRg79tlWj+30+5hplBBl2Cn5f+HdXYzO27t9Y=;
+        b=qNTC3gVZpm0/wi/DY6m/7JNtvsprwFjWaPoY8aeSbKo0pMQXRDBkgabwphkyv/1K+y
+         5PeYwsVJqamo2kgb8swMIM8kdB04eZ3zFfjcR+d7gTbhEzNV52DsGDzh5/+9btRyNc9z
+         SgWzSz9aPPqENgcDFQ8/fijEJ/MOSyttcDiW1goTd71QluBODXI9yNQazLUlEDxJ/HF3
+         FMRGxu0B5hQVRZ+wgbDohOMcixsY6AUio8dtnd3eYw60DqI8oqVuiW3fM5xAccbLoIS3
+         1edJelu136TtGxYPzp2+uv8DZqfU/X6KocG3w1tzDL9Fs57Kgt9r7YepgKmOxlI+05Xf
+         jx5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687415044; x=1690007044;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eH8Jr142ntLel/7gLS1oZ1Nz56TZasAa577P+okAIvw=;
-        b=glUN5EC5XsaDk2mF9c1CrEQtxar1osEkOJT33js1u3V0k5BqzAZj7QizhuP06kaX13
-         tu+/rS8/JkKhFVVLVfwJBRqQUsHIYSRK54fSnoWO11/jToYFwF7dS0NA8ZMmrq/RXK6R
-         JHjqRuEfmuly5XtBGxwjCcN/UGQLHLFEAetNNfOo6eiWfh/2X/+DcOdBot8U2GpzQWBv
-         1JWm2gkLC8KUM3cUf4zG/5SIG183EYZGzVTyocw8swfv2tEae2V6rcdxM68GquugXxIm
-         gpgARxtxty6h4SFcagQvKosx6AARd2yhk2xZwfdblSQs9E9moRKPlB2l8WyuIPBoU01z
-         b+rw==
-X-Gm-Message-State: AC+VfDxCSEkIlw8zqE5YHuNYMzln7rhDsTeert1PEzTfJJ69PJLSzhKM
-        5BwrNtu9FQBohrgXfYNxMHz9ng==
-X-Google-Smtp-Source: ACHHUZ4N2Wiu5Bmd+kn66yQlZpQggnM3k8bZUERZzs+mFFPuLF88JjPdu4yXxaJygw9d8Q1tFcz9gA==
-X-Received: by 2002:a1c:750a:0:b0:3f5:878:c0c2 with SMTP id o10-20020a1c750a000000b003f50878c0c2mr12326628wmc.3.1687415044072;
-        Wed, 21 Jun 2023 23:24:04 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n6-20020a05600c294600b003f7e4639aabsm17920533wmd.10.2023.06.21.23.24.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 23:24:03 -0700 (PDT)
-Message-ID: <3e4840e0-adb6-010b-8186-0b3e38b4a374@linaro.org>
-Date:   Thu, 22 Jun 2023 08:24:01 +0200
+        d=1e100.net; s=20221208; t=1687418008; x=1690010008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9hUliAdRg79tlWj+30+5hplBBl2Cn5f+HdXYzO27t9Y=;
+        b=jNtiCeAqZQVt0ZSqDWn8d4j3C2AlCShu8TIUe0dCN+gb2gb+1FvEdRloiPKRp/2Qm5
+         e4JS8qc0zsbTlh2oiQnV84bh3YdsLgX3kWREXryJxKsk8caWXYJW+RxGd8Ho6vTGmzo/
+         /h1BYcXU4L/74yc3M7HTL8UKgJtDWvnfH3BfU9zL3jguuJpNgBImuGF6QL1TsSD0vO+K
+         Mky8Ie5HDDlN0zehoepvYIfZC/w4dcYb+exQRx5weuOEpIHc7GvtpyuhJMYbIYk5SS5U
+         ERDNLkqgtJGIjP982Ov4BqgVZlKgcVBTpsjek9o7PkNgPl5ILxKr4zUAEqL2Uu2/wDEn
+         hmqg==
+X-Gm-Message-State: AC+VfDzQWmY4nzkhbVUeoKEqphV+M20mzWEA8lWEBOTicBzmrBzW0/Ts
+        MTABrnmD0yHCDh1mLZbxpr4R6OdTAkh35JXEzlkcxg==
+X-Google-Smtp-Source: ACHHUZ7m1xfekhso1XZxAYhTE6sJ6yX2vzQVSru2a5Y/qiFLulxLEFszMWFPoi6fKq16FfYcBUHXuV+K1Ti/DAseeI4=
+X-Received: by 2002:a25:e617:0:b0:be4:d7a9:31ff with SMTP id
+ d23-20020a25e617000000b00be4d7a931ffmr13516285ybh.35.1687418008582; Thu, 22
+ Jun 2023 00:13:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/3] dt-bindings: power: supply: Document Mitsumi MM8013
- fuel gauge
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
- <20230621-topic-mm8013-v1-2-4407c6260053@linaro.org>
- <da300402-d417-5646-d4c9-7c100c351db1@linaro.org>
- <dc5ffed0-555b-18e5-cf96-d6a4263357af@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <dc5ffed0-555b-18e5-cf96-d6a4263357af@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230621213115.113266-1-nick.hawkins@hpe.com>
+In-Reply-To: <20230621213115.113266-1-nick.hawkins@hpe.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 22 Jun 2023 09:13:17 +0200
+Message-ID: <CACRpkdazmeFHagwkJ3s6BHRBgFoLPbj8AVnPL2f+vTi9K46Kcg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/5] ARM: Add GPIO support
+To:     nick.hawkins@hpe.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Cc:     verdun@hpe.com, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
+        linux@roeck-us.net, andy.shevchenko@gmail.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,30 +72,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/06/2023 02:51, Konrad Dybcio wrote:
-> On 21.06.2023 18:38, Krzysztof Kozlowski wrote:
->> On 21/06/2023 17:39, Konrad Dybcio wrote:
->>> The Mitsumie MM8013 is an I2C fuel gauge for Li-Ion cells. The partial
->>
->> Mitsumi
+On Wed, Jun 21, 2023 at 11:35=E2=80=AFPM <nick.hawkins@hpe.com> wrote:
 
-...
+> The gxp-fan-ctrl driver in HWMON no longer will report fan presence
+> or fan failure states as these GPIOs providing this information will be
+> consumed by the host. It will be the hosts function to keep track of
+> fan presence and status.
 
->>
->>
->> I think you miss several properties: three power supplies (although not
->> all might be needed) and most likely monitored-battery. One regulator
->> output and output GPIO probably can be skipped.
-> Looking at the example circuit, it seems like the chip's power lines are
-> hardwired to the battery cell.
-> 
-> monitored-battery does not seem useful today, as we don't have any
-> information about writing values onto the chip :/ And I'm not w
+I understand the approach such that you have also constructed a
+userspace cooling daemon that will consume the fan and GPIO
+information to drive the hardware monitoring and that is what you
+mean when you say "the host" will do it.
 
-OK. With the typo in commit msg:
+This is a *bad idea*.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+While I can't stop you since these are indeed userspace interfaces we
+provide, I urge you to look into my earlier proposal to use a thermal
+zone to manage the cooling inside the kernel and get rid of all that
+custom userspace.
 
-Best regards,
-Krzysztof
+The kernel has all that is needed to regulate the thermal zone with
+PID and on/off regulation. It will work even if the userspace crashes
+completely, which is what you want. The code is reviewed by a large
+community and very well tested.
 
+I think I showed this example before from
+arch/arm/boot/dts/gemini-dlink-dns-313.dts:
+
+        thermal-zones {
+                chassis-thermal {
+                        /* Poll every 20 seconds */
+                        polling-delay =3D <20000>;
+                        /* Poll every 2nd second when cooling */
+                        polling-delay-passive =3D <2000>;
+
+                        thermal-sensors =3D <&g751>;
+
+                        /* Tripping points from the fan.script in the rootf=
+s */
+                        trips {
+                                chassis_alert0: chassis-alert0 {
+                                        /* At 43 degrees turn on low speed =
+*/
+                                        temperature =3D <43000>;
+                                        hysteresis =3D <3000>;
+                                        type =3D "active";
+                                };
+                                chassis_alert1: chassis-alert1 {
+                                        /* At 47 degrees turn on high speed=
+ */
+                                        temperature =3D <47000>;
+                                        hysteresis =3D <3000>;
+                                        type =3D "active";
+                                };
+                                chassis_crit: chassis-crit {
+                                        /* Just shut down at 60 degrees */
+                                        temperature =3D <60000>;
+                                        hysteresis =3D <2000>;
+                                        type =3D "critical";
+                                };
+                        };
+
+                        cooling-maps {
+                                map0 {
+                                        trip =3D <&chassis_alert0>;
+                                        cooling-device =3D <&fan0 1 1>;
+                                };
+                                map1 {
+                                        trip =3D <&chassis_alert1>;
+                                        cooling-device =3D <&fan0 2 2>;
+                                };
+                        };
+                };
+        };
+
+This uses a thermal sensor and a fan with two speeds.
+
+Adding a "presence" GPIO to the thermal zone core to enable and
+disable it which is what your use case needs should be pretty trivial.
+
+Yours,
+Linus Walleij
