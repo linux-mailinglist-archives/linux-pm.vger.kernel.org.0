@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC183739C3B
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357E3739C51
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbjFVJLU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 05:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S232086AbjFVJMW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 05:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjFVJKu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:10:50 -0400
+        with ESMTP id S232095AbjFVJMB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:12:01 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65E95FE2;
-        Thu, 22 Jun 2023 02:01:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B901E268F;
+        Thu, 22 Jun 2023 02:02:46 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 460231042;
-        Thu, 22 Jun 2023 02:02:34 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 132451063;
+        Thu, 22 Jun 2023 02:03:30 -0700 (PDT)
 Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2BCF3F663;
-        Thu, 22 Jun 2023 02:01:49 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 10:01:48 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A41063F663;
+        Thu, 22 Jun 2023 02:02:45 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 10:02:44 +0100
 From:   Ionela Voinescu <ionela.voinescu@arm.com>
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
@@ -44,15 +44,15 @@ Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         "Tim C . Chen" <tim.c.chen@intel.com>,
         Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
- IPC classes
-Message-ID: <ZJQN/KIwCUmzYoiN@arm.com>
+Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
+ balancing
+Message-ID: <ZJQONIinvSengWa8@arm.com>
 References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -62,25 +62,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ricardo,
-
-On Monday 12 Jun 2023 at 21:24:04 (-0700), Ricardo Neri wrote:
-> When selecting the busiest scheduling group between two otherwise identical
-> groups of types asym_packing or fully_busy, IPC classes can be used to
-> break the tie.
+On Monday 12 Jun 2023 at 21:24:05 (-0700), Ricardo Neri wrote:
+> When using IPCC scores to break ties between two scheduling groups, it is
+> necessary to consider both the current score and the score that would
+> result after load balancing.
 > 
-> Compute the IPC class performance score for a scheduling group. It is
-> defined as the sum of the IPC scores of the tasks at the back of each
-> runqueue in the group. Load balancing starts by pulling tasks from the back
-> of the runqueue first, making this tiebreaker more useful.
+> Compute the combined IPC class score of a scheduling group and the local
+> scheduling group. Compute both the current score and the prospective score.
 > 
-> Also, track the IPC class with the lowest score in the scheduling group. A
-> task of this class will be pulled when the destination CPU has lower
-> priority than the fully_busy busiest group.
+> Collect IPCC statistics only for asym_packing and fully_busy scheduling
+> groups. These are the only cases that use IPCC scores.
 > 
-> These two metrics will be used during idle load balancing to compute the
-> current and the potential IPC class score of a scheduling group in a
-> subsequent changeset.
+> These IPCC statistics are used during idle load balancing. The candidate
+> scheduling group will have one fewer busy CPU after load balancing. This
+> observation is important for cores with SMT support.
+> 
+> The IPCC score of scheduling groups composed of SMT siblings needs to
+> consider that the siblings share CPU resources. When computing the total
+> IPCC score of the scheduling group, divide the score of each sibling by
+> the number of busy siblings.
 > 
 > Cc: Ben Segall <bsegall@google.com>
 > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
@@ -103,161 +103,139 @@ On Monday 12 Jun 2023 at 21:24:04 (-0700), Ricardo Neri wrote:
 > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > ---
 > Changes since v3:
->  * Do not compute the IPCC stats using the current tasks of runqueues.
->    Instead, use the tasks at the back of the queue. These are the tasks
->    that will be pulled first during load balance. (Vincent)
+>  * None
 > 
 > Changes since v2:
->  * Also excluded deadline and realtime tasks from IPCC stats. (Dietmar)
->  * Also excluded tasks that cannot run on the destination CPU from the
->    IPCC stats.
->  * Folded struct sg_lb_ipcc_stats into struct sg_lb_stats. (Dietmar)
->  * Reworded description sg_lb_stats::min_ipcc. (Ionela)
+>  * Also collect IPCC stats for fully_busy sched groups.
+>  * Restrict use of IPCC stats to SD_ASYM_PACKING. (Ionela)
 >  * Handle errors of arch_get_ipcc_score(). (Ionela)
 > 
 > Changes since v1:
->  * Implemented cleanups and reworks from PeterZ. Thanks!
+>  * Implemented cleanups and reworks from PeterZ. I took all his
+>    suggestions, except the computation of the  IPC score before and after
+>    load balancing. We are computing not the average score, but the *total*.
+>  * Check for the SD_SHARE_CPUCAPACITY to compute the throughput of the SMT
+>    siblings of a physical core.
 >  * Used the new interface names.
+>  * Reworded commit message for clarity.
 > ---
->  kernel/sched/fair.c | 79 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
+>  kernel/sched/fair.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
 > 
 > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6189d1a45635..c0cab5e501b6 100644
+> index c0cab5e501b6..a51c65c9335f 100644
 > --- a/kernel/sched/fair.c
 > +++ b/kernel/sched/fair.c
-> @@ -9110,6 +9110,11 @@ struct sg_lb_stats {
->  	unsigned int nr_numa_running;
->  	unsigned int nr_preferred_running;
+> @@ -9114,6 +9114,8 @@ struct sg_lb_stats {
+>  	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
+>  	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
+>  	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
+> +	long ipcc_score_after; /* Prospective IPCC score after load balancing */
+> +	unsigned long ipcc_score_before; /* IPCC score before load balancing */
 >  #endif
-> +#ifdef CONFIG_IPC_CLASSES
-> +	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
-                                              ^^^^^^^^^^^^^^
-> +	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
-> +	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
-                                              ^^^^^^^^^^^^^^
-These no longer apply. It might be easier to describe them all in a
-comment just above their declaration. Something like:
-
-"The sum, min and its class of the IPC scores of the tasks at the back of each
-runqueue in the group."
-
-> +#endif
 >  };
 >  
->  /*
-> @@ -9387,6 +9392,77 @@ group_type group_classify(unsigned int imbalance_pct,
->  	return group_has_spare;
+> @@ -9452,6 +9454,62 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+>  	}
 >  }
 >  
-> +#ifdef CONFIG_IPC_CLASSES
-> +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
+> +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
+> +				      struct sched_group *sg,
+> +				      struct lb_env *env)
 > +{
-> +	/* All IPCC stats have been set to zero in update_sg_lb_stats(). */
-> +	sgs->min_score = ULONG_MAX;
-> +}
-> +
-> +static int rq_last_task_ipcc(int dst_cpu, struct rq *rq, unsigned short *ipcc)
-> +{
-> +	struct list_head *tasks = &rq->cfs_tasks;
-> +	struct task_struct *p;
-> +	struct rq_flags rf;
-> +	int ret = -EINVAL;
-> +
-
-It's more typical of ret to be initialised to 0 and changed to an error
-value when there's an error case.
-
-> +	rq_lock_irqsave(rq, &rf);
-> +	if (list_empty(tasks))
-> +		goto out;
-> +
-> +	p = list_last_entry(tasks, struct task_struct, se.group_node);
-> +	if (p->flags & PF_EXITING || is_idle_task(p) ||
-> +	    !cpumask_test_cpu(dst_cpu, p->cpus_ptr))
-> +		goto out;
-> +
-> +	ret = 0;
-> +	*ipcc = p->ipcc;
-> +out:
-> +	rq_unlock(rq, &rf);
-> +	return ret;
-> +}
-> +
-> +/* Called only if cpu_of(@rq) is not idle and has tasks running. */
-> +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> +				    struct rq *rq)
-> +{
-> +	unsigned short ipcc;
-> +	unsigned long score;
+> +	unsigned long score_on_dst_cpu, before;
+> +	int busy_cpus;
+> +	long after;
 > +
 > +	if (!sched_ipcc_enabled())
 > +		return;
 > +
-> +	if (rq_last_task_ipcc(dst_cpu, rq, &ipcc))
+> +	/*
+> +	 * IPCC scores are only useful during idle load balancing. For now,
+> +	 * only asym_packing uses IPCC scores.
+> +	 */
+> +	if (!(env->sd->flags & SD_ASYM_PACKING) ||
+> +	    env->idle == CPU_NOT_IDLE)
 > +		return;
-> +
-> +	score = arch_get_ipcc_score(ipcc, cpu_of(rq));
 > +
 > +	/*
-> +	 * Ignore tasks with invalid scores. When finding the busiest group, we
-> +	 * prefer those with higher sum_score. This group will not be selected.
+> +	 * IPCC scores are used to break ties only between these types of
+> +	 * groups.
 > +	 */
-
-nit: the comment is unnecessary, and a bit misleading, IMO.
-
-The comment says "This group will not be selected." but the only way to
-guarantee that here is to reset the sum_score to 0 when you find an
-invalid score, which I don't believe is your intention.
-
-Also the use of sum_score is captured in later functions, so I don't
-believe there's a need for additional comments here.
-
-Hope it helps,
-Ionela.
-
-> +	if (IS_ERR_VALUE(score))
+> +	if (sgs->group_type != group_fully_busy &&
+> +	    sgs->group_type != group_asym_packing)
 > +		return;
 > +
-> +	sgs->sum_score += score;
+> +	busy_cpus = sgs->group_weight - sgs->idle_cpus;
 > +
-> +	if (score < sgs->min_score) {
-> +		sgs->min_score = score;
-> +		sgs->min_ipcc = ipcc;
+> +	/* No busy CPUs in the group. No tasks to move. */
+> +	if (!busy_cpus)
+> +		return;
+> +
+> +	score_on_dst_cpu = arch_get_ipcc_score(sgs->min_ipcc, env->dst_cpu);
+> +
+> +	/*
+> +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be zero
+> +	 * and not used.
+> +	 */
+> +	if (IS_ERR_VALUE(score_on_dst_cpu))
+> +		return;
+> +
+> +	before = sgs->sum_score;
+> +	after = before - sgs->min_score;
+
+I don't believe this can end up being negative as the sum of all
+scores should be higher or equal to the min score, right?
+
+I'm just wondering if ipcc_score_after can be made unsigned long as well,
+just for consistency.
+
+> +
+> +	/* SMT siblings share throughput. */
+> +	if (busy_cpus > 1 && sg->flags & SD_SHARE_CPUCAPACITY) {
+> +		before /= busy_cpus;
+> +		/* One sibling will become idle after load balance. */
+> +		after /= busy_cpus - 1;
 > +	}
+> +
+> +	sgs->ipcc_score_after = after + score_on_dst_cpu;
+> +	sgs->ipcc_score_before = before;
+
+Shouldn't the score_on_dst_cpu be added to "after" before being divided
+between the SMT siblings?
+
+Thanks,
+Ionela.
+
 > +}
 > +
-> +#else /* CONFIG_IPC_CLASSES */
-> +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> +				    struct rq *rq)
+>  #else /* CONFIG_IPC_CLASSES */
+>  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+>  				    struct rq *rq)
+> @@ -9461,6 +9519,13 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+>  static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
+>  {
+>  }
+> +
+> +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
+> +				      struct sched_group *sg,
+> +				      struct lb_env *env)
 > +{
 > +}
 > +
-> +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
-> +{
-> +}
-> +#endif /* CONFIG_IPC_CLASSES */
-> +
+>  #endif /* CONFIG_IPC_CLASSES */
+>  
 >  /**
->   * sched_use_asym_prio - Check whether asym_packing priority must be used
->   * @sd:		The scheduling domain of the load balancing
-> @@ -9477,6 +9553,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  	int i, nr_running, local_group;
+> @@ -9620,6 +9685,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
 >  
->  	memset(sgs, 0, sizeof(*sgs));
-> +	init_rq_ipcc_stats(sgs);
+>  	sgs->group_type = group_classify(env->sd->imbalance_pct, group, sgs);
 >  
->  	local_group = group == sds->local;
->  
-> @@ -9526,6 +9603,8 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  			if (sgs->group_misfit_task_load < load)
->  				sgs->group_misfit_task_load = load;
->  		}
+> +	if (!local_group)
+> +		update_sg_lb_stats_scores(sgs, group, env);
 > +
-> +		update_sg_lb_ipcc_stats(env->dst_cpu, sgs, rq);
->  	}
->  
->  	sgs->group_capacity = group->sgc->capacity;
+>  	/* Computing avg_load makes sense only when group is overloaded */
+>  	if (sgs->group_type == group_overloaded)
+>  		sgs->avg_load = (sgs->group_load * SCHED_CAPACITY_SCALE) /
 > -- 
 > 2.25.1
 > 
