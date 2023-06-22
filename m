@@ -2,158 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB55739141
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jun 2023 23:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF3F7393E9
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 02:38:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbjFUVHV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 17:07:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
+        id S229830AbjFVAiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 20:38:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFUVHU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 17:07:20 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9818E1713;
-        Wed, 21 Jun 2023 14:07:16 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666e97fcc60so3070880b3a.3;
-        Wed, 21 Jun 2023 14:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687381636; x=1689973636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zxmHl6BRr4PCuqTmBRiO+tAEIgtNXslvgtPUDDYEk5g=;
-        b=oaaQAD9cGxPEmmAEmp3xGt7xjEDHAjuq0ULgnSRpME/0jfp5uei/cX5bL8V/aTAfhH
-         hGFWO3YeJ3zlpyqmhNTJ05nkVcTO1M/HDS0v2QoCyMuns2gymjr1mbs6jmFOyRyil0qq
-         vcyzj1o2Ck1X3aVmQGLz4L9hkX9lfx6AQT24lQNjfNxQH9R4tS/AEunlf++n1awxctia
-         qJ98y1ah/MBR2KqBgpSJJANu16QO+OsiafXzPlFT+YT6hqPWe/wpX4qzCQbp6I2b6Z0s
-         6kPlRQHCX37mmmjg0xxMV8lxc1ZMwpW5fT9QS8opCIJ2BIJNlD/MCDUvxyl65Iqcm/gB
-         mk0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687381636; x=1689973636;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zxmHl6BRr4PCuqTmBRiO+tAEIgtNXslvgtPUDDYEk5g=;
-        b=PRqbGXj+tPzeooTWfTT9v9jKXFF1IulAnwKM+YOJjSb28x3AFfborShfy1ewIUqDBB
-         hbiqt6Fm50mNpoUzE8zuMCCAXDMfLe0nIlWbA8pSYzMv/QIXZvEdaiEjfjH1VdjxEDXb
-         K78m7F/dwSkwzn/dYCCgbKfglRQuyS1Q1CWcIHohxPJlEWFKdS26aGtMLxWcP/7BOQ9H
-         TfEyFFCTZNRruVnW0ktXTvygq8hTMqPiwzNvkmJ1GmZJY5oPG9vUQJTTgmlh2Kr2BKHA
-         ZKLIYwA6IrZW/S1g2D2vlZZRiBXwf6oa7wYzsOQNjVA4O/FKQ8mu2jWtmMoRSP+SJFir
-         la5w==
-X-Gm-Message-State: AC+VfDx+ZGToYJptkKs5n1VSnsRYUIjBfPICexcZP4KPWvKV8xLo0Tbi
-        5p22qfbPqqA+0HxWxVLHLBs=
-X-Google-Smtp-Source: ACHHUZ7UDAN/DUH7d080Yzd19oIbDx6FPfqIcDrxG092wrfQR3eJP0wA81oUirDnxYC5Jt9r4xQd0w==
-X-Received: by 2002:a05:6a20:3d88:b0:10e:96b5:45fa with SMTP id s8-20020a056a203d8800b0010e96b545famr13704285pzi.43.1687381635960;
-        Wed, 21 Jun 2023 14:07:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g7-20020a635207000000b00528db73ed70sm3529775pgb.3.2023.06.21.14.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 14:07:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Jun 2023 14:07:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 14/24] init: clear root_wait on all invalid root= strings
-Message-ID: <8c1992bc-110a-4dad-8643-766c14bf6fd4@roeck-us.net>
-References: <20230523074535.249802-1-hch@lst.de>
- <20230523074535.249802-15-hch@lst.de>
+        with ESMTP id S229889AbjFVAiJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 20:38:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A151997
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687394208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JClsVInx+SfJQwVlXcLVSsPnUQ6NqCBnYMZfU8zrapQ=;
+        b=H5217mcVJ6cf2JO2feUfRdB67a+Y8vg1UkV3L/lTikVCK0tK6dhWZUpHaiDF7G4nGF8xiy
+        tX+bXKBP0aRau5/boQn0hRvsQy45ttkcXFGUT3Ka+qCf01QtaK2zi81VMvYmn/ET/fi4Cc
+        EgB6ETMa8JPGYpO+ITmIUIgMYe/Aagc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-h3nYqPbcM1-QS6yb3y4lTg-1; Wed, 21 Jun 2023 20:36:43 -0400
+X-MC-Unique: h3nYqPbcM1-QS6yb3y4lTg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ECB4E8C5868;
+        Thu, 22 Jun 2023 00:36:41 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.143])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 033EE112132C;
+        Thu, 22 Jun 2023 00:36:23 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
+        Joe Mario <jmario@redhat.com>, Waiman Long <longman@redhat.com>
+Subject: [PATCH v3 0/3] x86/speculation: Disable IBRS when idle
+Date:   Wed, 21 Jun 2023 20:36:00 -0400
+Message-Id: <20230622003603.1188364-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230523074535.249802-15-hch@lst.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+ v3:
+  - Drop patches 1 ("x86/speculation: Provide a debugfs file to dump
+    SPEC_CTRL MSRs") and 5 ("x86/idle: Disable IBRS entering mwait idle
+    and enable it on wakeup") for now.
+  - Drop the MSR restoration code in ("x86/idle: Disable IBRS when cpu
+    is offline") as native_play_dead() does not return.
+  - For patch ("intel_idle: Add ibrs_off module parameter to force
+    disable IBRS"), change the name from "no_ibrs" to "ibrs_off" and
+    document the new parameter in intel_idle.rst.
 
-On Tue, May 23, 2023 at 09:45:25AM +0200, Christoph Hellwig wrote:
-> Instead of only clearing root_wait in devt_from_partuuid when the UUID
-> format was invalid, do that in parse_root_device for all strings that
-> failed to parse.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+For Intel processors that need to turn on IBRS to protect against
+Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
+the performance of the whole core even if only one thread is turning
+it on when running in the kernel. For user space heavy applications,
+the performance impact of occasionally turning IBRS on during syscalls
+shouldn't be significant. Unfortunately, that is not the case when the
+sibling thread is idling in the kernel. In that case, the performance
+impact can be significant.
 
-In linux-next, almost all of my boot tests from usb drives as well
-as a few others fail with "Disabling rootwait; root= is invalid."
-in the log. Bisect points to this patch.
+When DPDK is running on an isolated CPU thread processing network packets
+in user space while its sibling thread is idle. The performance of the
+busy DPDK thread with IBRS on and off in the sibling idle thread are:
 
-It can not easily be reverted, but the following change fixes the problem.
+                                IBRS on         IBRS off
+                                -------         --------
+  packets/second:                  7.8M           10.4M
+  avg tsc cycles/packet:         282.26          209.86
 
---- a/init/do_mounts.c
-+++ b/init/do_mounts.c
-@@ -413,10 +413,12 @@ static dev_t __init parse_root_device(char *root_device_name)
- 
-        error = early_lookup_bdev(root_device_name, &dev);
-        if (error) {
-+#if 0
-                if (error == -EINVAL && root_wait) {
-                        pr_err("Disabling rootwait; root= is invalid.\n");
-                        root_wait = 0;
-                }
-+#endif
-                return 0;
-        }
-        return dev;
+This is a 25% performance degradation. The test system is a Intel Xeon
+4114 CPU @ 2.20GHz.
 
-Debugging shows that early_lookup_bdev() indeed returns -EINVAL.
-Looking into it further, it turns out that devt_from_devname() returns
--EINVAL for root devices such as
-	root=/dev/sda
-if the device is not found, making it impossible to rootwait for such
-a device (this might for example be a raw USB drive without partitions,
-or any qemu drive with format=raw).
+Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+disables IBRS when the CPU enters long idle (C6 or below). However, there
+are existing users out there who have set "intel_idle.max_cstate=1"
+to decrease latency. Those users won't be able to benefit from this
+commit. This patch series extends this commit by providing a new
+"intel_idle.ibrs_off" module parameter to force disable IBRS even when
+"intel_idle.max_cstate=1" at the expense of increased IRQ response
+latency. It also includes a commit to allow the disabling of IBRS when
+a CPU becomes offline.
 
-Guenter
+Waiman Long (3):
+  x86/idle: Disable IBRS when cpu is offline
+  intel_idle: Sync up the SPEC_CTRL MSR value to x86_spec_ctrl_current
+  intel_idle: Add ibrs_off module parameter to force disable IBRS
 
----
-# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
-# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
-git bisect start 'HEAD' 'v6.4-rc7'
-# good: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect good e867e67cd55ae460c860ffd896c7fc96add2821c
-# bad: [0ab4015a11182e2a19c3dd52db85418f370cef39] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
-git bisect bad 0ab4015a11182e2a19c3dd52db85418f370cef39
-# good: [901bdf5ea1a836400ee69aa32b04e9c209271ec7] Merge tag 'amd-drm-next-6.5-2023-06-09' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
-git bisect good 901bdf5ea1a836400ee69aa32b04e9c209271ec7
-# good: [07164956fbc26eff280f3a044a489460ae36413c] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git
-git bisect good 07164956fbc26eff280f3a044a489460ae36413c
-# good: [3067e020d361ed346957eb5e253911f7a3e18f59] add snd_soc_{of_}get_dlc()
-git bisect good 3067e020d361ed346957eb5e253911f7a3e18f59
-# bad: [0dbbd269fb6a8799f312dfc9b1ae1244a144cfc6] Merge branch 'for-6.5/block' into for-next
-git bisect bad 0dbbd269fb6a8799f312dfc9b1ae1244a144cfc6
-# good: [6c500000af037f74b66dd01b565c8ee1b501cc1b] block: mark bio_add_folio as __must_check
-git bisect good 6c500000af037f74b66dd01b565c8ee1b501cc1b
-# bad: [1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b] pktcdvd: replace sscanf() by kstrtoul()
-git bisect bad 1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b
-# good: [e3102722ffe77094ba9e7e46380792b3dd8a7abd] init: rename mount_block_root to mount_root_generic
-git bisect good e3102722ffe77094ba9e7e46380792b3dd8a7abd
-# bad: [d4a28d7defe79006e59293a4b43d518ba8483fb0] dm: remove dm_get_dev_t
-git bisect bad d4a28d7defe79006e59293a4b43d518ba8483fb0
-# good: [c0c1a7dcb6f5db4500e6574294674213bc24940c] init: move the nfs/cifs/ram special cases out of name_to_dev_t
-git bisect good c0c1a7dcb6f5db4500e6574294674213bc24940c
-# bad: [702f3189e454b3c3c2f3c99dbf30acf41aab707c] block: move the code to do early boot lookup of block devices to block/
-git bisect bad 702f3189e454b3c3c2f3c99dbf30acf41aab707c
-# bad: [079caa35f7863cd9958b4555ae873ea4d352a502] init: clear root_wait on all invalid root= strings
-git bisect bad 079caa35f7863cd9958b4555ae873ea4d352a502
-# good: [cf056a43121559d3642419917d405c3237ded90a] init: improve the name_to_dev_t interface
-git bisect good cf056a43121559d3642419917d405c3237ded90a
-# first bad commit: [079caa35f7863cd9958b4555ae873ea4d352a502] init: clear root_wait on all invalid root= strings
+ Documentation/admin-guide/pm/intel_idle.rst | 17 +++++++++++++++-
+ arch/x86/kernel/smpboot.c                   | 10 ++++++++++
+ drivers/idle/intel_idle.c                   | 22 +++++++++++++++++----
+ 3 files changed, 44 insertions(+), 5 deletions(-)
+
+-- 
+2.31.1
+
