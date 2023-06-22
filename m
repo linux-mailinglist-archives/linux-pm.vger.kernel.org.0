@@ -2,41 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FCE739DAC
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C44739DB6
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 11:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232467AbjFVJtx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 05:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51108 "EHLO
+        id S230230AbjFVJv0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 05:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbjFVJtV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:49:21 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2035E3C3D;
-        Thu, 22 Jun 2023 02:39:05 -0700 (PDT)
+        with ESMTP id S230342AbjFVJvI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 05:51:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73583AD05;
+        Thu, 22 Jun 2023 02:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=x38p0gWD91YX2y+SHRO0boRbxDQ/68lnOxCdXK758wM=; b=Ef8ZoPyWi8golq3xJ11Gi7qZj1
-        GRdhe8lrHWSiYuAriORJh6ygndefQMRS1hl24dEbLYT0FxdGJ8NzfZe3hIQufebq36SUN74rflOko
-        uakxPor+ru5YOVzWDlGCGi6YK67VV4tIJsy6/KNaUnqYIrypufHAWtbDwKHhA3lCH7n9BmwEpIjME
-        lPvIsmdIWc5Vz28QlF0kLuFqJqj5mUUsz09CH0xcp76WePpW1FgpehzQcOjs1clyyKoL59EmapJ9K
-        AGAY48sK9JhEGZpg+hyZUeuAURrbpjYFga7F8iRkjh1CS+W+w4JCu1h7U6gt+CZ5rOdGySSK4Xg0e
-        WpmIBjqg==;
+        bh=GIRkJ9xBSI9qzG3Aq2E0VHbn9jmHIdB63mJn4oOnJd4=; b=Vsylbf9yg8HFGDmU9o87kvXJFj
+        YIDeQUSpR3gmRDEb6wu2lIngamtpNoncgU7ddfm2nw7xNYMw25rqynfQwQnZqXsd/x+VEb2tR1YaP
+        +U/AFc6F4G/pVeK8F5q/B2LjcfP5praVDbvAx/4XZES8OncCKktL3v65nsZhsWpbh0KRPg2A9OKGE
+        qNI1PSjFAW9OllGkC0/Z/ygZ0SMDzWWjMd/g6lgGpkRm9iCl5Aw1pJ6s0kzYTpTo7guKRb/wATGNl
+        +w+Ji0ejwNG0RLTKU1AbbBJb6qIAN8svTx4o8nORDlMWJ/QKyxULK2QxKDqswNGDk2bDd1EekDlyJ
+        MBZUIFtA==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qCGlq-0018g0-1K;
-        Thu, 22 Jun 2023 09:38:30 +0000
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qCGo9-00FTiX-86; Thu, 22 Jun 2023 09:40:54 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 793E3300338;
-        Thu, 22 Jun 2023 11:38:28 +0200 (CEST)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0577E300338;
+        Thu, 22 Jun 2023 11:40:52 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 448342425A86B; Thu, 22 Jun 2023 11:38:28 +0200 (CEST)
-Date:   Thu, 22 Jun 2023 11:38:28 +0200
+        id D6D8324216AD3; Thu, 22 Jun 2023 11:40:51 +0200 (CEST)
+Date:   Thu, 22 Jun 2023 11:40:51 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Josh Poimboeuf <jpoimboe@kernel.org>
 Cc:     Waiman Long <longman@redhat.com>,
@@ -51,7 +50,7 @@ Cc:     Waiman Long <longman@redhat.com>,
         Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
 Subject: Re: [PATCH v3 2/3] intel_idle: Sync up the SPEC_CTRL MSR value to
  x86_spec_ctrl_current
-Message-ID: <20230622093828.GE4253@hirez.programming.kicks-ass.net>
+Message-ID: <20230622094051.GF4253@hirez.programming.kicks-ass.net>
 References: <20230622003603.1188364-1-longman@redhat.com>
  <20230622003603.1188364-3-longman@redhat.com>
  <20230622054633.ulrurzzvzjijvdhn@treble>
@@ -80,57 +79,10 @@ On Wed, Jun 21, 2023 at 10:46:33PM -0700, Josh Poimboeuf wrote:
 > 
 > Is this fixing an actual bug or is there some other reason for doing
 > this?
-> 
-> > 
-> > Signed-off-by: Waiman Long <longman@redhat.com>
-> > ---
-> >  drivers/idle/intel_idle.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> > index aa2d19db2b1d..07fa23707b3c 100644
-> > --- a/drivers/idle/intel_idle.c
-> > +++ b/drivers/idle/intel_idle.c
-> > @@ -181,13 +181,17 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
-> >  	u64 spec_ctrl = spec_ctrl_current();
-> >  	int ret;
-> >  
-> > -	if (smt_active)
-> > +	if (smt_active) {
-> > +		__this_cpu_write(x86_spec_ctrl_current, 0);
-> >  		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
-> > +	}
-> >  
-> >  	ret = __intel_idle(dev, drv, index);
-> >  
-> > -	if (smt_active)
-> > +	if (smt_active) {
-> >  		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
-> > +		__this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
-> > +	}
-> 
-> More candidates for update_spec_ctrl()?
 
-Both this and the play_dead case can't use update_spec_ctrl() because
-RCU isn't there anymore and all that is noinstr. Additionally, both
-sites rely on preemption being off already, where update_spec_ctrl()
-can't do that.
+No actual bug, he did this for his debugfs file -- which is no longer
+part of the series. With that on, you can observe the
+x86_spec_ctrl_current value while idle.
 
-That said, I suppose one could write it like so:
-
-static __always_inline __update_spec_ctrl(u64 val)
-{
-	__this_cpu_write(x86_spec_ctrl_current, val);
-	native_wrmsrl(MSR_IA32_SPEC_CTRL, val);
-}
-
-static void update_spec_ctrl(u64 val)
-{
-	preempt_disable();
-	__update_spec_ctrl(val);
-	preempt_enable();
-}
-
-And then you can use __update_spec_ctrl(). But that would need a wee
-audit of using native_wrmsrl() in all places, probably ok, IIRC Xen
-wasn't using our IBRS stuff anyway.
+Arguably that's not even inconsistent because we disable/enable the
+thing with IRQs disabled, so nothing can observe the difference.
