@@ -2,181 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7967393E2
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 02:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCDF73941F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 02:51:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjFVAh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Jun 2023 20:37:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S229544AbjFVAv4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Jun 2023 20:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjFVAh2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 20:37:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EA51981
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687394206;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1r3PzJd7BfuII/LkCpH6/mpfYzdtX6yj52D21WLcU08=;
-        b=Fa6s3/82zSqlQLElrUZDKgzdIbL0dFU+80QxjfvagWhAVlce23NZt/GbILI4YRLNnSS3zN
-        kcvC4EAivNnBa2rDwGIDInsixXQ6Dk9t9YHYyhvWKnfUOWk5s2FYqGtwlgT7MMef77rRtK
-        +W94UeXvZL/rVGetD8UbPUlF/W4aGog=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-433-Wf_xTA3DNyOMMsljI4GqDw-1; Wed, 21 Jun 2023 20:36:45 -0400
-X-MC-Unique: Wf_xTA3DNyOMMsljI4GqDw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66929800193;
-        Thu, 22 Jun 2023 00:36:44 +0000 (UTC)
-Received: from llong.com (unknown [10.22.33.143])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A8FA8112132C;
-        Thu, 22 Jun 2023 00:36:43 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
-        Joe Mario <jmario@redhat.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH v3 3/3] intel_idle: Add ibrs_off module parameter to force disable IBRS
-Date:   Wed, 21 Jun 2023 20:36:03 -0400
-Message-Id: <20230622003603.1188364-4-longman@redhat.com>
-In-Reply-To: <20230622003603.1188364-1-longman@redhat.com>
-References: <20230622003603.1188364-1-longman@redhat.com>
+        with ESMTP id S229501AbjFVAvz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Jun 2023 20:51:55 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F29197
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:51:54 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so9029809e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jun 2023 17:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687395112; x=1689987112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JpH450RlcCBag58hjq7lxrqN2fInkuZLNQWzOYqCTD4=;
+        b=hcMVMZxr3AZmAsjOEMtaDKs1BAyffyed833lUzAWODc+ovtjuJnYZLxkY+42oIEZAk
+         g7m5ght45cAE4HpsEarBfPkPQbTJA9Y7bzRNolCz6i7SggEG8MbRygrwARgUjIziYFxN
+         BILDyzX2sAoY7G+BYa5TDmWs1iQsT0QXuUWg3lSCkT/2VIDvyX7ONLGCsPyqVA2NuhK4
+         QN/mz+GDeeu/aNQyIoyx9VsWTl/RYGVmXQd/5SQaqS3aZ2mmNtEyLsty/VQ63xd5tkrj
+         X9o0ixOlKvzjsLJ3XR2lZPoGCJjt4msI6+T82At5mC++svcB7bgLFDrTLKDSufzRizzM
+         YuFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687395112; x=1689987112;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JpH450RlcCBag58hjq7lxrqN2fInkuZLNQWzOYqCTD4=;
+        b=DbaURvxRC0TtLqMqazRUkfJieTAEKx1VfpyhXv875uMIhIic5DYRK26D/mVgU2eOew
+         XRMfLKjuoTukufXGVylO93nP3uGWM1nIkZnM4xHVrybE7ycKpk/7yBsmrvMdH1smP7W0
+         rdCtKakLVyiX0hGPzIXD/UdQCO/qQVR87CauVBEj70pDYi4y5FwM9CQk1wd0vEtlSOzV
+         RZWYXL1l0aBRRomyGgG9ucqp8eXYg6HDtQ6Qxm1KNsZilmpHUyunz1nTh+bdIYKQSyy9
+         zyQ5byfK+XaFMpBSZkE8n4MHaiLgMRESgGN7ftJv6y9ez5cT1NmCCvVStdncPyLMdAiL
+         M3+g==
+X-Gm-Message-State: AC+VfDw4t1j3iKW+vNfbkzsHTCX3zaWidSCVg3KVdqafPEy4SE/VEfxx
+        d1a4Hu5fIVLi0Ptff9wiHNm9kQ==
+X-Google-Smtp-Source: ACHHUZ65QyPqBn4GlqwjOoSz+PSJNfvplML9UAIrdeTW08mFQ/X0fteOjnBCdjYy51tpPWPIo4EPKQ==
+X-Received: by 2002:a05:6512:3f0c:b0:4f9:58ed:7bba with SMTP id y12-20020a0565123f0c00b004f958ed7bbamr2736659lfa.16.1687395112337;
+        Wed, 21 Jun 2023 17:51:52 -0700 (PDT)
+Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
+        by smtp.gmail.com with ESMTPSA id a9-20020a19f809000000b004f3a71a9e72sm928156lff.102.2023.06.21.17.51.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 17:51:51 -0700 (PDT)
+Message-ID: <dc5ffed0-555b-18e5-cf96-d6a4263357af@linaro.org>
+Date:   Thu, 22 Jun 2023 02:51:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
+ <20230621-topic-mm8013-v1-2-4407c6260053@linaro.org>
+ <da300402-d417-5646-d4c9-7c100c351db1@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 2/3] dt-bindings: power: supply: Document Mitsumi MM8013
+ fuel gauge
+In-Reply-To: <da300402-d417-5646-d4c9-7c100c351db1@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
-disables IBRS when the cstate is 6 or lower. However, there are
-some use cases where a customer may want to use max_cstate=1 to
-lower latency. Such use cases will suffer from the performance
-degradation caused by the enabling of IBRS in the sibling idle thread.
-Add a "ibrs_off" module parameter to force disable IBRS and the
-CPUIDLE_FLAG_IRQ_ENABLE flag if set.
+On 21.06.2023 18:38, Krzysztof Kozlowski wrote:
+> On 21/06/2023 17:39, Konrad Dybcio wrote:
+>> The Mitsumie MM8013 is an I2C fuel gauge for Li-Ion cells. The partial
+> 
+> Mitsumi
+> 
+>> datasheet is available at [1]. Add bindings for this chip.
+>>
+>> [1] https://www.mitsumi.co.jp/latest-M/Catalog/pdf/battery_mm_8013_e.pdf
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  .../bindings/power/supply/mitsumi,mm8013.yaml      | 35 ++++++++++++++++++++++
+>>  1 file changed, 35 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
+>> new file mode 100644
+>> index 000000000000..080fd44083ac
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
+>> @@ -0,0 +1,35 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/supply/mitsumi,mm8013.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Mitsumi MM8013 fuel gauge
+>> +
+>> +maintainers:
+>> +  - Konrad Dybcio <konradybcio@kernel.org>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: mitsumi,mm8013
+>> +
+>> +  reg:
+>> +    maxItems: 1
+> 
+> 
+> I think you miss several properties: three power supplies (although not
+> all might be needed) and most likely monitored-battery. One regulator
+> output and output GPIO probably can be skipped.
+Looking at the example circuit, it seems like the chip's power lines are
+hardwired to the battery cell.
 
-In the case of a Skylake server with max_cstate=1, this new ibrs_off
-option will likely increase the IRQ response latency as IRQ will now
-be disabled.
+monitored-battery does not seem useful today, as we don't have any
+information about writing values onto the chip :/ And I'm not willing
+to experiment with that! :P
 
-When running SPECjbb2015 with cstates set to C1 on a Skylake system.
-
-First test when the kernel is booted with: "intel_idle.ibrs_off"
-  max-jOPS = 117828, critical-jOPS = 66047
-
-Then retest when the kernel is booted without the "intel_idle.ibrs_off"
-added.
-  max-jOPS = 116408, critical-jOPS = 58958
-
-That means booting with "intel_idle.ibrs_off" improves performance by:
-  max-jOPS:   1.2%, which could be considered noise range.
-  critical-jOPS: 12%, which is definitely a solid improvement.
-
-The admin-guide/pm/intel_idle.rst file is updated to add a description
-about the new "ibrs_off" module parameter.
-
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
- drivers/idle/intel_idle.c                   | 14 ++++++++++++--
- 2 files changed, 28 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
-index b799a43da62e..8604e6d1fe2c 100644
---- a/Documentation/admin-guide/pm/intel_idle.rst
-+++ b/Documentation/admin-guide/pm/intel_idle.rst
-@@ -170,7 +170,7 @@ and ``idle=nomwait``.  If any of them is present in the kernel command line, the
- ``MWAIT`` instruction is not allowed to be used, so the initialization of
- ``intel_idle`` will fail.
- 
--Apart from that there are four module parameters recognized by ``intel_idle``
-+Apart from that there are five module parameters recognized by ``intel_idle``
- itself that can be set via the kernel command line (they cannot be updated via
- sysfs, so that is the only way to change their values).
- 
-@@ -216,6 +216,21 @@ are ignored).
- The idle states disabled this way can be enabled (on a per-CPU basis) from user
- space via ``sysfs``.
- 
-+The ``ibrs_off`` module parameter is a boolean flag (default to false). It is
-+used to control if IBRS (Indirect Branch Restricted Speculation) should be
-+turned off, if set, when the CPU enters an idle state.  This flag will not
-+affect CPUs that are using Enhanced IBRS which can remain on with little
-+performance impact.
-+
-+For some CPUs, IBRS will be selected as mitigation for Spectre v2 and Retbleed
-+security vulnerabilities by default.  Leaving the IBRS mode on while idling may
-+have a performance impact on its sibling CPU.  The IBRS mode will be turned off
-+by default when the CPU enters into a deep idle state, but not in some
-+shallower ones.  Setting the ``ibrs_off`` module parameter will force the IBRS
-+mode to off when the CPU is in any one of the available idle states.  This may
-+help performance of a sibling CPU at the expense of a slightly higher wakeup
-+latency for the idle CPU.
-+
- 
- .. _intel-idle-core-and-package-idle-states:
- 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index 07fa23707b3c..8bbf1e6d845c 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
- static unsigned int disabled_states_mask __read_mostly;
- static unsigned int preferred_states_mask __read_mostly;
- static bool force_irq_on __read_mostly;
-+static bool ibrs_off __read_mostly;
- 
- static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
- 
-@@ -1907,12 +1908,15 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
- 			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
- 			state->enter = intel_idle_xstate;
- 		} else if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
--			   state->flags & CPUIDLE_FLAG_IBRS) {
-+			  ((state->flags & CPUIDLE_FLAG_IBRS) || ibrs_off)) {
- 			/*
- 			 * IBRS mitigation requires that C-states are entered
- 			 * with interrupts disabled.
- 			 */
--			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
-+			if (ibrs_off && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
-+				state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
-+			else
-+				WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
- 			state->enter = intel_idle_ibrs;
- 		} else if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
- 			state->enter = intel_idle_irq;
-@@ -2165,3 +2169,9 @@ MODULE_PARM_DESC(preferred_cstates, "Mask of preferred idle states");
-  * 'CPUIDLE_FLAG_INIT_XSTATE' and 'CPUIDLE_FLAG_IBRS' flags.
-  */
- module_param(force_irq_on, bool, 0444);
-+/*
-+ * Force the disabling of IBRS when X86_FEATURE_KERNEL_IBRS is on and
-+ * CPUIDLE_FLAG_IRQ_ENABLE isn't set.
-+ */
-+module_param(ibrs_off, bool, 0444);
-+MODULE_PARM_DESC(ibrs_off, "Disable IBRS when idle");
--- 
-2.31.1
-
+Konrad
+> 
+> Best regards,
+> Krzysztof
+> 
