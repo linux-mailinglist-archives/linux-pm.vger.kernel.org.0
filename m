@@ -2,47 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 347FD73A0E2
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 14:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4C873A0F6
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 14:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjFVM1z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 08:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S230446AbjFVMcy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 08:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjFVM1y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 08:27:54 -0400
+        with ESMTP id S231293AbjFVMcx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 08:32:53 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F79171C
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jun 2023 05:27:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2BCE75
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jun 2023 05:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687436840;
+        s=mimecast20190719; t=1687437123;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=erLEJFFmN1Si57UTDFO+md6AnHLgrWd6t+5xkKTrdTo=;
-        b=WjAEYcDddX2z0wcR9meFjGolps5fzbDl5zzg0qgO/+oPReM/XSSQhZlWlfnHl/OSJsfWec
-        QD1tHe+9KMphF27z/U/HjXmKCmci6lwTLSTwwZrs2H3/eIrnL8QqHjz+ZGaKhWpx4Q7tO3
-        yzBDJY1bm2LE4CNqsjN18IedeYnvtGs=
+        bh=XHz9E7zZxsLUl3CoUFODhh8sjTY5W8aaMW7xXwi0QZ4=;
+        b=ZbkdFIDSVP1DCZ0bYdUnRQX7SSdzWNzEZnQQCcvrZ8DFXOa4EQ4kmPgWn1AIZg72muVmJk
+        12T0x7oJpe2KiQaKfktXzCLzu8M+85L6N1QWSSYVb9gP14IPD6FmfB0XBS6Q/4RAT7P4TI
+        SzEukcxhdZ87GWBjQGAhFaqRiyYgBys=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-guJMTKOAPz-lqf1ByoKNRw-1; Thu, 22 Jun 2023 08:27:15 -0400
-X-MC-Unique: guJMTKOAPz-lqf1ByoKNRw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+ us-mta-507-4Ekn8PXCOCe4mV43ZjKflQ-1; Thu, 22 Jun 2023 08:31:58 -0400
+X-MC-Unique: 4Ekn8PXCOCe4mV43ZjKflQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3692E83FC20;
-        Thu, 22 Jun 2023 12:27:14 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18D4E881B25;
+        Thu, 22 Jun 2023 12:31:58 +0000 (UTC)
 Received: from [10.22.17.29] (unknown [10.22.17.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 663244087C70;
-        Thu, 22 Jun 2023 12:27:13 +0000 (UTC)
-Message-ID: <921e1b98-af36-1f51-5abe-dea36425b706@redhat.com>
-Date:   Thu, 22 Jun 2023 08:27:13 -0400
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 722CA200A3AD;
+        Thu, 22 Jun 2023 12:31:57 +0000 (UTC)
+Message-ID: <7b8a5195-83c4-5433-6261-24e0941a1cab@redhat.com>
+Date:   Thu, 22 Jun 2023 08:31:57 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/3] x86/idle: Disable IBRS when cpu is offline
+Subject: Re: [PATCH v3 2/3] intel_idle: Sync up the SPEC_CTRL MSR value to
+ x86_spec_ctrl_current
 Content-Language: en-US
 To:     Josh Poimboeuf <jpoimboe@kernel.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -56,17 +57,17 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         x86@kernel.org, linux-pm@vger.kernel.org,
         Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
 References: <20230622003603.1188364-1-longman@redhat.com>
- <20230622003603.1188364-2-longman@redhat.com>
- <20230622054053.uy577qezu5a65buc@treble>
+ <20230622003603.1188364-3-longman@redhat.com>
+ <20230622054633.ulrurzzvzjijvdhn@treble>
 From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230622054053.uy577qezu5a65buc@treble>
+In-Reply-To: <20230622054633.ulrurzzvzjijvdhn@treble>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,33 +75,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/22/23 01:40, Josh Poimboeuf wrote:
-> On Wed, Jun 21, 2023 at 08:36:01PM -0400, Waiman Long wrote:
->> +/*
->> + * naitve_play_dead() is essentially a __noreturn function, but it can't
->> + * be marked as such as the compiler may complain about it.
->> + */
-> FWIW, we could in theory do so by marking the smp_ops.play_dead function
-> pointer as __noreturn, but it would be tricky to teach objtool how to
-> understand that.
-I added the comment here because I had taken out the MSR restoration 
-code. We can always replace that later on if there is a better way to do 
-that.
+On 6/22/23 01:46, Josh Poimboeuf wrote:
+> On Wed, Jun 21, 2023 at 08:36:02PM -0400, Waiman Long wrote:
+>> When intel_idle_ibrs() is called, it modifies the SPEC_CTRL MSR to
+>> 0 in order disable IBRS. However, the new MSR value isn't reflected
+>> in x86_spec_ctrl_current which is at odd with the other code that
+>> keep track of its state in that percpu variable. Fix that by updating
+>> x86_spec_ctrl_current percpu value to always match the content of the
+>> SPEC_CTRL MSR.
+> Is this fixing an actual bug or is there some other reason for doing
+> this?
+It is not a bug per se. It is mainly to make the per cpu variable more 
+up to date.
 >
->>   void native_play_dead(void)
->>   {
->> +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
->> +		this_cpu_write(x86_spec_ctrl_current, 0);
->> +		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   drivers/idle/intel_idle.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+>> index aa2d19db2b1d..07fa23707b3c 100644
+>> --- a/drivers/idle/intel_idle.c
+>> +++ b/drivers/idle/intel_idle.c
+>> @@ -181,13 +181,17 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+>>   	u64 spec_ctrl = spec_ctrl_current();
+>>   	int ret;
+>>   
+>> -	if (smt_active)
+>> +	if (smt_active) {
+>> +		__this_cpu_write(x86_spec_ctrl_current, 0);
+>>   		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
 >> +	}
-> Can update_spec_ctrl() be used instead?
+>>   
+>>   	ret = __intel_idle(dev, drv, index);
+>>   
+>> -	if (smt_active)
+>> +	if (smt_active) {
+>>   		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
+>> +		__this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
+>> +	}
+> More candidates for update_spec_ctrl()?
 
-Yes, the code is similar to what has been done in update_spec_ctrl(). 
-Using it, however, will require exporting the function either by putting 
-it into a public header or making it a global function.
+I don't think we can use update_spec_ctrl() here simply because of the 
+noinstr requirement. See commit 9b461a6faae7 ("cpuidle, intel_idle: Fix 
+CPUIDLE_FLAG_IBRS").
 
 Cheers,
 Longman
-
->
 
