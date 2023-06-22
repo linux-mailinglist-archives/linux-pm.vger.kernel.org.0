@@ -2,132 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47476739668
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 06:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C925973968A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jun 2023 06:56:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjFVE3B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 00:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S229659AbjFVE40 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Jun 2023 00:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbjFVE3A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 00:29:00 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A32FE7E;
-        Wed, 21 Jun 2023 21:28:59 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-543ae6ce8d1so5322543a12.2;
-        Wed, 21 Jun 2023 21:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687408138; x=1690000138;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OK+CXuyFLwF44/27I2as5mqeWxwcMg3WlGZonvd6nV8=;
-        b=dNVx5yrY4KXXoJs8JhWWjAXhtEzg4NDMHTx+5nrRRMVRfRcs80NPvNdVi74BL84Fyu
-         OcmdhgjKLsW0tq3RH1ohPk3iTOkMq/tPRs3EK/oyuddmncwO0ByNSIsJtnOu+UNQRI2I
-         lKGr8VSTyD3va6S5APUyLLC5tIGhzGUYjw9DUjyYaqjoF9xukBi5XDIQgQQoCn+GOIwL
-         EYKfAr84RzMTOIrZ6dZmQUn6Ypk3LuKycSoPurmh9qDFAxuFEZwwGNcQwgGbbxTgXefv
-         m7+2WCjrJMVz+L9TDdXt8/cJShXYc7WpYsta4Tdz8uaK62azgBM9w/jGj3dT9dpXgv0r
-         m78g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687408138; x=1690000138;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OK+CXuyFLwF44/27I2as5mqeWxwcMg3WlGZonvd6nV8=;
-        b=mD7AMcG/pE5nLepdo9mMFMczjwIDX1F4ogKHJWRZMss/slY3L9i41uemtVD0l12lL8
-         P194BSrQM6QAwL5jckHw85dtdKMuO56ae2uYbVAJxJ6axhJiS85OsVPxRU2ihYzfPiMU
-         Ac2MVc5X/5W7dSEtFfDkdgpqL4goD+asp/af2glPdA9fCU31JRWWZP+FNXX4ls9q+TwD
-         GBauLiaQY1oic4VsnRsEAuZr3Ls1T5UdP6WHux069XvM0bLPeE9mejSlzcqb6ir50fLB
-         ZxqlE8jVyJHKlwW8CmLjexPbmjGK4muwoZd4Gsr+7MVkG7GcDfE9iPS89jBfDW8zbNM3
-         gVvA==
-X-Gm-Message-State: AC+VfDw8u/b+2raml37IEnbZ0mCecvfw3wlNguSYzaWSpx8i+kQkMnEN
-        MBv8sWuCeeTZtROCIJR7PFsZbC9GUIM=
-X-Google-Smtp-Source: ACHHUZ4+ZMoJr7SnY11jKCs2czSTRYO57d2qFyw6J6x2UuheAlVyskFDDBj2KxGUrXVcomI0QhCtBA==
-X-Received: by 2002:a05:6a20:3d92:b0:11d:38ea:7586 with SMTP id s18-20020a056a203d9200b0011d38ea7586mr22888787pzi.9.1687408138593;
-        Wed, 21 Jun 2023 21:28:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a17-20020aa780d1000000b00666e2dac482sm3605318pfn.124.2023.06.21.21.28.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 21:28:57 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <2205ef1e-9bb6-fb1e-9ca3-367c1afe12ac@roeck-us.net>
-Date:   Wed, 21 Jun 2023 21:28:55 -0700
+        with ESMTP id S229680AbjFVE4Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 00:56:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B24F19A1;
+        Wed, 21 Jun 2023 21:56:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DF31961725;
+        Thu, 22 Jun 2023 04:56:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3A41C433C8;
+        Thu, 22 Jun 2023 04:56:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687409780;
+        bh=lri1nd5wS7oB4FBbQf+NRYb9hZNLJZy73nB3fVrApqU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r31UtikvdakxdEF/Lk+BBD/pvE7TkJ4piHbWdl9rXyV1XzRU28MG5Cg0JLGpgjU1y
+         OzZfsYHCJuSBPUk41TmcwLSh5rqxUIsnMgDcxa9yGahdaHdUG9MKMM6CyOhn57Rjt6
+         U119Ox/smMeb61R/h7fy5ls7ggpsQx2YNSNyQHEG9xXAr0keo/+ZsBEvlYtK7zltoO
+         DpMlWUfiR/sQ5XkT2FsRVnnEZmfATBl9ghM99fWnhf3kIwzcFfRLYcnAV/vAeF/hWk
+         RhDAWZoih7g0ls+lnZAXFLGGOHmvJuh3kl2IBGHQt/lp5mzRKJ3Jl4zCs2v/ijhUVP
+         OlUDyLP5cMPNQ==
+Date:   Wed, 21 Jun 2023 21:56:18 -0700
+From:   Eduardo Valentin <evalenti@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Message-ID: <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+ <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+ <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+ <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
+ <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
+ <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
+ <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230523074535.249802-1-hch@lst.de>
- <20230523074535.249802-15-hch@lst.de>
- <8c1992bc-110a-4dad-8643-766c14bf6fd4@roeck-us.net>
- <20230622035149.GA4667@lst.de>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 14/24] init: clear root_wait on all invalid root= strings
-In-Reply-To: <20230622035149.GA4667@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/21/23 20:51, Christoph Hellwig wrote:
-> On Wed, Jun 21, 2023 at 02:07:13PM -0700, Guenter Roeck wrote:
->> On Tue, May 23, 2023 at 09:45:25AM +0200, Christoph Hellwig wrote:
->>> Instead of only clearing root_wait in devt_from_partuuid when the UUID
->>> format was invalid, do that in parse_root_device for all strings that
->>> failed to parse.
->>>
->>> Signed-off-by: Christoph Hellwig <hch@lst.de>
->>
->> In linux-next, almost all of my boot tests from usb drives as well
->> as a few others fail with "Disabling rootwait; root= is invalid."
->> in the log. Bisect points to this patch.
+On Wed, Jun 21, 2023 at 01:43:26PM +0200, Daniel Lezcano wrote:
 > 
-> Can you send such a log, and the command line you've used?
 > 
+> 
+> On 21/06/2023 07:06, Eduardo Valentin wrote:
+> > On Mon, Jun 12, 2023 at 10:17:51AM +0200, Daniel Lezcano wrote:
+> > > 
+> > > 
+> > > 
+> > > Hi Eduardo,
+> > > 
+> > > On 08/06/2023 19:44, Eduardo Valentin wrote:
+> > > 
+> > > [ ... ]
+> > > 
+> > > > > Do you have a use case with some measurements to spot an issue or is it
+> > > > > a potential issue you identified ?
+> > > > 
+> > > > 
+> > > > yes, a governor that is using I2C device as input, behind I2C fast mode (100KHz)
+> > > > and needs to update the zone every 100ms. Each read in this bus, if done alone
+> > > > would be around 500us, takes 10bytes to read the device, it is 10 clocks per byte,
+> > > > well technically 9, but rounding for the sake of the example, which gets you
+> > > > 50 / 100KHz = 500 us. That is for a single read. You add one single extra
+> > > > userspace read triggering an unused device update, that is already a 1ms drift.
+> > > > Basically you looking at 0.5% for each extra userspace read competing in this
+> > > > sysfs node. You add extra devices in the same I2C bus, your governor is looking
+> > > > at more than 1% overhead. And I am talking also about a main CPU of ~800MHz.
+> > > > I did not even include the lock overhead considered for this CPU ;-)
+> > > > 
+> > > > Again, this is not about controlling the DIE temperature of the CPU you
+> > > > are running the thermal subsystem. This is about controlling
+> > > > a target device.
+> > > 
+> > > Ok. The target device is on a bus which is slow and prone to contention.
+> > > 
+> > > This hardware is not designed to be monitored with a high precision, so
+> > > reading the temperature at a high rate does not really make sense.
+> > 
+> > On the contrary, it needs even more precision and any extra delay adds to
+> > loss on accuracy :-)
+> 
+> What I meant is if the hardware designer thought there could be a
+> problem with the thermal zone they would have put another kind of
+> sensor, not one with a i2c based communication.
+
+No, that is not a problem in the physical thermal zone. Or to cover
+for a hardware design flaw. This is an actual typical case. However,
+yes, designer must take into account any sort of delays or jittering
+in the control system, and typically one would add some thermal margins
+on the control system. But to the original point here, we should eliminate
+unnecessary jittering or delay in the control system.
+
+> 
+> 
+> > > Moreover (putting apart a potential contention), the delayed read does
+> > > not change the time interval, which remains the same from the governor
+> > > point of view.
+> > 
+> > It does not change the governor update interval and that is a property of
+> > the thermal zone. Correct. And that is the intention of the change.
+> > The actual temperature updates driven by the governor will always
+> > result in a driver call. While a userspace call will not be in the way
+> > of the governor update.
+> > 
+> > Sysfs reads, However, with the current code as is, it may cause
+> > jittering on the actual execution of the governor throttle function.
+> >   causing the computation of the desired outcome cooling device being skewed.
+> > 
+> > > 
+> > > In addition, i2c sensors are usually handled in the hwmon subsystem
+> > > which are registered in the thermal framework from there. Those have
+> > > most of their 'read' callback with a cached value in a jiffies based way
+> > > eg. [1].
+> > 
+> > I guess what you are really saying is: go read the hwmon sysfs node,
+> > or, hwmon solves this for us, which unfortunately is not true for all devices.
+> 
+> I meant the i2c sensors are under the hwmon subsystem. This subsystem is
+> connected with the thermal framework, so when a hwmon sensor is created,
+> it register this sensor as a thermal zone.
+> 
+> 
+> > > So the feature already exists for slow devices and are handled in the
+> > > drivers directly via the hwmon subsystem.
+> > > 
+> > >  From my POV, the feature is not needed in the thermal framework.
+> > 
+> > The fact that hwmon does it in some way is another evidence of the
+> > actual problem.
+> 
+> Not really, it shows the i2c sensors are in the hwmon subsystems.
+
+They are there too. And hwmon also sees same problem of too frequent
+device update. The problem is there regardless of the subsystem we use
+to represent the device. Also, I dont buy the argument that this is
+a problem of hwmon because it is already supported to plug in
+hwmon devices in the thermal subsystem. That is actually the original
+design in fact :-). So running a control in the thermal subsystem
+on top of inputs from hwmon, which happens to support I2C devices,
+is not a problem for hwmon to solve, since the control is in the
+thermal subsystem, and hwmon does not offer control solutions.
 
 
-There are lots of logs at https://kerneltests.org/builders, in the 'next'
-column of qemu tests. One example is
-https://kerneltests.org/builders/qemu-arm-v7-next/builds/511/steps/qemubuildcommand/logs/stdio
+> 
+> 
+> > Telling that this has to be solved by another subsystem
+> > for a sysfs node that is part of thermal subsystem does not really solve
+> > the problem. Also as I mentioned, this is not common on all hwmon
+> > devices, and not all I2C devices are hwmon devices. In fact, I2C
+> > was just one example of a slow device. There are more I can quote
+> > that are not necessarily under the hwmon case.
+> 
+> Yes, please. Can you give examples with existing drivers in the thermal
+> framework and observed issues on specific platforms ? Numbers would help.
 
-Sample command line:
+I believe I already gave you numbers. And as I explained above,
+the driver does not need to sit on thermal subsystem only,
+we already support plugging in I2C/pmbus devices on the thermal
+subsystem, so basically all drivers on hwmon that has the REGISTER_TZ
+flag are actual samples for this problem
 
-qemu-system-arm -M mcimx7d-sabre \
-      -kernel arch/arm/boot/zImage -no-reboot -snapshot \
-      -usb -device usb-storage,drive=d0,bus=usb-bus.1 \
-      -drive file=rootfs-armv7a.ext2,if=none,id=d0,format=raw \
-      -m 256 -nic user -display none \
-      --append "root=/dev/sda rootwait earlycon=ec_imx6q,mmio,0x30860000,115200n8 console=ttymxc0,115200" \
-      -dtb arch/arm/boot/dts/imx7d-sdb.dtb \
-      -nographic -monitor null -serial stdio
 
-This is with a modified imx_v6_v7_defconfig and root file system from
-https://github.com/groeck/linux-build-test/blob/master/rootfs/arm-v7/rootfs-armv7a.ext2.gz
-
-The -EINVAL return value is from
-
-	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
-
-in devt_from_devname().
-
-Guenter
-
+-- 
+All the best,
+Eduardo Valentin
