@@ -2,126 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBB073AE4A
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 03:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7206D73B213
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 09:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjFWB0V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Jun 2023 21:26:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35860 "EHLO
+        id S231688AbjFWHtW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 03:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjFWB0V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Jun 2023 21:26:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8EF1FCB;
-        Thu, 22 Jun 2023 18:26:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AFCEF61941;
-        Fri, 23 Jun 2023 01:26:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2E0C433C8;
-        Fri, 23 Jun 2023 01:26:16 +0000 (UTC)
-Date:   Thu, 22 Jun 2023 21:26:14 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "J. Avila" <elavila@google.com>,
-        Vivek Anand <vivekanand754@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
-        Netfilter Core Developers <coreteam@netfilter.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>
-Subject: Re: High cpu usage caused by kernel process when upgraded to linux
- 5.19.17 or later
-Message-ID: <20230622212614.5eb20dad@gandalf.local.home>
-In-Reply-To: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
-References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231721AbjFWHtO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 03:49:14 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E812729;
+        Fri, 23 Jun 2023 00:48:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD0E6C14;
+        Fri, 23 Jun 2023 00:43:43 -0700 (PDT)
+Received: from [10.57.27.57] (unknown [10.57.27.57])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE22B3F64C;
+        Fri, 23 Jun 2023 00:42:57 -0700 (PDT)
+Message-ID: <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
+Date:   Fri, 23 Jun 2023 08:43:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        Di Shen <di.shen@unisoc.com>, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
+        orsonzhai@gmail.com
+References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+ <20230619063534.12831-1-di.shen@unisoc.com>
+ <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
+ <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
+ <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
+ <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
+ <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
+ <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 23 Jun 2023 07:58:51 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-
-> Hi,
-> 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
-> 
-> > kernel process "kworker/events_power_efficient" uses a lot of cpu power (100% on ESXI 6.7, ~30% on ESXI 7.0U3 or later) after upgrading from 5.17.3 to 5.19.17 or later.
-> > 
-> > dmesg log:
-> > [ 2430.973102]  </TASK>
-> > [ 2430.973131] Sending NMI from CPU 1 to CPUs 0:
-> > [ 2430.973241] NMI backtrace for cpu 0
-> > [ 2430.973247] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 6.3.3 #1
-> > [ 2430.973254] Hardware name: VMware, Inc. VMware Virtual Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
-> > [ 2430.973258] Workqueue: events_power_efficient htable_gc [xt_hashlimit]
-> > [ 2430.973275] RIP: 0010:preempt_count_sub+0x2e/0xa0
-> > [ 2430.973289] Code: 36 01 85 c9 75 1b 65 8b 15 a7 da f8 5e 89 d1 81 e1 ff ff ff 7f 39 f9 7c 16 81 ff fe 00 00 00 76 3b f7 df 65 01 3d 8a da f8 5e <c3> cc cc cc cc e8 98 aa 25 00 85 c0 74 f2 8b 15 da 71 ed 00 85 d2
-> > [ 2430.973294] RSP: 0018:ffffb15ec00dbe58 EFLAGS: 00000297
-> > [ 2430.973299] RAX: 0000000000000000 RBX: ffffb15ec12ad000 RCX: 0000000000000001
-> > [ 2430.973302] RDX: 0000000080000001 RSI: ffffffffa1c3313b RDI: 00000000ffffffff
-> > [ 2430.973306] RBP: dead000000000122 R08: 0000000000000010 R09: 0000746e65696369
-> > [ 2430.973309] R10: 8080808080808080 R11: 0000000000000018 R12: 0000000000000000
-> > [ 2430.973312] R13: 0000000000001e2b R14: ffffb15ec12ad048 R15: ffff91c279c26a05
-> > [ 2430.973316] FS:  0000000000000000(0000) GS:ffff91c279c00000(0000) knlGS:0000000000000000
-> > [ 2430.973320] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [ 2430.973324] CR2: 000055fc138890e0 CR3: 000000010810e002 CR4: 00000000001706f0
-> > [ 2430.973374] Call Trace:
-> > [ 2430.973388]  <TASK>
-> > [ 2430.973390]  __local_bh_enable_ip+0x32/0x70
-> > [ 2430.973413]  htable_selective_cleanup+0x95/0xc0 [xt_hashlimit]
-> > [ 2430.973428]  htable_gc+0xf/0x30 [xt_hashlimit]
-
-I take it that the "gc" in "htable_gc" means "garbage collection". It may
-not have anything to do with changes to this thread. It could very well be
-something is feeding it too much garbage!
-
--- Steve
 
 
-> > [ 2430.973440]  process_one_work+0x1d4/0x360
-> > [ 2430.973459]  ? process_one_work+0x360/0x360
-> > [ 2430.973467]  worker_thread+0x25/0x3b0
-> > [ 2430.973476]  ? process_one_work+0x360/0x360
-> > [ 2430.973483]  kthread+0xe1/0x110
-> > [ 2430.973499]  ? kthread_complete_and_exit+0x20/0x20
-> > [ 2430.973507]  ret_from_fork+0x1f/0x30
-> > [ 2430.973526]  </TASK>  
-> 
-> See Bugzilla for the full thread and perf output.
-> 
-> Anyway, I'm tracking it in regzbot so that it doesn't fall through
-> cracks unnoticed:
-> 
-> #regzbot introduced: v5.17.3..v5.19.17 https://bugzilla.kernel.org/show_bug.cgi?id=217586
-> #regzbot title: kworker/events_power_efficient utilizes full CPU power after kernel upgrade
-> 
-> Thanks.
-> 
-> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217586
-> 
+On 6/22/23 19:27, Rafael J. Wysocki wrote:
+> On Tue, Jun 20, 2023 at 1:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 6/20/23 11:39, Rafael J. Wysocki wrote:
+>>> On Tue, Jun 20, 2023 at 12:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>>>
+>>>> Hi Rafael,
+>>>>
+>>>>
+>>>> On 6/20/23 11:07, Rafael J. Wysocki wrote:
+>>>>> On Tue, Jun 20, 2023 at 11:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
 
+[snip]
+
+> 
+> Because this is up to the governor, the core has no clue what to do
+> with the return value from ->reset() and so there should be none.
+> 
+> As I said, governors can print whatever diagnostic messages they like
+> in that callback, but returning anything from it to the core is just
+> not useful IMV.
+> 
+>> For the rest of the governors - it's up to them what they
+>> report in case non-passive trip is updated...
+> 
+> Sure.
+> 
+>>>
+>>>> What Di is facing is in the issue under the bucket of
+>>>> 'handle_non_critical_trips()' when the governor just tries to
+>>>> work on stale data - old trip temp.
+>>>
+>>> Well, fair enough, but what about the other governors?  Is this
+>>> problem limited to power_allocator?
+>>
+>> IIUC the core fwk code - non of the governors would be needed
+>> to handle the critical/hot trips. For the rest of the trip types
+>> I would say it's up to the governor. In our IPA case this stale
+>> data is used for power budget estimation - quite fundamental
+>> step. Therefore, the reset and start from scratch would make more
+>> sense.
+>>
+>> I think other governors don't try to 'estimate' such
+>> abstract power headroom based on temperature - so probably
+>> they don't have to even implement the 'reset()' callback
+>> (I don't know their logic that well).
+> 
+> So there seems to be a claim that IPA is the only governor needing the
+> ->reset() callback, but I have not seen any solid analysis confirming
+> that.  It very well may be the case, but then the changelog should
+> clearly explain why this is the case IMO.
+
+I agree, the patch header doesn't explain that properly. Here is the
+explanation for this Intelligent Power Allocator (IPA):
+
+The IPA controls temperature using PID mechanism. It's a closed
+feedback loop. That algorithm can 'learn' from the 'observed'
+in the past reaction for it's control decisions and accumulates that
+information in the part called 'error integral'. Those accumulated
+'error' gaps are the differences between the set target value and the
+actually achieved value. In our case the target value is the target
+temperature which is coming from the trip point. That part is then used
+with the 'I' (of PID) component, so we can compensate for those
+'learned' mistakes.
+Now, when you change the target temperature value - all your previous
+learned errors won't help you. That's why Intelligent Power Allocator
+should reset previously accumulated history.
+
+> 
+>>>
+>>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
+>>>> and should be ready for what you said (modification of that value).
+>>>
+>>> Generally speaking, it needs to be prepared for a simultaneous change
+>>> of multiple trip points (including active), in which case it may not
+>>> be useful to invoke the ->reset() callback for each of them
+>>> individually.
+>>
+>> Although, that looks more cleaner IMO. Resetting one by one in
+>> a temperature order would be easily maintainable, won't be?
+> 
+> I wouldn't call it maintainable really.
+> 
+> First of all, the trips may not be ordered.  There are no guarantees
+> whatsoever that they will be ordered, so the caller may have to
+> determine the temperature order in the first place.  This would be an
+> extra requirement that currently is not there.
+> 
+> Apart from this, I don't see any fundamental difference between the
+> case when trip points are updated via sysfs and when they are updated
+> by the driver.  The governor should reset itself in any of those cases
+> and even if one trip point changes, the temperature order of all of
+> them may change, so the governor reset mechanism should be able to
+> handle the case when multiple trip points are updated at the same
+> time.  While you may argue that this is theoretical, the ACPI spec
+> clearly states that this is allowed to happen, for example.
+> 
+> If you want a generic reset callback for governors, that's fine, but
+> make it generic and not specific to a particular use case.
+
+I think we agree here, but probably having slightly different
+implementation in mind. Based on you explanation I think you
+want simply this API:
+void (*reset)(struct thermal_zone_device *tz);
+
+1. no return value
+2. no specific trip ID as argument
+
+Do you agree?
+IMO such implementation and API would also work for this IPA
+purpose. Would that work for the ACPI use case as well?
