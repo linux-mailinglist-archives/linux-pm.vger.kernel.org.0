@@ -2,112 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC28C73BD77
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 19:10:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF2273BDD1
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 19:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231667AbjFWRKL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 13:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S231504AbjFWRcA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 23 Jun 2023 13:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjFWRJq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 13:09:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9072D69;
-        Fri, 23 Jun 2023 10:09:05 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NDf6qV010028;
-        Fri, 23 Jun 2023 17:08:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=czNt/8joIzOa1GCzQN/TG6UFZ73VTlS7L/4YiZu44dY=;
- b=As3Dk1lO9yf4DAtP+ZS0ENhbiwWoNGjz38uu/AaSF5Oaa720ymoc7WJ2ASzPaNko1t8n
- uVMNCRkmiGk0PyOVpmQw0AyPJr7xpJVPnWWA9HtJapgLTVVvxux1kgzQW3KUY409xqMz
- 6DykOnYGt0FW3gkroAyQsK42C4y+WGcZfe76HYkUc0Cr2/j0NzYx+TyKdKbAKd/iv0a+
- jnQQ3dU9JKM8KSHEHgqG74Wyf41+Ssp6pd4ZVXEdG2DJ8uoZoGjX+W6dy3L3wlx1t4oR
- sO8eBNUWPHhGqPq+ZnbjukqYAqXKNqgMGNYZu9h3Ugplsivoo9r7WEjvlbcWljmQ6kb6 8w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcw93j4bf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 17:08:58 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NH8vC6008169
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 23 Jun 2023 17:08:57 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 23 Jun 2023 10:08:57 -0700
-Date:   Fri, 23 Jun 2023 10:08:56 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Andrew Halaney <ahalaney@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <konrad.dybcio@linaro.org>,
-        <andersson@kernel.org>, <agross@kernel.org>
-Subject: Re: [PATCH] cpufreq: qcom-cpufreq-hw: Use dev_err_probe() when
- failing to get icc paths
-Message-ID: <20230623170856.GA1736857@hu-bjorande-lv.qualcomm.com>
-References: <20230623155707.944272-1-ahalaney@redhat.com>
+        with ESMTP id S230407AbjFWRb7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 13:31:59 -0400
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEAB1FCE;
+        Fri, 23 Jun 2023 10:31:56 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2b57b4e95a8so3038411fa.1;
+        Fri, 23 Jun 2023 10:31:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687541515; x=1690133515;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jOE+wA84bUgsrB1AzgI2LWtxgwxjdnvrreNkwnCKlM4=;
+        b=YWYQIAtX2f6BxL4OPRJIcii2RtFdCvCWCAHH5v7LVU//W3hDduEvq2myTiT8M3TidR
+         JTL8Jt4uwM39WZImpdgJdS8uvUylG2z8GmtSOQzeDqbGlL8zS7A95ca6AqNfm7y7Fqm6
+         l2F+yHD4uC87O71Y0LtDr27YK8haWd90Pj4EpS7nhEs0e1IK+4mL7H4rmo6A9cbJ0QtY
+         /Oo9H0Q7AY5FutwgaKoAIc9XTlwin/7LXjrTDTAo7pWHV6awraKxgvzWXhFWVnD1dDrS
+         T1zr1V/d0ZJUe9tEToxoImglR6mQtKj/FcskyL6tCwyNilvZJdHc+g7JnSDFeTskqdQz
+         4AAw==
+X-Gm-Message-State: AC+VfDwTZu24jtMk/R6v00IyhuMNaOKMT1oGsUVOaVPE7xGDWjAd9fpl
+        pB4meDgS9JUs9pMcygup5Wd4LlM1XjLNJHs9xs4=
+X-Google-Smtp-Source: ACHHUZ5GM58vz8yYEuxsD8CNzGT05eOKZYG6ay3XXTPUxwgDeLliAMWGobFGGvZeH9zpc6JSF1zoYG8vWPxdVCKYYpQ=
+X-Received: by 2002:a05:651c:1187:b0:2b4:799e:fb3e with SMTP id
+ w7-20020a05651c118700b002b4799efb3emr7829671ljo.1.1687541514886; Fri, 23 Jun
+ 2023 10:31:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230623155707.944272-1-ahalaney@redhat.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ps1W09bcuLMUPMOYI_SbyqSZgazmL5fE
-X-Proofpoint-ORIG-GUID: ps1W09bcuLMUPMOYI_SbyqSZgazmL5fE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-23_09,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- adultscore=0 clxscore=1011 impostorscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 lowpriorityscore=0 priorityscore=1501
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306230153
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230607003721.834038-1-evalenti@kernel.org> <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+ <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com> <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
+ <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com> <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com> <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+In-Reply-To: <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 23 Jun 2023 19:31:43 +0200
+Message-ID: <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+To:     Eduardo Valentin <evalenti@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 23, 2023 at 10:57:07AM -0500, Andrew Halaney wrote:
-> This way, if there's an issue (in this case a -EPROBE_DEFER), you can
-> get useful output:
-> 
->     [root@dhcp19-243-150 ~]# cat /sys/kernel/debug/devices_deferred
->     18591000.cpufreq        qcom-cpufreq-hw: Failed to find icc paths
-> 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+On Thu, Jun 22, 2023 at 6:56 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+>
+> On Wed, Jun 21, 2023 at 01:43:26PM +0200, Daniel Lezcano wrote:
+> >
+> >
+> >
+> > On 21/06/2023 07:06, Eduardo Valentin wrote:
+> > > On Mon, Jun 12, 2023 at 10:17:51AM +0200, Daniel Lezcano wrote:
+> > > >
+> > > >
+> > > >
+> > > > Hi Eduardo,
+> > > >
+> > > > On 08/06/2023 19:44, Eduardo Valentin wrote:
+> > > >
+> > > > [ ... ]
+> > > >
+> > > > > > Do you have a use case with some measurements to spot an issue or is it
+> > > > > > a potential issue you identified ?
+> > > > >
+> > > > >
+> > > > > yes, a governor that is using I2C device as input, behind I2C fast mode (100KHz)
+> > > > > and needs to update the zone every 100ms. Each read in this bus, if done alone
+> > > > > would be around 500us, takes 10bytes to read the device, it is 10 clocks per byte,
+> > > > > well technically 9, but rounding for the sake of the example, which gets you
+> > > > > 50 / 100KHz = 500 us. That is for a single read. You add one single extra
+> > > > > userspace read triggering an unused device update, that is already a 1ms drift.
+> > > > > Basically you looking at 0.5% for each extra userspace read competing in this
+> > > > > sysfs node. You add extra devices in the same I2C bus, your governor is looking
+> > > > > at more than 1% overhead. And I am talking also about a main CPU of ~800MHz.
+> > > > > I did not even include the lock overhead considered for this CPU ;-)
+> > > > >
+> > > > > Again, this is not about controlling the DIE temperature of the CPU you
+> > > > > are running the thermal subsystem. This is about controlling
+> > > > > a target device.
+> > > >
+> > > > Ok. The target device is on a bus which is slow and prone to contention.
+> > > >
+> > > > This hardware is not designed to be monitored with a high precision, so
+> > > > reading the temperature at a high rate does not really make sense.
+> > >
+> > > On the contrary, it needs even more precision and any extra delay adds to
+> > > loss on accuracy :-)
+> >
+> > What I meant is if the hardware designer thought there could be a
+> > problem with the thermal zone they would have put another kind of
+> > sensor, not one with a i2c based communication.
+>
+> No, that is not a problem in the physical thermal zone. Or to cover
+> for a hardware design flaw. This is an actual typical case. However,
+> yes, designer must take into account any sort of delays or jittering
+> in the control system, and typically one would add some thermal margins
+> on the control system. But to the original point here, we should eliminate
+> unnecessary jittering or delay in the control system.
+>
+> >
+> >
+> > > > Moreover (putting apart a potential contention), the delayed read does
+> > > > not change the time interval, which remains the same from the governor
+> > > > point of view.
+> > >
+> > > It does not change the governor update interval and that is a property of
+> > > the thermal zone. Correct. And that is the intention of the change.
+> > > The actual temperature updates driven by the governor will always
+> > > result in a driver call. While a userspace call will not be in the way
+> > > of the governor update.
+> > >
+> > > Sysfs reads, However, with the current code as is, it may cause
+> > > jittering on the actual execution of the governor throttle function.
+> > >   causing the computation of the desired outcome cooling device being skewed.
+> > >
+> > > >
+> > > > In addition, i2c sensors are usually handled in the hwmon subsystem
+> > > > which are registered in the thermal framework from there. Those have
+> > > > most of their 'read' callback with a cached value in a jiffies based way
+> > > > eg. [1].
+> > >
+> > > I guess what you are really saying is: go read the hwmon sysfs node,
+> > > or, hwmon solves this for us, which unfortunately is not true for all devices.
+> >
+> > I meant the i2c sensors are under the hwmon subsystem. This subsystem is
+> > connected with the thermal framework, so when a hwmon sensor is created,
+> > it register this sensor as a thermal zone.
+> >
+> >
+> > > > So the feature already exists for slow devices and are handled in the
+> > > > drivers directly via the hwmon subsystem.
+> > > >
+> > > >  From my POV, the feature is not needed in the thermal framework.
+> > >
+> > > The fact that hwmon does it in some way is another evidence of the
+> > > actual problem.
+> >
+> > Not really, it shows the i2c sensors are in the hwmon subsystems.
+>
+> They are there too. And hwmon also sees same problem of too frequent
+> device update. The problem is there regardless of the subsystem we use
+> to represent the device. Also, I dont buy the argument that this is
+> a problem of hwmon because it is already supported to plug in
+> hwmon devices in the thermal subsystem. That is actually the original
+> design in fact :-). So running a control in the thermal subsystem
+> on top of inputs from hwmon, which happens to support I2C devices,
+> is not a problem for hwmon to solve, since the control is in the
+> thermal subsystem, and hwmon does not offer control solutions.
 
-Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Regardless of where the problem is etc, if my understanding of the
+patch is correct, it is proposing to change the behavior of a
+well-known sysfs interface in a way that is likely to be incompatible
+with at least some of its users.  This is an obvious no-go in kernel
+development and I would expect you to be well aware of it.
 
-Regards,
-Bjorn
+IOW, if you want the cached value to be returned, a new interface (eg.
+a new sysfs attribute) is needed.
 
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index a78d7a27b4b5..f2830371d25f 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -661,7 +661,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  
->  	ret = dev_pm_opp_of_find_icc_paths(cpu_dev, NULL);
->  	if (ret)
-> -		return ret;
-> +		return dev_err_probe(dev, ret, "Failed to find icc paths\n");
->  
->  	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
->  		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
-> -- 
-> 2.40.1
-> 
+And I think that the use case is not really i2c sensors in general,
+because at least in some cases they work just fine AFAICS, but a
+platform with a control loop running in the kernel that depends on
+sensor reads carried out at a specific, approximately constant, rate
+that can be disturbed by user space checking the sensor temperature
+via sysfs at "wrong" times.  If at the same time the user space
+program in question doesn't care about the most recent values reported
+by the sensor, it may very well use the values cached by the in-kernel
+control loop.
