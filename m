@@ -2,137 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1001773B903
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 15:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E3E73B905
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 15:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjFWNqO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 09:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60624 "EHLO
+        id S231983AbjFWNrc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 09:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjFWNqL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 09:46:11 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E02968
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:45:45 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f870247d6aso838796e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:45:45 -0700 (PDT)
+        with ESMTP id S231925AbjFWNrZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 09:47:25 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEA4271E
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:46:55 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2b46d270ea1so11316281fa.1
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:46:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687527943; x=1690119943;
+        d=linaro.org; s=google; t=1687528013; x=1690120013;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CG/L5fCcL7PugjOiD8VAGfzqZ5AV8spPcF/+MHEpizc=;
-        b=JgnrBgJTH8r9UwKtq/t9/7Oi9fcEDKiRWPJoksmFlGffyYpNBC+4PpUlxI5wutnRMR
-         oF2NJbXJBiUxqWUG1/Ut3T02e2R4x9QCVJHRT3B1eRVn7fj7GhMef6JU/uYPKbptl1KA
-         5d1HYQjTZYnL/G/pgBLh8mIUfJqmzTxNm2fL195TyYKXPNrS8rhgGVHKI3DDrsEPsOP+
-         n/J4BF+aVuwo0UWpA/VQKeGTFgDqqGzMSLYYnZ0MWH36/icuTWu7d/cXyidUIYt3WiML
-         Z+ypYsAp6EBf7hj6SCuFf7gtZfxHDroviFaIKAhO2RoHs6u6z2Q1u2gUBv24sFvz36i5
-         Dnxw==
+        bh=MVPFiTXiHN5JMTEeha1FIlf9pYQ0Aa0NYaPk7qaQspM=;
+        b=Zs4Yo59/1MG72R0gt1GaekHcvCbVMvsosSU3+tLSUSwMLg1obNJQ7Uofshn21qRYyL
+         hv9X81xB5jjjqgi3txeh5VRKzKo4R81RBs7xA6hu9m/6jcatoArsJ8bSX9H301hQPDIf
+         qk8CHs++V39y7HsS7QeJteIcO8+00hdbtwVRh3L100BFC8IfZMIxaRkY68Fquc4ivUWH
+         bduPlItYGmxwv5XD3sSlNygieOYU1BUNOb/7HRdySZz9N1ASoysNPLK/G3Qr+vOPDGmi
+         G6cvDerHywGYVbQx7TlqQkd8lvY3ko5hmXk8nZ4+HhA7QNTxhx6N9+FVKh0cIBKSM6iY
+         4A9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687527943; x=1690119943;
+        d=1e100.net; s=20221208; t=1687528013; x=1690120013;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CG/L5fCcL7PugjOiD8VAGfzqZ5AV8spPcF/+MHEpizc=;
-        b=J/P82hvLdAv9gPKemirEWAi20i+usYcwNvd6Gx0Fsn0wFbEWhXRto9HpInX9jETwPY
-         sEKFXvBYReU+7zWDNbql65u53G0kW5fg0VfxpFKZ10ABkSImpgRb9xISq/BzEiyhSXAP
-         g50wLe8G9iZMyLg1JgVVJwv4RwhVuCyxhtRD6BfcH/YbwGNWONgun7BSavwFJNQDO7Ee
-         6tWsWFwyC5eYZFfMY/w7jXZnJn5cuRM03SPzx4wy8/mtuvAbemlLBZ+T+gentUnuwoI9
-         aC4VIpzv0Q8Z42HtzyTs6yaSVCJguC7W9jqNxmqsQ+UFjkG86UpON1sJkSBD7ub0fEwG
-         k16Q==
-X-Gm-Message-State: AC+VfDyHrZO/kzTEEY0QuMHASTgVapZlsCGCBSoTK4o7FsKIIxXvw3D2
-        g6CqKbGWqahPiUukQuqvlzZm0lEjilE3us7w3Dk=
-X-Google-Smtp-Source: ACHHUZ40Rmt0bQ6tFBgxMHDz3EIeoFE2P2zGcudX3YjsMnKPoegGaAcdTpd5fvMVdW+M2iYNeBFdZQ==
-X-Received: by 2002:a05:6512:2205:b0:4f9:69b8:1e6d with SMTP id h5-20020a056512220500b004f969b81e6dmr3371663lfu.3.1687527943566;
-        Fri, 23 Jun 2023 06:45:43 -0700 (PDT)
+        bh=MVPFiTXiHN5JMTEeha1FIlf9pYQ0Aa0NYaPk7qaQspM=;
+        b=amtHOIrdVFD/SOylpNjgTMxucQMzdzLdMcT7EFjK0WUHcwCf4Ubz5psfb4tobAqKzN
+         LtMKyDmTDhRZ0DTgR9m7zShTvYJ0Quzeboc1NzreY54JwFWLO1kC7Nv9vao2zacOPZoN
+         izmgyFQsjfzc/VNX96liLgMDoENW8T1mHshmAZuGYk0p1zd07rFnQcOORE0gwGazNv6m
+         1L+Ih0N7I6v02FTPBHxSEcdU+9ZYm+VVYlCVgecZYONyuzAgZJHQhQE2eZ0oLliR/uwS
+         dMj84eph1VWPDDZDKOR68a28rsTls1LNQwXrNG9KQkOLw3Afbc3A7Hd+sj14V+SQWk6r
+         60LA==
+X-Gm-Message-State: AC+VfDzQ4cicUCT8RaLEFaDE+ivihUYcdAOdYy9DRnL5IiejDsq5Eb5O
+        IyOtCQ3J0ktNXcrjdmMV4nBgwg==
+X-Google-Smtp-Source: ACHHUZ7nGCmwqqAJ+fPnypsOoPzK5m+s/lljI1cFEAxrGS67vTPHz9BzVNflq/NqyVkt/DiE+QTPhg==
+X-Received: by 2002:a2e:2d02:0:b0:2b1:ea3d:2625 with SMTP id t2-20020a2e2d02000000b002b1ea3d2625mr14334435ljt.31.1687528013444;
+        Fri, 23 Jun 2023 06:46:53 -0700 (PDT)
 Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id q30-20020ac2515e000000b004f1383d57ecsm1437980lfd.202.2023.06.23.06.45.42
+        by smtp.gmail.com with ESMTPSA id z6-20020a2e9646000000b002b47a15a2eesm1743320ljh.45.2023.06.23.06.46.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 06:45:43 -0700 (PDT)
-Message-ID: <e1e82967-f2d5-48f9-80ba-2dafbac554c9@linaro.org>
-Date:   Fri, 23 Jun 2023 15:45:41 +0200
+        Fri, 23 Jun 2023 06:46:53 -0700 (PDT)
+Message-ID: <ac1b0200-23a8-43d8-3f63-1ad49f08da10@linaro.org>
+Date:   Fri, 23 Jun 2023 15:46:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/4] interconnect: qcom: Add support for mask-based
- BCMs
+Subject: Re: [PATCH v2 2/4] interconnect: qcom: sm8450: add enable_mask for
+ bcm nodes
 Content-Language: en-US
-To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Georgi Djakov <djakov@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>
+        linux-kernel@vger.kernel.org
 References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
- <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-1-709474b151cc@linaro.org>
+ <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-2-709474b151cc@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-1-709474b151cc@linaro.org>
+In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-2-709474b151cc@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23.06.2023 14:50, neil.armstrong@linaro.org wrote:
-> From: Mike Tipton <mdtipton@codeaurora.org>
+On 23.06.2023 14:50, Neil Armstrong wrote:
+> Set the proper enable_mask to nodes requiring such value
+> to be used instead of a bandwidth when voting.
 > 
-> Some BCMs aren't directly associated with the data path (i.e. ACV) and
-> therefore don't communicate using BW. Instead, they are simply
-> enabled/disabled with a simple bit mask. Add support for these.
+> The masks were copied from the downstream implementation at [1].
 > 
-> Origin commit retrieved from:
-> https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/2d1573e0206998151b342e6b52a4c0f7234d7e36
+> [1] https://git.codelinaro.org/clo/la/kernel/msm-5.10/-/blob/KERNEL.PLATFORM.1.0.r2-05600-WAIPIOLE.0/drivers/interconnect/qcom/waipio.c
 > 
-> Signed-off-by: Mike Tipton <mdtipton@codeaurora.org>
-> [narmstrong: removed copyright change from original commit]
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  drivers/interconnect/qcom/bcm-voter.c | 5 +++++
->  drivers/interconnect/qcom/icc-rpmh.h  | 2 ++
->  2 files changed, 7 insertions(+)
+>  drivers/interconnect/qcom/sm8450.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> diff --git a/drivers/interconnect/qcom/bcm-voter.c b/drivers/interconnect/qcom/bcm-voter.c
-> index 8f385f9c2dd3..d5f2a6b5376b 100644
-> --- a/drivers/interconnect/qcom/bcm-voter.c
-> +++ b/drivers/interconnect/qcom/bcm-voter.c
-> @@ -83,6 +83,11 @@ static void bcm_aggregate(struct qcom_icc_bcm *bcm)
+> diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+> index 2d7a8e7b85ec..e64c214b4020 100644
+> --- a/drivers/interconnect/qcom/sm8450.c
+> +++ b/drivers/interconnect/qcom/sm8450.c
+> @@ -1337,6 +1337,7 @@ static struct qcom_icc_node qns_mem_noc_sf_disp = {
 >  
->  		temp = agg_peak[bucket] * bcm->vote_scale;
->  		bcm->vote_y[bucket] = bcm_div(temp, bcm->aux_data.unit);
-> +
-> +		if (bcm->enable_mask && (bcm->vote_x[bucket] || bcm->vote_y[bucket])) {
-> +			bcm->vote_x[bucket] = 0;
-> +			bcm->vote_y[bucket] = bcm->enable_mask;
-> +		}
->  	}
+>  static struct qcom_icc_bcm bcm_acv = {
+>  	.name = "ACV",
+> +	.enable_mask = 0x8,
+>  	.num_nodes = 1,
+>  	.nodes = { &ebi },
+>  };
+> @@ -1349,6 +1350,7 @@ static struct qcom_icc_bcm bcm_ce0 = {
 >  
->  	if (bcm->keepalive && bcm->vote_x[QCOM_ICC_BUCKET_AMC] == 0 &&
-> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
-> index 04391c1ba465..7843d8864d6b 100644
-> --- a/drivers/interconnect/qcom/icc-rpmh.h
-> +++ b/drivers/interconnect/qcom/icc-rpmh.h
-> @@ -81,6 +81,7 @@ struct qcom_icc_node {
->   * @vote_x: aggregated threshold values, represents sum_bw when @type is bw bcm
->   * @vote_y: aggregated threshold values, represents peak_bw when @type is bw bcm
->   * @vote_scale: scaling factor for vote_x and vote_y
-> + * @enable_mask: optional mask to send as vote instead of vote_x/vote_y
->   * @dirty: flag used to indicate whether the bcm needs to be committed
->   * @keepalive: flag used to indicate whether a keepalive is required
->   * @aux_data: auxiliary data used when calculating threshold values and
-> @@ -97,6 +98,7 @@ struct qcom_icc_bcm {
->  	u64 vote_x[QCOM_ICC_NUM_BUCKETS];
->  	u64 vote_y[QCOM_ICC_NUM_BUCKETS];
->  	u64 vote_scale;
-> +	u32 enable_mask;
->  	bool dirty;
->  	bool keepalive;
->  	struct bcm_db aux_data;
+>  static struct qcom_icc_bcm bcm_cn0 = {
+>  	.name = "CN0",
+> +	.enable_mask = 0x1,
+>  	.keepalive = true,
+>  	.num_nodes = 55,
+>  	.nodes = { &qnm_gemnoc_cnoc, &qnm_gemnoc_pcie,
+> @@ -1383,6 +1385,7 @@ static struct qcom_icc_bcm bcm_cn0 = {
+>  
+>  static struct qcom_icc_bcm bcm_co0 = {
+>  	.name = "CO0",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 2,
+>  	.nodes = { &qxm_nsp, &qns_nsp_gemnoc },
+>  };
+> @@ -1403,6 +1406,7 @@ static struct qcom_icc_bcm bcm_mm0 = {
+>  
+>  static struct qcom_icc_bcm bcm_mm1 = {
+>  	.name = "MM1",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 12,
+>  	.nodes = { &qnm_camnoc_hf, &qnm_camnoc_icp,
+>  		   &qnm_camnoc_sf, &qnm_mdp,
+> @@ -1445,6 +1449,7 @@ static struct qcom_icc_bcm bcm_sh0 = {
+>  
+>  static struct qcom_icc_bcm bcm_sh1 = {
+>  	.name = "SH1",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 7,
+>  	.nodes = { &alm_gpu_tcu, &alm_sys_tcu,
+>  		   &qnm_nsp_gemnoc, &qnm_pcie,
+> @@ -1461,6 +1466,7 @@ static struct qcom_icc_bcm bcm_sn0 = {
+>  
+>  static struct qcom_icc_bcm bcm_sn1 = {
+>  	.name = "SN1",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 4,
+>  	.nodes = { &qhm_gic, &qxm_pimem,
+>  		   &xm_gic, &qns_gemnoc_gc },
+> @@ -1492,6 +1498,7 @@ static struct qcom_icc_bcm bcm_sn7 = {
+>  
+>  static struct qcom_icc_bcm bcm_acv_disp = {
+>  	.name = "ACV",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 1,
+>  	.nodes = { &ebi_disp },
+>  };
+> @@ -1510,6 +1517,7 @@ static struct qcom_icc_bcm bcm_mm0_disp = {
+>  
+>  static struct qcom_icc_bcm bcm_mm1_disp = {
+>  	.name = "MM1",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 3,
+>  	.nodes = { &qnm_mdp_disp, &qnm_rot_disp,
+>  		   &qns_mem_noc_sf_disp },
+> @@ -1523,6 +1531,7 @@ static struct qcom_icc_bcm bcm_sh0_disp = {
+>  
+>  static struct qcom_icc_bcm bcm_sh1_disp = {
+>  	.name = "SH1",
+> +	.enable_mask = 0x1,
+>  	.num_nodes = 1,
+>  	.nodes = { &qnm_pcie_disp },
+>  };
 > 
