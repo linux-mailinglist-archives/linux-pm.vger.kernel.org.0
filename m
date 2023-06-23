@@ -2,106 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A765C73BC36
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 17:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D4B73BC90
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 18:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232298AbjFWP6N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 11:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S229541AbjFWQ3h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 12:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbjFWP6M (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 11:58:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480582117
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 08:57:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687535846;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8yB7HqTroWEhP9efqg+b7pKLnUsqA1PuT3Ijl2qFi+4=;
-        b=NxPwH1rdh8GVReKolL0r+HeHdDDt4ZaZYoF6g6i4sWcXb3pqoDmho3pc9yO+1YcSFbbamZ
-        0RNlWBY6V2uJ/VNfoCM1u7lp+Ak2zB1jxicoxv52/e7xRpZJ3/9HacK7DrlwPuRYHbHAAA
-        EQ0CxGrLr3kAAcUQTTEsp730ozPuAJM=
-Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
- [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-136-1IrWSn2hNCit2_66hcDkGQ-1; Fri, 23 Jun 2023 11:57:25 -0400
-X-MC-Unique: 1IrWSn2hNCit2_66hcDkGQ-1
-Received: by mail-ot1-f72.google.com with SMTP id 46e09a7af769-6b5d41d2f6bso587083a34.2
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 08:57:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687535844; x=1690127844;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8yB7HqTroWEhP9efqg+b7pKLnUsqA1PuT3Ijl2qFi+4=;
-        b=eJqf7USfr0MakAstyr2948qxuAWvdpD+NaROuuBtGOiwrRQvDH8wsprkqY1Ugqt7qF
-         irdYb0nDOrpvCP1fHGJQ1ZBTmvDCJWxbtqASVoL2etEG/LrWck2SViRczhQIobQFykjI
-         qO6mbOQzLTxsQOyFNTbtIOHPfDbmkB1FJMjnQDLE4fqRmbiwi47eEUZsaI9zfgiDI+tj
-         zzNebX3/bqH96XTynZORYgx3Q0tDR38PjwWct3RjZIB7Gb3vmxlXxwPPHYe/MswRNNAv
-         f4aeF1Thxps7IxVseeixIO+UgKLldiSdMxv0sVjqS9uNDuKtqtq3/d3qlWBgR6Zd7t9K
-         n6aQ==
-X-Gm-Message-State: AC+VfDwrwFQlrnGAh4Zfdr8ji3db4GsjN3aRP8I2hGrN2Hf+e0f2v90/
-        dTiNOeLjv1/NFndI/2PPHtEq/PomqPqAx2yU3qfMy/6/7TDO+YrtSlRp8h/8AFj+h85TM0ZlMC3
-        qdFRxoM/DdYWzdTV0YzbPgIpEqEg=
-X-Received: by 2002:a9d:7414:0:b0:6b7:296d:3d4e with SMTP id n20-20020a9d7414000000b006b7296d3d4emr980455otk.30.1687535843982;
-        Fri, 23 Jun 2023 08:57:23 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6nubFY5xAfbSlXYXWVWjad3VSMli+Q/HTHaXj169kXem2BAiF1sIv7sOY1ukVSIq+NyDYRnA==
-X-Received: by 2002:a9d:7414:0:b0:6b7:296d:3d4e with SMTP id n20-20020a9d7414000000b006b7296d3d4emr980442otk.30.1687535843646;
-        Fri, 23 Jun 2023 08:57:23 -0700 (PDT)
-Received: from halaney-x13s.redhat.com ([2600:1700:1ff0:d0e0::f])
-        by smtp.gmail.com with ESMTPSA id w17-20020a9d6391000000b006ac75cff491sm3883758otk.3.2023.06.23.08.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 08:57:23 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        viresh.kumar@linaro.org, rafael@kernel.org,
-        konrad.dybcio@linaro.org, andersson@kernel.org, agross@kernel.org,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH] cpufreq: qcom-cpufreq-hw: Use dev_err_probe() when failing to get icc paths
-Date:   Fri, 23 Jun 2023 10:57:07 -0500
-Message-Id: <20230623155707.944272-1-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S229531AbjFWQ3g (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 12:29:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC44189
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 09:29:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99A7061A91
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 16:29:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 05824C433C0
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 16:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687537775;
+        bh=2THy+0iqx6M1bCtK/v37avQQjssgWqELbXndv2StP+Q=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=YWMdZYqGDwv+YINseP/upIOO9E018bQuA85GBh1TQMXbH4VCMR7a/z3wQvYX7aBfp
+         s2ooD+1P+ANkJ++l6PK0ZK6NvGHzLOA15dp5r1j+el3Wm4G0O7I7g+I+IgwbOlfRat
+         yTMQxxcmRrpmD9xKmY7QUBuRFk6ttxn2YvBTMwgvrhJU/HgwycTyJnAdiP6GOFolDg
+         8P9dr45o0dS1ce6X4BQwjOp7Lal3ldR/QhQEOQGaDr/nyCtUmIa9JYY7t6Aznn1txa
+         0w5pTxpSrKyHXvOdWIW3F1M1ZNYQcGqqqXOIYrfOStj4+K1WCOMS7kvwXOkoaJZm94
+         lMeTIF1n9x11w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id D2861C53BCD; Fri, 23 Jun 2023 16:29:34 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217589] Intel CPU maximum boost frequency reduced after resume
+ from suspend to RAM
+Date:   Fri, 23 Jun 2023 16:29:34 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: srinivas.pandruvada@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217589-137361-0Fw6xYBnY9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217589-137361@https.bugzilla.kernel.org/>
+References: <bug-217589-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This way, if there's an issue (in this case a -EPROBE_DEFER), you can
-get useful output:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217589
 
-    [root@dhcp19-243-150 ~]# cat /sys/kernel/debug/devices_deferred
-    18591000.cpufreq        qcom-cpufreq-hw: Failed to find icc paths
+--- Comment #3 from Srinivas Pandruvada (srinivas.pandruvada@linux.intel.co=
+m) ---
+I suggest to dump
+rdmsr -a 0x774
+before and after suspend to RAM.
 
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+They should be same.
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index a78d7a27b4b5..f2830371d25f 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -661,7 +661,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 	ret = dev_pm_opp_of_find_icc_paths(cpu_dev, NULL);
- 	if (ret)
--		return ret;
-+		return dev_err_probe(dev, ret, "Failed to find icc paths\n");
- 
- 	for (num_domains = 0; num_domains < MAX_FREQ_DOMAINS; num_domains++)
- 		if (!platform_get_resource(pdev, IORESOURCE_MEM, num_domains))
--- 
-2.40.1
+The problem is voltage settings done via BIOS. OS doesn't have support to r=
+ead
+and restore. That must be done by the BIOS.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
