@@ -2,52 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7206D73B213
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 09:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DA873B81F
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 14:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231688AbjFWHtW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 03:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S231284AbjFWMvO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 08:51:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231721AbjFWHtO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 03:49:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 51E812729;
-        Fri, 23 Jun 2023 00:48:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AD0E6C14;
-        Fri, 23 Jun 2023 00:43:43 -0700 (PDT)
-Received: from [10.57.27.57] (unknown [10.57.27.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE22B3F64C;
-        Fri, 23 Jun 2023 00:42:57 -0700 (PDT)
-Message-ID: <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
-Date:   Fri, 23 Jun 2023 08:43:14 +0100
+        with ESMTP id S231292AbjFWMvK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 08:51:10 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212CE2132
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 05:50:48 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-307d58b3efbso599112f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 05:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687524646; x=1690116646;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=38ZFJVWNUQQxQWdNSjPpbRwE1qGpIOrtYRqEuWvZ+/4=;
+        b=YpUOOjwzMFvEIZShfWlC9G9X4m1UFxwzymvN/G9VN0jT4MLBCkY3Un7MS1sVdNyjO3
+         ZnZ16AZ8/G0Kol6CIDuaRN8Hu1LxMgVUivI44reoX4CsufuAeF6NdNkeqsVKpIGaXcI+
+         pP3u1e8sDjuDocGR2ijci7yNo71tlVtq+p6roarJbXC/qoudVknl6dMP/jkw1LuwhX4c
+         dZqX5Tmsxn3fKGdIwtSY2PLzrHGQxLcCdP6luhbbYYry2XTfheNw6g8xugqZMAXQq3E4
+         HuRXlqwemtH45ekuFJWNkeoZdwcW89TaHkvdcGRGMPr44pvXqtkm8nxreHrqKXe9ACdW
+         TLnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687524646; x=1690116646;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38ZFJVWNUQQxQWdNSjPpbRwE1qGpIOrtYRqEuWvZ+/4=;
+        b=lO7z2FPY9f+ivkRW8EwOng0dfa7KB5YnO9xNvmuomuKJwkGJ0WxWjODU29ZSTMw51i
+         NjukNMKEMuzooZbez+96X5ycJAvSz404y5wtKKZzVGmvL+gVKvd9NhnPq0toigY4VE3a
+         tqvf2xq0wV8XGDKG6HF3uopqwBvxqIBGAmzhKfizfLh2jrIE4xK2js0eJc783PMOhZNX
+         VfCRijcFUKTIS1tnhAPvZwe4rcMV6cfSfe98Ji0paJNxH9lO8i/PDvas8twACcsnNZiu
+         /SFikEpX9xf9v6QRvUzrrE/Bpvxz2cpJhOTMGqP+MX6kvK1xVCMCHGXK9kOiQGy/hBqJ
+         PGYQ==
+X-Gm-Message-State: AC+VfDwVkgGHuu7ycRvLiAnjXgrhG7nDVDq3iOw8WzroGctOBU7KKvLm
+        24PUA8nrOmiqLBz0id5mu0cy2g==
+X-Google-Smtp-Source: ACHHUZ4Vmgs4jLypOn8hl1JUDcNuGhBdib1XRFYXWUSNxlTfqNBHVVFvIVw3AWZtFCRqT6WcTBQdVQ==
+X-Received: by 2002:a5d:404f:0:b0:30f:c1ac:9249 with SMTP id w15-20020a5d404f000000b0030fc1ac9249mr13513756wrp.51.1687524646558;
+        Fri, 23 Jun 2023 05:50:46 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id m5-20020adffe45000000b002fae7408544sm9455350wrs.108.2023.06.23.05.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 05:50:46 -0700 (PDT)
+From:   neil.armstrong@linaro.org
+Subject: [PATCH v2 0/4] interconnect: qcom: rpmh: sm8550: mask to send as
+ vote
+Date:   Fri, 23 Jun 2023 14:50:41 +0200
+Message-Id: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        Di Shen <di.shen@unisoc.com>, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
-        orsonzhai@gmail.com
-References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
- <20230619063534.12831-1-di.shen@unisoc.com>
- <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
- <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
- <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
- <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
- <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
- <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACGVlWQC/52OQQ6CMBBFr0K6dkwpKQFX3sOwGOoIE6El00I0h
+ LtbPYJ/9/7i/b+rSMIU1aXYldDGkYPPYE6FciP6gYDvmZXRptJ12UIKCzuIc2OthnWJSQhnYJ9
+ IXPCeXIIZ4xO2kAjaGtHoytrSNiore4wEvaB3Y5b6dZpyuQg9+PX7cOsyjxxTkPfv0lZ+2z/Xt
+ xI01DmV04i2NdeJPUo4BxlUdxzHB4ZKyyX+AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Mike Tipton <mdtipton@codeaurora.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1285;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=dHlYALK7LZK9JGD1GTv8PH7HVFxRRCXWRUuHCV2V1AE=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBklZUjcy8hCaoLpedyJOAMD1KNd/U0sIl7+rBl6/L1
+ kwC3bMWJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJWVIwAKCRB33NvayMhJ0T0DEA
+ CUBYXFjABUSSNfXkbhRd6ZUxLRmT8sVvHDnlBGaMc1HnJTlZq9VCvg+o/xbI8LBT3F2RLIC/OvF92w
+ Qikg5QnjV5qREQUOoc1QY1iH1wd2PsFVMsxJNvx3HcmMRLEoK7RFo9P5qeVnszgjq2uSK9J10e2kjF
+ jNC1qhfmqEvyma1Td5E4lscNtq646V7JCHk8G55VGUp+MnBy3d+9+PHk8fVKdaZUEAAc8XfzchoB8p
+ QckZsVoIVdMTW55QWEipRDPd2tc8NzC1pVFKgxWIxBK1/TKuQ+uh372XQbEWLFHKGz767KTXd4I+0r
+ 7ENEjTc7qJtG+t1x576F1dsCaa3ACsCEkV4ZdmM6kiRb0oNpXsPliOsfn0vizrWbdNvM3zxjl1C3nE
+ f57l47tvJLgnwEG3YSt+n0nilAgY7X2h47eeyonqLbg5YF+UuhVl20e33oZGJVNpGV3cY38NjI/0Vq
+ 0zjjW2mNjqLw4VSFpOXUozQK2gISHYZ1qbbHf8zcfq9laVr59pUf+oPqnFvBxVVMcX21LoNAHZGn72
+ PoWsjpBQ/Ugj1YtxmAv3X9JgBdvabCnr+Bq9FNlP+vy6irA83VF5/VYEgby6dBA793iHFJ5AajROKX
+ O7rEOLOGNYElmY2JiaN6h3KCZ0DAJohyQG8k/not+Ie+zul1WcJPMZJpZ77A==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,118 +95,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On the SM8550 SoC, some nodes requires a specific bit mark
+instead of a bandwidth when voting.
 
+Add an enable_mask variable to be used instead of bandwidth.
 
-On 6/22/23 19:27, Rafael J. Wysocki wrote:
-> On Tue, Jun 20, 2023 at 1:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 6/20/23 11:39, Rafael J. Wysocki wrote:
->>> On Tue, Jun 20, 2023 at 12:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Hi Rafael,
->>>>
->>>>
->>>> On 6/20/23 11:07, Rafael J. Wysocki wrote:
->>>>> On Tue, Jun 20, 2023 at 11:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- Took downstream patch for patch 1
+- Added konrad's reviewed tag
+- Added changes for sm8450 and sa8775p
+- Link to v1: https://lore.kernel.org/r/20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org
 
-[snip]
+---
+Mike Tipton (1):
+      interconnect: qcom: Add support for mask-based BCMs
 
-> 
-> Because this is up to the governor, the core has no clue what to do
-> with the return value from ->reset() and so there should be none.
-> 
-> As I said, governors can print whatever diagnostic messages they like
-> in that callback, but returning anything from it to the core is just
-> not useful IMV.
-> 
->> For the rest of the governors - it's up to them what they
->> report in case non-passive trip is updated...
-> 
-> Sure.
-> 
->>>
->>>> What Di is facing is in the issue under the bucket of
->>>> 'handle_non_critical_trips()' when the governor just tries to
->>>> work on stale data - old trip temp.
->>>
->>> Well, fair enough, but what about the other governors?  Is this
->>> problem limited to power_allocator?
->>
->> IIUC the core fwk code - non of the governors would be needed
->> to handle the critical/hot trips. For the rest of the trip types
->> I would say it's up to the governor. In our IPA case this stale
->> data is used for power budget estimation - quite fundamental
->> step. Therefore, the reset and start from scratch would make more
->> sense.
->>
->> I think other governors don't try to 'estimate' such
->> abstract power headroom based on temperature - so probably
->> they don't have to even implement the 'reset()' callback
->> (I don't know their logic that well).
-> 
-> So there seems to be a claim that IPA is the only governor needing the
-> ->reset() callback, but I have not seen any solid analysis confirming
-> that.  It very well may be the case, but then the changelog should
-> clearly explain why this is the case IMO.
+Neil Armstrong (3):
+      interconnect: qcom: sm8450: add enable_mask for bcm nodes
+      interconnect: qcom: sm8550: add enable_mask for bcm nodes
+      interconnect: qcom: sa8775p: add enable_mask for bcm nodes
 
-I agree, the patch header doesn't explain that properly. Here is the
-explanation for this Intelligent Power Allocator (IPA):
+ drivers/interconnect/qcom/bcm-voter.c |  5 +++++
+ drivers/interconnect/qcom/icc-rpmh.h  |  2 ++
+ drivers/interconnect/qcom/sa8775p.c   |  1 +
+ drivers/interconnect/qcom/sm8450.c    |  9 +++++++++
+ drivers/interconnect/qcom/sm8550.c    | 17 +++++++++++++++++
+ 5 files changed, 34 insertions(+)
+---
+base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+change-id: 20230619-topic-sm8550-upstream-interconnect-mask-vote-96aa20355158
 
-The IPA controls temperature using PID mechanism. It's a closed
-feedback loop. That algorithm can 'learn' from the 'observed'
-in the past reaction for it's control decisions and accumulates that
-information in the part called 'error integral'. Those accumulated
-'error' gaps are the differences between the set target value and the
-actually achieved value. In our case the target value is the target
-temperature which is coming from the trip point. That part is then used
-with the 'I' (of PID) component, so we can compensate for those
-'learned' mistakes.
-Now, when you change the target temperature value - all your previous
-learned errors won't help you. That's why Intelligent Power Allocator
-should reset previously accumulated history.
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
-> 
->>>
->>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
->>>> and should be ready for what you said (modification of that value).
->>>
->>> Generally speaking, it needs to be prepared for a simultaneous change
->>> of multiple trip points (including active), in which case it may not
->>> be useful to invoke the ->reset() callback for each of them
->>> individually.
->>
->> Although, that looks more cleaner IMO. Resetting one by one in
->> a temperature order would be easily maintainable, won't be?
-> 
-> I wouldn't call it maintainable really.
-> 
-> First of all, the trips may not be ordered.  There are no guarantees
-> whatsoever that they will be ordered, so the caller may have to
-> determine the temperature order in the first place.  This would be an
-> extra requirement that currently is not there.
-> 
-> Apart from this, I don't see any fundamental difference between the
-> case when trip points are updated via sysfs and when they are updated
-> by the driver.  The governor should reset itself in any of those cases
-> and even if one trip point changes, the temperature order of all of
-> them may change, so the governor reset mechanism should be able to
-> handle the case when multiple trip points are updated at the same
-> time.  While you may argue that this is theoretical, the ACPI spec
-> clearly states that this is allowed to happen, for example.
-> 
-> If you want a generic reset callback for governors, that's fine, but
-> make it generic and not specific to a particular use case.
-
-I think we agree here, but probably having slightly different
-implementation in mind. Based on you explanation I think you
-want simply this API:
-void (*reset)(struct thermal_zone_device *tz);
-
-1. no return value
-2. no specific trip ID as argument
-
-Do you agree?
-IMO such implementation and API would also work for this IPA
-purpose. Would that work for the ACPI use case as well?
