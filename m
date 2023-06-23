@@ -2,58 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5409373BE32
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 20:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EF473BEA4
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 20:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232289AbjFWSAM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 23 Jun 2023 14:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
+        id S230237AbjFWS6v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 14:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjFWSAL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 14:00:11 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF9026B0;
-        Fri, 23 Jun 2023 11:00:09 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-988a4a7be58so21496266b.0;
-        Fri, 23 Jun 2023 11:00:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687543208; x=1690135208;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0va1mb6bq4MZFowSDRaXkuLvgSfhyk8ksAjyHi+zCc8=;
-        b=YiVm2Radc7W0XYPKVwGh9sIKa4kFDTip965gCMXeXNPu4Y0136XOo55LixKtfuIN/7
-         75ZgbZHDlFAbMk4ASAdTLEbf1i0N/rdtPPYM7F+4E+bbOWA6F8Xo+9FZ9k0Aa2dixSI+
-         eMNrwPo9z/fV3kCTtjmhNXusbMajgMPLRYUhUXKDKTJn33l7SSE64fpvWbbUE3M0fLK/
-         /29p0DiExXH3+Kw3i1LGHvwKb/K3ISyAr4ZYGRXNjfXi/NL3MjZKvbH6U5anrAob3wmm
-         INv330NSOjNhzKBRZy86AXK9j3SWON05KP6bL6HipiL4B+3miqgPi5DzJuG7XRuYRYeq
-         L5EQ==
-X-Gm-Message-State: AC+VfDxU/zv+/7cq9RknetX+Quziz2gmJmKhBmDwAgJDSRXdipN2Pm9M
-        Z9/gDp8UxSiQq+TE81XXZ/qzj9B9lOsyYxu2ZsHWxBvz
-X-Google-Smtp-Source: ACHHUZ6SSV5uqRZfR8iaGkDSPwib5HccxZ0D4VdalRzFBXljVpzSCynKj7zZYJfUvtnN0CZ1rhvmYoXLJX184aGzuGk=
-X-Received: by 2002:a17:906:728b:b0:988:f9ba:e18d with SMTP id
- b11-20020a170906728b00b00988f9bae18dmr9880639ejl.6.1687543207701; Fri, 23 Jun
- 2023 11:00:07 -0700 (PDT)
+        with ESMTP id S229644AbjFWS6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 14:58:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C73491FCE;
+        Fri, 23 Jun 2023 11:58:49 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35NHScY6006660;
+        Fri, 23 Jun 2023 18:58:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=nn4S/UTExuHhumcH/0O3TdCgnEhlwonUpMWQlXPcsag=;
+ b=AuRGSPZ1kIgbVyuyxgz0P+l7O+Oo4P7hSzK03DGA3UflttuuNxQhqGy4nidfuIuKbdaV
+ 4WSE9ffYQK/LzQAY9F6d/HuGVwienKigANDMVw7sk3zjKjpW3VvdRYimg3wDHNJ6iim3
+ ilqrcnAUNAfNJoDTydFhlj0cntwP3nASmrHdvL1zBLhMnDItMdX5GwSdAxONiUAy84fw
+ vm//efnHxHnQIp1M5H+BCDRkjiYx6vGzFcmvjqmtcxR4XLI0X8oaeavKU7acYKkxKt85
+ n6Acb9DnoUCpE3IPONRZMGpXNyWQnJ158VYVRXhFuf+voOxmzhX7bwF/Y8RK86/91Ajf TQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcju849gv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 18:58:17 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35NIwGA1007065
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 23 Jun 2023 18:58:16 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 23 Jun 2023 11:58:15 -0700
+Date:   Fri, 23 Jun 2023 11:58:14 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     <neil.armstrong@linaro.org>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        "Mike Tipton" <quic_mdtipton@quicinc.com>
+Subject: Re: [PATCH v2 0/4] interconnect: qcom: rpmh: sm8550: mask to send as
+ vote
+Message-ID: <20230623185814.GA1775967@hu-bjorande-lv.qualcomm.com>
+References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
+ <5b68b9ba-157b-067c-3926-9c5ecfecc311@linaro.org>
 MIME-Version: 1.0
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-5-daniel.lezcano@linaro.org> <CAJZ5v0iv6HkxmV08JyUO3K1YMPXerEb5qNobVkUNv2zW+qVh+w@mail.gmail.com>
- <93448681-8a0b-f565-1a98-a8607ff37488@linaro.org>
-In-Reply-To: <93448681-8a0b-f565-1a98-a8607ff37488@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 23 Jun 2023 19:59:55 +0200
-Message-ID: <CAJZ5v0iKmtWcGVk_NZNgCR-r3UvgpAi_tEDe5v90aF7xbVUTCg@mail.gmail.com>
-Subject: Re: [PATCH 4/8] thermal/core: Update the generic trip points
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        thierry.reding@gmail.com, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <5b68b9ba-157b-067c-3926-9c5ecfecc311@linaro.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: F3a5MqwWTQUBSzATLVutSExqQXBtZ2A_
+X-Proofpoint-GUID: F3a5MqwWTQUBSzATLVutSExqQXBtZ2A_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-23_10,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ clxscore=1011 phishscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306230169
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,199 +81,101 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 8:35 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> thanks for the comments
->
->
-> On 20/06/2023 13:28, Rafael J. Wysocki wrote:
-> > On Thu, May 25, 2023 at 4:02 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> At this point, the generic trip points rework allows to create a
-> >> thermal zone with a fixed number of trip points. This usage satisfy
-> >> almost all of the existing drivers.
-> >>
-> >> A few remaining drivers have a mechanism where the firmware updates
-> >> the trip points. But there is no such update mechanism for the generic
-> >> trip points, thus those drivers can not be converted to the generic
-> >> approach.
-> >>
-> >> This patch provides a function 'thermal_zone_trips_update()' allowing
-> >> to change the trip points of a thermal zone.
-> >>
-> >> At the same time, with the logic the trip points array is passed as a
-> >> parameter to the thermal zone at creation time, we make our own
-> >> private trip points array by copying the one passed as parameter.
-> >
-> > So the design seems to require the caller to create a new array of
-> > trip points and pass it to thermal_zone_trips_update(), so it can
-> > replace the zone's trips array with it.
-> >
-> > If only one trip point changes and there are multiple defined, this is
-> > rather not efficient.
->
-> This update is only for replacing the current trip array when one or
-> several trip points are added or removed. We can see that in one or two
-> drivers only.
+On Fri, Jun 23, 2023 at 03:58:09PM +0200, Konrad Dybcio wrote:
+> On 23.06.2023 14:50, neil.armstrong@linaro.org wrote:
+> > On the SM8550 SoC, some nodes requires a specific bit mark
+> > instead of a bandwidth when voting.
+> > 
+> > Add an enable_mask variable to be used instead of bandwidth.
+> > 
+> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > ---
+> After reviewing this patchset and taking a peek at older downstream,
+> it looks like ACV should be using 0x8 bmask on *all RPMh SoCs*.
+> 
+> It's worth noting however, that 8350's downstream (the first msm
+> kernel using the icc framework) did not incorporate that change.
+> Not sure if intentionally or not. Probably not. Might be worth to
+> poke Qcom to backport it in such case. If 8350 is still supported.
+> Probably not.
+> 
 
-Well, I'm not sure about this adding/removing idea, because of the
-sysfs issue mentioned below.
+Your observation is correct.
 
-Surely, some trip points can be made invalid by setting their
-temperatures to the "invalid" value, but they cannot be removed,
-because they are already represented in sysfs and may have been
-enumerated by user space which will get confused by removing them.
+But, note further that command db reports ACV to have data-width of 0,
+resulting in the numerator, and thereby vote_x and vote_y always being
+0.
 
-Conversely, if new trip points are added, they will not appear in
-sysfs and so user space will never become aware of them.
+This is downstream worked around by:
+https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/4d2818084015df1e05274ebcc5a0d21e6d256f93
 
-> This function is supposed to be called rarely (and I doubt there is
-> really a lot of hardware sending notification to add/remove trip points).
->
-> For changing a trip point property like its temperature or its
-> hysteresis, we keep the usual set_trip_point() function.
+Which should cause vote_x and vote_y to be non-zero. However without
+this series (and enable_mask defined for ACV on all platforms) the votes
+placed in the BCM would then be garbage...
 
-Do you mean the ->set_trip_temp/hyst() zone callback?
 
-But isn't that to be used by the core in order to notify the driver of
-a change, rather than the other way around?
 
-Here, we have a situation where the driver needs to let the core know
-that something has changed.
+That said, unless I'm missing something the math involved here is
+unnecessary.For BCMs with enable_mask, if for any node sum_avg[bucket]
+or max_peak[bucket] is non-zero then the calculated vote_x and vote_y
+comes out non-zero and we write the mask, otherwise 0.
 
-> > Do you want to prevent the core from using stale trip points this way?
-> >   If so, it should be stated here.
->
-> No, that will be a side effect. We can put this point apart, it will be
-> addressed in a cleanup series after everything is converted to the
-> generic trip points.
+Rewritten to avoid all the unnecessary multiplication and divisions, we
+wouldn't care about the unit or width and thereby don't need above
+referenced patch.
 
-I think we need to talk about the design.  It looks like you have one
-in mind, but I'm not really sure what it is.
 
->
-> > Moreover, at least in the cases when num_trips doesn't change, it
-> > might be more efficient to walk the new trips[] array and only copy
-> > the ones that have changed over their old versions.
->
-> IMO, that is over-engineered, especially for dedicating this
-> optimization for a very few drivers and ultra rare usages.
+A further tangent here is that a BCM with enable_mask != BIT(0) but
+keepalive set, a 0-bandwidth vote in AMC would result in an invalid
+(undefined?) BCM value being written out in the snippet below the loop.
 
-I'm not sure.
+> Check out these snippets:
+> 
+> https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LA.UM.10.2.1.c25/drivers/soc/qcom/msm_bus/msm_bus_arb_rpmh.c#L556-567
+> 
+> https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LA.UM.10.2.1.c25/drivers/soc/qcom/msm_bus/msm_bus_arb_rpmh.c#L475-495
+> 
+> Notice how acv is never updated beyond effectively setting =0 or =bmask,
+> perhaps Qualcomm never implemented something else..
+> 
+> Since this series is fine as-is, I'd be happy to see an incremental one.
+> Reported-by would be cool as well :D
 
-One thing to remember is that, in general, the core and the drivers
-need to communicate both ways regarding trip points.  For example,
-when a trip point is updated via sysfs, the core needs to tell the
-driver about that.  Conversely, if a trip point is updated by the
-platform firmware (say), the driver needs to tell the core about that.
+I agree, let's get this merged, backported to stable, and then fix ACV
+handling in a follow up commit (which doesn't necessarily need to hit
+stable).
 
-> > I am also not sure if this interface is going to be convenient from
-> > the user's perspective, especially if the trips get sorted by the core
-> > (in the future).  They would need to recreate the entire trips array
-> > every time from scratch, even if only one trip point changes, which
-> > means quite a bit of churn for thermal zones with many trip points.
->
-> Actually, the driver is not supposed to deal with the array. It can
-> create the array on the stack, pass it to the
-> thermal_zone_device_register_with_trips() function and forget about it.
->
-> The trip points array should not be used by a driver anymore.
+You should have a Jira card for this one already, but I don't mind
+sharing the Reported-by with you ;)
 
-Well, say that the core invokes ->set_trip_temp() for a certain trip
-point.  How is the driver going to know which trip point this is about
-if it cannot access the trip points table in the zone?
+Regards,
+Bjorn
 
-> > It might be better to allow them to update trips in place and notify
-> > the core about the change, all under the zone lock to prevent the core
-> > from using trips simultaneously.
->
-> I'm not sure to understand. The core code is called with this function
-> and takes the lock.
->
-> > And arguably, changing num_trips would be questionable due to the
-> > sysfs consistency reasons mentioned below.
->
-> [ ... ]
->
-> >> Note, no code has been found where the trip points update leads to a
-> >> refresh of the trip points in sysfs, so it is very unlikey the number
-> >> of trip points changes. However, for the sake of consistency it would
-> >> be nicer to have the trip points being refreshed in sysfs also, but
-> >> that could be done in a separate set of changes.
-> >
-> > So at this point user space has already enumerated the trip points, so
-> > it may fail if some of them go away or it may not be able to use any
-> > new trip points appearing in sysfs.
->
-> Yes, that is why I think the adding/removal of the trip points was never
-> really supported. I would be very curious to see a platform with such a
-> feature.
->
-> > For this reason, until there is a way to notify user space about the
-> > need to re-enumerate trip points (and user space indicates support for
-> > it), the only trip point property that may change in sysfs is the
-> > temperature.
->
-> The userspace can be notified when there is a change with:
->
-> THERMAL_GENL_EVENT_TZ_TRIP_CHANGE
-> THERMAL_GENL_EVENT_TZ_TRIP_ADD
-> THERMAL_GENL_EVENT_TZ_TRIP_DELETE
->
-> The last two ones are not implemented today but that could be done after
-> as that would be a new feature.
->
-> Let me summarize the situation:
->
->   - The trip point crossing events are not correctly detected because of
-> how they are handled and we need to sort them out.
-
-Sure.
-
->   - In order to sort them out, we need to convert the drivers to the
-> generic trip point and remove all those get_trip_* | set_trip_* ops
-
-IIUC, there are cases when the trip point temperature may be set via
-sysfs.  In some of them, the core needs to tell the driver what
-temperature to set for the trip, so the hardware or the platform
-notifies it of excursions.  The ->set_* callbacks are still going to
-be needed for that if I'm not mistaken.
-
->   - Almost all the drivers are converted except the ACPI thermal and the
-> intel_soc_dts_iosf drivers which are blocking the feature
-
-Sorry about that.  Hopefully, I'll have some time to sort this out
-during the next couple of weeks.
-
-I still would like to discuss the design related to that, though.
-
->   - The ACPI thermal driver can potentially add or remove a trip point
-> but we are not sure that can happen
-
-It may as per the spec, but whether or not this case needs to be
-handled is a good question.
-
-This depends on whether or not user space is prepared to deal with
-trip points appearing and going away.  I suspect that it isn't.
-
->   - We need to decorrelate the trip id and the array index for the ACPI
-> thermal driver
-
-That should be doable.
-
-> The generic trip points change is a big chunk of work and I would like
-> to have some progress to fix the trip crossing detection along with the
-> removal of the resulting dead code.
->
-> Given there may not be a real usage of the thermal trip number update,
-> can we stay simple and keep the proposed change but forcing the same
-> number of trip points ?
-
-I suppose so.
-
-> We can then improve the existing code if it is really needed
+> 
+> Konrad
+> > Changes in v2:
+> > - Took downstream patch for patch 1
+> > - Added konrad's reviewed tag
+> > - Added changes for sm8450 and sa8775p
+> > - Link to v1: https://lore.kernel.org/r/20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org
+> > 
+> > ---
+> > Mike Tipton (1):
+> >       interconnect: qcom: Add support for mask-based BCMs
+> > 
+> > Neil Armstrong (3):
+> >       interconnect: qcom: sm8450: add enable_mask for bcm nodes
+> >       interconnect: qcom: sm8550: add enable_mask for bcm nodes
+> >       interconnect: qcom: sa8775p: add enable_mask for bcm nodes
+> > 
+> >  drivers/interconnect/qcom/bcm-voter.c |  5 +++++
+> >  drivers/interconnect/qcom/icc-rpmh.h  |  2 ++
+> >  drivers/interconnect/qcom/sa8775p.c   |  1 +
+> >  drivers/interconnect/qcom/sm8450.c    |  9 +++++++++
+> >  drivers/interconnect/qcom/sm8550.c    | 17 +++++++++++++++++
+> >  5 files changed, 34 insertions(+)
+> > ---
+> > base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+> > change-id: 20230619-topic-sm8550-upstream-interconnect-mask-vote-96aa20355158
+> > 
+> > Best regards,
