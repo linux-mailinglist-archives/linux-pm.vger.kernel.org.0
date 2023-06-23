@@ -2,71 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F9573B90B
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 15:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8203273B932
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 15:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjFWNrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 09:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34132 "EHLO
+        id S232022AbjFWN6T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 09:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjFWNrl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 09:47:41 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6450A26BB
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:47:32 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b45e347266so11682621fa.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:47:32 -0700 (PDT)
+        with ESMTP id S232016AbjFWN6Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 09:58:16 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CA12686
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:58:13 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f86e1bdce5so866992e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 06:58:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687528050; x=1690120050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QY1sqDuScItGhrxobk0V3aEmwItBRyzCUAYzD0brN34=;
-        b=PtxV1iGr/52iLFbquJEyzvbZxPyLl9cPPgX4VZN4/pBZ4INmcglsjp3KHL/sz+fPV7
-         9u34CXpg19+iMeyzNlVInDEhSwcgB5i3I91ThucjUZjXalZ5bsojDWpsEjAsfFGYPOo0
-         qThQg21+LbYCwkZzUQTiYsu9TAM28Zv+XBS+KidryZOWov/FUtcLXhJODlFF0BezRhgD
-         l6852nGDMfW/3A/FT8vgO+dm9IuWaiMSu/8u6LpCac7OY0uO3XIcNqdiB4abOieVHO79
-         9gHW1Wnp7sOh0Ck8ZrpWp97VyxW5Ty9sXnxXSq4pAzJNdSxQDWXAJoCaIizlbp7rVPrk
-         CHJw==
+        d=linaro.org; s=google; t=1687528691; x=1690120691;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W6jndWPX8g/RkMlqUci+O1Pg3iw2GfjP5tf07sb/A2o=;
+        b=dKTmAAk1unTaguUb5PRb+mOCEnMd9/Ew/koIQi6g/d9jFBJmpJMQ0RUIvRatEqy/+W
+         9kFEK/981cTfEX6zuZu1niWIAXZyJ18FNth13ADJrP1BrvBKEhl+FNyl8m/fo93PAeAV
+         NlDinSNZ0+Bu7cX5uxuev5T6uEBRe9UscDjvxZfhZXyFmeJ1+cz511spcHb3JWyGBZDs
+         D+Ey/gnhVC3STTr4PM/ArciaypvNjcSufgXbpfuUcoTAb8y4GA3H0AEtzAhjSuzg1JYA
+         m6LsKowiV1gPbV7SCEXO6hbo+pyP29UEf4PqHoF/dtZ2GZTivhzyGIdxXIF9jGrFxgby
+         2g8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687528050; x=1690120050;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687528691; x=1690120691;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QY1sqDuScItGhrxobk0V3aEmwItBRyzCUAYzD0brN34=;
-        b=KQVMHnEum5Ro1Cm8JqzWNrLAlhbJ1GWMCudX0k1B7AZF4OPBgJDULydxIvRtGiDenX
-         7EnX3FPr+LdpkCbx9iUGy/eLhho1OsYVcFVjdHse4NAbRJnHflZwu3K6gCs0V/3jhDNr
-         B7v6VomG2FjZafvZraANIS+7sULUp0Y+x98yv/e86d5ewlF6Q+KOkLmiWUkjGOJspV4m
-         gMCkEdp5uP5/ShbToCqxXMDFbhDXVfbDFRyPOqeg4h5YqLDlV5IJs+RMM5K8uklrpyZ+
-         W0I9DBZ9QbRsXTf9iYhElKpc5sLs3dO8ugwMgbtSPQ2WWoYUkBgcrJ+yDaPezbXWBa4o
-         PEwg==
-X-Gm-Message-State: AC+VfDx6kKbX2X8fSy91h61XN4PtSXfI4F5iQkrRuJI5pzHSRIgTgydq
-        EiFdFqetyc0M62IPzu9YaiBTkg==
-X-Google-Smtp-Source: ACHHUZ4jvuVLXR/WSF+2ZielFRURH+zzPhs0avDrijKKnk1xO0Lg6lSb6+gw9E2WHU8AvwpvytzLkQ==
-X-Received: by 2002:a2e:9c86:0:b0:2b4:68a3:90e7 with SMTP id x6-20020a2e9c86000000b002b468a390e7mr13005953lji.22.1687528050736;
-        Fri, 23 Jun 2023 06:47:30 -0700 (PDT)
+        bh=W6jndWPX8g/RkMlqUci+O1Pg3iw2GfjP5tf07sb/A2o=;
+        b=bvSWOMQF9u86vf97ds0qX7fT212JOagN6w97IJ4rL/ZqJmp22ueCXc+gI5tdyakYCS
+         zjUj6/BkBqjFumzIBEtbb+sMznraOcNBGlWTYY6uLa1+uZkfKo7OtoiOR9jrvUyUXBXB
+         z3xotBa5gsZFDRh6uoLkri70YqkB815GODk20NNCzvV8i5riXm7d48HwJ2ZGdvOP3QzV
+         usW01AZSNFD3myZxLpjXEAVpb3+zdlYVaGHsvrNKx1clSdFY7ZlFhzniahLVv0wzma5s
+         LsTbqeomQqxXUzjE9cohKaoqEf/n9TphLt2zSJrb1CNmJ5SAPWkOiE+sfjWX9MGAa3an
+         cnHQ==
+X-Gm-Message-State: AC+VfDyRKFOd1BYdbyUH+UPLGqNp6AxfLGTPGRMBcGnMGzanSMEwHxr9
+        Kl2Z3KlEYRyepGrayofyyLEVGA==
+X-Google-Smtp-Source: ACHHUZ4u9yMyuI7mFr8evCNJV8EmOBr8kiJdt1uVnBpthIzjn/dhfH39xVwJwnZHO7+er1/mIsk7Yg==
+X-Received: by 2002:a19:e34a:0:b0:4f4:c973:c97d with SMTP id c10-20020a19e34a000000b004f4c973c97dmr12247542lfk.25.1687528691143;
+        Fri, 23 Jun 2023 06:58:11 -0700 (PDT)
 Received: from [192.168.1.101] (abyk30.neoplus.adsl.tpnet.pl. [83.9.30.30])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05651c023400b002b2207627c0sm1753626ljn.71.2023.06.23.06.47.29
+        by smtp.gmail.com with ESMTPSA id u24-20020ac25198000000b004eeec1261ecsm1457547lfi.31.2023.06.23.06.58.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jun 2023 06:47:30 -0700 (PDT)
-Message-ID: <bd99681e-c495-d9a2-5eca-0d741867e794@linaro.org>
-Date:   Fri, 23 Jun 2023 15:47:29 +0200
+        Fri, 23 Jun 2023 06:58:10 -0700 (PDT)
+Message-ID: <5b68b9ba-157b-067c-3926-9c5ecfecc311@linaro.org>
+Date:   Fri, 23 Jun 2023 15:58:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 4/4] interconnect: qcom: sa8775p: add enable_mask for
- bcm nodes
 Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Georgi Djakov <djakov@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>
 References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
- <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-4-709474b151cc@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-4-709474b151cc@linaro.org>
+Subject: Re: [PATCH v2 0/4] interconnect: qcom: rpmh: sm8550: mask to send as
+ vote
+In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,32 +77,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23.06.2023 14:50, Neil Armstrong wrote:
-> Set the proper enable_mask the ACV node requiring such value
-> to be used instead of a bandwidth when voting.
+On 23.06.2023 14:50, neil.armstrong@linaro.org wrote:
+> On the SM8550 SoC, some nodes requires a specific bit mark
+> instead of a bandwidth when voting.
 > 
-> The masks was copied from the downstream implementation at [1].
-> 
-> [1] https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/blob/kernel.lnx.5.15.r32-rel/drivers/interconnect/qcom/lemans.c
+> Add an enable_mask variable to be used instead of bandwidth.
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+After reviewing this patchset and taking a peek at older downstream,
+it looks like ACV should be using 0x8 bmask on *all RPMh SoCs*.
+
+It's worth noting however, that 8350's downstream (the first msm
+kernel using the icc framework) did not incorporate that change.
+Not sure if intentionally or not. Probably not. Might be worth to
+poke Qcom to backport it in such case. If 8350 is still supported.
+Probably not.
+
+Check out these snippets:
+
+https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LA.UM.10.2.1.c25/drivers/soc/qcom/msm_bus/msm_bus_arb_rpmh.c#L556-567
+
+https://git.codelinaro.org/clo/la/kernel/msm-4.19/-/blob/LA.UM.10.2.1.c25/drivers/soc/qcom/msm_bus/msm_bus_arb_rpmh.c#L475-495
+
+Notice how acv is never updated beyond effectively setting =0 or =bmask,
+perhaps Qualcomm never implemented something else..
+
+Since this series is fine as-is, I'd be happy to see an incremental one.
+Reported-by would be cool as well :D
 
 Konrad
->  drivers/interconnect/qcom/sa8775p.c | 1 +
->  1 file changed, 1 insertion(+)
+> Changes in v2:
+> - Took downstream patch for patch 1
+> - Added konrad's reviewed tag
+> - Added changes for sm8450 and sa8775p
+> - Link to v1: https://lore.kernel.org/r/20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org
 > 
-> diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
-> index da21cc31a580..f56538669de0 100644
-> --- a/drivers/interconnect/qcom/sa8775p.c
-> +++ b/drivers/interconnect/qcom/sa8775p.c
-> @@ -1873,6 +1873,7 @@ static struct qcom_icc_node srvc_snoc = {
->  
->  static struct qcom_icc_bcm bcm_acv = {
->  	.name = "ACV",
-> +	.enable_mask = 0x8,
->  	.num_nodes = 1,
->  	.nodes = { &ebi },
->  };
+> ---
+> Mike Tipton (1):
+>       interconnect: qcom: Add support for mask-based BCMs
 > 
+> Neil Armstrong (3):
+>       interconnect: qcom: sm8450: add enable_mask for bcm nodes
+>       interconnect: qcom: sm8550: add enable_mask for bcm nodes
+>       interconnect: qcom: sa8775p: add enable_mask for bcm nodes
+> 
+>  drivers/interconnect/qcom/bcm-voter.c |  5 +++++
+>  drivers/interconnect/qcom/icc-rpmh.h  |  2 ++
+>  drivers/interconnect/qcom/sa8775p.c   |  1 +
+>  drivers/interconnect/qcom/sm8450.c    |  9 +++++++++
+>  drivers/interconnect/qcom/sm8550.c    | 17 +++++++++++++++++
+>  5 files changed, 34 insertions(+)
+> ---
+> base-commit: 47045630bc409ce6606d97b790895210dd1d517d
+> change-id: 20230619-topic-sm8550-upstream-interconnect-mask-vote-96aa20355158
+> 
+> Best regards,
