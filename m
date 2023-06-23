@@ -2,69 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AD773B9A1
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 16:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7959E73BA3D
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 16:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232058AbjFWOPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 10:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
+        id S230171AbjFWOeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 10:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjFWOPF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 10:15:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC50F2696
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 07:15:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DD3261A5A
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 14:15:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E13C1C433C0
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 14:15:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687529702;
-        bh=conaE5lscTt+B8k1OO4KkIxlHXrLDYjllOhUKIA8AzU=;
-        h=From:To:Subject:Date:From;
-        b=mSIiqx5WzD6Ln/T7xtVBPoIh6HQzjMu5Vdvl4oYdZmFs1V936kWCQQCAx1tmcOyKi
-         D4j7/jDJwn5rb+lW8+poWeKYBfm4zsianONPuTeLqL4oe1ujdO5pnOgfxBZFvr6fsa
-         Nuh7bAcYwN/69oi4Mper/vAuYFaRFI0x9jhKVGQTSCupokkRS28QJjxY7euW9CO1uB
-         cZ8aDLA/E7irpVxBWR/LycwDmMvSZW5Y9la/YDchG+3+XcqPYGdL/ceVC+tAJ4a4t+
-         Gw9BMV0vQKFvFWG6QE9jd4GBnn710fIZ+RZUkVcLVabk68v38Vcds+uxpKG9G4qLCl
-         d6xyydzu6M39A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id CE092C53BD0; Fri, 23 Jun 2023 14:15:02 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 217589] New: Intel CPU maximum boost frequency reduced after
- resume from suspend to RAM
-Date:   Fri, 23 Jun 2023 14:15:02 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bjackson0971@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-217589-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231940AbjFWOeV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 10:34:21 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2071.outbound.protection.outlook.com [40.107.93.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8481992;
+        Fri, 23 Jun 2023 07:34:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EtVTlgzd1fKFXGOGsjLCsrYMbqoM7dgDYesliEISUyuceEzVFZ11gkn9UtYfDY0ysQyv7w/ZYEaRxhHP63kRa9z+Idpy3Z//RC/Z02CSd6a2+u+OhazUhgNWRwjwwUo83ANDjuoJofFMK1I+QwuBj0i9g84L59+p/ro0IEm0wzIjo0KEcTN/J0DeCAG7xQ5m3DitkmkFV1tZ7zCT1kP+ga4pdgQPxuNtIGKS3Po68CeeTGJFdYlqVJ8G9E1NPjgj6sL9huNX0JOIOfnmZOPzJzZa6CuZqiQzKqNDMUkyIm3PWQhaKvio2aHljdvUSPomLRrnzCZDoAA+XrdCSe9igg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PY2GWNHgRFckfBLUJJ0PiNtUGtbWGoW0EWS3nx+LSAE=;
+ b=A+Z3IFCG3+4AVe/MBmBoi7bUAk4VVI5/8f/LohQ7GBcMnk1xnPIeWY7uaHNDdGXmOhVtmNnFxZg6M+2a7WdT96uOO2BGfdh0p9YZzARJuvyIeHznLkwqVsNuY32ieMfWZeEAfbyeM5GyYiN45ZLJT6APoNDEltKA/+GeZc0Z0XNfZA9siJTXr7Eq6X2JlSfZ+xsPEvHujWxbjgnpPdaXGAwAuCgx7JhkdUPN9USdHRsOKhAGtyuwleMX/sC2+z+XIEDLD8WKjZwPZY3e+ID2rxrdLHmikpfWZe4mB7weoOc5Fa2GXwpJTNT0uk2aC+JGJDYbnaZtrQo+XB5C2CZ3XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PY2GWNHgRFckfBLUJJ0PiNtUGtbWGoW0EWS3nx+LSAE=;
+ b=tZEUXFlycBVdb/ZrfS2YXM6icITgSNru4F9B6nsqmTteDmloN5/sSLIpl7k/TBgVGsTUWZ20WqwkiDUV+Z9l9dK9rO7/LfIxC1i3/vr4cMPcV8UAzUeSKMw/+CIXlgI0DK2g0n9TAleZGxwIqdtk/ClmkJ579iAjItwPk++EdGgW9YfO3UzuW73sHme+T59k53R3fvpVCLJgB1eHVJVIOXPUuOzhzWSEtUDqXKmEUB08brInlj1CMebceDfUYCilsm/2/TMPWUilP1SutkpOIOOMDPV/Y+rYBUZefjMm+mdbBkz5DLygQfBE+HN2csbLkMoGY/u2aE9aEEkYPs2ETQ==
+Received: from BN9PR03CA0602.namprd03.prod.outlook.com (2603:10b6:408:106::7)
+ by DS0PR12MB6389.namprd12.prod.outlook.com (2603:10b6:8:cf::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.26; Fri, 23 Jun 2023 14:34:16 +0000
+Received: from BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:106:cafe::85) by BN9PR03CA0602.outlook.office365.com
+ (2603:10b6:408:106::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26 via Frontend
+ Transport; Fri, 23 Jun 2023 14:34:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT054.mail.protection.outlook.com (10.13.177.102) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.44 via Frontend Transport; Fri, 23 Jun 2023 14:34:15 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 23 Jun 2023
+ 07:34:04 -0700
+Received: from [10.41.21.79] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 23 Jun
+ 2023 07:33:59 -0700
+Message-ID: <691d3eb2-cd93-f0fc-a7a4-2a8c0d44262c@nvidia.com>
+Date:   Fri, 23 Jun 2023 20:03:56 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: Provide an AMU-based version of
+ arch_freq_get_on_cpu
+To:     Beata Michalska <beata.michalska@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <catalin.marinas@arm.com>,
+        <mark.rutland@arm.com>, <will@kernel.org>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <sudeep.holla@arm.com>,
+        <ionela.voinescu@arm.com>, <yang@os.amperecomputing.com>,
+        <linux-tegra@vger.kernel.org>
+References: <20230606155754.245998-1-beata.michalska@arm.com>
+ <8e755438-4b1f-b3d6-b2b8-a5efcca813bc@nvidia.com>
+ <ZIwxB5ao96pVPaCc@e120325.cambridge.arm.com>
+Content-Language: en-US
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <ZIwxB5ao96pVPaCc@e120325.cambridge.arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT054:EE_|DS0PR12MB6389:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bfe2e87-560d-4edf-eacf-08db73f6ebe1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hhaIrHe3TrvLYOpSLR/Ws3k4wIlaegP9+toQgkgwyn60FAZ9d6jXr9+AHWiQrjfIH0AJBzaJH3XEjW9msexjJA+cv5qyQqaT1v84dZ8EW+sYUV1jjAehU0/RVa40cqIqJEhdSd3PCOW1LqiEXr58/GWZEWF6rZ5UvoXHEByOWkc7c+1Vxmq0e+ySxVVISV8nNKkGA/E4nbsUd3SSxihb4zeF0mv8MElErUBJSLNCyc7f4Dz+zRE4OvrhfqafkqW5xkzqYBFIRAhiiZTHOerCb/tm060KTSgDvnBE1PVTBGLICgZ07vzy/Ot+E8ooWu0Zoby2g/gTrAGj1EiEVZ0PZgSeJq1uHrm0o7ouTcYtvcSX72/TaC+DiGPFHCbbDX8R49CsXyvGpinTF2sak7p22JfkZ+uk446yHzwEkfYpbYQqVJUFIwni01CNyWYO5QiDeiRiqEDXcs7ekr8QnsN6pdwoMNxvwtT5FTpctPlX3hlJrGfDQyP+dmpQY9x6LYyG0QRB/7oicfLvh5lHLbcFmPgj1Q7165fSZeCiM/1Up0Eu1zKDee53+SRpOOobbDM2Y+HySbpnuN+NCbTT74i3+3GC418WU+9jlJeUPorc9I8fg8mZPk7WzqpnmZ8Pa5EhD+t8M50qru4J2pS8jh1UXkNGagfPn7rAOKjB7MVlsjlFEJ3scv7dgYP2DG3E8WKf1T4r5/85IAhWQhciPoxSSTkIr1FgfFl1nuCI3RubKov1Xcllar5m+UahYZInTNEUGcMP80SZaJUrBaGMk16MX1Ozoyq31FuJqxG7aAvm3qvZxrqvx126yT01vbCgcO0stz2/MMQbwts9iaP79CsmAw+qP+wYlGwCQiJTte9Af2U=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(82310400005)(6666004)(40460700003)(86362001)(31696002)(966005)(82740400003)(36860700001)(186003)(26005)(426003)(336012)(2616005)(47076005)(40480700001)(36756003)(16526019)(53546011)(356005)(7636003)(83380400001)(8676002)(8936002)(2906002)(7416002)(6916009)(316002)(31686004)(4326008)(41300700001)(70206006)(70586007)(478600001)(54906003)(5660300002)(16576012)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2023 14:34:15.7626
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bfe2e87-560d-4edf-eacf-08db73f6ebe1
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT054.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6389
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,87 +112,91 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217589
 
-            Bug ID: 217589
-           Summary: Intel CPU maximum boost frequency reduced after resume
-                    from suspend to RAM
-           Product: Power Management
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: bjackson0971@gmail.com
-        Regression: No
 
-Hardware: MSI MAG Tomahawk Z790 Wifi motherboard, 7D91vH6 BIOS, with Intel
-i7-13700K, p-cores overclocked to 5.5GHz, e-cores overclocked to 4.4GHz
-Kernel: Linux fedora 6.3.9-200.fc38.x86_64
+On 16/06/23 15:23, Beata Michalska wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> On Thu, Jun 15, 2023 at 12:29:57AM +0530, Sumit Gupta wrote:
+>>
+>>
+>> On 06/06/23 21:27, Beata Michalska wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> With the Frequency Invariance Engine (FIE) being already wired up with
+>>> sched tick and making use of relevant (core counter and constant
+>>> counter) AMU counters, getting the current frequency for a given CPU
+>>> on supported platforms, can be achieved by utilizing the frequency scale
+>>> factor which reflects an average CPU frequency for the last tick period
+>>> length.
+>>>
+>>> With that at hand, arch_freq_get_on_cpu dedicated implementation
+>>> gets enrolled into cpuinfo_cur_freq policy sysfs attribute handler,
+>>> which is expected to represent the current frequency of a given CPU,
+>>> as obtained by the hardware. This is exactly the type of feedback that
+>>> cycle counters provide.
+>>>
+>>> In order to avoid calling arch_freq_get_on_cpu from the scaling_cur_freq
+>>> attribute handler for platforms that do provide cpuinfo_cur_freq, and
+>>> yet keeping things intact for those platform that do not, its use gets
+>>> conditioned on the presence of cpufreq_driver (*get) callback (which also
+>>> seems to be the case for creating cpuinfo_cur_freq attribute).
+>>>
+>>
+>> Tested the change with frequency switch stress test but was getting big
+>> delta between set and get freq.
+> Would you mind sharing some more data re your testing ?
+> The arch_freq_get_on_cpu will provided an average freq for last tick period,
+> with an updated occurring on each sched tick so the differences between set
+> and get might show up. With your stress testing, if the frequency change comes
+> at the end of current tick period, it might not be reflected until next one
+> elapses.
+> In case of idle states - if the CPU for which the current frequency is being
+> requested is in idle mode, the frequency returned will be the last one before
+> entering idle, which seems reasonable (?).
+> I guess the question here would be what is your tolerance level for those
+> differences.
 
-While running: sysbench cpu run --num-threads=3D24, then run cat
-/sys/devices/system/cpu/cpu*/cpufreq/scaling_cur_freq | sort -rn
+The test waits for 50ms before reading back the set frequency which is
+much more than a tick period.
 
-Correct output after reboot:
-5500054
-5500054
-5500000
-5500000
-5500000
-5500000
-5500000
-5500000
-5500000
-5500000
-5499945
-5499945
-5499945
-5499945
-5499945
-5499945
-4400096
-4400044
-4400017
-4400006
-4400004
-4400002
-4400000
-4399960
+High delta value might be due to the reference counter increments
+happening in bursts in Tegra241 SoC as mentioned in [1].
+If the CPU is idle for most of the period then observation window will
+be small due to AMU counters stopping at WFI. This can cause more error
+in Tegra241 as increasing the observation time interval reduces error
+percentage.
 
-After suspend to RAM and resume, CPU frequencies are at hardware default
-without overclock:
-5399941
-5399941
-5300057
-5300057
-5300000
-5300000
-5300000
-5300000
-5300000
-5300000
-5300000
-5300000
-5300000
-5300000
-4500000
-4499951
-4200050
-4200038
-4200036
-4200004
-4199991
-4199985
-4199963
-4199897
+I created 100% CPU load and then the test is passing. So, looks like we 
+will have to create load before the frequency switch test. Please share
+if more suggestions.
+[1] https://lore.kernel.org/lkml/20230418113459.12860-5-sumitg@nvidia.com/
 
-CPU boost clock should retain overclocked speeds after resume from suspend.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+>> After passing "nohz=off" and commenting "wfi" in "cpu_do_idle()", the
+>> delta is less. This confirms that more delta is due to AMU counters
+>> stopping at "WFI".
+>>
+>>    +++ b/arch/arm64/kernel/idle.c
+>>    @@ -27,7 +27,7 @@ void noinstr cpu_do_idle(void)
+>>            arm_cpuidle_save_irq_context(&context);
+>>
+>>            dsb(sy);
+>>    -       wfi();
+>>    +//     wfi();
+>>
+>> I am not sure if the expected behavior here is right.
+> Both CPU_CYCLES and CNT_CYCLES are not incremented in WFI.
+>> In our tests, we compare the last set frequency against the re-generated
+>> value from counters to confirm that the CPU is actually running at the
+>> requested frequency and the counters are working correct. But that won't
+>> happen with this change.
+>>
+>> In [1] and later in the updated patch within [2], we are busy looping
+>> on the target CPU and avoid WFI to get the actual frequency.
+>>
+>> Please share what you think is the right expected behavior.
+>>
+>> [1] https://lore.kernel.org/lkml/20230418113459.12860-7-sumitg@nvidia.com/
+>> [2] https://lore.kernel.org/lkml/cde1d8a9-3a21-e82b-7895-40603a14d898@nvidia.com/T/#mb898a75fd0c72d166b26b04da3ad162afe068a82
