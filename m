@@ -2,296 +2,230 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D56E73BF35
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 22:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED3A73BF8F
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 22:31:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjFWUHr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 16:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
+        id S231709AbjFWUbk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 16:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbjFWUHr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 16:07:47 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE89271F
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 13:07:41 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6687096c6ddso667875b3a.0
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 13:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1687550861; x=1690142861;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSQ5hSw9dkxf7JF25cVAazmGZwKAIhgLcACWRxNXPdQ=;
-        b=I1S0+Gj9AHOJk+YQcQd4bVQHbnDmoKW4nrk7oEBtHiDG2LNxclUPuQiTDoCukNH4Hs
-         5nmuy5MRi8zrfQ67aOmgBfyqJRaJtXVQmI2xD5ypgt/ApnVn5W+zzV6sutlIWYJ1cKz4
-         1CzX4vGJMuH/O1OqlSycFPC+HQb7rbNQp5mwpB3IurHxFWjI3TXhJ4zMxiWCwPQP/Zaq
-         M0/aClEY1/9sXx/KvVUN2bEG4Zzj5QBnjdb3Z5mgiEbA2jNxoFxJQTegvTqTt1p7vp7s
-         iHIT84oUsl41gxWymKpB1T7llddaKS3BLLna56d8sZ2faxFRCIrJVcZMPQp/Hl3KE0ef
-         jyOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687550861; x=1690142861;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GSQ5hSw9dkxf7JF25cVAazmGZwKAIhgLcACWRxNXPdQ=;
-        b=mGfjX1RxlT/uSi0ha33HP2oOOWCm8cuz8N72WOtvMUK32XqiN9CTs6thUNgwc+YcRj
-         TxnWHqzycrZ1HF5uVm0v/GXdMWa87ibjnx9Ec81ivPcrDq20zfUJMtVV0gPR8bHPJSs7
-         J8PN4zmC+gozpdveRtkwcu6vxHNzNjwetu3QksxeKmjc0Utrf05hh/AuxFaYQhKc8lf0
-         tGfSdvuY33wW61zAw824Hf0DAj48TbRczM3dlJPXwZZLJDwsreLWNdBAo4MfrYw8t70D
-         ej+qxr3cf+jZz08I9uxpahp9ptsMk8I1WdMrBwImQAbZMTO5DIO8z8looh5vHT3zOW8M
-         5Gng==
-X-Gm-Message-State: AC+VfDzMYGc5U4DWP0Iqeds/kQG0ueTMmPRFSi2ISReLSXJvkKUCoEWz
-        pA1ikZtXLQpc8649mBVYhqbKKkDl6h8eeQkygPngwA==
-X-Google-Smtp-Source: ACHHUZ7Ig4EZLsK5NDJQkczjF7XMka2nTXmS0E99LO79dCdIeEwxDjDxSzTxnGDXPvBWybhNKdWG2A==
-X-Received: by 2002:a05:6a20:7fa9:b0:126:1f70:30e6 with SMTP id d41-20020a056a207fa900b001261f7030e6mr991664pzj.20.1687550860715;
-        Fri, 23 Jun 2023 13:07:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id u4-20020aa78484000000b0064d34ace753sm6430998pfn.114.2023.06.23.13.07.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jun 2023 13:07:40 -0700 (PDT)
-Message-ID: <6495fb8c.a70a0220.c40b.df29@mx.google.com>
-Date:   Fri, 23 Jun 2023 13:07:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229451AbjFWUbi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 16:31:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9622112;
+        Fri, 23 Jun 2023 13:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687552296; x=1719088296;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k09nEHCiSzbJsqqSNMTaSxW8jtMKfqLZrahLVUHWd9A=;
+  b=cIB4HII1991xayeKfBVY8uQfzaGu2JvLWmpYq2Rz73SETXIum2cd8ECy
+   SuuoDw1tXjVffAcr91e3vhPvi5jILKqDYVb5oadMi8bqGeLrky9wTmrsz
+   qTi8H9AW/OJcC4I9qt2343tw+CjZj/gfVJBCj88TAEicfIdQ0ZaYfFwLs
+   26TW0SSgEXwi4shStxrZ2IB08bgRxOoeWuMezKLa945Ibk7uYv25FafjP
+   /Unr6MPZRaLLIPOwGu9/AIFS+ojOg7hM26Cu/cjv4PJYHEnbvdajx9Xpw
+   YvniVclikzVMVIwoEIDZzJrS7Dgplgvfp0zZ5Y54y3VIvpmzlt5Cf8IBL
+   A==;
+X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
+   d="scan'208";a="158361729"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Jun 2023 13:31:34 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 23 Jun 2023 13:31:29 -0700
+Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 23 Jun 2023 13:30:59 -0700
+From:   Varshini Rajendran <varshini.rajendran@microchip.com>
+To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <nicolas.ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <vkoul@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>,
+        <lee@kernel.org>, <ulf.hansson@linaro.org>,
+        <tudor.ambarus@linaro.org>, <miquel.raynal@bootlin.com>,
+        <richard@nod.at>, <vigneshr@ti.com>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <linus.walleij@linaro.org>,
+        <p.zabel@pengutronix.de>, <olivia@selenic.com>,
+        <a.zummo@towertech.it>, <radu_nicolae.pirea@upb.ro>,
+        <richard.genoud@gmail.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>,
+        <wim@linux-watchdog.org>, <linux@roeck-us.net>, <arnd@arndb.de>,
+        <olof@lixom.net>, <soc@kernel.org>, <linux@armlinux.org.uk>,
+        <sre@kernel.org>, <jerry.ray@microchip.com>,
+        <horatiu.vultur@microchip.com>, <durai.manickamkr@microchip.com>,
+        <varshini.rajendran@microchip.com>, <andrew@lunn.ch>,
+        <alain.volmat@foss.st.com>, <neil.armstrong@linaro.org>,
+        <mihai.sain@microchip.com>, <eugen.hristev@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-mtd@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-rtc@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-usb@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <Hari.PrasathGE@microchip.com>, <cristian.birsan@microchip.com>,
+        <balamanikandan.gunasundar@microchip.com>,
+        <manikandan.m@microchip.com>, <dharma.b@microchip.com>,
+        <nayabbasha.sayed@microchip.com>, <balakrishnan.s@microchip.com>
+Subject: [PATCH v2 00/45] Add support for sam9x7 SoC family
+Date:   Sat, 24 Jun 2023 02:00:11 +0530
+Message-ID: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.4-rc7-126-gf28ec6369334
-Subject: pm/testing baseline: 54 runs,
- 5 regressions (v6.4-rc7-126-gf28ec6369334)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 54 runs, 5 regressions (v6.4-rc7-126-gf28ec6369334)
+This patch series adds support for the new SoC family - sam9x7.
+ - The device tree, configs and drivers are added
+ - Clock driver for sam9x7 is added
+ - Support for basic peripherals is added
+ - Target board SAM9X75 Curiosity is added
+
+ Changes in v2:
+ --------------
+
+ - Added sam9x7 specific compatibles in DT with fallbacks
+ - Documented all the newly added DT compatible strings
+ - Added device tree for the target board sam9x75 curiosity and
+   documented the same in the DT bindings documentation
+ - Removed the dt nodes that are not supported at the moment
+ - Removed the configs added by previous version that are not supported
+   at the moment
+ - Fixed all the corrections in the commit message
+ - Changed all the instances of copyright year to 2023
+ - Added sam9x7 flag in PIT64B configuration
+ - Moved macro definitions to header file
+ - Added another divider in mck characteristics in the pmc driver
+ - Fixed the memory leak in the pmc driver
+ - Dropped patches that are no longer needed
+ - Picked up Acked-by and Reviewed-by tags
+
+
+Hari Prasath (1):
+  irqchip/atmel-aic5: Add support for sam9x7 aic
+
+Varshini Rajendran (44):
+  dt-bindings: microchip: atmel,at91rm9200-tcb: add sam9x60, sam9x7
+    compatible
+  dt-bindings: usb: ehci: Add atmel at91sam9g45-ehci compatible
+  dt-bindings: usb: generic-ehci: Document clock-names property
+  dt-bindings: net: cdns,macb: add documentation for sam9x7 ethernet
+    interface
+  ARM: at91: pm: add support for sam9x7 SoC family
+  ARM: at91: pm: add sam9x7 SoC init config
+  ARM: at91: add support in SoC driver for new sam9x7
+  clk: at91: clk-sam9x60-pll: re-factor to support individual core freq
+    outputs
+  clk: at91: sam9x7: add support for HW PLL freq dividers
+  clk: at91: sama7g5: move mux table macros to header file
+  dt-bindings: clk: at91: add bindings for SAM9X7's clock controller
+  dt-bindings: reset: atmel,at91sam9260-reset: add sam9x7 binding
+  dt-bindings: atmel-sysreg: add bindings for sam9x7
+  dt-bindings: crypto: add bindings for sam9x7 in Atmel AES
+  dt-bindings: crypto: add bindings for sam9x7 in Atmel SHA
+  dt-bindings: crypto: add bindings for sam9x7 in Atmel TDES
+  dt-bindings: dmaengine: at_xdmac: add compatible with microchip,sam9x7
+  dt-bindings: i2c: at91: Add SAM9X7 compatible string
+  dt-bindings: mfd: at91: Add SAM9X7 compatible string
+  dt-bindings: atmel-gpbr: add microchip,sam9x7-gpbr
+  dt-bindings: atmel-matrix: add microchip,sam9x7-matrix
+  dt-bindings: atmel-smc: add microchip,sam9x7-smc
+  dt-bindings: atmel-ssc: add microchip,sam9x7-ssc
+  dt-bindings: sdhci-of-at91: add microchip,sam9x7-sdhci
+  dt-bindings: atmel-nand: add microchip,sam9x7-pmecc
+  dt-bindings: pinctrl: at91: add bindings for SAM9X7
+  dt-bindings: rng: atmel,at91-trng: document sam9x7 TRNG
+  dt-bindings: rtc: at91rm9200: add sam9x7 compatible
+  dt-bindings: rtt: at91rm9260: add sam9x7 compatible
+  dt-bindings: serial: atmel,at91-usart: add compatible for sam9x7
+  dt-bindings: atmel-classd: add sam9x7 compatible
+  spi: dt-bindings: atmel,at91rm9200-spi: add sam9x7 compatible
+  dt-bindings: usb: atmel: Update DT bindings documentation for sam9x7
+  dt-bindings: watchdog: sama5d4-wdt: add compatible for sam9x7-wdt
+  dt-bindings: irqchip/atmel-aic5: Add support for sam9x7 aic
+  clk: at91: sam9x7: add sam9x7 pmc driver
+  power: reset: at91-poweroff: lookup for proper pmc dt node for sam9x7
+  power: reset: at91-reset: add reset support for sam9x7 SoC
+  power: reset: at91-reset: add sdhwc support for sam9x7 SoC
+  ARM: at91: Kconfig: add config flag for SAM9X7 SoC
+  ARM: configs: at91: enable config flags for sam9x7 SoC family
+  ARM: dts: at91: sam9x7: add device tree for SoC
+  dt-bindings: arm: add sam9x75 curiosity board
+  ARM: dts: at91: sam9x75_curiosity: add device tree for sam9x75
+    curiosity board
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |    6 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt |    7 +-
+ .../devicetree/bindings/clock/at91-clock.txt  |    7 +-
+ .../crypto/atmel,at91sam9g46-aes.yaml         |    5 +-
+ .../crypto/atmel,at91sam9g46-sha.yaml         |    5 +-
+ .../crypto/atmel,at91sam9g46-tdes.yaml        |    5 +-
+ .../devicetree/bindings/dma/atmel-xdma.txt    |    4 +-
+ .../bindings/i2c/atmel,at91sam-i2c.yaml       |    3 +
+ .../interrupt-controller/atmel,aic.txt        |    2 +-
+ .../devicetree/bindings/mfd/atmel-flexcom.txt |    2 +-
+ .../devicetree/bindings/mfd/atmel-gpbr.txt    |    1 +
+ .../devicetree/bindings/mfd/atmel-matrix.txt  |    1 +
+ .../devicetree/bindings/mfd/atmel-smc.txt     |    1 +
+ .../devicetree/bindings/misc/atmel-ssc.txt    |    1 +
+ .../devicetree/bindings/mmc/sdhci-atmel.txt   |    4 +-
+ .../devicetree/bindings/mtd/atmel-nand.txt    |    1 +
+ .../devicetree/bindings/net/cdns,macb.yaml    |    1 +
+ .../bindings/pinctrl/atmel,at91-pinctrl.txt   |    3 +-
+ .../reset/atmel,at91sam9260-reset.yaml        |    1 +
+ .../bindings/rng/atmel,at91-trng.yaml         |    1 +
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |    1 +
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |    1 +
+ .../bindings/serial/atmel,at91-usart.yaml     |    3 +
+ .../soc/microchip/atmel,at91rm9200-tcb.yaml   |    2 +
+ .../bindings/sound/atmel,sama5d2-classd.yaml  |    5 +-
+ .../bindings/spi/atmel,at91rm9200-spi.yaml    |    1 +
+ .../devicetree/bindings/usb/atmel-usb.txt     |    9 +-
+ .../devicetree/bindings/usb/generic-ehci.yaml |    5 +
+ .../bindings/watchdog/atmel,sama5d4-wdt.yaml  |    1 +
+ arch/arm/boot/dts/Makefile                    |    2 +
+ arch/arm/boot/dts/at91-sam9x75_curiosity.dts  |  336 +++++
+ arch/arm/boot/dts/sam9x7.dtsi                 | 1237 +++++++++++++++++
+ arch/arm/configs/at91_dt_defconfig            |    1 +
+ arch/arm/mach-at91/Kconfig                    |   23 +-
+ arch/arm/mach-at91/Makefile                   |    1 +
+ arch/arm/mach-at91/generic.h                  |    2 +
+ arch/arm/mach-at91/pm.c                       |   35 +
+ arch/arm/mach-at91/sam9x7.c                   |   34 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-sam9x60-pll.c            |   50 +-
+ drivers/clk/at91/pmc.h                        |   18 +
+ drivers/clk/at91/sam9x60.c                    |    7 +
+ drivers/clk/at91/sam9x7.c                     |  942 +++++++++++++
+ drivers/clk/at91/sama7g5.c                    |   42 +-
+ drivers/irqchip/irq-atmel-aic5.c              |   10 +
+ drivers/power/reset/Kconfig                   |    4 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c      |    1 +
+ drivers/soc/atmel/soc.c                       |   23 +
+ drivers/soc/atmel/soc.h                       |    9 +
+ 49 files changed, 2806 insertions(+), 61 deletions(-)
+ create mode 100644 arch/arm/boot/dts/at91-sam9x75_curiosity.dts
+ create mode 100644 arch/arm/boot/dts/sam9x7.dtsi
+ create mode 100644 arch/arm/mach-at91/sam9x7.c
+ create mode 100644 drivers/clk/at91/sam9x7.c
+
+-- 
+2.25.1
 
-Regressions Summary
--------------------
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-imx8mm-innocomm-wb15-evk     | arm64 | lab-pengutronix | gcc-10   | defconf=
-ig          | 1          =
-
-qemu_i386-uefi               | i386  | lab-collabora   | gcc-10   | i386_de=
-fconfig     | 1          =
-
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.4-rc7=
--126-gf28ec6369334/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.4-rc7-126-gf28ec6369334
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      f28ec636933467d6a13cbe9f37d97a74d13484b2 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx53-qsrb                   | arm   | lab-pengutronix | gcc-10   | multi_v=
-7_defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6495f138d72a84a6f8306156
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx53-qsrb.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/6495f138d72a84a6f830615f
-        failing since 147 days (last pass: v6.1-rc8-156-g0a9e32afe717, firs=
-t fail: acpi-6.2-rc6-146-g628c61874ffd)
-
-    2023-06-23T19:23:12.369324  + set +x
-    2023-06-23T19:23:12.369683  [   13.135949] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-987154_1.5.2.3.1>
-    2023-06-23T19:23:12.476833  / # #
-    2023-06-23T19:23:12.578633  export SHELL=3D/bin/sh
-    2023-06-23T19:23:12.579109  #
-    2023-06-23T19:23:12.680332  / # export SHELL=3D/bin/sh. /lava-987154/en=
-vironment
-    2023-06-23T19:23:12.680770  =
-
-    2023-06-23T19:23:12.782254  / # . /lava-987154/environment/lava-987154/=
-bin/lava-test-runner /lava-987154/1
-    2023-06-23T19:23:12.782996  =
-
-    2023-06-23T19:23:12.786730  / # /lava-987154/bin/lava-test-runner /lava=
--987154/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-imx8mm-innocomm-wb15-evk     | arm64 | lab-pengutronix | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6495f0bfc1fc56b4233061fb
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-wb1=
-5-evk.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm64/defconfig/gcc-10/lab-pengutronix/baseline-imx8mm-innocomm-wb1=
-5-evk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6495f0bfc1fc56b423306=
-1fc
-        new failure (last pass: v6.4-rc7-121-g3eb3368746ef) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-qemu_i386-uefi               | i386  | lab-collabora   | gcc-10   | i386_de=
-fconfig     | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6495ec5eb1db081604306171
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: i386_defconfig
-  Compiler:    gcc-10 (gcc (Debian 10.2.1-6) 10.2.1 20210110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/i386/i386_defconfig/gcc-10/lab-collabora/baseline-qemu_i386-uefi.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/i386/i386_defconfig/gcc-10/lab-collabora/baseline-qemu_i386-uefi.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/x86/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6495ec5eb1db081604306=
-172
-        new failure (last pass: v6.4-rc7-121-g3eb3368746ef) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun50i-h5-lib...ch-all-h3-cc | arm64 | lab-broonie     | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6495f26309bbd4ff63306196
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
--h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-h5-libretech-all=
--h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6495f26309bbd4ff63306=
-197
-        failing since 66 days (last pass: v6.3-rc6-135-g5235219c59f8, first=
- fail: v6.3-rc7-153-gbc538c8be4bd) =
-
- =
-
-
-
-platform                     | arch  | lab             | compiler | defconf=
-ig          | regressions
------------------------------+-------+-----------------+----------+--------=
-------------+------------
-sun50i-h6-pine-h64           | arm64 | lab-collabora   | gcc-10   | defconf=
-ig          | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/6495f1a886044a38fa30613b
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.4-rc7-126-gf28ec=
-6369334/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230609.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/6495f1a886044a38fa306=
-13c
-        new failure (last pass: v6.4-rc7-121-g3eb3368746ef) =
-
- =20
