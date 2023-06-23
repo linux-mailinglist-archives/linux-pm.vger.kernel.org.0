@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61AE873BDE8
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 19:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933FF73BE29
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 19:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjFWRgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 13:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
+        id S231129AbjFWR6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 13:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbjFWRgD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 13:36:03 -0400
+        with ESMTP id S230237AbjFWR6G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 13:58:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783F12703
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 10:35:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F893E41
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 10:58:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A7561AD5
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 17:35:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6503BC433C9
-        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 17:35:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B5A161AED
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 17:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6B642C433C9
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 17:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687541756;
-        bh=Qk2dsnF82ptlEURY6G9LY2+PbcC/O9Jo9s8R+eP+hOY=;
+        s=k20201202; t=1687543084;
+        bh=LO01+ljK8XoggJs5gbUbjOveu0MmI+/6jUmu2a+GTNo=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=fAza0TQYU1YN1iSFSh8JxKBE+r14166cBhxsP9iNKGBMJkJ+7SagHN3t1JiIlTb4i
-         i79xqW0JgTcnsBEnRahiEaiEvTMyt3/Tq7HJy48RYICWq4r00gxFrtMg2JkY3o54X5
-         zzdvTKlOq7sm3czMwBe9e11iHmu13GiHFjPvjLp6PQnu7ihvDIm1qJ6mBIdu+eccba
-         BXIRVchzKCtL/PYbxeouvUe97EZ20Q57hzHQrPj6EIl8pd4SwPeYv6LlxP32+po0cV
-         0MHzlIX70DWtziyW/L2Cq5wvCSLcmJhQO51kRwpddvKzNHw5yayVHLtjTcILHkG1pd
-         3mNzuKQLIBQQw==
+        b=UtDHw6Yt7QVXP8CQZRs5Usyvg+YyJcKSp6HpVSJMxW/Igm/kF1ffToIZ49nR7ynJT
+         Xyk4i3EcPWHPHm4MZNlIk978wh2Fp6FrsKfhXjaSVyJ7pl0SsfgespwSQDN+gxm6di
+         juLRX3/vxSpq1Jbpl9siRtxjvIOBC23T7Uus3/L1O/cTaqirtWu7TEc4RWHJwOsJRa
+         vfBLkgh6a7FlclxXZ4umDU6pnoRQWxjvoE5OZCrJ022vicEU7qEHQEzWZq7VkWb6/Y
+         fkSSCn34EUdkfKWISFXI4rp1RdYQ56VF3+mwatEpWuZuQcEfP5fryKRBxp7MB38bBf
+         1nT3jUC9k3o3A==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 52252C53BD0; Fri, 23 Jun 2023 17:35:56 +0000 (UTC)
+        id 519E0C53BCD; Fri, 23 Jun 2023 17:58:04 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 217589] Intel CPU maximum boost frequency reduced after resume
  from suspend to RAM
-Date:   Fri, 23 Jun 2023 17:35:56 +0000
+Date:   Fri, 23 Jun 2023 17:58:04 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,14 +47,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: srinivas.pandruvada@linux.intel.com
+X-Bugzilla-Who: bjackson0971@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217589-137361-5gdif2KABg@https.bugzilla.kernel.org/>
+Message-ID: <bug-217589-137361-mkA7iGdGge@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217589-137361@https.bugzilla.kernel.org/>
 References: <bug-217589-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -74,16 +74,20 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217589
 
---- Comment #5 from Srinivas Pandruvada (srinivas.pandruvada@linux.intel.co=
-m) ---
-Capture one log with:
-echo "file intel_pstate.c +p" >/sys/kernel/debug/dynamic_debug/control=20
-echo 0 > /sys/devices/system/cpu/cpu1/online=20
-echo 1 > /sys/devices/system/cpu/cpu1/online=20
+--- Comment #6 from Brad  Jackson (bjackson0971@gmail.com) ---
+Had to disable secure boot for debug output. First log:
 
-Another with=20
-echo "file intel_pstate.c +p" >/sys/kernel/debug/dynamic_debug/control=20
-suspend to RAM and resume
+intel_pstate: CPU 1 going offline
+smpboot: CPU 1 is now offline
+x86: Booting SMP configuration:
+smpboot: Booting Node 0 Processor 1 APIC 0x1
+intel_pstate: CPU 1 going online
+intel_pstate: set_policy cpuinfo.max 5500000 policy->max 5500000
+intel_pstate: cpu:1 min_policy_perf:11 max_policy_perf:70
+intel_pstate: cpu:1 global_min:11 global_max:70
+intel_pstate: cpu:1 max_perf_ratio:70 min_perf_ratio:11
+
+Second log attached below.
 
 --=20
 You may reply to this email to add a comment.
