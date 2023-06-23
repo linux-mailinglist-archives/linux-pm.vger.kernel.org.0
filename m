@@ -2,166 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A82473BDD5
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 19:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61AE873BDE8
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jun 2023 19:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjFWReU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 13:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53162 "EHLO
+        id S231979AbjFWRgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 13:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjFWReT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 13:34:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36553212B;
-        Fri, 23 Jun 2023 10:34:17 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D05881042;
-        Fri, 23 Jun 2023 10:35:00 -0700 (PDT)
-Received: from [10.57.27.57] (unknown [10.57.27.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0471B3F64C;
-        Fri, 23 Jun 2023 10:34:14 -0700 (PDT)
-Message-ID: <86da9945-04d5-047a-cb2d-5fb63737839f@arm.com>
-Date:   Fri, 23 Jun 2023 18:34:31 +0100
+        with ESMTP id S232238AbjFWRgD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 13:36:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783F12703
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 10:35:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A7561AD5
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 17:35:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6503BC433C9
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jun 2023 17:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687541756;
+        bh=Qk2dsnF82ptlEURY6G9LY2+PbcC/O9Jo9s8R+eP+hOY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=fAza0TQYU1YN1iSFSh8JxKBE+r14166cBhxsP9iNKGBMJkJ+7SagHN3t1JiIlTb4i
+         i79xqW0JgTcnsBEnRahiEaiEvTMyt3/Tq7HJy48RYICWq4r00gxFrtMg2JkY3o54X5
+         zzdvTKlOq7sm3czMwBe9e11iHmu13GiHFjPvjLp6PQnu7ihvDIm1qJ6mBIdu+eccba
+         BXIRVchzKCtL/PYbxeouvUe97EZ20Q57hzHQrPj6EIl8pd4SwPeYv6LlxP32+po0cV
+         0MHzlIX70DWtziyW/L2Cq5wvCSLcmJhQO51kRwpddvKzNHw5yayVHLtjTcILHkG1pd
+         3mNzuKQLIBQQw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 52252C53BD0; Fri, 23 Jun 2023 17:35:56 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217589] Intel CPU maximum boost frequency reduced after resume
+ from suspend to RAM
+Date:   Fri, 23 Jun 2023 17:35:56 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: srinivas.pandruvada@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217589-137361-5gdif2KABg@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217589-137361@https.bugzilla.kernel.org/>
+References: <bug-217589-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Di Shen <di.shen@unisoc.com>
-Cc:     daniel.lezcano@linaro.org, rui.zhang@intel.com, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
-        orsonzhai@gmail.com
-References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
- <20230619063534.12831-1-di.shen@unisoc.com>
- <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
- <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com>
- <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
- <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
- <62c35d1c-7dcd-7bf2-253e-65cdfd6e92cc@arm.com>
- <CAJZ5v0iX2WYVjXWecJHVB_w1HAAOLDJvFLTMALGQF3pfv-rKSw@mail.gmail.com>
- <2884a54e-4db0-bf47-3b8a-0deb337208d8@arm.com>
- <CAJZ5v0i5V8kpaaCsH4wuU83=zXpdJgR2CdCX-Wj=PmJx3OJ2Lg@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0i5V8kpaaCsH4wuU83=zXpdJgR2CdCX-Wj=PmJx3OJ2Lg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217589
 
+--- Comment #5 from Srinivas Pandruvada (srinivas.pandruvada@linux.intel.co=
+m) ---
+Capture one log with:
+echo "file intel_pstate.c +p" >/sys/kernel/debug/dynamic_debug/control=20
+echo 0 > /sys/devices/system/cpu/cpu1/online=20
+echo 1 > /sys/devices/system/cpu/cpu1/online=20
 
-On 6/23/23 17:55, Rafael J. Wysocki wrote:
-> On Fri, Jun 23, 2023 at 9:43 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
+Another with=20
+echo "file intel_pstate.c +p" >/sys/kernel/debug/dynamic_debug/control=20
+suspend to RAM and resume
 
-[snip]
+--=20
+You may reply to this email to add a comment.
 
->>
->> I agree, the patch header doesn't explain that properly. Here is the
->> explanation for this Intelligent Power Allocator (IPA):
->>
->> The IPA controls temperature using PID mechanism. It's a closed
->> feedback loop. That algorithm can 'learn' from the 'observed'
->> in the past reaction for it's control decisions and accumulates that
->> information in the part called 'error integral'. Those accumulated
->> 'error' gaps are the differences between the set target value and the
->> actually achieved value. In our case the target value is the target
->> temperature which is coming from the trip point. That part is then used
->> with the 'I' (of PID) component, so we can compensate for those
->> 'learned' mistakes.
->> Now, when you change the target temperature value - all your previous
->> learned errors won't help you. That's why Intelligent Power Allocator
->> should reset previously accumulated history.
-> 
-> Right.
-> 
-> And every other governor using information from the past for control
-> will have an analogous problem, won't it?
-
-Not necessarily, but to play safe I would go case-by-case and make
-sure other governors are aligned to this new feature.
-
-E.g. the bang-bang governor operates only on current temperature and
-current trip value + trip hysteresis. The flow graph describes it [1].
-The control (state of the fan: ON or OFF) of that governor could be
-simply adjusted to the new reality -> new trip point temp. That would
-just mean 'toggling' the fan if needed. There are only 2 'target'
-states: 0 or 1 for the fan. You can images a situation when the
-temperature doesn't change, but we manipulate the trip value for that
-governor. The governor would react correctly always in such situation
-w/o a need of a reset IMO.
-
-> 
->>>
->>>>>
->>>>>> For the 2nd case IIUC the code, we pass the 'trip.temperature'
->>>>>> and should be ready for what you said (modification of that value).
->>>>>
->>>>> Generally speaking, it needs to be prepared for a simultaneous change
->>>>> of multiple trip points (including active), in which case it may not
->>>>> be useful to invoke the ->reset() callback for each of them
->>>>> individually.
->>>>
->>>> Although, that looks more cleaner IMO. Resetting one by one in
->>>> a temperature order would be easily maintainable, won't be?
->>>
->>> I wouldn't call it maintainable really.
->>>
->>> First of all, the trips may not be ordered.  There are no guarantees
->>> whatsoever that they will be ordered, so the caller may have to
->>> determine the temperature order in the first place.  This would be an
->>> extra requirement that currently is not there.
->>>
->>> Apart from this, I don't see any fundamental difference between the
->>> case when trip points are updated via sysfs and when they are updated
->>> by the driver.  The governor should reset itself in any of those cases
->>> and even if one trip point changes, the temperature order of all of
->>> them may change, so the governor reset mechanism should be able to
->>> handle the case when multiple trip points are updated at the same
->>> time.  While you may argue that this is theoretical, the ACPI spec
->>> clearly states that this is allowed to happen, for example.
->>>
->>> If you want a generic reset callback for governors, that's fine, but
->>> make it generic and not specific to a particular use case.
->>
->> I think we agree here, but probably having slightly different
->> implementation in mind. Based on you explanation I think you
->> want simply this API:
->> void (*reset)(struct thermal_zone_device *tz);
->>
->> 1. no return value
->> 2. no specific trip ID as argument
->>
->> Do you agree?
-> 
-> Yes, I do.
-
-OK, thanks.
-
-Di could you implement that 'reset()' API according to this description,
-please?
-
-> 
->> IMO such implementation and API would also work for this IPA
->> purpose. Would that work for the ACPI use case as well?
-> 
-> It would AFAICS.
-
-Thanks Rafael for the comments and the progress that we made :)
-
-Regards,
-Lukasz
-
-[1] 
-https://elixir.bootlin.com/linux/v6.3/source/drivers/thermal/gov_bang_bang.c#L80
+You are receiving this mail because:
+You are the assignee for the bug.=
