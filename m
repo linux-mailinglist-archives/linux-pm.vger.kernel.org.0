@@ -2,230 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3A673C520
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Jun 2023 02:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790D273C78E
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Jun 2023 09:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231292AbjFXAWi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 20:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
+        id S230045AbjFXHxU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Jun 2023 03:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjFXAWi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 20:22:38 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F7C2955;
-        Fri, 23 Jun 2023 17:22:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687566140; x=1719102140;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U3MH7PP2TmV76figY0FD+MbRvRpBUufkqRIDmfyNmTc=;
-  b=Nrqo22uN8gi9cfbFUNzlXemD9nP+hcyo2jRwCNsSR2PGd5+tnAmbHdBM
-   LwrOpX6u5OFlEO67HpohfdjDMVcKxYIjPqpCGxLDVqUgQkidVIhG0cjQ9
-   ROVIB/j8S1TFoBR5T3C2klMZA5t7y2qGPon6EFrn6YCxHRWZqqoYUpGmG
-   6RL/I59XLsSBN3HijKm88V6ihH30Imtk4YpbxVx0NXrJwCNB6b5rb2pDj
-   AUOEEhMFEzSOpGSEjfC5x8aooPbPqclH2DLEnxv9xmx6UmkfBy8xM02Zs
-   vXiYdjtEhz1MwX++B973TTD9IS8niMyn6rIX7vQdiqH8Hx+AKYAc/jOhu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="447270509"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="447270509"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 17:22:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="715490601"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="715490601"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga002.jf.intel.com with ESMTP; 23 Jun 2023 17:22:18 -0700
-Date:   Fri, 23 Jun 2023 17:25:05 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 10/24] sched/fair: Use IPCC scores to select a busiest
- runqueue
-Message-ID: <20230624002505.GB32639@ranerica-svr.sc.intel.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-11-ricardo.neri-calderon@linux.intel.com>
- <ZJQOVUcFrqNReP1o@arm.com>
+        with ESMTP id S231202AbjFXHxR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Jun 2023 03:53:17 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14FF2940
+        for <linux-pm@vger.kernel.org>; Sat, 24 Jun 2023 00:53:14 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51d80d81d6eso194057a12.1
+        for <linux-pm@vger.kernel.org>; Sat, 24 Jun 2023 00:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687593192; x=1690185192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hr9nrGlYrxN00jEwRxs6PYBUQxgnGyvMLv6d+S+IyFk=;
+        b=LQEc0yoJm0GslpUZYCjcHtwoTCvu+59CHRYP/sGpmh7IIEWYyKbcmwOTWkHIAk5amo
+         GW/7Gpe870PqzwscCvwhvS2tRdD4lIO92N5a+9t0YvyTUExmCh3G/ey+cNZCCGzcBTPJ
+         6yPMwkjqsKsodsXDqWTZBNezjTKe+7X8fdEpM8mYCN9NPvWn/peXOWQ5kyvKsBiKcO44
+         1nn5gapVl7Ro8gQLfw1L+9piaUTX+p6FPVZZ1/ijnscvD92eH3mJCbstLfuZt0gY2UUX
+         +QldvphwJQ8glfg3JyKVOgSk3y2EQry5UIdVnMeV03t88wxPGoe0khhNc6S3VhqB4zja
+         Bt8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687593192; x=1690185192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr9nrGlYrxN00jEwRxs6PYBUQxgnGyvMLv6d+S+IyFk=;
+        b=PsXCCRJlYPg/rCPqPt85ymNxBsRu3+2Cyz4b7DCxUesO61H42DT7ikvjGSGXMNF13C
+         lLysVt2WTKsZ14ooqf779y5XJ8tlcOGc1L5gwIUdplKls0P1NQiuiayk+7qxArhk4xt2
+         C2ZYBqKEa95K1g1+Lxv7slvtPfHiOYGYog9X8YdeYpuOOrtg2GIZY1xiLI5FSMHbjXzo
+         qmrgtC4xhQYf/PTJv8JH+n8GOnYmreazrBsIXks5T88UY07j3F3v+p3ytLq116kmuh7U
+         fNKO1nhX/YL9tS0mr3vkYr8vCQI1RS//vDpfl3kWTe2D87/RLeSNbpgb+GzVVcCv+GNr
+         je9w==
+X-Gm-Message-State: AC+VfDyfjCn8j1qqxhlPNhGJ6r4W3hi2bBJEU78p7l4qq9JfoB/USljG
+        LblVQV30vviuASZwd7t1wirG9A==
+X-Google-Smtp-Source: ACHHUZ522CJYVOfO8kVotsUuEt+wtHkNFHrIi0PS6ACNcKvYFOPHzOCYWLySAcxpXgHfsNodLNJqrA==
+X-Received: by 2002:a50:ef12:0:b0:51a:f6de:bb81 with SMTP id m18-20020a50ef12000000b0051af6debb81mr10804337eds.28.1687593192613;
+        Sat, 24 Jun 2023 00:53:12 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id m5-20020aa7d345000000b0051495ce23absm404938edr.10.2023.06.24.00.53.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jun 2023 00:53:12 -0700 (PDT)
+Message-ID: <074048a2-5153-e013-3562-b5cad2ba0954@linaro.org>
+Date:   Sat, 24 Jun 2023 09:53:05 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJQOVUcFrqNReP1o@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 01/45] dt-bindings: microchip: atmel,at91rm9200-tcb:
+ add sam9x60, sam9x7 compatible
+Content-Language: en-US
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, lee@kernel.org,
+        ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linus.walleij@linaro.org, p.zabel@pengutronix.de,
+        olivia@selenic.com, a.zummo@towertech.it,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
+        linux@armlinux.org.uk, sre@kernel.org, jerry.ray@microchip.com,
+        horatiu.vultur@microchip.com, durai.manickamkr@microchip.com,
+        andrew@lunn.ch, alain.volmat@foss.st.com,
+        neil.armstrong@linaro.org, mihai.sain@microchip.com,
+        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
+        balamanikandan.gunasundar@microchip.com,
+        manikandan.m@microchip.com, dharma.b@microchip.com,
+        nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
+References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
+ <20230623203056.689705-2-varshini.rajendran@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230623203056.689705-2-varshini.rajendran@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 10:03:17AM +0100, Ionela Voinescu wrote:
-> On Monday 12 Jun 2023 at 21:24:08 (-0700), Ricardo Neri wrote:
-> > Use IPCC scores to break a tie between two runqueues with the same priority
-> > and number of running tasks: select the runqueue of which the task enqueued
-> > last would get a higher IPC boost when migrated to the destination CPU.
-> > (These tasks are migrated first during load balance.)
-> > 
-> > For now, restrict the utilization of IPCC scores to scheduling domains
-> > marked with the SD_ASYM_PACKING flag.
-> > 
-> > Cc: Ben Segall <bsegall@google.com>
-> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > Cc: Mel Gorman <mgorman@suse.de>
-> > Cc: Perry Yuan <Perry.Yuan@amd.com>
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> > Changes since v3:
-> >  * Do not compute the IPCC stats using the current tasks of runqueues.
-> >    Instead, use the tasks at the back of the queue. These are the tasks
-> >    that will be pulled first during load balance. (Vincent)
-> > 
-> > Changes since v2:
-> >  * Only use IPCC scores to break ties if the sched domain uses
-> >    asym_packing. (Ionela)
-> >  * Handle errors of arch_get_ipcc_score(). (Ionela)
-> > 
-> > Changes since v1:
-> >  * Fixed a bug when selecting a busiest runqueue: when comparing two
-> >    runqueues with equal nr_running, we must compute the IPCC score delta
-> >    of both.
-> >  * Renamed local variables to improve the layout of the code block.
-> >    (PeterZ)
-> >  * Used the new interface names.
-> > ---
-> >  kernel/sched/fair.c | 61 +++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 61 insertions(+)
-> > 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index fcec791ede4f..da3e009eef42 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -9564,6 +9564,41 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> >  	return sched_asym_ipcc_prefer(a_stats, b_stats);
-> >  }
-> >  
-> > +/**
-> > + * ipcc_score_delta - Get the IPCC score delta wrt the load balance's dst_cpu
-> > + * @rq:		A runqueue
-> > + * @env:	Load balancing environment
-> > + *
-> > + * Returns: The IPCC score delta that the last task enqueued in @rq would get
-> > + * if placed in the destination CPU of @env. LONG_MIN to indicate that the
-> > + * delta should not be used.
-> > + */
-> > +static long ipcc_score_delta(struct rq *rq, struct lb_env *env)
-> > +{
-> > +	unsigned long score_src, score_dst;
-> > +	unsigned short ipcc;
-> > +
-> > +	if (!sched_ipcc_enabled())
-> > +		return LONG_MIN;
-> > +
-> > +	/* Only asym_packing uses IPCC scores at the moment. */
-> > +	if (!(env->sd->flags & SD_ASYM_PACKING))
-> > +		return LONG_MIN;
-> > +
-> > +	if (rq_last_task_ipcc(env->dst_cpu, rq, &ipcc))
-> > +		return LONG_MIN;
-> > +
-> > +	score_dst = arch_get_ipcc_score(ipcc, env->dst_cpu);
-> > +	if (IS_ERR_VALUE(score_dst))
-> > +		return LONG_MIN;
-> > +
-> > +	score_src = arch_get_ipcc_score(ipcc, cpu_of(rq));
-> > +	if (IS_ERR_VALUE(score_src))
-> > +		return LONG_MIN;
-> > +
-> > +	return score_dst - score_src;
-> > +}
-> > +
-> >  #else /* CONFIG_IPC_CLASSES */
-> >  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> >  				    struct rq *rq)
-> > @@ -9594,6 +9629,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> >  	return false;
-> >  }
-> >  
-> > +static long ipcc_score_delta(struct rq *rq, struct lb_env *env)
-> > +{
-> > +	return LONG_MIN;
-> > +}
-> > +
-> >  #endif /* CONFIG_IPC_CLASSES */
-> >  
-> >  /**
-> > @@ -10769,6 +10809,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  {
-> >  	struct rq *busiest = NULL, *rq;
-> >  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> > +	long busiest_ipcc_delta = LONG_MIN;
-> >  	unsigned int busiest_nr = 0;
-> >  	int i;
-> >  
-> > @@ -10885,6 +10926,26 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  			if (busiest_nr < nr_running) {
-> >  				busiest_nr = nr_running;
-> >  				busiest = rq;
-> > +
-> > +				/*
-> > +				 * Remember the IPCC score of the busiest
-> > +				 * runqueue. We may need it to break a tie with
-> > +				 * other queues with equal nr_running.
-> > +				 */
-> > +				busiest_ipcc_delta = ipcc_score_delta(busiest, env);
-> > +			/*
-> > +			 * For ties, select @rq if doing would give its last
-> > +			 * queued task a bigger IPC boost when migrated to
-> > +			 * dst_cpu.
-> > +			 */
-> > +			} else if (busiest_nr == nr_running) {
-> > +				long delta = ipcc_score_delta(rq, env);
-> > +
-> > +				if (busiest_ipcc_delta < delta) {
-> > +					busiest_ipcc_delta = delta;
-> > +					busiest_nr = nr_running;
+On 23/06/2023 22:30, Varshini Rajendran wrote:
+> Add sam9x60, sam9x7 compatible string support in the schema file.
 > 
-> nit: there's no need as busiest_nr is already equal to nr_running.
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  .../devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml | 
 
-True! I will remove this pointless assignment.
 
-Thanks and BR,
-Ricardo
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
