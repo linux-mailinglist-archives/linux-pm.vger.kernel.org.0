@@ -2,274 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C558973C4F9
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Jun 2023 01:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C0D73C503
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Jun 2023 02:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjFWX6h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Jun 2023 19:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
+        id S230145AbjFXAJE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Jun 2023 20:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjFWX6h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 19:58:37 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4962693;
-        Fri, 23 Jun 2023 16:58:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687564715; x=1719100715;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZCsiRNeHR6k4zhE+8+E+Geaf2iCs4rkKevkjniNjVEc=;
-  b=JnkgoL7Mmi6LUgeyTKSj3UEWKNmVfNW78MD45VBApcNHl5jlMFU6vqW4
-   tRTbgfJ8xixcnIUADoxTvXJ1JUo7ANwmcubvSLPR3rm6hzHqLwPs/JHZq
-   SEWiC54vraoZ5oQqe4z9uWJKPUITdpEaDY8taFFSZL8B217YTAeF8FYi0
-   FOiPQr5p9Tkbmpa7U/Bmk0e/1VmsUaYXot6QFpRZohpBSY3AcqVL3Qx8R
-   3+7y+gmR0JSeJQAOMnHR4HzIcIe+XLIql9G+6xAkCrNbW9zc2mDXbpuv1
-   OV9tI2eb9ZoJ1jmiOgflflALGX8ZTT5yD0t/BWjJc4QPW660fhzAppgI7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="360923334"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="360923334"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2023 16:58:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10750"; a="718697989"
-X-IronPort-AV: E=Sophos;i="6.01,153,1684825200"; 
-   d="scan'208";a="718697989"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga007.fm.intel.com with ESMTP; 23 Jun 2023 16:58:34 -0700
-Date:   Fri, 23 Jun 2023 17:01:21 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
- IPC classes
-Message-ID: <20230624000121.GA32639@ranerica-svr.sc.intel.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
- <ZJQN/KIwCUmzYoiN@arm.com>
+        with ESMTP id S229451AbjFXAJE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Jun 2023 20:09:04 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21B62726;
+        Fri, 23 Jun 2023 17:09:02 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-557790487feso675155a12.0;
+        Fri, 23 Jun 2023 17:09:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687565342; x=1690157342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wbJYrnA9pnU+meP6XQ4kPeEwf/5w1AM0kN7wumRTQPk=;
+        b=PNtSvWLdn9xOWUkW+c/xisBSDCt4yIiRGsF9p+IVVWTxHksTX8GoGu+4bK9ObiNHdS
+         6nkRKXaZeOpZfl0YXRsSGGC11zmCYcuj1wb9sqSktGdWDxoAnWmA441nYZnikI90iq/M
+         uU+DCPS67i4GDBwiL1j/ZIRm4zeu/icq8P2m7jmPy+pOAZk/rj+8EA8/U7PkEQTUfyXX
+         f1wm9xWCYKJO3sjjiMInuykINkywjC9BVLZEY5OWqgz0X10/+wDgafPmFpZ16YHQteS+
+         TL8R4XaE3ALyzu9H7LB6bVnh43dxlBQy/BfQ7Z7SdmWSxssvI/YXa7EhP3URwBjI+H2R
+         S5RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687565342; x=1690157342;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wbJYrnA9pnU+meP6XQ4kPeEwf/5w1AM0kN7wumRTQPk=;
+        b=Y5OyNUywK3lUs3LszKOLDdHEyehi697qGIKttszeagd3iKyFVnXjC3Zu8dD1otPJ7E
+         ASqglnmg5KqlifrK8Dcx7ThjMA30Ny8YG33XA/DM/KBoRKRxew0PegtGBNWitfoNoETe
+         OA9/978TmjZiaZTC/q31mfHt5X9UM05qO+ugdeDRolbTPOjlRS4hhwoJzjYNkg2ztQJs
+         69L6R+9wIU4stOqkm0m1m/L4rc0UdsOMvULSi7wpsvagHficE2UGNaep4wrSjD9MjP2D
+         ohSYFKfetAA9pzgsv5gCDySnzvLwjL2ES5+ZV8sHc+Gr5X4F3wghsfgMQcImbtw0Yx1d
+         8JfA==
+X-Gm-Message-State: AC+VfDzqLCkbBQJUG68cXSYlvw3DRnAHkkMbdIDCFA3ejtQOcl+EbbIZ
+        W0MfyiXl7I+SEvapNssljKg=
+X-Google-Smtp-Source: ACHHUZ5UWmNb3hGeP/QCkeICkX9qJKsrvt0uGbMg739NNzwe0eHF70/k0NEUj6d2y5jm6EUom87PcA==
+X-Received: by 2002:a05:6a20:7f99:b0:10b:4539:fa0a with SMTP id d25-20020a056a207f9900b0010b4539fa0amr28469987pzj.1.1687565342232;
+        Fri, 23 Jun 2023 17:09:02 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o5-20020a656145000000b0052858b41008sm165159pgv.87.2023.06.23.17.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jun 2023 17:09:01 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 23 Jun 2023 17:08:59 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 08/24] init: pass root_device_name explicitly
+Message-ID: <c1391658-d785-4b2f-ba7e-01e4668685d7@roeck-us.net>
+References: <20230531125535.676098-1-hch@lst.de>
+ <20230531125535.676098-9-hch@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZJQN/KIwCUmzYoiN@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230531125535.676098-9-hch@lst.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 10:01:48AM +0100, Ionela Voinescu wrote:
-> Hi Ricardo,
+Hi,
 
-Hi Ionela,
-
-Thank you very much for reviewing the patches!
-
+On Wed, May 31, 2023 at 02:55:19PM +0200, Christoph Hellwig wrote:
+> Instead of declaring root_device_name as a global variable pass it as an
+> argument to the functions using it.
 > 
-> On Monday 12 Jun 2023 at 21:24:04 (-0700), Ricardo Neri wrote:
-> > When selecting the busiest scheduling group between two otherwise identical
-> > groups of types asym_packing or fully_busy, IPC classes can be used to
-> > break the tie.
-> > 
-> > Compute the IPC class performance score for a scheduling group. It is
-> > defined as the sum of the IPC scores of the tasks at the back of each
-> > runqueue in the group. Load balancing starts by pulling tasks from the back
-> > of the runqueue first, making this tiebreaker more useful.
-> > 
-> > Also, track the IPC class with the lowest score in the scheduling group. A
-> > task of this class will be pulled when the destination CPU has lower
-> > priority than the fully_busy busiest group.
-> > 
-> > These two metrics will be used during idle load balancing to compute the
-> > current and the potential IPC class score of a scheduling group in a
-> > subsequent changeset.
-> > 
-> > Cc: Ben Segall <bsegall@google.com>
-> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > Cc: Mel Gorman <mgorman@suse.de>
-> > Cc: Perry Yuan <Perry.Yuan@amd.com>
-> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Steven Rostedt <rostedt@goodmis.org>
-> > Cc: Tim C. Chen <tim.c.chen@intel.com>
-> > Cc: Valentin Schneider <vschneid@redhat.com>
-> > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> > Cc: x86@kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> > Changes since v3:
-> >  * Do not compute the IPCC stats using the current tasks of runqueues.
-> >    Instead, use the tasks at the back of the queue. These are the tasks
-> >    that will be pulled first during load balance. (Vincent)
-> > 
-> > Changes since v2:
-> >  * Also excluded deadline and realtime tasks from IPCC stats. (Dietmar)
-> >  * Also excluded tasks that cannot run on the destination CPU from the
-> >    IPCC stats.
-> >  * Folded struct sg_lb_ipcc_stats into struct sg_lb_stats. (Dietmar)
-> >  * Reworded description sg_lb_stats::min_ipcc. (Ionela)
-> >  * Handle errors of arch_get_ipcc_score(). (Ionela)
-> > 
-> > Changes since v1:
-> >  * Implemented cleanups and reworks from PeterZ. Thanks!
-> >  * Used the new interface names.
-> > ---
-> >  kernel/sched/fair.c | 79 +++++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 79 insertions(+)
-> > 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 6189d1a45635..c0cab5e501b6 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -9110,6 +9110,11 @@ struct sg_lb_stats {
-> >  	unsigned int nr_numa_running;
-> >  	unsigned int nr_preferred_running;
-> >  #endif
-> > +#ifdef CONFIG_IPC_CLASSES
-> > +	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
->                                               ^^^^^^^^^^^^^^
-> > +	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
-> > +	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
->                                               ^^^^^^^^^^^^^^
-> These no longer apply.
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Indeed, I missed this. I will update them in the next version.
+This patch results in the following build error when trying to build
+xtensa:tinyconfig.
 
-> It might be easier to describe them all in a
-> comment just above their declaration. Something like:
-> 
-> "The sum, min and its class of the IPC scores of the tasks at the back of each
-> runqueue in the group."
+WARNING: modpost: vmlinux: section mismatch in reference: strcpy.isra.0+0x14 (section: .text.unlikely) -> initcall_level_names (section: .init.data)
+ERROR: modpost: Section mismatches detected.
 
-I am hesitant to describe the three members in a single comment as it
-would not comply with what Documentation/doc-guide/kernel-doc.rst
-specifies.
+Unfortunately, reverting it is not possible due to conflicts,
+so I can not confirm the bisect results.
 
-Admittedly, the current format does not comply either. :) I would opt to
-be consistent with the existing format.
+Bisect log attached.
 
-> 
-> > +#endif
-> >  };
-> >  
-> >  /*
-> > @@ -9387,6 +9392,77 @@ group_type group_classify(unsigned int imbalance_pct,
-> >  	return group_has_spare;
-> >  }
-> >  
-> > +#ifdef CONFIG_IPC_CLASSES
-> > +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
-> > +{
-> > +	/* All IPCC stats have been set to zero in update_sg_lb_stats(). */
-> > +	sgs->min_score = ULONG_MAX;
-> > +}
-> > +
-> > +static int rq_last_task_ipcc(int dst_cpu, struct rq *rq, unsigned short *ipcc)
-> > +{
-> > +	struct list_head *tasks = &rq->cfs_tasks;
-> > +	struct task_struct *p;
-> > +	struct rq_flags rf;
-> > +	int ret = -EINVAL;
-> > +
-> 
-> It's more typical of ret to be initialised to 0 and changed to an error
-> value when there's an error case.
+Guenter
 
-My intention was to save lines of code. I would need to set the error
-value and then goto out. I am ok with your suggestion if it improves
-readability.
-
-> 
-> > +	rq_lock_irqsave(rq, &rf);
-> > +	if (list_empty(tasks))
-> > +		goto out;
-> > +
-> > +	p = list_last_entry(tasks, struct task_struct, se.group_node);
-> > +	if (p->flags & PF_EXITING || is_idle_task(p) ||
-> > +	    !cpumask_test_cpu(dst_cpu, p->cpus_ptr))
-> > +		goto out;
-> > +
-> > +	ret = 0;
-> > +	*ipcc = p->ipcc;
-> > +out:
-> > +	rq_unlock(rq, &rf);
-> > +	return ret;
-> > +}
-> > +
-> > +/* Called only if cpu_of(@rq) is not idle and has tasks running. */
-> > +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> > +				    struct rq *rq)
-> > +{
-> > +	unsigned short ipcc;
-> > +	unsigned long score;
-> > +
-> > +	if (!sched_ipcc_enabled())
-> > +		return;
-> > +
-> > +	if (rq_last_task_ipcc(dst_cpu, rq, &ipcc))
-> > +		return;
-> > +
-> > +	score = arch_get_ipcc_score(ipcc, cpu_of(rq));
-> > +
-> > +	/*
-> > +	 * Ignore tasks with invalid scores. When finding the busiest group, we
-> > +	 * prefer those with higher sum_score. This group will not be selected.
-> > +	 */
-> 
-> nit: the comment is unnecessary, and a bit misleading, IMO.
-> 
-> The comment says "This group will not be selected." but the only way to
-> guarantee that here is to reset the sum_score to 0 when you find an
-> invalid score, which I don't believe is your intention.
-
-You raise an interesting point. We will call this function for each rq
-in the sched group. Thus, if we encounter an error, the scores would be
-incomplete. Therefore, I think that the scores should be discarded and
-reset to 0 so that they are not used, IMO.
-
-> 
-> Also the use of sum_score is captured in later functions, so I don't
-> believe there's a need for additional comments here.
-
-Sure, I can remove the comment. Or maybe rephrase it as per my previous
-comment?
-
-> 
-> Hope it helps,
-
-It does! Thanks again for taking the time.
-
-BR,
-Ricardo
+---
+# bad: [8d2be868b42c08290509c60515865f4de24ea704] Add linux-next specific files for 20230623
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# good: [a5838c78db6a3a02e8d221e588c948f792e7f256] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git
+git bisect good a5838c78db6a3a02e8d221e588c948f792e7f256
+# bad: [cca41cc0b5485a0ec20707316c1a00082c01a2af] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
+git bisect bad cca41cc0b5485a0ec20707316c1a00082c01a2af
+# good: [901bdf5ea1a836400ee69aa32b04e9c209271ec7] Merge tag 'amd-drm-next-6.5-2023-06-09' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+git bisect good 901bdf5ea1a836400ee69aa32b04e9c209271ec7
+# good: [b4666c320b8113d94b3f4624054562e7add57e4a] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git
+git bisect good b4666c320b8113d94b3f4624054562e7add57e4a
+# good: [b2c28785b125acb28a681462510297410cbbabd7] ASoC: dt-bindings: microchip,sama7g5-pdmc: Simplify "microchip,mic-pos" constraints
+git bisect good b2c28785b125acb28a681462510297410cbbabd7
+# bad: [9d217fb0e778d69b2e3988efbc441976c0fb29b5] nvme: reorder fields in 'struct nvme_ctrl'
+git bisect bad 9d217fb0e778d69b2e3988efbc441976c0fb29b5
+# good: [20d099756b98fa6b5b838448b1ffbce46f4f3283] block: Replace all non-returning strlcpy with strscpy
+git bisect good 20d099756b98fa6b5b838448b1ffbce46f4f3283
+# bad: [93c8f6f38be67e30adf8d8eb5e7e9ccb89326119] pktcdvd: Drop redundant castings for sector_t
+git bisect bad 93c8f6f38be67e30adf8d8eb5e7e9ccb89326119
+# bad: [c8643c72bc42781fc169c6498a3902bec447099e] init: pass root_device_name explicitly
+git bisect bad c8643c72bc42781fc169c6498a3902bec447099e
+# good: [87efb39075be6a288cd7f23858f15bd01c83028a] fs: add a method to shut down the file system
+git bisect good 87efb39075be6a288cd7f23858f15bd01c83028a
+# good: [aa5f6ed8c21ec1aa5fd688118d8d5cd87c5ffc1d] driver core: return bool from driver_probe_done
+git bisect good aa5f6ed8c21ec1aa5fd688118d8d5cd87c5ffc1d
+# good: [cc89c63e2fe37d476357c82390dfb12edcd41cdd] PM: hibernate: move finding the resume device out of software_resume
+git bisect good cc89c63e2fe37d476357c82390dfb12edcd41cdd
+# good: [e3102722ffe77094ba9e7e46380792b3dd8a7abd] init: rename mount_block_root to mount_root_generic
+git bisect good e3102722ffe77094ba9e7e46380792b3dd8a7abd
+# good: [a6a41d39c2d91ff2543d31b6cc6070f3957e3aea] init: refactor mount_root
+git bisect good a6a41d39c2d91ff2543d31b6cc6070f3957e3aea
+# first bad commit: [c8643c72bc42781fc169c6498a3902bec447099e] init: pass root_device_name explicitly
