@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C883573C7A3
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Jun 2023 09:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6D973C7B5
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Jun 2023 09:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjFXHy0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 24 Jun 2023 03:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S231940AbjFXHzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 24 Jun 2023 03:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjFXHyS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Jun 2023 03:54:18 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566E62D6D
-        for <linux-pm@vger.kernel.org>; Sat, 24 Jun 2023 00:54:08 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9881b9d8cbdso461683466b.1
-        for <linux-pm@vger.kernel.org>; Sat, 24 Jun 2023 00:54:08 -0700 (PDT)
+        with ESMTP id S232230AbjFXHzE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 24 Jun 2023 03:55:04 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E4E295B
+        for <linux-pm@vger.kernel.org>; Sat, 24 Jun 2023 00:54:58 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51bdf83a513so1499092a12.2
+        for <linux-pm@vger.kernel.org>; Sat, 24 Jun 2023 00:54:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687593246; x=1690185246;
+        d=linaro.org; s=google; t=1687593297; x=1690185297;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0ItoFIh/55aB/e70WP466UAh+90Zeto+YBld1GOUDlc=;
-        b=DjI6EnIt0I30aO4+HTDU2Bee7J4vBxnKRd9UupAVeWwpXVR+/r44DC0Asz08Bbuogp
-         A3Aatz82DO8yHVMwWhn1gZCqEe6a2rWXkuiA6GfBUfoZTs2e6cwPHLJ+YuaeHPEUIAQJ
-         DJhwVAmDzSax0DlG6oJFsEy6UVQ/dIS8cQ+3QCTL9/CI0CL0ZoRWS02I2uBuEAJJk09M
-         Og5/SFPOzVmyQO9aVPrw3zuNNqm8+pzstsdw5EMvXLcY8o+3wfyYcS7e8fj+IvyDLk8l
-         BV2H6dDfJXmnGhqVtns8T1Mm5OFcAqbapX7uBCu2Qe31+yaUBaZBymo/wMUBAVDBKbPz
-         XF9w==
+        bh=soj7fUfKLSUMfNJRhcGNetkgOh1MYDCQh05RlBdkeN4=;
+        b=eD/q9ISsMCL47wOXs6De7fuRpet/07x40xn71+pyopNmpfC/leMOmohtiJNK9d+/0e
+         ILxksxb1fX6rwaa0PNl4dIKNWKQ0JE0p+6mC8Npy2RJ92zmvNc++lXF1Evombv7lLOhq
+         j0dEkeCidthf58IY6B/xewKh7UeXN34mH4Tn/G+1iZuhgJY19SkmNAEXnRUl+6Hr2Pkf
+         cSz2zRZiOrOsv0eavcQnSNRSp9hvrs6WsSE1JlocSaWw+8h6/lYnvjc7aqnaDQHYXfi2
+         MGVSEIum3iSzoq+S0mokQ5a3djEQN7ISokIkliin4UzR1LuGSZT4+Gyjp384W6jbO4Hx
+         53EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687593246; x=1690185246;
+        d=1e100.net; s=20221208; t=1687593297; x=1690185297;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ItoFIh/55aB/e70WP466UAh+90Zeto+YBld1GOUDlc=;
-        b=YiRkZKGRCTWMAAcN55P3ccXIty/5J5R+YHpzxvrtIaePLwknpBDfuKXPgg/yM3aNw0
-         VjqLuq8m7yJGC5+qzOs04sriUX3sMEyN/3ztRYEYSEHbxwn4tggaYEAVnaqEL+1KVcM3
-         zFyfMdkw0KgIiqlb0+AfvdknqoPJRLb4XPCFcBlOV5BnO50BY1wwpisQf8D86VPUT5jB
-         Gb7JM2HUxE6zJY8rt/uc5vcwZRVtzYOW37zheeJArlSYJ9iDkjVB0WJ7qobAwbT91FeZ
-         whrzR6G9CB3CS0QC3kT54Xn+IXa6vm/cBg2oK76Gv2QSZMfC5ptyd6qh5yCJ0k8ckM6j
-         0zjg==
-X-Gm-Message-State: AC+VfDyUjkMnIVqlDngFvJJg61bkjGvpD4cnnL7qzL0ffkJG0hCFxtAj
-        VoTxPsj2xgV3m+p8WzSw2iyuxg==
-X-Google-Smtp-Source: ACHHUZ49jFwiXxqnSCSn4kNoVnnSW/YdtiArnK3FxalPv2kaFMQNSvBgECWFO9OcGbSuOPMw0UOLPA==
-X-Received: by 2002:a17:906:58d2:b0:988:77f0:b671 with SMTP id e18-20020a17090658d200b0098877f0b671mr14792178ejs.38.1687593246753;
-        Sat, 24 Jun 2023 00:54:06 -0700 (PDT)
+        bh=soj7fUfKLSUMfNJRhcGNetkgOh1MYDCQh05RlBdkeN4=;
+        b=OADWWqJSVfzFhz4opAJqiI/3DnTl/QofytbUg01sycNgwMh5HNIOx5EqkfR3pG6LiU
+         +VBn3jEt6F5k0bL3E9ChR9cTOwYNhSO+Qcknv6gHpv+JMRYpq2T4FIsOHtTxMhMkqaJ5
+         h5Npp4PA1dUIfDQ+EdMNqTxwKygpMrkl5ClxX2UBWAvQxQgkudWOMw/LsjEuQnUu7jqG
+         N+zwUjH34/kLSS3GrX8JK5t0jzB3twnHvSe2Un7lFhG/9/qsQSHfvEwhaWeJkl8c4gD0
+         /e3QoW+LRFRFFGAr90ATZds8Uf579mRExSfYWymvxwA9M2Ghrp7cCE0xXAfpZ1vvYkvb
+         0d+g==
+X-Gm-Message-State: AC+VfDwVQ2c+hhMoaJPDp/IhhrdbJWRugEHO/Rbwco8WpIGBzZdn163T
+        vItRRMHZ6wXkNGH+7j8namYLmg==
+X-Google-Smtp-Source: ACHHUZ5vmH/wKISmL4HMBTOHg32GmJjKiHm7OZvesTfDEOfAm6Koe4Xv//vNxQvMZ5IiPxQ9Ro3PoQ==
+X-Received: by 2002:a17:907:320e:b0:96f:912e:5ec4 with SMTP id xg14-20020a170907320e00b0096f912e5ec4mr19710575ejb.16.1687593296802;
+        Sat, 24 Jun 2023 00:54:56 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id u12-20020a170906068c00b0098856d1470csm592132ejb.75.2023.06.24.00.54.01
+        by smtp.gmail.com with ESMTPSA id o6-20020aa7d3c6000000b0051a5177adeasm400813edr.21.2023.06.24.00.54.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Jun 2023 00:54:06 -0700 (PDT)
-Message-ID: <4f1015bb-50d3-84c9-ca32-564a0fe204e1@linaro.org>
-Date:   Sat, 24 Jun 2023 09:54:00 +0200
+        Sat, 24 Jun 2023 00:54:56 -0700 (PDT)
+Message-ID: <428a655e-8664-0e68-7eda-8edd47a4eee7@linaro.org>
+Date:   Sat, 24 Jun 2023 09:54:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 03/45] dt-bindings: usb: generic-ehci: Document
- clock-names property
+Subject: Re: [PATCH v2 04/45] dt-bindings: net: cdns,macb: add documentation
+ for sam9x7 ethernet interface
 Content-Language: en-US
 To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -92,15 +92,15 @@ Cc:     Hari.PrasathGE@microchip.com, cristian.birsan@microchip.com,
         manikandan.m@microchip.com, dharma.b@microchip.com,
         nayabbasha.sayed@microchip.com, balakrishnan.s@microchip.com
 References: <20230623203056.689705-1-varshini.rajendran@microchip.com>
- <20230623203056.689705-4-varshini.rajendran@microchip.com>
+ <20230623203056.689705-5-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230623203056.689705-4-varshini.rajendran@microchip.com>
+In-Reply-To: <20230623203056.689705-5-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -108,23 +108,13 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 23/06/2023 22:30, Varshini Rajendran wrote:
-> Document the property clock-names in the schema.
-> 
-> It fixes the dtbs_check warning,
-> 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+> Add documentation for sam9x7 ethernet interface.
 > 
 > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > ---
->  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 4 ++++
+>  Documentation/devicetree/bindings/net/cdns,macb.yaml | 1 +
 
-This is a friendly reminder during the review process.
-
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
+So you ignored the comments and tags everywhere?
 
 Best regards,
 Krzysztof
