@@ -2,120 +2,168 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E4B73D418
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jun 2023 22:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8298C73D41A
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jun 2023 22:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjFYU0c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 25 Jun 2023 16:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S229555AbjFYUaL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 25 Jun 2023 16:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjFYU0a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Jun 2023 16:26:30 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660410E4
-        for <linux-pm@vger.kernel.org>; Sun, 25 Jun 2023 13:26:14 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b69ea3b29fso6147941fa.3
-        for <linux-pm@vger.kernel.org>; Sun, 25 Jun 2023 13:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687724772; x=1690316772;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HiV5z5zUGyF9t+SInKUjgyhbtQRee0OBw3xrDTOT36E=;
-        b=C5H52spIDIYjTr5qExPIoHx3cPrpxJxpZJKRuinORN+vMRj/dj6axv3iMlGXBnZaR1
-         uJxczyaouIvDVzPaWPBQgnsu9iieTt45YVP0DeJtVHwjZDVx1qbsNDYJhv4kLcA1jgHh
-         0do0bRsu2m81tfR7VN5jRlf60hHHPdXd1KmctqFKtWpb694j8VBlm/loCNOVvjyjekD5
-         DLVempKF0Q/F2qjToa2vWCaE3E/uvznYFj/w/SxhwuTMJFFxTLtrvE7fie3yL/w1Ki85
-         fhzbC7MJtrGnEACkpHhQ1zdrDcnknm/D451DiOEWYHrhmSd+3PEylp5Yrq4r38GM0Ko1
-         rr7Q==
+        with ESMTP id S229447AbjFYUaK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 25 Jun 2023 16:30:10 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B159B;
+        Sun, 25 Jun 2023 13:30:09 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-97ea801b0d0so53788466b.1;
+        Sun, 25 Jun 2023 13:30:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687724772; x=1690316772;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687725008; x=1690317008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HiV5z5zUGyF9t+SInKUjgyhbtQRee0OBw3xrDTOT36E=;
-        b=Bijz7F08/ME81qYHWIvU6lmEmf6/j2Qb6AaT0jAT4Lq/hLhDBC2XaKdbrZ5DIYuFZa
-         TaxV1WtbTuQ6CgFj7nFo9A6PP9eI1UTIb0mKvkc34v/2VnawN+29pN3g0zsf3iHAAAXu
-         8agSwLCMD4WjHbwKr4o6mR5l2dGe8IgNJQBvJTkW1xVOG8gHrgh0s8FtYPwXM0HbatgL
-         Fw1DpzDxXJt+21kAuhV26tylY/+ecqbzvJ7wkCYvvS1QPIgI0XiW2TcOzQ6Ss8B7LDBA
-         l/BF1pfYcXl/Vkx6vAVtIW73nsBBurEj+qCsPwSw7SuzPL1S9puNQQTqxPokEYyE28zX
-         /WbA==
-X-Gm-Message-State: AC+VfDzYJTaXLsLKXAG0GgXnJPKmOxE4WspIGDf93jJEkf+F1Ssta8mz
-        le3emh0P3Pxln++zwuwynUIazg==
-X-Google-Smtp-Source: ACHHUZ45iG+1Sacn3/JNwppp4cAoDOFgBmwMe5BAxdk+yGg/pGOUFqw3c/qpIFx1UwMjlfCEzqZz8w==
-X-Received: by 2002:ac2:5b9a:0:b0:4f8:582f:414e with SMTP id o26-20020ac25b9a000000b004f8582f414emr15324375lfn.15.1687724772115;
-        Sun, 25 Jun 2023 13:26:12 -0700 (PDT)
-Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id m21-20020a195215000000b004f8427f8716sm787537lfb.262.2023.06.25.13.26.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jun 2023 13:26:11 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v2 26/26] ARM: dts: qcom: ipq8064: drop 'regulator' property from SAW2 devices
-Date:   Sun, 25 Jun 2023 23:25:47 +0300
-Message-Id: <20230625202547.174647-27-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230625202547.174647-1-dmitry.baryshkov@linaro.org>
-References: <20230625202547.174647-1-dmitry.baryshkov@linaro.org>
+        bh=3vDu07I6hDycUTSXbH6KDnP5ibSoUgPCPXzsR/4W9Tw=;
+        b=CoMi31rEPHxxgUIh8eaWxQhiiGokndMzwkFb9dJd6ZGw5rCZmuAX+bkS/dVwFTuLSA
+         9U79ZdOZnj6QD8jHhahQDDT/UhbZhj8xfrIWsAJIHiT+6nLF87QDGVceBz8jjwqE34Nx
+         uTJDQ53UKn+LA2AZ48vQLXWMN+kcYZw7sWgpQIRPAEicjdqOiU4suBKvkq8+sRflutxP
+         aeS13dzxw1D0s4MXrDmYh2wVf2+qgtSpCN67if87wBJlDUEWi3Q1v3m4s5Mlf6dBkAKW
+         O7b7/6e2y2vCwiLTSLXfSBwf18HA+0q+4rtuEjtLOrh0Sq9I6Q8M/sDauto41CPt5dhu
+         +fjw==
+X-Gm-Message-State: AC+VfDyVZlDCFVUPgHr7UdqzYlx91BxGUl1GBHMm7j/JpoZtPWzffS5+
+        0lPF4J6awCdbrFQy6cpWxTYeuutqqRLxEivS9G4=
+X-Google-Smtp-Source: ACHHUZ42MV8w/9YwIqsO7JhQJuwGZkIMmENHXY/WQQRvRl4+X+8um2cekZrv/MMkqna+Y9p5g89e+5esQKwTY3uDVYM=
+X-Received: by 2002:a17:906:73dd:b0:989:1ed3:d00b with SMTP id
+ n29-20020a17090673dd00b009891ed3d00bmr13002150ejl.4.1687725007494; Sun, 25
+ Jun 2023 13:30:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org> <20230525140135.3589917-5-daniel.lezcano@linaro.org>
+In-Reply-To: <20230525140135.3589917-5-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Sun, 25 Jun 2023 22:29:55 +0200
+Message-ID: <CAJZ5v0ivyJydE_Six4baLLZzJABOhH5eS2QFCaM-nG3Rt0s1Ww@mail.gmail.com>
+Subject: Re: [PATCH 4/8] thermal/core: Update the generic trip points
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        thierry.reding@gmail.com, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The SAW2 device should describe the regulator constraints rather than
-just declaring that it has the regulator.
+On Thu, May 25, 2023 at 4:02 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> At this point, the generic trip points rework allows to create a
+> thermal zone with a fixed number of trip points. This usage satisfy
+> almost all of the existing drivers.
+>
+> A few remaining drivers have a mechanism where the firmware updates
+> the trip points. But there is no such update mechanism for the generic
+> trip points, thus those drivers can not be converted to the generic
+> approach.
+>
+> This patch provides a function 'thermal_zone_trips_update()' allowing
+> to change the trip points of a thermal zone.
+>
+> At the same time, with the logic the trip points array is passed as a
+> parameter to the thermal zone at creation time, we make our own
+> private trip points array by copying the one passed as parameter.
+>
+> Note, no code has been found where the trip points update leads to a
+> refresh of the trip points in sysfs, so it is very unlikey the number
+> of trip points changes. However, for the sake of consistency it would
+> be nicer to have the trip points being refreshed in sysfs also, but
+> that could be done in a separate set of changes.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/thermal_core.c | 40 ++++++++---------
+>  drivers/thermal/thermal_core.h |  3 ++
+>  drivers/thermal/thermal_trip.c | 78 ++++++++++++++++++++++++++++++++++
+>  include/linux/thermal.h        |  4 ++
+>  4 files changed, 102 insertions(+), 23 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index afcd4197babd..3688b06401c8 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1224,32 +1224,11 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       /*
+> -        * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
+> -        * For example, shifting by 32 will result in compiler warning:
+> -        * warning: right shift count >= width of type [-Wshift-count- overflow]
+> -        *
+> -        * Also "mask >> num_trips" will always be true with 32 bit shift.
+> -        * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
+> -        * mask >> 32 = 0x80000000
+> -        * This will result in failure for the below condition.
+> -        *
+> -        * Check will be true when the bit 31 of the mask is set.
+> -        * 32 bit shift will cause overflow of 4 byte integer.
+> -        */
+> -       if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
+> -               pr_err("Incorrect number of thermal trips\n");
+> -               return ERR_PTR(-EINVAL);
+> -       }
+> -
+>         if (!ops) {
+>                 pr_err("Thermal zone device ops not defined\n");
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
+> -               return ERR_PTR(-EINVAL);
+> -
+>         if (!thermal_class)
+>                 return ERR_PTR(-ENODEV);
+>
+> @@ -1283,8 +1262,22 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+>         tz->ops = ops;
+>         tz->device.class = thermal_class;
+>         tz->devdata = devdata;
+> -       tz->trips = trips;
+> -       tz->num_trips = num_trips;
+> +
+> +       if (trips) {
+> +               result = __thermal_zone_trips_update(tz, trips, num_trips, mask);
+> +               if (result)
+> +                       goto remove_id;
+> +       } else {
+> +               /*
+> +                * Legacy trip point handling
+> +                */
+> +               if ((!tz->ops->get_trip_type || !tz->ops->get_trip_temp) && num_trips) {
+> +                       result = -EINVAL;
+> +                       goto remove_id;
+> +               }
+> +
+> +               tz->num_trips = num_trips;
+> +       }
 
-Drop the 'regulator' property. If/when CPU voltage scaling is
-implemented for this platform, proper regulator nodes show be added
-instead.
+Lest I forget, if I'm not mistaken, the above change would break the
+int3403 driver that uses int340x_thermal_update_trips() to update trip
+points in int3403_notify(), which handles notifications from the
+platform firmware, and it updates them through the driver's private
+pointer to the trips array used by the core with the assumption that
+the core will notice the changes.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+So it looks like at least this particular driver would need to be
+updated before the $subject patch can be applied.
 
-diff --git a/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi
-index 6198f42f6a9c..ecb99e104de0 100644
---- a/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom/qcom-ipq8064.dtsi
-@@ -589,7 +589,6 @@ acc0: clock-controller@2088000 {
- 		saw0: regulator@2089000 {
- 			compatible = "qcom,saw2";
- 			reg = <0x02089000 0x1000>, <0x02009000 0x1000>;
--			regulator;
- 		};
- 
- 		acc1: clock-controller@2098000 {
-@@ -604,7 +603,6 @@ acc1: clock-controller@2098000 {
- 		saw1: regulator@2099000 {
- 			compatible = "qcom,saw2";
- 			reg = <0x02099000 0x1000>, <0x02009000 0x1000>;
--			regulator;
- 		};
- 
- 		nss_common: syscon@3000000 {
--- 
-2.39.2
-
+That said, I think that the ACPI thermal driver won't really need to
+access the trips array after passing it to
+thermal_zone_device_register_with_trips() and it may create a new
+trips table every time the trip points are updated by the platform
+firmware, but I'm not convinced about this design.
