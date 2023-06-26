@@ -2,119 +2,280 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FC173E275
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 16:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A2073E361
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 17:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjFZOu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 10:50:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S229964AbjFZPdI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 11:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjFZOu6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 10:50:58 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A6912E;
-        Mon, 26 Jun 2023 07:50:58 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6686ef86110so1466951b3a.2;
-        Mon, 26 Jun 2023 07:50:58 -0700 (PDT)
+        with ESMTP id S230232AbjFZPdG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 11:33:06 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFB810CF
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:33:05 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fa74d06d72so35006135e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:33:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687791057; x=1690383057;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/i5nGpo6bAYzHRYmjepgeMVK+fjAMmYYEQI4A8dzWk=;
-        b=WcV4DcEBS5YMzS9iaPDRah1GA8GP4m8yCyx/thCr1kzXp/1T2D2H1Ap+Zx8/NxVenk
-         fUWee4Ndk2misDoh1G5NO6U6bOPbnUgSllMa4nTGKMd8ym6YzNTzuiXnYM/4WJUHhGyL
-         2yaFVJNBKnAPHE/DoYIlleYsrb/JWYyczHVojNOA51eOznE5hRz/GJfHkALKInY0RlTc
-         QV4bBN7spqzeaPNe741uGfXZsZszC1dkbG8KaY/daK6OaKqbjUda693A+36oGeMBO/PH
-         OGkE+Ld+QkjbCGet6WRjXY7YZ7gGq0qP4AeIhhM69FG9991bEoEDtmOKZysxC5K7pN/c
-         nyRA==
+        d=linaro.org; s=google; t=1687793583; x=1690385583;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JF49C2KyWhaD0aCZs4JSkQfR5O3+HuaVU0df0tQjSsM=;
+        b=CWg4RftvygJKuDkNmRSNndz3/YjPDNo5JP6hp/UK06XiuiMvD5KxDyaylKc9alcHm/
+         hei5LHE33rmzvqBw5fNEED0ITSXZPVq+axeB1QKHDaSLh5m/ziNRYoZ/rGczXedRGrMc
+         cVt5YY4C4LfRHKhiT8hhqi5fMPLjkOe6FZ9DncmsqY6nwi4wlBKVc5ssZa5HAO/pWUqh
+         gLQ17ZGBQL3Q4g+eETR+cz2FvdNC4IYxqI5DJ/OukkyrN9PH4Nt2qWd5bXrzjCaHTnBd
+         jJflDxT+6dz/EYK+75Ota4o730LZGMy43wvobs4Q+2hYrt8vJeCSMfYfQfe5p8LqtAWs
+         1LIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687791057; x=1690383057;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3/i5nGpo6bAYzHRYmjepgeMVK+fjAMmYYEQI4A8dzWk=;
-        b=K2PI67H2gpfSrsSgik9X+/J3AS/Q/AjJukbAlqtKb7vqndDAucR2/TTdzIplJFFjvf
-         /CvkaYlykSmPnMSC7pUKSV4wHWGD/rUeWToC+bHGjUcgyPnWOj9RBYeVL6jG0GppugeQ
-         zA/gfDtRjLWejdoml7qmhT8Pw4YeCUmpj7+MbvGiWGGnSUstmVEELQbbqXxax4yMSfKl
-         tdygaAMlpdqJmuLJBYc2ajX9OoqgBZd/7g80N5BUGEssOmVk83TOocI6O2Lc3rgoKQU7
-         bBl3ZBBtc0ZB9kWnJyP45jOmDRF7zpo3b70baOqE/zI8MwY1U/sHIOMyzb0L7xyBBxDA
-         3V6Q==
-X-Gm-Message-State: AC+VfDwUoqpFpfFRQsLINo3dqkr8gp/KZ2nbyOYxpXN/5W1DR/Q04Juc
-        HQ3yDOp77CgQs93NtyfgVtA=
-X-Google-Smtp-Source: ACHHUZ7gyf8JRcVX0msxlw87KM1NXLxkxhxSkyxpkjUkB5RP08dHtYuS1O5W3TiyOlTbkG5rO5m/Jw==
-X-Received: by 2002:a05:6a00:244f:b0:63b:5c82:e209 with SMTP id d15-20020a056a00244f00b0063b5c82e209mr18091552pfj.10.1687791057379;
-        Mon, 26 Jun 2023 07:50:57 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id u15-20020aa7838f000000b0066a6059d399sm3889133pfm.116.2023.06.26.07.50.55
+        d=1e100.net; s=20221208; t=1687793583; x=1690385583;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=JF49C2KyWhaD0aCZs4JSkQfR5O3+HuaVU0df0tQjSsM=;
+        b=S2Pyy32yRnsNJWSxQ24eKqb21R4tTRuFJapDekx+ibGbGDuOQZ+PvOEOcOW7LrrcHo
+         cTIArhiM4aQYoDu6njrThzv8ZAPJIYC5CdloAEmT6LgCA++rSlY7oXNdVJgJlzk5H02x
+         gmNV69OziRh/BhddoP107rcLtf1cuhj6DrsOJyIFgcZHfvhhUUbDAZPUsnDFxrDQvF0p
+         aqrPAXuHgU2tJ5iJmeSGIL3vdBlKqaKffxZd7c9Z0RTzfwRgV3RBqOd2wozXPofq/wkz
+         r86Np+IbKst9Z2X5HHtiayT5pqsO6ly3xziZMBeRWG5Pgwi05CR6a7ouqh/p4qq0slzU
+         g8GQ==
+X-Gm-Message-State: AC+VfDx4qxxj/OiIqgzES/vy///U1Uvk1WHO+IUO7TrPt8rfAy32+Efp
+        MXUkmdzgGzQOoCvcshV5/moAzQ==
+X-Google-Smtp-Source: ACHHUZ7eEDZjLD6fNvt4DGX/qatJc+bCceJKDl9YGYk/i8s1F+AGUOP3IqhwEtLpnGOzWrgGPdZsJA==
+X-Received: by 2002:a7b:c5d9:0:b0:3f7:f45d:5e44 with SMTP id n25-20020a7bc5d9000000b003f7f45d5e44mr20071203wmk.32.1687793583487;
+        Mon, 26 Jun 2023 08:33:03 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 7-20020a05600c230700b003fa968e9c27sm3299283wmo.9.2023.06.26.08.33.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 07:50:56 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <7e708dfa-4019-fe28-afbd-91ad847fada0@roeck-us.net>
-Date:   Mon, 26 Jun 2023 07:50:54 -0700
+        Mon, 26 Jun 2023 08:33:03 -0700 (PDT)
+Message-ID: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
+Date:   Mon, 26 Jun 2023 17:33:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 08/24] init: pass root_device_name explicitly
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230531125535.676098-1-hch@lst.de>
- <20230531125535.676098-9-hch@lst.de>
- <c1391658-d785-4b2f-ba7e-01e4668685d7@roeck-us.net>
- <20230626075325.GA26851@lst.de>
 Content-Language: en-US
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230626075325.GA26851@lst.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal for v6.5-rc1
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Peng Fan <peng.fan@nxp.com>,
+        Alex Leibovich <alexl@marvell.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, Luca Weiss <luca@z3ntu.xyz>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/26/23 00:53, Christoph Hellwig wrote:
-> On Fri, Jun 23, 2023 at 05:08:59PM -0700, Guenter Roeck wrote:
->> Hi,
->>
->> On Wed, May 31, 2023 at 02:55:19PM +0200, Christoph Hellwig wrote:
->>> Instead of declaring root_device_name as a global variable pass it as an
->>> argument to the functions using it.
->>>
->>> Signed-off-by: Christoph Hellwig <hch@lst.de>
->>
->> This patch results in the following build error when trying to build
->> xtensa:tinyconfig.
->>
->> WARNING: modpost: vmlinux: section mismatch in reference: strcpy.isra.0+0x14 (section: .text.unlikely) -> initcall_level_names (section: .init.data)
->> ERROR: modpost: Section mismatches detected.
-> 
-> I can reproduce these with gcc 13.1 on xtensa, but the report makes
-> no sense to me.  If I disable CONFIG_CC_OPTIMIZE_FOR_SIZE it now reports
-> a similar warning for put_page intead of strcpy which seems just as
-> arcance.
-> 
+Hi Rafael,
 
-I don't see that (I tried 11.3, 11.4, 12.3, and 13.1), but then I am not sure
-if this is worth tracking down. I just force CONFIG_SECTION_MISMATCH_WARN_ONLY=y
-for xtensa builds instead.
+please consider the following changes since commit 
+0bb619f9227aa370330d2b309733d74750705053:
 
-Guenter
+   thermal/intel/intel_soc_dts_iosf: Fix reporting wrong temperatures 
+(2023-06-15 18:07:48 +0200)
 
+are available in the Git repository at:
+
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.5-rc1
+
+for you to fetch changes up to 57c9eaa4de537e6f08819d9214de502cac5a989c:
+
+   thermal/drivers/qcom/temp-alarm: Use dev_err_probe (2023-06-26 
+12:10:22 +0200)
+
+----------------------------------------------------------------
+- Add DT bindings for SM6375, MSM8226 and QCM2290 Qcom platforms (Konrad
+   Dybcio)
+
+- Add DT bindings and support for QCom MSM8226 (Matti Lehtimäki)
+
+- Add DT bindings for QCom ipq9574 (Praveenkumar I)
+
+- Convert bcm2835 DT bindings to the yaml schema (Stefan Wahren)
+
+- Allow selecting the bang-bang governor as default (Thierry Reding)
+
+- Refactor and prepare the code to set the scene for RCar Gen4
+   (Wolfram Sang)
+
+- Cleanup and fixes for the QCom tsens drivers. Add DT bindings and
+   calibration for the MSM8909 platform (Stephan Gerhold)
+
+- Revert a patch introducing a wrong usage of devm_of_iomap() on the
+   Mediatek platform (Ricardo Cañuelo)
+
+- Fix the clock vs reset ordering in order to conform to the
+   documentation on the sun8i (Christophe JAILLET)
+
+- Prevent setting up undocumented registers, enable the only described
+   sensors and add the version 2.1 on the Qoriq sensor (Peng Fan)
+
+- Add DT bindings and support for the Armada AP807 (Alex Leibovich)
+
+- Update the mlx5 driver with the recent thermal changes (Daniel
+   Lezcano)
+
+- Convert to platform remove callback returning void on STM32 (Uwe
+   Kleine-König)
+
+- Add an error information printing for devm_thermal_add_hwmon_sysfs()
+   and remove the error from the Sun8i, Amlogic, i.MX, TI, K3, Tegra,
+   Qoriq, Mediateka and QCom (Yangtao Li)
+
+- Register as hwmon sensor for the Generic ADC (Chen-Yu Tsai)
+
+- Use the dev_err_probe() function in the QCom tsens alarm driver
+   (Luca Weiss)
+
+----------------------------------------------------------------
+Alex Leibovich (2):
+       dt-bindings: armada-thermal: Add armada-ap807-thermal compatible
+       thermal/drivers/armada: Add support for AP807 thermal data
+
+Chen-Yu Tsai (2):
+       thermal/drivers/mediatek/lvts_thermal: Register thermal zones as 
+hwmon sensors
+       thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
+
+Christophe JAILLET (1):
+       thermal/drivers/sun8i: Fix some error handling paths in 
+sun8i_ths_probe()
+
+Daniel Lezcano (1):
+       net/mlx5: Update the driver with the recent thermal changes
+
+Konrad Dybcio (2):
+       dt-bindings: thermal: tsens: Add QCM2290
+       dt-bindings: thermal: tsens: Add compatible for SM6375
+
+Luca Weiss (1):
+       thermal/drivers/qcom/temp-alarm: Use dev_err_probe
+
+Matti Lehtimäki (2):
+       dt-bindings: thermal: tsens: Add compatible for MSM8226
+       thermal/drivers/qcom/tsens-v0_1: Add support for MSM8226
+
+Pankit Garg (1):
+       thermal/drivers/qoriq: No need to program site adjustment register
+
+Peng Fan (2):
+       thermal/drivers/qoriq: Only enable supported sensors
+       thermal/drivers/qoriq: Support version 2.1
+
+Praveenkumar I (1):
+       dt-bindings: thermal: tsens: Add ipq9574 compatible
+
+Ricardo Cañuelo (1):
+       Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid 
+resource leak in mtk_thermal_probe"
+
+Stefan Wahren (1):
+       dt-bindings: thermal: convert bcm2835-thermal bindings to YAML
+
+Stephan Gerhold (6):
+       thermal/drivers/qcom/tsens: Drop unused legacy structs
+       thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
+       thermal/drivers/qcom/tsens-v0_1: Add mdm9607 correction offsets
+       dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
+       dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
+       thermal/drivers/qcom/tsens-v0_1: Add MSM8909 data
+
+Thierry Reding (1):
+       thermal: Allow selecting the bang-bang governor as default
+
+Uwe Kleine-König (1):
+       thermal/drivers/stm32: Convert to platform remove callback 
+returning void
+
+Wolfram Sang (3):
+       drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
+       drivers/thermal/rcar_gen3_thermal: refactor reading fuses into 
+seprarate function
+       drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
+
+Yangtao Li (10):
+       thermal/hwmon: Add error information printing for 
+devm_thermal_add_hwmon_sysfs()
+       thermal/drivers/sun8i: Remove redundant msg in sun8i_ths_register()
+       thermal/drivers/amlogic: Remove redundant msg in 
+amlogic_thermal_probe()
+       thermal/drivers/imx: Remove redundant msg in imx8mm_tmu_probe() 
+and imx_sc_thermal_probe()
+       drivers/thermal/k3: Remove redundant msg in k3_bandgap_probe()
+       thermal/drivers/tegra: Remove redundant msg in 
+tegra_tsensor_register_channel()
+       thermal/drivers/qoriq: Remove redundant msg in 
+qoriq_tmu_register_tmu_zone()
+       thermal/drivers/ti-soc: Remove redundant msg in 
+ti_thermal_expose_sensor()
+       thermal/drivers/qcom: Remove redundant msg at probe time
+       thermal/drivers/mediatek/lvts_thermal: Remove redundant msg in 
+lvts_ctrl_start()
+
+  .../devicetree/bindings/thermal/armada-thermal.txt |   1 +
+  .../bindings/thermal/brcm,bcm2835-thermal.txt      |  41 ------
+  .../bindings/thermal/brcm,bcm2835-thermal.yaml     |  48 +++++++
+  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  32 ++---
+  drivers/net/ethernet/mellanox/mlx5/core/thermal.c  |  15 ++-
+  drivers/thermal/Kconfig                            |   8 ++
+  drivers/thermal/amlogic_thermal.c                  |   3 +-
+  drivers/thermal/armada_thermal.c                   |  32 ++++-
+  drivers/thermal/imx8mm_thermal.c                   |   3 +-
+  drivers/thermal/imx_sc_thermal.c                   |   3 +-
+  drivers/thermal/k3_bandgap.c                       |   3 +-
+  drivers/thermal/mediatek/auxadc_thermal.c          |  14 +-
+  drivers/thermal/mediatek/lvts_thermal.c            |   4 +
+  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   4 +-
+  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  38 +++---
+  drivers/thermal/qcom/tsens-v0_1.c                  | 126 
+++++++++++++------
+  drivers/thermal/qcom/tsens-v1.c                    |  22 ----
+  drivers/thermal/qcom/tsens.c                       |  26 +++-
+  drivers/thermal/qcom/tsens.h                       |   6 +-
+  drivers/thermal/qoriq_thermal.c                    |  52 ++++----
+  drivers/thermal/rcar_gen3_thermal.c                | 141 
++++++++++++++++------
+  drivers/thermal/st/st_thermal.c                    |   4 +-
+  drivers/thermal/st/st_thermal.h                    |   2 +-
+  drivers/thermal/st/st_thermal_memmap.c             |   6 +-
+  drivers/thermal/sun8i_thermal.c                    |  59 +++------
+  drivers/thermal/tegra/tegra30-tsensor.c            |   3 +-
+  drivers/thermal/thermal-generic-adc.c              |   4 +
+  drivers/thermal/thermal_core.h                     |   2 +
+  drivers/thermal/thermal_hwmon.c                    |   5 +-
+  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   3 +-
+  30 files changed, 415 insertions(+), 295 deletions(-)
+  delete mode 100644 
+Documentation/devicetree/bindings/thermal/brcm,bcm2835-thermal.txt
+  create mode 100644 
+Documentation/devicetree/bindings/thermal/brcm,bcm2835-thermal.yaml
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
