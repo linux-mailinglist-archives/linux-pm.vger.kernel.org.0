@@ -2,149 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9B473E526
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 18:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCC273E548
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 18:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjFZQcp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 12:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S230055AbjFZQhc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 12:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbjFZQco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 12:32:44 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDFAC6
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 09:32:42 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so4753228e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 09:32:42 -0700 (PDT)
+        with ESMTP id S229783AbjFZQhb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 12:37:31 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0523D1AA
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 09:37:30 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b69e6cce7dso22692331fa.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 09:37:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20221208.gappssmtp.com; s=20221208; t=1687797161; x=1690389161;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0spNFz+6TM92jRoxw5G7AF/wIRfrOXvYpPWbmprIXQ0=;
-        b=bNQJ0XiyhHi5XxjG11HtTNvuMxuntTsRrq1w9EvHnyN7Zpkc8umTMfwxfdjeLOy2vs
-         MN9vhfr2ork5nEb/Z0jFpfZVfiwDO7CMypPRDJVBKZHHDDsaegkZ0JIH9oa5RG49+E+W
-         mrUxFr1Oy75jYbWU6giYlwttRipEzz5Cj8whYY9Tih+vgpwCLWw7h990wTlOFYDYtuMB
-         E3z7euApPPR+u0f898aqxW9zBUNwQcKIV0OIgNfUNZDmVNwXgx86WIWQpOcVo10PXhB6
-         6KAMMhWc18oirihv5STYNqS0J9R6jxAYvt2geSklsdeD9/m3/IZ0CNcClV9BSXsi0IzF
-         9JLQ==
+        d=linaro.org; s=google; t=1687797448; x=1690389448;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2S+hgq49/8PMX2Sw/UBHkH7erVlWQird49ywR0DgC6c=;
+        b=iQ2dtnRGO6sLFagFN121tgVoN6ddSFa0Dope7pddodC6ZlBIAZ1HG22rBPMMEjSbOm
+         +FyoS3AR5dUbury98Hsx6aYVcVJOmwjKjiuKmWZ2GuOV5ZQX5wyMhtzfdXr5KXy+/Juz
+         eWOYy1WKOF2f5P+OqZhRsHsdKX8b3Skvly7aHAw6XURFfdBRFu4zmj3D7gsdu9cFKX8B
+         3Rz7jPuDvOz+d+Ldua7x1pXu1wyd0KfSeQg5W8E3Xn1ggAOxy679U8yckLgTeWsxRyE1
+         6sPuBBONv5mIHuFkFgGWWWYO5YV8s8/negKxD6L4GUXlz6VrMEB7cfEavtlWxrU0Ue1X
+         C6gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687797161; x=1690389161;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20221208; t=1687797448; x=1690389448;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0spNFz+6TM92jRoxw5G7AF/wIRfrOXvYpPWbmprIXQ0=;
-        b=mFAGFPoPg920y7CoQyu95H33vZCcTk/HDdTEjHt+yD223PlF6eD9IR2vE7CaCd47mF
-         vFovHidVfy1aJZ1LPsems/VDViP80d2XG3SecH+8g2JvNEXt7qTn4rbGnb+6SeT/qE8Y
-         H/mfaQO/qpnV0rxvfpsKzfSJDZQoACsMJYbUdLFt5ACRaqMVhqzE0K3+3N7QBa6VDSzE
-         PMrTHILWmmOiLdtK+5WU2Gt0dStax6mOTrm9a3+aCy8dEjWT5tHeK3g0UkMlrv5gefkr
-         1HWuCxcf6pW/aeNu9j2cFcV4SxFKmbiFaVOhKCz59S5AIoyFVtJoaujV9dnA+bxyE9xl
-         nHXQ==
-X-Gm-Message-State: AC+VfDwo0EXeOzPuFy0fWiM2Fxkt2AcVDwViM9dm9gy7m18C9PVZOHfM
-        z056x6Ny+EvzSMXH6WAsC9ji6A==
-X-Google-Smtp-Source: ACHHUZ6If5m3B5Z98g30pqHfybyOWpNJUXCNnfUdLuTPjPZL0VqCyS79QjQbxszAnNWWhF8w8nqX+A==
-X-Received: by 2002:a05:6512:3e0e:b0:4fb:393:26c3 with SMTP id i14-20020a0565123e0e00b004fb039326c3mr2873589lfv.15.1687797160565;
-        Mon, 26 Jun 2023 09:32:40 -0700 (PDT)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id m21-20020a195215000000b004f8427f8716sm1156326lfb.262.2023.06.26.09.32.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 09:32:39 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 18:32:38 +0200
-From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] thermal/drivers/rcar: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZJm9ptHGdkO8EbOd@oden.dyn.berto.se>
-References: <20230626124334.15100-1-frank.li@vivo.com>
- <20230626124334.15100-5-frank.li@vivo.com>
+        bh=2S+hgq49/8PMX2Sw/UBHkH7erVlWQird49ywR0DgC6c=;
+        b=JMgU94qtRiCUCR6mJNe2ABjmkRL0eX+g9BPz2O9N8OkOuDLdp5974O8lsMNI9TRndZ
+         6OhAScaaRK9/qTavmirBn2VOSx8gvY1G5NuWQcWYVR+ROw6DZlIJn80iu4kwIVPqHg+D
+         mKUCzerYfPf590pMtlRWTadlo6Mbsac620HFtY6vYHCToHxysFkvk/6tdCDgnvPmOXj8
+         kpPHEZIvgDL8gPbkcPsI0R7ysrwFPIOzGtwsd7DoCPeSZjigHMCs/cgvANpFleBd/VdM
+         UFmm0ixrMjmeTW+k5LD/eFVgFcG89bCdJPrr4siNxA8bbZlk3NKiWvtNTjyaLlUdZohB
+         JjWw==
+X-Gm-Message-State: AC+VfDy9sBmtZk45cLtvviLhzy5NmTkGwn1wTcgNjBzjD/UHmd6e7vDD
+        Ty+WzpTczHx/vnD5+ssQBrpfNQ==
+X-Google-Smtp-Source: ACHHUZ7C+GL0ranNAERCN38ZVhW8Vq/IFa+uUnBjkLu55WYsM8tGdVHsOLP9P7uZAR+EGiaH52FJDg==
+X-Received: by 2002:a2e:8747:0:b0:2b5:8eae:7848 with SMTP id q7-20020a2e8747000000b002b58eae7848mr8242640ljj.44.1687797448138;
+        Mon, 26 Jun 2023 09:37:28 -0700 (PDT)
+Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
+        by smtp.gmail.com with ESMTPSA id x12-20020a2e9dcc000000b002b0488ef239sm1313392ljj.93.2023.06.26.09.37.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 09:37:27 -0700 (PDT)
+Message-ID: <9d49ecb6-1efd-0f19-c787-9baca79846fe@linaro.org>
+Date:   Mon, 26 Jun 2023 18:37:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230626124334.15100-5-frank.li@vivo.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 16/26] ARM: dts: qcom: apq8064: add L2 cache scaling
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230625202547.174647-1-dmitry.baryshkov@linaro.org>
+ <20230625202547.174647-17-dmitry.baryshkov@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230625202547.174647-17-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yangtao,
-
-Thanks for your work.
-
-On 2023-06-26 20:43:32 +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
+On 25.06.2023 22:25, Dmitry Baryshkov wrote:
+> Populate L2 cache node with clock, supplies and OPP information to
+> facilitate scaling L2 frequency.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
->  drivers/thermal/rcar_thermal.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+Are the L2 voltage ranges independent of speedbin?
+
+Konrad
+>  arch/arm/boot/dts/qcom/qcom-apq8064.dtsi | 101 ++++++++++++++++++++++-
+>  1 file changed, 100 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index b8571f7090aa..04a52d82022c 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -397,7 +397,6 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  	struct rcar_thermal_common *common;
->  	struct rcar_thermal_priv *priv;
->  	struct device *dev = &pdev->dev;
-> -	struct resource *res;
->  	const struct rcar_thermal_chip *chip = of_device_get_match_data(dev);
->  	int mres = 0;
->  	int i;
-> @@ -435,9 +434,7 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  			 * Then, driver uses common registers
->  			 * rcar_has_irq_support() will be enabled
->  			 */
-> -			res = platform_get_resource(pdev, IORESOURCE_MEM,
-> -						    mres++);
-> -			common->base = devm_ioremap_resource(dev, res);
-> +			common->base = devm_platform_ioremap_resource(pdev, mres++);
-
-This change is fine, please post a separate patch for it.
-
->  			if (IS_ERR(common->base)) {
->  				ret = PTR_ERR(common->base);
->  				goto error_unregister;
-> @@ -459,17 +456,13 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  	}
+> diff --git a/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi
+> index 1eb6d752ebae..ac07170c702f 100644
+> --- a/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi
+> +++ b/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi
+> @@ -81,9 +81,108 @@ CPU3: cpu@3 {
+>  		};
 >  
->  	for (i = 0;; i++) {
-> -		res = platform_get_resource(pdev, IORESOURCE_MEM, mres++);
-> -		if (!res)
-> -			break;
-
-This change is not OK as it changes the behavior of the driver same as 
-in patch 5/6.
-
-Nacked-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
-
-> -
->  		priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
->  		if (!priv) {
->  			ret = -ENOMEM;
->  			goto error_unregister;
->  		}
+>  		L2: l2-cache {
+> -			compatible = "cache";
+> +			compatible = "qcom,krait-l2-cache", "cache";
+>  			cache-level = <2>;
+>  			cache-unified;
+> +			vdd-mem-supply = <&pm8921_l24>;
+> +			vdd-dig-supply = <&pm8921_s3>;
+> +			clocks = <&kraitcc KRAIT_L2>;
+> +			#interconnect-cells = <1>;
+> +			operating-points-v2 = <&l2_opp_table>;
+> +
+> +			l2_opp_table: opp-table-l2 {
+> +				compatible = "operating-points-v2";
+> +
+> +				opp-384000000 {
+> +					opp-hz = /bits/ 64 <384000000>;
+> +					opp-microvolt = <1050000 1050000 1150000>,
+> +							<950000 950000 1150000>;
+> +				};
+> +
+> +				opp-432000000 {
+> +					opp-hz = /bits/ 64 <432000000>;
+> +					opp-microvolt = <1050000 1050000 1150000>,
+> +							<1050000 1050000 1150000>;
+> +				};
+> +
+> +				opp-486000000 {
+> +					opp-hz = /bits/ 64 <486000000>;
+> +					opp-microvolt = <1050000 1050000 1150000>,
+> +							<1050000 1050000 1150000>;
+> +				};
+> +
+> +				opp-540000000 {
+> +					opp-hz = /bits/ 64 <540000000>;
+> +					opp-microvolt = <1050000 1050000 1150000>,
+> +							<1050000 1050000 1150000>;
+> +				};
+> +
+> +				opp-594000000 {
+> +					opp-hz = /bits/ 64 <594000000>;
+> +					opp-microvolt = <1050000 1050000 1150000>,
+> +							<1050000 1050000 1150000>;
+> +				};
+> +
+> +				opp-648000000 {
+> +					opp-hz = /bits/ 64 <648000000>;
+> +					opp-microvolt = <1050000 1050000 1150000>,
+> +							<1050000 1050000 1150000>;
+> +				};
+> +
+> +				opp-702000000 {
+> +					opp-hz = /bits/ 64 <702000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-756000000 {
+> +					opp-hz = /bits/ 64 <756000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-810000000 {
+> +					opp-hz = /bits/ 64 <810000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-864000000 {
+> +					opp-hz = /bits/ 64 <864000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-918000000 {
+> +					opp-hz = /bits/ 64 <918000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-972000000 {
+> +					opp-hz = /bits/ 64 <972000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-1026000000 {
+> +					opp-hz = /bits/ 64 <1026000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-1080000000 {
+> +					opp-hz = /bits/ 64 <1080000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +
+> +				opp-1134000000 {
+> +					opp-hz = /bits/ 64 <1134000000>;
+> +					opp-microvolt = <1150000 1150000 1150000>,
+> +							<1150000 1150000 1150000>;
+> +				};
+> +			};
+>  		};
 >  
-> -		priv->base = devm_ioremap_resource(dev, res);
-> +		priv->base = devm_platform_ioremap_resource(pdev, mres++);
->  		if (IS_ERR(priv->base)) {
->  			ret = PTR_ERR(priv->base);
->  			goto error_unregister;
-> -- 
-> 2.39.0
-> 
-
--- 
-Kind Regards,
-Niklas Söderlund
+>  		idle-states {
