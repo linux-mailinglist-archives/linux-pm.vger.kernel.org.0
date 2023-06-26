@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9AA73DC46
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 12:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2616973DC48
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 12:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbjFZKcP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 06:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S230171AbjFZKcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 06:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjFZKcO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 06:32:14 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10782E5A
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 03:32:12 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f86e6e4038so3823768e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 03:32:11 -0700 (PDT)
+        with ESMTP id S230111AbjFZKcP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 06:32:15 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A4119A
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 03:32:13 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso2159520e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 03:32:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687775530; x=1690367530;
+        d=linaro.org; s=google; t=1687775531; x=1690367531;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tUgR1dLnPuxY4uDBYSPviY8Dvlm6F0UAHROxIQjI3RI=;
-        b=S0rxiJEIck2B0qiJwwnlBYplTMkTowmDofeL+hW9pOjaFLazRvV3dYtA/lbkVWrsej
-         U3qhcNmRVqC4xYDGgKJtoJe4RoGGqAn/BjXNCGvqdwu7O+X8Np/12n3euCUNJs+Q7liO
-         ZQ3zkr4YBv6sTRBZUw1UrmqovWFuiib7OGR4TBpI/eWHdiy+YOqzgto9jba6GxESwdKu
-         x+6iR68nFE8FyPLNNS17eg/45holEeJPgTNrldlgek17mHIycP594a5eLWhqGTDAJ8Eq
-         vT9aFwAaAYIfRN0KqUTNbOzjfXWRZ/+gwLe7LglAc/LwKoGl4SX/RRTUS1poMw7AsfRa
-         bUBQ==
+        bh=d6JtgnVPfaRDduEP2cAzMm1DanPSCZPJshpIYUQYupg=;
+        b=Y1+pvc7t8Q9UC0vxWjn35nn9N6orZjatS1wn93XmWtMoDik49aMMex3Fw3xaeDQMK8
+         xeaNaMNmtn7134qe5nchTNkSm3V1IS+C3Hi1yJARGHWyYqledAG6v9wsNDnSVWgBfJQM
+         clx13egRjQKHYmEtWFOCzM3P88GMKM3Fa5R4ZyigTXpq++YGRCfj/6hN32tgyfXCZSNU
+         X7fb65RWZx98tYOLNJ4adUxv+EL5HO3RIj/JsZXIbIQpc7NT/GdC8DAmJd1tkoOkHw0O
+         Q8mMjIEZ+kcXlXzm8xV+vTaa7GOhmmKjYyl+m18fevfHlujhYDmVJX5DmJXbqlmv5FcU
+         Uegw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687775530; x=1690367530;
+        d=1e100.net; s=20221208; t=1687775531; x=1690367531;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tUgR1dLnPuxY4uDBYSPviY8Dvlm6F0UAHROxIQjI3RI=;
-        b=AoTi+IgXxhJt2+xJ8WaX0RQ/1LAPQTC+NsBxdz4l2P9V6S9+Oxu2KXSphEqdPRxnbG
-         jiNVonI6EdzCFl9+8Nytq4ABQfOodGjTv7aaFiU6G2hPw3nViT5ftzs0WK0yNVchDtAJ
-         fdmYz95QHzos3IeA6Kk+IpSNMUPDBVYhIBGIfqlldAdxJOwrN8PgEuyupv2Y5MSD547F
-         ZMVZt8VTcDGU5WEckgfo39JBeXtX5HY5XNCsgHE8dv/xbgxtOoPHtpAjE/V01c5tGPb0
-         kNePB1QDAYIcRvTq0f864nw7fDRUTK07ErX02qpAWN78w6XqsjElanCrMvqU1jb6LF2h
-         8jyg==
-X-Gm-Message-State: AC+VfDysjiv5+79M0yTJIbv0GlzReARriiDlD4MvO9plc431lqENIteF
-        qvPl+Ceah7e1NtcrKqAsveIjHA==
-X-Google-Smtp-Source: ACHHUZ4bzudIo1D9r0Rg7s/vfxrKuM7pbkkFh8NBSgttAPwb65aHdHQomcKk0wJSZRIsF8HsCRI4/g==
-X-Received: by 2002:a05:6512:3a95:b0:4f9:6adf:3981 with SMTP id q21-20020a0565123a9500b004f96adf3981mr3350599lfu.33.1687775530289;
-        Mon, 26 Jun 2023 03:32:10 -0700 (PDT)
+        bh=d6JtgnVPfaRDduEP2cAzMm1DanPSCZPJshpIYUQYupg=;
+        b=kMkB4UGzbcboavAPKNEWujhvudKy7zeGbNFIYzbVT0droe/TC+L+RDx+Uo+fuoMYU/
+         A0UFTBsEi4MQXWQOdlnLOy4kn7hxsAmnuQ9G0JxS1xLdHrgXz3+Zwu0beSEbmXd+HWPd
+         AZ0BDOSRL4C/GUsv8Lqyg9G2MnfYECuoH8YClMX4duj7J/YUBxmFQwVVCpCBkSBnBPC2
+         QSTYUg4bolgPSO7CnEETODS25pgljWGIb1I9PiLWpF7DlJWBeFHtpZFSlSm2ZnwrHT0j
+         2aiyvaXfzfAahBFtVn7YauxpD/dSZGDywjvqVLm8On1OUSiUCjQYHil0euBEc+/O+XbW
+         6/XA==
+X-Gm-Message-State: AC+VfDzDEOqqpCEXgeaoVYEPQvFr6EBQuRfMGCQ0Y75snYLU5YyFvs2+
+        fY4mOFnjU7okyjFI2nMG8Tx2SA==
+X-Google-Smtp-Source: ACHHUZ4oQ099RycUF6mrTfJ09tkWckbnDIrMCbhBXjsuWrvVnxCOFt8GHX6b2CNnvFJPHmXeJwKc3Q==
+X-Received: by 2002:a19:5f1c:0:b0:4f4:d83e:4141 with SMTP id t28-20020a195f1c000000b004f4d83e4141mr15523490lfb.50.1687775531502;
+        Mon, 26 Jun 2023 03:32:11 -0700 (PDT)
 Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
-        by smtp.gmail.com with ESMTPSA id c26-20020ac2531a000000b004f13ca69dc8sm1041655lfh.72.2023.06.26.03.32.08
+        by smtp.gmail.com with ESMTPSA id c26-20020ac2531a000000b004f13ca69dc8sm1041655lfh.72.2023.06.26.03.32.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 03:32:10 -0700 (PDT)
+        Mon, 26 Jun 2023 03:32:11 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 26 Jun 2023 12:32:06 +0200
-Subject: [PATCH v2 1/3] dt-bindings: vendor-prefixes: Add Mitsumi Electric
- Co., Ltd.
+Date:   Mon, 26 Jun 2023 12:32:07 +0200
+Subject: [PATCH v2 2/3] dt-bindings: power: supply: Document Mitsumi MM8013
+ fuel gauge
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230621-topic-mm8013-v2-1-4be6223587ad@linaro.org>
+Message-Id: <20230621-topic-mm8013-v2-2-4be6223587ad@linaro.org>
 References: <20230621-topic-mm8013-v2-0-4be6223587ad@linaro.org>
 In-Reply-To: <20230621-topic-mm8013-v2-0-4be6223587ad@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -70,11 +70,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687775527; l=1125;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687775527; l=1459;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=TuRO5xCEXwws0sr0Ai5UAAA9eIk2XyYn2SGhIajpq0E=;
- b=YUjTXuuD7JlDrbZ3dgnAc3HoM7SActksn/k/2eFBg71QNM2I7rOd9bWH+tXW5vF0MvYd0QO7j
- 7xN9o6r9MBXDKjPJiSucfXZfoxt1UJlqZTIlMNI8EVqw1PyPwQP9710
+ bh=6NgCrA8TzKC0b1xLfjDslYNGxlWGJLejhI+Bt3kSWN8=;
+ b=KSFiBW+Q3z06d4lYzhcpKuWsUva9LjcS7caRBGzhENfqL8BfsZ7xqpP36pCbILGYlt5YBAiAE
+ Hf6S4p6aLsLDF81JYmjFtdpqsB8QKedo+SMgV+bDVl5RnpQEibA2KH+
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,33 +87,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Mitsumi was [1] a Japanese company making various electronics devices
-and components. They've merged into a new entity, MinebeaMitsumi in 2017.
+The Mitsumi MM8013 is an I2C fuel gauge for Li-Ion cells. The partial
+datasheet is available at [1]. Add bindings for this chip.
 
-Their current main page is available at [2]
+[1] https://www.mitsumi.co.jp/latest-M/Catalog/pdf/battery_mm_8013_e.pdf
 
-[1] https://en.wikipedia.org/wiki/Mitsumi_Electric
-[2] https://product.minebeamitsumi.com/en/
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/power/supply/mitsumi,mm8013.yaml      | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index af60bf1a6664..6142c40cf06e 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -865,6 +865,8 @@ patternProperties:
-     description: MiraMEMS Sensing Technology Co., Ltd.
-   "^mitsubishi,.*":
-     description: Mitsubishi Electric Corporation
-+  "^mitsumi,.*":
-+    description: Mitsumi Electric Co., Ltd.
-   "^mixel,.*":
-     description: Mixel, Inc.
-   "^miyoo,.*":
+diff --git a/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
+new file mode 100644
+index 000000000000..080fd44083ac
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/mitsumi,mm8013.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mitsumi MM8013 fuel gauge
++
++maintainers:
++  - Konrad Dybcio <konradybcio@kernel.org>
++
++properties:
++  compatible:
++    const: mitsumi,mm8013
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      fuel-gauge@55 {
++        compatible = "mitsumi,mm8013";
++        reg = <0x55>;
++      };
++    };
 
 -- 
 2.41.0
