@@ -2,73 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C427873DBC4
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 11:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A81873DC43
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 12:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbjFZJvg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 05:51:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
+        id S229599AbjFZKcM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 06:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjFZJvf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 05:51:35 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CB8AC
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 02:51:31 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3fde00693cfso30509251cf.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 02:51:31 -0700 (PDT)
+        with ESMTP id S229482AbjFZKcL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 06:32:11 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FB119A
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 03:32:10 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb41682472so1518965e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 03:32:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687773090; x=1690365090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wGW+DIgS9CWK2N0BnzgUdE8nx3ZQWbzDbAeMKQmOQr4=;
-        b=pOs4+sT+bkINnS/Qp7vbPVDPv2V40ihC2yeclx54KDjAQhW2cD1l+t7uHMEoWK1TJo
-         fv5NbFkQd9oOe80HxHLHMsOGRPo/FbXVBXD/Cc1s6xbOm60v8Xtm12KT+P+46Jau2fEW
-         I045Xp5zB7XMZw58/5RCyvFHQS6grngsqXpvpBJUUWLjiI8lUFjvARnWcH/iu5nYfajK
-         82rJ8k6tn9HqPHeCZ2gGfXxpZ2Yd5VxyGCznVhqj684aZpHevqGwzx9k+UzVbm4gLyka
-         G0b0gej4PzvJZwuVRJLJN0Q5oUYK1xCJ3N/HexSu1HBLYnaXYXxAAjBIQPxVy5Z/vkKE
-         IBgg==
+        d=linaro.org; s=google; t=1687775529; x=1690367529;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pPsxUiB9GWjwGBSnRU8epv6MKBN53dRKhwBYysnzvdQ=;
+        b=FCm6d7m5Ldgfx2Qld9rH21Nc9TPPsQHny8sXFf/BjHOP1rMm0O209+2K5qqTyCoYnS
+         MeK8nP4j/WA6Nhvc6NIClFWtzzddOt4cPJeGNSesRGP/GOMytGNCetD8zzkex8xgqxZP
+         aeiQzfGQgwulBdjOSaGIiHzsP+iJZXZjP+QZbDDjmbeKDETgj3MKT5EsUrJOldOktlbZ
+         Frx8OhkXKTd3vaCLmZJMCEzZrnmBb1oe3ADax+7xj0F5+fdLng1eW911fi0kw2cmJOpg
+         UWQrRsd21lT43m0V6tD3nSRSU2Cyd+WymHPQ8KsKwAe4xETf2EXDtkHET+lL9nPHGAg6
+         eyVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687773090; x=1690365090;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687775529; x=1690367529;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wGW+DIgS9CWK2N0BnzgUdE8nx3ZQWbzDbAeMKQmOQr4=;
-        b=bgqi7DWEhPmhQep8Vqt5i4TIO+1DWd7aRBt1gqQ17jyL+1UoOUfmnJzglOoe/u378l
-         Xg3DD5aqv2LshWYX7ARoINCL/tyTjaAgYjNvRJQ5D6RfbA01jvgVaYzIXg0RHU1Vd30b
-         5U2+Yc7j1swCNTNyj3z4TJ7PjXkjgSefbiksZwJrjX4yf+bYY1Q8dZGxkZ4OdmT1pcy8
-         LAHfreAQzQHsGZJjXm6YZ43cwAnpgroY0tXHEuJyTcvvCNoNRt/Sli2FpP8UzLkCB+hL
-         fE9lNwnuy4IgOz2DyS5YXQcRtWR0Gxvt+6ZAvCS5s75lixK/uuNBa3UKB1L6yQwqkviF
-         +VWQ==
-X-Gm-Message-State: AC+VfDzqL3XwVKZWJq+yY55N/r1Voy4CDCwWkvtFuUH6l38998uQgUO4
-        YWGRdBMpy4VE+PEgaXF7qwLx8FMLSF4SKn2JuUqomg==
-X-Google-Smtp-Source: ACHHUZ5X/UJpmXJIJc6ZXppn28jsGMTWM4wUsAypeexxOb7BxDFv3oIqJNK7ECnQ0vf/in1F+aplIYki5kCUQchfyes=
-X-Received: by 2002:ac8:5bd1:0:b0:400:790c:c5db with SMTP id
- b17-20020ac85bd1000000b00400790cc5dbmr13655588qtb.30.1687773090388; Mon, 26
- Jun 2023 02:51:30 -0700 (PDT)
+        bh=pPsxUiB9GWjwGBSnRU8epv6MKBN53dRKhwBYysnzvdQ=;
+        b=L3s/e+0epZHAGbkh+amBhzJ7gNi/sxDStIwwGKEjknZtLU2hFHnGCsQ+8Ruw3PGE3s
+         OXicPlUAX3HvDJExFeCKhAsvB8Prfj9tDSGT/FeBAwSjUOEpLxWqFxElwz0nm1CU2Cyj
+         o3pQx2Y9dAJYmNRWVjM/ZICC44uW5nL/xguIoTvYDrTYh/GGhyd8v5TX10KndizNXIg0
+         e6/fuG5ktJakialKghqtq/gPzsMOXerjtcEmO1Ldb+XmYhbr9JMnZKZll4qJEt+/6xE8
+         6lsvJpbtUXnimbqoPlsXrvj8VVbH/7eZxbCVHS5era0dYP+g506ZcgzitSuR8O2Cwl3f
+         lrWQ==
+X-Gm-Message-State: AC+VfDyvakgdQ6w5QotP1HPl5Qld2yTcoY3RDMxNYs/bGSf3cRUAcpzh
+        p1YI5SE5lVsAzep90h325I3eSw==
+X-Google-Smtp-Source: ACHHUZ7Vq1RayEQCKKKOZ/ELOPCW4x8lEQVD6zKyGBlpmhkLKEXQQa7Kjs0VD4CESTReCC4BC1JxGw==
+X-Received: by 2002:a05:6512:1590:b0:4fb:7a4e:b573 with SMTP id bp16-20020a056512159000b004fb7a4eb573mr942061lfb.5.1687775528805;
+        Mon, 26 Jun 2023 03:32:08 -0700 (PDT)
+Received: from [192.168.1.101] (abyk179.neoplus.adsl.tpnet.pl. [83.9.30.179])
+        by smtp.gmail.com with ESMTPSA id c26-20020ac2531a000000b004f13ca69dc8sm1041655lfh.72.2023.06.26.03.32.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 03:32:08 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/3] MM8013 fg driver
+Date:   Mon, 26 Jun 2023 12:32:05 +0200
+Message-Id: <20230621-topic-mm8013-v2-0-4be6223587ad@linaro.org>
 MIME-Version: 1.0
-References: <20220726083257.1730630-1-martin.kepplinger@puri.sm>
- <20220726083257.1730630-2-martin.kepplinger@puri.sm> <CAPDyKFrLLw=y9+t3f_bOH2mw2NVDGJxKE5=+XHY7C6SUzLzUDg@mail.gmail.com>
- <d1db07c8ca57c72b4f0820fcb6832dd7e4501055.camel@puri.sm> <CAPDyKFpz0HG_AzCkj8LkyisO1fjJiiyX2QjKTWDTLng2O7PDgA@mail.gmail.com>
- <77baacb930bf2ba1a65cb1515e6795b48d2d4ed5.camel@puri.sm> <CAPDyKFoS=E3c9XWWCaG2byMm-3nvvW5jXS0X7Bh-NK_msTUykQ@mail.gmail.com>
- <3bbba64dc4fd9ef37fb937f5176b1ef50b8b2d73.camel@puri.sm> <CAPDyKFqRAo+r0kW3H1ipu0trX0FC6EnG-PpFvXD7c1WmfPhtSA@mail.gmail.com>
- <1dec928bee02d46688a7041d64f2d951a44f8a9e.camel@puri.sm>
-In-Reply-To: <1dec928bee02d46688a7041d64f2d951a44f8a9e.camel@puri.sm>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 26 Jun 2023 11:50:54 +0200
-Message-ID: <CAPDyKFo=j6r+LA06RjD8=v72LK3voK9APR6rNFN+q1Xc_tHn-A@mail.gmail.com>
-Subject: Re: [PATCH v6 1/2] power: domain: handle genpd correctly when needing interrupts
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     rafael@kernel.org, khilman@kernel.org, robh@kernel.org,
-        krzysztof.kozlowski@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com, pavel@ucw.cz,
-        kernel@puri.sm, linux-imx@nxp.com, broonie@kernel.org,
-        l.stach@pengutronix.de, aford173@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACVpmWQC/3WNyw6CMBBFf4XM2jF9QEFX/odhUeoIk0BLWiQaw
+ r9b2bs8J7n3bJAoMiW4FhtEWjlx8BnUqQA3WN8T8iMzKKG0MEriEmZ2OE2NkBp1berqQpemUw3
+ kSWcTYRetd0Me+dc4ZjlHevL7aNzbzAOnJcTPkVzlz/55XyUKLEtRO6OMEJW+jextDOcQe2j3f
+ f8CrRdehr4AAAA=
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687775527; l=1176;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=neAEm/jOTpyEq30tLAlnYx3yk7D+d7zNKNZgHUszS/0=;
+ b=TOTovknD6ZcO4dk9c+zYD1zMrGYhxuR/SNZni4fVp3x/1Clz7f5NSZX7xXUC4t4OWCSGgdBmy
+ 6UuAVTra24kCvEQdoxcOk5eBtL5M/n6bkblDZhiA07ORpgcOf4UPYHe
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,226 +87,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 20:20, Martin Kepplinger
-<martin.kepplinger@puri.sm> wrote:
->
-> Am Freitag, dem 23.09.2022 um 15:55 +0200 schrieb Ulf Hansson:
-> > On Thu, 25 Aug 2022 at 09:06, Martin Kepplinger
-> > <martin.kepplinger@puri.sm> wrote:
-> > >
-> > > Am Mittwoch, dem 24.08.2022 um 15:30 +0200 schrieb Ulf Hansson:
-> > > > On Mon, 22 Aug 2022 at 10:38, Martin Kepplinger
-> > > > <martin.kepplinger@puri.sm> wrote:
-> > > > >
-> > > > > Am Freitag, dem 19.08.2022 um 16:53 +0200 schrieb Ulf Hansson:
-> > > > > > On Fri, 19 Aug 2022 at 11:17, Martin Kepplinger
-> > > > > > <martin.kepplinger@puri.sm> wrote:
-> > > > > > >
-> > > > > > > Am Dienstag, dem 26.07.2022 um 17:07 +0200 schrieb Ulf
-> > > > > > > Hansson:
-> > > > > > > > On Tue, 26 Jul 2022 at 10:33, Martin Kepplinger
-> > > > > > > > <martin.kepplinger@puri.sm> wrote:
-> > > > > > > > >
-> > > > > > > > > If for example the power-domains' power-supply node
-> > > > > > > > > (regulator)
-> > > > > > > > > needs
-> > > > > > > > > interrupts to work, the current setup with noirq
-> > > > > > > > > callbacks
-> > > > > > > > > cannot
-> > > > > > > > > work; for example a pmic regulator on i2c, when
-> > > > > > > > > suspending,
-> > > > > > > > > usually
-> > > > > > > > > already
-> > > > > > > > > times out during suspend_noirq:
-> > > > > > > > >
-> > > > > > > > > [   41.024193] buck4: failed to disable: -ETIMEDOUT
-> > > > > > > > >
-> > > > > > > > > So fix system suspend and resume for these power-
-> > > > > > > > > domains by
-> > > > > > > > > using
-> > > > > > > > > the
-> > > > > > > > > "outer" suspend/resume callbacks instead. Tested on the
-> > > > > > > > > imx8mq-
-> > > > > > > > > librem5 board,
-> > > > > > > > > but by looking at the dts, this will fix imx8mq-evk and
-> > > > > > > > > possibly
-> > > > > > > > > many other
-> > > > > > > > > boards too.
-> > > > > > > > >
-> > > > > > > > > This is designed so that genpd providers just say "this
-> > > > > > > > > genpd
-> > > > > > > > > needs
-> > > > > > > > > interrupts" (by setting the flag) - without implying an
-> > > > > > > > > implementation.
-> > > > > > > > >
-> > > > > > > > > Initially system suspend problems had been discussed at
-> > > > > > > > > https://lore.kernel.org/linux-arm-kernel/20211002005954.1367653-8-l.stach@pengutronix.de/
-> > > > > > > > > which led to discussing the pmic that contains the
-> > > > > > > > > regulators
-> > > > > > > > > which
-> > > > > > > > > serve as power-domain power-supplies:
-> > > > > > > > > https://lore.kernel.org/linux-pm/573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm/T/
-> > > > > > > > >
-> > > > > > > > > Signed-off-by: Martin Kepplinger
-> > > > > > > > > <martin.kepplinger@puri.sm>
-> > > > > > > > > ---
-> > > > > > > > >  drivers/base/power/domain.c | 13 +++++++++++--
-> > > > > > > > >  include/linux/pm_domain.h   |  5 +++++
-> > > > > > > > >  2 files changed, 16 insertions(+), 2 deletions(-)
-> > > > > > > > >
-> > > > > > > > > diff --git a/drivers/base/power/domain.c
-> > > > > > > > > b/drivers/base/power/domain.c
-> > > > > > > > > index 5a2e0232862e..58376752a4de 100644
-> > > > > > > > > --- a/drivers/base/power/domain.c
-> > > > > > > > > +++ b/drivers/base/power/domain.c
-> > > > > > > > > @@ -130,6 +130,7 @@ static const struct genpd_lock_ops
-> > > > > > > > > genpd_spin_ops = {
-> > > > > > > > >  #define genpd_is_active_wakeup(genpd)  (genpd->flags &
-> > > > > > > > > GENPD_FLAG_ACTIVE_WAKEUP)
-> > > > > > > > >  #define genpd_is_cpu_domain(genpd)     (genpd->flags &
-> > > > > > > > > GENPD_FLAG_CPU_DOMAIN)
-> > > > > > > > >  #define genpd_is_rpm_always_on(genpd)  (genpd->flags &
-> > > > > > > > > GENPD_FLAG_RPM_ALWAYS_ON)
-> > > > > > > > > +#define genpd_irq_on(genpd)            (genpd->flags &
-> > > > > > > > > GENPD_FLAG_IRQ_ON)
-> > > > > > > > >
-> > > > > > > > >  static inline bool irq_safe_dev_in_sleep_domain(struct
-> > > > > > > > > device
-> > > > > > > > > *dev,
-> > > > > > > > >                 const struct generic_pm_domain *genpd)
-> > > > > > > > > @@ -2065,8 +2066,15 @@ int pm_genpd_init(struct
-> > > > > > > > > generic_pm_domain
-> > > > > > > > > *genpd,
-> > > > > > > > >         genpd->domain.ops.runtime_suspend =
-> > > > > > > > > genpd_runtime_suspend;
-> > > > > > > > >         genpd->domain.ops.runtime_resume =
-> > > > > > > > > genpd_runtime_resume;
-> > > > > > > > >         genpd->domain.ops.prepare = genpd_prepare;
-> > > > > > > > > -       genpd->domain.ops.suspend_noirq =
-> > > > > > > > > genpd_suspend_noirq;
-> > > > > > > > > -       genpd->domain.ops.resume_noirq =
-> > > > > > > > > genpd_resume_noirq;
-> > > > > > > > > +
-> > > > > > > > > +       if (genpd_irq_on(genpd)) {
-> > > > > > > > > +               genpd->domain.ops.suspend =
-> > > > > > > > > genpd_suspend_noirq;
-> > > > > > > > > +               genpd->domain.ops.resume =
-> > > > > > > > > genpd_resume_noirq;
-> > > > > > > > > +       } else {
-> > > > > > > > > +               genpd->domain.ops.suspend_noirq =
-> > > > > > > > > genpd_suspend_noirq;
-> > > > > > > > > +               genpd->domain.ops.resume_noirq =
-> > > > > > > > > genpd_resume_noirq;
-> > > > > > > >
-> > > > > > > > As we discussed previously, I am thinking that it may be
-> > > > > > > > better
-> > > > > > > > to
-> > > > > > > > move to using genpd->domain.ops.suspend_late and
-> > > > > > > > genpd->domain.ops.resume_early instead.
-> > > > > > >
-> > > > > > > Wouldn't that better be a separate patch (on top)? Do you
-> > > > > > > really
-> > > > > > > want
-> > > > > > > me to change the current behaviour (default case) to from
-> > > > > > > noirq
-> > > > > > > to
-> > > > > > > late? Then I'll resend this series with such a patch added.
-> > > > > >
-> > > > > > Sorry, I wasn't clear enough, the default behaviour should
-> > > > > > remain
-> > > > > > as
-> > > > > > is.
-> > > > > >
-> > > > > > What I meant was, when genpd_irq_on() is true, we should use
-> > > > > > the
-> > > > > > genpd->domain.ops.suspend_late and genpd-
-> > > > > > > domain.ops.resume_early.
-> > > > >
-> > > > > Testing that shows that this isn't working. I can provide the
-> > > > > logs
-> > > > > later, but suspend fails and I think it makes sense:
-> > > > > "suspend_late"
-> > > > > is
-> > > > > simply already too late when i2c (or any needed driver) uses
-> > > > > "suspend".
-> > > >
-> > > > Okay, I see.
-> > > >
-> > > > The reason why I suggested moving the callbacks to
-> > > > "suspend_late",
-> > > > was
-> > > > that I was worried that some of the attached devices to genpd
-> > > > could
-> > > > use "suspend_late" themselves. This is the case for some drivers
-> > > > for
-> > > > DMA/clock/gpio/pinctrl-controllers, for example. That said, I am
-> > > > curious to look at the DT files for the platform you are running,
-> > > > would you mind giving me a pointer?
-> > >
-> > > I'm running
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/imx8mq-librem5.dtsi
-> > > with these (small) patches on top:
-> > > https://source.puri.sm/martin.kepplinger/linux-next/-/commits/5.19.3/librem5
-> >
-> > Thanks for sharing the information!
-> >
-> > >
-> > > >
-> > > > So, this made me think about this a bit more. In the end, just
-> > > > using
-> > > > different levels (suspend, suspend_late, suspend_noirq) of
-> > > > callbacks
-> > > > are just papering over the real *dependency* problem.
-> > >
-> > > true, it doesn't feel like a stable solution.
-> > >
-> > > >
-> > > > What we need for the genpd provider driver, is to be asked to be
-> > > > suspended under the following conditions:
-> > > > 1. All consumer devices (and child-domains) for its corresponding
-> > > > PM
-> > > > domain have been suspended.
-> > > > 2. All its supplier devices supplies must remain resumed, until
-> > > > the
-> > > > genpd provider has been suspended.
-> > > >
-> > > > Please allow me a few more days to think in more detail about
-> > > > this.
-> > >
-> > > Thanks a lot for thinking about this!
-> >
-> > I have made some more thinking, but it's been a busy period for me,
-> > so
-> > unfortunately I need some additional time (another week). It seems
-> > like I also need to do some prototyping, to convince myself about the
-> > approach.
-> >
-> > So, my apologies for the delay!
-> >
-> > Kind regards
-> > Uffe
->
-> Hi Ulf and all interested,
->
-> Has there been any development regarding this bug? - genpd that needs
-> interrupts for power-on/off being run in noirq phases - you remember
-> it? it's been a while :)
+This series brings support for the Mitsumi MM8013 Li-Ion fuel gauge.
 
-Yes, sorry for the no-progress on my side. Except for some thinking
-and drawing, I don't have an update.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- Fix typo in patch 2 commit message
+- Drop driver.owner in patch 3
+- Add PRESENT psy property
+- Pick up tags
+- Link to v1: https://lore.kernel.org/r/20230621-topic-mm8013-v1-0-4407c6260053@linaro.org
 
-Although, to clarify, I have not forgotten about it. It's in my TODO
-list of prioritized things. I just need to complete a couple other
-things before I come to this and I will certainly keep you in the loop
-if I post something.
+---
+Konrad Dybcio (3):
+      dt-bindings: vendor-prefixes: Add Mitsumi Electric Co., Ltd.
+      dt-bindings: power: supply: Document Mitsumi MM8013 fuel gauge
+      power: supply: Introduce MM8013 fuel gauge driver
 
->
-> Anyway I still run these patches and while it's a reasonable workaround
-> IMO, I wanted to check whether you are aware of anything that might
-> solve this. (or maybe it *is* solved and I simply overlooked because my
-> patches still apply?)
+ .../bindings/power/supply/mitsumi,mm8013.yaml      |  35 +++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   5 +
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/mm8013.c                      | 283 +++++++++++++++++++++
+ 6 files changed, 335 insertions(+)
+---
+base-commit: 60e7c4a25da68cd826719b685babbd23e73b85b0
+change-id: 20230621-topic-mm8013-376759e98b28
 
-The problem is still there, unfortunately.
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Kind regards
-Uffe
