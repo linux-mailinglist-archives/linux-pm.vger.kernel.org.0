@@ -2,280 +2,606 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A2073E361
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 17:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C0E73E3CB
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 17:45:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjFZPdI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 11:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S229844AbjFZPpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 11:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjFZPdG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 11:33:06 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFB810CF
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:33:05 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fa74d06d72so35006135e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:33:05 -0700 (PDT)
+        with ESMTP id S230381AbjFZPpL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 11:45:11 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF9D10FC
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:44:52 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bc9483b506fso4487346276.0
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687793583; x=1690385583;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JF49C2KyWhaD0aCZs4JSkQfR5O3+HuaVU0df0tQjSsM=;
-        b=CWg4RftvygJKuDkNmRSNndz3/YjPDNo5JP6hp/UK06XiuiMvD5KxDyaylKc9alcHm/
-         hei5LHE33rmzvqBw5fNEED0ITSXZPVq+axeB1QKHDaSLh5m/ziNRYoZ/rGczXedRGrMc
-         cVt5YY4C4LfRHKhiT8hhqi5fMPLjkOe6FZ9DncmsqY6nwi4wlBKVc5ssZa5HAO/pWUqh
-         gLQ17ZGBQL3Q4g+eETR+cz2FvdNC4IYxqI5DJ/OukkyrN9PH4Nt2qWd5bXrzjCaHTnBd
-         jJflDxT+6dz/EYK+75Ota4o730LZGMy43wvobs4Q+2hYrt8vJeCSMfYfQfe5p8LqtAWs
-         1LIg==
+        d=google.com; s=20221208; t=1687794291; x=1690386291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FJBcB4jOwusqcpP1lsu8R8DBb4OmkpDK8PTzl1v7bB4=;
+        b=HwKajbMxXabwi4rUUbdpPkZ6tqQ9BWJ9dEBheQU+4xM9DKMliV8Ty9A4NFOD/WNVX0
+         pnU4kmhcS1OwUZGFPKs+6GbvjTiJtMb6sjZh9WWGinQWf7TN/RQRvZdDS6XDre0ucVXX
+         z6JJERuMjY4q/zxdm+XhBb9kDbUYIaq3ff3IIDCsQrnIidkK2bvIzUpDxdexmFuDD1mf
+         DRoaNqMo1f5pU3VUTYHlae/0/j4ulFUpJmEaDYslH70MD+gHu7Qj6VFY4g7AD/IrYhtr
+         5n8ha0BFC9BOOZ5hRoPkGlFNDDkDJo/5zDE5LKegH1U2KHGjNKgby73v/9g5BzvZbljr
+         woTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687793583; x=1690385583;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JF49C2KyWhaD0aCZs4JSkQfR5O3+HuaVU0df0tQjSsM=;
-        b=S2Pyy32yRnsNJWSxQ24eKqb21R4tTRuFJapDekx+ibGbGDuOQZ+PvOEOcOW7LrrcHo
-         cTIArhiM4aQYoDu6njrThzv8ZAPJIYC5CdloAEmT6LgCA++rSlY7oXNdVJgJlzk5H02x
-         gmNV69OziRh/BhddoP107rcLtf1cuhj6DrsOJyIFgcZHfvhhUUbDAZPUsnDFxrDQvF0p
-         aqrPAXuHgU2tJ5iJmeSGIL3vdBlKqaKffxZd7c9Z0RTzfwRgV3RBqOd2wozXPofq/wkz
-         r86Np+IbKst9Z2X5HHtiayT5pqsO6ly3xziZMBeRWG5Pgwi05CR6a7ouqh/p4qq0slzU
-         g8GQ==
-X-Gm-Message-State: AC+VfDx4qxxj/OiIqgzES/vy///U1Uvk1WHO+IUO7TrPt8rfAy32+Efp
-        MXUkmdzgGzQOoCvcshV5/moAzQ==
-X-Google-Smtp-Source: ACHHUZ7eEDZjLD6fNvt4DGX/qatJc+bCceJKDl9YGYk/i8s1F+AGUOP3IqhwEtLpnGOzWrgGPdZsJA==
-X-Received: by 2002:a7b:c5d9:0:b0:3f7:f45d:5e44 with SMTP id n25-20020a7bc5d9000000b003f7f45d5e44mr20071203wmk.32.1687793583487;
-        Mon, 26 Jun 2023 08:33:03 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 7-20020a05600c230700b003fa968e9c27sm3299283wmo.9.2023.06.26.08.33.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 08:33:03 -0700 (PDT)
-Message-ID: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
-Date:   Mon, 26 Jun 2023 17:33:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal for v6.5-rc1
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        =?UTF-8?Q?Ricardo_Ca=c3=b1uelo?= <ricardo.canuelo@collabora.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Peng Fan <peng.fan@nxp.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, Luca Weiss <luca@z3ntu.xyz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687794291; x=1690386291;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FJBcB4jOwusqcpP1lsu8R8DBb4OmkpDK8PTzl1v7bB4=;
+        b=Ks/dKXy/cWHVzHXhGeOwYJ2Sw20szWAhbqYBS95W4TRQEexdl8rCPisvRswdR8cVzl
+         JaURoGSf/kvDyA2bLezpannPQYlSelIWoXmP5Xho9ntou5lu9oP1ANVgsSKf15HFFj7W
+         WFR5h6DcvU2IYZVheubeWeKfrs3m6nY9Qgmaed3jP3gFJTZWHbOE8xKjHzvheNKrUNCe
+         0V2EHWypzRyHGjmOdzLpYUj84SOwrJXboTE+SHw8Y9d8S3aza2ZCpaHnobZ/kPdPiNvR
+         QZt4fQDdUX5ToJH/rfpjj2cM7rM6JAWSiEGaLdL3GwUssvhRP2l3YuzqMpnqfNhRU5+G
+         QE6Q==
+X-Gm-Message-State: AC+VfDwzWLPqd18isf93mjQpWYxtaAhHGoyprbItzV2kjfeUxemYBQE1
+        Bq5HcULw6bNx4bkCyKx1edrVrhaq50hP
+X-Google-Smtp-Source: ACHHUZ4PpigACe8K+GaTtHiKMW8GF1nnUe75ZUisTk3zns+IIKflf04SB84znmbezTgsO+w+ArEnFMCICmK4
+X-Received: from bjg.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:415])
+ (user=bgeffon job=sendgmr) by 2002:a25:3444:0:b0:ba1:d0:7f7c with SMTP id
+ b65-20020a253444000000b00ba100d07f7cmr5933944yba.2.1687794291220; Mon, 26 Jun
+ 2023 08:44:51 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 11:44:49 -0400
+In-Reply-To: <20230113193006.1320379-1-bgeffon@google.com>
+Mime-Version: 1.0
+References: <20230113193006.1320379-1-bgeffon@google.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230626154449.3164237-1-bgeffon@google.com>
+Subject: [PATCH] PM: hibernate: don't store zero pages in the image file.
+From:   Brian Geffon <bgeffon@google.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Brian Geffon <bgeffon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On ChromeOS we've observed a considerable number of in-use pages filled with
+zeros. Today with hibernate it's entirely possible that saveable pages are just
+zero filled. Since we're already copying pages word-by-word in do_copy_page it
+becomes almost free to determine if a page was completely filled with zeros.
 
-please consider the following changes since commit 
-0bb619f9227aa370330d2b309733d74750705053:
+This change introduces a new bitmap which will track these zero pages. If a page
+is zero it will not be included in the saved image, instead to track these zero
+pages in the image file we will introduce a new flag which we will set on the
+packed PFN list. When reading back in the image file we will detect these zero
+page PFNs and rebuild the zero page bitmap.
 
-   thermal/intel/intel_soc_dts_iosf: Fix reporting wrong temperatures 
-(2023-06-15 18:07:48 +0200)
+When the image is being loaded through calls to write_next_page if we encounter
+a zero page we will silently memset it to 0 and then continue on to the next
+page. Given the implementation in snapshot_read_next/snapshot_write_next this
+change  will be transparent to non-compressed/compressed and swsusp modes of
+operation.
 
-are available in the Git repository at:
+To provide some concrete numbers from simple ad-hoc testing, on a device which
+was lightly in use we saw that:
 
+PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
+
+Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero filled
+and could be tracked entirely within the packed PFN list. The savings would
+obviously be much lower for lzo compressed images, but even in the case of
+compression not copying pages across to the compression threads will still
+speed things up. It's also possible that we would see better overall compression
+ratios as larger regions of "real data" would improve the compressibility.
+
+Finally, such an approach could dramatically improve swsusp performance
+as each one of those zero pages requires a write syscall to reload, by
+handling it as part of the packed PFN list we're able to fully avoid
+that.
+
+Patch v4 -> v5:
+- Addressed numerous style comments from Rafael J. Wysocki.
+
+Patch v3 -> v4:
+- Suggestions from Matthias Kaehlcke:
+ - Return number of copy pages from copy_data_pages
+ - Use an explicit temporary bitmap while moving the zerm_bm
+   to safe pages.
+
+Patch v2 -> v3:
+- Use nr_zero_pages rather than walking each pfn to count.
+- Make sure zero_bm is allocated in safe pages on resume.
+ When reading in the pfn list and building the zero page bm
+ we don't know which pages are unsafe yet so we will need to
+ copy this bm to safe pages after the metadata has been read.
+
+Patch v1 -> v2:
+- minor code mistake from rebasing corrected.
+
+Signed-off-by: Brian Geffon <bgeffon@google.com>
+---
+ kernel/power/snapshot.c | 184 ++++++++++++++++++++++++++++++++--------
+ 1 file changed, 147 insertions(+), 37 deletions(-)
+
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..4da53d470c82 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -404,6 +404,7 @@ struct bm_position {
+ 	struct mem_zone_bm_rtree *zone;
+ 	struct rtree_node *node;
+ 	unsigned long node_pfn;
++	unsigned long cur_pfn;
+ 	int node_bit;
+ };
  
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.5-rc1
-
-for you to fetch changes up to 57c9eaa4de537e6f08819d9214de502cac5a989c:
-
-   thermal/drivers/qcom/temp-alarm: Use dev_err_probe (2023-06-26 
-12:10:22 +0200)
-
-----------------------------------------------------------------
-- Add DT bindings for SM6375, MSM8226 and QCM2290 Qcom platforms (Konrad
-   Dybcio)
-
-- Add DT bindings and support for QCom MSM8226 (Matti Lehtimäki)
-
-- Add DT bindings for QCom ipq9574 (Praveenkumar I)
-
-- Convert bcm2835 DT bindings to the yaml schema (Stefan Wahren)
-
-- Allow selecting the bang-bang governor as default (Thierry Reding)
-
-- Refactor and prepare the code to set the scene for RCar Gen4
-   (Wolfram Sang)
-
-- Cleanup and fixes for the QCom tsens drivers. Add DT bindings and
-   calibration for the MSM8909 platform (Stephan Gerhold)
-
-- Revert a patch introducing a wrong usage of devm_of_iomap() on the
-   Mediatek platform (Ricardo Cañuelo)
-
-- Fix the clock vs reset ordering in order to conform to the
-   documentation on the sun8i (Christophe JAILLET)
-
-- Prevent setting up undocumented registers, enable the only described
-   sensors and add the version 2.1 on the Qoriq sensor (Peng Fan)
-
-- Add DT bindings and support for the Armada AP807 (Alex Leibovich)
-
-- Update the mlx5 driver with the recent thermal changes (Daniel
-   Lezcano)
-
-- Convert to platform remove callback returning void on STM32 (Uwe
-   Kleine-König)
-
-- Add an error information printing for devm_thermal_add_hwmon_sysfs()
-   and remove the error from the Sun8i, Amlogic, i.MX, TI, K3, Tegra,
-   Qoriq, Mediateka and QCom (Yangtao Li)
-
-- Register as hwmon sensor for the Generic ADC (Chen-Yu Tsai)
-
-- Use the dev_err_probe() function in the QCom tsens alarm driver
-   (Luca Weiss)
-
-----------------------------------------------------------------
-Alex Leibovich (2):
-       dt-bindings: armada-thermal: Add armada-ap807-thermal compatible
-       thermal/drivers/armada: Add support for AP807 thermal data
-
-Chen-Yu Tsai (2):
-       thermal/drivers/mediatek/lvts_thermal: Register thermal zones as 
-hwmon sensors
-       thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
-
-Christophe JAILLET (1):
-       thermal/drivers/sun8i: Fix some error handling paths in 
-sun8i_ths_probe()
-
-Daniel Lezcano (1):
-       net/mlx5: Update the driver with the recent thermal changes
-
-Konrad Dybcio (2):
-       dt-bindings: thermal: tsens: Add QCM2290
-       dt-bindings: thermal: tsens: Add compatible for SM6375
-
-Luca Weiss (1):
-       thermal/drivers/qcom/temp-alarm: Use dev_err_probe
-
-Matti Lehtimäki (2):
-       dt-bindings: thermal: tsens: Add compatible for MSM8226
-       thermal/drivers/qcom/tsens-v0_1: Add support for MSM8226
-
-Pankit Garg (1):
-       thermal/drivers/qoriq: No need to program site adjustment register
-
-Peng Fan (2):
-       thermal/drivers/qoriq: Only enable supported sensors
-       thermal/drivers/qoriq: Support version 2.1
-
-Praveenkumar I (1):
-       dt-bindings: thermal: tsens: Add ipq9574 compatible
-
-Ricardo Cañuelo (1):
-       Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid 
-resource leak in mtk_thermal_probe"
-
-Stefan Wahren (1):
-       dt-bindings: thermal: convert bcm2835-thermal bindings to YAML
-
-Stephan Gerhold (6):
-       thermal/drivers/qcom/tsens: Drop unused legacy structs
-       thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
-       thermal/drivers/qcom/tsens-v0_1: Add mdm9607 correction offsets
-       dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
-       dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
-       thermal/drivers/qcom/tsens-v0_1: Add MSM8909 data
-
-Thierry Reding (1):
-       thermal: Allow selecting the bang-bang governor as default
-
-Uwe Kleine-König (1):
-       thermal/drivers/stm32: Convert to platform remove callback 
-returning void
-
-Wolfram Sang (3):
-       drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
-       drivers/thermal/rcar_gen3_thermal: refactor reading fuses into 
-seprarate function
-       drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
-
-Yangtao Li (10):
-       thermal/hwmon: Add error information printing for 
-devm_thermal_add_hwmon_sysfs()
-       thermal/drivers/sun8i: Remove redundant msg in sun8i_ths_register()
-       thermal/drivers/amlogic: Remove redundant msg in 
-amlogic_thermal_probe()
-       thermal/drivers/imx: Remove redundant msg in imx8mm_tmu_probe() 
-and imx_sc_thermal_probe()
-       drivers/thermal/k3: Remove redundant msg in k3_bandgap_probe()
-       thermal/drivers/tegra: Remove redundant msg in 
-tegra_tsensor_register_channel()
-       thermal/drivers/qoriq: Remove redundant msg in 
-qoriq_tmu_register_tmu_zone()
-       thermal/drivers/ti-soc: Remove redundant msg in 
-ti_thermal_expose_sensor()
-       thermal/drivers/qcom: Remove redundant msg at probe time
-       thermal/drivers/mediatek/lvts_thermal: Remove redundant msg in 
-lvts_ctrl_start()
-
-  .../devicetree/bindings/thermal/armada-thermal.txt |   1 +
-  .../bindings/thermal/brcm,bcm2835-thermal.txt      |  41 ------
-  .../bindings/thermal/brcm,bcm2835-thermal.yaml     |  48 +++++++
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  32 ++---
-  drivers/net/ethernet/mellanox/mlx5/core/thermal.c  |  15 ++-
-  drivers/thermal/Kconfig                            |   8 ++
-  drivers/thermal/amlogic_thermal.c                  |   3 +-
-  drivers/thermal/armada_thermal.c                   |  32 ++++-
-  drivers/thermal/imx8mm_thermal.c                   |   3 +-
-  drivers/thermal/imx_sc_thermal.c                   |   3 +-
-  drivers/thermal/k3_bandgap.c                       |   3 +-
-  drivers/thermal/mediatek/auxadc_thermal.c          |  14 +-
-  drivers/thermal/mediatek/lvts_thermal.c            |   4 +
-  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   4 +-
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  38 +++---
-  drivers/thermal/qcom/tsens-v0_1.c                  | 126 
-++++++++++++------
-  drivers/thermal/qcom/tsens-v1.c                    |  22 ----
-  drivers/thermal/qcom/tsens.c                       |  26 +++-
-  drivers/thermal/qcom/tsens.h                       |   6 +-
-  drivers/thermal/qoriq_thermal.c                    |  52 ++++----
-  drivers/thermal/rcar_gen3_thermal.c                | 141 
-+++++++++++++++------
-  drivers/thermal/st/st_thermal.c                    |   4 +-
-  drivers/thermal/st/st_thermal.h                    |   2 +-
-  drivers/thermal/st/st_thermal_memmap.c             |   6 +-
-  drivers/thermal/sun8i_thermal.c                    |  59 +++------
-  drivers/thermal/tegra/tegra30-tsensor.c            |   3 +-
-  drivers/thermal/thermal-generic-adc.c              |   4 +
-  drivers/thermal/thermal_core.h                     |   2 +
-  drivers/thermal/thermal_hwmon.c                    |   5 +-
-  drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   3 +-
-  30 files changed, 415 insertions(+), 295 deletions(-)
-  delete mode 100644 
-Documentation/devicetree/bindings/thermal/brcm,bcm2835-thermal.txt
-  create mode 100644 
-Documentation/devicetree/bindings/thermal/brcm,bcm2835-thermal.yaml
-
+@@ -589,6 +590,7 @@ static void memory_bm_position_reset(struct memory_bitmap *bm)
+ 	bm->cur.node = list_entry(bm->cur.zone->leaves.next,
+ 				  struct rtree_node, list);
+ 	bm->cur.node_pfn = 0;
++	bm->cur.cur_pfn = BM_END_OF_MAP;
+ 	bm->cur.node_bit = 0;
+ }
+ 
+@@ -799,6 +801,7 @@ static int memory_bm_find_bit(struct memory_bitmap *bm, unsigned long pfn,
+ 	bm->cur.zone = zone;
+ 	bm->cur.node = node;
+ 	bm->cur.node_pfn = (pfn - zone->start_pfn) & ~BM_BLOCK_MASK;
++	bm->cur.cur_pfn = pfn;
+ 
+ 	/* Set return values */
+ 	*addr = node->data;
+@@ -850,6 +853,11 @@ static void memory_bm_clear_current(struct memory_bitmap *bm)
+ 	clear_bit(bit, bm->cur.node->data);
+ }
+ 
++static unsigned long memory_bm_get_current(struct memory_bitmap *bm)
++{
++	return bm->cur.cur_pfn;
++}
++
+ static int memory_bm_test_bit(struct memory_bitmap *bm, unsigned long pfn)
+ {
+ 	void *addr;
+@@ -929,10 +937,12 @@ static unsigned long memory_bm_next_pfn(struct memory_bitmap *bm)
+ 		if (bit < bits) {
+ 			pfn = bm->cur.zone->start_pfn + bm->cur.node_pfn + bit;
+ 			bm->cur.node_bit = bit + 1;
++			bm->cur.cur_pfn = pfn;
+ 			return pfn;
+ 		}
+ 	} while (rtree_next_node(bm));
+ 
++	bm->cur.cur_pfn = BM_END_OF_MAP;
+ 	return BM_END_OF_MAP;
+ }
+ 
+@@ -1371,14 +1381,18 @@ static unsigned int count_data_pages(void)
+ 
+ /*
+  * This is needed, because copy_page and memcpy are not usable for copying
+- * task structs.
++ * task structs. Returns true if the page was filled with only zeros, otherwise false.
+  */
+-static inline void do_copy_page(long *dst, long *src)
++static inline bool do_copy_page(long *dst, long *src)
+ {
++	long z = 0;
+ 	int n;
+ 
+-	for (n = PAGE_SIZE / sizeof(long); n; n--)
++	for (n = PAGE_SIZE / sizeof(long); n; n--) {
++		z |= *src;
+ 		*dst++ = *src++;
++	}
++	return !z;
+ }
+ 
+ /**
+@@ -1387,17 +1401,20 @@ static inline void do_copy_page(long *dst, long *src)
+  * Check if the page we are going to copy is marked as present in the kernel
+  * page tables. This always is the case if CONFIG_DEBUG_PAGEALLOC or
+  * CONFIG_ARCH_HAS_SET_DIRECT_MAP is not set. In that case kernel_page_present()
+- * always returns 'true'.
++ * always returns 'true'. Returns true if the page was entirely composed of zeros
++ * otherwise it will return false.
+  */
+-static void safe_copy_page(void *dst, struct page *s_page)
++static bool safe_copy_page(void *dst, struct page *s_page)
+ {
++	bool zeros_only;
+ 	if (kernel_page_present(s_page)) {
+-		do_copy_page(dst, page_address(s_page));
++		zeros_only = do_copy_page(dst, page_address(s_page));
+ 	} else {
+ 		hibernate_map_page(s_page);
+-		do_copy_page(dst, page_address(s_page));
++		zeros_only = do_copy_page(dst, page_address(s_page));
+ 		hibernate_unmap_page(s_page);
+ 	}
++	return zeros_only;
+ }
+ 
+ #ifdef CONFIG_HIGHMEM
+@@ -1407,17 +1424,18 @@ static inline struct page *page_is_saveable(struct zone *zone, unsigned long pfn
+ 		saveable_highmem_page(zone, pfn) : saveable_page(zone, pfn);
+ }
+ 
+-static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
++static bool copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ {
+ 	struct page *s_page, *d_page;
+ 	void *src, *dst;
++	bool zeros_only;
+ 
+ 	s_page = pfn_to_page(src_pfn);
+ 	d_page = pfn_to_page(dst_pfn);
+ 	if (PageHighMem(s_page)) {
+ 		src = kmap_atomic(s_page);
+ 		dst = kmap_atomic(d_page);
+-		do_copy_page(dst, src);
++		zeros_only = do_copy_page(dst, src);
+ 		kunmap_atomic(dst);
+ 		kunmap_atomic(src);
+ 	} else {
+@@ -1426,30 +1444,39 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 			 * The page pointed to by src may contain some kernel
+ 			 * data modified by kmap_atomic()
+ 			 */
+-			safe_copy_page(buffer, s_page);
++			zeros_only = safe_copy_page(buffer, s_page);
+ 			dst = kmap_atomic(d_page);
+ 			copy_page(dst, buffer);
+ 			kunmap_atomic(dst);
+ 		} else {
+-			safe_copy_page(page_address(d_page), s_page);
++			zeros_only = safe_copy_page(page_address(d_page), s_page);
+ 		}
+ 	}
++	return ret;
+ }
+ #else
+ #define page_is_saveable(zone, pfn)	saveable_page(zone, pfn)
+ 
+-static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
++static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ {
+-	safe_copy_page(page_address(pfn_to_page(dst_pfn)),
++	return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
+ 				pfn_to_page(src_pfn));
+ }
+ #endif /* CONFIG_HIGHMEM */
+ 
+-static void copy_data_pages(struct memory_bitmap *copy_bm,
+-			    struct memory_bitmap *orig_bm)
++/*
++ * Copy data pages will copy all pages into pages pulled from the copy_bm.
++ * If a page was entirely filled with zeros it will be marked in the zero_bm.
++ *
++ * Returns the number of pages copied.
++ */
++static unsigned long copy_data_pages(struct memory_bitmap *copy_bm,
++			    struct memory_bitmap *orig_bm,
++			    struct memory_bitmap *zero_bm)
+ {
++	unsigned long copied_pages = 0;
+ 	struct zone *zone;
+-	unsigned long pfn;
++	unsigned long pfn, copy_pfn;
+ 
+ 	for_each_populated_zone(zone) {
+ 		unsigned long max_zone_pfn;
+@@ -1462,18 +1489,30 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
+ 	}
+ 	memory_bm_position_reset(orig_bm);
+ 	memory_bm_position_reset(copy_bm);
++	copy_pfn = memory_bm_next_pfn(copy_bm);
+ 	for(;;) {
+ 		pfn = memory_bm_next_pfn(orig_bm);
+ 		if (unlikely(pfn == BM_END_OF_MAP))
+ 			break;
+-		copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
++		if (copy_data_page(copy_pfn, pfn)) {
++			memory_bm_set_bit(zero_bm, pfn);
++
++			/* Use this copy_pfn for a page that is not full of zeros */
++			continue;
++		}
++		copied_pages++;
++		copy_pfn = memory_bm_next_pfn(copy_bm);
+ 	}
++	return copied_pages;
+ }
+ 
+ /* Total number of image pages */
+ static unsigned int nr_copy_pages;
+ /* Number of pages needed for saving the original pfns of the image pages */
+ static unsigned int nr_meta_pages;
++/* Number of zero pages */
++static unsigned int nr_zero_pages;
++
+ /*
+  * Numbers of normal and highmem page frames allocated for hibernation image
+  * before suspending devices.
+@@ -1494,6 +1533,9 @@ static struct memory_bitmap orig_bm;
+  */
+ static struct memory_bitmap copy_bm;
+ 
++/* Memory bitmap which tracks which saveable pages were zero filled. */
++static struct memory_bitmap zero_bm;
++
+ /**
+  * swsusp_free - Free pages allocated for hibernation image.
+  *
+@@ -1538,6 +1580,7 @@ void swsusp_free(void)
+ out:
+ 	nr_copy_pages = 0;
+ 	nr_meta_pages = 0;
++	nr_zero_pages = 0;
+ 	restore_pblist = NULL;
+ 	buffer = NULL;
+ 	alloc_normal = 0;
+@@ -1756,8 +1799,15 @@ int hibernate_preallocate_memory(void)
+ 		goto err_out;
+ 	}
+ 
++	error = memory_bm_create(&zero_bm, GFP_IMAGE, PG_ANY);
++	if (error) {
++		pr_err("Cannot allocate zero bitmap\n");
++		goto err_out;
++	}
++
+ 	alloc_normal = 0;
+ 	alloc_highmem = 0;
++	nr_zero_pages = 0;
+ 
+ 	/* Count the number of saveable data pages. */
+ 	save_highmem = count_highmem_pages();
+@@ -2037,19 +2087,19 @@ asmlinkage __visible int swsusp_save(void)
+ 	 * Kill them.
+ 	 */
+ 	drain_local_pages(NULL);
+-	copy_data_pages(&copy_bm, &orig_bm);
++	nr_copy_pages = copy_data_pages(&copy_bm, &orig_bm, &zero_bm);
+ 
+ 	/*
+ 	 * End of critical section. From now on, we can write to memory,
+ 	 * but we should not touch disk. This specially means we must _not_
+ 	 * touch swap space! Except we must write out our image of course.
+ 	 */
+-
+ 	nr_pages += nr_highmem;
+-	nr_copy_pages = nr_pages;
++	/* We don't actually copy the zero pages */
++	nr_zero_pages = nr_pages - nr_copy_pages;
+ 	nr_meta_pages = DIV_ROUND_UP(nr_pages * sizeof(long), PAGE_SIZE);
+ 
+-	pr_info("Image created (%d pages copied)\n", nr_pages);
++	pr_info("Image created (%d pages copied, %d zero pages)\n", nr_copy_pages, nr_zero_pages);
+ 
+ 	return 0;
+ }
+@@ -2094,15 +2144,22 @@ static int init_header(struct swsusp_info *info)
+ 	return init_header_complete(info);
+ }
+ 
++#define ENCODED_PFN_ZERO_FLAG ((unsigned long)1 << (BITS_PER_LONG - 1))
++#define ENCODED_PFN_MASK (~ENCODED_PFN_ZERO_FLAG)
++
+ /**
+  * pack_pfns - Prepare PFNs for saving.
+  * @bm: Memory bitmap.
+  * @buf: Memory buffer to store the PFNs in.
++ * @zero_bm: Memory bitmap containing PFNs of zero pages.
+  *
+  * PFNs corresponding to set bits in @bm are stored in the area of memory
+- * pointed to by @buf (1 page at a time).
++ * pointed to by @buf (1 page at a time). Pages which were filled with only
++ * zeros will have the highest bit set in the packed format to distinguish
++ * them from PFNs which will be contained in the image file.
+  */
+-static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
++static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm,
++		struct memory_bitmap *zero_bm)
+ {
+ 	int j;
+ 
+@@ -2110,6 +2167,8 @@ static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
+ 		buf[j] = memory_bm_next_pfn(bm);
+ 		if (unlikely(buf[j] == BM_END_OF_MAP))
+ 			break;
++		if (memory_bm_test_bit(zero_bm, buf[j]))
++			buf[j] |= ENCODED_PFN_ZERO_FLAG;
+ 	}
+ }
+ 
+@@ -2151,7 +2210,7 @@ int snapshot_read_next(struct snapshot_handle *handle)
+ 		memory_bm_position_reset(&copy_bm);
+ 	} else if (handle->cur <= nr_meta_pages) {
+ 		clear_page(buffer);
+-		pack_pfns(buffer, &orig_bm);
++		pack_pfns(buffer, &orig_bm, &zero_bm);
+ 	} else {
+ 		struct page *page;
+ 
+@@ -2247,24 +2306,35 @@ static int load_header(struct swsusp_info *info)
+  * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
+  * @bm: Memory bitmap.
+  * @buf: Area of memory containing the PFNs.
++ * @zero_bm: Memory bitmap with the zero PFNs marked.
+  *
+  * For each element of the array pointed to by @buf (1 page at a time), set the
+- * corresponding bit in @bm.
++ * corresponding bit in @bm. If the page was originally populated with only
++ * zeros then a corresponding bit will also be set in @zero_bm.
+  */
+-static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
++static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm,
++		struct memory_bitmap *zero_bm)
+ {
++	unsigned long decoded_pfn;
++        bool zero;
+ 	int j;
+ 
+ 	for (j = 0; j < PAGE_SIZE / sizeof(long); j++) {
+ 		if (unlikely(buf[j] == BM_END_OF_MAP))
+ 			break;
+ 
+-		if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
+-			memory_bm_set_bit(bm, buf[j]);
++		zero = !!(buf[j] & ENCODED_PFN_ZERO_FLAG);
++		decoded_pfn = buf[j] & ENCODED_PFN_MASK;
++		if (pfn_valid(decoded_pfn) && memory_bm_pfn_present(bm, decoded_pfn)) {
++			memory_bm_set_bit(bm, decoded_pfn);
++			if (zero) {
++				memory_bm_set_bit(zero_bm, decoded_pfn);
++				nr_zero_pages++;
++			}
+ 		} else {
+-			if (!pfn_valid(buf[j]))
++			if (!pfn_valid(decoded_pfn))
+ 				pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
+-				       (unsigned long long)PFN_PHYS(buf[j]));
++				       (unsigned long long)PFN_PHYS(decoded_pfn));
+ 			return -EFAULT;
+ 		}
+ 	}
+@@ -2486,6 +2556,7 @@ static inline void free_highmem_data(void) {}
+  * prepare_image - Make room for loading hibernation image.
+  * @new_bm: Uninitialized memory bitmap structure.
+  * @bm: Memory bitmap with unsafe pages marked.
++ * @zero_bm: Memory bitmap containing the zero pages.
+  *
+  * Use @bm to mark the pages that will be overwritten in the process of
+  * restoring the system memory state from the suspend image ("unsafe" pages)
+@@ -2496,10 +2567,15 @@ static inline void free_highmem_data(void) {}
+  * pages will be used for just yet.  Instead, we mark them all as allocated and
+  * create a lists of "safe" pages to be used later.  On systems with high
+  * memory a list of "safe" highmem pages is created too.
++ *
++ * Because it was not known which pages were unsafe when @zero_bm was created,
++ * make a copy of it and recreate it within safe pages.
+  */
+-static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
++static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm,
++		struct memory_bitmap *zero_bm)
+ {
+ 	unsigned int nr_pages, nr_highmem;
++	struct memory_bitmap tmp;
+ 	struct linked_page *lp;
+ 	int error;
+ 
+@@ -2516,6 +2592,24 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
+ 
+ 	duplicate_memory_bitmap(new_bm, bm);
+ 	memory_bm_free(bm, PG_UNSAFE_KEEP);
++
++	/* Make a copy of zero_bm so it can be created in safe pages */
++	error = memory_bm_create(&tmp, GFP_ATOMIC, PG_ANY);
++	if (error)
++		goto Free;
++
++	duplicate_memory_bitmap(&tmp, zero_bm);
++	memory_bm_free(zero_bm, PG_UNSAFE_KEEP);
++
++	/* Recreate zero_bm in safe pages */
++	error = memory_bm_create(zero_bm, GFP_ATOMIC, PG_SAFE);
++	if (error)
++		goto Free;
++
++	duplicate_memory_bitmap(zero_bm, &tmp);
++	memory_bm_free(&tmp, PG_UNSAFE_KEEP);
++	/* At this point zero_bm is in safe pages and it can be used for restoring. */
++
+ 	if (nr_highmem > 0) {
+ 		error = prepare_highmem_image(bm, &nr_highmem);
+ 		if (error)
+@@ -2530,7 +2624,7 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
+ 	 *
+ 	 * nr_copy_pages cannot be less than allocated_unsafe_pages too.
+ 	 */
+-	nr_pages = nr_copy_pages - nr_highmem - allocated_unsafe_pages;
++	nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
+ 	nr_pages = DIV_ROUND_UP(nr_pages, PBES_PER_LINKED_PAGE);
+ 	while (nr_pages > 0) {
+ 		lp = get_image_page(GFP_ATOMIC, PG_SAFE);
+@@ -2543,7 +2637,7 @@ static int prepare_image(struct memory_bitmap *new_bm, struct memory_bitmap *bm)
+ 		nr_pages--;
+ 	}
+ 	/* Preallocate memory for the image */
+-	nr_pages = nr_copy_pages - nr_highmem - allocated_unsafe_pages;
++	nr_pages = (nr_zero_pages + nr_copy_pages) - nr_highmem - allocated_unsafe_pages;
+ 	while (nr_pages > 0) {
+ 		lp = (struct linked_page *)get_zeroed_page(GFP_ATOMIC);
+ 		if (!lp) {
+@@ -2631,8 +2725,9 @@ int snapshot_write_next(struct snapshot_handle *handle)
+ 	static struct chain_allocator ca;
+ 	int error = 0;
+ 
++next:
+ 	/* Check if we have already loaded the entire image */
+-	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages)
++	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages)
+ 		return 0;
+ 
+ 	handle->sync_read = 1;
+@@ -2657,19 +2752,26 @@ int snapshot_write_next(struct snapshot_handle *handle)
+ 		if (error)
+ 			return error;
+ 
++		error = memory_bm_create(&zero_bm, GFP_ATOMIC, PG_ANY);
++		if (error)
++			return error;
++
++		nr_zero_pages = 0;
++
+ 		hibernate_restore_protection_begin();
+ 	} else if (handle->cur <= nr_meta_pages + 1) {
+-		error = unpack_orig_pfns(buffer, &copy_bm);
++		error = unpack_orig_pfns(buffer, &copy_bm, &zero_bm);
+ 		if (error)
+ 			return error;
+ 
+ 		if (handle->cur == nr_meta_pages + 1) {
+-			error = prepare_image(&orig_bm, &copy_bm);
++			error = prepare_image(&orig_bm, &copy_bm, &zero_bm);
+ 			if (error)
+ 				return error;
+ 
+ 			chain_init(&ca, GFP_ATOMIC, PG_SAFE);
+ 			memory_bm_position_reset(&orig_bm);
++			memory_bm_position_reset(&zero_bm);
+ 			restore_pblist = NULL;
+ 			handle->buffer = get_buffer(&orig_bm, &ca);
+ 			handle->sync_read = 0;
+@@ -2686,6 +2788,14 @@ int snapshot_write_next(struct snapshot_handle *handle)
+ 			handle->sync_read = 0;
+ 	}
+ 	handle->cur++;
++
++	/* Zero pages were not included in the image, memset it and move on. */
++	if ((handle->cur > (nr_meta_pages + 1)) &&
++			memory_bm_test_bit(&zero_bm, memory_bm_get_current(&orig_bm))) {
++		memset(handle->buffer, 0, PAGE_SIZE);
++		goto next;
++	}
++
+ 	return PAGE_SIZE;
+ }
+ 
+@@ -2702,7 +2812,7 @@ void snapshot_write_finalize(struct snapshot_handle *handle)
+ 	copy_last_highmem_page();
+ 	hibernate_restore_protect_page(handle->buffer);
+ 	/* Do that only if we have loaded the image entirely */
+-	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages) {
++	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages) {
+ 		memory_bm_recycle(&orig_bm);
+ 		free_highmem_data();
+ 	}
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.41.0.162.gfafddb0af9-goog
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
