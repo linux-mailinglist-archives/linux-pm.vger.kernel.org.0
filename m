@@ -2,66 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD06B73E641
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 19:17:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FC673E64D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjFZRRu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 26 Jun 2023 13:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
+        id S229853AbjFZRUh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 13:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbjFZRQS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 13:16:18 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D6F1BEE;
-        Mon, 26 Jun 2023 10:15:27 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-98e2865e2f2so46484266b.0;
-        Mon, 26 Jun 2023 10:15:27 -0700 (PDT)
+        with ESMTP id S229877AbjFZRUS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 13:20:18 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F38962D42;
+        Mon, 26 Jun 2023 10:19:02 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-98de322d11fso72464766b.1;
+        Mon, 26 Jun 2023 10:19:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687799725; x=1690391725;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KtbCFdM31VuS7J+4uQXZ2N2jb4VKT9MQHjf41EIMETQ=;
-        b=hDHf0B2Gyg3CDKlPo+7HF0z0+6dxgPWIaMcwJ8Jut7k+FMNCQHwj5ObQ8f6INaXSuj
-         qPUp7gFrGDRFckcaxu4lphku407fqBnNkZe+cwiVruT36qVd4UU9j+oEV2m+XKL7hrcM
-         TI16dovFumRFAhqmtUeLkSiANfW09NcHd3l3HC/zuIQESW1eoZvFxBpxK49wLdp7SNPG
-         2qgASr4tsVG7sy7H/VGIBNYW3QlJkkOKQZdkLCAt+3rX7fYjfTqqcyeBsSWZ2jRnEWBQ
-         ELppPL0/R30L6RAjERVe6xFF//nifAtDIZRv/N3A7jG98itk3y6mpkH1Uuu1FUziUMtu
-         PegA==
-X-Gm-Message-State: AC+VfDwjat6qcUgUKWSJ33Nfn3SN29xBPhLnF31Xu3EPArLpvHb9R2Ak
-        yxNMrkhhInZP5QpiPiaf+aHa4MVRThCU/YL7hFY=
-X-Google-Smtp-Source: ACHHUZ5i49hsGEMviP4cvK4Drkv3i9ic2FdjAGUF90dcLJbGHAC/4L57HdDYVvbFWWt9cW4kBH41Cg2c729uSiSRqKY=
-X-Received: by 2002:a17:906:74da:b0:974:5480:6270 with SMTP id
- z26-20020a17090674da00b0097454806270mr21458379ejl.0.1687799725381; Mon, 26
- Jun 2023 10:15:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687799941; x=1690391941;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Scuo3RTSEy9HAbnvign3czok0NUjBI7Za32zNXoAwp8=;
+        b=TV445XSr5gQYwQQOtPnnHMV1qW8vNzp1XB4ttcWndWOeimaAkhGxTJ79Fongrh/eeO
+         xys0aJwXV1Eojyzz2l/+T9KgCmTv15LnPwq5OtRwyrM8wKZX/PC+StcL0x+3sQVkPBiB
+         dy4Mj7r3/jNvjda+UxssPBsjwE/qJQ2Bgu6tO8pN5Qm2lxw9FjqrppdL27qqo+2sSfl/
+         2L1EfA7E0kejzGxDgVnSHpCx6q+Y58NALDOy2EzZ03Kidykxut21li3Oz3BYkDLBJeAn
+         DlxX2xLlkPBcW6xDyONO/p0SK2TdbRJCnvbkBcs85TQNJYINqfVd/jf26AI5rgaVSGys
+         csmg==
+X-Gm-Message-State: AC+VfDzxH61D/kmgVgQ0YvIDoL9GtEDtbXQy85mkzeYa+QsB4bEZpg4r
+        zWxXH200JmdXx77xlpvJjoyAWOw3CYLTtzTrDJPi1pHrCmc=
+X-Google-Smtp-Source: ACHHUZ4kmBybpxSgtBU4QAemlbYO/AHphe8tPbmVYZu6MxX7HRZN2Xtdl0nHiCnX8aUFoglzPVjFSatW+UzwREtYaF0=
+X-Received: by 2002:a17:906:74da:b0:976:50a4:ac40 with SMTP id
+ z26-20020a17090674da00b0097650a4ac40mr23910375ejl.0.1687799941326; Mon, 26
+ Jun 2023 10:19:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
-In-Reply-To: <47423e79-8a68-87c3-c357-6d67c0653adf@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Jun 2023 19:15:14 +0200
-Message-ID: <CAJZ5v0gt3jBtWKhL3PNV97FbBzoHm-iGs+cL+YSWF5Qi-wafkA@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal for v6.5-rc1
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Peng Fan <peng.fan@nxp.com>,
-        Alex Leibovich <alexl@marvell.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, Luca Weiss <luca@z3ntu.xyz>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
+Date:   Mon, 26 Jun 2023 19:18:50 +0200
+Message-ID: <CAJZ5v0h88c==8MP7H98oJo1tzY-i1isuru-axwLpSQ0ouG_COA@mail.gmail.com>
+Subject: [GIT PULL] ACPI updates for v6.5-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
@@ -73,159 +54,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Linus,
 
-On Mon, Jun 26, 2023 at 5:33 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Hi Rafael,
->
-> please consider the following changes since commit
-> 0bb619f9227aa370330d2b309733d74750705053:
->
->    thermal/intel/intel_soc_dts_iosf: Fix reporting wrong temperatures
-> (2023-06-15 18:07:48 +0200)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.5-rc1
->
-> for you to fetch changes up to 57c9eaa4de537e6f08819d9214de502cac5a989c:
->
->    thermal/drivers/qcom/temp-alarm: Use dev_err_probe (2023-06-26
-> 12:10:22 +0200)
->
-> ----------------------------------------------------------------
-> - Add DT bindings for SM6375, MSM8226 and QCM2290 Qcom platforms (Konrad
->    Dybcio)
->
-> - Add DT bindings and support for QCom MSM8226 (Matti Lehtimäki)
->
-> - Add DT bindings for QCom ipq9574 (Praveenkumar I)
->
-> - Convert bcm2835 DT bindings to the yaml schema (Stefan Wahren)
->
-> - Allow selecting the bang-bang governor as default (Thierry Reding)
->
-> - Refactor and prepare the code to set the scene for RCar Gen4
->    (Wolfram Sang)
->
-> - Cleanup and fixes for the QCom tsens drivers. Add DT bindings and
->    calibration for the MSM8909 platform (Stephan Gerhold)
->
-> - Revert a patch introducing a wrong usage of devm_of_iomap() on the
->    Mediatek platform (Ricardo Cañuelo)
->
-> - Fix the clock vs reset ordering in order to conform to the
->    documentation on the sun8i (Christophe JAILLET)
->
-> - Prevent setting up undocumented registers, enable the only described
->    sensors and add the version 2.1 on the Qoriq sensor (Peng Fan)
->
-> - Add DT bindings and support for the Armada AP807 (Alex Leibovich)
->
-> - Update the mlx5 driver with the recent thermal changes (Daniel
->    Lezcano)
->
-> - Convert to platform remove callback returning void on STM32 (Uwe
->    Kleine-König)
->
-> - Add an error information printing for devm_thermal_add_hwmon_sysfs()
->    and remove the error from the Sun8i, Amlogic, i.MX, TI, K3, Tegra,
->    Qoriq, Mediateka and QCom (Yangtao Li)
->
-> - Register as hwmon sensor for the Generic ADC (Chen-Yu Tsai)
->
-> - Use the dev_err_probe() function in the QCom tsens alarm driver
->    (Luca Weiss)
->
-> ----------------------------------------------------------------
-> Alex Leibovich (2):
->        dt-bindings: armada-thermal: Add armada-ap807-thermal compatible
->        thermal/drivers/armada: Add support for AP807 thermal data
->
-> Chen-Yu Tsai (2):
->        thermal/drivers/mediatek/lvts_thermal: Register thermal zones as
-> hwmon sensors
->        thermal/drivers/generic-adc: Register thermal zones as hwmon sensors
->
-> Christophe JAILLET (1):
->        thermal/drivers/sun8i: Fix some error handling paths in
-> sun8i_ths_probe()
->
-> Daniel Lezcano (1):
->        net/mlx5: Update the driver with the recent thermal changes
->
-> Konrad Dybcio (2):
->        dt-bindings: thermal: tsens: Add QCM2290
->        dt-bindings: thermal: tsens: Add compatible for SM6375
->
-> Luca Weiss (1):
->        thermal/drivers/qcom/temp-alarm: Use dev_err_probe
->
-> Matti Lehtimäki (2):
->        dt-bindings: thermal: tsens: Add compatible for MSM8226
->        thermal/drivers/qcom/tsens-v0_1: Add support for MSM8226
->
-> Pankit Garg (1):
->        thermal/drivers/qoriq: No need to program site adjustment register
->
-> Peng Fan (2):
->        thermal/drivers/qoriq: Only enable supported sensors
->        thermal/drivers/qoriq: Support version 2.1
->
-> Praveenkumar I (1):
->        dt-bindings: thermal: tsens: Add ipq9574 compatible
->
-> Ricardo Cañuelo (1):
->        Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid
-> resource leak in mtk_thermal_probe"
->
-> Stefan Wahren (1):
->        dt-bindings: thermal: convert bcm2835-thermal bindings to YAML
->
-> Stephan Gerhold (6):
->        thermal/drivers/qcom/tsens: Drop unused legacy structs
->        thermal/drivers/qcom/tsens-v0_1: Fix mdm9607 slope values
->        thermal/drivers/qcom/tsens-v0_1: Add mdm9607 correction offsets
->        dt-bindings: thermal: qcom-tsens: Drop redundant compatibles
->        dt-bindings: thermal: qcom-tsens: Add MSM8909 compatible
->        thermal/drivers/qcom/tsens-v0_1: Add MSM8909 data
->
-> Thierry Reding (1):
->        thermal: Allow selecting the bang-bang governor as default
->
-> Uwe Kleine-König (1):
->        thermal/drivers/stm32: Convert to platform remove callback
-> returning void
->
-> Wolfram Sang (3):
->        drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
->        drivers/thermal/rcar_gen3_thermal: refactor reading fuses into
-> seprarate function
->        drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
->
-> Yangtao Li (10):
->        thermal/hwmon: Add error information printing for
-> devm_thermal_add_hwmon_sysfs()
->        thermal/drivers/sun8i: Remove redundant msg in sun8i_ths_register()
->        thermal/drivers/amlogic: Remove redundant msg in
-> amlogic_thermal_probe()
->        thermal/drivers/imx: Remove redundant msg in imx8mm_tmu_probe()
-> and imx_sc_thermal_probe()
->        drivers/thermal/k3: Remove redundant msg in k3_bandgap_probe()
->        thermal/drivers/tegra: Remove redundant msg in
-> tegra_tsensor_register_channel()
->        thermal/drivers/qoriq: Remove redundant msg in
-> qoriq_tmu_register_tmu_zone()
->        thermal/drivers/ti-soc: Remove redundant msg in
-> ti_thermal_expose_sensor()
->        thermal/drivers/qcom: Remove redundant msg at probe time
->        thermal/drivers/mediatek/lvts_thermal: Remove redundant msg in
-> lvts_ctrl_start()
+Please pull from the tag
 
-Pulled and added to the thermal branch of linux-pm.git.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.5-rc1
+
+with top-most commit 01fee479846bb13139d339b11e04bf327200cac9
+
+ Merge branches 'acpi-apei', 'acpi-pad' and 'acpi-misc'
+
+on top of commit e660abd551f1172e428b4e4003de887176a8a1fd
+
+ Merge tag 'acpi-6.4-rc8' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive ACPI updates for 6.5-rc1.
+
+These rework the handling of notifications in ACPI button drivers (to
+enable future simplifications and cleanups), clean up the ACPI thermal
+driver, update the ACPI backlight driver, add quirks working around AML
+bugs on some systems, fix some assorted issues and clean up code.
+
+Specifics:
+
+ - Reduce ACPI device enumeration overhead related to devices with
+   dependencies (Rafael Wysocki).
+
+ - Fix the handling of Microsoft LPS0 _DSM for suspend-to-idle (Mario
+   Limonciello).
+
+ - Fix section mismatch warning in the ACPI suspend-to-idle code (Arnd
+   Bergmann).
+
+ - Drop several ACPI resource management quirks related to IRQ overrides
+   on AMD "Zen" systems (Mario Limonciello).
+
+ - Modify the ACPI EC driver to make it only clear the EC GPE status
+   when handling the GPE (Jeremy Compostella).
+
+ - Add quirks to work around ACPI tables defects on Lenovo Yoga Book
+   yb1-x90f/l and Nextbook Ares 8A (Hans de Goede).
+
+ - Add ACPi backlight quirks for Dell Studio 1569, Lenovo ThinkPad X131e
+   (3371 AMD version) and Apple iMac11,3 and stop trying to use vendor
+   backlight control on relatively recent systems (Hans de Goede).
+
+ - Add pwm_lookup_table entry for second PWM on CHT/BSW devices in the
+   ACPI LPSS (Intel SoC) driver (Hans de Goede).
+
+ - Add nfit_intel_shutdown_status() declaration to a local header to
+   avoid a "missing prototypes" build warning (Arnd Bergmann).
+
+ - Clean up the ACPI thermal driver and drop some dead or otherwise
+   unneeded code from it (Rafael Wysocki).
+
+ - Rework the handling of notifications in the ACPI button drivers so
+   as to allow the common notification handling code for devices to be
+   simplified (Rafael Wysocki).
+
+ - Make ghes_get_devices() return NULL to indicate that there are no
+   GHES devices so as to allow vendor-specific EDAC drivers to probe
+   then (Li Yang).
+
+ - Mark bert_disable() as __initdata and drop an unused function from
+   the APEI GHES code (Miaohe Lin).
+
+ - Make the ACPI PAD (Processor Aggregator Device) driver realize that
+   Zhaoxin CPUs support nonstop TSC (Tony W Wang-oc).
+
+ - Drop the certainly unnecessary and likely incorrect inclusion of
+   linux/arm-smccc.h from acpi_ffh.c (Sudeep Holla).
 
 Thanks!
+
+
+---------------
+
+Arnd Bergmann (2):
+      ACPI: NFIT: Add declaration in a local header
+      ACPI: PM: s2idle: fix section mismatch warning
+
+Compostella, Jeremy (1):
+      ACPI: EC: Clear GPE on interrupt handling only
+
+Hans de Goede (8):
+      ACPI: x86: Add skip i2c clients quirk for Nextbook Ares 8A
+      ACPI: button: Add lid disable DMI quirk for Nextbook Ares 8A
+      ACPI: x86: Add ACPI_QUIRK_UART1_SKIP for Lenovo Yoga Book yb1-x90f/l
+      ACPI: video: Add backlight=native DMI quirk for Apple iMac11,3
+      ACPI: video: Add backlight=native DMI quirk for Lenovo ThinkPad
+X131e (3371 AMD version)
+      ACPI: LPSS: Add pwm_lookup_table entry for second PWM on CHT/BSW devices
+      ACPI: video: Stop trying to use vendor backlight control on
+laptops from after ~2012
+      ACPI: video: Add backlight=native DMI quirk for Dell Studio 1569
+
+Li Yang (1):
+      APEI: GHES: correctly return NULL for ghes_get_devices()
+
+Mario Limonciello (2):
+      ACPI: resource: Remove "Zen" specific match and quirks
+      ACPI: x86: s2idle: Adjust Microsoft LPS0 _DSM handling sequence
+
+Miaohe Lin (2):
+      ACPI: APEI: GHES: Remove unused ghes_estatus_pool_size_request()
+      ACPI: APEI: mark bert_disable as __initdata
+
+Rafael J. Wysocki (12):
+      ACPI: scan: Reduce overhead related to devices with dependencies
+      ACPI: thermal: Use BIT() macro for defining flags
+      ACPI: thermal: Drop redundant ACPI_TRIPS_REFRESH_DEVICES symbol
+      ACPI: thermal: Move symbol definitions to one place
+      ACPI: thermal: Move acpi_thermal_driver definition
+      ACPI: thermal: Eliminate struct acpi_thermal_state_flags
+      ACPI: button: Eliminate the driver notify callback
+      ACPI: button: Use different notify handlers for lid and buttons
+      ACPI: tiny-power-button: Eliminate the driver notify callback
+      ACPI: bus: Simplify installation and removal of notify callback
+      ACPI: thermal: Drop struct acpi_thermal_state
+      ACPI: thermal: Drop struct acpi_thermal_flags
+
+Sudeep Holla (1):
+      ACPI: FFH: Drop the inclusion of linux/arm-smccc.h
+
+Tony W Wang-oc (1):
+      ACPI: PAD: mark Zhaoxin CPUs NONSTOP TSC correctly
+
+---------------
+
+ drivers/acpi/acpi_ffh.c          |   2 -
+ drivers/acpi/acpi_lpss.c         |  10 +-
+ drivers/acpi/acpi_pad.c          |   1 +
+ drivers/acpi/apei/bert.c         |   2 +-
+ drivers/acpi/apei/ghes.c         |   4 +-
+ drivers/acpi/bus.c               |  53 ++------
+ drivers/acpi/button.c            | 164 ++++++++++++++++------
+ drivers/acpi/ec.c                |  31 +++--
+ drivers/acpi/nfit/nfit.h         |   2 +
+ drivers/acpi/resource.c          |  60 --------
+ drivers/acpi/scan.c              |  81 ++++++++---
+ drivers/acpi/sleep.c             |   2 +-
+ drivers/acpi/thermal.c           | 287 +++++++++++++++++----------------------
+ drivers/acpi/tiny-power-button.c |  49 +++++--
+ drivers/acpi/video_detect.c      |  45 ++++++
+ drivers/acpi/x86/s2idle.c        |  14 +-
+ drivers/acpi/x86/utils.c         |  26 +++-
+ include/acpi/acpi_bus.h          |   2 +
+ 18 files changed, 459 insertions(+), 376 deletions(-)
