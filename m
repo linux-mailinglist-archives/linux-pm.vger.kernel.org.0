@@ -2,142 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F81373DFDB
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 14:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1A073E0C5
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 15:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjFZMzg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 08:55:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48522 "EHLO
+        id S229778AbjFZNgS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 09:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjFZMzf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 08:55:35 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2104.outbound.protection.outlook.com [40.107.215.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34EEED8;
-        Mon, 26 Jun 2023 05:55:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gB9fqNt4pKjdod/QkBU52fP23hob6o3qSXt5kU1FjvpT0ZgCP2tHkz6uOziRrrmo6iSO0YRuZpKEBPM5oyDPGErzHL2qrj1Kvooymqc7yvK2UKv095IJTg/C1Yiaaq/+11CpusjD9J1/CgcewILdeZs5j5TDuswBJRCI+jE72YrMNnJJM4WeZSE0Hm6fQa/IB+56uUmt69pjz+8nRjtUCkvOKAO7Vn1gBtZygSk4SW8UilXXJfq24KDmQ1eBPXJrwFbtU3ehGLgk8yASs+uYnq+4eWNxPJR5DeahnzFMX+oL3pVK2VcJktVIoI7ClJ3Rd3eqiAme+TaiFNIkvkueiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6lqpjmZVffUlgEPT3QBsipRTfKSLabUIdo+4UJjAbeQ=;
- b=FiNJzD2atRPaeCP+6Vbtc5t1Q+B4xE/dIRw+gP3h+mnkyUcWpkHgWJ+Y1JiUxl2mKU1ub8M+s1o5oHAG7noOM694fRWv97ioReBrA6SafHCiAw9avM7EvNSqmU/6vghG8L0L+OdTmk/+Hjcbu1rLOPGhc2qSsVyz6zA90fo4HPlPtdyXjHHcorT+GUApDcioPXVQwVrLY/KqpqJweGYk8LKShkY8lMdyFvXN8RocCMQwDJ/pgm/1UYavNkds084Cmac6iesPHLCRpC2ToA+s0h5AfBsASJx1y+PYDPWgpQjDHn0fJvtUMv/u9sBKoLCHzaeZ/7v1WiB8HN6Q+gn8mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6lqpjmZVffUlgEPT3QBsipRTfKSLabUIdo+4UJjAbeQ=;
- b=hrql88WEuFLqz9zLwt9fiYCGhFGMcv/+bmnrDYVg9C2yDK4nLdkvitXeCNG4NIm03zK0gBN9C322wjX2szgNFlPGrkHaTlQvtBZQhl/rm6FtnoKKzWqIWA7VErI/qj0W2X8Lc2uZYLaNToEqQgUqiXmOhBxM4gwyaeuEPhSwkAvux1g6wWb52riErS8pXSA8AEW8TDocu8Nzn/1UMlda8uuJfl0G/2cNzhg3e3DO6lvon6bwhzv195NCkqxqgMieiq5LOhMqxl413d+/R0i7MJu4BJWRmv/jg1s5Er2xpKa9dT4GCeFXpM5QfMRQQ0GjZqVoGr/3i5h3m6ZiC5ODsg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by KL1PR0601MB3956.apcprd06.prod.outlook.com (2603:1096:820:24::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.26; Mon, 26 Jun
- 2023 12:55:28 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6521.023; Mon, 26 Jun 2023
- 12:55:28 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal/drivers/sun8i: remove unneeded comments
-Date:   Mon, 26 Jun 2023 20:55:15 +0800
-Message-Id: <20230626125515.18830-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0050.apcprd02.prod.outlook.com
- (2603:1096:4:196::11) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        with ESMTP id S229788AbjFZNgR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 09:36:17 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F00E79
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 06:36:15 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so4371979e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 06:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687786574; x=1690378574;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CUaOVbGrLmUdKtbdRSelS8yeyVs/S2d4eFpINDGmx+s=;
+        b=VPdYu1/kNJQEDNNFz/pDyAWlF+Hr7rG/NFFgvctw1MMosXDz3aYEunah1cgAGYpS2o
+         B5IDZ8/1WfrRmAfmXzrhnZuHOnwUyzKpenc6/S+u+H7Lvor8KbFZB1hfqYlF0xkA8OQ+
+         QHf4luiEKgP3L5ZZ8h4PfynG30jXovv3483jWuENaTNJrzbjiKLdzQKCSFGG/w4kH4v0
+         Y4ezLsQc1g5R5ZKg6mv6rHeH5p7f3So2PKOiF121+9CmTYVUBivuyqqObnWgk2Ask6fj
+         Gq2RQM4MAILH676BIPG2POZwC8E4jfMG431pf8UMtmHRdzD3BthdGn2d4dw+UnWp5N4d
+         jvsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687786574; x=1690378574;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CUaOVbGrLmUdKtbdRSelS8yeyVs/S2d4eFpINDGmx+s=;
+        b=FUyZwJz1K3jS/w5AsCA5py4O881KEzpxYplJYyXeK6C3y2GcfZ+F8ZsY3Kz3w52JjK
+         5xFlviLOA8nP3p9KxuSJ8fiPNCKmIV4zh0spyEoi5zl9HTSmDihPxxyDcxT3fSQwAcim
+         /1ypw+zkpZAVY2BUcLgeRwoddDjqU9HbTtBZe5VBuSFssU8itQPZzuhRLgZwmYeobxV8
+         h0ynBSvlo3bntIv5ZzClqdcuejjH3I/8XA0BecSLdEWbhd+5AwuABDbTZAOHbxaEdu8A
+         yvRp+of5DtQaEyzgjc0z3HDnAbb4b2OezbdOYgMpCZUp9W74Zc/PNdWH7ocyyHSRfmXl
+         +sMQ==
+X-Gm-Message-State: AC+VfDzCfNbZ2/xYbAEGUGTWfTtaPXjlgMaIqotHlfBaB2yo9idRA0jd
+        76n+U78vlAg8Mxp5zhMszvjsIg==
+X-Google-Smtp-Source: ACHHUZ6+l1Qzmq7jLH9MIL0J4iG3m5HOKc0Yu2i2BkiHU3OsTZNqfFo17ZAAHXXbDuZnwOPaVZNzSw==
+X-Received: by 2002:a19:434a:0:b0:4f8:6e1d:cf98 with SMTP id m10-20020a19434a000000b004f86e1dcf98mr12315894lfj.66.1687786573678;
+        Mon, 26 Jun 2023 06:36:13 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004f4b42e2d7dsm1109822lfi.230.2023.06.26.06.36.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jun 2023 06:36:13 -0700 (PDT)
+Message-ID: <ad2244a3-20b6-e126-c427-d535382d7d79@linaro.org>
+Date:   Mon, 26 Jun 2023 16:36:12 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|KL1PR0601MB3956:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0fdec005-ff72-404a-6969-08db76449da2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d8vGPndBsRGTpe24cFTkwSU4G8FigPp0vF7fig5LDzEdAnCKKwvmbVEvb6CgSuV3PfB/dpWU1AczNXkhbRLzKTaluMopO1H+OibSzBopky7FcPQjeccVHw3Wg4GqqiAcDTjt6hsVV951QBdrx4/E3RDdSY/NkmA0x1CQjv8o/UsJHwK28yO9lc6lkb/x1hmmQl6+QDDsQPvb3NHsul6XyK84+Wes2TXeurT+1KXuQyZc7gpaERv5ChUdiWY08varxNqgGizn19ql13Dp0VDmuZXETYdczNujOuTmUaJE62zCD5qZ5nESfvMBKtUIm8DjLka0MLqLk8alp4ojxSimhJ2cAjSZx1ZKjVD9J5W1Vulkm0XwHT4NlkuwyRbYDReCAFyB7Er6ZgHhrcS5X4vJVjmWDUyv/1Oam3YA+V7RZhrbo9c+sfmMle5NLKLWBMY+xcxHAEpPxos4AoRZeiEXzpI682DAqPfKRZ72zlxKhy/lsq32mfZVEABnIw3DESeEdtkoh4wMNgeWVGZxoGNJaU0APJ9jDXxHL6WseRzXHgSbkYwftY72Ep2nShNFDF66DUE0uX9+3cpTBjGQk7shhgr2/+6TayrU+VTXPg31vrmGYp9xp4tNVw8D0Umbxmzz
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(136003)(366004)(39860400002)(451199021)(478600001)(6666004)(6486002)(52116002)(2616005)(110136005)(83380400001)(26005)(186003)(1076003)(6506007)(2906002)(4744005)(5660300002)(7416002)(36756003)(38350700002)(38100700002)(4326008)(66946007)(316002)(66556008)(8936002)(8676002)(41300700001)(86362001)(66476007)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R3mN1rPSTeDuCSNAP+yQQ6YPp4epUe/kyY6sqZXRB0386o8d5lA31EuX1FYe?=
- =?us-ascii?Q?lyEeqHTd3aKCfSOKV8qSHe0teeWLzZkol1E6kMQ8g2sg5Ps5CE/ylB77nYEd?=
- =?us-ascii?Q?wEGTLjTobeoyi3TFwlaQFvC41IVf+TS+fZe+SZtAYQost85njvorEcmqViqP?=
- =?us-ascii?Q?UIb/QuJeuYuEREjk/ZFzTi8+oQrSKH0WYd54Hm3Y7gS2nGks0XlQ5YGIu+jR?=
- =?us-ascii?Q?rgwKhHjLpGLGel/UcZg2Q9vUbrt91VFCqUEwiWdM/0BjemorZP3D/r3L+UXp?=
- =?us-ascii?Q?+YgEP5b5HHEsaJhlemCvhcuKgjpw5V8oU/gwhSRcHiCPQFWxLAIRrQTpE3BB?=
- =?us-ascii?Q?0w6/bLby51rbaHNzj7mh6t0RSZ3GenrYoCouh5sD4mNjDprO3gb2TqdHIjeO?=
- =?us-ascii?Q?M0kirrtiqQdc+BzWrCmYSjBpxMHLAxCJ3DsSFhTV+97VBBBpA5ZKJ+FEw47h?=
- =?us-ascii?Q?UWN95cGHpPX2oPrGHAwurw2p+XDhjQYk4FnCQm9Iw7xUh9PMmMajW4EzaCPX?=
- =?us-ascii?Q?/+xju6VFwN6RIqxMTHGjEwP3j7h7WWgSYUY2dXs79HTc7Epe6vtcqJRGivHH?=
- =?us-ascii?Q?uMZX9RZ9vjY0boAwg0p27/RMDcwzDkGUWUly/SSLvXD2c++8M/a0YZDS8dIF?=
- =?us-ascii?Q?s3kewhfgDX4YX6R3Ya0Ofns3AAle8oBEBToULNHAkOYhO5yufX0/y9YA34h3?=
- =?us-ascii?Q?Awk14EpO8b0ZVPNz4T/1xDhHclOJMKZEQdbXD9Ogy68rw5YbMJu97Olh+SRB?=
- =?us-ascii?Q?NvufspJ8Gn1snhH1QNwSf6+byan1cKTEWKeU1Ol1TZN7qWr8NljpM4xOzHg+?=
- =?us-ascii?Q?EqUcBDYfiAO2f8FHfzUMbBStGpNXigUgPFMiB5DM/pejS6IahptdTSZzrS+g?=
- =?us-ascii?Q?pAB2MkdfnCpMJTB3imaqHixN7Onz88qKFOIoIEQBWmEhCBr3OQEHlA1tq1pA?=
- =?us-ascii?Q?FyKk8eR6+sgw8Ua3OIvQpOPsQ2ym4fn94qSXGYfqGwBZtAj7fjrpWDk15ORs?=
- =?us-ascii?Q?csuFnMZwihFS+DRtFJHe7vc+xtAdTitIWphI2/ydQqG941tYFwlVXb9Pmk03?=
- =?us-ascii?Q?+ycHiniyuZQWpTtiM5ViVBSJEsDlTHi0OqmdC2JJwH7p4AeKg4yWdRc52LS+?=
- =?us-ascii?Q?txqTt8qXugQKCNBYs9GvxN71Y6+NIn+z6x+hktcFjMEQDTjAhkcO79RerQYa?=
- =?us-ascii?Q?w3tNaN9FSbfJUZ8i3Ly1uPX9Gw94NQ5EDGBLhtU76M5s2UHcIGlwFBrJdkbw?=
- =?us-ascii?Q?llZWOYyZzidiQdbB7ZiJxRJry8dCPIP+lCf0PCwtZhjfnW+taAv7ypSxbED7?=
- =?us-ascii?Q?8HzsmrE8OsJdNkRVUDfUb+etotCCBcIGIr0jurPK75Uw5gwRh2dCCIxQuzjp?=
- =?us-ascii?Q?BcLVLegu+t3jCa0lkiYIk2ioeGzsjGc0obmsUxM+q/FP44l3n4h7/gmmS4+t?=
- =?us-ascii?Q?SYc8bHwd2tYR7oHC0RHbK7mT+AhjTpod8iVNmDMYYzS2BjIDVTYFNwG4gqIH?=
- =?us-ascii?Q?rm3BEk1k28DsJ/vohwDGU+dbKebBk55SvI/SxNg/7rx6MfLzOiBSYF7BfiKF?=
- =?us-ascii?Q?AEHiqcULGdhgFfU1MUOvh/9/ZzK6NQYHzUgjIFOI?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fdec005-ff72-404a-6969-08db76449da2
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2023 12:55:27.9614
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FxHaY4kGMKhyEL7n8uksUoYdjW0LbcPc6f/YAliPnWItvkSzTOIOz+M0aDZQrkw2lQyssRGXoMt3cZ5xDRyJUg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB3956
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 09/26] cpufreq: qcom-nvmem: create L2 cache device
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230625202547.174647-1-dmitry.baryshkov@linaro.org>
+ <20230625202547.174647-10-dmitry.baryshkov@linaro.org>
+ <a15a2564-3b48-4592-1e40-2187ee89af1c@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <a15a2564-3b48-4592-1e40-2187ee89af1c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's redundant, let's remove it.
+On 26/06/2023 14:50, Konrad Dybcio wrote:
+> On 25.06.2023 22:25, Dmitry Baryshkov wrote:
+>> Scaling the frequencies on some of Qualcomm Krait platforms (e.g.
+>> APQ8064) also requires scaling of the L2 cache frequency. As the
+>> l2-cache device node is places under /cpus/ path, it is not created by
+>> default by the OF code. Create corresponding device here.
+>>
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+> I think a generic solution (i.e. for each cpu node call
+> of_platform_populate in drivers/of/platform.c :
+> of_platform_default_populate_init) could be beneficial
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/thermal/sun8i_thermal.c | 2 --
- 1 file changed, 2 deletions(-)
+Yep. I thought about it, but I saw no direct benefit for it. Note, that 
+we do not instantiate cpu devices directly. But, maybe something like 
+/devices/system/cache/foo would make sense.
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 195f3c5d0b38..2c82bc744a24 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -56,8 +56,6 @@
- #define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & (x)) << 12)
- #define SUN50I_H6_THS_DATA_IRQ_STS(x)		BIT(x)
- 
--/* millidegree celsius */
--
- struct tsensor {
- 	struct ths_device		*tmdev;
- 	struct thermal_zone_device	*tzd;
+> 
+> Konrad
+>>   drivers/cpufreq/qcom-cpufreq-nvmem.c | 20 ++++++++++++++++++++
+>>   1 file changed, 20 insertions(+)
+>>
+>> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>> index a88b6fe5db50..ab78ef1531d0 100644
+>> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+>> @@ -380,6 +380,7 @@ static int __init qcom_cpufreq_init(void)
+>>   {
+>>   	struct device_node *np = of_find_node_by_path("/");
+>>   	const struct of_device_id *match;
+>> +	unsigned int cpu;
+>>   	int ret;
+>>   
+>>   	if (!np)
+>> @@ -390,6 +391,25 @@ static int __init qcom_cpufreq_init(void)
+>>   	if (!match)
+>>   		return -ENODEV;
+>>   
+>> +	for_each_possible_cpu(cpu) {
+>> +		struct device *dev = get_cpu_device(cpu);
+>> +		struct device_node *cache;
+>> +		struct platform_device *pdev;
+>> +
+>> +		cache = of_find_next_cache_node(dev->of_node);
+>> +		if (!cache)
+>> +			continue;
+>> +
+>> +		if (of_device_is_compatible(cache, "qcom,krait-l2-cache")) {
+>> +			pdev = of_platform_device_create(cache, NULL, NULL);
+>> +			if (IS_ERR(pdev))
+>> +				pr_err("%s: %pe, failed to create L2 cache node\n", __func__, pdev);
+>> +			/* the error is not fatal */
+>> +		}
+>> +
+>> +		of_node_put(cache);
+>> +	}
+>> +
+>>   	ret = platform_driver_register(&qcom_cpufreq_driver);
+>>   	if (unlikely(ret < 0))
+>>   		return ret;
+
 -- 
-2.39.0
+With best wishes
+Dmitry
 
