@@ -2,192 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F9173E0EF
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 15:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A4873E109
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 15:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjFZNoz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 09:44:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46102 "EHLO
+        id S229765AbjFZNuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 09:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjFZNoo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 09:44:44 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65772E7A
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 06:44:42 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f8689fbf59so5411075e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 06:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687787080; x=1690379080;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z182+Q4uKJie6Rxr4pwKFm/7JzYn7OU/lRN6E75YsLU=;
-        b=eXQV8HOG8X7LkEP0FGaLvSgKFbx5frQztyredVZnH3azpB0e/MWxX/OvIesjczaWTD
-         sbyN1HTNgbA98LWHmikLcIJuJ88TSUAAGZns00Lo4oboSKnvQQoFooYapW04pDeIipeB
-         xl8pyVivBRsCC1akqSDBp76Ut37ukgIFoDPVWTe8WSQuf6VGvXZNyraZGv5uodCCnahk
-         C9Lb/dkyYimWqVtCR3aKir/5u/0FJQkKygo9pXK4/CrE3jLXKfXPsP6oK9UuqfLGzzgJ
-         Em2yzd089u1gW8F1VvTEH1xwgUJI7nf4nlFAIAHqzjkvbGoqu8dmpR9y8H7jKRzVcpwI
-         aWDA==
+        with ESMTP id S230054AbjFZNuu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 09:50:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5008497
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 06:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687787405;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7RchIzLEFr49hSDoEPp8rxOvgg/jdjjvX3M5T7yGIGQ=;
+        b=Lmrlnj2Ta/7BZUZMnCEOgZUQUmBUBKTLXd6amyHaHDb4a6olJ+qcxyKrjtxoqxjp4+jFJa
+        T8Kfe6xWph3Z2yN7sPPKU01MVg1xiUK+Rc8WqOjdKoxZEOAKqzAG5oqSq1zxUfXL7fK0jq
+        nuBoF05TGWeY064z8yZRuU/HRueHQ4w=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-104-78MNjWivOdaTPgE5KkY58Q-1; Mon, 26 Jun 2023 09:50:03 -0400
+X-MC-Unique: 78MNjWivOdaTPgE5KkY58Q-1
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-573cacf4804so44192197b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 06:50:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687787080; x=1690379080;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z182+Q4uKJie6Rxr4pwKFm/7JzYn7OU/lRN6E75YsLU=;
-        b=NrXXD60PshsNHJGvsm18o/ZJw7n8uxwxTQB3jTYaCvl+v3Tg0g5j0sTHvHafiFSY2A
-         D7b0XNPYNUYWPzO08og4s+BdpQJQcScPfX316Q4k9VKeuIEqDFXXJJWrcTTVPHl/mRg1
-         ykbITxmPoGijnqd3uN7nKFRKG5O18+xldyXsfkj9YCy9rp4zKr8DF19LJHT2GQW5fQY2
-         R65ctix/QZwBI2xZSDhavbA9bgkmfUJplZJ1yTfUh/OcqiVMANiN4+e0GTtWUWQYMvNZ
-         BVh30Nbjgm6+Mqd7kUO4TFon2SdrYIWlCef2uOfPI0B2lWqRfvWTTVKTf6vx3sz2EzJ1
-         /KKg==
-X-Gm-Message-State: AC+VfDwSZxmZnBsbrdLCKEaMetQM/yvgBFcoWOxpTWxpDlXc8NN4W7W0
-        q6VpPV1vFn568Hxh5UkNQBlbgQ==
-X-Google-Smtp-Source: ACHHUZ4tMRepmhfl1tjS3N4io66eAdL2IcMharuAdzXvUqx4OEu4BAmMjhy8W1VXaGhJtB56aq84oA==
-X-Received: by 2002:a05:6512:33c7:b0:4f8:4b19:9533 with SMTP id d7-20020a05651233c700b004f84b199533mr9837735lfg.19.1687787080554;
-        Mon, 26 Jun 2023 06:44:40 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id d30-20020ac25ede000000b004f252003071sm1126500lfq.37.2023.06.26.06.44.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jun 2023 06:44:39 -0700 (PDT)
-Message-ID: <d9e4fd75-310a-7fe8-879e-651011873199@linaro.org>
-Date:   Mon, 26 Jun 2023 16:44:39 +0300
+        d=1e100.net; s=20221208; t=1687787403; x=1690379403;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7RchIzLEFr49hSDoEPp8rxOvgg/jdjjvX3M5T7yGIGQ=;
+        b=KtPlQXPkAZD8noTBBG/2OYwDDZgjUhH0h/yTWrTaIqnubakIwjLz3TYoxlzzAg/3p2
+         CL8f8cbwkDwSvi5CRoj0+sHqVA90lKsIfeigvn4rKCtEKVPZuy8X4EFdp6m/raHgkUy8
+         T/uwU5tNa28LFCyToLY9mu1GqFLBS5HLYO1mD8phHD+tATx0m82j2xag4yTAUzcGIYQb
+         2Caulh9u3jXjSbQM8Xc+OhCn0giAptx59ESCMb+HlIuzo59RRxnqbDRujLmhx5Rn9Ola
+         CYRwjd/POCcQlpX7gotdtQs/pUtjBrfW0DgOQo6QpDAMaoPDWknhenF8wY+6/oPNCiXA
+         5GXw==
+X-Gm-Message-State: AC+VfDw/pfFhcPULQw8JyJFooVzb7hilNpedAFwm6Mq8UG2Z3ZhETLt0
+        9PTc6xtYTku6ttiiXXrRzDN2+RemiDaxGmzIYa7JDutGaTBhZRWDZeq6w/WpL8+LdpcnCyduWal
+        hZ/404Q0wadbMGjJ3Q+A=
+X-Received: by 2002:a0d:f187:0:b0:573:bb84:737c with SMTP id a129-20020a0df187000000b00573bb84737cmr13040315ywf.26.1687787403048;
+        Mon, 26 Jun 2023 06:50:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5RZ5OK0Ds/pNf7+Fd6FJVJmf1ymc+daX8VibeE26jNxRg2COtxHdJPdXhdLdiPptCHMdDibw==
+X-Received: by 2002:a0d:f187:0:b0:573:bb84:737c with SMTP id a129-20020a0df187000000b00573bb84737cmr13040296ywf.26.1687787402730;
+        Mon, 26 Jun 2023 06:50:02 -0700 (PDT)
+Received: from halaney-x13s.redhat.com ([2600:1700:1ff0:d0e0::22])
+        by smtp.gmail.com with ESMTPSA id p64-20020a817443000000b0056d1c26f5b0sm1290844ywc.21.2023.06.26.06.50.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jun 2023 06:50:01 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-pm@vger.kernel.org, sboyd@kernel.org, nm@ti.com,
+        vireshk@kernel.org, Andrew Halaney <ahalaney@redhat.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Subject: [PATCH] OPP: Properly propagate error along when failing to get icc_path
+Date:   Mon, 26 Jun 2023 08:46:46 -0500
+Message-Id: <20230626134645.57902-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 06/26] interconnect: icc-clk: add support for scaling
- using OPP
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20230625202547.174647-1-dmitry.baryshkov@linaro.org>
- <20230625202547.174647-7-dmitry.baryshkov@linaro.org>
- <b5ff346b-cbde-68fe-a08a-3b3331439309@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <b5ff346b-cbde-68fe-a08a-3b3331439309@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/06/2023 14:28, Konrad Dybcio wrote:
-> On 25.06.2023 22:25, Dmitry Baryshkov wrote:
->> Sometimes it might be required to scale the clock using the OPP
->> framework (e.g. to scale regulators following the required clock rate).
->> Extend the interconnec
-> 't'
-> 
->> -clk framework to handle OPP case in addition to
->> scaling the clock.
->>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
-> I think we should check for OPP at the icc-clk registration time,
-> instead of passing it as a parameter, e.g.:
-> 
-> qn.opp = IS_ERR(dev_pm_opp_get_opp_count)
-> 
-> Not sure if there's a more idiomatic way.
+fa155f4f8348 ("OPP: Use dev_err_probe() when failing to get icc_path")
+failed to actually use the error it was trying to log:
 
-No. icc-clk is not limited to a single clock->icc conversion. So it is 
-possible to create several interconnect links, only one of which should 
-be the OPP-based one.
+    smatch warnings:
+    drivers/opp/of.c:516 dev_pm_opp_of_find_icc_paths() warn: passing zero to 'dev_err_probe'
 
-> 
-> Konrad
->>   drivers/interconnect/icc-clk.c   | 13 +++++++++++--
->>   include/linux/interconnect-clk.h |  1 +
->>   2 files changed, 12 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
->> index 4d43ebff4257..c7962acdcee7 100644
->> --- a/drivers/interconnect/icc-clk.c
->> +++ b/drivers/interconnect/icc-clk.c
->> @@ -7,10 +7,13 @@
->>   #include <linux/device.h>
->>   #include <linux/interconnect-clk.h>
->>   #include <linux/interconnect-provider.h>
->> +#include <linux/pm_opp.h>
->>   
->>   struct icc_clk_node {
->> +	struct device *dev;
->>   	struct clk *clk;
->>   	bool enabled;
->> +	bool opp;
->>   };
->>   
->>   struct icc_clk_provider {
->> @@ -25,12 +28,16 @@ struct icc_clk_provider {
->>   static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
->>   {
->>   	struct icc_clk_node *qn = src->data;
->> +	unsigned long rate = icc_units_to_bps(src->peak_bw);
->>   	int ret;
->>   
->>   	if (!qn || !qn->clk)
->>   		return 0;
->>   
->> -	if (!src->peak_bw) {
->> +	if (qn->opp)
->> +		return dev_pm_opp_set_rate(qn->dev, rate);
->> +
->> +	if (!rate) {
->>   		if (qn->enabled)
->>   			clk_disable_unprepare(qn->clk);
->>   		qn->enabled = false;
->> @@ -45,7 +52,7 @@ static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
->>   		qn->enabled = true;
->>   	}
->>   
->> -	return clk_set_rate(qn->clk, icc_units_to_bps(src->peak_bw));
->> +	return clk_set_rate(qn->clk, rate);
->>   }
->>   
->>   static int icc_clk_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
->> @@ -106,7 +113,9 @@ struct icc_provider *icc_clk_register(struct device *dev,
->>   	icc_provider_init(provider);
->>   
->>   	for (i = 0, j = 0; i < num_clocks; i++) {
->> +		qp->clocks[i].dev = dev;
->>   		qp->clocks[i].clk = data[i].clk;
->> +		qp->clocks[i].opp = data[i].opp;
->>   
->>   		node = icc_node_create(first_id + j);
->>   		if (IS_ERR(node)) {
->> diff --git a/include/linux/interconnect-clk.h b/include/linux/interconnect-clk.h
->> index 0cd80112bea5..c695e5099901 100644
->> --- a/include/linux/interconnect-clk.h
->> +++ b/include/linux/interconnect-clk.h
->> @@ -11,6 +11,7 @@ struct device;
->>   struct icc_clk_data {
->>   	struct clk *clk;
->>   	const char *name;
->> +	bool opp;
->>   };
->>   
->>   struct icc_provider *icc_clk_register(struct device *dev,
+Make sure to use the right error and pass it along.
 
+Fixes: fa155f4f8348 ("OPP: Use dev_err_probe() when failing to get icc_path")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/r/202306262008.guNLgjt6-lkp@intel.com/
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
+
+This slip up was totally my fault, apologies. I've got a "dirty"
+working tree (where I made this enhancement while debugging) and a clean
+tree for submitting patches along the way. It looks like I made a slight
+change in the patch that was sent in the clean tree, then rebuilt and
+tested the dirty tree and sent it off.
+
+Won't happen again, embarrassed to admit I sent a patch that was not
+properly tested but oh well. Here's a fix.
+
+Thanks,
+Andrew
+
+ drivers/opp/of.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 1f0923cc1cd9..ada4963c7cfa 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -513,7 +513,7 @@ int dev_pm_opp_of_find_icc_paths(struct device *dev,
+ 	for (i = 0; i < num_paths; i++) {
+ 		paths[i] = of_icc_get_by_index(dev, i);
+ 		if (IS_ERR(paths[i])) {
+-			ret = dev_err_probe(dev, ret, "%s: Unable to get path%d\n", __func__, i);
++			ret = dev_err_probe(dev, PTR_ERR(paths[i]), "%s: Unable to get path%d\n", __func__, i);
+ 			goto err;
+ 		}
+ 	}
 -- 
-With best wishes
-Dmitry
+2.40.1
 
