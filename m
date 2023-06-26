@@ -2,56 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C0E73E3CB
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 17:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8220673E3DD
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 17:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjFZPpM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 11:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S231363AbjFZPrc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 11:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjFZPpL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 11:45:11 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF9D10FC
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:44:52 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-bc9483b506fso4487346276.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:44:52 -0700 (PDT)
+        with ESMTP id S229704AbjFZPrb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 11:47:31 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF98EAB
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:47:28 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bf0ba82473dso4805783276.0
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 08:47:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687794291; x=1690386291;
+        d=google.com; s=20221208; t=1687794448; x=1690386448;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FJBcB4jOwusqcpP1lsu8R8DBb4OmkpDK8PTzl1v7bB4=;
-        b=HwKajbMxXabwi4rUUbdpPkZ6tqQ9BWJ9dEBheQU+4xM9DKMliV8Ty9A4NFOD/WNVX0
-         pnU4kmhcS1OwUZGFPKs+6GbvjTiJtMb6sjZh9WWGinQWf7TN/RQRvZdDS6XDre0ucVXX
-         z6JJERuMjY4q/zxdm+XhBb9kDbUYIaq3ff3IIDCsQrnIidkK2bvIzUpDxdexmFuDD1mf
-         DRoaNqMo1f5pU3VUTYHlae/0/j4ulFUpJmEaDYslH70MD+gHu7Qj6VFY4g7AD/IrYhtr
-         5n8ha0BFC9BOOZ5hRoPkGlFNDDkDJo/5zDE5LKegH1U2KHGjNKgby73v/9g5BzvZbljr
-         woTg==
+        bh=FZ/QsSgx247ZDmryhAEDwdiWrNxNuvuu0uDhTlnQph0=;
+        b=ebb/NLH8ZJGRRE0zmOspa1okpH8EsdSJNmpbh/XDeiII7Xzf8SbstcB8Y6UIQ4yGtm
+         7gNEHi2JPGDZAnWaX/ke3dpLTBq+QwHCT1rqUtj9UsXIeyyATo+NEsm/nS+BAAfLOO0c
+         MFgfluVk+Qr9dV6QplvAI5QZjXqkEMY7CbtjIEE+dQTe5XWTRYagPdGDhdB69HV4sIxg
+         FZwGTxDDjsyDvwXtB2Pv7b7D/x5uw88T6Aw3qXCrLtccFzPZ5TVqMqk/N5bI4AXbgD7E
+         QmPMD+CUcYZwKbey3d8/i5F4p/h3WMG4ZLh7L5D549sU8ukeP6GqfW8chGvjlbeKh2Q4
+         LHtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687794291; x=1690386291;
+        d=1e100.net; s=20221208; t=1687794448; x=1690386448;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FJBcB4jOwusqcpP1lsu8R8DBb4OmkpDK8PTzl1v7bB4=;
-        b=Ks/dKXy/cWHVzHXhGeOwYJ2Sw20szWAhbqYBS95W4TRQEexdl8rCPisvRswdR8cVzl
-         JaURoGSf/kvDyA2bLezpannPQYlSelIWoXmP5Xho9ntou5lu9oP1ANVgsSKf15HFFj7W
-         WFR5h6DcvU2IYZVheubeWeKfrs3m6nY9Qgmaed3jP3gFJTZWHbOE8xKjHzvheNKrUNCe
-         0V2EHWypzRyHGjmOdzLpYUj84SOwrJXboTE+SHw8Y9d8S3aza2ZCpaHnobZ/kPdPiNvR
-         QZt4fQDdUX5ToJH/rfpjj2cM7rM6JAWSiEGaLdL3GwUssvhRP2l3YuzqMpnqfNhRU5+G
-         QE6Q==
-X-Gm-Message-State: AC+VfDwzWLPqd18isf93mjQpWYxtaAhHGoyprbItzV2kjfeUxemYBQE1
-        Bq5HcULw6bNx4bkCyKx1edrVrhaq50hP
-X-Google-Smtp-Source: ACHHUZ4PpigACe8K+GaTtHiKMW8GF1nnUe75ZUisTk3zns+IIKflf04SB84znmbezTgsO+w+ArEnFMCICmK4
+        bh=FZ/QsSgx247ZDmryhAEDwdiWrNxNuvuu0uDhTlnQph0=;
+        b=kQxyVP1xGZ3QXgg/lf8MQhJo5mRdZRr606aunQw7cuQj8asxP3rx4ChfijQcadO5ai
+         TR2oP3T/nlBpvIl1GbGE4U04uEOoWJtMtUwvCWvfAZUufa5bVvUGbUqyG4ZQWTbasYSI
+         mrBAk7bbPPtnT5U1T/L8YamkHvhDo0qq8Wqauuj8rgntXwykY2XTCdVUvA6ztKv5IRnx
+         12YLajp01b21FWqShUD6eIawp6fFowvj3+HIKLmHyz689MCxj06GYWttxajer89LtTNO
+         /VH6QPvegNLf2G5JwWmqXrvcQpNmgeH/zMTeoZIBrEz7LbrUvpKLS2lcjs4L219vY33S
+         EWWw==
+X-Gm-Message-State: AC+VfDwZzjcbkLkkSE9P6F7QsWiprv+ZBIiUyE02+6suzkaZHgwr+Hy0
+        oYWukOmAZXWscwJaoJ/TgqpclfOaGGvt
+X-Google-Smtp-Source: ACHHUZ5z/l3CpgQ4N/W9hvMVnOdI9Co7aRA4G883sdjyh7BT9/nXisqLqaivZdGGNkDjlXKPpymBo+MzooIb
 X-Received: from bjg.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:415])
- (user=bgeffon job=sendgmr) by 2002:a25:3444:0:b0:ba1:d0:7f7c with SMTP id
- b65-20020a253444000000b00ba100d07f7cmr5933944yba.2.1687794291220; Mon, 26 Jun
- 2023 08:44:51 -0700 (PDT)
-Date:   Mon, 26 Jun 2023 11:44:49 -0400
+ (user=bgeffon job=sendgmr) by 2002:a25:abe6:0:b0:bff:4ed0:63f6 with SMTP id
+ v93-20020a25abe6000000b00bff4ed063f6mr4646107ybi.7.1687794448265; Mon, 26 Jun
+ 2023 08:47:28 -0700 (PDT)
+Date:   Mon, 26 Jun 2023 11:47:25 -0400
 In-Reply-To: <20230113193006.1320379-1-bgeffon@google.com>
 Mime-Version: 1.0
 References: <20230113193006.1320379-1-bgeffon@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230626154449.3164237-1-bgeffon@google.com>
-Subject: [PATCH] PM: hibernate: don't store zero pages in the image file.
+Message-ID: <20230626154725.3169975-1-bgeffon@google.com>
+Subject: [PATCH v6] PM: hibernate: don't store zero pages in the image file.
 From:   Brian Geffon <bgeffon@google.com>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>
 Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
@@ -62,7 +62,7 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -103,6 +103,9 @@ as each one of those zero pages requires a write syscall to reload, by
 handling it as part of the packed PFN list we're able to fully avoid
 that.
 
+Patch v5 -> v6:
+- Correcting missed variable when changing types.
+
 Patch v4 -> v5:
 - Addressed numerous style comments from Rafael J. Wysocki.
 
@@ -128,7 +131,7 @@ Signed-off-by: Brian Geffon <bgeffon@google.com>
  1 file changed, 147 insertions(+), 37 deletions(-)
 
 diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index cd8b7b35f1e8..4da53d470c82 100644
+index cd8b7b35f1e8..294c75646ab0 100644
 --- a/kernel/power/snapshot.c
 +++ b/kernel/power/snapshot.c
 @@ -404,6 +404,7 @@ struct bm_position {
@@ -262,7 +265,7 @@ index cd8b7b35f1e8..4da53d470c82 100644
 +			zeros_only = safe_copy_page(page_address(d_page), s_page);
  		}
  	}
-+	return ret;
++	return zeros_only;
  }
  #else
  #define page_is_saveable(zone, pfn)	saveable_page(zone, pfn)
