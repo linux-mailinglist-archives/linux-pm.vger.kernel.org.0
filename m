@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D69C73EB52
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 21:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0396E73EC5C
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 23:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbjFZTxE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 15:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49318 "EHLO
+        id S230064AbjFZVB3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 17:01:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFZTxC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 15:53:02 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F3AE7E;
-        Mon, 26 Jun 2023 12:53:01 -0700 (PDT)
+        with ESMTP id S229901AbjFZVB2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 17:01:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205CA125;
+        Mon, 26 Jun 2023 14:01:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687809182; x=1719345182;
+  t=1687813287; x=1719349287;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=6SK8NB2LsBYbp7+J0GVDHHXUhFuGKobVNw10WdKFO2s=;
-  b=YS61IW9SxFTXZYlrRSv7ZP452Gzb0cBZysYOYOEi9XnYglOlMdVI4oUy
-   ZDhPLtnx/uTrstRjAIh8i9A+xqQ7DO8wOffFDFXBBAIJTmU+5w1Z1bo6y
-   77zCoptY3h4GFqqGYGeS69ReYJQfMwXcFA9xEiyHmJ3o2vgS/cSPLhwGj
-   FDzT+GD+RS+UWpM0CPEdHvEEEIsloeJwnse+v6NrboFZohxIiqN7R2hoZ
-   S4YEUqAcN5OYuiHHIq2o46fo8hN+3yPetdTlJdizzuaFXxdSuYCVZP8ql
-   oR5/2s8lkzbIIjAr8NcGqrv3gpkg7NNRW6iBV8UseBoaRLwRfonkixVWO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="340959275"
+  bh=LOc6tDobeRpUuyxloHqratDaLJtesBy6Kzgu4za2HvY=;
+  b=BP9MAkq8hhXmztbOjxFIiumcGL/Auph0U8fqdjku7xIz9/H64eIzpJLm
+   iP0YsAYxx49eRZ5VMcsj/AMmr2IUrAHUaT0jIP4VNxXr9TPOiagKyNzOp
+   rKKIUnICyvNRd8Yimf7K4K2traNhzlTiBFm9Moj729ktLQo/jz63MgwXh
+   pRZXnT1wpoV8RRVvED0MlWxkM3kz4wbTnLbcQzMQUrHVMroh8nzuNPR1q
+   Vti6FOlSH1HfTbBfsCybCgkGntLj2Hv19hwjpAi1vKDadQFn5VZWHvcaq
+   JpVQTg1Iv4TkuXNNbTrTwTEsUnqBwJ7apNQRroxT6Kb4Un/CAub44WznI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="364836490"
 X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="340959275"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 12:53:01 -0700
+   d="scan'208";a="364836490"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 14:01:26 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="781576168"
+X-IronPort-AV: E=McAfee;i="6600,9927,10753"; a="666435927"
 X-IronPort-AV: E=Sophos;i="6.01,160,1684825200"; 
-   d="scan'208";a="781576168"
+   d="scan'208";a="666435927"
 Received: from jingyan2-mobl.amr.corp.intel.com (HELO [10.209.115.106]) ([10.209.115.106])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 12:53:00 -0700
-Message-ID: <d211d4dedd79330412e71a8b9b4b599cfe0fc80c.camel@linux.intel.com>
-Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
- IPC classes
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2023 14:01:26 -0700
+Message-ID: <7ca035b73ebcce9fde270227a5b630b169ebdeaf.camel@linux.intel.com>
+Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
+ balancing
 From:   Tim Chen <tim.c.chen@linux.intel.com>
 To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         Ionela Voinescu <ionela.voinescu@arm.com>
@@ -64,18 +64,18 @@ Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         "Tim C . Chen" <tim.c.chen@intel.com>,
         Zhao Liu <zhao1.liu@linux.intel.com>
-Date:   Mon, 26 Jun 2023 12:52:59 -0700
-In-Reply-To: <20230624000121.GA32639@ranerica-svr.sc.intel.com>
+Date:   Mon, 26 Jun 2023 14:01:25 -0700
+In-Reply-To: <20230625201155.GA3902@ranerica-svr.sc.intel.com>
 References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
-         <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
-         <ZJQN/KIwCUmzYoiN@arm.com>
-         <20230624000121.GA32639@ranerica-svr.sc.intel.com>
+         <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
+         <ZJQONIinvSengWa8@arm.com>
+         <20230625201155.GA3902@ranerica-svr.sc.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,25 +84,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-> >=20
-> > nit: the comment is unnecessary, and a bit misleading, IMO.
-> >=20
-> > The comment says "This group will not be selected." but the only way to
-> > guarantee that here is to reset the sum_score to 0 when you find an
-> > invalid score, which I don't believe is your intention.
+On Sun, 2023-06-25 at 13:11 -0700, Ricardo Neri wrote:
 >=20
-> You raise an interesting point. We will call this function for each rq
-> in the sched group. Thus, if we encounter an error, the scores would be
-> incomplete. Therefore, I think that the scores should be discarded and
-> reset to 0 so that they are not used, IMO.
+> > > +
+> > > +	score_on_dst_cpu =3D arch_get_ipcc_score(sgs->min_ipcc, env->dst_cp=
+u);
+> > > +
+> > > +	/*
+> > > +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be z=
+ero
+> > > +	 * and not used.
+> > > +	 */
 
-Since we still have other rqs to loop through, reset to 0 here does
-not guarantee that it will stay that way at the end of the loop when
-the sum could still be added to.  May need a special value like -EINVAL
-and make the score a "long" to mark such case.
+The comment is not matching the check below.  If zero
+is not used, the check should also reflect the case.
 
+> > > +	if (IS_ERR_VALUE(score_on_dst_cpu))
+> > > +		return;
+> > > +
+> > > +	before =3D sgs->sum_score;
+> > > +	after =3D before - sgs->min_score;
+> >=20
+>=20
 Tim
-
-
-
