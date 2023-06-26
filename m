@@ -2,91 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B831C73E70E
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 19:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7954073E79B
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jun 2023 20:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjFZR5I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Jun 2023 13:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S230493AbjFZSQz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Jun 2023 14:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFZR5I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 13:57:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D061183
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 10:57:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E668560F11
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 17:57:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56964C433C9
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jun 2023 17:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687802226;
-        bh=fw+blmTno1+Xu5E8mLwGXWGUBH8sm0OAJ3pHvpNrSrs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=sfuhd2CDauIzphpcMhDn0Cp9fwvdEmiErjvNCl5zhLLZbSf1/5NSSZEB8lz01GhBH
-         whcBNsutZbfmjAxTAEc4VQtrPndUysMH1V07SgehKhVBB6eQXOmcZR2TAClYKhO92n
-         WHiGLyFFL+Oi5zvBQzXELw2WTC86VSnDdcGpB7/NrsWIWwQh6Na8A1OoO4BdVCIFoR
-         ItGxGaPGV7ZyZy/gUDxq7fnq26GWRyzUxMbfsiSIOKVFHbqgT1vAx7KXM8DLpQadUg
-         uE6Pczbb4UKK/AZ8ql5jOnfenD6dmrs42k0iFyasY6NKiQQJI6q47AGyqO/9e8UAhG
-         p/cLDH4WO3qpA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 3A0C0C53BD0; Mon, 26 Jun 2023 17:57:06 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 217597] lscpu reporting incorrect CPU current frequencies
-Date:   Mon, 26 Jun 2023 17:57:06 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: yang.jie@linux.intel.com
-X-Bugzilla-Status: ASSIGNED
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P2
-X-Bugzilla-Assigned-To: yang.jie@linux.intel.com
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cf_bisect_commit priority bug_status cc
- assigned_to cf_regression
-Message-ID: <bug-217597-137361-hHjRgPR4qc@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217597-137361@https.bugzilla.kernel.org/>
-References: <bug-217597-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230397AbjFZSQy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Jun 2023 14:16:54 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CCD94;
+        Mon, 26 Jun 2023 11:16:52 -0700 (PDT)
+Received: from [192.168.1.141] ([37.4.248.15]) by mrelayeu.kundenserver.de
+ (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1N63NQ-1pyGlv1Q2S-016R6o; Mon, 26 Jun 2023 20:16:19 +0200
+Message-ID: <47eac53a-8d93-16fa-a8db-68bbd40020a8@i2se.com>
+Date:   Mon, 26 Jun 2023 20:16:18 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V2 7/7] dt-bindings: timer: convert bcm2835-system-timer
+ bindings to YAML
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+To:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, Ray Jui <rjui@broadcom.com>,
+        dmaengine@vger.kernel.org,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pwm@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        Vinod Koul <vkoul@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Scott Branden <sbranden@broadcom.com>
+References: <20230617133620.53129-1-stefan.wahren@i2se.com>
+ <20230617133620.53129-8-stefan.wahren@i2se.com>
+ <02d1d74a-1476-41c8-6d94-3eb477352309@linaro.org>
+ <543ca0c5-0051-3968-63cd-7982f95c06c6@i2se.com>
+Content-Language: en-US
+In-Reply-To: <543ca0c5-0051-3968-63cd-7982f95c06c6@i2se.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:Pf+nK9VlP6UkuRXw6XpNBDYvdhpAMd7zCnAyEYISBTYUuWfZsGA
+ KhKvXGty+Tb7YBrwQDkiXzvssgyiuvbh1qNHvlEzU1uVAt5DaVXhSukj4YlEdnFCxs/Kc56
+ 3AMyVt0eNBGYqT6Mww9J1VWG19uSHT850Q67pFWJcxQ70YrI6gKDTGufkCQGnZf5q9B0Eef
+ PkC3ZofiennUM481xaQrg==
+UI-OutboundReport: notjunk:1;M01:P0:9baAdFLbfrw=;I04Bud++nv5QiIFcrr0i7NvorWL
+ bmeG4KE1VO4eQSh+Wj84BLTzHYeNd7sAo9plxWLSlm6+wrJ6+eZSH5Tz5es+/silzRfMkHNvr
+ QX7EBXAf3+4lnnI3dajXM5Bl/lntwtvh/wZlRUBrrYrejthXr6YQE160LSVzKSNCg5liKHvOl
+ MtqTce1vS0xdsg2XNHdDarkIl3Q0yA4v/7tyl1VL+OgBcU92YQVyvzx7+4gq58wcc6vhAxyt5
+ RvPgZ5+Fi/ui0GvojkXoMu4a40PhD4SrnI4gyfPOctRZc9EVW0YcNk5XRXXrNFZcrAOWYNR0n
+ DLudhGKTeokM39AuofC6vHIvSS091Jm9S8XmwQVLhhMKdgw+AHAp5nq2EECpbgqu9/jRwTCH1
+ AyUwgAz38xB9x4D9qJKC5vf7Z5duDMFLOhe0zjUYJxdxr5Es9nqHcdhwV1KgCh+xRELVs67dU
+ A2e8NrLjZYOUovtmKtR+N7fa0tq0N7faVL8B/uwby3e9hCly8/UYPkUBKSWwfF9fFTIeVOqsL
+ IFgnG0Dw/McbUSSnV9+RP3QEpvO3XLK9SiOF6p3HMZwbXaPe8OT5ec8kSkb6tAOjVDtVuB1nH
+ 4Mxn4KibjxdPfaKfCCG/vdsXETLLunRNoixCqqk8IwifTw7aL/NZ2Ukr9ZLELEbFkFJAYaww7
+ aC56FuQq3AdG5s/Yt/gCc4ryMTEhg2wkLZmfXso8RA==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217597
+Hi Rob,
 
-Keyon (yang.jie@linux.intel.com) changed:
+Am 19.06.23 um 20:57 schrieb Stefan Wahren:
+> Hi Daniel,
+> 
+> Am 19.06.23 um 19:00 schrieb Daniel Lezcano:
+>> On 17/06/2023 15:36, Stefan Wahren wrote:
+>>> Convert the DT binding document for bcm2835-system-timer from .txt
+>>> to YAML.
+>>>
+>>> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
+>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>> ---
+>>>   .../timer/brcm,bcm2835-system-timer.txt       | 22 ---------
+>>>   .../timer/brcm,bcm2835-system-timer.yaml      | 48 +++++++++++++++++++
+>>>   2 files changed, 48 insertions(+), 22 deletions(-)
+>>>   delete mode 100644 
+>>> Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.yaml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt b/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
+>>> deleted file mode 100644
+>>> index 844bd5fbd04c..000000000000
+>>> --- 
+>>> a/Documentation/devicetree/bindings/timer/brcm,bcm2835-system-timer.txt
+>>
+>> Appliedp patch #7
+> 
+> i'm so sorry but i accidentially added a Reviewed-by from Rob, which is 
+> wrong here. I should have added to the patch 6 :-(
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Bisected commit-id|                            |f3eca381bd49
-           Priority|P3                          |P2
-             Status|NEW                         |ASSIGNED
-                 CC|                            |yang.jie@linux.intel.com
-           Assignee|linux-pm@vger.kernel.org    |yang.jie@linux.intel.com
-         Regression|No                          |Yes
+did you noticed the problem about the accidentially wrong added Reviewed-by?
 
---=20
-You may reply to this email to add a comment.
+Best regards
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+> 
+> Regards Stefan
+> 
+>>
+>> Thanks
+>>
