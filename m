@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70D8073F5DD
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 09:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CE073F5E8
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 09:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230397AbjF0HkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 03:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38916 "EHLO
+        id S231202AbjF0HoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 03:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjF0HkU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 03:40:20 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E653E58
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 00:40:18 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b6985de215so38181201fa.2
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 00:40:18 -0700 (PDT)
+        with ESMTP id S230054AbjF0HoC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 03:44:02 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F4510C9
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 00:44:00 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f957a45b10so5507404e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 00:44:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687851616; x=1690443616;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1687851839; x=1690443839;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6NTcpMVbPtfKRTcDrSmD8MoUfkjuvD8dm7rw3ArPL9I=;
-        b=swdKSXqee4DsixhpEGqQyNNW3XBWrUevNKszorloHuIBaCA0PcMPOfsuOzl9+QiTte
-         4wOsYWBVcN7F8Tj78icmZyMkGYOi7Dm+2krXIRn7atuzwAfMsfDBMaOZ9rnRRGBreFTM
-         T6w9ELsAX328Q75z7uohV2hndIY+XECbVG2a2EjOF+5CpugPTygos1zEsS/Efj66b8rp
-         FE/YMAM82KyOJcjbDpIYUnEKa3Caf5z4C/YQN9PxDLKCsMG3Si0/KaASqAsXFCONmnQL
-         9zuEFehYEYN9wLs03oc5+iWVK1iVNsitw/5ptAAcaTVhDNfxMHzKllJ7PBJJ9IiaC2h3
-         ItEg==
+        bh=nXDjy7JPJ8XrZiw8dYtuA9M7FtFKUmW4GijlGMiZDeo=;
+        b=W3StrIEt1NsXEWvdU5avGU95Enq3cbFYCcn4JQnVWeuR2OJCVzshq5XVbRERJWATTj
+         a8gTuNq+u+zQTtVHVlxCyJhcjzGRjssWWYa18rsYhWT5uM9hOtRtst7HejvUCbqZ9b6U
+         oBLhEK3ey+uadLyH3jqFHft76Hup2g93+m5WYHqveVWRtmePCFkN+4j5sJ9GDFM4Es8X
+         OdXG1uZChre1Rw0EPQGwd8DTHS9Tw2mPeNoAlu4qfwnbKprxnJ7GDcvEt9NC5IkZSfrh
+         Up8W3fdSXm5G/T2XZcqeOIo6DdRVHrwqkx6R8Eu7VZs1I+uQ9V8bQ4PbTI/hPhZT9Zo8
+         eLtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687851616; x=1690443616;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687851839; x=1690443839;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6NTcpMVbPtfKRTcDrSmD8MoUfkjuvD8dm7rw3ArPL9I=;
-        b=g0SiZNiyN5DOOLwBEtvzmO24uaDONg9dAasj5+BO/CneBnMLYa95GHxJbLOaNZZC4M
-         Q+pLgQRzicVouLsavRAqGVKBOZqASOt+XcJIQiRMH1VBtXr3TlVWknRwv8nrAq+tFpVP
-         qbPK2xSK/9J9n+ST7T+qAkXynkFdtDNfnSO3ha72DjWva+k6WTNIcvTcMscHGRL37+Ch
-         1OztC1z+v8+HBmyd/l1NJET0Yc1lhOotAUZbqr3NIj+4Et6TKORdFv126IMUhYn0OJFI
-         anaFKJ45derNc9diIzWUkR20NM1eRTILgGbVHN4yKDiifVFFxeRqjUImwjMH+6Ubde38
-         IWAQ==
-X-Gm-Message-State: AC+VfDzXz2XsjEOckewDuRpTgCvwjVTvGbdEk6naxV7OJVNVWRqu48z3
-        Hnrw+1IKaYKMceVHtqfh3KptBg==
-X-Google-Smtp-Source: ACHHUZ5+P/WxO4oUioGdTlGmHsZgaxSX0SXG7cUKhxcYXN9myY+XUcQUBUCnCbqT23LWO6u4jDOXNg==
-X-Received: by 2002:a2e:7e11:0:b0:2b5:95a8:412b with SMTP id z17-20020a2e7e11000000b002b595a8412bmr7300556ljc.52.1687851616523;
-        Tue, 27 Jun 2023 00:40:16 -0700 (PDT)
+        bh=nXDjy7JPJ8XrZiw8dYtuA9M7FtFKUmW4GijlGMiZDeo=;
+        b=Mc4k2uOMvUcV4rtJ+/blO/ZMjeIJ32iznJTy9YO8KEWH3Ff2iAxnUlYqdeGDnl/K5x
+         +8ySfSmMLd85o0aq0XYqWUO0J9ksh0kZlnkZcIwK5D0Yx4r6xqAkVof3e1d5kswlUvH0
+         8vWC89bG7MeijHyQNog76RFSB3VZeeUx9zxF7It2dwmiSKa4DAsoXxDkdkwheeSXmj3N
+         kQuyxupTsF5BmNskjp4typ7e6VSIAjv+R/eg3kFpuva8RNcBhM2fk8y5lJdmWWK/4z64
+         dJkFVimEK3yRNW+GFy+FR8Wigils5C3bfFVdHQs4mvZJ25d79Rq1SvEBEH2h3NJ2/3i5
+         QyKg==
+X-Gm-Message-State: AC+VfDzyhgmJGcnb0qtE2JgT90embTrb/7jMaojyd1X5OrGYWWIFXKxa
+        ZlDpUpZgtIdXG27aEf7zobzcfg==
+X-Google-Smtp-Source: ACHHUZ6qtmjN/vi/vgCBazSl8DAEcvTTiaFDRa2Iv5DYB3acC9xLxbjSTFmH5IakkXPbPPvl85v0lA==
+X-Received: by 2002:a05:6512:3f1d:b0:4fa:ce08:a9d0 with SMTP id y29-20020a0565123f1d00b004face08a9d0mr4045130lfa.57.1687851838802;
+        Tue, 27 Jun 2023 00:43:58 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id m14-20020a7bca4e000000b003fa786b5195sm9823842wml.42.2023.06.27.00.40.12
+        by smtp.gmail.com with ESMTPSA id 21-20020a05600c22d500b003f9cb3c8958sm12898448wmg.3.2023.06.27.00.43.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 00:40:16 -0700 (PDT)
-Message-ID: <61f9a781-81fe-d553-6c85-eb069174e6f0@linaro.org>
-Date:   Tue, 27 Jun 2023 09:40:11 +0200
+        Tue, 27 Jun 2023 00:43:58 -0700 (PDT)
+Message-ID: <82dc5efc-35fe-15ff-d0ea-e1a19da71c5c@linaro.org>
+Date:   Tue, 27 Jun 2023 09:43:54 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 13/15] thermal/drivers/rockchip: remove redundant msg
-Content-Language: en-US
+Subject: Re: [PATCH 01/15] genirq/devres: Add error information printing for
+ devm_request_threaded_irq()
 To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
         rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
         rui.zhang@intel.com, mmayer@broadcom.com,
@@ -80,9 +80,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
 References: <20230627071707.77659-1-frank.li@vivo.com>
- <20230627071707.77659-13-frank.li@vivo.com>
+Content-Language: en-US
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230627071707.77659-13-frank.li@vivo.com>
+In-Reply-To: <20230627071707.77659-1-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,17 +95,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/06/2023 09:17, Yangtao Li wrote:
-> The upper-layer devm_request_threaded_irq() function can directly
-> print error information.
-
-I don't understand. "Can print"? It does not matter if it can, if it
-does not. Currently it doesn't, therefore change is not correct.
-Otherwise explain a bit better why this is redundant.
-
+On 27/06/2023 09:16, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
+> 
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> If error messages are printed everywhere, more than 1000 lines of code
+> can be saved by removing the msg in the driver.
 > 
 > Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
+>  kernel/irq/devres.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+> index f6e5515ee077..94039a915218 100644
+> --- a/kernel/irq/devres.c
+> +++ b/kernel/irq/devres.c
+> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  
+>  	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+>  			  GFP_KERNEL);
+> -	if (!dr)
+> +	if (!dr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
+
+Just like any memory allocation, I don't think we print anything for
+devres failures. Why do you think we should start doing it?
+
+>  		return -ENOMEM;
+> +	}
+>  
+>  	if (!devname)
+>  		devname = dev_name(dev);
+> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+>  				  dev_id);
+>  	if (rc) {
+> +		dev_err(dev, "Failed to request threaded irq\n");
+
+I don't like that one path - devm() managed - prints error, but regular
+path does not. Code should be here consistent. Also error message is too
+generic. You need to print at least irq number, maybe also devname?
 
 Best regards,
 Krzysztof
