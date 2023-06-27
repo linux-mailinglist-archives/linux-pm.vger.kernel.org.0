@@ -2,58 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F8D74025E
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 19:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869BE74029F
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 19:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjF0RkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 13:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S231739AbjF0Rux (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 13:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjF0RkU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 13:40:20 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6BC213F;
-        Tue, 27 Jun 2023 10:40:19 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-98e2865e2f2so79793066b.0;
-        Tue, 27 Jun 2023 10:40:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687887618; x=1690479618;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bf+1l/vTcyq2/vOLeqcdP9HdilBl9gX1Dtm45t9QQxU=;
-        b=iamWs/K/Y2D8/+xFabrLd9y/UbzFjUcwbrdIhmTFweeXQWn/3Qe+VaD0Bj/oX3885G
-         k9NTvotpS/DqvMX+pelMahGlWhzmTxUEKEgsd1ETiyB2CC+KqpsxxWAB5DddZgb0/936
-         uZ1eUa4+QO+hkHdVObBs5kGLVLERGElrfXz7lAN8ffnxoH9UF8f4HDRgALTHkUsR20yn
-         qaluF1ZC1WlYABjY1iFsYUfzTR6mouoS+qKJE2l2KhWOb06tdMabLSGqH2+oOwTLBvyL
-         Jcs576CEWjEGairnmhyJ7bYru9+KRB/IiVVUbtHBgm4OEanavph4+A5im0KHiWGiz49X
-         3ebg==
-X-Gm-Message-State: AC+VfDx7vnjLfcCVWDbj8ZCjPW2hq+B3Ix2ywAepXxow/FthdYn13cbD
-        j94D6Ol9/8cDTYh2eBbAQzMNvlmWCWwQA9i+kVq6lPKX
-X-Google-Smtp-Source: ACHHUZ4e1ahlo4xk8HkxLywEhnZicsAyZiPa/om6ahQsq1UfNdHRfDvZXT3/rmMcmg+WJWzFPBf/fmsyC2QjuNNTKEY=
-X-Received: by 2002:a17:906:73cd:b0:992:387:44d1 with SMTP id
- n13-20020a17090673cd00b00992038744d1mr2198007ejl.7.1687887617769; Tue, 27 Jun
- 2023 10:40:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230627170827.60f9f749@canb.auug.org.au> <f6b0cc15-276c-0058-b201-865556bff31f@infradead.org>
-In-Reply-To: <f6b0cc15-276c-0058-b201-865556bff31f@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 27 Jun 2023 19:40:06 +0200
-Message-ID: <CAJZ5v0g8ZC6w2H0Ki_2gDJ-vwfHqTOrx+e91jpt+qLMrTTwiaA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jun 27 (idle: intel_idle)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
+        with ESMTP id S230056AbjF0Ruw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 13:50:52 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664A5EC;
+        Tue, 27 Jun 2023 10:50:51 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 69a6c5d9f6858510; Tue, 27 Jun 2023 19:50:49 +0200
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 209BD6603CA;
+        Tue, 27 Jun 2023 19:50:49 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
         Arjan van de Ven <arjan@linux.intel.com>
-Content-Type: multipart/mixed; boundary="000000000000e0d87b05ff1ff5e0"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Subject: [PATCH v1] intel_idle: Add __init annotation to matchup_vm_state_with_baremetal()
+Date:   Tue, 27 Jun 2023 19:50:48 +0200
+Message-ID: <12236592.O9o76ZdvQC@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrtddtgdejgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghrthgvmhdrsghithih
+ uhhtshhkihihsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprghrjhgrnheslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,53 +51,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---000000000000e0d87b05ff1ff5e0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Tue, Jun 27, 2023 at 6:02=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
->
->
-> On 6/27/23 00:08, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Please do *not* add any v5.6 related stuff to you linux-next included
-> > branches until after v5.5-rc1 has been released.
-> >
-> > Changes since 20230626:
-> >
->
-> on i386:
->
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_stat=
-e_with_baremetal+0x51 (section: .text) -> intel_idle_max_cstate_reached (se=
-ction: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_stat=
-e_with_baremetal+0x62 (section: .text) -> cpuidle_state_table (section: .in=
-it.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_stat=
-e_with_baremetal+0x79 (section: .text) -> icpu (section: .init.data)
+The caller of (recently added) matchup_vm_state_with_baremetal() is an
+__init function and it uses some __initdata data structures, so add the
+__init annotation to it for consistency.
 
-The attached patch should address this.
+This addresses the following build warnings:
 
---000000000000e0d87b05ff1ff5e0
-Content-Type: text/x-patch; charset="US-ASCII"; name="intel_idle-section-fix.patch"
-Content-Disposition: attachment; filename="intel_idle-section-fix.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ljekobpk0>
-X-Attachment-Id: f_ljekobpk0
+WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_state_with_baremetal+0x51 (section: .text) -> intel_idle_max_cstate_reached (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_state_with_baremetal+0x62 (section: .text) -> cpuidle_state_table (section: .init.data)
+WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_state_with_baremetal+0x79 (section: .text) -> icpu (section: .init.data)
 
-LS0tCiBkcml2ZXJzL2lkbGUvaW50ZWxfaWRsZS5jIHwgICAgMiArLQogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpJbmRleDogbGludXgtcG0vZHJpdmVycy9p
-ZGxlL2ludGVsX2lkbGUuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09Ci0tLSBsaW51eC1wbS5vcmlnL2RyaXZlcnMvaWRs
-ZS9pbnRlbF9pZGxlLmMKKysrIGxpbnV4LXBtL2RyaXZlcnMvaWRsZS9pbnRlbF9pZGxlLmMKQEAg
-LTIxNDcsNyArMjE0Nyw3IEBAIHN0YXRpYyB2b2lkIF9faW5pdCBpbnRlbF9pZGxlX2NwdWlkbGVf
-ZGUKICAqIEFsbCBvdXIgc2hvcnQgaWRsZSBzdGF0ZXMgYXJlIGRvbWluYXRlZCBieSB2bWV4aXQv
-dm1lbnRlciBsYXRlbmNpZXMsCiAgKiBub3QgdGhlIHVuZGVybHlpbmcgaGFyZHdhcmUgbGF0ZW5j
-aWVzIHNvIHdlIGtlZXAgb3VyIHZhbHVlcyBmb3IgdGhlc2UuCiAgKi8KLXN0YXRpYyB2b2lkIG1h
-dGNodXBfdm1fc3RhdGVfd2l0aF9iYXJlbWV0YWwodm9pZCkKK3N0YXRpYyB2b2lkIF9faW5pdCBt
-YXRjaHVwX3ZtX3N0YXRlX3dpdGhfYmFyZW1ldGFsKHZvaWQpCiB7CiAJaW50IGNzdGF0ZTsKIAo=
---000000000000e0d87b05ff1ff5e0--
+Fixes: 0fac214bb75e ("intel_idle: Add a "Long HLT" C1 state for the VM guest mode")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/idle/intel_idle.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: linux-pm/drivers/idle/intel_idle.c
+===================================================================
+--- linux-pm.orig/drivers/idle/intel_idle.c
++++ linux-pm/drivers/idle/intel_idle.c
+@@ -2147,7 +2147,7 @@ static void __init intel_idle_cpuidle_de
+  * All our short idle states are dominated by vmexit/vmenter latencies,
+  * not the underlying hardware latencies so we keep our values for these.
+  */
+-static void matchup_vm_state_with_baremetal(void)
++static void __init matchup_vm_state_with_baremetal(void)
+ {
+ 	int cstate;
+ 
+
+
+
