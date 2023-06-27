@@ -2,281 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C3D7405B8
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 23:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B718B740668
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 00:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjF0VgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 17:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
+        id S229912AbjF0WT4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 18:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjF0VgN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 17:36:13 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC742D6A
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 14:36:05 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b44d77e56bso3935891fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 14:36:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687901764; x=1690493764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gQoEUdCQmhCVof+x1iaXcNraVfHd+tkSB3JbLT+sqI0=;
-        b=UjOnMKo9T609SHgU+7jwWFLWlcpzeb5RV/VhQzzvv/l25urjB4wdEdxBpgt9YCPzYS
-         spphxOavZyAHJ7X2ilW5u8OZmlcoZyRFjhDDOh4NeVjtcLgMTHpALXivQBqqrlavRH7N
-         cu9mM4ibaEnkDSyBFhWfvfpWbsS1W6cIJbgSVC9K28YBL3ykdEOZuaDVZlia41cDq+1T
-         FDSaUfb2BZHfKhjp6E+2gvFt8VBgNzWHf3DQVNjluCw0gWbaQraruZBrcYC0IKptfBHv
-         lJOjjF9SPkArRRN2Vv90T61+Kg0JbyC9/iOMszXbU79Iwq2DUFXDjY/r1OZqUojZC6mg
-         1CUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687901764; x=1690493764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gQoEUdCQmhCVof+x1iaXcNraVfHd+tkSB3JbLT+sqI0=;
-        b=Bflac/1rAPrmQ4zHWI0Oar/hlRdw+BtkzsBI6xVBGEVyoVb+RHNXspyFRap/sqcFaj
-         wh4qgh35chcxRQjJ5+yaBSas/JEk52rhkIHNn5Dp7+gSisTw8vUGcVJwS63d0EoeWvGD
-         dn7dLRPLxjORVWOOGuJvS49niwGe7pUyMCJ+PlCF0pdHgHHm2flPZZwE2gEeW+2gB35x
-         wxuaSSeNqKIb1rJ/aswpDrUhDrqe4VidMxosatDCATPpHPpptdO4lIkUoOe9TqGlJfDD
-         iNeV/PyY822nMCq0NdqgY9veR3K6kyaLN98rDv4YZ1mS+Xse/l6Ie7TQqJrl+JQDcKs6
-         Qn5A==
-X-Gm-Message-State: AC+VfDwp6B2J9CrrvAQuBjAtPM8REkSVgA+itU/4tVZm34mkrt0JUM1Z
-        k1aGY7Xc1/devpQULClES4zZqQ==
-X-Google-Smtp-Source: ACHHUZ6D+WW+X1zs/JP/pvR0q99L6cNp8JX8nUK4jGjYd7ThqXjfNA7WQwosEi2wc+Rxi1f1sL02VQ==
-X-Received: by 2002:a2e:9d1a:0:b0:2b4:7d45:7654 with SMTP id t26-20020a2e9d1a000000b002b47d457654mr8576663lji.21.1687901763792;
-        Tue, 27 Jun 2023 14:36:03 -0700 (PDT)
-Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
-        by smtp.gmail.com with ESMTPSA id t9-20020a2e9d09000000b002b6a0ccc106sm1251597lji.12.2023.06.27.14.36.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jun 2023 14:36:03 -0700 (PDT)
-Message-ID: <b250540c-ce64-471e-4224-dc9ea6814d77@linaro.org>
-Date:   Tue, 27 Jun 2023 23:36:01 +0200
+        with ESMTP id S229923AbjF0WTz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 18:19:55 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF53C2943;
+        Tue, 27 Jun 2023 15:19:51 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RKIx5V015762;
+        Tue, 27 Jun 2023 22:19:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : to : cc : from : subject : content-type :
+ content-transfer-encoding; s=qcppdkim1;
+ bh=mdRkPUw0VNu4riMvavHEr7oNO0KadYH6MVwxpHk/bCo=;
+ b=WN/6vU8gq0niFpxh3dqULsuR6Mue3v0QCzI8RtEGrHukJ3xmo1C7TmUd7hEnWQBq3ee9
+ S8FfhbI2zQabg2vHOBpRXreij3alH4HA0z56/tlFEcXIDPCafEdTKJsHQLGPejelFSbe
+ p4zcM4CmZak0fC/t6MzbpVN30j9pfcz/PN9wLX8QrNSzljtwEM31d3FBUfID1YQ0SAF2
+ fFxvU5WxqklEZxjfbuVJnv2cr7DJT0i9WUOrLJms0rEhmZ50ZC5WDzIpmD22BWA+PW63
+ e7uihnLELapABSPMtpOMN0cPFYV1THv+lYr1fu11Myz+R9KjcSSu1aNhcogW/Dum0Z+/ Mg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfcvtumeg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 22:19:39 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35RMJbTo006317
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 22:19:38 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 27 Jun
+ 2023 15:19:36 -0700
+Message-ID: <7197a514-5568-2089-f038-2625b88d7e2e@quicinc.com>
+Date:   Tue, 27 Jun 2023 15:19:35 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v11 0/9] Add support for Core Power Reduction v3, v4 and
- Hardened
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     "Rafael J. Wysocki" <rafael@kernel.org>, <pavel@ucw.cz>
+CC:     <len.brown@intel.com>, <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <quic_travitej@quicinc.com>,
+        <quic_pdhaval@quicinc.com>,
+        Nagamalleswararao Ganji <nganji@quicinc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Question on platform_suspend_ops::suspend_again() callback
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: DNJli0smS86nrm9a_qMUfC79c3vo-bMJ
+X-Proofpoint-GUID: DNJli0smS86nrm9a_qMUfC79c3vo-bMJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011
+ malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=740 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306270203
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27.06.2023 20:30, Konrad Dybcio wrote:
-> Changes in v11:
-> 
-> CPR COMMON:
-> - split the commonizing patch, make it actually do what it says on the
->   tin..
-> - fix some overflow bugs
-> 
-> CPR3:
-> - fix some overflow bugs
-> - don't assume "lack of qcom,opp-?loop-vadj" means val=0"
-> 
-> CPR BINDINGS:
-> - drop quotes in items
-> - drop clock-names (there's just a single one)
-> - rewrite the description a bit
-> - fix up the example
-> - drop bogus minItems
-> - "acc-syscon" -> "qcom,acc"
-> 
-> DTS:
-> - fix qfprom children so that the bits=<> doesn't overflow reg[size]
-> - drop unrelated changes
-> - place one reg entry per line
-I managed to send the wrong revision. Will send a new one, with more
-fixes soon.
+Hi Rafael / Pavel
 
-Konrad
-> 
-> Link to v10: https://lore.kernel.org/r/20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org
-> 
-> Changes in v10:
-> - Skip "Let qcom,opp-fuse-level be a 2-long array" (Applied by Viresh)
-> - Use b4 (it may be the first time you're receiving this if git send-email
->   omitted you before..)
-> - +Cc Robert Marko (expressed interest in previous revisions)
-> - Add "Document CPR3 open/closed loop volt adjustment"
-> CPR:
-> - %hhu -> %u (checkpatch)
-> CPR BINDINGS:
-> - Drop QCS404 fuse set (it doesn't use this driver, what did I even think..)
->   but leave the allOf:if: block for expansion (sdm660, msm8996, ipqABCD should
->   follow soon..)
-> - Drop Rob's R-b (as things changed *again*, please take one more look to make
->   sure you're okay with this file, Rob..)
-> 
-> Link to v9:
-> https://lore.kernel.org/linux-arm-msm/20230116093845.72621-1-konrad.dybcio@linaro.org/
-> 
-> Changes in v9:
-> - Restore forgotten MAINTAINERS patch (oops)
-> CPR:
-> - Include the missing header (big oops!)
-> - Fix kconfig dependencies
-> CPR bindings:
-> - Fix cpu reg in example (why didn't dt_binding_check scream at that)
-> - Add newlines between nodes in example
-> - Change opp table node names to opp-table-cpu[04]
-> - Change opp table labels to cpu[04]_opp_table
-> - Change CPRh opp subnode names to opp-N from oppN
-> - Remove some stray newlines
-> - Bring back nvmem-cell-names and add the 8998's set
-> - Allow power-domains for VDDCX_AO voting
-> - Remove Rob's r-b, there's been quite a bit of changes..
-> CPR DT:
-> - Send the correct revision of the patch this time around..
-> OPP bindings:
-> - Add Rob's ack
-> 
-> Link to v8:
-> https://lore.kernel.org/linux-arm-msm/20230110175605.1240188-1-konrad.dybcio@linaro.org/
-> 
-> Changes in v8:
-> - Overtake this series from AGdR
-> - Apply all review comments from v7 except Vladimir's request to
->   not create the include/ header; it will be strictly necessary for
->   OSM-aware cpufreq_hw programming, which this series was more or
->   less created just for..
-> - Drop QCS404 dtsi change, account for not breaking backwards compat
->   in [3/5]
-> - Add type phandle type reference to acc-syscon in [1/5]
-> - Update AGdR's email addresses for maintainer entries
-> - Add [2/5] to make dt_binding_check happy
-> - Separate the CPRh DT addition from cpufreq_hw addition, sort and
->   properly indent new nodes
-> - Drop CPR yaml conversion, that happened in meantime
-> - Reorder the patches to make a bit more sense
-> - Tested again on MSM8998 Xperia XZ Premium (Maple)
-> - I take no responsibility for AGdR's cheeky jokes, only the code!
-> 
-> Link to v7:
-> https://lore.kernel.org/lkml/20210901155735.629282-1-angelogioacchino.delregno@somainline.org/
-> 
-> Changes in v7:
-> - Rebased on linux-next as of 210901
-> - Changed cpr_read_efuse calls to nvmem_cell_read_variable_le_u32,
->   following what was done in commit c77634b9d916
-> 
-> Changes in v6:
-> - Fixes from Bjorn's review
-> - After a conversation with Viresh, it turned out I was abusing the
->   OPP API to pass the APM and MEM-ACC thresholds to qcom-cpufreq-hw,
->   so now the driver is using the genpd created virtual device and
->   passing drvdata instead to stop the abuse
-> - Since the CPR commonization was ignored for more than 6 months,
->   it is now included in the CPRv3/4/h series, as there is no point
->   in commonizing without having this driver
-> - Rebased on v5.13
-> 
-> Changes in v5:
-> - Fixed getting OPP table when not yet installed by the caller
->   of power domain attachment
-> 
-> Changes in v4:
-> - Huge patch series has been split for better reviewability,
->   as suggested by Bjorn
-> 
-> Changes in v3:
-> - Fixed YAML doc issues
-> - Removed unused variables and redundant if branch
-> 
-> Changes in v2:
-> - Implemented dynamic Memory Accelerator corners support, needed
->   by MSM8998
-> - Added MSM8998 Silver/Gold parameters
-> 
-> This commit introduces a new driver, based on the one for cpr v1,
-> to enable support for the newer Qualcomm Core Power Reduction
-> hardware, known downstream as CPR3, CPR4 and CPRh, and support
-> for MSM8998 and SDM630 CPU power reduction.
-> 
-> In these new versions of the hardware, support for various new
-> features was introduced, including voltage reduction for the GPU,
-> security hardening and a new way of controlling CPU DVFS,
-> consisting in internal communication between microcontrollers,
-> specifically the CPR-Hardened and the Operating State Manager.
-> 
-> The CPR v3, v4 and CPRh are present in a broad range of SoCs,
-> from the mid-range to the high end ones including, but not limited
-> to, MSM8953/8996/8998, SDM630/636/660/845.
-> 
-> As to clarify, SDM845 does the CPR/SAW/OSM setup in TZ firmware, but
-> this is limited to the CPU context; despite GPU CPR support being not
-> implemented in this series, it is planned for the future, and some
-> SDM845 need the CPR (in the context of GPU CPR) to be configured from
-> this driver.
-> 
-> It is also planned to add the CPR data for MSM8996, since this driver
-> does support the CPRv4 found on that SoC, but I currently have no time
-> to properly test that on a real device, so I prefer getting this big
-> implementation merged before adding more things on top.
-> 
-> As for MSM8953, we (read: nobody from SoMainline) have no device with
-> this chip: since we are unable to test the cpr data and the entire
-> driver on that one, we currently have no plans to do this addition
-> in the future. This is left to other nice developers: I'm sure that
-> somebody will come up with that, sooner or later
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-> AngeloGioacchino Del Regno (7):
->       MAINTAINERS: Add entry for Qualcomm CPRv3/v4/Hardened driver
->       dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
->       soc: qcom: cpr: Move common functions to new file
->       soc: qcom: cpr-common: Add support for flat fuse adjustment
->       soc: qcom: cpr-common: Add threads support
->       soc: qcom: Add support for Core Power Reduction v3, v4 and Hardened
->       arm64: dts: qcom: msm8998: Configure CPRh
-> 
-> Konrad Dybcio (2):
->       dt-bindings: opp: v2-qcom-level: Document CPR3 open/closed loop volt adjustment
->       soc: qcom: cpr: Use u64 for frequency
-> 
->  .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |   14 +
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    |  289 ++
->  MAINTAINERS                                        |    6 +
->  arch/arm64/boot/dts/qcom/msm8998.dtsi              |  757 +++++
->  drivers/soc/qcom/Kconfig                           |   22 +
->  drivers/soc/qcom/Makefile                          |    2 +
->  drivers/soc/qcom/cpr-common.c                      |  362 +++
->  drivers/soc/qcom/cpr-common.h                      |  109 +
->  drivers/soc/qcom/cpr.c                             |  392 +--
->  drivers/soc/qcom/cpr3.c                            | 2932 ++++++++++++++++++++
->  include/soc/qcom/cpr.h                             |   17 +
->  11 files changed, 4535 insertions(+), 367 deletions(-)
-> ---
-> base-commit: 53cdf865f90ba922a854c65ed05b519f9d728424
-> change-id: 20230217-topic-cpr3h-de232bfb47ec
-> 
-> Best regards,
+I work with the QC display team and help to co-maintain the MSM display 
+sub-system.
+
+I had a question about the suspend_again() callback in the 
+platform_suspend_ops
+
+Typical pm_suspend() callflow is like below:
+
+pm_suspend()
+
+     ->pm_suspend()
+         ->enter_state()
+             -> suspend_prepare()
+                 -> suspend_freeze_processes()
+                  (freeze all userspace processes)
+             -> suspend_devices_and_enter()
+                 -> dpm_suspend_start()
+                 -> suspend_enter()
+                     -> s2idle_loop
+                     -> dpm_resume_early()
+                     (after breaking out of loop)
+
+             -> suspend_finish()
+                 -> suspend_thaw_processes()
+                   (unfreeze all userspace processes)
+
+
+Now, lets say while we are in s2idle() (typically in the display idle 
+screen use-cases) and then an interrupt fires. We will then break out of 
+the loop and also unfreeze() all usermode processes unless
+we have a suspend_again() callback 
+https://github.com/torvalds/linux/blob/master/kernel/power/suspend.c#L512 
+due to the suspend_thaw_processes().
+
+(ignoring the error and wakeup conditions for this discussion)
+
+ From our profiling it takes about 300ms to wakeup these usermode 
+processes on android (it can vary based on how many processes were 
+running, which OS etc).
+
+But on an average we can can continue to remain idle for about 300ms 
+more if can skip the usermode process wakeup.
+
+ From the documentation of the suspend_again() also, it seems that 
+defining this callback would ensure we can address the interrupt and go 
+back to the s2idle instead of waking up usermode processes and trying 
+again after that.
+
+  * @suspend_again: Returns whether the system should suspend again 
+(true) or
+  *      not (false). If the platform wants to poll sensors or execute some
+  *      code during suspended without invoking userspace and most of 
+devices,
+  *      suspend_again callback is the place assuming that 
+periodic-wakeup or
+  *      alarm-wakeup is already setup. This allows to execute some 
+codes while
+  *      being kept suspended in the view of userland and devices.
+  *
+
+Questions to you:
+
+1) We do not see anyone using this suspend_again() op currently. Has 
+there been any discussion about this before or are there any existing 
+patches in the list which demonstrate a usage? If so, can you pls point 
+us to those?
+
+2) If there are no such patches, if we go ahead and add a 
+suspend_again() callback and post it for review, can it be considered 
+for acceptance?
+
+3) If suspend_again() callback is not the way to go, can you please 
+suggest an alternative of how we can avoid wakeup of userspace process.
+
+Just want to make sure that there are no reasons which we are not aware 
+of before attempting this.
+
+Thanks
+
+Abhinav
