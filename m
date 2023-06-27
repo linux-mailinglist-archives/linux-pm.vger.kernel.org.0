@@ -2,59 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA80873FBD9
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 14:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22C073FBE6
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 14:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjF0MRN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 08:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S229867AbjF0MWH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 08:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjF0MRM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 08:17:12 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C741BE7;
-        Tue, 27 Jun 2023 05:17:10 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so6194691e87.2;
-        Tue, 27 Jun 2023 05:17:10 -0700 (PDT)
+        with ESMTP id S229790AbjF0MWG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 08:22:06 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17FC12C;
+        Tue, 27 Jun 2023 05:22:03 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fa7512e599so54726745e9.2;
+        Tue, 27 Jun 2023 05:22:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687868229; x=1690460229;
+        d=gmail.com; s=20221208; t=1687868522; x=1690460522;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zw0XO0K/YJZaGpOs6ScnOWaE2Vp0kSyIA1FOyq+ley8=;
-        b=Y4ZPTg47KBLzs+cPPRkoB4QEQJogOjJOdJjCAiLhGsqferI0CkZhck89KuGf/qZK8m
-         cNG79iYsCpGh0vUfoB1GfwwePp2dBEDo5S6JuiBMe/6lFyJbRGHCQ2453o4AMhZdaxoh
-         zciAkf+nZLm0WQYQYHqenxg3BBIiolRGNJvo/hWrPvw1G3LZnIwCoSQhstGxhC7wWoYO
-         OMQDJAeMLg4K6a+41nFCSWvQVgrXcJxe/w0XgAp9B5YqFkb5PSVqGvg4kdHi/+c2H1Rl
-         6id7Y9bLkRlvGKrNwhweQaiusg7KVIpmU12Fh/+hjFVrQXIDpL2mXonMgkpmfyBtATqM
-         3JMQ==
+        bh=yF+BfpyQkTKvNGNGOXI7AZCHasniunHH0XoTxKM2eq8=;
+        b=CBrxuCRgD7PbRvizbCFCNZzvIz7k4lZsd1vCuP26T6NlsZzsi1FPX2wlFMMn0n8dCZ
+         Jdn0CM3Zma9XG5W24lZ8oO/DaydxffbaoF2le8gapvO1HB82fpbc9izdctwUOhykU4mP
+         vpmJRTBlcd0ZmuPX8ImgpDVYR7xL1CMR+I8Llqz/+DbCozJVcc6TFdDMRlsXr+DpZFEx
+         JWrTWeEL0/mSZCvJEM/PIigYryl2nnEOZ3vZurGT6aamoUzZ5Bi9m/2bP/gxo7XDqWvc
+         V/9a2efL5Ib2pB1q3YHiJvzmJi3BLgvkLWnpy36d2fO+m/M+lEcAeCEro2qMTyda53ib
+         vjHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687868229; x=1690460229;
+        d=1e100.net; s=20221208; t=1687868522; x=1690460522;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zw0XO0K/YJZaGpOs6ScnOWaE2Vp0kSyIA1FOyq+ley8=;
-        b=dj6upq1M448AKv10Z/A+EFHbm9P2McPvbUOCqD/51JLI+a7HpnL07i5C8E6MM5tiAN
-         PYioXfEwXS6PC+Y7NkhUBf5wh+FJLUCfZ97GowuN+bemMG/Cqb2GR4CptcD5TaNSLBba
-         XA5zIarAjrWU+aw/wdIdeWMdfQd1BZLtbjHTzwZT33Mf0TiatEa3JKEl0yBighsNo/IR
-         s62ktiUzrChp0me/STanU/mvfSm8d4xlSg24mgnAzhPxyabPesfi5F4TJx7aHR7YaAcp
-         /2q5ONE47+wjyp3i0AyXGg4uTIPhHklP/02Fgdx9EFAP2NfVjqNo7Z5wmNqvtR5r5tYE
-         rwJA==
-X-Gm-Message-State: AC+VfDyOgDfv3GUljXMJgUJjBmKhLjBE4GTiyKRXjP3e5osOXj/FImWh
-        eU//QFf0aL/IKk7lq35jtHN5lJo6//M=
-X-Google-Smtp-Source: ACHHUZ4AZlBP0GXgHdZROjji+plUNPA9EpkAsuHPth/8ra4buZBwQysFftdpJP81W+FGiOrbApH5Lg==
-X-Received: by 2002:a19:505d:0:b0:4f8:5ede:d447 with SMTP id z29-20020a19505d000000b004f85eded447mr15585676lfj.28.1687868228732;
-        Tue, 27 Jun 2023 05:17:08 -0700 (PDT)
+        bh=yF+BfpyQkTKvNGNGOXI7AZCHasniunHH0XoTxKM2eq8=;
+        b=HGv9CpIk3RDLtqpIxuQ8e5QQjQBTUD61z52vXWREp6Jfx3JFpRFml+jHPCfxUNFIQJ
+         izq63N+sjh4h7n9EOK0543ocWebV8f02lsX36CDurZopMRXzudAg+i6ek51Zd64xJLXh
+         DEBXp2YWlErB6ff8w5RfWJHYqU3/pavIKtrUTyzB1HfaZQsljlkB+7sS14DfZ5x7NDRY
+         Edn2dIQl58YHcpdc8Vp4WLf654Uw14yPoLqgGCjPi/1ldMjZsPyJbr6S/U+E6P6K6zPT
+         7/pl6grA0xWbQ2fWHPjEt+AeFNcoVMe2gLRKtczYhznDNLUqrQMHCrUJcS+i1xlQ297X
+         xayw==
+X-Gm-Message-State: AC+VfDz1uA/X9QKHWNWLUCF77OgrVHYwIe1FzBsQWIhNdVS33YX66k5C
+        bZaqdeg58V49mM0cnfmxayxzhRTLFJ9UVA==
+X-Google-Smtp-Source: ACHHUZ49DxcpNNlfhj3ePNfadu6ido8FNLnvtMLuBvSnYoY/fd0GHnuYq858wJkQCKND8S21nh76vw==
+X-Received: by 2002:a05:600c:c4:b0:3fa:71db:56ff with SMTP id u4-20020a05600c00c400b003fa71db56ffmr11465476wmm.40.1687868522215;
+        Tue, 27 Jun 2023 05:22:02 -0700 (PDT)
 Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id c1-20020a056000104100b003140039f318sm1504556wrx.69.2023.06.27.05.17.07
+        by smtp.gmail.com with ESMTPSA id s24-20020a7bc398000000b003fb9ebb6b88sm2297449wmj.39.2023.06.27.05.22.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 05:17:07 -0700 (PDT)
+        Tue, 27 Jun 2023 05:22:01 -0700 (PDT)
 From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] power: supply: bd99954: make read-only array sub_status_reg
-Date:   Tue, 27 Jun 2023 13:17:07 +0100
-Message-Id: <20230627121707.722021-1-colin.i.king@gmail.com>
+Subject: [PATCH][next] thermal/drivers/k3_j72xx_bandgap: make read-only const arrays static
+Date:   Tue, 27 Jun 2023 13:22:00 +0100
+Message-Id: <20230627122200.722633-1-colin.i.king@gmail.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -69,27 +71,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Don't populate the read-only array on the stack, instead make it
-static const.
+Don't populate the const arrays on the stack, instead make them static.
 
 Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/power/supply/bd99954-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/k3_j72xx_bandgap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/bd99954-charger.c b/drivers/power/supply/bd99954-charger.c
-index 086dcf4033c1..1ed1d9f99fb3 100644
---- a/drivers/power/supply/bd99954-charger.c
-+++ b/drivers/power/supply/bd99954-charger.c
-@@ -536,7 +536,7 @@ static irqreturn_t bd9995x_irq_handler_thread(int irq, void *private)
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 5be1f09eeb2c..2250f3eec93b 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -357,7 +357,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 	struct err_values err_vals;
+ 	void __iomem *fuse_base;
  
- 	for_each_set_bit(i, &tmp, 7) {
- 		int sub_status, sub_mask;
--		int sub_status_reg[] = {
-+		static const int sub_status_reg[] = {
- 			INT1_STATUS, INT2_STATUS, INT3_STATUS, INT4_STATUS,
- 			INT5_STATUS, INT6_STATUS, INT7_STATUS,
- 		};
+-	const s64 golden_factors[] = {
++	static const s64 golden_factors[] = {
+ 		-490019999999999936,
+ 		3251200000000000,
+ 		-1705800000000,
+@@ -365,7 +365,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 		-92627,
+ 	};
+ 
+-	const s64 pvt_wa_factors[] = {
++	static const s64 pvt_wa_factors[] = {
+ 		-415230000000000000,
+ 		3126600000000000,
+ 		-1157800000000,
 -- 
 2.39.2
 
