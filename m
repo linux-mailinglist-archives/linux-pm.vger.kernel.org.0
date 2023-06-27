@@ -2,216 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4271873F5F8
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 09:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2038373F7C7
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 10:51:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231339AbjF0Hrz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 03:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S231235AbjF0Ivh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 04:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjF0Hrx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 03:47:53 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E7EF7
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 00:47:50 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so5748459e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 00:47:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech-se.20221208.gappssmtp.com; s=20221208; t=1687852069; x=1690444069;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KZs6V3WoqaN2ypay6C0mcFsBihk+1Lib6W1lzqZUXcA=;
-        b=Rz8K10r/ZmO1qzysKmpchpOle08tg4KT4u6GRsFni1e+KT+Q7GV6ApCy00Dz7OcOqM
-         6n/XfFhdt/yzeWgoH4zyeRpxb7EurE6UK2KevyqJGWZuO+slFkp+sUiO41sIeBpuNIk8
-         jyK9euk926FUJXyXApfk42got5hopxVWBVlLhhfMWmJGhzi3WaX9kim9j/oaySZ+jeVK
-         6qyoKOEDNNtqRtX0CY072wjGXtRBKd4mshBzIatfkZI70N+csz+9SQ8EcdVxpBG1qsZi
-         6K2DQAjanlRgPFiXYosaHHjyMDzEt9JxkUdDEt2KB/KmbJpx4drs7cVFPfknmtfIjKp7
-         2HuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687852069; x=1690444069;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZs6V3WoqaN2ypay6C0mcFsBihk+1Lib6W1lzqZUXcA=;
-        b=ipsCbcytw4u1otJ0q7Bp9gntMF8CpkPfAdy5R7MF5oBaNpxuDz8bkwHj0SlJRBjpbC
-         UCGNTcKSuUibvvXG4c+Ok0UCLmtXuRsGh/5SQv51HD7KH6U3/WEMxfpFRwcsbple8MoB
-         5YATHF3f8l0lI3ewmCnUTaElkJfgkYPep487HR6FC7znrwCQvt/vgSiWF/xYWeM4wFmd
-         dGyZKIu1MBgqgjfyFRYhb+DLhNhZu+LuND9muQW+diGP/2LyMC6yWmCq2PSlVmC+MPLN
-         b20vNSlWiWt6O+ASnh5an6+aY0STlEQgOtXlDLrExM0d8BTVDEQ1AY6tVq5LxaESPfYS
-         KEHA==
-X-Gm-Message-State: AC+VfDx02BQzILBiI2zjbgSeVcIHgCNsi8M+A3Qr+8nfrvIiXSqfgUgI
-        ywISkEWzo0UT1L/nIkkJcB+0Gg==
-X-Google-Smtp-Source: ACHHUZ4wHEFcdjzPyulmOIHzpvd1zFWEJSswBnhAwGXK1zWk1HEEmYbkPLIJGMwRtpu+8lIxD1zvqA==
-X-Received: by 2002:a19:5f07:0:b0:4dd:9f86:859d with SMTP id t7-20020a195f07000000b004dd9f86859dmr17063106lfb.13.1687852068882;
-        Tue, 27 Jun 2023 00:47:48 -0700 (PDT)
-Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac2519a000000b004f4b42e2d7dsm1413087lfi.230.2023.06.27.00.47.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 00:47:48 -0700 (PDT)
-Date:   Tue, 27 Jun 2023 09:47:47 +0200
-From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+        with ESMTP id S231903AbjF0Ivf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 04:51:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7922199C
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 01:51:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qE4Og-0007V2-F6; Tue, 27 Jun 2023 10:50:02 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qE4OT-00AOye-Qh; Tue, 27 Jun 2023 10:49:49 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qE4OS-000CFt-WF; Tue, 27 Jun 2023 10:49:49 +0200
+Date:   Tue, 27 Jun 2023 10:49:48 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/6] drivers/thermal/rcar_gen3_thermal: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <ZJqUI1hL29o-OBei@oden.dyn.berto.se>
-References: <20230626124334.15100-1-frank.li@vivo.com>
- <20230626124334.15100-4-frank.li@vivo.com>
- <ZJm8p4GnTG-vtb0Q@oden.dyn.berto.se>
- <2f33ff1e-ec4e-e060-a84d-ee38ed17c9f7@vivo.com>
+Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 01/15] genirq/devres: Add error information printing for
+ devm_request_threaded_irq()
+Message-ID: <20230627084948.nwp7gmwpdtadcfhk@pengutronix.de>
+References: <20230627071707.77659-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fbpfi3z6hsdafixb"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2f33ff1e-ec4e-e060-a84d-ee38ed17c9f7@vivo.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230627071707.77659-1-frank.li@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yangtao,
 
-On 2023-06-27 10:58:16 +0800, Yangtao Li wrote:
-> Hi Niklas,
-> 
-> On 2023/6/27 0:28, Niklas Söderlund wrote:
-> 
-> > Hi Yangtao,
-> > 
-> > Thanks for your work.
-> > 
-> > On 2023-06-26 20:43:31 +0800, Yangtao Li wrote:
-> > > Use devm_platform_ioremap_resource() to simplify code.
-> > > 
-> > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > This do indeed simplify the code, but it also breaks the driver :-)
-> 
-> How about the patch below? Can the following rcar driver also take a similar
-> approach?
+--fbpfi3z6hsdafixb
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Maybe it could, I would need to test it and I'm traveling this week with 
-no access to hardware. But I don't like the change you propose, as it 
-makes the code more complex without any other goal then to 
-s/platform_get_resource/devm_platform_ioremap_resource/.
+Hello,
 
-If you have a reason, like trying to remove platform_get_resource() from 
-the kernel or such I will consider the change. But if you only want to 
-change things *because* I think the current code do the right thing in a 
-clear way, look for resource, if found map it else use what resources 
-have been found already. Adding special case based on return code is 
-IMHO more complex, again if you need to go that route please add a 
-comment describing the special case.
+On Tue, Jun 27, 2023 at 03:16:52PM +0800, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
+>=20
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> If error messages are printed everywhere, more than 1000 lines of code
+> can be saved by removing the msg in the driver.
+>=20
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  kernel/irq/devres.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+> index f6e5515ee077..94039a915218 100644
+> --- a/kernel/irq/devres.c
+> +++ b/kernel/irq/devres.c
+> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsi=
+gned int irq,
+> =20
+>  	dr =3D devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+>  			  GFP_KERNEL);
+> -	if (!dr)
+> +	if (!dr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
+>  		return -ENOMEM;
+> +	}
+> =20
+>  	if (!devname)
+>  		devname =3D dev_name(dev);
+> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsig=
+ned int irq,
+>  	rc =3D request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+>  				  dev_id);
+>  	if (rc) {
+> +		dev_err(dev, "Failed to request threaded irq\n");
+>  		devres_free(dr);
+>  		return rc;
+>  	}
 
-> 
-> 
-> diff --git a/drivers/thermal/rcar_gen3_thermal.c
-> b/drivers/thermal/rcar_gen3_thermal.c
-> index 9029d01e029b..0cd9a030eb9e 100644
-> --- a/drivers/thermal/rcar_gen3_thermal.c
-> +++ b/drivers/thermal/rcar_gen3_thermal.c
-> @@ -481,7 +481,6 @@ static int rcar_gen3_thermal_probe(struct
-> platform_device *pdev)
->  {
->         struct rcar_gen3_thermal_priv *priv;
->         struct device *dev = &pdev->dev;
-> -       struct resource *res;
->         struct thermal_zone_device *zone;
->         unsigned int i;
->         int ret;
-> @@ -503,22 +502,23 @@ static int rcar_gen3_thermal_probe(struct
-> platform_device *pdev)
-> 
->         for (i = 0; i < TSC_MAX_NUM; i++) {
->                 struct rcar_gen3_thermal_tsc *tsc;
-> +               void __iomem *base;
-> 
-> -               res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-> -               if (!res)
-> -                       break;
-> +               base = devm_platform_ioremap_resource(pdev, i);
-> +               if (IS_ERR(base)) {
-> +                       if (PTR_ERR(base) == -EINVAL)
-> +                               break;
-> 
-> -               tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-> -               if (!tsc) {
-> -                       ret = -ENOMEM;
-> +                       ret = PTR_ERR(base);
->                         goto error_unregister;
->                 }
-> 
-> -               tsc->base = devm_ioremap_resource(dev, res);
-> -               if (IS_ERR(tsc->base)) {
-> -                       ret = PTR_ERR(tsc->base);
-> +               tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-> +               if (!tsc) {
-> +                       ret = -ENOMEM;
->                         goto error_unregister;
->                 }
-> +               tsc->base = base;
-> 
->                 priv->tscs[i] = tsc;
->         }
-> 
-> 
-> > Before the change, failing to find a resource at position "i", breaks
-> > the probe loop, and probing continues and the number of resource
-> > described are the number of TSC find are used.
-> > 
-> > After the change failing to find all possible TCS will fail the whole
-> > probe process, even if some TCS where described. And not describing max
-> > number of TCS on each system is perfectly fine.
-> > 
-> > Nacked-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
-> > 
-> > > ---
-> > >   drivers/thermal/rcar_gen3_thermal.c | 7 +------
-> > >   1 file changed, 1 insertion(+), 6 deletions(-)
-> > > 
-> > > diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-> > > index 9029d01e029b..5c623f13d9ec 100644
-> > > --- a/drivers/thermal/rcar_gen3_thermal.c
-> > > +++ b/drivers/thermal/rcar_gen3_thermal.c
-> > > @@ -481,7 +481,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
-> > >   {
-> > >   	struct rcar_gen3_thermal_priv *priv;
-> > >   	struct device *dev = &pdev->dev;
-> > > -	struct resource *res;
-> > >   	struct thermal_zone_device *zone;
-> > >   	unsigned int i;
-> > >   	int ret;
-> > > @@ -504,17 +503,13 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
-> > >   	for (i = 0; i < TSC_MAX_NUM; i++) {
-> > >   		struct rcar_gen3_thermal_tsc *tsc;
-> > > -		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
-> > > -		if (!res)
-> > > -			break;
-> > > -
-> > >   		tsc = devm_kzalloc(dev, sizeof(*tsc), GFP_KERNEL);
-> > >   		if (!tsc) {
-> > >   			ret = -ENOMEM;
-> > >   			goto error_unregister;
-> > >   		}
-> > > -		tsc->base = devm_ioremap_resource(dev, res);
-> > > +		tsc->base = devm_platform_ioremap_resource(pdev, i);
-> > >   		if (IS_ERR(tsc->base)) {
-> > >   			ret = PTR_ERR(tsc->base);
-> > >   			goto error_unregister;
-> > > -- 
-> > > 2.39.0
-> > > 
+My personal opinion is that generic allocation functions should be
+silent. The reason is that the consuming driver is in a better position
+to emit a helpful error message.
 
--- 
-Kind Regards,
-Niklas Söderlund
+While there is some room to improvment in this generic variant (by
+mentioning the error code and maybe also the irq number), consider a
+device that has up to 3 irqs and sometimes only 1. So the driver might
+want to handle some irq requesting silently. And also for non-optional
+irqs
+
+	mybus:mydev: Failed to request TX irq (EBUSY)
+
+is much more helpful than
+
+	mybus:mydev: Failed to request threaded irq
+
+(Hint: "threaded" is not a helpful information here either.)
+
+Yes, a message in the driver has the downside of making the kernel image
+(or module) bigger, but the added value is IMHO worth that.
+
+Also you might want to handle -EPROBE_DEFER and not emit a message then?
+(Not sure if request_threaded_irq can return that.)
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--fbpfi3z6hsdafixb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSaoqwACgkQj4D7WH0S
+/k66Lwf9Hq5nC1KErm/UPzhqFFiQaUkm5tlRfhc0HKwY231RXIl8U/sEUzFOmVp1
+QoBQ3HUogIHlgELx2qVVR9friYW9RRjYQUIFa1Sr1AtICCHEbmveRdjqF07bZTdw
+czHwMp90yKmH9mbGpEb7JfmhP+Gl3EJHkFZsfr9AniTRYyiDRNnKIOY8GbHv+Uvz
+vtzJx3uAlv/rcGSMxY+OKqTl24TYEQAoL6nWjp2tDuv2qgqUyCXBFsNG3/NfKsED
+ldiOz1Wlgger5JmYqUI2EikRolCllLBqEhUMZVTFdtckl0N82zUG+SKNhaSK37yP
+Q6KBysmk81RWjCHUIWVmIbxhxxgdUQ==
+=Okxi
+-----END PGP SIGNATURE-----
+
+--fbpfi3z6hsdafixb--
