@@ -2,191 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B73673F3FB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 07:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEE273F533
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 09:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229841AbjF0FlO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 01:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49574 "EHLO
+        id S229568AbjF0HSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 03:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjF0FlM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 01:41:12 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A5F173B;
-        Mon, 26 Jun 2023 22:41:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b7f2239bfdso22579405ad.1;
-        Mon, 26 Jun 2023 22:41:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687844470; x=1690436470;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eUHv1b8aqLsb4R7LditAal7kNTag6lxKqXAOQ2qujCU=;
-        b=fG/WGax37UoauKBSyv6kej64LdcGJrv6k66h8NGOsMv9uaUsNclSu7DiDyHvg7N0+H
-         TpLbLvnFmTkLJuRzyFn0V5R9/xG3MBNfmS6gpoZxFQmbIvFJa8XU1iIC6Fyl95ACCFHi
-         Ys+3TEnr35uP041kETcaQnaFL3Zzmuv0Ara4RUBuuI4A1DlyY37o026XtSt1PCG00d7o
-         R82xvUrMlfJH4JujFDKNZYqLCuYZs3onB7GlXFtQZdgcqNFnR06TCpWzVOviTJnvGG64
-         v3WIIO+Pf3siD1OxDgXeCgfd8ad+rtq0TuDOYOoPNLLpd/YOKy903+fL59/xrY4ynCa9
-         WP/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687844470; x=1690436470;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eUHv1b8aqLsb4R7LditAal7kNTag6lxKqXAOQ2qujCU=;
-        b=du9CZbEIY3iks5eVJgPE5NhzfXvDFcVsZcOB1xr4m2W1GIycHe7Iyggp1lBugeqql1
-         YEAV8L4wzKe2RLBmU7YHtBhSYMW3R7c/oJQvf/rvRNjVPf0Xx4e2qpwW/ED5eD596s/B
-         QzztS9wnezPyTT0Tu6cw6eSJMHvSmnPqKwjOGKYzdtRLzhzy7wrjD0RUtyRjNHWO/5wS
-         viGzBozIh/5VvtzM/v6k5L1TjNMXZ7pDfz2CQTBFCdBwS6OWdLmgWz8GvkA8olJRzSO4
-         WuN49jDu3lF4V8MaWFkisoTwCeaMO8kN738KUjIBKdzjCuQFTxaKUc84cmwXhdn2q/9z
-         8C5g==
-X-Gm-Message-State: AC+VfDz9mQ4v+z/lN1O+GFOSNl1V3Fg7ygkfUs+n3LjHS0YO7IurhqUC
-        HkoNqpbjyn60vSDLykeiOEs=
-X-Google-Smtp-Source: ACHHUZ4Aj+CfQoLGg0YEyBUDipJUlv6nej6ije3P7CId9SMSoIBcFwHmOjcIwHyQMLpCclEzduuKWQ==
-X-Received: by 2002:a17:902:f54b:b0:1b6:b805:5ae3 with SMTP id h11-20020a170902f54b00b001b6b8055ae3mr10571515plf.3.1687844469519;
-        Mon, 26 Jun 2023 22:41:09 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9-20020a1709026a8900b001b80d411e5bsm2144863plk.253.2023.06.26.22.41.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jun 2023 22:41:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 26 Jun 2023 22:41:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Jens Axboe <axboe@kernel.dk>, Richard Weinberger <richard@nod.at>,
-        Josef Bacik <josef@toxicpanda.com>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Coly Li <colyli@suse.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-scsi@vger.kernel.org, linux-bcache@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-nvme@lists.infradead.org,
-        linux-btrfs@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-nilfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 06/31] cdrom: remove the unused mode argument to
- cdrom_release
-Message-ID: <fb21bb8b-958a-4238-aab8-c2720ac519ad@roeck-us.net>
-References: <20230606073950.225178-1-hch@lst.de>
- <20230606073950.225178-7-hch@lst.de>
+        with ESMTP id S230146AbjF0HS2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 03:18:28 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2103.outbound.protection.outlook.com [40.107.255.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D911BEC;
+        Tue, 27 Jun 2023 00:18:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ORJciElWF5fC9RgbH9QjiEKrZ4vImoiL+neQbIJUFe78FO0QbJYkdiAbcusMEDh7M904zaC89864XrlmHdcpGPyxMcMHT7i5FK3Y/g4U5dOUpLyPXllKB9D6lY890LcnBYL8rpBqUAsWmX8RaZnMkEMTFXuwTHfK1VkLlmlFgshEWBPPaLulFIRog3IGik1s8DhItQCAiNys/JI2YV60VVaJQdyl56ahny9/1DCxW1bILNYVUUybNYYwGP2busTWFJhsVnOn7iJw1ucadpaaEQrnNIFDfsTLybNIlmwNv14XYMGXp87kPqXQ7av6YXyJnSzgycz/6TtOCIxb0ph7fA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=51TqBSHuDXoJXJu/QRggDkPtKMVIjd+MxWJJWwhPeEY=;
+ b=neMprW9P7ckOmO7clUlJkWtvbbJZW1IIBvB/OL8r6uAJtFoEFvdg/X8TR/AGJnDmWIkIa0VdSzrKgX2EC+9KJEhd7SyoUiP8LG+Wdn7tytmMZwWJ4I0M6aBUzsW0fsU58LgiS5crTs2mcdVIfa/1cMdJ5cS7VYZA9bLnE27ShuOuGL6jYcBXth3KbSxr7UTrT0F8w/pYcoQclvr5mg0L82NXDOm8h2MImir0m6TCsTMk8J9SenDx2xYw7cGGKDafKX5Jss/kVB2Cpm41+HvbzHxDivDFHMUWnUW2AWADtzBnPi+Mt4/ESAqpvJw6FNVBIBDwkeuB3XeiknEYu9SYkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=51TqBSHuDXoJXJu/QRggDkPtKMVIjd+MxWJJWwhPeEY=;
+ b=NuKi8+9aCEPG7NoMyiAlPkABJXEUTT+8+1V+Sgmh1CCZ6bjeb8+kmvvumxqVU5vOHHxiCaxWIKSxRDhUTJMA5kCOW6ag5ld4vcCqh71AkCcpsSR04P5yxxrvv4QONO+J9fMY7HFtSocxwqajiEmw17u4Vkqp+8e4HmlWeZgmjBwYrfl1UWiVCwmPQhSR2CfG9fTHocG5ccCqxCPMQ/ghgHi4DB0fdLZ7xPBNTCTTI5LwYTkm5cz/Kjs0QNwvrxVN7vBWCI4vqIt1jw2jGcNxVf9bBMfRDdFbd0ewjVAXwjcb5C5k9FVc1dFi/oJCWBOFXQ50U0IEPGyjF5wx/5639Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SI2PR06MB5137.apcprd06.prod.outlook.com (2603:1096:4:1ac::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.27; Tue, 27 Jun
+ 2023 07:18:19 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6521.023; Tue, 27 Jun 2023
+ 07:18:19 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     miquel.raynal@bootlin.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, frank.li@vivo.com,
+        shangxiaojing@huawei.com, bchihi@baylibre.com, wenst@chromium.org,
+        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH 01/15] genirq/devres: Add error information printing for devm_request_threaded_irq()
+Date:   Tue, 27 Jun 2023 15:16:52 +0800
+Message-Id: <20230627071707.77659-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0098.apcprd02.prod.outlook.com
+ (2603:1096:4:92::14) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606073950.225178-7-hch@lst.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SI2PR06MB5137:EE_
+X-MS-Office365-Filtering-Correlation-Id: 59c7243b-d573-4ca7-edd4-08db76deae7b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: BMuimp7YIXmbJcYdHfRwr0mPIB2kRS4bhtcjhs/CyvMe0GTjViBkRrquU/ldbzyBK+HnNvjG74mPYHA7gOPwr46+22R7KOnix0VL3botXy1F4QxzV+Ka/U5m+CqpQMlfo4I3orc6DLfyY4Od89C3U1yjfPRj4Bqk7np7Ipr827wLH+AtcYZNwuQh6fDdP/saWyuQsh45FbrpXuG8D0VPA6Nk5zypVBr0JXeU7Ki72kyR8H2l4VWYVhWzpXmCRTzhvhIEcClzgm9mnYlMesGIno/e525i2jT9IbN3BBzzufMakYmkLLdR2noql9bsf+5GsxccEw7MoKfezEXspnJ7qDZxGdxOo7nt+b5XZFDwVIgH9hO+arI1E8RQnj125U7T4N3x+MUTCMXc05hSYgn5yWIhCmCHyD7U1qr7YOr1GPJe3HrAi53uR9NvHF3Qiwk3HvLHN1U1tVhkaB4Br1oQ0lIsBcEBtMe9/oKEAQgwDl58zuH4t58lnCw9j2ZfDaVAjw22sgxSnQj9GDvJfdmCixMhYhv4xmAfPGN37MB0FFxA58TMPM5iXOnG8inwe1GbJuYu1tsROlEtqDUBD0d0W41YNHgAgP9vxVbFYuX9ucdymkaHFA9Kp5PGlZbp/hQfCJqsMj7+3uRTzLmnu+N9WA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(39860400002)(396003)(366004)(451199021)(52116002)(478600001)(6666004)(6486002)(1076003)(6506007)(2906002)(26005)(186003)(66476007)(6512007)(66556008)(5660300002)(66946007)(4326008)(7416002)(38350700002)(41300700001)(316002)(8676002)(8936002)(38100700002)(921005)(36756003)(7406005)(2616005)(86362001)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qLWCLn6Atkpmn4V9QXQofQM/y+zY3+Phjs3YQpk8roZYbbWC3DlUoMEmBWqM?=
+ =?us-ascii?Q?+jGwprheKz+OyWrabLR4aw04cB3MXmAFKKRsTpo9f5BCCjX2iIAAiAewFdrJ?=
+ =?us-ascii?Q?nV998ifonD4+nImmQW+nbvXGLnS5s3hyMfTLhnF+vFxjBEvsUEdKXbTOm/Lf?=
+ =?us-ascii?Q?FruuwO2D6CrMxjG9ahvJr95TwNXegMCardugJRZ+cX74MOO8oe5fWg+YMWHq?=
+ =?us-ascii?Q?/PmKNpI0P0rXpOVjwIcXa+IIebo538LXlwqGcHuip7a9srJ8pbjQSi1Rwxq1?=
+ =?us-ascii?Q?pTtfo2EgcXLysymu01NiBWqCuHGFLD7fvtGh8gBbthbQiMQKA6KGStfeGBqr?=
+ =?us-ascii?Q?UzXQ+PcTbhVTrjxpa3AFhJ1QlByYnpIjgv4VdAT19KsX4nqmjUF7RBdIEbuF?=
+ =?us-ascii?Q?lUz2whbz7kwmgufCRP3BjfZRmq/QkgRlzDMcp1AdVoK12UjixOWcv0AI6tnc?=
+ =?us-ascii?Q?DKwZeSk7W0Ln5zgu4NPNYOYCw4ncIF0NzwoVEYzMR4YdPLvvWvKi8eYMW21J?=
+ =?us-ascii?Q?ofJ2KvylWWtEyimwnqvn92n2JIXtQKxsQywpVfQl+k4q+eoeonk0cmkfaKa9?=
+ =?us-ascii?Q?mG7cozugKy/wooUJu4MelO8Gk6HiWc0pJAwaTKdwjK7FDx68fh7bMneneI6/?=
+ =?us-ascii?Q?gvzAOdQujeub1011MK+45NsYlvpZhMWVd3PMkAEPFIO9H/8Zge65DhATHKlg?=
+ =?us-ascii?Q?vxHEIlY5t5ZmMhMAwIC4E2nCZcPGrOYl4rrjHNgy5qWWFnvyeZPZIdDdtggT?=
+ =?us-ascii?Q?B609QEz6pK99/uM8D+mOd9flqgOYPVumR3Z3umKRc9crxs5NNZBnWNRAKdQw?=
+ =?us-ascii?Q?AFvyiKmJK/Q7089lP+6xMj49sv93HTqGxfjKg9Ujm2UJ8hw6FIoBpq24QhQo?=
+ =?us-ascii?Q?Fo16ESPjpYbcKk5Z9rkxJkCpgWPwU6ru8DMT3+1eqSkQl/RIj73HPFwIp5Aq?=
+ =?us-ascii?Q?IqJC7KYAfeH7WqgdKnt0IE/cBEOxz8ywuMWMftAQyErgpcrFasDLJYiNxL+l?=
+ =?us-ascii?Q?s5Ls6gpE+FlQLuDXM5YnSxGR5wbtCfSp5Csxg8urLGlGYkpDUUOeRysxmWbA?=
+ =?us-ascii?Q?d0bXk/ea6ctY2bgixjDDhfj744zRnaqyzYNi8Ur1JRNZHnGyCs6hwU+QKKhP?=
+ =?us-ascii?Q?FIyrRX1KYXhkZ3cXjOl6WAJbOrvl4ZoGXdG3MO2ChXyqmls8A5bm3qNVqEgl?=
+ =?us-ascii?Q?RH3Oj13FVJmZ+JcXYR4eceUXXAzeoWOlALn/HB3nAAGddDRnAoyVk1GQohq7?=
+ =?us-ascii?Q?28vArmijHFjHJ9fH2qT2PPk9tFtYydQbKUUWQY4SBx8yYQNpKaLf2+XNEo7R?=
+ =?us-ascii?Q?FOA2t7V5JnL8TdtwvXr7pNS+I6rpsFCy+VTUd37OKB+wELA5Z5y3PkHfOsVA?=
+ =?us-ascii?Q?ZrDM3pcy168VV8ubp40i3/OKc2H+JgtcOUDugBMqD5dBgRfiP8Vgy5M8COOm?=
+ =?us-ascii?Q?d3TqIgx4WPV8THB5CoAuDnTGh9dX2XKiMJ2lCWFWblHrOb3/+8+U0PO7P9S0?=
+ =?us-ascii?Q?qVHEJUedN0dRpT4SunS+af0JPuN4LpKQs2HfpQshvp5kTGJTyCUd4nPYQld6?=
+ =?us-ascii?Q?FFmmrJXX8bgl6SjtXfzXq76MEB3U0eGVQeNuC2Ui?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59c7243b-d573-4ca7-edd4-08db76deae7b
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2023 07:18:18.7400
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GBm1nYiZe272EoTZzTUHqEZ8CHM0QqaA1Yu+Dhzxv9kiYwTs3Ns106LEgm3MVXcwuPZdcjOFYIT1p5E2uaff5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5137
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 06, 2023 at 09:39:25AM +0200, Christoph Hellwig wrote:
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
+Ensure that all error handling branches print error information. In this
+way, when this function fails, the upper-layer functions can directly
+return an error code without missing debugging information. Otherwise,
+the error message will be printed redundantly or missing.
 
-$ git grep cdrom_release
-Documentation/cdrom/cdrom-standard.rst:         cdrom_release,          /* release */
-Documentation/cdrom/cdrom-standard.rst:the door, should be left over to the general routine *cdrom_release()*.
-Documentation/cdrom/cdrom-standard.rst: void cdrom_release(struct inode *ip, struct file *fp)
-                                                                           ^^^^^^^^^^^^^^^^^
-drivers/cdrom/cdrom.c:void cdrom_release(struct cdrom_device_info *cdi)
-drivers/cdrom/cdrom.c:  cd_dbg(CD_CLOSE, "entering cdrom_release\n");
-drivers/cdrom/cdrom.c:EXPORT_SYMBOL(cdrom_release);
-drivers/cdrom/gdrom.c:  cdrom_release(gd.cd_info, mode);
-                                                ^^^^^^
-drivers/scsi/sr.c:      cdrom_release(&cd->cdi);
-include/linux/cdrom.h:void cdrom_release(struct cdrom_device_info *cdi);
+There are more than 700 calls to the devm_request_threaded_irq method.
+If error messages are printed everywhere, more than 1000 lines of code
+can be saved by removing the msg in the driver.
 
-$ git grep cdrom_open
-Documentation/cdrom/cdrom-standard.rst:         cdrom_open,             /* open */
-Documentation/cdrom/cdrom-standard.rst: int cdrom_open(struct inode * ip, struct file * fp)
-Documentation/cdrom/cdrom-standard.rst:This function implements the reverse-logic of *cdrom_open()*, and then
-drivers/cdrom/cdrom.c:static int cdrom_open_write(struct cdrom_device_info *cdi)
-drivers/cdrom/cdrom.c:int cdrom_open(struct cdrom_device_info *cdi, blk_mode_t mode)
-drivers/cdrom/cdrom.c:  cd_dbg(CD_OPEN, "entering cdrom_open\n");
-drivers/cdrom/cdrom.c:                  if (cdrom_open_write(cdi))
-drivers/cdrom/cdrom.c:EXPORT_SYMBOL(cdrom_open);
-drivers/cdrom/gdrom.c:  ret = cdrom_open(gd.cd_info);
-                                         ^^^^^^^^^^
-drivers/scsi/sr.c:      ret = cdrom_open(&cd->cdi, mode);
-include/linux/cdrom.h:int cdrom_open(struct cdrom_device_info *cdi, blk_mode_t mode);
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ kernel/irq/devres.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
->  drivers/cdrom/cdrom.c | 2 +-
->  drivers/cdrom/gdrom.c | 2 +-
->  drivers/scsi/sr.c     | 2 +-
->  include/linux/cdrom.h | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-> index adebac1bd210d9..998b03fe976e22 100644
-> --- a/drivers/cdrom/cdrom.c
-> +++ b/drivers/cdrom/cdrom.c
-> @@ -1250,7 +1250,7 @@ static int check_for_audio_disc(struct cdrom_device_info *cdi,
->  	return 0;
->  }
->  
-> -void cdrom_release(struct cdrom_device_info *cdi, fmode_t mode)
-> +void cdrom_release(struct cdrom_device_info *cdi)
->  {
->  	const struct cdrom_device_ops *cdo = cdi->ops;
->  
-> diff --git a/drivers/cdrom/gdrom.c b/drivers/cdrom/gdrom.c
-> index 14922403983e9e..a401dc4218a998 100644
-> --- a/drivers/cdrom/gdrom.c
-> +++ b/drivers/cdrom/gdrom.c
-> @@ -481,7 +481,7 @@ static int gdrom_bdops_open(struct block_device *bdev, fmode_t mode)
->  	bdev_check_media_change(bdev);
->  
->  	mutex_lock(&gdrom_mutex);
-> -	ret = cdrom_open(gd.cd_info, mode);
-> +	ret = cdrom_open(gd.cd_info);
->  	mutex_unlock(&gdrom_mutex);
->  	return ret;
->  }
-> diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-> index 444c7efc14cba7..6d33120ee5ba85 100644
-> --- a/drivers/scsi/sr.c
-> +++ b/drivers/scsi/sr.c
-> @@ -512,7 +512,7 @@ static void sr_block_release(struct gendisk *disk, fmode_t mode)
->  	struct scsi_cd *cd = scsi_cd(disk);
->  
->  	mutex_lock(&cd->lock);
-> -	cdrom_release(&cd->cdi, mode);
-> +	cdrom_release(&cd->cdi);
->  	mutex_unlock(&cd->lock);
->  
->  	scsi_device_put(cd->device);
-> diff --git a/include/linux/cdrom.h b/include/linux/cdrom.h
-> index 385e94732b2cf1..3f23d5239de254 100644
-> --- a/include/linux/cdrom.h
-> +++ b/include/linux/cdrom.h
-> @@ -102,7 +102,7 @@ int cdrom_read_tocentry(struct cdrom_device_info *cdi,
->  
->  /* the general block_device operations structure: */
->  int cdrom_open(struct cdrom_device_info *cdi, fmode_t mode);
-> -extern void cdrom_release(struct cdrom_device_info *cdi, fmode_t mode);
-> +void cdrom_release(struct cdrom_device_info *cdi);
->  int cdrom_ioctl(struct cdrom_device_info *cdi, struct block_device *bdev,
->  		unsigned int cmd, unsigned long arg);
->  extern unsigned int cdrom_check_events(struct cdrom_device_info *cdi,
-> -- 
-> 2.39.2
-> 
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
+diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+index f6e5515ee077..94039a915218 100644
+--- a/kernel/irq/devres.c
++++ b/kernel/irq/devres.c
+@@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+ 
+ 	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+ 			  GFP_KERNEL);
+-	if (!dr)
++	if (!dr) {
++		dev_err(dev, "Failed to allocate device resource data\n");
+ 		return -ENOMEM;
++	}
+ 
+ 	if (!devname)
+ 		devname = dev_name(dev);
+@@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+ 	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+ 				  dev_id);
+ 	if (rc) {
++		dev_err(dev, "Failed to request threaded irq\n");
+ 		devres_free(dr);
+ 		return rc;
+ 	}
+-- 
+2.39.0
+
