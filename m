@@ -2,91 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F9673FA1B
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 12:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3097073FA37
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 12:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbjF0KXI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 06:23:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41828 "EHLO
+        id S230041AbjF0K2i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 06:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjF0KWp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 06:22:45 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D572109;
-        Tue, 27 Jun 2023 03:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QpIG8zIiPiSqoF8aX8idnXur9dqkJW4/QKoTrZH8cD8=; b=AvSWYAQNpQ/maAcKP7sl2uAWaM
-        r8VUkC/gUpf8gqV4fszhxttZkOR2LWKnEc87QNlx02OHUeHuUts/aXwTibIk39V5MnW2AcRRxkFw/
-        A5XYNmTvrwPSkdZqKNBuRoxZrePTBbZaP9Y1fHc3WOYafzBheEm/pdMdp/JftCUyKwlTmQLUhkkgO
-        E5bE9FwoMVtR525XRJIhz1KEncHrv9TwrCTeIrqVtuiHNK4ELXfXcDrCfNZIsKJCz+H+LwZmJiLNU
-        tB3d2WpFl5GpcyT6+4gZxPQsriZBPZcc2owzmgLkK5DEA6frQWGkpyGMtkQCmLDXJy7r6s1NWxF9P
-        e47EPxlA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qE5nR-004e0Y-1h;
-        Tue, 27 Jun 2023 10:19:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5A8D5300118;
-        Tue, 27 Jun 2023 12:19:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3790924A40809; Tue, 27 Jun 2023 12:19:39 +0200 (CEST)
-Date:   Tue, 27 Jun 2023 12:19:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "J. Avila" <elavila@google.com>,
-        Vivek Anand <vivekanand754@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Renninger <trenn@suse.com>,
-        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
-        Netfilter Core Developers <coreteam@netfilter.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        x86@kernel.org
-Subject: Re: Fwd: High cpu usage caused by kernel process when upgraded to
- linux 5.19.17 or later
-Message-ID: <20230627101939.GZ4253@hirez.programming.kicks-ass.net>
-References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
- <ZJpJkL3dPXxgw6RK@debian.me>
- <20230627073035.GV4253@hirez.programming.kicks-ass.net>
- <99b64dfd-be4a-2248-5c42-8eb9197824e1@gmail.com>
+        with ESMTP id S231359AbjF0K2X (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 06:28:23 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840D9102
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 03:28:21 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f90b8ace97so59457285e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 03:28:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687861700; x=1690453700;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gmf7swzBx3zmrorxZOdEgYZz3vMgCASZCN0hJOkIo00=;
+        b=C+BVtYn4jX0LRy0VrAz6Tpink6WrpV7gikawtc8z6OICC9zRejV4euVhEN7qDurUc4
+         I10v4x8VsvLNbjrUd0sigj2DP8SNn0yP4q3PpTmvlBr8qALYshj5BXKrSILx8V9DFiBz
+         4GvIQ3bQaSMtkaieP5dfIeXqPgQDS9KETd60dZ4ix3c/ckSMKh4Lyeq6OLsPB2tnVCVF
+         r8dEOPcgigBTLHy9fu59BNAsyRfs4OEh5LYoH4Qvx98EonKQ3VHEcOY29vpq2t+B5tTi
+         ywNEh7XU/A8bJQFbO3O/iFSoV3A/uMEFAEbntTtQ42fR777djBZbWkYChLlvgg+Bb4W1
+         QBNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687861700; x=1690453700;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gmf7swzBx3zmrorxZOdEgYZz3vMgCASZCN0hJOkIo00=;
+        b=fiusGHIrcHXG1GCKRPHW6HQzZgWKCljq5zPDw/MSQZrpOlNBbdv6Qg4o7lbuttnPV2
+         Sb2L1JIPhwpuMMLwQp5y+3OAlKgmLkUnkI5iVxFAOmUcOXZYq1XdfKrJu/y5TYUfvO73
+         Z4LshRnGS4NM/ZbJCjz0mRZ7SdGmclLHXEIHtwuNwH3uTXgHcdlmHhNf4DF0FiWv1Lmm
+         OVPm768+qjXiyouxuSZsKJyNk/cI1nIYnADWC1/zoNdktQ35hkueoO/PgsxWSTH4dpC/
+         EuyAmSnkTb123ammdtkBpWugUo9S44kRuHkALvOOyGHWQzFxafovEJRHntsTnKsPMvPS
+         +p+g==
+X-Gm-Message-State: AC+VfDw0lBWSCb/+Ev/SHTt+ZIq/t4PllDqynAHFH+CUUnWmS1Lgiidr
+        Bv1nRSAPOShWlt9npBf+s8W9tw==
+X-Google-Smtp-Source: ACHHUZ5XMObNZEMfu2qUXIhZuLUJ2ha5NxMgYWPdt3EyCo1TufdxxWi8w5C9EWlJPCA81JQywXQslA==
+X-Received: by 2002:a7b:cc15:0:b0:3f9:846:d892 with SMTP id f21-20020a7bcc15000000b003f90846d892mr24473786wmh.9.1687861699917;
+        Tue, 27 Jun 2023 03:28:19 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id h2-20020a1ccc02000000b003fa74bff02asm10232352wmb.26.2023.06.27.03.28.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 03:28:19 -0700 (PDT)
+Message-ID: <689ffb7b-9efb-ecec-61f5-9d8b00f9906b@linaro.org>
+Date:   Tue, 27 Jun 2023 12:28:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99b64dfd-be4a-2248-5c42-8eb9197824e1@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
+ for devm_request_threaded_irq()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20230627101215.58798-1-frank.li@vivo.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230627101215.58798-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 27, 2023 at 05:15:42PM +0700, Bagas Sanjaya wrote:
-> On 6/27/23 14:30, Peter Zijlstra wrote:
-> > I can't tell from this. Also, please don't use bugzilla.
+On 27/06/2023 12:12, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
 > 
-> Why not BZ? I'm confused too...
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> Most drivers only request one interrupt resource, and these error
+> messages are basically the same. If error messages are printed
+> everywhere, more than 1000 lines of code can be saved by removing the
+> msg in the driver.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  kernel/irq/devres.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+> index f6e5515ee077..fcb946ffb7ec 100644
+> --- a/kernel/irq/devres.c
+> +++ b/kernel/irq/devres.c
+> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  
+>  	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+>  			  GFP_KERNEL);
+> -	if (!dr)
+> +	if (!dr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
 
-Because we have email; and why would I want to touch a browser for this?
+I don't understand why did you send v2:
+1. Without responding to my comments - either by implementing them or
+continuing the discussion
+2. Without changelog explaining what happened here
+
+My comments for v1 stand. Please do not ignore them, respond. If sending
+new version, then usually one per day is max and of course provide
+changelog.
+
+>  		return -ENOMEM;
+> +	}
+>  
+>  	if (!devname)
+>  		devname = dev_name(dev);
+> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+>  				  dev_id);
+>  	if (rc) {
+> +		dev_err_probe(dev, rc, "Failed to request threaded irq%d: %d\n", irq, rc);
+
+Why printing rc twice? Did you test this patch? Does not look like.
+
+Best regards,
+Krzysztof
+
