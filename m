@@ -2,63 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE41B73F52E
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 09:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D4773F5C1
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 09:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjF0HSF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 03:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S230206AbjF0Hb3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 03:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjF0HSE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 03:18:04 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF911FCC;
-        Tue, 27 Jun 2023 00:18:02 -0700 (PDT)
-X-UUID: bf4cab2014ba11ee9cb5633481061a41-20230627
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=c9mFKbpihQFZgh8rmxAPEAkbMBe/YaOXmlWN7xitB5Y=;
-        b=kQlo0u8LL2sXtJUjvpA12E9wFjy6CgcHj4Bpfy0m+DiaPK1EB1m2MyD6o4jQ/cQYSCUMubmqoJBhVkSs+GYbRmBkI/lMIYPpOB1a64EeMm0fT3Pw27F2rFApFYyDmBMzhU0r6NSAj89Q75zQ1twISBalHKxze0yvXmNtVnIsV+A=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:1d78ccee-830f-4680-aaa0-ed1872936913,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.27,REQID:1d78ccee-830f-4680-aaa0-ed1872936913,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:01c9525,CLOUDID:bce9850d-c22b-45ab-8a43-3004e9216b56,B
-        ulkID:23062715180025QT4PPM,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-UUID: bf4cab2014ba11ee9cb5633481061a41-20230627
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
-        (envelope-from <chung-kai.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1497756027; Tue, 27 Jun 2023 15:18:00 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 27 Jun 2023 15:17:59 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 27 Jun 2023 15:17:59 +0800
-From:   Chungkai Yang <Chung-kai.Yang@mediatek.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Chung-kai.Yang@mediatek.com>, <ccj.yeh@mediatek.com>
-Subject: [PATCH v2] PM: QoS: Restore support for default value on frequency QoS
-Date:   Tue, 27 Jun 2023 15:17:27 +0800
-Message-ID: <20230627071727.16646-1-Chung-kai.Yang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S229727AbjF0Hb0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 03:31:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FEF1FCD;
+        Tue, 27 Jun 2023 00:31:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=XQpa9c5hGVf8V5MZIB+d15K6Y/YiH5GoQw4fpAih31c=; b=KrtBPNpF+/+Tvnv2Z7JXUi4f/S
+        nZb2l3/seqDyn86tl2FfkGPi5EPd2K4TCsiUhgXLfa1O9f+TTU+cLhuR74Muo9mDVrhsXZAWmYx8l
+        VyVdZhRJYhA+3dbd4lrfj4lWkGpHr+gPXdQjB/csHH88IEv1EpdjmCizemHKD4PY5MEGQHo/pRjwL
+        igyxgnZXRGwnad91S1V0f+pKr+LYehCS9U319UfqfDStSJeIkz1AgvLxUluSzRGzYADOb76MRx3Su
+        lyXeV2eaNAyEvYBq8j0X3JkoaPXEIICJRsp+0383NqG35INqi7T6Aoxo6nIXOgq1Zt9p+nsO15H7p
+        YbR8by3g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qE39r-004ZqJ-2r;
+        Tue, 27 Jun 2023 07:30:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 33F733002D6;
+        Tue, 27 Jun 2023 09:30:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 14A37248044D4; Tue, 27 Jun 2023 09:30:35 +0200 (CEST)
+Date:   Tue, 27 Jun 2023 09:30:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "J. Avila" <elavila@google.com>,
+        Vivek Anand <vivekanand754@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
+        Netfilter Core Developers <coreteam@netfilter.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        x86@kernel.org
+Subject: Re: Fwd: High cpu usage caused by kernel process when upgraded to
+ linux 5.19.17 or later
+Message-ID: <20230627073035.GV4253@hirez.programming.kicks-ass.net>
+References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
+ <ZJpJkL3dPXxgw6RK@debian.me>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ZJpJkL3dPXxgw6RK@debian.me>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,51 +82,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PM_QOS_DEFAULT_VALUE case is not covered.
+On Tue, Jun 27, 2023 at 09:29:36AM +0700, Bagas Sanjaya wrote:
+> On Fri, Jun 23, 2023 at 07:58:51AM +0700, Bagas Sanjaya wrote:
+> > Hi,
+> >=20
+> > I notice a regression report on Bugzilla [1]. Quoting from it:
+> >=20
+> > > kernel process "kworker/events_power_efficient" uses a lot of cpu pow=
+er (100% on ESXI 6.7, ~30% on ESXI 7.0U3 or later) after upgrading from 5.1=
+7.3 to 5.19.17 or later.
+> > >=20
+> > > dmesg log:
+> > > [ 2430.973102]  </TASK>
+> > > [ 2430.973131] Sending NMI from CPU 1 to CPUs 0:
+> > > [ 2430.973241] NMI backtrace for cpu 0
+> > > [ 2430.973247] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 6.3.3 #1
+> > > [ 2430.973254] Hardware name: VMware, Inc. VMware Virtual Platform/44=
+0BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+> > > [ 2430.973258] Workqueue: events_power_efficient htable_gc [xt_hashli=
+mit]
+> > > [ 2430.973275] RIP: 0010:preempt_count_sub+0x2e/0xa0
+> > > [ 2430.973289] Code: 36 01 85 c9 75 1b 65 8b 15 a7 da f8 5e 89 d1 81 =
+e1 ff ff ff 7f 39 f9 7c 16 81 ff fe 00 00 00 76 3b f7 df 65 01 3d 8a da f8 =
+5e <c3> cc cc cc cc e8 98 aa 25 00 85 c0 74 f2 8b 15 da 71 ed 00 85 d2
+> > > [ 2430.973294] RSP: 0018:ffffb15ec00dbe58 EFLAGS: 00000297
+> > > [ 2430.973299] RAX: 0000000000000000 RBX: ffffb15ec12ad000 RCX: 00000=
+00000000001
+> > > [ 2430.973302] RDX: 0000000080000001 RSI: ffffffffa1c3313b RDI: 00000=
+000ffffffff
+> > > [ 2430.973306] RBP: dead000000000122 R08: 0000000000000010 R09: 00007=
+46e65696369
+> > > [ 2430.973309] R10: 8080808080808080 R11: 0000000000000018 R12: 00000=
+00000000000
+> > > [ 2430.973312] R13: 0000000000001e2b R14: ffffb15ec12ad048 R15: ffff9=
+1c279c26a05
+> > > [ 2430.973316] FS:  0000000000000000(0000) GS:ffff91c279c00000(0000) =
+knlGS:0000000000000000
+> > > [ 2430.973320] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > [ 2430.973324] CR2: 000055fc138890e0 CR3: 000000010810e002 CR4: 00000=
+000001706f0
+> > > [ 2430.973374] Call Trace:
+> > > [ 2430.973388]  <TASK>
+> > > [ 2430.973390]  __local_bh_enable_ip+0x32/0x70
+> > > [ 2430.973413]  htable_selective_cleanup+0x95/0xc0 [xt_hashlimit]
+> > > [ 2430.973428]  htable_gc+0xf/0x30 [xt_hashlimit]
+> > > [ 2430.973440]  process_one_work+0x1d4/0x360
+> > > [ 2430.973459]  ? process_one_work+0x360/0x360
+> > > [ 2430.973467]  worker_thread+0x25/0x3b0
+> > > [ 2430.973476]  ? process_one_work+0x360/0x360
+> > > [ 2430.973483]  kthread+0xe1/0x110
+> > > [ 2430.973499]  ? kthread_complete_and_exit+0x20/0x20
+> > > [ 2430.973507]  ret_from_fork+0x1f/0x30
+> > > [ 2430.973526]  </TASK>
+> >=20
+> > See Bugzilla for the full thread and perf output.
+> >=20
+> > Anyway, I'm tracking it in regzbot so that it doesn't fall through
+> > cracks unnoticed:
+> >=20
+> > #regzbot introduced: v5.17.3..v5.19.17 https://bugzilla.kernel.org/show=
+_bug.cgi?id=3D217586
+> > #regzbot title: kworker/events_power_efficient utilizes full CPU power =
+after kernel upgrade
+> >=20
+>=20
+> The reporter had found the culprit (see Bugzilla for more information), t=
+hus
+> telling regzbot:
+>=20
+> #regzbot introduced: 6ad0ad2bf8a67e
+> #regzbot title: retbleed reporting causes high cpu utilization due to kwo=
+rker/events_power_efficient
+> #regzbot link: https://lore.kernel.org/all/PH0PR05MB8448A203A909959FAC754=
+B7AAF439@PH0PR05MB8448.namprd05.prod.outlook.com/
+> #regzbot link: 6ad0ad2bf8a67e
 
-Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
-non-negative") makes sure CPU freq is non-negative to avoid negative
-value converting to unsigned data type. However, when the value is
-PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
-c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
-cpufreq_policy_alloc is executed, for this case handling.
+Is there a problem other than that IBRS is slow and slower still on
+shitty virt?
 
-Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
-fix this problem.
+Does booting with: "spectre_v2=3Dretpoline retbleed=3Doff" make it go away?
 
-Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
-
----
-V1 -> V2: Check both freq_qos_add/update_request.
-
-Link:
-  https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
----
- kernel/power/qos.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index af51ed6d45ef..260aca45c681 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -531,7 +531,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
- {
- 	int ret;
- 
--	if (IS_ERR_OR_NULL(qos) || !req || value < 0)
-+	if (IS_ERR_OR_NULL(qos) || !req || (value < 0 && value != PM_QOS_DEFAULT_VALUE))
- 		return -EINVAL;
- 
- 	if (WARN(freq_qos_request_active(req),
-@@ -563,7 +563,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
-  */
- int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
- {
--	if (!req || new_value < 0)
-+	if (!req || (new_value < 0 && new_value != PM_QOS_DEFAULT_VALUE))
- 		return -EINVAL;
- 
- 	if (WARN(!freq_qos_request_active(req),
--- 
-2.18.0
-
+I can't tell from this. Also, please don't use bugzilla.
