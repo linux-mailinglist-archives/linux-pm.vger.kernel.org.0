@@ -2,54 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D53740445
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 22:06:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A1E7404CD
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 22:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjF0UGU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 16:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
+        id S231433AbjF0UQ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 16:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjF0UGT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 16:06:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96B12120;
-        Tue, 27 Jun 2023 13:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=X69Ch/oAeacF2RzcUXPsx9JeM7nGU2SUlR9C8WX3gbU=; b=I+hzAQgRZkLwXYo0RNQgWI9q33
-        ANHp+brDZuhwfMDmlzS8mGQukA6sUrM7kebofUds9HAL/CK1sOMzRmB5nukEIFVbnlM3Yh3bsVw9P
-        wLHB0ZB7oXN/Mz0tFIrX4ItrHIKaUbMUdOKbosEv4y6yBTdsiCmutRmH0wEhO93kCqBm/QSlvQqg2
-        VJu28RXTmakA3FyFp8g1mc/C1D9OFxSbS9z4LVGDjVREdVlHlSKMgVmq5EIta7eD5tlLVsiBf0LVi
-        XX+7Wh14NZ/K94UQMIJmgHZgG3lTYETiL3gsrfrkcbFkQQMWGpyNxJLSa/HLA2VPeVQaoI//lasWx
-        WnGrCAEA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qEEx7-00E1l9-0X;
-        Tue, 27 Jun 2023 20:06:17 +0000
-Message-ID: <a2280b4a-57cb-41ce-5208-c46492a1bf26@infradead.org>
-Date:   Tue, 27 Jun 2023 13:06:16 -0700
+        with ESMTP id S231307AbjF0UQh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 16:16:37 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181C4295B;
+        Tue, 27 Jun 2023 13:16:08 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RJJTPL014439;
+        Tue, 27 Jun 2023 20:15:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2CCHtuv2h6RPc7xyDAV09O/VTb/DZHoqqtDJwiZkPzc=;
+ b=o2lp6rjLbcSWuD2XBbWqz41Ho9UbimY2FGAxixjDzEHnkDwwPI9IV7YAvniyRr/KNwI4
+ DvN1qucfPZm0oFrdbgIYWCzXe/+RtBZWvtxFrbA/H20i52hQhPLKkDn8QU82RJ6ZsreX
+ C4yzN2+n+E2z4ZvZPYJv2w+0f+YrkVFnyD3ImLI+nifkJI3LAm9zjvPy5TYWUyxBTW0m
+ ADEmTxDPdxIQ4JJYNN6ArXIUg/TG6bHsZeKaD7DILt1953Amy82vCXuyfhGj4l/e/rgr
+ ssAVOOm5xXywo7MRxzj4z7Nu1gStHVWtKyG+CHYENg5ohqiLTWmgp3yfsoOceV/Me6wi jA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfpd8aaen-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 20:15:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35RKFAta021198
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 27 Jun 2023 20:15:11 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 27 Jun
+ 2023 13:15:10 -0700
+Message-ID: <2e11a98a-3e44-7164-84cc-7bbd519b608a@quicinc.com>
+Date:   Tue, 27 Jun 2023 14:15:09 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v1] intel_idle: Add __init annotation to
- matchup_vm_state_with_baremetal()
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v11 6/9] soc: qcom: cpr: Use u64 for frequency
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        Arjan van de Ven <arjan@linux.intel.com>
-References: <12236592.O9o76ZdvQC@kreacher>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <12236592.O9o76ZdvQC@kreacher>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Robert Marko <robimarko@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
+ <20230217-topic-cpr3h-v11-6-ba22b4daa5d6@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230217-topic-cpr3h-v11-6-ba22b4daa5d6@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2PzFoOEPkv9f_AtAEEWMbxga3q8X1a21
+X-Proofpoint-GUID: 2PzFoOEPkv9f_AtAEEWMbxga3q8X1a21
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-27_14,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 mlxscore=0 mlxlogscore=936 phishscore=0 impostorscore=0
+ bulkscore=0 suspectscore=0 clxscore=1011 spamscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306270184
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,50 +93,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 6/27/2023 12:30 PM, Konrad Dybcio wrote:
+> 32 bits is not enough for over-2.changeGHz frequencies. Move all variables
+> that operate on Hz to u64 to avoid overflows.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 
-On 6/27/23 10:50, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The caller of (recently added) matchup_vm_state_with_baremetal() is an
-> __init function and it uses some __initdata data structures, so add the
-> __init annotation to it for consistency.
-> 
-> This addresses the following build warnings:
-> 
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_state_with_baremetal+0x51 (section: .text) -> intel_idle_max_cstate_reached (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_state_with_baremetal+0x62 (section: .text) -> cpuidle_state_table (section: .init.data)
-> WARNING: modpost: vmlinux: section mismatch in reference: matchup_vm_state_with_baremetal+0x79 (section: .text) -> icpu (section: .init.data)
-> 
-> Fixes: 0fac214bb75e ("intel_idle: Add a "Long HLT" C1 state for the VM guest mode")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+I get the following warning when building this -
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
-> ---
->  drivers/idle/intel_idle.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Index: linux-pm/drivers/idle/intel_idle.c
-> ===================================================================
-> --- linux-pm.orig/drivers/idle/intel_idle.c
-> +++ linux-pm/drivers/idle/intel_idle.c
-> @@ -2147,7 +2147,7 @@ static void __init intel_idle_cpuidle_de
->   * All our short idle states are dominated by vmexit/vmenter latencies,
->   * not the underlying hardware latencies so we keep our values for these.
->   */
-> -static void matchup_vm_state_with_baremetal(void)
-> +static void __init matchup_vm_state_with_baremetal(void)
->  {
->  	int cstate;
->  
-> 
-> 
-> 
-
--- 
-~Randy
+   CC      drivers/soc/qcom/cpr-common.o
+In file included from ./include/linux/device.h:15:0,
+                  from ./include/linux/platform_device.h:13,
+                  from ./include/linux/of_device.h:5,
+                  from drivers/soc/qcom/cpr.c:18:
+drivers/soc/qcom/cpr.c: In function ‘cpr_corner_init’:
+drivers/soc/qcom/cpr.c:870:21: warning: format ‘%lu’ expects argument of 
+type ‘long unsigned int’, but argument 4 has type ‘u64 {aka long long 
+unsigned int}’ [-Wformat=]
+    dev_dbg(drv->dev, "freq: %lu level: %u fuse level: %u\n",
+                      ^
+./include/linux/dev_printk.h:129:27: note: in definition of macro 
+‘dev_printk’
+    _dev_printk(level, dev, fmt, ##__VA_ARGS__);  \
+                            ^~~
+./include/linux/dev_printk.h:163:31: note: in expansion of macro ‘dev_fmt’
+    dev_printk(KERN_DEBUG, dev, dev_fmt(fmt), ##__VA_ARGS__); \
+                                ^~~~~~~
+drivers/soc/qcom/cpr.c:870:3: note: in expansion of macro ‘dev_dbg’
+    dev_dbg(drv->dev, "freq: %lu level: %u fuse level: %u\n",
+    ^~~~~~~
