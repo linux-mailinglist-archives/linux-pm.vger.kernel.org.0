@@ -2,67 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22C073FBE6
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 14:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7727F73FC0E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 14:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjF0MWH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 08:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40540 "EHLO
+        id S231200AbjF0Mik (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 08:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjF0MWG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 08:22:06 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17FC12C;
-        Tue, 27 Jun 2023 05:22:03 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fa7512e599so54726745e9.2;
-        Tue, 27 Jun 2023 05:22:03 -0700 (PDT)
+        with ESMTP id S230063AbjF0Mij (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 08:38:39 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C330DD;
+        Tue, 27 Jun 2023 05:38:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98bcc533490so539492666b.0;
+        Tue, 27 Jun 2023 05:38:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687868522; x=1690460522;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yF+BfpyQkTKvNGNGOXI7AZCHasniunHH0XoTxKM2eq8=;
-        b=CBrxuCRgD7PbRvizbCFCNZzvIz7k4lZsd1vCuP26T6NlsZzsi1FPX2wlFMMn0n8dCZ
-         Jdn0CM3Zma9XG5W24lZ8oO/DaydxffbaoF2le8gapvO1HB82fpbc9izdctwUOhykU4mP
-         vpmJRTBlcd0ZmuPX8ImgpDVYR7xL1CMR+I8Llqz/+DbCozJVcc6TFdDMRlsXr+DpZFEx
-         JWrTWeEL0/mSZCvJEM/PIigYryl2nnEOZ3vZurGT6aamoUzZ5Bi9m/2bP/gxo7XDqWvc
-         V/9a2efL5Ib2pB1q3YHiJvzmJi3BLgvkLWnpy36d2fO+m/M+lEcAeCEro2qMTyda53ib
-         vjHg==
+        d=gmail.com; s=20221208; t=1687869517; x=1690461517;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OGrEp5Q39HZGQ82JmPmmh2H94aW0HaIcywyFDbjcurE=;
+        b=NOB+ERmjStBCqjkPlUmP0vwjHclGmaLXnqNDFHvHmtpwUsypiY0Dtg72njUZPar5fx
+         CMvsdYa1RXWaHtmHE7/6LS64Hc7BlWnUNxZ6QfZiOQEw5+J61NdWupYFNjah6fJ7KpbR
+         D+O8KhKUI1jxIrmJyXi1VJ46pPvlWBiDBxQTvq5fXQLreeb5Vm4A+qaLpd8YJ89U3Txg
+         8IvQKsRZWyFKZyh2vCzBgo8DhCBTHAK25K1WtFERxDQdKYOnv2gKjFHSsp3ndc7tB0nR
+         lPuNnof4ooUQ+36toCZHblt3mVHO1b/juwSFn4mVBx4he9scyvzUYeZqP0xL8VX2Sn1l
+         Btcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687868522; x=1690460522;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yF+BfpyQkTKvNGNGOXI7AZCHasniunHH0XoTxKM2eq8=;
-        b=HGv9CpIk3RDLtqpIxuQ8e5QQjQBTUD61z52vXWREp6Jfx3JFpRFml+jHPCfxUNFIQJ
-         izq63N+sjh4h7n9EOK0543ocWebV8f02lsX36CDurZopMRXzudAg+i6ek51Zd64xJLXh
-         DEBXp2YWlErB6ff8w5RfWJHYqU3/pavIKtrUTyzB1HfaZQsljlkB+7sS14DfZ5x7NDRY
-         Edn2dIQl58YHcpdc8Vp4WLf654Uw14yPoLqgGCjPi/1ldMjZsPyJbr6S/U+E6P6K6zPT
-         7/pl6grA0xWbQ2fWHPjEt+AeFNcoVMe2gLRKtczYhznDNLUqrQMHCrUJcS+i1xlQ297X
-         xayw==
-X-Gm-Message-State: AC+VfDz1uA/X9QKHWNWLUCF77OgrVHYwIe1FzBsQWIhNdVS33YX66k5C
-        bZaqdeg58V49mM0cnfmxayxzhRTLFJ9UVA==
-X-Google-Smtp-Source: ACHHUZ49DxcpNNlfhj3ePNfadu6ido8FNLnvtMLuBvSnYoY/fd0GHnuYq858wJkQCKND8S21nh76vw==
-X-Received: by 2002:a05:600c:c4:b0:3fa:71db:56ff with SMTP id u4-20020a05600c00c400b003fa71db56ffmr11465476wmm.40.1687868522215;
-        Tue, 27 Jun 2023 05:22:02 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id s24-20020a7bc398000000b003fb9ebb6b88sm2297449wmj.39.2023.06.27.05.22.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jun 2023 05:22:01 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] thermal/drivers/k3_j72xx_bandgap: make read-only const arrays static
-Date:   Tue, 27 Jun 2023 13:22:00 +0100
-Message-Id: <20230627122200.722633-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1687869517; x=1690461517;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGrEp5Q39HZGQ82JmPmmh2H94aW0HaIcywyFDbjcurE=;
+        b=MwOmoqeGHqa4pd++TTaFa6UOfHO0ZltDgwQ7m/uCmMa0llvaDUBztEU6dbp1xG1zhs
+         8JAsB86KavtD3exn9gtH39XmMHoAaNnWaOm41tM/jnVi9B3Ve/REQZ+EEkuuD5cZXn0i
+         BL/nPjraMXOhatHo1gMImRt+v1ZKtiZAKSJTve4ai1MQ67NBRmZ85WfOj0lwqp0EHKQD
+         XDLWTOfvNXj+D2zc/XDrYAPPFH2OPhdpHQU/dvdp4LVJvjzimXtvzx5ZDakwtp480dgs
+         vo/byhJuKNqb3JW1AjwVCjLI0zOoZGYk36+iCzaBnJIKpD6dae1Bq/ee7ctTm9J+2UZY
+         MfBw==
+X-Gm-Message-State: AC+VfDy2RmjNtfVKTyYwO2+7hkozG0UPWRMePel892bozmmOjb/MMgj3
+        /Dt85w42xfCOqSL2HnJXtrATCssR5E0+Qg==
+X-Google-Smtp-Source: ACHHUZ5PyNyzI/RcofGx13FdqXcShZMBIm55egb8GztHqoIAr75k6TPoNEICmVO1Te79u4XXd8uENA==
+X-Received: by 2002:a17:907:3e0a:b0:974:1ef1:81ad with SMTP id hp10-20020a1709073e0a00b009741ef181admr30559593ejc.4.1687869516574;
+        Tue, 27 Jun 2023 05:38:36 -0700 (PDT)
+Received: from [192.168.148.233] ([193.85.242.128])
+        by smtp.gmail.com with ESMTPSA id a3-20020a17090682c300b00992025654c4sm1083297ejy.182.2023.06.27.05.38.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jun 2023 05:38:36 -0700 (PDT)
+Message-ID: <94dca2c3-e5fc-c4bc-a945-31ebb728e353@gmail.com>
+Date:   Tue, 27 Jun 2023 15:38:35 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH][next] power: supply: bd99954: make read-only array
+ sub_status_reg
+Content-Language: en-US, en-GB
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230627121707.722021-1-colin.i.king@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230627121707.722021-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,35 +75,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Don't populate the const arrays on the stack, instead make them static.
+On 6/27/23 15:17, Colin Ian King wrote:
+> Don't populate the read-only array on the stack, instead make it
+> static const.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/thermal/k3_j72xx_bandgap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index 5be1f09eeb2c..2250f3eec93b 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -357,7 +357,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 	struct err_values err_vals;
- 	void __iomem *fuse_base;
- 
--	const s64 golden_factors[] = {
-+	static const s64 golden_factors[] = {
- 		-490019999999999936,
- 		3251200000000000,
- 		-1705800000000,
-@@ -365,7 +365,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 		-92627,
- 	};
- 
--	const s64 pvt_wa_factors[] = {
-+	static const s64 pvt_wa_factors[] = {
- 		-415230000000000000,
- 		3126600000000000,
- 		-1157800000000,
+Thanks!
+
+Yours,
+-- Matti
+
 -- 
-2.39.2
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
