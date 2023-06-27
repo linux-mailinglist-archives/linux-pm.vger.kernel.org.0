@@ -2,114 +2,286 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A60E9740310
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 20:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4C874034E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jun 2023 20:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjF0SR4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 27 Jun 2023 14:17:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
+        id S231274AbjF0Sa5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 14:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjF0SRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 14:17:52 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D7F107
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 11:17:51 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-94ea38c90ccso101700766b.1
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 11:17:51 -0700 (PDT)
+        with ESMTP id S231186AbjF0Saw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 14:30:52 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CDCE58
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 11:30:49 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f8777caaa1so6934271e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 11:30:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687890648; x=1690482648;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eEYoyXW6KI+40nikgb+c9QT03ex81BcyrCC3z8MFeq8=;
+        b=ChhBkIYBCPE5e3butSMyjWz2gumAtO2Gb7pMg07bRRdoyNFS+pHiMMN27n8s0qzIxc
+         cVeVKJd0CsbKMTpCXbPT4aX4shOOvjvxUiDqLO7ZGkGtBJleWdBTahf9wC5CXXJnowoZ
+         qBYAZKy/IpgwG9FPSOzqQSSeGoL6K4QX9swrtNaRnKyvvetrweb78H03mCjxzrLlfyqA
+         mfhlzt9uXcO32ygXXhAibp0CXrYLODrJjNOO6Ml97mgY1UPHcZrQl+RLVC1NwAoCKv5O
+         57LSKb3ID2OMOE+q/bjxPr+4w8Qlzw072a6ilFn1jG4zqZW03HpHoPDddjOlU6acvqw+
+         mt1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687889870; x=1690481870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lsENEjx/sGsoMo3b4hPV6hRin1hnzfHTpNFwJ9CgZ3w=;
-        b=HYxKW3j2TL+kwDJGpSR9tBUosD0enExZnkZ9Y4PNtXKxeVCr5SD1e9a36GccjYBS2J
-         NstzAAxtDLuZr0/fFcRV7MrVv3foDfhQEqwO8QoYJZQ9alI5S8dNvrUp+iRpgwXff7zk
-         hShgKFx8kU0MZF72Iio/4/iPkR4ZFHFTvD1JExYc/SzWOHFYcdrOxnzS83acFi+L7fD6
-         h42yNzv/AwmAjlli8MWHU1NdDaeu2ldZdcpazda2qu4nX/bsG6yMEGTeqjAspJvduFKb
-         h+cCm5xSUe6WDGHy2zqzJC78KrXKG3o7GPMuhrHAegqo0S5CJud5lZIXnkTJeF/hK5AM
-         KG6w==
-X-Gm-Message-State: AC+VfDwGcrYvQdiZFAXIFTJd6y2zPUr3hsjGa+FvQ2z+xBC4M3C3d7Xh
-        bHdwfPnD7rSCi7OeXDUEIKeC0xTZiChppL9wiu/Cqoun
-X-Google-Smtp-Source: ACHHUZ532d9ZmGj+eS4tgMTvR8PXrum6ze0C4woDUKLLTIXF94E4g9ig5i3N8txCEPWXOOa8vWXDUbKwSs44+0OBsJg=
-X-Received: by 2002:a17:906:73cc:b0:98d:b10f:f3cd with SMTP id
- n12-20020a17090673cc00b0098db10ff3cdmr7143681ejl.7.1687889869658; Tue, 27 Jun
- 2023 11:17:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687890648; x=1690482648;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eEYoyXW6KI+40nikgb+c9QT03ex81BcyrCC3z8MFeq8=;
+        b=epdsP/djEvycz+0riAfL+xAfnun01cCUSff12Grl8VNdtTGjIPvJyDJnoPpefTp8as
+         j7WtWouxUOHguS4APVyx7UeE+ALoJvTQXvt0szHRRQQdv5cOL1oZprCKMG+wETHGj2iw
+         ktqqte4m07w9/Kvnwz7jOeahm/Aomo72UdmsPqdusFNBIhFDW3KYjpfEZpF9SqvoUZ0E
+         0Wklq4sPgYGGynZTT/MtYy91AUmbhC0EDchUN4D8DD5G1cCE0RoOLBbked0zLZQ/MdEP
+         hroygrOaT6OfA6k76c/l1ovFNKPfxWInuyHVw9ofYjjeChbeNsMnf2c+nRixtzNghYkV
+         ihcQ==
+X-Gm-Message-State: AC+VfDwPCa2m+sKHEehU87Fy0BALMgxY+kgePeP8048lCDKVb5/mlxhP
+        BGMBWVxrPLVgRD9lsSSmUaUo1Q==
+X-Google-Smtp-Source: ACHHUZ49G223k7CVIhwQfiDM5CG7kvqpA7d51dAPg9ld9xVIXu250DD4U+oqXvUmZbEVXUf3jAewgA==
+X-Received: by 2002:ac2:4f12:0:b0:4ed:cc6d:61fe with SMTP id k18-20020ac24f12000000b004edcc6d61femr5638416lfr.24.1687890647601;
+        Tue, 27 Jun 2023 11:30:47 -0700 (PDT)
+Received: from [192.168.1.101] (abxj103.neoplus.adsl.tpnet.pl. [83.9.3.103])
+        by smtp.gmail.com with ESMTPSA id q16-20020ac25290000000b004f640b0fb04sm1605205lfm.212.2023.06.27.11.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jun 2023 11:30:47 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v11 0/9] Add support for Core Power Reduction v3, v4 and
+ Hardened
+Date:   Tue, 27 Jun 2023 20:30:36 +0200
+Message-Id: <20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org>
 MIME-Version: 1.0
-References: <20230627021646.evsp6e3capqxx6xn@vireshk-i7>
-In-Reply-To: <20230627021646.evsp6e3capqxx6xn@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 27 Jun 2023 20:17:38 +0200
-Message-ID: <CAJZ5v0g=pAPzZBaucU0UPnbHuJppmP+R6gx=m9+Fj7UPuW5jMw@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 6.5
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMwqm2QC/22NzQqDMBCEX0VybkoSi5ae+h7iIT8bsyCJbKy0i
+ O/erece5xu+mV1UIIQqHs0uCDasWDIHrS+N8MnmCSQGBsIo0yqje7mWBb30C7VJBjCtcdHdevC
+ CDWcrSEc2+8ROfs0zw4Ug4vv8GEbOCeta6HNeblr98P91LqWSXW8h3GOIttPPGbOlci00ifE4j
+ i88gg2EvwAAAA==
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687890646; l=7563;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=7+lu1MyAGNXwDNfi7jE2GjLf4UHybiRnD4saUaliAL8=;
+ b=XGTPmVre2Lc9Yp+EHRK4Wn5/lJNhQ+g9SX0/b72Pa6s5vC8tbYPycWChZ2KKKHWEmC+YSiHth
+ /augxC8pFpCBcIhfWiv2DBEAqsTKzYnd4s2dvNp/pOQYtJeeV2ohLEI
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
+Changes in v11:
 
-On Tue, Jun 27, 2023 at 4:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
->
->   Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.5
->
-> for you to fetch changes up to 5fb2864cbd50a84a73af4fdd900b31f2daddea34:
->
->   OPP: Properly propagate error along when failing to get icc_path (2023-06-27 07:35:14 +0530)
->
-> ----------------------------------------------------------------
-> OPP updates for 6.5
->
-> - Simplify performance state related logic in the OPP core (Viresh
->   Kumar).
->
-> - Fix use-after-free and improve locking around lazy_opp_tables (Viresh
->   Kumar and Stephan Gerhold).
->
-> - Minor cleanups - using dev_err_probe() and rate-limiting debug
->   messages (Andrew Halaney and Adrián Larumbe).
->
-> ----------------------------------------------------------------
-> Adrián Larumbe (1):
->       OPP: rate-limit debug messages when no change in OPP is required
->
-> Andrew Halaney (2):
->       OPP: Use dev_err_probe() when failing to get icc_path
->       OPP: Properly propagate error along when failing to get icc_path
->
-> Stephan Gerhold (1):
->       opp: Fix use-after-free in lazy_opp_tables after probe deferral
->
-> Viresh Kumar (5):
->       OPP: Staticize `lazy_opp_tables` in of.c
->       OPP: Protect `lazy_opp_tables` list with `opp_table_lock`
->       OPP: don't drop performance constraint on OPP table removal
->       OPP: pstate is only valid for genpd OPP tables
->       OPP: Simplify the over-designed pstate <-> level dance
->
->  drivers/opp/core.c    | 44 +++++++++++++++++++++++++-------------------
->  drivers/opp/debugfs.c |  1 -
->  drivers/opp/of.c      | 40 ++++++++++++++++++++++------------------
->  drivers/opp/opp.h     |  6 +-----
->  4 files changed, 48 insertions(+), 43 deletions(-)
->
+CPR COMMON:
+- split the commonizing patch, make it actually do what it says on the
+  tin..
+- fix some overflow bugs
 
-Pulled and added to the linux-next branch of linux-pm.git, thanks!
+CPR3:
+- fix some overflow bugs
+- don't assume "lack of qcom,opp-?loop-vadj" means val=0"
+
+CPR BINDINGS:
+- drop quotes in items
+- drop clock-names (there's just a single one)
+- rewrite the description a bit
+- fix up the example
+- drop bogus minItems
+- "acc-syscon" -> "qcom,acc"
+
+DTS:
+- fix qfprom children so that the bits=<> doesn't overflow reg[size]
+- drop unrelated changes
+- place one reg entry per line
+
+Link to v10: https://lore.kernel.org/r/20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org
+
+Changes in v10:
+- Skip "Let qcom,opp-fuse-level be a 2-long array" (Applied by Viresh)
+- Use b4 (it may be the first time you're receiving this if git send-email
+  omitted you before..)
+- +Cc Robert Marko (expressed interest in previous revisions)
+- Add "Document CPR3 open/closed loop volt adjustment"
+CPR:
+- %hhu -> %u (checkpatch)
+CPR BINDINGS:
+- Drop QCS404 fuse set (it doesn't use this driver, what did I even think..)
+  but leave the allOf:if: block for expansion (sdm660, msm8996, ipqABCD should
+  follow soon..)
+- Drop Rob's R-b (as things changed *again*, please take one more look to make
+  sure you're okay with this file, Rob..)
+
+Link to v9:
+https://lore.kernel.org/linux-arm-msm/20230116093845.72621-1-konrad.dybcio@linaro.org/
+
+Changes in v9:
+- Restore forgotten MAINTAINERS patch (oops)
+CPR:
+- Include the missing header (big oops!)
+- Fix kconfig dependencies
+CPR bindings:
+- Fix cpu reg in example (why didn't dt_binding_check scream at that)
+- Add newlines between nodes in example
+- Change opp table node names to opp-table-cpu[04]
+- Change opp table labels to cpu[04]_opp_table
+- Change CPRh opp subnode names to opp-N from oppN
+- Remove some stray newlines
+- Bring back nvmem-cell-names and add the 8998's set
+- Allow power-domains for VDDCX_AO voting
+- Remove Rob's r-b, there's been quite a bit of changes..
+CPR DT:
+- Send the correct revision of the patch this time around..
+OPP bindings:
+- Add Rob's ack
+
+Link to v8:
+https://lore.kernel.org/linux-arm-msm/20230110175605.1240188-1-konrad.dybcio@linaro.org/
+
+Changes in v8:
+- Overtake this series from AGdR
+- Apply all review comments from v7 except Vladimir's request to
+  not create the include/ header; it will be strictly necessary for
+  OSM-aware cpufreq_hw programming, which this series was more or
+  less created just for..
+- Drop QCS404 dtsi change, account for not breaking backwards compat
+  in [3/5]
+- Add type phandle type reference to acc-syscon in [1/5]
+- Update AGdR's email addresses for maintainer entries
+- Add [2/5] to make dt_binding_check happy
+- Separate the CPRh DT addition from cpufreq_hw addition, sort and
+  properly indent new nodes
+- Drop CPR yaml conversion, that happened in meantime
+- Reorder the patches to make a bit more sense
+- Tested again on MSM8998 Xperia XZ Premium (Maple)
+- I take no responsibility for AGdR's cheeky jokes, only the code!
+
+Link to v7:
+https://lore.kernel.org/lkml/20210901155735.629282-1-angelogioacchino.delregno@somainline.org/
+
+Changes in v7:
+- Rebased on linux-next as of 210901
+- Changed cpr_read_efuse calls to nvmem_cell_read_variable_le_u32,
+  following what was done in commit c77634b9d916
+
+Changes in v6:
+- Fixes from Bjorn's review
+- After a conversation with Viresh, it turned out I was abusing the
+  OPP API to pass the APM and MEM-ACC thresholds to qcom-cpufreq-hw,
+  so now the driver is using the genpd created virtual device and
+  passing drvdata instead to stop the abuse
+- Since the CPR commonization was ignored for more than 6 months,
+  it is now included in the CPRv3/4/h series, as there is no point
+  in commonizing without having this driver
+- Rebased on v5.13
+
+Changes in v5:
+- Fixed getting OPP table when not yet installed by the caller
+  of power domain attachment
+
+Changes in v4:
+- Huge patch series has been split for better reviewability,
+  as suggested by Bjorn
+
+Changes in v3:
+- Fixed YAML doc issues
+- Removed unused variables and redundant if branch
+
+Changes in v2:
+- Implemented dynamic Memory Accelerator corners support, needed
+  by MSM8998
+- Added MSM8998 Silver/Gold parameters
+
+This commit introduces a new driver, based on the one for cpr v1,
+to enable support for the newer Qualcomm Core Power Reduction
+hardware, known downstream as CPR3, CPR4 and CPRh, and support
+for MSM8998 and SDM630 CPU power reduction.
+
+In these new versions of the hardware, support for various new
+features was introduced, including voltage reduction for the GPU,
+security hardening and a new way of controlling CPU DVFS,
+consisting in internal communication between microcontrollers,
+specifically the CPR-Hardened and the Operating State Manager.
+
+The CPR v3, v4 and CPRh are present in a broad range of SoCs,
+from the mid-range to the high end ones including, but not limited
+to, MSM8953/8996/8998, SDM630/636/660/845.
+
+As to clarify, SDM845 does the CPR/SAW/OSM setup in TZ firmware, but
+this is limited to the CPU context; despite GPU CPR support being not
+implemented in this series, it is planned for the future, and some
+SDM845 need the CPR (in the context of GPU CPR) to be configured from
+this driver.
+
+It is also planned to add the CPR data for MSM8996, since this driver
+does support the CPRv4 found on that SoC, but I currently have no time
+to properly test that on a real device, so I prefer getting this big
+implementation merged before adding more things on top.
+
+As for MSM8953, we (read: nobody from SoMainline) have no device with
+this chip: since we are unable to test the cpr data and the entire
+driver on that one, we currently have no plans to do this addition
+in the future. This is left to other nice developers: I'm sure that
+somebody will come up with that, sooner or later
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+AngeloGioacchino Del Regno (7):
+      MAINTAINERS: Add entry for Qualcomm CPRv3/v4/Hardened driver
+      dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
+      soc: qcom: cpr: Move common functions to new file
+      soc: qcom: cpr-common: Add support for flat fuse adjustment
+      soc: qcom: cpr-common: Add threads support
+      soc: qcom: Add support for Core Power Reduction v3, v4 and Hardened
+      arm64: dts: qcom: msm8998: Configure CPRh
+
+Konrad Dybcio (2):
+      dt-bindings: opp: v2-qcom-level: Document CPR3 open/closed loop volt adjustment
+      soc: qcom: cpr: Use u64 for frequency
+
+ .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |   14 +
+ .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    |  289 ++
+ MAINTAINERS                                        |    6 +
+ arch/arm64/boot/dts/qcom/msm8998.dtsi              |  757 +++++
+ drivers/soc/qcom/Kconfig                           |   22 +
+ drivers/soc/qcom/Makefile                          |    2 +
+ drivers/soc/qcom/cpr-common.c                      |  362 +++
+ drivers/soc/qcom/cpr-common.h                      |  109 +
+ drivers/soc/qcom/cpr.c                             |  392 +--
+ drivers/soc/qcom/cpr3.c                            | 2932 ++++++++++++++++++++
+ include/soc/qcom/cpr.h                             |   17 +
+ 11 files changed, 4535 insertions(+), 367 deletions(-)
+---
+base-commit: 53cdf865f90ba922a854c65ed05b519f9d728424
+change-id: 20230217-topic-cpr3h-de232bfb47ec
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
