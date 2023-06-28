@@ -2,148 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8391741B43
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 23:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7FD741BFD
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 00:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231546AbjF1V5Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 17:57:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S229524AbjF1Wyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 18:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbjF1V4z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 17:56:55 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1782B2D60
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 14:56:32 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5700b15c12fso210287b3.1
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 14:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687989391; x=1690581391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hnGMQOEnuXwr/opUEDGr/9OsjO1I6gHLazySPyM8Vng=;
-        b=CUQC9Y0eQtr0n5pjuu2Txm57WGoabBOUVRjQ5EHElC3JMNgpioNjrtlcoP5zbhWO1O
-         Rf/R60eeZb+7LKZt51pv+J/dMGFxdPoVwNgWW7x1+Ujl+EdwYo1VXnQsB/B5/SFvEfwq
-         AonYCd9uflcMdqxozOZbma0uz55i25/BhftkpLEeuCb1IF6AFoMwcrOIsv5+w1I57IO9
-         R8XtcQogCe0Z8jcrJnJTy2YOjXcfIWgqZWmr+UiPd+uXGX4QlVT/DOO5zTQt1IDGVmzY
-         i4TUL80wSMN4CpMrpnWxQDD/SlK6xBYsDK8+F1mKPfTGZfMMoskacTFx5N79B0551sox
-         JceQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687989391; x=1690581391;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hnGMQOEnuXwr/opUEDGr/9OsjO1I6gHLazySPyM8Vng=;
-        b=E1XdT3+pffaLgckqutlHdym8HbMCY20aa0QQRDvl1WE2YBTRZCPb13pS3qUMdFGlKp
-         /UfI9O22ds7bpLfsvW773vgJkhHc8wymKUsRlC5/EsA3vf4jjHoOgEh4e5vGsGwJQzQp
-         7S9NjMHo3Dz6UtnhYsOwaMTVidDNRCV7xc1jkDqYHjJIMpx2cSlkVaTjpknh+zeXG5gD
-         nf5rbNRVIcsxkLoOFg4AnNDaJLt2tWUuz89ah7d+Gmp6bCuAJ5O0LEKFEenrSnjXAI2V
-         AL56ht3zke8Igq+VQ5N2MwtHNdZ8nDVVFI8W3rB/hkWfAR+UN5+y802brvMmEUAHDfrC
-         VHZQ==
-X-Gm-Message-State: AC+VfDyQxy+UJzezesJxtA7NDaJ7LsIQzUiovm652hRQ6NbPUF+6Cvvs
-        pW0S6D9xsUMOf0PWc1hffoAGB91+nsYAASlweedYRw==
-X-Google-Smtp-Source: ACHHUZ5wljNS/rozuIyPT6I2Z+jlk2Dv0uMmEMWXCme0AmmEZ66URZbi1CF/E0uJ5bJQocNix0qKBWxom4DQj52EsuA=
-X-Received: by 2002:a25:a4aa:0:b0:c00:e6c4:1812 with SMTP id
- g39-20020a25a4aa000000b00c00e6c41812mr19609040ybi.63.1687989391111; Wed, 28
- Jun 2023 14:56:31 -0700 (PDT)
+        with ESMTP id S230060AbjF1Wyi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 18:54:38 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F1126B9;
+        Wed, 28 Jun 2023 15:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687992876; x=1719528876;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Iki1tAwHsT0InDXDuJ03LNhaQB1nSzzHCxO6ym/RF98=;
+  b=FA1ceeOI1N5oayzbg4g51EtVigTVRp2Fb0EGnBGLGvqsCXOApO1TVUVz
+   1XU2kZ8RK3Jg077ufxUKD8Ann55fCjktiOU3PdqoZpuVcWPOojZcB+zB1
+   wdAPUOhKdYt/Y8oecHb+yd3sbOuLY6xVI8CMwAObp9xbNErDqzlRFGDpj
+   iA/XnhVvi3uQsaAB8XjWCAm3iFR3UK9LEYM09D2S0LZg3hxR0K0t9w5XC
+   /htWmHwSxXbDtrtSbzxoqElqK0AAFFu/gGJy0l/Eg6GMjQtFzuJ1JjCoc
+   5X5VeD1afJPcN8LBxtAFNBySKt5Z2wxCNxVLgpUaEIN1+MYS0/jPmW7ft
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="365438758"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="365438758"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 15:54:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="891206357"
+X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
+   d="scan'208";a="891206357"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga005.jf.intel.com with ESMTP; 28 Jun 2023 15:54:28 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
+Date:   Wed, 28 Jun 2023 15:53:41 -0700
+Message-Id: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230628105652.1670316-1-abel.vesa@linaro.org> <CAJZ5v0i-+b+oFOP92rhNw_UOKu3-QOy_-stQRa5X2HbaTq9XMA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i-+b+oFOP92rhNw_UOKu3-QOy_-stQRa5X2HbaTq9XMA@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 28 Jun 2023 23:55:54 +0200
-Message-ID: <CAPDyKFoO85-k38-eXzJ3wRK9tfS=DfUw8-jE6fXORTVSoRLXzQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] PM: domains: Add control for switching back and forth
- to HW control
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>, avel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 28 Jun 2023 at 19:15, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Jun 28, 2023 at 12:57=E2=80=AFPM Abel Vesa <abel.vesa@linaro.org>=
- wrote:
-> >
-> > This is just a resend of [1]. This resend just adds the back story behi=
-nd
-> > the need for such a generic API as a cover letter. Also added my SoB ta=
-g
-> > to Ulf's patch.
-> >
-> > Some of the newer Qualcomm platforms support handing of the control of
-> > some of the GDSCs (implemented as power domains in Linux) to some devic=
-e
-> > firmware. The idea behind such approach is that the firmware knows best
-> > when such a power domain can be powered off or not and leads most of th=
-e
-> > time to better power consumption.
-> >
-> > At this point, if such GDSC provides HW control support, the current
-> > implementation is switching to HW control right after the GDSC gets
-> > powered on and it is left in HW control mode until right before the
-> > request for power off is done. This needs to remain as is for now, as w=
-e
-> > do not know for sure what each firmware expects from its related GDSCs.
-> > For example, the venus driver expects the codec GDSCs to remain always
-> > in HW control mode, otherwise the firmware would crush.
-> >
-> > But in some cases, the consumer driver needs to switch back and forth.
-> > And the explanation for such case is when a driver needs to interract
-> > with the device (e.g. reading status bits) and the firmware doesn't
-> > guarantee the GDSC will be enabled when in HW mode. Therefore, the
-> > consumer would need to switch back to SW mode, do its thing, and then
-> > switch again back to HW mode.
-> >
-> > This is where the patch from Ulf comes in. It allows consumers that
-> > actually need to control the HW/SW mode to do so.
-> >
-> > The GDSC patch just implemets the set_hwmode op and sets it for each
-> > GDSC that provides HW control mode.
-> >
-> > [1] https://lore.kernel.org/all/20230627104033.3345659-1-abel.vesa@lina=
-ro.org/
-> >
-> > Abel Vesa (1):
-> >   clk: qcom: gdsc: Add support for set_hwmode_dev
-> >
-> > Ulf Hansson (1):
-> >   PM: domains: Allow devices attached to genpd to be managed by HW
-> >
-> >  drivers/base/power/domain.c | 66 +++++++++++++++++++++++++++++++++++++
-> >  drivers/clk/qcom/gdsc.c     | 22 +++++++++++++
-> >  include/linux/pm_domain.h   | 15 +++++++++
-> >  3 files changed, 103 insertions(+)
-> >
-> > --
->
-> I can queue up this series if I get an ACK for the second patch.
+Some system BIOS configuration may provide option to disable E-cores.
+As part of this change, CPUID feature for hybrid (Leaf 7 sub leaf 0,
+EDX[15] = 0) may not be set. But HWP performance limits will still be
+using a scaling factor like any other hybrid enabled system.
 
-Thanks, but please hold on until you get additional confirmation from me.
+The current check for applying scaling factor will fail when hybrid
+CPUID feature is not set. Only way to make sure that scaling should be
+applied by checking CPPC nominal frequency and nominal performance. If
+CPPC nominal frequency and nominal performance is defined and nominal
+frequency is not in multiples of 100MHz of nominal performance, then use
+hybrid scaling factor.
 
-I would like the consumer APIs that are being added in patch1 to have
-a user. At least I want to see a plan for upstreaming one user of it,
-before I think we should move forward. FYI, there are discussions
-around this offlist too.
+The above check will fail for non hybrid capable systems as they don't
+publish nominal frequency field in CPPC, so this function can be used
+for all HWP systems without additional cpu model check.
 
-Kind regards
-Uffe
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 59 ++++++++++++++++++++++++++++------
+ 1 file changed, 49 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 2548ec92faa2..b562ed7c4f37 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -330,6 +330,13 @@ static bool intel_pstate_get_ppc_enable_status(void)
+ 	return acpi_ppc;
+ }
+ 
++#define HYBRID_SCALING_FACTOR	78741
++
++static inline int core_get_scaling(void)
++{
++	return 100000;
++}
++
+ #ifdef CONFIG_ACPI_CPPC_LIB
+ 
+ /* The work item is needed to avoid CPU hotplug locking issues */
+@@ -400,10 +407,35 @@ static int intel_pstate_get_cppc_guaranteed(int cpu)
+ 
+ 	return cppc_perf.nominal_perf;
+ }
++
++static int intel_pstate_cppc_get_scaling(int cpu)
++{
++	struct cppc_perf_caps cppc_perf;
++	int ret;
++
++	ret = cppc_get_perf_caps(cpu, &cppc_perf);
++
++	/*
++	 * Check if nominal frequency is multiples of 100 MHz, if
++	 * not return hybrid scaling factor.
++	 */
++	if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
++	    (cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq))
++		return HYBRID_SCALING_FACTOR;
++
++	return core_get_scaling();
++}
++
+ #else /* CONFIG_ACPI_CPPC_LIB */
+ static inline void intel_pstate_set_itmt_prio(int cpu)
+ {
+ }
++
++static int intel_pstate_cppc_get_scaling(int cpu)
++{
++	return core_get_scaling();
++}
++
+ #endif /* CONFIG_ACPI_CPPC_LIB */
+ 
+ static void intel_pstate_init_acpi_perf_limits(struct cpufreq_policy *policy)
+@@ -1895,11 +1927,6 @@ static int core_get_turbo_pstate(int cpu)
+ 	return ret;
+ }
+ 
+-static inline int core_get_scaling(void)
+-{
+-	return 100000;
+-}
+-
+ static u64 core_get_val(struct cpudata *cpudata, int pstate)
+ {
+ 	u64 val;
+@@ -1936,16 +1963,29 @@ static void hybrid_get_type(void *data)
+ 	*cpu_type = get_this_hybrid_cpu_type();
+ }
+ 
+-static int hybrid_get_cpu_scaling(int cpu)
++static int hwp_get_cpu_scaling(int cpu)
+ {
+ 	u8 cpu_type = 0;
+ 
+ 	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
+ 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
+ 	if (cpu_type == 0x40)
+-		return 78741;
++		return HYBRID_SCALING_FACTOR;
+ 
+-	return core_get_scaling();
++	/* Use default core scaling for E-cores */
++	if (cpu_type == 0x20)
++		return core_get_scaling();
++
++	/*
++	 * If reached here, it means that, this system is either non
++	 * hybrid system (like Tiger Lake) or hybrid capable system (like
++	 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
++	 * support is 0).
++	 * All non hybrid systems, don't publish nominal_frequency
++	 * field (means nominal frequency = 0), In that case
++	 * the legacy core scaling is used.
++	 */
++	return intel_pstate_cppc_get_scaling(cpu);
+ }
+ 
+ static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
+@@ -3393,8 +3433,7 @@ static int __init intel_pstate_init(void)
+ 			if (!default_driver)
+ 				default_driver = &intel_pstate;
+ 
+-			if (boot_cpu_has(X86_FEATURE_HYBRID_CPU))
+-				pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
++			pstate_funcs.get_cpu_scaling = hwp_get_cpu_scaling;
+ 
+ 			goto hwp_cpu_matched;
+ 		}
+-- 
+2.31.1
+
