@@ -2,137 +2,294 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD767413B7
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 16:20:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5926B7413DF
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 16:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjF1OTR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 10:19:17 -0400
-Received: from mail-il1-f170.google.com ([209.85.166.170]:61767 "EHLO
-        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjF1OTE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 10:19:04 -0400
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-345a4efb66dso14182155ab.3;
-        Wed, 28 Jun 2023 07:19:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687961943; x=1690553943;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6Vpxh2xDXkwAvdFmyCoGaCJeQa/x+hA8BuVws8Zvars=;
-        b=igNkECNy25t8ZOoNvqw56lrTa4L6SKJP6ewtlIHP0ZrMebTWqzojb/ZMf4SO15iWjU
-         aUox33GlhW67joJKs4CjreXHvevsqkD7j4LMOwMmSU1vcNAFjjKghCbuPc4D9R1fgd/j
-         tI9KxK7xOX5qddsDfNALuh1lBdJs2glGOylkwlFefRIzIRHbtrL971z1d1CIiuguwRvJ
-         5F3pGjryYR4WyTbllVisfwz12nlwhM/AyNZNNgZK38JmqZe1X7zVb8b8V+er8V844P7c
-         fRrPHHoieC7dd1zllgW2C7uBPxPsTyNvpb8JIQr6ATUAlFVJ0z78/+7ryQ6bEKWnQ8sc
-         kINw==
-X-Gm-Message-State: AC+VfDzDjctPkVVYOZEP+oC3/YXpFZtlqC7/Yphyt+NqOJD7xX44rsIz
-        Y6GqRT8mPsp4oYYYFM/RSA==
-X-Google-Smtp-Source: ACHHUZ5R264ibhHn2cXWozz8/AFWB6PMBi6n4+wNMuyb8WCQYpXTZ8Bbh9aL83tYblAqYTWwdV0p1Q==
-X-Received: by 2002:a5e:dd0a:0:b0:780:cd7d:4073 with SMTP id t10-20020a5edd0a000000b00780cd7d4073mr17255025iop.13.1687961943210;
-        Wed, 28 Jun 2023 07:19:03 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id d13-20020a056602064d00b00774efe6fa24sm1462204iox.10.2023.06.28.07.19.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 07:19:02 -0700 (PDT)
-Received: (nullmailer pid 368757 invoked by uid 1000);
-        Wed, 28 Jun 2023 14:18:57 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        id S231293AbjF1Ocs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 10:32:48 -0400
+Received: from mx0b-0031df01.pphosted.com ([205.220.180.131]:11160 "EHLO
+        mx0b-0031df01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231127AbjF1Ocl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 10:32:41 -0400
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35SBEeoH026308;
+        Wed, 28 Jun 2023 14:32:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=W7WnL8mgHuMiFaub7gEfEGkF/nZF/hE5lIKpRJEdEjY=;
+ b=gKRjO4/6SGMS8/6q6UZiww5JA600Q14Ao08rtvNKK2jkQ3uxHoSMOF8CiEDubvnfbNRF
+ vx9fh8EJ7pVird/8mFFxShypEZgjoQi/OenLd8kBk72KRHrT1dTU7KUPg8pdOzMvDoT7
+ Vyp2btEbHNScPTmXNB0F913cQ2LiQcqbKUvFmjGoBAc+XGEjS7UAf2NLZoupkPoezvfU
+ kbKyf7+aKf1c+Lb9a1AxXje9e7/BzVMJzd6rwQ8j46aZAA/xHlHKnZPJEBZG+Vg18LCI
+ 2vll5l4Ae/pmgxGcw5V6/t3hH4Kk+zhqMQwq0KgsebvEXUXuYu19KqfGtbrAIHvCYiBv dw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rgemk15dp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 14:32:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35SEWMCj000945
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Jun 2023 14:32:22 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.7; Wed, 28 Jun
+ 2023 07:32:14 -0700
+Message-ID: <c3a6a217-dc5c-4814-1d32-c951f2f92495@quicinc.com>
+Date:   Wed, 28 Jun 2023 08:32:13 -0600
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v12 00/10] (no cover subject)
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
         Andy Gross <agross@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Nishanth Menon <nm@ti.com>, Niklas Cassel <nks@flawful.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     Robert Marko <robimarko@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
         Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>
-In-Reply-To: <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
 References: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
- <20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org>
-Message-Id: <168796193713.368698.17557837830037308933.robh@kernel.org>
-Subject: Re: [PATCH v12 04/10] dt-bindings: soc: qcom: cpr3: Add bindings
- for CPR3 driver
-Date:   Wed, 28 Jun 2023 08:18:57 -0600
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7VLS1VKQlhiTuDoTyXT8FpSL2LgcIDiN
+X-Proofpoint-ORIG-GUID: 7VLS1VKQlhiTuDoTyXT8FpSL2LgcIDiN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-28_10,2023-06-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ phishscore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
+ mlxlogscore=999 impostorscore=0 priorityscore=1501 mlxscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306280129
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Wed, 28 Jun 2023 16:00:43 +0200, Konrad Dybcio wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+On 6/28/2023 8:00 AM, Konrad Dybcio wrote:
+> Changes in v12:
+> - Add the !independent! patch to block cpufreq-dt from probing on 8998 (it tries
+>    to when we attach OPP tables to the CPU nodes)
+> - Include all promised changes to the CPR3 driver from v11 (I managed to
+>    send the wrong version of that patch last time around..)
+> - Partially rewrite debugfs code (to make it work and be cleaner)
+> - use FIELD_PREP/GET throughout the driver (managed to squash a bug when
+>    exploring that)
+> - Fix and finish the removal of cpr_get_ro_factor() by introducing
+>    cpr_thread_desc.ro_scaling_factor_common
+> - Replace underscores in node names with '-'
+> - Fix some formatstring issues that clang apparently doesn't care about
+> - Link to v11: https://lore.kernel.org/r/20230217-topic-cpr3h-v11-0-ba22b4daa5d6@linaro.org
 > 
-> Add the bindings for the CPR3 driver to the documentation.
+> Add support for Core Power Reduction v3, v4 and Hardened
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: Make binding check pass; update AGdR's email]
+> Changes in v11:
+> 
+> CPR COMMON:
+> - split the commonizing patch, make it actually do what it says on the
+>    tin..
+> - fix some overflow bugs
+> 
+> CPR3:
+> - fix some overflow bugs
+> - don't assume "lack of qcom,opp-?loop-vadj" means val=0"
+> 
+> CPR BINDINGS:
+> - drop quotes in items
+> - drop clock-names (there's just a single one)
+> - rewrite the description a bit
+> - fix up the example
+> - drop bogus minItems
+> - "acc-syscon" -> "qcom,acc"
+> 
+> DTS:
+> - fix qfprom children so that the bits=<> doesn't overflow reg[size]
+> - drop unrelated changes
+> - place one reg entry per line
+> 
+> Link to v10: https://lore.kernel.org/r/20230217-topic-cpr3h-v10-0-67aed8fdfa61@linaro.org
+> 
+> Changes in v10:
+> - Skip "Let qcom,opp-fuse-level be a 2-long array" (Applied by Viresh)
+> - Use b4 (it may be the first time you're receiving this if git send-email
+>    omitted you before..)
+> - +Cc Robert Marko (expressed interest in previous revisions)
+> - Add "Document CPR3 open/closed loop volt adjustment"
+> CPR:
+> - %hhu -> %u (checkpatch)
+> CPR BINDINGS:
+> - Drop QCS404 fuse set (it doesn't use this driver, what did I even think..)
+>    but leave the allOf:if: block for expansion (sdm660, msm8996, ipqABCD should
+>    follow soon..)
+> - Drop Rob's R-b (as things changed *again*, please take one more look to make
+>    sure you're okay with this file, Rob..)
+> 
+> Link to v9:
+> https://lore.kernel.org/linux-arm-msm/20230116093845.72621-1-konrad.dybcio@linaro.org/
+> 
+> Changes in v9:
+> - Restore forgotten MAINTAINERS patch (oops)
+> CPR:
+> - Include the missing header (big oops!)
+> - Fix kconfig dependencies
+> CPR bindings:
+> - Fix cpu reg in example (why didn't dt_binding_check scream at that)
+> - Add newlines between nodes in example
+> - Change opp table node names to opp-table-cpu[04]
+> - Change opp table labels to cpu[04]_opp_table
+> - Change CPRh opp subnode names to opp-N from oppN
+> - Remove some stray newlines
+> - Bring back nvmem-cell-names and add the 8998's set
+> - Allow power-domains for VDDCX_AO voting
+> - Remove Rob's r-b, there's been quite a bit of changes..
+> CPR DT:
+> - Send the correct revision of the patch this time around..
+> OPP bindings:
+> - Add Rob's ack
+> 
+> Link to v8:
+> https://lore.kernel.org/linux-arm-msm/20230110175605.1240188-1-konrad.dybcio@linaro.org/
+> 
+> Changes in v8:
+> - Overtake this series from AGdR
+> - Apply all review comments from v7 except Vladimir's request to
+>    not create the include/ header; it will be strictly necessary for
+>    OSM-aware cpufreq_hw programming, which this series was more or
+>    less created just for..
+> - Drop QCS404 dtsi change, account for not breaking backwards compat
+>    in [3/5]
+> - Add type phandle type reference to acc-syscon in [1/5]
+> - Update AGdR's email addresses for maintainer entries
+> - Add [2/5] to make dt_binding_check happy
+> - Separate the CPRh DT addition from cpufreq_hw addition, sort and
+>    properly indent new nodes
+> - Drop CPR yaml conversion, that happened in meantime
+> - Reorder the patches to make a bit more sense
+> - Tested again on MSM8998 Xperia XZ Premium (Maple)
+> - I take no responsibility for AGdR's cheeky jokes, only the code!
+> 
+> Link to v7:
+> https://lore.kernel.org/lkml/20210901155735.629282-1-angelogioacchino.delregno@somainline.org/
+> 
+> Changes in v7:
+> - Rebased on linux-next as of 210901
+> - Changed cpr_read_efuse calls to nvmem_cell_read_variable_le_u32,
+>    following what was done in commit c77634b9d916
+> 
+> Changes in v6:
+> - Fixes from Bjorn's review
+> - After a conversation with Viresh, it turned out I was abusing the
+>    OPP API to pass the APM and MEM-ACC thresholds to qcom-cpufreq-hw,
+>    so now the driver is using the genpd created virtual device and
+>    passing drvdata instead to stop the abuse
+> - Since the CPR commonization was ignored for more than 6 months,
+>    it is now included in the CPRv3/4/h series, as there is no point
+>    in commonizing without having this driver
+> - Rebased on v5.13
+> 
+> Changes in v5:
+> - Fixed getting OPP table when not yet installed by the caller
+>    of power domain attachment
+> 
+> Changes in v4:
+> - Huge patch series has been split for better reviewability,
+>    as suggested by Bjorn
+> 
+> Changes in v3:
+> - Fixed YAML doc issues
+> - Removed unused variables and redundant if branch
+> 
+> Changes in v2:
+> - Implemented dynamic Memory Accelerator corners support, needed
+>    by MSM8998
+> - Added MSM8998 Silver/Gold parameters
+> 
+> This commit introduces a new driver, based on the one for cpr v1,
+> to enable support for the newer Qualcomm Core Power Reduction
+> hardware, known downstream as CPR3, CPR4 and CPRh, and support
+> for MSM8998 and SDM630 CPU power reduction.
+> 
+> In these new versions of the hardware, support for various new
+> features was introduced, including voltage reduction for the GPU,
+> security hardening and a new way of controlling CPU DVFS,
+> consisting in internal communication between microcontrollers,
+> specifically the CPR-Hardened and the Operating State Manager.
+> 
+> The CPR v3, v4 and CPRh are present in a broad range of SoCs,
+> from the mid-range to the high end ones including, but not limited
+> to, MSM8953/8996/8998, SDM630/636/660/845.
+> 
+> As to clarify, SDM845 does the CPR/SAW/OSM setup in TZ firmware, but
+> this is limited to the CPU context; despite GPU CPR support being not
+> implemented in this series, it is planned for the future, and some
+> SDM845 need the CPR (in the context of GPU CPR) to be configured from
+> this driver.
+> 
+> It is also planned to add the CPR data for MSM8996, since this driver
+> does support the CPRv4 found on that SoC, but I currently have no time
+> to properly test that on a real device, so I prefer getting this big
+> implementation merged before adding more things on top.
+> 
+> As for MSM8953, we (read: nobody from SoMainline) have no device with
+> this chip: since we are unable to test the cpr data and the entire
+> driver on that one, we currently have no plans to do this addition
+> in the future. This is left to other nice developers: I'm sure that
+> somebody will come up with that, sooner or later
+> 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 289 +++++++++++++++++++++
->  1 file changed, 289 insertions(+)
+> AngeloGioacchino Del Regno (8):
+>        cpufreq: blacklist MSM8998 in cpufreq-dt-platdev
+>        MAINTAINERS: Add entry for Qualcomm CPRv3/v4/Hardened driver
+>        dt-bindings: soc: qcom: cpr3: Add bindings for CPR3 driver
+>        soc: qcom: cpr: Move common functions to new file
+>        soc: qcom: cpr-common: Add support for flat fuse adjustment
+>        soc: qcom: cpr-common: Add threads support
+>        soc: qcom: Add support for Core Power Reduction v3, v4 and Hardened
+>        arm64: dts: qcom: msm8998: Configure CPRh
 > 
+> Konrad Dybcio (2):
+>        dt-bindings: opp: v2-qcom-level: Document CPR3 open/closed loop volt adjustment
+>        soc: qcom: cpr: Use u64 for frequency
+> 
+>   .../devicetree/bindings/opp/opp-v2-qcom-level.yaml |   14 +
+>   .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    |  289 ++
+>   MAINTAINERS                                        |    6 +
+>   arch/arm64/boot/dts/qcom/msm8998.dtsi              |  757 ++++++
+>   drivers/cpufreq/cpufreq-dt-platdev.c               |    1 +
+>   drivers/soc/qcom/Kconfig                           |   22 +
+>   drivers/soc/qcom/Makefile                          |    2 +
+>   drivers/soc/qcom/cpr-common.c                      |  362 +++
+>   drivers/soc/qcom/cpr-common.h                      |  109 +
+>   drivers/soc/qcom/cpr.c                             |  394 +--
+>   drivers/soc/qcom/cpr3.c                            | 2855 ++++++++++++++++++++
+>   include/soc/qcom/cpr.h                             |   17 +
+>   12 files changed, 4460 insertions(+), 368 deletions(-)
+> ---
+> base-commit: 5c875096d59010cee4e00da1f9c7bdb07a025dc2
+> change-id: 20230217-topic-cpr3h-de232bfb47ec
+> 
+> Best regards,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Tested on the Lenovo Miix 630 (8998).  No issues observed.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['ti,twl6035-pmic', 'ti,palmas-pmic']
-Documentation/devicetree/bindings/iio/adc/ti,palmas-gpadc.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['ti,twl6035-pmic', 'ti,palmas-pmic']
-Documentation/devicetree/bindings/i2c/qcom,i2c-cci.example.dtb: /example-0/cci@ac4a000/i2c-bus@1/camera@60: failed to match any schema with compatible: ['ovti,ov7251']
-Documentation/devicetree/bindings/net/marvell,mvusb.example.dtb: /example-0/usb/mdio@1/switch@0: failed to match any schema with compatible: ['marvell,mv88e6190']
-Documentation/devicetree/bindings/net/qca,ar71xx.example.dtb: /example-0/ethernet@1a000000/mdio/switch@10: failed to match any schema with compatible: ['qca,ar9331-switch']
-Documentation/devicetree/bindings/memory-controllers/ingenic,nemc.example.dtb: /example-0/memory-controller@13410000/ethernet@6: failed to match any schema with compatible: ['davicom,dm9000']
-Documentation/devicetree/bindings/reset/hisilicon,hi3660-reset.example.dtb: /example-0/iomcu@ffd7e000: failed to match any schema with compatible: ['hisilicon,hi3660-iomcu', 'syscon']
-Documentation/devicetree/bindings/leds/common.example.dtb: /example-2/i2c/led-controller@30: failed to match any schema with compatible: ['panasonic,an30259a']
-Documentation/devicetree/bindings/dma/dma-router.example.dtb: /example-0/dma-router@4a002b78: failed to match any schema with compatible: ['ti,dra7-dma-crossbar']
-Documentation/devicetree/bindings/dma/dma-controller.example.dtb: /example-0/dma-controller@48000000: failed to match any schema with compatible: ['ti,omap-sdma']
-Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: /example-0/parent/i2c/camera@36: failed to match any schema with compatible: ['ovti,ov5695']
-Documentation/devicetree/bindings/clock/sprd,sc9863a-clk.example.dtb: /example-1/syscon@20e00000: failed to match any schema with compatible: ['sprd,sc9863a-glbregs', 'syscon', 'simple-mfd']
-Documentation/devicetree/bindings/clock/milbeaut-clock.example.dtb: /example-2/serial@1e700010: failed to match any schema with compatible: ['socionext,milbeaut-usio-uart']
-Documentation/devicetree/bindings/arm/hisilicon/controller/cpuctrl.example.dtb: /example-0/cpuctrl@a22000/clock@0: failed to match any schema with compatible: ['hisilicon,hix5hd2-clock']
-Documentation/devicetree/bindings/arm/hisilicon/controller/hi3798cv200-perictrl.example.dtb: /example-0/peripheral-controller@8a20000/phy@850: failed to match any schema with compatible: ['hisilicon,hi3798cv200-combphy']
-Documentation/devicetree/bindings/arm/hisilicon/controller/sysctrl.example.dtb: /example-0/system-controller@802000/clock@0: failed to match any schema with compatible: ['hisilicon,hi3620-clock']
-Documentation/devicetree/bindings/sound/audio-graph-card2.example.dtb: /example-0/cpu: failed to match any schema with compatible: ['cpu-driver']
-Documentation/devicetree/bindings/sound/audio-graph-card2.example.dtb: /example-0/codec: failed to match any schema with compatible: ['codec-driver']
-Documentation/devicetree/bindings/input/sprd,sc27xx-vibrator.example.dtb: /example-0/pmic@0: failed to match any schema with compatible: ['sprd,sc2731']
-Documentation/devicetree/bindings/input/mediatek,pmic-keys.example.dtb: /example-0/pmic: failed to match any schema with compatible: ['mediatek,mt6397']
-Documentation/devicetree/bindings/thermal/brcm,avs-ro-thermal.example.dtb: /example-0/avs-monitor@7d5d2000: failed to match any schema with compatible: ['brcm,bcm2711-avs-monitor', 'syscon', 'simple-mfd']
-Documentation/devicetree/bindings/thermal/imx-thermal.example.dtb: /example-0/anatop@20c8000: failed to match any schema with compatible: ['fsl,imx6q-anatop', 'syscon', 'simple-mfd']
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-1: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-2: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.example.dtb: opp-table-cprh: opp-3: 'qcom,opp-cloop-vadj', 'qcom,opp-oloop-vadj' do not match any of the regexes: 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/opp/opp-v2-qcom-level.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230217-topic-cpr3h-v12-4-1a4d050e1e67@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
