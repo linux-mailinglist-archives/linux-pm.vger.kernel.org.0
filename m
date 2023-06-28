@@ -2,109 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F24974170F
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 19:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862D4741716
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 19:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjF1RP4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 28 Jun 2023 13:15:56 -0400
-Received: from mail-ej1-f54.google.com ([209.85.218.54]:40082 "EHLO
-        mail-ej1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjF1RPz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 13:15:55 -0400
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-98e1fc9d130so1380366b.0;
-        Wed, 28 Jun 2023 10:15:54 -0700 (PDT)
+        id S231404AbjF1RS5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 13:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231732AbjF1RSu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 13:18:50 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587D81BF2
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 10:18:49 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so5315092e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 10:18:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687972727; x=1690564727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ow7tRjEnsCjS1GIOssymNS7x0t0R+j0hS5b7Ebpa1p0=;
+        b=ehYR155YzFx895QNHg9wHaaw+3kIP/EM7R6ld82ulDdVzKb3XAIzpizTnaiGaNnc46
+         YFOFtA23bJFNXeAN+td6RvEsX46tCTiCZz7wnj0D4oaPbUP8YN/iyKGFYiK/pmXz7yXC
+         KWmQNT1q+/RRZxr1tMFiZpubGU5T5NtVqJiI6ScmrVaG2druj0A4j6eyTPX1xinwmFEL
+         ZMmCMAbXULkJrFPS0+e7ULq6xTFqSub1DKt2o1utNYZmwjtBza2h2tw+ilQvrz7YvLev
+         HfBbnoFeEJOuwyrlyMeia5dpchManwelJAUd+kdDkWJIC9gQnwFciCzHzTWAR4rd09Ox
+         7y5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687972553; x=1690564553;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/LwO02mTObe+XE/ZbgwuNMH8tuDZ5edg4iqXBtgQBUk=;
-        b=kKJAovd8nDzpuJeNEu5eeMukFFz8qURc8zZVc8LTOuB1ldZ+dJCitRwMdxD9HsweZj
-         rosi5KfXb+I8aoIaKsh0MksjapsyQVDjU7rECgirmmnuwCvGAdvMtlYa68OTnaD7wly/
-         eb02hVEs5AoYfY+uNdgLpYTiznBulnPpmJVyjNcerrb6TRCiiFOPcWTBsyQonzqLlmAQ
-         BavAH6474ohDGKUBpmnq4yN6/aJVs3wq4OfNHskktL4l6cMM53V4lK9Dxt7p8HqPPVfQ
-         irLEGItqKrVp2lkegKCA4DB+V9Hu8m4zImfZkhJcq2n4v7ecVdPlJfLh5b1O9ULs9tfI
-         EyZA==
-X-Gm-Message-State: AC+VfDzT6P4vekd0Dvki5rgM0B03eIDbEPGA5/7GR3jLG9FEfsLOPHuw
-        d3kDz4XGbWuYTNagoX+Jvx0+7RLT3E6WxpRKJTc=
-X-Google-Smtp-Source: ACHHUZ7CIqElFwO2Gj2NC5FB5TW+/D7zez7V8RQplT4jstVJg2zFWxQSotgNlm2pZfDQJSupgWsdvRNx0BvzMADpE8M=
-X-Received: by 2002:a17:906:209e:b0:98e:886:e6bc with SMTP id
- 30-20020a170906209e00b0098e0886e6bcmr9714752ejq.6.1687972553371; Wed, 28 Jun
- 2023 10:15:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687972727; x=1690564727;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ow7tRjEnsCjS1GIOssymNS7x0t0R+j0hS5b7Ebpa1p0=;
+        b=PkYF2L6FSoaZRCuMiqW/XzhZjFBhIZ4cDO76y0vjoc9d77mEFUWFXGKwOh7zRMG6HH
+         4SWMai0damX2nyl8BlDIj92fVuT9VEzLWKlikTFG3HY3bwPS3SX4O+BOB5BGgJ0N/FH4
+         2F0gDnJOHpt69i5Cv8voJ+UKAFDpw+fHoKKupvXWbXjgu9peoJag9g4ogVbtLCsYkpXU
+         /9bEPnFWvlWw3SKsnmvx5dC977xz+Uk0jGKBDoXCfj+IFVpC+4/Un5D9J8JcDX7TTcpu
+         lci4nHgMEVhh4vGcxYiN+/dtuJ0+9PPYLCL+GaR4VhGiS0uG1Joiz4C8bN5ByhGWSTiR
+         HEUg==
+X-Gm-Message-State: AC+VfDy202BzRnTbpCuYkNLzivq1lKjhDThgG0+8wNI8kf0zw5B0y7nm
+        nq96JihRk06kWCc/+NIeuQT5qQ==
+X-Google-Smtp-Source: ACHHUZ77YJXHqmFGoChqgG3trHPveAapS5Nb3B+LNq40EJ1Bf0lssdrfxIgIeP0QaAx96K4CoERoaw==
+X-Received: by 2002:a19:6704:0:b0:4f9:547c:a3cc with SMTP id b4-20020a196704000000b004f9547ca3ccmr14580392lfc.14.1687972727147;
+        Wed, 28 Jun 2023 10:18:47 -0700 (PDT)
+Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
+        by smtp.gmail.com with ESMTPSA id d27-20020ac244db000000b004f27471e0aesm2006371lfm.79.2023.06.28.10.18.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jun 2023 10:18:46 -0700 (PDT)
+Message-ID: <42b1167d-da60-f6c3-67b6-3f6857327396@linaro.org>
+Date:   Wed, 28 Jun 2023 19:18:45 +0200
 MIME-Version: 1.0
-References: <20230628105652.1670316-1-abel.vesa@linaro.org>
-In-Reply-To: <20230628105652.1670316-1-abel.vesa@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 28 Jun 2023 19:15:42 +0200
-Message-ID: <CAJZ5v0i-+b+oFOP92rhNw_UOKu3-QOy_-stQRa5X2HbaTq9XMA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] PM: domains: Add control for switching back and forth
- to HW control
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Mike Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
+        Taniya Das <tdas@qti.qualcomm.com>
+Cc:     linux-pm@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+References: <20230628105652.1670316-1-abel.vesa@linaro.org>
+ <20230628105652.1670316-3-abel.vesa@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230628105652.1670316-3-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jun 28, 2023 at 12:57 PM Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> This is just a resend of [1]. This resend just adds the back story behind
-> the need for such a generic API as a cover letter. Also added my SoB tag
-> to Ulf's patch.
->
-> Some of the newer Qualcomm platforms support handing of the control of
-> some of the GDSCs (implemented as power domains in Linux) to some device
-> firmware. The idea behind such approach is that the firmware knows best
-> when such a power domain can be powered off or not and leads most of the
-> time to better power consumption.
->
-> At this point, if such GDSC provides HW control support, the current
-> implementation is switching to HW control right after the GDSC gets
-> powered on and it is left in HW control mode until right before the
-> request for power off is done. This needs to remain as is for now, as we
-> do not know for sure what each firmware expects from its related GDSCs.
-> For example, the venus driver expects the codec GDSCs to remain always
-> in HW control mode, otherwise the firmware would crush.
->
-> But in some cases, the consumer driver needs to switch back and forth.
-> And the explanation for such case is when a driver needs to interract
-> with the device (e.g. reading status bits) and the firmware doesn't
-> guarantee the GDSC will be enabled when in HW mode. Therefore, the
-> consumer would need to switch back to SW mode, do its thing, and then
-> switch again back to HW mode.
->
-> This is where the patch from Ulf comes in. It allows consumers that
-> actually need to control the HW/SW mode to do so.
->
-> The GDSC patch just implemets the set_hwmode op and sets it for each
-> GDSC that provides HW control mode.
->
-> [1] https://lore.kernel.org/all/20230627104033.3345659-1-abel.vesa@linaro.org/
->
-> Abel Vesa (1):
->   clk: qcom: gdsc: Add support for set_hwmode_dev
->
-> Ulf Hansson (1):
->   PM: domains: Allow devices attached to genpd to be managed by HW
->
->  drivers/base/power/domain.c | 66 +++++++++++++++++++++++++++++++++++++
->  drivers/clk/qcom/gdsc.c     | 22 +++++++++++++
->  include/linux/pm_domain.h   | 15 +++++++++
->  3 files changed, 103 insertions(+)
->
-> --
+On 28.06.2023 12:56, Abel Vesa wrote:
+> Implement the GDSC specific genpd set_hwmode_dev callback in order to
+> switch the HW control on or off. For any GDSC that supports HW control
+> set this callback in order to allow its consumers to control it.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+This still does nothing to prevent the HW_CTRL state being changed in
+init, enable and disable functions.
 
-I can queue up this series if I get an ACK for the second patch.
+Konrad
+>  drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index 5358e28122ab..9a04bf2e4379 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
+>  	return 0;
+>  }
+>  
+> +static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
+> +			       struct device *dev, bool enable)
+> +{
+> +	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
+> +
+> +	if (ret)
+> +		goto out;
+> +
+> +	/*
+> +	 * Wait for the GDSC to go through a power down and
+> +	 * up cycle.  In case there is a status polling going on
+> +	 * before the power cycle is completed it might read an
+> +	 * wrong status value.
+> +	 */
+> +	udelay(1);
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+>  static int gdsc_disable(struct generic_pm_domain *domain)
+>  {
+>  	struct gdsc *sc = domain_to_gdsc(domain);
+> @@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
+>  		sc->pd.power_off = gdsc_disable;
+>  	if (!sc->pd.power_on)
+>  		sc->pd.power_on = gdsc_enable;
+> +	if (sc->flags & HW_CTRL)
+> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
+>  
+>  	ret = pm_genpd_init(&sc->pd, NULL, !on);
+>  	if (ret)
