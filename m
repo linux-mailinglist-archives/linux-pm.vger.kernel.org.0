@@ -2,141 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 862D4741716
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 19:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CC5741926
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 22:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjF1RS5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 13:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S231608AbjF1UAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 16:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjF1RSu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 13:18:50 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587D81BF2
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 10:18:49 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb77f21c63so5315092e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 10:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687972727; x=1690564727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow7tRjEnsCjS1GIOssymNS7x0t0R+j0hS5b7Ebpa1p0=;
-        b=ehYR155YzFx895QNHg9wHaaw+3kIP/EM7R6ld82ulDdVzKb3XAIzpizTnaiGaNnc46
-         YFOFtA23bJFNXeAN+td6RvEsX46tCTiCZz7wnj0D4oaPbUP8YN/iyKGFYiK/pmXz7yXC
-         KWmQNT1q+/RRZxr1tMFiZpubGU5T5NtVqJiI6ScmrVaG2druj0A4j6eyTPX1xinwmFEL
-         ZMmCMAbXULkJrFPS0+e7ULq6xTFqSub1DKt2o1utNYZmwjtBza2h2tw+ilQvrz7YvLev
-         HfBbnoFeEJOuwyrlyMeia5dpchManwelJAUd+kdDkWJIC9gQnwFciCzHzTWAR4rd09Ox
-         7y5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687972727; x=1690564727;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ow7tRjEnsCjS1GIOssymNS7x0t0R+j0hS5b7Ebpa1p0=;
-        b=PkYF2L6FSoaZRCuMiqW/XzhZjFBhIZ4cDO76y0vjoc9d77mEFUWFXGKwOh7zRMG6HH
-         4SWMai0damX2nyl8BlDIj92fVuT9VEzLWKlikTFG3HY3bwPS3SX4O+BOB5BGgJ0N/FH4
-         2F0gDnJOHpt69i5Cv8voJ+UKAFDpw+fHoKKupvXWbXjgu9peoJag9g4ogVbtLCsYkpXU
-         /9bEPnFWvlWw3SKsnmvx5dC977xz+Uk0jGKBDoXCfj+IFVpC+4/Un5D9J8JcDX7TTcpu
-         lci4nHgMEVhh4vGcxYiN+/dtuJ0+9PPYLCL+GaR4VhGiS0uG1Joiz4C8bN5ByhGWSTiR
-         HEUg==
-X-Gm-Message-State: AC+VfDy202BzRnTbpCuYkNLzivq1lKjhDThgG0+8wNI8kf0zw5B0y7nm
-        nq96JihRk06kWCc/+NIeuQT5qQ==
-X-Google-Smtp-Source: ACHHUZ77YJXHqmFGoChqgG3trHPveAapS5Nb3B+LNq40EJ1Bf0lssdrfxIgIeP0QaAx96K4CoERoaw==
-X-Received: by 2002:a19:6704:0:b0:4f9:547c:a3cc with SMTP id b4-20020a196704000000b004f9547ca3ccmr14580392lfc.14.1687972727147;
-        Wed, 28 Jun 2023 10:18:47 -0700 (PDT)
-Received: from [192.168.1.101] (abyk82.neoplus.adsl.tpnet.pl. [83.9.30.82])
-        by smtp.gmail.com with ESMTPSA id d27-20020ac244db000000b004f27471e0aesm2006371lfm.79.2023.06.28.10.18.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jun 2023 10:18:46 -0700 (PDT)
-Message-ID: <42b1167d-da60-f6c3-67b6-3f6857327396@linaro.org>
-Date:   Wed, 28 Jun 2023 19:18:45 +0200
+        with ESMTP id S230496AbjF1UAG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 16:00:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 613B31FE7;
+        Wed, 28 Jun 2023 13:00:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD54D61464;
+        Wed, 28 Jun 2023 20:00:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF7D6C433C8;
+        Wed, 28 Jun 2023 20:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687982404;
+        bh=B+RSyNVteRzKXRsWojAaoBAvx3nzmKOepDBCgrWk75Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z3DAS+DhjSBSF9kLBE56DRoAnHxqMycCSGE90TM5K/zrbttcJ0PGjGYru+7zttFug
+         SiEsAu/eGbGk87tJa6MbuC+4T6HZPPX6H9LsZ3O+JhVTD8jEYeNYdS1/fsm3a1Kc/7
+         m4Ov1P0PCeIr7Ml2rVcX1J8bHYjjXYZ6KnwGejaruvL4cghEvDC0/W2KgSdq25y0mU
+         VwXE5W2suIGkTVwtlP9WYGagF9KxO/mqmfLMx8OpDoZAJY1X1wjz46lqpXWBKGWubM
+         2TWNJSmvbpFWbG4HoimhGCvT6CxwGWTRSqdLIT5NWqnnDlQDWGvmibpuh2Aw2nEpJF
+         gAqCqtEDvDT2A==
+Date:   Wed, 28 Jun 2023 13:00:02 -0700
+From:   Eduardo Valentin <evalenti@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
+        linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 5/7] thermal: stats: introduce tz time in trip
+Message-ID: <ZJyRQhLURUrIHP1z@uf8f119305bce5e.ant.amazon.com>
+References: <20230519032719.2581689-1-evalenti@kernel.org>
+ <20230519032719.2581689-6-evalenti@kernel.org>
+ <CAJZ5v0hho1B6TiwshT4kYhs+Z4Q6xvnbgf8aoEZop=owkJHqxg@mail.gmail.com>
+ <ZJKAYAx5768atJa8@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jVL69QYpUFCMBeZ9eACca4XoeR6Js_qoDd2K5PfU9BwA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-References: <20230628105652.1670316-1-abel.vesa@linaro.org>
- <20230628105652.1670316-3-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230628105652.1670316-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jVL69QYpUFCMBeZ9eACca4XoeR6Js_qoDd2K5PfU9BwA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 28.06.2023 12:56, Abel Vesa wrote:
-> Implement the GDSC specific genpd set_hwmode_dev callback in order to
-> switch the HW control on or off. For any GDSC that supports HW control
-> set this callback in order to allow its consumers to control it.
+On Fri, Jun 23, 2023 at 06:40:20PM +0200, Rafael J. Wysocki wrote:
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-This still does nothing to prevent the HW_CTRL state being changed in
-init, enable and disable functions.
+> 
+> 
+> On Wed, Jun 21, 2023 at 6:45 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+> >
+> > On Tue, Jun 20, 2023 at 07:27:57PM +0200, Rafael J. Wysocki wrote:
+> > >
+> > >
+> > >
+> > > On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+> > > >
+> > > > From: Eduardo Valentin <eduval@amazon.com>
+> > > >
+> > > > This patch adds a statistic to report how long
+> > > > the thermal zone spent on temperature intervals
+> > > > created by each trip point. The first interval
+> > > > is the range below the first trip point. All
+> > > > subsequent intervals are accounted when temperature
+> > > > is above the trip point temperature value.
+> > > >
+> > > > Samples:
+> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
+> > > > trip-1  0       0
+> > >
+> > > The above line is confusing.
+> > >
+> > > > trip0   -10000  35188
+> > > > trip1   25000   0
+> > >
+> > > And the format violates the "one value per attribute" sysfs rule.
+> > >
+> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
+> > > > trip-1  0       0
+> > > > trip0   -10000  36901
+> > > > trip1   25000   0
+> > > > $ echo 25001 > /sys//class/thermal/thermal_zone0/emul_temp
+> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
+> > > > trip-1  0       0
+> > > > trip0   -10000  47810
+> > > > trip1   25000   2259
+> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
+> > > > trip-1  0       0
+> > > > trip0   -10000  47810
+> > > > trip1   25000   3224
+> > > > $ echo 24001 > /sys//class/thermal/thermal_zone0/emul_temp
+> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
+> > > > trip-1  0       0
+> > > > trip0   -10000  48960
+> > > > trip1   25000   10080
+> > > > $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
+> > > > trip-1  0       0
+> > > > trip0   -10000  49844
+> > > > trip1   25000   10080
+> > > >
+> > > > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+> > > > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
+> > > > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
+> > > > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+> > > > Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
+> > > > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
+> > > > Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
+> > > > Cc: linux-kernel@vger.kernel.org (open list)
+> > > >
+> > > > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+> > > > ---
+> > > >  .../driver-api/thermal/sysfs-api.rst          |  2 +
+> > > >  drivers/thermal/thermal_sysfs.c               | 86 +++++++++++++++++++
+> > > >  2 files changed, 88 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
+> > > > index ed5e6ba4e0d7..4a2b92a7488c 100644
+> > > > --- a/Documentation/driver-api/thermal/sysfs-api.rst
+> > > > +++ b/Documentation/driver-api/thermal/sysfs-api.rst
+> > > > @@ -359,6 +359,8 @@ Thermal zone device sys I/F, created once it's registered::
+> > > >      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
+> > > >      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
+> > > >      |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
+> > > > +    |---stats/time_in_trip_ms: Time spent on each temperature interval of
+> > > > +                               trip points.
+> > >
+> > > I would write "in each temperature interval between consecutive trip points".
+> >
+> > Ok
+> >
+> > >
+> > > Doesn't this assume a specific temperature ordering of trip points?
+> > > And so what if they are not ordered?
+> >
+> > It does. I believe other things will break if they are not ordered.
+> 
+> But there's no guarantee that they will be ordered, so it looks like
+> those other things are already broken.
 
-Konrad
->  drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 5358e28122ab..9a04bf2e4379 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
->  	return 0;
->  }
->  
-> +static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
-> +			       struct device *dev, bool enable)
-> +{
-> +	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
-> +
-> +	if (ret)
-> +		goto out;
-> +
-> +	/*
-> +	 * Wait for the GDSC to go through a power down and
-> +	 * up cycle.  In case there is a status polling going on
-> +	 * before the power cycle is completed it might read an
-> +	 * wrong status value.
-> +	 */
-> +	udelay(1);
-> +
-> +out:
-> +	return ret;
-> +}
-> +
->  static int gdsc_disable(struct generic_pm_domain *domain)
->  {
->  	struct gdsc *sc = domain_to_gdsc(domain);
-> @@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
->  		sc->pd.power_off = gdsc_disable;
->  	if (!sc->pd.power_on)
->  		sc->pd.power_on = gdsc_enable;
-> +	if (sc->flags & HW_CTRL)
-> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
->  
->  	ret = pm_genpd_init(&sc->pd, NULL, !on);
->  	if (ret)
+Correct. (1) there is no guarantee, it works by construction, and (2) current
+code does assume ascending order, so yes, if they come unsorted, the core
+code will not properly work.
+
+Ensuring the order is likely beyond the original intention of this patch, but
+we do need to improve there, for sure.
+
+-- 
+All the best,
+Eduardo Valentin
