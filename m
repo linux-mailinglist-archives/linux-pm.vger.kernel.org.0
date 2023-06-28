@@ -2,128 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88F674075B
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 02:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5080A740858
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 04:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjF1A54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 20:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
+        id S230451AbjF1C1V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 22:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjF1A5y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 20:57:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B9EEE;
-        Tue, 27 Jun 2023 17:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687913873; x=1719449873;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GOhtVZ+gS1f2L4bPc+smRnRLYWWs+E1es9SS4PyT7Cs=;
-  b=bqnuQ9WMbQIPCWo7omUCepXw4qmyNKx0rjL/BoxgX/IaXFKgjKHlKBbP
-   9WDWHkF4sJPt6fICUAKaUFBCblddmfNja9L5F0mtuopXnqPPy2SCQYN2E
-   3xXKkQNQNfi+Eeu0JtDup5duB0ictTi1VAH1rMcouTjTDunM8N3sGVoBA
-   8itnSCBkuZwJa8G2cx3MN3TKhPvPLtUeebopNSO88xGqAGUf5Hc1LXl1S
-   njrGbU3ieyZJS7+40VS1o0ZZQeUI7ks6BILXyJEMoSxBMmpXCHjtI2gnF
-   yUXFD4ji4YqwNC+IP1gV0bqV9YvtYLTPcQQJ1tY+e7oHxb5TsNdPGPL67
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="360573173"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="360573173"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 17:57:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="786859385"
-X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
-   d="scan'208";a="786859385"
-Received: from yjie-desk1.jf.intel.com (HELO [10.24.96.120]) ([10.24.96.120])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 17:57:52 -0700
-Message-ID: <dd301065-a9ec-0918-daa4-596245baae00@linux.intel.com>
-Date:   Tue, 27 Jun 2023 17:57:36 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] x86/aperfmperf: Fix the fallback condition in
- arch_freq_get_on_cpu()
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        with ESMTP id S231166AbjF1C1T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 22:27:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800452D7E
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jun 2023 19:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687919169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=1Mwd2RHHbNwY1uNDBHOZHgn4cZFBmD9G4gGlkOLHa0o=;
+        b=imIrsdyTbq8keTpQ2AL0VVFs5uIIrUcLCCsBP/T6IugaWH4rSgVMGsWtGsenxI6bDaqBWU
+        4LkPENfNKz+7YYlK2vz6o0WQ6u+Wuo7TlaPcv2twJegvSd6qDckQrKIutZxuwlMM3lwOhQ
+        5lIkk8ko/uyK3Osv+0G7XYLASwSKfRc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-613-4Rmmy0hCPcOfWehKADoQLw-1; Tue, 27 Jun 2023 22:26:04 -0400
+X-MC-Unique: 4Rmmy0hCPcOfWehKADoQLw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 339551044589;
+        Wed, 28 Jun 2023 02:26:03 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.155])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 19334207B2C3;
+        Wed, 28 Jun 2023 02:26:02 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Yair Podemsky <ypodemsk@redhat.com>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Doug Smythies <dsmythies@telus.net>
-References: <20230626193601.9169-1-yang.jie@linux.intel.com>
-From:   Yang Jie <yang.jie@linux.intel.com>
-In-Reply-To: <20230626193601.9169-1-yang.jie@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v4 0/4] x86/speculation: Disable IBRS when idle
+Date:   Tue, 27 Jun 2023 22:25:50 -0400
+Message-Id: <20230628022554.1638318-1-longman@redhat.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+ v4:
+  - Add a new __update_spec_ctrl() helper in patch 1.
+  - Rebased to the latest linux kernel.
 
-Sorry for top posting, I should have sent it to linux-pm and maintainers.
+ v3:
+  - Drop patches 1 ("x86/speculation: Provide a debugfs file to dump
+    SPEC_CTRL MSRs") and 5 ("x86/idle: Disable IBRS entering mwait idle
+    and enable it on wakeup") for now.
+  - Drop the MSR restoration code in ("x86/idle: Disable IBRS when cpu
+    is offline") as native_play_dead() does not return.
+  - For patch ("intel_idle: Add ibrs_off module parameter to force
+    disable IBRS"), change the name from "no_ibrs" to "ibrs_off" and
+    document the new parameter in intel_idle.rst.
 
-Doug Smythies had a good discussion with me about the related history 
-and issues in the bugzilla here: 
-https://bugzilla.kernel.org/show_bug.cgi?id=217597.
+For Intel processors that need to turn on IBRS to protect against
+Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
+the performance of the whole core even if only one thread is turning
+it on when running in the kernel. For user space heavy applications,
+the performance impact of occasionally turning IBRS on during syscalls
+shouldn't be significant. Unfortunately, that is not the case when the
+sibling thread is idling in the kernel. In that case, the performance
+impact can be significant.
 
-Basically, there are 2 issues here per my observation:
-1. the cpu_khz shared for all CPU cores? In Intel's recent Hybrid CPUs, 
-what does this cpu_khz read from cpuid really mean? I am seeing 
-cpu_khz=3.6GHz for E-cores with Max frequecy 3GHz. We should fix that, no?
-2. We don't want to wake up cores just because of the sysfs queries, so 
-we introduced fallback mechanism here, what is our clear design about that?
+When DPDK is running on an isolated CPU thread processing network packets
+in user space while its sibling thread is idle. The performance of the
+busy DPDK thread with IBRS on and off in the sibling idle thread are:
 
-So, before discussing those issues, we should get alignment on these first:
-1. What is fallback and When should we fallback. From the comment, looks 
-we wanted to use cpu_khz for Cores haven't executed any task during the 
-last 20ms, this sounds reasonable, and I patch here is to address this 
-issue.
-2. What frequencies should we show in fallback case. This could be 
-controversial, 0? min_freq? base_freq? or last calculated one? Doug has 
-suggestion here but this is not touched in my patch here.
+                                IBRS on         IBRS off
+                                -------         --------
+  packets/second:                  7.8M           10.4M
+  avg tsc cycles/packet:         282.26          209.86
 
-Thanks,
-~Keyon
+This is a 25% performance degradation. The test system is a Intel Xeon
+4114 CPU @ 2.20GHz.
 
-On 6/26/23 12:36, Keyon Jie wrote:
->>From the commit f3eca381bd49 on, the fallback condition about the 'the
-> last update was too long' have been comparing ticks and milliseconds by
-> mistake, which leads to that the condition is met and the fallback
-> method is used frequently.
-> 
-> The change to compare ticks here corrects that and fixes related issues
-> have been seen on x86 platforms since 5.18 kernel.
-> 
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
-> Fixes: f3eca381bd49 ("x86/aperfmperf: Replace arch_freq_get_on_cpu()")
-> CC: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Keyon Jie <yang.jie@linux.intel.com>
-> ---
->   arch/x86/kernel/cpu/aperfmperf.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> index fdbb5f07448f..24e24e137226 100644
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -432,7 +432,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
->   	 * Bail on invalid count and when the last update was too long ago,
->   	 * which covers idle and NOHZ full CPUs.
->   	 */
-> -	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
-> +	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE * cpu_khz)
->   		goto fallback;
->   
->   	return div64_u64((cpu_khz * acnt), mcnt);
+Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+disables IBRS when the CPU enters long idle (C6 or below). However, there
+are existing users out there who have set "intel_idle.max_cstate=1"
+to decrease latency. Those users won't be able to benefit from this
+commit. This patch series extends this commit by providing a new
+"intel_idle.ibrs_off" module parameter to force disable IBRS even when
+"intel_idle.max_cstate=1" at the expense of increased IRQ response
+latency. It also includes a commit to allow the disabling of IBRS when
+a CPU becomes offline.
+
+
+Waiman Long (4):
+  x86/speculation: Add __update_spec_ctrl() helper
+  x86/idle: Disable IBRS when cpu is offline
+  intel_idle: Use __update_spec_ctrl() in intel_idle_ibrs()
+  intel_idle: Add ibrs_off module parameter to force disable IBRS
+
+ Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
+ arch/x86/include/asm/nospec-branch.h        | 11 ++++++++++-
+ arch/x86/kernel/smpboot.c                   |  8 ++++++++
+ drivers/idle/intel_idle.c                   | 18 ++++++++++++++----
+ 4 files changed, 48 insertions(+), 6 deletions(-)
+
+-- 
+2.31.1
+
