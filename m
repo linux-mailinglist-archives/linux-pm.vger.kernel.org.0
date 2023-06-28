@@ -2,161 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B718B740668
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 00:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88F674075B
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 02:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjF0WT4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Jun 2023 18:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S229680AbjF1A54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Jun 2023 20:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjF0WTz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 18:19:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF53C2943;
-        Tue, 27 Jun 2023 15:19:51 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35RKIx5V015762;
-        Tue, 27 Jun 2023 22:19:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : to : cc : from : subject : content-type :
- content-transfer-encoding; s=qcppdkim1;
- bh=mdRkPUw0VNu4riMvavHEr7oNO0KadYH6MVwxpHk/bCo=;
- b=WN/6vU8gq0niFpxh3dqULsuR6Mue3v0QCzI8RtEGrHukJ3xmo1C7TmUd7hEnWQBq3ee9
- S8FfhbI2zQabg2vHOBpRXreij3alH4HA0z56/tlFEcXIDPCafEdTKJsHQLGPejelFSbe
- p4zcM4CmZak0fC/t6MzbpVN30j9pfcz/PN9wLX8QrNSzljtwEM31d3FBUfID1YQ0SAF2
- fFxvU5WxqklEZxjfbuVJnv2cr7DJT0i9WUOrLJms0rEhmZ50ZC5WDzIpmD22BWA+PW63
- e7uihnLELapABSPMtpOMN0cPFYV1THv+lYr1fu11Myz+R9KjcSSu1aNhcogW/Dum0Z+/ Mg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rfcvtumeg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 22:19:39 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35RMJbTo006317
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 27 Jun 2023 22:19:38 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 27 Jun
- 2023 15:19:36 -0700
-Message-ID: <7197a514-5568-2089-f038-2625b88d7e2e@quicinc.com>
-Date:   Tue, 27 Jun 2023 15:19:35 -0700
+        with ESMTP id S229488AbjF1A5y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Jun 2023 20:57:54 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B9EEE;
+        Tue, 27 Jun 2023 17:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687913873; x=1719449873;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=GOhtVZ+gS1f2L4bPc+smRnRLYWWs+E1es9SS4PyT7Cs=;
+  b=bqnuQ9WMbQIPCWo7omUCepXw4qmyNKx0rjL/BoxgX/IaXFKgjKHlKBbP
+   9WDWHkF4sJPt6fICUAKaUFBCblddmfNja9L5F0mtuopXnqPPy2SCQYN2E
+   3xXKkQNQNfi+Eeu0JtDup5duB0ictTi1VAH1rMcouTjTDunM8N3sGVoBA
+   8itnSCBkuZwJa8G2cx3MN3TKhPvPLtUeebopNSO88xGqAGUf5Hc1LXl1S
+   njrGbU3ieyZJS7+40VS1o0ZZQeUI7ks6BILXyJEMoSxBMmpXCHjtI2gnF
+   yUXFD4ji4YqwNC+IP1gV0bqV9YvtYLTPcQQJ1tY+e7oHxb5TsNdPGPL67
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="360573173"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="360573173"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 17:57:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="786859385"
+X-IronPort-AV: E=Sophos;i="6.01,163,1684825200"; 
+   d="scan'208";a="786859385"
+Received: from yjie-desk1.jf.intel.com (HELO [10.24.96.120]) ([10.24.96.120])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2023 17:57:52 -0700
+Message-ID: <dd301065-a9ec-0918-daa4-596245baae00@linux.intel.com>
+Date:   Tue, 27 Jun 2023 17:57:36 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
+Subject: Re: [PATCH] x86/aperfmperf: Fix the fallback condition in
+ arch_freq_get_on_cpu()
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, <pavel@ucw.cz>
-CC:     <len.brown@intel.com>, <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, <quic_travitej@quicinc.com>,
-        <quic_pdhaval@quicinc.com>,
-        Nagamalleswararao Ganji <nganji@quicinc.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: Question on platform_suspend_ops::suspend_again() callback
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Yair Podemsky <ypodemsk@redhat.com>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Doug Smythies <dsmythies@telus.net>
+References: <20230626193601.9169-1-yang.jie@linux.intel.com>
+From:   Yang Jie <yang.jie@linux.intel.com>
+In-Reply-To: <20230626193601.9169-1-yang.jie@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DNJli0smS86nrm9a_qMUfC79c3vo-bMJ
-X-Proofpoint-GUID: DNJli0smS86nrm9a_qMUfC79c3vo-bMJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-27_14,2023-06-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- adultscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011
- malwarescore=0 priorityscore=1501 mlxscore=0 mlxlogscore=740 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306270203
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael / Pavel
 
-I work with the QC display team and help to co-maintain the MSM display 
-sub-system.
+Sorry for top posting, I should have sent it to linux-pm and maintainers.
 
-I had a question about the suspend_again() callback in the 
-platform_suspend_ops
+Doug Smythies had a good discussion with me about the related history 
+and issues in the bugzilla here: 
+https://bugzilla.kernel.org/show_bug.cgi?id=217597.
 
-Typical pm_suspend() callflow is like below:
+Basically, there are 2 issues here per my observation:
+1. the cpu_khz shared for all CPU cores? In Intel's recent Hybrid CPUs, 
+what does this cpu_khz read from cpuid really mean? I am seeing 
+cpu_khz=3.6GHz for E-cores with Max frequecy 3GHz. We should fix that, no?
+2. We don't want to wake up cores just because of the sysfs queries, so 
+we introduced fallback mechanism here, what is our clear design about that?
 
-pm_suspend()
+So, before discussing those issues, we should get alignment on these first:
+1. What is fallback and When should we fallback. From the comment, looks 
+we wanted to use cpu_khz for Cores haven't executed any task during the 
+last 20ms, this sounds reasonable, and I patch here is to address this 
+issue.
+2. What frequencies should we show in fallback case. This could be 
+controversial, 0? min_freq? base_freq? or last calculated one? Doug has 
+suggestion here but this is not touched in my patch here.
 
-     ->pm_suspend()
-         ->enter_state()
-             -> suspend_prepare()
-                 -> suspend_freeze_processes()
-                  (freeze all userspace processes)
-             -> suspend_devices_and_enter()
-                 -> dpm_suspend_start()
-                 -> suspend_enter()
-                     -> s2idle_loop
-                     -> dpm_resume_early()
-                     (after breaking out of loop)
+Thanks,
+~Keyon
 
-             -> suspend_finish()
-                 -> suspend_thaw_processes()
-                   (unfreeze all userspace processes)
-
-
-Now, lets say while we are in s2idle() (typically in the display idle 
-screen use-cases) and then an interrupt fires. We will then break out of 
-the loop and also unfreeze() all usermode processes unless
-we have a suspend_again() callback 
-https://github.com/torvalds/linux/blob/master/kernel/power/suspend.c#L512 
-due to the suspend_thaw_processes().
-
-(ignoring the error and wakeup conditions for this discussion)
-
- From our profiling it takes about 300ms to wakeup these usermode 
-processes on android (it can vary based on how many processes were 
-running, which OS etc).
-
-But on an average we can can continue to remain idle for about 300ms 
-more if can skip the usermode process wakeup.
-
- From the documentation of the suspend_again() also, it seems that 
-defining this callback would ensure we can address the interrupt and go 
-back to the s2idle instead of waking up usermode processes and trying 
-again after that.
-
-  * @suspend_again: Returns whether the system should suspend again 
-(true) or
-  *      not (false). If the platform wants to poll sensors or execute some
-  *      code during suspended without invoking userspace and most of 
-devices,
-  *      suspend_again callback is the place assuming that 
-periodic-wakeup or
-  *      alarm-wakeup is already setup. This allows to execute some 
-codes while
-  *      being kept suspended in the view of userland and devices.
-  *
-
-Questions to you:
-
-1) We do not see anyone using this suspend_again() op currently. Has 
-there been any discussion about this before or are there any existing 
-patches in the list which demonstrate a usage? If so, can you pls point 
-us to those?
-
-2) If there are no such patches, if we go ahead and add a 
-suspend_again() callback and post it for review, can it be considered 
-for acceptance?
-
-3) If suspend_again() callback is not the way to go, can you please 
-suggest an alternative of how we can avoid wakeup of userspace process.
-
-Just want to make sure that there are no reasons which we are not aware 
-of before attempting this.
-
-Thanks
-
-Abhinav
+On 6/26/23 12:36, Keyon Jie wrote:
+>>From the commit f3eca381bd49 on, the fallback condition about the 'the
+> last update was too long' have been comparing ticks and milliseconds by
+> mistake, which leads to that the condition is met and the fallback
+> method is used frequently.
+> 
+> The change to compare ticks here corrects that and fixes related issues
+> have been seen on x86 platforms since 5.18 kernel.
+> 
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
+> Fixes: f3eca381bd49 ("x86/aperfmperf: Replace arch_freq_get_on_cpu()")
+> CC: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Keyon Jie <yang.jie@linux.intel.com>
+> ---
+>   arch/x86/kernel/cpu/aperfmperf.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
+> index fdbb5f07448f..24e24e137226 100644
+> --- a/arch/x86/kernel/cpu/aperfmperf.c
+> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> @@ -432,7 +432,7 @@ unsigned int arch_freq_get_on_cpu(int cpu)
+>   	 * Bail on invalid count and when the last update was too long ago,
+>   	 * which covers idle and NOHZ full CPUs.
+>   	 */
+> -	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
+> +	if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE * cpu_khz)
+>   		goto fallback;
+>   
+>   	return div64_u64((cpu_khz * acnt), mcnt);
