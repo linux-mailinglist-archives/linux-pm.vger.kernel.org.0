@@ -2,76 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380CF740F76
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 12:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4606B741063
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 13:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbjF1K5g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 06:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
+        id S231332AbjF1Luk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 07:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbjF1K5Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 06:57:24 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D081BFE
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 03:57:01 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-991f956fb5aso280656466b.0
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 03:57:01 -0700 (PDT)
+        with ESMTP id S229667AbjF1Lui (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 07:50:38 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E7E2D73
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 04:50:35 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-313e34ab99fso4821542f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 04:50:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687949819; x=1690541819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/UOP/HXwOfjROV0iDHrU1g1p6LD4GcCF3K/FghLtNOU=;
-        b=dujCAIaXSqqrylpawSmjXQ0uVV5fxHuMEQFzZO//TIz9sxd1krxA8ZDYPCDBDRVh0/
-         BfluOhNKHaqL76P0tQO39OagrbXFJc2LI7Tg5leqj6NdydDD+PHLgE+d3n6pCSrGdu5c
-         qsrE6I/PhnivlF9PkTMJ1Laa3igaQiDWgWYmKdVl0J3y4kuOVTJ4Mg9PU83v4ml0UsSx
-         LK0jT/vaxWfQQJ50Yj/VnTLXf3Aj0r5qZRmcn1iRAh7QmanZn5fC3LhQaukjGHdSnlKi
-         B/+a2PL7DVxgndOYPox3yCot4+cfYZCKp4OCr+ZnWX93JP3lLrsTMb7JnHyfIWJF5ROo
-         sDKQ==
+        d=linaro.org; s=google; t=1687953034; x=1690545034;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RmI//46qVgwWaxyrm4e1NNaPRXGQ1onr4x9kkX9CbHc=;
+        b=Kv4DaSxKEuJneE0L6S7fY5QoTV3kl3Kn5jlQsSLp4t9tlBgnFMcSYefu3BotPkK8is
+         d33RIGgo128fM+7Zb0lOSA+jj31xzEIBdXuBpkyfwqT4Ffu35sy4VILhBvu1sVlY5Zcd
+         2gdIpS9oSgMa3i/K2ncU2/uK91lOrX415/JtcDKURT9dgREPLAuHxELVxWemgNOin+1k
+         lT2OUEfSIiTvf/Z1HtaLpbtgF3i30iITfEUQg2TwIYLbPFaZXv5e4ewxeiIWcqdq7MTd
+         FdlPQauXg9g7uHjTrJh/7zdPSh6c3SvT9JMLT39ezEg8+a5aDTZEbSqLYFdik7fsicvY
+         DoBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687949819; x=1690541819;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/UOP/HXwOfjROV0iDHrU1g1p6LD4GcCF3K/FghLtNOU=;
-        b=ero1BK8rYAG5mTCsS8V1tR2/1LuOQPTLFadELTIlyDwb5kjj8/0yEYCNk4guE8hUve
-         k802trWqK6MOIDKfkz6vzIcbRE/gz0mhX+obv2mKzgKhWsOOo6SBC94e1OFbLLQoyi8b
-         06aOMkMhyoeDOehtSqZLMa3Y+jRKuJj9ACPhj2VgfDBfhprWiWZgPK+RgNXH+p1CYJ2n
-         UGl9zsIeq+Hhw+zKKbi82d/p9Qc+nqHkSCM4BS/g5AFl2vMznIvt5DEcCTk/JtofxAOD
-         2mCoRq++AKBJwZne1MXRADoTb60/44DLOE0LfZB2m2ng2EYMT07gFgWhtHufnrHf50VB
-         hwTA==
-X-Gm-Message-State: AC+VfDzZ39AGbQmRPeTwcTQCUMHQV1pWoNf05RqaeVTxxyX97DVWoRd0
-        P4vIl9E4o1nRVpVUOPHvWMUF/Q==
-X-Google-Smtp-Source: ACHHUZ67Cwzrz18vbTdkKEW1I1amvlbeV+5l0PQbp3RlpgaAlkwLmpNPkfXRt0ALcbGFWNJZXuNGDw==
-X-Received: by 2002:a17:907:2683:b0:957:1df0:9cbf with SMTP id bn3-20020a170907268300b009571df09cbfmr25730821ejc.19.1687949819656;
-        Wed, 28 Jun 2023 03:56:59 -0700 (PDT)
-Received: from hackbox.lan ([62.231.110.100])
-        by smtp.gmail.com with ESMTPSA id e8-20020a1709062c0800b0098921e1b064sm5544678ejh.181.2023.06.28.03.56.58
+        d=1e100.net; s=20221208; t=1687953034; x=1690545034;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RmI//46qVgwWaxyrm4e1NNaPRXGQ1onr4x9kkX9CbHc=;
+        b=WaUCUcxcAUUr6MToQtZ91iv8iEseZ6iImUxDhMR8ewfhQ3BfJ8Q1RJkHyrdU/xXb8c
+         Q6LQ4bn3rfn2i1IOYo7DyPn2cPEz2HXy0nHXu5RKWSAJu8dIOejpVdjVxehL4mbp2jSD
+         t2NsqUQCtQpl3xRCYfulC51GItVoXMM58SHbb7qNkBqx2vb/AtGqozsVuMSZoBAX3XAC
+         r2nHbGMfcZaD4j0zdSJJRzgc6q+3DNBTxVgCrXLAsJEf6vNA36vPfQAKpI/2UjeRzhJ+
+         pa2RhLNCesTMU848ZbvJSAWo7sEl5N/Jsp3BXc+FCHhcLhS+GDPUtLEPbc4hEdj7FgPr
+         b7gw==
+X-Gm-Message-State: AC+VfDyao3xXdlgntmE7WC65aYQ3BVBaF+oe0czWCljooOhPyq5EATBU
+        1KWTCBvNCosyMyL0GacGW6E+CQ==
+X-Google-Smtp-Source: ACHHUZ6etkknx/dNH1vqjcH8bRcYPnCPvwMhc97C9X8JRhQQGGPu8ODcyBoYEWU2yajNLMzayh8h0A==
+X-Received: by 2002:a5d:6a4d:0:b0:313:f1a4:4112 with SMTP id t13-20020a5d6a4d000000b00313f1a44112mr6740967wrw.33.1687953034057;
+        Wed, 28 Jun 2023 04:50:34 -0700 (PDT)
+Received: from linaro.org ([62.231.110.100])
+        by smtp.gmail.com with ESMTPSA id z3-20020a5d4c83000000b0030497b3224bsm13075296wrs.64.2023.06.28.04.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jun 2023 03:56:59 -0700 (PDT)
+        Wed, 28 Jun 2023 04:50:33 -0700 (PDT)
+Date:   Wed, 28 Jun 2023 14:50:31 +0300
 From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Saravana Kannan <saravanak@google.com>,
         Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>
-Cc:     linux-pm@vger.kernel.org,
+        linux-pm@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
-Date:   Wed, 28 Jun 2023 13:56:52 +0300
-Message-Id: <20230628105652.1670316-3-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230628105652.1670316-1-abel.vesa@linaro.org>
-References: <20230628105652.1670316-1-abel.vesa@linaro.org>
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [RFC PATCH v5 2/4] driver core: Add dev_is_drv_state_synced()
+Message-ID: <ZJweh0MTuSY9jtW9@linaro.org>
+References: <20230621144019.3219858-1-abel.vesa@linaro.org>
+ <20230621144019.3219858-3-abel.vesa@linaro.org>
+ <2023062103-chevron-sabotage-bf26@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023062103-chevron-sabotage-bf26@gregkh>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -82,55 +80,55 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Implement the GDSC specific genpd set_hwmode_dev callback in order to
-switch the HW control on or off. For any GDSC that supports HW control
-set this callback in order to allow its consumers to control it.
+On 23-06-21 17:22:54, Greg Kroah-Hartman wrote:
+> On Wed, Jun 21, 2023 at 05:40:17PM +0300, Abel Vesa wrote:
+> > This can be used by drivers to figure out if a different device
+> > driver has state synced or not for a specific device.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > ---
+> >  include/linux/device.h | 14 ++++++++++++++
+> >  1 file changed, 14 insertions(+)
+> > 
+> > diff --git a/include/linux/device.h b/include/linux/device.h
+> > index bae11928ef7e..8f042f04b5d9 100644
+> > --- a/include/linux/device.h
+> > +++ b/include/linux/device.h
+> > @@ -1007,6 +1007,20 @@ static inline int dev_set_drv_sync_state(struct device *dev,
+> >  	return 0;
+> >  }
+> >  
+> > +static inline bool dev_is_drv_state_synced(struct device *dev)
+> > +{
+> > +	bool ret = false;
+> > +
+> > +	if (!dev)
+> > +		return ret;
+> > +
+> > +	device_lock(dev);
+> > +	ret = dev->state_synced;
+> > +	device_unlock(dev);
+> 
+> This lock is "protecting" nothing, given that the value can instantly
+> change after it is read.
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Hmm, for some reason I thought it needs to be synchronized with the
+sync state callback being called already. But I just noticed that call
+to the sync state callback is independently locked after state_synced is
+set. So I guess the lock can go away here.
 
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 5358e28122ab..9a04bf2e4379 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
- 	return 0;
- }
- 
-+static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
-+			       struct device *dev, bool enable)
-+{
-+	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
-+
-+	if (ret)
-+		goto out;
-+
-+	/*
-+	 * Wait for the GDSC to go through a power down and
-+	 * up cycle.  In case there is a status polling going on
-+	 * before the power cycle is completed it might read an
-+	 * wrong status value.
-+	 */
-+	udelay(1);
-+
-+out:
-+	return ret;
-+}
-+
- static int gdsc_disable(struct generic_pm_domain *domain)
- {
- 	struct gdsc *sc = domain_to_gdsc(domain);
-@@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
- 		sc->pd.power_off = gdsc_disable;
- 	if (!sc->pd.power_on)
- 		sc->pd.power_on = gdsc_enable;
-+	if (sc->flags & HW_CTRL)
-+		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
- 
- 	ret = pm_genpd_init(&sc->pd, NULL, !on);
- 	if (ret)
--- 
-2.34.1
+> 
+> Because it can change, how will this function actually show anything
+> relevant?
 
+The only usecase I can think of for this new API is for some driver
+to delay an action until ultimately the driver for a specific device
+gets state synced. So even if the value can change after it has
+been checked, such consumer driver will most likely retry later on.
+
+Hope that makes sense.
+
+> 
+> thanks,
+> 
+> greg k-h
