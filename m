@@ -2,215 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3771740A8F
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 10:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 686AA740F71
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jun 2023 12:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232241AbjF1IHF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 04:07:05 -0400
-Received: from mga04.intel.com ([192.55.52.120]:37884 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232964AbjF1IDe (ORCPT <rfc822;linux-pm@vger.kernel.org>);
-        Wed, 28 Jun 2023 04:03:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687939414; x=1719475414;
-  h=date:from:to:cc:subject:message-id;
-  bh=W+v8nOmQIWr2c1pMFo9exl/PrPSS1dJPCRsv0RHbKNc=;
-  b=BTCzlDbQf3PMicbamc7xEqbVWorFk98MZJBQdDmQ6yzauaULI0ZLJJWw
-   pQBwWXy//HmkY+0nLdcWbKbcBxLY3GV0IybGTmHYqmNEiyeDyPLFGsm05
-   QAMrhObyBbhn9CP4c/hISRtQCQjLsCeXppBC0sqsWLpaAAokvU1SSanvr
-   XMrbvW/m2IJHi6CsBRFLgll8gSOF8Ejq8G3AH7cuorq/2hGPcoF8sVNiT
-   vQ11eXG03e4tRqbRej451scu5o2lsMkKE55EBJm/JL7dX985SE2eHeSPw
-   YlbBGPOrCAVltXmYrP9emrkOKKz3ZGVAfJsc9Ts/fMqfNOa1CD7iy9HFo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="360625099"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="360625099"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 00:31:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10754"; a="840968432"
-X-IronPort-AV: E=Sophos;i="6.01,164,1684825200"; 
-   d="scan'208";a="840968432"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 28 Jun 2023 00:31:21 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEPe4-000D4X-1x;
-        Wed, 28 Jun 2023 07:31:20 +0000
-Date:   Wed, 28 Jun 2023 15:30:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 1d70c4c81b3511cd494d475eee1f111a5db59290
-Message-ID: <202306281545.CtV06mbw-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        id S231482AbjF1K50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 06:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231161AbjF1K5B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 06:57:01 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2518D1999
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 03:56:58 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98df69cacd1so397776066b.1
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 03:56:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687949816; x=1690541816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTQsoS+h53Vzzjs8qIkqE4wzhWloV1Y4NhbaPd70qbM=;
+        b=Fb/Wu62fN9GstdwqxVGC9NlOLfqSqYunhCsHpNEsTngqJ05R6sbGO6EgkSCfC1O1KU
+         Rp5DtAcNNhomPtbP1F/Zlc6CnHdUmNlh43TqMavwb4JcwmLgkdunqhQ0gF/HLPBhtVFb
+         pQ871BCyLXXhg7YbABeh4F6v8gJC29AbEIBjudezHIKkQe8dNPVq5CHfZvMCEecowkkH
+         bjfUdhjAoQgIcZ2FFoHdXJSNDylD2m2FdTquenR3st8z29J2qkgYZsDyTY0Y1o2zTc17
+         9t9x5vI0OEr6WZZEcF1tU02KQ9kr27Ma1nPLTLfrqipHihWq6LHtMQWFjCEIqfFW4MGA
+         7RkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687949816; x=1690541816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTQsoS+h53Vzzjs8qIkqE4wzhWloV1Y4NhbaPd70qbM=;
+        b=BkcYoQM9zIAvwp07xD4qtizITec/XgVQmQr7JWiGPD4qXGyKoGi6UGCl7Wnhhuup/6
+         3ME9Jf9zsEEYFWFVRVgM769yJMUgK6I0J4VWeJL0SyHy6yhBTJ2bTmNp6mb7XMDPFvSD
+         NXEu4nqMDyud62juhIG9v+dIuUMktJmZP//d79Sr9UhQDrAWP/sPc8aVHHccUanc34XD
+         jDsVq/husOXXAFlZ04ug71FNHkcC0Dp5FMrhamkAjX431urTAR+s21eBtDAu9Y+iDOWc
+         06zQ1xM1Mcljb2rIcMFDAmRZnMbPDyM7x+xKKky41ywVwvuULRwsffgRFj/5kY71XoRZ
+         Qfaw==
+X-Gm-Message-State: AC+VfDyKgesV1IpW4pTk+G0ed8Xmm4cCPYJY8lOnuL8OlPitSa/MmJns
+        xPshymbOIbU/qYbzoJAdJsFNsg==
+X-Google-Smtp-Source: ACHHUZ7Ck01xIBnrG3uP6P5tN/Jm9n8V/n4BxNQUecjRP3n5noyncuJBJMg954rqH4xX5H0F8x01hg==
+X-Received: by 2002:a17:907:7291:b0:98d:d26c:e142 with SMTP id dt17-20020a170907729100b0098dd26ce142mr11584981ejc.46.1687949816608;
+        Wed, 28 Jun 2023 03:56:56 -0700 (PDT)
+Received: from hackbox.lan ([62.231.110.100])
+        by smtp.gmail.com with ESMTPSA id e8-20020a1709062c0800b0098921e1b064sm5544678ejh.181.2023.06.28.03.56.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jun 2023 03:56:56 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH 0/2] PM: domains: Add control for switching back and forth to HW control
+Date:   Wed, 28 Jun 2023 13:56:50 +0300
+Message-Id: <20230628105652.1670316-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1d70c4c81b3511cd494d475eee1f111a5db59290  Merge branch 'pm-opp' into linux-next
+This is just a resend of [1]. This resend just adds the back story behind
+the need for such a generic API as a cover letter. Also added my SoB tag
+to Ulf's patch.
 
-elapsed time: 731m
+Some of the newer Qualcomm platforms support handing of the control of
+some of the GDSCs (implemented as power domains in Linux) to some device
+firmware. The idea behind such approach is that the firmware knows best
+when such a power domain can be powered off or not and leads most of the
+time to better power consumption.
 
-configs tested: 147
-configs skipped: 9
+At this point, if such GDSC provides HW control support, the current
+implementation is switching to HW control right after the GDSC gets
+powered on and it is left in HW control mode until right before the
+request for power off is done. This needs to remain as is for now, as we
+do not know for sure what each firmware expects from its related GDSCs.
+For example, the venus driver expects the codec GDSCs to remain always
+in HW control mode, otherwise the firmware would crush.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+But in some cases, the consumer driver needs to switch back and forth.
+And the explanation for such case is when a driver needs to interract
+with the device (e.g. reading status bits) and the firmware doesn't
+guarantee the GDSC will be enabled when in HW mode. Therefore, the
+consumer would need to switch back to SW mode, do its thing, and then
+switch again back to HW mode.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r015-20230627   gcc  
-arc                              allyesconfig   gcc  
-arc                          axs103_defconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r013-20230627   gcc  
-arc                  randconfig-r036-20230627   gcc  
-arc                  randconfig-r043-20230627   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                         axm55xx_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                        neponset_defconfig   clang
-arm                  randconfig-r001-20230627   clang
-arm                  randconfig-r005-20230627   clang
-arm                  randconfig-r016-20230627   gcc  
-arm                  randconfig-r046-20230627   gcc  
-arm                           u8500_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r014-20230627   gcc  
-csky                 randconfig-r031-20230627   gcc  
-hexagon              randconfig-r041-20230627   clang
-hexagon              randconfig-r045-20230627   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230627   gcc  
-i386         buildonly-randconfig-r005-20230627   gcc  
-i386         buildonly-randconfig-r006-20230627   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230627   gcc  
-i386                 randconfig-i001-20230628   clang
-i386                 randconfig-i002-20230627   gcc  
-i386                 randconfig-i002-20230628   clang
-i386                 randconfig-i003-20230627   gcc  
-i386                 randconfig-i003-20230628   clang
-i386                 randconfig-i004-20230627   gcc  
-i386                 randconfig-i004-20230628   clang
-i386                 randconfig-i005-20230627   gcc  
-i386                 randconfig-i005-20230628   clang
-i386                 randconfig-i006-20230627   gcc  
-i386                 randconfig-i006-20230628   clang
-i386                 randconfig-i011-20230627   clang
-i386                 randconfig-i012-20230627   clang
-i386                 randconfig-i013-20230627   clang
-i386                 randconfig-i014-20230627   clang
-i386                 randconfig-i015-20230627   clang
-i386                 randconfig-i016-20230627   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r002-20230627   gcc  
-loongarch            randconfig-r034-20230627   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r015-20230627   gcc  
-m68k                 randconfig-r016-20230627   gcc  
-m68k                 randconfig-r036-20230627   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                 randconfig-r002-20230627   clang
-mips                 randconfig-r014-20230627   gcc  
-mips                 randconfig-r023-20230627   gcc  
-mips                 randconfig-r025-20230627   gcc  
-mips                          rb532_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230627   gcc  
-nios2                randconfig-r004-20230627   gcc  
-nios2                randconfig-r035-20230627   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-openrisc             randconfig-r006-20230627   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r026-20230627   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    adder875_defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc                    gamecube_defconfig   clang
-powerpc                      katmai_defconfig   clang
-powerpc              randconfig-r012-20230627   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r011-20230627   clang
-riscv                randconfig-r042-20230627   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r004-20230627   gcc  
-s390                 randconfig-r012-20230627   clang
-s390                 randconfig-r033-20230627   gcc  
-s390                 randconfig-r044-20230627   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r024-20230627   gcc  
-sh                   randconfig-r025-20230627   gcc  
-sh                   randconfig-r026-20230627   gcc  
-sh                          rsk7203_defconfig   gcc  
-sh                           se7705_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r003-20230627   gcc  
-sparc64              randconfig-r005-20230627   gcc  
-sparc64              randconfig-r032-20230627   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r011-20230627   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230627   gcc  
-x86_64       buildonly-randconfig-r002-20230627   gcc  
-x86_64       buildonly-randconfig-r003-20230627   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230627   clang
-x86_64               randconfig-x002-20230627   clang
-x86_64               randconfig-x003-20230627   clang
-x86_64               randconfig-x004-20230627   clang
-x86_64               randconfig-x005-20230627   clang
-x86_64               randconfig-x006-20230627   clang
-x86_64               randconfig-x011-20230627   gcc  
-x86_64               randconfig-x012-20230627   gcc  
-x86_64               randconfig-x013-20230627   gcc  
-x86_64               randconfig-x014-20230627   gcc  
-x86_64               randconfig-x015-20230627   gcc  
-x86_64               randconfig-x016-20230627   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r013-20230627   gcc  
-xtensa               randconfig-r022-20230627   gcc  
-xtensa               randconfig-r023-20230627   gcc  
-xtensa               randconfig-r031-20230627   gcc  
-xtensa               randconfig-r033-20230627   gcc  
-xtensa               randconfig-r034-20230627   gcc  
+This is where the patch from Ulf comes in. It allows consumers that
+actually need to control the HW/SW mode to do so.
+
+The GDSC patch just implemets the set_hwmode op and sets it for each
+GDSC that provides HW control mode.
+
+[1] https://lore.kernel.org/all/20230627104033.3345659-1-abel.vesa@linaro.org/
+
+Abel Vesa (1):
+  clk: qcom: gdsc: Add support for set_hwmode_dev
+
+Ulf Hansson (1):
+  PM: domains: Allow devices attached to genpd to be managed by HW
+
+ drivers/base/power/domain.c | 66 +++++++++++++++++++++++++++++++++++++
+ drivers/clk/qcom/gdsc.c     | 22 +++++++++++++
+ include/linux/pm_domain.h   | 15 +++++++++
+ 3 files changed, 103 insertions(+)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
