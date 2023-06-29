@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73ACE742D4C
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 21:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E16A7742DC2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 21:45:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjF2TQg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 29 Jun 2023 15:16:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S231933AbjF2TpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jun 2023 15:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234046AbjF2TQM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jun 2023 15:16:12 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB57293CC
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jun 2023 12:07:49 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-98502b12fd4so25983066b.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jun 2023 12:07:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688065668; x=1690657668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qZbDXG8/P8AC0d5PmWBfdocnKrP8P7g8d4t1BrxofpI=;
-        b=Dji4p+hcpDq8qe4Z0lKmF1v9hWF2X3i0qp3nJjhr3vUwjydt/x39phxroGkWCpOd6L
-         /nONNnJELrV1FUBadjuc1T/ivnwoRfV8uh4J5PD56Xwh+9x1tFzLh7g777a4PK8Ww/Hl
-         ZnHWtpyJm5YaED2ZQ+1aZFJ0rj3SGgvMMI/+K4SHSRibnutqCma7anziFx9LS++mtzJ0
-         TO8JPTlQWOCRoJ6eyH1ddVDFe8LkCCmD3DNxn4xnzyGtWSg++G4SHf9qFRjq/eRVhvrr
-         Zd0op1mbHd7iwamMGkFWUwCL6lR2ffoiqR/sUwJikfC0o3p0DrqIKk0MPpi9qfH16Am0
-         y8vQ==
-X-Gm-Message-State: ABy/qLbtFXK15js8D9QYKwVS+mnkS4NlCOFwQuanM7bK+yh9j2FQCLY2
-        SpflbaLaPnbRsQyaBlUp2KbTzI1VXxw2i+b6jlo=
-X-Google-Smtp-Source: APBJJlG+4LY2Y6lO1eCOuN0mbtFNkr3YI68mXHb78e4rf4RROAQxAiPrsNNcXjYS0Mbf/FJKdxt2MwTdhx0WTk44+gs=
-X-Received: by 2002:a17:906:148c:b0:987:6960:36c6 with SMTP id
- x12-20020a170906148c00b00987696036c6mr209859ejc.5.1688065667948; Thu, 29 Jun
- 2023 12:07:47 -0700 (PDT)
+        with ESMTP id S231140AbjF2TpW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jun 2023 15:45:22 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9398D210E;
+        Thu, 29 Jun 2023 12:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688067921; x=1719603921;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=geT+oGQMxV2zFLyPGdH8g9ALOVFH/UnqOkB/8QWYnzQ=;
+  b=JIzltdyGH9GudMgpcSz6JZcoQ6Ai9ioww1AFEs8We6g+bvZpn6AIxR1r
+   PaGAgCw1tXFFpJnDeGhNpJJZkmhtEUCJejAPpKzfDtINVdpMho7Ze5Vz7
+   lvE/RjLTsKuB9REgH0WHIWKsEiedVrln5fBRjUU4VSUr+QssHENrug++9
+   wROZk7iY+Omr3Jhxupb3sqV9Ph7rwmMcHgrG+4CnaWdaLC5O6XuBdqNsi
+   +ATqHjAZ1VV3JfdfTg+TihsSy5hvqGUlaZcOoZbPNfWGJ3icQViLxy2Vh
+   KcWXeeSUBFynUrKZehhpEkW413tLX2P0Ks5uOT9lr1Yw0sEE18482mXXX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="425897624"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="425897624"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2023 12:45:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10756"; a="694781644"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="694781644"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga006.jf.intel.com with ESMTP; 29 Jun 2023 12:45:15 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
+Date:   Thu, 29 Jun 2023 12:45:09 -0700
+Message-Id: <20230629194509.4094455-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-References: <20230525211655.627415-1-evalenti@kernel.org> <fb558491-9906-fb3a-60c5-349cb4210695@linaro.org>
- <ZH5ve2KX/Y0DXQnE@uf8f119305bce5e.ant.amazon.com> <ZH5whRBkGCun3Gq+@uf8f119305bce5e.ant.amazon.com>
-In-Reply-To: <ZH5whRBkGCun3Gq+@uf8f119305bce5e.ant.amazon.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 21:07:36 +0200
-Message-ID: <CAJZ5v0gbwRNrjBOxGfFTNJ2meBU3fncBpeHZSCAjhFRYQ9VkaA@mail.gmail.com>
-Subject: Re: [PATCH 0/3] thermal: hook in with reboot and crash
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Eduardo Valentin <eduval@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,53 +58,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 6, 2023 at 1:32 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> On Mon, Jun 05, 2023 at 04:27:55PM -0700, Eduardo Valentin wrote:
-> >
-> >
-> >
-> > On Fri, May 26, 2023 at 10:27:39AM +0200, Daniel Lezcano wrote:
-> > >
-> > >
-> > >
-> > > Hi,
-> > >
-> > > On 25/05/2023 23:16, Eduardo Valentin wrote:
-> > > > From: Eduardo Valentin <eduval@amazon.com>
-> > > >
-> > > > Hello,
-> > > >
-> > > > This small series of changes teaches thermal core about
-> > > > reboot and crash callbacks. The intention is to have the core
-> > > > to get notified and the pass in the event to thermal governors
-> > > > that are willing to perform actions during reboot or crash events.
-> > > > The thermal workers will be teared down in the process too.
-> > >
-> > > What problem does it solve?
-> >
-> > This cover letter was not clear enough. In fact, the context for
-> > all patches I am sending now and will be sending in near future
-> > is when the thermal subsystem is configured to control temperature
-> > of a target device. The thermal subsystem is configured to have
-> > cooling devices that will act on the target system, and has
-> > input, temperature sensors, to have visibility to the target system
-> > temperature.  In this case, the problem is when the controlling system
-> > becomes unresponsive upon reboot or crash, therefore losing
-> > control of temperature of the target system. This series solves the
-> > problem by giving knowledge to the governors of such events, allowing
-> > the governors to have opportunity to act before the actual event happens.
->
->
-> Again, this is a different situation than a emergence shutdown due to
-> temperature/overheat on the typical application of the thermal subsystem.
-> Where it runs in the same system it controls the temperature of.
->
-> Here we want to reduce the likelihood of loosing control of temperature of a target systems
-> upon events where the controlling system is unavailable.
+Some system BIOS configuration may provide option to disable E-cores.
+As part of this change, CPUID feature for hybrid (Leaf 7 sub leaf 0,
+EDX[15] = 0) may not be set. But HWP performance limits will still be
+using a scaling factor like any other hybrid enabled system.
 
-So the use case for this seems to be a BMC running Linux that is
-responsible for the thermal control of a host system.
+The current check for applying scaling factor will fail when hybrid
+CPUID feature is not set. Only way to make sure that scaling should be
+applied by checking CPPC nominal frequency and nominal performance. If
+CPPC nominal frequency and nominal performance is defined and nominal
+frequency is not in multiples of 100MHz of nominal performance, then use
+hybrid scaling factor.
 
-It kind of escapes me why you want a thermal governor in the BMC's
-kernel to be part of this.
+The above check will fail for non hybrid capable systems as they don't
+publish nominal frequency field in CPPC, so this function can be used
+for all HWP systems without additional cpu model check.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+v2:
+Compile errors reported by kernel test robot and Rafael for the case
+when CONFIG_ACPI is not defined
+
+ drivers/cpufreq/intel_pstate.c | 58 ++++++++++++++++++++++++++++------
+ 1 file changed, 48 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index 2548ec92faa2..7e18999be46a 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -302,6 +302,13 @@ static bool hwp_forced __read_mostly;
+ 
+ static struct cpufreq_driver *intel_pstate_driver __read_mostly;
+ 
++#define HYBRID_SCALING_FACTOR	78741
++
++static inline int core_get_scaling(void)
++{
++	return 100000;
++}
++
+ #ifdef CONFIG_ACPI
+ static bool acpi_ppc;
+ #endif
+@@ -400,6 +407,25 @@ static int intel_pstate_get_cppc_guaranteed(int cpu)
+ 
+ 	return cppc_perf.nominal_perf;
+ }
++
++static int intel_pstate_cppc_get_scaling(int cpu)
++{
++	struct cppc_perf_caps cppc_perf;
++	int ret;
++
++	ret = cppc_get_perf_caps(cpu, &cppc_perf);
++
++	/*
++	 * Check if nominal frequency is multiples of 100 MHz, if
++	 * not return hybrid scaling factor.
++	 */
++	if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
++	    (cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq))
++		return HYBRID_SCALING_FACTOR;
++
++	return core_get_scaling();
++}
++
+ #else /* CONFIG_ACPI_CPPC_LIB */
+ static inline void intel_pstate_set_itmt_prio(int cpu)
+ {
+@@ -492,6 +518,11 @@ static inline int intel_pstate_get_cppc_guaranteed(int cpu)
+ {
+ 	return -ENOTSUPP;
+ }
++
++static int intel_pstate_cppc_get_scaling(int cpu)
++{
++	return core_get_scaling();
++}
+ #endif /* CONFIG_ACPI_CPPC_LIB */
+ 
+ /**
+@@ -1895,11 +1926,6 @@ static int core_get_turbo_pstate(int cpu)
+ 	return ret;
+ }
+ 
+-static inline int core_get_scaling(void)
+-{
+-	return 100000;
+-}
+-
+ static u64 core_get_val(struct cpudata *cpudata, int pstate)
+ {
+ 	u64 val;
+@@ -1936,16 +1962,29 @@ static void hybrid_get_type(void *data)
+ 	*cpu_type = get_this_hybrid_cpu_type();
+ }
+ 
+-static int hybrid_get_cpu_scaling(int cpu)
++static int hwp_get_cpu_scaling(int cpu)
+ {
+ 	u8 cpu_type = 0;
+ 
+ 	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
+ 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
+ 	if (cpu_type == 0x40)
+-		return 78741;
++		return HYBRID_SCALING_FACTOR;
+ 
+-	return core_get_scaling();
++	/* Use default core scaling for E-cores */
++	if (cpu_type == 0x20)
++		return core_get_scaling();
++
++	/*
++	 * If reached here, it means that, this system is either non
++	 * hybrid system (like Tiger Lake) or hybrid capable system (like
++	 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
++	 * support is 0).
++	 * All non hybrid systems, don't publish nominal_frequency
++	 * field (means nominal frequency = 0), In that case
++	 * the legacy core scaling is used.
++	 */
++	return intel_pstate_cppc_get_scaling(cpu);
+ }
+ 
+ static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
+@@ -3393,8 +3432,7 @@ static int __init intel_pstate_init(void)
+ 			if (!default_driver)
+ 				default_driver = &intel_pstate;
+ 
+-			if (boot_cpu_has(X86_FEATURE_HYBRID_CPU))
+-				pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
++			pstate_funcs.get_cpu_scaling = hwp_get_cpu_scaling;
+ 
+ 			goto hwp_cpu_matched;
+ 		}
+-- 
+2.38.1
+
