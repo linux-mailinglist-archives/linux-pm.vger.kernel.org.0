@@ -2,55 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB117437D5
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 11:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A1BB743C04
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 14:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbjF3I7j convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 30 Jun 2023 04:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53112 "EHLO
+        id S231657AbjF3Mhc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 08:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbjF3I7g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 04:59:36 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A3F359E;
-        Fri, 30 Jun 2023 01:59:33 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-98e1fc9d130so45589366b.0;
-        Fri, 30 Jun 2023 01:59:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688115571; x=1690707571;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y2MBUi7x9l7mMbhDLy13JZfd2Q6j84WVOfBVWYNME0M=;
-        b=U+xtwWtKZRL4a9wAZKZGnnE6qw59x55TjUASpetMfI+rYlti+E5bE4LS6JOk8NPnde
-         K6Br/I8QHqVANkV0090JQUuu+yD3PBitXaWQ8Z1u9Q8t4IHBQgloGpS/ogGY00agCfZ6
-         dQWjaQEpT7IUGofP2RVzLozcF4sjS9ZcqRRqq5O5zpARdIJdFnlbyOxJD1MvlZ8+VZPW
-         KWrgUX91nVzTt05y97suuhK0ABDWoez1jykp827ao5SBwYp1TrR0hMeRT2DbDarsKoJL
-         IDJaEuAL529gBulGuKZVzCl5WsiKCY+7BIDDEYsXHp3bspmOzlGFgNDbzi7tJCb1vUWg
-         2F7g==
-X-Gm-Message-State: ABy/qLbZ6eyGNnw0f/fppgF3A7NBTZrAleLW6otp3UVsmM9ayb4y+PoW
-        iM5FnssrH9It165K+9WL0a26zy9qEOrWMOPalyzH4USf
-X-Google-Smtp-Source: APBJJlHzbhhmzpKuxQdyMwB5fE8BfeYtL4juLmqsqi14Ay87YjPpOXL3wvEm1ZEJydQbHMQp8aE7H9ePdUhvkCvAqZ4=
-X-Received: by 2002:a17:906:ccc3:b0:98d:b10f:f3cd with SMTP id
- ot3-20020a170906ccc300b0098db10ff3cdmr1393351ejb.7.1688115571326; Fri, 30 Jun
- 2023 01:59:31 -0700 (PDT)
+        with ESMTP id S230506AbjF3Mhb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 08:37:31 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281501B4;
+        Fri, 30 Jun 2023 05:37:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bt245ibCfjZqVop8VQNlf2yxYf/vplLGuYeM+hMxt5a1V1UFkxBSfZGzNdBtBbmVf95ssURSK2YkLOgTjkpDxt+nh5mPTMaq83jDm/ZrxMc3djpSF0Q43sgJKpsOWlC3L8cvpuLOGzR5Yv9j9nAhHLN2PlLX3l7GTvlLL0p0vcSkbPimkUU+AAycz8Q4WW5mK1yl9WL7kvehn0+cCamH7b2wA+pDkYZ9K9lat914bJNsV7iMRRcIHxjpClTdWid/4GiW5y4g483jdDU+hOr6FqOhZwgUoEcrmlY+3BDaHl6Q7SOjN4S8Yq1KLoTfAF3xxMjwXoJfMEv4TjpMmmpqFw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fvU+4emVaOWoXWU/Y5gen1tfKdOurL2XUOUgchr6ZYY=;
+ b=oEVI1moCp8w0w5O2VYt5Pze5hz11coe3Xdytl4zDR8m2cFQ0g4Kk3ggg7hkJI6j+i/yAHURGGKmFnN1M59HeLm2YMVnzJ+GF0bWwBFsHwbwUxR6/TD4Jy9EGpnrsHwwZAUa1ufb/dWMQrjP5976vuyLh7jYKte/LKeTTrTZx/A3Xua6/PY2i8MIggp7y+Cpc+cvzEaojvfg82PONoi1YwcUK6cCGA9CGIvPogwy+3C5cmOZbZhEcBleHA4XMpEjtQgaX1xJMqvZdubhHJjZ+sv7OU0WoFxDN7EZdIm112LT6HqUf2cOFb9lhmOVymuCyULb7Z351kONx+qFgGatprQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fvU+4emVaOWoXWU/Y5gen1tfKdOurL2XUOUgchr6ZYY=;
+ b=cuWXpxBd/6m0DlzfDFt3R8Q/BwvXs/XyqKhfmfcU3k58SCkFLhU2dNICXEHbJs+nMIudQWPwaJkM4pBfJ9fLSzS5atKDXIDLX7kJqP/t9YFQZR6C8RECOExKQpqq/A48taMlGvMOoCEUIMHlmqtSBngMa8mjHff0LEN7AMxfS6g=
+Received: from BN8PR03CA0030.namprd03.prod.outlook.com (2603:10b6:408:94::43)
+ by PH7PR12MB7187.namprd12.prod.outlook.com (2603:10b6:510:203::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 30 Jun
+ 2023 12:37:26 +0000
+Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:94:cafe::3b) by BN8PR03CA0030.outlook.office365.com
+ (2603:10b6:408:94::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
+ Transport; Fri, 30 Jun 2023 12:37:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 12:37:24 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
+ 2023 07:37:23 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <ray.huang@amd.com>, <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Wyes Karny <wyes.karny@amd.com>,
+        Perry Yuan <perry.yuan@amd.com>
+Subject: [PATCH] cpufreq: amd-pstate: Add sysfs file for base frequency
+Date:   Thu, 29 Jun 2023 08:54:54 -0500
+Message-ID: <20230629135454.177421-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230629194509.4094455-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230629194509.4094455-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Jun 2023 10:59:20 +0200
-Message-ID: <CAJZ5v0ju6ffS3yWD97h1r0A1AzxoX+xLiXEN7YhGotD8SJv13Q@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq: intel_pstate: Fix scaling for hybrid capable
- system with disabled E-cores
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|PH7PR12MB7187:EE_
+X-MS-Office365-Filtering-Correlation-Id: a7a3fc03-5868-4ba4-411d-08db7966c1e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HLYF5Mu2mlXM3IA/uVSV/sySXKywfTgnek9V4goeaf6r9GBt3jNGuIGRbMig2GP5ulnLuktHs9lJo368pd5VxU3TrMXtFAUHlpjrUksiG4iLa2JIwCxT0sme2/OvMVI5zawCGTTD1jSXW+oUslvD1BolTLQIiJF8HWpNue6rmsJAO6R9yLj4uapFurQKaTqX/K84+DZeq7C0y+tcbgaq8pHejj3Kl6m9sR/5PGLs8me4LYAE50E9b8mZZt3o1yRGLjnHIkHhxD/+O1BUSxj8afXzUjRoGji5LY8CZ5MC8hfl9nxYvBTNF1vwuL2dCCeUl+5Ys/dMQL8TzI28kOyl1y/1oLjTi7l1lZehFJ16KY4x7KpqGYJyqAkjLIYs4Rdwl0ljdQ9RuwytIOgT96zawc1CGy4/3BLoy3VIiLMytpje09ETN9H6nVr9q72U79bjv5ODoezOWFtx09hVO5QzMbpFo7oulX6Wgih500JtEExGq58Wz46Mi8eppI9GL+fSl1rV5jvCte+WbOsKFJLnbDLTJLtkwgq7uxJPpjBzTJ6A2ySVbM0uPgfmv5HnOvG8cxjggNi4z/UNSG4ChXBYV2uRNtEjvtKfHN6D0UFVB2eLDhglyS8vaDfHOjNo6PlCHPnBdG97+Iklc8zdVkGHIud9rLywXdANNZNnprWFUSNbaIng+HS2SqTlcpETAfMO+QyMjfPa3v9geeAzvxv5vMregPO538IGt9fQhV1l8ZIUAwKsYZeq+fDaWouGS4s2XYSVmxRxJjt6DPkA+I/p1dRRMoZllrhGyiwZckLowss=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(82310400005)(1076003)(36860700001)(36756003)(5660300002)(44832011)(356005)(86362001)(47076005)(41300700001)(8676002)(316002)(81166007)(4326008)(70586007)(8936002)(40480700001)(82740400003)(40460700003)(70206006)(2906002)(478600001)(186003)(26005)(16526019)(2616005)(7696005)(336012)(6666004)(426003)(83380400001)(110136005)(54906003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 12:37:24.9437
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7a3fc03-5868-4ba4-411d-08db7966c1e8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7187
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,148 +100,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jun 29, 2023 at 9:45 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Some system BIOS configuration may provide option to disable E-cores.
-> As part of this change, CPUID feature for hybrid (Leaf 7 sub leaf 0,
-> EDX[15] = 0) may not be set. But HWP performance limits will still be
-> using a scaling factor like any other hybrid enabled system.
->
-> The current check for applying scaling factor will fail when hybrid
-> CPUID feature is not set. Only way to make sure that scaling should be
-> applied by checking CPPC nominal frequency and nominal performance. If
-> CPPC nominal frequency and nominal performance is defined and nominal
-> frequency is not in multiples of 100MHz of nominal performance, then use
-> hybrid scaling factor.
->
-> The above check will fail for non hybrid capable systems as they don't
-> publish nominal frequency field in CPPC, so this function can be used
-> for all HWP systems without additional cpu model check.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> Compile errors reported by kernel test robot and Rafael for the case
-> when CONFIG_ACPI is not defined
->
->  drivers/cpufreq/intel_pstate.c | 58 ++++++++++++++++++++++++++++------
->  1 file changed, 48 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 2548ec92faa2..7e18999be46a 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -302,6 +302,13 @@ static bool hwp_forced __read_mostly;
->
->  static struct cpufreq_driver *intel_pstate_driver __read_mostly;
->
-> +#define HYBRID_SCALING_FACTOR  78741
-> +
-> +static inline int core_get_scaling(void)
-> +{
-> +       return 100000;
-> +}
-> +
->  #ifdef CONFIG_ACPI
->  static bool acpi_ppc;
->  #endif
-> @@ -400,6 +407,25 @@ static int intel_pstate_get_cppc_guaranteed(int cpu)
->
->         return cppc_perf.nominal_perf;
->  }
-> +
-> +static int intel_pstate_cppc_get_scaling(int cpu)
-> +{
-> +       struct cppc_perf_caps cppc_perf;
-> +       int ret;
-> +
-> +       ret = cppc_get_perf_caps(cpu, &cppc_perf);
-> +
-> +       /*
-> +        * Check if nominal frequency is multiples of 100 MHz, if
-> +        * not return hybrid scaling factor.
-> +        */
-> +       if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
-> +           (cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq))
-> +               return HYBRID_SCALING_FACTOR;
-> +
-> +       return core_get_scaling();
-> +}
-> +
->  #else /* CONFIG_ACPI_CPPC_LIB */
->  static inline void intel_pstate_set_itmt_prio(int cpu)
->  {
-> @@ -492,6 +518,11 @@ static inline int intel_pstate_get_cppc_guaranteed(int cpu)
->  {
->         return -ENOTSUPP;
->  }
-> +
-> +static int intel_pstate_cppc_get_scaling(int cpu)
-> +{
-> +       return core_get_scaling();
-> +}
->  #endif /* CONFIG_ACPI_CPPC_LIB */
->
->  /**
-> @@ -1895,11 +1926,6 @@ static int core_get_turbo_pstate(int cpu)
->         return ret;
->  }
->
-> -static inline int core_get_scaling(void)
-> -{
-> -       return 100000;
-> -}
-> -
->  static u64 core_get_val(struct cpudata *cpudata, int pstate)
->  {
->         u64 val;
-> @@ -1936,16 +1962,29 @@ static void hybrid_get_type(void *data)
->         *cpu_type = get_this_hybrid_cpu_type();
->  }
->
-> -static int hybrid_get_cpu_scaling(int cpu)
-> +static int hwp_get_cpu_scaling(int cpu)
->  {
->         u8 cpu_type = 0;
->
->         smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
->         /* P-cores have a smaller perf level-to-freqency scaling factor. */
->         if (cpu_type == 0x40)
-> -               return 78741;
-> +               return HYBRID_SCALING_FACTOR;
->
-> -       return core_get_scaling();
-> +       /* Use default core scaling for E-cores */
-> +       if (cpu_type == 0x20)
-> +               return core_get_scaling();
-> +
-> +       /*
-> +        * If reached here, it means that, this system is either non
-> +        * hybrid system (like Tiger Lake) or hybrid capable system (like
-> +        * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
-> +        * support is 0).
-> +        * All non hybrid systems, don't publish nominal_frequency
-> +        * field (means nominal frequency = 0), In that case
-> +        * the legacy core scaling is used.
-> +        */
-> +       return intel_pstate_cppc_get_scaling(cpu);
->  }
->
->  static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
-> @@ -3393,8 +3432,7 @@ static int __init intel_pstate_init(void)
->                         if (!default_driver)
->                                 default_driver = &intel_pstate;
->
-> -                       if (boot_cpu_has(X86_FEATURE_HYBRID_CPU))
-> -                               pstate_funcs.get_cpu_scaling = hybrid_get_cpu_scaling;
-> +                       pstate_funcs.get_cpu_scaling = hwp_get_cpu_scaling;
->
->                         goto hwp_cpu_matched;
->                 }
-> --
+Some applications may want to query the base frequency to tell when
+a processor is operating in boost.
 
-Applied as 6.5-rc material with some adjustments.  Please check the
-bleeding-edge branch.
+Tested-by: Wyes Karny <wyes.karny@amd.com>
+Reviewed-by: Wyes Karny <wyes.karny@amd.com>
+Co-developed-by: Perry Yuan <perry.yuan@amd.com>
+Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ Documentation/admin-guide/pm/amd-pstate.rst |  4 ++++
+ drivers/cpufreq/amd-pstate.c                | 15 +++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-Thanks!
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 1cf40f69278cd..e68267857e859 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -281,6 +281,10 @@ integer values defined between 0 to 255 when EPP feature is enabled by platform
+ firmware, if EPP feature is disabled, driver will ignore the written value
+ This attribute is read-write.
+ 
++``base_frequency``
++	Shows the base frequency of the CPU. Frequencies above this will be in the
++  ``boost`` range. This attribute is read-only.
++
+ Other performance and frequency values can be read back from
+ ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
+ 
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 81fba0dcbee99..0fec66b3f7241 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -1037,6 +1037,19 @@ static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
+ 	return ret < 0 ? ret : count;
+ }
+ 
++static ssize_t show_base_frequency(struct cpufreq_policy *policy, char *buf)
++{
++	struct amd_cpudata *cpudata = policy->driver_data;
++	u32 nominal_freq;
++
++	nominal_freq = amd_get_nominal_freq(cpudata);
++	if (nominal_freq < 0)
++		return nominal_freq;
++
++	return sysfs_emit(buf, "%d\n", nominal_freq);
++}
++
++cpufreq_freq_attr_ro(base_frequency);
+ cpufreq_freq_attr_ro(amd_pstate_max_freq);
+ cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+ 
+@@ -1049,6 +1062,7 @@ static struct freq_attr *amd_pstate_attr[] = {
+ 	&amd_pstate_max_freq,
+ 	&amd_pstate_lowest_nonlinear_freq,
+ 	&amd_pstate_highest_perf,
++	&base_frequency,
+ 	NULL,
+ };
+ 
+@@ -1058,6 +1072,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
+ 	&amd_pstate_highest_perf,
+ 	&energy_performance_preference,
+ 	&energy_performance_available_preferences,
++	&base_frequency,
+ 	NULL,
+ };
+ 
+-- 
+2.34.1
+
