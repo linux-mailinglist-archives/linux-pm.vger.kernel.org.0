@@ -2,161 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7680741DE7
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 04:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F388C741E8C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 05:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231508AbjF2CDN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 22:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        id S229647AbjF2DFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Jun 2023 23:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbjF2CDM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 22:03:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B6E1FC1;
-        Wed, 28 Jun 2023 19:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688004191; x=1719540191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MqID3aXABUv7nc8CmrZcB8I0Vz3+y578ADvOER6lS44=;
-  b=JlJ3riuJ1I25WpwwluRx2/bcM20XZ8SfPB0nxU/3rFNFTp8+BIt6eZ8+
-   PMjxwoXzesFrd+DxKrg0ga+2YAwwG6KUAoetZFRR5zlz+zyXjkqv+Oxut
-   EWouaL7/eT9BAHCS+pjexntJm0EfnF9HIQsgfn1j+X/uMwjsfcgNF2oH1
-   UmNlkE5reiAVQKk+8l/B11dPgn2dGG1k8AFan1kKfAfmlZWfaZWVF2XWL
-   p22Qsbm5zV1SpS/CoGzNqdDkP6eRm5HiPvKTz0EQjXDbnfLCH+etijwrH
-   jiXoU+C1eRsSf6xX3MU3Nv1BajX5+aCoOvuMr13cVVzL0X756nuz7KIEA
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="392726375"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="392726375"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 19:03:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="1047611857"
-X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
-   d="scan'208";a="1047611857"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Jun 2023 19:03:04 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qEgzv-000DgL-2I;
-        Thu, 29 Jun 2023 02:03:03 +0000
-Date:   Thu, 29 Jun 2023 10:02:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable
- system with disabled E-cores
-Message-ID: <202306290948.ThmHeSqf-lkp@intel.com>
-References: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
+        with ESMTP id S230326AbjF2DE7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 23:04:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0929226BB
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 20:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1688007851;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=36xMCYTl0fRQ3bokXhwMdx0i+ytJIVoK5bZ80UNZk2k=;
+        b=hM+dU1Laq0EJv9SkhPioJMbfEZRQnl4Aj01xbjoqa7eM/WJSmLwuYIC1prn3QZ7saRgBv4
+        CQ/bcVboN4K88l6of9M2GVTyLfnzdTgo5HnrRytIeLjK4P4g+mTFN/Q2krKmKlBBrQX7NE
+        tfrmSCJzVA+s6L6WRGzNHRk5viaLMHM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-642-xfzANjggN-2sXftPaTIhUg-1; Wed, 28 Jun 2023 23:04:06 -0400
+X-MC-Unique: xfzANjggN-2sXftPaTIhUg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42F60185A7AF;
+        Thu, 29 Jun 2023 03:03:46 +0000 (UTC)
+Received: from [10.22.34.177] (unknown [10.22.34.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 05A6A200C0F2;
+        Thu, 29 Jun 2023 03:03:44 +0000 (UTC)
+Message-ID: <9ab9d8ef-36c1-82e9-125f-1f8e6ba5a228@redhat.com>
+Date:   Wed, 28 Jun 2023 23:03:44 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230628225341.3718351-1-srinivas.pandruvada@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 4/4] intel_idle: Add ibrs_off module parameter to force
+ disable IBRS
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+References: <20230628022554.1638318-1-longman@redhat.com>
+ <20230628022554.1638318-5-longman@redhat.com>
+ <24b34b27-d2eb-e287-ffbb-29ffde66790d@infradead.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <24b34b27-d2eb-e287-ffbb-29ffde66790d@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+On 6/27/23 22:58, Randy Dunlap wrote:
+> Hi,
+>
+> On 6/27/23 19:25, Waiman Long wrote:
+>>   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
+>>   drivers/idle/intel_idle.c                   | 14 ++++++++++++--
+>>   2 files changed, 28 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
+>> index b799a43da62e..8604e6d1fe2c 100644
+>> --- a/Documentation/admin-guide/pm/intel_idle.rst
+>> +++ b/Documentation/admin-guide/pm/intel_idle.rst
+> You may take or leave these comments as you choose.
+>
+>> @@ -216,6 +216,21 @@ are ignored).
+>>   The idle states disabled this way can be enabled (on a per-CPU basis) from user
+>>   space via ``sysfs``.
+>>   
+>> +The ``ibrs_off`` module parameter is a boolean flag (default to false). It is
+>                                                         (default false).
+> or
+>                                                         (defaults to false).
+>
+> Then I think it reads better if the next sentence begins with: "If set,"
+> instead of having it in the middle of the sentence.
+>
+>> +used to control if IBRS (Indirect Branch Restricted Speculation) should be
+>> +turned off, if set, when the CPU enters an idle state.  This flag will not
+>> +affect CPUs that are using Enhanced IBRS which can remain on with little
+>> +performance impact.
+>> +
+>> +For some CPUs, IBRS will be selected as mitigation for Spectre v2 and Retbleed
+>> +security vulnerabilities by default.  Leaving the IBRS mode on while idling may
+>> +have a performance impact on its sibling CPU.  The IBRS mode will be turned off
+>> +by default when the CPU enters into a deep idle state, but not in some
+>> +shallower ones.  Setting the ``ibrs_off`` module parameter will force the IBRS
+>> +mode to off when the CPU is in any one of the available idle states.  This may
+>> +help performance of a sibling CPU at the expense of a slightly higher wakeup
+>> +latency for the idle CPU.
+> thanks.
 
-kernel test robot noticed the following build errors:
+Thanks for the suggestion. I will make the change if I have to revise 
+the patch again for any reason.
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on linus/master v6.4 next-20230628]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Cheers,
+Longman
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Srinivas-Pandruvada/cpufreq-intel_pstate-Fix-scaling-for-hybrid-capable-system-with-disabled-E-cores/20230629-065506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230628225341.3718351-1-srinivas.pandruvada%40linux.intel.com
-patch subject: [PATCH] cpufreq: intel_pstate: Fix scaling for hybrid capable system with disabled E-cores
-config: i386-buildonly-randconfig-r004-20230628 (https://download.01.org/0day-ci/archive/20230629/202306290948.ThmHeSqf-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230629/202306290948.ThmHeSqf-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306290948.ThmHeSqf-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/cpufreq/intel_pstate.c:1975:10: error: use of undeclared identifier 'HYBRID_SCALING_FACTOR'
-                   return HYBRID_SCALING_FACTOR;
-                          ^
->> drivers/cpufreq/intel_pstate.c:1979:10: error: call to undeclared function 'core_get_scaling'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                   return core_get_scaling();
-                          ^
-   drivers/cpufreq/intel_pstate.c:1979:10: note: did you mean 'core_get_val'?
-   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
-   static u64 core_get_val(struct cpudata *cpudata, int pstate)
-              ^
->> drivers/cpufreq/intel_pstate.c:1990:9: error: call to undeclared function 'intel_pstate_cppc_get_scaling'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-           return intel_pstate_cppc_get_scaling(cpu);
-                  ^
->> drivers/cpufreq/intel_pstate.c:2350:17: error: use of undeclared identifier 'core_get_scaling'; did you mean 'core_get_val'?
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-                          core_get_val
-   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
-   static u64 core_get_val(struct cpudata *cpudata, int pstate)
-              ^
->> drivers/cpufreq/intel_pstate.c:2350:17: error: incompatible function pointer types initializing 'int (*)(void)' with an expression of type 'u64 (struct cpudata *, int)' (aka 'unsigned long long (struct cpudata *, int)') [-Werror,-Wincompatible-function-pointer-types]
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-   drivers/cpufreq/intel_pstate.c:2380:17: error: use of undeclared identifier 'core_get_scaling'; did you mean 'core_get_val'?
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-                          core_get_val
-   drivers/cpufreq/intel_pstate.c:1932:12: note: 'core_get_val' declared here
-   static u64 core_get_val(struct cpudata *cpudata, int pstate)
-              ^
-   drivers/cpufreq/intel_pstate.c:2380:17: error: incompatible function pointer types initializing 'int (*)(void)' with an expression of type 'u64 (struct cpudata *, int)' (aka 'unsigned long long (struct cpudata *, int)') [-Werror,-Wincompatible-function-pointer-types]
-           .get_scaling = core_get_scaling,
-                          ^~~~~~~~~~~~~~~~
-   7 errors generated.
-
-
-vim +/HYBRID_SCALING_FACTOR +1975 drivers/cpufreq/intel_pstate.c
-
-  1967	
-  1968	static int hwp_get_cpu_scaling(int cpu)
-  1969	{
-  1970		u8 cpu_type = 0;
-  1971	
-  1972		smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
-  1973		/* P-cores have a smaller perf level-to-freqency scaling factor. */
-  1974		if (cpu_type == 0x40)
-> 1975			return HYBRID_SCALING_FACTOR;
-  1976	
-  1977		/* Use default core scaling for E-cores */
-  1978		if (cpu_type == 0x20)
-> 1979			return core_get_scaling();
-  1980	
-  1981		/*
-  1982		 * If reached here, it means that, this system is either non
-  1983		 * hybrid system (like Tiger Lake) or hybrid capable system (like
-  1984		 * Alder Lake or Raptor Lake) with no E cores (CPUID for hybrid
-  1985		 * support is 0).
-  1986		 * All non hybrid systems, don't publish nominal_frequency
-  1987		 * field (means nominal frequency = 0), In that case
-  1988		 * the legacy core scaling is used.
-  1989		 */
-> 1990		return intel_pstate_cppc_get_scaling(cpu);
-  1991	}
-  1992	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
