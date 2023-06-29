@@ -2,126 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F388C741E8C
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 05:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E947E742077
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 08:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjF2DFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Jun 2023 23:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S231709AbjF2Gib (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Jun 2023 02:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjF2DE7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Jun 2023 23:04:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0929226BB
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jun 2023 20:04:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1688007851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=36xMCYTl0fRQ3bokXhwMdx0i+ytJIVoK5bZ80UNZk2k=;
-        b=hM+dU1Laq0EJv9SkhPioJMbfEZRQnl4Aj01xbjoqa7eM/WJSmLwuYIC1prn3QZ7saRgBv4
-        CQ/bcVboN4K88l6of9M2GVTyLfnzdTgo5HnrRytIeLjK4P4g+mTFN/Q2krKmKlBBrQX7NE
-        tfrmSCJzVA+s6L6WRGzNHRk5viaLMHM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-642-xfzANjggN-2sXftPaTIhUg-1; Wed, 28 Jun 2023 23:04:06 -0400
-X-MC-Unique: xfzANjggN-2sXftPaTIhUg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42F60185A7AF;
-        Thu, 29 Jun 2023 03:03:46 +0000 (UTC)
-Received: from [10.22.34.177] (unknown [10.22.34.177])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 05A6A200C0F2;
-        Thu, 29 Jun 2023 03:03:44 +0000 (UTC)
-Message-ID: <9ab9d8ef-36c1-82e9-125f-1f8e6ba5a228@redhat.com>
-Date:   Wed, 28 Jun 2023 23:03:44 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 4/4] intel_idle: Add ibrs_off module parameter to force
- disable IBRS
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-References: <20230628022554.1638318-1-longman@redhat.com>
- <20230628022554.1638318-5-longman@redhat.com>
- <24b34b27-d2eb-e287-ffbb-29ffde66790d@infradead.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <24b34b27-d2eb-e287-ffbb-29ffde66790d@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230353AbjF2GiV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jun 2023 02:38:21 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A132D60;
+        Wed, 28 Jun 2023 23:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688020700; x=1719556700;
+  h=date:from:to:cc:subject:message-id;
+  bh=buuQ0RXqokD5mzPNOSRnxPRVCM1qRESl8ZxW9HDM0jY=;
+  b=a+4WAJqf34zB+zsDSeUgByn/6yMbYYhnF81EDIkMWMRVV9Vtj5E/+MtF
+   gU8B6Jn7uNuM6L3BRyn67KcoB0UjCutY56NnAh6G2ZxAGNAFUg5iisz3/
+   efxi6bowGJlTBpTxRvCx2jwSxb1U/kzI6uKALxQ4p7OOCOHNemF1aESS3
+   UkHORm42uMmezguAedydSbvzdJcGASZczjeD6U5wFBWnde1HeX5eSjWgb
+   SgtFN1gHYDfTq/qD9Qyj4UJLI11mDgsXKCS8Hbr/He1Knv8s6jr+gClg0
+   8rTvXGgwWvVhPDbsc0QB6bAFiIud4tArbxdZrvmpgnxdZAjOnCQhyi/lq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="341618567"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="341618567"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jun 2023 23:38:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10755"; a="782583356"
+X-IronPort-AV: E=Sophos;i="6.01,167,1684825200"; 
+   d="scan'208";a="782583356"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jun 2023 23:38:13 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qElID-000DuX-0a;
+        Thu, 29 Jun 2023 06:38:13 +0000
+Date:   Thu, 29 Jun 2023 14:38:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 9d05d0562d7a9d54117e68c262431378caae5b8e
+Message-ID: <202306291401.kTLwM2YG-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 6/27/23 22:58, Randy Dunlap wrote:
-> Hi,
->
-> On 6/27/23 19:25, Waiman Long wrote:
->>   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
->>   drivers/idle/intel_idle.c                   | 14 ++++++++++++--
->>   2 files changed, 28 insertions(+), 3 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
->> index b799a43da62e..8604e6d1fe2c 100644
->> --- a/Documentation/admin-guide/pm/intel_idle.rst
->> +++ b/Documentation/admin-guide/pm/intel_idle.rst
-> You may take or leave these comments as you choose.
->
->> @@ -216,6 +216,21 @@ are ignored).
->>   The idle states disabled this way can be enabled (on a per-CPU basis) from user
->>   space via ``sysfs``.
->>   
->> +The ``ibrs_off`` module parameter is a boolean flag (default to false). It is
->                                                         (default false).
-> or
->                                                         (defaults to false).
->
-> Then I think it reads better if the next sentence begins with: "If set,"
-> instead of having it in the middle of the sentence.
->
->> +used to control if IBRS (Indirect Branch Restricted Speculation) should be
->> +turned off, if set, when the CPU enters an idle state.  This flag will not
->> +affect CPUs that are using Enhanced IBRS which can remain on with little
->> +performance impact.
->> +
->> +For some CPUs, IBRS will be selected as mitigation for Spectre v2 and Retbleed
->> +security vulnerabilities by default.  Leaving the IBRS mode on while idling may
->> +have a performance impact on its sibling CPU.  The IBRS mode will be turned off
->> +by default when the CPU enters into a deep idle state, but not in some
->> +shallower ones.  Setting the ``ibrs_off`` module parameter will force the IBRS
->> +mode to off when the CPU is in any one of the available idle states.  This may
->> +help performance of a sibling CPU at the expense of a slightly higher wakeup
->> +latency for the idle CPU.
-> thanks.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 9d05d0562d7a9d54117e68c262431378caae5b8e  Merge branch 'pm-cpuidle' into linux-next
 
-Thanks for the suggestion. I will make the change if I have to revise 
-the patch again for any reason.
+elapsed time: 721m
 
-Cheers,
-Longman
+configs tested: 128
+configs skipped: 9
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r004-20230628   gcc  
+alpha                randconfig-r021-20230628   gcc  
+alpha                randconfig-r031-20230628   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     haps_hs_smp_defconfig   gcc  
+arc                  randconfig-r006-20230628   gcc  
+arc                  randconfig-r043-20230628   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                          ixp4xx_defconfig   clang
+arm                          pxa168_defconfig   clang
+arm                  randconfig-r002-20230628   gcc  
+arm                  randconfig-r032-20230628   gcc  
+arm                  randconfig-r035-20230628   gcc  
+arm                  randconfig-r046-20230628   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r005-20230628   clang
+arm64                randconfig-r036-20230628   clang
+csky                                defconfig   gcc  
+hexagon              randconfig-r022-20230628   clang
+hexagon              randconfig-r041-20230628   clang
+hexagon              randconfig-r045-20230628   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230628   clang
+i386         buildonly-randconfig-r005-20230628   clang
+i386         buildonly-randconfig-r006-20230628   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230628   clang
+i386                 randconfig-i002-20230628   clang
+i386                 randconfig-i003-20230628   clang
+i386                 randconfig-i004-20230628   clang
+i386                 randconfig-i005-20230628   clang
+i386                 randconfig-i006-20230628   clang
+i386                 randconfig-i011-20230628   gcc  
+i386                 randconfig-i012-20230628   gcc  
+i386                 randconfig-i013-20230628   gcc  
+i386                 randconfig-i014-20230628   gcc  
+i386                 randconfig-i015-20230628   gcc  
+i386                 randconfig-i016-20230628   gcc  
+i386                 randconfig-r005-20230628   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r025-20230628   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r031-20230628   gcc  
+m68k                 randconfig-r032-20230628   gcc  
+microblaze           randconfig-r034-20230628   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r002-20230628   gcc  
+openrisc             randconfig-r004-20230628   gcc  
+openrisc             randconfig-r021-20230628   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r003-20230628   gcc  
+parisc               randconfig-r011-20230628   gcc  
+parisc               randconfig-r012-20230628   gcc  
+parisc               randconfig-r016-20230628   gcc  
+parisc               randconfig-r022-20230628   gcc  
+parisc               randconfig-r023-20230628   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r015-20230628   gcc  
+powerpc              randconfig-r026-20230628   gcc  
+powerpc              randconfig-r034-20230628   clang
+powerpc                     skiroot_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230628   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r012-20230628   gcc  
+s390                 randconfig-r015-20230628   gcc  
+s390                 randconfig-r036-20230628   clang
+s390                 randconfig-r044-20230628   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r003-20230628   gcc  
+sh                   randconfig-r024-20230628   gcc  
+sh                           se7705_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r013-20230628   gcc  
+sparc64              randconfig-r006-20230628   gcc  
+sparc64              randconfig-r025-20230628   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r014-20230628   clang
+um                   randconfig-r023-20230628   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230628   clang
+x86_64       buildonly-randconfig-r002-20230628   clang
+x86_64       buildonly-randconfig-r003-20230628   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r001-20230628   clang
+x86_64               randconfig-x001-20230628   gcc  
+x86_64               randconfig-x002-20230628   gcc  
+x86_64               randconfig-x003-20230628   gcc  
+x86_64               randconfig-x004-20230628   gcc  
+x86_64               randconfig-x005-20230628   gcc  
+x86_64               randconfig-x006-20230628   gcc  
+x86_64               randconfig-x011-20230628   clang
+x86_64               randconfig-x012-20230628   clang
+x86_64               randconfig-x013-20230628   clang
+x86_64               randconfig-x014-20230628   clang
+x86_64               randconfig-x015-20230628   clang
+x86_64               randconfig-x016-20230628   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
