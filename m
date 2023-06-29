@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D855742D14
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 21:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73ACE742D4C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jun 2023 21:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232523AbjF2TMG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 29 Jun 2023 15:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
+        id S231539AbjF2TQg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 29 Jun 2023 15:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234441AbjF2TLW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jun 2023 15:11:22 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955D259EB
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jun 2023 12:03:27 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98dfd15aae1so29730866b.0
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jun 2023 12:03:27 -0700 (PDT)
+        with ESMTP id S234046AbjF2TQM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Jun 2023 15:16:12 -0400
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB57293CC
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jun 2023 12:07:49 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-98502b12fd4so25983066b.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jun 2023 12:07:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688065406; x=1690657406;
+        d=1e100.net; s=20221208; t=1688065668; x=1690657668;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6R9kSAgaZYmHgiyvxUGAUXjOTjIm3tdUzpLvFa67Y/A=;
-        b=SuwcHIR7i/4x+A5VOMAoc4+bsIdz6W1fdqBKLOr+0qBqtTd6fPgyd0YxbvmdHY8Dkw
-         dnXiI9ePOD9tvJYY3xHHsIfMnjel0D974BLPOxYvxCp5DeIxzMvWuV5Lv7lGCcqzYIW1
-         WU3nB1zFNkHXdZh9JVLVxqBokmjjIJ7wxe6R2FMNumkhokbbS1Jm3X+POsohzYROXvlq
-         2uzg3wcADWTWVNr59jXdsIo97g/NBCxLcncI9c3kCKY4gMOICIDEGLTUilzkP/9YSGCs
-         mLlBfA95fG8Sr952Ks/OejkJTNHBSJHKVemlyswM717SMoTHMGdfqsav3LDEiVBK9m5q
-         dBvQ==
-X-Gm-Message-State: ABy/qLZHkjZ5iE/JNXvFYYN/bHsN2i44YaouuRsZPX87Q33PfZH0/TyN
-        DLO/8/WuJVldtx3rozVqQtUCAljlfoqnNlb8qrJIHvIv
-X-Google-Smtp-Source: APBJJlH+LpLLAnf+zEA3KT/yrQ7kjqPce9nDkvCH/aoe6ZODwQ3paRI2zr9BsiXnQYn5G9AenZe7e08/3BeRBsW4dX0=
-X-Received: by 2002:a17:907:119a:b0:987:6960:36c5 with SMTP id
- uz26-20020a170907119a00b00987696036c5mr257825ejb.6.1688065405448; Thu, 29 Jun
- 2023 12:03:25 -0700 (PDT)
+        bh=qZbDXG8/P8AC0d5PmWBfdocnKrP8P7g8d4t1BrxofpI=;
+        b=Dji4p+hcpDq8qe4Z0lKmF1v9hWF2X3i0qp3nJjhr3vUwjydt/x39phxroGkWCpOd6L
+         /nONNnJELrV1FUBadjuc1T/ivnwoRfV8uh4J5PD56Xwh+9x1tFzLh7g777a4PK8Ww/Hl
+         ZnHWtpyJm5YaED2ZQ+1aZFJ0rj3SGgvMMI/+K4SHSRibnutqCma7anziFx9LS++mtzJ0
+         TO8JPTlQWOCRoJ6eyH1ddVDFe8LkCCmD3DNxn4xnzyGtWSg++G4SHf9qFRjq/eRVhvrr
+         Zd0op1mbHd7iwamMGkFWUwCL6lR2ffoiqR/sUwJikfC0o3p0DrqIKk0MPpi9qfH16Am0
+         y8vQ==
+X-Gm-Message-State: ABy/qLbtFXK15js8D9QYKwVS+mnkS4NlCOFwQuanM7bK+yh9j2FQCLY2
+        SpflbaLaPnbRsQyaBlUp2KbTzI1VXxw2i+b6jlo=
+X-Google-Smtp-Source: APBJJlG+4LY2Y6lO1eCOuN0mbtFNkr3YI68mXHb78e4rf4RROAQxAiPrsNNcXjYS0Mbf/FJKdxt2MwTdhx0WTk44+gs=
+X-Received: by 2002:a17:906:148c:b0:987:6960:36c6 with SMTP id
+ x12-20020a170906148c00b00987696036c6mr209859ejc.5.1688065667948; Thu, 29 Jun
+ 2023 12:07:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230610183518.4061159-1-dedekind1@gmail.com> <20230610183518.4061159-2-dedekind1@gmail.com>
-In-Reply-To: <20230610183518.4061159-2-dedekind1@gmail.com>
+References: <20230525211655.627415-1-evalenti@kernel.org> <fb558491-9906-fb3a-60c5-349cb4210695@linaro.org>
+ <ZH5ve2KX/Y0DXQnE@uf8f119305bce5e.ant.amazon.com> <ZH5whRBkGCun3Gq+@uf8f119305bce5e.ant.amazon.com>
+In-Reply-To: <ZH5whRBkGCun3Gq+@uf8f119305bce5e.ant.amazon.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Jun 2023 21:03:14 +0200
-Message-ID: <CAJZ5v0jiuenEnLjeZg+rksLT5D1f0-0Xad98rumR+vJReCXx7Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] x86/mwait: Add support for idle via umwait
-To:     Artem Bityutskiy <dedekind1@gmail.com>, x86@kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>
+Date:   Thu, 29 Jun 2023 21:07:36 +0200
+Message-ID: <CAJZ5v0gbwRNrjBOxGfFTNJ2meBU3fncBpeHZSCAjhFRYQ9VkaA@mail.gmail.com>
+Subject: Re: [PATCH 0/3] thermal: hook in with reboot and crash
+To:     Eduardo Valentin <evalenti@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
+        linux-pm@vger.kernel.org, Eduardo Valentin <eduval@amazon.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -58,115 +58,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 8:35 PM Artem Bityutskiy <dedekind1@gmail.com> wrote:
+On Tue, Jun 6, 2023 at 1:32 AM Eduardo Valentin <evalenti@kernel.org> wrote:
 >
-> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> On Mon, Jun 05, 2023 at 04:27:55PM -0700, Eduardo Valentin wrote:
+> >
+> >
+> >
+> > On Fri, May 26, 2023 at 10:27:39AM +0200, Daniel Lezcano wrote:
+> > >
+> > >
+> > >
+> > > Hi,
+> > >
+> > > On 25/05/2023 23:16, Eduardo Valentin wrote:
+> > > > From: Eduardo Valentin <eduval@amazon.com>
+> > > >
+> > > > Hello,
+> > > >
+> > > > This small series of changes teaches thermal core about
+> > > > reboot and crash callbacks. The intention is to have the core
+> > > > to get notified and the pass in the event to thermal governors
+> > > > that are willing to perform actions during reboot or crash events.
+> > > > The thermal workers will be teared down in the process too.
+> > >
+> > > What problem does it solve?
+> >
+> > This cover letter was not clear enough. In fact, the context for
+> > all patches I am sending now and will be sending in near future
+> > is when the thermal subsystem is configured to control temperature
+> > of a target device. The thermal subsystem is configured to have
+> > cooling devices that will act on the target system, and has
+> > input, temperature sensors, to have visibility to the target system
+> > temperature.  In this case, the problem is when the controlling system
+> > becomes unresponsive upon reboot or crash, therefore losing
+> > control of temperature of the target system. This series solves the
+> > problem by giving knowledge to the governors of such events, allowing
+> > the governors to have opportunity to act before the actual event happens.
 >
-> On Intel platforms, C-states are requested using the 'monitor/mwait'
-> instructions pair, as implemented in 'mwait_idle_with_hints()'. This
-> mechanism allows for entering C1 and deeper C-states.
 >
-> Sapphire Rapids Xeon supports new idle states - C0.1 and C0.2 (later C0.x).
-> These idle states have lower latency comparing to C1, and can be requested
-> with either 'tpause' and 'umwait' instructions.
+> Again, this is a different situation than a emergence shutdown due to
+> temperature/overheat on the typical application of the thermal subsystem.
+> Where it runs in the same system it controls the temperature of.
 >
-> Linux already uses the 'tpause' instruction in delay functions like
-> 'udelay()'. This patch adds 'umwait' and 'umonitor' instructions support.
->
-> 'umwait' and 'tpause' instructions are very similar - both send the CPU to
-> C0.x and have the same break out rules. But unlike 'tpause', 'umwait' works
-> together with 'umonitor' and exits the C0.x when the monitored memory
-> address is modified (similar idea as with 'monitor/mwait').
->
-> This patch implements the 'umwait_idle()' function, which works very
-> similarly to existing 'mwait_idle_with_hints()', but requests C0.x. The
-> intention is to use it from the 'intel_idle' driver.
->
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Here we want to reduce the likelihood of loosing control of temperature of a target systems
+> upon events where the controlling system is unavailable.
 
-x86 folks, any comments on this?
+So the use case for this seems to be a BMC running Linux that is
+responsible for the thermal control of a host system.
 
-Barring any concerns, I would like to queue it up for 6.6 when the
-merge is over.
-
-> ---
->  arch/x86/include/asm/mwait.h | 65 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
->
-> diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
-> index 778df05f8539..681c281eeaa7 100644
-> --- a/arch/x86/include/asm/mwait.h
-> +++ b/arch/x86/include/asm/mwait.h
-> @@ -141,4 +141,69 @@ static inline void __tpause(u32 ecx, u32 edx, u32 eax)
->         #endif
->  }
->
-> +#ifdef CONFIG_X86_64
-> +/*
-> + * Monitor a memory address at 'rcx' using the 'umonitor' instruction.
-> + */
-> +static inline void __umonitor(const void *rcx)
-> +{
-> +       /* "umonitor %rcx" */
-> +#ifdef CONFIG_AS_TPAUSE
-> +       asm volatile("umonitor %%rcx\n"
-> +                    :
-> +                    : "c"(rcx));
-> +#else
-> +       asm volatile(".byte 0xf3, 0x0f, 0xae, 0xf1\t\n"
-> +                    :
-> +                    : "c"(rcx));
-> +#endif
-> +}
-> +
-> +/*
-> + * Same as '__tpause()', but uses the 'umwait' instruction. It is very
-> + * similar to 'tpause', but also breaks out if the data at the address
-> + * monitored with 'umonitor' is modified.
-> + */
-> +static inline void __umwait(u32 ecx, u32 edx, u32 eax)
-> +{
-> +       /* "umwait %ecx, %edx, %eax;" */
-> +#ifdef CONFIG_AS_TPAUSE
-> +       asm volatile("umwait %%ecx\n"
-> +                    :
-> +                    : "c"(ecx), "d"(edx), "a"(eax));
-> +#else
-> +       asm volatile(".byte 0xf2, 0x0f, 0xae, 0xf1\t\n"
-> +                    :
-> +                    : "c"(ecx), "d"(edx), "a"(eax));
-> +#endif
-> +}
-> +
-> +/*
-> + * Enter C0.1 or C0.2 state and stay there until an event happens (an interrupt
-> + * or the 'need_resched()'), the explicit deadline is reached, or the implicit
-> + * global limit is reached.
-> + *
-> + * The deadline is the absolute TSC value to exit the idle state at. If it
-> + * exceeds the global limit in the 'IA32_UMWAIT_CONTROL' register, the global
-> + * limit prevails, and the idle state is exited earlier than the deadline.
-> + */
-> +static inline void umwait_idle(u64 deadline, u32 state)
-> +{
-> +       if (!current_set_polling_and_test()) {
-> +               u32 eax, edx;
-> +
-> +               eax = lower_32_bits(deadline);
-> +               edx = upper_32_bits(deadline);
-> +
-> +               __umonitor(&current_thread_info()->flags);
-> +               if (!need_resched())
-> +                       __umwait(state, edx, eax);
-> +       }
-> +       current_clr_polling();
-> +}
-> +#else
-> +#define umwait_idle(deadline, state) \
-> +               WARN_ONCE(1, "umwait CPU instruction is not supported")
-> +#endif /* CONFIG_X86_64 */
-> +
->  #endif /* _ASM_X86_MWAIT_H */
-> --
-> 2.40.1
->
+It kind of escapes me why you want a thermal governor in the BMC's
+kernel to be part of this.
