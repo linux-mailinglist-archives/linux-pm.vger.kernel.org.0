@@ -2,172 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1BB743C04
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 14:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8F8743916
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 12:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjF3Mhc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 08:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S233051AbjF3KLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 06:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjF3Mhb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 08:37:31 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281501B4;
-        Fri, 30 Jun 2023 05:37:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bt245ibCfjZqVop8VQNlf2yxYf/vplLGuYeM+hMxt5a1V1UFkxBSfZGzNdBtBbmVf95ssURSK2YkLOgTjkpDxt+nh5mPTMaq83jDm/ZrxMc3djpSF0Q43sgJKpsOWlC3L8cvpuLOGzR5Yv9j9nAhHLN2PlLX3l7GTvlLL0p0vcSkbPimkUU+AAycz8Q4WW5mK1yl9WL7kvehn0+cCamH7b2wA+pDkYZ9K9lat914bJNsV7iMRRcIHxjpClTdWid/4GiW5y4g483jdDU+hOr6FqOhZwgUoEcrmlY+3BDaHl6Q7SOjN4S8Yq1KLoTfAF3xxMjwXoJfMEv4TjpMmmpqFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fvU+4emVaOWoXWU/Y5gen1tfKdOurL2XUOUgchr6ZYY=;
- b=oEVI1moCp8w0w5O2VYt5Pze5hz11coe3Xdytl4zDR8m2cFQ0g4Kk3ggg7hkJI6j+i/yAHURGGKmFnN1M59HeLm2YMVnzJ+GF0bWwBFsHwbwUxR6/TD4Jy9EGpnrsHwwZAUa1ufb/dWMQrjP5976vuyLh7jYKte/LKeTTrTZx/A3Xua6/PY2i8MIggp7y+Cpc+cvzEaojvfg82PONoi1YwcUK6cCGA9CGIvPogwy+3C5cmOZbZhEcBleHA4XMpEjtQgaX1xJMqvZdubhHJjZ+sv7OU0WoFxDN7EZdIm112LT6HqUf2cOFb9lhmOVymuCyULb7Z351kONx+qFgGatprQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fvU+4emVaOWoXWU/Y5gen1tfKdOurL2XUOUgchr6ZYY=;
- b=cuWXpxBd/6m0DlzfDFt3R8Q/BwvXs/XyqKhfmfcU3k58SCkFLhU2dNICXEHbJs+nMIudQWPwaJkM4pBfJ9fLSzS5atKDXIDLX7kJqP/t9YFQZR6C8RECOExKQpqq/A48taMlGvMOoCEUIMHlmqtSBngMa8mjHff0LEN7AMxfS6g=
-Received: from BN8PR03CA0030.namprd03.prod.outlook.com (2603:10b6:408:94::43)
- by PH7PR12MB7187.namprd12.prod.outlook.com (2603:10b6:510:203::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Fri, 30 Jun
- 2023 12:37:26 +0000
-Received: from BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:94:cafe::3b) by BN8PR03CA0030.outlook.office365.com
- (2603:10b6:408:94::43) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.22 via Frontend
- Transport; Fri, 30 Jun 2023 12:37:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT016.mail.protection.outlook.com (10.13.176.97) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.49 via Frontend Transport; Fri, 30 Jun 2023 12:37:24 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 30 Jun
- 2023 07:37:23 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Wyes Karny <wyes.karny@amd.com>,
-        Perry Yuan <perry.yuan@amd.com>
-Subject: [PATCH] cpufreq: amd-pstate: Add sysfs file for base frequency
-Date:   Thu, 29 Jun 2023 08:54:54 -0500
-Message-ID: <20230629135454.177421-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232234AbjF3KLb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 06:11:31 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7934A2681
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 03:11:28 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fb960b7c9dso2715048e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 03:11:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688119887; x=1690711887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4BFlfbAIfoDlnMUceOo+cEC26pgciEbyD8McQYGYoy0=;
+        b=U3e2f+aVKn74qcFA9TjZ5GPgcDNPKp04o7E2EJ/PScAt5JDpMuxteBQsSdxxPab8g1
+         fiBkdu3NllhwoBnxeQsCQk79/bxOzxWsamlKuCt6NEePCUmljoyAyzYjMapGCPA+Lnjo
+         EH73XvElbVyB0iKqnj46NFFwFg1AJZyA/Ve/EONDmQnnqm4WtId7Xw0OoSnYzKbDqeCm
+         AZ0W2tR+BFMxACXes2qJCIHIjoivKsa9HaLfcMvYTgaOj2DPoe3zISnm7MDJMMOzvozV
+         geIc4j3TffAsF7W/7bN/fhzvZPpG2YxOXw4OJ03oGtHUSGqem9tdDF7/eoCahgQWnnO3
+         f+hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688119887; x=1690711887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4BFlfbAIfoDlnMUceOo+cEC26pgciEbyD8McQYGYoy0=;
+        b=YVDdlHdn06TNpwFMjc7WP3Q6LNqx4cxcQdE4pyUIsFzdB6xjiHt9NEPZhWNvEVadaW
+         wkFUMeoPcm3H1cLJijSskViUGQ2Flzx/E1v5Eo//oHA1p7QD2M/TMKex0q/eN+q4tes1
+         GZvjVVdot6/Aib5XZRPfNy8jIWGkZOW2dZGPJYleoNq0xQtaNaEvkUdPQdA+HMLU6syK
+         MzhsNKtrsL1L5md7XHrkLtil5593h89nlMtZx1YHzVCJgOC92mCBIYhwv0VslH/OPdnx
+         YjeSqgX8h/r6hg2aDobe8WZXyGaYSKDDrkVZ/ZUqvk+f7DaHmVxuTPk0ZtI0cvD5+O7S
+         I2RQ==
+X-Gm-Message-State: ABy/qLZfn1zFHgPh4iusxAnempl59NXwSVMBOcxqlBklRaP10psWVB4k
+        XWmb/ffRKukgDsM+XJ2k0LXjc/su3f5VLYMpss4=
+X-Google-Smtp-Source: APBJJlGnhWJ4b9VxEgxH1ES2aQkjiqmgJhB9RNzeKyXcqPp/Vv6GLW4EAwOh/lUJ173h512qaK8yiA==
+X-Received: by 2002:a19:910a:0:b0:4f8:7568:e953 with SMTP id t10-20020a19910a000000b004f87568e953mr1720528lfd.35.1688119886617;
+        Fri, 30 Jun 2023 03:11:26 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id m8-20020adffe48000000b002c71b4d476asm18041198wrs.106.2023.06.30.03.11.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jun 2023 03:11:26 -0700 (PDT)
+Message-ID: <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
+Date:   Fri, 30 Jun 2023 12:11:25 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Eduardo Valentin <evalenti@kernel.org>
+Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <20230607003721.834038-1-evalenti@kernel.org>
+ <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
+ <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+ <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
+ <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
+ <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
+ <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+ <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT016:EE_|PH7PR12MB7187:EE_
-X-MS-Office365-Filtering-Correlation-Id: a7a3fc03-5868-4ba4-411d-08db7966c1e8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HLYF5Mu2mlXM3IA/uVSV/sySXKywfTgnek9V4goeaf6r9GBt3jNGuIGRbMig2GP5ulnLuktHs9lJo368pd5VxU3TrMXtFAUHlpjrUksiG4iLa2JIwCxT0sme2/OvMVI5zawCGTTD1jSXW+oUslvD1BolTLQIiJF8HWpNue6rmsJAO6R9yLj4uapFurQKaTqX/K84+DZeq7C0y+tcbgaq8pHejj3Kl6m9sR/5PGLs8me4LYAE50E9b8mZZt3o1yRGLjnHIkHhxD/+O1BUSxj8afXzUjRoGji5LY8CZ5MC8hfl9nxYvBTNF1vwuL2dCCeUl+5Ys/dMQL8TzI28kOyl1y/1oLjTi7l1lZehFJ16KY4x7KpqGYJyqAkjLIYs4Rdwl0ljdQ9RuwytIOgT96zawc1CGy4/3BLoy3VIiLMytpje09ETN9H6nVr9q72U79bjv5ODoezOWFtx09hVO5QzMbpFo7oulX6Wgih500JtEExGq58Wz46Mi8eppI9GL+fSl1rV5jvCte+WbOsKFJLnbDLTJLtkwgq7uxJPpjBzTJ6A2ySVbM0uPgfmv5HnOvG8cxjggNi4z/UNSG4ChXBYV2uRNtEjvtKfHN6D0UFVB2eLDhglyS8vaDfHOjNo6PlCHPnBdG97+Iklc8zdVkGHIud9rLywXdANNZNnprWFUSNbaIng+HS2SqTlcpETAfMO+QyMjfPa3v9geeAzvxv5vMregPO538IGt9fQhV1l8ZIUAwKsYZeq+fDaWouGS4s2XYSVmxRxJjt6DPkA+I/p1dRRMoZllrhGyiwZckLowss=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(82310400005)(1076003)(36860700001)(36756003)(5660300002)(44832011)(356005)(86362001)(47076005)(41300700001)(8676002)(316002)(81166007)(4326008)(70586007)(8936002)(40480700001)(82740400003)(40460700003)(70206006)(2906002)(478600001)(186003)(26005)(16526019)(2616005)(7696005)(336012)(6666004)(426003)(83380400001)(110136005)(54906003)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2023 12:37:24.9437
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7a3fc03-5868-4ba4-411d-08db7966c1e8
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7187
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some applications may want to query the base frequency to tell when
-a processor is operating in boost.
 
-Tested-by: Wyes Karny <wyes.karny@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Co-developed-by: Perry Yuan <perry.yuan@amd.com>
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst |  4 ++++
- drivers/cpufreq/amd-pstate.c                | 15 +++++++++++++++
- 2 files changed, 19 insertions(+)
+Hi Rafael,
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 1cf40f69278cd..e68267857e859 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -281,6 +281,10 @@ integer values defined between 0 to 255 when EPP feature is enabled by platform
- firmware, if EPP feature is disabled, driver will ignore the written value
- This attribute is read-write.
- 
-+``base_frequency``
-+	Shows the base frequency of the CPU. Frequencies above this will be in the
-+  ``boost`` range. This attribute is read-only.
-+
- Other performance and frequency values can be read back from
- ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
- 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 81fba0dcbee99..0fec66b3f7241 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1037,6 +1037,19 @@ static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
- 	return ret < 0 ? ret : count;
- }
- 
-+static ssize_t show_base_frequency(struct cpufreq_policy *policy, char *buf)
-+{
-+	struct amd_cpudata *cpudata = policy->driver_data;
-+	u32 nominal_freq;
-+
-+	nominal_freq = amd_get_nominal_freq(cpudata);
-+	if (nominal_freq < 0)
-+		return nominal_freq;
-+
-+	return sysfs_emit(buf, "%d\n", nominal_freq);
-+}
-+
-+cpufreq_freq_attr_ro(base_frequency);
- cpufreq_freq_attr_ro(amd_pstate_max_freq);
- cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
- 
-@@ -1049,6 +1062,7 @@ static struct freq_attr *amd_pstate_attr[] = {
- 	&amd_pstate_max_freq,
- 	&amd_pstate_lowest_nonlinear_freq,
- 	&amd_pstate_highest_perf,
-+	&base_frequency,
- 	NULL,
- };
- 
-@@ -1058,6 +1072,7 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
- 	&amd_pstate_highest_perf,
- 	&energy_performance_preference,
- 	&energy_performance_available_preferences,
-+	&base_frequency,
- 	NULL,
- };
- 
+On 30/06/2023 10:16, Rafael J. Wysocki wrote:
+> On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
+
+[ ... ]
+
+> So what about adding a new zone attribute that can be used to specify
+> the preferred caching time for the temperature?
+> 
+> That is, if the time interval between two consecutive updates of the
+> cached temperature value is less than the value of the new attribute,
+> the cached temperature value will be returned by "temp".  Otherwise,
+> it will cause the sensor to be read and the value obtained from it
+> will be returned to user space and cached.
+> 
+> If the value of the new attribute is 0, everything will work as it
+> does now (which will also need to be the default behavior).
+
+I'm still not convinced about the feature.
+
+Eduardo provided some numbers but they seem based on the characteristics 
+of the I2C, not to a real use case. Eduardo?
+
+Before adding more complexity in the thermal framework and yet another 
+sysfs entry, it would be interesting to have an experiment and show the 
+impact of both configurations, not from a timing point of view but with 
+a temperature mitigation accuracy.
+
+Without a real use case, this feature does make really sense IMO.
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
