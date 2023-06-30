@@ -2,169 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CCA743BA5
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 14:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E5BA743CB1
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 15:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjF3MKu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 08:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
+        id S232667AbjF3NZW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 09:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbjF3MKE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 08:10:04 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5764208
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 05:09:47 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fbc77e769cso5707365e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 05:09:47 -0700 (PDT)
+        with ESMTP id S232285AbjF3NZU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 09:25:20 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82223A8E
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 06:25:13 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f95bf5c493so2887082e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 06:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688126986; x=1690718986;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UaXDbRXR16mJA/DvXoLGkVIltz9YV1CgHioJo6bSNC4=;
-        b=KLr1MH/l+Z1HIOFz6gcyq5RfDHsv3Dfdi2Ot4OKJp0s73JoWGcIbVkRXO8bRfbu/kM
-         1g9h3fdfzDSnxz7K0kIMAPnZwdNnmAeFirQr3C4OIXyyiazpA87MgJ7NJb7HwxFWqqst
-         M4KRgHsjQyABwHjWYLTlR1h5dQuE74cgM3FXT2MnJFkH89wD4Uvmmobfnstejqsiadb6
-         KVjyh9z3XDnndOFVDe+STBYlEgXHhqYNkjBki1gxA7Hs3YDIwbW/UaasmpkeOZ5Mttcu
-         KKoqgZOas4fpiGHFNecLnXng6wiEm8ZvI3tBsogfu6ynAQ8bI0MLKUitrWQbF9vZGRAn
-         pFZA==
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688131512; x=1690723512;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qk/29pUWn0vGiMuP9Cfi3/EYqLftvL8xXi5fIA2JMrc=;
+        b=j+mHcNT0pkueAkNDWn7hm9eltY0NULS+J2NyiRE9ZLAh+KhRE7usnmg68+2I5JRgTy
+         0PL/HWtrOw/Pc3hhmE1FoYMWYkYKR13Wgy7vWcaqc0ujgZN5PwvXkbzgFhcZwpbUYrPa
+         JHZf4Otfur/p+BpVsSRlscKUY3dhWBuKbY0DIeoF1hb7TXh/48xIv3ygo+tbtHmo71b/
+         Sg1rEHUQvfI+3lI7DZX788Ln9+FIg2kfDisV06CoBI5zx3VKIIrLAKPA2BsK5rMz4buV
+         fzfvAztbyZjB9cpZOPwP6SYu2X7/UdDdloLWi+GoMOfFAm1GcOeyjdjf8dXtLyJiSyJn
+         a8kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688126986; x=1690718986;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UaXDbRXR16mJA/DvXoLGkVIltz9YV1CgHioJo6bSNC4=;
-        b=fIZ6gi9Tmx0W/fNoK0AfAZsiMJ04H8L/zVCI136M/qrLZ0Ez2BDsKQ5rVbJ5ZUNGXO
-         9BTECmq5IyaxxvdgcaeYAc92tuCCV3qCqnfliJ2K0rDQCHwVXkxflMmMM6v+w55OVj9l
-         Iu6dhpFtePDpkfgBWbLDWA87TQlgXHcvE8UUQRKJZh8CGKHx6CZDQgIkv1o7+oSmw/y2
-         BL8Emr3CcwobJ2U0RwTfQuxs9VHYuq0qcOwcZXmlLpnXyuDVyTZczlGqr5ml/tnpz73B
-         TPWJpI+cVQyJS0W05XCtUwGwZvQE+OnHcYkLssv0zLvu4dQbZyzu51z7d9em4mSCAQc8
-         0BIg==
-X-Gm-Message-State: AC+VfDy/DX+B7hHJj6FoXGytEY8HwgDrzFjKaV0eWYMoW3LWulYbn6EV
-        vTlz1FDZUNjtxb7UWvnwU8SHosiTO+86mSTLoP4=
-X-Google-Smtp-Source: ACHHUZ7Zr9JheT31uWfVeoOIRMYD7XEYRB6a/+4vpFtFxY8TlMJoafCn5J7IBRGnDhBFRrK2O26Msg==
-X-Received: by 2002:a7b:c397:0:b0:3fa:74ae:df9f with SMTP id s23-20020a7bc397000000b003fa74aedf9fmr1907548wmj.37.1688126985695;
-        Fri, 30 Jun 2023 05:09:45 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id x9-20020a05600c21c900b003fb40ec9475sm11797771wmj.11.2023.06.30.05.09.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jun 2023 05:09:45 -0700 (PDT)
-Message-ID: <1373aef0-c837-8e6f-fc94-9c6bd70a5b31@linaro.org>
-Date:   Fri, 30 Jun 2023 14:09:44 +0200
+        d=1e100.net; s=20221208; t=1688131512; x=1690723512;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Qk/29pUWn0vGiMuP9Cfi3/EYqLftvL8xXi5fIA2JMrc=;
+        b=DiGznInxTNtsbT85uEv95MeV0i6B+EiRfiKVhLq8A+KluhT1N19G3CiXf9NSIUFd+P
+         cR3uxjGBfbV515UexyS3kL7pIeS2h5isxBrd7VYzO25nBOxS5iHsU6Chm+lDDoJlJOGz
+         zSQQEK6A8iBfYsp0EMFVHtjvWNt0AEcdQGUhh1SqtTQDySlkUbQO24JTp9MjQ/9pwBuq
+         pbRYENwy0dFU/R+C7/UL16QsG+RQKhkJmr83JgCqFBwjEG2qccvopknLBID+6acGltoV
+         ez2i5+Z+WX9cQ/BTtFMaQZiDTw8K2w+DVC2ftZwfT+mqWA9jBNH3F5cIkpuJXPcpEgTZ
+         gQqg==
+X-Gm-Message-State: ABy/qLa5mMKPzYZ3CgIYAGmupfAi4JzSu3K6tqN5BoG1BSot9vSPUSd3
+        Ni72suNisef82BLKaYKLdVvOIw==
+X-Google-Smtp-Source: APBJJlFAg/rPCVEk3WXaVAiwSdndbFcfE5OcjnvsY8jXMLH02zphj9zIfobyZothbq+hgt0ET9b+4A==
+X-Received: by 2002:a05:6512:455:b0:4fa:9dc3:1d41 with SMTP id y21-20020a056512045500b004fa9dc31d41mr2182003lfk.51.1688131511950;
+        Fri, 30 Jun 2023 06:25:11 -0700 (PDT)
+Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
+        by smtp.gmail.com with ESMTPSA id q20-20020a1cf314000000b003f90b9b2c31sm22251634wmq.28.2023.06.30.06.25.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 06:25:11 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 14:25:07 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
+        qyousef@google.com, kernel test robot <lkp@intel.com>
+Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
+ filter out requests
+Message-ID: <20230630132507.hggzz5g2odrabii6@airbuntu>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-4-lukasz.luba@arm.com>
+ <20230531183105.r5tqpdx5axoogkzp@airbuntu>
+ <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
+ <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <20230607003721.834038-1-evalenti@kernel.org>
- <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
- <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
- <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
- <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
- <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
- <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
- <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
- <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
- <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/06/2023 12:46, Rafael J. Wysocki wrote:
-> Hi Daniel,
+On 06/30/23 13:01, Qais Yousef wrote:
+> On 06/20/23 18:52, Lukasz Luba wrote:
+> > Hi Qais,
+> > 
+> > I have somehow missed your feedback on this series.
+> > 
+> > On 5/31/23 19:31, Qais Yousef wrote:
+> > > On 05/22/23 15:57, Lukasz Luba wrote:
+> > > > Some of the frequency update requests coming form the task scheduler
+> > > > might be filter out. It can happen when the previous request was served
+> > > > not that long ago (in a period smaller than provided by the cpufreq driver
+> > > > as minimum for frequency update). In such case, we want to know if some of
+> > > > the frequency updates cannot make through.
+> > > > Export the new tracepoint as well. That would allow to handle it by a
+> > > > toolkit for trace analyzes.
+> > > > 
+> > > > Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
+> > > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > ---
+> > > >   include/trace/events/sched.h     |  4 ++++
+> > > >   kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
+> > > >   2 files changed, 12 insertions(+), 2 deletions(-)
+> > > > 
+> > > > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> > > > index dbfb30809f15..e34b7cd5de73 100644
+> > > > --- a/include/trace/events/sched.h
+> > > > +++ b/include/trace/events/sched.h
+> > > > @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
+> > > >   	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+> > > >   	TP_ARGS(tsk, uclamp_id, value));
+> > > > +DECLARE_TRACE(schedutil_update_filtered_tp,
+> > > > +	TP_PROTO(int cpu),
+> > > > +	TP_ARGS(cpu));
+> > > > +
+> > > >   #endif /* _TRACE_SCHED_H */
+> > > >   /* This part must be outside protection */
+> > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > > > index f462496e5c07..4f9daf258a65 100644
+> > > > --- a/kernel/sched/cpufreq_schedutil.c
+> > > > +++ b/kernel/sched/cpufreq_schedutil.c
+> > > > @@ -6,6 +6,8 @@
+> > > >    * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >    */
+> > > > +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
+> > > > +
+> > > >   #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
+> > > >   struct sugov_tunables {
+> > > > @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> > > >   	ignore_dl_rate_limit(sg_cpu);
+> > > > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> > > > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
+> > > > +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+> > > >   		return false;
+> > > > +	}
+> > > 
+> > > Can't we have something more generic here too? Are you interested to count
+> > > these events? How do you plan to use it?
+> > 
+> > The plan is to record those events, count them and maybe adjust the FW
+> > if the frequency switching capabilities are too low, e.g. 4ms...
 > 
-> On Fri, Jun 30, 2023 at 12:11 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Rafael,
->>
->> On 30/06/2023 10:16, Rafael J. Wysocki wrote:
->>> On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
->>
->> [ ... ]
->>
->>> So what about adding a new zone attribute that can be used to specify
->>> the preferred caching time for the temperature?
->>>
->>> That is, if the time interval between two consecutive updates of the
->>> cached temperature value is less than the value of the new attribute,
->>> the cached temperature value will be returned by "temp".  Otherwise,
->>> it will cause the sensor to be read and the value obtained from it
->>> will be returned to user space and cached.
->>>
->>> If the value of the new attribute is 0, everything will work as it
->>> does now (which will also need to be the default behavior).
->>
->> I'm still not convinced about the feature.
->>
->> Eduardo provided some numbers but they seem based on the characteristics
->> of the I2C, not to a real use case. Eduardo?
->>
->> Before adding more complexity in the thermal framework and yet another
->> sysfs entry, it would be interesting to have an experiment and show the
->> impact of both configurations, not from a timing point of view but with
->> a temperature mitigation accuracy.
->>
->> Without a real use case, this feature does make really sense IMO.
+> You mean as part of tuning step for the system or at runtime? The latter seems
+> to indicate for a proper interface instead.
 > 
-> I'm kind of unsure why you think that it is not a good idea in general
-> to have a way to limit the rate of accessing a temperature sensor, for
-> energy-efficiency reasons if nothing more.
+> IMHO I think the current filtering mechanism needs a bit of a massage.
+> 
+> One thing I think we must do is to ignore the filter if there's a big sudden
+> change in requested frequency. Like for instance if a big task migrates. Then
+> prev_cpu should go to lower freq sooner, and new_cpu should change to higher
+> frequency sooner too. The filtering makes sense only in steady state situation
+> where we are ramping up or down gradually.
+> 
+> If no one beats me to it, I'll propose something in that regard.
+> 
+> > 
+> > We need those numbers to point out that there is a need for faster
+> > FW micro-controller to serve those incoming requests.
+> 
+> I think there's a big assumption here that the filter is always set correctly
+> ;-)
+> 
+> > 
+> > > 
+> > > I think this will be a very noisy event by the way.
+> > 
+> > Could be, but on the other hand for those statistical analysis
+> > 'the more the better'. It will also depend on number of
+> > CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
+> > 
+> > I don't know when we will switch to this per-cpu cpufreq mode
+> > when all CPUs behave like independent DVFS. Juno mainline kernel and FW
+> > supports that mode. We would have to compare those two modes and
+> > measure how much we gain/loose when using one and not the other.
+> > 
+> > Furthermore, we already suspect some of our integration testing for
+> > EAS-mainline (on Juno) failing due to filtered out requests. How much
+> > that would impact other boards - it would be nice to see in traces.
+> 
+> Another problem I think we have is that the DVFS headroom value should be
+> a function of this filter. At the moment it is hardcoded to a random value
+> which causes power issue.
+> 
+> So to summarize I think there are two improvements required (and if anyone has
+> the time to try them out go ahead otherwise I'll get to it):
+> 
+>  1. The filter should only be applied if the history hasn't changed. ie: we are
+>     gradually increasing or decreasing PELT. Otherwise we should honour sudden
+>     changes ASAP.
+>  2. DVFS headroom should be a function of the filter. 25% is too high for
+>     500us. It could be too low for 10ms (I don't know).
 
-I don't think it is not a good idea. I've no judgement with the proposed 
-change.
+To expand a bit more since it's related. Our  migration margins should depend
+on the tick value instead of random magic numbers they are today. More
+precisely the balance_interval. If there's a misfit task, then we should
+upmigrate it at wake up only if we think it'll become misfit before the load
+balancer kicks in. Otherwise the load balancer should do the correction if it
+becomes long running/misfit. If the sys admin wants to speed up/slow down
+migration it should be throw controlling PELT IMO and not these magic margin
+values - which are hardcoded to random values at the moment anyway that are not
+suitable for every system.
 
-But I'm not convinced it is really useful, that is why having a real use 
-case and some numbers showing that feature solves the issue would be nice.
+And since we decoupled overutilized from misfit lb; I think our definition
+should improve to better detect when the system needs to disable packing and
+starts spreading. Current check for overutilized based on misfit is no longer
+adequate IMO. Especially when there's a single misfit task in the system.
 
-It is illogical we want a fast and accurate response on a specific 
-hardware and then design it with slow sensors and contention prone bus.
+Again, just sharing thoughts in case someone interested to work on this before
+I get a chance to share any patches ;-)
 
-In Eduardo's example, we have 100ms monitoring rate on a I2C. This rate 
-is usually to monitor CPUs with very fast transitions. With a remote 
-site, the monitoring rate would be much slower, so if there is a 
-contention in the bus because a dumb process is reading constantly the 
-temperature, then it should be negligible.
 
-All that are hypothesis, that is why having a real use case would help 
-to figure out the temperature limit drift at mitigation time.
+Cheers
 
-Assuming it is really needed, I'm not sure that should be exported via 
-sysfs. It is a driver issue and it may register the thermal zone with a 
-parameter telling the userspace rate limit.
-
-On the other side, hwmon and thermal are connected. hwmon drivers 
-register a thermal zone and thermal drivers add themselves in the hwmon 
-sysfs directory. The temperature cache is handled in the driver level in 
-the hwmon subsystems and we want to handle the temperature cache at the 
-thermal sysfs level. How will we cope with this inconsistency?
-
-As a side note, slow drivers are usually going under drivers/hwmon.
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+--
+Qais Yousef
