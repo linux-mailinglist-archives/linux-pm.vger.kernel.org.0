@@ -2,152 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B10E743A84
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 13:12:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 933BC743B20
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 13:50:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjF3LMM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 07:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
+        id S232740AbjF3Lt7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 07:49:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjF3LL7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 07:11:59 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF4735B6;
-        Fri, 30 Jun 2023 04:11:48 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1688123506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LBi2xn+NWrUQzLbxhPhUtfNKTaMAus8XdZkjy6jHSNM=;
-        b=418LKbfzErO8aWbRiCy6RicHEfWmrfLoIcdhuAdqKEQ/ZbLyV5fOr9TL2jgmxbiB1UJ3bl
-        L7RSNcul7PGGKtMoVG58xOTYMswwl0fvl2x6Gy3oeK78nmBEYbydnR6FVElSSy3QDkkQS4
-        aNdClghzIVSlb1kIYZa+lxNsG6dKqXTENfkuKKK8H3fwdANqYJnMII3qHGkdR7RslbGNzH
-        rMZSPPYA/DaN+m+jbNSRocp1b1dwjRh2NBrN92RDYtVGXNSXIAHcc+RtRHjhZQcR/LI027
-        /C9gb1mFySWZHISgYn13LNhN7Izd0dCqTTysj0/z5qIQHqLoTPKk/6VDB9l9vg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1688123506;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LBi2xn+NWrUQzLbxhPhUtfNKTaMAus8XdZkjy6jHSNM=;
-        b=jVPJlwFMcCzb0wYuBYE9xW6cZEwUMtJR24us2ZwmMLiYkh/Ya8FPIpIwdTH1G8h/qMJoP9
-        yy6W7RPJnQ28ZkBA==
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Yangtao Li <frank.li@vivo.com>
-Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
-        heiko@sntech.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        srinivas.pandruvada@linux.intel.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
-        bchihi@baylibre.com, wenst@chromium.org,
-        hayashi.kunihiko@socionext.com,
-        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
-        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
- for devm_request_threaded_irq()
-In-Reply-To: <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
-References: <20230627101215.58798-1-frank.li@vivo.com>
- <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
-Date:   Fri, 30 Jun 2023 13:11:46 +0200
-Message-ID: <87h6qpyzkd.ffs@tglx>
+        with ESMTP id S232168AbjF3Lt6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 07:49:58 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524933A90
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 04:49:53 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-313f58d6652so2004645f8f.2
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 04:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688125792; x=1690717792;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aV93Pj7PJNqMcvHis4EehVYWQIbC5KjF9IGBt9XYebI=;
+        b=EhSKNtwyisKNX51LLM/M+VxWHL1QwCxpeLYSyJAO82zbUEbfW3j7hF+zyqrxQUoSlT
+         rcqD+TLErHYlozTv2knm4OCvUd4tSgQlfO7LtUoQj8cI8IlmH8LtEVc5+CRwsAwUO34y
+         kV+2Rk7ociO5c+zbPDR0Zjmc7avOCocNyzJrYuDcRp5zoQxxhKVwT3AaOH58s9VveAme
+         9kf8PStDerdBF0N90DBJV7SapFcIw9QjKdsdKsOkv2kvfJU+gpm5UnEL8o+djT/t6zOw
+         1RgOLd6/F3aSkNpY1s7l9TCcOt8w4O3vZcC5vZFRv/l0c0yQwqK618G6ZcRIQZ1FqDiY
+         aGmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688125792; x=1690717792;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aV93Pj7PJNqMcvHis4EehVYWQIbC5KjF9IGBt9XYebI=;
+        b=QwzqEk/moEvvpiD1U6DiIzLhEInJ3fo3X3KkcVFHZT9xmJ8NdvHuDTfFgfqVh37i88
+         f64fcf8ibICZ87Ki6IdQ2h8Pll1g/hay7To//xuS876TNe0eZEIK4BX7J3xGCgBS3xwI
+         tx1+L/5P26KjbOCTtko6RE53Bo4o23YhcLL4Ry33gfzYr7psYtrmAvm91HGsCdGaWQHe
+         hCvmmjMVb+qjTo9BN5rVAPdVpEHuKQ29bCCL51/TA4DQ0+jtH5XVbHGHvI3PsaicdKIo
+         IuoA1EjgEsr9JjRojWV4nUXPTxkxLqlubA2RhuEIkongg8F37j/F1enUKJJ6b5t7u4aA
+         untQ==
+X-Gm-Message-State: ABy/qLaRdFYG6bTMSDOQTf/vt771hOvnkZY1VWczYCI/LaAZjkT57mQo
+        tYvgVujECsLJmaoZQv5SE051pQ==
+X-Google-Smtp-Source: APBJJlEpoJr7gjdrf73HXFl+g7/G3sJlnHp1EHY5GZSSFaw1ghdEDAtixlE4eveZuIKa36joGXONJQ==
+X-Received: by 2002:adf:ea83:0:b0:313:fbd0:9813 with SMTP id s3-20020adfea83000000b00313fbd09813mr1900057wrm.28.1688125791847;
+        Fri, 30 Jun 2023 04:49:51 -0700 (PDT)
+Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
+        by smtp.gmail.com with ESMTPSA id j8-20020adfff88000000b0031412b685d2sm4628258wrr.32.2023.06.30.04.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 04:49:51 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 12:49:50 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, rostedt@goodmis.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, delyank@fb.com, qyousef@google.com
+Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
+ uclamp set from user-space
+Message-ID: <20230630114950.zoocytnpvdrxgnss@airbuntu>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-2-lukasz.luba@arm.com>
+ <20230531182629.nztie5rwhjl53v3d@airbuntu>
+ <20230621122513.2aa3bc0d29321197e3d38441@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20230621122513.2aa3bc0d29321197e3d38441@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jun 27 2023 at 13:00, Uwe Kleine-K=C3=B6nig wrote:
-> On Tue, Jun 27, 2023 at 06:12:01PM +0800, Yangtao Li wrote:
->
-> While I assume changing to dev_err_probe is a result of my concern that
-> no error should be printed when rc=3D-EPROBEDEFER, my other concern that
-> adding an error message to a generic allocation function is a bad idea
-> still stands.
+On 06/21/23 12:25, Masami Hiramatsu wrote:
+> On Wed, 31 May 2023 19:26:29 +0100
+> Qais Yousef <qyousef@layalina.io> wrote:
+> 
+> > On 05/22/23 15:57, Lukasz Luba wrote:
+> > > The user-space can set uclamp value for a given task. It impacts task
+> > > placement decisions made by the scheduler. This is very useful information
+> > > and helps to understand the system behavior or track improvements in
+> > > middleware and applications which start using uclamp mechanisms and report
+> > > better performance in tests.
+> > 
+> > Do you mind adding a generic one instead please? And explain why we can't just
+> > attach to the syscall via kprobes? I think you want to bypass the permission
+> > checks, so maybe a generic tracepoint after that might be justifiable?
+> 
+> Could you tell me more about this point? I would like to know what kind of
+> permission checks can be bypassed with tracepoints.
 
-I agree in general, but if you actually look at the call sites of
-devm_request_threaded_irq() then the vast majority of them print more or
-less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+Sorry bad usage of English from my end.
 
-     519 messages total (there are probably more)
+The syscall can fail if the caller doesn't have permission to change the
+attribute (some of them are protected with CAP_NICE) or if the boundary check
+fails. The desire here is to emit a tracepoint() when the user successfully
+changes an attribute of a task.
 
-     352 unique messages
+Lukasz would like to have this tracepoint to help debug and analyse workloads.
+We are not really bypassing anything. So to rephrase, emit the tracepointn if
+the syscall is successfully changing an attribute.
 
-     323 unique messages after lower casing
+> 
+> > Then anyone can use it to track how userspace has changed any attributes for
+> > a task, not just uclamp.
+> 
+> I guess Uclamp is not controlled by syscall but from kernel internal
+> sched_setattr/setscheduler() too. Anyway I agree that it can be more generic
+> tracepoint, something like trace_sched_set_scheduer(task, attr).
 
-         Those 323 are mostly just variants of the same patterns with slight
-         modifications in formatting and information provided.
+Yes. Which is something worries me and I had a series in the past to hide it.
+The uclamp range is abstracted and has no meaning in general and should be set
+specifically to each system. e.g: 512 means half the system performance level,
+but if the system is over powered this could be too fast, and if it's
+underpowered it could be too slow. It must be set by userspace; though not sure
+if kernel threads need to manage their performance level how this can be
+achieved.
 
-     186 of these messages do not deliver any useful information,
-         e.g. "no irq", "
 
-     The most useful one of all is: "could request wakeup irq: %d"
+Thanks!
 
-So there is certainly an argument to be made that this particular
-function should print a well formatted and informative error message.
-
-It's not a general allocator like kmalloc(). It's specialized and in the
-vast majority of cases failing to request the interrupt causes the
-device probe to fail. So having proper and consistent information why
-the device cannot be used _is_ useful.
-
-Yangtao: The way how this is attempted is not useful at all.
-
-    1) The changelog is word salad and provides 0 rationale
-
-       Also such series require a cover letter...
-
-    2) The dev_err() which is added is not informative at all and cannot
-       replace actually useful error messages. It's not that hard to
-       make it useful.
-
-    2) Adding the printks unconditionally first will emit two messages
-       with different content.
-
-       This is not how such changes are done.
-
-       The proper approach is to create a wrapper function which emits
-       the error message:
-
-       wrapper(....., const char *info)
-       {
-            ret =3D devm_request_threaded_irq(....);
-            if (ret < 0) {
-               dev_err(dev, "Failed to request %sinterrupt %u %s %s: %d\n,
-                       thread_fn ? "threaded " : "",
-                       irq, devname, info ? : "", ret);
-            }
-            return ret;
-       }
-
-       Then convert the callsites over one by one with proper
-       changelogs and justification.
-
-       See?
-
-Thanks,
-
-        tglx
+--
+Qais Yousef
