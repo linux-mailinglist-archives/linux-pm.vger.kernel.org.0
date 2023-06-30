@@ -2,104 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D7C7443B7
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 23:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA521744417
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 23:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229485AbjF3VCa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 17:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S231718AbjF3VuK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 17:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjF3VCa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 17:02:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33F1E3AB6;
-        Fri, 30 Jun 2023 14:02:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC520617F3;
-        Fri, 30 Jun 2023 21:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E82DC433C9;
-        Fri, 30 Jun 2023 21:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688158948;
-        bh=VcUOHJR+47uuktJ5ytIptdWQ67g+qS6C8InKoEpNYPI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bKdUOjRCwCirUT9q7WtJCF4J3SZ4MFRFD8zaccxrUCFa9mbQEs4fZgvNSunaFSwHS
-         11ybRccrlNFDydC4LidgSdsGFXA7rSGVX9439m9ZFKuiJyw/WNoOyg+GKmnSr3ULyi
-         wHhqaTJsHXAOUOCB0CP88rjXunxKGHZQNCJkujwp9IlyYNecbajAR7n5nXCcv+pBd0
-         xscq2RUpHgoTZpW4VfBOQaINmjy/m8iOmKsAxgavZPUEy+5Qxp+J0WV2yqYc1p3A/T
-         B4lnfUMei8c8YgAy1s72TdRRzKQF1QxEjVJiQBSjzJ8Bn08y+Qvs1GD3YMgvhh8+Wh
-         4BILoquM3xp7A==
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b69923a715so36937441fa.0;
-        Fri, 30 Jun 2023 14:02:28 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZQMOUza1dBcv1cxRIKdEm3+S8Tm5EKYOc156vnFL56E9RtSqP4
-        2yr+rGyiUaHst8ih1U0dKIzu9OP34pVfO3XjTg==
-X-Google-Smtp-Source: APBJJlFXPs+PM/Yq4ExfSZtrMaxYg8sRjO2RE/Hx0FHDxKM+5ocBDwFMqtPHbTzm605Nqffb+L2iwr7y6OT1M6EjMHQ=
-X-Received: by 2002:a2e:3a10:0:b0:2b5:8102:1843 with SMTP id
- h16-20020a2e3a10000000b002b581021843mr3406860lja.18.1688158946181; Fri, 30
- Jun 2023 14:02:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230609183111.1765507-1-robh@kernel.org>
-In-Reply-To: <20230609183111.1765507-1-robh@kernel.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 30 Jun 2023 15:02:14 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJOAK4EzED1fbKiyyv8zzS4A0ZVzHu9Us9RhmFRnPYJpQ@mail.gmail.com>
-Message-ID: <CAL_JsqJOAK4EzED1fbKiyyv8zzS4A0ZVzHu9Us9RhmFRnPYJpQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: pmac32: Use of_property_read_reg() to parse "reg"
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S232434AbjF3VuE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 17:50:04 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430874487;
+        Fri, 30 Jun 2023 14:49:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688161798; x=1719697798;
+  h=date:from:to:cc:subject:message-id;
+  bh=rMeyFEGrHjR57hjXU6kaw8u73sgbFZPOjTAa8fI8+H4=;
+  b=jrIAwVH7CAwEvsYJZWmSbBb61GxiWWNUmRJKdXogsYFHWcm4edqvVyIf
+   KlsmFyGiXQKrYplOaleYYU9l3j0Ae3e6uNZEKNGz0VwN+DL5kBsO07P2O
+   n4ggET/eFzCePoiFLp6HVScJLVZl3wgLfJY108pt8lJGVJvyjOuOun2kn
+   UnGleVakwqQtNS8XFQ54htw7GfXhqJ8+2UFsERe89svzaYo4yBfGANE/z
+   6Eu59iXGAREv9HQ5wUzTpg+8AA5c5qo85pMcfAbCg/IMBEZEHJttUboQ8
+   tztCkVxmea2UCI7j3EZ/N6bAgpNYlxEv3pVL3pz7WknPGlsKYufvIyzUV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="342834649"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="342834649"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 14:49:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="891899075"
+X-IronPort-AV: E=Sophos;i="6.01,172,1684825200"; 
+   d="scan'208";a="891899075"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 30 Jun 2023 14:49:45 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qFLzs-000FPl-2Q;
+        Fri, 30 Jun 2023 21:49:44 +0000
+Date:   Sat, 01 Jul 2023 05:49:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 0d729b90fbbeba7c7c7a7c4b0477f736f34d5327
+Message-ID: <202307010539.p4mfcqK8-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 12:31=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
-:
->
-> Use the recently added of_property_read_reg() helper to get the
-> untranslated "reg" address value.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/cpufreq/pmac32-cpufreq.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 0d729b90fbbeba7c7c7a7c4b0477f736f34d5327  Merge branch 'pm-cpufreq' into bleeding-edge
 
-Ping!
+elapsed time: 722m
 
->
-> diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cp=
-ufreq.c
-> index ec75e79659ac..f53635ba16c1 100644
-> --- a/drivers/cpufreq/pmac32-cpufreq.c
-> +++ b/drivers/cpufreq/pmac32-cpufreq.c
-> @@ -378,10 +378,9 @@ static int pmac_cpufreq_cpu_init(struct cpufreq_poli=
-cy *policy)
->
->  static u32 read_gpio(struct device_node *np)
->  {
-> -       const u32 *reg =3D of_get_property(np, "reg", NULL);
-> -       u32 offset;
-> +       u64 offset;
->
-> -       if (reg =3D=3D NULL)
-> +       if (of_property_read_reg(np, 0, &offset, NULL) < 0)
->                 return 0;
->         /* That works for all keylargos but shall be fixed properly
->          * some day... The problem is that it seems we can't rely
-> --
-> 2.39.2
->
+configs tested: 107
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r002-20230629   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230629   gcc  
+arc                  randconfig-r016-20230630   gcc  
+arc                  randconfig-r043-20230630   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230630   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r013-20230630   gcc  
+hexagon              randconfig-r006-20230629   clang
+hexagon              randconfig-r014-20230630   clang
+hexagon              randconfig-r041-20230630   clang
+hexagon              randconfig-r045-20230630   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230629   gcc  
+i386         buildonly-randconfig-r005-20230629   gcc  
+i386         buildonly-randconfig-r006-20230629   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230629   gcc  
+i386                 randconfig-i002-20230629   gcc  
+i386                 randconfig-i003-20230629   gcc  
+i386                 randconfig-i004-20230629   gcc  
+i386                 randconfig-i005-20230629   gcc  
+i386                 randconfig-i006-20230629   gcc  
+i386                 randconfig-i011-20230629   clang
+i386                 randconfig-i012-20230629   clang
+i386                 randconfig-i013-20230629   clang
+i386                 randconfig-i014-20230629   clang
+i386                 randconfig-i015-20230629   clang
+i386                 randconfig-i016-20230629   clang
+i386                 randconfig-r034-20230630   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r011-20230630   gcc  
+loongarch            randconfig-r015-20230630   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r003-20230629   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r026-20230630   gcc  
+mips                 randconfig-r031-20230630   clang
+mips                 randconfig-r035-20230630   clang
+nios2                               defconfig   gcc  
+openrisc             randconfig-r033-20230630   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r012-20230630   gcc  
+parisc               randconfig-r032-20230630   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r022-20230630   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230630   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r005-20230629   gcc  
+s390                 randconfig-r044-20230630   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r036-20230630   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r021-20230630   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230629   gcc  
+x86_64       buildonly-randconfig-r002-20230629   gcc  
+x86_64       buildonly-randconfig-r003-20230629   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r001-20230629   gcc  
+x86_64               randconfig-r023-20230630   clang
+x86_64               randconfig-x001-20230629   clang
+x86_64               randconfig-x002-20230629   clang
+x86_64               randconfig-x003-20230629   clang
+x86_64               randconfig-x004-20230629   clang
+x86_64               randconfig-x005-20230629   clang
+x86_64               randconfig-x006-20230629   clang
+x86_64               randconfig-x011-20230629   gcc  
+x86_64               randconfig-x012-20230629   gcc  
+x86_64               randconfig-x013-20230629   gcc  
+x86_64               randconfig-x014-20230629   gcc  
+x86_64               randconfig-x015-20230629   gcc  
+x86_64               randconfig-x016-20230629   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
