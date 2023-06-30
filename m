@@ -2,129 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933BC743B20
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 13:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D3AF743B5A
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 14:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjF3Lt7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 07:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
+        id S232728AbjF3MBd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 08:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbjF3Lt6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 07:49:58 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524933A90
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 04:49:53 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-313f58d6652so2004645f8f.2
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 04:49:53 -0700 (PDT)
+        with ESMTP id S232777AbjF3MBa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 08:01:30 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83AA171E
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 05:01:28 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3112f5ab0b1so1971214f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 05:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688125792; x=1690717792;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688126487; x=1690718487;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aV93Pj7PJNqMcvHis4EehVYWQIbC5KjF9IGBt9XYebI=;
-        b=EhSKNtwyisKNX51LLM/M+VxWHL1QwCxpeLYSyJAO82zbUEbfW3j7hF+zyqrxQUoSlT
-         rcqD+TLErHYlozTv2knm4OCvUd4tSgQlfO7LtUoQj8cI8IlmH8LtEVc5+CRwsAwUO34y
-         kV+2Rk7ociO5c+zbPDR0Zjmc7avOCocNyzJrYuDcRp5zoQxxhKVwT3AaOH58s9VveAme
-         9kf8PStDerdBF0N90DBJV7SapFcIw9QjKdsdKsOkv2kvfJU+gpm5UnEL8o+djT/t6zOw
-         1RgOLd6/F3aSkNpY1s7l9TCcOt8w4O3vZcC5vZFRv/l0c0yQwqK618G6ZcRIQZ1FqDiY
-         aGmA==
+        bh=kIi2yEtNynaeVj4lGPrS9Nb0CegNEOUx7PCEkPOoutU=;
+        b=lnNS21tcMm+IiaQVAgr1Kcm6ZlvVDw3nnXqOZ8PNlaR241o3jetvnNxYnQz/DvQ0V1
+         QiRFKa7dDELZmZyZlPPpLbKF5B6EcFkIU4EJqZRabwFL5Nu7oJqg+zkFEIVHq0C/iYsP
+         xz69KDyfk38IfRqygUe1101/YvdCw6QcV578Y5jZcl/FwMq02o6f8cNNFemQK/Uy7NKt
+         G6lVZQCMSe1S1rvNnKZL6TK/kbUf4pnbASpAd9Ttv+VfbTdTJDPAZG4uGzoLWkUFC36I
+         o00TZGYOJi/QY6tgJcRipFS9gOb2V4T71uYGxFvPsUwbT3HDlWKFQuKGTQMka+mD82lh
+         C9cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688125792; x=1690717792;
+        d=1e100.net; s=20221208; t=1688126487; x=1690718487;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aV93Pj7PJNqMcvHis4EehVYWQIbC5KjF9IGBt9XYebI=;
-        b=QwzqEk/moEvvpiD1U6DiIzLhEInJ3fo3X3KkcVFHZT9xmJ8NdvHuDTfFgfqVh37i88
-         f64fcf8ibICZ87Ki6IdQ2h8Pll1g/hay7To//xuS876TNe0eZEIK4BX7J3xGCgBS3xwI
-         tx1+L/5P26KjbOCTtko6RE53Bo4o23YhcLL4Ry33gfzYr7psYtrmAvm91HGsCdGaWQHe
-         hCvmmjMVb+qjTo9BN5rVAPdVpEHuKQ29bCCL51/TA4DQ0+jtH5XVbHGHvI3PsaicdKIo
-         IuoA1EjgEsr9JjRojWV4nUXPTxkxLqlubA2RhuEIkongg8F37j/F1enUKJJ6b5t7u4aA
-         untQ==
-X-Gm-Message-State: ABy/qLaRdFYG6bTMSDOQTf/vt771hOvnkZY1VWczYCI/LaAZjkT57mQo
-        tYvgVujECsLJmaoZQv5SE051pQ==
-X-Google-Smtp-Source: APBJJlEpoJr7gjdrf73HXFl+g7/G3sJlnHp1EHY5GZSSFaw1ghdEDAtixlE4eveZuIKa36joGXONJQ==
-X-Received: by 2002:adf:ea83:0:b0:313:fbd0:9813 with SMTP id s3-20020adfea83000000b00313fbd09813mr1900057wrm.28.1688125791847;
-        Fri, 30 Jun 2023 04:49:51 -0700 (PDT)
+        bh=kIi2yEtNynaeVj4lGPrS9Nb0CegNEOUx7PCEkPOoutU=;
+        b=FohHKi5+Co2PSKG0S8y8OA/LFGokJO0f/943JbsCnP+zyMTnmRYKkwh7De8kOaHxBb
+         kUPFsvS0G53Jk/ZoqxBBPBpVQV5gotkEf401XOoUnZ1/kSlTmrByLcPqVKVLl23laR0W
+         7cq+30uDUxxBNZ9MKjUE3BbqNY/kc69g/RGYfDVTKrhXfvFK3JTno03oBf21mnCN4bba
+         GXi+N0dKFO9dA1sJ3xbXtz7sA20JiimMX5IQRU5GZpIrU1TB/RcFv33kkG+4PXfL+KWk
+         yPXf+yEqzfXYw3n+jBHY6AL4ABolLR4+mKBd8WT5gIXikjuPTgctTjyIBf2SaTRxdMGd
+         mZgA==
+X-Gm-Message-State: ABy/qLbXVx42bSiNZ+L1V3e5bN+yEhOi3y7Q7a+Tnnc5VPmag1ed6cNu
+        J1IClv9OwPQEn3qDULOFz5r0cg==
+X-Google-Smtp-Source: APBJJlE9dBlAuR9HijekonCZkukUMaBj/MZ5MurjXqaT9xXBVQFuDIlNj30jde7+dT4ik0bq+Rae5Q==
+X-Received: by 2002:adf:ed45:0:b0:314:1ca4:dbd9 with SMTP id u5-20020adfed45000000b003141ca4dbd9mr1912052wro.27.1688126486994;
+        Fri, 30 Jun 2023 05:01:26 -0700 (PDT)
 Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id j8-20020adfff88000000b0031412b685d2sm4628258wrr.32.2023.06.30.04.49.50
+        by smtp.gmail.com with ESMTPSA id r3-20020adfda43000000b0030ae3a6be4asm18203778wrl.72.2023.06.30.05.01.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jun 2023 04:49:51 -0700 (PDT)
-Date:   Fri, 30 Jun 2023 12:49:50 +0100
+        Fri, 30 Jun 2023 05:01:26 -0700 (PDT)
+Date:   Fri, 30 Jun 2023 13:01:22 +0100
 From:   Qais Yousef <qyousef@layalina.io>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, rostedt@goodmis.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com
-Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
- uclamp set from user-space
-Message-ID: <20230630114950.zoocytnpvdrxgnss@airbuntu>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
+        qyousef@google.com, kernel test robot <lkp@intel.com>
+Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
+ filter out requests
+Message-ID: <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
 References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-2-lukasz.luba@arm.com>
- <20230531182629.nztie5rwhjl53v3d@airbuntu>
- <20230621122513.2aa3bc0d29321197e3d38441@kernel.org>
+ <20230522145702.2419654-4-lukasz.luba@arm.com>
+ <20230531183105.r5tqpdx5axoogkzp@airbuntu>
+ <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230621122513.2aa3bc0d29321197e3d38441@kernel.org>
+In-Reply-To: <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/21/23 12:25, Masami Hiramatsu wrote:
-> On Wed, 31 May 2023 19:26:29 +0100
-> Qais Yousef <qyousef@layalina.io> wrote:
+On 06/20/23 18:52, Lukasz Luba wrote:
+> Hi Qais,
 > 
+> I have somehow missed your feedback on this series.
+> 
+> On 5/31/23 19:31, Qais Yousef wrote:
 > > On 05/22/23 15:57, Lukasz Luba wrote:
-> > > The user-space can set uclamp value for a given task. It impacts task
-> > > placement decisions made by the scheduler. This is very useful information
-> > > and helps to understand the system behavior or track improvements in
-> > > middleware and applications which start using uclamp mechanisms and report
-> > > better performance in tests.
+> > > Some of the frequency update requests coming form the task scheduler
+> > > might be filter out. It can happen when the previous request was served
+> > > not that long ago (in a period smaller than provided by the cpufreq driver
+> > > as minimum for frequency update). In such case, we want to know if some of
+> > > the frequency updates cannot make through.
+> > > Export the new tracepoint as well. That would allow to handle it by a
+> > > toolkit for trace analyzes.
+> > > 
+> > > Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
+> > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > ---
+> > >   include/trace/events/sched.h     |  4 ++++
+> > >   kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
+> > >   2 files changed, 12 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> > > index dbfb30809f15..e34b7cd5de73 100644
+> > > --- a/include/trace/events/sched.h
+> > > +++ b/include/trace/events/sched.h
+> > > @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
+> > >   	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+> > >   	TP_ARGS(tsk, uclamp_id, value));
+> > > +DECLARE_TRACE(schedutil_update_filtered_tp,
+> > > +	TP_PROTO(int cpu),
+> > > +	TP_ARGS(cpu));
+> > > +
+> > >   #endif /* _TRACE_SCHED_H */
+> > >   /* This part must be outside protection */
+> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > > index f462496e5c07..4f9daf258a65 100644
+> > > --- a/kernel/sched/cpufreq_schedutil.c
+> > > +++ b/kernel/sched/cpufreq_schedutil.c
+> > > @@ -6,6 +6,8 @@
+> > >    * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >    */
+> > > +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
+> > > +
+> > >   #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
+> > >   struct sugov_tunables {
+> > > @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> > >   	ignore_dl_rate_limit(sg_cpu);
+> > > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> > > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
+> > > +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+> > >   		return false;
+> > > +	}
 > > 
-> > Do you mind adding a generic one instead please? And explain why we can't just
-> > attach to the syscall via kprobes? I think you want to bypass the permission
-> > checks, so maybe a generic tracepoint after that might be justifiable?
+> > Can't we have something more generic here too? Are you interested to count
+> > these events? How do you plan to use it?
 > 
-> Could you tell me more about this point? I would like to know what kind of
-> permission checks can be bypassed with tracepoints.
+> The plan is to record those events, count them and maybe adjust the FW
+> if the frequency switching capabilities are too low, e.g. 4ms...
 
-Sorry bad usage of English from my end.
+You mean as part of tuning step for the system or at runtime? The latter seems
+to indicate for a proper interface instead.
 
-The syscall can fail if the caller doesn't have permission to change the
-attribute (some of them are protected with CAP_NICE) or if the boundary check
-fails. The desire here is to emit a tracepoint() when the user successfully
-changes an attribute of a task.
+IMHO I think the current filtering mechanism needs a bit of a massage.
 
-Lukasz would like to have this tracepoint to help debug and analyse workloads.
-We are not really bypassing anything. So to rephrase, emit the tracepointn if
-the syscall is successfully changing an attribute.
+One thing I think we must do is to ignore the filter if there's a big sudden
+change in requested frequency. Like for instance if a big task migrates. Then
+prev_cpu should go to lower freq sooner, and new_cpu should change to higher
+frequency sooner too. The filtering makes sense only in steady state situation
+where we are ramping up or down gradually.
+
+If no one beats me to it, I'll propose something in that regard.
 
 > 
-> > Then anyone can use it to track how userspace has changed any attributes for
-> > a task, not just uclamp.
-> 
-> I guess Uclamp is not controlled by syscall but from kernel internal
-> sched_setattr/setscheduler() too. Anyway I agree that it can be more generic
-> tracepoint, something like trace_sched_set_scheduer(task, attr).
+> We need those numbers to point out that there is a need for faster
+> FW micro-controller to serve those incoming requests.
 
-Yes. Which is something worries me and I had a series in the past to hide it.
-The uclamp range is abstracted and has no meaning in general and should be set
-specifically to each system. e.g: 512 means half the system performance level,
-but if the system is over powered this could be too fast, and if it's
-underpowered it could be too slow. It must be set by userspace; though not sure
-if kernel threads need to manage their performance level how this can be
-achieved.
+I think there's a big assumption here that the filter is always set correctly
+;-)
+
+> 
+> > 
+> > I think this will be a very noisy event by the way.
+> 
+> Could be, but on the other hand for those statistical analysis
+> 'the more the better'. It will also depend on number of
+> CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
+> 
+> I don't know when we will switch to this per-cpu cpufreq mode
+> when all CPUs behave like independent DVFS. Juno mainline kernel and FW
+> supports that mode. We would have to compare those two modes and
+> measure how much we gain/loose when using one and not the other.
+> 
+> Furthermore, we already suspect some of our integration testing for
+> EAS-mainline (on Juno) failing due to filtered out requests. How much
+> that would impact other boards - it would be nice to see in traces.
+
+Another problem I think we have is that the DVFS headroom value should be
+a function of this filter. At the moment it is hardcoded to a random value
+which causes power issue.
+
+So to summarize I think there are two improvements required (and if anyone has
+the time to try them out go ahead otherwise I'll get to it):
+
+ 1. The filter should only be applied if the history hasn't changed. ie: we are
+    gradually increasing or decreasing PELT. Otherwise we should honour sudden
+    changes ASAP.
+ 2. DVFS headroom should be a function of the filter. 25% is too high for
+    500us. It could be too low for 10ms (I don't know).
 
 
 Thanks!
 
 --
 Qais Yousef
+
+> 
+> Thanks for your feedback!
+> Lukasz
