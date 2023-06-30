@@ -2,107 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AE57439D3
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 12:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B10E743A84
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 13:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjF3Kqj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 30 Jun 2023 06:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S232834AbjF3LMM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 07:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjF3Kqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 06:46:38 -0400
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DEF0;
-        Fri, 30 Jun 2023 03:46:37 -0700 (PDT)
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-98502b12fd4so45256766b.1;
-        Fri, 30 Jun 2023 03:46:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688121996; x=1690713996;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/UBV7P1ulz8YvA35BhCt72l7KfIOxYTNUGMNlMCewg=;
-        b=CfdwF6kGwnTz+N01bo4RiU6731eJOd4t7eumO2s9F9czzzs0hGTrdLddF0nSE9EHEm
-         b/Eo5ZuLVI5hWttQgwALUii+30EHC97JHqnJJB3oIUX5EtjFtHk95MISnXHi9jc2XNa4
-         syE61espwdTE0OA3WOW0OCZdPsF4ZxruTYLxePVmUOcWwqsBuJpofit97cVpxuuFRpxm
-         JB/CXTssmXrDxbOnOTDpbx8YwmRoMq01QObcp9bzdH+NN7/s/BWpcatUIV8tgEKq0jPe
-         gNWV7AR/db5vAiD8J65q8y/mHgn7gmsKY13hlfiv/698grDge/6Vvi3/kTDytw2Jo18g
-         DMsQ==
-X-Gm-Message-State: ABy/qLYFa0CvbtbNFMaB1EJ7NQ7vxb63i+nJW2isTp5h8ESOQr3OpIm2
-        3HBoAfz7yK9u/UZmnvVTFJWQ9XUpHIAvoxXdx08=
-X-Google-Smtp-Source: APBJJlHAbw3cv+huvJUtlKwW2ExWGqSGStRGZZzCW/2PIO1UUthMw3rlS5DOVBCNSj+a75AK0FsQfC5rqzpn02VyAvk=
-X-Received: by 2002:a17:906:1109:b0:988:f9ba:e18d with SMTP id
- h9-20020a170906110900b00988f9bae18dmr1539376eja.6.1688121996174; Fri, 30 Jun
- 2023 03:46:36 -0700 (PDT)
+        with ESMTP id S232848AbjF3LL7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 07:11:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF4735B6;
+        Fri, 30 Jun 2023 04:11:48 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1688123506;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LBi2xn+NWrUQzLbxhPhUtfNKTaMAus8XdZkjy6jHSNM=;
+        b=418LKbfzErO8aWbRiCy6RicHEfWmrfLoIcdhuAdqKEQ/ZbLyV5fOr9TL2jgmxbiB1UJ3bl
+        L7RSNcul7PGGKtMoVG58xOTYMswwl0fvl2x6Gy3oeK78nmBEYbydnR6FVElSSy3QDkkQS4
+        aNdClghzIVSlb1kIYZa+lxNsG6dKqXTENfkuKKK8H3fwdANqYJnMII3qHGkdR7RslbGNzH
+        rMZSPPYA/DaN+m+jbNSRocp1b1dwjRh2NBrN92RDYtVGXNSXIAHcc+RtRHjhZQcR/LI027
+        /C9gb1mFySWZHISgYn13LNhN7Izd0dCqTTysj0/z5qIQHqLoTPKk/6VDB9l9vg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1688123506;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LBi2xn+NWrUQzLbxhPhUtfNKTaMAus8XdZkjy6jHSNM=;
+        b=jVPJlwFMcCzb0wYuBYE9xW6cZEwUMtJR24us2ZwmMLiYkh/Ya8FPIpIwdTH1G8h/qMJoP9
+        yy6W7RPJnQ28ZkBA==
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Yangtao Li <frank.li@vivo.com>
+Cc:     miquel.raynal@bootlin.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
+ for devm_request_threaded_irq()
+In-Reply-To: <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
+References: <20230627101215.58798-1-frank.li@vivo.com>
+ <20230627110025.vgtplc6nluiiuvoh@pengutronix.de>
+Date:   Fri, 30 Jun 2023 13:11:46 +0200
+Message-ID: <87h6qpyzkd.ffs@tglx>
 MIME-Version: 1.0
-References: <20230607003721.834038-1-evalenti@kernel.org> <f26ac9a9-60af-a0fe-fccc-25bcd306f5a1@linaro.org>
- <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com> <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
- <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com> <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
- <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com> <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
- <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
-In-Reply-To: <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Jun 2023 12:46:24 +0200
-Message-ID: <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+On Tue, Jun 27 2023 at 13:00, Uwe Kleine-K=C3=B6nig wrote:
+> On Tue, Jun 27, 2023 at 06:12:01PM +0800, Yangtao Li wrote:
+>
+> While I assume changing to dev_err_probe is a result of my concern that
+> no error should be printed when rc=3D-EPROBEDEFER, my other concern that
+> adding an error message to a generic allocation function is a bad idea
+> still stands.
 
-On Fri, Jun 30, 2023 at 12:11 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> On 30/06/2023 10:16, Rafael J. Wysocki wrote:
-> > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> [ ... ]
->
-> > So what about adding a new zone attribute that can be used to specify
-> > the preferred caching time for the temperature?
-> >
-> > That is, if the time interval between two consecutive updates of the
-> > cached temperature value is less than the value of the new attribute,
-> > the cached temperature value will be returned by "temp".  Otherwise,
-> > it will cause the sensor to be read and the value obtained from it
-> > will be returned to user space and cached.
-> >
-> > If the value of the new attribute is 0, everything will work as it
-> > does now (which will also need to be the default behavior).
->
-> I'm still not convinced about the feature.
->
-> Eduardo provided some numbers but they seem based on the characteristics
-> of the I2C, not to a real use case. Eduardo?
->
-> Before adding more complexity in the thermal framework and yet another
-> sysfs entry, it would be interesting to have an experiment and show the
-> impact of both configurations, not from a timing point of view but with
-> a temperature mitigation accuracy.
->
-> Without a real use case, this feature does make really sense IMO.
+I agree in general, but if you actually look at the call sites of
+devm_request_threaded_irq() then the vast majority of them print more or
+less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
 
-I'm kind of unsure why you think that it is not a good idea in general
-to have a way to limit the rate of accessing a temperature sensor, for
-energy-efficiency reasons if nothing more.
+     519 messages total (there are probably more)
+
+     352 unique messages
+
+     323 unique messages after lower casing
+
+         Those 323 are mostly just variants of the same patterns with slight
+         modifications in formatting and information provided.
+
+     186 of these messages do not deliver any useful information,
+         e.g. "no irq", "
+
+     The most useful one of all is: "could request wakeup irq: %d"
+
+So there is certainly an argument to be made that this particular
+function should print a well formatted and informative error message.
+
+It's not a general allocator like kmalloc(). It's specialized and in the
+vast majority of cases failing to request the interrupt causes the
+device probe to fail. So having proper and consistent information why
+the device cannot be used _is_ useful.
+
+Yangtao: The way how this is attempted is not useful at all.
+
+    1) The changelog is word salad and provides 0 rationale
+
+       Also such series require a cover letter...
+
+    2) The dev_err() which is added is not informative at all and cannot
+       replace actually useful error messages. It's not that hard to
+       make it useful.
+
+    2) Adding the printks unconditionally first will emit two messages
+       with different content.
+
+       This is not how such changes are done.
+
+       The proper approach is to create a wrapper function which emits
+       the error message:
+
+       wrapper(....., const char *info)
+       {
+            ret =3D devm_request_threaded_irq(....);
+            if (ret < 0) {
+               dev_err(dev, "Failed to request %sinterrupt %u %s %s: %d\n,
+                       thread_fn ? "threaded " : "",
+                       irq, devname, info ? : "", ret);
+            }
+            return ret;
+       }
+
+       Then convert the callsites over one by one with proper
+       changelogs and justification.
+
+       See?
+
+Thanks,
+
+        tglx
