@@ -2,73 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F22274402E
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 18:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6FE74404C
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 18:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbjF3QzH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 30 Jun 2023 12:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S232588AbjF3Q6m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 12:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbjF3QzA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 12:55:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 609A13ABD
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 09:54:58 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="361291574"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="361291574"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 09:54:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="747480504"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="747480504"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga008.jf.intel.com with ESMTP; 30 Jun 2023 09:54:45 -0700
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
-        by linux.intel.com (Postfix) with ESMTP id 1487D580DA1;
-        Fri, 30 Jun 2023 09:54:43 -0700 (PDT)
-Message-ID: <910cf424b779332e459e61e26426911a5a8a83bc.camel@gmail.com>
-Subject: Re: [PATCH v3 1/2] x86/mwait: Add support for idle via umwait
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
-        Arjan van de Ven <arjan@linux.intel.com>
-Date:   Fri, 30 Jun 2023 19:54:43 +0300
-In-Reply-To: <87352a0vu4.ffs@tglx>
-References: <20230610183518.4061159-1-dedekind1@gmail.com>
-         <20230610183518.4061159-2-dedekind1@gmail.com> <87352a0vu4.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        with ESMTP id S232523AbjF3Q6k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 12:58:40 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36BA3593
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 09:58:37 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3113dabc549so2508304f8f.1
+        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 09:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688144316; x=1690736316;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bcJVpZgsLmrXO6R6gbSb0Esg3xW+s2OxZQwgSrlzOI4=;
+        b=bmpj1QwFDiJjXYDFX+GcnbAhwD9vj3tix/zCMIrizJ9MPf5UNAxQ9v/cRw6OUxt2KW
+         KE3zf+2Pw7jthWTNZbprNCFqfFA+JS0W8jtQ65vZmpabGpdxDsw21KGdysW5Rgu8kg0B
+         PyGJRoYvj0LevhwgFxldljpw5mn5iYALAxticdMiFKM6XyW/5qXe/04qRO6TW0fLgXzr
+         aOfLaexfdvAPQ8s412PTcruvT5l9WfXM0yu7CPdJlryQ5/9gdmNvJJYUEPeAf8gw/fpM
+         QPW3nEPTqE0MbjRP8zn5uMkqrqVueY9X0mScX1gQmEmP8ReqesJYgPzBGkVVqLUu7t2U
+         LhTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688144316; x=1690736316;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bcJVpZgsLmrXO6R6gbSb0Esg3xW+s2OxZQwgSrlzOI4=;
+        b=WDtWiXWizav0D/LytU85BMH1qd8ROmM8GDMLyTKRxC++4X/DEKWILjpCwkgBASIyBi
+         +Ws3JKd5ERrQ8ieYHxlnsncl5eug/v45C861yIC5DEQP739KUjgvrGhUcdhtKvGPwmok
+         gOZoAMK3ilMbb2SLWo5WROC7+1KP3cYfdOMSVA3s6WFTS+WOfozTtZ+aNKcd4m/qXWkj
+         p/GPnaKfs/I1itghCPwwkau4lZwi15H3fTleao/fCKT24dQxlnVxMjVmIQUrx+mTjdFl
+         378z94PbjbJf7YYd1Ojp0YLSpdqNqS+6GEADuwsJV7WK+KaKT/U1qxhtKnsDMoBhe8f8
+         NTgQ==
+X-Gm-Message-State: ABy/qLYhmRCRQcFIABvWa2SelICg7FNhEvRZrvGG3aXwGkXLlNn+M4su
+        o2eHtOz7is/AXcvWkCefcb2Vyg==
+X-Google-Smtp-Source: APBJJlHhcFD79JEamztLfiWhkMMHToukfW0Lq0jmpkL1lmL0roIp7ChdAMevzDbwRlyav8HVHBrvBg==
+X-Received: by 2002:adf:f992:0:b0:314:1e87:f5d3 with SMTP id f18-20020adff992000000b003141e87f5d3mr4003549wrr.29.1688144316184;
+        Fri, 30 Jun 2023 09:58:36 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id u14-20020adfdb8e000000b003112ab916cdsm18913772wri.73.2023.06.30.09.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jun 2023 09:58:35 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v2 00/15] ARM: oxnas support removal
+Date:   Fri, 30 Jun 2023 18:58:25 +0200
+Message-Id: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALEJn2QC/42OQQ6DIBBFr2JYdxrBaGpXvUfjAmXQSRTMgMTGe
+ PdST9Dle4v//iECMmEQz+IQjIkCeZdB3QoxTNqNCGQyC1WqqqwqCdGvNIDfnQ6wrSEy6gUYF58
+ QdKOwNW1jEVHkhV4HhJ61G6a84bZ5znJltLRfyXeXeaIQPX+uB0n+7H+xJKGEujf1wxppjLSvm
+ Zxmf/c8iu48zy/Cf3Jp3AAAAA==
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4190;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=C4rej9R1KAWJBjlpvKevYXZln3FvwK8ckfIdYSWc8hc=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBknwmzV/0VBUuZ5VLF3VM024I/LCO+HhW4mBonGzT7
+ p0UWKQeJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJ8JswAKCRB33NvayMhJ0bEoD/
+ 92fTad2/jmG1/xFHGsOAAbus0mtr1yygYjXJIbrhRPE9uUwLGWjQRwdCZK+9uTzPlNOnFf8VfsSAWK
+ SsXzf6TJekC8afg4EWtpdlBUi5qaFI0ytw+1Rj94MZRLVKfQ8JXnxjZv8SkSvkLyueoV7rmfCHYFdK
+ cnD7CB/+wSgnvcnUp/fF6Fbf1O9oGZfdLiWaglf1yqZQOptaAYEl3EawwxrGx+a7PVtbr5Q3DY7YkJ
+ 0hvdHTEFmFGN8YmWLTDPN5NsnwjyS4XME/j+X1VZDa9DoXkYV/55BSUROfYSjLj8gpDDaUyJlCDU3J
+ RUnNef36xCarwAsdmyvK8NEU1X+I1SuFr8mz0patK77hcSogi3n9OKKg/+abu7mNekCipcgyevIxai
+ L+nkDsZd1QiGImw/Q9p5qRe1agynKMLlyZwvKpFLPiWW8aNfnLrTJZuSJshOCDe90CpalL/RF4zcZ1
+ X6Ol4UHFHd20V16aPz2SD8pkCdqwQfDl28ZzZFp8WC0j3BSgKHLGgzcIB1b4n9tuBzppZn35Xo3Amc
+ bEFUCVh90Fm/F3vcOFjRcWdWXsZ1trY99dp1K3wekKlmXaS3QGiLdWMI3qkpl9M2bl62QT8ESQp0Hk
+ jBmn6aCNV42zkSGc8Jm7jyROXzkjRH/Yz95icnWmMYEVF8Z5VLRJ9+hEOWow==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2023-06-30 at 00:04 +0200, Thomas Gleixner wrote:
-> > +#ifdef CONFIG_X86_64
-> > +/*
-> > + * Monitor a memory address at 'rcx' using the 'umonitor' instruction.
-> > + */
-> > +static inline void __umonitor(const void *rcx)
-> > +{
-> > +       /* "umonitor %rcx" */
-> > +#ifdef CONFIG_AS_TPAUSE
-> 
-> Are you sure that the instruction check for TPAUSE is sufficient to also
-> include UMONITOR on all toolchains which support TPAUSE?
+With [1] removing MPCore SMP support, this makes the OX820 barely usable,
+associated with a clear lack of maintainance, development and migration to
+dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
 
-Good point, I checked only GNU compiler. I can check Clang/LLVM.
+In addition, the OX810 hasn't been booted for years and isn't even present
+in an ARM config file.
 
+For the OX820, lack of USB and SATA support makes the platform not usable
+in the current Linux support and relies on off-tree drivers hacked from the
+vendor (defunct for years) sources.
 
-Will also address other issues that you pointed, thanks!
+The last users are in the OpenWRT distribution, and today's removal means
+support will still be in stable 6.1 LTS kernel until end of 2026.
 
-Artem.
+If someone wants to take over the development even with lack of SMP, I'll
+be happy to hand off maintainance.
+
+It has been a fun time adding support for this architecture, but it's time
+to get over!
+
+Now arch/arm parts are removed, now it's time to remove the remaining stuff.
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- s/maintainance/maintenance/
+- added acked/review tags
+- dropped already applied patches
+- drop RFC
+- Link to v1: https://lore.kernel.org/r/20230331-topic-oxnas-upstream-remove-v1-0-5bd58fd1dd1f@linaro.org
+
+---
+Neil Armstrong (15):
+      clk: oxnas: remove obsolete clock driver
+      dt-bindings: clk: oxnas: remove obsolete bindings
+      clksource: timer-oxnas-rps: remove obsolete timer driver
+      dt-bindings: timer: oxsemi,rps-timer: remove obsolete bindings
+      nand: oxnas_nand: remove obsolete raw nand driver
+      dt-bindings: mtd: oxnas-nand: remove obsolete bindings
+      net: stmmac: dwmac-oxnas: remove obsolete dwmac glue driver
+      dt-bindings: net: oxnas-dwmac: remove obsolete bindings
+      pinctrl: pinctrl-oxnas: remove obsolete pinctrl driver
+      dt-bindings: pinctrl: oxnas,pinctrl: remove obsolete bindings
+      dt-bindings: gpio: gpio_oxnas: remove obsolete bindings
+      power: reset: oxnas-restart: remove obsolete restart driver
+      irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
+      dt-bindings: interrupt-controller: arm,versatile-fpga-irq: mark oxnas compatible as deprecated
+      MAINTAINERS: remove OXNAS entry
+
+ .../devicetree/bindings/clock/oxnas,stdclk.txt     |   28 -
+ .../devicetree/bindings/gpio/gpio_oxnas.txt        |   47 -
+ .../arm,versatile-fpga-irq.txt                     |    4 +-
+ .../devicetree/bindings/mtd/oxnas-nand.txt         |   41 -
+ .../devicetree/bindings/net/oxnas-dwmac.txt        |   41 -
+ .../devicetree/bindings/pinctrl/oxnas,pinctrl.txt  |   56 -
+ .../devicetree/bindings/timer/oxsemi,rps-timer.txt |   17 -
+ MAINTAINERS                                        |   10 -
+ drivers/clk/Kconfig                                |    7 -
+ drivers/clk/Makefile                               |    1 -
+ drivers/clk/clk-oxnas.c                            |  251 ----
+ drivers/clocksource/Kconfig                        |    7 -
+ drivers/clocksource/Makefile                       |    1 -
+ drivers/clocksource/timer-oxnas-rps.c              |  288 -----
+ drivers/irqchip/irq-versatile-fpga.c               |    1 -
+ drivers/mtd/nand/raw/Kconfig                       |    7 -
+ drivers/mtd/nand/raw/Makefile                      |    1 -
+ drivers/mtd/nand/raw/oxnas_nand.c                  |  209 ----
+ drivers/net/ethernet/stmicro/stmmac/Kconfig        |   11 -
+ drivers/net/ethernet/stmicro/stmmac/Makefile       |    1 -
+ drivers/net/ethernet/stmicro/stmmac/dwmac-oxnas.c  |  245 ----
+ drivers/pinctrl/Kconfig                            |   11 -
+ drivers/pinctrl/Makefile                           |    1 -
+ drivers/pinctrl/pinctrl-oxnas.c                    | 1292 --------------------
+ drivers/power/reset/Kconfig                        |    7 -
+ drivers/power/reset/Makefile                       |    1 -
+ drivers/power/reset/oxnas-restart.c                |  233 ----
+ 27 files changed, 3 insertions(+), 2816 deletions(-)
+---
+base-commit: 5c875096d59010cee4e00da1f9c7bdb07a025dc2
+change-id: 20230331-topic-oxnas-upstream-remove-a62e9d96feee
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
