@@ -2,35 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0981744191
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 19:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1487441D3
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jun 2023 20:07:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbjF3Rsv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 13:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55062 "EHLO
+        id S232372AbjF3SG7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 14:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbjF3Rsr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 13:48:47 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5209F2D4A;
-        Fri, 30 Jun 2023 10:48:46 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="352275048"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="352275048"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2023 10:48:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10757"; a="787792137"
-X-IronPort-AV: E=Sophos;i="6.01,171,1684825200"; 
-   d="scan'208";a="787792137"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Jun 2023 10:48:36 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andy@kernel.org>)
-        id 1qFIET-001AaS-1x;
-        Fri, 30 Jun 2023 20:48:33 +0300
-Date:   Fri, 30 Jun 2023 20:48:33 +0300
-From:   Andy Shevchenko <andy@kernel.org>
+        with ESMTP id S232347AbjF3SG6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 14:06:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFEE81FC0;
+        Fri, 30 Jun 2023 11:06:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 633AF617E0;
+        Fri, 30 Jun 2023 18:06:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44654C433CC;
+        Fri, 30 Jun 2023 18:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688148415;
+        bh=yz5t1GiipNFNh1NtxgqisnUQ1CD8Mwvmr2prkm+aqsw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h8BVS2sR9N6T9w9CrLbGEkLtZUN8hymR5Yfqq38a/aJIH/8+cN3LhWC1qe0ABBgYh
+         +WqBRGYdoQU6Nt3Hxgu274LZGxuj3dXTjUFC0gpadKnR24KWnwNss6TUOYs5HzPAgL
+         69DWTSkPmvlyIGijGGtVsdNgq93wlUFCgrMlNUyUbtwMMbYkbBTmdNaNRMd8a9wsOh
+         HHDYDzKOmi2CTL7ac6HlH4x3ONaT6UQE/kzzOtQfsAzzW63ScznY5jFrNSUqpfzIhG
+         AoZkWNd9IQDpbsm4pGf/Gu3vudY9yeH3x7B7zrg0vngrABIfRCyWMgg5e+S/ARWYIe
+         MIrXoY3Cv3KjA==
+Date:   Fri, 30 Jun 2023 19:06:46 +0100
+From:   Conor Dooley <conor@kernel.org>
 To:     Neil Armstrong <neil.armstrong@linaro.org>
 Cc:     Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
@@ -52,6 +55,7 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
         Sebastian Reichel <sre@kernel.org>,
         Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
@@ -60,56 +64,57 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-oxnas@groups.io,
         Arnd Bergmann <arnd@arndb.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v2 00/15] ARM: oxnas support removal
-Message-ID: <ZJ8VcZq2s5XrxJge@smile.fi.intel.com>
+        Daniel Golle <daniel@makrotopia.org>
+Subject: Re: [PATCH v2 08/15] dt-bindings: net: oxnas-dwmac: remove obsolete
+ bindings
+Message-ID: <20230630-oppressor-circulate-1a2e5631d0dc@spud>
 References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
+ <20230630-topic-oxnas-upstream-remove-v2-8-fb6ab3dea87c@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="BvTA36mVIWDn/yrV"
 Content-Disposition: inline
-In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-8-fb6ab3dea87c@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jun 30, 2023 at 06:58:25PM +0200, Neil Armstrong wrote:
-> With [1] removing MPCore SMP support, this makes the OX820 barely usable,
-> associated with a clear lack of maintainance, development and migration to
-> dt-schema it's clear that Linux support for OX810 and OX820 should be removed.
-> 
-> In addition, the OX810 hasn't been booted for years and isn't even present
-> in an ARM config file.
-> 
-> For the OX820, lack of USB and SATA support makes the platform not usable
-> in the current Linux support and relies on off-tree drivers hacked from the
-> vendor (defunct for years) sources.
-> 
-> The last users are in the OpenWRT distribution, and today's removal means
-> support will still be in stable 6.1 LTS kernel until end of 2026.
-> 
-> If someone wants to take over the development even with lack of SMP, I'll
-> be happy to hand off maintainance.
-> 
-> It has been a fun time adding support for this architecture, but it's time
-> to get over!
-> 
-> Now arch/arm parts are removed, now it's time to remove the remaining stuff.
 
-For all non-DT patches
-Acked-by: Andy Shevchenko <andy@kernel.org>
+--BvTA36mVIWDn/yrV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I always like negative statistics of a magnitude order!
+On Fri, Jun 30, 2023 at 06:58:33PM +0200, Neil Armstrong wrote:
+> Due to lack of maintenance and stall of development for a few years now,
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 dwmac glue.
+>=20
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Daniel Golle <daniel@makrotopia.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+Cheers,
+Conor.
 
+--BvTA36mVIWDn/yrV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJ8ZtgAKCRB4tDGHoIJi
+0n34AQCaqt+oiyrpU/1VK5nJptp1QM1CruwCYZ4Kyxm+cqFlRAEA/3ZXE+gSBEOw
++/4RXjuoc0d0lEczRHPZqKqBpZdabgU=
+=8KMl
+-----END PGP SIGNATURE-----
+
+--BvTA36mVIWDn/yrV--
