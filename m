@@ -2,178 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5277E7447B2
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jul 2023 09:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C5F744804
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jul 2023 10:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjGAH2h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jul 2023 03:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S229980AbjGAIVW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Jul 2023 04:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjGAH2f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jul 2023 03:28:35 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01229189
-        for <linux-pm@vger.kernel.org>; Sat,  1 Jul 2023 00:28:34 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-313e34ab99fso2912580f8f.1
-        for <linux-pm@vger.kernel.org>; Sat, 01 Jul 2023 00:28:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688196512; x=1690788512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qP5UllHuZXC3hd0iLmBfiZxW7l6TOOsMoZA6FcK19FM=;
-        b=HWTmlrV3QfqaYDorYKv86jQCoZU6N7Ji4wa1QzzEmsoMFrgqp5cXBPQkqYO6RhoJrt
-         OMgCuxzOZV6U7NLCLllWehqAU1br0Cj99XtielJXjH0vtEItJnrkZcwi5aiQ9OKdmtDY
-         Q9A/xEzTaYQkszawJHDc+mtC7LwD6bt2awQYLG+ycz1aizL7EkZdofCyymLtKhv1ZNz3
-         3TjFr5Tcci6+Gug59XLL4912dDw99li64nXgikhdsE1m72dF9r2XyCgR+UoUfjg9p2L6
-         HdUBlsgbO+jYrmIK7txaOOoyWQTrnvr1keTbUiMG2x79IoONNQqw0cyo27pJq6Nb/0IR
-         6lQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688196512; x=1690788512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qP5UllHuZXC3hd0iLmBfiZxW7l6TOOsMoZA6FcK19FM=;
-        b=BG9SxpadHnL5Su4+aTlXYQGkSczyDRyR813op/EXxfW+SL9fHbqheSAepnr7pWftIX
-         ZrAtui+VG+ltQos+Nm7JNhKfTaQY3taePS0X0pEqQlT6134mkA8ntMrnFNQu4AjqA7IQ
-         fhg6Y43YvbVOZmap0Gj5MBE9vmWdNYyxNcTfTC51tjgGrgwlBJWXh0uPZInUr4TEfbYX
-         dZWcH63gUBAddRO84HXJLOmKIXyRHL5aSTp0CKZGZK9dL1XcloE+l+L0jY/DLkocp4VY
-         5AGAf4bumOdlgzBrWL/cqJ4L9FTyp1ZybhkOw3Ug/VNdfV4MoCYxXUj0j7YFtJ9OhJID
-         1yVg==
-X-Gm-Message-State: ABy/qLZzQvUC3mKNBGvVkH+xfYiSpPZw+MCYAjGjfofoM/dxdaGvqZxE
-        gzMM5cX+y9N/l8/RkM7mrBYCAs+nteqQTvfZlqQ=
-X-Google-Smtp-Source: APBJJlFjtuC3Tiza+s3Cb7QixRQeylJI0w5f72lgqwymNXHkL0Y0+Z4T49/L9iwnc4UyE635aXPrvg==
-X-Received: by 2002:a5d:6305:0:b0:314:1e86:e75d with SMTP id i5-20020a5d6305000000b003141e86e75dmr3520606wru.34.1688196512321;
-        Sat, 01 Jul 2023 00:28:32 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id cs7-20020a056000088700b0030ada01ca78sm20230874wrb.10.2023.07.01.00.28.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 00:28:31 -0700 (PDT)
-Message-ID: <0c766514-1063-bb57-192e-332559e22529@linaro.org>
-Date:   Sat, 1 Jul 2023 09:28:31 +0200
+        with ESMTP id S229552AbjGAIVU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jul 2023 04:21:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461C0B9
+        for <linux-pm@vger.kernel.org>; Sat,  1 Jul 2023 01:21:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDFEF6020F
+        for <linux-pm@vger.kernel.org>; Sat,  1 Jul 2023 08:21:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2A4DAC433CB
+        for <linux-pm@vger.kernel.org>; Sat,  1 Jul 2023 08:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688199678;
+        bh=JqUVZ+3qyXLGKbR/WiY/Mv4XPoFGhbENlp3FqtNEhWk=;
+        h=From:To:Subject:Date:From;
+        b=l9ujaLUagIeJ0NGBQ7eNqdA0Pqi0EKoLKq/zgrU5cArp6FKfv+ZLJgd/Duwn7yCPk
+         IH6bNOMR1OgWT1nu0maXkmgslz6+poV+pnI5YhKa8SPlLVQl0UcBJVP4OtFsPqPf31
+         uLnxw2HbSWPRMziO2DgeTiNC/h/kvjTONu3oFht4uOjKnXBiPfPp4qU9n9arwVvPR0
+         LNwIS1G+CUoHf1ejR8tKzqRtDftBK6fZ3GSJThX8QFfQftK+JQmKtgKa7YIFJnvpof
+         WmzOKt1dXD4o3yauMFef4Ip8fnuH01lOI0gqAUbH/zvhRiyBP1DaVGL1hDrvkI4AUo
+         pJ7vq2FqwXi8w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0D0E7C53BCD; Sat,  1 Jul 2023 08:21:18 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217618] New: Changing maximum frequency and boost state does
+ not work with amd-pstate in passive mode plus the schedutil governor
+Date:   Sat, 01 Jul 2023 08:21:17 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: putr4.s@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys bug_status bug_severity priority
+ component assigned_to reporter cc cf_regression
+Message-ID: <bug-217618-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
- <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
- <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
- <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
- <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
- <1373aef0-c837-8e6f-fc94-9c6bd70a5b31@linaro.org>
- <ZJ+GIRfhuHxbSxRf@uf8f119305bce5e.ant.amazon.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZJ+GIRfhuHxbSxRf@uf8f119305bce5e.ant.amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217618
 
-Eduardo,
+            Bug ID: 217618
+           Summary: Changing maximum frequency and boost state does not
+                    work with amd-pstate in passive mode plus the
+                    schedutil governor
+           Product: Power Management
+           Version: 2.5
+    Kernel Version: 6.4.0
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: putr4.s@gmail.com
+                CC: ray.huang@amd.com
+        Regression: No
 
-On 01/07/2023 03:49, Eduardo Valentin wrote:
+I have a HP Omen 16-n0000 laptop with a Ryzen 7 6800H, and if I have amd-ps=
+tate
+set to passive mode (either by booting with `amd_pstate=3Dpassive` kernel c=
+mdline
+or by running `echo "passive" | sudo tee
+/sys/devices/system/cpu/amd_pstate/status` on runtime) and the governor lef=
+t to
+the default schedutil then changing the maximum allowed frequency (via `sudo
+cpupower frequency-set -g 3200MHz` for example) does nothing, the CPU
+frequencies (and temperatures along with it) still goes up high. Disabling
+boost via `echo 0 | sudo tee /sys/devices/system/cpu/cpufreq/boost` also do=
+es
+not work with the schedutil governor.
 
-[ ... ]
+However, if I switch to the ondemand governor then both the boost and maxim=
+um
+frequency settings work as expected.
 
->> All that are hypothesis, that is why having a real use case would help
->> to figure out the temperature limit drift at mitigation time.
-> 
-> Yeah, I guess the problem here is that you are assuming I2C is not a real
-> use case, not sure why. But it is and very common design in fact.
+The distro I am using is Arch Linux, with kernel 6.4.0 from the testing rep=
+o,
+although this issue has been present since at least kernel 6.2.x when I fir=
+st
+got this laptop. I can recompile the kernel myself to test patches if there=
+ are
+any.
 
-If it is so common you should be able to reproduce the issue and give 
-numbers. At this point, what I read is "that may happen because I2C is 
-slow and we may monitor it at an insane rate, so let's cache the value".
+Also, for what it's worth amd-pstate in guided mode also ignores both the
+maximum frequency and boost knobs, but it does that with both the schedutil=
+ and
+ondemand governors so I guess that's expected(?).
 
->> Assuming it is really needed, I'm not sure that should be exported via
->> sysfs. It is a driver issue and it may register the thermal zone with a
->> parameter telling the userspace rate limit.
->>
->> On the other side, hwmon and thermal are connected. hwmon drivers
->> register a thermal zone and thermal drivers add themselves in the hwmon
->> sysfs directory. The temperature cache is handled in the driver level in
->> the hwmon subsystems and we want to handle the temperature cache at the
->> thermal sysfs level. How will we cope with this inconsistency?
-> 
-> Yeah, I do not see this, again, as where to handle cache type of design problem only.
-> This is really a protective / defensive code on the thermal core to avoid
-> userspace interfering on a kernel based control.
-> 
-> 
-> I agree that drivers may be free to go and defend themselves against
-> too frequent userspace requests, like they do, as you already shared
-> a link in another email. But saying that it is up to the driver to do this
-> is basically saying that the thermal subsystem do not care about their
-> own threads being delayed by a too frequent reads on a sysfs entry
-> created by the thermal subsystem, just because it is drivers responsability
-> to cache. To that is a missing defensive code.
+--=20
+You may reply to this email to add a comment.
 
-No, the core code has not to be defensive against bad hardware design.
-
-If multiple processes are reading in an infinite loop the temperature, 
-they will constantly take the lock, and as the monitoring thread is a 
-CFS task, this one will be considered as the readers and be delayed, 
-with probably a mitigation temperature drift. Here we have a missing 
-defensive / optimized code against a DoS but it is unrelated to the 
-hardware and the fix is not caching the value.
-
->> As a side note, slow drivers are usually going under drivers/hwmon.
-> 
-> Have you seen this code?
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/lm75.c#n517
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/hwmon.c#n850
-
-Yes, and ?
-
-That is what I said, the hwmon and the thermal zone are connected.
-
-> I also do not understand when you say slow drivers are usually going under
-> drivers/hwmon, does it really matter? One can design a thermal zone
-> that is connected to a hwmon device as input. Why would that be illogical?
-
-I'm not saying it is illogical. I'm pointing the slow drivers are under 
-hwmon subsystems and usually don't aim in-kernel mitigation. The 
-get_temp ops is going through hwmon and the drivers may cache the 
-values. So *if* there is an in-kernel mitigation, the value will be 
-already cached usually.
-
-I do believe I raised some valid concerns regarding the approach. Could 
-please take them into account instead of eluding them?
-
-1. A real use case with temperature limit drift (easy to reproduce 
-because it is very common)
-
-2. How about the consistency between hwmon and thermal? (one driver but 
-two ways to access the temperature - one may cache and the other not)
-
-Another question regarding the I2C example, if another subsystem is 
-using the I2C, won't it take the bus lock and create the contention 
-also? I mean it is possible to create a mitigation drift by reading 
-constantly another sensor value (eg. voltage or whatever) ?
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+You are receiving this mail because:
+You are the assignee for the bug.=
