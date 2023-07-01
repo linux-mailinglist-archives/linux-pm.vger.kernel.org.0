@@ -2,56 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9865D7445DF
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jul 2023 03:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9550C7445E1
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Jul 2023 03:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjGABgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Jun 2023 21:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
+        id S229503AbjGABiC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Jun 2023 21:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjGABgY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 21:36:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA95010C
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jun 2023 18:36:23 -0700 (PDT)
+        with ESMTP id S229489AbjGABiB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Jun 2023 21:38:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376F44201;
+        Fri, 30 Jun 2023 18:38:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D13A61807
-        for <linux-pm@vger.kernel.org>; Sat,  1 Jul 2023 01:36:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31383C433C7;
-        Sat,  1 Jul 2023 01:36:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 976F361751;
+        Sat,  1 Jul 2023 01:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C71C433C8;
+        Sat,  1 Jul 2023 01:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688175382;
-        bh=Rur7f3rOM68X18nbdyGzkd9VQL4TpuAsK8Bppn6ZG6Q=;
+        s=k20201202; t=1688175479;
+        bh=dINvi1s8N3Nm2ZPsPVOPrM4C4O6oID6cNW31iu48MNg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=II2Nf8QHjREegL2uClITdkGa6ec7zlo+TojT+tD1xZ51Y9q723SYeiSr4d/93JsnK
-         HPYU4ZpzVn1n2hOFMA98uD5K9jTbiIRd76BSj9FJRSeson4MXAPdDmGID/vGHZJSsU
-         U5K7JVveC/USGmoB3IC2gJjoGJrxo3I7wY/jlxhQTepzxEluIFarpMaJRaQ6x1CcUU
-         QEDvkvvICr472dTNPox/iP8HNbACU6DxjIRgvN4zWHm0nf+hlSl1XO63HS2kpkSXGh
-         FyREoP/KbISVsfRnO8owb99KJOBwpmz1ebibRMiI1SLNfJ0lccHg5bS9mQWIzGBDfi
-         6qrNtvpmnnp5Q==
-Date:   Fri, 30 Jun 2023 18:36:20 -0700
+        b=PZswgHWCQkOrbDjOoZ9n8fdQsUGNSaQqFraoRJUdk363hfqhvNxCi0IAbo0pfOCDF
+         BTW/7X/Ez+gV3fsXuVeC7FBTc98B3UMK91b/jlkOS1HTzWz1MKw4Qpm4EPrGJkpRLT
+         IWMwgU82DRRGxnJtT/eRbHX3GqcJ8Ue0i+9fbI8N4jG/gt8uR5TpobvCwHtf6Suq4q
+         UYo+GuY/jbLXs/f999wqVI3Um7vwecCkCnrqwtqew1lDr2yfjTv/V8q/EhpTSP1l6A
+         /0wOmc6soD7Htz7b4eAqS54LgfccdYmO2DdALd3yT8yZZ4akuYpcEtbSb+iBYbxy5T
+         R7VnjYCI6CzLA==
+Date:   Fri, 30 Jun 2023 18:37:57 -0700
 From:   Eduardo Valentin <evalenti@kernel.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Eduardo Valentin <evalenti@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, Eduardo Valentin <eduval@amazon.com>
-Subject: [PATCH 0/3] thermal: hook in with reboot and crash
-Message-ID: <ZJ+DFLBjZl3x16rL@uf8f119305bce5e.ant.amazon.com>
-References: <20230525211655.627415-1-evalenti@kernel.org>
- <fb558491-9906-fb3a-60c5-349cb4210695@linaro.org>
- <ZH5ve2KX/Y0DXQnE@uf8f119305bce5e.ant.amazon.com>
- <ZH5whRBkGCun3Gq+@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0gbwRNrjBOxGfFTNJ2meBU3fncBpeHZSCAjhFRYQ9VkaA@mail.gmail.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+Message-ID: <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
+References: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+ <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
+ <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
+ <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
+ <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
+ <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+ <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gbwRNrjBOxGfFTNJ2meBU3fncBpeHZSCAjhFRYQ9VkaA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,100 +67,115 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Rafael,
-
-On Thu, Jun 29, 2023 at 09:07:36PM +0200, Rafael J. Wysocki wrote:
+On Fri, Jun 30, 2023 at 10:16:38AM +0200, Rafael J. Wysocki wrote:
 > 
 > 
 > 
-> On Tue, Jun 6, 2023 at 1:32 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+> On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
 > >
-> > On Mon, Jun 05, 2023 at 04:27:55PM -0700, Eduardo Valentin wrote:
+> > On Fri, Jun 23, 2023 at 07:31:43PM +0200, Rafael J. Wysocki wrote:
 > > >
-> > >
-> > >
-> > > On Fri, May 26, 2023 at 10:27:39AM +0200, Daniel Lezcano wrote:
-> > > >
-> > > >
-> > > >
-> > > > Hi,
-> > > >
-> > > > On 25/05/2023 23:16, Eduardo Valentin wrote:
-> > > > > From: Eduardo Valentin <eduval@amazon.com>
-> > > > >
-> > > > > Hello,
-> > > > >
-> > > > > This small series of changes teaches thermal core about
-> > > > > reboot and crash callbacks. The intention is to have the core
-> > > > > to get notified and the pass in the event to thermal governors
-> > > > > that are willing to perform actions during reboot or crash events.
-> > > > > The thermal workers will be teared down in the process too.
-> > > >
-> > > > What problem does it solve?
-> > >
-> > > This cover letter was not clear enough. In fact, the context for
-> > > all patches I am sending now and will be sending in near future
-> > > is when the thermal subsystem is configured to control temperature
-> > > of a target device. The thermal subsystem is configured to have
-> > > cooling devices that will act on the target system, and has
-> > > input, temperature sensors, to have visibility to the target system
-> > > temperature.  In this case, the problem is when the controlling system
-> > > becomes unresponsive upon reboot or crash, therefore losing
-> > > control of temperature of the target system. This series solves the
-> > > problem by giving knowledge to the governors of such events, allowing
-> > > the governors to have opportunity to act before the actual event happens.
-> >
-> >
-> > Again, this is a different situation than a emergence shutdown due to
-> > temperature/overheat on the typical application of the thermal subsystem.
-> > Where it runs in the same system it controls the temperature of.
-> >
-> > Here we want to reduce the likelihood of loosing control of temperature of a target systems
-> > upon events where the controlling system is unavailable.
 > 
-> So the use case for this seems to be a BMC running Linux that is
-> responsible for the thermal control of a host system.
-
-BMC is a great example here, yes. But not limited to it.
-
-BMC is responsible of thermal control of not only host though,
-but the entire server thermal, considering not only
-host temperature sensor as inputs, but plenty of other sensing
-in the motherboard, for instance.
-
-The changes are not limited to BMC controlling a host temperature though.
-Any system controlling a target device temperature will fit.
-
+> [cut]
 > 
-> It kind of escapes me why you want a thermal governor in the BMC's
-> kernel to be part of this.
+> > >
+> > > Regardless of where the problem is etc, if my understanding of the
+> > > patch is correct, it is proposing to change the behavior of a
+> > > well-known sysfs interface in a way that is likely to be incompatible
+> > > with at least some of its users.  This is an obvious no-go in kernel
+> > > development and I would expect you to be well aware of it.
+> >
+> > yeah I get it.
+> >
+> > >
+> > > IOW, if you want the cached value to be returned, a new interface (eg.
+> > > a new sysfs attribute) is needed.
+> >
+> > Yeah, I am fine with either a new sysfs entry to return the cached value,
+> > or a new sysfs entry to change the behavior of the existing /temp, as I
+> > mentioned before, either way works for me, if changing the existing one
+> > is too intrusive.
+> >
+> > >
+> > > And I think that the use case is not really i2c sensors in general,
+> >
+> > I2C was just the factual example I had, but you are right, the use case
+> > is not isolated to I2C sensor. Rather, to be clear I am not blaming I2C,
+> > the actual issue just happen to be easier to see when I2C devices, slower
+> > than typical MMIO devices, are being used as input for the control.
+> >
+> > > because at least in some cases they work just fine AFAICS, but a
+> > > platform with a control loop running in the kernel that depends on
+> > > sensor reads carried out at a specific, approximately constant, rate
+> > > that can be disturbed by user space checking the sensor temperature
+> > > via sysfs at "wrong" times.  If at the same time the user space
+> > > program in question doesn't care about the most recent values reported
+> > > by the sensor, it may very well use the values cached by the in-kernel
+> > > control loop.
+> >
+> > That is right, the balance between supporting user space reads and
+> > running the control timely is the actual original concern. The problem
+> > fades out a bit when you have device reads in the us / ns time scale
+> > and control update is in 100s of ms. But becomes more apparent on slower
+> > devices, when reads are in ms and policy update is in the 100s ms, that is
+> > why the I2C case was quoted. But nothing wrong with I2C, or supporting
+> > I2C on the thermal subsystem as we do today via the hwmon interface REGISTER_TZ,
+> > the problem is on having to support the control in kernel and a read in
+> > userspace that can create jitter to the control.
+> >
+> > And as you properly stated, for this use case, the userspace does not care
+> > about the most recent value of the device, so that is why the change
+> > proposes to give cached values.
+> >
+> > On the flip side though, there may be user space based policies that
+> > require the most recent device value. But in this case, the expectation
+> > is to disable the in kernel policy and switch the thermal zone to
+> > mode == disabled. And that is also why this patch will go the path
+> > to request the most recent device value when the /temp sysfs entry
+> > is read and the mode is disabled.
+> >
+> > I would suggest to have an addition sysfs entry that sets the
+> > thermal zone into cached mode or not, let's say for the sake of the
+> > discussion, we call it 'cached_values', with default to 'not cached'.
+> > This way, we could support:
+> >
+> > a) Default, current situation, where all reads in /temp are always backed up
+> > with an actual device .get_temp(). Nothing changes here, keeps reading
+> > under /temp, and so long system designer is satisfied with jittering,
+> > no need to change anything.
+> >
+> > b) When one has control in kernel, and frequent userspace reads on /temp
+> > but system designer wants to protect the control in kernel to avoid jittering.
+> > Just keep reading from /temp but set the new sysfs property 'cached_values' to 'cached'.
+> > Then userspace will get updated values as frequent as the kernel control has
+> > and the kernel control will not be disturbed by frequent device reads.
+> >
+> > c) When one has control in userspace, and wants to have the most frequent
+> > device read. Here, one can simply disable the in kernel control by
+> > setting the 'mode' sysfs entry to 'disabled', and making sure the new sysfs property is set
+> > to 'not cached'. Well in fact, the way I thought this originally in this patch
+> > was to simply always read the device when /temp is read is 'mode' is 'disabled'.
+> >
+> > I believe you proposed to have another sysfs entry  sysfs entry for reading cached temperature.
+> > Something like 'temp_cached'. Thinking of it, as I mentioned before, it will work.
+> > The only possible downside is to have two entries to read temperature.
+> >
+> > Strong opinions on any of the above?
+> 
+> So what about adding a new zone attribute that can be used to specify
+> the preferred caching time for the temperature?
+> 
+> That is, if the time interval between two consecutive updates of the
+> cached temperature value is less than the value of the new attribute,
+> the cached temperature value will be returned by "temp".  Otherwise,
+> it will cause the sensor to be read and the value obtained from it
+> will be returned to user space and cached.
+> 
+> If the value of the new attribute is 0, everything will work as it
+> does now (which will also need to be the default behavior).
 
-Yeah, I understand the typical BMC design would have its control
-in userland. But as I said this not necessarily only about BMCs
-controlling host temperature.
 
-Primary reason to have in kernel is reliability compared to a
-userspace based control, avoiding downtime of the control,
-having the control available and stable during the entire
-life time of the controlling system, e.g from
-early boot, and avoiding unnecessary down time of the control
-due to application crashes. Sure the kernel can crash too :-),
-that is why this patch was written in the first place, but
-it is a more rare case.
-
-Userspace may still be involved here where user wants to have,
-for example a fixed override cooling state. But in that case
-the user would need to disable the in kernel control and
-take care of the cooling state and corner scenarios, like
-crash and reboot.
-
-I also do not see anything that would prevent a control
-of the controlling system, like a BMC, be put in the kernel,
-given all the abstractions needed, cooling devices, governor,
-sensors, are available there. Mechanically and physically
-the thermal zone is still something part of the hardware
-where the controlling system, say a BMC, is responsible for.
-
+Yeah, that makes sense to me. I can cook something up in the next version.
 
 -- 
 All the best,
