@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC10744F2C
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 19:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C5B744F37
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 19:44:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjGBRnj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jul 2023 13:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S230160AbjGBRnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jul 2023 13:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjGBRnO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 13:43:14 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7561E5E
-        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 10:43:12 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b6a662b9adso53816161fa.2
-        for <linux-pm@vger.kernel.org>; Sun, 02 Jul 2023 10:43:12 -0700 (PDT)
+        with ESMTP id S230194AbjGBRnP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 13:43:15 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD2FE48
+        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 10:43:13 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b6a084a34cso53921531fa.1
+        for <linux-pm@vger.kernel.org>; Sun, 02 Jul 2023 10:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688319791; x=1690911791;
+        d=linaro.org; s=google; t=1688319792; x=1690911792;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ok9P9IpAQTcPv0Tlft8NotdgEZSuFIkwvtwYagpVMWE=;
-        b=hU2u4lruLLK/+LV27c2moyQ9G1WO52cbfcHrN98FdIE14mmzSeSFniW4Zz5l/wm//M
-         dFR61fG/NE1TiYv/42Np0q7NiJgRYEttBvQSvQEJxwtSriS3ZrA4zV8SzJ2k1elAlr3w
-         losoEpzkcskMxQ2JOo+RYFZsR79d6b0caJaUn3rGM0n0KLwatwVC0egwwwsDNJTxKc6W
-         z9lPjVPEDT8k+NObH3PSoz3eG/gWDKU8kDW4ke1avRPvDIPpgYr/2ZAEBrhAosMqAcp4
-         0pnAbB3rKKo7Vce4EBAPs/DvCQcXEpb2TNAp/EEEMLQUfnKUIhr9JGqzB/s8YncxEPWd
-         ZMpg==
+        bh=m3iVCt7nS+euIxpXidw/3v385QWRNdeTuls6EQqgHh0=;
+        b=FWVdcPcQM0oDX7YXc1hgasumud57y5IH/tcRSF+Z8YRQjkfIHq6ewN5IGjP4MyUJZX
+         kiiKmNoV8ixbCH/qLyvBrtczqfa9NWfTzrlMki7OLrjNXy/FPPQhAWMjfJW1hJcGRKJC
+         820KeUqROhpKxwX3TpOongGe20QdY4njeT+ZtxgKaW3fWwylcZKK1DAzTF4Lmi4RCcqG
+         2wrsC+usDOyWUHu0uCo5Y0LPQ+0IEPF92Ltjq9brtjwnxpCE+bDFiZF8s/fnySRut9fd
+         Lkpzspw/0Jc6qbL96bkSolVK1QxUIR7QuAv7hbXWh3iP6D99p72md0DW3MVKwVtg/nhJ
+         mmdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688319791; x=1690911791;
+        d=1e100.net; s=20221208; t=1688319792; x=1690911792;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ok9P9IpAQTcPv0Tlft8NotdgEZSuFIkwvtwYagpVMWE=;
-        b=a6e7s1jaUG39jolkPIbPUp5a9TFtJ5RCCHDjVrWl6ovMfdrAq3+H6xqpnhIbZ7WIzn
-         HzA7+SxaJtGmSc/X9pEJqOclo9Mn/+UmH9VpwZbtW799TH6VzZ37DtMNI2qp3USEJNX6
-         oydC8DkmxGPE4hrwP/d0u7kBeG+Jg0KXjmE0RKPEor8uPfJryIXW88ZAw/c/5ye9JimQ
-         LFZ9Uzi1ywVtrSH4/rbs4kCHq9LumM8srfJSVspbeP6scdelHiyfIEbToXzWctadXTd6
-         /1/mAAXNnaOHSkBPkeEM8nDnbEt0auIhLg5T9gOK3dwiEo5BEslSB31NATs0iCmgONSv
-         yTXQ==
-X-Gm-Message-State: ABy/qLY71UYy1b1omUb1S7uDUEioV3HhzeLU7mk/0qYpt9v5lqW2BW5O
-        J+HbWXzKrpOjLlMLpCaA8hEdXg==
-X-Google-Smtp-Source: APBJJlGrwOZUDJObS9p4hbTu2Q7j7tqTM3w0NsR7pT0qKaTIsfP3sSBaw8ZXbOkisLykRKHjXM1l2A==
-X-Received: by 2002:a2e:7c0f:0:b0:2b6:d7a0:c27d with SMTP id x15-20020a2e7c0f000000b002b6d7a0c27dmr3136344ljc.37.1688319790947;
-        Sun, 02 Jul 2023 10:43:10 -0700 (PDT)
+        bh=m3iVCt7nS+euIxpXidw/3v385QWRNdeTuls6EQqgHh0=;
+        b=YRNWUIknGO7WcywZyTJ3I7jKg41NynbxvViVQMnr1BxdAjWAoHyp0PfbBVZUNqvcC8
+         XT620RlVarstClt3IaJ/U7btVU7jByPIZEGQIHQo5iOIUGVBFEYwEw32zENYh/uhFP/N
+         bFhoF6vBtL9rOyRcQqtYonz3kcQrhBp8gbKaR4B/57W/qtl1eEeqXHOEfnILq1Sp5k3+
+         a3ww0h+N62tEFxUSrZNnJCBk05sDSFSQvqKMwtx3wKrfsdtdY9eNS9KeYeiSUjDt6DZR
+         5HuuhcABCIUdmsXbQBgu7Jsob70e+E1toYnUvic7OsQWgcpzvTstq+wZd/Res3Wze0U0
+         AapA==
+X-Gm-Message-State: ABy/qLZnvSjfrVVPql4TkmEh3TODDR2MwtQcjTtkXT8JVnDmZ+L339B9
+        luYNnKOZgu4wCeG4/yU6oxEJGQ==
+X-Google-Smtp-Source: APBJJlGUFIcXD9GA76VfUeHACSqBSmGW1Heb75yKtmzwl7EWw9fDwWQbsPOmnA68jFGPBWfJSlXLtw==
+X-Received: by 2002:a2e:8257:0:b0:2b6:d084:e589 with SMTP id j23-20020a2e8257000000b002b6d084e589mr4307228ljh.47.1688319791965;
+        Sun, 02 Jul 2023 10:43:11 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id v23-20020a2e9917000000b002b6daa3fa2csm1372550lji.69.2023.07.02.10.43.10
+        by smtp.gmail.com with ESMTPSA id v23-20020a2e9917000000b002b6daa3fa2csm1372550lji.69.2023.07.02.10.43.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 10:43:10 -0700 (PDT)
+        Sun, 02 Jul 2023 10:43:11 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -66,9 +66,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
         Stephan Gerhold <stephan@gerhold.net>
-Subject: [PATCH v3 25/28] ARM: dts: qcom: apq8084: drop 'regulator' property from SAW2 device
-Date:   Sun,  2 Jul 2023 20:42:43 +0300
-Message-Id: <20230702174246.121656-26-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v3 26/28] ARM: dts: qcom: msm8974: drop 'regulator' property from SAW2 device
+Date:   Sun,  2 Jul 2023 20:42:44 +0300
+Message-Id: <20230702174246.121656-27-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230702174246.121656-1-dmitry.baryshkov@linaro.org>
 References: <20230702174246.121656-1-dmitry.baryshkov@linaro.org>
@@ -94,14 +94,14 @@ instead.
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- arch/arm/boot/dts/qcom/qcom-apq8084.dtsi | 1 -
+ arch/arm/boot/dts/qcom/qcom-msm8974.dtsi | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom/qcom-apq8084.dtsi
-index 8f178bc87e1d..6a2ff30a2f3c 100644
---- a/arch/arm/boot/dts/qcom/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom/qcom-apq8084.dtsi
-@@ -652,7 +652,6 @@ saw3: power-controller@f90b9000 {
+diff --git a/arch/arm/boot/dts/qcom/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom/qcom-msm8974.dtsi
+index a4ff1fe63903..bb4f08d40ca4 100644
+--- a/arch/arm/boot/dts/qcom/qcom-msm8974.dtsi
++++ b/arch/arm/boot/dts/qcom/qcom-msm8974.dtsi
+@@ -416,7 +416,6 @@ saw3: power-controller@f90b9000 {
  		saw_l2: power-controller@f9012000 {
  			compatible = "qcom,saw2";
  			reg = <0xf9012000 0x1000>;
