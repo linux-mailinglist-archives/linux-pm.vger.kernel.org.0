@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9CE745225
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 22:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B02745266
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 22:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232832AbjGBULN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jul 2023 16:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        id S229790AbjGBUqK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jul 2023 16:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232862AbjGBULD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 16:11:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD3410F9
-        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 13:10:01 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51d8fa4dbf9so4157205a12.1
-        for <linux-pm@vger.kernel.org>; Sun, 02 Jul 2023 13:10:01 -0700 (PDT)
+        with ESMTP id S229761AbjGBUqJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 16:46:09 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A57DE50
+        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 13:46:07 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-977e0fbd742so439981066b.2
+        for <linux-pm@vger.kernel.org>; Sun, 02 Jul 2023 13:46:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688328592; x=1690920592;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1688330766; x=1690922766;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0XEbinDKQmA0sOkZ9j4oK2eVO7lkopAowopk2a9saj8=;
-        b=UIXqveSMX+oujydoxpDfsn6bSse4eMBBiZz50mTtAiQkPx1/x9DVAZa3SBO2xUYLf1
-         7OTpN9L+07q93d8jxInlx1vzfueoLXVyTLi5jnOPHuPVWF2kgSAp81DQzf7dtA2hApmM
-         yA+EJCYdHCoxwUFHPqUdgsVCdI1F8ihJcwvuIADu/yvkv9OWCX1U+fSBZFGz3aXUn2PQ
-         TnI4nPcHhgbMOlvzMJnRNHvb9OdIMhcSS107H+fNZo9PlVhK14Th+D/0dKaukGaOrKYk
-         hvnCNzv6ko5iFkZBXBixixhIK0NOX2UBYCGwRb/tO6T5NsZOaB9jbIX8Oj8wy0iEebb8
-         XxWA==
+        bh=4jlYeSLn8Tq3IBahu6vVz/5FkROpZZXnVhcVPs+VklU=;
+        b=mlsQ/ikds9ypzeEzm4Pj87+T6CQka+qT4uNstCN6g7PIfoFr0POw9oJDxA9gV0n/I8
+         fWAfPiRSq2SGQmHhvlfge9J2rEwNZTQwTK8Zb5ldSngKtdL+hoT2hOUxfr7FuJtx7ChL
+         /0fty1jDDCkVKRyxA9wgDqV70TKO/hiBYENiWv+Y3AyGJXgzWtb/OEyde2xUI5YMoA3+
+         hrljN06m26pxCbc7M+ICFXdfwmXuKrX/6zn/nvIgw73TA5nBpTgLTkF9aqAOhK63T4lH
+         rPN/9qw6I4PCpm6oCGNKd1mgbZuZRAiQv8UfQ4kP7V04f67I+0zo86yHF439Et0zXDgd
+         RP3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688328592; x=1690920592;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1688330766; x=1690922766;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0XEbinDKQmA0sOkZ9j4oK2eVO7lkopAowopk2a9saj8=;
-        b=djFNoDGXVfaJIUPa6j2vkkzidRdj1Ya8BTOgvEOoPm0LYASU4ZzQAeyppriHdUpkcX
-         qPUIANxT2GWHaJAJpz3KCvfgJEcKQIYZFxPBaaWbuq2YBQsJPNBDo3a4XpnJkwQLJ+4h
-         UzU/QJn8JtcR5RIkuolCCQWLflx4zUBtixC5VvrhoHRTg2XVL3mVN+Nm75FGfSq8IJ5s
-         cQwPpHEDFzQuUfGi5XU10SyHz90kyVaM/XFp1rqp5q4kWem3K6oF0EB2A3TpsF9mCCJL
-         kNB/S4xClccQahAtYu1t4AAqjYpdqopYXEhOhssP7XqXKE4+H1ICX7zKmUtrXlyEdKod
-         s3Pg==
-X-Gm-Message-State: ABy/qLanjj6yY2txSnX3WDH0jcBEVwqyUVaeL0n5kN1cI2eRDg+5jdqV
-        xip2AWVQeiVLZ3qK40zv8wzAfw==
-X-Google-Smtp-Source: APBJJlG0HOHJON9xOHZ/yU82pUxWEV1BWHwlPLfoIk/EW35/54QSwfzuQdlgV1vXC9abgHES3eep6A==
-X-Received: by 2002:aa7:d8d9:0:b0:51d:e498:201 with SMTP id k25-20020aa7d8d9000000b0051de4980201mr5548697eds.27.1688328592128;
-        Sun, 02 Jul 2023 13:09:52 -0700 (PDT)
+        bh=4jlYeSLn8Tq3IBahu6vVz/5FkROpZZXnVhcVPs+VklU=;
+        b=Aa9v3xvFULT7QqDhVQOwgVddYNxgMWPAZXf/tmIUBzwMb83TiD+5CWRaSopY0dC3MO
+         9Z6lrkZuSJVe5QgKKPoog/8eRjfGomPgHkTou5tubelksvWFSr0WycPGuC+bOd0hX+ic
+         sZ3xccCXdLRn+S5WrQ246ftx7ruXNWJbGBKnX2P7bu8cZGnbOF9PqnrfcvpxykqjXtXE
+         x92e72XMr2B+88ZABOBBU02RzzwyDRF3A2GitzJ6xa7XziTiPAcW4bZKqauZEd80O4I3
+         4NqXNHNgrkTx0VSDt6WfS5GHsu8cXV4FYJ9NBzVGf8D4ZbAVwWESvXg0Dx+O+a0AvP9e
+         CZQg==
+X-Gm-Message-State: ABy/qLZeguTIkjRvZM9UIG5o92PuIfnCnUOXPzS3S749VT2D3NWMlhe6
+        U0Pj6MD7blWuUdAz7nCVv2VoLw==
+X-Google-Smtp-Source: APBJJlGZeCyGGolpS1rAfUIUpoBPWfZmmU7hCNm2ZfnL2GZ++SL/vljxXEnMAe7eHBu6cn/5YNtbdA==
+X-Received: by 2002:a17:906:b293:b0:992:3762:3dde with SMTP id q19-20020a170906b29300b0099237623ddemr5608122ejz.6.1688330765847;
+        Sun, 02 Jul 2023 13:46:05 -0700 (PDT)
 Received: from [192.168.10.214] ([217.169.179.6])
-        by smtp.gmail.com with ESMTPSA id u21-20020a056402065500b0051de3c6c5e5sm4033677edx.94.2023.07.02.13.09.51
+        by smtp.gmail.com with ESMTPSA id gx23-20020a170906f1d700b00992dcae806bsm3838517ejb.5.2023.07.02.13.46.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Jul 2023 13:09:51 -0700 (PDT)
-Message-ID: <64543b2f-854f-4342-ee6d-d32f616eb55e@linaro.org>
-Date:   Sun, 2 Jul 2023 22:09:50 +0200
+        Sun, 02 Jul 2023 13:46:05 -0700 (PDT)
+Message-ID: <cb057149-2051-0120-df79-4606d9cd7cea@linaro.org>
+Date:   Sun, 2 Jul 2023 22:46:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 21/28] ARM: dts: qcom: apq8064: add L2 cache scaling
-Content-Language: en-US
+Subject: Re: [PATCH v3 05/28] dt-bindings: cache: describe L2 cache on
+ Qualcomm Krait platforms
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -74,9 +74,10 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
         Stephan Gerhold <stephan@gerhold.net>
 References: <20230702174246.121656-1-dmitry.baryshkov@linaro.org>
- <20230702174246.121656-22-dmitry.baryshkov@linaro.org>
+ <20230702174246.121656-6-dmitry.baryshkov@linaro.org>
+Content-Language: en-US
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230702174246.121656-22-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230702174246.121656-6-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,43 +91,17 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 02/07/2023 19:42, Dmitry Baryshkov wrote:
-> Populate L2 cache node with clock, supplies and OPP information to
-> facilitate scaling L2 frequency.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
-
-...
-
->  	qcom,mode = <GSBI_PROT_I2C_UART>;
->  	status = "okay";
-> diff --git a/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi b/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi
-> index c212215800d0..860f8981e8db 100644
-> --- a/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi
-> +++ b/arch/arm/boot/dts/qcom/qcom-apq8064.dtsi
-> @@ -2,6 +2,7 @@
->  /dts-v1/;
->  
->  #include <dt-bindings/clock/qcom,gcc-msm8960.h>
-> +#include <dt-bindings/clock/qcom,krait-cc.h>
->  #include <dt-bindings/clock/qcom,lcc-msm8960.h>
->  #include <dt-bindings/reset/qcom,gcc-msm8960.h>
->  #include <dt-bindings/clock/qcom,mmcc-msm8960.h>
-> @@ -81,9 +82,106 @@ CPU3: cpu@3 {
->  		};
->  
->  		L2: l2-cache {
-> -			compatible = "cache";
-> +			compatible = "qcom,krait-l2-cache", "cache";
->  			cache-level = <2>;
->  			cache-unified;
-> +			clocks = <&kraitcc KRAIT_L2>;
-> +			#interconnect-cells = <1>;
-> +			operating-points-v2 = <&l2_opp_table>;
+> +description:
+> +  L2 cache on Qualcomm Krait platforms is shared between all CPU cores. L2
+> +  cache frequency and voltages should be scaled according to the needs of the
+> +  cores.
 > +
-> +			l2_opp_table: opp-table-l2 {
+> +allOf:
+> +  - $ref: ../cache-controller.yaml#
+> +
 
-opp-table
+One more thing - it seems you miss here select: field. Take a look at
+other bindings using cache compatible.
 
 Best regards,
 Krzysztof
