@@ -2,134 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FBAA74498B
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Jul 2023 16:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BCA744ECA
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 19:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjGAOUQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Jul 2023 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S229605AbjGBRh6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jul 2023 13:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjGAOUP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Jul 2023 10:20:15 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96B330D0
-        for <linux-pm@vger.kernel.org>; Sat,  1 Jul 2023 07:20:14 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbc244d3a8so26097255e9.2
-        for <linux-pm@vger.kernel.org>; Sat, 01 Jul 2023 07:20:14 -0700 (PDT)
+        with ESMTP id S229896AbjGBRh4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 13:37:56 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29BEE76
+        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 10:37:49 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b5e7dba43cso57608561fa.1
+        for <linux-pm@vger.kernel.org>; Sun, 02 Jul 2023 10:37:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688221212; x=1690813212;
+        d=linaro.org; s=google; t=1688319468; x=1690911468;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SvAVVgJkmeA4hsydfmvG5kZr6g/WLMdVAO+gG1MB6IE=;
-        b=hbVwVpLQ7okN8jl5JiOiVF9PGdz2A7jSY2udUcUwG+e6m2LOkY80CAdKlbYiPIwbRa
-         OHMOhPLKVMceX8ek39BezmowNf9W6IuzzSXEqruWBQLxyJbeGmKkvOgaahWAB/bLKI7K
-         Id3IX1QAVZ0hkIfw33867/5u57Kp57o2aFS4YmOBxV2erTXw+0yhQcyYDtnuhW8G+0L/
-         5aGyvzaNrPhB9jxvbtQi40PQTwIF+0Fu5UHOod8vWTtYZVjazP5LZ1a7FccWX6PkKO0b
-         aWcSPjrJ2VNrw3opC2fBDcTqgM9iPn5o6eZv85Y664OMAyF06zSeOFCq7nCyPxkmLxan
-         i8qg==
+        bh=P832M/MKIVcAnwYyLxfAF/7C9YRHmHPww8zmwWUQWmk=;
+        b=vjJydNpz7ul+/DI+LRuBT2DH+JHWkQxZHY1MPIEtQBBDUgXqyEVw5JEdy7gncByPno
+         OuHVi8UbZvwHrGt0eOIFeAbi2d//tvfjgBKsgAqkpYc6k41NB+OLWr7/2Sjnk233/mh9
+         98ZoB8wa3CdDy6uane0iEd46vk+qTbHfQ31qMgpoRKTaJ+WDGL6zCNJhTIrRwfY35/N9
+         l3BA1pbVTbbGlKTrfzE2a9uOVYK2GePu6U9xzXGgwzVdQCcOfJvrnrBiXCYmU79TJQ/r
+         7xVGCkEJhqBQjfi9O8pEp/aJm3FC/pF7TSsYAPvMClUQV7eU3KmGv21OTPyTgQDWW6xW
+         1yUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688221212; x=1690813212;
+        d=1e100.net; s=20221208; t=1688319468; x=1690911468;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SvAVVgJkmeA4hsydfmvG5kZr6g/WLMdVAO+gG1MB6IE=;
-        b=B+GRGaAt2NMt6FBknfi/7Jbsyh7vzKEGq8Xw+Fp7b7zNSYmtgORYf3L1k4hl8OIsfd
-         gAIf8is1t4seeoVrLWYzsR5AuibTRVKRb8j4JXLX36FNJHZWgChajXaIXGHSPPKyYyWz
-         GFhPAkqmehp7pIdG0iy0saHkTFgYmHkBllYt5Rw+xRH6iEVNUgUMJpRc01JTS6e0WBef
-         Of4PEbEAcE3KATbdSrHvtNpYObjacWld6Q9Wy35+05iapVQdo/bhDL1Ak4gNCHj1H0Wb
-         Q8qozeHZkp80usZeA87mYDsXBiZeI/HwKNC7CAKnY3QiWGNofMKX9z3Y2zHkvlZJmTLG
-         Svsw==
-X-Gm-Message-State: AC+VfDwtoSGChHKo7orCF8y9TD1KXOV/VYbaZNaUERz/eRLERc5Se/Q2
-        YY+I8+zcNKNavLGBDVEcwan0UA==
-X-Google-Smtp-Source: ACHHUZ7AvvU8HSIWlyr+fMlByVzT11D6vdN/V6YHGjUK3ae6gLfOmZRSkmiaBQXkZGld6pMBBrBsJg==
-X-Received: by 2002:a05:600c:2905:b0:3fb:ba04:6d57 with SMTP id i5-20020a05600c290500b003fbba046d57mr4419571wmd.5.1688221211966;
-        Sat, 01 Jul 2023 07:20:11 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l17-20020a1c7911000000b003fbb9339b29sm7060737wme.42.2023.07.01.07.20.11
+        bh=P832M/MKIVcAnwYyLxfAF/7C9YRHmHPww8zmwWUQWmk=;
+        b=OGZbnG02Obkorw4mDc4VYk8zAs9gA5i8y5IQkJCm/t4Ujxa9dp0x46u6sDlUpfBgnn
+         258Zr63jvM/2V7L+MZeSQy4OWEmjIv+2ShmiXPEJ3kHkwPcOm1zNxSvTy1fx7zjcvCK5
+         JxqJP/kjHJ1vB8w3/EmiuFiokAudTg1QqbTK3YMOcf1gpJLY+YUS9KD5haBg9PsFKf13
+         cJlKxHHwrAK2MVzNetxPlCzQNwhhT+YCTrRJZBAux65wlz4br2zcG9XrprbLIk6rd3KE
+         VReDIJvtjIRpyRFEmSe4sOxJXckwGhnBSmbhvo9gdLB4OmCghS8zqZJf8XS3uhjxqX60
+         VKsw==
+X-Gm-Message-State: ABy/qLaG9v0KyPu9XO54um9HfIwe9dZ/CQMk9mY9DImg+hogr61OkwVg
+        8bfSKOb8VVro84sVIpe+v7bYaQ==
+X-Google-Smtp-Source: APBJJlEBSvJdaoM+ESXqdWJdJ0GTZzt/18Fz2+w8eXAbm3VbXWt12w08jZ45D0SgsQd2fDoLDDjljg==
+X-Received: by 2002:a2e:8095:0:b0:2b6:a344:29cf with SMTP id i21-20020a2e8095000000b002b6a34429cfmr4928765ljg.17.1688319468009;
+        Sun, 02 Jul 2023 10:37:48 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id a16-20020a05651c011000b002b31ec01c97sm3754351ljb.15.2023.07.02.10.37.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Jul 2023 07:20:11 -0700 (PDT)
-Message-ID: <a98b6393-8d59-6824-3505-975a458c4575@linaro.org>
-Date:   Sat, 1 Jul 2023 16:20:10 +0200
+        Sun, 02 Jul 2023 10:37:47 -0700 (PDT)
+Message-ID: <c71797a8-27e1-40fb-2487-7ce68470da2a@linaro.org>
+Date:   Sun, 2 Jul 2023 20:37:46 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Content-Language: en-US
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org>
- <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
- <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org>
- <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
- <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
- <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
- <ZJ+Do990LVNQx4rp@uf8f119305bce5e.ant.amazon.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZJ+Do990LVNQx4rp@uf8f119305bce5e.ant.amazon.com>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 09/26] cpufreq: qcom-nvmem: create L2 cache device
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230625202547.174647-1-dmitry.baryshkov@linaro.org>
+ <20230625202547.174647-10-dmitry.baryshkov@linaro.org>
+ <a15a2564-3b48-4592-1e40-2187ee89af1c@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <a15a2564-3b48-4592-1e40-2187ee89af1c@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 26/06/2023 14:50, Konrad Dybcio wrote:
+> On 25.06.2023 22:25, Dmitry Baryshkov wrote:
+>> Scaling the frequencies on some of Qualcomm Krait platforms (e.g.
+>> APQ8064) also requires scaling of the L2 cache frequency. As the
+>> l2-cache device node is places under /cpus/ path, it is not created by
+>> default by the OF code. Create corresponding device here.
+>>
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+> I think a generic solution (i.e. for each cpu node call
+> of_platform_populate in drivers/of/platform.c :
+> of_platform_default_populate_init) could be beneficial
 
-Hi Eduardo,
-
-On 01/07/2023 03:38, Eduardo Valentin wrote:
-> Hey Daniel,
-> 
-> On Fri, Jun 30, 2023 at 12:11:25PM +0200, Daniel Lezcano wrote:
->>
->>
->>
->> Hi Rafael,
->>
->> On 30/06/2023 10:16, Rafael J. Wysocki wrote:
->>> On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
->>
->> [ ... ]
->>
->>> So what about adding a new zone attribute that can be used to specify
->>> the preferred caching time for the temperature?
->>>
->>> That is, if the time interval between two consecutive updates of the
->>> cached temperature value is less than the value of the new attribute,
->>> the cached temperature value will be returned by "temp".  Otherwise,
->>> it will cause the sensor to be read and the value obtained from it
->>> will be returned to user space and cached.
->>>
->>> If the value of the new attribute is 0, everything will work as it
->>> does now (which will also need to be the default behavior).
->>
->> I'm still not convinced about the feature.
->>
->> Eduardo provided some numbers but they seem based on the characteristics
->> of the I2C, not to a real use case. Eduardo?
-> 
-> Why I2C is not a real use case?
-
-What I meant is "I2C is slow, ok. But what is the setup where the 
-problem arises?"
-
+After giving it a lot of thought, I'm not brave enough to register all 
+CPU-like devices (especially since some of them are registered by other 
+means). So let's keep it this way, unless we see a bigger demand of 
+populating cache devices.
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+With best wishes
+Dmitry
 
