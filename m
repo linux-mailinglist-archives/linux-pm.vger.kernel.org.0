@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F31744F43
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 19:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D32744F52
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Jul 2023 19:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbjGBRuu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jul 2023 13:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S229791AbjGBRuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jul 2023 13:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjGBRuu (ORCPT
+        with ESMTP id S229795AbjGBRuu (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 13:50:50 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBD1E60
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4C5E5E
         for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 10:50:48 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so5830134e87.2
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fb863edcb6so5854958e87.0
         for <linux-pm@vger.kernel.org>; Sun, 02 Jul 2023 10:50:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688320246; x=1690912246;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7QLIcJhGf6roTEV5uHjocZCiVQtMN4WpmTTSqh8Iu8=;
-        b=IutP9H0Sl0plLlVVtqrMV2uur1iEdtzwdcHgeEwjPOZA93yfivwNa7PnYmEgVZ5zq/
-         bULbRNBr9UG1Xz1uDbBLrEk8oSHXOKusr4gintsV6013Zt2DGwtwL3eA7c4/B3cUQeEd
-         l8xCrEiK3AL9MiOgMZpCZzbod9Jq7Ty5YFHiJG7vYhlOI80DLiuMiYDqUpMBZQxU/m9g
-         KV6XmgON6zvKZsuHPeUQo2u5VOSjVfEe7HEBO11ElnRjnGBYizrI+nTmUMrSsuaEGTdk
-         A28ylp67+Rb0SHXIWuGbdayFIQbjS3yVuQ+U4Ual6EUtJRJh4DhHE9ooKLRwJiXJ2VHq
-         RlyA==
+        d=linaro.org; s=google; t=1688320247; x=1690912247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xy09Ud9yIKr2AD6oCCkzQftGXcApmZOlk4F4PzrOzkQ=;
+        b=qf6bQlvu+X4t1s7SNpdHOTeAiXl3d0m2BzqbFCUP6nnzLj4XdsQS417ahnFbtHNHnv
+         2oacuwRNDxZwU6Qd2nP2qUI8L1x9vgqRSjdh/Sr8QqztBBnA1iqoq0WCevMY70C/X6SB
+         lyI1a432fsjwgq/doPLfv9fqBvhrXeR1RVH1P68a3aM93ftVKfTP99dn380YXfO7lsVu
+         CAyOFGhLtLWcxFUGyv45ozppt1BSO2pJbyfq8TKMLrgwqPoCJEw41c9mHjpcJO8dyOak
+         jCSqPVQbXOMaDkP+ZqJuYL1GtOwoR96UGZX1Jcd8aDfna1WCgftjMtrJO7CP0vA481te
+         vJVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688320246; x=1690912246;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p7QLIcJhGf6roTEV5uHjocZCiVQtMN4WpmTTSqh8Iu8=;
-        b=S7VinoOsPxbemvGaCQuzQBksTBYJ33co1rIa7m331EY9H6kBkiWBOk+OX0mzypboHF
-         ee10CfHS9NzATDLBs4KevhTsFclcZvZQhxcpkzw3QeM9twTJjlJKifg9sn6sZTUIfmNH
-         tXijOJ1v0gtOfjPMEyJvyse8tdl+KmKWeB155Zem/Dd7PikaDqD76Chv9wIlpOsqI7L+
-         K8sRA0PJZJQlJNzvSxULPdD03Oi9HMKu6BdFzbPZbDNyiIUTe8mtuGGcfahpMX/PIJdb
-         bhDJryOShB2PMWSrs5XtX3iiOromVoOhjANQo7nFB6Bcntm1WOuA+KFGhY5lr8xOwo0u
-         bVHA==
-X-Gm-Message-State: ABy/qLY+Aesnfm+2qyWbWN1XqpUAY88e9Ja6E29a/n9fF2sFIRcHXZB5
-        9ZaufWijM/AYsbT4UFLNQXifGw==
-X-Google-Smtp-Source: APBJJlEEGJ19yefzJjPgvbVD3Vwt8o0hpwITPKpxhrZ6qfTncXtXmPc/2czBK22ojn0BWVp4pHLe1g==
-X-Received: by 2002:ac2:4a66:0:b0:4fa:9817:c1da with SMTP id q6-20020ac24a66000000b004fa9817c1damr4180775lfp.21.1688320246289;
-        Sun, 02 Jul 2023 10:50:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688320247; x=1690912247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xy09Ud9yIKr2AD6oCCkzQftGXcApmZOlk4F4PzrOzkQ=;
+        b=j4GqDzKcIANlVFIGhAdt47xpCkm4oGCEU8ocsy9uidUS/0MZZVTj0LoxFHM/P6XKxj
+         ljJNg5U7p3OoKyQ6wZ2qjGtsz+E5H/CV5ZZ9soV91QgQIoCioJZLzDtXS1bjYEK1EHan
+         gWvebs3AtH/xLCKWxixrY5u2TplSdQt0kM27sFLe53a7NzCvhUteUHZKbOKWDLO9AAtx
+         fo/V/KggsdahgHMzbtpoW06OhMkRP4PR4yO3garYi3RL3NmLoCpKoF9RFfdhTGNZvAOY
+         084pba+yst/JxwbMhKT1R6CHgTd6U2YhUt6cr31wSXDuBi31Is1eiikvE19Dq7Nrh15Z
+         C6yA==
+X-Gm-Message-State: ABy/qLZJw3mR9eMlfLIzIWOxh5NATrIJFO8M/AW3v4MEAvEGJEKQPO8J
+        t3eSrCdX40CcquM1yUmMlLzc5g==
+X-Google-Smtp-Source: APBJJlEIez/j04ndZ+AAM08YlJA0Kf6p24z1WYVdIzR/FQeQGtQ3v0FWV8YTRcMBbGKqeODAr5mmVA==
+X-Received: by 2002:a05:6512:3242:b0:4f8:6b82:56c4 with SMTP id c2-20020a056512324200b004f86b8256c4mr4642616lfr.33.1688320247228;
+        Sun, 02 Jul 2023 10:50:47 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id d1-20020ac24c81000000b004fb759964a9sm3354130lfl.168.2023.07.02.10.50.45
+        by smtp.gmail.com with ESMTPSA id d1-20020ac24c81000000b004fb759964a9sm3354130lfl.168.2023.07.02.10.50.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Jul 2023 10:50:45 -0700 (PDT)
+        Sun, 02 Jul 2023 10:50:46 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -65,10 +66,12 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
         Stephan Gerhold <stephan@gerhold.net>
-Subject: [RFC PATCH 0/8] ARM: qcom: msm8960: support CPU frequency scaling
-Date:   Sun,  2 Jul 2023 20:50:37 +0300
-Message-Id: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
+Subject: [RFC PATCH 1/8] dt-bindings: nvmem: qfprom: add compatible for MSM8960
+Date:   Sun,  2 Jul 2023 20:50:38 +0300
+Message-Id: <20230702175045.122041-2-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
+References: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,36 +84,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is an RFC (or maybe it should be RFT), as I did not test this on
-the actual hardware. The actual core and L2 setup is mostly the same as
-APQ8064, so this is just a port of APQ8064 code and adaptation for small
-MSM8960 peculiarities.
+Add the QFPROM compatible for MSM8960.
 
-Note, msm-3.4 had separate optional AVS code for MSM8960, but as I don't
-have the actual hardware, it is left untouched for now.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Dependencies: [1].
-
-[1] https://lore.kernel.org/linux-arm-msm/20230702174246.121656-1-dmitry.baryshkov@linaro.org/
-
-Dmitry Baryshkov (8):
-  dt-bindings: nvmem: qfprom: add compatible for MSM8960
-  cpufreq: qcom-nvmem: enable core voltage scaling for MSM8960
-  cpufreq: qcom-nvmem: provide vmin constraint for early Kraits
-  ARM: dts: qcom: msm8960-cdp: constraint cpufreq regulators
-  ARM: dts: qcom: msm8960-samsung-expressatt: constraint cpufreq
-    regulators
-  ARM: dts: qcom: msm8960: add Krait clock controller
-  ARM: dts: qcom: msm8960: add L2 cache scaling
-  ARM: dts: qcom: apq8064: add simple CPUFreq support
-
- .../bindings/nvmem/qcom,qfprom.yaml           |   1 +
- arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts   |   9 +-
- .../qcom/qcom-msm8960-samsung-expressatt.dts  |   9 +-
- arch/arm/boot/dts/qcom/qcom-msm8960.dtsi      | 289 +++++++++++++++++-
- drivers/cpufreq/qcom-cpufreq-nvmem.c          |  69 ++++-
- 5 files changed, 370 insertions(+), 7 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+index 6cd4682a167d..d8d0423e8fee 100644
+--- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
++++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
+@@ -24,6 +24,7 @@ properties:
+           - qcom,ipq8074-qfprom
+           - qcom,ipq9574-qfprom
+           - qcom,msm8916-qfprom
++          - qcom,msm8960-qfprom
+           - qcom,msm8974-qfprom
+           - qcom,msm8976-qfprom
+           - qcom,msm8996-qfprom
 -- 
 2.39.2
 
