@@ -2,31 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A508B746024
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 17:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13250746031
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 17:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjGCPx3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 11:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S230089AbjGCP6G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 11:58:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbjGCPx2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 11:53:28 -0400
+        with ESMTP id S230050AbjGCP6F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 11:58:05 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C264CE54;
-        Mon,  3 Jul 2023 08:53:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E6F3C2;
+        Mon,  3 Jul 2023 08:58:04 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 539802F4;
-        Mon,  3 Jul 2023 08:54:10 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B68E92F4;
+        Mon,  3 Jul 2023 08:58:46 -0700 (PDT)
 Received: from [10.57.27.93] (unknown [10.57.27.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1986B3F663;
-        Mon,  3 Jul 2023 08:53:24 -0700 (PDT)
-Message-ID: <d871465b-4774-5b62-79a3-9e5325cf8b18@arm.com>
-Date:   Mon, 3 Jul 2023 16:53:42 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 745263F663;
+        Mon,  3 Jul 2023 08:58:01 -0700 (PDT)
+Message-ID: <bcf297db-4878-84e2-842d-178b79d7abbe@arm.com>
+Date:   Mon, 3 Jul 2023 16:58:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 05/17] trace: energy_model: Add trace event for EM
- runtime modifications
+Subject: Re: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
 Content-Language: en-US
 To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
@@ -37,10 +36,10 @@ Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rafael@kernel.org
 References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-6-lukasz.luba@arm.com>
- <3ed3c9a0-8aed-02ad-b7f0-69200441a994@arm.com>
+ <20230512095743.3393563-9-lukasz.luba@arm.com>
+ <c4052a3d-ab24-6c20-ed07-d752098e6286@arm.com>
 From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <3ed3c9a0-8aed-02ad-b7f0-69200441a994@arm.com>
+In-Reply-To: <c4052a3d-ab24-6c20-ed07-d752098e6286@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -54,30 +53,96 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 5/30/23 11:03, Dietmar Eggemann wrote:
+On 5/30/23 11:18, Dietmar Eggemann wrote:
 > On 12/05/2023 11:57, Lukasz Luba wrote:
->> The Energy Model (EM) supports runtime modifications. Track the changes
->> in order to do post-processing analysis. Don't use arrays in the trace
->> event, since they are not properly supported by the tools. Instead use
->> simple "unroll" with emitting the trace event for each EM array entry
->> with proper ID information. The older debugging mechanism which was
->> the simple debugfs which dumping the EM content won't be sufficient for
->> the modifiable EM purpose. This trace event mechanism would address the
->> needs.
+>> This patch introduces the new feature: modifiable EM perf_state table.
+>> The new runtime table would be populated with a new power data to better
+>> reflect the actual power. The power can vary over time e.g. due to the
+>> SoC temperature change. Higher temperature can increase power values.
+>> For longer running scenarios, such as game or camera, when also other
+>> devices are used (e.g. GPU, ISP) the CPU power can change. The new
+>> EM framework is able to addresses this issue and change the data
+>> at runtime safely. The runtime modifiable EM data is used by the Energy
+>> Aware Scheduler (EAS) for the task placement.
 > 
-> Do we really need a full trace_event for this? Can we not follow the
-> task scheduler rule which says no new trace_events and use a trace_point
-> here? The footprint in the kernel would be so much smaller.
+> It's important to say that EAS is the _only_user of the `runtime
+> modifiable EM`. All the other users (thermal, etc.) are still using the
+> default (basic) EM. IMHO, this fact drove the design here.
+
+OK, I'll add that information in the header.
+
 > 
-> E.g. pelt_cfs_tp
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   include/linux/energy_model.h | 13 +++++++++++++
+>>   kernel/power/energy_model.c  | 24 ++++++++++++++++++++++++
+>>   2 files changed, 37 insertions(+)
+>>
+>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+>> index cc2bf607191e..a616006a8130 100644
+>> --- a/include/linux/energy_model.h
+>> +++ b/include/linux/energy_model.h
+>> @@ -36,9 +36,21 @@ struct em_perf_state {
+>>    */
+>>   #define EM_PERF_STATE_INEFFICIENT BIT(0)
+>>   
+>> +/**
+>> + * struct em_perf_table - Performance states table, which can be
+>> + *		runtime modifiable and protected with RCU
 > 
-> 0 sched.h  694 DECLARE_TRACE(pelt_cfs_tp,
-> 1 core.c   106 EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_cfs_tp);
-> 2 fair.c  3937 trace_pelt_cfs_tp(cfs_rq);
+> which is `runtime modifiable` ? So `runtime modifiable performance state
+> table`? RCU is obvious since we have `struct rcu_head rcu`.
+
+Thanks, 'Runtime modifiable performance state table' sounds better.
+
 > 
-> And then this patch should be after the section with the functional changes.
+>> + * @state:	List of performance states, in ascending order
+>> + * @rcu:	RCU used for safe access and destruction
+>> + */
+>> +struct em_perf_table {
+>> +	struct em_perf_state *state;
+>> +	struct rcu_head rcu;
+>> +};
+>> +
+>>   /**
+>>    * struct em_perf_domain - Performance domain
+>>    * @table:		List of performance states, in ascending order
+>> + * @runtime_table:	Pointer to the runtime modified em_perf_table
+> 
+> s/modified/modifiable
 > 
 > [...]
+> 
+>> @@ -237,12 +238,23 @@ static int em_create_pd(struct device *dev, int nr_states,
+>>   			return -ENOMEM;
+>>   	}
+>>   
+>> +	runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
+>> +	if (!runtime_table) {
+>> +		kfree(pd);
+>> +		return -ENOMEM;
+>> +	}
+>> +
+>>   	ret = em_create_perf_table(dev, pd, nr_states, cb, flags);
+>>   	if (ret) {
+>>   		kfree(pd);
+>> +		kfree(runtime_table);
+>>   		return ret;
+>>   	}
+>>   
+>> +	/* Re-use temporally (till 1st modification) the memory */
+> 
+> So this means that the runtime (modifiable) table
+> (pd->runtime_table>state) is mapped to the default (basic) table
+> (pd->default_table->state) until the first call to
+> em_dev_update_perf_domain() (here mentioned as the 1st modification)?
 
-I agree. I will change that approach and create tracepoint. Also, I'll
-move it to the patch at the end of the functional changes.
+correct
+
+> 
+> IMHO, not easy to understand since neither the cover letter, nor
+> documentation patch 15/17 describes this in a consistent story.
+
+I'll add that to the patch header and also to the documentation patch
+which is later in the series.
+
