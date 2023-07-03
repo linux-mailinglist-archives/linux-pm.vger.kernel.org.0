@@ -2,68 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00BD874617D
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 19:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D013746185
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 19:44:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjGCRiZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 13:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
+        id S230120AbjGCRoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 13:44:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230364AbjGCRiY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 13:38:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4907AE6C
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 10:38:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC75E60FF1
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 17:38:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3EF9CC433CA
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 17:38:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688405902;
-        bh=dusbUbnnL2mAASHuow+7OxnXUPHxyl2Eqvjb2zkFIhs=;
-        h=From:To:Subject:Date:From;
-        b=KP8Z0m4KiaPNtFz/1seRqcmmizrBFyuaVBcmD4Z+PiqS//ICWW4PoXSOst0PSwcea
-         ccykImuuxUpVyI/DhU8WxuvvlxtCNUn4qpXlSRs4Wd3fMvU41E4IQVO6QWieNL0++J
-         zukb+Or+OC92LYIUMAEb21Q81UllvvatimYZ29wEPoueuqKi1BvPKPjChGeGDDMTEv
-         fmjj1AbnUz6BegephKDpwNqexPqCtR462wA5n5AWeI10d+IETiMwzBCoUikrj19xy1
-         3s8/wUeY3IIwWOEgw8FDRCP2PKzGS6RSLqHzEy2F5zesVgvqwSoqksP/eXtqCFdP3l
-         uJtHcu6N7mLBA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 28661C53BC6; Mon,  3 Jul 2023 17:38:22 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 217630] New: Kernel fails to load amd_pstate driver on 3970x
- while Windows works well on the same machine
-Date:   Mon, 03 Jul 2023 17:38:21 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: pshirshov@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-217630-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229656AbjGCRoP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 13:44:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABBEE
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 10:44:11 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGNab-0001io-SY; Mon, 03 Jul 2023 19:43:53 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGNaX-00Br6B-FH; Mon, 03 Jul 2023 19:43:49 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGNaW-001x3o-OE; Mon, 03 Jul 2023 19:43:48 +0200
+Date:   Mon, 3 Jul 2023 19:43:47 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 1/5] genirq/devres: Add
+ devm_request_threaded_irq_emsg()
+Message-ID: <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
+References: <20230703090455.62101-1-frank.li@vivo.com>
+ <20230703090455.62101-2-frank.li@vivo.com>
+ <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zufm3m2q3aozq5vp"
+Content-Disposition: inline
+In-Reply-To: <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,50 +62,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217630
 
-            Bug ID: 217630
-           Summary: Kernel fails to load amd_pstate driver on 3970x while
-                    Windows works well on the same machine
-           Product: Power Management
-           Version: 2.5
-          Hardware: AMD
-                OS: Linux
-            Status: NEW
-          Severity: high
-          Priority: P3
-         Component: cpufreq
-          Assignee: linux-pm@vger.kernel.org
-          Reporter: pshirshov@gmail.com
-        Regression: No
+--zufm3m2q3aozq5vp
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I have 3970x CPU installed into Gigabyte Designare TRX40 rev 1.0 motherboar=
-d.
-The UEFI is updated to version F6 so AGESA has version 1.0.0.7.
+Hello Krzysztof,
 
-CPPC is explicitly enabled in UEFI settings. It definitely works in Windows=
-:=20
+On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wrote:
+> On 03/07/2023 11:04, Yangtao Li wrote:
+> > There are more than 700 calls to the devm_request_threaded_irq method.
+> > Most drivers only request one interrupt resource, and these error
+> > messages are basically the same. If error messages are printed
+> > everywhere, more than 1000 lines of code can be saved by removing the
+> > msg in the driver.
+>=20
+>=20
+> ...
+>=20
+> > +int devm_request_threaded_irq_emsg(struct device *dev, unsigned int ir=
+q,
+> > +				   irq_handler_t handler, irq_handler_t thread_fn,
+> > +				   unsigned long irqflags, const char *devname,
+> > +				   void *dev_id, const char *emsg)
+> > +{
+> > +	int rc;
+> > +
+> > +	rc =3D devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
+> > +				       devname, dev_id);
+> > +	if (rc && rc !=3D -EPROBE_DEFER) {
+> > +		dev_err(dev, "Failed to request %sinterrupt %u %s %s: %pe\n",
+> > +			thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
+> > +			emsg ? : "", ERR_PTR(rc));
+>=20
+> It is open-coding dev_err_probe(). Just use dev_err_probe instead.
 
-> Information   7/3/2023 4:46:04 PM=20=20=20=20
-> Microsoft-Windows-Kernel-Processor-Power        55      (47)    "Processo=
-r 63
-> in group 0 exposes the following power management capabilities:
-> Idle state type: ACPI Idle (C) States (2 state(s))
-> Performance state type: ACPI Collaborative Processor Performance Control
+dev_err_probe is supposed to be only called in probe functions, while
+devm_request_threaded_irq might be called in other contexts (e.g. when a
+device is opened). That's why I asked to not use dev_err_probe() in v2
+(IIRC).
 
-Kernel 6.3 fails to load amd_pstate with both "amd_pstate=3Dactive" and
-"amd_pstate=3Dpassive" kernel parameters with the following message:
-
-> amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
-
-Kernel 6.4.0 doesn't shows the same error "amd_pstate=3Dactive",
-"amd_pstate=3Dpassive" and "amd_pstate=3Dguided".
-
-
-Please help.
+Best regards
+Uwe
 
 --=20
-You may reply to this email to add a comment.
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+--zufm3m2q3aozq5vp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSjCNIACgkQj4D7WH0S
+/k6nJwf/fxOBBI8xueY091xxUtJ+Jjt9Qh7iRlnXM72aTkCwI2aSwccmmypcUCtY
+ETYrAdgD8dtYSPkVAdCtcjwnKrotdk2bwyMpN6v9n0SEcRB0glrRIHwsaOYSgIhz
+zISXiqdWOJmBXuaqwzxx4cq7Hc4Ca7dDdHvAUaR4lW6n7Ii2c0BB+cUcBOzhq24O
+wCivFjPfQcr+5tdVDSMT+5kD1kQfyx6V+AY71ZQzaBV//Q8fDooOyTIOXeJVeRMU
+fKffsEtUtKhMmXqNvd89oPKCc1YqYh87ysoSdE9GJNwSCDQ3z1A1dFbhB/gDW7Kx
+feNdkyKlUn0+OSUjbmEq288CCPzaDQ==
+=Icjv
+-----END PGP SIGNATURE-----
+
+--zufm3m2q3aozq5vp--
