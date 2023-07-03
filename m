@@ -2,49 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389FD746042
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D876746068
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:08:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjGCQAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 12:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S231201AbjGCQIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 12:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbjGCQAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:00:35 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 274D9E44;
-        Mon,  3 Jul 2023 09:00:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C2E42F4;
-        Mon,  3 Jul 2023 09:01:16 -0700 (PDT)
-Received: from [10.57.27.93] (unknown [10.57.27.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5071E3F663;
-        Mon,  3 Jul 2023 09:00:31 -0700 (PDT)
-Message-ID: <07e778b5-07bd-94e1-1fc0-876fa21ac7ac@arm.com>
-Date:   Mon, 3 Jul 2023 17:00:49 +0100
+        with ESMTP id S230512AbjGCQIi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:08:38 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2BFE5D
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 09:08:36 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1qGM5a-0008OS-K9; Mon, 03 Jul 2023 18:07:46 +0200
+Message-ID: <a69a239b-bc62-7793-dd8c-ca6943f7dd8e@pengutronix.de>
+Date:   Mon, 3 Jul 2023 18:07:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 13/17] PM: EM: Refactor struct em_perf_domain and add
- default_table
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
+ for devm_request_threaded_irq()
 Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-14-lukasz.luba@arm.com>
- <6fc603da-b874-0e38-2402-a112e5c3914d@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <6fc603da-b874-0e38-2402-a112e5c3914d@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
+        heiko@sntech.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        srinivas.pandruvada@linux.intel.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
+        bchihi@baylibre.com, wenst@chromium.org,
+        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
+        johan+linaro@kernel.org, jernej.skrabec@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+References: <20230627101215.58798-1-frank.li@vivo.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20230627101215.58798-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,24 +67,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 5/30/23 11:23, Dietmar Eggemann wrote:
-> On 12/05/2023 11:57, Lukasz Luba wrote:
->> The Energy Model support runtime modifications. Refactor old
->> implementation which accessed struct em_perf_state and introduce
->> em_perf_domain::default_table to clean up the design. This new field
->> is better aligned with em_perf_domain::runtime_table and helps to
->> distinguish them better.
->>
->> Update all drivers or frameworks which used the old field:
->> em_perf_domain::table and now should use em_perf_domain::default_table.
+On 27.06.23 12:12, Yangtao Li wrote:
+> Ensure that all error handling branches print error information. In this
+> way, when this function fails, the upper-layer functions can directly
+> return an error code without missing debugging information. Otherwise,
+> the error message will be printed redundantly or missing.
 > 
-> I still believe that doing this refactoring before the introducation o
-> the new feature `runtime modifiable EM` would do wonders on the
-> tangibility of the other patches in this set.
+> There are more than 700 calls to the devm_request_threaded_irq method.
+> Most drivers only request one interrupt resource, and these error
+> messages are basically the same. If error messages are printed
+> everywhere, more than 1000 lines of code can be saved by removing the
+> msg in the driver.
 > 
-> [...]
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+>  kernel/irq/devres.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
+> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
+> index f6e5515ee077..fcb946ffb7ec 100644
+> --- a/kernel/irq/devres.c
+> +++ b/kernel/irq/devres.c
+> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  
+>  	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
+>  			  GFP_KERNEL);
+> -	if (!dr)
+> +	if (!dr) {
+> +		dev_err(dev, "Failed to allocate device resource data\n");
 
-Let me move that refactor patch a bit earlier in the series...
+Why not use dev_err_probe too? Could turn this block into a oneliner.
+
+>  		return -ENOMEM;
+> +	}
+>  
+>  	if (!devname)
+>  		devname = dev_name(dev);
+> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
+>  	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
+>  				  dev_id);
+>  	if (rc) {
+> +		dev_err_probe(dev, rc, "Failed to request threaded irq%d: %d\n", irq, rc);
+
+No need to format rc with %d. dev_err_probe will already do this for you.
+
+>  		devres_free(dr);
+>  		return rc;
+>  	}
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
