@@ -2,89 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309D27456EF
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 10:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E749745703
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 10:11:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjGCIG6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 04:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S229728AbjGCILi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 04:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbjGCIGs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 04:06:48 -0400
+        with ESMTP id S231258AbjGCILg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 04:11:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95381E72;
-        Mon,  3 Jul 2023 01:06:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BB291
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 01:11:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 553C060CF9;
-        Mon,  3 Jul 2023 08:05:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19BAC433C8;
-        Mon,  3 Jul 2023 08:05:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6428160DE6
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 08:11:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C321FC433C7
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 08:11:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688371554;
-        bh=H5Ol2bCcQqFdyg09aatCLPI6rS9AzzMNSSBC2BX7O1I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oIOJhIeWjUIxznyHbsEeDY5V8fSvW8F5I5Zbpq9mqcP+T9XMyqXGDJ6dnFtL+EpBE
-         np9qw2ScLgM6bAjcqjJXKWwDm0NcSYh6kAwd3tjWQzihkTEC8PCC/wlM34zRiZ76fR
-         IH1IfE8iJIfMYy63dWPg67elzEENbAfi73ipG9gU6GCYimHHRZ5bMbi3NScPVLVY5w
-         cE2xhZG5eHjXKDxqe0iqx9hbVE1hByEZZAycdUD0Qwj32j6GACr3Opb5Kq0i1SMaUR
-         nFuHse6zHojgdslFv3lrJ3tW767gbbXbcE1hXPdxFSbAuQg+xkjaqn/ISyMbad0I9F
-         zPicWmzxLkokg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1qGEZD-00A68h-Sj;
-        Mon, 03 Jul 2023 09:05:52 +0100
-Date:   Mon, 03 Jul 2023 09:05:52 +0100
-Message-ID: <875y71zafz.wl-maz@kernel.org>
-From:   Marc Zyngier <maz@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Re: [PATCH v2 13/15] irqchip: irq-versatile-fpga: remove obsolete oxnas compatible
-In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-13-fb6ab3dea87c@linaro.org>
-References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
-        <20230630-topic-oxnas-upstream-remove-v2-13-fb6ab3dea87c@linaro.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: neil.armstrong@linaro.org, mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, daniel.lezcano@linaro.org, tglx@linutronix.de, miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com, peppe.cavallaro@st.com, alexandre.torgue@foss.st.com, joabreu@synopsys.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mcoquelin.stm32@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl, andy@kernel.org, sre@kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-mtd@lists.infradead.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, linux-oxnas@groups.io, krzysztof.kozlowski@linaro.org, arnd@arndb.de, daniel@makrotopia.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+        s=k20201202; t=1688371894;
+        bh=n7B5gKlWG+xB7K3q/kQsuO4sorSgxoYpd7yVPaO7I04=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=nKT3HrH98wquinzMVNIuTF+NvLL3xJtziOB17MpSMpxz9n1WAD94DOiONDQ87K6/P
+         +OyjMvbcfnTHlubXMM6ujW7pDLvCO0G9u16FWbA7D6iwXQirJQRXFIaV32hvvmuItt
+         tuaUO5lUfBAAaCNUoEqwWXwpcGjhUMGpiU8fL8MwbF9cWyPCWcyVCnnWZePwRxYEvo
+         5U74v98vHXWk1e1VDfW2mb+SOpznZ/vhVMGs6GVEe3/ZR0ND0LnaYczY+YR4MNA+zL
+         43F1a+IBcSRzMfm4RTK8zEuE5+rIRrIjXdjNOSc4/Jfui6TDakntHlx7bb39KGc6pO
+         LbeQL7QA32pcA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id AD916C53BD2; Mon,  3 Jul 2023 08:11:34 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217618] Changing maximum frequency and boost state does not
+ work with amd-pstate in passive mode plus the schedutil governor
+Date:   Mon, 03 Jul 2023 08:11:34 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217618-137361-EfXBN676kM@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217618-137361@https.bugzilla.kernel.org/>
+References: <bug-217618-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -95,41 +72,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 30 Jun 2023 17:58:38 +0100,
-Neil Armstrong <neil.armstrong@linaro.org> wrote:
-> 
-> Due to lack of maintenance and stall of development for a few years now,
-> and since no new features will ever be added upstream, remove support
-> for OX810 and OX820 IRQ controller.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Acked-by: Arnd Bergmann <arnd@arndb.de>
-> Acked-by: Daniel Golle <daniel@makrotopia.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  drivers/irqchip/irq-versatile-fpga.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/irqchip/irq-versatile-fpga.c b/drivers/irqchip/irq-versatile-fpga.c
-> index ba543ed9c154..5018a06060e6 100644
-> --- a/drivers/irqchip/irq-versatile-fpga.c
-> +++ b/drivers/irqchip/irq-versatile-fpga.c
-> @@ -242,5 +242,4 @@ static int __init fpga_irq_of_init(struct device_node *node,
->  }
->  IRQCHIP_DECLARE(arm_fpga, "arm,versatile-fpga-irq", fpga_irq_of_init);
->  IRQCHIP_DECLARE(arm_fpga_sic, "arm,versatile-sic", fpga_irq_of_init);
-> -IRQCHIP_DECLARE(ox810se_rps, "oxsemi,ox810se-rps-irq", fpga_irq_of_init);
->  #endif
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217618
 
-Acked-by: Marc Zyngier <maz@kernel.org>
+--- Comment #3 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+Thanks for your info share, I guess the boost and scaling_max have something
+need to be improved when user try to limit the max frequency.
 
-Feel free to route this via the SoC tree as part of the removal
-series.
+--=20
+You may reply to this email to add a comment.
 
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+You are receiving this mail because:
+You are the assignee for the bug.=
