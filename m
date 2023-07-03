@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891CF745ADE
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 13:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F79745AE6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 13:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjGCLR6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 07:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
+        id S230300AbjGCLVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 07:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjGCLR5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 07:17:57 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655C2F3
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 04:17:54 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f9fdb0ef35so6812189e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Jul 2023 04:17:54 -0700 (PDT)
+        with ESMTP id S229894AbjGCLVa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 07:21:30 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD0EE6
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 04:21:27 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb8574a3a1so6675061e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jul 2023 04:21:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688383072; x=1690975072;
+        d=linaro.org; s=google; t=1688383285; x=1690975285;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AiG2E9lyX7R6JeCw0Hq9bLTBu3xdtmAiHdXrjzQB/Go=;
-        b=ftU7FTMwBj4VMEGow7wF9oaZUig6nbUCWaqi2MmOP1RFY6wePfmeFm+k3/HvFham5J
-         dUQyOMnevCAwwZ1SgqqXTOafa5G373uxwEqxjwgyq3JkBYrifprqWkX8rn+wbpxVAjAI
-         Hx04aLNBu+b4wSgaHdHHmgzakMLv60KoG3rOq68NxWmQ/9FAwfbxP2G8Bveoq4tjNNhK
-         rJsNuDmMNS1RwbQSjyvDJEiR0HCVeeH1+Tb+071ILZXVQWHaDzw57fr6mSB7lxfdPpll
-         Npc7FJImUGZLYlIWNjc5zoR4ICy12+zIVpzud4ub10TXFl92FzKcXZyJtO1HHIy8KQiP
-         UBaw==
+        bh=mHh2OKB9/bYmAPh7Rs8RmaVfgXZOB5llGpcZfp5iwQc=;
+        b=qhQhkFUoyeNj2aiRPapXgBpxOJL56bfQL7pNHuUuR4j1uyLQDHTUtcWI+lzsknhGpK
+         CKLxDXfFehYTnhvbev6gaX8JQ65moaPhhbN6uutVMPjC8L2hvc66dS36PBBu8KTuOFal
+         PjqfNpA24zozwXgKFwA0HZaATFPXQAz6IJKx5q4yCGs6+3sJvQi/zuskKRLA8+S0hmAw
+         Aki4mcZAHFaenYLWllNzSB7rGX4FV4fIvAIeqxDFhdA1XBHDYbX3fdymzpoWr4+VLU5q
+         z1xpuEHn5uKpSBvpF8O4ytN0F+0lJYpYd9wi4wvMmoulGkVY0sU6RFfL0Ph2Oe2/dX9c
+         MiJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688383072; x=1690975072;
+        d=1e100.net; s=20221208; t=1688383285; x=1690975285;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AiG2E9lyX7R6JeCw0Hq9bLTBu3xdtmAiHdXrjzQB/Go=;
-        b=TSzsZ/GO8CpFoBljGR+oWrcioeWf6HXReiOCq8uMtKxN2YXwDEUT4mZXvweN3EJI8x
-         zj+YhE02xr2Wn3LCtT0uW2YLsQYjASPWdzi5Gd7EVK0+rwLu2ctM+6Mfb2S/vhqpKu1h
-         8VmFH8bA7u3RfDjXyDr3s95h3HfRWHXNBlrBrF3DVlv7jGUDnVyWrkS88TjuuyA0fdbA
-         JbExmj7E0z07eDcj1DCkC+jAuelgm6WQH09Z3ho4zi3JECq2zZFaUpvLkjMVzwxk+KGo
-         bWXSrkU7FoUDLvJn7VgkTX1HykODEMJl2oGMtvTB7X9giG+7dkC4/T1XZ+CbrpU568eI
-         naTw==
-X-Gm-Message-State: ABy/qLZ3MJkCfgLrqLX2F+fAt+uTY2pH2U/7tCq1g7Om3WLK1N4P1b2l
-        10wiKg9x3fdUfqpLAcUwKnlOpCA8R5bii36HSnUF5A==
-X-Google-Smtp-Source: APBJJlF+ROws4cooNvbfGzB14o/lSdC80W+tRssizG9GZwZtIZG3LnIlnNPhCazurc5TA2oDfmdZKQ==
-X-Received: by 2002:a05:6512:3a8e:b0:4f5:a181:97b8 with SMTP id q14-20020a0565123a8e00b004f5a18197b8mr7390760lfu.25.1688383072379;
-        Mon, 03 Jul 2023 04:17:52 -0700 (PDT)
+        bh=mHh2OKB9/bYmAPh7Rs8RmaVfgXZOB5llGpcZfp5iwQc=;
+        b=TwlYcp9TAlT8sbUoFiR8qZ2OXON5yWYf9U4J8S/wNm+Ms6zvJO749KbjIz/oFX181Y
+         pdNgXFgBsG4L+49VQhH13f4JGwLl3ll3EWnqrHE8TaDGUt2JNHJOPDo7WI4QncFNQO+r
+         zdetSWo6V5jXqzmx+SmgR+lj3iPEX+RSkfe9HQQbFCJzQIuV6o6cn4PAVbZf66HLQb8D
+         KD/gcT28UY/Z7mVdKMqsfNVKS5CAYT2mBh2SrnZNcQrJ3xK5iMKGTmFVQCfjAGXk5AF2
+         pP7iAocBLP1M7NTwD2D4gi3AjKA5YYWss1LznkNj5Jv4ZbpwRPKy5RE5P1ErgkXPidQS
+         QjMA==
+X-Gm-Message-State: ABy/qLaK9gZGm/kr9XUojFniWaa8JsSHlpgSbsSP3KBDn6eq2Gbz8q6m
+        XtkW/g5arbFG4wkNIWpoeEZfHQ==
+X-Google-Smtp-Source: APBJJlHCMCVI+091yp/4JUnz20G1Pumr2n+qkg34pUvK6YEapCzJ643yUrbjU0x7/sAsr6Hc23P4wA==
+X-Received: by 2002:a05:6512:1141:b0:4f8:4216:e91f with SMTP id m1-20020a056512114100b004f84216e91fmr6476219lfg.63.1688383285365;
+        Mon, 03 Jul 2023 04:21:25 -0700 (PDT)
 Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
-        by smtp.gmail.com with ESMTPSA id d1-20020ac24c81000000b004fb759964a9sm3758528lfl.168.2023.07.03.04.17.50
+        by smtp.gmail.com with ESMTPSA id c18-20020ac244b2000000b004fba770f45fsm1832305lfm.112.2023.07.03.04.21.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Jul 2023 04:17:52 -0700 (PDT)
-Message-ID: <915fa7cd-5d5d-94dd-621c-654938cb07b3@linaro.org>
-Date:   Mon, 3 Jul 2023 13:17:50 +0200
+        Mon, 03 Jul 2023 04:21:24 -0700 (PDT)
+Message-ID: <e6eacaa5-c505-b4ab-2854-b1feec563128@linaro.org>
+Date:   Mon, 3 Jul 2023 13:21:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 06/28] interconnect: icc-clk: add support for scaling
- using OPP
+Subject: Re: [PATCH v3 08/28] soc: qcom: spm: add support for voltage
+ regulator
 Content-Language: en-US
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -74,9 +74,9 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Christian Marangi <ansuelsmth@gmail.com>,
         Stephan Gerhold <stephan@gerhold.net>
 References: <20230702174246.121656-1-dmitry.baryshkov@linaro.org>
- <20230702174246.121656-7-dmitry.baryshkov@linaro.org>
+ <20230702174246.121656-9-dmitry.baryshkov@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230702174246.121656-7-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230702174246.121656-9-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,84 +90,323 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 2.07.2023 19:42, Dmitry Baryshkov wrote:
-> Sometimes it might be required to scale the clock using the OPP
-> framework (e.g. to scale regulators following the required clock rate).
-> Extend the interconnec-clk framework to handle OPP case in addition to
-> scaling the clock.
+> The SPM / SAW2 device also provides a voltage regulator functionality
+> with optional AVS (Adaptive Voltage Scaling) support. The exact register
+> sequence and voltage ranges differs from device to device.
 > 
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Looks like you didn't update this patch from v2
 
 Konrad
->  drivers/interconnect/icc-clk.c   | 13 +++++++++++--
->  include/linux/interconnect-clk.h |  1 +
->  2 files changed, 12 insertions(+), 2 deletions(-)
+>  drivers/soc/qcom/spm.c | 205 ++++++++++++++++++++++++++++++++++++++++-
+>  include/soc/qcom/spm.h |   9 ++
+>  2 files changed, 212 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
-> index 4d43ebff4257..c7962acdcee7 100644
-> --- a/drivers/interconnect/icc-clk.c
-> +++ b/drivers/interconnect/icc-clk.c
-> @@ -7,10 +7,13 @@
->  #include <linux/device.h>
->  #include <linux/interconnect-clk.h>
->  #include <linux/interconnect-provider.h>
-> +#include <linux/pm_opp.h>
+> diff --git a/drivers/soc/qcom/spm.c b/drivers/soc/qcom/spm.c
+> index a6cbeb40831b..3c16a7e1710c 100644
+> --- a/drivers/soc/qcom/spm.c
+> +++ b/drivers/soc/qcom/spm.c
+> @@ -9,19 +9,31 @@
+>  #include <linux/kernel.h>
+>  #include <linux/init.h>
+>  #include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/linear_range.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_device.h>
+> +#include <linux/bitfield.h>
+>  #include <linux/err.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/regulator/driver.h>
+> +#include <linux/smp.h>
+>  #include <soc/qcom/spm.h>
 >  
->  struct icc_clk_node {
-> +	struct device *dev;
->  	struct clk *clk;
->  	bool enabled;
-> +	bool opp;
+> +#define FIELD_SET(current, mask, val)	\
+> +	(((current) & ~(mask)) | FIELD_PREP((mask), (val)))
+> +
+>  #define SPM_CTL_INDEX		0x7f
+>  #define SPM_CTL_INDEX_SHIFT	4
+>  #define SPM_CTL_EN		BIT(0)
+>  
+> +#define SPM_1_1_AVS_CTL_AVS_ENABLED BIT(27)
+> +#define SPM_AVS_CTL_MIN_VLVL	(0x3f << 10)
+> +#define SPM_AVS_CTL_MAX_VLVL	(0x3f << 17)
+> +
+>  enum spm_reg {
+>  	SPM_REG_CFG,
+>  	SPM_REG_SPM_CTL,
+> @@ -31,10 +43,12 @@ enum spm_reg {
+>  	SPM_REG_PMIC_DATA_1,
+>  	SPM_REG_VCTL,
+>  	SPM_REG_SEQ_ENTRY,
+> -	SPM_REG_SPM_STS,
+> +	SPM_REG_STS0,
+> +	SPM_REG_STS1,
+>  	SPM_REG_PMIC_STS,
+>  	SPM_REG_AVS_CTL,
+>  	SPM_REG_AVS_LIMIT,
+> +	SPM_REG_RST,
+>  	SPM_REG_NR,
 >  };
 >  
->  struct icc_clk_provider {
-> @@ -25,12 +28,16 @@ struct icc_clk_provider {
->  static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
->  {
->  	struct icc_clk_node *qn = src->data;
-> +	unsigned long rate = icc_units_to_bps(src->peak_bw);
->  	int ret;
+> @@ -171,6 +185,10 @@ static const struct spm_reg_data spm_reg_8226_cpu  = {
 >  
->  	if (!qn || !qn->clk)
->  		return 0;
+>  static const u16 spm_reg_offset_v1_1[SPM_REG_NR] = {
+>  	[SPM_REG_CFG]		= 0x08,
+> +	[SPM_REG_STS0]		= 0x0c,
+> +	[SPM_REG_STS1]		= 0x10,
+> +	[SPM_REG_VCTL]		= 0x14,
+> +	[SPM_REG_AVS_CTL]	= 0x18,
+>  	[SPM_REG_SPM_CTL]	= 0x20,
+>  	[SPM_REG_PMIC_DLY]	= 0x24,
+>  	[SPM_REG_PMIC_DATA_0]	= 0x28,
+> @@ -178,7 +196,12 @@ static const u16 spm_reg_offset_v1_1[SPM_REG_NR] = {
+>  	[SPM_REG_SEQ_ENTRY]	= 0x80,
+>  };
 >  
-> -	if (!src->peak_bw) {
-> +	if (qn->opp)
-> +		return dev_pm_opp_set_rate(qn->dev, rate);
+> +static void smp_set_vdd_v1_1(void *data);
 > +
-> +	if (!rate) {
->  		if (qn->enabled)
->  			clk_disable_unprepare(qn->clk);
->  		qn->enabled = false;
-> @@ -45,7 +52,7 @@ static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
->  		qn->enabled = true;
->  	}
+>  /* SPM register data for 8064 */
+> +static struct linear_range spm_v1_1_regulator_range =
+> +	REGULATOR_LINEAR_RANGE(700000, 0, 56, 12500);
+> +
+>  static const struct spm_reg_data spm_reg_8064_cpu = {
+>  	.reg_offset = spm_reg_offset_v1_1,
+>  	.spm_cfg = 0x1F,
+> @@ -189,6 +212,10 @@ static const struct spm_reg_data spm_reg_8064_cpu = {
+>  		0x10, 0x54, 0x30, 0x0C, 0x24, 0x30, 0x0F },
+>  	.start_index[PM_SLEEP_MODE_STBY] = 0,
+>  	.start_index[PM_SLEEP_MODE_SPC] = 2,
+> +	.set_vdd = smp_set_vdd_v1_1,
+> +	.range = &spm_v1_1_regulator_range,
+> +	.init_uV = 1300000,
+> +	.ramp_delay = 1250,
+>  };
 >  
-> -	return clk_set_rate(qn->clk, icc_units_to_bps(src->peak_bw));
-> +	return clk_set_rate(qn->clk, rate);
+>  static inline void spm_register_write(struct spm_driver_data *drv,
+> @@ -240,6 +267,179 @@ void spm_set_low_power_mode(struct spm_driver_data *drv,
+>  	spm_register_write_sync(drv, SPM_REG_SPM_CTL, ctl_val);
 >  }
 >  
->  static int icc_clk_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
-> @@ -106,7 +113,9 @@ struct icc_provider *icc_clk_register(struct device *dev,
->  	icc_provider_init(provider);
+> +static int spm_set_voltage_sel(struct regulator_dev *rdev, unsigned int selector)
+> +{
+> +	struct spm_driver_data *drv = rdev_get_drvdata(rdev);
+> +
+> +	drv->volt_sel = selector;
+> +
+> +	/* Always do the SAW register writes on the corresponding CPU */
+> +	return smp_call_function_single(drv->reg_cpu, drv->reg_data->set_vdd, drv, true);
+> +}
+> +
+> +static int spm_get_voltage_sel(struct regulator_dev *rdev)
+> +{
+> +	struct spm_driver_data *drv = rdev_get_drvdata(rdev);
+> +
+> +	return drv->volt_sel;
+> +}
+> +
+> +static const struct regulator_ops spm_reg_ops = {
+> +	.set_voltage_sel	= spm_set_voltage_sel,
+> +	.get_voltage_sel	= spm_get_voltage_sel,
+> +	.list_voltage		= regulator_list_voltage_linear_range,
+> +	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
+> +};
+> +
+> +static void smp_set_vdd_v1_1(void *data)
+> +{
+> +	struct spm_driver_data *drv = data;
+> +	unsigned int vlevel = drv->volt_sel;
+> +	unsigned int vctl, data0, data1, avs_ctl, sts;
+> +	bool avs_enabled;
+> +
+> +	vlevel |= 0x80; /* band */
+> +
+> +	avs_ctl = spm_register_read(drv, SPM_REG_AVS_CTL);
+> +	vctl = spm_register_read(drv, SPM_REG_VCTL);
+> +	data0 = spm_register_read(drv, SPM_REG_PMIC_DATA_0);
+> +	data1 = spm_register_read(drv, SPM_REG_PMIC_DATA_1);
+> +
+> +	avs_enabled = avs_ctl & SPM_1_1_AVS_CTL_AVS_ENABLED;
+> +
+> +	/* If AVS is enabled, switch it off during the voltage change */
+> +	if (avs_enabled) {
+> +		avs_ctl &= ~SPM_1_1_AVS_CTL_AVS_ENABLED;
+> +		spm_register_write(drv, SPM_REG_AVS_CTL, avs_ctl);
+> +	}
+> +
+> +	/* Kick the state machine back to idle */
+> +	spm_register_write(drv, SPM_REG_RST, 1);
+> +
+> +	vctl = FIELD_SET(vctl, 0xff, vlevel);
+> +	data0 = FIELD_SET(data0, 0xff, vlevel);
+> +	data1 = FIELD_SET(data1, 0x3f, vlevel);
+> +	data1 = FIELD_SET(data1, 0x3f << 16, vlevel);
+> +
+> +	spm_register_write(drv, SPM_REG_VCTL, vctl);
+> +	spm_register_write(drv, SPM_REG_PMIC_DATA_0, data0);
+> +	spm_register_write(drv, SPM_REG_PMIC_DATA_1, data1);
+> +
+> +	if (read_poll_timeout_atomic(spm_register_read,
+> +				      sts, sts == vlevel,
+> +				      1, 200, false,
+> +				      drv, SPM_REG_STS1)) {
+> +		dev_err_ratelimited(drv->dev, "timeout setting the voltage (%x %x)!\n", sts, vlevel);
+> +		goto enable_avs;
+> +	}
+> +
+> +	if (avs_enabled) {
+> +		unsigned int max_avs = vlevel & 0x3f;
+> +		unsigned int min_avs = max(max_avs, 4U) - 4;
+> +		avs_ctl = FIELD_SET(avs_ctl, SPM_AVS_CTL_MIN_VLVL, min_avs);
+> +		avs_ctl = FIELD_SET(avs_ctl, SPM_AVS_CTL_MAX_VLVL, max_avs);
+> +		spm_register_write(drv, SPM_REG_AVS_CTL, avs_ctl);
+> +	}
+> +
+> +enable_avs:
+> +	if (avs_enabled) {
+> +		avs_ctl |= SPM_1_1_AVS_CTL_AVS_ENABLED;
+> +		spm_register_write(drv, SPM_REG_AVS_CTL, avs_ctl);
+> +	}
+> +}
+> +
+> +static int spm_get_cpu(struct device *dev)
+> +{
+> +	int cpu;
+> +	bool found;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		struct device_node *cpu_node, *saw_node;
+> +
+> +		cpu_node = of_cpu_device_node_get(cpu);
+> +		if (!cpu_node)
+> +			continue;
+> +
+> +		saw_node = of_parse_phandle(cpu_node, "qcom,saw", 0);
+> +		found = (saw_node == dev->of_node);
+> +		of_node_put(saw_node);
+> +		of_node_put(cpu_node);
+> +
+> +		if (found)
+> +			return cpu;
+> +	}
+> +
+> +	/* L2 SPM is not bound to any CPU, tie it to CPU0 */
+> +
+> +	return 0;
+> +}
+> +
+> +#ifdef CONFIG_REGULATOR
+> +static int spm_register_regulator(struct device *dev, struct spm_driver_data *drv)
+> +{
+> +	struct regulator_config config = {
+> +		.dev = dev,
+> +		.driver_data = drv,
+> +	};
+> +	struct regulator_desc *rdesc;
+> +	struct regulator_dev *rdev;
+> +	int ret;
+> +	bool found;
+> +
+> +	if (!drv->reg_data->set_vdd)
+> +		return 0;
+> +
+> +	rdesc = devm_kzalloc(dev, sizeof(*rdesc), GFP_KERNEL);
+> +	if (!rdesc)
+> +		return -ENOMEM;
+> +
+> +	rdesc->name = "spm";
+> +	rdesc->of_match = of_match_ptr("regulator");
+> +	rdesc->type = REGULATOR_VOLTAGE;
+> +	rdesc->owner = THIS_MODULE;
+> +	rdesc->ops = &spm_reg_ops;
+> +
+> +	rdesc->linear_ranges = drv->reg_data->range;
+> +	rdesc->n_linear_ranges = 1;
+> +	rdesc->n_voltages = rdesc->linear_ranges[rdesc->n_linear_ranges - 1].max_sel + 1;
+> +	rdesc->ramp_delay = drv->reg_data->ramp_delay;
+> +
+> +	drv->reg_cpu = spm_get_cpu(dev);
+> +	dev_dbg(dev, "SAW2 bound to CPU %d\n", drv->reg_cpu);
+> +
+> +	/*
+> +	 * Program initial voltage, otherwise registration will also try
+> +	 * setting the voltage, which might result in undervolting the CPU.
+> +	 */
+> +	drv->volt_sel = DIV_ROUND_UP(drv->reg_data->init_uV - rdesc->min_uV,
+> +				     rdesc->uV_step);
+> +	ret = linear_range_get_selector_high(drv->reg_data->range,
+> +					     drv->reg_data->init_uV,
+> +					     &drv->volt_sel,
+> +					     &found);
+> +	if (ret) {
+> +		dev_err(dev, "Initial uV value out of bounds\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Always do the SAW register writes on the corresponding CPU */
+> +	smp_call_function_single(drv->reg_cpu, drv->reg_data->set_vdd, drv, true);
+> +
+> +	rdev = devm_regulator_register(dev, rdesc, &config);
+> +	if (IS_ERR(rdev)) {
+> +		dev_err(dev, "failed to register regulator\n");
+> +		return PTR_ERR(rdev);
+> +	}
+> +
+> +	return 0;
+> +}
+> +#else
+> +static int spm_register_regulator(struct device *dev, struct spm_driver_data *drv)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+>  static const struct of_device_id spm_match_table[] = {
+>  	{ .compatible = "qcom,sdm660-gold-saw2-v4.1-l2",
+>  	  .data = &spm_reg_660_gold_l2 },
+> @@ -292,6 +492,7 @@ static int spm_dev_probe(struct platform_device *pdev)
+>  		return -ENODEV;
 >  
->  	for (i = 0, j = 0; i < num_clocks; i++) {
-> +		qp->clocks[i].dev = dev;
->  		qp->clocks[i].clk = data[i].clk;
-> +		qp->clocks[i].opp = data[i].opp;
+>  	drv->reg_data = match_id->data;
+> +	drv->dev = &pdev->dev;
+>  	platform_set_drvdata(pdev, drv);
 >  
->  		node = icc_node_create(first_id + j);
->  		if (IS_ERR(node)) {
-> diff --git a/include/linux/interconnect-clk.h b/include/linux/interconnect-clk.h
-> index 0cd80112bea5..c695e5099901 100644
-> --- a/include/linux/interconnect-clk.h
-> +++ b/include/linux/interconnect-clk.h
-> @@ -11,6 +11,7 @@ struct device;
->  struct icc_clk_data {
->  	struct clk *clk;
->  	const char *name;
-> +	bool opp;
+>  	/* Write the SPM sequences first.. */
+> @@ -319,7 +520,7 @@ static int spm_dev_probe(struct platform_device *pdev)
+>  	if (drv->reg_data->reg_offset[SPM_REG_SPM_CTL])
+>  		spm_set_low_power_mode(drv, PM_SLEEP_MODE_STBY);
+>  
+> -	return 0;
+> +	return spm_register_regulator(&pdev->dev, drv);
+>  }
+>  
+>  static struct platform_driver spm_driver = {
+> diff --git a/include/soc/qcom/spm.h b/include/soc/qcom/spm.h
+> index 4951f9d8b0bd..9859ebe42003 100644
+> --- a/include/soc/qcom/spm.h
+> +++ b/include/soc/qcom/spm.h
+> @@ -30,11 +30,20 @@ struct spm_reg_data {
+>  	u32 avs_limit;
+>  	u8 seq[MAX_SEQ_DATA];
+>  	u8 start_index[PM_SLEEP_MODE_NR];
+> +
+> +	smp_call_func_t set_vdd;
+> +	/* for now we support only a single range */
+> +	struct linear_range *range;
+> +	unsigned int ramp_delay;
+> +	unsigned int init_uV;
 >  };
 >  
->  struct icc_provider *icc_clk_register(struct device *dev,
+>  struct spm_driver_data {
+>  	void __iomem *reg_base;
+>  	const struct spm_reg_data *reg_data;
+> +	struct device *dev;
+> +	unsigned int volt_sel;
+> +	int reg_cpu;
+>  };
+>  
+>  void spm_set_low_power_mode(struct spm_driver_data *drv,
