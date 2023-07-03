@@ -2,84 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E749745703
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 10:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B643F745713
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 10:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjGCILi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 04:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S230298AbjGCIOU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 04:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjGCILg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 04:11:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BB291
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 01:11:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6428160DE6
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 08:11:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C321FC433C7
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 08:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688371894;
-        bh=n7B5gKlWG+xB7K3q/kQsuO4sorSgxoYpd7yVPaO7I04=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=nKT3HrH98wquinzMVNIuTF+NvLL3xJtziOB17MpSMpxz9n1WAD94DOiONDQ87K6/P
-         +OyjMvbcfnTHlubXMM6ujW7pDLvCO0G9u16FWbA7D6iwXQirJQRXFIaV32hvvmuItt
-         tuaUO5lUfBAAaCNUoEqwWXwpcGjhUMGpiU8fL8MwbF9cWyPCWcyVCnnWZePwRxYEvo
-         5U74v98vHXWk1e1VDfW2mb+SOpznZ/vhVMGs6GVEe3/ZR0ND0LnaYczY+YR4MNA+zL
-         43F1a+IBcSRzMfm4RTK8zEuE5+rIRrIjXdjNOSc4/Jfui6TDakntHlx7bb39KGc6pO
-         LbeQL7QA32pcA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id AD916C53BD2; Mon,  3 Jul 2023 08:11:34 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 217618] Changing maximum frequency and boost state does not
- work with amd-pstate in passive mode plus the schedutil governor
-Date:   Mon, 03 Jul 2023 08:11:34 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217618-137361-EfXBN676kM@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217618-137361@https.bugzilla.kernel.org/>
-References: <bug-217618-137361@https.bugzilla.kernel.org/>
+        with ESMTP id S230464AbjGCIOT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 04:14:19 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053A0E41
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 01:14:17 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-45739737afcso1025150e0c.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jul 2023 01:14:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1688372056; x=1690964056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=11QJYwMbaUBpF9NueY3t6DsMt9/06w7p8RRvTfLIaJc=;
+        b=L0Xoku72iyScuyAAlvdURXBApKe96vcZyauApjEXYrGVlSdQ5+Noqx/dJGtVL5x6q/
+         jlFR5a9BhO9sA8f3jeglFFz63W5kpnijEXV3GbujV4lA4VrnyUUly7d3Wcix3txlUZKX
+         0zTnULX0ieClGA2akWPTDF84ad2rXwBO7fEXhu1OYcHAAKgyVmkRs6hX/zxDaek+K+yy
+         +Dq303IKCVITitnmnDhFbe5F+dSDTjXUpTQlniD7u22PH7eeed9b8JO4qs6ZdKwCYj/I
+         dMxjHx7kBRx/dGnktAFbMiPelHl/QS1H0Ujo5z344HSwUz0dNoig8gIxg/cBlzWUnRon
+         rbWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688372056; x=1690964056;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=11QJYwMbaUBpF9NueY3t6DsMt9/06w7p8RRvTfLIaJc=;
+        b=K634z5l/bvKFRH3/IGFoqu4z8SftaZxG96K+8yx7ciA3/mMJ1L2CMZVwoaz3/OpkgU
+         yR+TYCr1nLNXrjJTdim0yiRZcUc0PrPrwC78kJ/ReBUxz6qPt7C/ULFsRHJGTew7+yzV
+         ilpScxdntTbwLHKarjo4fTczU+NCqNIubuwCYc9xMrX+LQdJyy9KmTGgwUgCkn3w0RMy
+         eOZmalpZLn6Dljc7SRIiwgiPgdlfAjvy7Y3NoNJ4liQZt9Iueat1vEIz2u1MNFnbrllz
+         NktS2LMjrLmZc1NRyCXGFGMnspTmzyTe0lqmJlUrqBCLuXCQxl+PA9UUiKsoap2e71JN
+         0cYA==
+X-Gm-Message-State: ABy/qLbGVYoU+od0AiwYKW7tzpSx15TxWoniQUUjQrX//C/gPtreLYLZ
+        WXETmKDO96FSUmfOA8NDyPu7o5YWS09q8jAJ0dtKAQ==
+X-Google-Smtp-Source: APBJJlGUXmmzazOU3H2rwPItzzs5yY59Pr2doU3bzs7pqr02Nwa0JTfP80SKVHXrdbTVZhHGNnsVQtkzPqxhjzQX+Tw=
+X-Received: by 2002:a1f:c1d0:0:b0:471:5939:f4f2 with SMTP id
+ r199-20020a1fc1d0000000b004715939f4f2mr3056599vkf.8.1688372056011; Mon, 03
+ Jul 2023 01:14:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
+ <20230630-topic-oxnas-upstream-remove-v2-11-fb6ab3dea87c@linaro.org>
+In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-11-fb6ab3dea87c@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 3 Jul 2023 10:14:04 +0200
+Message-ID: <CAMRc=McTEPt_gb5HX98khmxvQDX-VQQ62uBF=p4dr_QqouL0kQ@mail.gmail.com>
+Subject: Re: [PATCH v2 11/15] dt-bindings: gpio: gpio_oxnas: remove obsolete bindings
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Golle <daniel@makrotopia.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217618
+On Fri, Jun 30, 2023 at 6:58=E2=80=AFPM Neil Armstrong
+<neil.armstrong@linaro.org> wrote:
+>
+> Due to lack of maintenance and stall of development for a few years now,
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 gpio bindings.
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Daniel Golle <daniel@makrotopia.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
---- Comment #3 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-Thanks for your info share, I guess the boost and scaling_max have something
-need to be improved when user try to limit the max frequency.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
