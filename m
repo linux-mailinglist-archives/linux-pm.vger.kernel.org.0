@@ -2,64 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D876746068
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CD6746073
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjGCQIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 12:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
+        id S230416AbjGCQJe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 12:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjGCQIi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:08:38 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2BFE5D
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 09:08:36 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1qGM5a-0008OS-K9; Mon, 03 Jul 2023 18:07:46 +0200
-Message-ID: <a69a239b-bc62-7793-dd8c-ca6943f7dd8e@pengutronix.de>
-Date:   Mon, 3 Jul 2023 18:07:33 +0200
+        with ESMTP id S229885AbjGCQJd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:09:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53A51138;
+        Mon,  3 Jul 2023 09:09:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F6172F4;
+        Mon,  3 Jul 2023 09:10:14 -0700 (PDT)
+Received: from [10.57.27.93] (unknown [10.57.27.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E6DFF3F663;
+        Mon,  3 Jul 2023 09:09:28 -0700 (PDT)
+Message-ID: <a43ce55d-371f-28a0-eb72-3a839df59168@arm.com>
+Date:   Mon, 3 Jul 2023 17:09:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2 01/15] genirq/devres: Add error information printing
- for devm_request_threaded_irq()
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 14/17] Documentation: EM: Add a new section about the
+ design
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, thara.gopinath@gmail.com,
-        heiko@sntech.de, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, tglx@linutronix.de, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        srinivas.pandruvada@linux.intel.com,
-        DLG-Adam.Ward.opensource@dm.renesas.com, shangxiaojing@huawei.com,
-        bchihi@baylibre.com, wenst@chromium.org,
-        u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
-        niklas.soderlund+renesas@ragnatech.se, chi.minghao@zte.com.cn,
-        johan+linaro@kernel.org, jernej.skrabec@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-References: <20230627101215.58798-1-frank.li@vivo.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20230627101215.58798-1-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org
+References: <20230512095743.3393563-1-lukasz.luba@arm.com>
+ <20230512095743.3393563-15-lukasz.luba@arm.com>
+ <0968c915-0344-b08f-7117-5b1ff6b126fd@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <0968c915-0344-b08f-7117-5b1ff6b126fd@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,57 +52,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27.06.23 12:12, Yangtao Li wrote:
-> Ensure that all error handling branches print error information. In this
-> way, when this function fails, the upper-layer functions can directly
-> return an error code without missing debugging information. Otherwise,
-> the error message will be printed redundantly or missing.
+
+
+On 5/30/23 11:33, Dietmar Eggemann wrote:
+> On 12/05/2023 11:57, Lukasz Luba wrote:
+>> Add a new section 'Design' which covers the information about Energy
+>> Model. It contains the design decisions, describes models and how they
+>> reflect the reality. Add description of the basic const. EM. Change the
+>> other section IDs.
 > 
-> There are more than 700 calls to the devm_request_threaded_irq method.
-> Most drivers only request one interrupt resource, and these error
-> messages are basically the same. If error messages are printed
-> everywhere, more than 1000 lines of code can be saved by removing the
-> msg in the driver.
+> I would vote for coalescing the 4 doc patches into 1.
+
+OK, I can make that. I will be a big one patch, though.
+
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  kernel/irq/devres.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   Documentation/power/energy-model.rst | 36 +++++++++++++++++++++-------
+>>   1 file changed, 27 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
+>> index ef341be2882b..e97c7f18d8bd 100644
+>> --- a/Documentation/power/energy-model.rst
+>> +++ b/Documentation/power/energy-model.rst
+>> @@ -72,16 +72,34 @@ required to have the same micro-architecture. CPUs in different performance
+>>   domains can have different micro-architectures.
+>>   
+>>   
+>> -2. Core APIs
+>> +2. Design
+>> +-----------------
+>> +
+>> +2.1 Basic EM
+>> +^^^^^^^^^^^^
 > 
-> diff --git a/kernel/irq/devres.c b/kernel/irq/devres.c
-> index f6e5515ee077..fcb946ffb7ec 100644
-> --- a/kernel/irq/devres.c
-> +++ b/kernel/irq/devres.c
-> @@ -58,8 +58,10 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
->  
->  	dr = devres_alloc(devm_irq_release, sizeof(struct irq_devres),
->  			  GFP_KERNEL);
-> -	if (!dr)
-> +	if (!dr) {
-> +		dev_err(dev, "Failed to allocate device resource data\n");
+> Can we make sure that people get the relation between 'basic' and
+> 'default' easier?
+> 
+> It should be obvious that `pd->default_table->state` refers to this
+> `basic (const.) EM. Using the same identifier always helps in this
+> situation.
 
-Why not use dev_err_probe too? Could turn this block into a oneliner.
+OK, how about adding this:
+"The basic EM is built around const. power information for each
+performance state, which is accessible in:
+'dev->em_pd->default_table->state'. This model can be derived based..."
 
->  		return -ENOMEM;
-> +	}
->  
->  	if (!devname)
->  		devname = dev_name(dev);
-> @@ -67,6 +69,7 @@ int devm_request_threaded_irq(struct device *dev, unsigned int irq,
->  	rc = request_threaded_irq(irq, handler, thread_fn, irqflags, devname,
->  				  dev_id);
->  	if (rc) {
-> +		dev_err_probe(dev, rc, "Failed to request threaded irq%d: %d\n", irq, rc);
-
-No need to format rc with %d. dev_err_probe will already do this for you.
-
->  		devres_free(dr);
->  		return rc;
->  	}
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
+> 
+>> +
+>> +The basic EM is built around const. power information for each performance
+>> +state. This model can be derived based on power measurements of the device
+>> +e.g. CPU while running some benchmark. The benchmark might be integer heavy
+>> +or floating point computation with a data set fitting into the CPU cache or
+>> +registers. Bare in mind that this model might not be covering all possible
+>> +workloads running on CPUs. Thus, please run a few different benchmarks and
+>> +verify with some real workloads your power model values. The power variation
+>> +due to the workload instruction mix and data set is not modeled.
+>> +Also static power which can change during runtime due to variation of SOC
+>> +temperature is not modeled in EM.
+>> +
+>> +
