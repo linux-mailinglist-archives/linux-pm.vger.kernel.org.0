@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916C07453A8
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 03:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F607453E6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 04:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjGCBj7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Jul 2023 21:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45102 "EHLO
+        id S229836AbjGCClq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Jul 2023 22:41:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGCBj6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 21:39:58 -0400
+        with ESMTP id S229605AbjGCClo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Jul 2023 22:41:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515BB180
-        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 18:39:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABB9188
+        for <linux-pm@vger.kernel.org>; Sun,  2 Jul 2023 19:41:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB6CF60CBB
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 01:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 472CEC433C9
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 01:39:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEBB660D37
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 02:41:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27690C433C9
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 02:41:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688348397;
-        bh=KfApBBXuEv4erfEveQFXevrfso//eeGVAQKOhGVUb5E=;
+        s=k20201202; t=1688352103;
+        bh=0ETXk4ScxWPIAbbkkWgBm/QNPofe0TnLdHK+I3IC5aw=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Xu5zAE43g7vN5oQ+UdD0d+xV5rzFmx4t0EaZYF9QqdFgpVJI24khUnabE/M00b5Cd
-         0rdNzruxH96NZBsGQG8BpLn8X9LJqAlHKbhSpG8TkMEGnX4wGcIACAsG7QRS0qO/7l
-         lx80ZkLX569dcNCrgtS4ISAseGkipIqsG3YA50lG0w+AKE2NeEGsq9gDo1VxcmcxZ4
-         rCGBgeid5OM5x6Chu56Z+mjTmPGRVqY2irW7YKq7qRCOXrNCPnrpoHr9XKOk9NM62f
-         AgU4gqC4GCzYNRMEX07pluGGUpXCGCf2UBekwDQtN3E65CvlcfID6nvqnyP5MGKowS
-         RC/XMiQNsY8mA==
+        b=VNqwq+HtfNvZFYhcrJjfmlVrUh7Qm92PDV8ZHIbnW4LXbecslHhI9/8S9W6CQn5nc
+         oeeCkXaTEPlJ5+wvHfl4lNj/PEO5NuXbntcP4fsphOPz8pHkM5VOGE9WU5SNpMwQKr
+         FtoTU2IERrEnnwWuc3rN1cPXGfJxzo8JPay+XudXcWJlFn5dcX3E7QBYTqk4L3BoEN
+         D8S9DlELYEQDoS/UTkLAmJdn6s0lX8nXUeAXQyJAcvb2rDSIK+ep7EQ8tPSLEHh9EB
+         xLcfCT5bTWm3H1zp4I2axEfQOLCGXfOPZo62wcBdqzrl8WZmU9Sg27b/nXN19ZUmhP
+         w3EY4VWeIkGyA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 2A492C53BD2; Mon,  3 Jul 2023 01:39:57 +0000 (UTC)
+        id 09F8CC53BD2; Mon,  3 Jul 2023 02:41:43 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-pm@vger.kernel.org
 Subject: [Bug 217618] Changing maximum frequency and boost state does not
  work with amd-pstate in passive mode plus the schedutil governor
-Date:   Mon, 03 Jul 2023 01:39:56 +0000
+Date:   Mon, 03 Jul 2023 02:41:42 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -47,14 +47,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Who: putr4.s@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217618-137361-ORmv6n1guG@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217618-137361-NW14y8Slzk@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217618-137361@https.bugzilla.kernel.org/>
 References: <bug-217618-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -74,22 +74,42 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217618
 
-Perry Yuan(AMD) (Perry.Yuan@amd.com) changed:
+--- Comment #2 from Prajna Sariputra (putr4.s@gmail.com) ---
+Here is the output of the first command:
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
+4785000
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |Perry.Yuan@amd.com
-
---- Comment #1 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-Hi Sariputra,=20
-
-thank you for reporting this issue, could you let me know the values of your
-system?
-
-# cat /sys/devices/system/cpu/cpu*/cpufreq/amd_pstate_max_freq
-# cat /sys/devices/system/cpu/cpu*/acpi_cppc/highest_perf
-
-Perry.
+And here is the output for the second one:
+191
+196
+196
+166
+166
+186
+186
+191
+181
+181
+176
+176
+196
+196
+171
+171
 
 --=20
 You may reply to this email to add a comment.
