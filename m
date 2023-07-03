@@ -2,59 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D013746185
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 19:44:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BC47463C5
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 22:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjGCRoQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 13:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S231397AbjGCUPg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 16:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjGCRoP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 13:44:15 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABBEE
-        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 10:44:11 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGNab-0001io-SY; Mon, 03 Jul 2023 19:43:53 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGNaX-00Br6B-FH; Mon, 03 Jul 2023 19:43:49 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qGNaW-001x3o-OE; Mon, 03 Jul 2023 19:43:48 +0200
-Date:   Mon, 3 Jul 2023 19:43:47 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, tglx@linutronix.de,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 1/5] genirq/devres: Add
- devm_request_threaded_irq_emsg()
-Message-ID: <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
-References: <20230703090455.62101-1-frank.li@vivo.com>
- <20230703090455.62101-2-frank.li@vivo.com>
- <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
+        with ESMTP id S230197AbjGCUPf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 16:15:35 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A3FE6A
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 13:15:33 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so5996887e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jul 2023 13:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688415331; x=1691007331;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmxlnwW6OlUanek5Fckd1dRfjqDIwlG3Z86p0uliLOk=;
+        b=SsRnH/OMBJV2EOefcvu1Xb2yQsvdhSI2R2icQ1p/FvczfAwJVJXLbqxxVRXC/kLjpc
+         o38MR5sskA7mguUVBFOcSYtw9xKDHL8hwsHxQvHbJwSn4Hd08mhlOp8hNY/yx5bivGhV
+         DGAjN1eKwyVC+7XJcYpN+u+sxIG4NaGCmG5Ldm2n/Umf5ZEFn6mLZF25C9I69vCjHKqv
+         Pl7Ag7jK6DfrFp2DhnKorKLfOJIw9O0fovcVYNYjBiOR9vPGdkwbBwRR1FTK7wL7rzYu
+         hzJfoq1NP5km7ZR50eKzjPnUbVTEyjdcHKGz7MgaYcGpD6vpWP+6F8OnE7KRgLSqldHR
+         kIVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688415331; x=1691007331;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OmxlnwW6OlUanek5Fckd1dRfjqDIwlG3Z86p0uliLOk=;
+        b=ROPi+PeUZzJh0s9+I0AlUlMVxkr6xYDofQ2URBFNSyn9WG2mX0ucQhykTBLRiCkVu6
+         bA1DTIJBV75oYsyindZvcT7o2BgFT05YQooprZc7DKTKa83wYkcWCK4Dh5WHZWeMKfyF
+         Lkj1BdZl9Q7aOaL+dIeN11c3RcTGLp+bdCy+u636z5QGGy6c9ELIygD5YYAD2iRScVMY
+         wtPBTuWEmxqGwjjXRdRXPq8wHCK0YExJLDx+FxIibdol1Rj77RPHoL6BoSfP9UOrJVLT
+         0CpPyH5OjgeTFql3z/DHqFACohe1q88Izr8hYFJNBc+iBDMmMZd5FQZXcVCRqYWYrMUR
+         HG3g==
+X-Gm-Message-State: ABy/qLY2Wp9aZciwg+13oRxioY9Zkfc9+7+ZZKWbjxCd2ljO3aQR8iE0
+        2vmH/4QFhpP3BulxsvbH6cuetIgfZGgjJm8Pz6Tqdw==
+X-Google-Smtp-Source: APBJJlHCV6QxaUZW/HE8PKjX7YHTl04DbkAPArIbQaOyoBWA0fQG8UECxLN2PRjJhO0iwXMN6tPfxw==
+X-Received: by 2002:a05:6512:4013:b0:4f9:56b8:45e5 with SMTP id br19-20020a056512401300b004f956b845e5mr4663385lfb.25.1688415331030;
+        Mon, 03 Jul 2023 13:15:31 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id w27-20020a05651204db00b004fba7edc6cesm1991365lfq.7.2023.07.03.13.15.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Jul 2023 13:15:30 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/4] Add interconnects to QUPs on SM8250
+Date:   Mon, 03 Jul 2023 22:15:24 +0200
+Message-Id: <20230703-topic-8250_qup_icc-v2-0-9ba0a9460be2@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zufm3m2q3aozq5vp"
-Content-Disposition: inline
-In-Reply-To: <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFwso2QC/32NQQqDMBAAvyI5NyUm1die+o8ism5XXZDEJiot4
+ t+b+oAeZ2CYTUQKTFHcsk0EWjmydwn0KRM4gOtJ8jOx0EobZZWRs58YZaUL1byWqWFEWea2rMB
+ c0BKKFLYQSbYBHA4pdcs4JjkF6vh9nB514oHj7MPnGK/5z/59rLlUsiMwVwBlC13cR3YQ/NmHX
+ tT7vn8BgyzMtsoAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Sibi Sankar <sibis@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1688415328; l=1365;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=dPT2roZiTmdQmO/AOJA7mh/BGKezhgAf87PZ1MFFvgg=;
+ b=YYNXe31KSRcf7Lk7nGQU5Xt0Jfhyz/T8zQ6WxbFjMq5eCquktEC2yJaN7vfHXBu+lgFjrcHIa
+ A/Sq/fnZE+7Dfn0irrsXaCOk9Ng3RRcXVYrA2snsERBhkcvmRayf47M
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,67 +95,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+SM8250 (like SM8150 but unlike all other QUP-equipped SoCs) doesn't
+provide a qup-core path. Adjust the bindings and drivers as necessary,
+and then describe the icc paths in the device tree. This makes it possible
+for interconnect sync_state succeed so long as you don't use UFS.
 
---zufm3m2q3aozq5vp
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v2:
+- drop everything, fix icc instead of messing with bindings
+- Link to v1: https://lore.kernel.org/r/20230703-topic-8250_qup_icc-v1-0-fea39aa07525@linaro.org
 
-Hello Krzysztof,
+---
+Konrad Dybcio (4):
+      dt-bindings: interconnect: qcom,rpmh: Add SM8250 QUP virt
+      dt-bindings: interconnect: qcom,sm8250: Add QUP virt
+      interconnect: qcom: sm8250: Fix QUP0 nodes
+      arm64: dts: qcom: sm8250: Add interconnects and power-domains to QUPs
 
-On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wrote:
-> On 03/07/2023 11:04, Yangtao Li wrote:
-> > There are more than 700 calls to the devm_request_threaded_irq method.
-> > Most drivers only request one interrupt resource, and these error
-> > messages are basically the same. If error messages are printed
-> > everywhere, more than 1000 lines of code can be saved by removing the
-> > msg in the driver.
->=20
->=20
-> ...
->=20
-> > +int devm_request_threaded_irq_emsg(struct device *dev, unsigned int ir=
-q,
-> > +				   irq_handler_t handler, irq_handler_t thread_fn,
-> > +				   unsigned long irqflags, const char *devname,
-> > +				   void *dev_id, const char *emsg)
-> > +{
-> > +	int rc;
-> > +
-> > +	rc =3D devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
-> > +				       devname, dev_id);
-> > +	if (rc && rc !=3D -EPROBE_DEFER) {
-> > +		dev_err(dev, "Failed to request %sinterrupt %u %s %s: %pe\n",
-> > +			thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
-> > +			emsg ? : "", ERR_PTR(rc));
->=20
-> It is open-coding dev_err_probe(). Just use dev_err_probe instead.
+ .../bindings/interconnect/qcom,rpmh.yaml           |  18 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi               | 286 +++++++++++++++++++++
+ drivers/interconnect/qcom/sm8250.c                 |  74 +++++-
+ drivers/interconnect/qcom/sm8250.h                 |   6 +
+ include/dt-bindings/interconnect/qcom,sm8250.h     |   7 +
+ 5 files changed, 384 insertions(+), 7 deletions(-)
+---
+base-commit: 296d53d8f84ce50ffaee7d575487058c8d437335
+change-id: 20230703-topic-8250_qup_icc-61768a34c7ec
 
-dev_err_probe is supposed to be only called in probe functions, while
-devm_request_threaded_irq might be called in other contexts (e.g. when a
-device is opened). That's why I asked to not use dev_err_probe() in v2
-(IIRC).
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---zufm3m2q3aozq5vp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSjCNIACgkQj4D7WH0S
-/k6nJwf/fxOBBI8xueY091xxUtJ+Jjt9Qh7iRlnXM72aTkCwI2aSwccmmypcUCtY
-ETYrAdgD8dtYSPkVAdCtcjwnKrotdk2bwyMpN6v9n0SEcRB0glrRIHwsaOYSgIhz
-zISXiqdWOJmBXuaqwzxx4cq7Hc4Ca7dDdHvAUaR4lW6n7Ii2c0BB+cUcBOzhq24O
-wCivFjPfQcr+5tdVDSMT+5kD1kQfyx6V+AY71ZQzaBV//Q8fDooOyTIOXeJVeRMU
-fKffsEtUtKhMmXqNvd89oPKCc1YqYh87ysoSdE9GJNwSCDQ3z1A1dFbhB/gDW7Kx
-feNdkyKlUn0+OSUjbmEq288CCPzaDQ==
-=Icjv
------END PGP SIGNATURE-----
-
---zufm3m2q3aozq5vp--
