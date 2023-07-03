@@ -2,69 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA09474608E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:16:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73C37460A6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjGCQQB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 12:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S230078AbjGCQWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 12:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjGCQQA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:16:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728FE4E;
-        Mon,  3 Jul 2023 09:15:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688400959; x=1719936959;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DRemAbyCfHOBhZ+tlssIsD3Ly0occMYgkFulsRkiiys=;
-  b=d3HGPvXRG+wRcu6wmYAO+5PscJuwg9Dkj56oR4u3UsjHn9it+9mg+K5O
-   9oYexm9RA4UVxuHIPw1sibOEaotS4vpMogKtSwU1cFOo7cjfs4vmtPBvj
-   ZwXn/eOcOmaQ12cFJYSLs2OqOG0iV2vsci5VW5pUQT1CLq2Hr7AWea+eo
-   TAY0zPGb5yCxXDS2t3Ob8/G6+VWat+Ujusvh1ugVqQaBFTfii8lVAxNdy
-   jplyABrTpDf7Q1p9mjtuiFfvDeRzkMcNkymsSUzoJ0rots8B8OST7ZCCg
-   NAvuhPAf/JFNPs+7ATZg0qvGyme5ywLrKXXRa81bwdzEcnE+I3BgqzsHO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426606184"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="426606184"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 09:15:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="831875148"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="831875148"
-Received: from vviswana-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.251.30.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 09:15:57 -0700
-Message-ID: <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
-Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
- wrappers
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
-Date:   Mon, 03 Jul 2023 09:15:57 -0700
-In-Reply-To: <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
-         <20230525140135.3589917-6-daniel.lezcano@linaro.org>
-         <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S229534AbjGCQWe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:22:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1D25E42;
+        Mon,  3 Jul 2023 09:22:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2F10A2F4;
+        Mon,  3 Jul 2023 09:23:16 -0700 (PDT)
+Received: from [10.57.27.93] (unknown [10.57.27.93])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E29FE3F663;
+        Mon,  3 Jul 2023 09:22:30 -0700 (PDT)
+Message-ID: <4e16fb56-7628-8b2f-182b-170a85168cb8@arm.com>
+Date:   Mon, 3 Jul 2023 17:22:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 03/17] PM: EM: Refactor em_pd_get_efficient_state() to
+ be more flexible
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org
+References: <20230512095743.3393563-1-lukasz.luba@arm.com>
+ <20230512095743.3393563-4-lukasz.luba@arm.com>
+ <418bef75-883c-2442-3376-03fd7537c734@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <418bef75-883c-2442-3376-03fd7537c734@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,114 +52,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
 
-On Mon, 2023-07-03 at 12:49 +0200, Daniel Lezcano wrote:
-> 
-> Hi Srinivas,
-> 
-> do you agree with the changes in patches 5 and 6 ?
-> 
-> Thanks
-> 
->    -- Daniel
-> 
-> 
-> On 25/05/2023 16:01, Daniel Lezcano wrote:
-> > The driver is accessing the thermal zone device structure but the
-> > accessors are already existing and we want to consolidate the
-> > thermal
-> > core code by preventing accesses to the internals from the drivers.
-> > 
-> > Let's use these accessors.
-> > 
-> > On the other side, the code is getting directly the temperature
-> > from
-> > tz->temperature, but the temperature is a faked on, so we can
-> > replace
-> > this access by the fake temp and remove the thermal zone device
-> > structure access.
-> > 
-May be something simple description like this will be enough.
 
-"
-Use thermal core API to access thermal zone "type" field instead of
-directly using the structure field.
-While here, remove access to temperature field, as this driver is
-reporting fake temperature, which can be replaced with
-INT3400_FAKE_TEMP. Also replace hardcoded 20C with INT3400_FAKE_TEMP.
-"
-
-The change itself looks fine.
-
-Thanks,
-Srinivas
-
-> > 
-
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > ---
-> >   .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12
-> > ++++++++----
-> >   1 file changed, 8 insertions(+), 4 deletions(-)
-> > 
-> > diff --git
-> > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > index 810231b59dcd..66e34241b33a 100644
-> > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> > @@ -15,6 +15,7 @@
-> >   #define INT3400_THERMAL_TABLE_CHANGED 0x83
-> >   #define INT3400_ODVP_CHANGED 0x88
-> >   #define INT3400_KEEP_ALIVE 0xA0
-> > +#define INT3400_FAKE_TEMP (20 * 1000) /* faked temp sensor with
-> > 20C */
-> >   
-> >   enum int3400_thermal_uuid {
-> >         INT3400_THERMAL_ACTIVE = 0,
-> > @@ -453,6 +454,7 @@ static void int3400_notify(acpi_handle handle,
-> >                         void *data)
-> >   {
-> >         struct int3400_thermal_priv *priv = data;
-> > +       struct device *dev;
-> >         char *thermal_prop[5];
-> >         int therm_event;
-> >   
-> > @@ -475,12 +477,14 @@ static void int3400_notify(acpi_handle
-> > handle,
-> >                 return;
-> >         }
-> >   
-> > -       thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s", priv-
-> > >thermal->type);
-> > -       thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d", priv-
-> > >thermal->temperature);
-> > +       dev = thermal_zone_device(priv->thermal);
-> > +       
-> > +       thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s",
-> > thermal_zone_device_type(priv->thermal));
-> > +       thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d",
-> > INT3400_FAKE_TEMP);
-> >         thermal_prop[2] = kasprintf(GFP_KERNEL, "TRIP=");
-> >         thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d",
-> > therm_event);
-> >         thermal_prop[4] = NULL;
-> > -       kobject_uevent_env(&priv->thermal->device.kobj,
-> > KOBJ_CHANGE, thermal_prop);
-> > +       kobject_uevent_env(&dev->kobj, KOBJ_CHANGE, thermal_prop);
-> >         kfree(thermal_prop[0]);
-> >         kfree(thermal_prop[1]);
-> >         kfree(thermal_prop[2]);
-> > @@ -490,7 +494,7 @@ static void int3400_notify(acpi_handle handle,
-> >   static int int3400_thermal_get_temp(struct thermal_zone_device
-> > *thermal,
-> >                         int *temp)
-> >   {
-> > -       *temp = 20 * 1000; /* faked temp sensor with 20C */
-> > +       *temp = INT3400_FAKE_TEMP;
-> >         return 0;
-> >   }
-> >   
+On 5/30/23 12:06, Dietmar Eggemann wrote:
+> On 12/05/2023 11:57, Lukasz Luba wrote:
+>> Prepare em_pd_get_efficient_state() for the upcoming changes and
+>> make it possible to re-use. Return an index for the best performance
 > 
+> Don't get the `possible to re-use`? Did you mean `possible to be
+> re-used`? But then `re-used` for what?
+
+The function will no longer get a pointer to 'struct em_perf_domain'
+but instead to 'struct em_perf_state'. It would also require to
+get the number of states from 'pd->nr_perf_states'.
+
+This is preparation for handling 2 tables:
+modifiable (a) and default (b).
+
+Then it also returns and ID not the pointer to state.
+It all makes it more generic and ready for those 2 tables.
+
+> 
+>> state. The function arguments that are introduced should allow to
+>> work on different performance state arrays. The caller of
+>> em_pd_get_efficient_state() should be able to use the index either
+>> on the default or the modifiable EM table.
+> 
+> This describes the WHAT but not the WHY.
+
+I will add that description as 'why' in the header. I wanted to
+avoid mentioning in the patch description something which
+is coming in the next patch.
 
