@@ -2,100 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D2F7460D2
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB3D74613B
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 19:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjGCQiS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 12:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S230414AbjGCRPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 13:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjGCQiR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:38:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DD2E4C;
-        Mon,  3 Jul 2023 09:38:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S229804AbjGCRPU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 13:15:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4B9CD;
+        Mon,  3 Jul 2023 10:15:19 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB41660FD1;
-        Mon,  3 Jul 2023 16:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B23CC433C8;
-        Mon,  3 Jul 2023 16:38:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688402296;
-        bh=LZYtAPoqRLO4t1Oy4wzK5nYWXqfIPAkSuqkQg/HcCes=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bSCHnPU9jvzc9Pzzl+EJG4mkwUCQkexotZcaccEOhLutHDGqNbFoa9ZueHKB69BlU
-         hgEe4/7z2JpFmZsyhWIGlhlCbhWa0dIQE5UVrFxPiGU4UBK+HzMt1b8/Lxg/sF1F0v
-         IezQMZZUVxnCwg68QqyqRf21Q7hJ0sIzgHYaECYNZMP581VV+6O0JaU+apypULPpEO
-         z9kcQptgnsDPUuopQOvP3snzoX5+VwoJLWXTIU4Mn2yn/opLPJenavoHrowylH/QeK
-         hpXFiyGgy0exeyREBu1FGB1vIGB1ccBH1vvku+vS9ubilMPBubozQ5K+xqTurY25vy
-         9l/iPlNFGml/g==
-Date:   Mon, 3 Jul 2023 17:38:10 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: Re: [RFC PATCH 1/8] dt-bindings: nvmem: qfprom: add compatible for
- MSM8960
-Message-ID: <20230703-tray-striving-eef10843a377@spud>
-References: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
- <20230702175045.122041-2-dmitry.baryshkov@linaro.org>
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB7CE6606F7D;
+        Mon,  3 Jul 2023 18:15:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688404518;
+        bh=+FspP4SEXLpd8UGez/YnH27IKQxsKfy3tcMyJKUz3yk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eShCOhwfHuWkARISle8RvontgqPMwOzK0A+y0Swu8MYAf2U4nHZgrYGt/m7XnOWH1
+         /T909DFVycl40YdEOV0Aapa17mXExSkGDaZX0/1dp11i0YqEKfeAhovI4kZsNtPLCC
+         cTNMxpS4LKJe2Tn4Zkqldnapn/piPFIBJJtMXSTBU7aiDh18V5QdtoUa9AjJMUCOcs
+         trPcGvU2IcCsAVIKsAXy+9ZuHokvhUx5mFwhEu2bLyi/5jWI+sUZKnuizIOyw1+g2d
+         BBW7T57VY23pQM+1gsjcgAsSmt30uVQ6sm0Dk5F9mO83+1A2cShO72aMGI40pf57dq
+         k5yuX1Vy94Rsg==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] thermal/core: Don't update trip points inside the hysteresis range
+Date:   Mon,  3 Jul 2023 13:14:44 -0400
+Message-ID: <20230703171502.44657-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/s4fxM7mP/6a6+lZ"
-Content-Disposition: inline
-In-Reply-To: <20230702175045.122041-2-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+When searching for the trip points that need to be set, the nearest trip
+point's temperature is used for the high trip, while the nearest trip
+point's temperature minus the hysteresis is used for the low trip. The
+issue with this logic is that when the current temperature is inside a
+trip point's hysteresis range, both high and low trips will come from
+the same trip point. As a consequence instability can still occur like
+this:
+* the temperature rises slightly and enters the hysteresis range of a
+  trip point
+* polling happens and updates the trip points to the hysteresis range
+* the temperature falls slightly, exiting the hysteresis range, crossing
+  the trip point and triggering an IRQ, the trip points are updated
+* repeat
 
---/s4fxM7mP/6a6+lZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So even though the current hysteresis implementation prevents
+instability from happening due to IRQs triggering on the same
+temperature value, both ways, it doesn't prevent it from happening due
+to an IRQ on one way and polling on the other.
 
-On Sun, Jul 02, 2023 at 08:50:38PM +0300, Dmitry Baryshkov wrote:
-> Add the QFPROM compatible for MSM8960.
->=20
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To properly implement a hysteresis behavior, when inside the hysteresis
+range, don't update the trip points. This way, the previously set trip
+points will stay in effect, which will in a way remember the previous
+state (if the temperature signal came from above or below the range) and
+therefore have the right trip point already set. The exception is if
+there was no previous trip point set, in which case a previous state
+doesn't exist, and so it's sensible to allow the hysteresis range as
+trip points.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Cheers,
-Conor.
+---
 
---/s4fxM7mP/6a6+lZ
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/thermal/thermal_trip.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index 907f3a4d7bc8..c386ac5d8bad 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -57,6 +57,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+ {
+ 	struct thermal_trip trip;
+ 	int low = -INT_MAX, high = INT_MAX;
++	int low_trip_id = -1, high_trip_id = -2;
+ 	int i, ret;
+ 
+ 	lockdep_assert_held(&tz->lock);
+@@ -73,18 +74,34 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+ 
+ 		trip_low = trip.temperature - trip.hysteresis;
+ 
+-		if (trip_low < tz->temperature && trip_low > low)
++		if (trip_low < tz->temperature && trip_low > low) {
+ 			low = trip_low;
++			low_trip_id = i;
++		}
+ 
+ 		if (trip.temperature > tz->temperature &&
+-		    trip.temperature < high)
++		    trip.temperature < high) {
+ 			high = trip.temperature;
++			high_trip_id = i;
++		}
+ 	}
+ 
+ 	/* No need to change trip points */
+ 	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
+ 		return;
+ 
++	/*
++	 * If the current temperature is inside a trip point's hysteresis range,
++	 * don't update the trip points, rely on the previously set ones to
++	 * rememember the previous state.
++	 *
++	 * Unless no previous trip point was set, in which case there's no
++	 * previous state to remember.
++	 */
++	if ((tz->prev_low_trip > -INT_MAX || tz->prev_high_trip < INT_MAX) &&
++	    low_trip_id == high_trip_id)
++		return;
++
+ 	tz->prev_low_trip = low;
+ 	tz->prev_high_trip = high;
+ 
+-- 
+2.41.0
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKL5cQAKCRB4tDGHoIJi
-0lEnAP0YlmIJOSwYf/7PVEYhTfZbpuJoaFQKbbdJwP00ZnT/hAEApl93pCtB9q7f
-YZGnUEsWiGvtOQlTEzwX3jISg0+hsw4=
-=Uc20
------END PGP SIGNATURE-----
-
---/s4fxM7mP/6a6+lZ--
