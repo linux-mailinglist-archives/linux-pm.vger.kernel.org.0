@@ -2,127 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90788745D8F
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 15:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951F6745DB4
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 15:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbjGCNhb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 09:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57744 "EHLO
+        id S230075AbjGCNrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 09:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjGCNhb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 09:37:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127F3E41;
-        Mon,  3 Jul 2023 06:37:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98F0760F3E;
-        Mon,  3 Jul 2023 13:37:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1778C433C8;
-        Mon,  3 Jul 2023 13:37:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688391449;
-        bh=mdjfMlB9hWcQuuvCh4C/RYuY26QuKk1rnzzxz5iy9LE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HWly50qCniJRfYL/8TVUTx0uAx63NuOfafqUc1CDwazaJHgukKtR4vIsogPXIdRt4
-         MZuxFHzroI5/HtF6nbqBB7WZcaqYKjDKioVxgRly8qj8QOWuZM+6f1CuYt0PG5ver9
-         Gg1gWu9hPpYIJ4K1ddZ6+62/PiomO8RdxN0Uc/HQlg0sJkVZVnhnIZe/kVhSXYwwlD
-         xR1IfGq01iU1KwqfEb46gCbvw/pRB/AnlUk723++yPV+0QDbxQ2fbR4s3PvwxNzCan
-         B7J0qrDhqJppnh5DIbq7UBILkuJcS4VKviT0LCGAvIyr9bH2PUt2cinafyLwLn0vNV
-         dldZyfRbt6QoQ==
-Message-ID: <cce616da-fb1b-ef0b-69de-11a14d4b3e7b@kernel.org>
-Date:   Mon, 3 Jul 2023 15:37:16 +0200
+        with ESMTP id S229750AbjGCNrw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 09:47:52 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37944E51
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 06:47:51 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-991c786369cso531541566b.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Jul 2023 06:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688392069; x=1690984069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5mR8kflAUl3Rreoc5lJ+BkszrAX8k/kBUds7AX5wTeQ=;
+        b=luH7LMT3M6gjy+U9cz1PKrhJaitqeIjGWzyuCQk1Fg98SinFKK84u425JS/Pod4SEY
+         W5iAMYzShDe/QD4iDQNjApF1N6nEliO1cv99bqxinSAVA/D3pgTnbHDCov21AJJ2UrdT
+         Uh27Y+hdz3Q5nVDBRdA/DWhQyyCi+iJbXIavvGpbv90UClKFWobx5dGZAo4iRXpGmQ5V
+         533VsGBlyklrUzpITzl6qeVIWbmF0rQApIENtAgSBRjhUWitb25lNQ4HzJh0ElGoDjzU
+         /uZIzP80x6zRcdRRprqCzm9AQZpJ249deanxwT6mjuGM9LZBtY2aKfzTQOL+8RvaTAEv
+         yPLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688392069; x=1690984069;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mR8kflAUl3Rreoc5lJ+BkszrAX8k/kBUds7AX5wTeQ=;
+        b=VATnl+QXBp9R2sHIBfK05XeX3+i6MPmGQSN5CajZtkLr61AXqsrYHw2gJrwCzqBj2I
+         0sy2LKtPC57bW0n7E2A7x7Ote3xt1qwookI5CvzfIqPJzt+WAhH/Xdre/pj2C+HHbMOz
+         pjm4cs1UmZhIebgFUp6h23lBve0DuPv7IDzPktBfS7TFCfsTXh/Hl2KnClXhSp6QiJPU
+         b0UCW9VG7uLDGLOFSFXGPqMKDOM0S8QVkgNpXucFPLZo9iJ3yxMMv3kb7eIjFMWY3jXZ
+         xHGT9wfYRL9I0DZV7v/jDxpiCxCxYonT1ErpLItrGuHb/BLPub+9wRQlMUM0LikA3mvm
+         0wdg==
+X-Gm-Message-State: ABy/qLYnoK1JtxLwhphbhEhO1O77xT1eD+fKv1WB2tfOeBSXyid5MdmN
+        7tynWphtpMM1YCY7yb1tR42IZw==
+X-Google-Smtp-Source: APBJJlEL46+KVkuqPX8uIyw1aGCUFwRRFtVipSjMFgZQOsSGE44XK1wwr4iA1h2F4ukGGad+KbHMZg==
+X-Received: by 2002:a17:906:1690:b0:96f:5747:a0de with SMTP id s16-20020a170906169000b0096f5747a0demr7622915ejd.6.1688392069742;
+        Mon, 03 Jul 2023 06:47:49 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id oz31-20020a170906cd1f00b0098d15d170a0sm11936803ejb.202.2023.07.03.06.47.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Jul 2023 06:47:49 -0700 (PDT)
+Message-ID: <5f501f0f-2362-4079-d833-6883b674e588@linaro.org>
+Date:   Mon, 3 Jul 2023 15:47:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/5] genirq/devres: Add
- devm_request_threaded_irq_emsg()
+Subject: Re: [PATCH v4 2/2] soc: loongson2_pm: add power management support
 Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
-        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, mmayer@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, tglx@linutronix.de,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, wenst@chromium.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230703090455.62101-1-frank.li@vivo.com>
- <20230703090455.62101-2-frank.li@vivo.com>
- <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
- <930003c4-c90d-0008-a6cf-9298240e7d93@vivo.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <930003c4-c90d-0008-a6cf-9298240e7d93@vivo.com>
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liu Yun <liuyun@loongson.cn>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230620090811.721-1-zhuyinbo@loongson.cn>
+ <20230620090811.721-3-zhuyinbo@loongson.cn>
+ <bd9661f1-b77d-2ce9-0de2-f559576bf55a@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bd9661f1-b77d-2ce9-0de2-f559576bf55a@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/07/2023 15:24, Yangtao Li wrote:
+On 03/07/2023 03:30, zhuyinbo wrote:
 > 
-> On 2023/7/3 20:31, Krzysztof Kozlowski wrote:
->> [你通常不会收到来自 krzk@kernel.org 的电子邮件。请访问 https://aka.ms/LearnAboutSenderIdentification，以了解这一点为什么很重要]
->>
->> On 03/07/2023 11:04, Yangtao Li wrote:
->>> There are more than 700 calls to the devm_request_threaded_irq method.
->>> Most drivers only request one interrupt resource, and these error
->>> messages are basically the same. If error messages are printed
->>> everywhere, more than 1000 lines of code can be saved by removing the
->>> msg in the driver.
->>
->> ...
->>
->>> +int devm_request_threaded_irq_emsg(struct device *dev, unsigned int irq,
->>> +                                irq_handler_t handler, irq_handler_t thread_fn,
->>> +                                unsigned long irqflags, const char *devname,
->>> +                                void *dev_id, const char *emsg)
->>> +{
->>> +     int rc;
->>> +
->>> +     rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
->>> +                                    devname, dev_id);
->>> +     if (rc && rc != -EPROBE_DEFER) {
->>> +             dev_err(dev, "Failed to request %sinterrupt %u %s %s: %pe\n",
->>> +                     thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
->>> +                     emsg ? : "", ERR_PTR(rc));
->> It is open-coding dev_err_probe(). Just use dev_err_probe instead.
+> Friendly ping ?
 > 
-> 
-> How about the following? If possible, I would like to start modifying 
-> more drivers in the next version.
-> 
-> 
-> int devm_request_threaded_irq_emsg(struct device *dev, unsigned int irq,
->                                     irq_handler_t handler, irq_handler_t 
-> thread_fn,
->                                     unsigned long irqflags, const char 
-> *devname,
->                                     void *dev_id, const char *emsg)
-> {
->          int rc;
-> 
->          rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
->                                         devname, dev_id);
->          if (rc) {
->                  dev_err_probe(dev, rc, "Failed to request %sinterrupt 
-> %u %s %s\n",
->                                thread_fn ? "threaded " : "", irq, 
-> devname ? : dev_name(dev),
->                                emsg ? : "");
 
-That's not the syntax already used - see existing code with `git grep`.
-Instead - return dev_err_probe().
-
+Please avoid pings during merge window. Not much can happen with the
+patchset anyway. Resend or ping afterwards.
 
 Best regards,
 Krzysztof
