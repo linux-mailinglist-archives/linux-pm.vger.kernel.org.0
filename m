@@ -2,49 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4169E746084
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA09474608E
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 18:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjGCQNS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 12:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S229494AbjGCQQB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 12:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjGCQNR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:13:17 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C6D5E42;
-        Mon,  3 Jul 2023 09:13:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D6642F4;
-        Mon,  3 Jul 2023 09:13:58 -0700 (PDT)
-Received: from [10.57.27.93] (unknown [10.57.27.93])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FA8C3F663;
-        Mon,  3 Jul 2023 09:13:13 -0700 (PDT)
-Message-ID: <69fc620d-e480-b5ff-731c-d902d2c18ee0@arm.com>
-Date:   Mon, 3 Jul 2023 17:13:31 +0100
+        with ESMTP id S230016AbjGCQQA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 12:16:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B728FE4E;
+        Mon,  3 Jul 2023 09:15:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1688400959; x=1719936959;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DRemAbyCfHOBhZ+tlssIsD3Ly0occMYgkFulsRkiiys=;
+  b=d3HGPvXRG+wRcu6wmYAO+5PscJuwg9Dkj56oR4u3UsjHn9it+9mg+K5O
+   9oYexm9RA4UVxuHIPw1sibOEaotS4vpMogKtSwU1cFOo7cjfs4vmtPBvj
+   ZwXn/eOcOmaQ12cFJYSLs2OqOG0iV2vsci5VW5pUQT1CLq2Hr7AWea+eo
+   TAY0zPGb5yCxXDS2t3Ob8/G6+VWat+Ujusvh1ugVqQaBFTfii8lVAxNdy
+   jplyABrTpDf7Q1p9mjtuiFfvDeRzkMcNkymsSUzoJ0rots8B8OST7ZCCg
+   NAvuhPAf/JFNPs+7ATZg0qvGyme5ywLrKXXRa81bwdzEcnE+I3BgqzsHO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="426606184"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="426606184"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 09:15:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10760"; a="831875148"
+X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
+   d="scan'208";a="831875148"
+Received: from vviswana-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.251.30.44])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2023 09:15:57 -0700
+Message-ID: <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
+Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
+ wrappers
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
+Date:   Mon, 03 Jul 2023 09:15:57 -0700
+In-Reply-To: <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+         <20230525140135.3589917-6-daniel.lezcano@linaro.org>
+         <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 15/17] Documentation: EM: Add a runtime modifiable EM
- design description
-Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org
-References: <20230512095743.3393563-1-lukasz.luba@arm.com>
- <20230512095743.3393563-16-lukasz.luba@arm.com>
- <77033400-94ba-85c4-77b6-f29a90843fce@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <77033400-94ba-85c4-77b6-f29a90843fce@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,60 +72,114 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Daniel,
 
+On Mon, 2023-07-03 at 12:49 +0200, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> do you agree with the changes in patches 5 and 6 ?
+> 
+> Thanks
+> 
+>    -- Daniel
+> 
+> 
+> On 25/05/2023 16:01, Daniel Lezcano wrote:
+> > The driver is accessing the thermal zone device structure but the
+> > accessors are already existing and we want to consolidate the
+> > thermal
+> > core code by preventing accesses to the internals from the drivers.
+> > 
+> > Let's use these accessors.
+> > 
+> > On the other side, the code is getting directly the temperature
+> > from
+> > tz->temperature, but the temperature is a faked on, so we can
+> > replace
+> > this access by the fake temp and remove the thermal zone device
+> > structure access.
+> > 
+May be something simple description like this will be enough.
 
-On 5/30/23 11:42, Dietmar Eggemann wrote:
-> On 12/05/2023 11:57, Lukasz Luba wrote:
->> Document the new runtime modifiable EM design and how it can be used.
->> Change the last section layout and allow to provide another example
->> how to use this new API in a driver code.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   Documentation/power/energy-model.rst | 20 ++++++++++++++++++++
->>   1 file changed, 20 insertions(+)
->>
->> diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
->> index e97c7f18d8bd..64c2462dc9a6 100644
->> --- a/Documentation/power/energy-model.rst
->> +++ b/Documentation/power/energy-model.rst
->> @@ -89,6 +89,26 @@ due to the workload instruction mix and data set is not modeled.
->>   Also static power which can change during runtime due to variation of SOC
->>   temperature is not modeled in EM.
->>   
->> +2.2 Runtime modifiable EM
->> +^^^^^^^^^^^^^^^^^^^^^^^^^
->> +
->> +To better reflect power variation due to static power (leakage) the EM
->> +supports runtime modifications of the power values. The mechanism relies on
->> +RCU to free the modifiable EM perf_state table memory. Its user, the task
->> +scheduler, also uses RCU to access this memory. The EM framework is
->> +responsible for allocating the new memory for the modifiable EM perf_state
->> +table. The old memory is freed automatically using RCU callback mechanism.
->> +This design decision is made based on task scheduler using that data and
->> +to prevent wrong usage of kernel modules if they would be responsible for the
->> +memory management.
->> +The drivers which want to modify the EM values are protected from concurrent
->> +access using a mutex. Therefore, the drivers must use sleeping context when
->> +they want to modify the EM. The runtime modifiable EM might also be used for
->> +better reflecting real workload scenarios, e.g. when they pop-up on the screen
->> +and will run for longer period, such as: games, video recoding or playing,
->> +video calls, etc. It is up to the platform engineers to experiment and choose
->> +the right approach for their device.
-> 
-> IMHO, there are a lot of design aspects missing here.
-> 
-> E.g.
-> 
-> Why 2 tables, modifiable (a) and default (b)?
-> 
-> Why does only EAS use (a)?
-> 
-> (a) and (b) being the same performance state table until first call to
-> modify (a) ()
+"
+Use thermal core API to access thermal zone "type" field instead of
+directly using the structure field.
+While here, remove access to temperature field, as this driver is
+reporting fake temperature, which can be replaced with
+INT3400_FAKE_TEMP. Also replace hardcoded 20C with INT3400_FAKE_TEMP.
+"
+
+The change itself looks fine.
+
+Thanks,
+Srinivas
+
+> > 
+
+> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > ---
+> >   .../thermal/intel/int340x_thermal/int3400_thermal.c  | 12
+> > ++++++++----
+> >   1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git
+> > a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > index 810231b59dcd..66e34241b33a 100644
+> > --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> > @@ -15,6 +15,7 @@
+> >   #define INT3400_THERMAL_TABLE_CHANGED 0x83
+> >   #define INT3400_ODVP_CHANGED 0x88
+> >   #define INT3400_KEEP_ALIVE 0xA0
+> > +#define INT3400_FAKE_TEMP (20 * 1000) /* faked temp sensor with
+> > 20C */
+> >   
+> >   enum int3400_thermal_uuid {
+> >         INT3400_THERMAL_ACTIVE = 0,
+> > @@ -453,6 +454,7 @@ static void int3400_notify(acpi_handle handle,
+> >                         void *data)
+> >   {
+> >         struct int3400_thermal_priv *priv = data;
+> > +       struct device *dev;
+> >         char *thermal_prop[5];
+> >         int therm_event;
+> >   
+> > @@ -475,12 +477,14 @@ static void int3400_notify(acpi_handle
+> > handle,
+> >                 return;
+> >         }
+> >   
+> > -       thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s", priv-
+> > >thermal->type);
+> > -       thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d", priv-
+> > >thermal->temperature);
+> > +       dev = thermal_zone_device(priv->thermal);
+> > +       
+> > +       thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s",
+> > thermal_zone_device_type(priv->thermal));
+> > +       thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d",
+> > INT3400_FAKE_TEMP);
+> >         thermal_prop[2] = kasprintf(GFP_KERNEL, "TRIP=");
+> >         thermal_prop[3] = kasprintf(GFP_KERNEL, "EVENT=%d",
+> > therm_event);
+> >         thermal_prop[4] = NULL;
+> > -       kobject_uevent_env(&priv->thermal->device.kobj,
+> > KOBJ_CHANGE, thermal_prop);
+> > +       kobject_uevent_env(&dev->kobj, KOBJ_CHANGE, thermal_prop);
+> >         kfree(thermal_prop[0]);
+> >         kfree(thermal_prop[1]);
+> >         kfree(thermal_prop[2]);
+> > @@ -490,7 +494,7 @@ static void int3400_notify(acpi_handle handle,
+> >   static int int3400_thermal_get_temp(struct thermal_zone_device
+> > *thermal,
+> >                         int *temp)
+> >   {
+> > -       *temp = 20 * 1000; /* faked temp sensor with 20C */
+> > +       *temp = INT3400_FAKE_TEMP;
+> >         return 0;
+> >   }
+> >   
 > 
 
-I'll add that explanation in the v3. I wanted to avoid such detailed
-description about e.g. 'being the same performance state table until 
-first call to > modify (a)' since it's a memory optimization
-bit. Although, I will add that reason to the doc as well.
