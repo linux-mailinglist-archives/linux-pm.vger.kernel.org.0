@@ -2,145 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB3D74613B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 19:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BD874617D
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Jul 2023 19:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbjGCRPV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Jul 2023 13:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
+        id S230258AbjGCRiZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Jul 2023 13:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjGCRPU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 13:15:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4B9CD;
-        Mon,  3 Jul 2023 10:15:19 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        with ESMTP id S230364AbjGCRiY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Jul 2023 13:38:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4907AE6C
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 10:38:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB7CE6606F7D;
-        Mon,  3 Jul 2023 18:15:16 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688404518;
-        bh=+FspP4SEXLpd8UGez/YnH27IKQxsKfy3tcMyJKUz3yk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eShCOhwfHuWkARISle8RvontgqPMwOzK0A+y0Swu8MYAf2U4nHZgrYGt/m7XnOWH1
-         /T909DFVycl40YdEOV0Aapa17mXExSkGDaZX0/1dp11i0YqEKfeAhovI4kZsNtPLCC
-         cTNMxpS4LKJe2Tn4Zkqldnapn/piPFIBJJtMXSTBU7aiDh18V5QdtoUa9AjJMUCOcs
-         trPcGvU2IcCsAVIKsAXy+9ZuHokvhUx5mFwhEu2bLyi/5jWI+sUZKnuizIOyw1+g2d
-         BBW7T57VY23pQM+1gsjcgAsSmt30uVQ6sm0Dk5F9mO83+1A2cShO72aMGI40pf57dq
-         k5yuX1Vy94Rsg==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] thermal/core: Don't update trip points inside the hysteresis range
-Date:   Mon,  3 Jul 2023 13:14:44 -0400
-Message-ID: <20230703171502.44657-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.41.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC75E60FF1
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 17:38:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3EF9CC433CA
+        for <linux-pm@vger.kernel.org>; Mon,  3 Jul 2023 17:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688405902;
+        bh=dusbUbnnL2mAASHuow+7OxnXUPHxyl2Eqvjb2zkFIhs=;
+        h=From:To:Subject:Date:From;
+        b=KP8Z0m4KiaPNtFz/1seRqcmmizrBFyuaVBcmD4Z+PiqS//ICWW4PoXSOst0PSwcea
+         ccykImuuxUpVyI/DhU8WxuvvlxtCNUn4qpXlSRs4Wd3fMvU41E4IQVO6QWieNL0++J
+         zukb+Or+OC92LYIUMAEb21Q81UllvvatimYZ29wEPoueuqKi1BvPKPjChGeGDDMTEv
+         fmjj1AbnUz6BegephKDpwNqexPqCtR462wA5n5AWeI10d+IETiMwzBCoUikrj19xy1
+         3s8/wUeY3IIwWOEgw8FDRCP2PKzGS6RSLqHzEy2F5zesVgvqwSoqksP/eXtqCFdP3l
+         uJtHcu6N7mLBA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 28661C53BC6; Mon,  3 Jul 2023 17:38:22 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217630] New: Kernel fails to load amd_pstate driver on 3970x
+ while Windows works well on the same machine
+Date:   Mon, 03 Jul 2023 17:38:21 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: pshirshov@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-217630-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When searching for the trip points that need to be set, the nearest trip
-point's temperature is used for the high trip, while the nearest trip
-point's temperature minus the hysteresis is used for the low trip. The
-issue with this logic is that when the current temperature is inside a
-trip point's hysteresis range, both high and low trips will come from
-the same trip point. As a consequence instability can still occur like
-this:
-* the temperature rises slightly and enters the hysteresis range of a
-  trip point
-* polling happens and updates the trip points to the hysteresis range
-* the temperature falls slightly, exiting the hysteresis range, crossing
-  the trip point and triggering an IRQ, the trip points are updated
-* repeat
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217630
 
-So even though the current hysteresis implementation prevents
-instability from happening due to IRQs triggering on the same
-temperature value, both ways, it doesn't prevent it from happening due
-to an IRQ on one way and polling on the other.
+            Bug ID: 217630
+           Summary: Kernel fails to load amd_pstate driver on 3970x while
+                    Windows works well on the same machine
+           Product: Power Management
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: high
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: pshirshov@gmail.com
+        Regression: No
 
-To properly implement a hysteresis behavior, when inside the hysteresis
-range, don't update the trip points. This way, the previously set trip
-points will stay in effect, which will in a way remember the previous
-state (if the temperature signal came from above or below the range) and
-therefore have the right trip point already set. The exception is if
-there was no previous trip point set, in which case a previous state
-doesn't exist, and so it's sensible to allow the hysteresis range as
-trip points.
+I have 3970x CPU installed into Gigabyte Designare TRX40 rev 1.0 motherboar=
+d.
+The UEFI is updated to version F6 so AGESA has version 1.0.0.7.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+CPPC is explicitly enabled in UEFI settings. It definitely works in Windows=
+:=20
 
----
+> Information   7/3/2023 4:46:04 PM=20=20=20=20
+> Microsoft-Windows-Kernel-Processor-Power        55      (47)    "Processo=
+r 63
+> in group 0 exposes the following power management capabilities:
+> Idle state type: ACPI Idle (C) States (2 state(s))
+> Performance state type: ACPI Collaborative Processor Performance Control
 
- drivers/thermal/thermal_trip.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Kernel 6.3 fails to load amd_pstate with both "amd_pstate=3Dactive" and
+"amd_pstate=3Dpassive" kernel parameters with the following message:
 
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-index 907f3a4d7bc8..c386ac5d8bad 100644
---- a/drivers/thermal/thermal_trip.c
-+++ b/drivers/thermal/thermal_trip.c
-@@ -57,6 +57,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
- {
- 	struct thermal_trip trip;
- 	int low = -INT_MAX, high = INT_MAX;
-+	int low_trip_id = -1, high_trip_id = -2;
- 	int i, ret;
- 
- 	lockdep_assert_held(&tz->lock);
-@@ -73,18 +74,34 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
- 
- 		trip_low = trip.temperature - trip.hysteresis;
- 
--		if (trip_low < tz->temperature && trip_low > low)
-+		if (trip_low < tz->temperature && trip_low > low) {
- 			low = trip_low;
-+			low_trip_id = i;
-+		}
- 
- 		if (trip.temperature > tz->temperature &&
--		    trip.temperature < high)
-+		    trip.temperature < high) {
- 			high = trip.temperature;
-+			high_trip_id = i;
-+		}
- 	}
- 
- 	/* No need to change trip points */
- 	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
- 		return;
- 
-+	/*
-+	 * If the current temperature is inside a trip point's hysteresis range,
-+	 * don't update the trip points, rely on the previously set ones to
-+	 * rememember the previous state.
-+	 *
-+	 * Unless no previous trip point was set, in which case there's no
-+	 * previous state to remember.
-+	 */
-+	if ((tz->prev_low_trip > -INT_MAX || tz->prev_high_trip < INT_MAX) &&
-+	    low_trip_id == high_trip_id)
-+		return;
-+
- 	tz->prev_low_trip = low;
- 	tz->prev_high_trip = high;
- 
--- 
-2.41.0
+> amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
 
+Kernel 6.4.0 doesn't shows the same error "amd_pstate=3Dactive",
+"amd_pstate=3Dpassive" and "amd_pstate=3Dguided".
+
+
+Please help.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
