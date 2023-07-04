@@ -2,68 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251307472B5
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 15:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0646B7472CA
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 15:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjGDNY5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 09:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
+        id S230472AbjGDNfN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 09:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGDNY4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 09:24:56 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B313C107
-        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 06:24:54 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-c581c758ad8so1793942276.1
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 06:24:54 -0700 (PDT)
+        with ESMTP id S230349AbjGDNfM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 09:35:12 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E13A11D
+        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 06:35:10 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-579dfae6855so39358647b3.1
+        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 06:35:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688477094; x=1691069094;
+        d=linaro.org; s=google; t=1688477709; x=1691069709;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XammPMRuFbJ7jZvdGT2m8llzDSyROEzD+mjdnEUmkvA=;
-        b=d9WuFsaAYWcDLGtG3g5xafjQ2hE1ahocHZmcqZdYkuyPYnfAcrDb8ZQhyYdcmNIE9N
-         cgfpjNvVr5B3wJriRNKorSj33dHjFdwSWcXtPfHyntNFnqU2ptxbKKApVZHAnZdmvZ3k
-         EUCG9WQkMOK7FLMLQ8/NwM+8kD9GAej/lrESP98M+/F/Q59YukYe9MlNy64w75zhsAuo
-         zEqyzmfvMFdp01dGuDuvi2ywTxUEOYgZpVjnYYZxpMtcgOGJ1mcHkHbhNkNZZBDSaNoh
-         mGcKG2wq/YgMmLlV2wVT+zu2IxfJs1E7G/V4mjIsD8Hu7QXkno6bOlIknjpo6+qjVMT9
-         io1Q==
+        bh=WqIHh+G4XahXVKdkslZXY2hDyJ9c234XGoQUojzzroA=;
+        b=y3EPa0BxKmG5AolGrBXtKtk5yxu7UDdfkbh9qbFcLUnY5WWexlDXKwKEOAjVlVakkJ
+         uKxLuoTitJmFs9PO9UDVAUlC9SoX6MKokSyPQhLsCyQRSkaYA0j8hInarR9amNsIwVOF
+         Jy4w/a2ROrnNsnygY5w8aIb+I6Nixvp0EWrPTND8WlYO+q1OqPUz4PbJaEx/JlhPPRzM
+         qGpH7ZfPtT6VNBslTQ4VoBMb0GbxzKaIx6dW3oDVN5G3jtmoBhaMk7VtbfjdAbxGSuz3
+         BHvgh4lxl6BpC/p2KjCHpH1s1kXvESul+KB40C3D8TkAWE9Wf4vUiXgL94YB2Us1H4Ar
+         acbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688477094; x=1691069094;
+        d=1e100.net; s=20221208; t=1688477709; x=1691069709;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XammPMRuFbJ7jZvdGT2m8llzDSyROEzD+mjdnEUmkvA=;
-        b=I3+fBDMuyBBdrPrlfVg7rZWQfL1jpwt7GgktU9HJqcttOaEiSwdPbjYi3Ble9F9hqW
-         Jk4aBB8riNaNCtAZ/vq4DjtyYlAf3DA4OsTLwp7TjL7lAL7Hz1O1ZpXfChh5yfRzQvl9
-         qjZAHSNZU9IHo3P9F/ZoI3DcGtTOrmbF9MTg3BT76dzKknt206WuX6Ns5giMekjXObdc
-         trSKkDFe2oQWrb1dm3wdxIXx3n70SbWZ3Xar2vQVhVfL9q+94wp7JsOkBJZ0vohyfaFO
-         eo1gS2rKYsJVYcOHpLwVXJ/E7XG7SBYUUPLIxk4/v3/LsLwnQpJgXYJDfuqzGDEyUG17
-         UCCQ==
-X-Gm-Message-State: ABy/qLaP9PsBqtvC9sFt1R+/dIs9eDNPG7cEEt3nngl/+1yEHrgAUvj5
-        dxoBJQ4QF7mDfs2eYvPyWjSGNwm/Wjun1Swbfq73TA==
-X-Google-Smtp-Source: APBJJlGumq+4hgA+gyaUbNRmbE2j9Mkzri7JWnTYYJEuFB1a9lo4lfPsWVBAW+46oQ8bdNhAddsq/k6xPGoPq6dz5jI=
-X-Received: by 2002:a5b:243:0:b0:bcb:b9c3:f738 with SMTP id
- g3-20020a5b0243000000b00bcbb9c3f738mr10026998ybp.53.1688477093854; Tue, 04
- Jul 2023 06:24:53 -0700 (PDT)
+        bh=WqIHh+G4XahXVKdkslZXY2hDyJ9c234XGoQUojzzroA=;
+        b=XNbSZL6jJQtSK3cBU1f05eQeNR1NZSiFl+UVcg6hSy6CmFbLQfg9PhiGn5l6YUN59t
+         u1iXMKKxu0XjvUbeSh2kfeMiBDFdLlqw0f/67FIXVYK4+ofnP+GbBO+SkPoSIbUld+Tp
+         bqPSfdQU38Bk6dTf8ZX7NE98thqj5ToP0lxZgbkxWWWtjc/HAQ8Z2daHE3Z8imQMUCt4
+         AZ82XbFIogS2TRpvJkZ4JDfYl4WSRgLuo90DU5t8QC8d/bMZH2ZIChmb8kNnEy2YN3II
+         CSc0mbBNk7Uh2OgE5J8Us6mfy9gHqhJAYVCKC3BTHSBZTdbRNfunMsgumax0eJ3DKUGm
+         sd/A==
+X-Gm-Message-State: ABy/qLbcm7qExgdPFoxOuJKZSRyByB0ovaUn0kw0rLzdpWVCG1ApbZE9
+        UQ5I6X225HzBYWgGyGODeeAxgsTXUoxdpREzw5xrNg==
+X-Google-Smtp-Source: APBJJlEYH6VsmNEu5MYnqCp4aZICtRhSpFUOoR+/B14onGj+m97qmuMBKMWWYtMv7ca/U7kvG6k+qXQV+bE2WdHHHyo=
+X-Received: by 2002:a5b:f07:0:b0:c13:aca0:b70a with SMTP id
+ x7-20020a5b0f07000000b00c13aca0b70amr12114660ybr.32.1688477709691; Tue, 04
+ Jul 2023 06:35:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230621144019.3219858-1-abel.vesa@linaro.org> <20230621144019.3219858-4-abel.vesa@linaro.org>
-In-Reply-To: <20230621144019.3219858-4-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 4 Jul 2023 15:24:17 +0200
-Message-ID: <CAPDyKFqczOR0GjdCpe=C5r8=RWQ9nkhMNP_Nok5_Jkw+LaSahw@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 3/4] PM: domains: Ignore power off request for
- enabled unused domains
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
+References: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
+ <20230702175045.122041-5-dmitry.baryshkov@linaro.org> <971262d5-98b3-c48e-89fd-ce107275008a@linaro.org>
+In-Reply-To: <971262d5-98b3-c48e-89fd-ce107275008a@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 4 Jul 2023 16:34:58 +0300
+Message-ID: <CAA8EJpqvk02LeuS=-pPLUi=0OsBQ0npqioEtYkiNfPm+0EpF8Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 4/8] ARM: dts: qcom: msm8960-cdp: constraint cpufreq regulators
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -75,144 +80,57 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 16:40, Abel Vesa <abel.vesa@linaro.org> wrote:
+On Tue, 4 Jul 2023 at 16:03, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
 >
-> First of, safekeep the boot state that is provided on init, then use this
-> boot state to make decisions whether a power off request should be
-> ignored or not. In case a domain was left enabled before boot, most
-> likely such domain is needed and should not be disabled on the 'disable
-> unused' late initcall, but rather needs to stay powered on until the
-> consumer driver gets a chance to probe. In order to keep such domain
-> powered on until the consumer handles it correctly, the domain needs to
-> be registered by a provider that has a sync_state callback registered
-> and said provider has state synced.
+> On 2.07.2023 19:50, Dmitry Baryshkov wrote:
+> > Add additional constraints to the CPUfreq-related regulators, it is
+> > better be safe than sorry there.
+> >
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> I'm squinting quite hard at
 >
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/base/power/domain.c | 49 +++++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h   |  1 +
->  2 files changed, 50 insertions(+)
+> https://github.com/LineageOS/sony-kernel-msm8960/blob/jb-dev/arch/arm/mach-msm/acpuclock-8960.c
 >
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 51b9d4eaab5e..5967ade160e2 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -654,6 +654,43 @@ static void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
->         queue_work(pm_wq, &genpd->power_off_work);
->  }
+> but I can't figure out where these min values came from
+
+These should be the minimum values for vdd_min and vdd_dig in
+l2_freq_tbl_8960_kraitv2 (v1 is unsupported in mainline).
+See below,
+
 >
-> +/**
-> + * genpd_keep_on - Tells if the domain should skip the power 'off' request
-> + * @genpd: PM domain to be checked.
-> + *
-> + * If the domain's current state meets the following conditions:
-> + *  - marked for being kept as enabled
-> + *  - has a provider with a sync state callback registered
-> + *  - the provider hasn't state synced yet
-> + * then the power 'off' request should be skipped.
-> + *
-> + * This function should only be called from genpd_power_off and with
-> + * the lock held.
-> + */
-> +static inline bool genpd_keep_on(struct generic_pm_domain *genpd)
-> +{
-> +       bool ret = false;
-> +
-> +       if (!(genpd->boot_keep_on))
-> +               return false;
-> +
-> +       if (!genpd->has_provider)
-> +               goto out;
+> Konrad
+> >  arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts b/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+> > index 414881d34c60..cba0d1e460a1 100644
+> > --- a/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+> > +++ b/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+> > @@ -131,7 +131,7 @@ pm8921_s2: s2 {
+> >               };
+> >
+> >               pm8921_s3: s3 {
+> > -                     regulator-min-microvolt = <500000>;
+> > +                     regulator-min-microvolt = <950000>;
 
-Hmm, resetting the boot_keep_on flag based on the above condition
-isn't really working, I think.
+And this is obviously a c&p from 8064. This should be 1050000.
 
-genpd_power_off() may be called before/after there is an OF provider
-assigned/removed for the genpd. With the current genpd APIs
-(pm_genpd_init() and of_genpd_add_provider_*()), we have at least two
-separate function calls to complete the initialization of the genpd
-provider(s). Theoretically, we can't know when genpd_power_off() may
-be called, especially if there are child-domains being used too.
+> >                       regulator-max-microvolt = <1150000>;
+> >                       qcom,switch-mode-frequency = <4800000>;
+> >                       bias-pull-down;
+> > @@ -287,7 +287,7 @@ pm8921_l23: l23 {
+> >               };
+> >
+> >               pm8921_l24: l24 {
+> > -                     regulator-min-microvolt = <750000>;
+> > +                     regulator-min-microvolt = <1050000>;
+> >                       regulator-max-microvolt = <1150000>;
+> >                       bias-pull-down;
+> >               };
 
-It looks to me that we should not clear the boot_keep_on flag at all
-in this path. Instead, we should rather bail out and return false, to
-prevent the genpd from being powered off. Although this should be fine
-for most cases, we have some genpd providers, which don't use OF
-providers at all (pm-s3c64xx, amdgpu_acp). To deal with these cases,
-we seem to need an opt-out solution (maybe a new genpd configuration
-bit) that they can set, before calling pm_genpd_init().
 
-That said, it looks like the genpd->has_provider seems not to be
-entirely protected by the genpd lock (not in this path, but in other
-paths in genpd). I think we need to fix that too, in some way or the
-other.
 
-> +
-> +       if (!dev_has_sync_state(genpd->provider->dev))
-> +               goto out;
-> +
-> +       if (dev_is_drv_state_synced(genpd->provider->dev))
-> +               goto out;
-> +
-> +       return true;
-> +
-> +out:
-> +       genpd->boot_keep_on = false;
-> +
-> +       return ret;
-> +}
-> +
->  /**
->   * genpd_power_off - Remove power from a given PM domain.
->   * @genpd: PM domain to power down.
-> @@ -682,6 +719,13 @@ static int genpd_power_off(struct generic_pm_domain *genpd, bool one_dev_on,
->         if (!genpd_status_on(genpd) || genpd->prepared_count > 0)
->                 return 0;
->
-> +       /*
-> +        * If the domain is enabled and unused, bail out and ignore
-> +        * the 'off' request until the provider has state synced.
-> +        */
-> +       if (genpd_keep_on(genpd))
-> +               return -EBUSY;
-> +
->         /*
->          * Abort power off for the PM domain in the following situations:
->          * (1) The domain is configured as always on.
-> @@ -2065,6 +2109,7 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->         atomic_set(&genpd->sd_count, 0);
->         genpd->status = is_off ? GENPD_STATE_OFF : GENPD_STATE_ON;
->         genpd->device_count = 0;
-> +       genpd->boot_keep_on = !is_off;
->         genpd->provider = NULL;
->         genpd->has_provider = false;
->         genpd->accounting_time = ktime_get_mono_fast_ns();
-> @@ -2718,6 +2763,10 @@ static void genpd_dev_pm_sync(struct device *dev)
->         if (IS_ERR(pd))
->                 return;
->
-> +       genpd_lock(pd);
-> +       pd->boot_keep_on = false;
-
-This should not be needed. I think you can drop this.
-
-> +       genpd_unlock(pd);
-> +
->         genpd_queue_power_off_work(pd);
->  }
->
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index f776fb93eaa0..3eb32c4b6d4f 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -131,6 +131,7 @@ struct generic_pm_domain {
->         const char *name;
->         atomic_t sd_count;      /* Number of subdomains with power "on" */
->         enum gpd_status status; /* Current state of the domain */
-> +       bool boot_keep_on;      /* Keep enabled during 'disable unused' late initcall */
->         unsigned int device_count;      /* Number of devices */
->         unsigned int suspended_count;   /* System suspend device counter */
->         unsigned int prepared_count;    /* Suspend counter of prepared devices */
-
-Kind regards
-Uffe
+-- 
+With best wishes
+Dmitry
