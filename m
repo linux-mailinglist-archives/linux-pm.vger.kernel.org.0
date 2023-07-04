@@ -2,53 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78700746C41
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 10:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51433746C5B
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 10:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231643AbjGDIqQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 04:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56368 "EHLO
+        id S231601AbjGDItc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 04:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjGDIqP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 04:46:15 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B47B2;
-        Tue,  4 Jul 2023 01:46:13 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688460371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LQjBl3xjsOvqrn/5MSnlNvfmLvFW7KbTctHheLwyri4=;
-        b=Nx+gbrqlmWo18DeiRQmsO25hjYZTl74Ctko9c9XGKlzwBZoCPIXX71gbWa3Y9Ou2tN1xle
-        h1KwBVTYAMeC6ZXXk6R1KQDbvytw3u6BGAUrThI5JwyqvnvIYtSn80B6SjGD0QmvSetWWS
-        s7GND8pJdkB0+tCuEwbqKHVMF7LtmMGr0Ecj2me0fR8YejgsldVz4EydVN0f3nhIcfzoDT
-        R4prtYHVnqTCuSF0DFfNf6xyY7+mSruczDkgDxarYk0TdEU+0B9/lefr2DhwwKrw25If0z
-        qaCbqYZtPnw8770cPqLduqXjWVWbSrin8Ijpos9e14n6IvfKovkjEGFWZxksEQ==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CDAA06000E;
-        Tue,  4 Jul 2023 08:46:09 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 10:46:08 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        with ESMTP id S231851AbjGDItI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 04:49:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F293110F2;
+        Tue,  4 Jul 2023 01:48:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A8C66119E;
+        Tue,  4 Jul 2023 08:48:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE33C433CA;
+        Tue,  4 Jul 2023 08:48:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1688460537;
+        bh=zvTuVs2YUJIWjd+2H/rF7bPq86bQGD26x3z2S4w1GT0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SQCBl16RCbD2rUr46QYzQjQiy8fUncB9hDirEgp806O7bO2QpuP9QO4+HvOsToiRa
+         Udn3dCdv9ALWZnxrrTNoLN5+AW5egOWw7nN/w0NmOMlDIcN3sGRHD9VIogz2JfM+Q9
+         JsgukE7Tuyre8dRtUdxp181ekGeA9pRPvwLicR0IKX7veqZ0FDLBrtQjq6UGK3PCt7
+         729MviFxP037WA+dJmC6Boo9rhYMEbaMxVB0jiaQZULdvHeN/OYAZ3VP0fJjYZWHmN
+         k6Lc9lbgSelCZsJjcT1C7WBQ9DOPV4IX1HDul6RC36Gt6jqgifNUamQKspejCK8I2B
+         mZOuiPc/InTmA==
+Message-ID: <11052797-b006-11bb-e4eb-987ddd568b24@kernel.org>
+Date:   Tue, 4 Jul 2023 10:48:45 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/5] genirq/devres: Add
+ devm_request_threaded_irq_emsg()
+Content-Language: en-US
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Yangtao Li <frank.li@vivo.com>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
         rui.zhang@intel.com, mmayer@broadcom.com,
         bcm-kernel-feedback-list@broadcom.com,
         florian.fainelli@broadcom.com, tglx@linutronix.de,
@@ -56,112 +50,61 @@ Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
         bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 2/5] thermal/drivers/armada: convert to use
- devm_request_threaded_irq_emsg()
-Message-ID: <20230704104608.29527ec3@xps-13>
-In-Reply-To: <20230703090455.62101-3-frank.li@vivo.com>
 References: <20230703090455.62101-1-frank.li@vivo.com>
-        <20230703090455.62101-3-frank.li@vivo.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+ <20230703090455.62101-2-frank.li@vivo.com>
+ <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
+ <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yangtao,
+On 03/07/2023 19:43, Uwe Kleine-König wrote:
+> Hello Krzysztof,
+> 
+> On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wrote:
+>> On 03/07/2023 11:04, Yangtao Li wrote:
+>>> There are more than 700 calls to the devm_request_threaded_irq method.
+>>> Most drivers only request one interrupt resource, and these error
+>>> messages are basically the same. If error messages are printed
+>>> everywhere, more than 1000 lines of code can be saved by removing the
+>>> msg in the driver.
+>>
+>>
+>> ...
+>>
+>>> +int devm_request_threaded_irq_emsg(struct device *dev, unsigned int irq,
+>>> +				   irq_handler_t handler, irq_handler_t thread_fn,
+>>> +				   unsigned long irqflags, const char *devname,
+>>> +				   void *dev_id, const char *emsg)
+>>> +{
+>>> +	int rc;
+>>> +
+>>> +	rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
+>>> +				       devname, dev_id);
+>>> +	if (rc && rc != -EPROBE_DEFER) {
+>>> +		dev_err(dev, "Failed to request %sinterrupt %u %s %s: %pe\n",
+>>> +			thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev),
+>>> +			emsg ? : "", ERR_PTR(rc));
+>>
+>> It is open-coding dev_err_probe(). Just use dev_err_probe instead.
+> 
+> dev_err_probe is supposed to be only called in probe functions, while
+> devm_request_threaded_irq might be called in other contexts (e.g. when a
+> device is opened). That's why I asked to not use dev_err_probe() in v2
 
-frank.li@vivo.com wrote on Mon,  3 Jul 2023 17:04:51 +0800:
+True, but then all the callers of this function will forget to set
+deferred probe reason.
 
-> There are more than 700 calls to the devm_request_threaded_irq method.
-> Most drivers only request one interrupt resource, and these error
-> messages are basically the same. If error messages are printed
-> everywhere, more than 1000 lines of code can be saved by removing the
-> msg in the driver.
->=20
-> And tglx point out that:
->=20
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
->=20
->      519 messages total (there are probably more)
->=20
->      352 unique messages
->=20
->      323 unique messages after lower casing
->=20
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
->=20
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
->=20
->      The most useful one of all is: "could request wakeup irq: %d"
->=20
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
->=20
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
->=20
-> Let's use devm_request_threaded_irq_emsg(), which ensure that all error
-> handling branches print error information. In this way, when this function
-> fails, the upper-layer functions can directly return an error code without
-> missing debugging information. Otherwise, the error message will be
-> printed redundantly or missing.
->=20
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  drivers/thermal/armada_thermal.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_th=
-ermal.c
-> index 9f6dc4fc9112..a5e140643f00 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -913,15 +913,12 @@ static int armada_thermal_probe(struct platform_dev=
-ice *pdev)
-> =20
->  	/* The overheat interrupt feature is not mandatory */
->  	if (irq > 0) {
-> -		ret =3D devm_request_threaded_irq(&pdev->dev, irq,
-> -						armada_overheat_isr,
-> -						armada_overheat_isr_thread,
-> -						0, NULL, priv);
-> -		if (ret) {
-> -			dev_err(&pdev->dev, "Cannot request threaded IRQ %d\n",
-> -				irq);
-> +		ret =3D devm_request_threaded_irq_emsg(&pdev->dev, irq,
-> +						     armada_overheat_isr,
-> +						     armada_overheat_isr_thread,
-> +						     0, NULL, priv, NULL);
-> +		if (ret)
+Best regards,
+Krzysztof
 
-I don't see a patch renaming this helper with s/emsg//, do you plan to
-keep it like that? I bet nobody outside of this series will notice the
-new helper and will continue to add error messages because it kind
-of feels "right" to do so.
-
-I would rather prefer returning to the original function name which
-everybody knows/uses.
-
-Anyhow, I'm fine with the idea of dropping custom error messages, so
-whatever the final solution:
-
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miqu=C3=A8l
