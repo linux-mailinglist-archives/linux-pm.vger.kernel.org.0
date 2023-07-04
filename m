@@ -2,60 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07839746D8B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 11:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ADA3746F57
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 13:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231958AbjGDJeY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 05:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S231316AbjGDLET (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 07:04:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232144AbjGDJdy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 05:33:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1AC1722
-        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 02:33:23 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qGcOv-0006tw-RL; Tue, 04 Jul 2023 11:32:49 +0200
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qGcOu-00C09s-8Y; Tue, 04 Jul 2023 11:32:48 +0200
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <sha@pengutronix.de>)
-        id 1qGcOr-002TzG-I0; Tue, 04 Jul 2023 11:32:45 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     linux-rockchip@lists.infradead.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, kernel@pengutronix.de,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Vincent Legoll <vincent.legoll@gmail.com>,
+        with ESMTP id S230385AbjGDLES (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 07:04:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E2EA3;
+        Tue,  4 Jul 2023 04:04:17 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3418266018CF;
+        Tue,  4 Jul 2023 12:04:15 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688468656;
+        bh=g9fpBwzmmxZyfKY6sgTFm+2amQjq86tk1fvz17dQUl4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=FRuatuby77tNcxZSxVDTH03bWGJwByCsT6Hb2gZ5y8G74zDCqn85uZL6x2NJRwmou
+         5deKeFimLsJ2sdt7eklWDWjz6/yvYhViFFxr4IFYHkuW7H9aR9HOe2cmCAoGHnpF+u
+         98fD4l2wK8X1AY6N8PY377oKuMvy07MPfzH8a6laSNAYFwxTfVY0yIEEEGYRDZv31R
+         0ZWtveLpALW6Mee55sfmlge99s/6tXjbfgyuNUBVP55Zg34jhL8aTWMCpEp3jl968w
+         ZOXybuMCEAg4iQH1K4HmnDB+5Ns+cSbEQl0bNa9VaEIR2eh373l6jwN9TLDx7B6pIz
+         b3daF4EMnxAsw==
+Message-ID: <d3b8faf2-2d60-1a91-2cc2-1fec5d25d69e@collabora.com>
+Date:   Tue, 4 Jul 2023 13:04:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v12 07/10] soc: qcom: cpr: Use u64 for frequency
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Subject: [PATCH v7 26/26] arm64: dts: rockchip: rk3588s: Add DFI
-Date:   Tue,  4 Jul 2023 11:32:42 +0200
-Message-Id: <20230704093242.583575-27-s.hauer@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230704093242.583575-1-s.hauer@pengutronix.de>
-References: <20230704093242.583575-1-s.hauer@pengutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230217-topic-cpr3h-v12-0-1a4d050e1e67@linaro.org>
+ <20230217-topic-cpr3h-v12-7-1a4d050e1e67@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230217-topic-cpr3h-v12-7-1a4d050e1e67@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,56 +70,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The DFI unit can be used to measure DRAM utilization using perf. Add the
-node to the device tree. The DFI needs a rockchip,pmu phandle to the pmu
-containing registers for SDRAM configuration details. This is added in
-this patch as well.
+Il 28/06/23 16:00, Konrad Dybcio ha scritto:
+> 32 bits is not enough for over-2.changeGHz frequencies. Move all variables
+> that operate on Hz to u64 to avoid overflows.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
----
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Notes:
-    Changes since v4:
-    - new patch
-
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index a3124bd2e092c..723a17ec04361 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -397,6 +397,11 @@ scmi_shmem: sram@0 {
- 		};
- 	};
- 
-+	pmu1grf: syscon@fd58a000 {
-+		compatible = "rockchip,rk3588-pmugrf", "syscon", "simple-mfd";
-+		reg = <0x0 0xfd58a000 0x0 0x10000>;
-+	};
-+
- 	sys_grf: syscon@fd58c000 {
- 		compatible = "rockchip,rk3588-sys-grf", "syscon";
- 		reg = <0x0 0xfd58c000 0x0 0x1000>;
-@@ -1121,6 +1126,17 @@ qos_vop_m1: qos@fdf82200 {
- 		reg = <0x0 0xfdf82200 0x0 0x20>;
- 	};
- 
-+	dfi: dfi@fe060000 {
-+		reg = <0x00 0xfe060000 0x00 0x10000>;
-+		compatible = "rockchip,rk3588-dfi";
-+		interrupts = <GIC_SPI 28 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_SPI 48 IRQ_TYPE_LEVEL_HIGH 0>,
-+			     <GIC_SPI 58 IRQ_TYPE_LEVEL_HIGH 0>;
-+		interrupt-names = "ch0", "ch1", "ch2", "ch3";
-+		rockchip,pmu = <&pmu1grf>;
-+	};
-+
- 	gmac1: ethernet@fe1c0000 {
- 		compatible = "rockchip,rk3588-gmac", "snps,dwmac-4.20a";
- 		reg = <0x0 0xfe1c0000 0x0 0x10000>;
--- 
-2.39.2
 
