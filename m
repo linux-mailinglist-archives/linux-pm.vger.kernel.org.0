@@ -2,146 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60010747216
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 15:03:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86AE74721F
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 15:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjGDNDi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 09:03:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58904 "EHLO
+        id S229793AbjGDNEg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 09:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjGDNDg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 09:03:36 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2127.outbound.protection.outlook.com [40.107.215.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D8D10D9;
-        Tue,  4 Jul 2023 06:03:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Eu+F3oqaUTG+l2LHiQtekIjTMSdgExR+CBZq5r+dl6pyI2L2N0WPBUj0Xk2yrpZAhBxybALgHODqH0mszjB6KGN4Y979wgNc/uOQmHjutxusSrMU3v770jbU4W84bCCNLk4a+xKuJHiH52ozIz2Ju6A5LR6lRLYTgozBs6e+YigH6goaJuSE2ZzWk/657s4FjL7Mtqx6i/xm4d4oWdPxtXkFG14Oa7z5/7QZ6i6ENT9EveegtvkhmUrY8rToucmfNsdgxvS8qX0cGKTDMNIzTHY38FXU1yYI/b9CufuKYQLlBoyr6tqb0ttBHHyv/C3yxBjhzIhz1uTz+MPChBHO+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MJJ5pMnb1fr2kULRAapmovW8e9ZPi/PWlNlldzHO8tM=;
- b=EuRORoa5nsJLmLivXPVbl4r7Fy82lYPjaCaFm1DQ3/hBzz7SB7o+r6rYYtNKRNuieokWNk3mxl20CFkD28c8VRtQkDzCMsQicPwsjDEjwN9+G/pH3APXyUx1iQpC9n87sov4XWKGVVm4ZqbHe8a7SPXsN8eaidzJf7jezKpaTZ81LVqZYlMi7qneCgcXfzAM4nJajoDu/5dxwbuJqVhiuzRoJlzHjxU3Xvh4ErEykI2vQtb+xTTNVxGfGIT6HCIP2ucicCWKtLIHpwbc9vqRjjzvK+G1NWyqMVe82/pg8DuQVokWsgMTa9T8IH11cHtxSUttdhEK3zDPbYnL78c43A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MJJ5pMnb1fr2kULRAapmovW8e9ZPi/PWlNlldzHO8tM=;
- b=WRs5lefmUSzeCbWr7yBRH4WD17MA0YuecU5ka0CUb1aPNDa2nUrByuMBLa9L36yUvdJSndibOcZO2RZmjgnPAPqc2WjzSzIY9PKgjyHrYml8ncipKW6F+IGltppyA04r56wTAEqdrvTIaTLGqr3X1b9mufelkWsoVgE+bDnrRLND/iD+5/zkehAy8LcU8jlYCRaYJnDDdE5MaUIUfOCvIRmvTEMTQkMSF4C6VanogRv29KC6rpFpCBT2tFAFnV8IXCiX2OcHSNudkN05dGEub7CQ+1JGw3YpiT/XKo4mLFrueo4GNI65fwlEA7NmLVUAcViJCCya78DJ5C0MjvDExg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
- by SEZPR06MB6198.apcprd06.prod.outlook.com (2603:1096:101:f1::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.24; Tue, 4 Jul
- 2023 13:03:29 +0000
-Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c]) by SEZPR06MB5269.apcprd06.prod.outlook.com
- ([fe80::fa0e:6c06:7474:285c%5]) with mapi id 15.20.6544.024; Tue, 4 Jul 2023
- 13:03:29 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] power: reset: ocelot: Convert to devm_platform_ioremap_resource()
-Date:   Tue,  4 Jul 2023 21:03:08 +0800
-Message-Id: <20230704130309.16444-6-frank.li@vivo.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230704130309.16444-1-frank.li@vivo.com>
-References: <20230704130309.16444-1-frank.li@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0209.apcprd04.prod.outlook.com
- (2603:1096:4:187::12) To SEZPR06MB5269.apcprd06.prod.outlook.com
- (2603:1096:101:78::6)
+        with ESMTP id S231344AbjGDNEU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 09:04:20 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C94F1998
+        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 06:03:51 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fb73ba3b5dso8971468e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 06:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688475829; x=1691067829;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mqNFEYbfaetiBaaCCq5dlakPJ6xMPu9fuyjq6ckqKKI=;
+        b=hcWyPQJ0Scl6T5c9hS3B0rqtUiBam2Y7usGDUzf4ClQ4w6B/M+6MqkIWISX7OogugX
+         G/jc/k7X1HV72yHe3qM7MadmKRrQIQ6X7EPqmoqY7PW//UZV83JLqUt00rrL4fP6NL0E
+         KpSjPiPapK9MPceps9hH8zF9TOLKHA4NpGcSh8brnm2EGpb0vQCpWKPX9uJkoDv3mbrc
+         Rn3AGofTA5NuZttoAuClwy4n/zypIcNZ6w1UWVnk9k4mTPFiF4B786MIdRNqFJ83zQLn
+         FSaMKddJc52zTuArIa0cKKQcVfqjTmUdJPpk4642oUtjY4vnuqH5MHUiRAHc77vohDOG
+         hWkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688475829; x=1691067829;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mqNFEYbfaetiBaaCCq5dlakPJ6xMPu9fuyjq6ckqKKI=;
+        b=Fxx7ayY/5N/BZxfCrOulMbfCMwwM4bUdeMUg7oLEhhZkMuTXyrtX89/6tFoZ6w52mi
+         bc8Xxtr0IeRTAn+jkegVnLn4JIiIU7EBl5QTvVsPBtH4Vdgqv+IUgTMv0OkXEvZeVVfu
+         bSyzn/hhAYMJMfGQ9j8Nb+lVTgaTRstnKz6WY6K9YJV1FCc+VVpJCLnGlsGArJKcbSNV
+         5B+fohMa/xZNj+YybPQ7MmCtRTOxiYgAOk+N/GeBViu7gCXIbLET3ieUIODC5Kp4uwRk
+         wD5vVtKK5kfXbcGLifcnbxEx52tMCRI4kXa5iqWS6DamahsENbH6dkg4l9djV79UuT5p
+         /JNA==
+X-Gm-Message-State: ABy/qLaUcZLgvgf9ZfOmtRf00P9AdfMhX69bK+QckRzjl6KhZu2wU6Xr
+        ZQlT6R06v3jM2chN9GMbaFfzug==
+X-Google-Smtp-Source: APBJJlGmV/GZ2Ck0zw2BnJTKC08EED8fq31PqMjpTN0JsiZC+ceHVBFuI3LhL1kcgRR62d6BniwVlQ==
+X-Received: by 2002:a05:6512:3b8b:b0:4fb:774f:9a84 with SMTP id g11-20020a0565123b8b00b004fb774f9a84mr10863098lfv.13.1688475828935;
+        Tue, 04 Jul 2023 06:03:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyj26.neoplus.adsl.tpnet.pl. [83.9.29.26])
+        by smtp.gmail.com with ESMTPSA id j12-20020a19f50c000000b004fbbd81856asm341134lfb.143.2023.07.04.06.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 06:03:48 -0700 (PDT)
+Message-ID: <971262d5-98b3-c48e-89fd-ce107275008a@linaro.org>
+Date:   Tue, 4 Jul 2023 15:03:46 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEZPR06MB6198:EE_
-X-MS-Office365-Filtering-Correlation-Id: 098f6a32-5448-4aea-1880-08db7c8f0f9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E7B673vMNbxk98Mxzh3r9EyRCfa3doYlFjaXOUo3oqObW/LPeeGM0ToYq1BuJy7q2FN5567WahEwuDoQn4fzN34OOd5CNP7avBJ+q4+qYlVKbT4c77ZJSgFTgvMNqmfigozd0RIqQjBNjHOr8oOwjBawBRIm8+XivadvVA9x0XBAyzdOp1sUEmKaq+YIj720qRBFCGjTsqGSTJMxlrhuLjTUhOkSSDXIG42I58aUUyv9pDWbbZEaVX4GHmZ/h5dJ7Uo/Fw2bjekqHfcipPXrfXszPtKiIyOwVSPMaEpe4+Tdx8gIEWMOnpkdX9c3KwRDSQw43vC1nfXu7/0wG3jKxH8QejvB+MI0npYGW6wo8YX4EkgYE0G2ov7AfkcCMy6cTCBdiDcm+Wbkz/viqu/adBntK9cWDmWzd9fQkHLUmGIM1D7ANyqthH+dzvC7GLbyiyY2Ag0s+LiiHR4eTfJW7FHPaPzmPK5FjU+kRucrIcyuUM60DhYxEsOXMNQhJkA3G1DbMyKkkTXEX0D42+WnAUGQ606JBqLWhzgvWfoxJ3NZAM9LaGfdgDqAybZrRnIPAKIAMD19B2dIZ7Qc07AEJP6mhS4iM1kiDjqULGyL5o1deBjZdCw/yMR6dsuL8XGA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39850400004)(366004)(346002)(376002)(451199021)(66556008)(66946007)(4326008)(36756003)(66476007)(478600001)(316002)(2906002)(8676002)(6916009)(8936002)(5660300002)(41300700001)(86362001)(6486002)(6512007)(38350700002)(52116002)(4744005)(38100700002)(6666004)(1076003)(6506007)(26005)(186003)(2616005)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?o0uIknqmzpXmikkw3kdPZ2LrM0imMjEWROE97m+mAfHDOrxlCSa6e1iaWlfe?=
- =?us-ascii?Q?S51z9iWjtmvnabrnVHj2M9o6G/G6CBkc6Zo48scum/lviTUglU/+a2YMRUsU?=
- =?us-ascii?Q?2q0TH+wROiHHZoOH6bza1zLGtYy6bTRpRt6itUvSdx2ZPYu9lz2hToZUr6uc?=
- =?us-ascii?Q?YNHYUUMiCd2RXoXj3dU4upIxi3n/jikS102A65eu9iiwnYr8EYIEGGILpSso?=
- =?us-ascii?Q?lJ/TC9FfqxQvgNE7XDnu58TFJFox8vqa2473MCb/CC2c/nqy6luIlGtkKcM1?=
- =?us-ascii?Q?VY9IaRHFmrasB1xaoCxg7wfgBc8cKiQXXBS/NswkwEBxPuyESDcIn1nPSXbz?=
- =?us-ascii?Q?2sI84K3s4Y5kjvC2aDc/k7WfsU5VQedonlztPrRtYv1yrGUz1Hgqgdfk7YO7?=
- =?us-ascii?Q?KBG4estWSsKo6y4B4mMQDp78mbD8wNLnWnxq9CD3FomUaGbY5wtOtIM93rLi?=
- =?us-ascii?Q?7/Bd7IhxKZQU6BkhPTVl2s3t2C5/3Tz16JfgUxXTxJQCB8CGtDCHskYQ+BCe?=
- =?us-ascii?Q?3+tNYGXD2FjesJhuOxY/X8ZLnnp+22a2WcH23FpTaXcW32uQz8Oj7Cej9e1G?=
- =?us-ascii?Q?z9jVrFsDtEpU0sJxvqfMQ13WJOaE4wRp25ee2yGGjI6K/atdB/rgQEouhcCb?=
- =?us-ascii?Q?meXvXntDn9/iOa3nfldvrMEHXQwtzYinWtIUhnmTaDQdRXKm/hCUIud9/NVP?=
- =?us-ascii?Q?2QtHiadbhbv5vVctK55K6expctTWFDt80Fut8kNSWPRyq2PaJDZZ5GzxMc/W?=
- =?us-ascii?Q?IjLMl/bG/S5NLGCg01qUGv1tHgvma9uyzam5GLlfb5Hhshpg08I9vDNz7+Au?=
- =?us-ascii?Q?xCyS4K9noSfhBKNApXvpO1ZQQi9SlHk/eStcslmSQXEjcNMhJ2UY0EcM0FyD?=
- =?us-ascii?Q?t2OjvK7FK5JxP763bVM+W80tR+mY3CP3RYdI2yz8K3r+YwvdMLv3G/YvjPuA?=
- =?us-ascii?Q?B3Ar9j/v/Je3IcvmBr9cvq0IvmL21G3K+12g6dVOuLe2aEPcJHSggOWfG20S?=
- =?us-ascii?Q?HWCk0Rj+ymZIa8QQTvaH53Pu3RH35Vcp9IgdrmN9nBJxOt0yTNP9kucxo9fk?=
- =?us-ascii?Q?Qy5+kIKXGpFFZJYUxe/Wdno9dQt3Pjy0ZuHDyVSx6bqRdfpPUV3Dk+0kiseF?=
- =?us-ascii?Q?Je/Rphkli0yiA+OOcReGgBLI5TJdDUZLRB8nSfyltH3jAmkN5y1w4f/jO/4k?=
- =?us-ascii?Q?DiJxVyIQUUKesDxnpIzERnp5RXMuSPiaeT1dcOyCNtHzN7IKfD/PYwh21xgz?=
- =?us-ascii?Q?hf9yroHbLKpRZg3CzpV2GyqPDAA9x5Ntf6wXTU9qd5ilqyas2V16JuWGI5Xc?=
- =?us-ascii?Q?UZgK89hDF5LabkowWnpBApNAs5E+5hFM8ypZnnlyo8S2tUi2kTTLIdel7v94?=
- =?us-ascii?Q?h9PXcdVHsHwpUnoSwbz5ToB42dwaO/NmU826QUxEQlxRPYZ/Hf3sNLSfWKYB?=
- =?us-ascii?Q?IY6vgXDot4zhw+DxN/YfRk/dAUc9gtapJVE1dPEmhfh5grX7Qu+dV81bpIZC?=
- =?us-ascii?Q?sBn6wkpnhyLLLDurHNDMnvJgsIqS3ZqQ/w41tKhcOBmFGgUCsDj6v8KHXXo2?=
- =?us-ascii?Q?bNLwEt500JXtj0KLg762dVZc7uiM2Hf5Ulcd/cxZ?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 098f6a32-5448-4aea-1880-08db7c8f0f9e
-X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Jul 2023 13:03:28.9478
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AFKaJhPLQrXift8vlKZVKNOBIWBmgb6jCoO+Duju5zFFmsPo63Iap2Vc/ndpPEuyPmsvFCHwNJZGsceJ6q6S1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6198
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH 4/8] ARM: dts: qcom: msm8960-cdp: constraint cpufreq
+ regulators
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230702175045.122041-1-dmitry.baryshkov@linaro.org>
+ <20230702175045.122041-5-dmitry.baryshkov@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230702175045.122041-5-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify code.
+On 2.07.2023 19:50, Dmitry Baryshkov wrote:
+> Add additional constraints to the CPUfreq-related regulators, it is
+> better be safe than sorry there.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+I'm squinting quite hard at
 
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- drivers/power/reset/ocelot-reset.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+https://github.com/LineageOS/sony-kernel-msm8960/blob/jb-dev/arch/arm/mach-msm/acpuclock-8960.c
 
-diff --git a/drivers/power/reset/ocelot-reset.c b/drivers/power/reset/ocelot-reset.c
-index 8caa90cb58fc..031772a60b1a 100644
---- a/drivers/power/reset/ocelot-reset.c
-+++ b/drivers/power/reset/ocelot-reset.c
-@@ -69,8 +69,6 @@ static int ocelot_restart_handle(struct notifier_block *this,
- static int ocelot_reset_probe(struct platform_device *pdev)
- {
- 	struct ocelot_reset_context *ctx;
--	struct resource *res;
--
- 	struct device *dev = &pdev->dev;
- 	int err;
- 
-@@ -78,8 +76,7 @@ static int ocelot_reset_probe(struct platform_device *pdev)
- 	if (!ctx)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	ctx->base = devm_ioremap_resource(dev, res);
-+	ctx->base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(ctx->base))
- 		return PTR_ERR(ctx->base);
- 
--- 
-2.39.0
+but I can't figure out where these min values came from
 
+Konrad
+>  arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts b/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+> index 414881d34c60..cba0d1e460a1 100644
+> --- a/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+> +++ b/arch/arm/boot/dts/qcom/qcom-msm8960-cdp.dts
+> @@ -131,7 +131,7 @@ pm8921_s2: s2 {
+>  		};
+>  
+>  		pm8921_s3: s3 {
+> -			regulator-min-microvolt = <500000>;
+> +			regulator-min-microvolt = <950000>;
+>  			regulator-max-microvolt = <1150000>;
+>  			qcom,switch-mode-frequency = <4800000>;
+>  			bias-pull-down;
+> @@ -287,7 +287,7 @@ pm8921_l23: l23 {
+>  		};
+>  
+>  		pm8921_l24: l24 {
+> -			regulator-min-microvolt = <750000>;
+> +			regulator-min-microvolt = <1050000>;
+>  			regulator-max-microvolt = <1150000>;
+>  			bias-pull-down;
+>  		};
