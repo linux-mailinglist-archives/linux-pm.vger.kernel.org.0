@@ -2,156 +2,274 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863E9747359
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 15:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA25A747363
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 15:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjGDNzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 09:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60076 "EHLO
+        id S231352AbjGDN7A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 09:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjGDNzG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 09:55:06 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243D1BE
-        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 06:55:05 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-be49ca27e1fso6184991276.3
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 06:55:05 -0700 (PDT)
+        with ESMTP id S231233AbjGDN67 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 09:58:59 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DCBFC
+        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 06:58:56 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbc54cab6fso49016045e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 06:58:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688478904; x=1691070904;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bbInuMOaeGH2/pfUXBP7Ae3B0+gOG6gDsXRs6oqX8sQ=;
-        b=B68oywBDw6QM9sPH3nKNiCHT/pSIoiCPuIIkzAkCxCa8GJ5lpYfWjfDdH0trlCaTJd
-         2xK/cpi/YT3sxzulpr3nj7jYseH50FY4ahSlV4PfRQzRvZwgKh9pOb4hfs8EwW4ovnNp
-         Ju6CXm1AvuUp/Y4cp94R1qefX9ERrpQJto1M4iRQiIQEMybWzU4iCYjJLHo1UEZC95Tt
-         +EgY7Q8FnyB6hjhllftqxmwgCaqTUMtD6gKvd9Wsaj1XoO7T+70WMobYUaP3QofKXC1I
-         52FEykZzJyaJMWXRy27mu3oi48ll39hqlYQKQoZUMp4JlG1KCgZejX9l2AG1uFWaxBPY
-         6PnQ==
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688479135; x=1691071135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KXukMoiUHsFnABd/wPhkZ9XTrO4JKNHS6gLRhLQfPrw=;
+        b=qAplUnOrZ7sW0L3AtiaFgnB27rPog0XZkibQeE06ehyqFJ7wOpcdx//oLsp0pEoKhE
+         vs6MvQOnZ7gpHFhWR5AramoApQ8e/AevTkjt4v53LmUV+axiPWkAtH2VJ879Qvv7A7QO
+         RULCYSMEXe8tD96lOr6dsB3vd/dD5VQJaV+1QJAkXOcy6TdTevWCklpZR+urflsVtHYO
+         QJzJC7v7SQlAMITu0YwC3WT9KHXH4I7Q1aI0959stm6VZwKvv44WAuFoaHLxlUpm+sUj
+         wkg3WgVWDHc7Bmhd1V3+mqs+lcRuRmDZbfrezwQ0K6HkUo6Jov1gfWu/SY/1JjNd1ee4
+         ietg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688478904; x=1691070904;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bbInuMOaeGH2/pfUXBP7Ae3B0+gOG6gDsXRs6oqX8sQ=;
-        b=AcZIa7Jf22/bmXEKUYYUo1oepb511/lXftIlVmUOzF4ZBOHzbycugZp/nTbdisr7O4
-         LiCH+GHbujA/1IzehJuF90unAjqa4ET/VP+yDLO4x5jNwTDvtsRj0DL5X75iTZHGlciI
-         M+ZF0x/70nt+dFRkInWwcdm1iJB09PqW1Id+SFQzdcOuI2c9LhwiAk6UUUQyqOHcs1It
-         lHPieR2K72WO4/k0FgIvI2eOTcEkWUCCBvi2WuRGQsxJfiPNHnf9tHBz3YMrFvx8moaa
-         cbrYBKrXo0YRE0ByZ5PmFUxmqjq7YtA9QbgddfLavd8KQtDpSR9Q68u7uGDXhjj4n4Pg
-         5dDA==
-X-Gm-Message-State: ABy/qLbcZG/BIgijEx8wG3jJ6acdDgzR1AdYCU21Hceix5iSskSqDfAE
-        2Sn0Y3RwhVznzKJbCzSvtF/J2ijzoT1OfGe5riNVtg==
-X-Google-Smtp-Source: APBJJlE/ZZiKuvpdnr9LwWHHgdmOPydDsK5lYvgSF5VC1VJFhX6g20gb+lSl/bQIvqlE5yD64J2YYrOM5X4CtMON5GA=
-X-Received: by 2002:a25:b326:0:b0:c01:287b:41f9 with SMTP id
- l38-20020a25b326000000b00c01287b41f9mr10447897ybj.59.1688478904309; Tue, 04
- Jul 2023 06:55:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688479135; x=1691071135;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KXukMoiUHsFnABd/wPhkZ9XTrO4JKNHS6gLRhLQfPrw=;
+        b=dmJ0wYwIMqJ/BFEwSYoTOEYcZj5jgeKtlWNNok0PUu8wlXPdlXGPgeSK2XqpdfSRX9
+         aZo9UbFSQ7nIUCTgkUZImXkxH8NV6UldPkMTLq9C9W6xW3Pjda+eKLnZtJ/6wHomw9HD
+         JTwgs6L+ALJaqTnVDbtk66qvl6QM0KeD+DnbjX7T8rYa5Stta2OQ0ruNj8xtO4NHycn/
+         aIXxE4lOWxyihhqovs1sMYv0F+M1JFpatXEu9f5SrtoUiOZB7kaksJlFetsN9IdII+wP
+         yLoq1ZTvPkDaP2Fe6ONoNHm/D5lGVLX7L+Ih8O7D0DRJyH1NG+c4wYPSuMQ7IoObyMhH
+         LM4Q==
+X-Gm-Message-State: AC+VfDyP0QESgXeGAgjFKw6SwdQd02mRLF2IYaF6JFGg/L/hkuRROELN
+        DmJK8z186oB1rwvQQc3nJXYqsg==
+X-Google-Smtp-Source: ACHHUZ5F71QlUqoXVjpa302vOdIuAEU7ajQUSk5+RbDFLT2dNXnaQtMNNG3GltJYd9ukODusNi9uSA==
+X-Received: by 2002:a7b:c04a:0:b0:3fb:403d:90c5 with SMTP id u10-20020a7bc04a000000b003fb403d90c5mr10204425wmc.39.1688479134886;
+        Tue, 04 Jul 2023 06:58:54 -0700 (PDT)
+Received: from airbuntu ([104.132.45.103])
+        by smtp.gmail.com with ESMTPSA id w10-20020a1cf60a000000b003f9bd9e3226sm30010310wmc.7.2023.07.04.06.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Jul 2023 06:58:54 -0700 (PDT)
+Date:   Tue, 4 Jul 2023 14:58:48 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
+        qyousef@google.com, kernel test robot <lkp@intel.com>
+Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
+ filter out requests
+Message-ID: <20230704135848.jfogmar4o6lmycog@airbuntu>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-4-lukasz.luba@arm.com>
+ <20230531183105.r5tqpdx5axoogkzp@airbuntu>
+ <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
+ <20230630120122.oqy4q42bl5gy6bfd@airbuntu>
+ <20230630132507.hggzz5g2odrabii6@airbuntu>
+ <be79b206-01f8-f3e1-4107-ae6c662cbf47@arm.com>
 MIME-Version: 1.0
-References: <20230621144019.3219858-1-abel.vesa@linaro.org> <20230621144019.3219858-5-abel.vesa@linaro.org>
-In-Reply-To: <20230621144019.3219858-5-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 4 Jul 2023 15:54:28 +0200
-Message-ID: <CAPDyKFpPNYYxECPpk0Qbos70WeZgOXCtu7qXGGzvLLizzrdjtA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 4/4] PM: domains: Add and set generic sync state callback
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <be79b206-01f8-f3e1-4107-ae6c662cbf47@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 16:40, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> For every provider that doesn't register a sync_state callback,
-> register a generic one. This new generic sync_state callback queues up a
-> power off request.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/base/power/domain.c | 23 +++++++++++++++++++++++
->  include/linux/pm_domain.h   |  3 +++
->  2 files changed, 26 insertions(+)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index 5967ade160e2..ec16db0599ac 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -654,6 +654,27 @@ static void genpd_queue_power_off_work(struct generic_pm_domain *genpd)
->         queue_work(pm_wq, &genpd->power_off_work);
->  }
->
-> +/**
-> + * pm_genpd_power_off_unused_sync_state - Power off all domains for provider.
-> + * @dev: Provider's device.
-> + *
-> + * Request power off for all unused domains of the provider.
-> + * This should be used exclusively as sync state callback for genpd providers.
-> + */
-> +void pm_genpd_power_off_unused_sync_state(struct device *dev)
-> +{
-> +       struct generic_pm_domain *genpd;
-> +
-> +       mutex_lock(&gpd_list_lock);
-> +
-> +       list_for_each_entry(genpd, &gpd_list, gpd_list_node)
-> +               if (genpd->provider && genpd->provider->dev == dev)
+On 07/04/23 09:23, Lukasz Luba wrote:
+> Hi Qais,
+> 
+> On 6/30/23 14:25, Qais Yousef wrote:
+> > On 06/30/23 13:01, Qais Yousef wrote:
+> > > On 06/20/23 18:52, Lukasz Luba wrote:
+> > > > Hi Qais,
+> > > > 
+> > > > I have somehow missed your feedback on this series.
+> > > > 
+> > > > On 5/31/23 19:31, Qais Yousef wrote:
+> > > > > On 05/22/23 15:57, Lukasz Luba wrote:
+> > > > > > Some of the frequency update requests coming form the task scheduler
+> > > > > > might be filter out. It can happen when the previous request was served
+> > > > > > not that long ago (in a period smaller than provided by the cpufreq driver
+> > > > > > as minimum for frequency update). In such case, we want to know if some of
+> > > > > > the frequency updates cannot make through.
+> > > > > > Export the new tracepoint as well. That would allow to handle it by a
+> > > > > > toolkit for trace analyzes.
+> > > > > > 
+> > > > > > Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
+> > > > > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > > > ---
+> > > > > >    include/trace/events/sched.h     |  4 ++++
+> > > > > >    kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
+> > > > > >    2 files changed, 12 insertions(+), 2 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> > > > > > index dbfb30809f15..e34b7cd5de73 100644
+> > > > > > --- a/include/trace/events/sched.h
+> > > > > > +++ b/include/trace/events/sched.h
+> > > > > > @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
+> > > > > >    	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+> > > > > >    	TP_ARGS(tsk, uclamp_id, value));
+> > > > > > +DECLARE_TRACE(schedutil_update_filtered_tp,
+> > > > > > +	TP_PROTO(int cpu),
+> > > > > > +	TP_ARGS(cpu));
+> > > > > > +
+> > > > > >    #endif /* _TRACE_SCHED_H */
+> > > > > >    /* This part must be outside protection */
+> > > > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > > > > > index f462496e5c07..4f9daf258a65 100644
+> > > > > > --- a/kernel/sched/cpufreq_schedutil.c
+> > > > > > +++ b/kernel/sched/cpufreq_schedutil.c
+> > > > > > @@ -6,6 +6,8 @@
+> > > > > >     * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > >     */
+> > > > > > +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
+> > > > > > +
+> > > > > >    #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
+> > > > > >    struct sugov_tunables {
+> > > > > > @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> > > > > >    	ignore_dl_rate_limit(sg_cpu);
+> > > > > > -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> > > > > > +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
+> > > > > > +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+> > > > > >    		return false;
+> > > > > > +	}
+> > > > > 
+> > > > > Can't we have something more generic here too? Are you interested to count
+> > > > > these events? How do you plan to use it?
+> > > > 
+> > > > The plan is to record those events, count them and maybe adjust the FW
+> > > > if the frequency switching capabilities are too low, e.g. 4ms...
+> > > 
+> > > You mean as part of tuning step for the system or at runtime? The latter seems
+> > > to indicate for a proper interface instead.
+> 
+> Not at runtime, the FW change or maybe even the uC would be needed for
+> this. Therefore, our client which experiments with the new platform
+> can run the analysis and spot this. Then it can change the FW
+> if there was an issue, or maybe even upgrade the HW if there are severe
+> issues with delivering needed performance on time (e.g. in high display
+> refresh rates and first-frame drops).
+> 
+> > > 
+> > > IMHO I think the current filtering mechanism needs a bit of a massage.
+> > > 
+> > > One thing I think we must do is to ignore the filter if there's a big sudden
+> > > change in requested frequency. Like for instance if a big task migrates. Then
+> > > prev_cpu should go to lower freq sooner, and new_cpu should change to higher
+> > > frequency sooner too. The filtering makes sense only in steady state situation
+> > > where we are ramping up or down gradually.
+> 
+> This is kind of a heuristic, which is biased for mobiles IMO.
 
-Not all genpds have the ->provider assigned. Moreover, the
-of_genpd_mutex is protecting the list of providers, we should use that
-instead.
+How come? big tasks are not only on mobile? A 500+ task can exist on any
+system?
 
-> +                       genpd_queue_power_off_work(genpd);
-> +
-> +       mutex_unlock(&gpd_list_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(pm_genpd_power_off_unused_sync_state);
+> 
+> > > 
+> > > If no one beats me to it, I'll propose something in that regard.
+> > > 
+> > > > 
+> > > > We need those numbers to point out that there is a need for faster
+> > > > FW micro-controller to serve those incoming requests.
+> > > 
+> > > I think there's a big assumption here that the filter is always set correctly
+> > > ;-)
+> 
+> In our case, it is set correctly, the value is coming directly from FW
+> [1]. It is the FW+HW limit, so not much to do with this in the kernel.
+> 
+> > > 
+> > > > 
+> > > > > 
+> > > > > I think this will be a very noisy event by the way.
+> > > > 
+> > > > Could be, but on the other hand for those statistical analysis
+> > > > 'the more the better'. It will also depend on number of
+> > > > CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
+> > > > 
+> > > > I don't know when we will switch to this per-cpu cpufreq mode
+> > > > when all CPUs behave like independent DVFS. Juno mainline kernel and FW
+> > > > supports that mode. We would have to compare those two modes and
+> > > > measure how much we gain/loose when using one and not the other.
+> > > > 
+> > > > Furthermore, we already suspect some of our integration testing for
+> > > > EAS-mainline (on Juno) failing due to filtered out requests. How much
+> > > > that would impact other boards - it would be nice to see in traces.
+> > > 
+> > > Another problem I think we have is that the DVFS headroom value should be
+> > > a function of this filter. At the moment it is hardcoded to a random value
+> > > which causes power issue.
+> 
+> It's not a random value, as you can see in [1]. This is the main goal
 
-Why does this need to be exported? Is there a provider that assigns
-it's own sync state callback that needs to call this? If that is the
-case, I would prefer to see a user of this API as a part of the series
-too.
+I'm referring to the 25% in map_util_perf().
 
-> +
->  /**
->   * genpd_keep_on - Tells if the domain should skip the power 'off' request
->   * @genpd: PM domain to be checked.
-> @@ -2329,6 +2350,8 @@ static int genpd_add_provider(struct device_node *np, genpd_xlate_t xlate,
->         cp->xlate = xlate;
->         fwnode_dev_initialized(&np->fwnode, true);
->
-> +       dev_set_drv_sync_state(np->fwnode.dev, pm_genpd_power_off_unused_sync_state);
-> +
->         mutex_lock(&of_genpd_mutex);
->         list_add(&cp->link, &of_genpd_providers);
->         mutex_unlock(&of_genpd_mutex);
-> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-> index 3eb32c4b6d4f..78164244b89f 100644
-> --- a/include/linux/pm_domain.h
-> +++ b/include/linux/pm_domain.h
-> @@ -279,6 +279,9 @@ static inline int pm_genpd_remove(struct generic_pm_domain *genpd)
->         return -EOPNOTSUPP;
->  }
->
-> +static inline void pm_genpd_power_off_unused_sync_state(struct device *dev)
-> +{ }
-> +
->  static inline int dev_pm_genpd_set_performance_state(struct device *dev,
->                                                      unsigned int state)
->  {
+> for this $subject - provide information with proper test that the FW
+> or HW change is needed. If you like to have a decent performance in
+> your Linux based solution, the faster FW/HW would be needed. I don't
+> want to put more hacks or heuristics which try to workaround performance
+> issues with the HW. E.g. if someone instead of a 200MHz uC running fast
+> FW would put 100MHz uC than should get quality data from integration
+> tests, that such a design might not work well with recent OSes and apps.
+> Currently those kind of 'design' checks are very hard, because require
+> sophisticated knowledge and we are trying to lower that bar for more
+> engineers.
 
-Kind regards
-Uffe
+I think we're talking about different things ;-)
+
+> 
+> > > 
+> > > So to summarize I think there are two improvements required (and if anyone has
+> > > the time to try them out go ahead otherwise I'll get to it):
+> > > 
+> > >   1. The filter should only be applied if the history hasn't changed. ie: we are
+> > >      gradually increasing or decreasing PELT. Otherwise we should honour sudden
+> > >      changes ASAP.
+> > >   2. DVFS headroom should be a function of the filter. 25% is too high for
+> > >      500us. It could be too low for 10ms (I don't know).
+> > 
+> > To expand a bit more since it's related. Our  migration margins should depend
+> > on the tick value instead of random magic numbers they are today. More
+> > precisely the balance_interval. If there's a misfit task, then we should
+> > upmigrate it at wake up only if we think it'll become misfit before the load
+> > balancer kicks in. Otherwise the load balancer should do the correction if it
+> > becomes long running/misfit. If the sys admin wants to speed up/slow down
+> > migration it should be throw controlling PELT IMO and not these magic margin
+> > values - which are hardcoded to random values at the moment anyway that are not
+> > suitable for every system.
+> > 
+> > And since we decoupled overutilized from misfit lb; I think our definition
+> > should improve to better detect when the system needs to disable packing and
+> > starts spreading. Current check for overutilized based on misfit is no longer
+> > adequate IMO. Especially when there's a single misfit task in the system.
+> > 
+> > Again, just sharing thoughts in case someone interested to work on this before
+> > I get a chance to share any patches ;-)
+> 
+> Those are all heuristics and some of your ideas are going very beyond
+> the $subject. As I said the main goal for the $subject is to
+> deliver information that the FW/HW might need a re-design (maybe even
+> a more silicon for the uC).
+> 
+> I cannot stop you from creating a dedicated thread with your patches,
+> though ;)
+
+Fair enough.
+
+/me goes away
+
+--
+Qais Yousef
+
+> 
+> Regards,
+> Lukasz
+> 
+> [1] https://elixir.bootlin.com/linux/v6.4/source/drivers/cpufreq/scmi-cpufreq.c#L224
