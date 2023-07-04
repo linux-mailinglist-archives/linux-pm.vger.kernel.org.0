@@ -2,194 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E27574741D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 16:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F06B747465
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 16:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbjGDO3q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 10:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
+        id S231628AbjGDOsH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 10:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjGDO3p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 10:29:45 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FACE49;
-        Tue,  4 Jul 2023 07:29:42 -0700 (PDT)
-X-GND-Sasl: miquel.raynal@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1688480981;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zhC+KWn+e1iSNCp2dmqL3RwKmWOqhZYUPme+wcWSUyk=;
-        b=YYowUOH/d+UO3jZfLAm3vj5YK/nP7y0Oj6nvyFmHYqJ+cz3BLsG1XEY6xCo2xRG75E45tI
-        d4Rr1ys9ooc9p5lUM6q3QAgs2XL4xhLlXHhpQgHojO8oBYQ3pFfU/SbvTUZE2oxDnlwpcR
-        sYjDJxQmjBnXmAgaj9Zz56v84kRGToC/LxeDL/eFrskYD+29W/6Hd8RGPB82i0T6QyHNjP
-        0gCoLhjW3tN3HJd63Gq8zy9wrjUrEL9otMSFRQzL+6p0eAL7sOgy7uAqL05JZp0vrMpNoM
-        9VMrTL7xeOPsXuPbDNQyVhJVV1kXh2u8xqpbd0GNFWAikbc7Vywo2alyT+2sww==
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-GND-Sasl: miquel.raynal@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D6C1060008;
-        Tue,  4 Jul 2023 14:29:38 +0000 (UTC)
-Date:   Tue, 4 Jul 2023 16:29:37 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Yangtao Li <frank.li@vivo.com>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        florian.fainelli@broadcom.com, tglx@linutronix.de,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 2/5] thermal/drivers/armada: convert to use
- devm_request_threaded_irq_emsg()
-Message-ID: <20230704162937.2600d5b0@xps-13>
-In-Reply-To: <20230704142227.65k3kdrnyqqolf6t@pengutronix.de>
-References: <20230703090455.62101-1-frank.li@vivo.com>
-        <20230703090455.62101-3-frank.li@vivo.com>
-        <20230704104608.29527ec3@xps-13>
-        <20230704142227.65k3kdrnyqqolf6t@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231877AbjGDOsF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 10:48:05 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93766E47
+        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 07:48:04 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3142a9ffa89so4765548f8f.0
+        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 07:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1688482083; x=1691074083;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=j8gNe+nxGVxwF1w6XDPTiOi39pAr5xEb4orQDWKHAj4=;
+        b=VzZrMZBGFo6R3VlAx8bx6HpJLR3coRYR8P2bebU7yutP/qvvzbB6zsSOupDswdxn0q
+         OrQy3Wi7vRhy68Oe98nA/ncGF6+t474H7e77PBudu1MMIOy8PR/NOa7uXxwPh0n0IYL7
+         bYA6s+dq+SwMVqbuts3BwVM77nEQ9/jD+BXN4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688482083; x=1691074083;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j8gNe+nxGVxwF1w6XDPTiOi39pAr5xEb4orQDWKHAj4=;
+        b=YHUKJtfTrS2t9yMIInF40891cedZqxKI6JcDpXGWw4VOYfCYmS6PqS+SA0OY/iQlD7
+         bMMlk+iutyTm/duVfmpDaFzgGU2F9wqOFsFXz8+xClmQuSd18Xldf2bAHfdBz9hVWcL4
+         ZCwmS7VyEp7/CFU7zpmeMFXDuIMPCKzZAxZBtxk1r0Uc5+k26wLY4dgh3yINPtLi6FaO
+         vB1NZNjYS4lqX9fDlQt1mfTPiZIjKIVNU7UgRH6Oky1mRDcZ+H6HjKlj7jc7gECEiAjA
+         Ujs/sSGP5wuEwmcf8aIlk0EwIXaVuPPGq0I16Kej5eZdS0j4koFl1LbRYuhpTuN+CqtX
+         S1ig==
+X-Gm-Message-State: ABy/qLYPHwRU1Xa8JhKDWTw4yHja+Opfd5U7iVl4fMhYHKFMSLOazIfC
+        TQt20qfqQ5egyyxP938yuo4tgA==
+X-Google-Smtp-Source: APBJJlElrUehpohXm8KEALVx4CCVHzv6N5c4KwuWnhducTfEjaJECFTGE8IdVpR2SrryOz/nGb4a9A==
+X-Received: by 2002:adf:f589:0:b0:313:f3b5:87cc with SMTP id f9-20020adff589000000b00313f3b587ccmr12432194wro.43.1688482082995;
+        Tue, 04 Jul 2023 07:48:02 -0700 (PDT)
+Received: from ?IPV6:2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0? (2a01cb0586f567009c8c678d15a0e7e0.ipv6.abo.wanadoo.fr. [2a01:cb05:86f5:6700:9c8c:678d:15a0:e7e0])
+        by smtp.gmail.com with ESMTPSA id u14-20020adfdb8e000000b003112ab916cdsm28788545wri.73.2023.07.04.07.48.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 07:48:02 -0700 (PDT)
+Message-ID: <d6ddcd44-5630-f6ca-8b1f-a994d21edf32@broadcom.com>
+Date:   Tue, 4 Jul 2023 07:48:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/6] power: reset: brcm-kona: Convert to
+ devm_platform_ioremap_resource()
+To:     Yangtao Li <frank.li@vivo.com>, Sebastian Reichel <sre@kernel.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230704130309.16444-1-frank.li@vivo.com>
+ <20230704130309.16444-3-frank.li@vivo.com>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230704130309.16444-3-frank.li@vivo.com>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000c9aa5105ffaa5e81"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Uwe,
+--000000000000c9aa5105ffaa5e81
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-u.kleine-koenig@pengutronix.de wrote on Tue, 4 Jul 2023 16:22:27 +0200:
 
-> Hello Miquel,
->=20
-> On Tue, Jul 04, 2023 at 10:46:08AM +0200, Miquel Raynal wrote:
-> > Hi Yangtao,
-> >=20
-> > frank.li@vivo.com wrote on Mon,  3 Jul 2023 17:04:51 +0800:
-> >  =20
-> > > There are more than 700 calls to the devm_request_threaded_irq method.
-> > > Most drivers only request one interrupt resource, and these error
-> > > messages are basically the same. If error messages are printed
-> > > everywhere, more than 1000 lines of code can be saved by removing the
-> > > msg in the driver.
-> > >=20
-> > > And tglx point out that:
-> > >=20
-> > >   If we actually look at the call sites of
-> > >   devm_request_threaded_irq() then the vast majority of them print mo=
-re or
-> > >   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
-> > >=20
-> > >      519 messages total (there are probably more)
-> > >=20
-> > >      352 unique messages
-> > >=20
-> > >      323 unique messages after lower casing
-> > >=20
-> > >          Those 323 are mostly just variants of the same patterns with
-> > >          slight modifications in formatting and information provided.
-> > >=20
-> > >      186 of these messages do not deliver any useful information,
-> > >          e.g. "no irq", "
-> > >=20
-> > >      The most useful one of all is: "could request wakeup irq: %d"
-> > >=20
-> > >   So there is certainly an argument to be made that this particular
-> > >   function should print a well formatted and informative error messag=
-e.
-> > >=20
-> > >   It's not a general allocator like kmalloc(). It's specialized and i=
-n the
-> > >   vast majority of cases failing to request the interrupt causes the
-> > >   device probe to fail. So having proper and consistent information w=
-hy
-> > >   the device cannot be used _is_ useful.
-> > >=20
-> > > Let's use devm_request_threaded_irq_emsg(), which ensure that all err=
-or
-> > > handling branches print error information. In this way, when this fun=
-ction
-> > > fails, the upper-layer functions can directly return an error code wi=
-thout
-> > > missing debugging information. Otherwise, the error message will be
-> > > printed redundantly or missing.
-> > >=20
-> > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > > ---
-> > >  drivers/thermal/armada_thermal.c | 13 +++++--------
-> > >  1 file changed, 5 insertions(+), 8 deletions(-)
-> > >=20
-> > > diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armad=
-a_thermal.c
-> > > index 9f6dc4fc9112..a5e140643f00 100644
-> > > --- a/drivers/thermal/armada_thermal.c
-> > > +++ b/drivers/thermal/armada_thermal.c
-> > > @@ -913,15 +913,12 @@ static int armada_thermal_probe(struct platform=
-_device *pdev)
-> > > =20
-> > >  	/* The overheat interrupt feature is not mandatory */
-> > >  	if (irq > 0) {
-> > > -		ret =3D devm_request_threaded_irq(&pdev->dev, irq,
-> > > -						armada_overheat_isr,
-> > > -						armada_overheat_isr_thread,
-> > > -						0, NULL, priv);
-> > > -		if (ret) {
-> > > -			dev_err(&pdev->dev, "Cannot request threaded IRQ %d\n",
-> > > -				irq);
-> > > +		ret =3D devm_request_threaded_irq_emsg(&pdev->dev, irq,
-> > > +						     armada_overheat_isr,
-> > > +						     armada_overheat_isr_thread,
-> > > +						     0, NULL, priv, NULL);
-> > > +		if (ret) =20
-> >=20
-> > I don't see a patch renaming this helper with s/emsg//, do you plan to
-> > keep it like that? I bet nobody outside of this series will notice the
-> > new helper and will continue to add error messages because it kind
-> > of feels "right" to do so.
-> >=20
-> > I would rather prefer returning to the original function name which
-> > everybody knows/uses. =20
->=20
-> See https://lore.kernel.org/lkml/87h6qpyzkd.ffs@tglx for why there is a
-> new function name.
 
-Yes of course, I fully understand Thomas' concerns, but I am
-questioning the usefulness of creating such helper if it's not the
-default. People will continue to use [devm_]request_threaded_irq()
-without noticing the new helper. If we want to make this change useful,
-I believe we should:
-- target all users
-- at the end of the series: atomically include the error message in
-  request_threaded_irq() and rename all callers of the _verbose variant
-  which will eventually vanish.
+On 7/4/2023 3:03 PM, Yangtao Li wrote:
+> Use devm_platform_ioremap_resource() to simplify code.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Otherwise this is a lot of noise for very little progress, IMHO :)
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
-Thanks,
-Miqu=C3=A8l
+--000000000000c9aa5105ffaa5e81
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIN6Wmf/iQJ6VDdTV
+vvbv1avyb1kRBu1fciPswvPJhcy+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDcwNDE0NDgwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCKMr1rH6AvXm6T+R/5qG+830jUGa42bS94
+WVReu2of5uKoOZ/5hkd2Llk2N3sq3Kp4WvNSUXzOB/Id5gW+IfW2RKJCWebTg5dLjNfR8f1bq+iI
+i7Hn8XJr6tZ+uPFIdXfvjkbkUCC/4LTPEpN2XyPi6LW+fOy3mocyDWO1O9Q+m60pKsINWFcmsW6i
+hDuv6r9F71vSGI2Vurgzm0Brbg3znpnRK0mRyb5OqxnYBITYFTkDd8zURuXTrUVblyLf52MWt8g4
+rb9QCa+e0X/M67HyWoVjmw1DBSwrrXzHXqygf+fddgw1FvvV9djsBuILmxZI+QoyIPNECGjcBXi/
+ArAB
+--000000000000c9aa5105ffaa5e81--
