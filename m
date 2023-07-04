@@ -2,127 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D00747386
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 16:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEA6747393
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Jul 2023 16:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbjGDODI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Jul 2023 10:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S231331AbjGDOGc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Jul 2023 10:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbjGDODH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 10:03:07 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60BAFC
-        for <linux-pm@vger.kernel.org>; Tue,  4 Jul 2023 07:03:06 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fba8e2aa52so67988255e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 04 Jul 2023 07:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1688479385; x=1691071385;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G7EhOSJt2DKose19cgkkEa+phWPe/FOTqdbgT2ux33Q=;
-        b=3McXv32dthR6tk13Qcg+VMJ/5ZO5DoprRbWVn1QolCYp0bw0ba3NdDAOQFT2us2q1R
-         Az3M1TOMSXtHNlXiYUCsjNYnM64enWNxc/nHHkolultE4tS7xwI0NmXIwT46Gr9FKT1o
-         idcQrPHTm/6UdCk4HvWIiBbYlPZCUtL50JV07Bon647gls3mYaW6TP+79LyT1FhEx1O3
-         BHXAbHu+8hoOZZAhqC5qxI4ucj3JRdvC8BzQFxMa9a6JCkeQ9E3nHsJiMHKx8y43LIEd
-         PYYhrT79Tf09bFwtpT/LDDKktIth392rm4ZLKfCRxeQlqDSMO91wv/E/Y9d0lRM+tAIF
-         FuiA==
+        with ESMTP id S230197AbjGDOGb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Jul 2023 10:06:31 -0400
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB9BF7;
+        Tue,  4 Jul 2023 07:06:30 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1b8303cd32aso44543055ad.2;
+        Tue, 04 Jul 2023 07:06:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688479385; x=1691071385;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G7EhOSJt2DKose19cgkkEa+phWPe/FOTqdbgT2ux33Q=;
-        b=aRghvPaCUD8AVApzXPp0zZ8SJFGaeBNDW/FaRab0kghyYF2DP1nvTgu3hHzzRgTnQ1
-         qoDN2QD4bSF67HlrrpY2Pkqn2JOqL2/fiJLEDI36hLRpIkKj30bvc2+5LIjFfDzF5GcY
-         V2THLw6vb2oLTtAf6xX6yBpGu3N60n29RPkl1FEYMFcSo1wd45NnSR+B96/BTEY/RhE8
-         +b2VvtOP4/clE9JdSIfriEFltdxLed7S0mSWjC8tv228DbRW3q4aATdrxZll/XqNIiyE
-         PuFY+pzKPxCGG/5qlIwfqjYzPvhDVZNhNgPOx1uxmHC+WPUVK6SYsGwUNANSR9e35NeV
-         O2aA==
-X-Gm-Message-State: ABy/qLb2NXgyz7tN+AxmRzmM9p6oDccvfIDFwfFNILIxRbrZN0A5J7Kt
-        uwRqPL1Bd0g3XSjf9NDbcWfaiw==
-X-Google-Smtp-Source: APBJJlGLxkjEACwFRdjd26xTjgu/yJhljm/LzrfDmC/LPv+4of4vKhPbrt4Vd7rpKxywAVWCs78pGg==
-X-Received: by 2002:a05:600c:2102:b0:3fb:e054:903f with SMTP id u2-20020a05600c210200b003fbe054903fmr2134386wml.36.1688479384966;
-        Tue, 04 Jul 2023 07:03:04 -0700 (PDT)
-Received: from airbuntu ([104.132.45.103])
-        by smtp.gmail.com with ESMTPSA id c17-20020a7bc851000000b003fbc89af035sm12290381wml.17.2023.07.04.07.03.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Jul 2023 07:03:04 -0700 (PDT)
-Date:   Tue, 4 Jul 2023 15:02:59 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com
-Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
- uclamp set from user-space
-Message-ID: <20230704140259.cb3g4us3u46iyegf@airbuntu>
-References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-2-lukasz.luba@arm.com>
- <20230531182629.nztie5rwhjl53v3d@airbuntu>
- <20230621122513.2aa3bc0d29321197e3d38441@kernel.org>
- <20230630114950.zoocytnpvdrxgnss@airbuntu>
- <c4bcff44-c306-73f5-7864-ef9551d5f5bf@arm.com>
+        d=1e100.net; s=20221208; t=1688479590; x=1691071590;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JV2SCOEdB9t0w6tigDexjJMYhGF54ZwsLlYmJ1gE7wU=;
+        b=bMICWCFC1W076H+YN1lR/nCQau0HbgCI0H4vl8vZYXgociPXrYyV5p2vJwJSn4IvXw
+         X0VdLEzWRujDjUle97qp5ejyEiOTvK9cEwtJF9fXchWUeZ3V4uQSdYUun19YJ76vkPzg
+         EZ1VW7i4f34rBtELVeYa/NvSt/WWf8EGkE3xgRc0FNndIJufTeQZZj1KiqF78g6Qv4BO
+         0X8PwY5ee/rPn2rjRArQ76JDuSpgQ/4XYckAc/yuSHkTasvw/OegnkRz43f6yLq3W0e3
+         rRA6atJmAtXopQDEq1HSeWbL6ASsixUt+la82hfgmJxFH2y2NJEwaZhVIkeu3mm+1ick
+         EadQ==
+X-Gm-Message-State: ABy/qLaMBNDn1rNBaXGQB2u/UKIklMPTeUzdebm00ZhMy9QxeJpBvQHH
+        tDxcOHS51TLWDp/ELdGfDOY=
+X-Google-Smtp-Source: APBJJlEESj5502hCCjnCrW5aNdhMviGxH5NXIz8SFwBF+614aVB6e0+1hJtWMTw8TJzZNuQy8olTNg==
+X-Received: by 2002:a17:903:447:b0:1b8:a31b:ac85 with SMTP id iw7-20020a170903044700b001b8a31bac85mr2719760plb.41.1688479589749;
+        Tue, 04 Jul 2023 07:06:29 -0700 (PDT)
+Received: from [192.168.50.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id jk4-20020a170903330400b001b672af624esm13083569plb.164.2023.07.04.07.06.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Jul 2023 07:06:29 -0700 (PDT)
+Message-ID: <bb91e76b-0bd8-a949-f8b9-868f919ebcb9@acm.org>
+Date:   Tue, 4 Jul 2023 07:06:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c4bcff44-c306-73f5-7864-ef9551d5f5bf@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
+Content-Language: en-US
+To:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+References: <20230629165206.383-1-jack@suse.cz>
+ <20230704122224.16257-1-jack@suse.cz>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230704122224.16257-1-jack@suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/04/23 08:49, Lukasz Luba wrote:
-> Hi Masami, Qais,
-> 
-> On 6/30/23 12:49, Qais Yousef wrote:
-> > On 06/21/23 12:25, Masami Hiramatsu wrote:
-> > > On Wed, 31 May 2023 19:26:29 +0100
-> > > Qais Yousef <qyousef@layalina.io> wrote:
-> > > 
-> > > > On 05/22/23 15:57, Lukasz Luba wrote:
-> > > > > The user-space can set uclamp value for a given task. It impacts task
-> > > > > placement decisions made by the scheduler. This is very useful information
-> > > > > and helps to understand the system behavior or track improvements in
-> > > > > middleware and applications which start using uclamp mechanisms and report
-> > > > > better performance in tests.
-> > > > 
-> > > > Do you mind adding a generic one instead please? And explain why we can't just
-> > > > attach to the syscall via kprobes? I think you want to bypass the permission
-> > > > checks, so maybe a generic tracepoint after that might be justifiable?
-> > > 
-> > > Could you tell me more about this point? I would like to know what kind of
-> > > permission checks can be bypassed with tracepoints.
-> > 
-> > Sorry bad usage of English from my end.
-> > 
-> > The syscall can fail if the caller doesn't have permission to change the
-> > attribute (some of them are protected with CAP_NICE) or if the boundary check
-> > fails. The desire here is to emit a tracepoint() when the user successfully
-> > changes an attribute of a task.
-> > 
-> > Lukasz would like to have this tracepoint to help debug and analyse workloads.
-> > We are not really bypassing anything. So to rephrase, emit the tracepointn if
-> > the syscall is successfully changing an attribute.
-> 
-> Sorry, but no. As I said, I don't want to add more dependencies in our
-> tooling and kernel configuration.
+On 7/4/23 05:21, Jan Kara wrote:
+> +struct bdev_handle {
+> +	struct block_device *bdev;
+> +	void *holder;
+> +};
 
-Fair enough. But as I said before a dedicate uclamp only tracepoint doesn't
-make sense to me. If maintainers are convinced, then be it. My point of view is
-that We want generic tracepoints that scale to other use cases and it makes
-sense to go this way to accommodate all potential future users, not just you.
+Please explain in the patch description why a holder pointer is 
+introduced in struct bdev_handle and how it relates to the bd_holder 
+pointer in struct block_device. Is one of the purposes of this patch 
+series perhaps to add support for multiple holders per block device?
 
+Thanks,
 
-Cheers
+Bart.
 
---
-Qais Yousef
