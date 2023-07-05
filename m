@@ -2,138 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E067481F5
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 12:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E574748253
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 12:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbjGEKVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jul 2023 06:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S230158AbjGEKlP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jul 2023 06:41:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbjGEKVb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 06:21:31 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A246B122;
-        Wed,  5 Jul 2023 03:21:30 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 58F0C1F6E6;
-        Wed,  5 Jul 2023 10:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1688552489; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qqER76PXnxWxMVZH46uY+IP0A7ISNxa4dFOpqm8Npig=;
-        b=rK+eFTza2+XXgbRvOv5tQtV93F/4zZpu7norREAepZy5yow7baD/dvvqWhpeeItBt0IPcu
-        Y5rwLWutv/on4mwv5EJraqTeqhb05mRkTW0yYXikGz/UA9AQcATVDIgxrBuvXRHMAszN6R
-        RSIAN/j2D8s9RJrt3/Umhb+lT3pvazU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1688552489;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qqER76PXnxWxMVZH46uY+IP0A7ISNxa4dFOpqm8Npig=;
-        b=0Ik5A3faiNr6MKUo0ZlFf0SVDy0zGGeX4x6PTOEnPlUJVjHk96v3tsbq/TGqKcufwhGJGx
-        3sf2EXg0rHzUTICQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 44C0D13460;
-        Wed,  5 Jul 2023 10:21:29 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xem5EClEpWRSCwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 05 Jul 2023 10:21:29 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id C5467A0707; Wed,  5 Jul 2023 12:21:28 +0200 (CEST)
-Date:   Wed, 5 Jul 2023 12:21:28 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
-Message-ID: <20230705102128.vquve4qencbbn2br@quack3>
-References: <20230629165206.383-1-jack@suse.cz>
- <20230704122224.16257-1-jack@suse.cz>
- <ZKRItBRhm8f5Vba/@kbusch-mbp>
+        with ESMTP id S230049AbjGEKlO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 06:41:14 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA62123
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jul 2023 03:41:13 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3143493728dso3796938f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jul 2023 03:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688553672; x=1691145672;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=88goqqosTuFo/x96Kg4wKBh8UXMAznfyTlC2iZi5QZg=;
+        b=VWkK2Ls2GShcm8rjv2v4WGq3q+Yhov40dgVPs4iOOhOnljFDm7SmgcHcSAka0mLq6h
+         p3wmGmMd0SHzs19gR2JqgfVjUxu7X2keQXIO5NW2EXOZztzo2zoa8H3r0cd/HywQ22JS
+         OqlHzCzuzmFNUS6KQwIpDLU0NqMtGvPWy6kIYGPmkC4KDQHaWREDZ8a+oytBqWj8JyNx
+         jJdCfGV56ycJEtHOZRncxijPLU4+gDRuKqSGawmMkk/W9Pr8yYl1U/n91rsXgZEuSAw9
+         vDCbgXqMTVouFfXXMarLmrK3W/p7+ASjMRb6rHssrqCWhBBGDQHn9YDquveE1QMbPfPV
+         aHcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688553672; x=1691145672;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=88goqqosTuFo/x96Kg4wKBh8UXMAznfyTlC2iZi5QZg=;
+        b=CJrCvqu4OtRW1p9R6O6tqMgaqnsyFq/Ij79QnVOWWBJ3wybfYJrOMj4cqqYmOKZ83q
+         GKEC/veMKgbkBjfG+m1NSfdnFx6MKs3h9W0P09ltruRbYotk04fc4dtaM/C6jvNo2vFv
+         A/NteXqJfStB+3zqKIOLua+ab4yz/FkYbWPrZKv6COMd8iRIgR+kAslkJ7ZEWJ3dHs6A
+         UzGMqcByvC6EhBBqBdD3IPa62GE5aMFVZwmGhqReS9/qIokHtr6C3RslSEXW1MFIp+c0
+         4dOyc7ASSgR+hJIx3EPmg1BNRbz2RH+5KrP78WD6AdSlRQbt+7tNboWpkg5DJFBn3U1n
+         5M+A==
+X-Gm-Message-State: ABy/qLZ6DIWZIGZp3/clx59dLHw07hhVsTvtgqwnEwEvevhg8E3ZSZx0
+        NnNUUjKEWTbSchmvLwd+3Ok6cA==
+X-Google-Smtp-Source: APBJJlF76X3ficyDs1/4Q++zss6/LXS7miOrOFC/V/Zbqi6qGsAVh719iwSI3BQ0uT/myXy+ikVTcA==
+X-Received: by 2002:a5d:4a47:0:b0:314:1096:ed2f with SMTP id v7-20020a5d4a47000000b003141096ed2fmr14313429wrs.35.1688553671880;
+        Wed, 05 Jul 2023 03:41:11 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id l12-20020a5d668c000000b003143ac73fd0sm6364914wru.1.2023.07.05.03.41.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Jul 2023 03:41:11 -0700 (PDT)
+Message-ID: <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
+Date:   Wed, 5 Jul 2023 12:41:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZKRItBRhm8f5Vba/@kbusch-mbp>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
+ wrappers
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
+References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
+ <20230525140135.3589917-6-daniel.lezcano@linaro.org>
+ <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
+ <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue 04-07-23 10:28:36, Keith Busch wrote:
-> On Tue, Jul 04, 2023 at 02:21:28PM +0200, Jan Kara wrote:
-> > +struct bdev_handle *blkdev_get_handle_by_dev(dev_t dev, blk_mode_t mode,
-> > +		void *holder, const struct blk_holder_ops *hops)
-> > +{
-> > +	struct bdev_handle *handle = kmalloc(sizeof(struct bdev_handle),
-> > +					     GFP_KERNEL);
+
+Hi Srinivas,
+
+thanks for your answer. What about the patch 6?
+
+
+On 03/07/2023 18:15, srinivas pandruvada wrote:
+> Hi Daniel,
 > 
-> I believe 'sizeof(*handle)' is the preferred style.
-
-OK.
-
-> > +	struct block_device *bdev;
-> > +
-> > +	if (!handle)
-> > +		return ERR_PTR(-ENOMEM);
-> > +	bdev = blkdev_get_by_dev(dev, mode, holder, hops);
-> > +	if (IS_ERR(bdev))
-> > +		return ERR_CAST(bdev);
+> On Mon, 2023-07-03 at 12:49 +0200, Daniel Lezcano wrote:
+>>
+>> Hi Srinivas,
+>>
+>> do you agree with the changes in patches 5 and 6 ?
+>>
+>> Thanks
+>>
+>>     -- Daniel
+>>
+>>
+>> On 25/05/2023 16:01, Daniel Lezcano wrote:
+>>> The driver is accessing the thermal zone device structure but the
+>>> accessors are already existing and we want to consolidate the
+>>> thermal
+>>> core code by preventing accesses to the internals from the drivers.
+>>>
+>>> Let's use these accessors.
+>>>
+>>> On the other side, the code is getting directly the temperature
+>>> from
+>>> tz->temperature, but the temperature is a faked on, so we can
+>>> replace
+>>> this access by the fake temp and remove the thermal zone device
+>>> structure access.
+>>>
+> May be something simple description like this will be enough.
 > 
-> Need a 'kfree(handle)' before the error return. Or would it be simpler
-> to get the bdev first so you can check the mode settings against a
-> read-only bdev prior to the kmalloc?
+> "
+> Use thermal core API to access thermal zone "type" field instead of
+> directly using the structure field.
+> While here, remove access to temperature field, as this driver is
+> reporting fake temperature, which can be replaced with
+> INT3400_FAKE_TEMP. Also replace hardcoded 20C with INT3400_FAKE_TEMP.
+> "
+> 
+> The change itself looks fine.
 
-Yeah. Good point with kfree(). I'm not sure calling blkdev_get_by_dev()
-first will be "simpler" - then we need blkdev_put() in case of kmalloc()
-failure. Thanks for review!
- 
-								Honza
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
