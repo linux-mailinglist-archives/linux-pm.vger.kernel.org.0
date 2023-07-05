@@ -2,114 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29522748378
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 13:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCCC7487BA
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 17:19:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjGELtv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jul 2023 07:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
+        id S233191AbjGEPT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jul 2023 11:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjGELtv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 07:49:51 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92538E3
-        for <linux-pm@vger.kernel.org>; Wed,  5 Jul 2023 04:49:48 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3141c3a7547so6754285f8f.2
-        for <linux-pm@vger.kernel.org>; Wed, 05 Jul 2023 04:49:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688557787; x=1691149787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lBdhQMjZ1nmdVkf9BPqZOJoWodxWjAZazvM+FwYqquU=;
-        b=lvWaH8FhmcKK4FHYbjSZy+vvVeZPVdi5dzrJra3N8JSUQZLCodRkpRjG/VErV0KaRa
-         XubE1cBmEq6dXiEGMbg/Cnfre0T1PU8u5pet31/BbuxauVeKTSRyfziztq3/2/1VSHV9
-         PIj3Bg4bOoFKwIRXDavIFNVq2V2P6uQ1an0pmoD5jNXDwoapzjZ43JX6/dfu4Frpppyx
-         kIRq6oLhzBHGBI69Vn9AawlNlYpvcRsum/4lxFfZvoFh+poS2asS2t/b/KrLQOKj+0W4
-         p2aabg9IeaRhTp5djHtxxsVutqIH/mj9eWpf/VKLh17Uig8kDxcd3xnK5n0jmXq8dQkD
-         HEDw==
+        with ESMTP id S232994AbjGEPT0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 11:19:26 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED451735;
+        Wed,  5 Jul 2023 08:19:24 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-345db6c12b4so25136435ab.0;
+        Wed, 05 Jul 2023 08:19:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688557787; x=1691149787;
+        d=1e100.net; s=20221208; t=1688570364; x=1691162364;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBdhQMjZ1nmdVkf9BPqZOJoWodxWjAZazvM+FwYqquU=;
-        b=egac5RS0EUic6Wn/3Xv2h/UizAdUhWu3HmE7Ezym94AsWh0Te5aERzfqI7LE6mMC2D
-         ew/Ae78kpZdZ4HUFKcn8KGS6ccMhSN/4E6ZoE3qSDj4RiQ2a69Yzg7YdVDD+yd+AuwUw
-         Ljk+NijEb/MYr4++X1U26AeK3gybeMuAvfZcYKaugs89o0+0KPk/wLNkkVeO5sUh8cXJ
-         s3c9whJwiPtqya4ZHpmMu0Dj5MFqp+w7rHleA7NxXTxf4oheHwCiDxa4I7T38kwJAHxD
-         3jnRjFr2EvG/4kMA6Uhl2qhY4R+nGWrU+rNDMQF6l1M+t3VZLYU4kfoSx4fj7CNhH7rZ
-         nE/Q==
-X-Gm-Message-State: ABy/qLYhjfKpaadYWsGFw9p9GyA0GEYQ45d+8d8Z8A+ILOC0kLGcJUpz
-        i+lVwBNg90KAPwmDF6NzjqmSRg==
-X-Google-Smtp-Source: APBJJlGA54lpF7GkU8VEDpwGTeAGM+Ylm1KCIcUDHKGYR+tvHzBEJzquneg2oziHR1M5iEmZ/0/g/g==
-X-Received: by 2002:a5d:544d:0:b0:313:e146:1816 with SMTP id w13-20020a5d544d000000b00313e1461816mr12558836wrv.24.1688557786918;
-        Wed, 05 Jul 2023 04:49:46 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id c8-20020adfed88000000b0031433443265sm9361029wro.53.2023.07.05.04.49.46
+        bh=vhOVd+fM39By6Neo4SNlvIwXWgDBhgramNmEhS79nFc=;
+        b=DESWvkdXfKRFM7YbT070ZmknAy3m3u3OBm8n2LEXxQK6fuEG5UkpUrgMQue9xGiagw
+         dwoleP2J5Qw6bPF7EzsJ0i0QFB+EbVcpSzjvgR7pGn/vXQWXCEbmy31T+HjFF5qXdYR1
+         z+3q7Pg8tj3Qe+E6RXqzuubza3bnSf4csuiZLXOat/vCU4R8im7e73uAOEIGMs6ICtX/
+         rsXwpPAokvej42pZH9/taX2sbR5sXl9V+vVdisjJV9U3MFGSHTMEQ5sGqEeX46WzyMlV
+         UClv8XYFy0yLUXAyQYseavn58dOSNX9/2O29h38956C8kGkaN+qKW3fnBS9yJCyf0iCd
+         XNWA==
+X-Gm-Message-State: AC+VfDzsJDUwAEjjmxd2e0EBu6YLsL2TilrOZR+pmtA3er4k02CRZNJB
+        RmIjIUDf1wBVSCyRJf0loyE=
+X-Google-Smtp-Source: ACHHUZ70uoI88DRVhGiNe4v8NMOn4CckRug5A25bO6UrnrhXn4O+oQb9CB+u9z1UucgpvIObIHjohw==
+X-Received: by 2002:a05:6602:2113:b0:784:314f:8d68 with SMTP id x19-20020a056602211300b00784314f8d68mr18093430iox.1.1688570364015;
+        Wed, 05 Jul 2023 08:19:24 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:c1f1:7d21:6172:cbd2? ([2620:15c:211:201:c1f1:7d21:6172:cbd2])
+        by smtp.gmail.com with ESMTPSA id l6-20020a656806000000b005579c73d209sm15456631pgt.1.2023.07.05.08.19.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Jul 2023 04:49:46 -0700 (PDT)
-Message-ID: <1845ebfb-8b1a-c291-6724-73df3639905b@linaro.org>
-Date:   Wed, 5 Jul 2023 13:49:45 +0200
+        Wed, 05 Jul 2023 08:19:23 -0700 (PDT)
+Message-ID: <1ea08f84-f900-92f2-e32b-2db242a74559@acm.org>
+Date:   Wed, 5 Jul 2023 08:19:16 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 5/8] thermal/drivers/int3400: Use thermal zone device
- wrappers
+Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
 Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Lee, Chun-Yi" <joeyli.kernel@gmail.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        open list <linux-kernel@vger.kernel.org>, rafael@kernel.org
-References: <20230525140135.3589917-1-daniel.lezcano@linaro.org>
- <20230525140135.3589917-6-daniel.lezcano@linaro.org>
- <ab892878-9c66-f94f-cf4c-9961723411d2@linaro.org>
- <74c232550c6787ef34ddac67a61339e6c028fb0d.camel@linux.intel.com>
- <77c90891-3712-4b3b-a22c-d9ccba36f58e@linaro.org>
- <f3679761bbf31ff93d45985f67a85f28b0027eac.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f3679761bbf31ff93d45985f67a85f28b0027eac.camel@linux.intel.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+References: <20230629165206.383-1-jack@suse.cz>
+ <20230704122224.16257-1-jack@suse.cz>
+ <bb91e76b-0bd8-a949-f8b9-868f919ebcb9@acm.org>
+ <ZKRFSZQglwCba9/i@casper.infradead.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <ZKRFSZQglwCba9/i@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/07/2023 13:35, srinivas pandruvada wrote:
-> Hi Daniel,
+On 7/4/23 09:14, Matthew Wilcox wrote:
+> On Tue, Jul 04, 2023 at 07:06:26AM -0700, Bart Van Assche wrote:
+>> On 7/4/23 05:21, Jan Kara wrote:
+>>> +struct bdev_handle {
+>>> +	struct block_device *bdev;
+>>> +	void *holder;
+>>> +};
+>>
+>> Please explain in the patch description why a holder pointer is introduced
+>> in struct bdev_handle and how it relates to the bd_holder pointer in struct
+>> block_device. Is one of the purposes of this patch series perhaps to add
+>> support for multiple holders per block device?
 > 
-> On Wed, 2023-07-05 at 12:41 +0200, Daniel Lezcano wrote:
->>
->> Hi Srinivas,
->>
->> thanks for your answer. What about the patch 6?
-> I was not CCed. But checked from LKML,
-> The change looks good.
+> That is all in patch 0/32.  Why repeat it?
 
-Actually, you were Cc'ed, the mail may have been lost somehow.
+This cover letter: https://lore.kernel.org/linux-block/20230629165206.383-1-jack@suse.cz/T/#t?
 
-Anyway, thanks for the review. I'll resend with the changelog fixed in 
-patch 5 and your acked-by
+The word "holder" doesn't even occur in that cover letter so how could the
+answer to my question be present in the cover letter?
 
-   -- Daniel
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Bart.
 
