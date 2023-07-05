@@ -2,84 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAB87481C6
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 12:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1017481C8
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 12:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbjGEKNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jul 2023 06:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
+        id S229720AbjGEKO2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jul 2023 06:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjGEKNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 06:13:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B66D129
-        for <linux-pm@vger.kernel.org>; Wed,  5 Jul 2023 03:13:47 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365986p5003647;
-        Wed, 5 Jul 2023 10:12:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=513dum0RspUpNU4Q/iRiQuy4wnuou9fCtU9m43yGGG4=;
- b=bamS4Ro4XrY03qe42Hqj72f1bzXwy7nc+fKnYb06mRNDDRuSYK5w7ZwLKPCRB7elQUbp
- Ir+CyV5adDY41cnnidnJcE38kH8pYZR1bl08ZUwFrNC/DoYYVejBE9o8DRBsfSUZYwom
- HswMYRF4FQvDMZdvvZIR6w/f9jO3vq6Vs0aCfH5SYxoYDutOsWb6iYeA+pv8ZdorPDxk
- /kXUts1VtixgccHtUWvX6YE3orZ2Q13jRNWNf/lLnh9uREYbiju8K6ex3z5GANkegGAJ
- 9uToz0xZ06R18CpuyOi604j2fGGfiyc0POMZj1Zcu8sbaFupM2VhiWukrdfiGIpT8tdw Cg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn2w58duk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 05 Jul 2023 10:12:51 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 365ACnXt006243
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 5 Jul 2023 10:12:49 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 5 Jul 2023 03:12:43 -0700
-Date:   Wed, 5 Jul 2023 15:42:39 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Yan Yankovskyi <yyankovskyi@gmail.com>
-CC:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Pavel Machek <pavel@ucw.cz>, <linux-pm@vger.kernel.org>,
-        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
-        Chen Yu <yu.c.chen@intel.com>, Yifan Li <yifan2.li@intel.com>,
-        Xueqin Luo <luoxueqin@kylinos.cn>,
-        xiongxin <xiongxin@kylinos.cn>,
-        Wendy Wang <wendy.wang@intel.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        kolAflash <kolAflash@kolahilft.de>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Dirk Behme <dirk.behme@de.bosch.com>,
-        Aleksandar Momiroski 
-        <fixed-term.aleksandar.momiroski@se.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: Delay on resume from hibernation in swsusp_free()
-Message-ID: <3d5e5a63-8336-4902-bd0f-50a8590ca388@quicinc.com>
-References: <CAMMwpw3XD+MrOVGkg2WRSVn5ziYfD052MXTZeme6igQA8LwLog@mail.gmail.com>
+        with ESMTP id S231463AbjGEKO1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 06:14:27 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B2113E;
+        Wed,  5 Jul 2023 03:14:26 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C619766018CF;
+        Wed,  5 Jul 2023 11:14:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688552064;
+        bh=2abyu5VJmEt3tb1PbtQ8yXrWLSAXhrHf+oXfvn2ghmo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=f3iQDUhuHulywT0n0IOD0av3igx8ZWuBUmB4cPKu+bRKBfbgUEfI+UxwqdPHlGIsK
+         y3lnpqYAm1IxJMNS27Z6RIPGLzcIW5LPQiKV/KGo3JX9YTdXVsI68G8IO1pYE8iRBx
+         iphGWqpo8+c/JTX5azF65fZtmAeVOHq//b2ueZsxtG8zskHKbFD91Hn1mD3CbKSDNJ
+         zoXWMO05yjfR20N+40dAgKxxrPQ5hSnGRvb6ACtlqb7oU5zEPoAr/jrs8loFwjqQi/
+         /O8FEOzccvZ2L0bRO/VR4UrUpWhJALAQebtD2WKMcO+KtLnzxW7VPMpNn+1Js9/uTN
+         7HpZrpAJEGShg==
+Message-ID: <548f2a41-1f37-fe3a-6665-ae786e4c8f77@collabora.com>
+Date:   Wed, 5 Jul 2023 12:14:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAMMwpw3XD+MrOVGkg2WRSVn5ziYfD052MXTZeme6igQA8LwLog@mail.gmail.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: WSteL-PNbvAv7rhvEsvxqzm-TVtPuXmA
-X-Proofpoint-GUID: WSteL-PNbvAv7rhvEsvxqzm-TVtPuXmA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-05_02,2023-07-04_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1011 spamscore=0
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307050088
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/5] genirq/devres: Add
+ devm_request_threaded_irq_emsg()
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>, miquel.raynal@bootlin.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, mmayer@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, bchihi@baylibre.com, wenst@chromium.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230703090455.62101-1-frank.li@vivo.com>
+ <20230703090455.62101-2-frank.li@vivo.com>
+ <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
+ <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
+ <11052797-b006-11bb-e4eb-987ddd568b24@kernel.org>
+ <20805fef-d6aa-91d8-999e-04b1d6b7a37a@vivo.com>
+ <20230704141954.fcmol2yswkpbnpaw@pengutronix.de>
+ <20230705101537.000059d2@Huawei.com>
+ <20230705073000.oxlb7e7sdkdxurps@pengutronix.de>
+ <c092b860-33d5-77c0-456c-367d545e8b7f@vivo.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <c092b860-33d5-77c0-456c-367d545e8b7f@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,45 +76,93 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 11:57:20AM +0200, Yan Yankovskyi wrote:
-> Dear Linux community experts,
+Il 05/07/23 09:43, Yangtao Li ha scritto:
+> On 2023/7/5 15:30, Uwe Kleine-König wrote:
 > 
-> I'd like to ask for advice in debugging a problem I'm facing while
-> resuming from hibernation.
-> Upon entering hibernate() -> hibernation_snapshot() -> swsusp_free(),
-> I can see two scenarios:
-> * Good case: swsusp_free() takes <100ms to complete;
-> * Bad case: swsusp_free() takes ~1,6s to complete;
+>> Hello,
+>>
+>> On Wed, Jul 05, 2023 at 10:15:37AM +0800, Jonathan Cameron wrote:
+>>> On Tue, 4 Jul 2023 16:19:54 +0200
+>>> Uwe Kleine-König <u.kleine-koenig@pengutronix.de> wrote:
+>>>
+>>>> Hello,
+>>>>
+>>>> On Tue, Jul 04, 2023 at 05:06:12PM +0800, Yangtao Li wrote:
+>>>>> On 2023/7/4 16:48, Krzysztof Kozlowski wrote:
+>>>>>> [你通常不会收到来自 krzk@kernel.org 的电子邮件。请访问 https://aka.ms 
+>>>>>> /LearnAboutSenderIdentification，以了解这一点为什么很重要]
+>>>>>>
+>>>>>> On 03/07/2023 19:43, Uwe Kleine-König wrote:
+>>>>>>> Hello Krzysztof,
+>>>>>>>
+>>>>>>> On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wrote:
+>>>>>>>> On 03/07/2023 11:04, Yangtao Li wrote:
+>>>>>>>>> There are more than 700 calls to the devm_request_threaded_irq method.
+>>>>>>>>> Most drivers only request one interrupt resource, and these error
+>>>>>>>>> messages are basically the same. If error messages are printed
+>>>>>>>>> everywhere, more than 1000 lines of code can be saved by removing the
+>>>>>>>>> msg in the driver.
+>>>>>>>> ...
+>>>>>>>>> +int devm_request_threaded_irq_emsg(struct device *dev, unsigned int irq,
+>>>>>>>>> +                              irq_handler_t handler, irq_handler_t 
+>>>>>>>>> thread_fn,
+>>>>>>>>> +                              unsigned long irqflags, const char *devname,
+>>>>>>>>> +                              void *dev_id, const char *emsg)
+>>>>>>>>> +{
+>>>>>>>>> +   int rc;
+>>>>>>>>> +
+>>>>>>>>> +   rc = devm_request_threaded_irq(dev, irq, handler, NULL, irqflags,
+>>>>>>>>> +                                  devname, dev_id);
+>>>>>>>>> +   if (rc && rc != -EPROBE_DEFER) {
+>>>>>>>>> +           dev_err(dev, "Failed to request %sinterrupt %u %s %s: %pe\n",
+>>>>>>>>> +                   thread_fn ? "threaded " : "", irq, devname ? : 
+>>>>>>>>> dev_name(dev),
+>>>>>>>>> +                   emsg ? : "", ERR_PTR(rc));
+>>>>>>>> It is open-coding dev_err_probe(). Just use dev_err_probe instead.
+>>>>>>> dev_err_probe is supposed to be only called in probe functions, while
+>>>>>>> devm_request_threaded_irq might be called in other contexts (e.g. when a
+>>>>>>> device is opened). That's why I asked to not use dev_err_probe() in v2
+>>>>>> True, but then all the callers of this function will forget to set
+>>>>>> deferred probe reason.
+>>>> That's another reason for letting the driver issue the error message and
+>>>> not the request_irq function.
+>>>>> So let's use dev_err_probe?
+>>>>>
+>>>>> BTW, any suggestions for names here, keep using
+>>>>> devm_request_threaded_irq_emsg or change to a new name?
+>>>> I would have called it devm_request_threaded_irq_verbose() which I
+>>>> consider easier to understand. But maybe  is just my (green)
+>>>> bikeshed.
+>>> If going to use dev_err_probe() internally maybe can just use
+>>> devm_request_threaded_irq_probe() thus reflecting that and making
+>>> it different to the devm_request_threaded_irq()?
+>> I like devm_request_threaded_irq_probe(), thanks for that suggestion
+>> (even though it's red :-)
 > 
-> I believe the delay is introduced by the do-while loop,
-> but it's not certain.
 > 
-> HW: Qualcomm Snapdragon SA8155P.
-> The Kernel version is downstream v5.4.210.
-> Unfortunately it's not possible to reproduce this test with a newer
-> kernel version, as the use-case is highly tailored to downstream.
-> 
-> I'm struggling to understand what external factors could contribute
-> to this delay, and would be grateful for any opinions.
+> devm_request_threaded_irq_probe() also sounds good to me, :-) If there is no 
+> objection, I think it's time to start working on switching the api.
 > 
 
-swsusp_free() is supposed to free all the pages used for creating the
-snapshot. AFAICT, it is not doing anything apart from bitmask operations
-and freeing pages. I have added some folks that have worked on
-hibernation on this qualcomm chipset. Can you also answer the below
-questions.
++1 on devm_request_threaded_irq_probe() name, makes sense to me, as it'd be
+using the same error logic as dev_err_probe() (no prints if -EPROBE_DEFER),
+and also.. this is a function that's anyway used in .probe() callbacks at
+least in the *vast* majority of the cases.
 
-- can you give your .config for your kernel and dmesg logs after the
-  restore.
+Cheers,
+Angelo
 
-- What are the kernel commandline parameters. In particular do you pass
-  param like hibernate=protect_image ?
+> int devm_request_threaded_irq_probe(struct device *dev, unsigned int irq, 
+> irq_handler_t handler, irq_handler_t thread_fn, unsigned long irqflags, const char 
+> *devname, void *dev_id, const char *info) { int rc; rc = 
+> devm_request_threaded_irq(dev, irq, handler, NULL, irqflags, devname, dev_id); if 
+> (rc) return dev_err_probe(dev, rc, "Failed to request %sinterrupt %u %s %s\n", 
+> thread_fn ? "threaded " : "", irq, devname ? : dev_name(dev), info ? : ""); return 
+> 0; } EXPORT_SYMBOL(devm_request_threaded_irq_probe); MBR, Yangtao
+> 
+> 
+>>
+>> Best regards
+>> Uwe
+>>
 
-- What is your good case and bad case. Is it across hibernation/restore
-  cycles? 
-
-- would you be able to add printk/debug code around the loop to see if
-  any particular page freeing took more time?
-
-Thanks,
-Pavan
