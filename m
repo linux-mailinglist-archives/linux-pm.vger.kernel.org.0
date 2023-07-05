@@ -2,63 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B355D748045
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 10:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAB87481C6
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 12:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjGEI7T (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jul 2023 04:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38114 "EHLO
+        id S231375AbjGEKNt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jul 2023 06:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbjGEI7S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 04:59:18 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A8510E2;
-        Wed,  5 Jul 2023 01:59:15 -0700 (PDT)
-X-UUID: 34d824de1b1211ee9cb5633481061a41-20230705
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=vepb8sQgZ1ddPhURr2IJj8dJ6RrdgtEMpT1it/FOgsE=;
-        b=guQAvCmvZTHcNsnjaFWvCYu214Rw+EOYun2WKKp0zGndtRTNPXBGAJVR29I2OSVsKfrNdkscxgO/Kbuwy3yGNLh5fvLMlVw/JHbm/9dTCEwrTqMtXYiLNsQ72NmFnlq3N0ACMgSVkdN7u6nhYv2LvFboYSkB369hubgA/ouWTT8=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:016ed7f0-6679-4371-b73b-b98c374880ab,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:100
-X-CID-INFO: VERSION:1.1.27,REQID:016ed7f0-6679-4371-b73b-b98c374880ab,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:100
-X-CID-META: VersionHash:01c9525,CLOUDID:5cc5e20d-c22b-45ab-8a43-3004e9216b56,B
-        ulkID:230705163748ZVIUNA4A,BulkQuantity:1,Recheck:0,SF:19|48|38|29|28|17,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,
-        OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-UUID: 34d824de1b1211ee9cb5633481061a41-20230705
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
-        (envelope-from <chung-kai.yang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 739156038; Wed, 05 Jul 2023 16:59:10 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+        with ESMTP id S229720AbjGEKNs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 06:13:48 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B66D129
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jul 2023 03:13:47 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 365986p5003647;
+        Wed, 5 Jul 2023 10:12:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=513dum0RspUpNU4Q/iRiQuy4wnuou9fCtU9m43yGGG4=;
+ b=bamS4Ro4XrY03qe42Hqj72f1bzXwy7nc+fKnYb06mRNDDRuSYK5w7ZwLKPCRB7elQUbp
+ Ir+CyV5adDY41cnnidnJcE38kH8pYZR1bl08ZUwFrNC/DoYYVejBE9o8DRBsfSUZYwom
+ HswMYRF4FQvDMZdvvZIR6w/f9jO3vq6Vs0aCfH5SYxoYDutOsWb6iYeA+pv8ZdorPDxk
+ /kXUts1VtixgccHtUWvX6YE3orZ2Q13jRNWNf/lLnh9uREYbiju8K6ex3z5GANkegGAJ
+ 9uToz0xZ06R18CpuyOi604j2fGGfiyc0POMZj1Zcu8sbaFupM2VhiWukrdfiGIpT8tdw Cg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rn2w58duk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 05 Jul 2023 10:12:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 365ACnXt006243
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 5 Jul 2023 10:12:49 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 5 Jul 2023 16:59:09 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 5 Jul 2023 16:59:09 +0800
-From:   Chungkai Yang <Chung-kai.Yang@mediatek.com>
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Chung-kai.Yang@mediatek.com>, <ccj.yeh@mediatek.com>
-Subject: [PATCH v3] PM: QoS: Restore support for default value on frequency QoS
-Date:   Wed, 5 Jul 2023 16:59:07 +0800
-Message-ID: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+ 15.2.1118.30; Wed, 5 Jul 2023 03:12:43 -0700
+Date:   Wed, 5 Jul 2023 15:42:39 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Yan Yankovskyi <yyankovskyi@gmail.com>
+CC:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Pavel Machek <pavel@ucw.cz>, <linux-pm@vger.kernel.org>,
+        Pavankumar Kondeti <quic_pkondeti@quicinc.com>,
+        Chen Yu <yu.c.chen@intel.com>, Yifan Li <yifan2.li@intel.com>,
+        Xueqin Luo <luoxueqin@kylinos.cn>,
+        xiongxin <xiongxin@kylinos.cn>,
+        Wendy Wang <wendy.wang@intel.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        kolAflash <kolAflash@kolahilft.de>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Dirk Behme <dirk.behme@de.bosch.com>,
+        Aleksandar Momiroski 
+        <fixed-term.aleksandar.momiroski@se.bosch.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: Delay on resume from hibernation in swsusp_free()
+Message-ID: <3d5e5a63-8336-4902-bd0f-50a8590ca388@quicinc.com>
+References: <CAMMwpw3XD+MrOVGkg2WRSVn5ziYfD052MXTZeme6igQA8LwLog@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAMMwpw3XD+MrOVGkg2WRSVn5ziYfD052MXTZeme6igQA8LwLog@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WSteL-PNbvAv7rhvEsvxqzm-TVtPuXmA
+X-Proofpoint-GUID: WSteL-PNbvAv7rhvEsvxqzm-TVtPuXmA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-05_02,2023-07-04_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1011 spamscore=0
+ suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307050088
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,65 +88,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PM_QOS_DEFAULT_VALUE case is not covered.
+On Wed, Jul 05, 2023 at 11:57:20AM +0200, Yan Yankovskyi wrote:
+> Dear Linux community experts,
+> 
+> I'd like to ask for advice in debugging a problem I'm facing while
+> resuming from hibernation.
+> Upon entering hibernate() -> hibernation_snapshot() -> swsusp_free(),
+> I can see two scenarios:
+> * Good case: swsusp_free() takes <100ms to complete;
+> * Bad case: swsusp_free() takes ~1,6s to complete;
+> 
+> I believe the delay is introduced by the do-while loop,
+> but it's not certain.
+> 
+> HW: Qualcomm Snapdragon SA8155P.
+> The Kernel version is downstream v5.4.210.
+> Unfortunately it's not possible to reproduce this test with a newer
+> kernel version, as the use-case is highly tailored to downstream.
+> 
+> I'm struggling to understand what external factors could contribute
+> to this delay, and would be grateful for any opinions.
+> 
 
-Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
-non-negative") makes sure CPU freq is non-negative to avoid negative
-value converting to unsigned data type. However, when the value is
-PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
-c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
-cpufreq_policy_alloc is executed, for this case handling.
+swsusp_free() is supposed to free all the pages used for creating the
+snapshot. AFAICT, it is not doing anything apart from bitmask operations
+and freeing pages. I have added some folks that have worked on
+hibernation on this qualcomm chipset. Can you also answer the below
+questions.
 
-Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
-fix this problem.
+- can you give your .config for your kernel and dmesg logs after the
+  restore.
 
-Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
+- What are the kernel commandline parameters. In particular do you pass
+  param like hibernate=protect_image ?
 
----
-V2 -> V3: Added helper function to avoid duplicating the value check.
-V1 -> V2: Checked both freq_qos_add/update_request.
+- What is your good case and bad case. Is it across hibernation/restore
+  cycles? 
 
-Link: https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
-Link: https://lore.kernel.org/lkml/20230627071727.16646-1-Chung-kai.Yang@mediatek.com/
-Link: https://lore.kernel.org/lkml/CAJZ5v0gxNOWhC58PHeUhW_tgf6d1fGJVZ1x91zkDdht11yUv-A@mail.gmail.com/
----
- kernel/power/qos.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+- would you be able to add printk/debug code around the loop to see if
+  any particular page freeing took more time?
 
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index af51ed6d45ef..782d3b41c1f3 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -426,6 +426,11 @@ late_initcall(cpu_latency_qos_init);
- 
- /* Definitions related to the frequency QoS below. */
- 
-+static inline bool freq_qos_value_invalid(s32 value)
-+{
-+	return value < 0 && value != PM_QOS_DEFAULT_VALUE;
-+}
-+
- /**
-  * freq_constraints_init - Initialize frequency QoS constraints.
-  * @qos: Frequency QoS constraints to initialize.
-@@ -531,7 +536,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
- {
- 	int ret;
- 
--	if (IS_ERR_OR_NULL(qos) || !req || value < 0)
-+	if (IS_ERR_OR_NULL(qos) || !req || freq_qos_value_invalid(value))
- 		return -EINVAL;
- 
- 	if (WARN(freq_qos_request_active(req),
-@@ -563,7 +568,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
-  */
- int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
- {
--	if (!req || new_value < 0)
-+	if (!req || freq_qos_value_invalid(new_value))
- 		return -EINVAL;
- 
- 	if (WARN(!freq_qos_request_active(req),
--- 
-2.18.0
-
+Thanks,
+Pavan
