@@ -2,196 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCE1747C7F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 07:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F05BD747E40
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Jul 2023 09:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjGEFiB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jul 2023 01:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55300 "EHLO
+        id S232046AbjGEHak (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jul 2023 03:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjGEFh7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 01:37:59 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F55F1705;
-        Tue,  4 Jul 2023 22:37:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688535478; x=1720071478;
-  h=date:from:to:cc:subject:message-id;
-  bh=KQamy0D3QLjCRbrHlSo7yqXvSDhs6+RZhVaLjOufMic=;
-  b=K2/vavQ6TS98puMUd/QwcTtKu+SATahNqn9CWOWZwg49257+WP4d1Me9
-   enDCVHv76axlnJrhutDEfJizJ9maa2octQekYdAq4kQvcW7f6RCGcUVpp
-   vx42w3nMfwKM/Gi/11RBxz4fAYIwxp9Pd4VhibLhLGsXPDMq0fBwej/7i
-   bwasfh/1t93P43hzbIc6TgaDHd4N2sgmPQCcdnqxPJkVrtX2eF7Phyt/D
-   6BtKyp+gXHTMZrSweHU6di8QzBKhnyM85QhCOQTwK85CXwdUOGYgO6r8H
-   DFTZJj0sik1eyC14F56YhVHv5OBKk/PSlM1Qt0Pm6fbsjmqWpDMx7Dwng
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="353083847"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="353083847"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2023 22:37:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10761"; a="784405882"
-X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="784405882"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 04 Jul 2023 22:37:49 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qGvD2-0000Od-2W;
-        Wed, 05 Jul 2023 05:37:48 +0000
-Date:   Wed, 05 Jul 2023 13:37:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bf244610b488082b381bca2cc9247b70d13c0367
-Message-ID: <202307051319.WUmun1vl-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S231250AbjGEHaj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 03:30:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815EF10DD
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jul 2023 00:30:36 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGwxk-00074H-2x; Wed, 05 Jul 2023 09:30:08 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGwxd-00CDDv-9E; Wed, 05 Jul 2023 09:30:01 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qGwxc-002Nyt-Mr; Wed, 05 Jul 2023 09:30:00 +0200
+Date:   Wed, 5 Jul 2023 09:30:00 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        miquel.raynal@bootlin.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        florian.fainelli@broadcom.com, tglx@linutronix.de,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        bchihi@baylibre.com, wenst@chromium.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 1/5] genirq/devres: Add
+ devm_request_threaded_irq_emsg()
+Message-ID: <20230705073000.oxlb7e7sdkdxurps@pengutronix.de>
+References: <20230703090455.62101-1-frank.li@vivo.com>
+ <20230703090455.62101-2-frank.li@vivo.com>
+ <f4873823-fd7e-c6dd-fbc0-eac4a9be52b1@kernel.org>
+ <20230703174347.4m6hcmify4jwsozv@pengutronix.de>
+ <11052797-b006-11bb-e4eb-987ddd568b24@kernel.org>
+ <20805fef-d6aa-91d8-999e-04b1d6b7a37a@vivo.com>
+ <20230704141954.fcmol2yswkpbnpaw@pengutronix.de>
+ <20230705101537.000059d2@Huawei.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3w7pvwtu25s3yawr"
+Content-Disposition: inline
+In-Reply-To: <20230705101537.000059d2@Huawei.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bf244610b488082b381bca2cc9247b70d13c0367  Merge branch 'acpi-scan' into bleeding-edge
 
-elapsed time: 722m
+--3w7pvwtu25s3yawr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 118
-configs skipped: 5
+Hello,
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On Wed, Jul 05, 2023 at 10:15:37AM +0800, Jonathan Cameron wrote:
+> On Tue, 4 Jul 2023 16:19:54 +0200
+> Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
+>=20
+> > Hello,
+> >=20
+> > On Tue, Jul 04, 2023 at 05:06:12PM +0800, Yangtao Li wrote:
+> > > On 2023/7/4 16:48, Krzysztof Kozlowski wrote:
+> > >  =20
+> > > > [=E4=BD=A0=E9=80=9A=E5=B8=B8=E4=B8=8D=E4=BC=9A=E6=94=B6=E5=88=B0=E6=
+=9D=A5=E8=87=AA krzk@kernel.org =E7=9A=84=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=
+=B6=E3=80=82=E8=AF=B7=E8=AE=BF=E9=97=AE https://aka.ms/LearnAboutSenderIden=
+tification=EF=BC=8C=E4=BB=A5=E4=BA=86=E8=A7=A3=E8=BF=99=E4=B8=80=E7=82=B9=
+=E4=B8=BA=E4=BB=80=E4=B9=88=E5=BE=88=E9=87=8D=E8=A6=81]
+> > > >=20
+> > > > On 03/07/2023 19:43, Uwe Kleine-K=C3=B6nig wrote: =20
+> > > > > Hello Krzysztof,
+> > > > >=20
+> > > > > On Mon, Jul 03, 2023 at 02:31:59PM +0200, Krzysztof Kozlowski wro=
+te: =20
+> > > > > > On 03/07/2023 11:04, Yangtao Li wrote: =20
+> > > > > > > There are more than 700 calls to the devm_request_threaded_ir=
+q method.
+> > > > > > > Most drivers only request one interrupt resource, and these e=
+rror
+> > > > > > > messages are basically the same. If error messages are printed
+> > > > > > > everywhere, more than 1000 lines of code can be saved by remo=
+ving the
+> > > > > > > msg in the driver. =20
+> > > > > >=20
+> > > > > > ...
+> > > > > >  =20
+> > > > > > > +int devm_request_threaded_irq_emsg(struct device *dev, unsig=
+ned int irq,
+> > > > > > > +                              irq_handler_t handler, irq_han=
+dler_t thread_fn,
+> > > > > > > +                              unsigned long irqflags, const =
+char *devname,
+> > > > > > > +                              void *dev_id, const char *emsg)
+> > > > > > > +{
+> > > > > > > +   int rc;
+> > > > > > > +
+> > > > > > > +   rc =3D devm_request_threaded_irq(dev, irq, handler, NULL,=
+ irqflags,
+> > > > > > > +                                  devname, dev_id);
+> > > > > > > +   if (rc && rc !=3D -EPROBE_DEFER) {
+> > > > > > > +           dev_err(dev, "Failed to request %sinterrupt %u %s=
+ %s: %pe\n",
+> > > > > > > +                   thread_fn ? "threaded " : "", irq, devnam=
+e ? : dev_name(dev),
+> > > > > > > +                   emsg ? : "", ERR_PTR(rc)); =20
+> > > > > > It is open-coding dev_err_probe(). Just use dev_err_probe inste=
+ad. =20
+> > > > > dev_err_probe is supposed to be only called in probe functions, w=
+hile
+> > > > > devm_request_threaded_irq might be called in other contexts (e.g.=
+ when a
+> > > > > device is opened). That's why I asked to not use dev_err_probe() =
+in v2 =20
+> > > > True, but then all the callers of this function will forget to set
+> > > > deferred probe reason. =20
+> >=20
+> > That's another reason for letting the driver issue the error message and
+> > not the request_irq function.
+> > =20
+> > > So let's use dev_err_probe?
+> > >=20
+> > > BTW, any suggestions for names here, keep using
+> > > devm_request_threaded_irq_emsg or change to a new name? =20
+> >=20
+> > I would have called it devm_request_threaded_irq_verbose() which I
+> > consider easier to understand. But maybe  is just my (green)
+> > bikeshed.
+>=20
+> If going to use dev_err_probe() internally maybe can just use
+> devm_request_threaded_irq_probe() thus reflecting that and making
+> it different to the devm_request_threaded_irq()?
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r032-20230704   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230703   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                          pxa910_defconfig   gcc  
-arm                  randconfig-r046-20230703   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r003-20230704   clang
-arm64                randconfig-r024-20230704   gcc  
-arm64                randconfig-r035-20230704   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r006-20230704   gcc  
-csky                 randconfig-r026-20230704   gcc  
-hexagon              randconfig-r001-20230704   clang
-hexagon              randconfig-r041-20230703   clang
-hexagon              randconfig-r045-20230703   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230703   gcc  
-i386         buildonly-randconfig-r005-20230703   gcc  
-i386         buildonly-randconfig-r006-20230703   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230704   clang
-i386                 randconfig-i002-20230704   clang
-i386                 randconfig-i003-20230704   clang
-i386                 randconfig-i004-20230704   clang
-i386                 randconfig-i005-20230704   clang
-i386                 randconfig-i006-20230704   clang
-i386                 randconfig-i011-20230703   clang
-i386                 randconfig-i012-20230703   clang
-i386                 randconfig-i013-20230703   clang
-i386                 randconfig-i014-20230703   clang
-i386                 randconfig-i015-20230703   clang
-i386                 randconfig-i016-20230703   clang
-loongarch                        alldefconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch                 loongson3_defconfig   gcc  
-loongarch            randconfig-r034-20230704   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r025-20230704   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      maltaaprp_defconfig   clang
-mips                       rbtx49xx_defconfig   clang
-nios2                               defconfig   gcc  
-openrisc                 simple_smp_defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                    ge_imp3a_defconfig   clang
-powerpc                 mpc832x_rdb_defconfig   clang
-powerpc              randconfig-r021-20230704   gcc  
-powerpc                     taishan_defconfig   gcc  
-powerpc                     tqm8541_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r033-20230704   clang
-riscv                randconfig-r042-20230703   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r005-20230704   clang
-s390                 randconfig-r015-20230704   gcc  
-s390                 randconfig-r044-20230703   clang
-sh                               allmodconfig   gcc  
-sh                           se7343_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r011-20230704   gcc  
-sparc                randconfig-r012-20230704   gcc  
-sparc                randconfig-r014-20230704   gcc  
-sparc                randconfig-r016-20230704   gcc  
-sparc                randconfig-r023-20230704   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r013-20230704   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230703   gcc  
-x86_64       buildonly-randconfig-r002-20230703   gcc  
-x86_64       buildonly-randconfig-r003-20230703   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r002-20230704   clang
-x86_64               randconfig-r022-20230704   gcc  
-x86_64               randconfig-x001-20230703   clang
-x86_64               randconfig-x002-20230703   clang
-x86_64               randconfig-x003-20230703   clang
-x86_64               randconfig-x004-20230703   clang
-x86_64               randconfig-x005-20230703   clang
-x86_64               randconfig-x006-20230703   clang
-x86_64               randconfig-x011-20230704   clang
-x86_64               randconfig-x012-20230704   clang
-x86_64               randconfig-x013-20230704   clang
-x86_64               randconfig-x014-20230704   clang
-x86_64               randconfig-x015-20230704   clang
-x86_64               randconfig-x016-20230704   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+I like devm_request_threaded_irq_probe(), thanks for that suggestion
+(even though it's red :-)
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--3w7pvwtu25s3yawr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSlG/cACgkQj4D7WH0S
+/k7NJAf/W/VmS09wlRNdQ8cSrZRQMlAZTlz/61ILtur39hnGBqdq32Vg8eyL4OLD
+hIkfsr7VsST40mM9u3ar/g4g0upuPF64MagUJ1Xo4H8oSsg7AoEdMRCeQUYmP0ru
+EZnLjykOQRjPbKG1w3qbh6P380EMUUmebcsvq2hftoWNOFN839DtdIwQbbjDyU88
+WAQY4KYps2wtAkIFsdRwc5B2AfPcRvsA2u1eGoTdHO7GMxTW1gHSP0+JdPbCwo+G
+yNja5Eoh59NpRQxNLmHbKDdT2QVmov+o8+UQdmULeTeAIMHJhPasklv4XckQahBg
+MdJl4H/H2ukouHulyntW3si+qNnScg==
+=whBA
+-----END PGP SIGNATURE-----
+
+--3w7pvwtu25s3yawr--
