@@ -2,60 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF4974A1FB
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 18:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB7874A23B
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 18:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbjGFQPW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jul 2023 12:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S230054AbjGFQdI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Jul 2023 12:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjGFQPU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 12:15:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7F710C;
-        Thu,  6 Jul 2023 09:15:19 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        with ESMTP id S229610AbjGFQdI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 12:33:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA5183;
+        Thu,  6 Jul 2023 09:33:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 45AEE6606FC4;
-        Thu,  6 Jul 2023 17:15:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688660118;
-        bh=j4Ff8jZjJXo7I/FQ5lBog+vo+xtKrEJKPXvRjQjs67g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TvWdYc4hqW5CowqNu/0c/JhbwtCGD3WTQS8ADenSlLyffsiXemx2i1bd/M+y0aGsM
-         IiAcCyioCzgtgKQ5Y184uaTbo+oGie9yuPyJ358Jvv4CsC1OFloX3gcNjepCfSSojE
-         UFr0ciczt0GV+LBORO3oAD3NUv7WdVxXzblawz2jVWpcI8XdB8jlWleB1++VnWTMAc
-         B0B1IOqd8mULvYFHFUdL4VFzetSWz0MU9ui4jGfRHrGZmgrF6/ZaId457ZZgSm2jMh
-         DBh5XGqsG+uruHm2l4UKEIDLBjAY0fCXeZGYBTx8VjhbS6kLE2AmRior76CVCJVOD5
-         5zNVnrqBHkW1g==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E07260F16;
+        Thu,  6 Jul 2023 16:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4518EC433C7;
+        Thu,  6 Jul 2023 16:33:03 +0000 (UTC)
+Date:   Thu, 6 Jul 2023 12:33:00 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Vivek Anand <vivekanand754@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lingutla Chandrasekhar <clingutla@codeaurora.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "J. Avila" <elavila@google.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: [PATCH] thermal/drivers/mediatek/lvts_thermal: Make readings valid in filtered mode
-Date:   Thu,  6 Jul 2023 12:14:33 -0400
-Message-ID: <20230706161509.204546-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.41.0
+        Thomas Renninger <trenn@suse.com>,
+        Shuah Khan <shuah@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Netfilter Development <netfilter-devel@vger.kernel.org>,
+        Netfilter Core Developers <coreteam@netfilter.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        x86@kernel.org
+Subject: Re: High cpu usage caused by kernel process when upgraded to linux
+ 5.19.17 or later
+Message-ID: <20230706123300.55d6450b@gandalf.local.home>
+In-Reply-To: <CAJnqnX5dHiXe3smKhj6JT9+6FNdgrAR=5_Hm8BSRpVF3uARYUg@mail.gmail.com>
+References: <01ac399d-f793-49d4-844b-72cd8e0034df@gmail.com>
+        <ZJpJkL3dPXxgw6RK@debian.me>
+        <20230627073035.GV4253@hirez.programming.kicks-ass.net>
+        <99b64dfd-be4a-2248-5c42-8eb9197824e1@gmail.com>
+        <20230627101939.GZ4253@hirez.programming.kicks-ass.net>
+        <CAJnqnX5rYn65zVQ+SLN4m4ZzM_jOa_RjGhazWO=Fh8ZvdOCadg@mail.gmail.com>
+        <878rc22vxq.ffs@tglx>
+        <CAJnqnX5dHiXe3smKhj6JT9+6FNdgrAR=5_Hm8BSRpVF3uARYUg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,78 +74,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently, when a controller is configured to use filtered mode, thermal
-readings are valid only about 30% of the time.
+On Mon, 3 Jul 2023 18:23:25 +0530
+Vivek Anand <vivekanand754@gmail.com> wrote:
 
-Upon testing, it was noticed that lowering any of the interval settings
-resulted in an improved rate of valid data. The same was observed when
-decreasing the number of samples for each sensor (which also results in
-quicker measurements).
+> Hi Thomas,
+> 
+> Further analyzing, I found that I did set
+> "CONFIG_NETFILTER_XT_MATCH_LIMIT=m" in my kernel config earlier which was
+> causing high CPU consumption.
+> Setting it to "CONFIG_NETFILTER_XT_MATCH_LIMIT=n" resolved the high CPU
+> issue.
+> 
+> Is there any suggestion regarding the use of this config
+> "CONFIG_NETFILTER_XT_MATCH_LIMIT" as I'm getting high CPU by setting it to
+> "m" ?
 
-Retrying the read with a timeout longer than the time it takes to
-resample (about 344us with these settings and 4 sensors) also improves
-the rate.
+That config enables the compiling of: net/netfilter/xt_limit.c
 
-Lower all timing settings to the minimum, configure the filtering to
-single sample, and poll the measurement register for at least one period
-to improve the data validity on filtered mode.  With these changes in
-place, out of 100000 reads, a single one failed, ie 99.999% of the data
-was valid.
+The htable_gc that you reported is defined in: net/netfilter/xt_hashlimit.c
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+It has:
 
----
+static void htable_gc(struct work_struct *work)
+{
+        struct xt_hashlimit_htable *ht;
 
- drivers/thermal/mediatek/lvts_thermal.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+        ht = container_of(work, struct xt_hashlimit_htable, gc_work.work);
 
-diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index 1e11defe4f35..b5fb1d8bc3d8 100644
---- a/drivers/thermal/mediatek/lvts_thermal.c
-+++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -58,11 +58,11 @@
- #define LVTS_PROTTC(__base)		(__base + 0x00CC)
- #define LVTS_CLKEN(__base)		(__base + 0x00E4)
- 
--#define LVTS_PERIOD_UNIT			((118 * 1000) / (256 * 38))
--#define LVTS_GROUP_INTERVAL			1
--#define LVTS_FILTER_INTERVAL		1
--#define LVTS_SENSOR_INTERVAL		1
--#define LVTS_HW_FILTER				0x2
-+#define LVTS_PERIOD_UNIT			0
-+#define LVTS_GROUP_INTERVAL			0
-+#define LVTS_FILTER_INTERVAL		0
-+#define LVTS_SENSOR_INTERVAL		0
-+#define LVTS_HW_FILTER				0x0
- #define LVTS_TSSEL_CONF				0x13121110
- #define LVTS_CALSCALE_CONF			0x300
- #define LVTS_MONINT_CONF			0x9FBF7BDE
-@@ -257,6 +257,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
- 	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
- 	void __iomem *msr = lvts_sensor->msr;
- 	u32 value;
-+	int rc;
- 
- 	/*
- 	 * Measurement registers:
-@@ -269,7 +270,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
- 	 * 16	: Valid temperature
- 	 * 15-0	: Raw temperature
- 	 */
--	value = readl(msr);
-+	rc = readl_poll_timeout(msr, value, value & BIT(16), 240, 400);
- 
- 	/*
- 	 * As the thermal zone temperature will read before the
-@@ -282,7 +283,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
- 	 * functionning temperature and directly jump to a system
- 	 * shutdown.
- 	 */
--	if (!(value & BIT(16)))
-+	if (rc)
- 		return -EAGAIN;
- 
- 	*temp = lvts_raw_to_temp(value & 0xFFFF);
--- 
-2.41.0
+        htable_selective_cleanup(ht, false);
+
+        queue_delayed_work(system_power_efficient_wq,
+                           &ht->gc_work, msecs_to_jiffies(ht->cfg.gc_interval));
+}
+
+So it queues itself every ht->cfg.gc_interval msecs. That variable seems to
+come from some configuration of netfilter, and I think you can see these in:
+
+ find /proc/sys/net -name 'gc_interval'
+
+Perhaps you have it set off to go too much?
+
+-- Steve
+
+
+> 
+> Thanks,
+> Vivek
+> 
+> On Thu, Jun 29, 2023 at 7:48 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+> 
+> > On Thu, Jun 29 2023 at 12:05, Vivek Anand wrote:
+> > > I've tried booting with "spectre_v2=retpoline retbleed=off".
+> > > This change didn't work. Still CPU is 100%
+> >
+> > This does not make sense.
+> >
+> > retbleed=off has the same effect as CONFIG_X86_IBRS_ENTRY=n.
+> >
+> > The only difference is that with CONFIG_X86_IBRS_ENTRY=y and
+> > retbleed=off there is one extra jump in the low level entry code
+> > (syscall, interrupts, exceptions) and one extra jump on the exit side.
+> >
+> > But those extra jumps are completely irrelevant for the kworker threads.
+> >
+> > Can you please provide dmesg and the content of the files in
+> >
+> >  /sys/devices/system/cpu/vulnerabilities/
+> >
+> > on a kernel booted with "spectre_v2=retpoline retbleed=off" ?
+> >
+> > Thanks,
+> >
+> >         tglx
+> >
 
