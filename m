@@ -2,257 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D56F749348
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 03:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70467493FE
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 05:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232833AbjGFBtP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Jul 2023 21:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
+        id S232991AbjGFDGd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Jul 2023 23:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232414AbjGFBtO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 21:49:14 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C596BE57;
-        Wed,  5 Jul 2023 18:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688608153; x=1720144153;
-  h=date:from:to:cc:subject:message-id;
-  bh=KT+VrNFE/65metzet1vk6UwWZvC6hTgkwPe8DonGFZY=;
-  b=MP/5haTgg0ChFh+HN21fBnyK6+l/7K7izug/I8AaHcHEYW3qKqKg7gsB
-   T35XJtmyBGuXCBXEpuH8Mu7tKLFQ25SJ1A1E18FjPEW5SFYEmuu47ZWNt
-   if1idmwwN76BGR82wYN+9eErHd+VpSo1paIyOWMY6k+UewuzmOue/Kwie
-   uWlu796uJg4O46JXbGZr04uhZnJ0ppJ1ZsL7gGC2NBoFvtBbovw7mbWav
-   g1YdAsoVCAi8Ta2Y6CQBmqnlOoqzmKrtqwj1UAKYblCIMTXWhxn9okWxp
-   12oPWM5O99UAe+oRIZjGIhKUHfJYzgeM9P/Llk7xW08AiyeKjXWJWbEFu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="366054543"
-X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
-   d="scan'208";a="366054543"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2023 18:49:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10762"; a="784740612"
-X-IronPort-AV: E=Sophos;i="6.01,184,1684825200"; 
-   d="scan'208";a="784740612"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 05 Jul 2023 18:49:11 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qHE7K-0000xR-35;
-        Thu, 06 Jul 2023 01:49:10 +0000
-Date:   Thu, 06 Jul 2023 09:48:52 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- bd9bb08847da3b1eba2ea8cebf514d9287e7f4fb
-Message-ID: <202307060950.o1vOEQl4-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S233283AbjGFDG3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Jul 2023 23:06:29 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909711BCD
+        for <linux-pm@vger.kernel.org>; Wed,  5 Jul 2023 20:06:25 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6687466137bso247377b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 05 Jul 2023 20:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1688612785; x=1691204785;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=99rLLs4Jp9MCNeQLMP7yzims2WyoJRlW8GyAoOBPdRE=;
+        b=DQzN8sQN/PaSjDYG+l3ruz8n7BxH21WYyyAlBrmbriGKybP3RCBFVWaWBXLg9IlqXv
+         uIXu84E+ipHxS9/93wdfcBdGg9WdvrhE2pB/EvlcS1GeEVCDVHVHPLTVV+lBRkIkhVoc
+         RhHgXHPO8io/W8sY38ME1/lCcOVGPrzDeYHcm1BXoHpZYUmEEMmqCcnSsan/Fla5vsGS
+         d8PFpsf2vCKDrHtrew0qfuJMzgR8JhLg3KfnaHQ38jKoSM70H8nELskCOcXsY0hsQmHC
+         YGQoFUawwdauNfCE3KEB97O5VPfTlUis/QAUZV1f11Dg8pDeRVY2eIaw5uYJB6FTSdB4
+         /QbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688612785; x=1691204785;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=99rLLs4Jp9MCNeQLMP7yzims2WyoJRlW8GyAoOBPdRE=;
+        b=XVZFaZseTlCqFr6eQEmcapJ46xIM78Y3GEbAmkhscNC11pKuLuAM9r99fdAnJP1iMn
+         oCS4rR3UsAUVt0Ut8+QXzrB8ziKp+9ttNz1Cp7WIMUaK74qU2P3IdwFVxc+M6CauNi2K
+         PNEMulQ8+/hVrzL8aLvbvLXyMyeuhHIHoEoUSOI88vkel8c5xvTB5GMgcbTk3UiVEAXr
+         x1fLk6hVe72QeAJ2E8uN+9tjV23nadTAGfHgt6T1y6SW488rynlRPL3HvjO0Zt8Wkguz
+         pUzE+rXzruul8mMPTvCr6H3PvtXCKb55gyBTo/lT0eqHO9/DBPUr71y95XOiDmrHspAY
+         eJHw==
+X-Gm-Message-State: ABy/qLa6jZNJcxu+zt041mzA1IdMrmsDRcEtuOckizkVx4qC4XR2E65g
+        WwtcVTN1WAxIKIF8h1mxCPn4TQ==
+X-Google-Smtp-Source: APBJJlHOZPK7P19lXlINFr/Dqp79j8rxfnvTDK3ZVvTCnOzJbys8o8pl2d+qk/AQLF7RxsZlOMrG0A==
+X-Received: by 2002:a05:6a00:2ea3:b0:682:95ab:32f with SMTP id fd35-20020a056a002ea300b0068295ab032fmr587148pfb.1.1688612784886;
+        Wed, 05 Jul 2023 20:06:24 -0700 (PDT)
+Received: from google.com (41.183.143.34.bc.googleusercontent.com. [34.143.183.41])
+        by smtp.gmail.com with ESMTPSA id s20-20020aa78294000000b0066e7a540ea5sm197156pfm.205.2023.07.05.20.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Jul 2023 20:06:24 -0700 (PDT)
+Date:   Thu, 6 Jul 2023 08:36:14 +0530
+From:   Ajay Agarwal <ajayagarwal@google.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
+Cc:     linux-pm@vger.kernel.org, manugautam@google.com,
+        mshavit@google.com, quangh@google.com
+Subject: Prevent PM suspend from powering off the domain for non-wakeup
+ in-use devices
+Message-ID: <ZKYvpgs6p3S7nglh@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: bd9bb08847da3b1eba2ea8cebf514d9287e7f4fb  Merge branches 'acpi-scan' and 'acpi-bus' into linux-next
+Hello Linux PM experts
+I have a question on PM domain. As per the current PM domain driver design, the genpd_finish_suspend turns OFF a power domain if it is not already turned OFF by runtime suspend.
 
-elapsed time: 722m
+I have a usecase of a device having to stay ON during system suspend. This device will be used by a co-processor which is running its own OS. Thereby, it requires the power domain to stay turned ON, so genpd_finish_suspend should not be powering down the domain.
 
-configs tested: 178
-configs skipped: 5
+I studied the code and found the flag `GENPD_FLAG_ACTIVE_WAKEUP` which can be set for the power domain. And device_set_wakeup_path can be invoked in the suspend() callback of the device. Together, these will prevent the genpd_finish_suspend from turning OFF the domain. See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.c#n1260
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+But this flag is really intended to be used for devices which are capable of waking up the system from PM suspend. But my usecase does not involve a scenario of the device potentially waking up the system, it just needs to stay powered for the co-processor to be able to use it.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230705   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r014-20230705   gcc  
-arc                  randconfig-r026-20230705   gcc  
-arc                  randconfig-r043-20230705   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         at91_dt_defconfig   gcc  
-arm                          collie_defconfig   clang
-arm                                 defconfig   clang
-arm                                 defconfig   gcc  
-arm                       imx_v4_v5_defconfig   clang
-arm                   milbeaut_m10v_defconfig   clang
-arm                            mmp2_defconfig   clang
-arm                         mv78xx0_defconfig   clang
-arm                          pxa168_defconfig   clang
-arm                  randconfig-r005-20230705   clang
-arm                  randconfig-r035-20230705   clang
-arm                  randconfig-r046-20230705   gcc  
-arm                         s5pv210_defconfig   clang
-arm                           sama7_defconfig   clang
-arm                         socfpga_defconfig   clang
-arm                    vt8500_v6_v7_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r023-20230705   clang
-arm64                randconfig-r024-20230705   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r002-20230705   gcc  
-csky                 randconfig-r016-20230705   gcc  
-csky                 randconfig-r036-20230705   gcc  
-hexagon              randconfig-r013-20230705   clang
-hexagon              randconfig-r041-20230705   clang
-hexagon              randconfig-r045-20230705   clang
-i386                             allyesconfig   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230705   gcc  
-i386         buildonly-randconfig-r005-20230705   gcc  
-i386         buildonly-randconfig-r006-20230705   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230705   gcc  
-i386                 randconfig-i002-20230705   gcc  
-i386                 randconfig-i003-20230705   gcc  
-i386                 randconfig-i004-20230705   gcc  
-i386                 randconfig-i005-20230705   gcc  
-i386                 randconfig-i006-20230705   gcc  
-i386                 randconfig-i011-20230705   clang
-i386                 randconfig-i012-20230705   clang
-i386                 randconfig-i013-20230705   clang
-i386                 randconfig-i014-20230705   clang
-i386                 randconfig-i015-20230705   clang
-i386                 randconfig-i016-20230705   clang
-i386                 randconfig-r004-20230705   gcc  
-i386                 randconfig-r031-20230705   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r006-20230705   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5272c3_defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-m68k                          multi_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                 randconfig-r011-20230705   gcc  
-microblaze           randconfig-r001-20230705   gcc  
-microblaze           randconfig-r021-20230705   gcc  
-microblaze           randconfig-r036-20230705   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                            ar7_defconfig   gcc  
-mips                     cu1000-neo_defconfig   clang
-mips                           ip32_defconfig   gcc  
-mips                          malta_defconfig   clang
-mips                      maltasmvp_defconfig   gcc  
-mips                        qi_lb60_defconfig   clang
-mips                 randconfig-r005-20230705   clang
-mips                 randconfig-r024-20230705   gcc  
-mips                       rbtx49xx_defconfig   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r015-20230705   gcc  
-nios2                randconfig-r023-20230705   gcc  
-openrisc             randconfig-r022-20230705   gcc  
-openrisc             randconfig-r031-20230705   gcc  
-openrisc                 simple_smp_defconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r014-20230705   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          g5_defconfig   clang
-powerpc                    ge_imp3a_defconfig   clang
-powerpc                     kilauea_defconfig   clang
-powerpc                   lite5200b_defconfig   clang
-powerpc                  mpc885_ads_defconfig   clang
-powerpc                      ppc44x_defconfig   clang
-powerpc                      ppc64e_defconfig   clang
-powerpc              randconfig-r025-20230705   clang
-powerpc              randconfig-r034-20230705   gcc  
-powerpc                    socrates_defconfig   clang
-powerpc                 xes_mpc85xx_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_virt_defconfig   clang
-riscv                randconfig-r012-20230705   clang
-riscv                randconfig-r032-20230705   gcc  
-riscv                randconfig-r034-20230705   gcc  
-riscv                randconfig-r042-20230705   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r021-20230705   clang
-s390                 randconfig-r035-20230705   gcc  
-s390                 randconfig-r044-20230705   clang
-sh                               allmodconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                   randconfig-r004-20230705   gcc  
-sh                   randconfig-r006-20230705   gcc  
-sh                           sh2007_defconfig   gcc  
-sh                        sh7785lcr_defconfig   gcc  
-sh                            shmin_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r016-20230705   gcc  
-sparc                randconfig-r032-20230705   gcc  
-sparc                randconfig-r033-20230705   gcc  
-sparc                       sparc32_defconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r013-20230705   gcc  
-sparc64              randconfig-r022-20230705   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r001-20230705   clang
-um                   randconfig-r003-20230705   clang
-um                   randconfig-r015-20230705   gcc  
-um                   randconfig-r026-20230705   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230705   gcc  
-x86_64       buildonly-randconfig-r002-20230705   gcc  
-x86_64       buildonly-randconfig-r003-20230705   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r011-20230705   clang
-x86_64               randconfig-r012-20230705   clang
-x86_64               randconfig-x001-20230705   clang
-x86_64               randconfig-x002-20230705   clang
-x86_64               randconfig-x003-20230705   clang
-x86_64               randconfig-x004-20230705   clang
-x86_64               randconfig-x005-20230705   clang
-x86_64               randconfig-x006-20230705   clang
-x86_64               randconfig-x011-20230705   gcc  
-x86_64               randconfig-x012-20230705   gcc  
-x86_64               randconfig-x013-20230705   gcc  
-x86_64               randconfig-x014-20230705   gcc  
-x86_64               randconfig-x015-20230705   gcc  
-x86_64               randconfig-x016-20230705   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-kvm   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                           alldefconfig   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
+Can you suggest if I should go ahead with using the existing framework of `GENPD_FLAG_ACTIVE_WAKEUP`? Or add a new flag, say `GENPD_FLAG_RPM_ONLY` for this scenario?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks
+Ajay
