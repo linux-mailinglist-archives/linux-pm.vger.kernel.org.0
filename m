@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36519749A5A
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 13:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F273C749CEC
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 15:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjGFLPE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jul 2023 07:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
+        id S229613AbjGFNC5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Jul 2023 09:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjGFLPD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 07:15:03 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301C1119;
-        Thu,  6 Jul 2023 04:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bSlL37087xTCXokKPbb0YKoOakvJNB5SSToD/acvXa4=; b=Dc9YYPLnaVOExpdsmgzVFIgnNm
-        sT4P33wS1wpkPPD1Q/7n9elVaJBKQjv3sJo1DFOGMXuRJJbx8CfrRPwN61fmI4yCiY2c9c0EYcb6N
-        j46l2hsRO0IgV2WShwYQZCOndP68HuTyiF32+I+7GR7149BhqCvIW3UKbv+ekX8Yra6tdo91Ombkn
-        RFAzHdk2REdU4LZauhTZFbcrVG/cvlSkx54ZGagtjMzbO/55EaRVC7GdaDX8ZSzQhQFMVKE5RiEhl
-        orvuHRxyUcDcelML+YDFTqviHCETuvU2RuWLilI0IT5BIA0oL80ApdGPiGdm+KH1ZZbWe0QAnSidb
-        7Ssa4dYg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qHMwf-00B0Gp-09; Thu, 06 Jul 2023 11:14:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4E6930005E;
-        Thu,  6 Jul 2023 13:14:43 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 85C6F20071AF3; Thu,  6 Jul 2023 13:14:43 +0200 (CEST)
-Date:   Thu, 6 Jul 2023 13:14:43 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com
-Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
- uclamp set from user-space
-Message-ID: <20230706111443.GH2833176@hirez.programming.kicks-ass.net>
-References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-2-lukasz.luba@arm.com>
- <20230531182629.nztie5rwhjl53v3d@airbuntu>
+        with ESMTP id S232355AbjGFNCz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 09:02:55 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADB519A0;
+        Thu,  6 Jul 2023 06:02:53 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-991f9148334so17618266b.1;
+        Thu, 06 Jul 2023 06:02:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688648572; x=1691240572;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ROZzyOO666TNx7fzn6G8xyIEzZlf0t0j8YuwaFtdhGc=;
+        b=Ph7Rszqd2EDhxR593VDge3r516fzw2g0AHgyoQ98SzoaqR4So5PLwtUTfqQpKF6kx6
+         KDGx+ibt/UMYi7xQSGoMmvAO1jvp9383+JOsV8kjCSXDkgDctcwZBSJCDuU5KZbAEIdO
+         GMqxrBVOThm6wwQVNIvcwIZ5kRYcLD/21nu1Cumu32meF+ctxN6lUwCNX1/hV01a7+mG
+         A8n1ma/T31JrP/kdpXNenqMyEnifeOHKGiwNdQQSJdru+6isD5yjj8N+5pshW0Lxecjx
+         EHzGKihPafgJrWtqyC5zB27JPXzkfyF6saGLjBIZnvR558v0flGhm2wWb7AbjNNPSAT4
+         52Mw==
+X-Gm-Message-State: ABy/qLbMHClUcG8cH18htYRK3maLJm/GulcFWLlWcuHCtqONUwywZj83
+        x4g3x8Hor+7RNfwuUvMIiUu4blVOjTICVfvL5Wc=
+X-Google-Smtp-Source: APBJJlHWKb0rwWuDcDKo8RnYWexZr9+5UJpK+NbIEawG7Ru2BqBGWOyUIZPi1pxsg2+NzV4iq/IYUHpNhfJYlw5P+K8=
+X-Received: by 2002:a17:906:51cc:b0:98e:32d:c390 with SMTP id
+ v12-20020a17090651cc00b0098e032dc390mr1249327ejk.5.1688648571414; Thu, 06 Jul
+ 2023 06:02:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230531182629.nztie5rwhjl53v3d@airbuntu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
+ <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org> <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
+ <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org> <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
+ <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org> <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
+ <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+ <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
+ <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
+In-Reply-To: <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 6 Jul 2023 15:02:38 +0200
+Message-ID: <CAJZ5v0ix1T1V5B78MA=ut56K6G=KbZb_41BHwgGmcFrV9EpKFg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
+To:     Eduardo Valentin <evalenti@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,25 +66,122 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, May 31, 2023 at 07:26:29PM +0100, Qais Yousef wrote:
-> On 05/22/23 15:57, Lukasz Luba wrote:
-> > The user-space can set uclamp value for a given task. It impacts task
-> > placement decisions made by the scheduler. This is very useful information
-> > and helps to understand the system behavior or track improvements in
-> > middleware and applications which start using uclamp mechanisms and report
-> > better performance in tests.
-> 
-> Do you mind adding a generic one instead please? And explain why we can't just
-> attach to the syscall via kprobes? I think you want to bypass the permission
-> checks, so maybe a generic tracepoint after that might be justifiable?
-> Then anyone can use it to track how userspace has changed any attributes for
-> a task, not just uclamp.
+On Sat, Jul 1, 2023 at 3:37 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+>
+> On Fri, Jun 30, 2023 at 10:16:38AM +0200, Rafael J. Wysocki wrote:
+> >
+> >
+> >
+> > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
+> > >
+> > > On Fri, Jun 23, 2023 at 07:31:43PM +0200, Rafael J. Wysocki wrote:
+> > > >
+> >
+> > [cut]
+> >
+> > > >
+> > > > Regardless of where the problem is etc, if my understanding of the
+> > > > patch is correct, it is proposing to change the behavior of a
+> > > > well-known sysfs interface in a way that is likely to be incompatible
+> > > > with at least some of its users.  This is an obvious no-go in kernel
+> > > > development and I would expect you to be well aware of it.
+> > >
+> > > yeah I get it.
+> > >
+> > > >
+> > > > IOW, if you want the cached value to be returned, a new interface (eg.
+> > > > a new sysfs attribute) is needed.
+> > >
+> > > Yeah, I am fine with either a new sysfs entry to return the cached value,
+> > > or a new sysfs entry to change the behavior of the existing /temp, as I
+> > > mentioned before, either way works for me, if changing the existing one
+> > > is too intrusive.
+> > >
+> > > >
+> > > > And I think that the use case is not really i2c sensors in general,
+> > >
+> > > I2C was just the factual example I had, but you are right, the use case
+> > > is not isolated to I2C sensor. Rather, to be clear I am not blaming I2C,
+> > > the actual issue just happen to be easier to see when I2C devices, slower
+> > > than typical MMIO devices, are being used as input for the control.
+> > >
+> > > > because at least in some cases they work just fine AFAICS, but a
+> > > > platform with a control loop running in the kernel that depends on
+> > > > sensor reads carried out at a specific, approximately constant, rate
+> > > > that can be disturbed by user space checking the sensor temperature
+> > > > via sysfs at "wrong" times.  If at the same time the user space
+> > > > program in question doesn't care about the most recent values reported
+> > > > by the sensor, it may very well use the values cached by the in-kernel
+> > > > control loop.
+> > >
+> > > That is right, the balance between supporting user space reads and
+> > > running the control timely is the actual original concern. The problem
+> > > fades out a bit when you have device reads in the us / ns time scale
+> > > and control update is in 100s of ms. But becomes more apparent on slower
+> > > devices, when reads are in ms and policy update is in the 100s ms, that is
+> > > why the I2C case was quoted. But nothing wrong with I2C, or supporting
+> > > I2C on the thermal subsystem as we do today via the hwmon interface REGISTER_TZ,
+> > > the problem is on having to support the control in kernel and a read in
+> > > userspace that can create jitter to the control.
+> > >
+> > > And as you properly stated, for this use case, the userspace does not care
+> > > about the most recent value of the device, so that is why the change
+> > > proposes to give cached values.
+> > >
+> > > On the flip side though, there may be user space based policies that
+> > > require the most recent device value. But in this case, the expectation
+> > > is to disable the in kernel policy and switch the thermal zone to
+> > > mode == disabled. And that is also why this patch will go the path
+> > > to request the most recent device value when the /temp sysfs entry
+> > > is read and the mode is disabled.
+> > >
+> > > I would suggest to have an addition sysfs entry that sets the
+> > > thermal zone into cached mode or not, let's say for the sake of the
+> > > discussion, we call it 'cached_values', with default to 'not cached'.
+> > > This way, we could support:
+> > >
+> > > a) Default, current situation, where all reads in /temp are always backed up
+> > > with an actual device .get_temp(). Nothing changes here, keeps reading
+> > > under /temp, and so long system designer is satisfied with jittering,
+> > > no need to change anything.
+> > >
+> > > b) When one has control in kernel, and frequent userspace reads on /temp
+> > > but system designer wants to protect the control in kernel to avoid jittering.
+> > > Just keep reading from /temp but set the new sysfs property 'cached_values' to 'cached'.
+> > > Then userspace will get updated values as frequent as the kernel control has
+> > > and the kernel control will not be disturbed by frequent device reads.
+> > >
+> > > c) When one has control in userspace, and wants to have the most frequent
+> > > device read. Here, one can simply disable the in kernel control by
+> > > setting the 'mode' sysfs entry to 'disabled', and making sure the new sysfs property is set
+> > > to 'not cached'. Well in fact, the way I thought this originally in this patch
+> > > was to simply always read the device when /temp is read is 'mode' is 'disabled'.
+> > >
+> > > I believe you proposed to have another sysfs entry  sysfs entry for reading cached temperature.
+> > > Something like 'temp_cached'. Thinking of it, as I mentioned before, it will work.
+> > > The only possible downside is to have two entries to read temperature.
+> > >
+> > > Strong opinions on any of the above?
+> >
+> > So what about adding a new zone attribute that can be used to specify
+> > the preferred caching time for the temperature?
+> >
+> > That is, if the time interval between two consecutive updates of the
+> > cached temperature value is less than the value of the new attribute,
+> > the cached temperature value will be returned by "temp".  Otherwise,
+> > it will cause the sensor to be read and the value obtained from it
+> > will be returned to user space and cached.
+> >
+> > If the value of the new attribute is 0, everything will work as it
+> > does now (which will also need to be the default behavior).
+>
+> Yeah, that makes sense to me. I can cook something up in the next version.
 
-Yeah, so I'm leaning towards the same, if you want to put a tracepoint
-in __sched_setscheduler(), just trace the whole attr and leave it at
-that:
+Yes, please.
 
-	trace_update_sched_attr_tp(p, attr);
-
-or somesuch.
-
+Also I think that the $subject patch was inspired by observations made
+on a specific system in practice.  It would be good to say what the
+system is and include some numbers illustrating how severe the problem
+is (that is, what is expected and what is observed and why the
+discrepancy is attributed to the effect of direct sensor accesses from
+user space via sysfs).
