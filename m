@@ -2,102 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83C774A005
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 16:55:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915A474A125
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 17:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233647AbjGFOzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jul 2023 10:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S232492AbjGFPih (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Jul 2023 11:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233622AbjGFOzO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 10:55:14 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DBCB9;
-        Thu,  6 Jul 2023 07:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fhykVYOZkzlXT4yh75rGeCVJ3cPkDr5sjhaxZXHjD+c=; b=zbagyQChudyQPE2bMPZfTnWPir
-        xEx+mIn+jmhXiSkClrK6vyYVxVucLdM5bush+XAhi1L8+RYYMWbrfI/PXNLKjNrWkvX1JuFMBGnvz
-        hobfOtgzfc30tNgXDTW5f735BiGierSS2sw4A5BsLsjO+NIDmCJaoqnJvjB6GpO63lTBhPw1Ktdzv
-        09/JTSE1nHQ4VXLt2IEwE6yDDWWPLCfOggEtJrOTiDfYzQXVq9m9NhYrAKw8aQvc7GPBw2+8hQS8A
-        80c0RawRFeosEEQrvmZs9gRIzWZlEHNQkGLdtR04aftBqsNeChaMLjpw0CwixmzDs5mdRTNLsZohR
-        2STEGtcw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1qHQNf-001vuf-2T;
-        Thu, 06 Jul 2023 14:54:51 +0000
-Date:   Thu, 6 Jul 2023 07:54:51 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jan Kara <jack@suse.cz>
-Cc:     linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC 0/32] block: Make blkdev_get_by_*() return handle
-Message-ID: <ZKbVuyn0jELh8UDM@infradead.org>
-References: <20230629165206.383-1-jack@suse.cz>
+        with ESMTP id S232151AbjGFPih (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 11:38:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF0C171D;
+        Thu,  6 Jul 2023 08:38:36 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F32F86606FD9;
+        Thu,  6 Jul 2023 16:38:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1688657914;
+        bh=YtEw57pQl1u5j7kjoL9FMCgBqCbc54t/fOoETI0WtnM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=S8tuXTraa+8ofdyz9TCNT4AAyvTRMBzIUG/O5SQBwf6Lx4/X9o/4Y7ePkfsTrkifF
+         n9kwhBPYBoYUISK1sQAefLgAxhlgo9Q33iFi2csLXL+y7FDt8JmNtu8Zs6lxb69neW
+         AT8dc9b9S9irmqcMa94PRrffHP+N91aUUezYx58SMKBOQ6YX8OK/TjctgTSzWNbk/u
+         LyM3r3d/2wPuvJpMwKtn7Ea9qD4VXRnjMdjf+erLfpgJ0jQzJBoNIk4OYbctf++yKW
+         PT2K+4Hl6mv5yuCxWGg+qjIX8AWSNY22se9+GZNbd1F1f+XNM9jOzZy8g9YyPqxuDb
+         T9wkTFN9FxuOQ==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Alexandre Bailon <abailon@baylibre.com>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Amit Kucheria <amitk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/6] thermal/drivers/mediatek/lvts_thermal: Fixes to the interrupt handling
+Date:   Thu,  6 Jul 2023 11:37:31 -0400
+Message-ID: <20230706153823.201943-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230629165206.383-1-jack@suse.cz>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 04, 2023 at 02:21:27PM +0200, Jan Kara wrote:
-> Hello,
-> 
-> this patch series implements the idea of blkdev_get_by_*() calls returning
-> bdev_handle which is then passed to blkdev_put() [1]. This makes the get
-> and put calls for bdevs more obviously matching and allows us to propagate
-> context from get to put without having to modify all the users (again!).
-> In particular I need to propagate used open flags to blkdev_put() to be able
-> count writeable opens and add support for blocking writes to mounted block
-> devices. I'll send that series separately.
-> 
-> The series is based on Linus' tree as of yesterday + two bcache fixes which are
-> in the block tree. Patches have passed some basic testing, I plan to test more
-> users once we agree this is the right way to go.
 
-Can you post a link to a git branch for this and the follow up series?
-Especially with a fairly unstable base it's kinda hard to look at the
-result otherwise.
+This series fixes interrupt handling in the LVTS thermal driver. It not
+only solves the interrupt storms currently happening, but also allows
+the temperature monitoring interrupts to trigger when the thermal trip
+temperature is reached.
+
+This series was tested together with the MT8192 support series [1] on
+the Spherion Chromebook (mt8192-asurada-spherion).
+
+These are standalone fixes and don't depend on anything else.
+
+[1] https://lore.kernel.org/all/20230530195132.2286163-1-bero@baylibre.com
+
+Thanks,
+Nícolas
+
+Changes in v3:
+- Reworded cover letter
+- Split bitmaps for immediate and filtered modes into separate arrays
+  (patch 2)
+- Removed duplicate code for setting MINIMUM_THRESHOLD (patch 5)
+
+Changes in v2:
+- Added commits 3, 5, 6 to get working interrupts when crossing thermal
+trip points
+- Updated commit 4 with interrupt flags for the offset
+
+Nícolas F. R. A. Prado (6):
+  thermal/drivers/mediatek/lvts_thermal: Handle IRQ on all controllers
+  thermal/drivers/mediatek/lvts_thermal: Honor sensors in immediate mode
+  thermal/drivers/mediatek/lvts_thermal: Use offset threshold for IRQ
+  thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
+  thermal/drivers/mediatek/lvts_thermal: Don't leave threshold zeroed
+  thermal/drivers/mediatek/lvts_thermal: Manage threshold between
+    sensors
+
+ drivers/thermal/mediatek/lvts_thermal.c | 152 ++++++++++++++++++------
+ 1 file changed, 115 insertions(+), 37 deletions(-)
+
+-- 
+2.41.0
+
