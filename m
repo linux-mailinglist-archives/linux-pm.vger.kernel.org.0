@@ -2,54 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F273C749CEC
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 15:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82611749D5A
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Jul 2023 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjGFNC5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Jul 2023 09:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S229787AbjGFNXL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 6 Jul 2023 09:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjGFNCz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 09:02:55 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADB519A0;
-        Thu,  6 Jul 2023 06:02:53 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-991f9148334so17618266b.1;
-        Thu, 06 Jul 2023 06:02:53 -0700 (PDT)
+        with ESMTP id S230290AbjGFNXK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 09:23:10 -0400
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F9B1996;
+        Thu,  6 Jul 2023 06:23:08 -0700 (PDT)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-98e1fc9d130so19686766b.0;
+        Thu, 06 Jul 2023 06:23:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688648572; x=1691240572;
+        d=1e100.net; s=20221208; t=1688649787; x=1691241787;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ROZzyOO666TNx7fzn6G8xyIEzZlf0t0j8YuwaFtdhGc=;
-        b=Ph7Rszqd2EDhxR593VDge3r516fzw2g0AHgyoQ98SzoaqR4So5PLwtUTfqQpKF6kx6
-         KDGx+ibt/UMYi7xQSGoMmvAO1jvp9383+JOsV8kjCSXDkgDctcwZBSJCDuU5KZbAEIdO
-         GMqxrBVOThm6wwQVNIvcwIZ5kRYcLD/21nu1Cumu32meF+ctxN6lUwCNX1/hV01a7+mG
-         A8n1ma/T31JrP/kdpXNenqMyEnifeOHKGiwNdQQSJdru+6isD5yjj8N+5pshW0Lxecjx
-         EHzGKihPafgJrWtqyC5zB27JPXzkfyF6saGLjBIZnvR558v0flGhm2wWb7AbjNNPSAT4
-         52Mw==
-X-Gm-Message-State: ABy/qLbMHClUcG8cH18htYRK3maLJm/GulcFWLlWcuHCtqONUwywZj83
-        x4g3x8Hor+7RNfwuUvMIiUu4blVOjTICVfvL5Wc=
-X-Google-Smtp-Source: APBJJlHWKb0rwWuDcDKo8RnYWexZr9+5UJpK+NbIEawG7Ru2BqBGWOyUIZPi1pxsg2+NzV4iq/IYUHpNhfJYlw5P+K8=
-X-Received: by 2002:a17:906:51cc:b0:98e:32d:c390 with SMTP id
- v12-20020a17090651cc00b0098e032dc390mr1249327ejk.5.1688648571414; Thu, 06 Jul
- 2023 06:02:51 -0700 (PDT)
+        bh=iLqFI+9DrYewCcFMty0BbJZOcnZJJe71lSnXp2bNNvY=;
+        b=ZQCfCGI8iw5zXZ+H8jRZVj710vfhtmwwkJyZAqSo7tXVmLjjLfrlcYHPQyUF+okPAJ
+         6auzrWOwvW5a3yFNUyyBiZbcJUZYq4arKYkoVQ0T+S1Et4lgoSXeDj7O86zhJqO4esU4
+         /RXWTcBREe3r2zxrdQZl+Kd86+m4+UD1VuiwBXdAKlH+Twp3m+J+MuSahh6RcB4uq83k
+         dtuFyVRjbAxXoWe2w0Fyqt2XFlQKK9d/6rx7jq2ngQSi8//X6sP0QVkng/QJtJpkuePS
+         pItcY+ZCaMSV4HM5ZNSSPzd/hjdiGv9efytKZJoPUvhZ28jlO0+Y31oqzoRTDKXBHJT1
+         WOkQ==
+X-Gm-Message-State: ABy/qLYgUTQELVZfUuWJBFMuR/VdUhakMjuU5mKt/ebKN4FDGUtKD4jT
+        dhAwwTfAaRSIZSMFY5fBpuj5owz8W1YqETpwezQ=
+X-Google-Smtp-Source: APBJJlEtKqHfltnYl5R35LbsgWMtafOdDPIrUKDgN05i5ODUT3HvhuTwRs/RJ/Z9ASB+b69tgXmdLQgXkGNHxQ4fBlM=
+X-Received: by 2002:a17:906:8f:b0:982:cf60:601b with SMTP id
+ 15-20020a170906008f00b00982cf60601bmr1286238ejc.0.1688649786908; Thu, 06 Jul
+ 2023 06:23:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZICybSuZELhR1Ni5@uf8f119305bce5e.ant.amazon.com>
- <b2e93db5-e6f8-a9d8-53de-af5ea750f0f0@linaro.org> <ZIITZINvtPfjuhS6@uf8f119305bce5e.ant.amazon.com>
- <7616fd9d-aa0d-2ecd-8751-894b1c9073c0@linaro.org> <ZJKFar/U75+PGCRt@uf8f119305bce5e.ant.amazon.com>
- <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org> <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
+References: <75eba2da-593f-f3bd-4eac-5155fcf5aee8@linaro.org>
+ <ZJPUchRH+3LLvuKy@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
  <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com> <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
-In-Reply-To: <ZJ+DdYpPEEjehoFP@uf8f119305bce5e.ant.amazon.com>
+ <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org> <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
+ <1373aef0-c837-8e6f-fc94-9c6bd70a5b31@linaro.org> <ZJ+GIRfhuHxbSxRf@uf8f119305bce5e.ant.amazon.com>
+ <0c766514-1063-bb57-192e-332559e22529@linaro.org> <ZKXzli5BtRF9u5de@uf8f119305bce5e.ant.amazon.com>
+In-Reply-To: <ZKXzli5BtRF9u5de@uf8f119305bce5e.ant.amazon.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 6 Jul 2023 15:02:38 +0200
-Message-ID: <CAJZ5v0ix1T1V5B78MA=ut56K6G=KbZb_41BHwgGmcFrV9EpKFg@mail.gmail.com>
+Date:   Thu, 6 Jul 2023 15:22:55 +0200
+Message-ID: <CAJZ5v0jRPh6_6ERf_d2AL+3bgTqhqi0f4oNS+91omXt9-q9cRQ@mail.gmail.com>
 Subject: Re: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
+To:     Eduardo Valentin <evalenti@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, eduval@amazon.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>
@@ -66,122 +65,157 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 1, 2023 at 3:37 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+On Thu, Jul 6, 2023 at 12:50 AM Eduardo Valentin <evalenti@kernel.org> wrote:
 >
-> On Fri, Jun 30, 2023 at 10:16:38AM +0200, Rafael J. Wysocki wrote:
+> On Sat, Jul 01, 2023 at 09:28:31AM +0200, Daniel Lezcano wrote:
 > >
 > >
 > >
-> > On Wed, Jun 28, 2023 at 11:10 PM Eduardo Valentin <evalenti@kernel.org> wrote:
+> > Eduardo,
+> >
+> > On 01/07/2023 03:49, Eduardo Valentin wrote:
+> >
+> > [ ... ]
+> >
+> > > > All that are hypothesis, that is why having a real use case would help
+> > > > to figure out the temperature limit drift at mitigation time.
 > > >
-> > > On Fri, Jun 23, 2023 at 07:31:43PM +0200, Rafael J. Wysocki wrote:
+> > > Yeah, I guess the problem here is that you are assuming I2C is not a real
+> > > use case, not sure why. But it is and very common design in fact.
+> >
+> > If it is so common you should be able to reproduce the issue and give
+> > numbers. At this point, what I read is "that may happen because I2C is
+> > slow and we may monitor it at an insane rate, so let's cache the value".
+> >
+> > > > Assuming it is really needed, I'm not sure that should be exported via
+> > > > sysfs. It is a driver issue and it may register the thermal zone with a
+> > > > parameter telling the userspace rate limit.
 > > > >
+> > > > On the other side, hwmon and thermal are connected. hwmon drivers
+> > > > register a thermal zone and thermal drivers add themselves in the hwmon
+> > > > sysfs directory. The temperature cache is handled in the driver level in
+> > > > the hwmon subsystems and we want to handle the temperature cache at the
+> > > > thermal sysfs level. How will we cope with this inconsistency?
+> > >
+> > > Yeah, I do not see this, again, as where to handle cache type of design problem only.
+> > > This is really a protective / defensive code on the thermal core to avoid
+> > > userspace interfering on a kernel based control.
+> > >
+> > >
+> > > I agree that drivers may be free to go and defend themselves against
+> > > too frequent userspace requests, like they do, as you already shared
+> > > a link in another email. But saying that it is up to the driver to do this
+> > > is basically saying that the thermal subsystem do not care about their
+> > > own threads being delayed by a too frequent reads on a sysfs entry
+> > > created by the thermal subsystem, just because it is drivers responsability
+> > > to cache. To that is a missing defensive code.
 > >
-> > [cut]
-> >
-> > > >
-> > > > Regardless of where the problem is etc, if my understanding of the
-> > > > patch is correct, it is proposing to change the behavior of a
-> > > > well-known sysfs interface in a way that is likely to be incompatible
-> > > > with at least some of its users.  This is an obvious no-go in kernel
-> > > > development and I would expect you to be well aware of it.
-> > >
-> > > yeah I get it.
-> > >
-> > > >
-> > > > IOW, if you want the cached value to be returned, a new interface (eg.
-> > > > a new sysfs attribute) is needed.
-> > >
-> > > Yeah, I am fine with either a new sysfs entry to return the cached value,
-> > > or a new sysfs entry to change the behavior of the existing /temp, as I
-> > > mentioned before, either way works for me, if changing the existing one
-> > > is too intrusive.
-> > >
-> > > >
-> > > > And I think that the use case is not really i2c sensors in general,
-> > >
-> > > I2C was just the factual example I had, but you are right, the use case
-> > > is not isolated to I2C sensor. Rather, to be clear I am not blaming I2C,
-> > > the actual issue just happen to be easier to see when I2C devices, slower
-> > > than typical MMIO devices, are being used as input for the control.
-> > >
-> > > > because at least in some cases they work just fine AFAICS, but a
-> > > > platform with a control loop running in the kernel that depends on
-> > > > sensor reads carried out at a specific, approximately constant, rate
-> > > > that can be disturbed by user space checking the sensor temperature
-> > > > via sysfs at "wrong" times.  If at the same time the user space
-> > > > program in question doesn't care about the most recent values reported
-> > > > by the sensor, it may very well use the values cached by the in-kernel
-> > > > control loop.
-> > >
-> > > That is right, the balance between supporting user space reads and
-> > > running the control timely is the actual original concern. The problem
-> > > fades out a bit when you have device reads in the us / ns time scale
-> > > and control update is in 100s of ms. But becomes more apparent on slower
-> > > devices, when reads are in ms and policy update is in the 100s ms, that is
-> > > why the I2C case was quoted. But nothing wrong with I2C, or supporting
-> > > I2C on the thermal subsystem as we do today via the hwmon interface REGISTER_TZ,
-> > > the problem is on having to support the control in kernel and a read in
-> > > userspace that can create jitter to the control.
-> > >
-> > > And as you properly stated, for this use case, the userspace does not care
-> > > about the most recent value of the device, so that is why the change
-> > > proposes to give cached values.
-> > >
-> > > On the flip side though, there may be user space based policies that
-> > > require the most recent device value. But in this case, the expectation
-> > > is to disable the in kernel policy and switch the thermal zone to
-> > > mode == disabled. And that is also why this patch will go the path
-> > > to request the most recent device value when the /temp sysfs entry
-> > > is read and the mode is disabled.
-> > >
-> > > I would suggest to have an addition sysfs entry that sets the
-> > > thermal zone into cached mode or not, let's say for the sake of the
-> > > discussion, we call it 'cached_values', with default to 'not cached'.
-> > > This way, we could support:
-> > >
-> > > a) Default, current situation, where all reads in /temp are always backed up
-> > > with an actual device .get_temp(). Nothing changes here, keeps reading
-> > > under /temp, and so long system designer is satisfied with jittering,
-> > > no need to change anything.
-> > >
-> > > b) When one has control in kernel, and frequent userspace reads on /temp
-> > > but system designer wants to protect the control in kernel to avoid jittering.
-> > > Just keep reading from /temp but set the new sysfs property 'cached_values' to 'cached'.
-> > > Then userspace will get updated values as frequent as the kernel control has
-> > > and the kernel control will not be disturbed by frequent device reads.
-> > >
-> > > c) When one has control in userspace, and wants to have the most frequent
-> > > device read. Here, one can simply disable the in kernel control by
-> > > setting the 'mode' sysfs entry to 'disabled', and making sure the new sysfs property is set
-> > > to 'not cached'. Well in fact, the way I thought this originally in this patch
-> > > was to simply always read the device when /temp is read is 'mode' is 'disabled'.
-> > >
-> > > I believe you proposed to have another sysfs entry  sysfs entry for reading cached temperature.
-> > > Something like 'temp_cached'. Thinking of it, as I mentioned before, it will work.
-> > > The only possible downside is to have two entries to read temperature.
-> > >
-> > > Strong opinions on any of the above?
-> >
-> > So what about adding a new zone attribute that can be used to specify
-> > the preferred caching time for the temperature?
-> >
-> > That is, if the time interval between two consecutive updates of the
-> > cached temperature value is less than the value of the new attribute,
-> > the cached temperature value will be returned by "temp".  Otherwise,
-> > it will cause the sensor to be read and the value obtained from it
-> > will be returned to user space and cached.
-> >
-> > If the value of the new attribute is 0, everything will work as it
-> > does now (which will also need to be the default behavior).
+> > No, the core code has not to be defensive against bad hardware design.
 >
-> Yeah, that makes sense to me. I can cook something up in the next version.
+> I do not understand why you are calling this a bad hardware design.
+>
+> >
+> > If multiple processes are reading in an infinite loop the temperature,
+> > they will constantly take the lock, and as the monitoring thread is a
+> > CFS task, this one will be considered as the readers and be delayed,
+> > with probably a mitigation temperature drift. Here we have a missing
+> > defensive / optimized code against a DoS but it is unrelated to the
+> > hardware and the fix is not caching the value.
+>
+> I am not even going into the CFS discussion, yet. But if we go that direction,
+> here we are having a case of a userspace process contending into
+> a in kernel process, regardless of the userspace process priority.
+>
+> But again that is not the main point of discussion for this change.
+>
+> >
+> > > > As a side note, slow drivers are usually going under drivers/hwmon.
+> > >
+> > > Have you seen this code?
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/lm75.c#n517
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/hwmon.c#n850
+> >
+> > Yes, and ?
+>
+>
+> I mean , I am sure can git grep for all occurences if that is what are looking for.
+> >
+> > That is what I said, the hwmon and the thermal zone are connected.
+> >
+> > > I also do not understand when you say slow drivers are usually going under
+> > > drivers/hwmon, does it really matter? One can design a thermal zone
+> > > that is connected to a hwmon device as input. Why would that be illogical?
+> >
+> > I'm not saying it is illogical. I'm pointing the slow drivers are under
+> > hwmon subsystems and usually don't aim in-kernel mitigation. The
+> > get_temp ops is going through hwmon and the drivers may cache the
+> > values. So *if* there is an in-kernel mitigation, the value will be
+> > already cached usually.
+>
+> Oh I see. yes, I totally give you that the most common case is to have
+> the in kernel policy written with drivers under thermal, but neglecting
+> the existence of drivers under /hwmon that connects into the thermal subsystem
+> is not fair, is it? They are there, they connect to thermal subsystem
+> and one can certainly have an in kernel control with hwmon drivers as input,
+> I am not understanding why protecting against those cases make the change
+> invalid or overcomplicates the subsystem design.
+>
+> >
+> > I do believe I raised some valid concerns regarding the approach. Could
+> > please take them into account instead of eluding them
+> >
+> > 1. A real use case with temperature limit drift (easy to reproduce
+> > because it is very common)
+> >
+> > 2. How about the consistency between hwmon and thermal? (one driver but
+> > two ways to access the temperature - one may cache and the other not)
+>
+> I am not eluding anything. But this conversation seams to not move forward
+> because of the assumption that building in kernel control based on
+> hwmon drivers is either wrong or uncommon.  I fail to see that as the
+> main argument to be discussed mainly because it is a problem that exists.
+> Driver count is also not a meaningful metric to conclude if the problem
+> is common or not. How many motherboard can you think that are out there
+> that may have an lm75 to represent an actual temperature point in the
+> PCB? Or an lm75 that may come from a PCI board? That is what I meant
+> by common design.
+>
+> Seams to me that you are trying to make a point that this problem
+> is not worth having a fix for, even if you already recognized the
+> basic point of it, because (a) this is not happening MMIO based
+> drivers which is the (today) common case for drivers under /thermal
+> and (b) hwmon drivers are supposed to feed in only control in userspace.
+>
+> for both argument that seams to restrict the thermal subsystem
+> to only MMIO base devices drivers to feed into CPU temperature control,
+> which is a limited application of it in real world scenario, for
+> any real life scenario really, mobile. BMC, or any embedded case.
+> When in fact, the abstraction and desing on the thermal subsystem today
+> is pure control of temperature and can be used in any application
+> that does it. Limiting the application of the thermal subsystem to
+> only MMIO based devices is, well, limiting :-).
+>
+> >
+> > Another question regarding the I2C example, if another subsystem is
+> > using the I2C, won't it take the bus lock and create the contention
+> > also? I mean it is possible to create a mitigation drift by reading
+> > constantly another sensor value (eg. voltage or whatever) ?
+>
+> Yes, if a flood of events in the bus happen, then the drift will also happen,
+> specially if reads are aligned with the in kernel monitoring thread
+> update / call to .get_temp().
 
-Yes, please.
+This is all in general terms, though.
 
-Also I think that the $subject patch was inspired by observations made
-on a specific system in practice.  It would be good to say what the
-system is and include some numbers illustrating how severe the problem
-is (that is, what is expected and what is observed and why the
-discrepancy is attributed to the effect of direct sensor accesses from
-user space via sysfs).
+I think that Daniel has been asking for a specific example, because if
+a new sysfs i/f is added with a certain issue in mind and then it
+turns out to be never used by anyone, because the issue is theoretical
+or not severe enough for anyone to care, it is a pure maintenance
+burden.  It would be good to have at least some assurance that this
+will not be the case.
+
+Daniel, even if you think that the hardware in question is
+misdesigned, Linux has a long record of supporting misdesigned
+hardware, so this wouldn't be the first time ever.  However, I do
+agree that it would be good to have a specific example supporting this
+case.
