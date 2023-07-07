@@ -2,77 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE24774B33A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84EB74B348
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjGGOpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S229729AbjGGOuh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:50:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjGGOpO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:45:14 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5F01FD7;
-        Fri,  7 Jul 2023 07:45:12 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so21920605e9.0;
-        Fri, 07 Jul 2023 07:45:12 -0700 (PDT)
+        with ESMTP id S229586AbjGGOuh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:50:37 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207D91FD7
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:50:36 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-c5e76dfcc36so2192256276.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:50:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1688741111; x=1691333111;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=swjcoqb53SUMB+DeeB9DvOSbSUZxcLJDlvlKSPHfeEA=;
-        b=EcoaLuTvcXuXAayOAavdbHzX2pVNH/G03FXOIGUydIXmJQFbXUuROQO3utdu1UBlkJ
-         i5T79FLwHEn+FbOtR6rojeXwzJHcN3/CK68Bvad105Kftqm7T8WDy8sNuGjTd6hfayxv
-         uDJpcivLdOgHm8ZSTeXafh5kjH1vdz2QyHtzSHJLV/XWYvaOhiPNnuQ5tzKTLvDjncvS
-         P5y3XVHqP3pY7yN0RNh/vAFc8a4l591jAPxYmEal9MXxlDk2fBMq4NgR91GWWwHGck3P
-         eI4yxP0AJ/MzpKAkgF7Zh61e2cd2+bok+S1BGzDVt9sha/nd0oeYoFxqrjfurOOtpj/L
-         wcnQ==
+        d=linaro.org; s=google; t=1688741435; x=1691333435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Sp/uA5IfbAuF+hGROjsdKR3qA3EtgZfyUKAVT4Nkw4=;
+        b=x5sw/ii2BLnKBGR/rtRCUO7YPRyP1pWvW6pdAsXrs1hw0YV3KSSFhTJ4aFSThjiNe2
+         iQL9/ZPQDO44hEJR8irC8l37EPMHGkcRFBFfo6c32mI2dChyn2UcIws9sBCKErzJ48kF
+         3q23hpJgvwkcCSMOVkJe/p2t/P6DVrun4ZJ80xlDf2m8P4qASsieCzI5M62Dw5ZlHRRU
+         mJQltxSdKzoA9hb8u6MNchKauws/KQ7aI4pjWzPiaiHV2SjHmiAxwtDUyi8zv59QeEND
+         UqcS2Md4Su+qtIOuYJdSifSCn08WTFlgeS+DKIoKODGKvc/RDRvacBTdPBajx6bIb+S8
+         OOpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688741111; x=1691333111;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=swjcoqb53SUMB+DeeB9DvOSbSUZxcLJDlvlKSPHfeEA=;
-        b=ZdK8Lhr3310rRREACJW0n9VFjuMNFySJ4GW8x3tNpvW/nDtXM4uGn2Gbc7R+XSCMPc
-         fuiGSfbP461xgjhDZVgNV0zfdODmf9MV5t9F9T1soQUyGgc0b94as5twKb2aeizNuoch
-         slLHvmSGFT08wZhQUAagk1JB/21s7fHZkRmezLO9AmlE/egbCulrYgoUfRpKVDiJYBdo
-         6wmzccvr3q6QctGyYf4kAcHtJsuj/+wSZsOCRn/WMA1KuAYv7blXIlY3kDe3dS2QNxCv
-         dyPv2lAOcxGrNF8e/nQfxT+ZwM8n8aeY7bmRAfIETFK3v2iH+VbU1WXiwZ7AhUmaQPXq
-         hw9Q==
-X-Gm-Message-State: ABy/qLZw8fqoMJoUL/bzCcqNxV0x14p5rPXRdU3v1RECogeeTy0J8Ogm
-        2lOwG1HyRV2f6y8BnauERCk=
-X-Google-Smtp-Source: APBJJlETLQxFyjxg4eixOg08xV5sR1+LQzSdY3LDqoWIxyh7KGoxRT87Xs2dLzQbJvZmgQ+CxxmFAg==
-X-Received: by 2002:a1c:ed14:0:b0:3fb:4149:b816 with SMTP id l20-20020a1ced14000000b003fb4149b816mr4242668wmh.8.1688741111164;
-        Fri, 07 Jul 2023 07:45:11 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.161.188])
-        by smtp.gmail.com with ESMTPSA id l15-20020a1c790f000000b003fc00789d5bsm1434084wme.1.2023.07.07.07.45.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 07:45:09 -0700 (PDT)
-Message-ID: <0364cab8-25b0-5850-9791-4b0451d2adbe@gmail.com>
-Date:   Fri, 7 Jul 2023 16:45:08 +0200
+        d=1e100.net; s=20221208; t=1688741435; x=1691333435;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1Sp/uA5IfbAuF+hGROjsdKR3qA3EtgZfyUKAVT4Nkw4=;
+        b=DjHd9VQO2ic68QB0TyH0I5UJ+yt566d/kILYP3RX7b6QOnKHAjLFnPsyxhGNAdnuui
+         rjtiY4UooAOt/pkq5ggxXL/HjNTDkGQm7HPUheV1tPZXZaeEHtTF/H3h44l+sWUzVxb8
+         uHH2DETi2pqFBotvarsldqY5jhQtVTQpa/YwASkY34WWuL7o/50R4T4E2SvWGFaw7IBv
+         TbjIuX9/KyYCfIPjXqIWue9uSmKQ63dLHrqa1gctUlEwx++lQkqWA8h/g4E8Axk/r/DD
+         rR9e0QVgZBPHQXXulQRiVeuSKdZrF9f2MZwHXxPxxa+K1hDfmqcdlX6tJBKSCzazrosL
+         eE0w==
+X-Gm-Message-State: ABy/qLbqNS9hsRVSuN23eBVKhb1LaGcGt7PUVLquaKs2qTA0OX8E4vE6
+        Wh9cOi6zYNJDbZ7oZo5dyBmYzZqZfcXsSUEYWfBBDg==
+X-Google-Smtp-Source: APBJJlEKONstJ7DrgNwd6Gmi5G6P6HU0HS1ioa7jdA62/7EJShy5yUhhnid/2w55qOEy+S6s+R3/hNvYCE5JEK/7QEE=
+X-Received: by 2002:a05:6902:289:b0:bcf:b219:7919 with SMTP id
+ v9-20020a056902028900b00bcfb2197919mr4403052ybh.44.1688741435310; Fri, 07 Jul
+ 2023 07:50:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 07/18] soc: mediatek: Move power-domain drivers to the
- genpd dir
-Content-Language: en-US, ca-ES, es-ES
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-8-ulf.hansson@linaro.org>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <20230707140434.723349-8-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <ZKYvpgs6p3S7nglh@google.com>
+In-Reply-To: <ZKYvpgs6p3S7nglh@google.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Jul 2023 16:49:59 +0200
+Message-ID: <CAPDyKFpWybtCWt9pVcFMKcV0zBrjCzhhmAzYN-JPw2ZS6mUpwQ@mail.gmail.com>
+Subject: Re: Prevent PM suspend from powering off the domain for non-wakeup
+ in-use devices
+To:     Ajay Agarwal <ajayagarwal@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        manugautam@google.com, mshavit@google.com, quangh@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,123 +72,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
++ Manivannan
 
+On Thu, 6 Jul 2023 at 05:06, Ajay Agarwal <ajayagarwal@google.com> wrote:
+>
+> Hello Linux PM experts
+> I have a question on PM domain. As per the current PM domain driver desig=
+n, the genpd_finish_suspend turns OFF a power domain if it is not already t=
+urned OFF by runtime suspend.
+>
+> I have a usecase of a device having to stay ON during system suspend. Thi=
+s device will be used by a co-processor which is running its own OS. Thereb=
+y, it requires the power domain to stay turned ON, so genpd_finish_suspend =
+should not be powering down the domain.
+>
+> I studied the code and found the flag `GENPD_FLAG_ACTIVE_WAKEUP` which ca=
+n be set for the power domain. And device_set_wakeup_path can be invoked in=
+ the suspend() callback of the device. Together, these will prevent the gen=
+pd_finish_suspend from turning OFF the domain. See: https://git.kernel.org/=
+pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.=
+c#n1260
 
-On 07/07/2023 16:04, Ulf Hansson wrote:
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Cc: <linux-mediatek@lists.infradead.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+To solve the problem, this is exactly what I would have started to explore =
+too.
 
-We are missing a complete commit message here, is that intentional?
-It would also need a patch against the maintainers file.
+>
+> But this flag is really intended to be used for devices which are capable=
+ of waking up the system from PM suspend. But my usecase does not involve a=
+ scenario of the device potentially waking up the system, it just needs to =
+stay powered for the co-processor to be able to use it.
 
-Apart from that patch looks good.
+Sure, I understand your point. Maybe it's as simple as renaming the
+device_set_wakeup_path() and corresponding flag to something more
+generic.
 
-Regards,
-Matthias
+Solving the problem that you are looking for, would probably be done
+along the lines of device_set_wakeup_path() and
+GENPD_FLAG_ACTIVE_WAKEUP anyway. And we really don't want to two
+solutions for one similar problem, if you get my point.
 
-> ---
->   drivers/genpd/Makefile                              | 1 +
->   drivers/genpd/mediatek/Makefile                     | 3 +++
->   drivers/{soc => genpd}/mediatek/mt6795-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8167-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8173-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8183-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8186-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8188-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8192-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mt8195-pm-domains.h | 0
->   drivers/{soc => genpd}/mediatek/mtk-pm-domains.c    | 0
->   drivers/{soc => genpd}/mediatek/mtk-pm-domains.h    | 0
->   drivers/{soc => genpd}/mediatek/mtk-scpsys.c        | 0
->   drivers/soc/mediatek/Makefile                       | 2 --
->   14 files changed, 4 insertions(+), 2 deletions(-)
->   create mode 100644 drivers/genpd/mediatek/Makefile
->   rename drivers/{soc => genpd}/mediatek/mt6795-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8167-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8173-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8183-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8186-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8188-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8192-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mt8195-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.c (100%)
->   rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.h (100%)
->   rename drivers/{soc => genpd}/mediatek/mtk-scpsys.c (100%)
-> 
-> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> index 6b9e9fe907f3..1a0a56925756 100644
-> --- a/drivers/genpd/Makefile
-> +++ b/drivers/genpd/Makefile
-> @@ -3,3 +3,4 @@ obj-y					+= actions/
->   obj-y					+= amlogic/
->   obj-y					+= apple/
->   obj-y					+= bcm/
-> +obj-y					+= mediatek/
-> diff --git a/drivers/genpd/mediatek/Makefile b/drivers/genpd/mediatek/Makefile
-> new file mode 100644
-> index 000000000000..8cde09e654b3
-> --- /dev/null
-> +++ b/drivers/genpd/mediatek/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_MTK_SCPSYS)		+= mtk-scpsys.o
-> +obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) 	+= mtk-pm-domains.o
-> diff --git a/drivers/soc/mediatek/mt6795-pm-domains.h b/drivers/genpd/mediatek/mt6795-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt6795-pm-domains.h
-> rename to drivers/genpd/mediatek/mt6795-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8167-pm-domains.h b/drivers/genpd/mediatek/mt8167-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8167-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8167-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8173-pm-domains.h b/drivers/genpd/mediatek/mt8173-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8173-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8173-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8183-pm-domains.h b/drivers/genpd/mediatek/mt8183-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8183-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8183-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8186-pm-domains.h b/drivers/genpd/mediatek/mt8186-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8186-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8186-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8188-pm-domains.h b/drivers/genpd/mediatek/mt8188-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8188-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8188-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8192-pm-domains.h b/drivers/genpd/mediatek/mt8192-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8192-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8192-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mt8195-pm-domains.h b/drivers/genpd/mediatek/mt8195-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mt8195-pm-domains.h
-> rename to drivers/genpd/mediatek/mt8195-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/genpd/mediatek/mtk-pm-domains.c
-> similarity index 100%
-> rename from drivers/soc/mediatek/mtk-pm-domains.c
-> rename to drivers/genpd/mediatek/mtk-pm-domains.c
-> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/genpd/mediatek/mtk-pm-domains.h
-> similarity index 100%
-> rename from drivers/soc/mediatek/mtk-pm-domains.h
-> rename to drivers/genpd/mediatek/mtk-pm-domains.h
-> diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/genpd/mediatek/mtk-scpsys.c
-> similarity index 100%
-> rename from drivers/soc/mediatek/mtk-scpsys.c
-> rename to drivers/genpd/mediatek/mtk-scpsys.c
-> diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
-> index 8c0ddacbcde8..9d3ce7878c5c 100644
-> --- a/drivers/soc/mediatek/Makefile
-> +++ b/drivers/soc/mediatek/Makefile
-> @@ -4,8 +4,6 @@ obj-$(CONFIG_MTK_DEVAPC) += mtk-devapc.o
->   obj-$(CONFIG_MTK_INFRACFG) += mtk-infracfg.o
->   obj-$(CONFIG_MTK_PMIC_WRAP) += mtk-pmic-wrap.o
->   obj-$(CONFIG_MTK_REGULATOR_COUPLER) += mtk-regulator-coupler.o
-> -obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
-> -obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
->   obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
->   obj-$(CONFIG_MTK_MMSYS) += mtk-mutex.o
->   obj-$(CONFIG_MTK_SVS) += mtk-svs.o
+>
+> Can you suggest if I should go ahead with using the existing framework of=
+ `GENPD_FLAG_ACTIVE_WAKEUP`? Or add a new flag, say `GENPD_FLAG_RPM_ONLY` f=
+or this scenario?
+
+Let's see what Rafael thinks, but renaming is an option (or add a
+wrapper function that calls device_set_wakeup_path()) that would work
+for me.
+
+>
+> Thanks
+> Ajay
+
+Note that, I have looped in Manivannan, who is working on a very
+similar problem. The problem can be summarized like this:
+
+Depending if there is an nvme storage device added to the pcie
+interface, the nvmw storage must remain powered on during system
+suspend. For that reason, we also need the part from the PM core where
+propagation of the flag is done from child to parents.
+
+It's been a couple of weeks ago since I chatted with Manivannan about
+this - and I suggested the approach you have been exploring too. Let's
+see if Manivannan has some more updates to share from his side around
+this.
+
+Kind regards
+Uffe
