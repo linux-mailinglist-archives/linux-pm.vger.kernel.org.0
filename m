@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D0674B2A1
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5013474B2A3
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:06:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbjGGOGB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S233035AbjGGOGD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjGGOFi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:38 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791822738
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:05:11 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b5c231c23aso31015271fa.0
+        with ESMTP id S232947AbjGGOFj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:39 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A629273D
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:05:12 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fa48b5dc2eso3095102e87.1
         for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688738709; x=1691330709;
+        d=linaro.org; s=google; t=1688738710; x=1691330710;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=I8/R65mfXAHzbxX/Yt/oiagP1RewF0H/jSZoqHRKyvw=;
-        b=tunTCtuJSMkrNfKB7zXRqYFc3dBg13wFN2619YM1UDWrcOwMNMMdemELKhSYM1ulK0
-         BLiUHkr/mQebq+CTZqrW33MHDNPalSMa2wmE+IxEX1wIzViVba2hqUA35D0qDtAboKk/
-         1tCUcEnOgxhjruhHhF284mKTZzLUh7FNzFH9CFLl5SgVWJuEWn6DpaUPVkq2PIkOkIUM
-         NUEa5FG7BYycAF0tolipgMQEph6v5kUBmy47MXRV3KkIBs/vfJd5XJiz2NKj1rEWwNe4
-         TUcaskBDiN0U4vhPwa8kZ4Ac0gNdgFsZO+kLgJlmqV6QEIp/+0PLibvM42dnJwqtdsU8
-         GI/Q==
+        bh=NDGJ4Rdnalj6TqDKeki2lXBkMtKfcEDmiGvYuLXTlyU=;
+        b=zJEtOhTvr8IllxLtfLNdI3yUT/E73+PntZtuCWGUUchHKZgSYD+qEtQXCLvwzveqMW
+         ZyAOjZTv8zOcIQUh5z4XAYMD6Yym0d0VmIqGe8KkeF7X4ldg8qbSBKqY4Elp4FcAjBgG
+         4s+W28dTDXf7uNACg9wDlnX86NTuRwM9w2KFwAXEVKo1PROcScXrRGxFEkVuia+qAdyi
+         mmMqcvMSZfdyPxB7tir7/NRQGpAyBzcvw8E0RqkLloFAcju6EJ8uwHFUzPb8yAGNpz++
+         1dpz89dt0adj2uRATINhATo6vgof3bo6Eu0KWrjlMZl3DOG++mmT65hRZrjfSsRzR/xL
+         lgUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688738709; x=1691330709;
+        d=1e100.net; s=20221208; t=1688738710; x=1691330710;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I8/R65mfXAHzbxX/Yt/oiagP1RewF0H/jSZoqHRKyvw=;
-        b=VYnKNESI6MxCXWf8VCe1JfuE5JTETiN/rXWSimh4rzYb/Rx4ffqgtmEUVQGe+5Ru3E
-         2iwEStalfO7HYaMNulWw4Wfr1iR4NNKPhd0qzbAeYaHkwQtPVzQFNUoW+Tk2BT2OwNOl
-         i94NJ/v2OdvM+XmYVrQ4kAvgtRoKN5o5JEmMXZDQIzDXMUdc7Y1ckQtJZ0jBNnHYpR06
-         0SdAX/eMw1PsTRKnvd7Jl1GXDZs0JohvVKIS2kskcpZb6ewyCHSAAW/jQG5CKuOnRKoO
-         cX07WisGH/cz6BDKXutR6Q/cUVcp+EdQhTS9+K5mLsP78SQaTMfL++uCia9YZc5KudyL
-         Ce8Q==
-X-Gm-Message-State: ABy/qLbpYnE7WEsug3IT/EaE+xo4WjouIPSxmpPBAvSavApV4YmBp5zx
-        Ue/WdW29se6aBfU+0RZKE+R6HQ==
-X-Google-Smtp-Source: APBJJlHpl8BDqdizNvRgFYh8xGJqPB5RsiI6fTOozpyN+ToBWQzqKLiwu+M08DljZ9h1vz5AHVd/pw==
-X-Received: by 2002:a2e:3e1a:0:b0:2b6:df15:f6ad with SMTP id l26-20020a2e3e1a000000b002b6df15f6admr4230300lja.18.1688738709123;
-        Fri, 07 Jul 2023 07:05:09 -0700 (PDT)
+        bh=NDGJ4Rdnalj6TqDKeki2lXBkMtKfcEDmiGvYuLXTlyU=;
+        b=PL0Q+FRwktepRaRwT9Gazs5u6Vk21dfpD+nNzvomzB9KlLrcH8eL2KoiJZeGZ0X+Dq
+         nBW9UU5czC3cLK6siu7TpCB/QoU6M5n17KEGnjxmnAUFPY25ERbf+/Jc7WBtOSwzqyl6
+         lY6zflqtlArYQFcunuB0U7/nVmIsZkuXiiYqHZttMcVyoa6NNNFr6jJWn05wZM7vGvc3
+         aPmPb5YETIUCFZL17+xSupCM90pfq9YUR0GQDU6ixWeRKPL2RLbh3cD1V+VRUFJDllHb
+         isH6gdHw7/ZNdEgxT+qNsQz6nSMHEjM5vgN3TzP7xd+P5Uenzc9kXh5+X8F/mr6GBvai
+         lOiA==
+X-Gm-Message-State: ABy/qLa1B4MxFuCCkDIy97qe+FDXNsJ/MQzEVdBvwlRyIGO+qEku4mfb
+        rNtqHeyTK/78O/Pz6FVrmrlCIg==
+X-Google-Smtp-Source: APBJJlEzYGXiYkpimLJdVvfFtEAfokJSPAH7vL71Isu/R6lRimZa+x/dK5wbVNgi11PgJpFopZ7Rgw==
+X-Received: by 2002:a2e:800a:0:b0:2b6:a76b:c39e with SMTP id j10-20020a2e800a000000b002b6a76bc39emr3365228ljg.35.1688738710333;
+        Fri, 07 Jul 2023 07:05:10 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.05.08
+        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.05.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:05:08 -0700 (PDT)
+        Fri, 07 Jul 2023 07:05:09 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 17/18] ARM: ux500: Convert power-domain code into a regular platform driver
-Date:   Fri,  7 Jul 2023 16:04:33 +0200
-Message-Id: <20230707140434.723349-18-ulf.hansson@linaro.org>
+Subject: [PATCH 18/18] ARM: ux500: Move power-domain driver to the genpd dir
+Date:   Fri,  7 Jul 2023 16:04:34 +0200
+Message-Id: <20230707140434.723349-19-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230707140434.723349-1-ulf.hansson@linaro.org>
 References: <20230707140434.723349-1-ulf.hansson@linaro.org>
@@ -65,133 +65,70 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To make the code more standalone and moveable, let's convert it into a
-platform driver.
-
 Cc: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- arch/arm/mach-ux500/cpu-db8500.c |  5 -----
- arch/arm/mach-ux500/pm_domains.c | 25 ++++++++++++++++++++-----
- arch/arm/mach-ux500/pm_domains.h | 17 -----------------
- 3 files changed, 20 insertions(+), 27 deletions(-)
- delete mode 100644 arch/arm/mach-ux500/pm_domains.h
+ MAINTAINERS                                                     | 1 +
+ arch/arm/mach-ux500/Makefile                                    | 1 -
+ drivers/genpd/Makefile                                          | 1 +
+ drivers/genpd/st/Makefile                                       | 2 ++
+ .../pm_domains.c => drivers/genpd/st/ste-ux500-pm-domain.c      | 0
+ 5 files changed, 4 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/genpd/st/Makefile
+ rename arch/arm/mach-ux500/pm_domains.c => drivers/genpd/st/ste-ux500-pm-domain.c (100%)
 
-diff --git a/arch/arm/mach-ux500/cpu-db8500.c b/arch/arm/mach-ux500/cpu-db8500.c
-index 7cc0dd8ed991..b1a70f203372 100644
---- a/arch/arm/mach-ux500/cpu-db8500.c
-+++ b/arch/arm/mach-ux500/cpu-db8500.c
-@@ -26,8 +26,6 @@
- #include <asm/mach/map.h>
- #include <asm/mach/arch.h>
- 
--#include "pm_domains.h"
--
- static int __init ux500_l2x0_unlock(void)
- {
- 	int i;
-@@ -115,9 +113,6 @@ static const struct of_device_id u8500_local_bus_nodes[] = {
- 
- static void __init u8500_init_machine(void)
- {
--	/* Initialize ux500 power domains */
--	ux500_pm_domains_init();
--
- 	of_platform_populate(NULL, u8500_local_bus_nodes,
- 			     NULL, NULL);
- }
-diff --git a/arch/arm/mach-ux500/pm_domains.c b/arch/arm/mach-ux500/pm_domains.c
-index 427b9ac4af6c..3d4f111ed156 100644
---- a/arch/arm/mach-ux500/pm_domains.c
-+++ b/arch/arm/mach-ux500/pm_domains.c
-@@ -6,6 +6,9 @@
-  *
-  * Implements PM domains using the generic PM domain for ux500.
-  */
-+#include <linux/device.h>
-+#include <linux/kernel.h>
-+#include <linux/platform_device.h>
- #include <linux/printk.h>
- #include <linux/slab.h>
- #include <linux/err.h>
-@@ -13,7 +16,6 @@
- #include <linux/pm_domain.h>
- 
- #include <dt-bindings/arm/ux500_pm_domains.h>
--#include "pm_domains.h"
- 
- static int pd_power_off(struct generic_pm_domain *domain)
- {
-@@ -49,18 +51,17 @@ static struct generic_pm_domain *ux500_pm_domains[NR_DOMAINS] = {
- 	[DOMAIN_VAPE] = &ux500_pm_domain_vape,
- };
- 
--static const struct of_device_id ux500_pm_domain_matches[] __initconst = {
-+static const struct of_device_id ux500_pm_domain_matches[] = {
- 	{ .compatible = "stericsson,ux500-pm-domains", },
- 	{ },
- };
- 
--int __init ux500_pm_domains_init(void)
-+static int ux500_pm_domains_probe(struct platform_device *pdev)
- {
--	struct device_node *np;
-+	struct device_node *np = pdev->dev.of_node;
- 	struct genpd_onecell_data *genpd_data;
- 	int i;
- 
--	np = of_find_matching_node(NULL, ux500_pm_domain_matches);
- 	if (!np)
- 		return -ENODEV;
- 
-@@ -77,3 +78,17 @@ int __init ux500_pm_domains_init(void)
- 	of_genpd_add_provider_onecell(np, genpd_data);
- 	return 0;
- }
-+
-+static struct platform_driver ux500_pm_domains_driver = {
-+	.probe  = ux500_pm_domains_probe,
-+	.driver = {
-+		.name = "ux500_pm_domains",
-+		.of_match_table = ux500_pm_domain_matches,
-+	},
-+};
-+
-+static int __init ux500_pm_domains_init(void)
-+{
-+	return platform_driver_register(&ux500_pm_domains_driver);
-+}
-+arch_initcall(ux500_pm_domains_init);
-diff --git a/arch/arm/mach-ux500/pm_domains.h b/arch/arm/mach-ux500/pm_domains.h
-deleted file mode 100644
-index 33c55f2c6b3c..000000000000
---- a/arch/arm/mach-ux500/pm_domains.h
-+++ /dev/null
-@@ -1,17 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Copyright (C) 2014 Linaro Ltd.
-- *
-- * Author: Ulf Hansson <ulf.hansson@linaro.org>
-- */
--
--#ifndef __MACH_UX500_PM_DOMAINS_H
--#define __MACH_UX500_PM_DOMAINS_H
--
--#ifdef CONFIG_PM_GENERIC_DOMAINS
--extern int __init ux500_pm_domains_init(void);
--#else
--static inline int ux500_pm_domains_init(void) { return 0; }
--#endif
--
--#endif
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3cf16ffac892..f9820072848d 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2419,6 +2419,7 @@ F:	arch/arm/mach-ux500/
+ F:	drivers/clk/clk-nomadik.c
+ F:	drivers/clocksource/clksrc-dbx500-prcmu.c
+ F:	drivers/dma/ste_dma40*
++F:	drivers/genpd/st/ste-ux500-pm-domain.c
+ F:	drivers/hwspinlock/u8500_hsem.c
+ F:	drivers/i2c/busses/i2c-nomadik.c
+ F:	drivers/iio/adc/ab8500-gpadc.c
+diff --git a/arch/arm/mach-ux500/Makefile b/arch/arm/mach-ux500/Makefile
+index 5e903241bded..270e5676fa02 100644
+--- a/arch/arm/mach-ux500/Makefile
++++ b/arch/arm/mach-ux500/Makefile
+@@ -6,4 +6,3 @@
+ obj-y				:= pm.o
+ obj-$(CONFIG_UX500_SOC_DB8500)	+= cpu-db8500.o
+ obj-$(CONFIG_SMP)		+= platsmp.o
+-obj-$(CONFIG_PM_GENERIC_DOMAINS) += pm_domains.o
+diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+index efd955f586e9..c429485c13f6 100644
+--- a/drivers/genpd/Makefile
++++ b/drivers/genpd/Makefile
+@@ -8,6 +8,7 @@ obj-y					+= qcom/
+ obj-y					+= renesas/
+ obj-y					+= rockchip/
+ obj-y					+= samsung/
++obj-y					+= st/
+ obj-y					+= starfive/
+ obj-y					+= sunxi/
+ obj-y					+= tegra/
+diff --git a/drivers/genpd/st/Makefile b/drivers/genpd/st/Makefile
+new file mode 100644
+index 000000000000..8fa5f9855460
+--- /dev/null
++++ b/drivers/genpd/st/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_ARCH_U8500)		+= ste-ux500-pm-domain.o
+diff --git a/arch/arm/mach-ux500/pm_domains.c b/drivers/genpd/st/ste-ux500-pm-domain.c
+similarity index 100%
+rename from arch/arm/mach-ux500/pm_domains.c
+rename to drivers/genpd/st/ste-ux500-pm-domain.c
 -- 
 2.34.1
 
