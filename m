@@ -2,115 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C1774B6DE
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 21:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224D074B80B
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 22:37:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjGGTG2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 15:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S231316AbjGGUhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 16:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbjGGTG1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 15:06:27 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515B9269E;
-        Fri,  7 Jul 2023 12:05:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id A795E5C00D6;
-        Fri,  7 Jul 2023 15:05:11 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 07 Jul 2023 15:05:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1688756711; x=1688843111; bh=S/
-        sKC+j2TRg2RQQy0ZV7Lc1gET+LltLUonVflsJid7o=; b=XTjGP7IVmi6yN46O7T
-        Ci0BcMSjK9Yl6Dg2Zk7MChMgoUHr/K+qhSkiY3sVhTmkintjM8rYAfWSFaEUaQym
-        YyO6w1vcddODF6YxT47uEcJytirJE5F/fF85WomWpg6Cfzs7KQBpJSQxheMMVZ+H
-        mZNoS0wcVu8cV5o85EcarTlsr/5Vqf9AY3sN6UcjP5h1DNcXXS2BGynAH6jWW8zy
-        1B/fbQa60RxeeWnw5xnxnVJigIx94KNWqyAzXxrtgA16fHFn21wr+a7g91QlA8Fp
-        fsHpG4VoxM07qRYJB4oIZ7fg+wlgYux+1wAAnLchrNfue0NzyM7SSN516V6Uv0WK
-        LTLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1688756711; x=1688843111; bh=S/sKC+j2TRg2R
-        QQy0ZV7Lc1gET+LltLUonVflsJid7o=; b=hSforSkRer7o84ADH2YsHbx2ZAoPR
-        wzMqmFd+sBroTfYKoJ3IUojG+foqlNogRBvDU+qi8p0vgZgmpvb5GqAbkAHIyNBH
-        rtl6VhDDCGE0DBrddgzEmSCm0c508T5H5YdcLygSvuxdjS2ZZ6WZWF5R0fstlzbi
-        wJd4RG+zxa50xaVHf6rx30nCC1akuW/56sYSNshEyYbfLVpaIglT/MxrNIpoTHlD
-        3G/5FPp+TQihS2M12cV1SDdWFrXAQNmdui/hamqFoGXrS7Qv+cRoljNyXQ2XT0JJ
-        VFmxT4rQp+dlQ6N7vI8zmkvmINwnVG4PFIC5dw44wduKY1krcY8UAXHHQ==
-X-ME-Sender: <xms:5mGoZKwEcncMygIYkFErlDqR-j3pBWPufhGNzbVSgMnv-CuP0eVQmA>
-    <xme:5mGoZGShRApNxSrKZcVFeulHfLzTKltiPr8f65iIvY_JHjolBfWi2ZaMSXYaRHc0v
-    7VQSt5C6Ztau79D7KA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrvddugddufeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5mGoZMXnyH8QeZquYT8O7HkU-OGrPIisdsi1IoHPE5cdlceknXAcvQ>
-    <xmx:5mGoZAgZRa3xqgAgqD8BJS-S2srYocMIm-slw6Mght1ZIpcl7mAbMA>
-    <xmx:5mGoZMCcjBoh6pCBUEaCWuDueyZyMRF1iZ-cM3LISDTvv9JwCXCXNQ>
-    <xmx:52GoZKBMabj1UfKaCW41m2q7QGKftXrE7TEAp5dytvrK5JI_F3rFZw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8B6A7B60086; Fri,  7 Jul 2023 15:05:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-531-gfdfa13a06d-fm-20230703.001-gfdfa13a0
-Mime-Version: 1.0
-Message-Id: <653aafb6-ddf5-496f-a780-6d5214a3bd00@app.fastmail.com>
-In-Reply-To: <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-4-ulf.hansson@linaro.org>
- <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
- <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
-Date:   Fri, 07 Jul 2023 21:04:49 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>
-Cc:     "Olof Johansson" <olof@lixom.net>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Kevin Hilman" <khilman@baylibre.com>,
-        "Jerome Brunet" <jbrunet@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the genpd dir
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230145AbjGGUhw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 16:37:52 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8266E1986
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 13:37:51 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3141c8a6f30so2409619f8f.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 13:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688762270; x=1691354270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g4HspQwLyN/0KAF6AN2JANGXDGJX10XlJGv3FkdFNB0=;
+        b=Ba1f/ZqrWpPeZua5hrhiX1yu+18Aq/SUp2ZUZdpBJ9lbeMsUD1LejL8c4xqHz6oJhA
+         Sl3MPw3LaQ/r4Uit3N7tIILLyCcUQ+5bnpQHEhHYKnm01O4xNYg88/8QuqfKcFm8K18R
+         lBVLbMceymzB8wFF4PFMP0gJCiOfJz7PVNFg/VJExJuv1ZAjEW6w7ciu7TNMddiWk8Tv
+         nRkCaSHa8eKcHmtvjuk1vONVTJrWPITKZzlEnoHtbBUYFNvtKmjvhjaOn4lN32ErSU5W
+         9ivpVJHLkaDUtJSBn+xqNdDYEGxGjNJ7lSaRl9v0R46kxU4UNbvFP8W7Q37Pjg/T9h1B
+         wqpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688762270; x=1691354270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g4HspQwLyN/0KAF6AN2JANGXDGJX10XlJGv3FkdFNB0=;
+        b=bvNT0Qx+woj3Xba8bHz1s9GPAE6cPa2fAfgLEMRig/cQF4FwlrzcdXJRQaw380J9X7
+         8lQ7AF6TOh7TYdGf2Qe++Ingfu+ybpdCe2IEwsIRg66MMP40XL29j12DWsTf5K4Pjp1W
+         WaFAn3blWr4AsjMILW37gQCfHt2qZtXl2cv3ea8APteZzHTdDMROs4JxffJuC7KQ9sHC
+         n5C5iLaBeQ3MJXAJVTjJ66CQDp+ZDhpBWwg0+y7f3jPeGm//+gAFxzZUHdf2/LEkmGC5
+         tBYO1FrZqM7tYcBQ+POfb/lK3ab6cW9xPLtB3Tim9IUEcByXOnVvVbKWfW0LhOSH2sW5
+         6BJw==
+X-Gm-Message-State: ABy/qLbEBzsAbYrdg1eFryzDgT+b97PlZcZYSkUXjuOt8+S927Z7SkAX
+        bX+V7r1aTY9KAp/ZPpvGHICxiV5kU2QG2E0ixiY=
+X-Google-Smtp-Source: APBJJlF47znCRWOhugTz/uinATCfMNp8DhqRHIDR/KHzbL3FP/enIaX40ctSi4pY9QKXNw62dK9fEg==
+X-Received: by 2002:adf:ee51:0:b0:314:25d:c8f4 with SMTP id w17-20020adfee51000000b00314025dc8f4mr4949402wro.2.1688762269939;
+        Fri, 07 Jul 2023 13:37:49 -0700 (PDT)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id i4-20020adfefc4000000b003143be36d99sm5260674wrp.58.2023.07.07.13.37.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 13:37:49 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        linux-kernel@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Subject: [PATCH v2 0/4] One more step to the thermal zone structure encapsulation
+Date:   Fri,  7 Jul 2023 22:37:27 +0200
+Message-Id: <20230707203731.848188-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 7, 2023, at 16:54, Ulf Hansson wrote:
-> On Fri, 7 Jul 2023 at 16:42, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+The series provides more changes to self-encapsulate the thermal zone device
+structure in order to protect wild accesses to the thermal zone device
+internals, especially the trip points and the locks.
 
->> > @@ -2,7 +2,4 @@
->> >   obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
->> >   obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
->> >   obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
->> > -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
->> >   obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
->> > -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
->> > -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
->>
->> I've a few changes for v6.6, how shall we handle that ?
->
-> I think we should continue to use the soc tree until v6.6-rc1 (or if
-> Arnd have some other ideas), there are some more thoughts around this
-> in the cover letter.
+The first patch adds a macro to warn at compilation time if the
+thermal_core.h is included in a file not belonging to the thermal core
+code. One warning will happen with the nvidia drivers but this is in
+the way to be solved.
 
-Right, I think I can handle the merge conflicts as I add stuff
-to the soc tree.
+The second patch reorders the headers inclusion in the core code.
 
-     Arnd
+The next patches makes the int340x drivers to use the thermal trip
+update above and the different accessors for thermal zone structure.
+
+Daniel Lezcano (4):
+  thermal/core: Hardening the self-encapsulation
+  thermal/core: Reorder the headers inclusion
+  thermal/drivers/int3400: Use thermal zone device wrappers
+  thermal/drivers/int340x: Do not check the thermal zone state
+
+ drivers/thermal/gov_bang_bang.c               |  1 +
+ drivers/thermal/gov_fair_share.c              |  1 +
+ drivers/thermal/gov_power_allocator.c         |  7 +--
+ drivers/thermal/gov_step_wise.c               |  1 +
+ drivers/thermal/gov_user_space.c              |  1 +
+ .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++++++----------
+ drivers/thermal/thermal_acpi.c                |  1 +
+ drivers/thermal/thermal_core.c                |  7 +--
+ drivers/thermal/thermal_core.h                |  4 ++
+ drivers/thermal/thermal_helpers.c             |  1 +
+ drivers/thermal/thermal_hwmon.c               |  1 +
+ drivers/thermal/thermal_netlink.c             |  1 +
+ drivers/thermal/thermal_of.c                  |  1 +
+ drivers/thermal/thermal_sysfs.c               |  1 +
+ drivers/thermal/thermal_trip.c                |  1 +
+ 15 files changed, 45 insertions(+), 28 deletions(-)
+
+-- 
+2.34.1
+
