@@ -2,61 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F407174ACCC
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 10:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFB3774ACEC
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 10:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjGGIXH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 04:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S231895AbjGGIcJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 04:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbjGGIW4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 04:22:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 614AC2109;
-        Fri,  7 Jul 2023 01:22:44 -0700 (PDT)
+        with ESMTP id S229993AbjGGIcI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 04:32:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A63B90;
+        Fri,  7 Jul 2023 01:32:07 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E8056606FCA;
-        Fri,  7 Jul 2023 09:22:42 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 469A56606FCA;
+        Fri,  7 Jul 2023 09:32:05 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1688718163;
-        bh=C7CMkxmZPAlHvOPFwq2S9P/9xy5K1sw18FMOfrzXvRs=;
+        s=mail; t=1688718725;
+        bh=t2rkCbgGEm+ru0kRuGpgrdPysXExXq3DnEOiku93jvQ=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DvqZkfgqgUMrr+u89G0Qog44SqNJzD2utg2faRY9pl8nXtOZORJywbcWcb01Mh9Mb
-         9s4d0sCaaD+ZUnS0VafaPJjmCMK14DnM25sDcVuswmSA9GSQhfIIRC52kc4AYW1/9K
-         +TWstsAk3LrBkXhw1mm5WVGQEthuqx/ZHFZ3qVNAycSNV+iFXF99USK+blOhEVVg8M
-         assnECXSq4tIvwZK2XgsrpY7U+u/fVTi0O9wyllf1pPmbWRNctpZ1UB2NaCqby0+zl
-         Ps7wpuPWcV8QI8mB4aocMhj9X6CQY2QrWPlOWsE0XBwWiW0IkoCSjaFOll4k0bPgV0
-         w/v1Op4BHVtOA==
-Message-ID: <16c4d5a9-4eeb-6a92-e97e-6e15eaeb913a@collabora.com>
-Date:   Fri, 7 Jul 2023 10:22:40 +0200
+        b=Ucl090laFkEUAlFDIM5irYbjHt5rA1HD4+cSbtY8egpSBKUfu19u9Jlq1Gt8QBPLs
+         1mJ5lhSSTpB6Ol5oYTUEyBw+p/IcFoRsVM4l3OHxaPtWun1sADjlYcb18B0xAgBAAW
+         5y5cLUsTFmUZ9RhHhDrd0jO/v5pY8aoUBWl/dAMgDnYeWzTacBnQ4Tao3iRZYjGlok
+         CsMk3E4ztWsI50rAyQatyxgcSrDFUqLjxHhmCdY4ArGTVCwpiYSgOo//CScu88A9Y0
+         tX8qtuUDI9AzwDdEexZyQWHxGPvYL3sfmNZhsg+rwxJ2WB0K8TEeTds0mnVXCuCc7M
+         VbWvlZwpmNBvw==
+Message-ID: <a08862e5-4e84-c3a8-b373-5fbff1e84704@collabora.com>
+Date:   Fri, 7 Jul 2023 10:32:02 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v3 6/6] thermal/drivers/mediatek/lvts_thermal: Manage
- threshold between sensors
+Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Make readings
+ valid in filtered mode
 Content-Language: en-US
 To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
         <nfraprado@collabora.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
+Cc:     kernel@collabora.com, Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
         Balsam CHIHI <bchihi@baylibre.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        kernel@collabora.com, Amit Kucheria <amitk@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230706153823.201943-1-nfraprado@collabora.com>
- <20230706153823.201943-7-nfraprado@collabora.com>
+References: <20230706161509.204546-1-nfraprado@collabora.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230706153823.201943-7-nfraprado@collabora.com>
+In-Reply-To: <20230706161509.204546-1-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,27 +67,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 06/07/23 17:37, Nícolas F. R. A. Prado ha scritto:
-> Each LVTS thermal controller can have up to four sensors, each capable
-> of triggering its own interrupt when its measured temperature crosses
-> the configured threshold. The threshold for each sensor is handled
-> separately by the thermal framework, since each one is registered with
-> its own thermal zone and trips. However, the temperature thresholds are
-> configured on the controller, and therefore are shared between all
-> sensors on that controller.
+Il 06/07/23 18:14, Nícolas F. R. A. Prado ha scritto:
+> Currently, when a controller is configured to use filtered mode, thermal
+> readings are valid only about 30% of the time.
 > 
-> When the temperature measured by the sensors is different enough to
-> cause the thermal framework to configure different thresholds for each
-> one, interrupts start triggering on sensors outside the last threshold
-> configured.
+> Upon testing, it was noticed that lowering any of the interval settings
+> resulted in an improved rate of valid data. The same was observed when
+> decreasing the number of samples for each sensor (which also results in
+> quicker measurements).
 > 
-> To address the issue, track the thresholds required by each sensor and
-> only actually set the highest one in the hardware, and disable
-> interrupts for all sensors outside the current configured range.
+> Retrying the read with a timeout longer than the time it takes to
+> resample (about 344us with these settings and 4 sensors) also improves
+> the rate.
 > 
-> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+> Lower all timing settings to the minimum, configure the filtering to
+> single sample, and poll the measurement register for at least one period
+> to improve the data validity on filtered mode.  With these changes in
+> place, out of 100000 reads, a single one failed, ie 99.999% of the data
+> was valid.
+> 
 > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > 
+> ---
+> 
+>   drivers/thermal/mediatek/lvts_thermal.c | 15 ++++++++-------
+>   1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 1e11defe4f35..b5fb1d8bc3d8 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -58,11 +58,11 @@
+>   #define LVTS_PROTTC(__base)		(__base + 0x00CC)
+>   #define LVTS_CLKEN(__base)		(__base + 0x00E4)
+>   
+> -#define LVTS_PERIOD_UNIT			((118 * 1000) / (256 * 38))
+> -#define LVTS_GROUP_INTERVAL			1
+> -#define LVTS_FILTER_INTERVAL		1
+> -#define LVTS_SENSOR_INTERVAL		1
+> -#define LVTS_HW_FILTER				0x2
+> +#define LVTS_PERIOD_UNIT			0
+> +#define LVTS_GROUP_INTERVAL			0
+> +#define LVTS_FILTER_INTERVAL		0
+> +#define LVTS_SENSOR_INTERVAL		0
+> +#define LVTS_HW_FILTER				0x0
+>   #define LVTS_TSSEL_CONF				0x13121110
+>   #define LVTS_CALSCALE_CONF			0x300
+>   #define LVTS_MONINT_CONF			0x9FBF7BDE
+> @@ -257,6 +257,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>   	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
+>   	void __iomem *msr = lvts_sensor->msr;
+>   	u32 value;
+> +	int rc;
+>   
+>   	/*
+>   	 * Measurement registers:
+> @@ -269,7 +270,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>   	 * 16	: Valid temperature
+>   	 * 15-0	: Raw temperature
+>   	 */
+> -	value = readl(msr);
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+#define LVTS_MSR_READ_TIMEOUT_US	400
+
+then, either 240 like this...
+
+#define LVTS_MSR_READ_WAIT_US		((LVTS_MSR_READ_TIMEOUT_US / 2) - 10)
+
+..or 220 (if valid) like this..
+
+#define LVTS_MSR_READ_WAIT_US		((LVTS_MSR_READ_TIMEOUT_US / 20) + \
+					 (LVTS_MSR_READ_TIMEOUT_US / 2))
+
+..or just "240-and-that's-it"
+
+#define LVTS_MSR_READ_WAIT_US		240
+
+	rc = readl_poll_timeout(msr, value, value & BIT(16),
+				LVTS_MSR_READ_WAIT_US, LVTS_MSR_READ_TIMEOUT_US);
+
+Cheers,
+Angelo
+
 
