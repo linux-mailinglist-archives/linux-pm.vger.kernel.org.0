@@ -2,249 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C5D74B598
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 19:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9392B74B5FE
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 19:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjGGROO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 13:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S229625AbjGGRvF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 13:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbjGGROO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 13:14:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FE201BE8;
-        Fri,  7 Jul 2023 10:14:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EB8661A15;
-        Fri,  7 Jul 2023 17:14:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A1DEC433C8;
-        Fri,  7 Jul 2023 17:14:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688750051;
-        bh=grjrpDDuXrcXco+TAikudw5vn7ZiNKw/LMhmZ8FUjso=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qBkCvuogO54/jZ35R2u7HeWkGHxOaM3vRS01W4c7TBVLgNIl7SXT2hLmE2UGGAfQo
-         kEcxNzZxc2PZaXHlzNkp82im05TMPo9UpCcAwpqTEVE3dGg4HRbjvnFRerWCiPEDZD
-         0K4ybvMrOX3AjcmhwUY129KOVcCF595CVXA5Jbv7bBwCgCedrOQtYPbtTARylN6EbN
-         RWRRVKpw+5snmziS2YNtfkm8559QqKPzwdGBih3ctSusuwODkswLGqla2cZlpJ//XN
-         3Li4qeh9NIdNT91OBN/NMjl+dSgYgwuzzCWjS44vHNx/YgnP48XhtrzT1qMvGj+d2l
-         sXjWrwqvh0ZkA==
-Date:   Fri, 7 Jul 2023 10:14:09 -0700
-From:   Eduardo Valentin <evalenti@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Eduardo Valentin <evalenti@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 1/1] thermal: sysfs: avoid actual readings from sysfs
-Message-ID: <ZKhH4e+70kM5P+Zd@uf8f119305bce5e.ant.amazon.com>
-References: <CAJZ5v0jAJj-Eh9tJZRMamSFSWWJqVpzaWeHmqThyPvAGpzk17w@mail.gmail.com>
- <ZJyh1Dp5WrXyv9wW@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jn-zCgObgNYswGQK0vLbWaK1VhPZP1L+pB5k1BhNs5bA@mail.gmail.com>
- <2d59de0d-5011-780a-cb6c-94e6e2b74156@linaro.org>
- <CAJZ5v0jQssaVMim3b3yWEqw2NGt4SYSZP6Zb4i5O++=9Tp7C3w@mail.gmail.com>
- <1373aef0-c837-8e6f-fc94-9c6bd70a5b31@linaro.org>
- <ZJ+GIRfhuHxbSxRf@uf8f119305bce5e.ant.amazon.com>
- <0c766514-1063-bb57-192e-332559e22529@linaro.org>
- <ZKXzli5BtRF9u5de@uf8f119305bce5e.ant.amazon.com>
- <CAJZ5v0jRPh6_6ERf_d2AL+3bgTqhqi0f4oNS+91omXt9-q9cRQ@mail.gmail.com>
+        with ESMTP id S229530AbjGGRvF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 13:51:05 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA13A10CE;
+        Fri,  7 Jul 2023 10:51:03 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 367HomiK108890;
+        Fri, 7 Jul 2023 12:50:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1688752248;
+        bh=A579pIuEfLRxSSqRnb3noaAXO5nSKibbRHfnvKiaJJ8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=urp+1ULQsuFdy59aSLz7DbuTvMwzdefU07KHsDwbrFQifwNpN+00so1BtxjEqEZwJ
+         HzUIgXt+YpE2MU1SKPQzjmrzcxpwoM750209JBQLoW3LBjriQsItZggI+fPCP02nVs
+         saqv+Tx6PvuF2eIdBi6lIYbC9qfhv9mdEistq5NI=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 367Hom3s018521
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 7 Jul 2023 12:50:48 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 7
+ Jul 2023 12:50:48 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 7 Jul 2023 12:50:48 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 367HomuQ095914;
+        Fri, 7 Jul 2023 12:50:48 -0500
+Date:   Fri, 7 Jul 2023 12:50:48 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Tony Lindgren <tony@atomide.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>
+Subject: Re: [PATCH 15/18] soc: ti: Mover power-domain drivers to the genpd
+ dir
+Message-ID: <20230707175048.6yees6d3evcomyux@vacation>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-16-ulf.hansson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jRPh6_6ERf_d2AL+3bgTqhqi0f4oNS+91omXt9-q9cRQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230707140434.723349-16-ulf.hansson@linaro.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 03:22:55PM +0200, Rafael J. Wysocki wrote:
+On 16:04-20230707, Ulf Hansson wrote:
+> Cc: Nishanth Menon <nm@ti.com>
+> Cc: Santosh Shilimkar <ssantosh@kernel.org>
+> Cc: Tero Kristo <kristo@kernel.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  MAINTAINERS                                   | 3 ++-
+>  drivers/genpd/Makefile                        | 1 +
+>  drivers/genpd/ti/Makefile                     | 3 +++
+>  drivers/{soc => genpd}/ti/omap_prm.c          | 0
+>  drivers/{soc => genpd}/ti/ti_sci_pm_domains.c | 0
+>  drivers/soc/ti/Makefile                       | 2 --
+>  6 files changed, 6 insertions(+), 3 deletions(-)
+>  create mode 100644 drivers/genpd/ti/Makefile
+>  rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
+>  rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
 > 
-> 
-> 
-> On Thu, Jul 6, 2023 at 12:50 AM Eduardo Valentin <evalenti@kernel.org> wrote:
-> >
-> > On Sat, Jul 01, 2023 at 09:28:31AM +0200, Daniel Lezcano wrote:
-> > >
-> > >
-> > >
-> > > Eduardo,
-> > >
-> > > On 01/07/2023 03:49, Eduardo Valentin wrote:
-> > >
-> > > [ ... ]
-> > >
-> > > > > All that are hypothesis, that is why having a real use case would help
-> > > > > to figure out the temperature limit drift at mitigation time.
-> > > >
-> > > > Yeah, I guess the problem here is that you are assuming I2C is not a real
-> > > > use case, not sure why. But it is and very common design in fact.
-> > >
-> > > If it is so common you should be able to reproduce the issue and give
-> > > numbers. At this point, what I read is "that may happen because I2C is
-> > > slow and we may monitor it at an insane rate, so let's cache the value".
-> > >
-> > > > > Assuming it is really needed, I'm not sure that should be exported via
-> > > > > sysfs. It is a driver issue and it may register the thermal zone with a
-> > > > > parameter telling the userspace rate limit.
-> > > > >
-> > > > > On the other side, hwmon and thermal are connected. hwmon drivers
-> > > > > register a thermal zone and thermal drivers add themselves in the hwmon
-> > > > > sysfs directory. The temperature cache is handled in the driver level in
-> > > > > the hwmon subsystems and we want to handle the temperature cache at the
-> > > > > thermal sysfs level. How will we cope with this inconsistency?
-> > > >
-> > > > Yeah, I do not see this, again, as where to handle cache type of design problem only.
-> > > > This is really a protective / defensive code on the thermal core to avoid
-> > > > userspace interfering on a kernel based control.
-> > > >
-> > > >
-> > > > I agree that drivers may be free to go and defend themselves against
-> > > > too frequent userspace requests, like they do, as you already shared
-> > > > a link in another email. But saying that it is up to the driver to do this
-> > > > is basically saying that the thermal subsystem do not care about their
-> > > > own threads being delayed by a too frequent reads on a sysfs entry
-> > > > created by the thermal subsystem, just because it is drivers responsability
-> > > > to cache. To that is a missing defensive code.
-> > >
-> > > No, the core code has not to be defensive against bad hardware design.
-> >
-> > I do not understand why you are calling this a bad hardware design.
-> >
-> > >
-> > > If multiple processes are reading in an infinite loop the temperature,
-> > > they will constantly take the lock, and as the monitoring thread is a
-> > > CFS task, this one will be considered as the readers and be delayed,
-> > > with probably a mitigation temperature drift. Here we have a missing
-> > > defensive / optimized code against a DoS but it is unrelated to the
-> > > hardware and the fix is not caching the value.
-> >
-> > I am not even going into the CFS discussion, yet. But if we go that direction,
-> > here we are having a case of a userspace process contending into
-> > a in kernel process, regardless of the userspace process priority.
-> >
-> > But again that is not the main point of discussion for this change.
-> >
-> > >
-> > > > > As a side note, slow drivers are usually going under drivers/hwmon.
-> > > >
-> > > > Have you seen this code?
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/lm75.c#n517
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hwmon/hwmon.c#n850
-> > >
-> > > Yes, and ?
-> >
-> >
-> > I mean , I am sure can git grep for all occurences if that is what are looking for.
-> > >
-> > > That is what I said, the hwmon and the thermal zone are connected.
-> > >
-> > > > I also do not understand when you say slow drivers are usually going under
-> > > > drivers/hwmon, does it really matter? One can design a thermal zone
-> > > > that is connected to a hwmon device as input. Why would that be illogical?
-> > >
-> > > I'm not saying it is illogical. I'm pointing the slow drivers are under
-> > > hwmon subsystems and usually don't aim in-kernel mitigation. The
-> > > get_temp ops is going through hwmon and the drivers may cache the
-> > > values. So *if* there is an in-kernel mitigation, the value will be
-> > > already cached usually.
-> >
-> > Oh I see. yes, I totally give you that the most common case is to have
-> > the in kernel policy written with drivers under thermal, but neglecting
-> > the existence of drivers under /hwmon that connects into the thermal subsystem
-> > is not fair, is it? They are there, they connect to thermal subsystem
-> > and one can certainly have an in kernel control with hwmon drivers as input,
-> > I am not understanding why protecting against those cases make the change
-> > invalid or overcomplicates the subsystem design.
-> >
-> > >
-> > > I do believe I raised some valid concerns regarding the approach. Could
-> > > please take them into account instead of eluding them
-> > >
-> > > 1. A real use case with temperature limit drift (easy to reproduce
-> > > because it is very common)
-> > >
-> > > 2. How about the consistency between hwmon and thermal? (one driver but
-> > > two ways to access the temperature - one may cache and the other not)
-> >
-> > I am not eluding anything. But this conversation seams to not move forward
-> > because of the assumption that building in kernel control based on
-> > hwmon drivers is either wrong or uncommon.  I fail to see that as the
-> > main argument to be discussed mainly because it is a problem that exists.
-> > Driver count is also not a meaningful metric to conclude if the problem
-> > is common or not. How many motherboard can you think that are out there
-> > that may have an lm75 to represent an actual temperature point in the
-> > PCB? Or an lm75 that may come from a PCI board? That is what I meant
-> > by common design.
-> >
-> > Seams to me that you are trying to make a point that this problem
-> > is not worth having a fix for, even if you already recognized the
-> > basic point of it, because (a) this is not happening MMIO based
-> > drivers which is the (today) common case for drivers under /thermal
-> > and (b) hwmon drivers are supposed to feed in only control in userspace.
-> >
-> > for both argument that seams to restrict the thermal subsystem
-> > to only MMIO base devices drivers to feed into CPU temperature control,
-> > which is a limited application of it in real world scenario, for
-> > any real life scenario really, mobile. BMC, or any embedded case.
-> > When in fact, the abstraction and desing on the thermal subsystem today
-> > is pure control of temperature and can be used in any application
-> > that does it. Limiting the application of the thermal subsystem to
-> > only MMIO based devices is, well, limiting :-).
-> >
-> > >
-> > > Another question regarding the I2C example, if another subsystem is
-> > > using the I2C, won't it take the bus lock and create the contention
-> > > also? I mean it is possible to create a mitigation drift by reading
-> > > constantly another sensor value (eg. voltage or whatever) ?
-> >
-> > Yes, if a flood of events in the bus happen, then the drift will also happen,
-> > specially if reads are aligned with the in kernel monitoring thread
-> > update / call to .get_temp().
-> 
-> This is all in general terms, though.
-> 
-> I think that Daniel has been asking for a specific example, because if
-> a new sysfs i/f is added with a certain issue in mind and then it
-> turns out to be never used by anyone, because the issue is theoretical
-> or not severe enough for anyone to care, it is a pure maintenance
-> burden.  It would be good to have at least some assurance that this
-> will not be the case.
-> 
-> Daniel, even if you think that the hardware in question is
-> misdesigned, Linux has a long record of supporting misdesigned
-> hardware, so this wouldn't be the first time ever.  However, I do
-> agree that it would be good to have a specific example supporting this
-> case.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 9e580df3e5db..3cf16ffac892 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21101,7 +21101,7 @@ F:	drivers/irqchip/irq-ti-sci-inta.c
+>  F:	drivers/irqchip/irq-ti-sci-intr.c
+>  F:	drivers/reset/reset-ti-sci.c
+>  F:	drivers/soc/ti/ti_sci_inta_msi.c
+> -F:	drivers/soc/ti/ti_sci_pm_domains.c
+> +F:	drivers/genpd/ti/ti_sci_pm_domains.c
+>  F:	include/dt-bindings/soc/ti,sci_pm_domain.h
+>  F:	include/linux/soc/ti/ti_sci_inta_msi.h
+>  F:	include/linux/soc/ti/ti_sci_protocol.h
+> @@ -21335,6 +21335,7 @@ L:	linux-kernel@vger.kernel.org
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Maintained
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
+> +F:	drivers/genpd/ti/omap_prm.c
 
+Probably the wrong place for this as omap_prm is'nt a keystone navigator
+driver set. Maybe Tony has a suggestion?
 
-I will add some examples in the next version with the numbers I quoted in this thread.
-
-Also, generally speaking, this series uses the thermal subsystem mostly
-for board monitoring use cases, which includes applications like BMC,
-and that has generated some churn because the current set of existing
-drivers mainly targets in-kernel control for the running system CPU temperature monitoring.
-However, even since time of thermal device tree binding conception, this limitation
-was never part of the original thoughts on enhancing the thermal subsystem from
-ACPI only to a more general solution.
-
-For this reason, next iteration I will start with enhancing documentation.
-I took a brief look in the existing master tree and plenty of
-the existing documentation references to board monitoring have been lost
-in reshuffle of thermal documentation files, including thermal device tree
-bindings, which is a shame. I will recover those examples with refreshed examples.
-Thermal doc has been not the prettiest anyways so it is always good to spend
-some time enhancing it.
+>  F:	drivers/soc/ti/*
+>  
+>  TI LM49xxx FAMILY ASoC CODEC DRIVERS
+> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> index e6f34d82e6a8..193892189f0d 100644
+> --- a/drivers/genpd/Makefile
+> +++ b/drivers/genpd/Makefile
+> @@ -11,3 +11,4 @@ obj-y					+= samsung/
+>  obj-y					+= starfive/
+>  obj-y					+= sunxi/
+>  obj-y					+= tegra/
+> +obj-y					+= ti/
+> diff --git a/drivers/genpd/ti/Makefile b/drivers/genpd/ti/Makefile
+> new file mode 100644
+> index 000000000000..69580afbb436
+> --- /dev/null
+> +++ b/drivers/genpd/ti/Makefile
+> @@ -0,0 +1,3 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_ARCH_OMAP2PLUS)		+= omap_prm.o
+> +obj-$(CONFIG_TI_SCI_PM_DOMAINS)		+= ti_sci_pm_domains.o
+> diff --git a/drivers/soc/ti/omap_prm.c b/drivers/genpd/ti/omap_prm.c
+> similarity index 100%
+> rename from drivers/soc/ti/omap_prm.c
+> rename to drivers/genpd/ti/omap_prm.c
+> diff --git a/drivers/soc/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
+> similarity index 100%
+> rename from drivers/soc/ti/ti_sci_pm_domains.c
+> rename to drivers/genpd/ti/ti_sci_pm_domains.c
+> diff --git a/drivers/soc/ti/Makefile b/drivers/soc/ti/Makefile
+> index cc3c972fad2e..cb800a745e66 100644
+> --- a/drivers/soc/ti/Makefile
+> +++ b/drivers/soc/ti/Makefile
+> @@ -6,9 +6,7 @@ obj-$(CONFIG_KEYSTONE_NAVIGATOR_QMSS)	+= knav_qmss.o
+>  knav_qmss-y := knav_qmss_queue.o knav_qmss_acc.o
+>  obj-$(CONFIG_KEYSTONE_NAVIGATOR_DMA)	+= knav_dma.o
+>  obj-$(CONFIG_AMX3_PM)			+= pm33xx.o
+> -obj-$(CONFIG_ARCH_OMAP2PLUS)		+= omap_prm.o
+>  obj-$(CONFIG_WKUP_M3_IPC)		+= wkup_m3_ipc.o
+> -obj-$(CONFIG_TI_SCI_PM_DOMAINS)		+= ti_sci_pm_domains.o
+>  obj-$(CONFIG_TI_SCI_INTA_MSI_DOMAIN)	+= ti_sci_inta_msi.o
+>  obj-$(CONFIG_TI_K3_RINGACC)		+= k3-ringacc.o
+>  obj-$(CONFIG_TI_K3_SOCINFO)		+= k3-socinfo.o
+> -- 
+> 2.34.1
+> 
 
 -- 
-All the best,
-Eduardo Valentin
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
