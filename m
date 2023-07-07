@@ -2,64 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C464D74B288
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CC274B28D
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbjGGOFI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40784 "EHLO
+        id S232781AbjGGOFL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbjGGOE5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:04:57 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7506A19BD
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:04:52 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b6f943383eso31018061fa.2
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:04:52 -0700 (PDT)
+        with ESMTP id S232773AbjGGOFC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:02 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AED2210C
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:04:53 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b708e49059so26569201fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:04:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688738691; x=1691330691;
+        d=linaro.org; s=google; t=1688738692; x=1691330692;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0C9FKQaL/DjhwSAwt3ArSmfw7wijMULRc04IKf+RB6c=;
-        b=JhXWmV+T447FKYsYy6dzhvKCW6juQUSijMSScTTi/Vg7iA6f59CwmTplfO221r6YH1
-         Ru43D7CE7iM4eTo+xO0B6q3tnI5fQtzTwWCdmG9X6Ud2CMD1lPUyxc7LZEeQndf8oW3j
-         TgWzcg3sttamRQvHTWcIIuC6Nj0a73F+Jb68Tz0u5Q4ETeom+/6C3osqTB0SkRIPhO14
-         AuVwUFy5FsIw8lGcZuQ6+CppiH2Spp3aMRTyo+z3fY0l2CPBwwdHSyk0wX8+GMLDkPCc
-         3UsYSKMXfe3p9LT9EOf6PF3Ji6YARY+SQ2367x6aKW9agMKORnZ/w8FgBTPMK+TKwf4y
-         aM8w==
+        bh=8ewLZ7PsrVNiFdNIbfFquaT6V9xwZk4+lwOcXDJHnfw=;
+        b=LnJEhcpAFuO7pDbjxc/tCUP9N9Zz2V0bEFLE2/ucW4oBShV+0u7o1KRGgF17LDQTbb
+         sgFkFKP1gQ4V2YsjwM9u+R00tzKGrVzDNmKpbUSXd/A9lKR+GLgtqu7VYXSh5rvPilOM
+         nrjml2olouJjpWQmDwNOn1I8RKBKaZSwYl2Zizf+mCRaVmYnP1OjqmkM17FxdYq4DSZ3
+         ojeRfm4+YTvMhdknjhdfhpFACf0644lbT889BmVF4pZbyb2vOiqmXcblCsVr9sFRxdqt
+         BGPZlp5bOCJNU2zfB7D751GUCagakr/jVcIXjh4ACQXB7NSIhzZ+O+Qf6iGrmmRFaqtG
+         nKzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688738691; x=1691330691;
+        d=1e100.net; s=20221208; t=1688738692; x=1691330692;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0C9FKQaL/DjhwSAwt3ArSmfw7wijMULRc04IKf+RB6c=;
-        b=JdaeZ8NL0Mpo2dDsyshCIhozKDf61uiJ9ZB3k/oTpsgysQcm7PpEhy/82LJYUODGGQ
-         qRr8nrB3dk4VObhZ8FeHs+/sGybX5mvgNWmM8tAaloQcDGIdYfuNRmXw7Sqx+rXzPS2e
-         8LZcvFg7UWMSrWtaMQEca6l+ygNsRVAs2TQoW6ndV2QD9ToGG2a/j++ChSq6nv4lSsrh
-         ucK5llTvKvrXCcaMYNxU54XzXZEhAv4yCVghKaM3GkRNAyVdTogsAn6rm5cbQXaCKrob
-         JcXOM43MJBKpGiHdBlhBSM31rOoQaLzb4rxgAcwmXG8/rzfo74radTjDTDf/xryKgYS4
-         buKQ==
-X-Gm-Message-State: ABy/qLZ0LlnVoMU5l1gSRqRTWt7zf1ArFfWu/GnrOHF7ti8pBbKDRAK2
-        dES3iSf8aUPWdfVCnnNhqg4Phg==
-X-Google-Smtp-Source: APBJJlHBmMeXjugK8v9YuEhL1V3jLnXeidwnEj3l3uiEN5XJ77pwCTcdYgDDx1GbKdO/iL6N2yp8wA==
-X-Received: by 2002:a2e:a40f:0:b0:2b6:efcf:1463 with SMTP id p15-20020a2ea40f000000b002b6efcf1463mr3811395ljn.6.1688738690802;
-        Fri, 07 Jul 2023 07:04:50 -0700 (PDT)
+        bh=8ewLZ7PsrVNiFdNIbfFquaT6V9xwZk4+lwOcXDJHnfw=;
+        b=CL7a4Q3lztNakW6sxa19QBMjtmWBkYKWOOdotlmDUgMYzhBR+8AZTaG437oVPXddLK
+         GQAIr2LIMwfBBZsKMM1Th/NFYUPn2KNjfCeCDsG5RICl7dNg3qsQoePe2Z8k2qTbHVj7
+         TiSh6JQ1DISgsDDO6jeWtdhXpV2UqtJ2pyh1YDEVo3/SqCUsCkKRSWuwovw/zlibvPPg
+         +qs2JcFxZbhAdB+kGBKh7vxxvJ4KCAecU5vM2mzEoGrkE2JEQ1J/0QeGJVTxMORTXwAO
+         YhKUKmNiH1goIKdDJgLlruDwOF/i40oA2zMOko5j3B2vGeq8nIMlCRvzoSRCW4S1PPwZ
+         T6PA==
+X-Gm-Message-State: ABy/qLYaYnH1hRsKL1Mt9Lk6cY6nKDiT8ekjAmAaqgQ1zMUAlhvTNFsm
+        kDkkBQkrHaQpcxllUvFn96cG4A==
+X-Google-Smtp-Source: APBJJlE8yrl9/DHLKpG1gXCDtRhglmdeTUefxOCsODcqBZDs1ZGKpyfQog45Q6+FHuTn3i4Na1vMFg==
+X-Received: by 2002:a2e:b0ca:0:b0:2b6:e105:6174 with SMTP id g10-20020a2eb0ca000000b002b6e1056174mr4000524ljl.47.1688738691962;
+        Fri, 07 Jul 2023 07:04:51 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.49
+        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:04:50 -0700 (PDT)
+        Fri, 07 Jul 2023 07:04:51 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 07/18] soc: mediatek: Move power-domain drivers to the genpd dir
-Date:   Fri,  7 Jul 2023 16:04:23 +0200
-Message-Id: <20230707140434.723349-8-ulf.hansson@linaro.org>
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: [PATCH 08/18] soc: qcom: Move power-domain drivers to the genpd dir
+Date:   Fri,  7 Jul 2023 16:04:24 +0200
+Message-Id: <20230707140434.723349-9-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230707140434.723349-1-ulf.hansson@linaro.org>
 References: <20230707140434.723349-1-ulf.hansson@linaro.org>
@@ -68,121 +67,97 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cc: Matthias Brugger <matthias.bgg@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: <linux-mediatek@lists.infradead.org>
+Cc: Bjorn Andersson <andersson@kernel.org>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Andy Gross <agross@kernel.org>
+Cc: <linux-arm-msm@vger.kernel.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/genpd/Makefile                              | 1 +
- drivers/genpd/mediatek/Makefile                     | 3 +++
- drivers/{soc => genpd}/mediatek/mt6795-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8167-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8173-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8183-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8186-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8188-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8192-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mt8195-pm-domains.h | 0
- drivers/{soc => genpd}/mediatek/mtk-pm-domains.c    | 0
- drivers/{soc => genpd}/mediatek/mtk-pm-domains.h    | 0
- drivers/{soc => genpd}/mediatek/mtk-scpsys.c        | 0
- drivers/soc/mediatek/Makefile                       | 2 --
- 14 files changed, 4 insertions(+), 2 deletions(-)
- create mode 100644 drivers/genpd/mediatek/Makefile
- rename drivers/{soc => genpd}/mediatek/mt6795-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8167-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8173-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8183-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8186-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8188-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8192-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mt8195-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.c (100%)
- rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.h (100%)
- rename drivers/{soc => genpd}/mediatek/mtk-scpsys.c (100%)
+ MAINTAINERS                          | 2 +-
+ drivers/genpd/Makefile               | 1 +
+ drivers/genpd/qcom/Makefile          | 4 ++++
+ drivers/{soc => genpd}/qcom/cpr.c    | 0
+ drivers/{soc => genpd}/qcom/rpmhpd.c | 0
+ drivers/{soc => genpd}/qcom/rpmpd.c  | 0
+ drivers/soc/qcom/Makefile            | 3 ---
+ 7 files changed, 6 insertions(+), 4 deletions(-)
+ create mode 100644 drivers/genpd/qcom/Makefile
+ rename drivers/{soc => genpd}/qcom/cpr.c (100%)
+ rename drivers/{soc => genpd}/qcom/rpmhpd.c (100%)
+ rename drivers/{soc => genpd}/qcom/rpmpd.c (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9fad7f6033f4..753eea641129 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17518,7 +17518,7 @@ L:	linux-pm@vger.kernel.org
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
+-F:	drivers/soc/qcom/cpr.c
++F:	drivers/genpd/qcom/cpr.c
+ 
+ QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
+ M:	Ilia Lin <ilia.lin@kernel.org>
 diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index 6b9e9fe907f3..1a0a56925756 100644
+index 1a0a56925756..dfdea14e2a8a 100644
 --- a/drivers/genpd/Makefile
 +++ b/drivers/genpd/Makefile
-@@ -3,3 +3,4 @@ obj-y					+= actions/
- obj-y					+= amlogic/
+@@ -4,3 +4,4 @@ obj-y					+= amlogic/
  obj-y					+= apple/
  obj-y					+= bcm/
-+obj-y					+= mediatek/
-diff --git a/drivers/genpd/mediatek/Makefile b/drivers/genpd/mediatek/Makefile
+ obj-y					+= mediatek/
++obj-y					+= qcom/
+diff --git a/drivers/genpd/qcom/Makefile b/drivers/genpd/qcom/Makefile
 new file mode 100644
-index 000000000000..8cde09e654b3
+index 000000000000..403dfc5af095
 --- /dev/null
-+++ b/drivers/genpd/mediatek/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_MTK_SCPSYS)		+= mtk-scpsys.o
-+obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) 	+= mtk-pm-domains.o
-diff --git a/drivers/soc/mediatek/mt6795-pm-domains.h b/drivers/genpd/mediatek/mt6795-pm-domains.h
++++ b/drivers/genpd/qcom/Makefile
+@@ -0,0 +1,4 @@
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_QCOM_CPR)		+= cpr.o
++obj-$(CONFIG_QCOM_RPMPD)	+= rpmpd.o
++obj-$(CONFIG_QCOM_RPMHPD)	+= rpmhpd.o
+diff --git a/drivers/soc/qcom/cpr.c b/drivers/genpd/qcom/cpr.c
 similarity index 100%
-rename from drivers/soc/mediatek/mt6795-pm-domains.h
-rename to drivers/genpd/mediatek/mt6795-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8167-pm-domains.h b/drivers/genpd/mediatek/mt8167-pm-domains.h
+rename from drivers/soc/qcom/cpr.c
+rename to drivers/genpd/qcom/cpr.c
+diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/genpd/qcom/rpmhpd.c
 similarity index 100%
-rename from drivers/soc/mediatek/mt8167-pm-domains.h
-rename to drivers/genpd/mediatek/mt8167-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8173-pm-domains.h b/drivers/genpd/mediatek/mt8173-pm-domains.h
+rename from drivers/soc/qcom/rpmhpd.c
+rename to drivers/genpd/qcom/rpmhpd.c
+diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/genpd/qcom/rpmpd.c
 similarity index 100%
-rename from drivers/soc/mediatek/mt8173-pm-domains.h
-rename to drivers/genpd/mediatek/mt8173-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8183-pm-domains.h b/drivers/genpd/mediatek/mt8183-pm-domains.h
-similarity index 100%
-rename from drivers/soc/mediatek/mt8183-pm-domains.h
-rename to drivers/genpd/mediatek/mt8183-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8186-pm-domains.h b/drivers/genpd/mediatek/mt8186-pm-domains.h
-similarity index 100%
-rename from drivers/soc/mediatek/mt8186-pm-domains.h
-rename to drivers/genpd/mediatek/mt8186-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8188-pm-domains.h b/drivers/genpd/mediatek/mt8188-pm-domains.h
-similarity index 100%
-rename from drivers/soc/mediatek/mt8188-pm-domains.h
-rename to drivers/genpd/mediatek/mt8188-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8192-pm-domains.h b/drivers/genpd/mediatek/mt8192-pm-domains.h
-similarity index 100%
-rename from drivers/soc/mediatek/mt8192-pm-domains.h
-rename to drivers/genpd/mediatek/mt8192-pm-domains.h
-diff --git a/drivers/soc/mediatek/mt8195-pm-domains.h b/drivers/genpd/mediatek/mt8195-pm-domains.h
-similarity index 100%
-rename from drivers/soc/mediatek/mt8195-pm-domains.h
-rename to drivers/genpd/mediatek/mt8195-pm-domains.h
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/genpd/mediatek/mtk-pm-domains.c
-similarity index 100%
-rename from drivers/soc/mediatek/mtk-pm-domains.c
-rename to drivers/genpd/mediatek/mtk-pm-domains.c
-diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/genpd/mediatek/mtk-pm-domains.h
-similarity index 100%
-rename from drivers/soc/mediatek/mtk-pm-domains.h
-rename to drivers/genpd/mediatek/mtk-pm-domains.h
-diff --git a/drivers/soc/mediatek/mtk-scpsys.c b/drivers/genpd/mediatek/mtk-scpsys.c
-similarity index 100%
-rename from drivers/soc/mediatek/mtk-scpsys.c
-rename to drivers/genpd/mediatek/mtk-scpsys.c
-diff --git a/drivers/soc/mediatek/Makefile b/drivers/soc/mediatek/Makefile
-index 8c0ddacbcde8..9d3ce7878c5c 100644
---- a/drivers/soc/mediatek/Makefile
-+++ b/drivers/soc/mediatek/Makefile
-@@ -4,8 +4,6 @@ obj-$(CONFIG_MTK_DEVAPC) += mtk-devapc.o
- obj-$(CONFIG_MTK_INFRACFG) += mtk-infracfg.o
- obj-$(CONFIG_MTK_PMIC_WRAP) += mtk-pmic-wrap.o
- obj-$(CONFIG_MTK_REGULATOR_COUPLER) += mtk-regulator-coupler.o
--obj-$(CONFIG_MTK_SCPSYS) += mtk-scpsys.o
--obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) += mtk-pm-domains.o
- obj-$(CONFIG_MTK_MMSYS) += mtk-mmsys.o
- obj-$(CONFIG_MTK_MMSYS) += mtk-mutex.o
- obj-$(CONFIG_MTK_SVS) += mtk-svs.o
+rename from drivers/soc/qcom/rpmpd.c
+rename to drivers/genpd/qcom/rpmpd.c
+diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+index 99114c71092b..f548a7150bb2 100644
+--- a/drivers/soc/qcom/Makefile
++++ b/drivers/soc/qcom/Makefile
+@@ -3,7 +3,6 @@ CFLAGS_rpmh-rsc.o := -I$(src)
+ obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
+ obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
+ obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
+-obj-$(CONFIG_QCOM_CPR)		+= cpr.o
+ obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
+ obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
+ obj-$(CONFIG_QCOM_OCMEM)	+= ocmem.o
+@@ -29,8 +28,6 @@ obj-$(CONFIG_QCOM_STATS)	+= qcom_stats.o
+ obj-$(CONFIG_QCOM_WCNSS_CTRL) += wcnss_ctrl.o
+ obj-$(CONFIG_QCOM_APR) += apr.o
+ obj-$(CONFIG_QCOM_LLCC) += llcc-qcom.o
+-obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
+-obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
+ obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
+ obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
+ qcom_ice-objs			+= ice.o
 -- 
 2.34.1
 
