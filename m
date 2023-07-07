@@ -2,68 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694B474B317
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DF574B32C
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbjGGOdw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S232010AbjGGOmh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232992AbjGGOdr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:33:47 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B801FC6
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:33:46 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-57045429f76so24089737b3.0
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:33:46 -0700 (PDT)
+        with ESMTP id S229556AbjGGOmg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:42:36 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBCF51FD7
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:42:34 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3143ccb0f75so2230645f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:42:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688740426; x=1691332426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7WekvXAmU0QQVL2ZEw2tjkX0EAjaAPbaYREDimQcMGk=;
-        b=Dq5C0e56lUdmmh/1HJppW/d7Qr/tEUwD3D7yPUh+hUT+id+ADBmK6/LvwANK3RsGG0
-         hnvnQK6g83sJiMF6eePm9WZ/M8QEMXJQehXKZIbq83ahUYIcDSmX3lbe3lSpssAx6vFk
-         MsDSamW/EQgrEWV/3FN41EMapTD2PDD8utM6pYgJEPyRfbsM2cn6mKcI12HKBiuqH4n2
-         hzJsTbOW1d3oo/Hg8iIEgvMGDHzKpDXjSIHRn+KCmTARBgm2ssbHTw0g4t8yFo3JhxAU
-         nFs7cAZGDldUNodW8TUhlgxgYL4RAHczsu4lTm422IaY5kOew8qJ3KuDpK5W6hGkeE5+
-         4Kwg==
+        d=linaro.org; s=google; t=1688740953; x=1691332953;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=z4lWoBqUTsmtDgqpIXQd4kMN9P4iNoBN46guAJ4J0UY=;
+        b=PY8Trs51ttpj0rQ77raRmZRLf1dKh8mRaBthfH/Z69kQfenZfIgqssui+V1ic649Mu
+         y83Av13S3K2KL2ROegnSN6y/mrKgyyrxz8l9iu5L4EsrDokiMpcsTbwtVwV15nZu9OCY
+         3Sa0LitqLGs5/ED0l7IjmKZuu89vfFGj+OT8FwOoSoZUUuBMy7tuuZ6w1EsUyFjAnews
+         GLcS5IWrlr5KyMocqgNAwAR8R8os91F1mbaF2dldsrhAxHlRgLZJWYNKAg81F5U6IjMQ
+         ArhQACobVp3SBs5CsONrv4Rqmb/GDRbU3vi4J8HXCUj79yyZlp3AflM1oqLHpljJ8x1q
+         AZJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688740426; x=1691332426;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7WekvXAmU0QQVL2ZEw2tjkX0EAjaAPbaYREDimQcMGk=;
-        b=eE8rPkpZuo/e/alKlk/p9menr4CrP6DtMHP3P+5GohVsdWi/dnl5sa9h+oZv7zqh1/
-         nQl0l9tQh9KDJ2GRJwzh6srUG3A5yu2fUSZzlqSSLLfYTA3yifjYS2QWeIAw0XI/QTak
-         2Nz6+jtabltyaS4BknIhFOpq32CDyDg9r3NmCkRuAWwS52Ub1zHnDLKSev0hAlcUndN+
-         EFejXwX3A9qly3S+nxGW2/p2hijKqg+7BpIuDoCLW7kmGQBZNcIfwIAssbPM/VZX+nbD
-         rsSXNrjdcZbgD3Y2P4wdm6HQZ3rftNJwXMO74HtYB+anJ/GlcDXLPTnp7AkSGj7k8Kf8
-         sMPw==
-X-Gm-Message-State: ABy/qLbWmDgQYs0h93LBRQwdtjIyO7VCS8ZXTVHWEkSNwBg1bnEG9hF5
-        XN55tAbxfGloqZ+AAJtWwlvbNf5JN5fi2kPZC8aGFA==
-X-Google-Smtp-Source: APBJJlFQodjakzRWF8WW0DCaumWalOESZwzgo6hb6I5dEQD49XSPTIEw4ttkvMpWuNZ565vLnSKAh8JEv5CG1I743dM=
-X-Received: by 2002:a25:1483:0:b0:c66:4ffb:69f7 with SMTP id
- 125-20020a251483000000b00c664ffb69f7mr4370202ybu.52.1688740424904; Fri, 07
- Jul 2023 07:33:44 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688740953; x=1691332953;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z4lWoBqUTsmtDgqpIXQd4kMN9P4iNoBN46guAJ4J0UY=;
+        b=hMqk9coU1gnb5X7l6xB+ezOq1Ga/djQJs/KdmtMqE7RS+u/Xa3wlXtT/sx6WNnExYF
+         0I2qrOq4ybBgSPKradAPiauRD4qWSjUoyQYt0LCWntJxWUYBPC8KvaWg1/dIOBvVL0bN
+         mH4x0DC8PCLw07gcTYPjuL4gUh+3CpblJ/cnjGg/AeswS45f61wUc4nXyuxn0j8odYIo
+         X7jRiSbgNG7G8/2Q3QGiJCNC8G3KPVYhlUTo+4FFfhtp1/6qxQ5hYBZM8/gnyUxZvW0Q
+         K2vJxFWGCq2I03Pf16zBnLbyO2tr6wDR6fW5mrSNz0wLEAZ3T1RJ56A5Rd+VhJbLwEru
+         hQ3A==
+X-Gm-Message-State: ABy/qLaUN0MTzFt8yWvQHg6W00uB+oYo7px7jj3cqi3TmirZd9fl2O8P
+        ZRnf1PwTooJ+xv5cHhjmpmvzbA==
+X-Google-Smtp-Source: APBJJlHBP9G/LqJXiH8qNwypAEFyU81HIVpOXYc4p9njD0acJ2CEliu5SxfbBxyOn5IJb2gB5tdV5w==
+X-Received: by 2002:adf:ee0c:0:b0:314:3997:530d with SMTP id y12-20020adfee0c000000b003143997530dmr6132017wrn.31.1688740953164;
+        Fri, 07 Jul 2023 07:42:33 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ac80:753:1ffc:791b? ([2a01:e0a:982:cbb0:ac80:753:1ffc:791b])
+        by smtp.gmail.com with ESMTPSA id h16-20020adff4d0000000b0031134bcdacdsm4631399wrp.42.2023.07.07.07.42.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Jul 2023 07:42:32 -0700 (PDT)
+Message-ID: <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
+Date:   Fri, 7 Jul 2023 16:42:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
+ genpd dir
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
 References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-7-ulf.hansson@linaro.org> <CAOMZO5Df5bHGy6-kTKwysSe6Kp7e2HNn+uhOD2E6MT+cDkS07A@mail.gmail.com>
-In-Reply-To: <CAOMZO5Df5bHGy6-kTKwysSe6Kp7e2HNn+uhOD2E6MT+cDkS07A@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 7 Jul 2023 16:33:09 +0200
-Message-ID: <CAPDyKFofqTYpYxSiMm173U75nF17tHaZMwbzHum3k1Bj05GrWA@mail.gmail.com>
-Subject: Re: [PATCH 06/18] soc: imx: Move power-domain drivers to the genpd dir
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+ <20230707140434.723349-4-ulf.hansson@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230707140434.723349-4-ulf.hansson@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,34 +83,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 7 Jul 2023 at 16:25, Fabio Estevam <festevam@gmail.com> wrote:
->
-> On Fri, Jul 7, 2023 at 11:04=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> >
-> > Cc: Shawn Guo <shawnguo@kernel.org>
-> > Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> > Cc: Fabio Estevam <festevam@gmail.com>
-> > Cc: <kernel@pengutronix.de>
-> > Cc: <linux-imx@nxp.com>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->
-> A commit log explaining the motivation would be helpful here.
+Hi,
 
-Right. I was a bit lazy and added motivation only as part of the
-commit message in patch 1/18 (and in the cover letter).
+On 07/07/2023 16:04, Ulf Hansson wrote:
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Cc: <linux-amlogic@lists.infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>   MAINTAINERS                                        | 1 +
+>   drivers/genpd/Makefile                             | 1 +
+>   drivers/genpd/amlogic/Makefile                     | 4 ++++
+>   drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
+>   drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
+>   drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
+>   drivers/soc/Makefile                               | 1 -
+>   drivers/soc/amlogic/Makefile                       | 3 ---
+>   8 files changed, 6 insertions(+), 4 deletions(-)
+>   create mode 100644 drivers/genpd/amlogic/Makefile
+>   rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+>   rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+>   rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 588769fab516..9b8c9ae2375d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1843,6 +1843,7 @@ F:	Documentation/devicetree/bindings/phy/amlogic*
+>   F:	arch/arm/boot/dts/amlogic/
+>   F:	arch/arm/mach-meson/
+>   F:	arch/arm64/boot/dts/amlogic/
+> +F:	drivers/genpd/amlogic/
+>   F:	drivers/mmc/host/meson*
+>   F:	drivers/phy/amlogic/
+>   F:	drivers/pinctrl/meson/
+> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> index a2d5b2095915..cdba3b9f0c75 100644
+> --- a/drivers/genpd/Makefile
+> +++ b/drivers/genpd/Makefile
+> @@ -1,2 +1,3 @@
+>   # SPDX-License-Identifier: GPL-2.0-only
+>   obj-y					+= actions/
+> +obj-y					+= amlogic/
+> diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
+> new file mode 100644
+> index 000000000000..3d58abd574f9
+> --- /dev/null
+> +++ b/drivers/genpd/amlogic/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+> +obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+> +obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+> diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
+> similarity index 100%
+> rename from drivers/soc/amlogic/meson-ee-pwrc.c
+> rename to drivers/genpd/amlogic/meson-ee-pwrc.c
+> diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+> similarity index 100%
+> rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
+> rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
+> similarity index 100%
+> rename from drivers/soc/amlogic/meson-secure-pwrc.c
+> rename to drivers/genpd/amlogic/meson-secure-pwrc.c
+> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> index 3b0f9fb3b5c8..dc93e1762ca7 100644
+> --- a/drivers/soc/Makefile
+> +++ b/drivers/soc/Makefile
+> @@ -23,7 +23,6 @@ obj-y				+= mediatek/
+>   obj-y				+= microchip/
+>   obj-y				+= nuvoton/
+>   obj-y				+= pxa/
+> -obj-y				+= amlogic/
+>   obj-y				+= qcom/
+>   obj-y				+= renesas/
+>   obj-y				+= rockchip/
+> diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
+> index 7b8c5d323f5c..c25f835e6a26 100644
+> --- a/drivers/soc/amlogic/Makefile
+> +++ b/drivers/soc/amlogic/Makefile
+> @@ -2,7 +2,4 @@
+>   obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
+>   obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
+>   obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
+> -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+>   obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
+> -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+> -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
 
-I deliberately didn't want to spam everyone with this, but you find it
-at the generic linux-kernel list.
+I've a few changes for v6.6, how shall we handle that ?
 
->
-> With that added:
->
-> Reviewed-by: Fabio Estevam <festevam@gmail.com>
->
-> Thanks
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-Thanks!
-
-Kind regards
-Uffe
+Thanks !
+Neil
