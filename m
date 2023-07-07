@@ -2,93 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2869674B34C
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C162574B364
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjGGOv7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S233169AbjGGOzo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjGGOv6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:51:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880941FD7
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:51:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D462619C4
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 14:51:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79C0BC433C7
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 14:51:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688741514;
-        bh=OMVwRopbxuuI2S8t7eNuyHinIW4UrDt/WlkBRSB08vc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=YrxFpsUYZxeREx7Kb41CFRZzgJHB/TEnz+T/cR5gic6GAq52fEMjjTjLcGzcJZI3G
-         5ADVvUX5gZSbgHpg9AUq/S/YRexucyeVEvcxqVNC0h8Qy57haiKyhD1oOmYXZrz0wI
-         COYBdIZLIbRn7aUKE/4QAtjdP/10Rkupi/l2sR0oYib7/gP0QcQDb15AGB6tyZvjh7
-         DE7C2TzACN8OXHtbkA8YGdWk7Qja8mkGaAGwW6Bps9eW5mPLCrDehgVLr67TzVNZD4
-         Mxk/8V4DggBm2e0UNEddt7bVKqArw6S0vI0vh42QzEDMMmvYObRIF+NiTQlNam0C/J
-         pIIxo1C5qzrOQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 63A26C53BD3; Fri,  7 Jul 2023 14:51:54 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
- frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Fri, 07 Jul 2023 14:51:53 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-215800-137361-3oTN9it7zM@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
-References: <bug-215800-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S233141AbjGGOzl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:55:41 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3441211E
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:55:24 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5774335bb2aso26154917b3.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688741724; x=1691333724;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2fD8UqByjVQZaOYrRH9n00mG/JWxOflxhgkt3jKtV60=;
+        b=e0hb2EAf6WHbY5geehHqIq7YESqpwGvat037XDdpfWRZfWXcWlo9Vu0WtyxhTB5gii
+         hDE7eifmi/ROEpYHjnuENTOTuJNOHCl2dcFDc903Ulstmf8zRFj2gTEaI1tShs79U4ot
+         704VJZksXadue5fq0wx/0Gfj9q1VfAIV7gm1H/tVl+ros4g+/Uf/TUOUWkJr9HI9Ee1x
+         CIYkJr5/3pw6I8BLP1UvHU03jFmGvUjn3rF4/bRIfwwwxoNyKbLctNsMsH1E98BseWoQ
+         Se4PJfgCeK/y3T8Z7hIAw+/aIy+St0AK723wjrC1UV48MQaEKpWGhllVc+8RH730WE1Q
+         OWMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688741724; x=1691333724;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2fD8UqByjVQZaOYrRH9n00mG/JWxOflxhgkt3jKtV60=;
+        b=Q/DJvRj2eX/rYb0wNxKmnJuH2pisB+cWb8khVH1eBpa5dPekpkEiy0cVShvdr1vu0k
+         nw99fVUJO4kpRlFoV3xs2ze0t0iGnBZSmF5XQPcKoDXd4o7pQcnZxKMd5SZ5/mUdq/Nq
+         qyUGPsKUUq384ehOrgOJyiuif8kLBau3jll5lOJDnTa/KyyI3B1SEltf8F4vOtkMrsho
+         yyk7jI1AO1i3bSixdb8VaRHjJxJiYJ5XHoXiDYVX39IJsRZnGyhzRRLJbAAJiUDw55E7
+         DfTEWaSHVcAMfHs4npMehrR27AqsvS1RuTEAUD+wDU93QMkGY7NbqSgoOp+j0YRoTmEJ
+         +X0Q==
+X-Gm-Message-State: ABy/qLalrQEGpoT6BjzgKhgzhRHy+lhsYMkgf6JGjLyeGQ8F5S0Iv+Uu
+        xlFK8I7CGXPRwTK6/W01QwjKp6rWW/n3zZ9EGVSXmQ==
+X-Google-Smtp-Source: APBJJlFrxFaG6bMvHkWjJa+Y/Zsglssbt8lE2+df1lfmaJ2asc9CJWHX4MFlS3Ein1oiJ/ppMK5rWUQLy28WoX5vMuk=
+X-Received: by 2002:a25:6dd6:0:b0:c5d:37ca:a413 with SMTP id
+ i205-20020a256dd6000000b00c5d37caa413mr4225615ybc.28.1688741723707; Fri, 07
+ Jul 2023 07:55:23 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-4-ulf.hansson@linaro.org> <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
+In-Reply-To: <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 7 Jul 2023 16:54:48 +0200
+Message-ID: <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
+Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
+ genpd dir
+To:     neil.armstrong@linaro.org
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
+On Fri, 7 Jul 2023 at 16:42, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Hi,
+>
+> On 07/07/2023 16:04, Ulf Hansson wrote:
+> > Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> > Cc: Kevin Hilman <khilman@baylibre.com>
+> > Cc: Jerome Brunet <jbrunet@baylibre.com>
+> > Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> > Cc: <linux-amlogic@lists.infradead.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >   MAINTAINERS                                        | 1 +
+> >   drivers/genpd/Makefile                             | 1 +
+> >   drivers/genpd/amlogic/Makefile                     | 4 ++++
+> >   drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
+> >   drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
+> >   drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
+> >   drivers/soc/Makefile                               | 1 -
+> >   drivers/soc/amlogic/Makefile                       | 3 ---
+> >   8 files changed, 6 insertions(+), 4 deletions(-)
+> >   create mode 100644 drivers/genpd/amlogic/Makefile
+> >   rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+> >   rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+> >   rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 588769fab516..9b8c9ae2375d 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -1843,6 +1843,7 @@ F:      Documentation/devicetree/bindings/phy/amlogic*
+> >   F:  arch/arm/boot/dts/amlogic/
+> >   F:  arch/arm/mach-meson/
+> >   F:  arch/arm64/boot/dts/amlogic/
+> > +F:   drivers/genpd/amlogic/
+> >   F:  drivers/mmc/host/meson*
+> >   F:  drivers/phy/amlogic/
+> >   F:  drivers/pinctrl/meson/
+> > diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> > index a2d5b2095915..cdba3b9f0c75 100644
+> > --- a/drivers/genpd/Makefile
+> > +++ b/drivers/genpd/Makefile
+> > @@ -1,2 +1,3 @@
+> >   # SPDX-License-Identifier: GPL-2.0-only
+> >   obj-y                                       += actions/
+> > +obj-y                                        += amlogic/
+> > diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
+> > new file mode 100644
+> > index 000000000000..3d58abd574f9
+> > --- /dev/null
+> > +++ b/drivers/genpd/amlogic/Makefile
+> > @@ -0,0 +1,4 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+> > +obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+> > +obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+> > diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
+> > similarity index 100%
+> > rename from drivers/soc/amlogic/meson-ee-pwrc.c
+> > rename to drivers/genpd/amlogic/meson-ee-pwrc.c
+> > diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+> > similarity index 100%
+> > rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
+> > rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+> > diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
+> > similarity index 100%
+> > rename from drivers/soc/amlogic/meson-secure-pwrc.c
+> > rename to drivers/genpd/amlogic/meson-secure-pwrc.c
+> > diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> > index 3b0f9fb3b5c8..dc93e1762ca7 100644
+> > --- a/drivers/soc/Makefile
+> > +++ b/drivers/soc/Makefile
+> > @@ -23,7 +23,6 @@ obj-y                               += mediatek/
+> >   obj-y                               += microchip/
+> >   obj-y                               += nuvoton/
+> >   obj-y                               += pxa/
+> > -obj-y                                += amlogic/
+> >   obj-y                               += qcom/
+> >   obj-y                               += renesas/
+> >   obj-y                               += rockchip/
+> > diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
+> > index 7b8c5d323f5c..c25f835e6a26 100644
+> > --- a/drivers/soc/amlogic/Makefile
+> > +++ b/drivers/soc/amlogic/Makefile
+> > @@ -2,7 +2,4 @@
+> >   obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
+> >   obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
+> >   obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
+> > -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+> >   obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
+> > -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+> > -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+>
+> I've a few changes for v6.6, how shall we handle that ?
 
---- Comment #28 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-When you're using active mode (EPP), the hardware is choosing frequencies a=
-nd
-software only provides a hint to set bias.
+I think we should continue to use the soc tree until v6.6-rc1 (or if
+Arnd have some other ideas), there are some more thoughts around this
+in the cover letter.
 
-You can read a little bit more about active mode at
-https://www.kernel.org/doc/html/latest/admin-guide/pm/amd-pstate.html
+Beyond v6.6-rc1 I plan to help with maintenance in practice  and run
+my own separate git tree.
 
-What you should be doing isn't trying to set specific frequency targets, but
-rather you should change the values of 'energy_performance_preference' to m=
-eet
-the needs for your workload.
+>
+> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+>
+> Thanks !
+> Neil
 
---=20
-You may reply to this email to add a comment.
+Thanks!
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Kind regards
+Uffe
