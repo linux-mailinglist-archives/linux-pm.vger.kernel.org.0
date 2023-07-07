@@ -2,97 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C2474B2DD
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F8674B300
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjGGONm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        id S229570AbjGGOZg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjGGONl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:13:41 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB60B2;
-        Fri,  7 Jul 2023 07:13:38 -0700 (PDT)
-Received: from i53875a50.versanet.de ([83.135.90.80] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qHmDG-0000Sg-8C; Fri, 07 Jul 2023 16:13:34 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 10/18] soc: rockchip: Mover power-domain driver to the genpd dir
-Date:   Fri, 07 Jul 2023 16:13:33 +0200
-Message-ID: <4517610.cEBGB3zze1@diego>
-In-Reply-To: <20230707140434.723349-11-ulf.hansson@linaro.org>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-11-ulf.hansson@linaro.org>
+        with ESMTP id S230044AbjGGOZf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:25:35 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459B91BF4;
+        Fri,  7 Jul 2023 07:25:33 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-51f64817809so169850a12.1;
+        Fri, 07 Jul 2023 07:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688739933; x=1691331933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VQpNcExAidhzmAX5mqxwLcDsKlQH76X8tAmxgxEbLeo=;
+        b=l5seuOELr9PbN56mqnFpaie+nQdyY1U6mLT8l150oxhmcxmxMqg3eKPPJr4PGBq427
+         wKT4yw9vd5loszISHhtN++aOVV5UA384h9mSgydVrKshsS7eJ11kGlhWwufK4TkRRWoO
+         GpGBjlliXyldKCd1aWrfeQPqzbENOxkkdrDRkl4NCLRbWzLQA8FGGi2NA1z6yF4ybHM8
+         BFRooaMtnd8Q+amOhNewi+F813WJabQJC2CoyP6hrA+ShSLAJRzFS55hvHbPUBDODLhs
+         lcHo4/RVsiWuNk0cq4OQSBIF18WHBl1sEZWzBA6tfFdcIvhk1TfElJO8oQ4PZTz4WfZv
+         OBUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688739933; x=1691331933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VQpNcExAidhzmAX5mqxwLcDsKlQH76X8tAmxgxEbLeo=;
+        b=Zk9U5321TKea13GaYPKUvO0Q8liY2+swUY6QauKy8iXJGW0ev5zpO1QAHx+oDe92Cv
+         yrPsN35GbBsTXpu5AKvElCl54RgQNDrE5loiCvAwhal+w3Y+5xBJHBLxW2UPIwrme1w2
+         ZxjpVJwZM5lSMppN1fFWcvyi57CwYXjJAucRU34LYLAklEbFQeWH+mDYQus/2B9Q3ory
+         QuTrRbhZa05IwLGotRxbwodJJZRJ14p5P3KT7tlhinPLsOeD6YLuUF94y9Iyw6Ufz+wm
+         O2WD97uxw+TM7d8HgHD6XDWsa4+acdl+PagnosJKX2jTh5xDX85IO3ivBQGEqeY8XNqx
+         a46Q==
+X-Gm-Message-State: ABy/qLbyef/wAqJdFKjEJPk1Zv2lnxcMN3RgIH04+DVq2sn1JpBhgp0E
+        NnKyVW9wFYjXeVRF75zk8IUGNLZRF0beoBOBLh4=
+X-Google-Smtp-Source: APBJJlESBbs9wkXuxpVQznKynwcE2DrR/fZtA95YOu2obH1Joa40EV6F61/CS41emPirlQMCL8XsVTkoPNSgohWR4Mc=
+X-Received: by 2002:a05:6a20:54a9:b0:12d:77e:ba3 with SMTP id
+ i41-20020a056a2054a900b0012d077e0ba3mr6417452pzk.0.1688739932697; Fri, 07 Jul
+ 2023 07:25:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230707140434.723349-1-ulf.hansson@linaro.org> <20230707140434.723349-7-ulf.hansson@linaro.org>
+In-Reply-To: <20230707140434.723349-7-ulf.hansson@linaro.org>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Fri, 7 Jul 2023 11:25:22 -0300
+Message-ID: <CAOMZO5Df5bHGy6-kTKwysSe6Kp7e2HNn+uhOD2E6MT+cDkS07A@mail.gmail.com>
+Subject: Re: [PATCH 06/18] soc: imx: Move power-domain drivers to the genpd dir
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Am Freitag, 7. Juli 2023, 16:04:26 CEST schrieb Ulf Hansson:
-> Cc: Heiko Stuebner <heiko@sntech.de>
-> Cc: <linux-rockchip@lists.infradead.org>
+On Fri, Jul 7, 2023 at 11:04=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: <kernel@pengutronix.de>
+> Cc: <linux-imx@nxp.com>
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-I guess this is part of a bigger series moving these things around, so
-Acked-by: Heiko Stuebner <heiko@sntech.de>
+A commit log explaining the motivation would be helpful here.
 
-> ---
->  drivers/genpd/Makefile                                          | 1 +
->  drivers/genpd/rockchip/Makefile                                 | 2 ++
->  .../{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c}  | 0
->  drivers/soc/rockchip/Makefile                                   | 1 -
->  4 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/genpd/rockchip/Makefile
->  rename drivers/{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c} (100%)
-> 
-> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> index 286598ce7620..c178421e0cbc 100644
-> --- a/drivers/genpd/Makefile
-> +++ b/drivers/genpd/Makefile
-> @@ -6,3 +6,4 @@ obj-y					+= bcm/
->  obj-y					+= mediatek/
->  obj-y					+= qcom/
->  obj-y					+= renesas/
-> +obj-y					+= rockchip/
-> diff --git a/drivers/genpd/rockchip/Makefile b/drivers/genpd/rockchip/Makefile
-> new file mode 100644
-> index 000000000000..8fb9d88a3492
-> --- /dev/null
-> +++ b/drivers/genpd/rockchip/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_ROCKCHIP_PM_DOMAINS)	+= pm-domains.o
-> diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/genpd/rockchip/pm-domains.c
-> similarity index 100%
-> rename from drivers/soc/rockchip/pm_domains.c
-> rename to drivers/genpd/rockchip/pm-domains.c
-> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
-> index 05f31a4e743c..23d414433c8c 100644
-> --- a/drivers/soc/rockchip/Makefile
-> +++ b/drivers/soc/rockchip/Makefile
-> @@ -4,5 +4,4 @@
->  #
->  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
->  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
-> -obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
->  obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
-> 
+With that added:
 
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-
-
+Thanks
