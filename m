@@ -2,63 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9669374B28A
+	by mail.lfdr.de (Postfix) with ESMTP id EA6A074B28B
 	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbjGGOFM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
+        id S232620AbjGGOFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232828AbjGGOFH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:07 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCD02118
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:04:55 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b701e41cd3so30810231fa.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:04:55 -0700 (PDT)
+        with ESMTP id S232833AbjGGOFI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:08 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F544211D
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:04:56 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b69e6d324aso29520291fa.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688738693; x=1691330693;
+        d=linaro.org; s=google; t=1688738694; x=1691330694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ah7YGD1xyf3kSBx1jvLazId0APuOLF3pVJjrHEEu/ig=;
-        b=WzV8wBgJnPy4qeBnOZRqGp2YKUS3RX/TdS3SRNG+atvqyPjAyGGvE9KH+3ujUeRKQz
-         PwCa+l9PVlqNJlibhqHyhaNrb654HaZ3IwpdzdjTt1DX2owekQVypyH/NgoI59UdN3wZ
-         ib20TKnH8DOYjEeRegiVzy1lYvG4oOxcq1442g/d3RLuHb3SO+jQEVPlTOH7w51ZpihO
-         55bxuuBvsxlPDZMK4bsW5jVYhKYJvLPjnYQxdHsdaeE7t2k+2gjg179zFaZOUqvm5TBH
-         wei/1fMD0c4HJj5N+ww2Gu6z5j1tpPWMv102AmJwaxJpaCWj+yeZQXpu6SUoEMboGkW0
-         zs2A==
+        bh=dvYXj99u7TbpJIDZNfoYyEKQkjm1mobuKtYLdIv6z2U=;
+        b=p/oH5D8hyIf5Dkec8klXho99OyxP80D/QtgL4Gm0vWlJ1aeL+tiNklnjF0R12Qpam6
+         TaTTV4uQ/sj91Kzjq8BXg21nsyc6hKiIqGm6o3P5frn4qyATm+KWjfsJMJR0DrVnqmAP
+         NVQIJrpUbuvXpoIDVMSAfjkwkSFKRKSYfrCOK23vNq69Psdl9sVmPkheppRFu+dl5ppT
+         whl3eeKzEnDRDtzxp4Zqc09WgAJEJBCdDROwDRQfAsVFReiEY0dW6FiGQeZW7X2VWHUr
+         +iOL5adYEiav1yk9MrfCcYU0cSUcsFsukv+ucSgLTKnfVjo7wrAZgMTj+hwJNAAO1pmy
+         E4wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688738693; x=1691330693;
+        d=1e100.net; s=20221208; t=1688738694; x=1691330694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ah7YGD1xyf3kSBx1jvLazId0APuOLF3pVJjrHEEu/ig=;
-        b=bAXMFImNqOszugsODcqUMv8sD5Ff3YTrPJcSKucsoHTpxZMQ+Vb99D8054g4RBPJwA
-         KXqesWjSbAKq2MUOARV/2v+SQT4XTjd2jP/mQJP9Q+ciJpyTJJOcu5qUJiVFq51bvptE
-         etaDq8mY6TTCg4SgHoKWBZJtM9D+JrWji3rylwyz/3b7z53kJSC7QihOqha6nwa3xE3C
-         pixhs1j6DwN6uL2jhJ3rgnhiaJGD83bKmjgyKRtwaB6FiVc2NavqtkFQVCPgLW5Aj2XQ
-         kXXtIB1DaGDFIYB5puZukQigAbQWJ7mvjJydOrqiWugFm+NWTADicE8DWmEzFc61IuCw
-         f3ig==
-X-Gm-Message-State: ABy/qLaxSy2xvCxNW6MiEImbHDpnSVzU9KHldJ1kAP5vjW99C+kkXcCT
-        xX0INQXS0cZHATbLfJk92E2VQzlyTs7rZ3iHAyY=
-X-Google-Smtp-Source: APBJJlFlxElROl8lCVcuW04EJ7Kx+bi8Prfy3SdyYewfyxMMh9NzLlD7C69u2RhV4Y5QdP1gKzLhKw==
-X-Received: by 2002:a2e:9c95:0:b0:2b6:c16a:db06 with SMTP id x21-20020a2e9c95000000b002b6c16adb06mr4104254lji.39.1688738693486;
-        Fri, 07 Jul 2023 07:04:53 -0700 (PDT)
+        bh=dvYXj99u7TbpJIDZNfoYyEKQkjm1mobuKtYLdIv6z2U=;
+        b=A5AubqYfaMD4wlsv7X4SyFKejVd7r2c5NrG2bEyDOojwa+1zpI4VCbxVwTG3C6vwM0
+         blTWsx/MSS/gCr57hpekBviBjavu9hpjfUwmqwzFoHMeVCBFD2egrycoUOlhjTiAf0lA
+         yLQn6PlbGlsTnuwy1rqNxnzpMvxdW4UqoVU5FLpSQBFTzV6tF62vFDTb4qUQ42Rqhjay
+         G32fd4Pr9F2BMfpR/l5DT2TZisE2pkUGvsnDQumRifpH7H8yaWdnJKokunnIE82nc4y7
+         VvEO69KjYDYSqqyOUf4C3U0ExghvDNh1u/Zp1tl+bvFS79NhEuejCEVVqE5nmQEHVQNP
+         dwLg==
+X-Gm-Message-State: ABy/qLYcz3pHSKSf4gccb0Xi0Hn0WlOwi+oARLi6MJA5o+l57kK6cBW/
+        1DFxCaD8p6IWS/5AOUziVM9NUg==
+X-Google-Smtp-Source: APBJJlFZUteWbKYl1aexP46DguwGv5crahAqnytrmTR0O5/HuzUepW8m9GQt2AqtWhVNZYlKuIDy2A==
+X-Received: by 2002:a2e:9e58:0:b0:2b6:e12f:267 with SMTP id g24-20020a2e9e58000000b002b6e12f0267mr3598442ljk.5.1688738694744;
+        Fri, 07 Jul 2023 07:04:54 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.52
+        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:04:53 -0700 (PDT)
+        Fri, 07 Jul 2023 07:04:54 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 09/18] soc: renesas: Move power-domain drivers to the genpd dir
-Date:   Fri,  7 Jul 2023 16:04:25 +0200
-Message-Id: <20230707140434.723349-10-ulf.hansson@linaro.org>
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org
+Subject: [PATCH 10/18] soc: rockchip: Mover power-domain driver to the genpd dir
+Date:   Fri,  7 Jul 2023 16:04:26 +0200
+Message-Id: <20230707140434.723349-11-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230707140434.723349-1-ulf.hansson@linaro.org>
 References: <20230707140434.723349-1-ulf.hansson@linaro.org>
@@ -74,285 +73,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Magnus Damm <magnus.damm@gmail.com>
-Cc: <linux-renesas-soc@vger.kernel.org>
+Cc: Heiko Stuebner <heiko@sntech.de>
+Cc: <linux-rockchip@lists.infradead.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- MAINTAINERS                                   |  1 +
- drivers/genpd/Makefile                        |  1 +
- drivers/genpd/renesas/Makefile                | 30 +++++++++++++++++++
- drivers/{soc => genpd}/renesas/r8a7742-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7743-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7745-sysc.c |  0
- .../{soc => genpd}/renesas/r8a77470-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a774a1-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a774b1-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a774c0-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a774e1-sysc.c    |  0
- drivers/{soc => genpd}/renesas/r8a7779-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7790-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7791-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7792-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7794-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7795-sysc.c |  0
- drivers/{soc => genpd}/renesas/r8a7796-sysc.c |  0
- .../{soc => genpd}/renesas/r8a77965-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a77970-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a77980-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a77990-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a77995-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a779a0-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a779f0-sysc.c    |  0
- .../{soc => genpd}/renesas/r8a779g0-sysc.c    |  0
- .../{soc => genpd}/renesas/rcar-gen4-sysc.c   |  0
- .../{soc => genpd}/renesas/rcar-gen4-sysc.h   |  0
- drivers/{soc => genpd}/renesas/rcar-sysc.c    |  0
- drivers/{soc => genpd}/renesas/rcar-sysc.h    |  0
- drivers/{soc => genpd}/renesas/rmobile-sysc.c |  0
- drivers/soc/renesas/Makefile                  | 27 -----------------
- 32 files changed, 32 insertions(+), 27 deletions(-)
- create mode 100644 drivers/genpd/renesas/Makefile
- rename drivers/{soc => genpd}/renesas/r8a7742-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7743-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7745-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a77470-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a774a1-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a774b1-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a774c0-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a774e1-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7779-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7790-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7791-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7792-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7794-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7795-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a7796-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a77965-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a77970-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a77980-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a77990-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a77995-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a779a0-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a779f0-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/r8a779g0-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/rcar-gen4-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/rcar-gen4-sysc.h (100%)
- rename drivers/{soc => genpd}/renesas/rcar-sysc.c (100%)
- rename drivers/{soc => genpd}/renesas/rcar-sysc.h (100%)
- rename drivers/{soc => genpd}/renesas/rmobile-sysc.c (100%)
+ drivers/genpd/Makefile                                          | 1 +
+ drivers/genpd/rockchip/Makefile                                 | 2 ++
+ .../{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c}  | 0
+ drivers/soc/rockchip/Makefile                                   | 1 -
+ 4 files changed, 3 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/genpd/rockchip/Makefile
+ rename drivers/{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c} (100%)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 753eea641129..cb57f5fb2cd7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2591,6 +2591,7 @@ F:	arch/arm/include/debug/renesas-scif.S
- F:	arch/arm/mach-shmobile/
- F:	arch/arm64/boot/dts/renesas/
- F:	arch/riscv/boot/dts/renesas/
-+F:	drivers/genpd/renesas/
- F:	drivers/soc/renesas/
- F:	include/linux/soc/renesas/
- K:	\brenesas,
 diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index dfdea14e2a8a..286598ce7620 100644
+index 286598ce7620..c178421e0cbc 100644
 --- a/drivers/genpd/Makefile
 +++ b/drivers/genpd/Makefile
-@@ -5,3 +5,4 @@ obj-y					+= apple/
- obj-y					+= bcm/
+@@ -6,3 +6,4 @@ obj-y					+= bcm/
  obj-y					+= mediatek/
  obj-y					+= qcom/
-+obj-y					+= renesas/
-diff --git a/drivers/genpd/renesas/Makefile b/drivers/genpd/renesas/Makefile
+ obj-y					+= renesas/
++obj-y					+= rockchip/
+diff --git a/drivers/genpd/rockchip/Makefile b/drivers/genpd/rockchip/Makefile
 new file mode 100644
-index 000000000000..e306e396fc8c
+index 000000000000..8fb9d88a3492
 --- /dev/null
-+++ b/drivers/genpd/renesas/Makefile
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# SoC
-+obj-$(CONFIG_SYSC_R8A7742)	+= r8a7742-sysc.o
-+obj-$(CONFIG_SYSC_R8A7743)	+= r8a7743-sysc.o
-+obj-$(CONFIG_SYSC_R8A7745)	+= r8a7745-sysc.o
-+obj-$(CONFIG_SYSC_R8A77470)	+= r8a77470-sysc.o
-+obj-$(CONFIG_SYSC_R8A774A1)	+= r8a774a1-sysc.o
-+obj-$(CONFIG_SYSC_R8A774B1)	+= r8a774b1-sysc.o
-+obj-$(CONFIG_SYSC_R8A774C0)	+= r8a774c0-sysc.o
-+obj-$(CONFIG_SYSC_R8A774E1)	+= r8a774e1-sysc.o
-+obj-$(CONFIG_SYSC_R8A7779)	+= r8a7779-sysc.o
-+obj-$(CONFIG_SYSC_R8A7790)	+= r8a7790-sysc.o
-+obj-$(CONFIG_SYSC_R8A7791)	+= r8a7791-sysc.o
-+obj-$(CONFIG_SYSC_R8A7792)	+= r8a7792-sysc.o
-+obj-$(CONFIG_SYSC_R8A7794)	+= r8a7794-sysc.o
-+obj-$(CONFIG_SYSC_R8A7795)	+= r8a7795-sysc.o
-+obj-$(CONFIG_SYSC_R8A77960)	+= r8a7796-sysc.o
-+obj-$(CONFIG_SYSC_R8A77961)	+= r8a7796-sysc.o
-+obj-$(CONFIG_SYSC_R8A77965)	+= r8a77965-sysc.o
-+obj-$(CONFIG_SYSC_R8A77970)	+= r8a77970-sysc.o
-+obj-$(CONFIG_SYSC_R8A77980)	+= r8a77980-sysc.o
-+obj-$(CONFIG_SYSC_R8A77990)	+= r8a77990-sysc.o
-+obj-$(CONFIG_SYSC_R8A77995)	+= r8a77995-sysc.o
-+obj-$(CONFIG_SYSC_R8A779A0)	+= r8a779a0-sysc.o
-+obj-$(CONFIG_SYSC_R8A779F0)	+= r8a779f0-sysc.o
-+obj-$(CONFIG_SYSC_R8A779G0)	+= r8a779g0-sysc.o
-+# Family
-+obj-$(CONFIG_SYSC_RCAR)		+= rcar-sysc.o
-+obj-$(CONFIG_SYSC_RCAR_GEN4)	+= rcar-gen4-sysc.o
-+obj-$(CONFIG_SYSC_RMOBILE)	+= rmobile-sysc.o
-diff --git a/drivers/soc/renesas/r8a7742-sysc.c b/drivers/genpd/renesas/r8a7742-sysc.c
++++ b/drivers/genpd/rockchip/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_ROCKCHIP_PM_DOMAINS)	+= pm-domains.o
+diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/genpd/rockchip/pm-domains.c
 similarity index 100%
-rename from drivers/soc/renesas/r8a7742-sysc.c
-rename to drivers/genpd/renesas/r8a7742-sysc.c
-diff --git a/drivers/soc/renesas/r8a7743-sysc.c b/drivers/genpd/renesas/r8a7743-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7743-sysc.c
-rename to drivers/genpd/renesas/r8a7743-sysc.c
-diff --git a/drivers/soc/renesas/r8a7745-sysc.c b/drivers/genpd/renesas/r8a7745-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7745-sysc.c
-rename to drivers/genpd/renesas/r8a7745-sysc.c
-diff --git a/drivers/soc/renesas/r8a77470-sysc.c b/drivers/genpd/renesas/r8a77470-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a77470-sysc.c
-rename to drivers/genpd/renesas/r8a77470-sysc.c
-diff --git a/drivers/soc/renesas/r8a774a1-sysc.c b/drivers/genpd/renesas/r8a774a1-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a774a1-sysc.c
-rename to drivers/genpd/renesas/r8a774a1-sysc.c
-diff --git a/drivers/soc/renesas/r8a774b1-sysc.c b/drivers/genpd/renesas/r8a774b1-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a774b1-sysc.c
-rename to drivers/genpd/renesas/r8a774b1-sysc.c
-diff --git a/drivers/soc/renesas/r8a774c0-sysc.c b/drivers/genpd/renesas/r8a774c0-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a774c0-sysc.c
-rename to drivers/genpd/renesas/r8a774c0-sysc.c
-diff --git a/drivers/soc/renesas/r8a774e1-sysc.c b/drivers/genpd/renesas/r8a774e1-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a774e1-sysc.c
-rename to drivers/genpd/renesas/r8a774e1-sysc.c
-diff --git a/drivers/soc/renesas/r8a7779-sysc.c b/drivers/genpd/renesas/r8a7779-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7779-sysc.c
-rename to drivers/genpd/renesas/r8a7779-sysc.c
-diff --git a/drivers/soc/renesas/r8a7790-sysc.c b/drivers/genpd/renesas/r8a7790-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7790-sysc.c
-rename to drivers/genpd/renesas/r8a7790-sysc.c
-diff --git a/drivers/soc/renesas/r8a7791-sysc.c b/drivers/genpd/renesas/r8a7791-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7791-sysc.c
-rename to drivers/genpd/renesas/r8a7791-sysc.c
-diff --git a/drivers/soc/renesas/r8a7792-sysc.c b/drivers/genpd/renesas/r8a7792-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7792-sysc.c
-rename to drivers/genpd/renesas/r8a7792-sysc.c
-diff --git a/drivers/soc/renesas/r8a7794-sysc.c b/drivers/genpd/renesas/r8a7794-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7794-sysc.c
-rename to drivers/genpd/renesas/r8a7794-sysc.c
-diff --git a/drivers/soc/renesas/r8a7795-sysc.c b/drivers/genpd/renesas/r8a7795-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7795-sysc.c
-rename to drivers/genpd/renesas/r8a7795-sysc.c
-diff --git a/drivers/soc/renesas/r8a7796-sysc.c b/drivers/genpd/renesas/r8a7796-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a7796-sysc.c
-rename to drivers/genpd/renesas/r8a7796-sysc.c
-diff --git a/drivers/soc/renesas/r8a77965-sysc.c b/drivers/genpd/renesas/r8a77965-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a77965-sysc.c
-rename to drivers/genpd/renesas/r8a77965-sysc.c
-diff --git a/drivers/soc/renesas/r8a77970-sysc.c b/drivers/genpd/renesas/r8a77970-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a77970-sysc.c
-rename to drivers/genpd/renesas/r8a77970-sysc.c
-diff --git a/drivers/soc/renesas/r8a77980-sysc.c b/drivers/genpd/renesas/r8a77980-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a77980-sysc.c
-rename to drivers/genpd/renesas/r8a77980-sysc.c
-diff --git a/drivers/soc/renesas/r8a77990-sysc.c b/drivers/genpd/renesas/r8a77990-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a77990-sysc.c
-rename to drivers/genpd/renesas/r8a77990-sysc.c
-diff --git a/drivers/soc/renesas/r8a77995-sysc.c b/drivers/genpd/renesas/r8a77995-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a77995-sysc.c
-rename to drivers/genpd/renesas/r8a77995-sysc.c
-diff --git a/drivers/soc/renesas/r8a779a0-sysc.c b/drivers/genpd/renesas/r8a779a0-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a779a0-sysc.c
-rename to drivers/genpd/renesas/r8a779a0-sysc.c
-diff --git a/drivers/soc/renesas/r8a779f0-sysc.c b/drivers/genpd/renesas/r8a779f0-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a779f0-sysc.c
-rename to drivers/genpd/renesas/r8a779f0-sysc.c
-diff --git a/drivers/soc/renesas/r8a779g0-sysc.c b/drivers/genpd/renesas/r8a779g0-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/r8a779g0-sysc.c
-rename to drivers/genpd/renesas/r8a779g0-sysc.c
-diff --git a/drivers/soc/renesas/rcar-gen4-sysc.c b/drivers/genpd/renesas/rcar-gen4-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/rcar-gen4-sysc.c
-rename to drivers/genpd/renesas/rcar-gen4-sysc.c
-diff --git a/drivers/soc/renesas/rcar-gen4-sysc.h b/drivers/genpd/renesas/rcar-gen4-sysc.h
-similarity index 100%
-rename from drivers/soc/renesas/rcar-gen4-sysc.h
-rename to drivers/genpd/renesas/rcar-gen4-sysc.h
-diff --git a/drivers/soc/renesas/rcar-sysc.c b/drivers/genpd/renesas/rcar-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/rcar-sysc.c
-rename to drivers/genpd/renesas/rcar-sysc.c
-diff --git a/drivers/soc/renesas/rcar-sysc.h b/drivers/genpd/renesas/rcar-sysc.h
-similarity index 100%
-rename from drivers/soc/renesas/rcar-sysc.h
-rename to drivers/genpd/renesas/rcar-sysc.h
-diff --git a/drivers/soc/renesas/rmobile-sysc.c b/drivers/genpd/renesas/rmobile-sysc.c
-similarity index 100%
-rename from drivers/soc/renesas/rmobile-sysc.c
-rename to drivers/genpd/renesas/rmobile-sysc.c
-diff --git a/drivers/soc/renesas/Makefile b/drivers/soc/renesas/Makefile
-index 6e4e77b0afff..734f8f8cefa4 100644
---- a/drivers/soc/renesas/Makefile
-+++ b/drivers/soc/renesas/Makefile
-@@ -3,30 +3,6 @@
- obj-$(CONFIG_SOC_RENESAS)	+= renesas-soc.o
- 
- # SoC
--obj-$(CONFIG_SYSC_R8A7742)	+= r8a7742-sysc.o
--obj-$(CONFIG_SYSC_R8A7743)	+= r8a7743-sysc.o
--obj-$(CONFIG_SYSC_R8A7745)	+= r8a7745-sysc.o
--obj-$(CONFIG_SYSC_R8A77470)	+= r8a77470-sysc.o
--obj-$(CONFIG_SYSC_R8A774A1)	+= r8a774a1-sysc.o
--obj-$(CONFIG_SYSC_R8A774B1)	+= r8a774b1-sysc.o
--obj-$(CONFIG_SYSC_R8A774C0)	+= r8a774c0-sysc.o
--obj-$(CONFIG_SYSC_R8A774E1)	+= r8a774e1-sysc.o
--obj-$(CONFIG_SYSC_R8A7779)	+= r8a7779-sysc.o
--obj-$(CONFIG_SYSC_R8A7790)	+= r8a7790-sysc.o
--obj-$(CONFIG_SYSC_R8A7791)	+= r8a7791-sysc.o
--obj-$(CONFIG_SYSC_R8A7792)	+= r8a7792-sysc.o
--obj-$(CONFIG_SYSC_R8A7794)	+= r8a7794-sysc.o
--obj-$(CONFIG_SYSC_R8A7795)	+= r8a7795-sysc.o
--obj-$(CONFIG_SYSC_R8A77960)	+= r8a7796-sysc.o
--obj-$(CONFIG_SYSC_R8A77961)	+= r8a7796-sysc.o
--obj-$(CONFIG_SYSC_R8A77965)	+= r8a77965-sysc.o
--obj-$(CONFIG_SYSC_R8A77970)	+= r8a77970-sysc.o
--obj-$(CONFIG_SYSC_R8A77980)	+= r8a77980-sysc.o
--obj-$(CONFIG_SYSC_R8A77990)	+= r8a77990-sysc.o
--obj-$(CONFIG_SYSC_R8A77995)	+= r8a77995-sysc.o
--obj-$(CONFIG_SYSC_R8A779A0)	+= r8a779a0-sysc.o
--obj-$(CONFIG_SYSC_R8A779F0)	+= r8a779f0-sysc.o
--obj-$(CONFIG_SYSC_R8A779G0)	+= r8a779g0-sysc.o
- ifdef CONFIG_SMP
- obj-$(CONFIG_ARCH_R9A06G032)	+= r9a06g032-smp.o
- endif
-@@ -34,6 +10,3 @@ endif
- # Family
- obj-$(CONFIG_PWC_RZV2M)		+= pwc-rzv2m.o
- obj-$(CONFIG_RST_RCAR)		+= rcar-rst.o
--obj-$(CONFIG_SYSC_RCAR)		+= rcar-sysc.o
--obj-$(CONFIG_SYSC_RCAR_GEN4)	+= rcar-gen4-sysc.o
--obj-$(CONFIG_SYSC_RMOBILE)	+= rmobile-sysc.o
+rename from drivers/soc/rockchip/pm_domains.c
+rename to drivers/genpd/rockchip/pm-domains.c
+diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
+index 05f31a4e743c..23d414433c8c 100644
+--- a/drivers/soc/rockchip/Makefile
++++ b/drivers/soc/rockchip/Makefile
+@@ -4,5 +4,4 @@
+ #
+ obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
+ obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
+-obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
+ obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
 -- 
 2.34.1
 
