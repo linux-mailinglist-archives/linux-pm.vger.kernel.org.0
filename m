@@ -2,116 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC1874B53E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 18:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4514874B597
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 19:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjGGQr7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 12:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S229688AbjGGRNb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 7 Jul 2023 13:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjGGQr6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 12:47:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE641FEF;
-        Fri,  7 Jul 2023 09:47:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 267CC619FD;
-        Fri,  7 Jul 2023 16:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57FA4C433C7;
-        Fri,  7 Jul 2023 16:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1688748476;
-        bh=xaxR5LdYxVE2tosF86edgKHIbkGlYTFvwouFf3J52bA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OjGydPHQwmS3FbZizdz7ALKDj0ou4KNPyuDA7t9taCfC06/v+pYVNTpjOVTKVBIxZ
-         jtQLQC5tMD/nScEqxfENye7DNV/2tIDXPCWEs/5Us/sBSYgqtr2NTex2Sq6ds4sTsF
-         EcWlVkF7uwvxxTRoGulb/oLbBA6nahAT8HVRzOAGv+/Clk6YKg0Q2mFWyBWOmrFM4P
-         CnXyBOJnjJOFWbcNONGdiPh047OZJaajpqYGse4JDYms4pZTsSFsA45eHfDih0KKqo
-         9sI4yCPq8BxxaUhuuOiUmuWw6vKyyUn+mBL3lBL+eu3UxwpWCsolVZ9DaOAW1OcWep
-         XNN3RYdTkCXmQ==
-Date:   Fri, 7 Jul 2023 22:17:35 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        linux-actions@lists.infradead.org
-Subject: Re: [PATCH 02/18] soc: actions: Move power-domain driver to the
- genpd dir
-Message-ID: <20230707164735.GQ6001@thinkpad>
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-3-ulf.hansson@linaro.org>
+        with ESMTP id S229582AbjGGRNa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 13:13:30 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C981FEC
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 10:13:27 -0700 (PDT)
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="363974296"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="363974296"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2023 10:13:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10764"; a="833477255"
+X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
+   d="scan'208";a="833477255"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Jul 2023 10:13:26 -0700
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+        by linux.intel.com (Postfix) with ESMTP id EA802580C63;
+        Fri,  7 Jul 2023 10:13:24 -0700 (PDT)
+Message-ID: <eef335753f73e505eb91307b2a2cd06b32901d24.camel@gmail.com>
+Subject: Re: [PATCH v3 1/2] x86/mwait: Add support for idle via umwait
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>,
+        Arjan van de Ven <arjan@linux.intel.com>
+Date:   Fri, 07 Jul 2023 20:13:23 +0300
+In-Reply-To: <87352a0vu4.ffs@tglx>
+References: <20230610183518.4061159-1-dedekind1@gmail.com>
+         <20230610183518.4061159-2-dedekind1@gmail.com> <87352a0vu4.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230707140434.723349-3-ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 07, 2023 at 04:04:18PM +0200, Ulf Hansson wrote:
-> Cc: "Andreas Färber" <afaerber@suse.de>
-> Cc: Manivannan Sadhasivam <mani@kernel.org>
-> Cc: <linux-actions@lists.infradead.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
-
-I hope Arnd will take this patch directly.
-
-- Mani
-
-> ---
->  drivers/genpd/Makefile                   | 1 +
->  drivers/genpd/actions/Makefile           | 2 ++
->  drivers/{soc => genpd}/actions/owl-sps.c | 0
->  drivers/soc/actions/Makefile             | 1 -
->  4 files changed, 3 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/genpd/actions/Makefile
->  rename drivers/{soc => genpd}/actions/owl-sps.c (100%)
+On Fri, 2023-06-30 at 00:04 +0200, Thomas Gleixner wrote:
+> > +#ifdef CONFIG_X86_64
+> > +/*
+> > + * Monitor a memory address at 'rcx' using the 'umonitor' instruction.
+> > + */
+> > +static inline void __umonitor(const void *rcx)
+> > +{
+> > +       /* "umonitor %rcx" */
+> > +#ifdef CONFIG_AS_TPAUSE
 > 
-> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> index a4e40e534e6a..a2d5b2095915 100644
-> --- a/drivers/genpd/Makefile
-> +++ b/drivers/genpd/Makefile
-> @@ -1 +1,2 @@
->  # SPDX-License-Identifier: GPL-2.0-only
-> +obj-y					+= actions/
-> diff --git a/drivers/genpd/actions/Makefile b/drivers/genpd/actions/Makefile
-> new file mode 100644
-> index 000000000000..e78c420a2454
-> --- /dev/null
-> +++ b/drivers/genpd/actions/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0+
-> +obj-$(CONFIG_OWL_PM_DOMAINS)		+= owl-sps.o
-> diff --git a/drivers/soc/actions/owl-sps.c b/drivers/genpd/actions/owl-sps.c
-> similarity index 100%
-> rename from drivers/soc/actions/owl-sps.c
-> rename to drivers/genpd/actions/owl-sps.c
-> diff --git a/drivers/soc/actions/Makefile b/drivers/soc/actions/Makefile
-> index 4db9e7b050e5..4ac88fec2050 100644
-> --- a/drivers/soc/actions/Makefile
-> +++ b/drivers/soc/actions/Makefile
-> @@ -1,4 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0+
->  
->  obj-$(CONFIG_OWL_PM_DOMAINS_HELPER) += owl-sps-helper.o
-> -obj-$(CONFIG_OWL_PM_DOMAINS) += owl-sps.o
-> -- 
-> 2.34.1
-> 
+> Are you sure that the instruction check for TPAUSE is sufficient to also
+> include UMONITOR on all toolchains which support TPAUSE?
 
--- 
-மணிவண்ணன் சதாசிவம்
+I've verified by building the kernel with gcc/binutils and clang/LLVM.
+Builds, boots, umwait works, C0.2 happens with both.
+
+I inspected gcc, binutils, and clang/llvm git logs: support for
+'tpause' and 'umwait' arrived in the same commit. Details below.
+
+'tpause' and 'umwait' instructions are very similar, arrived together,
+guarded together by CPUID.7's "MWAITPKG" bit. Based on this, I'd generally
+expect toolchains to support both or none.
+
+I can add a note about this in the commit message too.
+
+Details on commits in the projects I checked.
+
+1. binutils-gcc git tree:
+   de89d0a34d5 Enable Intel WAITPKG instructions.
+
+2. gcc git tree:
+   55f31ed10fd i386-common.c (OPTION_MASK_ISA_WAITPKG_SET, [...]): New defines.
+
+3. llvm-project git tree:
+   2e02579a76cf [OpenMP] Add use of TPAUSE
+
+It'll take some time to re-test and and partially re-measure power/perf,
+so I'll send new version a bit later.
+
+Thanks,
+Artem.
