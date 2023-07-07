@@ -2,112 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A291174B2D8
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C2474B2DD
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:13:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232199AbjGGOMJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48284 "EHLO
+        id S229561AbjGGONm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232614AbjGGOMF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:12:05 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDC92122
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:12:01 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so21185715e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1688739120; x=1691331120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ycpGNLsgt/ES0G1zwIWkJIdAtFjomLDl2xkjlXWSTo4=;
-        b=DVbjMVlxHE9pu3YlBytLFnpsxwPBMrs4rpCRfT0334ztrG4dfj5UIdU8xKhSyHlI9y
-         dGLp86nBHpb1Wu+ID9UCtE6PciybqIGVT99TKQf3pGyXZk5VATe4xCQLgdm8jDwy0J4t
-         aw4jAa8+T0nz9r55f4c6Evev2l5Gqc6l5K0eSgnO3ZeyyNdDyYHbDCh7SnwkUciF2r0L
-         eXqCFb4R0FaCMGVkNY6mryVPdOytgJr4TglhKevcsFBxYZJJLojSXS2c8UtF6mjIpuh9
-         p22MJ0bzcWpPT1A5c6tcjU7D7C5B63Z/0/R/xV6iet0dSYSSVVFX1IOId8dTN6lYtbb3
-         thUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688739120; x=1691331120;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ycpGNLsgt/ES0G1zwIWkJIdAtFjomLDl2xkjlXWSTo4=;
-        b=G0imv6vmAvwQZKibCj5vWz9LyfDjNxIC6+rOqxcPwd72VZzdjM/nTUb/KayNyDoLo0
-         yNrIqD37UzCr78Lq5D8bY/Ji2P9gM6vGW2ZuTZv3+1IzXWlAnaf9L1SUpylAoY+NhFq8
-         IjcoEg+EgtjO7SoMgqQR/bn1AElHMkZDlr4CflsYewMBeBZcOYO4oLRJuLju2i89klrv
-         O4VGXvxYf3NA3Xwyh2zrRJMd+Em1sqBERWlhO+tQVYEeTZJg0Z6zMo9gRz55HuvVYi02
-         jKNJ12yqsqQLl7xr/ybNnb/eSUrD34TKNwmQTB29JmqyHfUWbmZsYDhdTvc7tfX33dbn
-         ErVw==
-X-Gm-Message-State: ABy/qLZwjij58N8I7LRPnY6gANbhupv/WvQPQgHNJnHV7pffiLgQJ9AW
-        7yH6vF0GBknr9PkhBtnJ79lTcw==
-X-Google-Smtp-Source: APBJJlFfVX3E+RmKYUQNq3SgciMbgNUkXY9Sjj/5oyQe0BzJbpLNP6WT1j91P4EKn7/5h62zHXUB0g==
-X-Received: by 2002:a1c:4b0a:0:b0:3fb:d1db:545b with SMTP id y10-20020a1c4b0a000000b003fbd1db545bmr4005976wma.20.1688739120033;
-        Fri, 07 Jul 2023 07:12:00 -0700 (PDT)
-Received: from [192.168.1.172] ([93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id l22-20020a7bc456000000b003fbb5142c4bsm2579548wmi.18.2023.07.07.07.11.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Jul 2023 07:11:59 -0700 (PDT)
-Message-ID: <6fb74321-2f85-1a08-e16e-97346bd7e82a@baylibre.com>
-Date:   Fri, 7 Jul 2023 16:11:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 6/6] thermal/drivers/mediatek/lvts_thermal: Manage
- threshold between sensors
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com,
-        Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+        with ESMTP id S229471AbjGGONl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:13:41 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB60B2;
+        Fri,  7 Jul 2023 07:13:38 -0700 (PDT)
+Received: from i53875a50.versanet.de ([83.135.90.80] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qHmDG-0000Sg-8C; Fri, 07 Jul 2023 16:13:34 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230706153823.201943-1-nfraprado@collabora.com>
- <20230706153823.201943-7-nfraprado@collabora.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230706153823.201943-7-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 10/18] soc: rockchip: Mover power-domain driver to the genpd dir
+Date:   Fri, 07 Jul 2023 16:13:33 +0200
+Message-ID: <4517610.cEBGB3zze1@diego>
+In-Reply-To: <20230707140434.723349-11-ulf.hansson@linaro.org>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-11-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Am Freitag, 7. Juli 2023, 16:04:26 CEST schrieb Ulf Hansson:
+> Cc: Heiko Stuebner <heiko@sntech.de>
+> Cc: <linux-rockchip@lists.infradead.org>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
+I guess this is part of a bigger series moving these things around, so
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
-On 06/07/2023 17:37, Nícolas F. R. A. Prado wrote:
-> Each LVTS thermal controller can have up to four sensors, each capable
-> of triggering its own interrupt when its measured temperature crosses
-> the configured threshold. The threshold for each sensor is handled
-> separately by the thermal framework, since each one is registered with
-> its own thermal zone and trips. However, the temperature thresholds are
-> configured on the controller, and therefore are shared between all
-> sensors on that controller.
+> ---
+>  drivers/genpd/Makefile                                          | 1 +
+>  drivers/genpd/rockchip/Makefile                                 | 2 ++
+>  .../{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c}  | 0
+>  drivers/soc/rockchip/Makefile                                   | 1 -
+>  4 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/genpd/rockchip/Makefile
+>  rename drivers/{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c} (100%)
 > 
-> When the temperature measured by the sensors is different enough to
-> cause the thermal framework to configure different thresholds for each
-> one, interrupts start triggering on sensors outside the last threshold
-> configured.
+> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> index 286598ce7620..c178421e0cbc 100644
+> --- a/drivers/genpd/Makefile
+> +++ b/drivers/genpd/Makefile
+> @@ -6,3 +6,4 @@ obj-y					+= bcm/
+>  obj-y					+= mediatek/
+>  obj-y					+= qcom/
+>  obj-y					+= renesas/
+> +obj-y					+= rockchip/
+> diff --git a/drivers/genpd/rockchip/Makefile b/drivers/genpd/rockchip/Makefile
+> new file mode 100644
+> index 000000000000..8fb9d88a3492
+> --- /dev/null
+> +++ b/drivers/genpd/rockchip/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +obj-$(CONFIG_ROCKCHIP_PM_DOMAINS)	+= pm-domains.o
+> diff --git a/drivers/soc/rockchip/pm_domains.c b/drivers/genpd/rockchip/pm-domains.c
+> similarity index 100%
+> rename from drivers/soc/rockchip/pm_domains.c
+> rename to drivers/genpd/rockchip/pm-domains.c
+> diff --git a/drivers/soc/rockchip/Makefile b/drivers/soc/rockchip/Makefile
+> index 05f31a4e743c..23d414433c8c 100644
+> --- a/drivers/soc/rockchip/Makefile
+> +++ b/drivers/soc/rockchip/Makefile
+> @@ -4,5 +4,4 @@
+>  #
+>  obj-$(CONFIG_ROCKCHIP_GRF) += grf.o
+>  obj-$(CONFIG_ROCKCHIP_IODOMAIN) += io-domain.o
+> -obj-$(CONFIG_ROCKCHIP_PM_DOMAINS) += pm_domains.o
+>  obj-$(CONFIG_ROCKCHIP_DTPM) += dtpm.o
 > 
-> To address the issue, track the thresholds required by each sensor and
-> only actually set the highest one in the hardware, and disable
-> interrupts for all sensors outside the current configured range.
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
--- 
-Regards,
-Alexandre
+
+
