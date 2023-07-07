@@ -2,117 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 596B774A7E5
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 01:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 575E374AC51
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 09:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjGFXqJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Jul 2023 19:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S232626AbjGGHyB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 03:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjGFXqI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Jul 2023 19:46:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8801BE1;
-        Thu,  6 Jul 2023 16:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1688687168; x=1720223168;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5z4OjmeZwDQyXYWW2PZs4DvSJouSgf57c25znqVWnvk=;
-  b=c+CPDtpYuTK9VqKMb27hiBAFRJcav/ET714jsCBo0NTolueMg5yjmBF7
-   +BigaXKn3PX/PHQFBDPUM3NfDpg2xCLJji8MGdGgFOOHkSSgoL1DZn71+
-   UNfZ6/SoOwuC7lYByGXNTje2Dii1z8BFgKpAizGfThqpYZo5aAhZKK5fN
-   5KrWgJ3kXAs/sMd2a7fdhTkNclZeMb6wtb0WqFoYYqL3QtuUbtUFdYuVK
-   I96Oj9Je9ogt2/nFuoJTukNSSS4n+VD522q1OGqcmITMr6ankyNL2BtqR
-   rByjg3GVrk+GDDvIkxGe4GbUuXA0o275hHEgn1w4zC5B5qLJXiQ9h3GjF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="344086754"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="344086754"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2023 16:46:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10763"; a="697038151"
-X-IronPort-AV: E=Sophos;i="6.01,187,1684825200"; 
-   d="scan'208";a="697038151"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga006.jf.intel.com with ESMTP; 06 Jul 2023 16:46:06 -0700
-Date:   Thu, 6 Jul 2023 16:48:50 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Ionela Voinescu <ionela.voinescu@arm.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
- balancing
-Message-ID: <20230706234850.GD12259@ranerica-svr.sc.intel.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
- <ZJQONIinvSengWa8@arm.com>
- <20230625201155.GA3902@ranerica-svr.sc.intel.com>
- <7ca035b73ebcce9fde270227a5b630b169ebdeaf.camel@linux.intel.com>
+        with ESMTP id S231691AbjGGHyA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 03:54:00 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7DDA2
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 00:53:58 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b8062c1ee1so10634415ad.3
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 00:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1688716438; x=1691308438;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HQgfVl/i/AVcUS5ggc70MxFgfsFBmBSGVm2GhzJXRGM=;
+        b=EY+mwitihR1BY0wiVH06ZwvPZB0vcDEEn4HC1LNgbbGW0oKYFmY/xs24morMGXUsr3
+         jV/bx4/CxOmJaCIiln1tlZ+gG4y3QixOpNEEnx+9RihDs7Dkeh2hu9R+WjcULUPemcIj
+         PBni27YtiE7DOpbwTUoRCcqMt1BLkGrrrVyTs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1688716438; x=1691308438;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HQgfVl/i/AVcUS5ggc70MxFgfsFBmBSGVm2GhzJXRGM=;
+        b=jGRlsQhAaQbfEz0re7n5+zZFwpEVladoFs4sHsyNNigFM9XfwWN75jp48xy1w+OM8F
+         8+ZJ8YciLCe5ABJAhTl0eICfo0KLkizL980phy0LDoCMHB0iqBM0AwvVQwLVBKZQ9x8Z
+         DnCZfhVFjpKW4Xw3BPQWNd8fRN2Zhj8URKbXSxi1lYg3q5QMTtTxhVSAJbpeiOd1wldb
+         ytKjHrJO1rrqbJT8RDk9fiKdLOoZtbLbajKuwcUlAE/e8HO1bTiH/pBxSAv5f432Tgor
+         /ypBXh38z+5e5U99eGaglPmv7+ocI3jZtHpg7ej8aNkmEAiY28VBTg/pdnw0L2FzubFB
+         SsXQ==
+X-Gm-Message-State: ABy/qLamrGH1Mi5jeLxe4QV+SRP8OXvXQj2SLUSO8C1/MMOsxcsCziJ+
+        tAOOqyTvN9R8omvgKC1Dn0dyEA==
+X-Google-Smtp-Source: APBJJlF6RcNC5y+ljau2+G5q7B3VhzXd0PfFiNLMgLRX96g3mUA+FT12+Re08qem3DIVvI9ZeTddlw==
+X-Received: by 2002:a17:903:120f:b0:1b3:cac7:19cd with SMTP id l15-20020a170903120f00b001b3cac719cdmr4804993plh.18.1688716438426;
+        Fri, 07 Jul 2023 00:53:58 -0700 (PDT)
+Received: from google.com ([2401:fa00:1:10:7493:8870:1e91:754])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170902e5cf00b001b1c3542f57sm2611449plf.103.2023.07.07.00.53.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Jul 2023 00:53:58 -0700 (PDT)
+Date:   Fri, 7 Jul 2023 15:53:54 +0800
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Bernhard =?iso-8859-1?Q?Rosenkr=E4nzer?= <bero@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Make readings
+ valid in filtered mode
+Message-ID: <20230707075354.GA1333497@google.com>
+References: <20230706161509.204546-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <7ca035b73ebcce9fde270227a5b630b169ebdeaf.camel@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230706161509.204546-1-nfraprado@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jun 26, 2023 at 02:01:25PM -0700, Tim Chen wrote:
-> On Sun, 2023-06-25 at 13:11 -0700, Ricardo Neri wrote:
-> > 
-> > > > +
-> > > > +	score_on_dst_cpu = arch_get_ipcc_score(sgs->min_ipcc, env->dst_cpu);
-> > > > +
-> > > > +	/*
-> > > > +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be zero
-> > > > +	 * and not used.
-> > > > +	 */
+On Thu, Jul 06, 2023 at 12:14:33PM -0400, Nícolas F. R. A. Prado wrote:
+> Currently, when a controller is configured to use filtered mode, thermal
+> readings are valid only about 30% of the time.
 > 
-> The comment is not matching the check below.  If zero
-> is not used, the check should also reflect the case.
+> Upon testing, it was noticed that lowering any of the interval settings
+> resulted in an improved rate of valid data. The same was observed when
+> decreasing the number of samples for each sensor (which also results in
+> quicker measurements).
+> 
+> Retrying the read with a timeout longer than the time it takes to
+> resample (about 344us with these settings and 4 sensors) also improves
+> the rate.
+> 
+> Lower all timing settings to the minimum, configure the filtering to
+> single sample, and poll the measurement register for at least one period
+> to improve the data validity on filtered mode.  With these changes in
+> place, out of 100000 reads, a single one failed, ie 99.999% of the data
+> was valid.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Agreed. This comment is not clear. I meant to say that returning here
-has the effect of leaving the `before` and `after` scores of this group as
-zero.
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 
-Since zero is the minimum possible score, this group will not be selected
-during the tie breaker, unless the statistics of all other groups are also
-zero.
+on Hayato. Reading out the temperature is now quite reliable.
 
 > 
-> > > > +	if (IS_ERR_VALUE(score_on_dst_cpu))
-> > > > +		return;
-> > > > +
-> > > > +	before = sgs->sum_score;
-> > > > +	after = before - sgs->min_score;
-> > > 
-> > 
-> Tim
+> ---
+> 
+>  drivers/thermal/mediatek/lvts_thermal.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 1e11defe4f35..b5fb1d8bc3d8 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -58,11 +58,11 @@
+>  #define LVTS_PROTTC(__base)		(__base + 0x00CC)
+>  #define LVTS_CLKEN(__base)		(__base + 0x00E4)
+>  
+> -#define LVTS_PERIOD_UNIT			((118 * 1000) / (256 * 38))
+> -#define LVTS_GROUP_INTERVAL			1
+> -#define LVTS_FILTER_INTERVAL		1
+> -#define LVTS_SENSOR_INTERVAL		1
+> -#define LVTS_HW_FILTER				0x2
+> +#define LVTS_PERIOD_UNIT			0
+> +#define LVTS_GROUP_INTERVAL			0
+> +#define LVTS_FILTER_INTERVAL		0
+> +#define LVTS_SENSOR_INTERVAL		0
+> +#define LVTS_HW_FILTER				0x0
+
+This hunk conflicts with
+
+    thermal/drivers/mediatek/lvts_thermal: Disable undesired interrupts
+
+from your other series
+
+>  #define LVTS_TSSEL_CONF				0x13121110
+>  #define LVTS_CALSCALE_CONF			0x300
+>  #define LVTS_MONINT_CONF			0x9FBF7BDE
+
+on this line.
+
+> @@ -257,6 +257,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>  	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
+>  	void __iomem *msr = lvts_sensor->msr;
+>  	u32 value;
+> +	int rc;
+>  
+>  	/*
+>  	 * Measurement registers:
+> @@ -269,7 +270,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>  	 * 16	: Valid temperature
+>  	 * 15-0	: Raw temperature
+>  	 */
+> -	value = readl(msr);
+> +	rc = readl_poll_timeout(msr, value, value & BIT(16), 240, 400);
+>  
+>  	/*
+>  	 * As the thermal zone temperature will read before the
+> @@ -282,7 +283,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>  	 * functionning temperature and directly jump to a system
+>  	 * shutdown.
+>  	 */
+> -	if (!(value & BIT(16)))
+> +	if (rc)
+>  		return -EAGAIN;
+>  
+>  	*temp = lvts_raw_to_temp(value & 0xFFFF);
+> -- 
+> 2.41.0
+> 
