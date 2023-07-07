@@ -2,64 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2636574B299
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DC074B29C
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Jul 2023 16:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbjGGOFl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Jul 2023 10:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
+        id S232906AbjGGOFr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Jul 2023 10:05:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232969AbjGGOF3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:29 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC6D2703
-        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:05:04 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b6ef64342aso30705551fa.3
-        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:05:04 -0700 (PDT)
+        with ESMTP id S232992AbjGGOFa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Jul 2023 10:05:30 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB522717
+        for <linux-pm@vger.kernel.org>; Fri,  7 Jul 2023 07:05:06 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b6f97c7115so29186901fa.2
+        for <linux-pm@vger.kernel.org>; Fri, 07 Jul 2023 07:05:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688738702; x=1691330702;
+        d=linaro.org; s=google; t=1688738705; x=1691330705;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C42FrWKbauKrpHyGQL85ov8a9IzG5rtXeIwWVhxtqVk=;
-        b=MCu7vlROYZ/xIKEYZmjZztxNMAhryMpK0Unegzg8Q/0Z0ijMjupo0Vj5o5KA/+OE+J
-         XFiVISB2r8qtP8rYoLnpVNxW8FXFTbJfkeKDW9l4Dkb8UUmR5LqMhAVeRaF7AumW79Jb
-         RXVGTkN9yite37tYrCtpU9vqK64UbqszV80El/ekskzn9wowhvbQmaraxzrrfeJcOMlN
-         hOZiVmq/6FjsdDG1LrZM3sauPgkivdWBYOgFZ46y9Gn/mF11V9jQc3tGfUG7Y2KYnKc9
-         +nKM1MJF6h60t4rdpGe8CblT4AZ4UOXr7xH/DPGqRF9fgG8WLARufHtNFBcF8EHyUcjx
-         h+1A==
+        bh=kubpqVY+wfLhuDXukhvTufqnNdzOkNaWWajItyQMxWM=;
+        b=Yup815+bfBG+qKfdbmDkUR3hKM6OAuBkkeYgoD2wvVs9x5tdisLBsy8u2bqr4f0DSn
+         2hpXqIDKiEHwTBDti5FM+cY06+KHs3ahD0ERG7JtxSrdcFY/d1TdG5zS2+1q6NZ2XDRa
+         nhT9l5Q5vWWicaDnhDKsO2gN6hgk+R07ln21n95e+IJM3QzONtlULjHog3dTjn/IcVoS
+         vueGTxyyKt5sKLmjkgv9J4FeijJ1//uc5tuUiHMULMUC6h/huzNPmq9niLaBJRCgKDM3
+         jBbufA5CCrqoJ06HpRS+dZycpRG2yg5STU724HPnDQgmA5NRhs4uY1pYfC5uX+WNnLKX
+         DoYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688738702; x=1691330702;
+        d=1e100.net; s=20221208; t=1688738705; x=1691330705;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=C42FrWKbauKrpHyGQL85ov8a9IzG5rtXeIwWVhxtqVk=;
-        b=J361laQeRznp3AjTlKQ9DBKjY/j4kaOi0e4uB5Cu+1sUtmbvdwzLu/8hBPg1fiml4h
-         hn2FIQ+zAxzs0Vd3cPK8wRQkfXKEdGdjYSFyF+JyQyPXz7BaBV7t7aPQhF0oJ+08ski9
-         vjmOrQb5kD5I57Ekv5enkCkwal15RrBGcaBAbJyARGXT2cwRwbZjTcoEj8IAK04ME80a
-         mfs4JinOBLdKKez9kWAurn2xdUUDWu4ZAZM05cdRfiwnT+95i1FYEA7X86yGjXaNgIwK
-         kPGSz3fK/wJrS+h7z+YlYb1pvl+0oKOhsVQ61gAfoWK6k642AdMR0jzr7CBa9a2gYCvZ
-         0zew==
-X-Gm-Message-State: ABy/qLbToPxkYx3a9nT7a0hUdjtk8WguGxqC71A0OsuXZyUpgFSQVcRA
-        QNH3UrQxFFm50Yjak0KxEpsUxg==
-X-Google-Smtp-Source: APBJJlGEv/lo3wa1G7PQ6zQPPu2YP1CoXxXtYuj6YVBRNt0l/8ADVQL/9ApsIP43zURVV2GBgM+6Zw==
-X-Received: by 2002:a2e:99c9:0:b0:2b6:ed7e:5a74 with SMTP id l9-20020a2e99c9000000b002b6ed7e5a74mr3830249ljj.36.1688738702659;
-        Fri, 07 Jul 2023 07:05:02 -0700 (PDT)
+        bh=kubpqVY+wfLhuDXukhvTufqnNdzOkNaWWajItyQMxWM=;
+        b=LVkVyTKtPpbpmntGnRJTnytyAkQa/1KH7jlOozIaHxxUG7IQIMyHxEx+5VGQZ9AMHT
+         /32sBNiaVyXwW9bOZZG/V/hFp8la3Wt6P2qP7qjdhQshEoFwnXMwqADgwfPWV8mGWwyx
+         IRP/1bUjuEmWeQ7bcttOvaS80PGgXX8y6KOjP3HNPbIxuxQchYQ9DsrVrnaf6lG2TB29
+         weeo1TAXcZvsvovk1fTU8Rls/i0gQeZ2HEAMaxUZxG+bEIcOg+yvDFfW56JSjdT07u6K
+         DtyRQbif8kR6V/jBUELPTVm2r/cb847C0m5ANqZe2tyATXGMdodDAe+M+t5hY6++n1zx
+         haNQ==
+X-Gm-Message-State: ABy/qLY7cqEynPoei4JjnxKAKf4JKNm6p2fI/7un1FHlSB+hflGgOzH3
+        9oeVRIhUivuo0z4Kst093xD5CQ==
+X-Google-Smtp-Source: APBJJlF67NbLX0eb6y4ugssNq0/Qewc5uDxjKQNtG/3DMiEh/RVTtC8ZQ2+0X4TTuC06eW+jJBdiPw==
+X-Received: by 2002:a2e:8745:0:b0:2b3:4ea3:d020 with SMTP id q5-20020a2e8745000000b002b34ea3d020mr3841130ljj.17.1688738704915;
+        Fri, 07 Jul 2023 07:05:04 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.04.59
+        by smtp.gmail.com with ESMTPSA id u21-20020a2e8555000000b002b6cb25e3f1sm760341ljj.108.2023.07.07.07.05.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Jul 2023 07:05:00 -0700 (PDT)
+        Fri, 07 Jul 2023 07:05:03 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH 13/18] soc: sunxi: Move power-domain driver to the genpd dir
-Date:   Fri,  7 Jul 2023 16:04:29 +0200
-Message-Id: <20230707140434.723349-14-ulf.hansson@linaro.org>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH 14/18] soc: tegra: Move powergate-bpmp driver to the genpd dir
+Date:   Fri,  7 Jul 2023 16:04:30 +0200
+Message-Id: <20230707140434.723349-15-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230707140434.723349-1-ulf.hansson@linaro.org>
 References: <20230707140434.723349-1-ulf.hansson@linaro.org>
@@ -68,57 +68,64 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cc: Chen-Yu Tsai <wens@csie.org>
-Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc: Samuel Holland <samuel@sholland.org>
-Cc: <linux-sunxi@lists.linux.dev>
+Let's moves the powergate-bpmp driver, while we leave the pmc driver in the
+soc directory. To move the latter, we first need to split it up in a few
+pieces so the genpd parts can be moved alone.
+
+Cc: Thierry Reding <thierry.reding@gmail.com>
+Cc: Jonathan Hunter <jonathanh@nvidia.com>
+Cc: Mikko Perttunen <mperttunen@nvidia.com>
+Cc: <linux-tegra@vger.kernel.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/genpd/Makefile                    | 1 +
- drivers/genpd/sunxi/Makefile              | 2 ++
- drivers/{soc => genpd}/sunxi/sun20i-ppu.c | 0
- drivers/soc/sunxi/Makefile                | 1 -
+ drivers/genpd/Makefile                        | 1 +
+ drivers/genpd/tegra/Makefile                  | 2 ++
+ drivers/{soc => genpd}/tegra/powergate-bpmp.c | 0
+ drivers/soc/tegra/Makefile                    | 1 -
  4 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 drivers/genpd/sunxi/Makefile
- rename drivers/{soc => genpd}/sunxi/sun20i-ppu.c (100%)
+ create mode 100644 drivers/genpd/tegra/Makefile
+ rename drivers/{soc => genpd}/tegra/powergate-bpmp.c (100%)
 
 diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index baf2021235a7..76f2a411e6bc 100644
+index 76f2a411e6bc..e6f34d82e6a8 100644
 --- a/drivers/genpd/Makefile
 +++ b/drivers/genpd/Makefile
-@@ -9,3 +9,4 @@ obj-y					+= renesas/
- obj-y					+= rockchip/
+@@ -10,3 +10,4 @@ obj-y					+= rockchip/
  obj-y					+= samsung/
  obj-y					+= starfive/
-+obj-y					+= sunxi/
-diff --git a/drivers/genpd/sunxi/Makefile b/drivers/genpd/sunxi/Makefile
+ obj-y					+= sunxi/
++obj-y					+= tegra/
+diff --git a/drivers/genpd/tegra/Makefile b/drivers/genpd/tegra/Makefile
 new file mode 100644
-index 000000000000..ec1d7a2fb21d
+index 000000000000..ec8acfd2c77c
 --- /dev/null
-+++ b/drivers/genpd/sunxi/Makefile
++++ b/drivers/genpd/tegra/Makefile
 @@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_SUN20I_PPU)		+= sun20i-ppu.o
-diff --git a/drivers/soc/sunxi/sun20i-ppu.c b/drivers/genpd/sunxi/sun20i-ppu.c
++# SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_SOC_TEGRA_POWERGATE_BPMP)	+= powergate-bpmp.o
+diff --git a/drivers/soc/tegra/powergate-bpmp.c b/drivers/genpd/tegra/powergate-bpmp.c
 similarity index 100%
-rename from drivers/soc/sunxi/sun20i-ppu.c
-rename to drivers/genpd/sunxi/sun20i-ppu.c
-diff --git a/drivers/soc/sunxi/Makefile b/drivers/soc/sunxi/Makefile
-index 90ff2ebe7655..549159571d4f 100644
---- a/drivers/soc/sunxi/Makefile
-+++ b/drivers/soc/sunxi/Makefile
-@@ -1,4 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_SUNXI_MBUS) +=	sunxi_mbus.o
- obj-$(CONFIG_SUNXI_SRAM) +=	sunxi_sram.o
--obj-$(CONFIG_SUN20I_PPU) +=	sun20i-ppu.o
+rename from drivers/soc/tegra/powergate-bpmp.c
+rename to drivers/genpd/tegra/powergate-bpmp.c
+diff --git a/drivers/soc/tegra/Makefile b/drivers/soc/tegra/Makefile
+index d722f512dc9d..01059619e764 100644
+--- a/drivers/soc/tegra/Makefile
++++ b/drivers/soc/tegra/Makefile
+@@ -5,7 +5,6 @@ obj-y += cbb/
+ obj-y += common.o
+ obj-$(CONFIG_SOC_TEGRA_FLOWCTRL) += flowctrl.o
+ obj-$(CONFIG_SOC_TEGRA_PMC) += pmc.o
+-obj-$(CONFIG_SOC_TEGRA_POWERGATE_BPMP) += powergate-bpmp.o
+ obj-$(CONFIG_SOC_TEGRA20_VOLTAGE_COUPLER) += regulators-tegra20.o
+ obj-$(CONFIG_SOC_TEGRA30_VOLTAGE_COUPLER) += regulators-tegra30.o
+ obj-$(CONFIG_ARCH_TEGRA_186_SOC) += ari-tegra186.o
 -- 
 2.34.1
 
