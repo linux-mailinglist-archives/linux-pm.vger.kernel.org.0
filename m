@@ -2,165 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7089974BD5B
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Jul 2023 13:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164F774BD81
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Jul 2023 14:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbjGHL2O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Jul 2023 07:28:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
+        id S229852AbjGHMxG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Jul 2023 08:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjGHL2O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jul 2023 07:28:14 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768F11FE0
-        for <linux-pm@vger.kernel.org>; Sat,  8 Jul 2023 04:28:00 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1qI66T-0002PN-BZ; Sat, 08 Jul 2023 13:27:53 +0200
-Received: from [2a0a:edc0:0:1101:1d::54] (helo=dude05.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1qI66S-00CwkO-Lz; Sat, 08 Jul 2023 13:27:52 +0200
-Received: from afa by dude05.red.stw.pengutronix.de with local (Exim 4.96)
-        (envelope-from <afa@pengutronix.de>)
-        id 1qI66S-00C9mn-07;
-        Sat, 08 Jul 2023 13:27:52 +0200
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        with ESMTP id S229627AbjGHMxG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Jul 2023 08:53:06 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997C41737;
+        Sat,  8 Jul 2023 05:53:04 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id CB1F0861A1;
+        Sat,  8 Jul 2023 14:53:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1688820782;
+        bh=IvddLfxwhrH7kTVtfgBFgKokYGybU9LtMq+/etkdvbI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NHqRydq/3DWpKNfzIpfw3UKozdmCaMiozNFilkMiJMlziIeTSdMqOTMJ2cQw14JKI
+         ruGev34X1eYWi8FvOyvKSOPUidKLzZL63NBpXZ8YMMRoD/bG12sF7vF2+PeFszVewa
+         WIAsD7sgfn/VbOL4miCL8falHNw9TI+1Z5BBy2tW/oIzOOTOzpe9OrkyiNuV9rqmm0
+         6ORny8Uo/MywvdnVktK+h6squ6maxI4NBwr+B4HWjQNhilCSlTngNB/8ir03B90ami
+         PjWd/c53V7RmBPTSCi5WJGnu7QPEVyB+6oJcmTMDOvnk+2yc21FQwAYYoWGczGNQCl
+         xF0GxvbOw2lMw==
+Message-ID: <db4304f6-0d8b-5eef-38d9-f3965cdc3cba@denx.de>
+Date:   Sat, 8 Jul 2023 14:52:58 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] thermal: imx8mm: suppress log message on probe deferral
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] thermal: of: fix double-free on unregistration
-Date:   Sat,  8 Jul 2023 13:27:20 +0200
-Message-Id: <20230708112720.2897484-2-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
-References: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230708112647.2897294-1-a.fatoum@pengutronix.de>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20230708112647.2897294-1-a.fatoum@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal
-zone parameters structure"), thermal_zone_device_register() allocates
-a copy of the tzp argument and frees it when unregistering, so
-thermal_of_zone_register() now ends up leaking its original tzp and
-double-freeing the tzp copy. Fix this by locating tzp on stack instead.
+On 7/8/23 13:26, Ahmad Fatoum wrote:
+> nvmem_cell_read_u32() may return -EPROBE_DEFER if NVMEM supplier has not
+> yet been probed. Future reprobe may succeed, so printing:
+> 
+>    i.mx8mm_thermal 30260000.tmu: Failed to read OCOTP nvmem cell (-517).
+> 
+> to the log is confusing. Fix this by using dev_err_probe. This also
+> elevates the message from warning to error, which is more correct: The
+> log message is only ever printed in probe error path and probe aborts
+> afterwards, so it really warrants an error-level message.
+> 
+> Fixes: 403291648823 ("thermal/drivers/imx: Add support for loading calibration data from OCOTP")
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
- drivers/thermal/thermal_of.c | 27 ++++++---------------------
- 1 file changed, 6 insertions(+), 21 deletions(-)
+Reviewed-by: Marek Vasut <marex@denx.de>
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 6fb14e521197..bc07ae1c284c 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -238,17 +238,13 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
- 	return 0;
- }
- 
--static struct thermal_zone_params *thermal_of_parameters_init(struct device_node *np)
-+static void thermal_of_parameters_init(struct device_node *np,
-+				       struct thermal_zone_params *tzp)
- {
--	struct thermal_zone_params *tzp;
- 	int coef[2];
- 	int ncoef = ARRAY_SIZE(coef);
- 	int prop, ret;
- 
--	tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
--	if (!tzp)
--		return ERR_PTR(-ENOMEM);
--
- 	tzp->no_hwmon = true;
- 
- 	if (!of_property_read_u32(np, "sustainable-power", &prop))
-@@ -267,8 +263,6 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
- 
- 	tzp->slope = coef[0];
- 	tzp->offset = coef[1];
--
--	return tzp;
- }
- 
- static struct device_node *thermal_of_zone_get_by_name(struct thermal_zone_device *tz)
-@@ -442,13 +436,11 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
- static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
- {
- 	struct thermal_trip *trips = tz->trips;
--	struct thermal_zone_params *tzp = tz->tzp;
- 	struct thermal_zone_device_ops *ops = tz->ops;
- 
- 	thermal_zone_device_disable(tz);
- 	thermal_zone_device_unregister(tz);
- 	kfree(trips);
--	kfree(tzp);
- 	kfree(ops);
- }
- 
-@@ -477,7 +469,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- {
- 	struct thermal_zone_device *tz;
- 	struct thermal_trip *trips;
--	struct thermal_zone_params *tzp;
-+	struct thermal_zone_params tzp = {};
- 	struct thermal_zone_device_ops *of_ops;
- 	struct device_node *np;
- 	int delay, pdelay;
-@@ -509,12 +501,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 		goto out_kfree_trips;
- 	}
- 
--	tzp = thermal_of_parameters_init(np);
--	if (IS_ERR(tzp)) {
--		ret = PTR_ERR(tzp);
--		pr_err("Failed to initialize parameter from %pOFn: %d\n", np, ret);
--		goto out_kfree_trips;
--	}
-+	thermal_of_parameters_init(np, &tzp);
- 
- 	of_ops->bind = thermal_of_bind;
- 	of_ops->unbind = thermal_of_unbind;
-@@ -522,12 +509,12 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 	mask = GENMASK_ULL((ntrips) - 1, 0);
- 
- 	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
--						     mask, data, of_ops, tzp,
-+						     mask, data, of_ops, &tzp,
- 						     pdelay, delay);
- 	if (IS_ERR(tz)) {
- 		ret = PTR_ERR(tz);
- 		pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
--		goto out_kfree_tzp;
-+		goto out_kfree_trips;
- 	}
- 
- 	ret = thermal_zone_device_enable(tz);
-@@ -540,8 +527,6 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
- 
- 	return tz;
- 
--out_kfree_tzp:
--	kfree(tzp);
- out_kfree_trips:
- 	kfree(trips);
- out_kfree_of_ops:
--- 
-2.39.2
-
+Thanks
