@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E8C74C694
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Jul 2023 19:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C7374C6A4
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Jul 2023 19:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbjGIRT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Jul 2023 13:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S230293AbjGIRZb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 9 Jul 2023 13:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjGIRT1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Jul 2023 13:19:27 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C978126
-        for <linux-pm@vger.kernel.org>; Sun,  9 Jul 2023 10:19:25 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99384a80af7so420175966b.2
-        for <linux-pm@vger.kernel.org>; Sun, 09 Jul 2023 10:19:25 -0700 (PDT)
+        with ESMTP id S229667AbjGIRZb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Jul 2023 13:25:31 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DA9D7
+        for <linux-pm@vger.kernel.org>; Sun,  9 Jul 2023 10:25:29 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98e39784a85so944762366b.1
+        for <linux-pm@vger.kernel.org>; Sun, 09 Jul 2023 10:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688923164; x=1691515164;
+        d=linaro.org; s=google; t=1688923528; x=1691515528;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BxMRy4/ZX59Gjw8AFiUdNiqxbSxqjUU/VT1J6LS1+jY=;
-        b=V3PEFRinVlmUISMSTEBWWi+A+Id5wM6lxDwOU5Ky/AF6+yTwoHLw2Q5AA3CoCEHmzQ
-         oJE2pG3XUai0Tf0ZrgoXcn3+DjuBTQJ5b4fGjgAXVP6eYAhLmshKgn3f2NQ9t8RMjG3c
-         l7hg59kXci3I98oc9o04zV8mrReORbwQR1IbhKEV0hCCLtTCEEMvZwVZVilrhetfjUbC
-         7bEBBCAWrnWMOh2zGgeQXrQndvWixlVOIB6Pclf9jmXCbYAq+YolUYbxEzifRZLxxgFv
-         NjIGMFVHN91iI6PCoFJLXPw5PRP2jwI8Ii4SSaOfHJ/i4TXjfEvwoebT1CU9DwYQOGUm
-         KqKQ==
+        bh=Dpp3G23d1UMv8kjbjiwhc4d7WJR736PVunLF1S6v/yU=;
+        b=sUtrySA7WHUatdcE1Ior9IcnJmaMZQkZBLJmGq+jRkeO4gvk8BATD/KOrXK79LLa+t
+         ZHQmS1NVOsaZinWRBxqtW/cq6gIvFMBCWKzZXq7QpikvyH0zOJy6kXlO3SEIm6kzENe7
+         QzjUao9FwYwzwum308wA4N/gr4VJnZSPFJNZ0NaAaS8BUneK53wYwh89p1ViwOWzLhPl
+         DHn0X8DKU/eKChol/ZAX1gFTtkHMYSOva2tM1ezm/MdjybJYmcwHYunBToCtaEdHKVF8
+         pivYp3R2IwTfK1l+rxb5kXMzAFL+H8L8TWTSXMQ7DuznKIHm52wyEPdoJFJVg6s2us63
+         6F6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688923164; x=1691515164;
+        d=1e100.net; s=20221208; t=1688923528; x=1691515528;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BxMRy4/ZX59Gjw8AFiUdNiqxbSxqjUU/VT1J6LS1+jY=;
-        b=B6qNGCQSSjHI8w2e+CjJeEadUAECGvP417SJ4wFRIJa3jJ1NVLIKjcx/QUUqDwZTgv
-         OykcGtFLUDA4v/kbuU8STzmDrs6VPbw1hcijkW2dyrmusRylRAJfyvjGhLmKsG6BSgeq
-         9Du8gKlQXgZmI+p09u4x2fEkFN4CmM6UnrodVh7nKfLU4RTDe1wqGaVPk2CwJ0G5/J2U
-         dUv5POvcL0SuAKXk71/I/20CDQPWB5ANqyUSfSjeWrWbggozaNnI+YUKlhXjvxy1dVEN
-         Zgkser1THDilfmxZyMPDjranhgfnk+yCsNkrQicLeVzUORIKX6+l5W/7Pjt7Cpb5r3t/
-         y11A==
-X-Gm-Message-State: ABy/qLZJLEwEZSpt+JkUYvuYCDTPEWMCoEBYjx+fsGh5MP1DymSzgNCj
-        HQukt8eofHr9vQUhabwTaGT3yA==
-X-Google-Smtp-Source: APBJJlEKpLkUgb+Yuq/DwGb4Fz4U6Dm6A0KYZoHWxDN1MSqyW/la+01BJEq2DinOqGC6jvLPHm86Kg==
-X-Received: by 2002:a17:906:cc57:b0:989:21e4:6c6e with SMTP id mm23-20020a170906cc5700b0098921e46c6emr8879153ejb.53.1688923163998;
-        Sun, 09 Jul 2023 10:19:23 -0700 (PDT)
+        bh=Dpp3G23d1UMv8kjbjiwhc4d7WJR736PVunLF1S6v/yU=;
+        b=MQ/awrVJ9TODoyE5EMbNWBZdNYUK1DBU0qOun6KGLLfb0yFNeH3zAn659Ow4kFxlMu
+         wCaoZzoAAx5nX3pxhYGdbJLQ8ka6koGudmT0WewCBSyrCBBxgCS5hpSBIR9rHOHSY+vi
+         rrdvXO0LDZbYuXst88BjEnWkLwBYoom+2/V8XIbn3rIk6CaiwgjE2j8CaTCFU/rA0HR/
+         kgzAZ+pJ6Ay2VbLVtt7bescv9Fn0GpSH4ArOEfA9eB+EkTPJVGaY1GVANuIkdfbMEs/r
+         6gfY+1odYl1vLqHmi30eoUrV59BIHcWGEhs1rVpVInzx5zRvT7B0+QrzwDxDEOcLlLA8
+         Vw/w==
+X-Gm-Message-State: ABy/qLbLFhy7ECi/THBx3Da+CK4irGPdOiaIm38vviSnsq6KQVJc1UkH
+        fJs4LR2GmTXxElI7haGGgEp4Bw==
+X-Google-Smtp-Source: APBJJlHqbRiIps+tbnWMbB8QFAlN9qDjjxb/xg9uB1z05BEAHvBQ6tmFaz1UkRToJpAIFcSmWNxeVw==
+X-Received: by 2002:a17:907:d15:b0:992:103c:43fa with SMTP id gn21-20020a1709070d1500b00992103c43famr15849207ejc.30.1688923528140;
+        Sun, 09 Jul 2023 10:25:28 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id c21-20020a170906341500b00992ab0262c9sm5024947ejb.147.2023.07.09.10.19.21
+        by smtp.gmail.com with ESMTPSA id g21-20020a1709063b1500b00988781076e2sm4965791ejf.78.2023.07.09.10.25.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Jul 2023 10:19:23 -0700 (PDT)
-Message-ID: <dffc7942-d9b6-e291-9cab-9a1642225fc3@linaro.org>
-Date:   Sun, 9 Jul 2023 19:19:20 +0200
+        Sun, 09 Jul 2023 10:25:27 -0700 (PDT)
+Message-ID: <730fa9bd-560f-e91e-d0be-3e73f9e56999@linaro.org>
+Date:   Sun, 9 Jul 2023 19:25:24 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 04/11] iio: adc: Update bindings to remove support for
- ADC7 name used on QCOM PMICs
+Subject: Re: [PATCH 08/11] dt-bindings: iio: adc: Copy QCOM ADC bindings files
 Content-Language: en-US
 To:     Jishnu Prakash <quic_jprakash@quicinc.com>, agross@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -79,14 +78,14 @@ To:     Jishnu Prakash <quic_jprakash@quicinc.com>, agross@kernel.org,
         linux-pm@vger.kernel.org
 Cc:     linux-arm-msm-owner@vger.kernel.org
 References: <20230708072835.3035398-1-quic_jprakash@quicinc.com>
- <20230708072835.3035398-5-quic_jprakash@quicinc.com>
+ <20230708072835.3035398-9-quic_jprakash@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230708072835.3035398-5-quic_jprakash@quicinc.com>
+In-Reply-To: <20230708072835.3035398-9-quic_jprakash@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,48 +94,12 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 08/07/2023 09:28, Jishnu Prakash wrote:
-> Now that usage of "ADC7" name has been replaced with usage of "ADC5
-> Gen2" name everywhere, remove all support for "ADC7" name.
+> At present, the QCOM ADC bindings files are located in the
+> dt-bindings/iio folder. As they are all specifically for
+> ADC, copy them into the dt-bindings/iio/adc folder.
 
-Why?
-
-
-> 
-> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
-> ---
->  .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  5 +-
->  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |  1 -
->  .../dt-bindings/iio/qcom,spmi-adc7-pm8350.h   | 63 -------------
->  .../dt-bindings/iio/qcom,spmi-adc7-pm8350b.h  | 88 -------------------
->  .../dt-bindings/iio/qcom,spmi-adc7-pmk8350.h  | 46 ----------
->  .../dt-bindings/iio/qcom,spmi-adc7-pmr735a.h  | 28 ------
->  .../dt-bindings/iio/qcom,spmi-adc7-pmr735b.h  | 28 ------
->  include/dt-bindings/iio/qcom,spmi-vadc.h      | 76 ----------------
->  8 files changed, 1 insertion(+), 334 deletions(-)
->  delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pm8350.h
->  delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pm8350b.h
->  delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pmk8350.h
->  delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pmr735a.h
->  delete mode 100644 include/dt-bindings/iio/qcom,spmi-adc7-pmr735b.h
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> index f886977de165..eb7d16e385ad 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> @@ -26,7 +26,6 @@ properties:
->            - qcom,spmi-vadc
->            - qcom,spmi-adc5
->            - qcom,spmi-adc-rev2
-> -          - qcom,spmi-adc7
-
-NAK. You did not explained why dropping existing compatible is correct,
-expected and okay.
-
-Also:
-
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+Copy? I expect moving. Either description does not make any sense or
+your created a lot of duplicated code.
 
 
 
