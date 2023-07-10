@@ -2,132 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4170174D605
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 14:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D476A74D702
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 15:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbjGJMx4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Jul 2023 08:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S231681AbjGJNJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 09:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjGJMxz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 08:53:55 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A860C9;
-        Mon, 10 Jul 2023 05:53:54 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-577497ec6c6so47998647b3.2;
-        Mon, 10 Jul 2023 05:53:54 -0700 (PDT)
+        with ESMTP id S233617AbjGJNIc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 09:08:32 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A1B128;
+        Mon, 10 Jul 2023 06:08:22 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99364ae9596so577511166b.1;
+        Mon, 10 Jul 2023 06:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1688994500; x=1691586500;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t4Yu4nZ9o/MAugiHNW1oP2TWBog7+wh9NiTblk14kDg=;
+        b=ViKLx3vuJ5Z2OZiH/tMNs7+36C5ErzoM+wXhMsBLmBioA4d/87VvFYg9xu7yF9NYI7
+         eW0cRRSun9o7/uBwbj9nMt1MxZ2ILgZ8TJL6Qbw0qOjL3bsRT3ZUoCACT5dzlbz+CGVp
+         t9wLe+JD8luMvDMLgGkXaC6r/WstGA6qKjIKBmIAn8B2ibPW+yuWsRN7leV1a+r4uxNj
+         u+hZVI2YPLOuz3AeCDWCh2PiCBEMstSEL2fBx8AVNUXNq28fWnwYpknz6ZRs8fdzmGFB
+         KpjD24mWQEkMUYbgDUeKuX3D9Tr0BjxOh9BA1kgHsmGbRKIljItY/qy8B4DcqhccOgkC
+         y3fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688993633; x=1691585633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1688994500; x=1691586500;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5ZOBAzVYjXK3LDlHRwH+RyX9od9CvnTpwN65S7Xs+ro=;
-        b=JWNU5NzllEu1w3nKr4E+zjK5dJRi6ghnKM+xHU15oP1uV0XmZeHZgFxIjH5mNHjRgK
-         lCWKrGCyGKeyVFJsqzK/gufJfTxbctcsw8NQhmtgOa4xrkQ2Mlo1sqP8LJ2ynXZ1xlzJ
-         IZqWfJGCQalUuNsWH7BRRTiotEWtCSUOYOW7CjAOdUlJN7VIHxfyGr53ZePw/c49uvpZ
-         Z04zZtRCQ4/WPUMYf61VQYtzxAbIfVJwhNjaagrfC/But4HzmNCG9PZ0O4BGNWAUvFcN
-         eQ6XoK695a1zGIi1jh+3GRYJ11fQsVfQECUL5WwIfq1LRLVAig1KE/EIzhbIQFoCHyVy
-         zDig==
-X-Gm-Message-State: ABy/qLYE5Xzf8Xmx1JEBnIosU+u50a2S6QaIAl5mV7+fMshIryUkx9nd
-        d4rksBVVMuWY3xnt/aXDux+2zweALTTK1Q==
-X-Google-Smtp-Source: APBJJlHvV4V+/sOXsbStTVlrSLhme6udEucKr1TSlnyIBzNjl46LuAvWKZ7/JfqJJhKysU8QtgvdDQ==
-X-Received: by 2002:a81:5a8b:0:b0:56f:fbc6:3b0 with SMTP id o133-20020a815a8b000000b0056ffbc603b0mr14119576ywb.14.1688993633417;
-        Mon, 10 Jul 2023 05:53:53 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id b127-20020a816785000000b0057a44e20fb8sm3031269ywc.73.2023.07.10.05.53.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:53:53 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5703cb4bcb4so47938297b3.3;
-        Mon, 10 Jul 2023 05:53:53 -0700 (PDT)
-X-Received: by 2002:a0d:cb56:0:b0:577:630d:ef63 with SMTP id
- n83-20020a0dcb56000000b00577630def63mr13531231ywd.24.1688993633075; Mon, 10
- Jul 2023 05:53:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230707140434.723349-1-ulf.hansson@linaro.org> <20230707140434.723349-10-ulf.hansson@linaro.org>
-In-Reply-To: <20230707140434.723349-10-ulf.hansson@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 14:53:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUcmbv7vRKJWACN9dobqKeZuLqjpd8sLgt7FeTBi4uKfA@mail.gmail.com>
-Message-ID: <CAMuHMdUcmbv7vRKJWACN9dobqKeZuLqjpd8sLgt7FeTBi4uKfA@mail.gmail.com>
-Subject: Re: [PATCH 09/18] soc: renesas: Move power-domain drivers to the
- genpd dir
+        bh=t4Yu4nZ9o/MAugiHNW1oP2TWBog7+wh9NiTblk14kDg=;
+        b=WirI5RBBL8Jd9POeObAP2ic3AidoARfZZNLBO4/aTN345lvjR6N/1h41q18gpkjYt+
+         mTPHyNKkvv5CkUpsgZ5EBw4+2cY/U+6oXW2DNgFBXs2GaUrBvudy6pbTp9oMGLLv8l3J
+         ECm72GuAQtJJ0oms6V5Ih2TEnX4eCAdNs05FtXJwWkEgiSp6/k0NWcesrVPxN7Zyfa+J
+         X7Bik6eKV2yWOeM3aS4vG0biZjvDzgE6NkA/Agj3efKgAiJJESdyCSbPhyRSbBmiYMwB
+         iiIoWOYSE536GF/IoGm2uETHiF//JyQv7OlX1AZO3CTEMpnMLH47k/yNlQM3u8x9/H1T
+         q2Dg==
+X-Gm-Message-State: ABy/qLbUwDvkNR42qEsNylS9w9btTStPt8r+4vMgGikUlZsLB3eAxJLR
+        QOH9roAI/OKm020OKUcMbak=
+X-Google-Smtp-Source: APBJJlEZSid4m5LqiMkjIuq9pqoFUus2yiqHgqNIdRxQzpkVtb3ChiIS1Aia+iMuLU7ts1DBLslKyg==
+X-Received: by 2002:a17:907:9008:b0:988:9621:d85f with SMTP id ay8-20020a170907900800b009889621d85fmr11123647ejc.58.1688994500400;
+        Mon, 10 Jul 2023 06:08:20 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id i18-20020a170906851200b0098669cc16b2sm6048866ejx.83.2023.07.10.06.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Jul 2023 06:08:19 -0700 (PDT)
+Date:   Mon, 10 Jul 2023 15:08:18 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 14/18] soc: tegra: Move powergate-bpmp driver to the
+ genpd dir
+Message-ID: <ZKwCwqHwqCEIHMKv@orome>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-15-ulf.hansson@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bFL+MChN9/7KXUcr"
+Content-Disposition: inline
+In-Reply-To: <20230707140434.723349-15-ulf.hansson@linaro.org>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ulf,
 
-On Fri, Jul 7, 2023 at 4:04 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-> Cc: Magnus Damm <magnus.damm@gmail.com>
-> Cc: <linux-renesas-soc@vger.kernel.org>
+--bFL+MChN9/7KXUcr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Jul 07, 2023 at 04:04:30PM +0200, Ulf Hansson wrote:
+> Let's moves the powergate-bpmp driver, while we leave the pmc driver in t=
+he
+> soc directory. To move the latter, we first need to split it up in a few
+> pieces so the genpd parts can be moved alone.
+>=20
+> Cc: Thierry Reding <thierry.reding@gmail.com>
+> Cc: Jonathan Hunter <jonathanh@nvidia.com>
+> Cc: Mikko Perttunen <mperttunen@nvidia.com>
+> Cc: <linux-tegra@vger.kernel.org>
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Thanks for your patch!
-
 > ---
->  MAINTAINERS                                   |  1 +
->  drivers/genpd/Makefile                        |  1 +
->  drivers/genpd/renesas/Makefile                | 30 +++++++++++++++++++
->  drivers/{soc => genpd}/renesas/r8a7742-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7743-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7745-sysc.c |  0
->  .../{soc => genpd}/renesas/r8a77470-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a774a1-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a774b1-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a774c0-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a774e1-sysc.c    |  0
->  drivers/{soc => genpd}/renesas/r8a7779-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7790-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7791-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7792-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7794-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7795-sysc.c |  0
->  drivers/{soc => genpd}/renesas/r8a7796-sysc.c |  0
->  .../{soc => genpd}/renesas/r8a77965-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a77970-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a77980-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a77990-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a77995-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a779a0-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a779f0-sysc.c    |  0
->  .../{soc => genpd}/renesas/r8a779g0-sysc.c    |  0
->  .../{soc => genpd}/renesas/rcar-gen4-sysc.c   |  0
->  .../{soc => genpd}/renesas/rcar-gen4-sysc.h   |  0
->  drivers/{soc => genpd}/renesas/rcar-sysc.c    |  0
->  drivers/{soc => genpd}/renesas/rcar-sysc.h    |  0
->  drivers/{soc => genpd}/renesas/rmobile-sysc.c |  0
->  drivers/soc/renesas/Makefile                  | 27 -----------------
->  32 files changed, 32 insertions(+), 27 deletions(-)
+>  drivers/genpd/Makefile                        | 1 +
+>  drivers/genpd/tegra/Makefile                  | 2 ++
+>  drivers/{soc =3D> genpd}/tegra/powergate-bpmp.c | 0
+>  drivers/soc/tegra/Makefile                    | 1 -
+>  4 files changed, 3 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/genpd/tegra/Makefile
+>  rename drivers/{soc =3D> genpd}/tegra/powergate-bpmp.c (100%)
 
-LGTM.
+Fine with me:
 
-Is there any specific reason why you're not moving the SYSC_* symbols
-from drivers/soc/renesas/Kconfig to drivers/genpd/renesas/Kconfig?
-Thanks!
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-Gr{oetje,eeting}s,
+--bFL+MChN9/7KXUcr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-                        Geert
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSsAsIACgkQ3SOs138+
+s6GpGw/+PL9CvgiLkda1wJNl1l2p4aij2hHBUbv5HmJ26j99KaMSJHfXSr+FU8zE
+hY/w1nVVm2hUjn0k3rLo6Pe/vNGw4XzeA+Ifp17KoqHhEk2aboOZdLyLK/KULYS+
+ADH9C+s2nunBpXTbwODqP8/8GysMwTotkKPGn3l0VvD7pzKE6Bsx4cUdi0LV1vwr
+AVfHAOBOy1HB27K3oM5tppuA3OiRcwCUJPtFty3FMv5UDHFOcKmYOYLRK6R0PIA5
+o+SANCTlpioBcQIW8rQo4yJwFHvllTr6j8slRvzbmuL++vwKYNZTPoZXhiy2rKD7
+squsr1qQNjJRHayNKoapV1ElZNan1L7X8zgoqW29FAGuJeuRx6ecqlBTEiD0bgsp
+daoiZAdfPLc9ZmR+A9aNDtXzM5owlXoxG6ZRLqo4J93nQDT+8S1PyN3cbIWQB7PL
+uq/m/aFpLGzfsw+82q9XfVdtZpjEe9F4JcEhAeP5ZrdmMthzAra/aYxd+IyGDdE0
+I34tGGKOLOw4EeCYJ/4XlLrCVEz4oHlXHEJtqmrMFUM1fKwvZY12X2RIfOw9v+Mk
+f4Jej8JDO4LkYaQKZh2myc/XoqniY5FR5NMRbhSEiKDAqq9MIBhCPfBqIRA1U79s
+TfYkYPBbSqZ2QtJLSeIrH61+7CkXCySKqSNU+lRJk3DUbERgnYo=
+=rRak
+-----END PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--bFL+MChN9/7KXUcr--
