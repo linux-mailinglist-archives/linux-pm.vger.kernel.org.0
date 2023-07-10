@@ -2,232 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18C974D4B1
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 13:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3E274D50E
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 14:14:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjGJLkv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 07:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
+        id S230250AbjGJMOw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 08:14:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjGJLkt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 07:40:49 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3E3F2
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 04:40:47 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bad0c4f6f50so6347231276.1
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 04:40:47 -0700 (PDT)
+        with ESMTP id S231358AbjGJMOs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 08:14:48 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818C6198
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 05:14:43 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so6708215e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 05:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688989247; x=1691581247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A0baWHvJEuymJsSf+7zXG5QpL6IwXsO62n0ON36eeSc=;
-        b=Wrm7CvNA2UjxNAJnmdVa0vkA0kU1l1/NYs5RXPLkcHszVSMYyRpzLNrlp8JvNp8mUg
-         SlaDSvhKer7MALbZO3YEnSRaYN4vD6A0DESoJJwm7veyC/JfATTN31yWpY+dFegdDg+q
-         gSjR1wOkko8gIDmwgtTNpNWHDKQqz/6YUgKmlwjzOks25mJC4NebQ0H109vIb885OhkA
-         xmvzdNGwAm2//+KmwLGD6UZQXJSRByfX2DIS+oAe61Ce6WckPFOjHnHDmEouSpR5kJXF
-         EXuSZNQsWI2NHI33fRysIKGweGiYCnFnzPiU7rd4YamDVl7hiq6uN1cnKtEHB0se4Hs2
-         G1lg==
+        d=linaro.org; s=google; t=1688991281; x=1691583281;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FIUM80sem4wvBeLJM7gxDVfcq4hFkz0TAKhA7YTlha0=;
+        b=T3lrZkp+l0MpEVWQYcpC2aYnnrChpg4lobA/mkpPEJVQV0pIGNWa0GXgLs88EXFpVa
+         ZIbQ5WhqtTETOmfuAtQZWpm7a/seTDSxVWUY4T3NAkD0y5jRdx4LjPD9ket4+PskCCG7
+         VWASjUFKokDKj4uXztwOem+R9vh9h+qY9UTEfjIiQy+FqDQAxBmTsxjNeVGlFoTMj/s0
+         GgQj9Ott1jKbkncPXlMA2NlotE2xmFU7hW/CcyYp3aOW10tyDmManBPJtOr/iHHEl72B
+         9x+74s98lapudBtz3j57nWmfsPOGbqnK7gIyXrMWs9n8oPLnxLfn3wv0CWZ7ZtOLHjwn
+         /o8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688989247; x=1691581247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=A0baWHvJEuymJsSf+7zXG5QpL6IwXsO62n0ON36eeSc=;
-        b=ThC0mWYop25HX3kUpk82l1FQ5SzPi2gDflYfZs+J5h8AbbuDrPuSIHsMHBEWwz/doc
-         BjAqQQ6AtpdcLu9VadY1wB/DmeOC9RmaMkg0XXj53RdwpEySO1OTQDG2KZqN9wvaaqBw
-         R5NyhWZ8ho2dPi9A4XPQSZYla6G0niYPigoFxHmwVZx33idvL8g9fs1l+ueWOLtRwwtF
-         Yh+PV2J0BE6FdS+yhApnNKcBiJP2kKaTu9Ec5kbniPrNycXnQ9enDxkY6AecchnJrxxG
-         v4wVp9TYXvGa5khiZQk0nw9CY9OhH5FvoSQkPFzDswm+Eac2849XFkyuRe5lso2XX+NB
-         4+Ng==
-X-Gm-Message-State: ABy/qLb+H+fXJhplQVIv083gJrKDMhSNi6xFyNyW0IWcStiZm+RA7q03
-        N4QVbMOJwN4AT8sGWDKaCSE5ZrKpwL65Fnabs2McPQ==
-X-Google-Smtp-Source: APBJJlG43lphj5dSNPax0uxGnPOKxibjsrO5vULJkKbP8xMPCTSfJ/56PgpMjMUDYP+bStbBUVsCYNM5+WjZQrvIl+A=
-X-Received: by 2002:a25:6905:0:b0:c4b:1a9f:90eb with SMTP id
- e5-20020a256905000000b00c4b1a9f90ebmr10256666ybc.7.1688989246886; Mon, 10 Jul
- 2023 04:40:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688991282; x=1691583282;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FIUM80sem4wvBeLJM7gxDVfcq4hFkz0TAKhA7YTlha0=;
+        b=WWVrZUrlUOJ/iVIzr0TzNjQVzJ1PqRgzWHIUHoOyQkeLVJbLD+FdF4gSeq7qneJuLx
+         BwJQBu+tBsW47chDgX+l0hWnJhG1q7yoquERD0pEpOcACvCsGWUQHGDEnLjg8CsXu/8j
+         Z0Jedzzz3TRHqqzWsmJQm5SSZg8T7p1OLTM7/RFOGI2gADgeZBs5X6Zd0dROWnlm9NeE
+         8S9MoH/LZl/W4MvrYOUkDu65toxF3T6Qr6onWaLYHTQSStxx9kk1P3C7M0iQyOxM+/w2
+         h2LtCj0bV5hCz7+u3MCmU44iHk27qA6sgIfQVffUrSV942DCOQC/9d+44Xwe4MUw06Ef
+         U8iA==
+X-Gm-Message-State: ABy/qLaQBrUgpQaJTJ3RE9yiGvmxT1nGmz+Xfyt9igGdJjT4gcjgM1Su
+        79c1X4bBPa90IcUfwOmCWL+KxQ==
+X-Google-Smtp-Source: APBJJlEggwbPNBYWyFhjvfF6GLwQ/BHHtenN1h2x1ww8Fde/Lb05kPWkKWYva1WKoqvyG5xx6CJVPw==
+X-Received: by 2002:a05:6512:239f:b0:4fb:77d6:89c3 with SMTP id c31-20020a056512239f00b004fb77d689c3mr11852649lfv.12.1688991281113;
+        Mon, 10 Jul 2023 05:14:41 -0700 (PDT)
+Received: from [192.168.1.101] (abxj141.neoplus.adsl.tpnet.pl. [83.9.3.141])
+        by smtp.gmail.com with ESMTPSA id e7-20020ac25467000000b004fb763b5171sm1678441lfn.86.2023.07.10.05.14.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 05:14:40 -0700 (PDT)
+Message-ID: <b1346bc7-4bf0-e885-c3d4-6fac01516bf4@linaro.org>
+Date:   Mon, 10 Jul 2023 14:14:39 +0200
 MIME-Version: 1.0
-References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-6-frank.li@vivo.com>
- <c628dff0-bb0c-f78d-7302-599c5329c977@linaro.org> <57b97b0a-6570-5085-dbac-a08089791876@vivo.com>
-In-Reply-To: <57b97b0a-6570-5085-dbac-a08089791876@vivo.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 10 Jul 2023 14:40:35 +0300
-Message-ID: <CAA8EJpoQXe1bHf=EG=6Tt4gWz_4h-rkLHK92_mVQQmZCc4hq4g@mail.gmail.com>
-Subject: Re: [PATCH v4 06/21] thermal/drivers/db8500: convert to use devm_request*_irq_probe()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 5/6] arm64: dts: qcom: ipq5332: Add thermal zone nodes
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_varada@quicinc.com
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-6-quic_ipkumar@quicinc.com>
+ <3f6ab4b4-b5f5-5807-0cb4-8ae782bd6044@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <3f6ab4b4-b5f5-5807-0cb4-8ae782bd6044@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 10 Jul 2023 at 14:30, Yangtao Li <frank.li@vivo.com> wrote:
->
-> Hi Dmitry,
->
-> On 2023/7/10 19:25, Dmitry Baryshkov wrote:
->
-> > On 10/07/2023 12:59, Yangtao Li wrote:
-> >> There are more than 700 calls to devm_request_threaded_irq method and
-> >> more than 1000 calls to devm_request_irq method. Most drivers only
-> >> request one interrupt resource, and these error messages are basically
-> >> the same. If error messages are printed everywhere, more than 2000 lin=
-es
-> >> of code can be saved by removing the msg in the driver.
-> >>
-> >> And tglx point out that:
-> >>
-> >>    If we actually look at the call sites of
-> >>    devm_request_threaded_irq() then the vast majority of them print
-> >> more or
-> >>    less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
-> >>
-> >>       519 messages total (there are probably more)
-> >>
-> >>       352 unique messages
-> >>
-> >>       323 unique messages after lower casing
-> >>
-> >>           Those 323 are mostly just variants of the same patterns with
-> >>           slight modifications in formatting and information provided.
-> >>
-> >>       186 of these messages do not deliver any useful information,
-> >>           e.g. "no irq", "
-> >>
-> >>       The most useful one of all is: "could request wakeup irq: %d"
-> >>
-> >>    So there is certainly an argument to be made that this particular
-> >>    function should print a well formatted and informative error messag=
-e.
-> >>
-> >>    It's not a general allocator like kmalloc(). It's specialized and
-> >> in the
-> >>    vast majority of cases failing to request the interrupt causes the
-> >>    device probe to fail. So having proper and consistent information w=
-hy
-> >>    the device cannot be used _is_ useful.
-> >>
-> >> So convert to use devm_request*_irq_probe() API, which ensure that all
-> >> error handling branches print error information.
-> >>
-> >> In this way, when this function fails, the upper-layer functions can
-> >> directly return an error code without missing debugging information.
-> >> Otherwise, the error message will be printed redundantly or missing.
-> >>
-> >> Cc: Thomas Gleixner <tglx@linutronix.de>
-> >> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> >> Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
-> >> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> >> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.co=
-m>
-> >> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> >> ---
-> >>   drivers/thermal/db8500_thermal.c | 16 ++++++----------
-> >>   drivers/thermal/qcom/lmh.c       |  7 +++----
-> >
-> > Please split LMH to a separate driver.
->
->
-> Sorry for mixing these two patches together,
->
-> can I add your Reviewed-by tag when the patch is resubmitted for the
-> next version?
-
-Yes, please add it to the LMH patch.
-
->
->
-> Thx,
->
-> Yangtao
->
-> >
-> >>   2 files changed, 9 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/db8500_thermal.c
-> >> b/drivers/thermal/db8500_thermal.c
-> >> index fca5c2c93bf9..0ef8fc2eb4a1 100644
-> >> --- a/drivers/thermal/db8500_thermal.c
-> >> +++ b/drivers/thermal/db8500_thermal.c
-> >> @@ -164,25 +164,21 @@ static int db8500_thermal_probe(struct
-> >> platform_device *pdev)
-> >>       if (low_irq < 0)
-> >>           return low_irq;
-> >>   -    ret =3D devm_request_threaded_irq(dev, low_irq, NULL,
-> >> +    ret =3D devm_request_threaded_irq_probe(dev, low_irq, NULL,
-> >>           prcmu_low_irq_handler, IRQF_NO_SUSPEND | IRQF_ONESHOT,
-> >> -        "dbx500_temp_low", th);
-> >> -    if (ret < 0) {
-> >> -        dev_err(dev, "failed to allocate temp low irq\n");
-> >> +        "dbx500_temp_low", th, "temp low");
-> >> +    if (ret < 0)
-> >>           return ret;
-> >> -    }
-> >>         high_irq =3D platform_get_irq_byname(pdev, "IRQ_HOTMON_HIGH");
-> >>       if (high_irq < 0)
-> >>           return high_irq;
-> >>   -    ret =3D devm_request_threaded_irq(dev, high_irq, NULL,
-> >> +    ret =3D devm_request_threaded_irq_probe(dev, high_irq, NULL,
-> >>           prcmu_high_irq_handler, IRQF_NO_SUSPEND | IRQF_ONESHOT,
-> >> -        "dbx500_temp_high", th);
-> >> -    if (ret < 0) {
-> >> -        dev_err(dev, "failed to allocate temp high irq\n");
-> >> +        "dbx500_temp_high", th, "temp high");
-> >> +    if (ret < 0)
-> >>           return ret;
-> >> -    }
-> >>         /* register of thermal sensor and get info from DT */
-> >>       th->tz =3D devm_thermal_of_zone_register(dev, 0, th, &thdev_ops)=
-;
-> >> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-> >> index f6edb12ec004..48a14d7e8bf5 100644
-> >> --- a/drivers/thermal/qcom/lmh.c
-> >> +++ b/drivers/thermal/qcom/lmh.c
-> >> @@ -207,11 +207,10 @@ static int lmh_probe(struct platform_device *pde=
-v)
-> >>         /* Disable the irq and let cpufreq enable it when ready to
-> >> handle the interrupt */
-> >>       irq_set_status_flags(lmh_data->irq, IRQ_NOAUTOEN);
-> >> -    ret =3D devm_request_irq(dev, lmh_data->irq, lmh_handle_irq,
-> >> -                   IRQF_ONESHOT | IRQF_NO_SUSPEND,
-> >> -                   "lmh-irq", lmh_data);
-> >> +    ret =3D devm_request_irq_probe(dev, lmh_data->irq, lmh_handle_irq=
-,
-> >> +                     IRQF_ONESHOT | IRQF_NO_SUSPEND,
-> >> +                     "lmh-irq", lmh_data, NULL);
-> >>       if (ret) {
-> >> -        dev_err(dev, "Error %d registering irq %x\n", ret,
-> >> lmh_data->irq);
-> >>           irq_domain_remove(lmh_data->domain);
-> >>           return ret;
-> >>       }
-> >
+On 10.07.2023 13:23, Dmitry Baryshkov wrote:
+> On 10/07/2023 13:37, Praveenkumar I wrote:
+>> This patch adds thermal zone nodes for sensors present in
+>> IPQ5332.
+>>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 72 +++++++++++++++++++++++++++
+>>   1 file changed, 72 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> index a1e3527178c0..8b276aeca53e 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> @@ -527,4 +527,76 @@ timer {
+>>                    <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>>                    <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+>>       };
+>> +
+>> +    thermal-zones {
+>> +        rfa-0-thermal{
+thermal {
 
 
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 11>;
+>> +
+>> +            trips {
+Indentation seems off, tab size for kernel code is 8 spaces.
 
---=20
-With best wishes
-Dmitry
+Konrad
+>> +                rfa-0-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        rfa-1-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 12>;
+>> +
+>> +            trips {
+>> +                rfa-1-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        misc-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 13>;
+>> +
+>> +            trips {
+>> +                misc-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        cpu-top-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 14>;
+>> +
+>> +            trips {
+>> +                cpu-top-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+> 
+> Could you please add a passive cooling devices for the CPU?
+> 
+>> +        };
+>> +
+>> +        top-glue-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 15>;
+>> +
+>> +            trips {
+>> +                top-glue-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>>   };
+> 
