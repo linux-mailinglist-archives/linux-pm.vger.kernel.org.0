@@ -2,139 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F29874D55F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 14:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CED74D5C0
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 14:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbjGJM2A convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Jul 2023 08:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34966 "EHLO
+        id S229823AbjGJMhj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 08:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbjGJM14 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 08:27:56 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46449B1;
-        Mon, 10 Jul 2023 05:27:55 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-5701810884aso47893327b3.0;
-        Mon, 10 Jul 2023 05:27:55 -0700 (PDT)
+        with ESMTP id S229517AbjGJMhi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 08:37:38 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B3999
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 05:37:37 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-57a4a476bbfso49073777b3.2
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 05:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1688992656; x=1691584656;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=I+4ETNnXEEIrUabO7XSXb0/uWa2F8tZk9bAJbwXI7Gs=;
+        b=N2mrNEPdno1WGhAjOeQdYHWV2aGzQo7aOrodhjWo0rxhnrmcx7a7nwnNj3zKpYqw9r
+         5GZYtUefXvoW4DrRW2NI/sxU4t4sUkhhdBVFkadtBp+QupG0Y3rEixzDH39Qt+niLEMK
+         5QFtH/Y8rf5BS27nSdo8Dh8mXO+ts0/IU8iFW5+xmnfBfBGl8n8tnrJwzs77VWHTU6FV
+         Uj5OLyIjsIlDoYOav2Nh4X8YQP8bbXMWE8RItasPPgl01T0B8etEJEvTwxtQcS3gitrx
+         qSKSEtXrsPX+2hQJsLLLwB4qMVwod+R+tqHiCNTu6hEamdL/nzKzbYPFtHE4XIs/CSY2
+         LgEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688992074; x=1691584074;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=72G0xT35DUUmjR1UqeCEhln7BH2NFD1TsIdwv6WzGBc=;
-        b=ZIcR4xwd+wyeXWZZf2pQxCdkIYD1dc8smbu0Aj/4NmE04Aa6wxyNER2S+y7gCiKzcP
-         YwmM4bRRrC8rbxdBTJeMspOog2NknJrGtg+QyLKfeEMM9FFo5B3sfth1NKvYRlbN1InM
-         nvPhs9fA4mZIBKyaqRHLiB4BYWLgUXYadg6QQhvqmbxyNV1qCRGWdyGpjtuYWgZpZU+B
-         N6tVBhayyONlmEOpgrfyTu3OdFasDiGP0Yb0CX3iboRYK7Dy4YRr5crSvItF/DHpqpc+
-         Gl+kjrkDoJPIKTYJChF+KlzyO0MPIwpitYZRP1Gbx1/85Qpldsn/Vi4uOwH2cZI0mwsw
-         cAJA==
-X-Gm-Message-State: ABy/qLb4OxsycZB+Nc2ERz2SXjpb0tMPS/RkKCHPeEa3ye4mLLmbHYIF
-        zAeTSfHT7y8hT3Tb8Iln1HsuYFo7m3yU5w==
-X-Google-Smtp-Source: APBJJlF3C3k5W0rlJYMrCIaaaHsDWlLU6YObswQhANuqzGgxgR+Tm6T4wmMLk9qs7TuJINXBo4mkMw==
-X-Received: by 2002:a0d:de42:0:b0:570:7df7:e401 with SMTP id h63-20020a0dde42000000b005707df7e401mr14208890ywe.29.1688992074352;
-        Mon, 10 Jul 2023 05:27:54 -0700 (PDT)
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
-        by smtp.gmail.com with ESMTPSA id a62-20020a0dd841000000b0054f9e7fed7asm3048610ywe.137.2023.07.10.05.27.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 05:27:53 -0700 (PDT)
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-c4d04d50c4cso4240323276.1;
-        Mon, 10 Jul 2023 05:27:53 -0700 (PDT)
-X-Received: by 2002:a25:5c5:0:b0:c59:f91:a769 with SMTP id 188-20020a2505c5000000b00c590f91a769mr11544540ybf.64.1688992073743;
- Mon, 10 Jul 2023 05:27:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1688992656; x=1691584656;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I+4ETNnXEEIrUabO7XSXb0/uWa2F8tZk9bAJbwXI7Gs=;
+        b=F2CcqsWHRPwWxG/c2tpSp2+0DjXWTXUPA5f4torlxYV9QCwJeF9pRLoHRwXHI2xFYB
+         g4Dl3l1XWw3fPYFzirlGr1sdaM4rSl/IAaUbRvrz/89/Ra9dkDKcec8Q5XA3/AwXJo2V
+         MSWzsWO5W1x7X5wJ3K+Qxtk3XoD1o1QC/YsOswdsbw5gIKe3CFjzO3jltyiaDtbpAEyT
+         bJRt7lWMHLbMiumSVFR54cZ0G2S3ZU0sUWXv2hRzPGK34lWdd6qPA4Dwxt2FIRvPCLvU
+         IOzBKw3Rt5gKfn0riCm+63BbBKt8tN7+LP4tCtGL/u+O+jnE4LYpWtfugkGhuhGthze5
+         Gt5Q==
+X-Gm-Message-State: ABy/qLbb0NK95g/TOh33d/rrsszJrAhMk7AfjEWry3A85CYFIKYV7PwP
+        N5vM3GJwWKobTiXLPWGyoo8R/YF+772Vsga/+2bNEzZU5KVUs6yIgOw=
+X-Google-Smtp-Source: APBJJlFfNDnfTLuhBhNMxxs9meN/aT8dA4DyAJodczZG5et458C2HMSMxoay4jvpzvlnUJl0aE5Uoqspw+fvlsfQpD8=
+X-Received: by 2002:a0d:ea48:0:b0:577:60d4:a879 with SMTP id
+ t69-20020a0dea48000000b0057760d4a879mr11018410ywe.33.1688992656290; Mon, 10
+ Jul 2023 05:37:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-13-frank.li@vivo.com>
-In-Reply-To: <20230710095926.15614-13-frank.li@vivo.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 10 Jul 2023 14:27:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV7nef1OaBCwG7vs3KKm1nFuuhGp_41V6v4ZFjahZBeGQ@mail.gmail.com>
-Message-ID: <CAMuHMdV7nef1OaBCwG7vs3KKm1nFuuhGp_41V6v4ZFjahZBeGQ@mail.gmail.com>
-Subject: Re: [PATCH v4 13/21] drivers/thermal/rcar_gen3_thermal: convert to
- use devm_request*_irq_probe()
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-4-ulf.hansson@linaro.org> <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
+ <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
+ <1496b9c1-289a-c354-f0ae-e14fd4c9bcfa@linaro.org> <CAPDyKFr7Mqy5bisLcxcA_iEGWqL8SFt2mDDng7zYEaTD1vNisA@mail.gmail.com>
+ <deyyt5r2wkxo7ily434gl3wudls2sbinkmnehssqshwnbzmlwf@lmqskj6zwfu2>
+In-Reply-To: <deyyt5r2wkxo7ily434gl3wudls2sbinkmnehssqshwnbzmlwf@lmqskj6zwfu2>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 10 Jul 2023 14:37:00 +0200
+Message-ID: <CAPDyKFoRtEXTGQkNzGza-sS_j1ajGmjtCTaoPB7PXVDE2bS0tQ@mail.gmail.com>
+Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
+ genpd dir
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     neil.armstrong@linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 12:10 PM Yangtao Li <frank.li@vivo.com> wrote:
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
+On Sun, 9 Jul 2023 at 04:21, Bjorn Andersson <andersson@kernel.org> wrote:
 >
-> And tglx point out that:
+> On Fri, Jul 07, 2023 at 05:27:39PM +0200, Ulf Hansson wrote:
+> > On Fri, 7 Jul 2023 at 17:12, <neil.armstrong@linaro.org> wrote:
+> > >
+> > > On 07/07/2023 16:54, Ulf Hansson wrote:
+> > > > On Fri, 7 Jul 2023 at 16:42, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+> > > >>
+> > > >> Hi,
+> > > >>
+> > > >> On 07/07/2023 16:04, Ulf Hansson wrote:
+> > > >>> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> > > >>> Cc: Kevin Hilman <khilman@baylibre.com>
+> > > >>> Cc: Jerome Brunet <jbrunet@baylibre.com>
+> > > >>> Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> > > >>> Cc: <linux-amlogic@lists.infradead.org>
+> > > >>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > >>> ---
+> > > >>>    MAINTAINERS                                        | 1 +
+> > > >>>    drivers/genpd/Makefile                             | 1 +
+> > > >>>    drivers/genpd/amlogic/Makefile                     | 4 ++++
+> > > >>>    drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
+> > > >>>    drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
+> > > >>>    drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
+> > > >>>    drivers/soc/Makefile                               | 1 -
+> > > >>>    drivers/soc/amlogic/Makefile                       | 3 ---
+> > > >>>    8 files changed, 6 insertions(+), 4 deletions(-)
+> > > >>>    create mode 100644 drivers/genpd/amlogic/Makefile
+> > > >>>    rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+> > > >>>    rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+> > > >>>    rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
+> > > >>>
+> > > >>> diff --git a/MAINTAINERS b/MAINTAINERS
+> > > >>> index 588769fab516..9b8c9ae2375d 100644
+> > > >>> --- a/MAINTAINERS
+> > > >>> +++ b/MAINTAINERS
+> > > >>> @@ -1843,6 +1843,7 @@ F:      Documentation/devicetree/bindings/phy/amlogic*
+> > > >>>    F:  arch/arm/boot/dts/amlogic/
+> > > >>>    F:  arch/arm/mach-meson/
+> > > >>>    F:  arch/arm64/boot/dts/amlogic/
+> > > >>> +F:   drivers/genpd/amlogic/
+> > > >>>    F:  drivers/mmc/host/meson*
+> > > >>>    F:  drivers/phy/amlogic/
+> > > >>>    F:  drivers/pinctrl/meson/
+> > > >>> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> > > >>> index a2d5b2095915..cdba3b9f0c75 100644
+> > > >>> --- a/drivers/genpd/Makefile
+> > > >>> +++ b/drivers/genpd/Makefile
+> > > >>> @@ -1,2 +1,3 @@
+> > > >>>    # SPDX-License-Identifier: GPL-2.0-only
+> > > >>>    obj-y                                       += actions/
+> > > >>> +obj-y                                        += amlogic/
+> > > >>> diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
+> > > >>> new file mode 100644
+> > > >>> index 000000000000..3d58abd574f9
+> > > >>> --- /dev/null
+> > > >>> +++ b/drivers/genpd/amlogic/Makefile
+> > > >>> @@ -0,0 +1,4 @@
+> > > >>> +# SPDX-License-Identifier: GPL-2.0-only
+> > > >>> +obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+> > > >>> +obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+> > > >>> +obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+> > > >>> diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
+> > > >>> similarity index 100%
+> > > >>> rename from drivers/soc/amlogic/meson-ee-pwrc.c
+> > > >>> rename to drivers/genpd/amlogic/meson-ee-pwrc.c
+> > > >>> diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+> > > >>> similarity index 100%
+> > > >>> rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
+> > > >>> rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+> > > >>> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
+> > > >>> similarity index 100%
+> > > >>> rename from drivers/soc/amlogic/meson-secure-pwrc.c
+> > > >>> rename to drivers/genpd/amlogic/meson-secure-pwrc.c
+> > > >>> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> > > >>> index 3b0f9fb3b5c8..dc93e1762ca7 100644
+> > > >>> --- a/drivers/soc/Makefile
+> > > >>> +++ b/drivers/soc/Makefile
+> > > >>> @@ -23,7 +23,6 @@ obj-y                               += mediatek/
+> > > >>>    obj-y                               += microchip/
+> > > >>>    obj-y                               += nuvoton/
+> > > >>>    obj-y                               += pxa/
+> > > >>> -obj-y                                += amlogic/
+> > > >>>    obj-y                               += qcom/
+> > > >>>    obj-y                               += renesas/
+> > > >>>    obj-y                               += rockchip/
+> > > >>> diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
+> > > >>> index 7b8c5d323f5c..c25f835e6a26 100644
+> > > >>> --- a/drivers/soc/amlogic/Makefile
+> > > >>> +++ b/drivers/soc/amlogic/Makefile
+> > > >>> @@ -2,7 +2,4 @@
+> > > >>>    obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
+> > > >>>    obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
+> > > >>>    obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
+> > > >>> -obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+> > > >>>    obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
+> > > >>> -obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+> > > >>> -obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+> > > >>
+> > > >> I've a few changes for v6.6, how shall we handle that ?
+> > > >
+> > > > I think we should continue to use the soc tree until v6.6-rc1 (or if
+> > > > Arnd have some other ideas), there are some more thoughts around this
+> > > > in the cover letter.
+> > > >
+> > > > Beyond v6.6-rc1 I plan to help with maintenance in practice  and run
+> > > > my own separate git tree.
+> > >
+> > > If it helps I can send you a PR with only the pwrc changes you can merge
+> > > before applying this serie.
+> >
+> > Right, that could be a good idea, but let's defer to Arnd before we
+> > agree on the way forward.
+> >
 >
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+> How about sharing an immutable branch/tag with patch 1, then each one of
+> us can merge that together with the soc-specific change, followed by any
+> subsequent patches - leading up to the next merge window.
 >
->      519 messages total (there are probably more)
+> Stephen will have a merge conflict in drivers/genpd/Makefile as each
+> soc-specific addition comes in, and Arnd will see this conflict too. But
+> this is going to be extremely trivial. But apart from this, there will
+> not be any conflicts or additional branching constraints for us...
 >
->      352 unique messages
->
->      323 unique messages after lower casing
->
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
->
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
->
->      The most useful one of all is: "could request wakeup irq: %d"
->
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
->
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
->
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
->
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+If I understand correctly, you are suggesting that each platform
+maintainer should merge the immutable branch with patch1 - and that I
+should send the patches (based on the immutable branch) to each of the
+platform maintainers to manage. Instead of one pull request with
+everything directly to Arnd, right?
 
-Gr{oetje,eeting}s,
+This still means that Arnd will have to resolve the conflicts as the
+pull requests arrive in his inbox.
 
-                        Geert
+Although, I guess what you are looking for is less work for the soc/
+maintainers, which seems reasonable. Although, in that case, I might
+as well share an immutable branch with the complete series, rather
+than just patch1. That should help Arnd too, I think.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Again, let's leave the call to Arnd on what to do.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Kind regards
+Uffe
