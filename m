@@ -2,182 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946BE74DE8C
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 21:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15A4574DEC3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 22:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjGJTuu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 15:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51548 "EHLO
+        id S231602AbjGJUGg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 16:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbjGJTut (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 15:50:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2651AA
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 12:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689018557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zVD0BJNeNWCX3FiC5d0xpNwjoMoIZh8smCbpmvPkLpA=;
-        b=ewijZuS5uksptzthR2NSqTy3dCYt+wZmohfpmEEzsVa8KM3hNUA8w49agAhZPiMJI4ieZr
-        yMDDMtVCttKtPWghyKFNfhkf9OLlHnjZEUc63gJuyWy9oZQ8NywbD+OBKY4P1aWW6iN5jk
-        d7rq01a58GQl3nhV4PAfMqljqvGifQA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-335-8AR2pWZvNKWB2zwIf0sXOg-1; Mon, 10 Jul 2023 15:49:13 -0400
-X-MC-Unique: 8AR2pWZvNKWB2zwIf0sXOg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E79D73C11CC7;
-        Mon, 10 Jul 2023 19:49:10 +0000 (UTC)
-Received: from llong.com (unknown [10.22.18.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 17B72111E3E6;
-        Mon, 10 Jul 2023 19:49:10 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 4/4] intel_idle: Add ibrs_off module parameter to force disable IBRS
-Date:   Mon, 10 Jul 2023 15:48:57 -0400
-Message-Id: <20230710194857.2898284-5-longman@redhat.com>
-In-Reply-To: <20230710194857.2898284-1-longman@redhat.com>
-References: <20230710194857.2898284-1-longman@redhat.com>
+        with ESMTP id S230016AbjGJUGe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 16:06:34 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20356133
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 13:06:33 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so650853366b.2
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 13:06:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689019591; x=1691611591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1BsV3afNUPdRTqIu9mC0ppRm+HLuppkRLq5+x+yU4ss=;
+        b=iGsuPKAQ4y+HsUAXtu0egNmfuNLKhZpsLpulpuyFtbJuqk+DZ1W0Hn/IMhqy8VOGrX
+         qpAKbUMmEB4Gs03GN/GnUE5qZm49XEktkZYEhp1VFeLvk4Tl1wBAzx5zXfQwadTvV2Cz
+         DcmYDldJlJUPng05pyrCVnYkU8gYLBYSS35NOzG0/WRTY1W6NTrl8pQTY62XnQiH7VpY
+         ffZITKenjkKtuuDY67OpKol4V5t3sx0/gtPefhTz8GvK9GEIe65KqSVUXcI3pa4DQAtt
+         MHlUXmSAa7oF0tVn3Q3aqhxLKZoCPkYtCm0Nb6MOqbSgUuf8FpAhBG+VixX89pnwZEiG
+         wLow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689019591; x=1691611591;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BsV3afNUPdRTqIu9mC0ppRm+HLuppkRLq5+x+yU4ss=;
+        b=VNimP8tuVcW8CiYZlGvNMVwaSPHS1VDhmmtG2LeN7YdfPbGAb5dbkLaQo6GUiHCOp8
+         LhqPOJQ/tbjQ/5t6HYMg5jlRrmU4jTiQvEqEj9WUN04ySDYS4Yab00wyz3Cm/8DWBLOS
+         IpxGrTqyxED0Jl3qTiu4wbR5k2zmX7NfwO79dIsILUUWFb/NPYOfglkVQtwN/nCioVK/
+         qLu0B0DjCIZtX9ixr5YbMtxsC6gowFUmLvCCKN7zvODKbt7WXsiVkGzisoCeJOQcUjWv
+         svy1qsgyfh5dGdjXa1H2shOptJ9UVpofK4pzkKBTqoSSOFIBmLh7SJZXQaiHYfu1Dd/o
+         eASg==
+X-Gm-Message-State: ABy/qLZElGUO58U/01lzMrvOAIfJsqzkkLFkIucymyJrNoJOxHD3LbId
+        7+REhYBkcritsvo7UY2vaApr+w==
+X-Google-Smtp-Source: APBJJlEFYeatmYspjFQNCMZfZRMGTpcYPZh9depifJXq2wY7Qxc4M/1FWw5viZ1q7/HRU8uqbAP7EQ==
+X-Received: by 2002:a17:906:a242:b0:982:8ec0:15a3 with SMTP id bi2-20020a170906a24200b009828ec015a3mr11921561ejb.67.1689019591609;
+        Mon, 10 Jul 2023 13:06:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id dk7-20020a170906f0c700b009931a3adf64sm176882ejb.17.2023.07.10.13.06.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Jul 2023 13:06:30 -0700 (PDT)
+Message-ID: <5f65d487-4692-0e94-a79a-82c663317ec7@linaro.org>
+Date:   Mon, 10 Jul 2023 22:06:28 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 3/6] dt-bindings: thermal: tsens: Add ipq5332 compatible
+Content-Language: en-US
+To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_varada@quicinc.com
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-4-quic_ipkumar@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230710103735.1375847-4-quic_ipkumar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
-disables IBRS when the cstate is 6 or lower. However, there are
-some use cases where a customer may want to use max_cstate=1 to
-lower latency. Such use cases will suffer from the performance
-degradation caused by the enabling of IBRS in the sibling idle thread.
-Add a "ibrs_off" module parameter to force disable IBRS and the
-CPUIDLE_FLAG_IRQ_ENABLE flag if set.
+On 10/07/2023 12:37, Praveenkumar I wrote:
+> IPQ5332 uses TSENS v2.3.3 with combined interrupt. RPM is not
+> available in the SoC, hence adding new compatible to have the
+> sensor enablement and calibration function.>
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 8b7863c3989e..ee57713f6131 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -68,8 +68,10 @@ properties:
+>            - const: qcom,tsens-v2
+>  
+>        - description: v2 of TSENS with combined interrupt
+> -        enum:
+> -          - qcom,ipq8074-tsens
+> +        items:
 
-In the case of a Skylake server with max_cstate=1, this new ibrs_off
-option will likely increase the IRQ response latency as IRQ will now
-be disabled.
+Drop items, you do not have multiple items.
 
-When running SPECjbb2015 with cstates set to C1 on a Skylake system.
+> +          - enum:
+> +              - qcom,ipq8074-tsens
+> +              - qcom,ipq5332-tsens
 
-First test when the kernel is booted with: "intel_idle.ibrs_off"
-  max-jOPS = 117828, critical-jOPS = 66047
+Keep the order.
+>  
+>        - description: v2 of TSENS with combined interrupt
+>          items:
+> @@ -289,6 +291,7 @@ allOf:
+>            contains:
+>              enum:
+>                - qcom,ipq8074-tsens
+> +              - qcom,ipq5332-tsens
 
-Then retest when the kernel is booted without the "intel_idle.ibrs_off"
-added.
-  max-jOPS = 116408, critical-jOPS = 58958
+And here
 
-That means booting with "intel_idle.ibrs_off" improves performance by:
-  max-jOPS:   1.2%, which could be considered noise range.
-  critical-jOPS: 12%, which is definitely a solid improvement.
+>      then:
+>        properties:
+>          interrupts:
+> @@ -304,6 +307,7 @@ allOf:
+>            contains:
+>              enum:
+>                - qcom,ipq8074-tsens
+> +              - qcom,ipq5332-tsens
 
-The admin-guide/pm/intel_idle.rst file is updated to add a description
-about the new "ibrs_off" module parameter.
+And here.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
- drivers/idle/intel_idle.c                   | 11 ++++++++++-
- 2 files changed, 26 insertions(+), 2 deletions(-)
+>                - qcom,tsens-v0_1
+>                - qcom,tsens-v1
+>                - qcom,tsens-v2
 
-diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
-index b799a43da62e..39bd6ecce7de 100644
---- a/Documentation/admin-guide/pm/intel_idle.rst
-+++ b/Documentation/admin-guide/pm/intel_idle.rst
-@@ -170,7 +170,7 @@ and ``idle=nomwait``.  If any of them is present in the kernel command line, the
- ``MWAIT`` instruction is not allowed to be used, so the initialization of
- ``intel_idle`` will fail.
- 
--Apart from that there are four module parameters recognized by ``intel_idle``
-+Apart from that there are five module parameters recognized by ``intel_idle``
- itself that can be set via the kernel command line (they cannot be updated via
- sysfs, so that is the only way to change their values).
- 
-@@ -216,6 +216,21 @@ are ignored).
- The idle states disabled this way can be enabled (on a per-CPU basis) from user
- space via ``sysfs``.
- 
-+The ``ibrs_off`` module parameter is a boolean flag (defaults to
-+false). If set, it is used to control if IBRS (Indirect Branch Restricted
-+Speculation) should be turned off when the CPU enters an idle state.
-+This flag does not affect CPUs that use Enhanced IBRS which can remain
-+on with little performance impact.
-+
-+For some CPUs, IBRS will be selected as mitigation for Spectre v2 and Retbleed
-+security vulnerabilities by default.  Leaving the IBRS mode on while idling may
-+have a performance impact on its sibling CPU.  The IBRS mode will be turned off
-+by default when the CPU enters into a deep idle state, but not in some
-+shallower ones.  Setting the ``ibrs_off`` module parameter will force the IBRS
-+mode to off when the CPU is in any one of the available idle states.  This may
-+help performance of a sibling CPU at the expense of a slightly higher wakeup
-+latency for the idle CPU.
-+
- 
- .. _intel-idle-core-and-package-idle-states:
- 
-diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-index c9479f089037..e1b826344682 100644
---- a/drivers/idle/intel_idle.c
-+++ b/drivers/idle/intel_idle.c
-@@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
- static unsigned int disabled_states_mask __read_mostly;
- static unsigned int preferred_states_mask __read_mostly;
- static bool force_irq_on __read_mostly;
-+static bool ibrs_off __read_mostly;
- 
- static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
- 
-@@ -1919,11 +1920,13 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
- 	}
- 
- 	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
--			   state->flags & CPUIDLE_FLAG_IBRS) {
-+			((state->flags & CPUIDLE_FLAG_IBRS) || ibrs_off)) {
- 		/*
- 		 * IBRS mitigation requires that C-states are entered
- 		 * with interrupts disabled.
- 		 */
-+		if (ibrs_off && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
-+			state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
- 		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
- 		state->enter = intel_idle_ibrs;
- 		return;
-@@ -2346,3 +2349,9 @@ MODULE_PARM_DESC(preferred_cstates, "Mask of preferred idle states");
-  * 'CPUIDLE_FLAG_INIT_XSTATE' and 'CPUIDLE_FLAG_IBRS' flags.
-  */
- module_param(force_irq_on, bool, 0444);
-+/*
-+ * Force the disabling of IBRS when X86_FEATURE_KERNEL_IBRS is on and
-+ * CPUIDLE_FLAG_IRQ_ENABLE isn't set.
-+ */
-+module_param(ibrs_off, bool, 0444);
-+MODULE_PARM_DESC(ibrs_off, "Disable IBRS when idle");
--- 
-2.31.1
+Best regards,
+Krzysztof
 
