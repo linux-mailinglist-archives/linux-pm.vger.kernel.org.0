@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A4574DEC3
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 22:06:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D86974DECC
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 22:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjGJUGg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 16:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S231751AbjGJUHv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 16:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjGJUGe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 16:06:34 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20356133
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 13:06:33 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-98dfb3f9af6so650853366b.2
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 13:06:33 -0700 (PDT)
+        with ESMTP id S231858AbjGJUHs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 16:07:48 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44BAA1AB
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 13:07:44 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b703a0453fso76181561fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 13:07:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689019591; x=1691611591;
+        d=linaro.org; s=google; t=1689019662; x=1691611662;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1BsV3afNUPdRTqIu9mC0ppRm+HLuppkRLq5+x+yU4ss=;
-        b=iGsuPKAQ4y+HsUAXtu0egNmfuNLKhZpsLpulpuyFtbJuqk+DZ1W0Hn/IMhqy8VOGrX
-         qpAKbUMmEB4Gs03GN/GnUE5qZm49XEktkZYEhp1VFeLvk4Tl1wBAzx5zXfQwadTvV2Cz
-         DcmYDldJlJUPng05pyrCVnYkU8gYLBYSS35NOzG0/WRTY1W6NTrl8pQTY62XnQiH7VpY
-         ffZITKenjkKtuuDY67OpKol4V5t3sx0/gtPefhTz8GvK9GEIe65KqSVUXcI3pa4DQAtt
-         MHlUXmSAa7oF0tVn3Q3aqhxLKZoCPkYtCm0Nb6MOqbSgUuf8FpAhBG+VixX89pnwZEiG
-         wLow==
+        bh=7Gmkr0ZsV7o9lbnt39Mt5hBjVzHXUL3TRnDJ+Lhjk48=;
+        b=UUNRxaaJeK6MBUR6FGYs6kSlVtSWACYECM2MlILdlrf7J4Y6FzZG1b8TjdLhH4Nmlz
+         3vDRW8A9t3NGVNfzFpErchAVANUjkSA7KU9e4zZMG62N9goUQbZKBlLiZVjgG8eCUZEd
+         2ai7tjadJgN62/n+MzfbGMD8r+9h571gi3KiVA+ouQSReLHogLgPViESJ4JwwK3wmS4d
+         sv9z2xfEbtfKUpBQVi0p3vXZaeH9hrkdpUUXv4r4yFziCk04ziKieLeVgsURjnd+jwcJ
+         sd02Il9bqZ7oSJf5/OmZm2U5dEg2U5VzoRocX/02a1A2beAJhYyX9Sd6JQBrcYWEBJR2
+         zzLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689019591; x=1691611591;
+        d=1e100.net; s=20221208; t=1689019662; x=1691611662;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1BsV3afNUPdRTqIu9mC0ppRm+HLuppkRLq5+x+yU4ss=;
-        b=VNimP8tuVcW8CiYZlGvNMVwaSPHS1VDhmmtG2LeN7YdfPbGAb5dbkLaQo6GUiHCOp8
-         LhqPOJQ/tbjQ/5t6HYMg5jlRrmU4jTiQvEqEj9WUN04ySDYS4Yab00wyz3Cm/8DWBLOS
-         IpxGrTqyxED0Jl3qTiu4wbR5k2zmX7NfwO79dIsILUUWFb/NPYOfglkVQtwN/nCioVK/
-         qLu0B0DjCIZtX9ixr5YbMtxsC6gowFUmLvCCKN7zvODKbt7WXsiVkGzisoCeJOQcUjWv
-         svy1qsgyfh5dGdjXa1H2shOptJ9UVpofK4pzkKBTqoSSOFIBmLh7SJZXQaiHYfu1Dd/o
-         eASg==
-X-Gm-Message-State: ABy/qLZElGUO58U/01lzMrvOAIfJsqzkkLFkIucymyJrNoJOxHD3LbId
-        7+REhYBkcritsvo7UY2vaApr+w==
-X-Google-Smtp-Source: APBJJlEFYeatmYspjFQNCMZfZRMGTpcYPZh9depifJXq2wY7Qxc4M/1FWw5viZ1q7/HRU8uqbAP7EQ==
-X-Received: by 2002:a17:906:a242:b0:982:8ec0:15a3 with SMTP id bi2-20020a170906a24200b009828ec015a3mr11921561ejb.67.1689019591609;
-        Mon, 10 Jul 2023 13:06:31 -0700 (PDT)
+        bh=7Gmkr0ZsV7o9lbnt39Mt5hBjVzHXUL3TRnDJ+Lhjk48=;
+        b=eEy0gygMRaXloeFYlQGuMkI9U+tMyUKeXsK80sznLBvfiw4Z2+OaalOFQjd4fpM/Ef
+         ULUyb6rY63NeAX/jK0C6SBvFiSvNOAozvbZDs3owo/cLfJeSstX4DY2Em4Fc7yFyTFF/
+         nuv4kPLnWDgcxvJQf4XEi2MUi4US+L9C280HcdZigx5WO7T3FZPB0+reync98bWCZ7WY
+         H0eWdvPC78Q+BqnSrTcphvuwbhFQZT7ryX/ilhGjihE2bmcTrCCl8AyKJ9hYU1S7xVrc
+         njlZhdWdR68TO8fWPQKjFTSlU14U+WjvJEGY9N2mgwiW4/xHvUY0zBa4dXpIn+JVpdnO
+         QSEg==
+X-Gm-Message-State: ABy/qLZ77WiWKkRCpveD3HUSkorTja0rN1GdCeVVfdo3Wnw06M6tBnqv
+        p7SqShhFWIVfeqynJg89HkSHlQ==
+X-Google-Smtp-Source: APBJJlHQNf+KH5erXwYyHE8pLluEhzLlSnS1QXI/mllF/cXrYYtjdPxl8Ruwbp9e5HUitkEm8V28Aw==
+X-Received: by 2002:a2e:3c0e:0:b0:2b4:7f2e:a433 with SMTP id j14-20020a2e3c0e000000b002b47f2ea433mr11330207lja.36.1689019661849;
+        Mon, 10 Jul 2023 13:07:41 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id dk7-20020a170906f0c700b009931a3adf64sm176882ejb.17.2023.07.10.13.06.29
+        by smtp.gmail.com with ESMTPSA id l24-20020a1709065a9800b00991bba473e1sm175723ejq.3.2023.07.10.13.07.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 13:06:30 -0700 (PDT)
-Message-ID: <5f65d487-4692-0e94-a79a-82c663317ec7@linaro.org>
-Date:   Mon, 10 Jul 2023 22:06:28 +0200
+        Mon, 10 Jul 2023 13:07:41 -0700 (PDT)
+Message-ID: <ee0db4bc-ec28-513a-bd39-b526a6ee805c@linaro.org>
+Date:   Mon, 10 Jul 2023 22:07:38 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 3/6] dt-bindings: thermal: tsens: Add ipq5332 compatible
+Subject: Re: [PATCH 4/6] arm64: dts: qcom: ipq5332: Add tsens node
 Content-Language: en-US
 To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
         andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
@@ -65,15 +65,15 @@ To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     quic_varada@quicinc.com
 References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
- <20230710103735.1375847-4-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-5-quic_ipkumar@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230710103735.1375847-4-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230710103735.1375847-5-quic_ipkumar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,58 +81,41 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 10/07/2023 12:37, Praveenkumar I wrote:
-> IPQ5332 uses TSENS v2.3.3 with combined interrupt. RPM is not
-> available in the SoC, hence adding new compatible to have the
-> sensor enablement and calibration function.>
+> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
+> node with nvmem cells for calibration data.
+> 
 > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 113 ++++++++++++++++++++++++++
+>  1 file changed, 113 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index 8b7863c3989e..ee57713f6131 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -68,8 +68,10 @@ properties:
->            - const: qcom,tsens-v2
->  
->        - description: v2 of TSENS with combined interrupt
-> -        enum:
-> -          - qcom,ipq8074-tsens
-> +        items:
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> index 8bfc2db44624..a1e3527178c0 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> @@ -150,6 +150,91 @@ qfprom: efuse@a4000 {
+>  			reg = <0x000a4000 0x721>;
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> +
+> +			tsens_mode: mode@3e1 {
+> +				reg = <0x3e1 0x1>;
+> +				bits = <0 3>;
+> +			};
+> +
+> +			tsens_base0: base0@3e1 {
+> +				reg = <0x3e1 0x2>;
+> +				bits = <3 10>;
+> +			};
+> +
+> +			tsens_base1: base1@3e2 {
+> +				reg = <0x3e2 0x2>;
+> +				bits = <5 10>;
+> +			};
+> +
+> +			s0_offset: s0_offset@3e4 {
 
-Drop items, you do not have multiple items.
-
-> +          - enum:
-> +              - qcom,ipq8074-tsens
-> +              - qcom,ipq5332-tsens
-
-Keep the order.
->  
->        - description: v2 of TSENS with combined interrupt
->          items:
-> @@ -289,6 +291,7 @@ allOf:
->            contains:
->              enum:
->                - qcom,ipq8074-tsens
-> +              - qcom,ipq5332-tsens
-
-And here
-
->      then:
->        properties:
->          interrupts:
-> @@ -304,6 +307,7 @@ allOf:
->            contains:
->              enum:
->                - qcom,ipq8074-tsens
-> +              - qcom,ipq5332-tsens
-
-And here.
-
->                - qcom,tsens-v0_1
->                - qcom,tsens-v1
->                - qcom,tsens-v2
+Underscores are not allowed in node names.
 
 Best regards,
 Krzysztof
