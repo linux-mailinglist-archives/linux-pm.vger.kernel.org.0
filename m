@@ -2,149 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A64474DC71
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 19:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DDE74DC8D
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 19:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjGJR2Y convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Jul 2023 13:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
+        id S230089AbjGJRdW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Jul 2023 13:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjGJR2Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 13:28:24 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2B9C4;
-        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98dfd15aae1so108981366b.0;
-        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
+        with ESMTP id S229850AbjGJRdU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 13:33:20 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFB9CA;
+        Mon, 10 Jul 2023 10:33:19 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-98e2865e2f2so136844866b.0;
+        Mon, 10 Jul 2023 10:33:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689010101; x=1691602101;
+        d=1e100.net; s=20221208; t=1689010398; x=1691602398;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6m9bcYgGbjrVRMFW6nrHcAcb8xg9Wr/oPN8BtfdOyoo=;
-        b=DpbGpUoGlBUJ3pq+NuJX09C9Ttk9iQS7C1oQ+dDX2wLh6fd4AgdpBkS/n9QsnABYP8
-         Zo2b+0LZgV8Xnxi1qyzTo+fZoaobbDctjEigQNJEG0H80bKVitAaSYLtxKBYqknqUHtX
-         bh6S7PjWeWorPAet3nZCwGnrLHV6X7NX7o63nHaimBwCQ95Z5QBEgZRxtBG4Q6fIfC9u
-         hruAc4+FShMtcK48CFl/qqByFVfmCUb1CCFX6tXqTxy3cc0pgyMEco0cMnNhileckDEp
-         3dZR+P1J1WK2DzRRDs6Gv/1/3cglTZM4cufwglJXXiRT898ujbHJ+HFHPfSgBZAlEkbI
-         pRZQ==
-X-Gm-Message-State: ABy/qLZ8/3I8Xc9nIacUWw3/lXWqne9sASv09kw5BdHKzuT+VoHPn/LG
-        GE/AjhAlkxXKX+3e8cWrTs7TZp6yOoixQ89Z+vg=
-X-Google-Smtp-Source: APBJJlGaLddWMgg3l2iwjH8O/u5lm1FCcnISu3+XYpvHyebQmDlWIxA57nnYOaWv8SkozX7erXyetKP23I5mOyLbYZ4=
-X-Received: by 2002:a17:906:51c9:b0:993:d901:9b46 with SMTP id
- v9-20020a17090651c900b00993d9019b46mr8677753ejk.3.1689010101128; Mon, 10 Jul
- 2023 10:28:21 -0700 (PDT)
+        bh=AW7gIWoXz+75O82v0in9rOdnCFb2N1IDml+dDmi5wIg=;
+        b=RxHF0x56rGb4ij+aJg1D7q+g9dzGHrWTo5mO437HgBbmogPYys9/GSsVkphHH2kKnR
+         1o7HoK2q2XogldiENEY6LQP3GwwnpTA61fRx8m24L7rcBuF0F40ii7OmLqhqJ2ndGyAV
+         a+Gh8uNw2Zram32gUC6EjTtk5Xr9JFjR00C015jbHLztJyADorD8Ikl0HY2waJq8dM7b
+         ifkyt5CEb1NewJNVFjjoW0on61vyCbjtqn1W8nA6XLF/RDk5YjyDbSrAnx7r1b5PJJTT
+         opx+ndkOv+otbVTEixerg+9wSBzo0/QAW15ICHOwtocw330m4NbXiUtdJL+eZt/4FXQ8
+         SCkA==
+X-Gm-Message-State: ABy/qLaGT+1HEjw8ScW0GpffUA0pf5HidP75yiKRqushXvXstDxrySHK
+        BFZruOh0Smw6UFWSSbUnIjxCA9Pwn3OefZZQ4ao=
+X-Google-Smtp-Source: APBJJlGrFWckOpq6F+U2Dl/Hd7X1UmYvh0fkh/4EhV8ipIPJo+zhkLpCh1ZKPllZ5JtsB8HAZ9lnMlofZYItVc7OVGQ=
+X-Received: by 2002:a17:906:64d8:b0:988:815c:ba09 with SMTP id
+ p24-20020a17090664d800b00988815cba09mr11678904ejn.4.1689010397756; Mon, 10
+ Jul 2023 10:33:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-9-frank.li@vivo.com>
-In-Reply-To: <20230710095926.15614-9-frank.li@vivo.com>
+References: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
+In-Reply-To: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Jul 2023 19:28:09 +0200
-Message-ID: <CAJZ5v0h7bvAqyKzV_SsKaTc3JV0R01y0k6aaieAk7iRcbN-eCg@mail.gmail.com>
-Subject: Re: [PATCH v4 09/21] thermal: intel: int340x: processor_thermal:
- convert to use devm_request*_irq_probe()
-To:     Yangtao Li <frank.li@vivo.com>
+Date:   Mon, 10 Jul 2023 19:33:06 +0200
+Message-ID: <CAJZ5v0h6_jzOBxhmd2b8WL5nVOvZ03AD5fzdtc9ACXGiCKEmOw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: core: constify params in thermal_zone_device_register
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+        Zhang Rui <rui.zhang@intel.com>, kernel@pengutronix.de,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 10, 2023 at 12:00 PM Yangtao Li <frank.li@vivo.com> wrote:
+On Sat, Jul 8, 2023 at 1:27 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
 >
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
+> Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone
+> parameters structure"), thermal_zone_device_register() allocates a copy
+> of the tzp argument and callers need not explicitly manage its lifetime.
 >
-> And tglx point out that:
+> This means the function no longer cares about the parameter being
+> mutable, so constify it.
 >
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+> No functional change.
 >
->      519 messages total (there are probably more)
->
->      352 unique messages
->
->      323 unique messages after lower casing
->
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
->
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
->
->      The most useful one of all is: "could request wakeup irq: %d"
->
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
->
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
->
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
->
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
->
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Why is this particular patch regarded as a fix?
 
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 > ---
->  .../intel/int340x_thermal/processor_thermal_device_pci.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
+>  drivers/thermal/thermal_core.c | 4 ++--
+>  include/linux/thermal.h        | 6 +++---
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index 0d1e98007270..ee766904b314 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -258,13 +258,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
->                 irq_flag = IRQF_SHARED;
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 842f678c1c3e..cc2b5e81c620 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1203,7 +1203,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+>  struct thermal_zone_device *
+>  thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
+>                                         void *devdata, struct thermal_zone_device_ops *ops,
+> -                                       struct thermal_zone_params *tzp, int passive_delay,
+> +                                       const struct thermal_zone_params *tzp, int passive_delay,
+>                                         int polling_delay)
+>  {
+>         struct thermal_zone_device *tz;
+> @@ -1371,7 +1371,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
 >
->         irq =  pci_irq_vector(pdev, 0);
-> -       ret = devm_request_threaded_irq(&pdev->dev, irq,
-> -                                       proc_thermal_irq_handler, NULL,
-> -                                       irq_flag, KBUILD_MODNAME, pci_info);
-> -       if (ret) {
-> -               dev_err(&pdev->dev, "Request IRQ %d failed\n", pdev->irq);
-> +       ret = devm_request_threaded_irq_probe(&pdev->dev, irq, proc_thermal_irq_handler,
-> +                                             NULL, irq_flag, KBUILD_MODNAME, pci_info, NULL);
-> +       if (ret)
->                 goto err_free_vectors;
-> -       }
+>  struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
+>                                                          void *devdata, struct thermal_zone_device_ops *ops,
+> -                                                        struct thermal_zone_params *tzp, int passive_delay,
+> +                                                        const struct thermal_zone_params *tzp, int passive_delay,
+>                                                          int polling_delay)
+>  {
+>         return thermal_zone_device_register_with_trips(type, NULL, ntrips, mask,
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 87837094d549..dee66ade89a0 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -301,14 +301,14 @@ int thermal_acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp);
+>  #ifdef CONFIG_THERMAL
+>  struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
+>                 void *, struct thermal_zone_device_ops *,
+> -               struct thermal_zone_params *, int, int);
+> +               const struct thermal_zone_params *, int, int);
 >
->         ret = thermal_zone_device_enable(pci_info->tzone);
->         if (ret)
+>  void thermal_zone_device_unregister(struct thermal_zone_device *);
+>
+>  struct thermal_zone_device *
+>  thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int, int,
+>                                         void *, struct thermal_zone_device_ops *,
+> -                                       struct thermal_zone_params *, int, int);
+> +                                       const struct thermal_zone_params *, int, int);
+>
+>  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>  const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+> @@ -348,7 +348,7 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz);
+>  static inline struct thermal_zone_device *thermal_zone_device_register(
+>         const char *type, int trips, int mask, void *devdata,
+>         struct thermal_zone_device_ops *ops,
+> -       struct thermal_zone_params *tzp,
+> +       const struct thermal_zone_params *tzp,
+>         int passive_delay, int polling_delay)
+>  { return ERR_PTR(-ENODEV); }
+>  static inline void thermal_zone_device_unregister(
 > --
-> 2.39.0
+> 2.39.2
 >
