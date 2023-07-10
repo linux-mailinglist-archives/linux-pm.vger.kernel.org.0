@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E59A74D493
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 13:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C40E74D497
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 13:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232323AbjGJL0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 07:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S232338AbjGJL1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 07:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232317AbjGJL0p (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 07:26:45 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BB4E3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 04:26:44 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fafe87c6fbso6651731e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 04:26:44 -0700 (PDT)
+        with ESMTP id S232376AbjGJL1F (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 07:27:05 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593C9FB
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 04:27:02 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fba1288bbdso6065498e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 04:27:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688988403; x=1691580403;
+        d=linaro.org; s=google; t=1688988420; x=1691580420;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9PHH/ZnQn9XiQzAx5OrNn25+/t6ajKjbIjxfreb9ZlQ=;
-        b=hjWRHqAegFnwe5jHxSz5I4oDy5cF8JoVVof72FZ6EzvV7MlLrUyXugv6wSn5ZbiHvu
-         E2pYgHCue9Se2rhpDPb2Cic7yXmIPaRdc18UwzY6yDfOaykbVbyXkxGlc2GR5VFIpU32
-         FMJYiQtcNIlLLFTC1pZcuAHQDsagbfjQ64vjTBuK+wxN3OIuJtgt6p+dPXQPmFNRcAkA
-         puyqHMLWOXfjAd9uiDEZHz/+BSabhwsBlMw/rFB09qFMmvOgA0QE9Yf8yWKu0mSp5uuR
-         ZCtYXCKNOPrv9AcBIBoHlHYcuqDz+KIiy6uHjEKAleumJxTUDIR7nT4Z+XRICo3p4F6s
-         Y7sQ==
+        bh=4+Ouigov7V/f0TWefy/omICdopKlzJ8egLhg1vkm8FQ=;
+        b=O8UkG2zgu8nXebCjlfLQ879phf7e4jpqFeV3T1p18QkJZH0bd8D0XQyHPWdgYYxqIS
+         cy9WQhPs1HJA1iW5sZNc1M1XitXWd3pnn7vRGG8MxhMWWdNea7m7eFiBqkCdtGOzCkTO
+         NM/jY+Gbj805A2c8RCrbgyuQejW9RVvPXag45UZ7ocz+UXG4SMkmeLzPxk2qbe03TaF0
+         VeOP6I8TDtA95fgAnP2HSm1+/gUpTOrzWRKrQtbFclZQRc12jQY+Ji9X4S6A7zXXtK5o
+         2fu7g9KrxFLQU2zrrM3lVHwXrfET/hIofj8OCgy6n4RIdhMmr3kgA3BuJmr9H7zV2en9
+         SvKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688988403; x=1691580403;
+        d=1e100.net; s=20221208; t=1688988420; x=1691580420;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9PHH/ZnQn9XiQzAx5OrNn25+/t6ajKjbIjxfreb9ZlQ=;
-        b=SRoYgBqmMFXmjbTBLAng415UTieq/5+C+PX1QxqjO05Nly0Hk7SQ/G7yrdQnB0fiie
-         yf5P6pkWncz/73kwYnpVe23ARnHXyBhpu4mcjLgrjAR+dsM16YoaOb0ZHnILSvn1Mg/k
-         pe1dtqNC7E76KX4oIKw/IN8R3iFu9dS1UoxrMY/Z5XljGQuvCAvKgHlbeBhgzUH/y2+G
-         qh3NmXSrig+KBiI6bCWa68zFhZ026qku4JtsdrNpYeFxQkFL4FX26ZKeY+EK2xoAFzIm
-         lgTSteLQG5yrzfjbxfG3QRZELYOU5Dc1wUUqSTIBgp1VHBKYzttSZC4wW1ILxghOD3Up
-         t+AQ==
-X-Gm-Message-State: ABy/qLa7wn0s5d0An97eDe29nJSUHz7zILpM3bR1cCZDJPpCDgQ9WF26
-        GM0uQ4LNt64n9lDMDK0EALdWog==
-X-Google-Smtp-Source: APBJJlEeYNvW984z8M7COsLRHwgjawoIMPhEQJdaoXLE5Yd3J+Ss9uQOMnJyZyA+INIs9PHMTMcukA==
-X-Received: by 2002:a19:e059:0:b0:4fb:8bad:1cdf with SMTP id g25-20020a19e059000000b004fb8bad1cdfmr9651035lfj.42.1688988402841;
-        Mon, 10 Jul 2023 04:26:42 -0700 (PDT)
+        bh=4+Ouigov7V/f0TWefy/omICdopKlzJ8egLhg1vkm8FQ=;
+        b=KukwKeVxe+QGfMSYElso78V+qV24uZqeF+b4OBb3O3u8/eDtovK8G+xbS4CSVXxh+j
+         cIeT7bs5r43Hv547g50BkXGuJRjm+PaKo3+Cf4e9NScmxy/1zlWk1U+l7Y/lAXgcCgzC
+         yEwyR/QS628EbMQUft6vKCwCSpubp1nkq/92xKyZ/I61hWjk9KPX98dQe9jdQ0OJQuTb
+         qh36K0zAFRkSBfBlkRLwzvU7erp9SjvpjrNnfe00H+qJ3uk2vALs1y6kBdu7HvhiF1bG
+         ZhOwFaitV6lOwG08qJvb/1XgfkD3ERNKzlcshVTZWg66Ptu3sLKm3V1aqVYxZBlUNXPv
+         r9/g==
+X-Gm-Message-State: ABy/qLZUm/KjwYHvArM0pzYrZ5xjB9BP7VBoP5dq8EeKhJ4/pWPuk6PU
+        98dhyhVdLXIPUP4Qee/od3rOOA==
+X-Google-Smtp-Source: APBJJlHxFXD2/i4ZnHH56AzsZRq63Gn+i9WYZ0lInXyBG1ewVCdnt+gE8Y5+1u46kLrPXik16E6V1Q==
+X-Received: by 2002:a05:6512:1146:b0:4fb:7a4e:b573 with SMTP id m6-20020a056512114600b004fb7a4eb573mr9921600lfg.5.1688988420517;
+        Mon, 10 Jul 2023 04:27:00 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id w23-20020a19c517000000b004fbb1f70ceesm1647218lfe.227.2023.07.10.04.26.42
+        by smtp.gmail.com with ESMTPSA id j16-20020ac25510000000b004fbb20791f3sm1664280lfk.31.2023.07.10.04.26.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 04:26:42 -0700 (PDT)
-Message-ID: <25677836-9b06-b18e-ca91-87d87264355d@linaro.org>
-Date:   Mon, 10 Jul 2023 14:26:41 +0300
+        Mon, 10 Jul 2023 04:27:00 -0700 (PDT)
+Message-ID: <7b14955f-be89-b04a-a0d1-0988a0c77501@linaro.org>
+Date:   Mon, 10 Jul 2023 14:26:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v4 08/21] thermal/drivers/qcom/temp-alarm: convert to use
+Subject: Re: [PATCH v4 18/21] thermal/drivers/qcom/tsens-v0_1: convert to use
  devm_request*_irq_probe()
 Content-Language: en-GB
 To:     Yangtao Li <frank.li@vivo.com>, Amit Kucheria <amitk@kernel.org>,
@@ -71,18 +71,18 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230710095926.15614-1-frank.li@vivo.com>
- <20230710095926.15614-8-frank.li@vivo.com>
+ <20230710095926.15614-18-frank.li@vivo.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230710095926.15614-8-frank.li@vivo.com>
+In-Reply-To: <20230710095926.15614-18-frank.li@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -138,8 +138,8 @@ On 10/07/2023 12:59, Yangtao Li wrote:
 > Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
 > Signed-off-by: Yangtao Li <frank.li@vivo.com>
 > ---
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/thermal/qcom/tsens.c | 23 ++++++++++-------------
+>   1 file changed, 10 insertions(+), 13 deletions(-)
 
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
