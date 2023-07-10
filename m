@@ -2,113 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388BE74DC03
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 19:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A64474DC71
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 19:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjGJRMe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 13:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S229595AbjGJR2Y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 10 Jul 2023 13:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjGJRMd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 13:12:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D08E10D;
-        Mon, 10 Jul 2023 10:12:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD81661127;
-        Mon, 10 Jul 2023 17:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6C96C433C7;
-        Mon, 10 Jul 2023 17:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689009151;
-        bh=vvAVbgZpcOMJ/qEH4hsXQCETNWbXWjh5iV2QQXaC0tg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oro8aYvmVsJJ98tLydLUTYFS87pkQOLf5Krtz8ir5PIx2/x56qIU53TcWk3tyBZg9
-         FqyVbrFAMXMNljNmfitBPZ3DhejlpOY6XWHiiar04lkpMA5pr62g/BFt/HsQtTdD/j
-         2+yRpyQTFaFTgFNpAqWZgeU6S8JMVUTQ4GGLv2VZTlpAotJtpAXgV981jeDdTDwCDL
-         MHIBfRdYs52NqSK1wUn3dIV+7ry5MM+N1MSs5v/Jy+3f+Kjizg/XgE+uxRBol87Yz3
-         JLcC1eSEtgJtBPWjD9BQuzCJR3DMafBO/BhjW4t+xauuE6sM6I/xQkEdFhDCRZvuEs
-         j0loaPokieDog==
-Date:   Mon, 10 Jul 2023 18:12:26 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc:     Rob Herring <robh@kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        alexandre.belloni@bootlin.com, sre@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings: power: reset: atmel,sama5d2-shdwc:
- convert to yaml
-Message-ID: <20230710-eldercare-affection-778b7e26951a@spud>
-References: <20230524123528.439082-1-claudiu.beznea@microchip.com>
- <20230524123528.439082-4-claudiu.beznea@microchip.com>
- <20230524-blizzard-hunting-4da815e634e2@spud>
- <20230607204351.GA3984668-robh@kernel.org>
- <20230607-refute-acrobat-3b3f645da71b@spud>
- <CAL_JsqLyLs3Vfsd8LRd5_dUbzjE9LgMNnWa+8uP88Ab+E1oLfw@mail.gmail.com>
- <20230608-tiptop-unfold-66c4b8f4e620@spud>
- <82f1d66a-b8cf-69bd-4783-e2c867c11828@microchip.com>
- <20230613-library-enigmatic-267396f84d78@spud>
+        with ESMTP id S229558AbjGJR2Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 13:28:24 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2B9C4;
+        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98dfd15aae1so108981366b.0;
+        Mon, 10 Jul 2023 10:28:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689010101; x=1691602101;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6m9bcYgGbjrVRMFW6nrHcAcb8xg9Wr/oPN8BtfdOyoo=;
+        b=DpbGpUoGlBUJ3pq+NuJX09C9Ttk9iQS7C1oQ+dDX2wLh6fd4AgdpBkS/n9QsnABYP8
+         Zo2b+0LZgV8Xnxi1qyzTo+fZoaobbDctjEigQNJEG0H80bKVitAaSYLtxKBYqknqUHtX
+         bh6S7PjWeWorPAet3nZCwGnrLHV6X7NX7o63nHaimBwCQ95Z5QBEgZRxtBG4Q6fIfC9u
+         hruAc4+FShMtcK48CFl/qqByFVfmCUb1CCFX6tXqTxy3cc0pgyMEco0cMnNhileckDEp
+         3dZR+P1J1WK2DzRRDs6Gv/1/3cglTZM4cufwglJXXiRT898ujbHJ+HFHPfSgBZAlEkbI
+         pRZQ==
+X-Gm-Message-State: ABy/qLZ8/3I8Xc9nIacUWw3/lXWqne9sASv09kw5BdHKzuT+VoHPn/LG
+        GE/AjhAlkxXKX+3e8cWrTs7TZp6yOoixQ89Z+vg=
+X-Google-Smtp-Source: APBJJlGaLddWMgg3l2iwjH8O/u5lm1FCcnISu3+XYpvHyebQmDlWIxA57nnYOaWv8SkozX7erXyetKP23I5mOyLbYZ4=
+X-Received: by 2002:a17:906:51c9:b0:993:d901:9b46 with SMTP id
+ v9-20020a17090651c900b00993d9019b46mr8677753ejk.3.1689010101128; Mon, 10 Jul
+ 2023 10:28:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/fvOucPn118co02/"
-Content-Disposition: inline
-In-Reply-To: <20230613-library-enigmatic-267396f84d78@spud>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230710095926.15614-1-frank.li@vivo.com> <20230710095926.15614-9-frank.li@vivo.com>
+In-Reply-To: <20230710095926.15614-9-frank.li@vivo.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 10 Jul 2023 19:28:09 +0200
+Message-ID: <CAJZ5v0h7bvAqyKzV_SsKaTc3JV0R01y0k6aaieAk7iRcbN-eCg@mail.gmail.com>
+Subject: Re: [PATCH v4 09/21] thermal: intel: int340x: processor_thermal:
+ convert to use devm_request*_irq_probe()
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jul 10, 2023 at 12:00 PM Yangtao Li <frank.li@vivo.com> wrote:
+>
+> There are more than 700 calls to devm_request_threaded_irq method and
+> more than 1000 calls to devm_request_irq method. Most drivers only
+> request one interrupt resource, and these error messages are basically
+> the same. If error messages are printed everywhere, more than 2000 lines
+> of code can be saved by removing the msg in the driver.
+>
+> And tglx point out that:
+>
+>   If we actually look at the call sites of
+>   devm_request_threaded_irq() then the vast majority of them print more or
+>   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
+>
+>      519 messages total (there are probably more)
+>
+>      352 unique messages
+>
+>      323 unique messages after lower casing
+>
+>          Those 323 are mostly just variants of the same patterns with
+>          slight modifications in formatting and information provided.
+>
+>      186 of these messages do not deliver any useful information,
+>          e.g. "no irq", "
+>
+>      The most useful one of all is: "could request wakeup irq: %d"
+>
+>   So there is certainly an argument to be made that this particular
+>   function should print a well formatted and informative error message.
+>
+>   It's not a general allocator like kmalloc(). It's specialized and in the
+>   vast majority of cases failing to request the interrupt causes the
+>   device probe to fail. So having proper and consistent information why
+>   the device cannot be used _is_ useful.
+>
+> So convert to use devm_request*_irq_probe() API, which ensure that all
+> error handling branches print error information.
+>
+> In this way, when this function fails, the upper-layer functions can
+> directly return an error code without missing debugging information.
+> Otherwise, the error message will be printed redundantly or missing.
+>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Krzysztof Kozlowski <krzk@kernel.org>
+> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
---/fvOucPn118co02/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-Hey Nicolas,
-
-On Tue, Jun 13, 2023 at 07:44:58PM +0100, Conor Dooley wrote:
-> On Fri, Jun 09, 2023 at 12:09:24PM +0200, Nicolas Ferre wrote:
-> > On 08/06/2023 at 18:49, Conor Dooley wrote:
-> > >=20
-> > > On Thu, Jun 08, 2023 at 08:38:10AM -0600, Rob Herring wrote:
-> > >=20
-> > > > For reference, anything done by Arm, Linaro or NVIDIA employees is
-> > > > okay to relicense to dual license.
-> > > Ah cool, that's good to know, thanks.
-> > > Perhaps I should try to get a similar edict issued for Microchip ones.
-> > > @Nicolas, does that sound reasonable?
-> >=20
-> > Well, we can work it out internally, indeed. But is there a public stat=
-ement
-> > about this somewhere?
->=20
-> You mean, is there a public statement about Arm/Linaro/Nvidia being okay
-> with relicensing bindings as dual license?
-
-This was sitting at the end of my queue, don't recall following this up
-internally. Getting an edict might be more hassle than it is worth & I
-guess I am always CCed on bindings to Ack them.
-
-
---/fvOucPn118co02/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZKw7+gAKCRB4tDGHoIJi
-0iRRAQDA/gIPYRJcURGv5S6W/ljvEX7yrygRh24zGK97esFiDwEA/v0daV8787V0
-xmXk0NdicJ0n2tVchsnCPmBr+PmLIQw=
-=70wv
------END PGP SIGNATURE-----
-
---/fvOucPn118co02/--
+> ---
+>  .../intel/int340x_thermal/processor_thermal_device_pci.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> index 0d1e98007270..ee766904b314 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
+> @@ -258,13 +258,10 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
+>                 irq_flag = IRQF_SHARED;
+>
+>         irq =  pci_irq_vector(pdev, 0);
+> -       ret = devm_request_threaded_irq(&pdev->dev, irq,
+> -                                       proc_thermal_irq_handler, NULL,
+> -                                       irq_flag, KBUILD_MODNAME, pci_info);
+> -       if (ret) {
+> -               dev_err(&pdev->dev, "Request IRQ %d failed\n", pdev->irq);
+> +       ret = devm_request_threaded_irq_probe(&pdev->dev, irq, proc_thermal_irq_handler,
+> +                                             NULL, irq_flag, KBUILD_MODNAME, pci_info, NULL);
+> +       if (ret)
+>                 goto err_free_vectors;
+> -       }
+>
+>         ret = thermal_zone_device_enable(pci_info->tzone);
+>         if (ret)
+> --
+> 2.39.0
+>
