@@ -2,268 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833A374CF7F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 10:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE9874D0AB
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 10:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232446AbjGJIJ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 04:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S231817AbjGJIzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 04:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjGJIJ2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 04:09:28 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF3AFB
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 01:09:26 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9741caaf9d4so478471566b.0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 01:09:26 -0700 (PDT)
+        with ESMTP id S231986AbjGJIzh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 04:55:37 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2493F9
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 01:55:35 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b700e85950so61578101fa.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 01:55:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1688976565; x=1691568565;
+        d=linaro.org; s=google; t=1688979334; x=1691571334;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ai5VPz1A3P6zIF7jpvLukucy9yK0spksXLW5++Hkwu0=;
-        b=hYB7np9XfCdqXie44QMhTkunjecFnATwad8Cyyo3cA9qi6t2sLlUyjZCOYKCXDlGBV
-         nPna4VI9M6GkZXB4xK6fNvW+h2no2VMNwFyLvVwppl0bLdpvu/ViZMPwORarP9e4pqQF
-         lCxPiKrh08E9NC8wgQMqe7MX7c82bz1j1fyJbRi4LmFUhdBTWfCLjcI1DRNuJE9BUOgQ
-         NCbjeoEirKXeWOUVREL+B+SDFq2LpNio6UIYpZzxzFqQe5T50i08sQaBkFKxGvg+coHX
-         R0sEgDEIDAjlfjNLg7nQur6OoGDxjONrnhAyMW4YEaGc3jO98Y7RMsITypd4VHglyA0R
-         AtQA==
+        bh=yn9ioLNwEgAe0GJRu4yxWz0XbMvGtpC919vku2LmRu4=;
+        b=FlzVImcE4J5Y7YSTzYuyGCbRicW0KB3qKsGvjoU8PQ0R4leQk/PcmX8CTdF6m+2s4H
+         vCVuFkamxEX2swHPAINA66ayYIKUC7MC0IPOGd874mgKnuey/7lkYXAI1KCtSJocLmpl
+         m+de3Bx80f6tout5/MvTvg2JSwXrAKNHlXzutUNUtYUmCDEIrREd8MYwbbGEeDUAlONi
+         jOUE48BKU4CtjaSjZXGsq0ADM7spH7d/s1rOq5OWD9Ti64TfQud+kAVVFkNwZHlRSPJz
+         lzZknudmSWRe+YPoIYGAJ+9z8j2O2FwWH4T2KnQv40RQvnmWX754+zsll9n1HkFyXjjy
+         zPqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1688976565; x=1691568565;
+        d=1e100.net; s=20221208; t=1688979334; x=1691571334;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ai5VPz1A3P6zIF7jpvLukucy9yK0spksXLW5++Hkwu0=;
-        b=FTNYJoKwZMxFpJR5pQXT08Y8S6iSKUyMr/caufX49WzbMzC8nrKGqtj6Bsh1Mdu44L
-         CWFSFS+kYr2QPS3H3f3zMJTSL7cqAGcJ0fQ6jFEn1SWTTnZxvZqrRf3VnEhOxCIioEWv
-         wznG6wAgFrzObeEmcr01mt2v1YBbE7iph3KVxXtN2o13lGA2dSH3Iz0lwiiIp8EVj8Ar
-         YiUFhvo6RVZvnDx+VNGDZ1YexKypZGqoROeJsSj81xauU1uTnaEljq+Ms/6C5CnvUBDW
-         4UYGYLLX3v/WyT7cIMzLNrPpldtiSbv56NAOOo/UCuT9SbDHtoCv+2djF+ENiqDzXZPL
-         uV4Q==
-X-Gm-Message-State: ABy/qLZnj/22Ci3gR9KPXGnI3QAKNITXvwFpUFoSjBELo+Ov63yrhQ5w
-        DrIitQ2+HRHBQYKdzfTuSWDREQ==
-X-Google-Smtp-Source: APBJJlFFTpAolmaqeCsAlbJoBZcfe0TaJ9E4fo1wShcyU+Kz/UIB/z6U65faCFChzdghvGoQPNILgQ==
-X-Received: by 2002:a17:907:cca1:b0:974:771e:6bf0 with SMTP id up33-20020a170907cca100b00974771e6bf0mr10941305ejc.56.1688976564772;
-        Mon, 10 Jul 2023 01:09:24 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id xa20-20020a170907b9d400b00993004239a4sm5738182ejc.215.2023.07.10.01.09.23
+        bh=yn9ioLNwEgAe0GJRu4yxWz0XbMvGtpC919vku2LmRu4=;
+        b=Wr262f0pMA1SQhWkzpwl5KOo79+OBrCYDIfy96xUWdOir+1g/6ZEq4X9B7yANag0HL
+         proNwMdqITz9rwhbPd1775wnykUBLhAfWb+GSFCsKCQ2vGBrgm6UUOAWzFvSRdg/KPLK
+         Hwkdt7EGEkx9Z3hM86QfJJjoGddYsV8bUvVO8fENjFK/dpyh0g1BFre7GGtJItjs1Rnn
+         E7ICG9PAgoWM1wBiwNMBLpxXTQLxEHuSBxXOsnpOqNj6bygbRv0VFAajH5j/GX+uiGlI
+         iHQlDHShuynz8uRgCYef3C/SPG9yW2MzOVR45GNnyqcw4Htec9hvTIh52pKBi/G8Uw/Z
+         6DUQ==
+X-Gm-Message-State: ABy/qLbLIU1Pfygoa7airUHTK30hbHw59eQeHMvMExU/SVCQXlfLRLsQ
+        5I7smXDpHcvxxZd26M/NRvLKpw==
+X-Google-Smtp-Source: APBJJlHf6M7nrwzpmLVNv3eHxsbeIXrb/TI4xh1WONMNAfVQ84+jVpvqnsf2XyHfPXAhMcBR2Mg56g==
+X-Received: by 2002:a2e:9206:0:b0:2b6:ba00:f733 with SMTP id k6-20020a2e9206000000b002b6ba00f733mr8666371ljg.18.1688979333800;
+        Mon, 10 Jul 2023 01:55:33 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id k12-20020a7bc30c000000b003fba92fad35sm9677016wmj.26.2023.07.10.01.55.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Jul 2023 01:09:24 -0700 (PDT)
-Message-ID: <d6386a66-4cc2-9358-e65e-b09e614800c3@linaro.org>
-Date:   Mon, 10 Jul 2023 10:09:18 +0200
+        Mon, 10 Jul 2023 01:55:33 -0700 (PDT)
+Message-ID: <6d3f24a4-ae70-49eb-6e41-86baa1db6bed@linaro.org>
+Date:   Mon, 10 Jul 2023 10:55:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: thermal: tegra: Convert to json-schema
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V5] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20230707133333.2998802-1-thierry.reding@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230707133333.2998802-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Di Shen <di.shen@unisoc.com>, lukasz.luba@arm.com,
+        rafael@kernel.org
+Cc:     amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, orsonzhai@gmail.com, zhanglyra@gmail.com
+References: <20230710033234.28641-1-di.shen@unisoc.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230710033234.28641-1-di.shen@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/07/2023 15:33, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
+On 10/07/2023 05:32, Di Shen wrote:
+> When the thermal trip point is changed, the governor should
+> be reset so that the policy algorithm can be updated to adapt
+> to the new trip point.
 > 
-> Convert the Tegra thermal bindings from the free-form text format to
-> json-schema.
+> 1.Thermal governor is working for the passive trip point or active
+> trip point. Therefore, when the trip point is changed it should
+> reset the governor only for passic/active trip points.
 > 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> 2.For "power_allocator" governor reset, the parameters of pid
+> controller and the states of power cooling devices should be reset.
+> 
+> 2.1
+> The IPA controls temperature using PID mechanism. It is a closed-
+> loop feedback monitoring system. It uses the gap between target
+> temperature and current temperature which says "error" as the
+> input of the PID controller:
+> 
+> err = desired_temperature - current_temperature
+> P_max =
+> k_p * err + k_i * err_integral + k_d * diff_err + sustainable_power
+> 
+> That algorithm can 'learn' from the 'observed' in the past reaction
+> for it's control decisions and accumulates that information in the
+> I(Integral) part so that it can conpensate for those 'learned'
+> mistakes.
+> 
+> Based on the above, the most important is the desired temperature
+> comes from the trip point. When the trip point is changed, all the
+> previous learned errors won't help for the IPA. So the pid parameters
+> should be reset for IPA governor reset.
+> 
+> 2.2
+> Other wise, the cooling devices should also be reset when the trip
+> point is changed.
+> 
+> This patch adds an ops for the thermal_governor structure to reset
+> the governor and give the 'reset' function definition for power
+> allocator. The ops is called when the trip points are changed via
+> sysfs interface.
+> 
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> ---
+>   drivers/thermal/gov_power_allocator.c | 9 +++++++++
+>   drivers/thermal/thermal_trip.c        | 5 +++++
+>   include/linux/thermal.h               | 3 +++
+>   3 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 8642f1096b91..8d17a10671e4 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -729,10 +729,19 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+>   	return allocate_power(tz, trip.temperature);
+>   }
+>   
+> +static void power_allocator_reset(struct thermal_zone_device *tz)
+> +{
+> +	struct power_allocator_params *params = tz->governor_data;
+> +
+> +	reset_pid_controller(params);
+> +	allow_maximum_power(tz, true);
 
-Thank you for your patch. There is something to discuss/improve.
+Do you really want to allow the maximum power? What about if the trip 
+temperature is decreased ?
 
-...
+You want maximum power only if the mitigation ends.
 
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nvidia,tegra124-soctherm
-> +      - nvidia,tegra132-soctherm
-> +      - nvidia,tegra210-soctherm
+> +}
 > +
-> +  reg:
-> +    minItems: 2
+>   static struct thermal_governor thermal_gov_power_allocator = {
+>   	.name		= "power_allocator",
+>   	.bind_to_tz	= power_allocator_bind,
+>   	.unbind_from_tz	= power_allocator_unbind,
+>   	.throttle	= power_allocator_throttle,
+> +	.reset		= power_allocator_reset,
+>   };
+>   THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+> index 907f3a4d7bc8..13bbe029c6ab 100644
+> --- a/drivers/thermal/thermal_trip.c
+> +++ b/drivers/thermal/thermal_trip.c
+> @@ -173,6 +173,11 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+>   	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
+>   		tz->trips[trip_id] = *trip;
+>   
+> +	/* Reset the governor only when the trip type is active or passive. */
+> +	ret = (trip->type == THERMAL_TRIP_PASSIVE || trip->type == THERMAL_TRIP_ACTIVE);
 
-Drop minItems, not needed if equals to maxItems.
+Actually we have the trip points:
 
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    minItems: 2
+ACTIVE, PASSIVE, HOT and CRITICAL
 
-Drop minItems, not needed if equals to maxItems.
+The last two ones should not be writable.
 
+Instead of this test, it would be cleaner to only make the ACTIVE and 
+PASSIVE trip point writable when the CONFIG_THERMAL_WRITABLE_TRIPS 
+option is set. Consequently, other trip points won't be writable and 
+this test can go away as set_trip will be protected by a RO sysfs file 
+property.
 
-> +    maxItems: 2
-> +
-> +  interrupts:
-> +    items:
-> +      - description: module interrupt
-> +      - description: EDP interrupt
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: thermal
-> +      - const: edp
-> +
-> +  clocks:
-> +    items:
-> +      - description: thermal sensor clock
-> +      - description: module clock
-> +
-> +  clock-names:
-> +    items:
-> +      - const: tsensor
-> +      - const: soctherm
-> +
-> +  resets:
-> +    items:
-> +      - description: module reset
-> +
-> +  reset-names:
-> +    items:
-> +      - const: soctherm
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  throttle-cfgs:
-> +    $ref: thermal-cooling-devices.yaml
+> +	if (ret && t.temperature != trip->temperature && tz->governor && tz->governor->reset)
 
-Missing unevaluatedProperties: false on this level.
+The temperature test is duplicated because it is already done in the 
+block before.
 
-> +    description: A sub-node which is a container of configuration for each
-> +      hardware throttle events. These events can be set as cooling devices.
-> +      Throttle event sub-nodes must be named as "light" or "heavy".
-> +    patternProperties:
-> +      "^(light|heavy)$":
-> +        type: object
-> +        properties:
-> +          nvidia,priority:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            minimum: 1
-> +            maximum: 100
-> +            description: Each throttles has its own throttle settings, so the
-> +              SW need to set priorities for various throttle, the HW arbiter
-> +              can select the final throttle settings. Bigger value indicates
-> +              higher priority, In general, higher priority translates to lower
-> +              target frequency. SW needs to ensure that critical thermal
-> +              alarms are given higher priority, and ensure that there is no
-> +              race if priority of two vectors is set to the same value.
+> +		tz->governor->reset(tz);
 > +
-> +          nvidia,cpu-throt-percent:
+>   	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+>   				      trip->temperature, trip->hysteresis);
+>   
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 87837094d549..d27d053319bf 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -197,6 +197,8 @@ struct thermal_zone_device {
+>    *			thermal zone.
+>    * @throttle:	callback called for every trip point even if temperature is
+>    *		below the trip point temperature
+> + * @reset:	callback called for governor reset
+> + *
+>    * @governor_list:	node in thermal_governor_list (in thermal_core.c)
+>    */
+>   struct thermal_governor {
+> @@ -204,6 +206,7 @@ struct thermal_governor {
+>   	int (*bind_to_tz)(struct thermal_zone_device *tz);
+>   	void (*unbind_from_tz)(struct thermal_zone_device *tz);
+>   	int (*throttle)(struct thermal_zone_device *tz, int trip);
+> +	void (*reset)(struct thermal_zone_device *tz);
+>   	struct list_head	governor_list;
+>   };
+>   
 
-Missing type
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> +            description: This property is for Tegra124 and Tegra210. It is the
-> +              throttling depth of pulse skippers, it's the percentage
-> +              throttling.
-> +
-> +          nvidia,cpu-throt-level:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            description: This property is only for Tegra132, it is the level
-> +              of pulse skippers, which used to throttle clock frequencies. It
-> +              indicates cpu clock throttling depth, and the depth can be
-> +              programmed.
-> +            enum:
-> +              # none (TEGRA_SOCTHERM_THROT_LEVEL_NONE)
-> +              - 0
-> +              # low (TEGRA_SOCTHERM_THROT_LEVEL_LOW)
-> +              - 1
-> +              # medium (TEGRA_SOCTHERM_THROT_LEVEL_MED)
-> +              - 2
-> +              # high (TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
-> +              - 3
-> +
-> +          nvidia,gpu-throt-level:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            description: This property is for Tegra124 and Tegra210. It is the
-> +              level of pulse skippers, which used to throttle clock
-> +              frequencies. It indicates gpu clock throttling depth and can be
-> +              programmed to any of the following values which represent a
-> +              throttling percentage.
-> +            enum:
-> +              # none (0%, TEGRA_SOCTHERM_THROT_LEVEL_NONE)
-> +              - 0
-> +              # low (50%, TEGRA_SOCTHERM_THROT_LEVEL_LOW)
-> +              - 1
-> +              # medium (75%, TEGRA_SOCTHERM_THROT_LEVEL_MED)
-> +              - 2
-> +              # high (85%, TEGRA_SOCTHERM_THROT_LEVEL_HIGH)
-> +              - 3
-> +
-> +          # optional
-> +          # Tegra210 specific and valid only for OCx throttle events
-> +          nvidia,count-threshold:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            description: Specifies the number of OC events that are required
-> +              for triggering an interrupt. Interrupts are not triggered if the
-> +              property is missing. A value of 0 will interrupt on every OC
-> +              alarm.
-> +
-> +          nvidia,polarity-active-low:
-> +            $ref: /schemas/types.yaml#/definitions/flag
-> +            description: Configures the polarity of the OC alaram signal. If
-> +              present, this means assert low, otherwise assert high.
-> +
-> +          nvidia,alarm-filter:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            description: Number of clocks to filter event. When the filter
-> +              expires (which means the OC event has not occurred for a long
-> +              time), the counter is cleared and filter is rearmed.
-> +            default: 0
-> +
-> +          nvidia,throttle-period-us:
-> +            description: Specifies the number of microseconds for which
-> +              throttling is engaged after the OC event is deasserted.
-> +            default: 0
-> +
-> +  # optional
-> +  nvidia,thermtrips:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-
-Missing items describing the matrix.
-
-> +    description: |
-> +      When present, this property specifies the temperature at which the
-> +      SOCTHERM hardware will assert the thermal trigger signal to the Power
-> +      Management IC, which can be configured to reset or shutdown the device.
-> +      It is an array of pairs where each pair represents a tsensor ID followed
-> +      by a temperature in milli Celcius. In the absence of this property the
-> +      critical trip point will be used for thermtrip temperature.
-> +
-> +      Note:
-> +      - the "critical" type trip points will be used to set the temperature at
-> +        which the SOCTHERM hardware will assert a thermal trigger if the
-> +        "nvidia,thermtrips" property is missing.  When the thermtrips property
-> +        is present, the breach of a critical trip point is reported back to
-> +        the thermal framework to implement software shutdown.
-> +
-> +      - the "hot" type trip points will be set to SOCTHERM hardware as the
-> +        throttle temperature.  Once the temperature of this thermal zone is
-> +        higher than it, it will trigger the HW throttle event.
-> +
-
-
-Best regards,
-Krzysztof
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
