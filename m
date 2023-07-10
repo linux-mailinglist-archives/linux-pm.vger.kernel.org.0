@@ -2,92 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7673774DCEA
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 20:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F3974DE13
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Jul 2023 21:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjGJSAK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Jul 2023 14:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33632 "EHLO
+        id S229583AbjGJTWC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Jul 2023 15:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbjGJSAJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 14:00:09 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B616AB
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 11:00:08 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-3a412653335so369886b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 11:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689012007; x=1691604007;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oxyuM/wL9q4Oq4EoRKDtXsO7yaeaRmhx3XbbQ+h4N00=;
-        b=teOyJTkBJ/LIix85iNK4UNxcm5n602B6h/Yt4krGxuOrH+/hbaborHnRRDvVsiBoeC
-         2VZ4eTBX1pc/IVjmH2i1REO12Ud2ZHDM5TMYr8pPhWmF155XYzTXZ/nNlwqyQS6RFsVU
-         TebY+dicPcKkCwOKGkIvPrIfWhv1BSDLTlrFjpKO9y4z5gVQIZCHFOqGGh4XJUEIOpkb
-         F+J0PIWVyZx+h4FM/bx5HkpqgICycpznJyJsjJYFVoRy+yorOVAmPFulxe/T+/6bN6LW
-         hFowNkjScOWxioYSmwrujs5uLa3dN2JN6EVFwp3OAHRQnb0gaWS20eEFjtj0OzZrOyBd
-         DRPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689012007; x=1691604007;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oxyuM/wL9q4Oq4EoRKDtXsO7yaeaRmhx3XbbQ+h4N00=;
-        b=RezA4msMrLH5RtV6Hso0Grgxuwc4A0NkY9peJLABpbzhF0AAb5vl62WSm/xMEyAxCr
-         UfeRpU26tmwXHfFyqqtWwbBYwUbB4RqcNjVedjq9Hahxci4pI9TgXF5bAURKid3GksLf
-         Pzjzf5MFv0ehn2NgosWVO32pX44veXTa3+D/wkqbeuYOzWwyZ1B2+lrsqAsb1zxEfxQ0
-         g9PfFjXL8mLFOOaohBMidJddZrNPnC9VqjBiBxNmgrZkUjZ0ZFEdKpjtz9xevnZctQL/
-         qNCIFunY4POae/dte9B/BiLEg9i5GesukW68pzjpnTsCFUi/FTKdTsGj9mi6xhx8d/yB
-         /Ytg==
-X-Gm-Message-State: ABy/qLZ/CIB1aQLswG+FDJwKg9n99QFkp9aPo3K1t7WUIEN/4Rq7iq9M
-        MNQjIBZeoNYY4ZsmBMEqyqilgw==
-X-Google-Smtp-Source: APBJJlG/GoNUMdIg7gnp0W+zq3hCMMFp5rWpD4Gd1tm+8tGsENaGeMuMmT6vLVc1016OAyTJ1SmeUg==
-X-Received: by 2002:a05:6808:2211:b0:3a1:acef:7e2c with SMTP id bd17-20020a056808221100b003a1acef7e2cmr12528145oib.58.1689012007477;
-        Mon, 10 Jul 2023 11:00:07 -0700 (PDT)
-Received: from google.com (41.183.143.34.bc.googleusercontent.com. [34.143.183.41])
-        by smtp.gmail.com with ESMTPSA id x23-20020a63b217000000b0055c558ac4edsm8694pge.46.2023.07.10.11.00.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 11:00:07 -0700 (PDT)
-Date:   Mon, 10 Jul 2023 23:29:58 +0530
-From:   Ajay Agarwal <ajayagarwal@google.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        manugautam@google.com, mshavit@google.com, quangh@google.com
-Subject: Re: Prevent PM suspend from powering off the domain for non-wakeup
- in-use devices
-Message-ID: <ZKxHHvBKvJeWiioc@google.com>
-References: <ZKYvpgs6p3S7nglh@google.com>
- <CAPDyKFpWybtCWt9pVcFMKcV0zBrjCzhhmAzYN-JPw2ZS6mUpwQ@mail.gmail.com>
- <20230707164149.GP6001@thinkpad>
+        with ESMTP id S229562AbjGJTWC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Jul 2023 15:22:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06E4FBC
+        for <linux-pm@vger.kernel.org>; Mon, 10 Jul 2023 12:22:01 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1qIwSH-0006F7-SJ; Mon, 10 Jul 2023 21:21:53 +0200
+Message-ID: <fa3d706a-57e9-9ca6-9d7d-a7a2b62960e1@pengutronix.de>
+Date:   Mon, 10 Jul 2023 21:21:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230707164149.GP6001@thinkpad>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH 1/2] thermal: core: constify params in
+ thermal_zone_device_register
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230708112720.2897484-1-a.fatoum@pengutronix.de>
+ <CAJZ5v0h6_jzOBxhmd2b8WL5nVOvZ03AD5fzdtc9ACXGiCKEmOw@mail.gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <CAJZ5v0h6_jzOBxhmd2b8WL5nVOvZ03AD5fzdtc9ACXGiCKEmOw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Thanks Ulf and Mani for looking into this. I could not quite understand
-your suggestions here. I believe you are talking about adding a new
-helper API. What flag will this API update? Will it be
-`dev->power.wakeup_path` itself? Or do we introduce a new boolean flag
-in dev_pm_info structure for this?
+Hello,
 
-Also, how about the genpd flag? Shall we re-use the
-GENPD_FLAG_ACTIVE_WAKEUP flag? Or create a new one?
+On 10.07.23 19:33, Rafael J. Wysocki wrote:
+> On Sat, Jul 8, 2023 at 1:27 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
+>>
+>> Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone
+>> parameters structure"), thermal_zone_device_register() allocates a copy
+>> of the tzp argument and callers need not explicitly manage its lifetime.
+>>
+>> This means the function no longer cares about the parameter being
+>> mutable, so constify it.
+>>
+>> No functional change.
+>>
+>> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
+> 
+> Why is this particular patch regarded as a fix?
 
-I feel that we should come up with a generic name for both the genpd
-flag and the power flag to satisfy both the wakeup usecase and the
-stay-on usecase. Let me know what you think.
+That the prototype wasn't adjust in aforementioned commit is IMO an oversight,
+so this commit fixes that. As the commit is already referenced in the commit
+message body, I don't mind dropping the Fixes: line. Please let me know if
+I should resend.
 
-Rafael, can you chime in as well?
+Cheers,
+Ahmad
+
+>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>> ---
+>>  drivers/thermal/thermal_core.c | 4 ++--
+>>  include/linux/thermal.h        | 6 +++---
+>>  2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index 842f678c1c3e..cc2b5e81c620 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -1203,7 +1203,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+>>  struct thermal_zone_device *
+>>  thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
+>>                                         void *devdata, struct thermal_zone_device_ops *ops,
+>> -                                       struct thermal_zone_params *tzp, int passive_delay,
+>> +                                       const struct thermal_zone_params *tzp, int passive_delay,
+>>                                         int polling_delay)
+>>  {
+>>         struct thermal_zone_device *tz;
+>> @@ -1371,7 +1371,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
+>>
+>>  struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
+>>                                                          void *devdata, struct thermal_zone_device_ops *ops,
+>> -                                                        struct thermal_zone_params *tzp, int passive_delay,
+>> +                                                        const struct thermal_zone_params *tzp, int passive_delay,
+>>                                                          int polling_delay)
+>>  {
+>>         return thermal_zone_device_register_with_trips(type, NULL, ntrips, mask,
+>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+>> index 87837094d549..dee66ade89a0 100644
+>> --- a/include/linux/thermal.h
+>> +++ b/include/linux/thermal.h
+>> @@ -301,14 +301,14 @@ int thermal_acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp);
+>>  #ifdef CONFIG_THERMAL
+>>  struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
+>>                 void *, struct thermal_zone_device_ops *,
+>> -               struct thermal_zone_params *, int, int);
+>> +               const struct thermal_zone_params *, int, int);
+>>
+>>  void thermal_zone_device_unregister(struct thermal_zone_device *);
+>>
+>>  struct thermal_zone_device *
+>>  thermal_zone_device_register_with_trips(const char *, struct thermal_trip *, int, int,
+>>                                         void *, struct thermal_zone_device_ops *,
+>> -                                       struct thermal_zone_params *, int, int);
+>> +                                       const struct thermal_zone_params *, int, int);
+>>
+>>  void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
+>>  const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
+>> @@ -348,7 +348,7 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz);
+>>  static inline struct thermal_zone_device *thermal_zone_device_register(
+>>         const char *type, int trips, int mask, void *devdata,
+>>         struct thermal_zone_device_ops *ops,
+>> -       struct thermal_zone_params *tzp,
+>> +       const struct thermal_zone_params *tzp,
+>>         int passive_delay, int polling_delay)
+>>  { return ERR_PTR(-ENODEV); }
+>>  static inline void thermal_zone_device_unregister(
+>> --
+>> 2.39.2
+>>
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
