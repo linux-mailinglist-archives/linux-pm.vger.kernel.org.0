@@ -2,173 +2,452 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F3674EA2B
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 11:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C9374EA47
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 11:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232137AbjGKJTe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 05:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
+        id S231767AbjGKJYq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 05:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbjGKJSj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 05:18:39 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8188419A5
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 02:16:40 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-c15a5ed884dso6192527276.2
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 02:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689066999; x=1691658999;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pas4YXhE9tyV0vWkPBY+CDLqBNjLyZTNoC+4U42dUhg=;
-        b=aSj3J0kYl+ZUK4IWnBmQzG32fjD8rRq1hQO8yd5hdn0xoSO4SaIprQRSpWjAGbuT4L
-         j4HrGZeG89ENokExPTEpnaFx1AKo2T518QAOLp2gE30huepexy89ondFfiKpjRHsU9rz
-         tdst5M73OOskM8vqQmN58qghP7koMOC2FMvk7qJW4RFCq/QOyPsIucYIg3GxB0QBHI81
-         4XzgIw80HFQU7RpiVP7DI7w18VCqVaGxieOr+avEv64qf1tEq9cIN88HeadL9JMzgdor
-         q+QaTlZJDKgVtvP6JbsVsBFGh2uATMds+PwjgZ57m0tZ1tWqlmEDTlmlNpj71HBeilwD
-         fGiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689066999; x=1691658999;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pas4YXhE9tyV0vWkPBY+CDLqBNjLyZTNoC+4U42dUhg=;
-        b=L6XJFP9gLWtnVRaEbLoHuk6fhu9ADzYrdSlFeoThJiL8Za3ebPKM1YyowL0b8+eJ8R
-         aZZ4wELk6xobHIA4PYXHXjPaqrwA20hToAJ30eciRB1qpILLB6yRbXAC4GHs22u0ioo2
-         9P/VkhLQDRl+G3f9JoLtmg1VHKpsz/BVWVDdxCPApC+Hpu1fQc6T2oexfxey2NgSNgH1
-         wUoLw4gMkLowJXDVeZ7cAnjhk+DE1ZHoNPniAuiCT8C64lFxVpxB4of0wuPvgU8YwMvz
-         t5t7/K8HJEUqkoBGSBM+q+nax4y17lEBR99OduETUrHD14wpPkz2x3JzCz7G5zuo7+t0
-         nCfQ==
-X-Gm-Message-State: ABy/qLatibZKKF/wSSf4EXzSWfv/nCfCd13VK/hLpz97M2gFXYCDnSG8
-        hWi0c6UPOv+kQxiUCsCxmXCKfJ2UnTBx2RJxE8olvg==
-X-Google-Smtp-Source: APBJJlFJ4nPhwO9ZTqhum94WuBn2fW/8fJYK7aZ8jIYhnO9NC6z3uLrgIlyEcMprOo7OQRJgLy6wYE4bG/JpUEeCIyc=
-X-Received: by 2002:a0d:da43:0:b0:56c:fd03:dba with SMTP id
- c64-20020a0dda43000000b0056cfd030dbamr13287487ywe.35.1689066999749; Tue, 11
- Jul 2023 02:16:39 -0700 (PDT)
+        with ESMTP id S231782AbjGKJYP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 05:24:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BF12709;
+        Tue, 11 Jul 2023 02:19:41 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36B7MFmm006543;
+        Tue, 11 Jul 2023 09:19:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=66OXzw/seGmBC3V8Ne4w+goktO+Rr3Yb5H56bkzW5qw=;
+ b=DOp+P+dwJojxpAU8xofcNtBoYaF/ORRLt+RC+q0KTFUv9Eg59OArYTH1GSol56RNzMq4
+ RZkHuOgLf43cp/8xCWqySx6GvyARWovAt4JV2+o3MBJixiydR3y74G6kwZ1mtb+4J20p
+ 2CxEQgAuTWY1pulk8nlXAcjD98ndS6XvfIniQ+i5DERSlXJm8DdQvehQfa0BelmA+2NJ
+ HDGDUVwd2hViRJORuQe9T4HxjvWei8W2FCsdtNUzFueUTyvSllDXqR01CtZtDaYnKdSX
+ ewERjQDeOdmecha7dI1++yIj7gDqNhKjmtOHz8dapa2WBJpbqfqrdmIi/wwemuC07rO2 nA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rs279r9ek-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:19:33 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36B9JEx8012420
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jul 2023 09:19:15 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 11 Jul
+ 2023 02:19:09 -0700
+Message-ID: <1c178228-2b83-e319-129f-4524b5a1bc8b@quicinc.com>
+Date:   Tue, 11 Jul 2023 14:49:06 +0530
 MIME-Version: 1.0
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-16-ulf.hansson@linaro.org> <20230707175048.6yees6d3evcomyux@vacation>
-In-Reply-To: <20230707175048.6yees6d3evcomyux@vacation>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 11 Jul 2023 11:16:03 +0200
-Message-ID: <CAPDyKFoc0hr=9LEtwwwe3R6rMn0b7TB1MCZN0ArUq+h9Pud08Q@mail.gmail.com>
-Subject: Re: [PATCH 15/18] soc: ti: Mover power-domain drivers to the genpd dir
-To:     Tony Lindgren <tony@atomide.com>, Nishanth Menon <nm@ti.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <kristo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 2/6] thermal/drivers/tsens: Add TSENS enable and
+ calibration support for V2
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_varada@quicinc.com>
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-3-quic_ipkumar@quicinc.com>
+ <cf2cae88-e226-8df1-6c4f-543b683cbc8c@linaro.org>
+ <a03d6823-2084-e4c6-1c9d-853127956f69@quicinc.com>
+ <CAA8EJpo+r48uj1-X6O0r3wOodydMfMrPQHt+afXO7PNGqCJk3A@mail.gmail.com>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <CAA8EJpo+r48uj1-X6O0r3wOodydMfMrPQHt+afXO7PNGqCJk3A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Mwp1QFcII3dTu3gLbL2Bjk5odOjJ3A8e
+X-Proofpoint-GUID: Mwp1QFcII3dTu3gLbL2Bjk5odOjJ3A8e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-11_04,2023-07-06_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ bulkscore=0 priorityscore=1501 adultscore=0 clxscore=1015 mlxlogscore=999
+ malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307110083
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 7 Jul 2023 at 19:50, Nishanth Menon <nm@ti.com> wrote:
->
-> On 16:04-20230707, Ulf Hansson wrote:
-> > Cc: Nishanth Menon <nm@ti.com>
-> > Cc: Santosh Shilimkar <ssantosh@kernel.org>
-> > Cc: Tero Kristo <kristo@kernel.org>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  MAINTAINERS                                   | 3 ++-
-> >  drivers/genpd/Makefile                        | 1 +
-> >  drivers/genpd/ti/Makefile                     | 3 +++
-> >  drivers/{soc => genpd}/ti/omap_prm.c          | 0
-> >  drivers/{soc => genpd}/ti/ti_sci_pm_domains.c | 0
-> >  drivers/soc/ti/Makefile                       | 2 --
-> >  6 files changed, 6 insertions(+), 3 deletions(-)
-> >  create mode 100644 drivers/genpd/ti/Makefile
-> >  rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
-> >  rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 9e580df3e5db..3cf16ffac892 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -21101,7 +21101,7 @@ F:    drivers/irqchip/irq-ti-sci-inta.c
-> >  F:   drivers/irqchip/irq-ti-sci-intr.c
-> >  F:   drivers/reset/reset-ti-sci.c
-> >  F:   drivers/soc/ti/ti_sci_inta_msi.c
-> > -F:   drivers/soc/ti/ti_sci_pm_domains.c
-> > +F:   drivers/genpd/ti/ti_sci_pm_domains.c
-> >  F:   include/dt-bindings/soc/ti,sci_pm_domain.h
-> >  F:   include/linux/soc/ti/ti_sci_inta_msi.h
-> >  F:   include/linux/soc/ti/ti_sci_protocol.h
-> > @@ -21335,6 +21335,7 @@ L:    linux-kernel@vger.kernel.org
-> >  L:   linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-> >  S:   Maintained
-> >  T:   git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
-> > +F:   drivers/genpd/ti/omap_prm.c
->
-> Probably the wrong place for this as omap_prm is'nt a keystone navigator
-> driver set. Maybe Tony has a suggestion?
 
-I guess we could add it to the OMAP2+ section then?
-
-In any case, I suggest we consider that as a separate patch on top, as
-I am just obeying to the existing pattern that the get_maintainers
-script provides.
-
-Kind regards
-Uffe
-
+On 7/10/2023 8:32 PM, Dmitry Baryshkov wrote:
+> On Mon, 10 Jul 2023 at 16:22, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
+>>
+>> On 7/10/2023 4:49 PM, Dmitry Baryshkov wrote:
+>>> On 10/07/2023 13:37, Praveenkumar I wrote:
+>>>> SoCs without RPM have to enable sensors and calibrate from the kernel.
+>>>> Though TSENS IP supports 16 sensors, not all are used. So added
+>>>> sensors_to_en in tsens data help enable the relevant sensors.
+>>>>
+>>>> Added new calibration function for V2 as the tsens.c calib function
+>>>> only supports V1.
+>>>>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> ---
+>>>>    drivers/thermal/qcom/tsens-v2.c | 116 ++++++++++++++++++++++++++++++++
+>>>>    drivers/thermal/qcom/tsens.c    |  37 +++++++++-
+>>>>    drivers/thermal/qcom/tsens.h    |  56 +++++++++++++++
+>>>>    3 files changed, 208 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/thermal/qcom/tsens-v2.c
+>>>> b/drivers/thermal/qcom/tsens-v2.c
+>>>> index 29a61d2d6ca3..db48b1d95348 100644
+>>>> --- a/drivers/thermal/qcom/tsens-v2.c
+>>>> +++ b/drivers/thermal/qcom/tsens-v2.c
+>>>> @@ -6,11 +6,20 @@
+>>>>      #include <linux/bitops.h>
+>>>>    #include <linux/regmap.h>
+>>>> +#include <linux/nvmem-consumer.h>
+>>>>    #include "tsens.h"
+>>>>      /* ----- SROT ------ */
+>>>>    #define SROT_HW_VER_OFF    0x0000
+>>>>    #define SROT_CTRL_OFF        0x0004
+>>>> +#define SROT_MEASURE_PERIOD    0x0008
+>>>> +#define SROT_Sn_CONVERSION    0x0060
+>>>> +#define V2_SHIFT_DEFAULT    0x0003
+>>>> +#define V2_SLOPE_DEFAULT    0x0cd0
+>>>> +#define V2_CZERO_DEFAULT    0x016a
+>>>> +#define ONE_PT_SLOPE        0x0cd0
+>>>> +#define TWO_PT_SHIFTED_GAIN    921600
+>>>> +#define ONE_PT_CZERO_CONST    94
+>>>>      /* ----- TM ------ */
+>>>>    #define TM_INT_EN_OFF            0x0004
+>>>> @@ -59,6 +68,16 @@ static const struct reg_field
+>>>> tsens_v2_regfields[MAX_REGFIELDS] = {
+>>>>        /* CTRL_OFF */
+>>>>        [TSENS_EN]     = REG_FIELD(SROT_CTRL_OFF,    0,  0),
+>>>>        [TSENS_SW_RST] = REG_FIELD(SROT_CTRL_OFF,    1,  1),
+>>>> +    [SENSOR_EN]    = REG_FIELD(SROT_CTRL_OFF,    3,  18),
+>>>> +    [CODE_OR_TEMP] = REG_FIELD(SROT_CTRL_OFF,    21, 21),
+>>>> +
+>>>> +    /* MAIN_MEASURE_PERIOD */
+>>>> +    [MAIN_MEASURE_PERIOD] = REG_FIELD(SROT_MEASURE_PERIOD, 0, 7),
+>>>> +
+>>>> +    /* Sn Conversion */
+>>>> +    REG_FIELD_FOR_EACH_SENSOR16(SHIFT, SROT_Sn_CONVERSION, 23, 24),
+>>>> +    REG_FIELD_FOR_EACH_SENSOR16(SLOPE, SROT_Sn_CONVERSION, 10, 22),
+>>>> +    REG_FIELD_FOR_EACH_SENSOR16(CZERO, SROT_Sn_CONVERSION, 0, 9),
+>>>>          /* ----- TM ------ */
+>>>>        /* INTERRUPT ENABLE */
+>>>> @@ -104,6 +123,103 @@ static const struct reg_field
+>>>> tsens_v2_regfields[MAX_REGFIELDS] = {
+>>>>        [TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
+>>>>    };
+>>>>    +static int tsens_v2_calibration(struct tsens_priv *priv)
+>>>> +{
+>>>> +    struct device *dev = priv->dev;
+>>>> +    u32 mode, base0, base1;
+>>>> +    u32 slope, czero;
+>>>> +    char name[15];
+>>>> +    int i, j, ret;
+>>>> +
+>>>> +    if (priv->num_sensors > MAX_SENSORS)
+>>>> +        return -EINVAL;
+>>>> +
+>>>> +    ret = nvmem_cell_read_variable_le_u32(priv->dev, "mode", &mode);
+>>>> +    if (ret == -ENOENT)
+>>>> +        dev_warn(priv->dev, "Calibration data not present in DT\n");
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+>>>> +
+>>>> +    ret = nvmem_cell_read_variable_le_u32(priv->dev, "base0", &base0);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    ret = nvmem_cell_read_variable_le_u32(priv->dev, "base1", &base1);
+>>>> +    if (ret < 0)
+>>>> +        return ret;
+>>>> +
+>>>> +    /* Read offset values and allocate SHIFT, SLOPE & CZERO regmap
+>>>> for enabled sensors */
+>>>> +    for (i = 0; i < priv->num_sensors; i++) {
+>>>> +        if (!(priv->sensors_to_en & (0x1 << i)))
+>>>> +            continue;
+>>>> +
+>>>> +        ret = snprintf(name, sizeof(name), "s%d_offset",
+>>>> priv->sensor[i].hw_id);
+>>>> +        if (ret < 0)
+>>>> +            return ret;
+>>>> +
+>>>> +        ret = nvmem_cell_read_variable_le_u32(priv->dev, name,
+>>>> &priv->sensor[i].offset);
+>>>> +        if (ret)
+>>>> +            return ret;
+>>>> +
+>>>> +        for (j = SHIFT_0; j <= CZERO_0; j++) {
+>>>> +            int idx = (i * 3) + j;
+>>>> +
+>>>> +            priv->rf[idx] = devm_regmap_field_alloc(dev,
+>>>> priv->srot_map,
+>>>> +                                priv->fields[idx]);
+>>>> +            if (IS_ERR(priv->rf[idx]))
+>>>> +                return PTR_ERR(priv->rf[idx]);
+>>> I think, allocating data structures for 48 regfields, which are
+>>> written just once, to be an overkill.
+>> Can we change it to single field for each sensor. For example,
+>> CONVERSION_0 instead of SHIFT_0, SLOPE_0 and CZERO_0? This way it will
+>> be max 16 regfields.
+> If you move writing of the registers to the loop, you won't need
+> regfields. You can just call regmap_update_bits. The point is that you
+> don't have to allocate a one-time instance.
+Sure, will update in next patch.
 >
-> >  F:   drivers/soc/ti/*
-> >
-> >  TI LM49xxx FAMILY ASoC CODEC DRIVERS
-> > diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> > index e6f34d82e6a8..193892189f0d 100644
-> > --- a/drivers/genpd/Makefile
-> > +++ b/drivers/genpd/Makefile
-> > @@ -11,3 +11,4 @@ obj-y                                       += samsung/
-> >  obj-y                                        += starfive/
-> >  obj-y                                        += sunxi/
-> >  obj-y                                        += tegra/
-> > +obj-y                                        += ti/
-> > diff --git a/drivers/genpd/ti/Makefile b/drivers/genpd/ti/Makefile
-> > new file mode 100644
-> > index 000000000000..69580afbb436
-> > --- /dev/null
-> > +++ b/drivers/genpd/ti/Makefile
-> > @@ -0,0 +1,3 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +obj-$(CONFIG_ARCH_OMAP2PLUS)         += omap_prm.o
-> > +obj-$(CONFIG_TI_SCI_PM_DOMAINS)              += ti_sci_pm_domains.o
-> > diff --git a/drivers/soc/ti/omap_prm.c b/drivers/genpd/ti/omap_prm.c
-> > similarity index 100%
-> > rename from drivers/soc/ti/omap_prm.c
-> > rename to drivers/genpd/ti/omap_prm.c
-> > diff --git a/drivers/soc/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
-> > similarity index 100%
-> > rename from drivers/soc/ti/ti_sci_pm_domains.c
-> > rename to drivers/genpd/ti/ti_sci_pm_domains.c
-> > diff --git a/drivers/soc/ti/Makefile b/drivers/soc/ti/Makefile
-> > index cc3c972fad2e..cb800a745e66 100644
-> > --- a/drivers/soc/ti/Makefile
-> > +++ b/drivers/soc/ti/Makefile
-> > @@ -6,9 +6,7 @@ obj-$(CONFIG_KEYSTONE_NAVIGATOR_QMSS) += knav_qmss.o
-> >  knav_qmss-y := knav_qmss_queue.o knav_qmss_acc.o
-> >  obj-$(CONFIG_KEYSTONE_NAVIGATOR_DMA) += knav_dma.o
-> >  obj-$(CONFIG_AMX3_PM)                        += pm33xx.o
-> > -obj-$(CONFIG_ARCH_OMAP2PLUS)         += omap_prm.o
-> >  obj-$(CONFIG_WKUP_M3_IPC)            += wkup_m3_ipc.o
-> > -obj-$(CONFIG_TI_SCI_PM_DOMAINS)              += ti_sci_pm_domains.o
-> >  obj-$(CONFIG_TI_SCI_INTA_MSI_DOMAIN) += ti_sci_inta_msi.o
-> >  obj-$(CONFIG_TI_K3_RINGACC)          += k3-ringacc.o
-> >  obj-$(CONFIG_TI_K3_SOCINFO)          += k3-socinfo.o
-> > --
-> > 2.34.1
-> >
+>>>> +        }
+>>>> +    }
+>>>> +
+>>>> +    /* Based on calib mode, program SHIFT, SLOPE and CZERO for
+>>>> enabled sensors */
+>>>> +    switch (mode) {
+>>>> +    case TWO_PT_CALIB:
+>>>> +        slope = (TWO_PT_SHIFTED_GAIN / (base1 - base0));
+>>>> +
+>>>> +        for (i = 0; i < priv->num_sensors; i++) {
+>>>> +            if (!(priv->sensors_to_en & (0x1 << i)))
+>>>> +                continue;
+>>>> +
+>>>> +            int idx = i * 3;
+>>>> +
+>>>> +            czero = (base0 + priv->sensor[i].offset - ((base1 -
+>>>> base0) / 3));
+>>>> +            regmap_field_write(priv->rf[SHIFT_0 + idx],
+>>>> V2_SHIFT_DEFAULT);
+>>>> +            regmap_field_write(priv->rf[SLOPE_0 + idx], slope);
+>>>> +            regmap_field_write(priv->rf[CZERO_0 + idx], czero);
+>>>> +        }
+>>>> +        fallthrough;
+>>>> +    case ONE_PT_CALIB2:
+>>>> +        for (i = 0; i < priv->num_sensors; i++) {
+>>>> +            if (!(priv->sensors_to_en & (0x1 << i)))
+>>>> +                continue;
+>>>> +
+>>>> +            int idx = i * 3;
+>>>> +
+>>>> +            czero = base0 + priv->sensor[i].offset -
+>>>> ONE_PT_CZERO_CONST;
+>>>> +            regmap_field_write(priv->rf[SHIFT_0 + idx],
+>>>> V2_SHIFT_DEFAULT);
+>>>> +            regmap_field_write(priv->rf[SLOPE_0 + idx], ONE_PT_SLOPE);
+>>>> +            regmap_field_write(priv->rf[CZERO_0 + idx], czero);
+>>>> +        }
+>>>> +        break;
+>>>> +    default:
+>>>> +        dev_dbg(priv->dev, "calibrationless mode\n");
+>>>> +        for (i = 0; i < priv->num_sensors; i++) {
+>>>> +            if (!(priv->sensors_to_en & (0x1 << i)))
+>>>> +                continue;
+>>>> +
+>>>> +            int idx = i * 3;
+>>>> +
+>>>> +            regmap_field_write(priv->rf[SHIFT_0 + idx],
+>>>> V2_SHIFT_DEFAULT);
+>>>> +            regmap_field_write(priv->rf[SLOPE_0 + idx],
+>>>> V2_SLOPE_DEFAULT);
+>>>> +            regmap_field_write(priv->rf[CZERO_0 + idx],
+>>>> V2_CZERO_DEFAULT);
+>>>> +        }
+>>>> +    }
+>>> This code iterates over the sensors field several times. Please
+>>> consider extracting a function that handles all setup for a single
+>>> sensor, then calling it in a loop (I should probably do the same for
+>>> tsens-v0/v1 too).
+>> Sure. After reading the mode0, base0 and base1 from QFPROM, we can call
+>> a function in a loop to setup the calibration for each sensor.
+>>>> +
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>>    static const struct tsens_ops ops_generic_v2 = {
+>>>>        .init        = init_common,
+>>>>        .get_temp    = get_temp_tsens_valid,
+>>>> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+>>>> index 98c356acfe98..169690355dad 100644
+>>>> --- a/drivers/thermal/qcom/tsens.c
+>>>> +++ b/drivers/thermal/qcom/tsens.c
+>>>> @@ -974,7 +974,7 @@ int __init init_common(struct tsens_priv *priv)
+>>>>        ret = regmap_field_read(priv->rf[TSENS_EN], &enabled);
+>>>>        if (ret)
+>>>>            goto err_put_device;
+>>>> -    if (!enabled) {
+>>>> +    if (!enabled && !priv->sensors_to_en) {
+>>>>            dev_err(dev, "%s: device not enabled\n", __func__);
+>>>>            ret = -ENODEV;
+>>>>            goto err_put_device;
+>>>> @@ -1006,6 +1006,40 @@ int __init init_common(struct tsens_priv *priv)
+>>>>            goto err_put_device;
+>>>>        }
+>>>>    +    /* Do TSENS initialization if required */
+>>>> +    if (priv->sensors_to_en) {
+>>> Maybe it would be better to explicitly add VER_2_X_NO_RPM and check it
+>>> here?
+>> Sure, will add a separate version macro.
+>>>> +        priv->rf[CODE_OR_TEMP] = devm_regmap_field_alloc(dev,
+>>>> priv->srot_map,
+>>>> + priv->fields[CODE_OR_TEMP]);
+>>>> +        if (IS_ERR(priv->rf[CODE_OR_TEMP])) {
+>>>> +            ret = PTR_ERR(priv->rf[CODE_OR_TEMP]);
+>>>> +            goto err_put_device;
+>>>> +        }
+>>>> +
+>>>> +        priv->rf[MAIN_MEASURE_PERIOD] =
+>>>> +            devm_regmap_field_alloc(dev, priv->srot_map,
+>>>> +                        priv->fields[MAIN_MEASURE_PERIOD]);
+>>>> +        if (IS_ERR(priv->rf[MAIN_MEASURE_PERIOD])) {
+>>>> +            ret = PTR_ERR(priv->rf[MAIN_MEASURE_PERIOD]);
+>>>> +            goto err_put_device;
+>>>> +        }
+>>>> +
+>>>> +        regmap_field_write(priv->rf[TSENS_SW_RST], 0x1);
+>>>> +
+>>>> +        /* Update measure period to 2ms */
+>>>> +        regmap_field_write(priv->rf[MAIN_MEASURE_PERIOD], 0x1);
+>>>> +
+>>>> +        /* Enable available sensors */
+>>>> +        regmap_field_write(priv->rf[SENSOR_EN], priv->sensors_to_en);
+>>>> +
+>>>> +        /* Real temperature format */
+>>>> +        regmap_field_write(priv->rf[CODE_OR_TEMP], 0x1);
+>>>> +
+>>>> +        regmap_field_write(priv->rf[TSENS_SW_RST], 0x0);
+>>>> +
+>>>> +        /* Enable TSENS */
+>>>> +        regmap_field_write(priv->rf[TSENS_EN], 0x1);
+>>>> +    }
+>>>> +
+>>>>        /* This loop might need changes if enum regfield_ids is
+>>>> reordered */
+>>>>        for (j = LAST_TEMP_0; j <= UP_THRESH_15; j += 16) {
+>>>>            for (i = 0; i < priv->feat->max_sensors; i++) {
+>>>> @@ -1282,6 +1316,7 @@ static int tsens_probe(struct platform_device
+>>>> *pdev)
+>>>>          priv->dev = dev;
+>>>>        priv->num_sensors = num_sensors;
+>>>> +    priv->sensors_to_en = data->sensors_to_en;
+>>>>        priv->ops = data->ops;
+>>>>        for (i = 0;  i < priv->num_sensors; i++) {
+>>>>            if (data->hw_ids)
+>>>> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+>>>> index 2805de1c6827..f8897bc8944e 100644
+>>>> --- a/drivers/thermal/qcom/tsens.h
+>>>> +++ b/drivers/thermal/qcom/tsens.h
+>>>> @@ -168,6 +168,58 @@ enum regfield_ids {
+>>>>        TSENS_SW_RST,
+>>>>        SENSOR_EN,
+>>>>        CODE_OR_TEMP,
+>>>> +    /* MEASURE_PERIOD */
+>>>> +    MAIN_MEASURE_PERIOD,
+>>>> +
+>>>> +    /* Sn_CONVERSION */
+>>>> +    SHIFT_0,
+>>>> +    SLOPE_0,
+>>>> +    CZERO_0,
+>>>> +    SHIFT_1,
+>>>> +    SLOPE_1,
+>>>> +    CZERO_1,
+>>>> +    SHIFT_2,
+>>>> +    SLOPE_2,
+>>>> +    CZERO_2,
+>>>> +    SHIFT_3,
+>>>> +    SLOPE_3,
+>>>> +    CZERO_3,
+>>>> +    SHIFT_4,
+>>>> +    SLOPE_4,
+>>>> +    CZERO_4,
+>>>> +    SHIFT_5,
+>>>> +    SLOPE_5,
+>>>> +    CZERO_5,
+>>>> +    SHIFT_6,
+>>>> +    SLOPE_6,
+>>>> +    CZERO_6,
+>>>> +    SHIFT_7,
+>>>> +    SLOPE_7,
+>>>> +    CZERO_7,
+>>>> +    SHIFT_8,
+>>>> +    SLOPE_8,
+>>>> +    CZERO_8,
+>>>> +    SHIFT_9,
+>>>> +    SLOPE_9,
+>>>> +    CZERO_9,
+>>>> +    SHIFT_10,
+>>>> +    SLOPE_10,
+>>>> +    CZERO_10,
+>>>> +    SHIFT_11,
+>>>> +    SLOPE_11,
+>>>> +    CZERO_11,
+>>>> +    SHIFT_12,
+>>>> +    SLOPE_12,
+>>>> +    CZERO_12,
+>>>> +    SHIFT_13,
+>>>> +    SLOPE_13,
+>>>> +    CZERO_13,
+>>>> +    SHIFT_14,
+>>>> +    SLOPE_14,
+>>>> +    CZERO_14,
+>>>> +    SHIFT_15,
+>>>> +    SLOPE_15,
+>>>> +    CZERO_15,
+>>>>          /* ----- TM ------ */
+>>>>        /* TRDY */
+>>>> @@ -524,6 +576,7 @@ struct tsens_features {
+>>>>    /**
+>>>>     * struct tsens_plat_data - tsens compile-time platform data
+>>>>     * @num_sensors: Number of sensors supported by platform
+>>>> + * @sensors_to_en: Sensors to be enabled. Each bit represent a sensor
+>>>>     * @ops: operations the tsens instance supports
+>>>>     * @hw_ids: Subset of sensors ids supported by platform, if not the
+>>>> first n
+>>>>     * @feat: features of the IP
+>>>> @@ -531,6 +584,7 @@ struct tsens_features {
+>>>>     */
+>>>>    struct tsens_plat_data {
+>>>>        const u32        num_sensors;
+>>>> +    const u16        sensors_to_en;
+>>> There is already a similar field, hw_ids. Can it be used instead?
+>> Yes, it can be used. I missed to check this hw_ids. Will change the
+>> num_sensors to 5 and use the hw_ids.
+>>>>        const struct tsens_ops    *ops;
+>>>>        unsigned int        *hw_ids;
+>>>>        struct tsens_features    *feat;
+>>>> @@ -551,6 +605,7 @@ struct tsens_context {
+>>>>     * struct tsens_priv - private data for each instance of the tsens IP
+>>>>     * @dev: pointer to struct device
+>>>>     * @num_sensors: number of sensors enabled on this device
+>>>> + * @sensors_to_en: sensors to be enabled. Each bit represents a sensor
+>>>>     * @tm_map: pointer to TM register address space
+>>>>     * @srot_map: pointer to SROT register address space
+>>>>     * @tm_offset: deal with old device trees that don't address TM and
+>>>> SROT
+>>>> @@ -569,6 +624,7 @@ struct tsens_context {
+>>>>    struct tsens_priv {
+>>>>        struct device            *dev;
+>>>>        u32                num_sensors;
+>>>> +    u16                sensors_to_en;
+>>>>        struct regmap            *tm_map;
+>>>>        struct regmap            *srot_map;
+>>>>        u32                tm_offset;
+>> --
+>> Thanks,
+>> Praveenkumar
 >
-> --
-> Regards,
-> Nishanth Menon
-> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+>
