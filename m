@@ -2,175 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF39874F7BC
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8CD74F7C5
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231145AbjGKSFj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Jul 2023 14:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
+        id S229911AbjGKSJV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 14:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbjGKSFi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:05:38 -0400
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B325B10D2;
-        Tue, 11 Jul 2023 11:05:37 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3145fcecef6so1286629f8f.0;
-        Tue, 11 Jul 2023 11:05:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689098736; x=1689703536;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jN4aAUtnCM1PMkPeyFKL9GEE0yIi4I315hV3adntXQQ=;
-        b=cQTtPWtuAXSc5Sb7Dezk6Q70atT8nC4y+lcDiFvlIKMqCiL+lx96IxiyV8yCXPBitE
-         CmdGWGHJl/YvB9v1TY+dCI6cqs23YXbqNrOEydd/CBdljHjwcKCpoCNbEw9qopbQYDCC
-         O7Kt6G1w8uidbOmb0f/M2aMKaLkxwsDWyqZNCPkXm19e69PZpXykls29sdL5EwSL1AyR
-         7ZOV4lQNA42rZgDz7O5/A3gcYlsMLv1mAld5KysFO4ga/wzsDObwQwJbv+cyn6xnXeSq
-         /G4siGauTKZeAtE72yMkYwQUT2TnY8liCXCzzfXbHdI/Uel4PQtygRVqNxt/Sk0BfNBj
-         OSkg==
-X-Gm-Message-State: ABy/qLZzDU4eUrdNzqe2jBDHYGJ6mOCDFOwQJYffb6QUV7DjEE6XEet5
-        uU175wbWxd9nYDqc6yPfku/iGWD42mnq/01lSSQ=
-X-Google-Smtp-Source: APBJJlFmMOy5GRp17SG0GzxU/8aBXeeFTTrPAluCrUjPtiK7fzAge2wfiPvLTTBvTIXdxh2MfIW4Azgvf4F1qKQDdWQ=
-X-Received: by 2002:adf:cd86:0:b0:314:1af1:4ea6 with SMTP id
- q6-20020adfcd86000000b003141af14ea6mr15669150wrj.5.1689098735993; Tue, 11 Jul
- 2023 11:05:35 -0700 (PDT)
+        with ESMTP id S229626AbjGKSJV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:09:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC3910D2;
+        Tue, 11 Jul 2023 11:09:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADC9E615B7;
+        Tue, 11 Jul 2023 18:09:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71DAEC433C8;
+        Tue, 11 Jul 2023 18:09:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689098959;
+        bh=lxqKz1fXilmbmExU5zZS6bRZAzz+KDaE3lki+iQDT04=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mRzHUvso7igjJ85rG5JnTVXKoWxeK6ia3uk/4VKeURbmokAEfS/G9Ij4JpSvUUigl
+         mIjjkQhRVO3TFqmDQB93wr1Ud7j/USyGKLdt7zMcWY37deDSD6g9Kp2r2gJ+OdG8YV
+         qcnzn5Pw1TfpLgdL1xg1eo0JuT8Gq79EkmCowzdwfDpswYxCVL52z3fL9y8t9Haacq
+         vhozEjrWqS0sKaSn8w9dbVQ90EnRAy2SVtSrku678YVJSSfCHaaWODVaAHStqp74P9
+         JuQnNuGk6zKRPC/SNJLWlSF3sSufpUe1JeHlC8R4rW2xN95iWdiM4hvuFser/vk2od
+         lVkQobz+HUvBQ==
+Date:   Tue, 11 Jul 2023 19:09:14 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ SM6350 bwmon instances
+Message-ID: <20230711-happiest-unworldly-15ed297b668d@spud>
+References: <20230711-topic-sm638250_bwmon-v1-0-bd4bb96b0673@linaro.org>
+ <20230711-topic-sm638250_bwmon-v1-2-bd4bb96b0673@linaro.org>
 MIME-Version: 1.0
-References: <20230708112720.2897484-1-a.fatoum@pengutronix.de> <20230708112720.2897484-2-a.fatoum@pengutronix.de>
-In-Reply-To: <20230708112720.2897484-2-a.fatoum@pengutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Jul 2023 20:05:24 +0200
-Message-ID: <CAJZ5v0jS-VVjj7AS-W4dGNY2E=hAiXS-ZtNbj6mNSzCVFXxCwg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] thermal: of: fix double-free on unregistration
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, kernel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="bUr6myj+mW8Jbc5x"
+Content-Disposition: inline
+In-Reply-To: <20230711-topic-sm638250_bwmon-v1-2-bd4bb96b0673@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 8, 2023 at 1:27 PM Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
->
-> Since commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal
-> zone parameters structure"), thermal_zone_device_register() allocates
-> a copy of the tzp argument and frees it when unregistering, so
-> thermal_of_zone_register() now ends up leaking its original tzp and
-> double-freeing the tzp copy. Fix this by locating tzp on stack instead.
->
-> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Daniel, this looks like a genuine fix to me, so I'm inclined to pick
-it up directly.
+--bUr6myj+mW8Jbc5x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Any objections?
+On Tue, Jul 11, 2023 at 04:35:14PM +0200, Konrad Dybcio wrote:
+> SM6350 has a BWMONv4 for LLCC and a BWMONv5 for CPU. Document them.
+>=20
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
 
 > ---
->  drivers/thermal/thermal_of.c | 27 ++++++---------------------
->  1 file changed, 6 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 6fb14e521197..bc07ae1c284c 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -238,17 +238,13 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
->         return 0;
->  }
->
-> -static struct thermal_zone_params *thermal_of_parameters_init(struct device_node *np)
-> +static void thermal_of_parameters_init(struct device_node *np,
-> +                                      struct thermal_zone_params *tzp)
->  {
-> -       struct thermal_zone_params *tzp;
->         int coef[2];
->         int ncoef = ARRAY_SIZE(coef);
->         int prop, ret;
->
-> -       tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
-> -       if (!tzp)
-> -               return ERR_PTR(-ENOMEM);
-> -
->         tzp->no_hwmon = true;
->
->         if (!of_property_read_u32(np, "sustainable-power", &prop))
-> @@ -267,8 +263,6 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
->
->         tzp->slope = coef[0];
->         tzp->offset = coef[1];
-> -
-> -       return tzp;
->  }
->
->  static struct device_node *thermal_of_zone_get_by_name(struct thermal_zone_device *tz)
-> @@ -442,13 +436,11 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
->  static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
->  {
->         struct thermal_trip *trips = tz->trips;
-> -       struct thermal_zone_params *tzp = tz->tzp;
->         struct thermal_zone_device_ops *ops = tz->ops;
->
->         thermal_zone_device_disable(tz);
->         thermal_zone_device_unregister(tz);
->         kfree(trips);
-> -       kfree(tzp);
->         kfree(ops);
->  }
->
-> @@ -477,7 +469,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->  {
->         struct thermal_zone_device *tz;
->         struct thermal_trip *trips;
-> -       struct thermal_zone_params *tzp;
-> +       struct thermal_zone_params tzp = {};
->         struct thermal_zone_device_ops *of_ops;
->         struct device_node *np;
->         int delay, pdelay;
-> @@ -509,12 +501,7 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->                 goto out_kfree_trips;
->         }
->
-> -       tzp = thermal_of_parameters_init(np);
-> -       if (IS_ERR(tzp)) {
-> -               ret = PTR_ERR(tzp);
-> -               pr_err("Failed to initialize parameter from %pOFn: %d\n", np, ret);
-> -               goto out_kfree_trips;
-> -       }
-> +       thermal_of_parameters_init(np, &tzp);
->
->         of_ops->bind = thermal_of_bind;
->         of_ops->unbind = thermal_of_unbind;
-> @@ -522,12 +509,12 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->         mask = GENMASK_ULL((ntrips) - 1, 0);
->
->         tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-> -                                                    mask, data, of_ops, tzp,
-> +                                                    mask, data, of_ops, &tzp,
->                                                      pdelay, delay);
->         if (IS_ERR(tz)) {
->                 ret = PTR_ERR(tz);
->                 pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-> -               goto out_kfree_tzp;
-> +               goto out_kfree_trips;
->         }
->
->         ret = thermal_zone_device_enable(tz);
-> @@ -540,8 +527,6 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->
->         return tz;
->
-> -out_kfree_tzp:
-> -       kfree(tzp);
->  out_kfree_trips:
->         kfree(trips);
->  out_kfree_of_ops:
-> --
+>  Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml |=
+ 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-=
+bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bw=
+mon.yaml
+> index 51ba6490c951..73f809cdb783 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.y=
+aml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.y=
+aml
+> @@ -29,6 +29,7 @@ properties:
+>                - qcom,sc7280-cpu-bwmon
+>                - qcom,sc8280xp-cpu-bwmon
+>                - qcom,sdm845-cpu-bwmon
+> +              - qcom,sm6350-llcc-bwmon
+>                - qcom,sm8250-cpu-bwmon
+>                - qcom,sm8550-cpu-bwmon
+>            - const: qcom,sdm845-bwmon    # BWMON v4, unified register spa=
+ce
+> @@ -36,6 +37,7 @@ properties:
+>            - enum:
+>                - qcom,sc7180-llcc-bwmon
+>                - qcom,sc8280xp-llcc-bwmon
+> +              - qcom,sm6350-cpu-bwmon
+>                - qcom,sm8250-llcc-bwmon
+>                - qcom,sm8550-llcc-bwmon
+>            - const: qcom,sc7280-llcc-bwmon
+>=20
+> --=20
+> 2.41.0
+>=20
+
+--bUr6myj+mW8Jbc5x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK2aygAKCRB4tDGHoIJi
+0gXbAQC1U8xbWc2YXj6Lizngzmt9aqAMIpsEZeEr2Fd1zb5vIwD9H4L8PrT/tC5m
+FaYfRdCrN7jpeAlDILxLRyT/1lBHTQM=
+=GcWR
+-----END PGP SIGNATURE-----
+
+--bUr6myj+mW8Jbc5x--
