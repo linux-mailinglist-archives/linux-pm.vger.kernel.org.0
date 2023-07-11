@@ -2,50 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D990974F7D2
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7DB74F7DA
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjGKSLa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Jul 2023 14:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S231601AbjGKSOj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Jul 2023 14:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjGKSL1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:11:27 -0400
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C59510C4;
-        Tue, 11 Jul 2023 11:11:26 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-315abbd2e64so36844f8f.1;
-        Tue, 11 Jul 2023 11:11:25 -0700 (PDT)
+        with ESMTP id S231646AbjGKSOi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:14:38 -0400
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C233170E;
+        Tue, 11 Jul 2023 11:14:37 -0700 (PDT)
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2b70357ca12so17765971fa.1;
+        Tue, 11 Jul 2023 11:14:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689099084; x=1691691084;
+        d=1e100.net; s=20221208; t=1689099275; x=1689704075;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=f4pTgOl4kr3INqK7GWkbIOwJ2OoYx4wbuRsCFl9wKjs=;
-        b=htTbK3XefIdus0P7WtgHWhPEJIfUbRpTe0/SyQmIBj605sjxi1EzR8mN/xWHxy5rfR
-         vaFSgr6bBlw8tpNEFXfzvqmdvMYWykDcgAR9Xnw2xTu5YrXmdxiqdTHto4joI1UmOmmi
-         q/mRbiuMhyGdnB982ANvt4cE6+jHuGm2JUbaDgaP+8hhsgg5dO4LPnbRmP7MaL50llR0
-         pzZQD2k+as+XklGqGaXb5Rs5J2aFaru6JSRJd8jTsBqFVUG4KyK8Z9vw45rXo1PMbea4
-         cIAh4sTntCoeMoH1AYj38UjU/Du7sA0iygbQew8CqWMcw4pcWWb1K7JHP2n/8zdpAZsr
-         qvPw==
-X-Gm-Message-State: ABy/qLZT2a7Tk9jJ0YrUlEQeOcNArym65PUfOLezt5VoKD+lYaOw9042
-        P4A3WbwTkwt0f7c5USX/cyZhwKn0A5+5HuFPbxycXs/u
-X-Google-Smtp-Source: APBJJlEpIbhOmBRe04QMC23MNIw+WBjJ+zUQzleUvz2/emIfuqZAIyavt4IFyil/DoaEJVlJ5GR56IAvM/jAmmYh2Vs=
-X-Received: by 2002:a5d:4c85:0:b0:314:1d7f:9e9 with SMTP id
- z5-20020a5d4c85000000b003141d7f09e9mr16305627wrs.0.1689099084284; Tue, 11 Jul
- 2023 11:11:24 -0700 (PDT)
+        bh=6TLXCb1Re20kCu+wyRFtE0SAFooY3rB0FDpaO7CDdmc=;
+        b=bq1tQsBwHNBF7EY8lBWfrqhy2p4TGLJmuo9Dn1z0xDSuRwCzTDxl1DKpzilBcojLBQ
+         mTcCpVQ+kpK8TihzbpYPsaaYCWnAPRz0+YN6A8qpajOF9JuWTUfp6CpiFaz/bN8kNUN2
+         7I5OacmrnyBHCuvkEDAcTH/xqTLXKIaCNwkm94xh2Hm1w7QEXvvZs9WzUGk5W0LhR1kX
+         jLbdgoSuIWd5BeBgFMG8x1cXGhKvjy3RySOq1a+yHcrl+vXin354NbiVQvrEt5yK9fdt
+         AMUz6sdowZynMbsBsOi3/Es/DfLNbw0M/3W8rngY/nfXomoZ44Inupfq9QFziCg/AEWt
+         nmUQ==
+X-Gm-Message-State: ABy/qLY7OAJwbhCUSierY34IIo/5+Xacbb4pqh/HjbpWnou9iHe+9uAJ
+        Lyrhs26g+Brw+GN+rAAOSqYFG/E68n7xjq3SYLXlfY34
+X-Google-Smtp-Source: APBJJlFXHZaeCoMTMEjKYmQCkQzZN8qQ3DK1iLvN6hZcSYA+NfuPEQ9dKIkHiGkXKZjyb+qqkG+8wTxnF+sUGIvne7Y=
+X-Received: by 2002:a2e:9886:0:b0:2b6:a662:b879 with SMTP id
+ b6-20020a2e9886000000b002b6a662b879mr11071549ljj.3.1689099275200; Tue, 11 Jul
+ 2023 11:14:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
-In-Reply-To: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
+References: <20230704050238.712223-1-rui.zhang@intel.com>
+In-Reply-To: <20230704050238.712223-1-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 11 Jul 2023 20:11:13 +0200
-Message-ID: <CAJZ5v0gw3PALtEQLc1W6ZFO6j19SCjVhjsNV6R4knbn83s+-5g@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: QoS: Restore support for default value on
- frequency QoS
-To:     Chungkai Yang <Chung-kai.Yang@mediatek.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ccj.yeh@mediatek.com
+Date:   Tue, 11 Jul 2023 20:14:23 +0200
+Message-ID: <CAJZ5v0gZz1RCqp=Do0RTOCwPvWW9E_SQSyFjuRVuBkR9jxCJjw@mail.gmail.com>
+Subject: Re: [PATCH] powercap: intel_rapl_tpmi: Fix a sparse warning
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        lkp@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -58,68 +57,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 5, 2023 at 10:59 AM Chungkai Yang
-<Chung-kai.Yang@mediatek.com> wrote:
+On Tue, Jul 4, 2023 at 7:02 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> PM_QOS_DEFAULT_VALUE case is not covered.
+> Fix a sparse warning in intel_rapl_tpmi driver.
 >
-> Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
-> non-negative") makes sure CPU freq is non-negative to avoid negative
-> value converting to unsigned data type. However, when the value is
-> PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
-> c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
-> cpufreq_policy_alloc is executed, for this case handling.
+> ../drivers/powercap/intel_rapl_tpmi.c:141:41: sparse: warning: incorrect type in initializer (different address spaces)
+> ../drivers/powercap/intel_rapl_tpmi.c:141:41: sparse:    expected unsigned long long [usertype] *tpmi_rapl_regs
+> ../drivers/powercap/intel_rapl_tpmi.c:141:41: sparse:    got void [noderef] __iomem *
 >
-> Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
-> fix this problem.
->
-> Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
->
+> Fixes: 9eef7f9da928 ("powercap: intel_rapl: Introduce RAPL TPMI interface driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202307031405.dy3druuy-lkp@intel.com/
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
-> V2 -> V3: Added helper function to avoid duplicating the value check.
-> V1 -> V2: Checked both freq_qos_add/update_request.
+>  drivers/powercap/intel_rapl_tpmi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Link: https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
-> Link: https://lore.kernel.org/lkml/20230627071727.16646-1-Chung-kai.Yang@mediatek.com/
-> Link: https://lore.kernel.org/lkml/CAJZ5v0gxNOWhC58PHeUhW_tgf6d1fGJVZ1x91zkDdht11yUv-A@mail.gmail.com/
-> ---
->  kernel/power/qos.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
+> diff --git a/drivers/powercap/intel_rapl_tpmi.c b/drivers/powercap/intel_rapl_tpmi.c
+> index 4f4f13ded225..05f664a096ab 100644
+> --- a/drivers/powercap/intel_rapl_tpmi.c
+> +++ b/drivers/powercap/intel_rapl_tpmi.c
+> @@ -138,7 +138,7 @@ static int parse_one_domain(struct tpmi_rapl_package *trp, u32 offset)
+>         enum tpmi_rapl_register reg_index;
+>         enum rapl_domain_reg_id reg_id;
+>         int tpmi_domain_size, tpmi_domain_flags;
+> -       u64 *tpmi_rapl_regs = trp->base + offset;
+> +       u64 *tpmi_rapl_regs = (u64 *)(trp->base + offset);
+>         u64 tpmi_domain_header = readq((void __iomem *)tpmi_rapl_regs);
 >
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index af51ed6d45ef..782d3b41c1f3 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -426,6 +426,11 @@ late_initcall(cpu_latency_qos_init);
->
->  /* Definitions related to the frequency QoS below. */
->
-> +static inline bool freq_qos_value_invalid(s32 value)
-> +{
-> +       return value < 0 && value != PM_QOS_DEFAULT_VALUE;
-> +}
-> +
->  /**
->   * freq_constraints_init - Initialize frequency QoS constraints.
->   * @qos: Frequency QoS constraints to initialize.
-> @@ -531,7 +536,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
->  {
->         int ret;
->
-> -       if (IS_ERR_OR_NULL(qos) || !req || value < 0)
-> +       if (IS_ERR_OR_NULL(qos) || !req || freq_qos_value_invalid(value))
->                 return -EINVAL;
->
->         if (WARN(freq_qos_request_active(req),
-> @@ -563,7 +568,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
->   */
->  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
->  {
-> -       if (!req || new_value < 0)
-> +       if (!req || freq_qos_value_invalid(new_value))
->                 return -EINVAL;
->
->         if (WARN(!freq_qos_request_active(req),
+>         /* Domain Parent bits are ignored for now */
 > --
 
 Applied as 6.5-rc material, thanks!
