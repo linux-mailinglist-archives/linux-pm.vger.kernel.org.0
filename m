@@ -2,180 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884CF74F313
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 17:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2832E74F3EE
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 17:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjGKPKy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 11:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S233188AbjGKPnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 11:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231537AbjGKPKv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 11:10:51 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D480C1709
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 08:10:33 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230711151029euoutp01dc80c4ac4e4c30178600b33b9752e969~w2MuowSar0303303033euoutp01V
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 15:10:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230711151029euoutp01dc80c4ac4e4c30178600b33b9752e969~w2MuowSar0303303033euoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1689088229;
-        bh=PR6/oisp6C6D0XMxyINuZwhMGfLjoew2gWfv7sDpXvY=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=aM8UbV4I3GoUpyt6vodDYo4g72CJT+T9ndhpNwgxhG/TUpGU/oBGxFFrGAvgfcExk
-         K+rKiHMKjfKT527KeYUIvyGhzVAY7No+Vx1N04FgzFc9A63YC/ZeO+Kh4izcorbpw3
-         v8cDfqTluAYhANgLq5qSABm8G+LW/u2lH8c7kv44=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230711151029eucas1p2a55cd6bb5a717d5489414afea00c4e47~w2MuQes3H1781617816eucas1p2t;
-        Tue, 11 Jul 2023 15:10:29 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id F1.91.11320.4E07DA46; Tue, 11
-        Jul 2023 16:10:29 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230711151028eucas1p2c290e05e2df325ff16d53fea88ab8877~w2Mt7hyN80061100611eucas1p2K;
-        Tue, 11 Jul 2023 15:10:28 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230711151028eusmtrp19bb25444389ec29dd674e3a370201f05~w2Mt6nYIy0196201962eusmtrp1E;
-        Tue, 11 Jul 2023 15:10:28 +0000 (GMT)
-X-AuditID: cbfec7f4-993ff70000022c38-05-64ad70e41771
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 14.63.10549.4E07DA46; Tue, 11
-        Jul 2023 16:10:28 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230711151028eusmtip1a4ab5c8ae0daf7e045928ff55aa7449b~w2MtSFwzI0116901169eusmtip1K;
-        Tue, 11 Jul 2023 15:10:27 +0000 (GMT)
-Message-ID: <f33bb13a-b4dc-4011-1c59-3454d54c3606@samsung.com>
-Date:   Tue, 11 Jul 2023 17:10:28 +0200
+        with ESMTP id S233446AbjGKPnI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 11:43:08 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A18C10EA;
+        Tue, 11 Jul 2023 08:42:54 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so60339435e9.0;
+        Tue, 11 Jul 2023 08:42:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689090173; x=1691682173;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dYkIVAZXWVX4d2XXeeAGh0C7Fz570/7R4cfKcgzr7xM=;
+        b=T2CpvTIaIbPDKjJ5YVIA4ke79D2vU13ltJkDu3hEYYT38x9IvL0ujvxlw7yFVfesbN
+         U48N4AJ3OUkwGg5ea/5jzux45iFRoWq9o4x5OVFko73IoWlz8M3OCnsfiApLP9OHSzKi
+         sn9uaW7ZoxxyXG0f5Z2B47vhoh3UIVuDPdpo8GZE4jK+rzSrXtAHS6AJLvIVZ5VwXLga
+         /xc1q9dDQT9mB867Wa0DfMbNsDXP9rLUPTdA1GiZRc5691ige8/jyuZEyjkK7GuS682O
+         8VGVv/hbZ+3WH3Br1UafqwtzxnQqrkqKqJt1GRdnw7TWSzZq0xZD882vkKTX/hcfyiQT
+         no0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689090173; x=1691682173;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dYkIVAZXWVX4d2XXeeAGh0C7Fz570/7R4cfKcgzr7xM=;
+        b=C7VLcnm+VFrfpKcGSsiLZrbGvYTul1L7dP10hBscN1n2qUge8X4/OJ2Vlt1eiIqusB
+         MS0q9nyXJBxWNUoFcBNL9goPxYpW065Tgn8qf5E6mEJODuKY6Vu66gLlyV6m0CXYzgL2
+         eplhGu4kNSxOat635PbGsZLU50174TDsXGJEW2VNpOGHNnbgCF4nTjUBfIfuEaeOXWyl
+         LoqYbVUOPweGetouzSoYTZtNVLhl8mh8CfrGK7tilWskqbVseq5141oH1Ecrbu7Pq+uE
+         +u0K+hw7A+oadFub0dF5XH3JbF6j1dQxKJl2G9XBIzCk4YboQLsSfg1j1JIAVB0dt9AE
+         9tzw==
+X-Gm-Message-State: ABy/qLb9R9PB7MBywzVq638xOeRIcWOhab5Ac/YOmIAWJ95gRcUqIWSt
+        3WNqaatDSn2R0ojWo85lS3NGfpH1pAM=
+X-Google-Smtp-Source: APBJJlFW86hBRt0IpFq/pliN6JI4YKtM0YwYa0MQwtzpGnECPTVzremtVJfCW2S2nC8lLTC/Aws1qw==
+X-Received: by 2002:a05:600c:234b:b0:3fc:dd9:91fd with SMTP id 11-20020a05600c234b00b003fc0dd991fdmr7229551wmq.40.1689090172348;
+        Tue, 11 Jul 2023 08:42:52 -0700 (PDT)
+Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id u10-20020a7bcb0a000000b003fb739d27aesm13212223wmj.35.2023.07.11.08.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 08:42:51 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 17:42:49 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 00/10] thermal: tegra: Do not register cooling device
+Message-ID: <ZK14edZUih1kH_sZ@orome>
+References: <20230414125721.1043589-1-thierry.reding@gmail.com>
+ <fa218582-0ac1-ea8e-fcaf-222bdcf2bc6a@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v2 11/18] soc: samsung: Move power-domain driver to the
- genpd dir
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230711142148.751712-1-ulf.hansson@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjmO+d4PFutPqeyNwuFkUFZahFxuidZ7V83IhKshh5M07k21w0i
-        G1ZzXhpqNVfpWpaizkyXlWQXK5cZ3SwLEzUyreUg2yyWabUdK/897/M+z/s+78fHkOIqvxAm
-        WZHBqRTyVCktpBpaPE/nfVBaE6Nd+QTbW9JAs6MFLf5s0+er/mzd+w4/tr3xLM268u4j1vj0
-        FsE+eu2iWbt16yqBbORHAZJ1ddykZfVlh2UvH2r9ZPm2SiRz1YVuoOOEyxK51OS9nCpqxU7h
-        rtLqPFppDdrfoftEZKI7WI8EDOCF8MTyivJiMa5AcFsn0SPhH+xGcNJiI/jChaDu4hfyr8Pm
-        qSD5RjmCtpbecdUQgt6hC/5elQivgE7HIO3FFA6HErOR4PkAaC3u8+0Lxhxcf2vw0yOGCcRb
-        oajVZyWxBDr7Sn3yIJwCN1ostHc+ifsRWH/m+Lw0ng96p943X4CXw2hp07g5DK45z/rSAXYz
-        8DPvhD8fOxaqdcMUjwPBYbeN8zOgrTCX4g3HEZhHegi+MCDIHOhEvGopdD35QXujkng2XG6M
-        4ukYeF10hvLSgKfAG2cAH2IKFDScJnlaBLpjYl49C0z2mn9r7z57QRqQ1DThWUwT7jdNOMf0
-        f68ZUZVIwmnUaUmceoGC2xeplqepNYqkyIT0tDr05z+1jdnd11G5YyiyGREMakbAkNIgkfJu
-        ZaJYlCg/cJBTpe9QaVI5dTOazlBSiShieWuCGCfJM7jdHKfkVH+7BCMIySRkyCCMdVdldw9r
-        N+rnvguZWlPkaY9/EHvnY7ykuLw4dGzRmPHK7dE1wnPy/ARbT56+uyfTMRxRq1hbX6CJbhrr
-        TpmWk6y4ZN7clNXfHzZQeqD6lGu6c/LittyRgdD2L579qPP+JMfM3Oys3I9drU6z/qu1Pc2S
-        P+vbPXt2yZajDWLpobK96l+OwObtSaKY749MgsL0EsHnY8cdjeVZcc/iA1ZqDRkmbfDuQgve
-        8rzWUy1yvxiJitHVUisjHh7psGwwrl6yJ+5Dij26cumpI4O/6JxNazcPldGHtmmV9TZxz2Nx
-        aO3pvjfB19yDmsfGmq7zwzPWn1gXbry0/cKqMM3qIiml3iWfP4dUqeW/AbMMF1C+AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xu7pPCtamGGzfp2HxYN42Nou/k46x
-        W+x9vZXdYtPja6wWl3fNYbP43HuE0WLG+X1MFqeuf2azOL423IHT4/evSYwed67tYfPYvKTe
-        48qJJlaPvi2rGD0+b5ILYIvSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3
-        s0lJzcksSy3St0vQy5i/ppetYK1IxbWOl0wNjAcEuhg5OSQETCS2/FzB3MXIxSEksJRR4u6t
-        y0wQCRmJk9MaWCFsYYk/17rYIIreM0oc2v6HESTBK2AncevVGzYQm0VAVWLeghlMEHFBiZMz
-        n7CA2KICqRK/GnYBDeLgEBYIl5hykh0kzCwgLnHryXywchGBLIkbvY+YQOYzCzxjlFh4czUT
-        xLIJjBJTVx1gBqliEzCU6HrbBbaMU8BW4u/8vVCTzCS6tnYxQtjyEtvfzmGewCg0C8kds5As
-        nIWkZRaSlgWMLKsYRVJLi3PTc4sN9YoTc4tL89L1kvNzNzECI3LbsZ+bdzDOe/VR7xAjEwfj
-        IUYJDmYlEd6Cg6tShHhTEiurUovy44tKc1KLDzGaAgNjIrOUaHI+MCXklcQbmhmYGpqYWRqY
-        WpoZK4nzehZ0JAoJpCeWpGanphakFsH0MXFwSjUwVfsvO5zjO/fc6o+dUVt2VAcJKyz30xJX
-        qeNYvvDj2gPv3jX3uLwMuyHabPK8bM3qyX+W7301m4HrXfL6okr+zaHH3/x8o7VVtVisaO/Z
-        PSHvzi2RVez8ahv69Ub2vOvRfRz5p6SflZ03/KQ+h/FQd/Uv9sC/q6t+Bn9VCpWUdzy7K1tn
-        irjahiqm59nhF5jYn6q+zjs69YLgmxTLlPfPJR/pHftnLLbI9/nLP/b7fRotheIiZZXP7xFY
-        cIr/P7vSG8vX0wo7ZW9G3F8Ye06S92NI/1lX2U6JUyKhP3I2pB2S37pn5gdjD2t+194KthNq
-        uu+O+K6aZvBMKOLxPcfvP/vDr/F8n7vqhu/fi2zp85RYijMSDbWYi4oTATh0F6tRAwAA
-X-CMS-MailID: 20230711151028eucas1p2c290e05e2df325ff16d53fea88ab8877
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230711142243eucas1p24e278e48ee335a68d7c68690fa00306a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230711142243eucas1p24e278e48ee335a68d7c68690fa00306a
-References: <CGME20230711142243eucas1p24e278e48ee335a68d7c68690fa00306a@eucas1p2.samsung.com>
-        <20230711142148.751712-1-ulf.hansson@linaro.org>
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="DlpEOaqtXO5oFliO"
+Content-Disposition: inline
+In-Reply-To: <fa218582-0ac1-ea8e-fcaf-222bdcf2bc6a@linaro.org>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11.07.2023 16:21, Ulf Hansson wrote:
-> To simplify with maintenance let's move the samsung power-domain driver to
-> the new genpd directory. Going forward, patches are intended to be managed
-> through a separate git tree, according to MAINTAINERS.
->
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: <linux-samsung-soc@vger.kernel.org>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
+--DlpEOaqtXO5oFliO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jul 11, 2023 at 10:25:16AM +0200, Daniel Lezcano wrote:
+> Hi Thierry,
+>=20
+> do you have an update for this series?
 
-> ---
->   drivers/genpd/Makefile                                          | 1 +
->   drivers/genpd/samsung/Makefile                                  | 2 ++
->   .../samsung/pm_domains.c => genpd/samsung/exynos-pm-domains.c}  | 0
->   drivers/soc/samsung/Makefile                                    | 1 -
->   4 files changed, 3 insertions(+), 1 deletion(-)
->   create mode 100644 drivers/genpd/samsung/Makefile
->   rename drivers/{soc/samsung/pm_domains.c => genpd/samsung/exynos-pm-domains.c} (100%)
->
-> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-> index c178421e0cbc..1cf0ff26a44f 100644
-> --- a/drivers/genpd/Makefile
-> +++ b/drivers/genpd/Makefile
-> @@ -7,3 +7,4 @@ obj-y					+= mediatek/
->   obj-y					+= qcom/
->   obj-y					+= renesas/
->   obj-y					+= rockchip/
-> +obj-y					+= samsung/
-> diff --git a/drivers/genpd/samsung/Makefile b/drivers/genpd/samsung/Makefile
-> new file mode 100644
-> index 000000000000..397aa5908c1d
-> --- /dev/null
-> +++ b/drivers/genpd/samsung/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_EXYNOS_PM_DOMAINS)		+= exynos-pm-domains.o
-> diff --git a/drivers/soc/samsung/pm_domains.c b/drivers/genpd/samsung/exynos-pm-domains.c
-> similarity index 100%
-> rename from drivers/soc/samsung/pm_domains.c
-> rename to drivers/genpd/samsung/exynos-pm-domains.c
-> diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
-> index d35270fc6b2b..248a33d7754a 100644
-> --- a/drivers/soc/samsung/Makefile
-> +++ b/drivers/soc/samsung/Makefile
-> @@ -10,7 +10,6 @@ obj-$(CONFIG_EXYNOS_PMU)	+= exynos-pmu.o
->   
->   obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
->   					exynos5250-pmu.o exynos5420-pmu.o
-> -obj-$(CONFIG_EXYNOS_PM_DOMAINS) += pm_domains.o
->   obj-$(CONFIG_EXYNOS_REGULATOR_COUPLER) += exynos-regulator-coupler.o
->   
->   obj-$(CONFIG_SAMSUNG_PM_CHECK)	+= s3c-pm-check.o
+Yeah, I've been working on this on and off for a while since I ran into
+some complications with this version. I need to find a block of spare
+time to go over the latest version again and do some testing. Hopefully
+I can get around to that within this week or next.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+Thierry
 
+--DlpEOaqtXO5oFliO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSteHkACgkQ3SOs138+
+s6GELRAAh3ZZvukzF3k/5LWmdv2+B+5P8ow14YghjTcKEGabnDXfWVbculyh2MgD
+5sClWfrFlsx5ohAsOSAtImsnqmOGeXH9pMPukBVYYfNGVRy11r1oX6l1NWRc1EwA
+8fYjseIMPaUqwOLD2Q/i9Ksjc4PtAqeloH+UI6iNZI/Z7SrUgtLRBGdtkNjW3nNj
+9LjuDZtb+pad0iV7Ij4L1F6K6Vkem6/81LADfT+hhb2n6A/Ynk9KlXtYHySqQVAF
+SyOk3dVBo8i8g//kxjOPdiXd4pFF3YKyGMt3t9sQqFQwFD9X639MYxpxmxwSU+Ji
+4JaOxjV99p1meA9OKAKrZO9e6QlmEdaEuiA3T13/8DQ7pp4Nx9NI3DO5iUeJZ6/A
+Hg5qN+tmwcM7To3TVWvsc+WompqJ1HZ4gmJ1sffIKc/7akRV7uqc0UFI8w4fTK8a
+m1lOxmzDctvpgLz+yF18yNvSZhoUvljXarhy6TC16EoYWf1ozt57zXG1kPmPnnDc
++EnTRysa1MXSRUm8OFEvv33PmY6f4SMA0RvDlROxcfXyy698OFm6cMLXMBL48PSi
+2c+YpR8CfAvYXxCqpRSbPBRY+EFDeEVccdjDsUFEx73MItKbq4I77MjNUvg9yXHz
+2BHR2ejRKyLSN55o2bl5SukcJUXgRGdGMiaF3lu0B2HtxhispL8=
+=qpDd
+-----END PGP SIGNATURE-----
+
+--DlpEOaqtXO5oFliO--
