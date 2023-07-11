@@ -2,97 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1A874E831
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 09:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B643174E83E
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 09:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjGKHiP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 03:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52428 "EHLO
+        id S230213AbjGKHmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 03:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjGKHiO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 03:38:14 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A35F133
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 00:38:13 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-98df3dea907so655943366b.3
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 00:38:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689061091; x=1691653091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rx8H9As3YW36H58C24CHOAt5gVbFUaVPwH/qkPeltgA=;
-        b=Otb6Q+H12C1MG49c1/HOyW7wiMJN3PdzI8R2HXi0dC2zkhD+hwgITRq0B3rbrnBlHC
-         aBguDm3mJMekGZR5U2fHR8L9oIy/FrejZFLiprGMiJimOuqgz7o5hxLzrWJ/NEg2TrVx
-         T+UOFANp8SygESr+6KxyAi/j8Jg4TdCKZLvBZ2HmFuF4fcHsYicldL+agjgh8xw9M8D7
-         qtwNsz+Ol/NtMPVER8P4T3FCvcnPW8BDSZlAbA1gLtFrXRUeEuZcqR/nHT04z+rJ7Vjg
-         80RFfX1WC7zdNktLvePWMPfvGQ/dmNTWzNB4nvcI0uAOabloFWZpsUd/RX1iZWAskreD
-         bTaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689061091; x=1691653091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rx8H9As3YW36H58C24CHOAt5gVbFUaVPwH/qkPeltgA=;
-        b=Mny+2NwEWiEOdtS1L3NXFjfGlflC55OzSLwqrNYB/RiVrbLtYKsrLEUmCNvjKQw95I
-         XaQcQ8GPqkJXo8XA65sKG7hGPYN2Ze9REJ2eOn0hMN3eo9Po2W91QNHTbFAmhiLduv4A
-         C/4x43q1ZTTJkR6+ePnzKTmTrcqvEjRKQ1ySJvunH8GiBkqM+vc7F6xrzmppWZFBixwU
-         wMHtl/sY+GkPPX+1liz0eTErssCUapvP9PfONlx8/rQYjo2sx5EcMU3NmsE0ja8YMZwT
-         BYaXHRIuv49cYJqCn22UMeIVcezrUqmskQI7b1/Ex0CFRzJthRoRpo+cRRJPpQuee/LG
-         5ukQ==
-X-Gm-Message-State: ABy/qLZelwEcLDqalS1vTdWK1wTRcTpKDlOrehlOcBDmvZf9ZppvEU5t
-        LT3QdKICq0b5L06uheEbRUenaA==
-X-Google-Smtp-Source: APBJJlHyHjzHC8e0SOfh0h8Lzjgp0m0GgKV0prF8oQ5UrvplNd05w6cHvPGuBAcUiYE9+jsR6bE1Hg==
-X-Received: by 2002:a17:906:f2ca:b0:96f:d345:d0f7 with SMTP id gz10-20020a170906f2ca00b0096fd345d0f7mr12103193ejb.62.1689061091717;
-        Tue, 11 Jul 2023 00:38:11 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id ov4-20020a170906fc0400b00992b50fbbe9sm786810ejb.90.2023.07.11.00.38.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 00:38:11 -0700 (PDT)
-Message-ID: <c3149d29-1ec2-0123-1784-f7da6c43a6c5@linaro.org>
-Date:   Tue, 11 Jul 2023 09:38:09 +0200
+        with ESMTP id S229560AbjGKHmv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 03:42:51 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FCB1A2;
+        Tue, 11 Jul 2023 00:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XtqhhCxrscYtAF+o0y3E3eFRGgnUA7fzd0enBwWepxU=; b=MQgQgqxoay5mhCv5KD37I/giKm
+        MWeK1ixJjh5CZPTJHP841zcuEHc00GrF5vNJQK4pNI+WMP33z7lk0uQpXB+DedAwcQBT1CuAnjFUF
+        Q/mCkvAMNBM9PdshGsOnToHAnYa7L0OagLT56mhJmmhk1NQbbUvumljxCV2rhWHPdySD8LFcczGxm
+        zJaYHUUff3h/73uoamrGoclf36wn0pfv4ea/8/Rv4E0z75LEyOE1LfNjgoXi3mfn1FNmfzjwzDnKa
+        L0lMGc+fk5xhPVu17MSotNCoPMNQ9/yd07Gx9I6I6FlAmRzeLKAd+C4BDOSdlSMnGbhXW9uFMv4My
+        ahaxyyTQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qJ813-002IBT-0B;
+        Tue, 11 Jul 2023 07:42:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0279B30014A;
+        Tue, 11 Jul 2023 09:42:31 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id DCB9B240EBDBA; Tue, 11 Jul 2023 09:42:31 +0200 (CEST)
+Date:   Tue, 11 Jul 2023 09:42:31 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kazuki Hashimoto <kazukih0205@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH 1/2] cpuidle: Don't pass any values to
+ cpuidle_not_available
+Message-ID: <20230711074231.GD3062772@hirez.programming.kicks-ass.net>
+References: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
+ <20230711-cpuidle-v1-1-f391224b3140@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 11/18] soc: samsung: Move power-domain driver to the genpd
- dir
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-samsung-soc@vger.kernel.org
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-12-ulf.hansson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230707140434.723349-12-ulf.hansson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230711-cpuidle-v1-1-f391224b3140@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/07/2023 16:04, Ulf Hansson wrote:
+On Tue, Jul 11, 2023 at 02:54:21PM +0900, Kazuki Hashimoto wrote:
+> There's no reason to pass any values to cpuidle_not_available() as the
+> function works standalone. Since we're planning to use the function in
+> other places, make it so to avoid code duplication.
+> 
+> Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
+> ---
+>  drivers/cpuidle/cpuidle.c | 6 ++++--
+>  include/linux/cpuidle.h   | 6 ++----
+>  kernel/sched/idle.c       | 2 +-
+>  3 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
+> index 737a026ef58a..c9ba51e0fa38 100644
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -49,9 +49,11 @@ void disable_cpuidle(void)
+>  	off = 1;
+>  }
+>  
+> -bool cpuidle_not_available(struct cpuidle_driver *drv,
+> -			   struct cpuidle_device *dev)
+> +bool cpuidle_not_available(void)
+>  {
+> +	struct cpuidle_device *dev = cpuidle_get_device();
+> +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
+> +
+>  	return off || !initialized || !drv || !dev || !dev->enabled;
+>  }
 
-You miss here some commit msg shortly explaining the rationale behind this.
+It appears to me these are a lot of conditions to check *every* time we
+go idle -- especially since they hardly, if ever, change.
 
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: <linux-samsung-soc@vger.kernel.org>
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Let me know if you prefer me to take it via Samsung SoC.
-
-Best regards,
-Krzysztof
-
+Can't cpuidle track all this in a single global variable, preferably as
+a static_key ?
