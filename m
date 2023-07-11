@@ -2,178 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665C174EB26
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 11:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7855874ED2D
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 13:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjGKJwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 05:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S230437AbjGKLsa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 07:48:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231515AbjGKJwk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 05:52:40 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5233A1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 02:52:38 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-51bece5d935so7545416a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 02:52:38 -0700 (PDT)
+        with ESMTP id S229987AbjGKLs3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 07:48:29 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C61810E;
+        Tue, 11 Jul 2023 04:48:28 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51e6113437cso1426930a12.2;
+        Tue, 11 Jul 2023 04:48:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689069157; x=1691661157;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FBsilH/Wv3zx61Y3YrX4aQgolpw0cneKejaXzy4ijj8=;
-        b=M1/Bdaz18qU7zhpTw3JrWIef953afBThaEeBSQLenn8lypb4Busu05MRQ131YVTFrc
-         vSymi9Xzu2lNP6QcJeKXI2PUyWWBgTd0az4L8gguXUb1okX+aWunPfeV8CNJHz3+wXvE
-         N3+CnAA148l2wzBXeEQc1m9L7Lb9r0KAHoUUAq6Nv2TQ6sVRj19CB1Kc2TNvX0bVzUNh
-         ivIp11tU/7ULtKdgj5fHWwrdKYhY4Q9ZOrUBnjlbuZfDA8zyTza+Ivt/r3MyZfuO+uRK
-         LQw1PjNHOSRR87elFjhfmlKw9CIOKvQD6MN6KWGzvGW67k1hWMUXv9TWg/Fd/g1vBGmA
-         U2pg==
+        d=gmail.com; s=20221208; t=1689076107; x=1691668107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Cy1faYBjU+oiNv+mEI1JhoJuRWFnOpAxBy8BKOfb6Y=;
+        b=XOB1ozW4MPG56pfPy9tXjW2N2vo8eLy6XkcbnrRw8ZvkS/T/EvMX6W7lZs7YnrznUo
+         sRzstRISZW4il2kkRjCLo5k5hnI0YCaVACXUQFZXP0ZqcUOvxT3u333zm2A/TuDmAnwz
+         aXg1LLaGRqqFt3GmM9Dl5Zw9bzgn8NJxGECl4cN0OhtnHgj+6QChCxlkepxrviVK/nk8
+         Bh/quw+KAq+2dJTLKazthOpBBgZSXDSqNNEYDalNypOQYrTaJr85kKKEpY2FGyN/t3cS
+         6aWhpxoDyyUQp/YTz3iKsKt/0soTXxyzpl6ENhVNnYuWkJGqt1NhCwhy7GX8wSVrx3h9
+         4jsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689069157; x=1691661157;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FBsilH/Wv3zx61Y3YrX4aQgolpw0cneKejaXzy4ijj8=;
-        b=OLzeRDhSm317QhRN7n6ZIh/xK2ur2OAGwOsMZmYWrsh1AkBu1u5CH15P87O5NEdBet
-         dBnk4uNVUWxMWly42riBBmch+3NRY/1WWN5CB6W+14Mah9CzDpYUU0/zmyjnz2eqpkr+
-         2GdtZw6RRuz5p23YXdmrstt/XXk28WH/AFZroklIjEU0dmoxdZ0CVH8wjeRjHU+X3ScM
-         hlRej8oo2x4ZLlgWW+J1RQaLkU8i30Ah0vtI04BDWkkwmUNEC5nOVP4vV7tyCh8+BuyC
-         p+wk4ae1kCZz/RNJpFo26ptHJ8dQr/1qCDWY+Vn9s1cQOrjMNB+39X0UQhLk+4Ue+j4O
-         PQVw==
-X-Gm-Message-State: ABy/qLZwKebGhR0jz9WwOHp3im1uJ9TEs1VRfQHr9tfIjnkuHMdHUjDp
-        vITPbrbTJZZdPYFLik0OB628ng==
-X-Google-Smtp-Source: APBJJlFBJKAac6woquP4clYjY/LaBb0bcQDlEU9gjKJqKd2vFIvqN9xMWLAmsWBMrN2nm2FyhgBsCA==
-X-Received: by 2002:aa7:cb0c:0:b0:51d:a724:48d1 with SMTP id s12-20020aa7cb0c000000b0051da72448d1mr13930604edt.23.1689069157328;
-        Tue, 11 Jul 2023 02:52:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id l7-20020aa7c3c7000000b0051e229d04fcsm987488edr.70.2023.07.11.02.52.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 02:52:36 -0700 (PDT)
-Message-ID: <37aa7ae8-206e-3a48-b90d-22d49e86c675@linaro.org>
-Date:   Tue, 11 Jul 2023 11:52:35 +0200
+        d=1e100.net; s=20221208; t=1689076107; x=1691668107;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Cy1faYBjU+oiNv+mEI1JhoJuRWFnOpAxBy8BKOfb6Y=;
+        b=WeGRkr/7QCJarv2PxfWLdWTPkTW2elkpxmCoI1v6hfaUl4UhSqnopSDhca2Eb3DvF7
+         iW754LqIzt71QPKUUDQ2bi2bZ57aD6OtmoYS28Sjk+q0JChFB63TiOwBAHlzMg6WnR8Y
+         rXPaSSPv8T3T8XP92Yi/p7bnyETMFHEL3e85idijFPB9lW6vYHK6I5ERWt1LdHj1BLVq
+         mvwyE3rUX5GzW7CYYzQpEYiXsmLOKb95Y8Mv5sFNY2ylQaz0jrCW2FDQ2iO0ASuvSzDl
+         TMCHBnfvE5FH01Kd2ut6h6tb/kb8sG5sAHFgRADMb/E7h2OPv4L9iemeRa9Tjeiea0pt
+         4Z9g==
+X-Gm-Message-State: ABy/qLbxyHHab5vZgO52Dcveaztw6BWuCFiL6DsNVnwKgvceQoejBj7Z
+        OXEvW3QNbPgczjqCZlfLpvQ7Fu1IFU0=
+X-Google-Smtp-Source: APBJJlEhY7DcL5cvXqOY4Rtmkh4B7YIxRwZc/XlJiBs8hYkXyDHXFlR+mPsQFgFtDT5y4dGKYk9pFg==
+X-Received: by 2002:aa7:cd71:0:b0:51d:e486:4348 with SMTP id ca17-20020aa7cd71000000b0051de4864348mr12437544edb.22.1689076106521;
+        Tue, 11 Jul 2023 04:48:26 -0700 (PDT)
+Received: from localhost (2a02-a210-0fc1-bf80-3ee9-f7ff-fec5-cf4c.cable.dynamic.v6.ziggo.nl. [2a02:a210:fc1:bf80:3ee9:f7ff:fec5:cf4c])
+        by smtp.gmail.com with ESMTPSA id s15-20020aa7cb0f000000b0051e3cda6d49sm1121146edt.90.2023.07.11.04.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Jul 2023 04:48:25 -0700 (PDT)
+From:   Azat Khuzhin <a3at.mail@gmail.com>
+To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Azat Khuzhin <a3at.mail@gmail.com>, Christoph Hellwig <hch@lst.de>
+Subject: [PATCH] Fix writing maj:min to /sys/power/resume (fixes hiberation with systemd)
+Date:   Tue, 11 Jul 2023 13:48:12 +0200
+Message-ID: <20230711114821.1273-1-a3at.mail@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/6] dt-bindings: thermal: tsens: Add nvmem cells for
- calibration data
-Content-Language: en-US
-To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_varada@quicinc.com
-References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
- <20230710103735.1375847-2-quic_ipkumar@quicinc.com>
- <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
- <59ea653e-c5da-71cb-eb85-1aa3c72e2089@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <59ea653e-c5da-71cb-eb85-1aa3c72e2089@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/07/2023 11:39, Praveenkumar I wrote:
-> 
-> On 7/11/2023 1:40 AM, Krzysztof Kozlowski wrote:
->> On 10/07/2023 12:37, Praveenkumar I wrote:
->>> Add TSENS V2 calibration nvmem cells for IPQ5332
->>>
->>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>> ---
->>>   .../bindings/thermal/qcom-tsens.yaml          | 26 +++++++++++++++++--
->>>   1 file changed, 24 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> index 27e9e16e6455..8b7863c3989e 100644
->>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
->>> @@ -91,7 +91,7 @@ properties:
->>>       maxItems: 2
->>>   
->>>     nvmem-cells:
->>> -    oneOf:
->>> +    anyOf:
->>>         - minItems: 1
->>>           maxItems: 2
->>>           description:
->>> @@ -106,9 +106,13 @@ properties:
->>>           description: |
->>>             Reference to nvmem cells for the calibration mode, two calibration
->>>             bases and two cells per each sensor, main and backup copies, plus use_backup cell
->>> +      - maxItems: 17
->>> +        description: |
->>> +          V2 of TSENS, reference to nvmem cells for the calibration mode, two calibration
->>> +          bases and one cell per each sensor
->> I think this is already included in one of the previous entries.
->> Otherwise, are you sure that all new devices will have exactly 17 entries?
-> Previous entries does not support TSENS version 2.X.X QFPROM. TSENS V2 
-> QFPROM has mode, base0, base1 and s[0-15]+_offset.
-> Ideally it should be like,
-> - minItems: 4
-> - maxItems: 19
+resume_store() first calls lookup_bdev() and after tries to handle
+maj:min, but it does not reset the error before, hence if you will write
+maj:min you will get ENOENT:
 
-I see it covered:
-minItems: 5
-maxItems: 35
+    # echo 259:2 >| /sys/power/resume
+    bash: echo: write error: No such file or directory
 
-I think 17 is between 5 and 35.
+This also should fix hiberation via systemd, since it uses this way.
 
-> But dt binding check fails in oneOf / anyOf condition. So added the 
-> IPQ5332 properties which is exactly 17.
->>
->>>   
->>>     nvmem-cell-names:
->>> -    oneOf:
->>> +    anyOf:
->>>         - minItems: 1
->>>           items:
->>>             - const: calib
->>> @@ -205,6 +209,24 @@ properties:
->>>             - const: s9_p2_backup
->>>             - const: s10_p1_backup
->>>             - const: s10_p2_backup
->>> +      - items:
->>> +          - const: mode
->>> +          - const: base0
->>> +          - const: base1
->>> +          - const: s0_offset
->>> +          - const: s3_offset
->>> +          - const: s4_offset
->>> +          - const: s5_offset
->>> +          - const: s6_offset
->>> +          - const: s7_offset
->>> +          - const: s8_offset
->>> +          - const: s9_offset
->>> +          - const: s10_offset
->>> +          - const: s11_offset
->>> +          - const: s12_offset
->>> +          - const: s13_offset
->>> +          - const: s14_offset
->>> +          - const: s15_offset
->> Don't introduce new naming style. Existing uses s[0-9]+, without offset
->> suffix. Why this should be different?
-> As I mentioned above, s[0-9]+_p1 / s[0-9]+p2 is for TSENS V1. TSENS V2 
-> QFPROM layout is different from the existing one.
+Fixes: 1e8c813b083c4 ("PM: hibernate: don't use early_lookup_bdev in resume_store")
+Cc: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Azat Khuzhin <a3at.mail@gmail.com>
+---
+ kernel/power/hibernate.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I know, I did not write about p1/p2.
-
-> I would like to add mode, base0, base1 and 16 patterns 
-> '^s[0-15]+_offset$'. But DT binding check is failing in oneOf/ anyOf 
-> condintion.
-
-This does not explain why you need different style - this "offset" suffix.
-
-Best regards,
-Krzysztof
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index f62e89d0d906..e1b4bfa938dd 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -1179,6 +1179,7 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 		unsigned maj, min, offset;
+ 		char *p, dummy;
+ 
++		error = 0;
+ 		if (sscanf(name, "%u:%u%c", &maj, &min, &dummy) == 2 ||
+ 		    sscanf(name, "%u:%u:%u:%c", &maj, &min, &offset,
+ 				&dummy) == 3) {
+-- 
+2.41.0
 
