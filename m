@@ -2,119 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D1C74F843
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 21:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC83C74F84F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 21:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231266AbjGKTJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 15:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S230257AbjGKTRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 15:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjGKTJc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 15:09:32 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E41C170B
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 12:09:31 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3877918a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 12:09:31 -0700 (PDT)
+        with ESMTP id S229655AbjGKTRa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 15:17:30 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06B910C2;
+        Tue, 11 Jul 2023 12:17:29 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3143b88faebso6899562f8f.3;
+        Tue, 11 Jul 2023 12:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689102571; x=1691694571;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=asCZyZ9HFpR6s9Nkpl+Kthe/NXqPSPboBgGQ3MRKnE0=;
-        b=GP0qRMQlKuYPtwB1+ZJJOGc1MITkdfAYBhIq6wbV4fmJfqfhui7DcNPRHCE0L6Ecve
-         vabhnrK9yFHNehxIdKz4JBzdtZjLuiN+OiCZFHgJuTq7n3f2vm64DKOpdIfQieRT662B
-         nCaxW/ADD/obxVS8DqB5EinRnfShJAY1/jU4hd4ULKQARahXYLpSff1NAy2EB6SaOwAq
-         /frPitEks6Cgb9rEuRz1cNSuPWU3tDbQGWCFw7cl/UWgKnYXTzoLrcnn3aZGRxMvx1CD
-         vQJuxz1Wa1OPq+Ufd+pKCqF7dY6EhRk6DX9YS7OA4D9TlwR0a2PwCMIjqcZ5F6xhzTpu
-         u2KQ==
+        d=gmail.com; s=20221208; t=1689103048; x=1691695048;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oSUy+2QLSZkyXGWTlb70qZpMsyDgtjtC0vWQLCNM99s=;
+        b=JLqNrRCLg22oTon1ELMrG+YAPgAmFPmjfnWPjFMVIeJ3NDgkUOZv69eSQBCuq6ehby
+         gfvj+DATBXAFeCluw1FzSu+8OJ9tdVW96/HDAQwk2oxeOXroVr2ZQyppBKXvkDYHOS54
+         RmMZmZgVjI6TSqxy1xq+GMh2D2bHOFHo77vdF6FAi3cQHO+irkzfhFE1qOtQ6RJkI0NU
+         JG6KccpLZe3oZIogXkW0gS5v5sWpeyYHmmJfBCX6/29d/gJetjo8A7ajWpjergc3bbng
+         zmGWEjB3NphzAL2JR2VRV2kJA3jGOB4NKIPYEVAk9qgclY1LB/7DIUOsJR/BnA1PmIwv
+         bANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689102571; x=1691694571;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=asCZyZ9HFpR6s9Nkpl+Kthe/NXqPSPboBgGQ3MRKnE0=;
-        b=GKdGIh7YTefTS64g3ALqFqH3os6DwfplK7HS07CedzRkONq0Hy6fIgXEk+y3NNj7rz
-         L7t9VJrkCJZ8M7XAqQVcU2263ouxNVYtwmoAnooACzKsqyjr3fnLkabWQ3qVjA1xxbHz
-         IU+Q4pI04N2UdIhdys9s1RkkHRgfY4NqEM79JRz1b1uBffRMZ+Cin+jXAN0UecdnOPR1
-         et49d98vbrbqCWk94SI5pJe7BP6HmOFbaeL/jTsg0E8yL6c0rgiiLILu+oT74pph+UTd
-         O5AtlVo5bjV6/e2T1L58lt31gwPNy2a8il4QT0MrOlR2HqXBXNIA8sNLQS7EvbkU4SeJ
-         SGOQ==
-X-Gm-Message-State: ABy/qLb9bbyNhAWj9jj23fiNItzF+CMrItMEfdT4Iwdf4ySgUgZyjLqB
-        tveF9i2OTPE8DtXkdkDZNR1V9A==
-X-Google-Smtp-Source: APBJJlFFN/uCmKXDwgXa7/bSp7SdbX5FkQXK6YS1zfi0i53Au2LVZoADjiz8jJVLALDaxabV0OPcsQ==
-X-Received: by 2002:a17:90a:8c01:b0:25c:18ad:6b82 with SMTP id a1-20020a17090a8c0100b0025c18ad6b82mr23361986pjo.21.1689102570923;
-        Tue, 11 Jul 2023 12:09:30 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id in15-20020a17090b438f00b00262d079720bsm8422664pjb.29.2023.07.11.12.09.29
+        d=1e100.net; s=20221208; t=1689103048; x=1691695048;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oSUy+2QLSZkyXGWTlb70qZpMsyDgtjtC0vWQLCNM99s=;
+        b=SAVNEZuvIwonp8DYvwMkGwXuMWsKHhuuVQVsMuIuFq7Ktya1P02nsMLkhr2NUQ8ZbZ
+         wqPi3ri+4nrJT+O6aTHG75bUQNNdgCOmNgNFJrzB9DHGuQs0e1h/UWAYfTWtB6GBw+FG
+         8IO5+vpKk3C+tiq9V60MakM63Xo1zRR5P3upkWvrcTpB8hIaxnumhPAJF2+pvS1KDHzy
+         N7FtfeETdVmIGlOvDMxfmpGZ1Uig5ZxaKB+9m7IsZjyNBp8qBf3jTaQUphlkYUNZvFJU
+         cowJ7aVyieC8xkRfAuxR6ixY8V84RrfPeUIK2bBS4UCqT7+a9BTGYMaXLqqt/jO97NAY
+         DPGA==
+X-Gm-Message-State: ABy/qLaWG1GhY79YKO3yN9udnpFWIs1ImRzEXL8RNbmRWulYFqOc0YFB
+        clwR5QJh5cWAzU4nyUAmcX4=
+X-Google-Smtp-Source: APBJJlFQ98K9vJ2fSMFaRy4heIAr/uAgzrBzN0S/+2G2XajhEljHNs+9+wAlK3JcuYzXdnAaeJI1Sw==
+X-Received: by 2002:adf:fb01:0:b0:315:96ca:dcab with SMTP id c1-20020adffb01000000b0031596cadcabmr8506330wrr.35.1689103048303;
+        Tue, 11 Jul 2023 12:17:28 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id o6-20020a5d4a86000000b0030e5bd253aasm2974302wrq.39.2023.07.11.12.17.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 12:09:29 -0700 (PDT)
-Message-ID: <64ada8e9.170a0220.69234.ff34@mx.google.com>
-Date:   Tue, 11 Jul 2023 12:09:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 11 Jul 2023 12:17:28 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Yangtao Li <frank.li@vivo.com>
+Cc:     Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/sun8i: remove unneeded comments
+Date:   Tue, 11 Jul 2023 21:17:26 +0200
+Message-ID: <4278554.ejJDZkT8p0@jernej-laptop>
+In-Reply-To: <20230626125515.18830-1-frank.li@vivo.com>
+References: <20230626125515.18830-1-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.5-rc1-15-g61ca8e67fe61
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 5 builds: 0 failed,
- 5 passed (v6.5-rc1-15-g61ca8e67fe61)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 5 builds: 0 failed, 5 passed (v6.5-rc1-15-g61ca8e67fe61)
+Dne ponedeljek, 26. junij 2023 ob 14:55:15 CEST je Yangtao Li napisal(a):
+> It's redundant, let's remove it.
+> 
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-5-rc1-15-g61ca8e67fe61/
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Tree: pm
-Branch: testing
-Git Describe: v6.5-rc1-15-g61ca8e67fe61
-Git Commit: 61ca8e67fe61d3df255cede64416b70502c3232d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 5 unique architectures
+Best regards,
+Jernej
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+> ---
+>  drivers/thermal/sun8i_thermal.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/sun8i_thermal.c
+> b/drivers/thermal/sun8i_thermal.c index 195f3c5d0b38..2c82bc744a24 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -56,8 +56,6 @@
+>  #define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & 
+(x)) << 12)
+>  #define SUN50I_H6_THS_DATA_IRQ_STS(x)		BIT(x)
+> 
+> -/* millidegree celsius */
+> -
+>  struct tsensor {
+>  	struct ths_device		*tmdev;
+>  	struct thermal_zone_device	*tzd;
 
-Detailed per-defconfig build reports:
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----
-For more info write to <info@kernelci.org>
