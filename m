@@ -2,96 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 952B274F5EB
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 18:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEFC74F79A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 19:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232397AbjGKQpC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 12:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S231226AbjGKR4B convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Jul 2023 13:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbjGKQoc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 12:44:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92C21738;
-        Tue, 11 Jul 2023 09:44:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2CE561573;
-        Tue, 11 Jul 2023 16:44:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEE6C433C7;
-        Tue, 11 Jul 2023 16:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689093845;
-        bh=zaf2CZqYHNb3WqOn3g5/TSKwC8Wg0LJ436Q4TrZp4RA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=KGVJGsnCZruy2hUuUpH7ijZulq48NN9mnjYRkxxJjynGm26JcUksScIF1TfoPCX/i
-         r6f3ggg+UqlnfDC8exH6e7PS74/XlFttq9p+kmOU9hYXf1ImUimWTMY0z2+2tj2l3/
-         Jk1VB0hRL9DKcciP3cxJhjOMlekjAJH3P6RJPKHWorzn/EFP5qzmufgEyFzhTE2rL1
-         89rukrhKXE24SakUpiwTCpCEb6JU6Th6JehZathj/7UQ3uIHAEQuV4g4S9FgAcVBuE
-         SqvqShT6i3EAPE7sAEcTYX9r0drCG/0POAcYJRJMJYVtt5bAFNFPay3NAIxZKXTEfX
-         Qpv9VDnwO9Q1w==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-pm@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com
-In-Reply-To: <20230617133620.53129-1-stefan.wahren@i2se.com>
-References: <20230617133620.53129-1-stefan.wahren@i2se.com>
-Subject: Re: (subset) [PATCH V2 0/7] ARM: dts: bcm283x: Improve
- device-trees and bindings
-Message-Id: <168909383906.208679.14234810400324537529.b4-ty@kernel.org>
-Date:   Tue, 11 Jul 2023 22:13:59 +0530
+        with ESMTP id S229963AbjGKR4A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 13:56:00 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB75E6F;
+        Tue, 11 Jul 2023 10:55:59 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-991f9148334so136085466b.1;
+        Tue, 11 Jul 2023 10:55:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689098158; x=1689702958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mgzkTpou4QHWe/2pRU5/Ualjk4fqFrZ7g3GXd8Lq7w0=;
+        b=Aael6yJrk4vFb+kkrEpRltvxqep9zR7L7HZTRlYPA6BzyJXCVbz7BVk3n5FQBUeEkN
+         ibrDCaWhv/f/7MOk2Jwna+8A+msomxduohnKYn0MmIOlY270r5iThwzoHi9WTJVYBD8s
+         M5a8oVeQAMSSq1j5iaHwfgdjnjRVgqGW4vNuxZE3vIMAGDExrjPiqbDXCJE5Q/Zxp7Y6
+         Y+7LJqX7nT/xdo1MQFTyZDrZafkm0QDlUqaLiDHANXFeV0sMf/XdMWS54QneITy98RoY
+         5LxUTRSI2ciU2Zt249lnz9qg2NK4qotqCXx2q4LIGb0kjMuvCEEzwIzOplydYDUGMpvk
+         M8fQ==
+X-Gm-Message-State: ABy/qLbQO2+a5xGDnrtTqHL0w+qsO7Ptlif48w15p92ia5CzX/9WsDjV
+        aZ30L7YR1GkKHnhvPRtANGHL0D4Ru/yBsWfB970=
+X-Google-Smtp-Source: APBJJlGC2MUe+TO2cMb4ulCnph/8unEsh7CuN6Cs5UgUC9dDBiaQdPncuQL/pkLElhudtTiNMSZo/8hHmXqHA27UlI4=
+X-Received: by 2002:a17:906:739a:b0:993:f349:c989 with SMTP id
+ f26-20020a170906739a00b00993f349c989mr9105584ejl.7.1689098157990; Tue, 11 Jul
+ 2023 10:55:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230711-cpuidle-v1-0-f391224b3140@gmail.com> <20230711-cpuidle-v1-2-f391224b3140@gmail.com>
+In-Reply-To: <20230711-cpuidle-v1-2-f391224b3140@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 11 Jul 2023 19:55:46 +0200
+Message-ID: <CAJZ5v0hBJoCHk_hFN2unez+Qi9v_zAFCZHXHa=Rb95pCFRLk6g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: s2idle: Fully prevent the system from entering
+ s2idle when cpuidle isn't supported
+To:     Kazuki Hashimoto <kazukih0205@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Hector Martin <marcan@marcan.st>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Jul 11, 2023 at 7:54 AM Kazuki Hashimoto <kazukih0205@gmail.com> wrote:
+>
+> In order for systems to properly enter s2idle, we need functions both in
+> the idle subsystem (such as call_cpuidle_s2idle()) and the suspend subsystem
+> to be executed.
+>
+> s2idle got blocked in the idle subsystem on platforms without cpuidle after
+> commit ef2b22ac540c ("cpuidle / sleep: Use broadcast timer for states that stop
+> local timer").
 
-On Sat, 17 Jun 2023 15:36:13 +0200, Stefan Wahren wrote:
-> This series fix some dtbs_check warning for the Raspberry Pi boards
-> and convert 4 txt DT bindings for BCM2835 to YAML.
-> 
-> Changes in V2:
-> - drop already applied patches (bcm2835-sdhost, bcm2835-thermal)
-> - drop patch "dmaengine: bcm2835: also support generic dma-channel-mask"
-> - keep brcm,bcm2835-dma for ABI compatibility which also resolve
->   dependency between patch 2 and 3
-> - drop quotes in patch 2 as noted by Rob Herring
-> - add interrupt description as suggested by Rob
-> - add Rob's and Uwe's Reviewed-by
-> 
-> [...]
+What do you mean by "blocked in the idle subsystem"?
 
-Applied, thanks!
+> However, the suspend subsystem doesn't have this, which can cause
+> the suspend subsystem to begin entering s2idle behind the idle subsystem's back,
 
-[2/7] dt-bindings: dma: convert bcm2835-dma bindings to YAML
-      commit: c60d5060b019e8095df7eebd1716747edfbd192a
+What do you mean by this?
 
-Best regards,
--- 
-~Vinod
+> which in turn can cause the system to enter s2idle even though all the functions
+> necessary for s2idle hasn't been executed, breaking the system
+> (e.g. ClOCK_MONOTONIC keeps ticking during suspend even though it's not supposed
+> to).
 
+Why is this a problem?
 
+> Prevent the system from entering s2idle when cpuidle isn't supported in the
+> suspend subsystem as well.
+
+I'm sure that there's a real problem you're trying to address, but I
+cannot help you without understanding what the problem is.
+
+So please explain what exactly is going on, what is expected to happen
+and what happens instead and why this is problematic.
+
+Till then, the patches are not going anywhere.
+
+Thanks!
