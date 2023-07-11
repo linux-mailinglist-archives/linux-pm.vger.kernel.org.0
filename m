@@ -2,63 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB76E74F206
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 16:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F89674F216
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 16:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjGKOXu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 10:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S233578AbjGKOXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 10:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233639AbjGKOWx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 10:22:53 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1361FE7
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:22:25 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b717e9d423so34400461fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:22:25 -0700 (PDT)
+        with ESMTP id S233706AbjGKOXD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 10:23:03 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374B92704
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:22:30 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so9129703e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:22:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689085335; x=1691677335;
+        d=linaro.org; s=google; t=1689085343; x=1691677343;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/xuXo525qhEtOsBMOOeqNnkhkuvPW6MSZV6cV6RV74=;
-        b=ecZdF7I1cB6puCD8OiDeTOgVfmGrb7jQHt8u7hGDt+6wSgOBzFtvtMcJnL0pqmF5tx
-         /MaCsgSo4MNhWN56Xtycp4uqigyprB72n9zGQpw9da4j2vVetSkoO9K6PsOYiwGc8fj1
-         nhcR0S60n6gx7M2gnA0JnF7WAHWHnBxzjl+4GmCgaDGu5/IDtcK8M93GWALyCaolr8ZE
-         cs9VIMS8nwD79e2dgWi9puQcINBwPr58wYZtS5rj+IwTL/7faCUdDBpwmLmKa3x4pDBz
-         iGoj68vRCKJKhOjXcoAGS80oJNThRYdV0GcA2CJksmGwAgnY8GYIjaXRPcsA/5KgrH5k
-         FuAw==
+        bh=iwIBZ05Ys45I978D50ldwhR/Cf6WfL00p93qangrY3Q=;
+        b=Iou84qTwZTWHyUC5ueKdQedZumyQQXVVqADsXy14PIsu47h1UECAkc/MAemCiToZ6n
+         rKEGK5lCL5LD5stpmMGK2sCBV2ZuW/aDPw274rORL1tFEVb7MjlEGt4CmZw9A3mkGcGu
+         DvcDU8Q43Zo+xE7VAHNHNRzaYsm+MIznNQMPhSV8Z5BKMrtHXEipR/tr+7BaJb73fZHN
+         qOZCCqL01iOZCqx97LB1oFQFQ+M+3nL2CW2knHH/eGy6nOTJqmpNJQyF2aZdXi8lj9gG
+         xImxCRawYhLeEqe9PgOFYhuLAW9oRNqQEdORDzp6P9ixb9knA3Dy7AsaIt9C0BpYitsx
+         7ZnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689085335; x=1691677335;
+        d=1e100.net; s=20221208; t=1689085343; x=1691677343;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=z/xuXo525qhEtOsBMOOeqNnkhkuvPW6MSZV6cV6RV74=;
-        b=Y6Lx6Sqle6/LOpGgcW9Jq8OASZ+hl8iNbyoKHhsICmFJxYhYufy4kPLp1UqD+fQbRe
-         SWw1ETjQ8YT+7lTrXoQvVbCU0+18YquAGa7q0deg+nQNqeDvMo53S7ysy8lo4Uk29iOv
-         zAADYOGWICRQcquMNt2JXdTYC0xRPduFmsSLnPOFrVuiyroJlXvE5b0CW3ze+Jj8qhYg
-         82I5uxE+pwlmMcu1vano+2EJhdKMN2wJICe4701/YTrIgZOcRx6MNLemVpw+SOQjt9IA
-         mOI1RA4FY3yAmjnRPELG7NwG3XRKC+78bwMAmqKBvHqocyBeZuJQFtMHfv0kBGSNLHD7
-         yr7w==
-X-Gm-Message-State: ABy/qLYLejU83RY8wJECTLmdO1ExjpZAs0Vtq3em754YrnVTZPP1PNfA
-        tHtFP+j0YOPgg+019v96L+tFzt3ayb5M5Cgk/yU=
-X-Google-Smtp-Source: APBJJlHAzO1ekClENkgJuRc1MMovRYV7zFJoIH7lfgd0ZdS0MSPENbgHnh9IJWigjKrmlVKeQm6hMw==
-X-Received: by 2002:a05:651c:339:b0:2b6:9e82:446 with SMTP id b25-20020a05651c033900b002b69e820446mr7357921ljp.0.1689085335391;
-        Tue, 11 Jul 2023 07:22:15 -0700 (PDT)
+        bh=iwIBZ05Ys45I978D50ldwhR/Cf6WfL00p93qangrY3Q=;
+        b=d0IEZ2bL4ual1q9jF3baENAcdUTgBoOkApMJAc6++efIUT9o6OSVMv0SzqR1HCNWFx
+         z7sHVn84nEW/Tzqr2Hwp3IRlp1pCjvKEe7i2UTdpQBBktK6V71u0ITeYImtfCnzj9LJd
+         u2ivhZI17kAE5xQSZQL1Xf0ZQtbSadD5I8utIJD9Mr5EKWMDzZ5vd3bWBzoJIPhlgWKK
+         5gIPO/gahr30F/CxA4KMKRxTa8RvAdLslu2nvL1QLzgVn4/TXHRvomM7M1LTi3sdzlzv
+         fbmagMHaTXVGjAO2gQ2D5DEjcZEPbiJWpxAy5uiQCmD6Uewf13iPqT3PbnNPnqR1N0pn
+         +nbg==
+X-Gm-Message-State: ABy/qLarpGHHlByvuEB3xZHVe6xtnQ2Gbm5yBfz/aV56BYOk6NMO0qMP
+        ViiuggOePT1OZn6aOGX2u6k0Eg==
+X-Google-Smtp-Source: APBJJlGEMYUOHgBlD4JB4xGY34paEiDQr3XVU9HTTGAP9qFTytewgj5cPGx3DY7erboJDQ9LoHVwog==
+X-Received: by 2002:ac2:5f01:0:b0:4fa:6d62:9219 with SMTP id 1-20020ac25f01000000b004fa6d629219mr11328781lfq.62.1689085343456;
+        Tue, 11 Jul 2023 07:22:23 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id b3-20020a2e8943000000b002b6db0ed72fsm483073ljk.48.2023.07.11.07.22.14
+        by smtp.gmail.com with ESMTPSA id w12-20020ac2598c000000b004fbbf5db0a5sm339232lfn.100.2023.07.11.07.22.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 07:22:14 -0700 (PDT)
+        Tue, 11 Jul 2023 07:22:23 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>
-Subject: [PATCH v2 14/18] soc: tegra: Move powergate-bpmp driver to the genpd dir
-Date:   Tue, 11 Jul 2023 16:22:12 +0200
-Message-Id: <20230711142212.751774-1-ulf.hansson@linaro.org>
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH v2 15/18] soc: ti: Mover power-domain drivers to the genpd dir
+Date:   Tue, 11 Jul 2023 16:22:20 +0200
+Message-Id: <20230711142220.751795-1-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -72,61 +72,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To simplify with maintenance let's move the powergate-bpmp driver to the
+To simplify with maintenance let's move the ti power-domain drivers to the
 new genpd directory. Going forward, patches are intended to be managed
 through a separate git tree, according to MAINTAINERS.
 
-Note that, we leave the pmc driver in the soc directory for now, as it
-looks like it may need some re-structuring before it's ready to be moved.
-
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Cc: Mikko Perttunen <mperttunen@nvidia.com>
-Cc: <linux-tegra@vger.kernel.org>
-Acked-by: Thierry Reding <treding@nvidia.com>
+Cc: Nishanth Menon <nm@ti.com>
+Cc: Santosh Shilimkar <ssantosh@kernel.org>
+Cc: Tero Kristo <kristo@kernel.org>
+Cc: Tony Lindgren <tony@atomide.com>
+Reviewed-by: Nishanth Menon <nm@ti.com>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
+ MAINTAINERS                                   | 3 ++-
  drivers/genpd/Makefile                        | 1 +
- drivers/genpd/tegra/Makefile                  | 2 ++
- drivers/{soc => genpd}/tegra/powergate-bpmp.c | 0
- drivers/soc/tegra/Makefile                    | 1 -
- 4 files changed, 3 insertions(+), 1 deletion(-)
- create mode 100644 drivers/genpd/tegra/Makefile
- rename drivers/{soc => genpd}/tegra/powergate-bpmp.c (100%)
+ drivers/genpd/ti/Makefile                     | 3 +++
+ drivers/{soc => genpd}/ti/omap_prm.c          | 0
+ drivers/{soc => genpd}/ti/ti_sci_pm_domains.c | 0
+ drivers/soc/ti/Makefile                       | 2 --
+ 6 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/genpd/ti/Makefile
+ rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
+ rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 4be5dc3fd6dd..633bc6767cd5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21107,7 +21107,7 @@ F:	drivers/irqchip/irq-ti-sci-inta.c
+ F:	drivers/irqchip/irq-ti-sci-intr.c
+ F:	drivers/reset/reset-ti-sci.c
+ F:	drivers/soc/ti/ti_sci_inta_msi.c
+-F:	drivers/soc/ti/ti_sci_pm_domains.c
++F:	drivers/genpd/ti/ti_sci_pm_domains.c
+ F:	include/dt-bindings/soc/ti,sci_pm_domain.h
+ F:	include/linux/soc/ti/ti_sci_inta_msi.h
+ F:	include/linux/soc/ti/ti_sci_protocol.h
+@@ -21341,6 +21341,7 @@ L:	linux-kernel@vger.kernel.org
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
++F:	drivers/genpd/ti/omap_prm.c
+ F:	drivers/soc/ti/*
+ 
+ TI LM49xxx FAMILY ASoC CODEC DRIVERS
 diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index 76f2a411e6bc..e6f34d82e6a8 100644
+index e6f34d82e6a8..193892189f0d 100644
 --- a/drivers/genpd/Makefile
 +++ b/drivers/genpd/Makefile
-@@ -10,3 +10,4 @@ obj-y					+= rockchip/
- obj-y					+= samsung/
+@@ -11,3 +11,4 @@ obj-y					+= samsung/
  obj-y					+= starfive/
  obj-y					+= sunxi/
-+obj-y					+= tegra/
-diff --git a/drivers/genpd/tegra/Makefile b/drivers/genpd/tegra/Makefile
+ obj-y					+= tegra/
++obj-y					+= ti/
+diff --git a/drivers/genpd/ti/Makefile b/drivers/genpd/ti/Makefile
 new file mode 100644
-index 000000000000..ec8acfd2c77c
+index 000000000000..69580afbb436
 --- /dev/null
-+++ b/drivers/genpd/tegra/Makefile
-@@ -0,0 +1,2 @@
++++ b/drivers/genpd/ti/Makefile
+@@ -0,0 +1,3 @@
 +# SPDX-License-Identifier: GPL-2.0
-+obj-$(CONFIG_SOC_TEGRA_POWERGATE_BPMP)	+= powergate-bpmp.o
-diff --git a/drivers/soc/tegra/powergate-bpmp.c b/drivers/genpd/tegra/powergate-bpmp.c
++obj-$(CONFIG_ARCH_OMAP2PLUS)		+= omap_prm.o
++obj-$(CONFIG_TI_SCI_PM_DOMAINS)		+= ti_sci_pm_domains.o
+diff --git a/drivers/soc/ti/omap_prm.c b/drivers/genpd/ti/omap_prm.c
 similarity index 100%
-rename from drivers/soc/tegra/powergate-bpmp.c
-rename to drivers/genpd/tegra/powergate-bpmp.c
-diff --git a/drivers/soc/tegra/Makefile b/drivers/soc/tegra/Makefile
-index d722f512dc9d..01059619e764 100644
---- a/drivers/soc/tegra/Makefile
-+++ b/drivers/soc/tegra/Makefile
-@@ -5,7 +5,6 @@ obj-y += cbb/
- obj-y += common.o
- obj-$(CONFIG_SOC_TEGRA_FLOWCTRL) += flowctrl.o
- obj-$(CONFIG_SOC_TEGRA_PMC) += pmc.o
--obj-$(CONFIG_SOC_TEGRA_POWERGATE_BPMP) += powergate-bpmp.o
- obj-$(CONFIG_SOC_TEGRA20_VOLTAGE_COUPLER) += regulators-tegra20.o
- obj-$(CONFIG_SOC_TEGRA30_VOLTAGE_COUPLER) += regulators-tegra30.o
- obj-$(CONFIG_ARCH_TEGRA_186_SOC) += ari-tegra186.o
+rename from drivers/soc/ti/omap_prm.c
+rename to drivers/genpd/ti/omap_prm.c
+diff --git a/drivers/soc/ti/ti_sci_pm_domains.c b/drivers/genpd/ti/ti_sci_pm_domains.c
+similarity index 100%
+rename from drivers/soc/ti/ti_sci_pm_domains.c
+rename to drivers/genpd/ti/ti_sci_pm_domains.c
+diff --git a/drivers/soc/ti/Makefile b/drivers/soc/ti/Makefile
+index cc3c972fad2e..cb800a745e66 100644
+--- a/drivers/soc/ti/Makefile
++++ b/drivers/soc/ti/Makefile
+@@ -6,9 +6,7 @@ obj-$(CONFIG_KEYSTONE_NAVIGATOR_QMSS)	+= knav_qmss.o
+ knav_qmss-y := knav_qmss_queue.o knav_qmss_acc.o
+ obj-$(CONFIG_KEYSTONE_NAVIGATOR_DMA)	+= knav_dma.o
+ obj-$(CONFIG_AMX3_PM)			+= pm33xx.o
+-obj-$(CONFIG_ARCH_OMAP2PLUS)		+= omap_prm.o
+ obj-$(CONFIG_WKUP_M3_IPC)		+= wkup_m3_ipc.o
+-obj-$(CONFIG_TI_SCI_PM_DOMAINS)		+= ti_sci_pm_domains.o
+ obj-$(CONFIG_TI_SCI_INTA_MSI_DOMAIN)	+= ti_sci_inta_msi.o
+ obj-$(CONFIG_TI_K3_RINGACC)		+= k3-ringacc.o
+ obj-$(CONFIG_TI_K3_SOCINFO)		+= k3-socinfo.o
 -- 
 2.34.1
 
