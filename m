@@ -2,171 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC1974F79D
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 19:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DB5B74F7A5
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 19:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjGKR5e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 13:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52404 "EHLO
+        id S232126AbjGKR6Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 13:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbjGKR5e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 13:57:34 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2DF10EF;
-        Tue, 11 Jul 2023 10:57:31 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbf7fbe722so68332425e9.3;
-        Tue, 11 Jul 2023 10:57:31 -0700 (PDT)
+        with ESMTP id S232049AbjGKR6T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 13:58:19 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162D310D2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 10:58:18 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbdfda88f4so61585175e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 10:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689098250; x=1691690250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GIFkoFyB9SW01SkRjiPF7cZKlQPCkHMlbvXQ3wgbocE=;
-        b=PwU/eI3gWiMbv8rCV0Uqye+GFPG76AhQmwZ2FnpaQwJ9y7M4sV6dtyY3iqO4/x+lwu
-         ypWOQfiykvDHKN0jp9jwIoKnGcpvU+u03UdwFNoX1pyFBHTSKCg7RVmmpQz8OOe2Grdb
-         fjIpGPyF199rb/ohsmNUCNFbcUlVv61jzvHMSZHsGGqNCqn9BZfH8Bh5NOmaI3hbzdzl
-         6Phl2rkqt1NxmpHW4FoEt0Q+1O9jrYeR3jDS+S6wpoAr+oicD12M53elgOux1EMVOOnq
-         pWkxTr+/z8WB16hnrNjDu/o2FPu6cC++NZLpoQdKcmzih8yHr/iqaW0xkcEg4TvGEJ2o
-         Jeqw==
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689098296; x=1691690296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OD7Un52lM1nQCq9xqwKkXllli+tL3PRiZw04TrZHK0I=;
+        b=fEi+nNDxTAXsLwgekHmMgnk/oFoDgCszQlDAfzbCbZZK61xqf2AbTYQvzi1ffmah/C
+         EI8nSl/4i4l4XGE9RNS9rr/eLCyGlD6HUEaDZOad4VwLGIy7JMy3hpHuQLqwLjQtID5X
+         FHR2r/oP5KbzQf8W7gZLDRJS0UKSRcd5sbDcCMmQbsDREww08S+EcWcAyNCLIliw0N+i
+         gGbTzQ5EVM3uPTyhAfJo2tBGNO/Ro50yPAydaethQkEer/RLnyVBkVEOWKo/cheNj2Tz
+         Jm9RT4mMy2tVjUbTyJtQtBXaQuD6KBwh35ryydzXbfPpOHEqJJXhXJkptlbh6610bpFm
+         oJtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689098250; x=1691690250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GIFkoFyB9SW01SkRjiPF7cZKlQPCkHMlbvXQ3wgbocE=;
-        b=SkiQiOWOkvTkRmThybQpqlqNo7eza+hfglF3z/WfxhwxF7IbwdJ+7DVkLrj8HLxUt6
-         NyXsn+2rw2A6S5nzv16/LskxD1VEVHGFSDmUPQkHHC+aP+zlmIp7MS3LrRWkdk3p6duq
-         QU8uaV7K+Qp61yKcFnRjInpKtFw2G5LvPrUJXa1EZQt5YNN25AxWelQBphzETvodhUV8
-         FgQopCkd921YaoVH/5CmrPDsLTVa4/5aISzzZLWN2foLDBCTQNfqlh/ZJcQiArMTXKzM
-         f5ODnhIevBFEuGGF/47ncqIRZ21YGt1wgKTkzZFJ+dbQOCLhjYB5Sr5Yk/xtS6WvIZCF
-         +JOQ==
-X-Gm-Message-State: ABy/qLbXOQ/+X6AStsCgMFbo1VzCZ9H3ZajgI7/1/mmZNKYydRxWfnZf
-        humQ03oc1N1FeGoa5JSIawI=
-X-Google-Smtp-Source: APBJJlHAMpKa+EZaUNoo4wd5oPaMTWpVHMeokblQ7Fn42upmiGHcDty8+Z2Gl9UlIys9DMRnWeJPoQ==
-X-Received: by 2002:a1c:7714:0:b0:3fa:aeac:e96c with SMTP id t20-20020a1c7714000000b003faaeace96cmr14348052wmi.9.1689098250022;
-        Tue, 11 Jul 2023 10:57:30 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id o5-20020a1c7505000000b003fbd9e390e1sm13591421wmc.47.2023.07.11.10.57.28
+        d=1e100.net; s=20221208; t=1689098296; x=1691690296;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OD7Un52lM1nQCq9xqwKkXllli+tL3PRiZw04TrZHK0I=;
+        b=B8qLn+KLYnKxCBpC3hWXAPN097ItFukVPKovm+C9f9/I1rKHrirmhNapPVMs78uz7A
+         +SVs4XEL38a0/9qEl8JT722NVS4+LjWZQtGXc90/Rm+/Hp1vUZzwznPv2ZWeNdesYTMF
+         HQPbZcQblCN8KAOuAX9x80YxSrJiGSFMWNaPn3Drz+qYBEykNirOWqSWwk57notF9nAK
+         AnFEqd3/MTvcAYU/w1iDE90xqSWTuj+FfLu0F57F+NvNrdGvRk4enlWeaIIwAw9fidwN
+         yszj9u7tFgA+SU35khVil4U7ijHnR0vqcLw1SvL2GpBXclzS1Z2rdoYnwRJDfHtbULVS
+         Ch/w==
+X-Gm-Message-State: ABy/qLYVROo9uZf6W2SYRwuEWLFu7mSFT1Hf9CsJ7E+M681XtLIGCD2u
+        0so8kLCVwrO+a6Xm7v491SmToA==
+X-Google-Smtp-Source: APBJJlEbj13xi6YmgAau9Qx0g364idTDfv8C9e/JLyeOs5Hn6W2evY+sN29+F+a0fXbv5uBiofW9gA==
+X-Received: by 2002:adf:f590:0:b0:314:149a:4f28 with SMTP id f16-20020adff590000000b00314149a4f28mr11383680wro.23.1689098296506;
+        Tue, 11 Jul 2023 10:58:16 -0700 (PDT)
+Received: from airbuntu ([104.132.45.107])
+        by smtp.gmail.com with ESMTPSA id y18-20020adffa52000000b00313f031876esm2850524wrr.43.2023.07.11.10.58.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 10:57:29 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Yangtao Li <frank.li@vivo.com>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 02/21] thermal/drivers/sun8i: convert to use
- devm_request*_irq_probe()
-Date:   Tue, 11 Jul 2023 19:57:26 +0200
-Message-ID: <2687714.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <20230710095926.15614-2-frank.li@vivo.com>
-References: <20230710095926.15614-1-frank.li@vivo.com>
- <20230710095926.15614-2-frank.li@vivo.com>
+        Tue, 11 Jul 2023 10:58:15 -0700 (PDT)
+Date:   Tue, 11 Jul 2023 18:58:14 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
+Message-ID: <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+ <20230105145159.1089531-3-kajetan.puchalski@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230105145159.1089531-3-kajetan.puchalski@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dne ponedeljek, 10. julij 2023 ob 11:59:06 CEST je Yangtao Li napisal(a):
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
->=20
-> And tglx point out that:
->=20
->   If we actually look at the call sites of
->   devm_request_threaded_irq() then the vast majority of them print more or
->   less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
->=20
->      519 messages total (there are probably more)
->=20
->      352 unique messages
->=20
->      323 unique messages after lower casing
->=20
->          Those 323 are mostly just variants of the same patterns with
->          slight modifications in formatting and information provided.
->=20
->      186 of these messages do not deliver any useful information,
->          e.g. "no irq", "
->=20
->      The most useful one of all is: "could request wakeup irq: %d"
->=20
->   So there is certainly an argument to be made that this particular
->   function should print a well formatted and informative error message.
->=20
->   It's not a general allocator like kmalloc(). It's specialized and in the
->   vast majority of cases failing to request the interrupt causes the
->   device probe to fail. So having proper and consistent information why
->   the device cannot be used _is_ useful.
->=20
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
->=20
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
->=20
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-K=F6nig" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
+Hi Kajetan
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+On 01/05/23 14:51, Kajetan Puchalski wrote:
 
-Best regards,
-Jernej
+[...]
 
->  drivers/thermal/sun8i_thermal.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_ther=
-mal.c
-> index 195f3c5d0b38..a952804ff993 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -512,9 +512,9 @@ static int sun8i_ths_probe(struct platform_device *pd=
-ev)
->  	 * registered yet, we deffer the registration of the interrupt to
->  	 * the end.
->  	 */
-> -	ret =3D devm_request_threaded_irq(dev, irq, NULL,
-> -					sun8i_irq_thread,
-> -					IRQF_ONESHOT, "ths", tmdev);
-> +	ret =3D devm_request_threaded_irq_probe(dev, irq, NULL,
-> +					      sun8i_irq_thread,
-> +					      IRQF_ONESHOT, "ths", tmdev, NULL);
->  	if (ret)
->  		return ret;
-> =20
->=20
+> @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+>  			     struct cpuidle_device *dev)
+>  {
+>  	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+> +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
+>  	int i;
+>  
+>  	memset(cpu_data, 0, sizeof(*cpu_data));
+> +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
+
+Given that utilization is invariant, why do we set the threshold based on
+cpu capacity?
+
+I'm not sure if this is a problem, but on little cores this threshold would be
+too low. Given that util is invariant - I wondered if we need to have a single
+threshold for all type of CPUs instead. Have you tried something like that
+while developing the patch?
 
 
+Thanks
 
-
+--
+Qais Yousef
