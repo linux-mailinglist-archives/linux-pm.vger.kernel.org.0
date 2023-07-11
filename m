@@ -2,121 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB1B74F81C
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D1C74F843
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 21:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjGKSsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 14:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
+        id S231266AbjGKTJd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 15:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGKSsa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:48:30 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1591BB;
-        Tue, 11 Jul 2023 11:48:29 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b5d57d7db9so5044344a34.3;
-        Tue, 11 Jul 2023 11:48:29 -0700 (PDT)
+        with ESMTP id S229770AbjGKTJc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 15:09:32 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E41C170B
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 12:09:31 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52cb8e5e9f5so3877918a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 12:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689101308; x=1691693308;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gu03/SCtVVcBDsZ2+gj/YtwCxilJE8tJksxSSr0pLio=;
-        b=NWpaJocUhmsi0NHcxdC+xRoeqhWS61QuWM7DapD7Tfi7ZDS6ZuhkIMvrW1x/Xopa55
-         rNkvuKfd7qQS01YnHgf4aWCgSefp5oZcMLnmlXiISonBProKGxgzQitPQYdkJpz/XYWi
-         eahI5jb0+VY7/pMwLJNoGp41rX1rzwKjbDfVCyTM7HJ0mBHha3G5uTcVRE5QhRm54UKb
-         hOH4tbXhP6PvOEYLjUdKYkC4fUfsUj/KdjJ8m+eyOLrjbAn766IGD7Sztn38atZ/jiF/
-         rCCGougGYodzqMYhRSuCVQozWM8vAN+voXpmNlGItaqgwPdPcjE0Jj15SnvzdG0KEmjp
-         mAxQ==
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689102571; x=1691694571;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=asCZyZ9HFpR6s9Nkpl+Kthe/NXqPSPboBgGQ3MRKnE0=;
+        b=GP0qRMQlKuYPtwB1+ZJJOGc1MITkdfAYBhIq6wbV4fmJfqfhui7DcNPRHCE0L6Ecve
+         vabhnrK9yFHNehxIdKz4JBzdtZjLuiN+OiCZFHgJuTq7n3f2vm64DKOpdIfQieRT662B
+         nCaxW/ADD/obxVS8DqB5EinRnfShJAY1/jU4hd4ULKQARahXYLpSff1NAy2EB6SaOwAq
+         /frPitEks6Cgb9rEuRz1cNSuPWU3tDbQGWCFw7cl/UWgKnYXTzoLrcnn3aZGRxMvx1CD
+         vQJuxz1Wa1OPq+Ufd+pKCqF7dY6EhRk6DX9YS7OA4D9TlwR0a2PwCMIjqcZ5F6xhzTpu
+         u2KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689101308; x=1691693308;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gu03/SCtVVcBDsZ2+gj/YtwCxilJE8tJksxSSr0pLio=;
-        b=L8sXGjw387R0PVrKjdMQNUAPRvq3R5MFjkz7I/6JhF8SpJi3SaT8ruzITNW8sD7bDV
-         4+BcBEWw0J9jca7mTHLVISRrdaTVW8RfEcKHwAmik5tE0NxAtxjh10ibzZIhd9TX/4Yv
-         4HzYocBPDCCOSx2CzlRbtiL6wnbDVxteK0iOtCMRBnfV1Wfvbpw5TAHiccYeNHfxfJR+
-         hNc0lG3RRgFw3nEHBB0R6dxsx+6159KjFoRGs26237xxh9PJGndSbXjcGS2c9N+CcfXT
-         pxiDJkAeT0keCavXr5iZTqivlWErLwawHMeQP1cI6UtHc9c82YMuh2kN+ccn9qSli7sU
-         8urg==
-X-Gm-Message-State: ABy/qLa3PNpB50tPaAKY3zCCFvYVptu0I73g4Ncdq/yYp5zq7RtHFTAV
-        S0chGIg4Mt3N8On/o5hegzU=
-X-Google-Smtp-Source: APBJJlH7f99gu6ixZlphLL9S+yFCej1SPbG1Q/Md/m4FfKJGPCCz7/pZB4oRbW7KN1xkOCm+grPv4w==
-X-Received: by 2002:a05:6358:7f05:b0:135:57d0:d170 with SMTP id p5-20020a0563587f0500b0013557d0d170mr6811803rwn.11.1689101307873;
-        Tue, 11 Jul 2023 11:48:27 -0700 (PDT)
-Received: from j293.lan ([2400:4051:ea3:5910:5676:1078:8b85:c18f])
-        by smtp.gmail.com with ESMTPSA id l6-20020a637006000000b0055b07fcb6ddsm1937688pgc.72.2023.07.11.11.48.24
+        d=1e100.net; s=20221208; t=1689102571; x=1691694571;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=asCZyZ9HFpR6s9Nkpl+Kthe/NXqPSPboBgGQ3MRKnE0=;
+        b=GKdGIh7YTefTS64g3ALqFqH3os6DwfplK7HS07CedzRkONq0Hy6fIgXEk+y3NNj7rz
+         L7t9VJrkCJZ8M7XAqQVcU2263ouxNVYtwmoAnooACzKsqyjr3fnLkabWQ3qVjA1xxbHz
+         IU+Q4pI04N2UdIhdys9s1RkkHRgfY4NqEM79JRz1b1uBffRMZ+Cin+jXAN0UecdnOPR1
+         et49d98vbrbqCWk94SI5pJe7BP6HmOFbaeL/jTsg0E8yL6c0rgiiLILu+oT74pph+UTd
+         O5AtlVo5bjV6/e2T1L58lt31gwPNy2a8il4QT0MrOlR2HqXBXNIA8sNLQS7EvbkU4SeJ
+         SGOQ==
+X-Gm-Message-State: ABy/qLb9bbyNhAWj9jj23fiNItzF+CMrItMEfdT4Iwdf4ySgUgZyjLqB
+        tveF9i2OTPE8DtXkdkDZNR1V9A==
+X-Google-Smtp-Source: APBJJlFFN/uCmKXDwgXa7/bSp7SdbX5FkQXK6YS1zfi0i53Au2LVZoADjiz8jJVLALDaxabV0OPcsQ==
+X-Received: by 2002:a17:90a:8c01:b0:25c:18ad:6b82 with SMTP id a1-20020a17090a8c0100b0025c18ad6b82mr23361986pjo.21.1689102570923;
+        Tue, 11 Jul 2023 12:09:30 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id in15-20020a17090b438f00b00262d079720bsm8422664pjb.29.2023.07.11.12.09.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 11:48:27 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 03:48:22 +0900
-From:   Kazuki Hashimoto <kazukih0205@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Hector Martin <marcan@marcan.st>,
-        Kazuki Hashimoto <kazukih0205@gmail.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] cpuidle: Don't pass any values to
- cpuidle_not_available
-Message-ID: <f3nt5ve3derp2kmbe5zcj3kvtozcrhsvbduxtn5yj5yqnfvztb@v2nm4zuvyzhq>
-References: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
- <20230711-cpuidle-v1-1-f391224b3140@gmail.com>
- <20230711074231.GD3062772@hirez.programming.kicks-ass.net>
+        Tue, 11 Jul 2023 12:09:29 -0700 (PDT)
+Message-ID: <64ada8e9.170a0220.69234.ff34@mx.google.com>
+Date:   Tue, 11 Jul 2023 12:09:29 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711074231.GD3062772@hirez.programming.kicks-ass.net>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.5-rc1-15-g61ca8e67fe61
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: testing
+Subject: pm/testing build: 5 builds: 0 failed,
+ 5 passed (v6.5-rc1-15-g61ca8e67fe61)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-on oue, Jul 11, 2023 at 09:42:31AM +0200, Peter Zijlstra wrote:
-> On Tue, Jul 11, 2023 at 02:54:21PM +0900, Kazuki Hashimoto wrote:
-> > There's no reason to pass any values to cpuidle_not_available() as the
-> > function works standalone. Since we're planning to use the function in
-> > other places, make it so to avoid code duplication.
-> > 
-> > Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
-> > ---
-> >  drivers/cpuidle/cpuidle.c | 6 ++++--
-> >  include/linux/cpuidle.h   | 6 ++----
-> >  kernel/sched/idle.c       | 2 +-
-> >  3 files changed, 7 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> > index 737a026ef58a..c9ba51e0fa38 100644
-> > --- a/drivers/cpuidle/cpuidle.c
-> > +++ b/drivers/cpuidle/cpuidle.c
-> > @@ -49,9 +49,11 @@ void disable_cpuidle(void)
-> >  	off = 1;
-> >  }
-> >  
-> > -bool cpuidle_not_available(struct cpuidle_driver *drv,
-> > -			   struct cpuidle_device *dev)
-> > +bool cpuidle_not_available(void)
-> >  {
-> > +	struct cpuidle_device *dev = cpuidle_get_device();
-> > +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-> > +
-> >  	return off || !initialized || !drv || !dev || !dev->enabled;
-> >  }
-> 
-> It appears to me these are a lot of conditions to check *every* time we
-> go idle -- especially since they hardly, if ever, change.
-> 
-> Can't cpuidle track all this in a single global variable, preferably as
-> a static_key ?
-I don't think so? I'll drop this one though since it adds unnecesary
-overhead.
+pm/testing build: 5 builds: 0 failed, 5 passed (v6.5-rc1-15-g61ca8e67fe61)
 
-Thanks,
-Kazuki
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+5-rc1-15-g61ca8e67fe61/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.5-rc1-15-g61ca8e67fe61
+Git Commit: 61ca8e67fe61d3df255cede64416b70502c3232d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 5 unique architectures
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---
+For more info write to <info@kernelci.org>
