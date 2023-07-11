@@ -2,128 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE9274F7C9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D990974F7D2
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 20:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbjGKSJq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 14:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
+        id S229843AbjGKSLa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 11 Jul 2023 14:11:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjGKSJn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:09:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A39170A;
-        Tue, 11 Jul 2023 11:09:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A917615B8;
-        Tue, 11 Jul 2023 18:09:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD92DC433C7;
-        Tue, 11 Jul 2023 18:09:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689098981;
-        bh=+mRQnnvwI4SKREDWdwihTC8LToebwOozVYnFhR8we8s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eR+CLGC2mBuk1ME5FLTSieByI5+XU4XE7zQBUE2MzOeTdPlzR9H+EkIs/NST0rH8/
-         vqb9qHOj+StFwxH63sE4bhPvpk8Ba8eR6x0xBuZyJSqZYUHZoilSH22sRX/F3k6Sc+
-         A/HtZojNZXY8JmCh+q+1rUqaNOan/MamOTBxu45zU87LLxtn77SZGFQwPhaHh9p+bC
-         DoueZd7+CxE7pjd3mna9ZnwUDni8HB2TPeOYsmQmbptr+FhdEqWnxr8nAgS7bE6Imq
-         RhSe4buFUX64+QaHgQmbZa7Yy6CTjZhppsBw4k7ANlJj/yROpNgamx2WlrWJ2MPV8S
-         KdGMLYNlV8cOg==
-Date:   Tue, 11 Jul 2023 19:09:36 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- SM8250 bwmon instances
-Message-ID: <20230711-bodacious-royal-1852a5716807@spud>
-References: <20230711-topic-sm638250_bwmon-v1-0-bd4bb96b0673@linaro.org>
- <20230711-topic-sm638250_bwmon-v1-1-bd4bb96b0673@linaro.org>
+        with ESMTP id S230308AbjGKSL1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 14:11:27 -0400
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C59510C4;
+        Tue, 11 Jul 2023 11:11:26 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-315abbd2e64so36844f8f.1;
+        Tue, 11 Jul 2023 11:11:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689099084; x=1691691084;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=f4pTgOl4kr3INqK7GWkbIOwJ2OoYx4wbuRsCFl9wKjs=;
+        b=htTbK3XefIdus0P7WtgHWhPEJIfUbRpTe0/SyQmIBj605sjxi1EzR8mN/xWHxy5rfR
+         vaFSgr6bBlw8tpNEFXfzvqmdvMYWykDcgAR9Xnw2xTu5YrXmdxiqdTHto4joI1UmOmmi
+         q/mRbiuMhyGdnB982ANvt4cE6+jHuGm2JUbaDgaP+8hhsgg5dO4LPnbRmP7MaL50llR0
+         pzZQD2k+as+XklGqGaXb5Rs5J2aFaru6JSRJd8jTsBqFVUG4KyK8Z9vw45rXo1PMbea4
+         cIAh4sTntCoeMoH1AYj38UjU/Du7sA0iygbQew8CqWMcw4pcWWb1K7JHP2n/8zdpAZsr
+         qvPw==
+X-Gm-Message-State: ABy/qLZT2a7Tk9jJ0YrUlEQeOcNArym65PUfOLezt5VoKD+lYaOw9042
+        P4A3WbwTkwt0f7c5USX/cyZhwKn0A5+5HuFPbxycXs/u
+X-Google-Smtp-Source: APBJJlEpIbhOmBRe04QMC23MNIw+WBjJ+zUQzleUvz2/emIfuqZAIyavt4IFyil/DoaEJVlJ5GR56IAvM/jAmmYh2Vs=
+X-Received: by 2002:a5d:4c85:0:b0:314:1d7f:9e9 with SMTP id
+ z5-20020a5d4c85000000b003141d7f09e9mr16305627wrs.0.1689099084284; Tue, 11 Jul
+ 2023 11:11:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MlZ2u2W+u/pn47Cp"
-Content-Disposition: inline
-In-Reply-To: <20230711-topic-sm638250_bwmon-v1-1-bd4bb96b0673@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
+In-Reply-To: <20230705085907.30880-1-Chung-kai.Yang@mediatek.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 11 Jul 2023 20:11:13 +0200
+Message-ID: <CAJZ5v0gw3PALtEQLc1W6ZFO6j19SCjVhjsNV6R4knbn83s+-5g@mail.gmail.com>
+Subject: Re: [PATCH v3] PM: QoS: Restore support for default value on
+ frequency QoS
+To:     Chungkai Yang <Chung-kai.Yang@mediatek.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ccj.yeh@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---MlZ2u2W+u/pn47Cp
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jul 11, 2023 at 04:35:13PM +0200, Konrad Dybcio wrote:
-> SM8250 has a BWMONv5 for LLCC and a BWMONv4 for CPU. Document them.
->=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
+On Wed, Jul 5, 2023 at 10:59 AM Chungkai Yang
+<Chung-kai.Yang@mediatek.com> wrote:
+>
+> PM_QOS_DEFAULT_VALUE case is not covered.
+>
+> Commit 8d36694245f2 ("PM: QoS: Add check to make sure CPU freq is
+> non-negative") makes sure CPU freq is non-negative to avoid negative
+> value converting to unsigned data type. However, when the value is
+> PM_QOS_DEFAULT_VALUE, pm_qos_update_target specifically uses
+> c->default_value which is set to FREQ_QOS_MIN/MAX_DEFAULT_VALUE when
+> cpufreq_policy_alloc is executed, for this case handling.
+>
+> Adding check for PM_QOS_DEFAULT_VALUE to let default setting work will
+> fix this problem.
+>
+> Signed-off-by: Chungkai Yang <Chung-kai.Yang@mediatek.com>
+>
 > ---
->  Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml |=
- 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-=
-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bw=
-mon.yaml
-> index b63db9098345..51ba6490c951 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.y=
-aml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.y=
-aml
-> @@ -29,12 +29,14 @@ properties:
->                - qcom,sc7280-cpu-bwmon
->                - qcom,sc8280xp-cpu-bwmon
->                - qcom,sdm845-cpu-bwmon
-> +              - qcom,sm8250-cpu-bwmon
->                - qcom,sm8550-cpu-bwmon
->            - const: qcom,sdm845-bwmon    # BWMON v4, unified register spa=
-ce
->        - items:
->            - enum:
->                - qcom,sc7180-llcc-bwmon
->                - qcom,sc8280xp-llcc-bwmon
-> +              - qcom,sm8250-llcc-bwmon
->                - qcom,sm8550-llcc-bwmon
->            - const: qcom,sc7280-llcc-bwmon
->        - const: qcom,sc7280-llcc-bwmon   # BWMON v5
->=20
-> --=20
-> 2.41.0
->=20
+> V2 -> V3: Added helper function to avoid duplicating the value check.
+> V1 -> V2: Checked both freq_qos_add/update_request.
+>
+> Link: https://lore.kernel.org/lkml/20230626035144.19717-1-Chung-kai.Yang@mediatek.com/
+> Link: https://lore.kernel.org/lkml/20230627071727.16646-1-Chung-kai.Yang@mediatek.com/
+> Link: https://lore.kernel.org/lkml/CAJZ5v0gxNOWhC58PHeUhW_tgf6d1fGJVZ1x91zkDdht11yUv-A@mail.gmail.com/
+> ---
+>  kernel/power/qos.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index af51ed6d45ef..782d3b41c1f3 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -426,6 +426,11 @@ late_initcall(cpu_latency_qos_init);
+>
+>  /* Definitions related to the frequency QoS below. */
+>
+> +static inline bool freq_qos_value_invalid(s32 value)
+> +{
+> +       return value < 0 && value != PM_QOS_DEFAULT_VALUE;
+> +}
+> +
+>  /**
+>   * freq_constraints_init - Initialize frequency QoS constraints.
+>   * @qos: Frequency QoS constraints to initialize.
+> @@ -531,7 +536,7 @@ int freq_qos_add_request(struct freq_constraints *qos,
+>  {
+>         int ret;
+>
+> -       if (IS_ERR_OR_NULL(qos) || !req || value < 0)
+> +       if (IS_ERR_OR_NULL(qos) || !req || freq_qos_value_invalid(value))
+>                 return -EINVAL;
+>
+>         if (WARN(freq_qos_request_active(req),
+> @@ -563,7 +568,7 @@ EXPORT_SYMBOL_GPL(freq_qos_add_request);
+>   */
+>  int freq_qos_update_request(struct freq_qos_request *req, s32 new_value)
+>  {
+> -       if (!req || new_value < 0)
+> +       if (!req || freq_qos_value_invalid(new_value))
+>                 return -EINVAL;
+>
+>         if (WARN(!freq_qos_request_active(req),
+> --
 
---MlZ2u2W+u/pn47Cp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK2a4AAKCRB4tDGHoIJi
-0uooAQDkQ4XIxsH2sVPIdg6Jd5+l39IkarR5xswL9VWJ9I8QkQEA0wr5w9nYuCX4
-U4aXmgwnvmX/CmapUpiqUhfr07E0UgU=
-=rwut
------END PGP SIGNATURE-----
-
---MlZ2u2W+u/pn47Cp--
+Applied as 6.5-rc material, thanks!
