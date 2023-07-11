@@ -2,169 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3C574E8F2
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 10:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B0C74E8FF
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 10:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbjGKIXk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 04:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
+        id S231258AbjGKIZV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 04:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjGKIXj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 04:23:39 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE2ABF
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 01:23:37 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbc12181b6so59381395e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 01:23:37 -0700 (PDT)
+        with ESMTP id S230455AbjGKIZU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 04:25:20 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AA0E6B
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 01:25:18 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3141fa31c2bso5457018f8f.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 01:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689063816; x=1691655816;
+        d=linaro.org; s=google; t=1689063917; x=1691655917;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qInhMV9Locu6xtAhuRgmTKHwzbA+LW4kMcmNGenGo1Y=;
-        b=P9CmDR2UuUXITyHXpHjEzaUcGtNzqfEzbp7afhD7xInFWb+O6brslPNHZOxG57f3C7
-         +MR05inIFpu5TYwInWbzIbwWGbc/m1qR+clzxvLnv3CSQYprPdeAvMFOi4lm91U1lZba
-         W9O+VgdzhZERezpxb4c8xRCMpLYW+oLNfkjxLIzuKZzuFurTxTn1YEXx2LRFc0jvJTCV
-         JWnjb1UfyiWlMSCXK0tSWnOQuk3bZXNccO4/KJk3kubXc2NKjSHYqvCJ7dRJDk0g6dY7
-         LP2CKrVANQs2cG2dgMvcqcP4pU9gh6GrsVYJ2j/RPyogwj/KytLmc2lbftkXZx+wAXY1
-         0Vhg==
+        bh=EOhERrgy4Dgjs1P4t5ImERMArKjBrmI2sHen3jN1qjo=;
+        b=LS74P2YoURG3ehmDJp1iLPkX0Bo0ilrIYDp3dKd0yDLZsbZ882ufspia//GC2AcYSa
+         1Ft/zd3IVkhyc5OtI1iUMA+IfrjPGnL01cr0or9aQ6ma7JpU+aqHp4ID0CpBpk9nUljr
+         MwmERasykKAUBobMO1DP8NVNHZO5egj22CtJCfLZyt54LTpqF4RL5SBqTJjitOWFdgLz
+         EephXe92oeDQyPW/iGR+DIlGtpoGi5BvtEQbozxyORO8VZGxNXwrJZtwiB2DGO2XwWhY
+         DJob1ke+TCO7t0KOWTUsxSKp7jtlKiNOgaORqmsDYLB+aS+H0DYfCJMdSkFimpFxZBT1
+         S3qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689063816; x=1691655816;
+        d=1e100.net; s=20221208; t=1689063917; x=1691655917;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qInhMV9Locu6xtAhuRgmTKHwzbA+LW4kMcmNGenGo1Y=;
-        b=Dsify3FOXRvjKtlqwJ+RYHUiUPha6rA76o7Xy5gRMxZ7XOcpSZafF+ijhKhr46P66B
-         kkElG7UkEHh4dmAQ3VQhcstqji9GJQ9qoFeuY5ZE2K4wQsEWOkxNXOI8eTh3uLHN0s8J
-         u1L6+C+bg73hY8DlJT2A6b3W39rvbLslmlZcHm+DA4rXKvd0ZjQYsvNkFGHEHeUHt+0e
-         uQoLFM6v9795DMibEXyHIl27FNaKsPPL3t/pmI9a7qKLAkLgqRJM0y1KLNkutnLmHE+f
-         IjHJoouCmIFeoBMmKTtzqRi66ha3y//zKD3JIJD1RLYdq5nb7ezd3FX4/0Fw93DunkWh
-         uf7g==
-X-Gm-Message-State: ABy/qLamZ8/u11xKDDZDbr9cIkabk9Y71zzq9OYiia9fiwlGYVHneymc
-        aT68sjJwgXvsSSZI6iq+oQweGg==
-X-Google-Smtp-Source: APBJJlE6z4Lh9osQA5l1Hg344WxWb8AYZAaMO+/+0s36+ogVudjeakoxSUPSXEw20hdPB90QPBZF4g==
-X-Received: by 2002:a7b:c850:0:b0:3fb:dd9c:72c8 with SMTP id c16-20020a7bc850000000b003fbdd9c72c8mr13981377wml.22.1689063816128;
-        Tue, 11 Jul 2023 01:23:36 -0700 (PDT)
+        bh=EOhERrgy4Dgjs1P4t5ImERMArKjBrmI2sHen3jN1qjo=;
+        b=U18UgSX9FHtrLHngWH9vLN3pBkHj48dq8lYRfdLhZ+hj+BcDxYl+PpjZwl7n4SpUGS
+         4InDXSS+T5kQPfe0OUVBKIKLeFqIoTrdPU+2VOySOjUIEeGyBvLjkvmarIPoZ7ABJ1gi
+         GVSxyoUKF3mV1JpzgqIvfmNJtC7KihsvhdGwzvAPuY02sSfi95DCaOEgZXdr6BNVuZsa
+         qnSc1hZYx74mez5QJxOR4hfGKsR+DsZLyzpTEcUOtkgKb0yDg+Qpg6RDEjlOW1RlcPoi
+         fS2qmIC0i6NLU5MkDjsaPWvpPq8AOXzS1kRWRGBYibzI+tUNPFpZyN5LV5vBQp+elNya
+         TRdQ==
+X-Gm-Message-State: ABy/qLawwD1asDtxvQWQa/2WahMelQ+yIpFz2qv+K468chtGlXGGc9IZ
+        eBKUnGPv7gWf6gc8IWxcRuYgXA==
+X-Google-Smtp-Source: APBJJlE3w01jPs+NmtLyAG6IutWVWSah77FRCEWjeKjgj7Ip7BzfgLj9TZulACDBTiiiSsi+ILKGbA==
+X-Received: by 2002:a05:6000:923:b0:314:10d8:b483 with SMTP id cx3-20020a056000092300b0031410d8b483mr14553642wrb.64.1689063917242;
+        Tue, 11 Jul 2023 01:25:17 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q20-20020a7bce94000000b003fa96620b23sm12250012wmj.12.2023.07.11.01.23.35
+        by smtp.googlemail.com with ESMTPSA id r8-20020a056000014800b0030fa3567541sm1583751wrx.48.2023.07.11.01.25.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Jul 2023 01:23:35 -0700 (PDT)
-Message-ID: <33508f0e-414f-a990-29ad-58e43d20374b@linaro.org>
-Date:   Tue, 11 Jul 2023 10:23:34 +0200
+        Tue, 11 Jul 2023 01:25:16 -0700 (PDT)
+Message-ID: <fa218582-0ac1-ea8e-fcaf-222bdcf2bc6a@linaro.org>
+Date:   Tue, 11 Jul 2023 10:25:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH V5] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
+Subject: Re: [PATCH 00/10] thermal: tegra: Do not register cooling device
 Content-Language: en-US
-To:     Di Shen <cindygm567@gmail.com>, lukasz.luba@arm.com
-Cc:     Di Shen <di.shen@unisoc.com>, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, orsonzhai@gmail.com, zhanglyra@gmail.com
-References: <20230710033234.28641-1-di.shen@unisoc.com>
- <6d3f24a4-ae70-49eb-6e41-86baa1db6bed@linaro.org>
- <CAHYJL4og14kQ4ev6QtDQeknJELME7URTN_HmR01P5+2RhpthzQ@mail.gmail.com>
- <f7cf2153-aa22-d376-f776-54ea940a5e35@linaro.org>
- <CAHYJL4p7FEjLTZURA6fvVPCmwKodmxWS7fNpi_c0ZFBX7yjDZQ@mail.gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20230414125721.1043589-1-thierry.reding@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAHYJL4p7FEjLTZURA6fvVPCmwKodmxWS7fNpi_c0ZFBX7yjDZQ@mail.gmail.com>
+In-Reply-To: <20230414125721.1043589-1-thierry.reding@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Thierry,
 
-Hi Di,
+do you have an update for this series?
 
-On 11/07/2023 05:40, Di Shen wrote:
+Thanks
 
-[ ... ]
+   -- Daniel
 
->>>>> +static void power_allocator_reset(struct thermal_zone_device *tz)
->>>>> +{
->>>>> +     struct power_allocator_params *params = tz->governor_data;
->>>>> +
->>>>> +     reset_pid_controller(params);
->>>>> +     allow_maximum_power(tz, true);
->>>>
->>>> Do you really want to allow the maximum power? What about if the trip
->>>> temperature is decreased ?
->>>>
->>> If the trip temperature is decreased, allow_maximum_power will only
->>> be executed once, and then the ipa governor will adapt to the lower trip
->>> temperature and calculate the allocated power for cooling actors again.
->>> Right?
->>
->> Sorry for jumping in this fifth version but I'm not sure about resetting
->> the change is the right way (and probably, changing a trip point with
->> the power allocator is not a good idea)
->>
->> The platforms where the IPA is planned to be used are creating a dummy
->> trip point where the IPA begins the acquisition without cooling devices
->> in order to have the math building the PID schema (eg. hi3660.dtsi).
->>
->> What about the sustainable power vs the trip point temperature? I mean
->> we can change the trip temperature but not the sustainable power which
->> is directly related to the target temperature. So the resulting power
->> computation will be wrong.
->>
-> I totally agree, thanks for reminding me. Sustainable power is the maximum
-> power available at the target temperature, so it must be updated when the trip
-> point is changed. Sorry for missing this point. How about calling
-> get_sustainable_power() to update the sustainable_power? Furthermore, when
-> the sustainble_power() is changed, the pid constants tzp->k_* must be estimated
-> again. In get_sustainble_power, it checks that the sustainable_power is updated,
-> it will call the estimate_pid_constants() to renew the tzp->k_*.
-
-Yes and the sustainable power can be set from userspace too.
-
-So here we have to distinguish what is related to the thermal setup and 
-the thermal usage.
-
-Actually the thermal framework should protect the information from the 
-firmware. It is not acceptable to have an user being able to change the 
-trip points provided by the firmware.
-
-The writable trip point should allow only temperature changes below the 
-ones given in the firmware.
-
->> The more I think about that, the more I do believe writable trip point
->> and IPA are incompatible.
->>
->> What about forbid that?
->>
->> For instance, add a set_trip callback instead of resetting in the
->> governor and return -EPERM from the IPA?
->>
-> I've seen that you have sent a patch recently which adds the callback
-> thermal_zone_trips_update(), is that what you said set_trip callback?
-
-Not exactly.
-
-Instead of adding a 'reset' callback, add a 'trip_update' (or whatever 
-the name) callback.
-
-Then pass the trip point to the callback along with the thermal zone.
-
-int ipa_trip_update(struct thermal_zone_device *tz,
-			struct thermal_trip *trip)
-{
-	// Do more IPA crazy stuff or return -EPERM
-}
-
-
->> Lukasz ?
-
-Lukasz? what do you think?
-
+On 14/04/2023 14:57, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> Hi,
+> 
+> this set of patches removes the registration of the SOCTHERM internal
+> throttling mechanism as cooling device. Since this throttling starts
+> automatically once a certain temperature threshold is crossed, it
+> doesn't make sense to represent it as a cooling device, which are
+> typically "manually" activated by the thermal framework when thermal
+> sensors report temperature thresholds being crossed.
+> 
+> Instead of using the cooling device mechanism, this statically programs
+> the throttling mechanism when it is configured in device tree. In order
+> to do this, an additional device tree property is needed to replace the
+> information that was previously contained in trip points.
+> 
+> There's a few preparatory patches to make the removal a bit simpler and
+> also some follow up cleanups included as well.
+> 
+> Thierry
+> 
+> Thierry Reding (10):
+>    dt-bindings: thermal: tegra: Document throttle temperature
+>    thermal: tegra: Use driver-private data consistently
+>    thermal: tegra: Constify SoC-specific data
+>    thermal: tegra: Do not register cooling device
+>    thermal: tegra: Use unsigned int where appropriate
+>    thermal: tegra: Avoid over-allocation of temporary array
+>    thermal: tegra: Remove gratuitous error assignment
+>    thermal: tegra: Minor stylistic cleanups
+>    arm64: tegra: Rework SOCTHERM on Tegra132 and Tegra210
+>    ARM: tegra: Rework SOCTHERM on Tegra124
+> 
+>   .../thermal/nvidia,tegra124-soctherm.yaml     |   7 +
+>   arch/arm/boot/dts/tegra124.dtsi               |  65 +--
+>   arch/arm64/boot/dts/nvidia/tegra132.dtsi      |  63 +--
+>   arch/arm64/boot/dts/nvidia/tegra210.dtsi      |  83 +---
+>   drivers/thermal/tegra/soctherm.c              | 392 ++++++------------
+>   drivers/thermal/tegra/soctherm.h              |   1 +
+>   drivers/thermal/tegra/tegra124-soctherm.c     |   4 +
+>   drivers/thermal/tegra/tegra132-soctherm.c     |   4 +
+>   drivers/thermal/tegra/tegra210-soctherm.c     |   4 +
+>   9 files changed, 208 insertions(+), 415 deletions(-)
+> 
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
