@@ -2,77 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2832E74F3EE
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 17:43:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB2874F46B
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 18:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjGKPnp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 11:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56566 "EHLO
+        id S232250AbjGKQHj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 12:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233446AbjGKPnI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 11:43:08 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A18C10EA;
-        Tue, 11 Jul 2023 08:42:54 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbc244d384so60339435e9.0;
-        Tue, 11 Jul 2023 08:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689090173; x=1691682173;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dYkIVAZXWVX4d2XXeeAGh0C7Fz570/7R4cfKcgzr7xM=;
-        b=T2CpvTIaIbPDKjJ5YVIA4ke79D2vU13ltJkDu3hEYYT38x9IvL0ujvxlw7yFVfesbN
-         U48N4AJ3OUkwGg5ea/5jzux45iFRoWq9o4x5OVFko73IoWlz8M3OCnsfiApLP9OHSzKi
-         sn9uaW7ZoxxyXG0f5Z2B47vhoh3UIVuDPdpo8GZE4jK+rzSrXtAHS6AJLvIVZ5VwXLga
-         /xc1q9dDQT9mB867Wa0DfMbNsDXP9rLUPTdA1GiZRc5691ige8/jyuZEyjkK7GuS682O
-         8VGVv/hbZ+3WH3Br1UafqwtzxnQqrkqKqJt1GRdnw7TWSzZq0xZD882vkKTX/hcfyiQT
-         no0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689090173; x=1691682173;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dYkIVAZXWVX4d2XXeeAGh0C7Fz570/7R4cfKcgzr7xM=;
-        b=C7VLcnm+VFrfpKcGSsiLZrbGvYTul1L7dP10hBscN1n2qUge8X4/OJ2Vlt1eiIqusB
-         MS0q9nyXJBxWNUoFcBNL9goPxYpW065Tgn8qf5E6mEJODuKY6Vu66gLlyV6m0CXYzgL2
-         eplhGu4kNSxOat635PbGsZLU50174TDsXGJEW2VNpOGHNnbgCF4nTjUBfIfuEaeOXWyl
-         LoqYbVUOPweGetouzSoYTZtNVLhl8mh8CfrGK7tilWskqbVseq5141oH1Ecrbu7Pq+uE
-         +u0K+hw7A+oadFub0dF5XH3JbF6j1dQxKJl2G9XBIzCk4YboQLsSfg1j1JIAVB0dt9AE
-         9tzw==
-X-Gm-Message-State: ABy/qLb9R9PB7MBywzVq638xOeRIcWOhab5Ac/YOmIAWJ95gRcUqIWSt
-        3WNqaatDSn2R0ojWo85lS3NGfpH1pAM=
-X-Google-Smtp-Source: APBJJlFW86hBRt0IpFq/pliN6JI4YKtM0YwYa0MQwtzpGnECPTVzremtVJfCW2S2nC8lLTC/Aws1qw==
-X-Received: by 2002:a05:600c:234b:b0:3fc:dd9:91fd with SMTP id 11-20020a05600c234b00b003fc0dd991fdmr7229551wmq.40.1689090172348;
-        Tue, 11 Jul 2023 08:42:52 -0700 (PDT)
-Received: from orome (p200300e41f4b7100f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4b:7100:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id u10-20020a7bcb0a000000b003fb739d27aesm13212223wmj.35.2023.07.11.08.42.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 08:42:51 -0700 (PDT)
-Date:   Tue, 11 Jul 2023 17:42:49 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jon Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 00/10] thermal: tegra: Do not register cooling device
-Message-ID: <ZK14edZUih1kH_sZ@orome>
-References: <20230414125721.1043589-1-thierry.reding@gmail.com>
- <fa218582-0ac1-ea8e-fcaf-222bdcf2bc6a@linaro.org>
+        with ESMTP id S230329AbjGKQHd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 12:07:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78DA11D;
+        Tue, 11 Jul 2023 09:07:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7822961529;
+        Tue, 11 Jul 2023 16:07:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC54C433C7;
+        Tue, 11 Jul 2023 16:07:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689091651;
+        bh=JzqdbMwppagfSDpscGlUsf8Nn0nudwa3m9LkCZQlS94=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pz3WjobbzhkAcikJXcIu2XtQsP0O3vWHMtvTzDTfe2Jm1RxQ1aolD293DZtAp4QUZ
+         WMqPk593QfaxFoopWPNkEieXAUNDyyVV5D+Wlyno5Q/EythJr/AEOgn9y9b7P1jde/
+         sd6wDScb3V/Jek8G5ECnRf93oCf3yzuAQcNzheuOxYwF8N00IRN13Q6+OPw/cZe/GA
+         VgwmYJJNFQ7C9BqBm1trK60XKD19eedO8tlSvbU3h5uUEQCGeoK7iWo3EOMAEaQdjI
+         68ypAl4SZG2ss4PDK9bTXTIedpjxVxoSvg+LiqEf28QS0N8ABSp/m7ggn5B6UiSLPX
+         oG32qi12DKS4Q==
+Date:   Tue, 11 Jul 2023 17:07:28 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Walker Chen <walker.chen@starfivetech.com>
+Subject: Re: [PATCH 12/18] soc: starfive: Move the power-domain driver to the
+ genpd dir
+Message-ID: <20230711-user-elves-9aebe921351e@spud>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-13-ulf.hansson@linaro.org>
+ <20230707-vexingly-prologue-fea19dd3d962@spud>
+ <CAPDyKFoy2HZLSqSpQ8jPgDLU10p1H0_WQkHXsL1LfXEcpJDcCA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DlpEOaqtXO5oFliO"
+        protocol="application/pgp-signature"; boundary="e10Q48OQXTWbo7Mh"
 Content-Disposition: inline
-In-Reply-To: <fa218582-0ac1-ea8e-fcaf-222bdcf2bc6a@linaro.org>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFoy2HZLSqSpQ8jPgDLU10p1H0_WQkHXsL1LfXEcpJDcCA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,41 +62,64 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---DlpEOaqtXO5oFliO
+--e10Q48OQXTWbo7Mh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 11, 2023 at 10:25:16AM +0200, Daniel Lezcano wrote:
-> Hi Thierry,
+On Tue, Jul 11, 2023 at 03:57:49PM +0200, Ulf Hansson wrote:
+> On Fri, 7 Jul 2023 at 17:51, Conor Dooley <conor@kernel.org> wrote:
+> >
+> > On Fri, Jul 07, 2023 at 04:04:28PM +0200, Ulf Hansson wrote:
+> > > Cc: Walker Chen <walker.chen@starfivetech.com>
+> > > Cc: Conor Dooley <conor@kernel.org>
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >
+
+> > If you are not going to write a commit message with an explanation,
 >=20
-> do you have an update for this series?
+> I will, sorry for being lazy.
+>=20
+> > the least you could do is CC me on the cover letter.
+>=20
+> Yes, I will soon post a new version and add you to the cover letter and p=
+atch 1.
 
-Yeah, I've been working on this on and off for a while since I ran into
-some complications with this version. I need to find a block of spare
-time to go over the latest version again and do some testing. Hopefully
-I can get around to that within this week or next.
+Thanks. Obviously I was able to pull the message-id & look at lore etc,
+but what goes for the goose, goes for the gander and all that.
 
-Thierry
+> > > ---
+> > >  MAINTAINERS                                                    | 2 +-
+> > >  drivers/genpd/Makefile                                         | 1 +
+> > >  drivers/genpd/starfive/Makefile                                | 2 ++
+> > >  .../{soc/starfive/jh71xx_pmu.c =3D> genpd/starfive/jh71xx-pmu.c} | 0
+> > >  drivers/soc/starfive/Makefile                                  | 3 -=
+--
+> >
+> > Why not also move the Kconfig entry while you are at it?
+>=20
+> I just replied to Geert [1], who had similar questions. Hope that
+> makes sense to you?
 
---DlpEOaqtXO5oFliO
+In general, it does explain why you did not do it.
+I think that the Kconfig stuff should move too & the whole
+soc/starfive directory should vanish, but that could be left for a
+follow-up activity.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+--e10Q48OQXTWbo7Mh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmSteHkACgkQ3SOs138+
-s6GELRAAh3ZZvukzF3k/5LWmdv2+B+5P8ow14YghjTcKEGabnDXfWVbculyh2MgD
-5sClWfrFlsx5ohAsOSAtImsnqmOGeXH9pMPukBVYYfNGVRy11r1oX6l1NWRc1EwA
-8fYjseIMPaUqwOLD2Q/i9Ksjc4PtAqeloH+UI6iNZI/Z7SrUgtLRBGdtkNjW3nNj
-9LjuDZtb+pad0iV7Ij4L1F6K6Vkem6/81LADfT+hhb2n6A/Ynk9KlXtYHySqQVAF
-SyOk3dVBo8i8g//kxjOPdiXd4pFF3YKyGMt3t9sQqFQwFD9X639MYxpxmxwSU+Ji
-4JaOxjV99p1meA9OKAKrZO9e6QlmEdaEuiA3T13/8DQ7pp4Nx9NI3DO5iUeJZ6/A
-Hg5qN+tmwcM7To3TVWvsc+WompqJ1HZ4gmJ1sffIKc/7akRV7uqc0UFI8w4fTK8a
-m1lOxmzDctvpgLz+yF18yNvSZhoUvljXarhy6TC16EoYWf1ozt57zXG1kPmPnnDc
-+EnTRysa1MXSRUm8OFEvv33PmY6f4SMA0RvDlROxcfXyy698OFm6cMLXMBL48PSi
-2c+YpR8CfAvYXxCqpRSbPBRY+EFDeEVccdjDsUFEx73MItKbq4I77MjNUvg9yXHz
-2BHR2ejRKyLSN55o2bl5SukcJUXgRGdGMiaF3lu0B2HtxhispL8=
-=qpDd
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZK1+PwAKCRB4tDGHoIJi
+0neiAQCpoVvhlBw/Sz3h6KFVmVfZbln4DunwB6BtYeJIJHlzhQEA21SiTMwAprMD
+kaVKQjmT1tsbB2pBHzcS8UbKcDTIcAQ=
+=uOmA
 -----END PGP SIGNATURE-----
 
---DlpEOaqtXO5oFliO--
+--e10Q48OQXTWbo7Mh--
