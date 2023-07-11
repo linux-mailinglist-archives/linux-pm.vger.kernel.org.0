@@ -2,162 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA26E74E693
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 07:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6D574E76F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 08:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjGKFyh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 01:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37996 "EHLO
+        id S230248AbjGKGh6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 02:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbjGKFyf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 01:54:35 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92104E40;
-        Mon, 10 Jul 2023 22:54:32 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666683eb028so2804971b3a.0;
-        Mon, 10 Jul 2023 22:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689054872; x=1691646872;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nk4niLNV6K0/PBl1ZDWCwqAEI3u1h+Q4tTNLOBHoMWM=;
-        b=kWPuKebr23fLuFvrI3MW4ogXI6dr/IRwsu/v40oN4sHO1B15ZKtejInkzcOS8BLsMS
-         fhZIJ76/5TOOSuk+vi2y0XQIsK2m8hi7MDkVqr3jbkgYbBsmLRhJoC5X63gijFpNGFbN
-         f01mVUks/HfHprmN16QR5elSbGKmQpGfpIjzzGSWHStCrRl7De6V8oOmqYXmvB2yLpuR
-         i1ARofJ/hSDSj5BNou5oNgOAkTQMPze7ru4UQn1L62Eu6HpnI1sCqkW+bg73KgAhDCkZ
-         4aL9MaFAbhZ1YsUsIbSdsUlKFWLvPjAbE8h/FIc46Xx93onlyxoEVynaDyEIeugwUgMU
-         pm3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689054872; x=1691646872;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nk4niLNV6K0/PBl1ZDWCwqAEI3u1h+Q4tTNLOBHoMWM=;
-        b=FAWYkeRkLx6h3aNIYKuf1cPaU2ezNP5AuapUvpPM0g0Echoj1c9YmCXaVEdkQAB1Lx
-         DitnRqqPPsPoLlVob9c6ljDMLFDdS0wu84nQglQnuL0aTRoAI5KBkeDj+FEQbxxEqZy5
-         iBRgtmo/NSfL1unfK0/48k6Ih2ItjLioKuIa+AUSfpERbs0iopL313uffRWPD+UjbCbO
-         3dreCLm/wZ6jHvyUKOd9RjR0d5XHCPaIcZVROrDXuY2t7sMWZFPZ4JrzpIkl1rlIKAmE
-         krd90RdDoyBQZA6rgjQ9vLl85LW/8NU0hFhYkt4g0QWoQggxaVpC9LsBpOXf+dvaiBai
-         xTfA==
-X-Gm-Message-State: ABy/qLYsS05a2+c/jWd++ovBRKzjSwCxV95fE5BsUiKgkGO+eYiqwtNy
-        NEmAQJXAYcGTX4mza5b4bNDqr2quuCw=
-X-Google-Smtp-Source: APBJJlEogGkNT4ZLN5vPivJF9MZxskDvW4C7eY2Gj7J+C8iQjwkmk1dh4d2I+BqDreEerwZ0ZeTRTw==
-X-Received: by 2002:a05:6a21:6811:b0:131:1bbd:dc50 with SMTP id wr17-20020a056a21681100b001311bbddc50mr6236730pzb.6.1689054872037;
-        Mon, 10 Jul 2023 22:54:32 -0700 (PDT)
-Received: from j293.lan ([2400:4051:ea3:5910:5676:1078:8b85:c18f])
-        by smtp.gmail.com with ESMTPSA id bd5-20020a170902830500b001b8761c739csm878053plb.271.2023.07.10.22.54.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Jul 2023 22:54:31 -0700 (PDT)
-From:   Kazuki Hashimoto <kazukih0205@gmail.com>
-Date:   Tue, 11 Jul 2023 14:54:22 +0900
-Subject: [PATCH 2/2] PM: s2idle: Fully prevent the system from entering
- s2idle when cpuidle isn't supported
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230711-cpuidle-v1-2-f391224b3140@gmail.com>
-References: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
-In-Reply-To: <20230711-cpuidle-v1-0-f391224b3140@gmail.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Hector Martin <marcan@marcan.st>,
-        Kazuki Hashimoto <kazukih0205@gmail.com>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689054863; l=2849;
- i=kazukih0205@gmail.com; s=20230709; h=from:subject:message-id;
- bh=M0tNL3ccyxkfW5oli7KYKognuqR974/5Z/sS00RLTpY=;
- b=+vtnn6cnlTZTyDy/DLEZFml0G2vgNaqFHTs6ssNRATlNAiax2uJaMsh5C/xmGlJkeKHtBogaV
- dZBlmMupN8cAw3FQS8Ek1VDKZkTlEKdBC/p9vYQA1hluzM5WyJFYx2t
-X-Developer-Key: i=kazukih0205@gmail.com; a=ed25519;
- pk=r8m5wVK5lljix+hYnqXRT/GsxNkTADqXGmhdl7kykYY=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231622AbjGKGhx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 02:37:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630A3A6;
+        Mon, 10 Jul 2023 23:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689057472; x=1720593472;
+  h=date:from:to:cc:subject:message-id;
+  bh=ZneV9oBzod4xTR8TYQKRxAV5AqjiBL2c2OXBkIJhoDs=;
+  b=cvAQD3h4R/xaCSGKopEGcW9JwQU4J0+2NgXp6+c9n6z1Jy/5C1wzb7nw
+   4s7Tk0dhxu0Rb4ZhyplsNerzliURjyZaGYatHxzfUJeao0CA4WAu5yOXd
+   tEzLU+lIy4ejOrEIRKefjYZ/cyXWWyzPOcmIjaMkGf6ax4bogEpH5p1vo
+   JqJ454kIeopyxTcImxhnNMfW/wVRIbzdejsCthx5Rfrimp0aBv4BjejYe
+   fSUR6OE0bABLF3NrurepvPaK5oaJ3NRfQKxGt9iQtJQbpt3tmdv6Ht+MK
+   K+wAt0xPB8h7o9MJx78Hv+yHPkoAU8E+i0FzXJaLo2tXy4kmr/ED2vEO5
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="450900793"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="450900793"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2023 23:37:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10767"; a="967678022"
+X-IronPort-AV: E=Sophos;i="6.01,196,1684825200"; 
+   d="scan'208";a="967678022"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 10 Jul 2023 23:37:45 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJ70L-0004P0-0M;
+        Tue, 11 Jul 2023 06:37:45 +0000
+Date:   Tue, 11 Jul 2023 14:37:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c530a7f1973b4c2eed7e71de3c74f26292a1e1a9
+Message-ID: <202307111432.N81dy3Qw-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In order for systems to properly enter s2idle, we need functions both in
-the idle subsystem (such as call_cpuidle_s2idle()) and the suspend subsystem
-to be executed.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c530a7f1973b4c2eed7e71de3c74f26292a1e1a9  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-s2idle got blocked in the idle subsystem on platforms without cpuidle after
-commit ef2b22ac540c ("cpuidle / sleep: Use broadcast timer for states that stop
-local timer"). However, the suspend subsystem doesn't have this, which can cause
-the suspend subsystem to begin entering s2idle behind the idle subsystem's back,
-which in turn can cause the system to enter s2idle even though all the functions
-necessary for s2idle hasn't been executed, breaking the system
-(e.g. ClOCK_MONOTONIC keeps ticking during suspend even though it's not supposed
-to).
+elapsed time: 724m
 
-Prevent the system from entering s2idle when cpuidle isn't supported in the
-suspend subsystem as well.
+configs tested: 127
+configs skipped: 2
 
-Fixes: ef2b22ac540c ("cpuidle / sleep: Use broadcast timer for states that stop local timer")
-Signed-off-by: Kazuki Hashimoto <kazukih0205@gmail.com>
----
- kernel/power/main.c    | 12 +++++++++---
- kernel/power/suspend.c |  5 +++++
- 2 files changed, 14 insertions(+), 3 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index f6425ae3e8b0..82fedcf6032d 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -174,6 +174,8 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
- 		if (i >= PM_SUSPEND_MEM && cxl_mem_active())
- 			continue;
-+		if (i == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
-+			continue;
- 		if (mem_sleep_states[i]) {
- 			const char *label = mem_sleep_states[i];
- 
-@@ -226,11 +228,15 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
- 	}
- 
- 	state = decode_suspend_state(buf, n);
--	if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON)
-+	if (state == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
-+		goto err;
-+	if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON) {
- 		mem_sleep_current = state;
--	else
--		error = -EINVAL;
-+		goto out;
-+	}
- 
-+ err:
-+	error = -EINVAL;
-  out:
- 	pm_autosleep_unlock();
- 	return error ? error : n;
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index fa3bf161d13f..02cc76c9109e 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -556,6 +556,11 @@ static int enter_state(suspend_state_t state)
- 
- 	trace_suspend_resume(TPS("suspend_enter"), state, true);
- 	if (state == PM_SUSPEND_TO_IDLE) {
-+		if (cpuidle_not_available()) {
-+			pr_warn("s2idle is unsupported when cpuidle is unavailable");
-+			return -EINVAL;
-+		}
-+
- #ifdef CONFIG_PM_DEBUG
- 		if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
- 			pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r036-20230710   gcc  
+arc                              alldefconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r043-20230710   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                            dove_defconfig   clang
+arm                   milbeaut_m10v_defconfig   clang
+arm                       netwinder_defconfig   clang
+arm                  randconfig-r032-20230710   clang
+arm                  randconfig-r033-20230710   clang
+arm                  randconfig-r046-20230710   gcc  
+arm                         s5pv210_defconfig   clang
+arm                           sama5_defconfig   gcc  
+arm                        spear3xx_defconfig   clang
+arm                           stm32_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r013-20230710   gcc  
+hexagon                             defconfig   clang
+hexagon              randconfig-r003-20230710   clang
+hexagon              randconfig-r005-20230710   clang
+hexagon              randconfig-r031-20230710   clang
+hexagon              randconfig-r035-20230710   clang
+hexagon              randconfig-r041-20230710   clang
+hexagon              randconfig-r045-20230710   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230710   gcc  
+i386         buildonly-randconfig-r005-20230710   gcc  
+i386         buildonly-randconfig-r006-20230710   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230711   clang
+i386                 randconfig-i002-20230711   clang
+i386                 randconfig-i003-20230711   clang
+i386                 randconfig-i004-20230711   clang
+i386                 randconfig-i005-20230711   clang
+i386                 randconfig-i006-20230711   clang
+i386                 randconfig-i011-20230710   clang
+i386                 randconfig-i012-20230710   clang
+i386                 randconfig-i013-20230710   clang
+i386                 randconfig-i014-20230710   clang
+i386                 randconfig-i015-20230710   clang
+i386                 randconfig-i016-20230710   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r002-20230710   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5307c3_defconfig   gcc  
+m68k                 randconfig-r001-20230710   gcc  
+microblaze           randconfig-r021-20230711   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath25_defconfig   clang
+mips                 randconfig-r034-20230710   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r011-20230710   gcc  
+openrisc             randconfig-r015-20230710   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r023-20230711   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                       ppc64_defconfig   gcc  
+powerpc              randconfig-r004-20230710   gcc  
+powerpc              randconfig-r006-20230710   gcc  
+powerpc                     sequoia_defconfig   gcc  
+powerpc                     tqm8560_defconfig   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r022-20230711   gcc  
+riscv                randconfig-r042-20230710   clang
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230710   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r016-20230710   gcc  
+sh                   randconfig-r026-20230711   gcc  
+sh                   rts7751r2dplus_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r014-20230710   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r012-20230710   gcc  
+um                   randconfig-r025-20230711   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230710   gcc  
+x86_64       buildonly-randconfig-r002-20230710   gcc  
+x86_64       buildonly-randconfig-r003-20230710   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r024-20230711   gcc  
+x86_64               randconfig-x001-20230710   clang
+x86_64               randconfig-x002-20230710   clang
+x86_64               randconfig-x003-20230710   clang
+x86_64               randconfig-x004-20230710   clang
+x86_64               randconfig-x005-20230710   clang
+x86_64               randconfig-x006-20230710   clang
+x86_64               randconfig-x011-20230710   gcc  
+x86_64               randconfig-x012-20230710   gcc  
+x86_64               randconfig-x013-20230710   gcc  
+x86_64               randconfig-x014-20230710   gcc  
+x86_64               randconfig-x015-20230710   gcc  
+x86_64               randconfig-x016-20230710   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                           alldefconfig   gcc  
+xtensa                  audio_kc705_defconfig   gcc  
 
 -- 
-2.41.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
