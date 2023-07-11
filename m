@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C937C74EDED
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 14:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCDC74EDF1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 14:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjGKMSc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 08:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
+        id S231603AbjGKMSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 08:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjGKMSb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 08:18:31 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B173010C0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 05:18:28 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b6a084a34cso85734451fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 05:18:28 -0700 (PDT)
+        with ESMTP id S231664AbjGKMSc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 08:18:32 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B02C10D4
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 05:18:30 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b6ef9ed2fdso92171251fa.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 05:18:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689077907; x=1691669907;
+        d=linaro.org; s=google; t=1689077908; x=1691669908;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gXcfnAFG0ALqJ5wchl9zMk96ke46h0gdnZo33aXqC6o=;
-        b=VonMOp0i5+expziTeWEBTHMUNC7qXDeGRqyBPoJ1wkAUuR3RhU2Ey3IYC+JawK9rh6
-         bHI9uJjJTWpyxc+pRRnma1cuAF16RAAcxjDTqfJT6s4+9D2lvb1crKrbG6E4T7E3j3JE
-         7MBA0ngRqYrmXBTmKhP8l+hs9rWnbXQSPVyMw7DbtLvV9/KjkIbn9stCTJCLeYJ8Siq5
-         7i6lnvVM71Lo1lZSupzYng3WE+l4ju3i2NfEvdXOdYzXzUSKWLTohxXt0Q13+Y0mjbSM
-         kXXdY0gVkT+n4/u+ipmWfAu03x0bq1UG9/bal13n2vWRq52X43EVZGTNJNQro/YhG8uU
-         ocRw==
+        bh=+wKqZuebC0/DNlU3YArXv0CU05fgiLNPi4ZrsgdcBCw=;
+        b=WKIt9VI7VJ3uXfTMs1BXr+QomiovZ7rSHNtwxKGNAK3FIQdok2JfMO1I7E+ZueunP5
+         CkJaXnjOvT+Ln3G8eLhAghX4R+wvEBRMbfW/7al/oHjA50IrXBNdY2F0tOFX16rcRJGq
+         KmHi9fSz1G2Ho1uPijA4gQ3wUPBoGR/vsSIif9vYrvnJ+V8rI2FpRfSkgyG0yB2JLp6y
+         g1lwIGmDPNtyphI+qKGqbiMmP5w0qAyKBomC5K4TewkEs93laxZmkPhMLnFzHNA3r6TU
+         ojuJ60L0sWrXaBvwoFj7n0SubltRpRjnVfONXK2Ok2uWrpd+taxvpMN5D/ixeQtiUmEZ
+         jTIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689077907; x=1691669907;
+        d=1e100.net; s=20221208; t=1689077908; x=1691669908;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gXcfnAFG0ALqJ5wchl9zMk96ke46h0gdnZo33aXqC6o=;
-        b=ZgaG92zHKENORdghESWOWlkg+gLabtAwD7bqSz2IVTMl556FbW6by/+t/Qz2OnQ7zY
-         nBhpp1Qj7wJwPBfZUMOrY+vq3sB/zKqfmHZQRPF/2aj9C+H7qehtm+k36Jwl/vRjQmCY
-         KMUX/njdt+Ghq0Yz06peTbeMpF0w8N2Hk1N33P7l1wydxh5HXfGExqYOg1i0UoNdpFIE
-         nZespSPPGpQxE3h8UUUpDVbJKjJ0XEg9Rzd08LXIpYrjCDqHqaP72gNHmlMyCu122A8j
-         TkHe6GcJy8GqD1iuGeuWLWDwW9VKNOrP6bttVurNdGoFEABpZoNxGEmPP1jzDFXbq7j3
-         t+kA==
-X-Gm-Message-State: ABy/qLYapCDMYRLHPTwNvF1F2Lxpex2aOgyEPchxoXhDwwIAWKlNNX8J
-        yBX4EXtVTy2DMH2i+dyDavfIbg==
-X-Google-Smtp-Source: APBJJlHATZyGrxjvNQ4UHts/OGjmEwK4EuBMFcRIRxrV1Y/bvqWGJbi81Vw/Tydk5ULRpDptO1qfDQ==
-X-Received: by 2002:a2e:91d7:0:b0:2b6:e0b8:946e with SMTP id u23-20020a2e91d7000000b002b6e0b8946emr13108332ljg.51.1689077907043;
-        Tue, 11 Jul 2023 05:18:27 -0700 (PDT)
+        bh=+wKqZuebC0/DNlU3YArXv0CU05fgiLNPi4ZrsgdcBCw=;
+        b=Ix9b8SrA/hYK+cy9YpgcDGizBywJXCs5woOXWdGXeXMFr/wxOCzA+7vv28wW2tu3NB
+         +zWRGCmvF9XrGbBdydMjRHtYHHiwNT+bgZGBXik2qZuDq+EMfTWtbjiotRH+ZZrB/sI5
+         59JiwhoC82s0MMaxJLpPMkNcMweNFD5ABZvdyT0RA5q5RJo7a6VOeoWMYDM2myV+UwMa
+         xZR4mwhlzJvryTuLxmEsTLc72dqERlkKRgmcjTcmTuB4jtfc9b41zd1WzE2pYXJ4CZT7
+         vuRGGtMqXXhy+iQ/H+D29Yb4kHemKchjc22fRSoTCeiyaHDLm+VenZQIquusRqt3Kmp6
+         IDsA==
+X-Gm-Message-State: ABy/qLa1ADqhlJgF/zg4pAmTnJfaporvqzJ1oCogLQmSkqLMrO1Xv97I
+        PiTJ+8bBx0zNemawj3Sovr7NCg==
+X-Google-Smtp-Source: APBJJlGFkoNLOi418Dus0WqQX99QCX3C7IKzXbumFFa8qic1h0VzMt3LwPo6s6NWOhxVmAEzfz6uDg==
+X-Received: by 2002:a2e:700b:0:b0:2b6:e780:97c9 with SMTP id l11-20020a2e700b000000b002b6e78097c9mr12619568ljc.18.1689077908368;
+        Tue, 11 Jul 2023 05:18:28 -0700 (PDT)
 Received: from [192.168.1.101] (abyl96.neoplus.adsl.tpnet.pl. [83.9.31.96])
-        by smtp.gmail.com with ESMTPSA id d18-20020a2e96d2000000b002b708450951sm435563ljj.88.2023.07.11.05.18.25
+        by smtp.gmail.com with ESMTPSA id d18-20020a2e96d2000000b002b708450951sm435563ljj.88.2023.07.11.05.18.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 05:18:26 -0700 (PDT)
+        Tue, 11 Jul 2023 05:18:28 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 11 Jul 2023 14:18:00 +0200
-Subject: [PATCH 01/53] dt-bindings: interconnect: qcom,icc: Introduce fixed
- BCM voter indices
+Date:   Tue, 11 Jul 2023 14:18:01 +0200
+Subject: [PATCH 02/53] dt-bindings: interconnect: qcom,bcm-voter: Add
+ qcom,bcm-voter-idx
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230708-topic-rpmh_icc_rsc-v1-1-b223bd2ac8dd@linaro.org>
+Message-Id: <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
 References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
 In-Reply-To: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -71,11 +71,11 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689077904; l=1189;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1689077904; l=1777;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=9/TmGzQ1xk3CQ8ToyRcpOQBYP1VhR10l+JU+aSmEvI0=;
- b=N1JxOuvEYm4h/wsNdORtSNFT8AF68EXhuMFZexG+clfwKvtG5+uxA4rn/Z4fouP9EkKmuRWz+
- 7R/htFQncM5BE7iN2tU0kXbvvV7s3St2Rs+MKybBnVpLAaPzAPW+821
+ bh=1YdtkjCpwqfCeGyrzm5y0lnW6+XAD6b/nL964j7XiAc=;
+ b=xos5lY2485rsc/Fk8rtrxCyUPIzjqnRyhiyLpKu+58DpQKwGajPucJDjZBVy9wi9zJJ9gfdh6
+ VLXTFNZnq0gAaPF4VFj/7ocVEN6NJ6MYG26wIQmS+2QDKR9YXajYKvP
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,37 +88,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It makes zero (or less) sense to consume BCM voters per interconnect
-provider. They are shared throughout the entire system and it's enough
-to keep a single reference to each of them.
-
-Storing them in a shared array at fixed indices will let us improve both
-the representation of the RPMh architecture (every RSC can hold a resource
-vote on any bus, they're not limited in that regard) and save as much as
-kilobytes worth of RAM.
+In order to (at least partially) untangle the global BCM voter lookup
+(as again, they are shared throughout the entire system and not bound to
+individual buses/providers), introduce a new required property to assign
+a unique identifier to each BCM voter.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- include/dt-bindings/interconnect/qcom,icc.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml       | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/include/dt-bindings/interconnect/qcom,icc.h b/include/dt-bindings/interconnect/qcom,icc.h
-index cd34f36daaaa..9c13ef8a044e 100644
---- a/include/dt-bindings/interconnect/qcom,icc.h
-+++ b/include/dt-bindings/interconnect/qcom,icc.h
-@@ -23,4 +23,12 @@
- #define QCOM_ICC_TAG_ALWAYS		(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
- 					 QCOM_ICC_TAG_SLEEP)
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+index eec987640b37..09321c1918bf 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+@@ -38,8 +38,14 @@ properties:
  
-+#define ICC_BCM_VOTER_APPS		0
-+#define ICC_BCM_VOTER_DISP		1
-+#define ICC_BCM_VOTER_CAM0		2
-+#define ICC_BCM_VOTER_CAM1		3
-+#define ICC_BCM_VOTER_CAM2		4
+     $ref: /schemas/types.yaml#/definitions/uint32
+ 
++  qcom,bcm-voter-idx:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      A globally unique predefined discrimnator, identifying each BCM voter.
 +
-+#define ICC_BCM_VOTER_MAX		64
+ required:
+   - compatible
++  - qcom,bcm-voter-idx
+ 
+ additionalProperties: false
+ 
+@@ -48,8 +54,11 @@ examples:
+   # as defined in Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
+   - |
+ 
++    #include <dt-bindings/interconnect/qcom,icc.h>
 +
- #endif
+     apps_bcm_voter: bcm-voter {
+         compatible = "qcom,bcm-voter";
++        qcom,bcm-voter-idx = <ICC_BCM_VOTER_APPS>;
+     };
+ 
+   # Example 2: disp bcm_voter on SDM845 should be defined inside &disp_rsc node
+@@ -61,5 +70,6 @@ examples:
+     disp_bcm_voter: bcm-voter {
+         compatible = "qcom,bcm-voter";
+         qcom,tcs-wait = <QCOM_ICC_TAG_AMC>;
++        qcom,bcm-voter-idx = <ICC_BCM_VOTER_DISP>;
+     };
+ ...
 
 -- 
 2.41.0
