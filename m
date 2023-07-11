@@ -2,134 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A40F574F205
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 16:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F9874F230
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 16:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233568AbjGKOXv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 10:23:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59680 "EHLO
+        id S233610AbjGKO0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 10:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233994AbjGKOX0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 10:23:26 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC8C19BE
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:22:59 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b6ef64342aso92097501fa.3
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:22:59 -0700 (PDT)
+        with ESMTP id S232621AbjGKO0D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 10:26:03 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E5926AD
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:25:11 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fbcbf4375dso6933308e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 07:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689085369; x=1691677369;
+        d=linaro.org; s=google; t=1689085475; x=1691677475;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=k3HkS8n/DHjLJ9CSnu0btooLeG2USC/O5hAcB+zQHR0=;
-        b=YFzpDs4qddfLuT2Ja47Tie8E9U6WSvRiitw3Rl6fvE7ZRbRoJ/B1O7jT+omGz2Zkoo
-         Psieekd+8Hyx64OQnlvvI62//QvgBAYh+forEFEZlWdq6K0ex3Fk4oK/XuogaHW4O2RQ
-         KAhZAe/mXovdHvRxuM0igb/7yg/9gPrZwWfcpVg2S6K3ceqZV3rQx1mHdYj1mZYZ1P1X
-         o7nF3oFkjdaKskPFUFPENSh7AVinLMokMVPv7/uFZ56fMFDsJqiZvNPm226qBD8+LE7a
-         D2Z29Jh6edFJJT5FZYRmny/D3dq0IbZ7ylCIMd0ZNN9/F9GaGvkbI1T0A1XG7LZduV36
-         LZXw==
+        bh=4ETzJnyxb//1LYCRZgH6X5nK55znbdEdKT0t8qjhkAw=;
+        b=TpQjD365mxeGXkAjNS1Yg5OzWV5hWBmQFP1W5jq6C/AgtBmyVfUiBwjjdYXC8Eae1p
+         gzTVXLqA/LRNhkzEferJ0M3dGsZ8dYPRip9BB5MOCbevyG2N2xyIyS8V1PQ5paNd7W4S
+         MYQukgp4KFF3xls+tzfj7Gjv0b1HA9RRV5PmYg008NBqRV9o4zLoJ+RMcekCayb8I+XM
+         e1/HZ+1yH4cfLg3ulOsh1p53gr6Hm4neaIhMNFhBlZRV2NrRWRVzSouVSULYQwrSio1t
+         +7lZ7G99ooRXummOAXo3N2Yxu5iF+kBjbhyypd/bSwwiAnWmTQr1ososN+jB3VRANZJG
+         oMjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689085369; x=1691677369;
+        d=1e100.net; s=20221208; t=1689085475; x=1691677475;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k3HkS8n/DHjLJ9CSnu0btooLeG2USC/O5hAcB+zQHR0=;
-        b=K8g35/lc1mleutk0JDOR8v+puPooB8tQfJy6wgd0eLCWFrpduWw6s2IX1pgY/lynjo
-         zJSCrhM5f0NpDVKFoAVR3oyvdyYikD4k5z0431csHLBoocsgBv306daQT1E9zjLPF0dH
-         XRydlqT3zzfghREXd4SRjHl19f6orX7N5RTpta3Z0LsBJRszvGPCOMmY/Aukz+TDYszb
-         XlwSfWTmSi9A5SDiyvNbgKhdRkfYkY7NNgXGKLtJt6FYLtHCnywLOu5xbli/mbeHLYGm
-         dUDnzs7mSkIZVtl85gUZMxumCzI//Xw8EGJj9TDhyOXLSLZEpsm4rBdt3fI7aaUPALpk
-         Y84Q==
-X-Gm-Message-State: ABy/qLbxltBPMOPbZiPgUNVoeCmDPJuvtBohRjtHQkaNERGk5nO2eDmX
-        y4Awq5zt84yTjAtw+J66/iBKnw==
-X-Google-Smtp-Source: APBJJlHeyQA/rrTBRnhHmFHAQ9RkvQirevuuq4l+s9FWvVcIYzcJfIjCrcqTAVLnbDxJIqDqRKtRxQ==
-X-Received: by 2002:a2e:b0c7:0:b0:2b6:ec69:7c3b with SMTP id g7-20020a2eb0c7000000b002b6ec697c3bmr12314784ljl.46.1689085369756;
-        Tue, 11 Jul 2023 07:22:49 -0700 (PDT)
+        bh=4ETzJnyxb//1LYCRZgH6X5nK55znbdEdKT0t8qjhkAw=;
+        b=X87KUGmt78e2R9ERoLjglkYUEX8Ncx9DwDe8Dc3gC2k4omCMv/yoy7qMa+tKDJcgPR
+         JTBcywg0JcnY28yZ0I5Q+H/n0/z18S+rAa8izrf3+1pfu246/iMoF1nFmtHEEJ4RIXVP
+         7bgPmZNYmNipEX/W9DjGJJJxL8I0vd/vRyVUpKUIpqo1pBBu4jvLQqYO3KTu1vlFwnkt
+         7HCV4QxpRZr4KRkM+zdXq77mAEOFWWTRwnH+7Mgx0yvh2kzKzK6vv0/0iKeoB58qeBSw
+         wSMleqq/Dw0RdOyIaPRWaUdLcpiJbkarsLzkvz2b7IebLmHvY4qEK36jqlHQVlDaPj/h
+         MvCA==
+X-Gm-Message-State: ABy/qLYcby5fCstWEdqWaULRjoLv/8d6uSBd3MQSqguuyiVJRlNeBN3e
+        uVUiHYlhbtdJzcFwpsbaQByDNw==
+X-Google-Smtp-Source: APBJJlH5vtnfD2VWOxoAWSTv1/4Sxwt9FRzf0RXakCeJHs85TPWrAyK4Co3SRyIcN0Rf1+grwX7y8w==
+X-Received: by 2002:a05:6512:4016:b0:4f6:56ca:36fc with SMTP id br22-20020a056512401600b004f656ca36fcmr7142871lfb.6.1689085474936;
+        Tue, 11 Jul 2023 07:24:34 -0700 (PDT)
 Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id q6-20020a2e84c6000000b002b69b44fd52sm488065ljh.5.2023.07.11.07.22.48
+        by smtp.gmail.com with ESMTPSA id g12-20020ac2538c000000b004fb763b5171sm341888lfh.86.2023.07.11.07.24.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Jul 2023 07:22:49 -0700 (PDT)
+        Tue, 11 Jul 2023 07:24:34 -0700 (PDT)
 From:   Ulf Hansson <ulf.hansson@linaro.org>
 To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>
 Cc:     Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v2 18/18] ARM: ux500: Move power-domain driver to the genpd dir
-Date:   Tue, 11 Jul 2023 16:22:47 +0200
-Message-Id: <20230711142247.751857-1-ulf.hansson@linaro.org>
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
+Subject: [PATCH v2 03/18] soc: amlogic: Move power-domain drivers to the genpd dir
+Date:   Tue, 11 Jul 2023 16:24:31 +0200
+Message-Id: <20230711142431.751888-1-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To simplify with maintenance let's move the ux500 power-domain driver to
+To simplify with maintenance let's move the amlogic power-domain drivers to
 the new genpd directory. Going forward, patches are intended to be managed
 through a separate git tree, according to MAINTAINERS.
 
-Cc: Linus Walleij <linus.walleij@linaro.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: <linux-amlogic@lists.infradead.org>
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- MAINTAINERS                                                     | 1 +
- arch/arm/mach-ux500/Makefile                                    | 1 -
- drivers/genpd/Makefile                                          | 1 +
- drivers/genpd/st/Makefile                                       | 2 ++
- .../pm_domains.c => drivers/genpd/st/ste-ux500-pm-domain.c      | 0
- 5 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 drivers/genpd/st/Makefile
- rename arch/arm/mach-ux500/pm_domains.c => drivers/genpd/st/ste-ux500-pm-domain.c (100%)
+ MAINTAINERS                                        | 1 +
+ drivers/genpd/Makefile                             | 1 +
+ drivers/genpd/amlogic/Makefile                     | 4 ++++
+ drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     | 0
+ drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c | 0
+ drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c | 0
+ drivers/soc/amlogic/Makefile                       | 3 ---
+ 7 files changed, 6 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/genpd/amlogic/Makefile
+ rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 633bc6767cd5..377f68e66fb4 100644
+index 38eebcc97aa2..ab583b8c5b97 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -2421,6 +2421,7 @@ F:	arch/arm/mach-ux500/
- F:	drivers/clk/clk-nomadik.c
- F:	drivers/clocksource/clksrc-dbx500-prcmu.c
- F:	drivers/dma/ste_dma40*
-+F:	drivers/genpd/st/ste-ux500-pm-domain.c
- F:	drivers/hwspinlock/u8500_hsem.c
- F:	drivers/i2c/busses/i2c-nomadik.c
- F:	drivers/iio/adc/ab8500-gpadc.c
-diff --git a/arch/arm/mach-ux500/Makefile b/arch/arm/mach-ux500/Makefile
-index 5e903241bded..270e5676fa02 100644
---- a/arch/arm/mach-ux500/Makefile
-+++ b/arch/arm/mach-ux500/Makefile
-@@ -6,4 +6,3 @@
- obj-y				:= pm.o
- obj-$(CONFIG_UX500_SOC_DB8500)	+= cpu-db8500.o
- obj-$(CONFIG_SMP)		+= platsmp.o
--obj-$(CONFIG_PM_GENERIC_DOMAINS) += pm_domains.o
+@@ -1843,6 +1843,7 @@ F:	Documentation/devicetree/bindings/phy/amlogic*
+ F:	arch/arm/boot/dts/amlogic/
+ F:	arch/arm/mach-meson/
+ F:	arch/arm64/boot/dts/amlogic/
++F:	drivers/genpd/amlogic/
+ F:	drivers/mmc/host/meson*
+ F:	drivers/phy/amlogic/
+ F:	drivers/pinctrl/meson/
 diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index efd955f586e9..c429485c13f6 100644
+index a2d5b2095915..cdba3b9f0c75 100644
 --- a/drivers/genpd/Makefile
 +++ b/drivers/genpd/Makefile
-@@ -8,6 +8,7 @@ obj-y					+= qcom/
- obj-y					+= renesas/
- obj-y					+= rockchip/
- obj-y					+= samsung/
-+obj-y					+= st/
- obj-y					+= starfive/
- obj-y					+= sunxi/
- obj-y					+= tegra/
-diff --git a/drivers/genpd/st/Makefile b/drivers/genpd/st/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ obj-y					+= actions/
++obj-y					+= amlogic/
+diff --git a/drivers/genpd/amlogic/Makefile b/drivers/genpd/amlogic/Makefile
 new file mode 100644
-index 000000000000..8fa5f9855460
+index 000000000000..3d58abd574f9
 --- /dev/null
-+++ b/drivers/genpd/st/Makefile
-@@ -0,0 +1,2 @@
++++ b/drivers/genpd/amlogic/Makefile
+@@ -0,0 +1,4 @@
 +# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_ARCH_U8500)		+= ste-ux500-pm-domain.o
-diff --git a/arch/arm/mach-ux500/pm_domains.c b/drivers/genpd/st/ste-ux500-pm-domain.c
++obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
++obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
++obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
+diff --git a/drivers/soc/amlogic/meson-ee-pwrc.c b/drivers/genpd/amlogic/meson-ee-pwrc.c
 similarity index 100%
-rename from arch/arm/mach-ux500/pm_domains.c
-rename to drivers/genpd/st/ste-ux500-pm-domain.c
+rename from drivers/soc/amlogic/meson-ee-pwrc.c
+rename to drivers/genpd/amlogic/meson-ee-pwrc.c
+diff --git a/drivers/soc/amlogic/meson-gx-pwrc-vpu.c b/drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+similarity index 100%
+rename from drivers/soc/amlogic/meson-gx-pwrc-vpu.c
+rename to drivers/genpd/amlogic/meson-gx-pwrc-vpu.c
+diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/genpd/amlogic/meson-secure-pwrc.c
+similarity index 100%
+rename from drivers/soc/amlogic/meson-secure-pwrc.c
+rename to drivers/genpd/amlogic/meson-secure-pwrc.c
+diff --git a/drivers/soc/amlogic/Makefile b/drivers/soc/amlogic/Makefile
+index 7b8c5d323f5c..c25f835e6a26 100644
+--- a/drivers/soc/amlogic/Makefile
++++ b/drivers/soc/amlogic/Makefile
+@@ -2,7 +2,4 @@
+ obj-$(CONFIG_MESON_CANVAS) += meson-canvas.o
+ obj-$(CONFIG_MESON_CLK_MEASURE) += meson-clk-measure.o
+ obj-$(CONFIG_MESON_GX_SOCINFO) += meson-gx-socinfo.o
+-obj-$(CONFIG_MESON_GX_PM_DOMAINS) += meson-gx-pwrc-vpu.o
+ obj-$(CONFIG_MESON_MX_SOCINFO) += meson-mx-socinfo.o
+-obj-$(CONFIG_MESON_EE_PM_DOMAINS) += meson-ee-pwrc.o
+-obj-$(CONFIG_MESON_SECURE_PM_DOMAINS) += meson-secure-pwrc.o
 -- 
 2.34.1
 
