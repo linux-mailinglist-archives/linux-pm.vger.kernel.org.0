@@ -2,122 +2,174 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBF474E8A5
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 10:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3C574E8F2
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 10:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjGKIFD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 04:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36130 "EHLO
+        id S229512AbjGKIXk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 04:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjGKIFC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 04:05:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C3092;
-        Tue, 11 Jul 2023 01:05:00 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E9BB2660700B;
-        Tue, 11 Jul 2023 09:04:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689062698;
-        bh=/V0I7v/mPKMX5r0sk/NMla2fyPgsaDd1OqBwVtFEoZk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Pkmw4Hc/+NkfN79HurY+KiRwaqNw3dKK7n3YLe5y160Aj3rw+tSbq6R2k3hKKZgYs
-         aP1mzJXB2R/rK95018uNp57dc9UfNal5nM3VPnZrkd0dpJyAPDG3SlrDjfW/Q7ur+w
-         1Ov3kCIuvfjkqkITTUUfV3Rq5fywVV/u1YSfEvx7HlrOUn7mX1qXWL+5wBkoe28d8C
-         uswFPnlhWKIRNRD7uY1ygbNCSdCH0JBKZsoxkm2I1LyRuwqNU1havi5OOxn91j03zv
-         6SwJLA0eo0mAN8zM69V8TYyQelOhr0m2YddzkLfJGmW6idOhZiadnetmbTY/mK8yHD
-         tJMGSfz8X+NuQ==
-Message-ID: <44d70b15-2929-1a2d-4ea0-f61b2294d72b@collabora.com>
-Date:   Tue, 11 Jul 2023 10:04:54 +0200
+        with ESMTP id S230131AbjGKIXj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 04:23:39 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE2ABF
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 01:23:37 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbc12181b6so59381395e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 01:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689063816; x=1691655816;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qInhMV9Locu6xtAhuRgmTKHwzbA+LW4kMcmNGenGo1Y=;
+        b=P9CmDR2UuUXITyHXpHjEzaUcGtNzqfEzbp7afhD7xInFWb+O6brslPNHZOxG57f3C7
+         +MR05inIFpu5TYwInWbzIbwWGbc/m1qR+clzxvLnv3CSQYprPdeAvMFOi4lm91U1lZba
+         W9O+VgdzhZERezpxb4c8xRCMpLYW+oLNfkjxLIzuKZzuFurTxTn1YEXx2LRFc0jvJTCV
+         JWnjb1UfyiWlMSCXK0tSWnOQuk3bZXNccO4/KJk3kubXc2NKjSHYqvCJ7dRJDk0g6dY7
+         LP2CKrVANQs2cG2dgMvcqcP4pU9gh6GrsVYJ2j/RPyogwj/KytLmc2lbftkXZx+wAXY1
+         0Vhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689063816; x=1691655816;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qInhMV9Locu6xtAhuRgmTKHwzbA+LW4kMcmNGenGo1Y=;
+        b=Dsify3FOXRvjKtlqwJ+RYHUiUPha6rA76o7Xy5gRMxZ7XOcpSZafF+ijhKhr46P66B
+         kkElG7UkEHh4dmAQ3VQhcstqji9GJQ9qoFeuY5ZE2K4wQsEWOkxNXOI8eTh3uLHN0s8J
+         u1L6+C+bg73hY8DlJT2A6b3W39rvbLslmlZcHm+DA4rXKvd0ZjQYsvNkFGHEHeUHt+0e
+         uQoLFM6v9795DMibEXyHIl27FNaKsPPL3t/pmI9a7qKLAkLgqRJM0y1KLNkutnLmHE+f
+         IjHJoouCmIFeoBMmKTtzqRi66ha3y//zKD3JIJD1RLYdq5nb7ezd3FX4/0Fw93DunkWh
+         uf7g==
+X-Gm-Message-State: ABy/qLamZ8/u11xKDDZDbr9cIkabk9Y71zzq9OYiia9fiwlGYVHneymc
+        aT68sjJwgXvsSSZI6iq+oQweGg==
+X-Google-Smtp-Source: APBJJlE6z4Lh9osQA5l1Hg344WxWb8AYZAaMO+/+0s36+ogVudjeakoxSUPSXEw20hdPB90QPBZF4g==
+X-Received: by 2002:a7b:c850:0:b0:3fb:dd9c:72c8 with SMTP id c16-20020a7bc850000000b003fbdd9c72c8mr13981377wml.22.1689063816128;
+        Tue, 11 Jul 2023 01:23:36 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q20-20020a7bce94000000b003fa96620b23sm12250012wmj.12.2023.07.11.01.23.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Jul 2023 01:23:35 -0700 (PDT)
+Message-ID: <33508f0e-414f-a990-29ad-58e43d20374b@linaro.org>
+Date:   Tue, 11 Jul 2023 10:23:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 14/21] thermal/drivers/mediatek/lvts_thermal: convert
- to use devm_request*_irq_probe()
-To:     Yangtao Li <frank.li@vivo.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230710095926.15614-1-frank.li@vivo.com>
- <20230710095926.15614-14-frank.li@vivo.com>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V5] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
 Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230710095926.15614-14-frank.li@vivo.com>
+To:     Di Shen <cindygm567@gmail.com>, lukasz.luba@arm.com
+Cc:     Di Shen <di.shen@unisoc.com>, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
+        jeson.gao@unisoc.com, orsonzhai@gmail.com, zhanglyra@gmail.com
+References: <20230710033234.28641-1-di.shen@unisoc.com>
+ <6d3f24a4-ae70-49eb-6e41-86baa1db6bed@linaro.org>
+ <CAHYJL4og14kQ4ev6QtDQeknJELME7URTN_HmR01P5+2RhpthzQ@mail.gmail.com>
+ <f7cf2153-aa22-d376-f776-54ea940a5e35@linaro.org>
+ <CAHYJL4p7FEjLTZURA6fvVPCmwKodmxWS7fNpi_c0ZFBX7yjDZQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAHYJL4p7FEjLTZURA6fvVPCmwKodmxWS7fNpi_c0ZFBX7yjDZQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 10/07/23 11:59, Yangtao Li ha scritto:
-> There are more than 700 calls to devm_request_threaded_irq method and
-> more than 1000 calls to devm_request_irq method. Most drivers only
-> request one interrupt resource, and these error messages are basically
-> the same. If error messages are printed everywhere, more than 2000 lines
-> of code can be saved by removing the msg in the driver.
-> 
-> And tglx point out that:
-> 
->    If we actually look at the call sites of
->    devm_request_threaded_irq() then the vast majority of them print more or
->    less lousy error messages. A quick grep/sed/awk/sort/uniq revealed
-> 
->       519 messages total (there are probably more)
-> 
->       352 unique messages
-> 
->       323 unique messages after lower casing
-> 
->           Those 323 are mostly just variants of the same patterns with
->           slight modifications in formatting and information provided.
-> 
->       186 of these messages do not deliver any useful information,
->           e.g. "no irq", "
-> 
->       The most useful one of all is: "could request wakeup irq: %d"
-> 
->    So there is certainly an argument to be made that this particular
->    function should print a well formatted and informative error message.
-> 
->    It's not a general allocator like kmalloc(). It's specialized and in the
->    vast majority of cases failing to request the interrupt causes the
->    device probe to fail. So having proper and consistent information why
->    the device cannot be used _is_ useful.
-> 
-> So convert to use devm_request*_irq_probe() API, which ensure that all
-> error handling branches print error information.
-> 
-> In this way, when this function fails, the upper-layer functions can
-> directly return an error code without missing debugging information.
-> Otherwise, the error message will be printed redundantly or missing.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Cc: AngeloGioacchino Del Regno  <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hi Di,
 
+On 11/07/2023 05:40, Di Shen wrote:
+
+[ ... ]
+
+>>>>> +static void power_allocator_reset(struct thermal_zone_device *tz)
+>>>>> +{
+>>>>> +     struct power_allocator_params *params = tz->governor_data;
+>>>>> +
+>>>>> +     reset_pid_controller(params);
+>>>>> +     allow_maximum_power(tz, true);
+>>>>
+>>>> Do you really want to allow the maximum power? What about if the trip
+>>>> temperature is decreased ?
+>>>>
+>>> If the trip temperature is decreased, allow_maximum_power will only
+>>> be executed once, and then the ipa governor will adapt to the lower trip
+>>> temperature and calculate the allocated power for cooling actors again.
+>>> Right?
+>>
+>> Sorry for jumping in this fifth version but I'm not sure about resetting
+>> the change is the right way (and probably, changing a trip point with
+>> the power allocator is not a good idea)
+>>
+>> The platforms where the IPA is planned to be used are creating a dummy
+>> trip point where the IPA begins the acquisition without cooling devices
+>> in order to have the math building the PID schema (eg. hi3660.dtsi).
+>>
+>> What about the sustainable power vs the trip point temperature? I mean
+>> we can change the trip temperature but not the sustainable power which
+>> is directly related to the target temperature. So the resulting power
+>> computation will be wrong.
+>>
+> I totally agree, thanks for reminding me. Sustainable power is the maximum
+> power available at the target temperature, so it must be updated when the trip
+> point is changed. Sorry for missing this point. How about calling
+> get_sustainable_power() to update the sustainable_power? Furthermore, when
+> the sustainble_power() is changed, the pid constants tzp->k_* must be estimated
+> again. In get_sustainble_power, it checks that the sustainable_power is updated,
+> it will call the estimate_pid_constants() to renew the tzp->k_*.
+
+Yes and the sustainable power can be set from userspace too.
+
+So here we have to distinguish what is related to the thermal setup and 
+the thermal usage.
+
+Actually the thermal framework should protect the information from the 
+firmware. It is not acceptable to have an user being able to change the 
+trip points provided by the firmware.
+
+The writable trip point should allow only temperature changes below the 
+ones given in the firmware.
+
+>> The more I think about that, the more I do believe writable trip point
+>> and IPA are incompatible.
+>>
+>> What about forbid that?
+>>
+>> For instance, add a set_trip callback instead of resetting in the
+>> governor and return -EPERM from the IPA?
+>>
+> I've seen that you have sent a patch recently which adds the callback
+> thermal_zone_trips_update(), is that what you said set_trip callback?
+
+Not exactly.
+
+Instead of adding a 'reset' callback, add a 'trip_update' (or whatever 
+the name) callback.
+
+Then pass the trip point to the callback along with the thermal zone.
+
+int ipa_trip_update(struct thermal_zone_device *tz,
+			struct thermal_trip *trip)
+{
+	// Do more IPA crazy stuff or return -EPERM
+}
+
+
+>> Lukasz ?
+
+Lukasz? what do you think?
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
