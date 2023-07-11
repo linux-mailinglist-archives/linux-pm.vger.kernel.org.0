@@ -2,74 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 842A774F586
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 18:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952B274F5EB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Jul 2023 18:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233476AbjGKQd3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Jul 2023 12:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33652 "EHLO
+        id S232397AbjGKQpC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Jul 2023 12:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233390AbjGKQdD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 12:33:03 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661791FD8
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 09:32:50 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b701e1ca63so94730171fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 09:32:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689093167; x=1691685167;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWtpptzPuOCoLkyZBw7yYHV5FeI36rJVjotbONsdA94=;
-        b=WFibieZ2v0r4nWPy0J1wGTrFtOXxVksWo9Ycvtk6r1viqsBFsWV1+2Luw0tJWYEc2d
-         EybaDJGcl9KBnd0R2+PpSfAnadC6cUCuzXIeMjWw73PxDtrOeheXj3MKd/apxW9S3ScJ
-         Bl58mCaKB5LUAOIUynXr102zB7CYguU8HSAJLcDpZc+IWY8x5SiZcHZRkmcdW0/ue2oa
-         8aXF0EdL9nkFqQ8NQ6NYa+DFo+gCiYHKk0xm586Z7LI3nLfD/P1f+sXgZTNlbdV9CQLJ
-         zPkvhLIsOegU5GpzkADKnE1GLB+w6gcz5zA7aFFk4hLsPcOTQHM9yDbvmbKV8wZAXdVk
-         LFCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689093167; x=1691685167;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VWtpptzPuOCoLkyZBw7yYHV5FeI36rJVjotbONsdA94=;
-        b=MBvK8+XmX3q3lgif5Z39BPOJcFbtt/dt93ZtsWQ1j2FS6r/cBi0CvLYOVYX1AK6Yqc
-         cHim5fSQW664ZO9VJs1GrNXoLxcTVZP3zANyvgAJE0qU7cM5oyBK2DtnLoVmDR8ZF2gK
-         a5cZ1q7dchCvuXdt77a4Yblf+LhfUn8JmfpVy20LRK7BCWRF2w6KzF47jQnZk53Plr4B
-         WQZvuEv8iS/34HOgcMfPqxf39A1w6YZNh0kfvlFSMwKW7WqOWJVX/3lqNQ3vGmMNqokP
-         dULZ7zcTsS1vRSUpqM8rbObj/jywpBxLzW3BYmqlvc3kUyLotAtik23YW2/JSCnFgFw/
-         +Klg==
-X-Gm-Message-State: ABy/qLb4hDR247XHt2o+D/BQstaOuX2vjWjS1Zm1XatithNfk8kAnV0P
-        781cKpXD67Rq24ueEtMuQ/HUU9SfW8Y/WTpgVQ4=
-X-Google-Smtp-Source: APBJJlH1If/svLi3ZvVSK9N5XCgAEROHhzB3qlp5M8M0oO6v2qngfJe3MewXHmdWauY1GePpYxisCh5XUDIQqNBIkDk=
-X-Received: by 2002:a05:651c:120c:b0:2b6:fc80:c45f with SMTP id
- i12-20020a05651c120c00b002b6fc80c45fmr12883371lja.13.1689093167200; Tue, 11
- Jul 2023 09:32:47 -0700 (PDT)
+        with ESMTP id S233113AbjGKQoc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Jul 2023 12:44:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92C21738;
+        Tue, 11 Jul 2023 09:44:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2CE561573;
+        Tue, 11 Jul 2023 16:44:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEE6C433C7;
+        Tue, 11 Jul 2023 16:43:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689093845;
+        bh=zaf2CZqYHNb3WqOn3g5/TSKwC8Wg0LJ436Q4TrZp4RA=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=KGVJGsnCZruy2hUuUpH7ijZulq48NN9mnjYRkxxJjynGm26JcUksScIF1TfoPCX/i
+         r6f3ggg+UqlnfDC8exH6e7PS74/XlFttq9p+kmOU9hYXf1ImUimWTMY0z2+2tj2l3/
+         Jk1VB0hRL9DKcciP3cxJhjOMlekjAJH3P6RJPKHWorzn/EFP5qzmufgEyFzhTE2rL1
+         89rukrhKXE24SakUpiwTCpCEb6JU6Th6JehZathj/7UQ3uIHAEQuV4g4S9FgAcVBuE
+         SqvqShT6i3EAPE7sAEcTYX9r0drCG/0POAcYJRJMJYVtt5bAFNFPay3NAIxZKXTEfX
+         Qpv9VDnwO9Q1w==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-pm@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com
+In-Reply-To: <20230617133620.53129-1-stefan.wahren@i2se.com>
+References: <20230617133620.53129-1-stefan.wahren@i2se.com>
+Subject: Re: (subset) [PATCH V2 0/7] ARM: dts: bcm283x: Improve
+ device-trees and bindings
+Message-Id: <168909383906.208679.14234810400324537529.b4-ty@kernel.org>
+Date:   Tue, 11 Jul 2023 22:13:59 +0530
 MIME-Version: 1.0
-Received: by 2002:a17:907:1c16:b0:986:7a95:9cc0 with HTTP; Tue, 11 Jul 2023
- 09:32:46 -0700 (PDT)
-Reply-To: mrsvl06@gmail.com
-From:   Veronica Lee <nd4846496@gmail.com>
-Date:   Tue, 11 Jul 2023 18:32:46 +0200
-Message-ID: <CAPadVRx=24t+dtCfxOJ-H_QTG0496dY-ZfFTyFRXoPSEnRePwA@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16nXnNeV150g15nXp9eZ16jXqteZINep157Xl9eUINec15TXkteZ16Ig15DXnNeZ15og16nXldeR
-INeZ16kg15zXmSDXnteZ15nXnCDXkdei15HXqCDXnNec15Ag16rXkteV15HXlCDXkNeg15kg157X
-lteb15nXqA0K15zXkteR15kg15fXldeW15Qg16nXkNeg15kg16jXldem15Qg15zXqdeq16Mg15DX
-ldeq15og15fXlteV16gg15DXnNeZ15kg15zXpNeo15jXmdedINeg15XXodek15nXnSDXkNeg15kg
-157Xl9eb15QNCteQ16DXkA0K
+
+On Sat, 17 Jun 2023 15:36:13 +0200, Stefan Wahren wrote:
+> This series fix some dtbs_check warning for the Raspberry Pi boards
+> and convert 4 txt DT bindings for BCM2835 to YAML.
+> 
+> Changes in V2:
+> - drop already applied patches (bcm2835-sdhost, bcm2835-thermal)
+> - drop patch "dmaengine: bcm2835: also support generic dma-channel-mask"
+> - keep brcm,bcm2835-dma for ABI compatibility which also resolve
+>   dependency between patch 2 and 3
+> - drop quotes in patch 2 as noted by Rob Herring
+> - add interrupt description as suggested by Rob
+> - add Rob's and Uwe's Reviewed-by
+> 
+> [...]
+
+Applied, thanks!
+
+[2/7] dt-bindings: dma: convert bcm2835-dma bindings to YAML
+      commit: c60d5060b019e8095df7eebd1716747edfbd192a
+
+Best regards,
+-- 
+~Vinod
+
+
