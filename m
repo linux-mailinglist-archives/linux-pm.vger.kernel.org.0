@@ -2,84 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F937508AC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8A67508B2
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233158AbjGLMs4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
+        id S232525AbjGLMtl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:49:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbjGLMsz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:48:55 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93ADA1727;
-        Wed, 12 Jul 2023 05:48:54 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CCJP25002477;
-        Wed, 12 Jul 2023 12:48:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rXIuXoAEhI7O3qWcksCIs8vl+k8098kXLaBDeBMr0vQ=;
- b=jTTZJ+aBwiOduMuSXCZtYQjeQ8PfuxPD9wyT6GJFSNUhtXLGCnwaq7mYIY4LB+aCuaqe
- vWHsSQkTF0jRw3iewyphAcs3iIGTARDbp8ZXnuuXUNSGU/ksSQ0ZnSMZfXSqVB9I9uGK
- qZmVlw5T6dex7ajd3JfVaNj466GryPpRhyIDpMMyCt9Ry+EqN6Oy+96y4rLJmFSmas69
- WIDo1kQ20OmeOdl7oC4rMb320Mvw9nYx/vipXBqOfQIFF6uH0U0M7OASaGRf/HqVnvNp
- le+6gB29NR4VdQSUFeS/WdxIOBB+UPEmK1oEgWVi8Vgx0+Px/1F/wHa9PChn+dG1TtX1 /w== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsf87hggh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:48:42 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CCmfS4003346
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:48:41 GMT
-Received: from [10.201.3.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
- 2023 05:48:36 -0700
-Message-ID: <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
-Date:   Wed, 12 Jul 2023 18:18:32 +0530
+        with ESMTP id S233358AbjGLMtk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:49:40 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A5D1984
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:49:39 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZHc-0005nV-F2; Wed, 12 Jul 2023 14:49:28 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZHb-00DtNV-FD; Wed, 12 Jul 2023 14:49:27 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZHa-004J0e-B0; Wed, 12 Jul 2023 14:49:26 +0200
+Date:   Wed, 12 Jul 2023 14:49:25 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 21/27] thermal/drivers/rcar_thermal: Convert to platform
+ remove callback returning void
+Message-ID: <20230712124925.mssqxm3cvvgy2bbc@pengutronix.de>
+References: <20230712081258.29254-1-frank.li@vivo.com>
+ <20230712081258.29254-21-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: ipq5332: Add tsens node
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>
-References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
- <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
- <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
-From:   Praveenkumar I <quic_ipkumar@quicinc.com>
-In-Reply-To: <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LuJVjy9CbJTPJJZScFi8q5TWucNj-56n
-X-Proofpoint-ORIG-GUID: LuJVjy9CbJTPJJZScFi8q5TWucNj-56n
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 mlxlogscore=915 malwarescore=0
- adultscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120114
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tf26cdgvc5q2g7lq"
+Content-Disposition: inline
+In-Reply-To: <20230712081258.29254-21-frank.li@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -87,113 +60,50 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On 7/12/2023 5:54 PM, Dmitry Baryshkov wrote:
-> On 12/07/2023 14:35, Praveenkumar I wrote:
->> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
->> node with nvmem cells for calibration data.
->>
->> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->> ---
->> [v2]:
->>     Included qfprom nodes only for available sensors and removed
->>     the offset suffix.
->>
->>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 +++++++++++++++++++++++++++
->>   1 file changed, 66 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
->> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> index 8bfc2db44624..0eef77e36609 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> @@ -150,6 +150,46 @@ qfprom: efuse@a4000 {
->>               reg = <0x000a4000 0x721>;
->>               #address-cells = <1>;
->>               #size-cells = <1>;
->> +
->> +            tsens_mode: mode@3e1 {
->> +                reg = <0x3e1 0x1>;
->> +                bits = <0 3>;
->> +            };
->> +
->> +            tsens_base0: base0@3e1 {
->> +                reg = <0x3e1 0x2>;
->> +                bits = <3 10>;
->> +            };
->> +
->> +            tsens_base1: base1@3e2 {
->> +                reg = <0x3e2 0x2>;
->> +                bits = <5 10>;
->> +            };
->> +
->> +            s11: s11@3a5 {
->> +                reg = <0x3a5 0x1>;
->> +                bits = <4 4>;
->> +            };
->> +
->> +            s12: s12@3a6 {
->> +                reg = <0x3a6 0x1>;
->> +                bits = <0 4>;
->> +            };
->> +
->> +            s13: s13@3a6 {
->> +                reg = <0x3a6 0x1>;
->> +                bits = <4 4>;
->> +            };
->> +
->> +            s14: s14@3ad {
->> +                reg = <0x3ad 0x2>;
->> +                bits = <7 4>;
->> +            };
->> +
->> +            s15: s15@3ae {
->> +                reg = <0x3ae 0x1>;
->> +                bits = <3 4>;
->> +            };
->>           };
->>             rng: rng@e3000 {
->> @@ -159,6 +199,32 @@ rng: rng@e3000 {
->>               clock-names = "core";
->>           };
->>   +        tsens: thermal-sensor@4a9000 {
->> +            compatible = "qcom,ipq5332-tsens";
->> +            reg = <0x4a9000 0x1000>,
->> +                  <0x4a8000 0x1000>;
->> +            nvmem-cells = <&tsens_mode>,
->> +                      <&tsens_base0>,
->> +                      <&tsens_base1>,
->> +                      <&s11>,
->> +                      <&s12>,
->> +                      <&s13>,
->> +                      <&s14>,
->> +                      <&s15>;
->> +            nvmem-cell-names = "mode",
->> +                       "base0",
->> +                       "base1",
->> +                       "s11",
->> +                       "s12",
->> +                       "s13",
->> +                       "s14",
->> +                       "s15";
->
-> Previously you had data for other sensors here. Are they not used at 
-> all, not wired, have no known-good placement? I think it might be 
-> better to declare all sensors here (and in the driver too) and then 
-> consider enabling only a pile of them in the thermal-zone node.
+--tf26cdgvc5q2g7lq
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Remaining sensors are not used at all. It is not wired. Only above 
-sensors are placed in SoC.
+Hello,
 
-- Praveenkumar
+On Wed, Jul 12, 2023 at 04:12:52PM +0800, Yangtao Li wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+>=20
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
->
->> +            interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
->> +            interrupt-names = "combined";
->> +            #qcom,sensors = <5>;
->> +            #thermal-sensor-cells = <1>;
->> +        };
->> +
->>           tlmm: pinctrl@1000000 {
->>               compatible = "qcom,ipq5332-tlmm";
->>               reg = <0x01000000 0x300000>;
->
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--tf26cdgvc5q2g7lq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSuoVQACgkQj4D7WH0S
+/k7K5AgAm0/HM7N+Wpid5+g4rZnR/veF450ephm3dGBsVNwsSsSyvzQJ3Vq5FMo/
+imp2YHjJFwmU5XgEt902XhgpOF/ABqWEeQaDUjdPnRTxLbTzhMBZLKx7Rgv1zUQW
+gZcswSMOkE2uFuvm4QbDoVxmIHsSZCrhxHv72Az2CWILdnENO90LjGMRxzxzVhyi
+7syCB+s+usqaKe9f0VNW43/AMGKAP8TywrLFM553EjTKtfNLtGX5uUZOwYIFCr5i
+1Kxvs7VHBAXrtfXO0S6wTQN1fcnsfR4UlqkBqxYu6Qf8kJaziWSN3oA8j4Pea511
+W1hpClUrNd/ira9dnJb5CyUocRlX0g==
+=0C0b
+-----END PGP SIGNATURE-----
+
+--tf26cdgvc5q2g7lq--
