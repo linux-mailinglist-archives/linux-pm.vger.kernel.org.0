@@ -2,70 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 388E7750CB0
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 17:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1861750CB5
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 17:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233363AbjGLPiQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 11:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S233752AbjGLPim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 11:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233836AbjGLPiH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 11:38:07 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A598A1BE3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:38:05 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-34611de0ee4so26758075ab.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:38:05 -0700 (PDT)
+        with ESMTP id S233740AbjGLPij (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 11:38:39 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD0A1BE4
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:38:34 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6686c74183cso6332099b3a.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:38:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1689176285; x=1691768285;
+        d=broadcom.com; s=google; t=1689176314; x=1691768314;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BLM3UylzuB/jm+2NLDwQqlL1LcNuMLSl3aJKr1z3CsU=;
-        b=f+F0p5M2hD/attgaCYJFX/t3dFktlL3sNMu0P+WHIJJ+BqDHxKwr/l6Yb7W8mVa0dj
-         U2ZSuCzTPvOvMd4tuOb5SNv/vRe1hmqdfAsHOiGIkDgtx8/Ek3DGG2uJbpMem0CCU/1Y
-         NrOhdn+psGx+FQIv8ZRfEwgpcSAH0MLyUncJk=
+        bh=b4WbyTW1o52fjawuSMt0sfLtiZRf7KxpOd8nMrq0E20=;
+        b=PKxZwWAd8SaWohVjoBDkoQyxlDLVjpDMGpzzSwoOwd3vuoWBkzpyMdO1g4/KwUd+Lm
+         U4bAlwDNKoEx83coAZoMUkrvzRThhgXNG1PTfrQNy3KKs13yuP6ffKH15wRyP2ZGfRZK
+         AyPJ+XQyCQTywyuofx9aXHdZVskvY72iS1vmM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689176285; x=1691768285;
+        d=1e100.net; s=20221208; t=1689176314; x=1691768314;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BLM3UylzuB/jm+2NLDwQqlL1LcNuMLSl3aJKr1z3CsU=;
-        b=FbcYUDOuSGX1fenRUOdgvQe9muLL7NOMg4JSz4szuEow78aUHxwYNcIuQj9r6ZXbp+
-         orYoyYj+ErueR5EmWwyn/JD31wDgMpA8/TD3mv8gZNHt+oipz+PY8VKti3VKodoorPZX
-         jvpEC0RsCrukmE1WBkrL34wquRiETbqUicrIfzS0TcDxFYuVyMlpduTBJ19pLxedPFgn
-         eq4T4h/ctkNouA3TZ8J7x0Mbo1aoOcPdk1JUteLQdYlNDhR2NMdG3J6TDD5T+qJA/Qvl
-         hm+/sWR9IDsqsvph+63W3S53rDNPvGSZDQr/eAaOkQ1me4WBnHSH8eTUFmqb2VMaTivw
-         wlLg==
-X-Gm-Message-State: ABy/qLaY7DMrY1VBuLEldT5rIV8PQXjuV6E8U6zMJ0A6d5fHZAeqm8MC
-        ubJpo7M436TNtrLqvdITThmVIA==
-X-Google-Smtp-Source: APBJJlGaNZ3SarpYIv+8586dnSsatR7aSnSbPlF8Z9fRYSq7o3T0tgRkT/tSACIPTr/DVyANor60IA==
-X-Received: by 2002:a92:907:0:b0:346:4c80:7fdb with SMTP id y7-20020a920907000000b003464c807fdbmr12168431ilg.5.1689176285003;
-        Wed, 12 Jul 2023 08:38:05 -0700 (PDT)
+        bh=b4WbyTW1o52fjawuSMt0sfLtiZRf7KxpOd8nMrq0E20=;
+        b=LZCSaIZV60MpXsI5qxzw9/NkZ7oCGPwrXCrY39uTZvs0th2xPNRXa1Rk/TjcGiDPha
+         QlMIiWBzWaUK0g6PR/M1ma/4h2he0XsuYfFLCOr/9Nb2E7n2OIq6ZvX4ZwgjDHlsctxV
+         CoYnZnltITIwjFXIuEj2mnmAGdSZ2t2QOg7e+YjHLT/BskjkPEPYopNpPQ9z/h94RCeO
+         463ii7JhB7wfOCxx2DpMSI7+SYsj/T/kWK0+sR18AWiQGW7/cND6+Xzpm6hkqAwmXCk4
+         5g8h5upgONauEPcdpzPmnZxrHCRHrtRT5TPgiwNs6m1c+VlxU1t261MHDM3liAvbKrea
+         iVpw==
+X-Gm-Message-State: ABy/qLbUh7nX2aGsNPqWlqOv8PHb6ngAOrnEq2zUI8LZcX5iBBGqxyiR
+        60ieHw50Pj7ZjD8TbcL0H8mI+t5/Zp9CsDQMaOzHcA==
+X-Google-Smtp-Source: APBJJlFRPtz2TqgyqUuA8lbGkvSeogOx4o4hQRRkx3QyXTeEEusGlL7lnilTYHJ2t/ScsX9h+U9zYw==
+X-Received: by 2002:a05:6a20:1394:b0:132:cd2c:f0f4 with SMTP id hn20-20020a056a20139400b00132cd2cf0f4mr2025031pzc.29.1689176314186;
+        Wed, 12 Jul 2023 08:38:34 -0700 (PDT)
 Received: from [192.168.47.133] ([37.175.79.111])
-        by smtp.gmail.com with ESMTPSA id l12-20020a17090a408c00b0026094c23d0asm3853315pjg.17.2023.07.12.08.38.02
+        by smtp.gmail.com with ESMTPSA id h21-20020a62b415000000b0067b24701daasm3724158pfn.86.2023.07.12.08.38.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 08:38:04 -0700 (PDT)
-Message-ID: <7614bf95-8b82-e72a-e303-db59d11fb1b3@broadcom.com>
-Date:   Wed, 12 Jul 2023 17:38:01 +0200
+        Wed, 12 Jul 2023 08:38:33 -0700 (PDT)
+Message-ID: <42b9312e-7fcd-7df4-2a33-fd720f89c706@broadcom.com>
+Date:   Wed, 12 Jul 2023 17:38:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 09/19] cpufreq: brcmstb-avs-cpufreq: Convert to platform
- remove callback returning void
-To:     Yangtao Li <frank.li@vivo.com>, Markus Mayer <mmayer@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
+Subject: Re: [PATCH 12/19] cpufreq: raspberrypi: Convert to platform remove
+ callback returning void
+To:     Yangtao Li <frank.li@vivo.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>
 Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20230712093322.37322-1-frank.li@vivo.com>
- <20230712093322.37322-9-frank.li@vivo.com>
+ <20230712093322.37322-12-frank.li@vivo.com>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230712093322.37322-9-frank.li@vivo.com>
+In-Reply-To: <20230712093322.37322-12-frank.li@vivo.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000729d7506004c0042"
+        boundary="0000000000003092e006004c0257"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
@@ -76,7 +76,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---000000000000729d7506004c0042
+--0000000000003092e006004c0257
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -102,7 +102,7 @@ Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
 Florian
 
---000000000000729d7506004c0042
+--0000000000003092e006004c0257
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -175,12 +175,12 @@ AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
 /D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOvzhEPm3RdHKWKY
 lw8H+fU3DkDSBaihbLbAjD53+21oMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDcxMjE1MzgwNVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AQkFMQ8XDTIzMDcxMjE1MzgzNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBy6YnUG6AShJJCICpLDcWyyr5EkXydnLuN
-3glkssmg29+GqjrEG0E5Y2FclUUgiSG//58qn5W+VI2fZ1/ExpXcenefSXvIELpn75sG/uMcbvp2
-GlAxbuMenN9EXsBJ3QW+ie4Kt+aiZS0gaqjXIvHiVnZI25kvlgknwPmMKSwDyvv2RwUMbC6tG4QT
-6ybJ52uG3AjRfcBxrZ0+Y4qLwLe1wn05MZ1VekGpEj4Z1VfO5CHrDAGmh4tmDxYSVWCEUf3O1vIJ
-OMiBAfoPp0B2g2U9HBjE9xA57WdSD++9H3RHFNvYMQd88C0Iv2fkRtTs8fDQfQ7LofbZBztHYenL
-XXms
---000000000000729d7506004c0042--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCy4IAkTHAB5T/8ygBEycDQbqQrepTLpxG5
+wkfZY0uQqBUl93jbGylkcXhGCtQbQgrXprhsOMZrne20KqFh1kbfsaYHf9/7RuQ8hKqddyt/S0ck
+r9MvuZwog9wCdYYDIhF2B6CSae0bl4Nth6xq4vdW0N1s9vxnIu6lnPAVuSosMyFDdNF1zpFxqNKd
+VEPmZ4Pt/s0L0IxnXB5L4VIAJQHKNtLIJ2v8w+GPuJOSG/5TDAU5FZ0lLPz/ohozve+mm2fJisD2
+wtLoJY+MGJHRaRbFwBhEadFUZaRPKnEphF2kmfYtlHevbbr/08/ZBlZHQ+R+HIyW26Ce/JoAz/MN
+BplQ
+--0000000000003092e006004c0257--
