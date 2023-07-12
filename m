@@ -2,105 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60FE57505AC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 13:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC291750638
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 13:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbjGLLM2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 07:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43782 "EHLO
+        id S232743AbjGLLg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 07:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjGLLM1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 07:12:27 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F12F1712
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 04:12:25 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-668709767b1so4052806b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 04:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689160345; x=1691752345;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nVwe3oATxadInKWfhPahYmr2Wuk+PoT6QXJO53ETr60=;
-        b=Jy4LBq1/y7Q0k9uVaWzUYa3AMrhNie3O3EdPzirb8suL2pzU/POTsrG1VzQFAz+gsq
-         AmHYiC+BfeddTyFWOP5hyJrUxkb1N9VRdWIkKo3WqUWGiJUU3V00Be7rwC2zbTmUhfRB
-         N/TcnPDEm496ciCi/6rRvYwN4nQbYW5xLvT/x3c8fdRwDRlpQ/TpcUJu5hSCxFANqo5Z
-         IVvAOhkvrmYBKJ9JBwYOgKehjoJGw9s2Y3snVz6aE89RKM9BGNWEZ5v6KBaxOq9e4h+s
-         G+rGGzFurBKpa6wSXSltZ1WxcBvZrKPEKXPH7uJTKqX62QsBo6Z/E93RcRHjyXu3CI1B
-         La4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689160345; x=1691752345;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nVwe3oATxadInKWfhPahYmr2Wuk+PoT6QXJO53ETr60=;
-        b=OnBxMGRFU98tAIN9le1dlnT4xdko8qU/t/ien/LuOtvukam1oJACUyOm+lAoqYTw3B
-         chFccfwCD1ItSupuvNK+w9B8metsqKlwNb53C8XhPmpsh3zrE4dO6Vz2vnY1IfJw+MOS
-         okdo8t06ot+FaWcKuyagJ4+73ykCJDNWkBcPQM4LldsMmhnWoYDXLfT385xQit0j8mV9
-         fPanLLqh5vMebfrvsHA7oycVZrZ5WSUhwOobWuPJHj+i9BlTjJJ3bgZKWt39PXDeHznj
-         nhY4n/fu5f10yLRxWXHdQ1Ru/xZ+hDNih6bzIqkL6/xzEBziD96Z7MbR52qoXqXD8LgO
-         iFnw==
-X-Gm-Message-State: ABy/qLY2Zpu5gxP/49Fu0ZrrEaUgzOdKvck5wjwn43vCqvNNFErrFYew
-        WQl0E8Ma3WdmVHb87agOxJh6
-X-Google-Smtp-Source: APBJJlFnl85MjQWlkwn1Zyl5TcKEjspNtR5ngVg7G/HHZviVEXVBaK04YsU6EWzsFEru4iHW4c8IVA==
-X-Received: by 2002:a17:903:32ce:b0:1b8:b4e5:15c2 with SMTP id i14-20020a17090332ce00b001b8b4e515c2mr17966878plr.22.1689160345081;
-        Wed, 12 Jul 2023 04:12:25 -0700 (PDT)
-Received: from thinkpad ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id c1-20020a170902848100b001b03cda6389sm3695566plo.10.2023.07.12.04.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 04:12:24 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 16:42:08 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH 00/14] UFS: Add OPP and interconnect support
-Message-ID: <20230712111208.GA102757@thinkpad>
-References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <35256e49-2a34-1334-698c-161d443ab3fc@oracle.com>
+        with ESMTP id S231773AbjGLLgo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 07:36:44 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31341173C;
+        Wed, 12 Jul 2023 04:36:43 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36C8foUA008681;
+        Wed, 12 Jul 2023 11:36:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=WMaHetkUT0AA1H//qau1sBZbxkTNUXPfs2DvkqOOYuU=;
+ b=H6h79yVK3FzyNwXA0pdI0lm8tZL26Ppq3efwwZq1lLkUGnJGfCP1QayNUZNGMCCmIHFI
+ 99SPLfB3BrlrYwZW8IB9xPHGm2K0vSmx+azLRUM+QfJQLwlFV+YgGiYFQBfJmCfDHFCz
+ 3UT59jPwT+aMLEUOnQeVDyCoDSh0fR+lGCMm5IqM8jXFpq2o8mOP8Ufhhus920fayzPi
+ 55lO0b+mYh5LqgTnvO5ml5jhc0iVtjaRRMm1+0GTcCQbBNihtjYu1uqGn7zSgKraPeJo
+ o2o4oZSILYRg5xiqwg5XYzchWI9mV2Zgoze2eKEsuWqyrffa1phpb/MEltlWx8LbNO8S IA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rse45heac-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 11:36:33 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CBaWph007983
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 11:36:32 GMT
+Received: from hu-ipkumar-blr.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 12 Jul 2023 04:35:56 -0700
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+To:     <amitk@kernel.org>, <thara.gopinath@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+Subject: [PATCH v2 0/5] Add IPQ5332 TSENS support
+Date:   Wed, 12 Jul 2023 17:05:34 +0530
+Message-ID: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <35256e49-2a34-1334-698c-161d443ab3fc@oracle.com>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kr5tTN3mhODXF4OSCzz-wgAPrLcZFR2m
+X-Proofpoint-ORIG-GUID: kr5tTN3mhODXF4OSCzz-wgAPrLcZFR2m
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_06,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=714
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120103
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 12:02:37PM +0100, John Garry wrote:
-> Did you bcc linux-scsi on this series?
-> 
-> I am just wondering why it came directly to my inbox and I am not the to: or
-> cc: list. I also notice replies in the archives which I have not received...
-> 
+IPQ5332 uses tsens v2.3.3 IP with combined interrupt for
+upper/lower and critical. IPQ5332 does not have RPM and
+kernel has to take care of TSENS enablement and calibration.
+This patch series adds the sensor enablement and calibration
+support. On top, adds IPQ5332 TSENS support.
 
-I initially missed CCing scsi list and maintainers. So instead of resending the
-series (since it has too many people CCed), I just bounced the patches to scsi
-list and maintainers using Mutt.
+[v2]:
+	Dropped [v1 1/6] dt-bindings change and added nvmem-cell-names
+	as part of [v2 2/5] ipq5332 dt-bindings
 
-From the next iteration, I will make sure to add everyone. Sorry for the
-trouble.
+Praveenkumar I (5):
+  thermal/drivers/tsens: Add TSENS enable and calibration support for V2
+  dt-bindings: thermal: tsens: Add ipq5332 compatible
+  arm64: dts: qcom: ipq5332: Add tsens node
+  arm64: dts: qcom: ipq5332: Add thermal zone nodes
+  thermal/drivers/tsens: Add IPQ5332 support
 
-- Mani
-
-> Thanks,
-> John
+ .../bindings/thermal/qcom-tsens.yaml          |  12 ++
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi         | 144 +++++++++++++++
+ drivers/thermal/qcom/tsens-v2.c               | 169 ++++++++++++++++++
+ drivers/thermal/qcom/tsens.c                  |   5 +-
+ drivers/thermal/qcom/tsens.h                  |   5 +-
+ 5 files changed, 333 insertions(+), 2 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
