@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6956750825
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1709875082C
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbjGLMYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
+        id S231853AbjGLMZ3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:25:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233025AbjGLMYr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:24:47 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD0A0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:24:45 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so10755681e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:24:45 -0700 (PDT)
+        with ESMTP id S232767AbjGLMZ2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:25:28 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C780A100
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:25:23 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fbf1f6c771so1666066e87.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:25:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689164684; x=1691756684;
+        d=linaro.org; s=google; t=1689164722; x=1691756722;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wa9JW/WgSJqIhnDFJ2lPwRLRAbKTDP/bdGMeL+uenak=;
-        b=D+WMjx18oS3oIW7sOM5dXoBvbr81cFxTK7JJVYjKyWCVESTeY4BJ/7pci13Gw+mAth
-         984AuwsloliHjFXAAyHnKpUCSkaoHtzKNL9BEmaxbH7Iyf6CMfxYsJbc5yoTn+eoEzxr
-         zEGBWKBmqfwFUxLn6qvhrZ+swEYdYpTyzEInPyWAOfDstGK67WMBTO9K7qEVmr+emUQl
-         iP1qYbFE/3BXMr+KeYc0p8+zb4rsHaoIz76qqG3ePqzdWqNkSZVWREI0/RQgLkxRAxj3
-         VQGuxa0l48WWDBuvbsJc2LkB9qumVFuuS9HfhqkfRexwVtdofwfDgF6ZchcXezOutjfC
-         TcqQ==
+        bh=F1ZyIkq4WbMXWqsXns9THs2olK9VahWIVb3OHn8unLs=;
+        b=JOhezo/1ZaTIWSt6mBTejlQYkBv3WvNx2TkyB751uV8RDLHsGi3hu3tW9xLHpiBE27
+         t4RmO25UfGXyjCr5+327l2i6qJsBRlizuq4Mw3Hraf1vvDHPc7+KqAOCAAo8arDlju4T
+         Gf9sZHtrCRqGKepDySmk7mN4VqXwDn0L+04sgal+ZfHzMohsv2AkZ/I6IhEwGEBSmJnE
+         kRNtlyQj7knLf98OQuIJ4xTZbg7X5QIgQs1zxn0q8K55dN3NbLaYi+Q/CgXUKHKH4oiZ
+         eKxmRal20B/z+d7dp1CYfWZKWSSTpmvWZZH13oueWr1KVcC1k/cL4Q/yWBFusZWwcnXf
+         V8VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689164684; x=1691756684;
+        d=1e100.net; s=20221208; t=1689164722; x=1691756722;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wa9JW/WgSJqIhnDFJ2lPwRLRAbKTDP/bdGMeL+uenak=;
-        b=LFM/e75RUI0dgefwUR2x1fMvFzqkcw4XINbApUSzXl2R1Jt2/OWNR/4vlNsDJGPQEl
-         FfdY8t3AKEx5zp6z2B5sGmMDYyEz6vfZHaUFibOxiq+1Elp2YOjfcmJhW23e50pz54Au
-         I50Z/mKWr9J+aLRjGWl6fCmDHGGZ51uXOliiqgeoCD+PNsbPhrvgXSkhtG3HXM2ClQLL
-         VI8OXO1HoCNVdxZOqcC74qZp2ctT119tbpTTlGjT8D1ylcIfUfiiAn/sffxw3IBsPmqw
-         vO3FgLkZF5v9iaQ6iwOQJ0UDrZ4g/h3SHq60UWSbbFqBYXl2IkpKjwzHbrKfEcSc+fXx
-         eiiQ==
-X-Gm-Message-State: ABy/qLbQaL2ycm18HmBeVzuM/W66BR/BYUIpAFcqznTPvpRacnwAS6/q
-        KwKgPpr3MNNw1PgYk2T3Q7OGcA==
-X-Google-Smtp-Source: APBJJlHK3CtRUxX9Fq4xB1c0C+pE6yEyeluKd9AcBaQOLzyeBaGibEe7Ex4O9ymSaESzIa5HVUjiHQ==
-X-Received: by 2002:a05:6512:32bb:b0:4fb:89c1:c209 with SMTP id q27-20020a05651232bb00b004fb89c1c209mr14725929lfe.62.1689164684068;
-        Wed, 12 Jul 2023 05:24:44 -0700 (PDT)
+        bh=F1ZyIkq4WbMXWqsXns9THs2olK9VahWIVb3OHn8unLs=;
+        b=Vand2D/yMPYDJYW7BLOkRCDZXocDHVxQS7nBXnjdAB8xNUi9MW1r2wM3zusjSHdrku
+         glE9zfbIFKSiSVitUfvh/3zt3HUZKRLY+CJJ6+DeMGdF7Og3mcJYZsbjT1ybcwjozBzv
+         rVggSTlf4vL090nBCAbMJk4zPpN3RrCab9my0uHoKOyNN4SR53WyhIrBSIsE4IWGT/AG
+         379XAfUeGKfiWz8ulDtJ7NiRJrCVNA8p+6b6fjEFt5ygpMAteI+VrbMmVmJASvc3n6ru
+         x3+Wt1ZcPbxNGmvscY3140E0NvCDuE58vpyxNvCdGM/W5tF7pPQCIYbwz4q/JTD0teBL
+         uk+w==
+X-Gm-Message-State: ABy/qLZYzRYdu/4A8QqtzlMkMesl+1i1aJMEdrSt1rYQzkCfz1kQwxG9
+        yqZ0yW7VQg48WBPInncqI7pcfQ==
+X-Google-Smtp-Source: APBJJlH7qN4d0sOGUx0/N+ngJQbFVjX31uyhadAOMznlzUCc1KWAh341B1BGXehV5rlS7kbWZ5IdWA==
+X-Received: by 2002:a19:5e06:0:b0:4fb:9595:15e9 with SMTP id s6-20020a195e06000000b004fb959515e9mr14485851lfb.22.1689164722152;
+        Wed, 12 Jul 2023 05:25:22 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id q8-20020ac25288000000b004fb8c0f247fsm685755lfm.129.2023.07.12.05.24.43
+        by smtp.gmail.com with ESMTPSA id i13-20020a056512006d00b004f73eac0308sm688235lfo.183.2023.07.12.05.25.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 05:24:43 -0700 (PDT)
-Message-ID: <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
-Date:   Wed, 12 Jul 2023 15:24:43 +0300
+        Wed, 12 Jul 2023 05:25:21 -0700 (PDT)
+Message-ID: <a33368ef-f68c-d7ee-922a-8896a5d1f158@linaro.org>
+Date:   Wed, 12 Jul 2023 15:25:21 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: ipq5332: Add tsens node
+Subject: Re: [PATCH v2 4/5] arm64: dts: qcom: ipq5332: Add thermal zone nodes
 Content-Language: en-GB
 To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
         thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
@@ -65,9 +65,9 @@ To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     quic_varada@quicinc.com
 References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
- <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
+ <20230712113539.4029941-5-quic_ipkumar@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230712113539.4029941-5-quic_ipkumar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,108 +81,107 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 12/07/2023 14:35, Praveenkumar I wrote:
-> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
-> node with nvmem cells for calibration data.
+> This patch adds thermal zone nodes for sensors present in
+> IPQ5332.
 > 
 > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 > ---
 > [v2]:
-> 	Included qfprom nodes only for available sensors and removed
-> 	the offset suffix.
+> 	Added passive trips and alignment change.
 > 
->   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 +++++++++++++++++++++++++++
->   1 file changed, 66 insertions(+)
+>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 78 +++++++++++++++++++++++++++
+>   1 file changed, 78 insertions(+)
 > 
 > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> index 8bfc2db44624..0eef77e36609 100644
+> index 0eef77e36609..a1f59af97ee8 100644
 > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
 > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> @@ -150,6 +150,46 @@ qfprom: efuse@a4000 {
->   			reg = <0x000a4000 0x721>;
->   			#address-cells = <1>;
->   			#size-cells = <1>;
+> @@ -480,4 +480,82 @@ timer {
+>   			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+>   			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+>   	};
 > +
-> +			tsens_mode: mode@3e1 {
-> +				reg = <0x3e1 0x1>;
-> +				bits = <0 3>;
-> +			};
+> +	thermal-zones {
+> +		rfa-0-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 11>;
 > +
-> +			tsens_base0: base0@3e1 {
-> +				reg = <0x3e1 0x2>;
-> +				bits = <3 10>;
+> +			trips {
+> +				rfa-0-critical {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
 > +			};
-> +
-> +			tsens_base1: base1@3e2 {
-> +				reg = <0x3e2 0x2>;
-> +				bits = <5 10>;
-> +			};
-> +
-> +			s11: s11@3a5 {
-> +				reg = <0x3a5 0x1>;
-> +				bits = <4 4>;
-> +			};
-> +
-> +			s12: s12@3a6 {
-> +				reg = <0x3a6 0x1>;
-> +				bits = <0 4>;
-> +			};
-> +
-> +			s13: s13@3a6 {
-> +				reg = <0x3a6 0x1>;
-> +				bits = <4 4>;
-> +			};
-> +
-> +			s14: s14@3ad {
-> +				reg = <0x3ad 0x2>;
-> +				bits = <7 4>;
-> +			};
-> +
-> +			s15: s15@3ae {
-> +				reg = <0x3ae 0x1>;
-> +				bits = <3 4>;
-> +			};
->   		};
->   
->   		rng: rng@e3000 {
-> @@ -159,6 +199,32 @@ rng: rng@e3000 {
->   			clock-names = "core";
->   		};
->   
-> +		tsens: thermal-sensor@4a9000 {
-> +			compatible = "qcom,ipq5332-tsens";
-> +			reg = <0x4a9000 0x1000>,
-> +			      <0x4a8000 0x1000>;
-> +			nvmem-cells = <&tsens_mode>,
-> +				      <&tsens_base0>,
-> +				      <&tsens_base1>,
-> +				      <&s11>,
-> +				      <&s12>,
-> +				      <&s13>,
-> +				      <&s14>,
-> +				      <&s15>;
-> +			nvmem-cell-names = "mode",
-> +					   "base0",
-> +					   "base1",
-> +					   "s11",
-> +					   "s12",
-> +					   "s13",
-> +					   "s14",
-> +					   "s15";
-
-Previously you had data for other sensors here. Are they not used at 
-all, not wired, have no known-good placement? I think it might be better 
-to declare all sensors here (and in the driver too) and then consider 
-enabling only a pile of them in the thermal-zone node.
-
-> +			interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "combined";
-> +			#qcom,sensors = <5>;
-> +			#thermal-sensor-cells = <1>;
 > +		};
 > +
->   		tlmm: pinctrl@1000000 {
->   			compatible = "qcom,ipq5332-tlmm";
->   			reg = <0x01000000 0x300000>;
+> +		rfa-1-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 12>;
+> +
+> +			trips {
+> +				rfa-1-critical {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		misc-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 13>;
+> +
+> +			trips {
+> +				misc-critical {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +
+> +		cpu-top-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 14>;
+> +
+> +			trips {
+> +				cpu-top-critical {
+> +					temperature = <115000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +
+> +				cpu-passive {
+> +					temperature = <105000>;
+> +					hysteresis = <1000>;
+> +					type = "passive";
+
+cooling device for this trip point?
+
+> +				};
+> +			};
+> +		};
+> +
+> +		top-glue-thermal {
+> +			polling-delay-passive = <0>;
+> +			polling-delay = <0>;
+> +			thermal-sensors = <&tsens 15>;
+> +
+> +			trips {
+> +				top-glue-critical {
+> +					temperature = <125000>;
+> +					hysteresis = <1000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+>   };
 
 -- 
 With best wishes
