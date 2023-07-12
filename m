@@ -2,382 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25609750ECC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19BB6750EE3
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233024AbjGLQl5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 12:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S232395AbjGLQpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 12:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbjGLQlx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:41:53 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E0A2118
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:41:31 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666e97fcc60so5001449b3a.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689180091; x=1691772091;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JG8l8l0Mu0+pNnnrqeaG4m1soj2ykxAUEUS5bx3yBLM=;
-        b=nOVty0dxCm9ug10ZW6YA4SiPykK8fhs51YLTIqnJH0kZlbVVhI7O9WUrwR6tjjNKjj
-         pjTJV5x3YzJdUXE/qZgKkXTCycTgxV8QhZT5b2tLGOsVvWg0iKKKn1NiGoSIelNMIFF8
-         wvVy/4WcmAgVSyEPfcfBP9GpE19ZH2CxfVWfCdrbDwsxh8Q1tHvTWMerWIQOQMdN0RKa
-         9uVX4w64lFAyVM3eKkqwxn2jIxsvuPIQLTvj4d42T2vXU2Bj1lJOlhZIrjllVHjfP+1z
-         l35/O6o9ObnWMvl5igPCdwrdL5FWv1qfezKmqBr/MJS7ujAumef6LFZnsKuft5dCUop4
-         LX3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689180091; x=1691772091;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JG8l8l0Mu0+pNnnrqeaG4m1soj2ykxAUEUS5bx3yBLM=;
-        b=QhhzrVIoEJoow/x4DCduY+U9tu5ufe699fDwWC3kix1sHpVT1W4xhtMwXPuMJ3Ohn+
-         R9CbcRojeEc9zFlcgSS/tnHewbTwi1ss2/WEoO7iZEC/1vUl60KB7JtQOUSNdadR972X
-         TpjX/FgoEk6gzVcyvLWJXvW0VOhZLaxDXYGsRIXhdfspaL+3uEHrcthPzD8u+/vVFD4o
-         7ceLvBd7+7EDE/KJJE2NPoPp8dvZDZB/phtSWs4Vxejit5CEwfwSVNWADN+4bLoP16EI
-         0oHA7+rANFad615A22AbAMB75z/SjiLLgjb7Oyw26TEt/n4+uodIrfBic/5VcnmlqNgB
-         s4Pg==
-X-Gm-Message-State: ABy/qLaE2zTvlRRIi6p2Gqdf7V/GPHZ481yNTs7DA5XrGBVtB3aApwOM
-        qNHffXmJkqeFEzdnGBnwKHvw
-X-Google-Smtp-Source: APBJJlEP45rbWedRrUg7MPlYZwbsPDhir8/t9WkxHshZaYuyK4SnAsKjBbOxXXv4A+DrfqbwTsIBSA==
-X-Received: by 2002:a05:6a00:2196:b0:64c:c5f9:1533 with SMTP id h22-20020a056a00219600b0064cc5f91533mr18788238pfi.33.1689180090850;
-        Wed, 12 Jul 2023 09:41:30 -0700 (PDT)
-Received: from thinkpad ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id b20-20020aa78714000000b00682bbb65852sm3953029pfo.176.2023.07.12.09.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 09:41:30 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 22:11:14 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH 14/14] scsi: ufs: qcom: Add support for scaling
- interconnects
-Message-ID: <20230712164114.GH102757@thinkpad>
-References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <20230712103213.101770-19-manivannan.sadhasivam@linaro.org>
- <107aad9f-40c0-f32b-9f74-6c82ee6785bf@linaro.org>
+        with ESMTP id S229668AbjGLQp3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:45:29 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA4611B;
+        Wed, 12 Jul 2023 09:45:28 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CDgDhU024621;
+        Wed, 12 Jul 2023 16:44:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Ecv2JxhYijVtgzl9hWfCcUgczVGuOQqmpvz3ynsFnRA=;
+ b=XDVNGf240CXJcETtLNGEh/cCBRb4pCDtJOJQXvr+FBj/CsY39az+BTh/jUwChJBvHeT/
+ 7+UMYE+EYs5m4d7/6c4CI2Tmabhk90gPXRkurTGnOdbV2wCKG8oYC1zs4OWDdpDkmk5L
+ 8otzzSVBFOCak154MjOmus/+ca8Ct8G9OVAg/r5sEHoumcP9m4jKE8qb26UZ4lRa3f+y
+ 40of8jEuGwS87dCorbYbz3xMMz2fhQUzbAjdAG8q/vIZppdTe8HsmCVnfH0l0F1ACBNT
+ kN+isPcRShr/o87oNK1G0xHdWTB6wZJdONQuSNuu94g7PrtXtTtxSKVxqza8TtU449KZ dQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rseqpt48v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 16:44:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CGipGb013382
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 16:44:52 GMT
+Received: from [10.216.33.107] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
+ 2023 09:44:46 -0700
+Message-ID: <4adcdd78-8cc3-8ea8-7195-4ece0527d627@quicinc.com>
+Date:   Wed, 12 Jul 2023 22:14:42 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <107aad9f-40c0-f32b-9f74-6c82ee6785bf@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 2/5] dt-bindings: thermal: tsens: Add ipq5332
+ compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <amitk@kernel.org>, <thara.gopinath@gmail.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
+ <20230712113539.4029941-3-quic_ipkumar@quicinc.com>
+ <f31e9ff1-807b-c252-6f7e-146aba844fd9@linaro.org>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <f31e9ff1-807b-c252-6f7e-146aba844fd9@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: R5CWdmS8An8U0na_MfefeWrU8AF9HpJc
+X-Proofpoint-ORIG-GUID: R5CWdmS8An8U0na_MfefeWrU8AF9HpJc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_11,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 clxscore=1015
+ impostorscore=0 adultscore=0 malwarescore=0 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2307120150
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 04:22:51PM +0300, Dmitry Baryshkov wrote:
-> On 12/07/2023 13:32, Manivannan Sadhasivam wrote:
-> > Qcom SoCs require scaling the interconnect paths for proper working of the
-> > peripherals connected through interconnects. Even for accessing the UFS
-> > controller, someone should setup the interconnect paths. So far, the
-> > bootloaders used to setup the interconnect paths before booting linux as
-> > they need to access the UFS storage for things like fetching boot firmware.
-> > But with the advent of multi boot options, bootloader nowadays like in
-> > SA8540p SoC do not setup the interconnect paths at all.
-> > 
-> > So trying to configure UFS in the absence of the interconnect path
-> > configuration, results in boot crash.
-> > 
-> > To fix this issue and also to dynamically scale the interconnects (UFS-DDR
-> > and CPU-UFS), interconnect API support is added to the Qcom UFS driver.
-> > With this support, the interconnect paths are scaled dynamically based on
-> > the gear configuration.
-> > 
-> > During the early stage of ufs_qcom_init(), ufs_qcom_icc_init() will setup
-> > the paths to max bandwidth to allow configuring the UFS registers. Touching
-> > the registers without configuring the icc paths would result in a crash.
-> > However, we don't really need to set max vote for the icc paths as any
-> > minimal vote would suffice. But the max value would allow initialization to
-> > be done faster. After init, the bandwidth will get updated using
-> > ufs_qcom_icc_update_bw() based on the gear and lane configuration.
-> > 
-> > The bandwidth values defined in ufs_qcom_bw_table struct are taken from
-> > Qcom downstream vendor devicetree source and are calculated as per the
-> > UFS3.1 Spec, Section 6.4.1, HS Gear Rates. So it is fixed across platforms.
-> > 
-> > Cc: Brian Masney <bmasney@redhat.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/ufs/host/ufs-qcom.c | 131 +++++++++++++++++++++++++++++++++++-
-> >   drivers/ufs/host/ufs-qcom.h |   3 +
-> >   2 files changed, 133 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> > index 8d6fd4c3324f..8a3132d45a65 100644
-> > --- a/drivers/ufs/host/ufs-qcom.c
-> > +++ b/drivers/ufs/host/ufs-qcom.c
-> > @@ -7,6 +7,7 @@
-> >   #include <linux/time.h>
-> >   #include <linux/clk.h>
-> >   #include <linux/delay.h>
-> > +#include <linux/interconnect.h>
-> >   #include <linux/module.h>
-> >   #include <linux/of.h>
-> >   #include <linux/platform_device.h>
-> > @@ -46,6 +47,49 @@ enum {
-> >   	TSTBUS_MAX,
-> >   };
-> > +#define QCOM_UFS_MAX_GEAR 4
-> > +#define QCOM_UFS_MAX_LANE 2
-> > +
-> > +enum {
-> > +	MODE_MIN,
-> > +	MODE_PWM,
-> > +	MODE_HS_RA,
-> > +	MODE_HS_RB,
-> > +	MODE_MAX,
-> 
-> MODE_MIN and MODE_MAX seem to be unused
-> 
 
-No, they are used in the driver.
+On 7/12/2023 7:55 PM, Krzysztof Kozlowski wrote:
+> On 12/07/2023 13:35, Praveenkumar I wrote:
+>> IPQ5332 uses TSENS v2.3.3 with combined interrupt. RPM is not
+>> available in the SoC, hence adding new compatible to have the
+>> sensor enablement and calibration function.
+>>
+>> This patch also adds nvmem-cell-names for ipq5332
+>>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> ---
+>> [v2]:
+>> 	Followed the order for ipq5332 and added nvmem-cell-names.
+>>
+>>   .../devicetree/bindings/thermal/qcom-tsens.yaml      | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> index 27e9e16e6455..cca115906762 100644
+>> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+>> @@ -69,6 +69,7 @@ properties:
+>>   
+>>         - description: v2 of TSENS with combined interrupt
+>>           enum:
+>> +          - qcom,ipq5332-tsens
+>>             - qcom,ipq8074-tsens
+>>   
+>>         - description: v2 of TSENS with combined interrupt
+>> @@ -205,6 +206,15 @@ properties:
+>>             - const: s9_p2_backup
+>>             - const: s10_p1_backup
+>>             - const: s10_p2_backup
+>> +      - items:
+>> +          - const: mode
+>> +          - const: base0
+>> +          - const: base1
+>> +          - pattern: '^s[0-9]+$'
+>> +          - pattern: '^s[0-9]+$'
+>> +          - pattern: '^s[0-9]+$'
+>> +          - pattern: '^s[0-9]+$'
+>> +          - pattern: '^s[0-9]+$'
+> Previously there were 17 items here. What changed?
+Previously I have added all the available sensor offsets in QFPROM. But 
+in IPQ5332,only 5 sensors are present.
+Other sensors not present/wired in the SoC, hence updated only for 5 
+sensors now.
 
-> > +};
-> > +
-> > +struct __ufs_qcom_bw_table {
-> > +	u32 bw1;
-> > +	u32 bw2;
-> 
-> Please consider:
-> 
-> s/bw1/mem_bw/
-> s/bw2/cfg_bw/
-> 
-
-Ok.
-
-> > +} ufs_qcom_bw_table[MODE_MAX + 1][QCOM_UFS_MAX_GEAR + 1][QCOM_UFS_MAX_LANE + 1] = {
-> 
-> I'd say, these +1's are slightly confusing and unnecessary.
-> 
-
-These max values itself are used in the table. Without adding 1 to them, we will
-end up with out of bounds access.
-
-> > +	[MODE_MIN][0][0] = { 0,		0 },	/* Bandwidth values are in KB/s */
-> 
-> I'd say, this becomes impossible to check. Can you please structure it?
-
-What do you mean by "impossible to check"?
-
-> Either by inclusion:
-> 
-> [MODE_PWM] = {
->   [1] = {
->      [1] = { .. },
->      [2] = { .. },
->   },
->   // etc.
-
-Now, this seems confusion to me. The existing table looks fine IMO.
-
-> };
-> 
-> Also, do we have defines for gears? Can we use them instead of indices?
-> 
-
-There are defines for the gears but not for lanes. So I ended up using numbers
-for simplicity.
-
-- Mani
-
-> > +	[MODE_PWM][1][1] = { 922,	1000 },
-> > +	[MODE_PWM][2][1] = { 1844,	1000 },
-> > +	[MODE_PWM][3][1] = { 3688,	1000 },
-> > +	[MODE_PWM][4][1] = { 7376,	1000 },
-> > +	[MODE_PWM][1][2] = { 1844,	1000 },
-> > +	[MODE_PWM][2][2] = { 3688,	1000 },
-> > +	[MODE_PWM][3][2] = { 7376,	1000 },
-> > +	[MODE_PWM][4][2] = { 14752,	1000 },
-> > +	[MODE_HS_RA][1][1] = { 127796,	1000 },
-> > +	[MODE_HS_RA][2][1] = { 255591,	1000 },
-> > +	[MODE_HS_RA][3][1] = { 1492582,	102400 },
-> > +	[MODE_HS_RA][4][1] = { 2915200,	204800 },
-> > +	[MODE_HS_RA][1][2] = { 255591,	1000 },
-> > +	[MODE_HS_RA][2][2] = { 511181,	1000 },
-> > +	[MODE_HS_RA][3][2] = { 1492582,	204800 },
-> > +	[MODE_HS_RA][4][2] = { 2915200,	409600 },
-> > +	[MODE_HS_RB][1][1] = { 149422,	1000 },
-> > +	[MODE_HS_RB][2][1] = { 298189,	1000 },
-> > +	[MODE_HS_RB][3][1] = { 1492582,	102400 },
-> > +	[MODE_HS_RB][4][1] = { 2915200,	204800 },
-> > +	[MODE_HS_RB][1][2] = { 298189,	1000 },
-> > +	[MODE_HS_RB][2][2] = { 596378,	1000 },
-> > +	[MODE_HS_RB][3][2] = { 1492582,	204800 },
-> > +	[MODE_HS_RB][4][2] = { 2915200,	409600 },
-> > +	[MODE_MAX][0][0] = { 7643136, 307200 },
-> > +};
-> > +
-> >   static struct ufs_qcom_host *ufs_qcom_hosts[MAX_UFS_QCOM_HOSTS];
-> >   static void ufs_qcom_get_default_testbus_cfg(struct ufs_qcom_host *host);
-> > @@ -789,6 +833,51 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
-> >   	}
-> >   }
-> > +static int ufs_qcom_icc_set_bw(struct ufs_qcom_host *host, u32 bw1, u32 bw2)
-> > +{
-> > +	struct device *dev = host->hba->dev;
-> > +	int ret;
-> > +
-> > +	ret = icc_set_bw(host->icc_ddr, 0, bw1);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	ret = icc_set_bw(host->icc_cpu, 0, bw2);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static struct __ufs_qcom_bw_table ufs_qcom_get_bw_table(struct ufs_qcom_host *host)
-> > +{
-> > +	struct ufs_pa_layer_attr *p = &host->dev_req_params;
-> > +	int gear = max_t(u32, p->gear_rx, p->gear_tx);
-> > +	int lane = max_t(u32, p->lane_rx, p->lane_tx);
-> > +
-> > +	if (ufshcd_is_hs_mode(p)) {
-> > +		if (p->hs_rate == PA_HS_MODE_B)
-> > +			return ufs_qcom_bw_table[MODE_HS_RB][gear][lane];
-> > +		else
-> > +			return ufs_qcom_bw_table[MODE_HS_RA][gear][lane];
-> > +	} else {
-> > +		return ufs_qcom_bw_table[MODE_PWM][gear][lane];
-> > +	}
-> > +}
-> > +
-> > +static int ufs_qcom_icc_update_bw(struct ufs_qcom_host *host)
-> > +{
-> > +	struct __ufs_qcom_bw_table bw_table;
-> > +
-> > +	bw_table = ufs_qcom_get_bw_table(host);
-> > +
-> > +	return ufs_qcom_icc_set_bw(host, bw_table.bw1, bw_table.bw2);
-> > +}
-> > +
-> >   static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
-> >   				enum ufs_notify_change_status status,
-> >   				struct ufs_pa_layer_attr *dev_max_params,
-> > @@ -852,6 +941,8 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
-> >   		memcpy(&host->dev_req_params,
-> >   				dev_req_params, sizeof(*dev_req_params));
-> > +		ufs_qcom_icc_update_bw(host);
-> > +
-> >   		/* disable the device ref clock if entered PWM mode */
-> >   		if (ufshcd_is_hs_mode(&hba->pwr_info) &&
-> >   			!ufshcd_is_hs_mode(dev_req_params))
-> > @@ -981,7 +1072,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
-> >   	switch (status) {
-> >   	case PRE_CHANGE:
-> > -		if (!on) {
-> > +		if (on) {
-> > +			ufs_qcom_icc_update_bw(host);
-> > +		} else {
-> >   			if (!ufs_qcom_is_link_active(hba)) {
-> >   				/* disable device ref_clk */
-> >   				ufs_qcom_dev_ref_clk_ctrl(host, false);
-> > @@ -993,6 +1086,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
-> >   			/* enable the device ref clock for HS mode*/
-> >   			if (ufshcd_is_hs_mode(&hba->pwr_info))
-> >   				ufs_qcom_dev_ref_clk_ctrl(host, true);
-> > +		} else {
-> > +			ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MIN][0][0].bw1,
-> > +					    ufs_qcom_bw_table[MODE_MIN][0][0].bw2);
-> >   		}
-> >   		break;
-> >   	}
-> > @@ -1031,6 +1127,34 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
-> >   	.deassert = ufs_qcom_reset_deassert,
-> >   };
-> > +static int ufs_qcom_icc_init(struct ufs_qcom_host *host)
-> > +{
-> > +	struct device *dev = host->hba->dev;
-> > +	int ret;
-> > +
-> > +	host->icc_ddr = devm_of_icc_get(dev, "ufs-ddr");
-> > +	if (IS_ERR(host->icc_ddr))
-> > +		return dev_err_probe(dev, PTR_ERR(host->icc_ddr),
-> > +				    "failed to acquire interconnect path\n");
-> > +
-> > +	host->icc_cpu = devm_of_icc_get(dev, "cpu-ufs");
-> > +	if (IS_ERR(host->icc_cpu))
-> > +		return dev_err_probe(dev, PTR_ERR(host->icc_cpu),
-> > +				    "failed to acquire interconnect path\n");
-> > +
-> > +	/*
-> > +	 * Set Maximum bandwidth vote before initializing the UFS controller and
-> > +	 * device. Ideally, a minimal interconnect vote would suffice for the
-> > +	 * initialization, but a max vote would allow faster initialization.
-> > +	 */
-> > +	ret = ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MAX][0][0].bw1,
-> > +				  ufs_qcom_bw_table[MODE_MAX][0][0].bw2);
-> > +	if (ret < 0)
-> > +		return dev_err_probe(dev, ret, "failed to set bandwidth request\n");
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   /**
-> >    * ufs_qcom_init - bind phy with controller
-> >    * @hba: host controller instance
-> > @@ -1085,6 +1209,10 @@ static int ufs_qcom_init(struct ufs_hba *hba)
-> >   		}
-> >   	}
-> > +	err = ufs_qcom_icc_init(host);
-> > +	if (err)
-> > +		goto out_variant_clear;
-> > +
-> >   	host->device_reset = devm_gpiod_get_optional(dev, "reset",
-> >   						     GPIOD_OUT_HIGH);
-> >   	if (IS_ERR(host->device_reset)) {
-> > @@ -1282,6 +1410,7 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
-> >   				    dev_req_params->pwr_rx,
-> >   				    dev_req_params->hs_rate,
-> >   				    false);
-> > +		ufs_qcom_icc_update_bw(host);
-> >   		ufshcd_uic_hibern8_exit(hba);
-> >   	}
-> > diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-> > index 6289ad5a42d0..dc27395ecba1 100644
-> > --- a/drivers/ufs/host/ufs-qcom.h
-> > +++ b/drivers/ufs/host/ufs-qcom.h
-> > @@ -206,6 +206,9 @@ struct ufs_qcom_host {
-> >   	struct clk *tx_l1_sync_clk;
-> >   	bool is_lane_clks_enabled;
-> > +	struct icc_path *icc_ddr;
-> > +	struct icc_path *icc_cpu;
-> > +
-> >   #ifdef CONFIG_SCSI_UFS_CRYPTO
-> >   	struct qcom_ice *ice;
-> >   #endif
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
-
--- 
-மணிவண்ணன் சதாசிவம்
+--
+Thanks,
+Praveenkumar
+>
+> Best regards,
+> Krzysztof
+>
