@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C7E74FF1C
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 08:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEB974FFC6
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 08:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjGLGQ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 02:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S229731AbjGLG4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 02:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjGLGQ4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 02:16:56 -0400
-Received: from mail.208.org (unknown [183.242.55.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59F110C2
-        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 23:16:53 -0700 (PDT)
-Received: from mail.208.org (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTP id 4R16vl4G0fzBR5lR
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 14:16:51 +0800 (CST)
-Authentication-Results: mail.208.org (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)" header.d=208.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
-        content-transfer-encoding:content-type:message-id:user-agent
-        :references:in-reply-to:subject:to:from:date:mime-version; s=
-        dkim; t=1689142611; x=1691734612; bh=wfCG/SruIwuAsnB8Aw7zPE90r7M
-        G2A0S2zrw6C4ebX8=; b=jPww0/OU4JzMMNPQ6XpcmuM4SWqHcVuv9gNZdGW+x/a
-        a/kVx7eFwGymkOs/9d+kZcD6lClyDgZJXKDX7XGWMWRm84u7qEcLfXPuZ5oKl2c9
-        mhVtdYibTT16CuNMLLInXf1/tDC+p9L0aP1ay2wEGBum1CPOmHA3m8pO1GxwqF7H
-        sbDpztCLJp7hM6X7EojqWHK4HKi3HO45y0VBNiU5q2vS7UP0O3WMsvmgDOTtsLT+
-        uENSaEQdAzL3z1jmPbpJVqkfrinylcUto2x85TJSq/W5CD2/Howkp8o3IRFZwpjF
-        f7kLRekqS05+yOkZk6dRKMJny5bjbQ1bBFI70uTEO+g==
-X-Virus-Scanned: amavisd-new at mail.208.org
-Received: from mail.208.org ([127.0.0.1])
-        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id njLYlRzbrOZ0 for <linux-pm@vger.kernel.org>;
-        Wed, 12 Jul 2023 14:16:51 +0800 (CST)
-Received: from localhost (email.208.org [127.0.0.1])
-        by mail.208.org (Postfix) with ESMTPSA id 4R16vl2G7kzBHXhD;
-        Wed, 12 Jul 2023 14:16:51 +0800 (CST)
-MIME-Version: 1.0
-Date:   Wed, 12 Jul 2023 14:16:51 +0800
-From:   hanyu001@208suo.com
-To:     sre@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: Fix errors
-In-Reply-To: <tencent_6D69416A3BCF8704CCAA9D2A6DC60B891E09@qq.com>
-References: <tencent_6D69416A3BCF8704CCAA9D2A6DC60B891E09@qq.com>
-User-Agent: Roundcube Webmail
-Message-ID: <66805adb7db117206d4c0c943024dbac@208suo.com>
-X-Sender: hanyu001@208suo.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        with ESMTP id S229566AbjGLG4L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 02:56:11 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFEFDC;
+        Tue, 11 Jul 2023 23:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689144970; x=1720680970;
+  h=date:from:to:cc:subject:message-id;
+  bh=Aix+sebAr5d/cP/q9zYQR6XWltGXQhXYRkYcR4Ttjio=;
+  b=Q7pWQIHmqIChPSPebqE6a7zXTlzFnod+T3yrNqIEGjbVEp4bU49N2Ar4
+   Hi1z06nDFSD5RxO2WvlEQWw/ypuJxlgfX5fgL5SuWphQiUMU1MI6rXEbE
+   1ghZTlAbROZKj0UMlALnYgIb/4y29ysmE4IIMED8761OkSLPkSLgL1a3D
+   YLuUgU+3aSqtAg07m6N2QKm9kJsBRrm6fzgTWnSZPJ+sXWA2Dv/Y1tpyB
+   7+LeRfMYtm+OtPkUB6OFUh7LU7CswqMo4dog9aplUReXjElNlPrufhjWj
+   7oz5XsOgt92Gv56Q14AfIUTSHDTgzS3J10VWZh9Mg0eZujzn0GXU9hylG
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367437022"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="367437022"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 23:55:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="715446531"
+X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
+   d="scan'208";a="715446531"
+Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 23:55:44 -0700
+Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qJTlH-0005Tv-1e;
+        Wed, 12 Jul 2023 06:55:43 +0000
+Date:   Wed, 12 Jul 2023 14:54:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d26e5b690e4be2f96d55bdcf5d80bb42c2d55cc6
+Message-ID: <202307121441.LZ9vpvNt-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,37 +61,128 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix the below checkpatch errors:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d26e5b690e4be2f96d55bdcf5d80bb42c2d55cc6  Merge branch 'powercap' into bleeding-edge
 
-drivers/power/supply/ab8500_bmdata.c:186: ERROR: that open brace { 
-should be on the previous line
-drivers/power/supply/ab8500_bmdata.c:192: ERROR: that open brace { 
-should be on the previous line
+elapsed time: 726m
 
-Signed-off-by: Yu Han <hanyu001@208suo.com>
----
-  drivers/power/supply/ab8500_bmdata.c | 6 ++----
-  1 file changed, 2 insertions(+), 4 deletions(-)
+configs tested: 109
+configs skipped: 7
 
-diff --git a/drivers/power/supply/ab8500_bmdata.c 
-b/drivers/power/supply/ab8500_bmdata.c
-index 3e6ea22..a092727 100644
---- a/drivers/power/supply/ab8500_bmdata.c
-+++ b/drivers/power/supply/ab8500_bmdata.c
-@@ -184,14 +184,12 @@ int ab8500_bm_of_probe(struct power_supply *psy,
-      }
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-      if (bi->alert_low_temp_charge_current_ua < 0 ||
--        bi->alert_low_temp_charge_voltage_uv < 0)
--    {
-+        bi->alert_low_temp_charge_voltage_uv < 0){
-          bi->alert_low_temp_charge_current_ua = 300000;
-          bi->alert_low_temp_charge_voltage_uv = 4000000;
-      }
-      if (bi->alert_high_temp_charge_current_ua < 0 ||
--        bi->alert_high_temp_charge_voltage_uv < 0)
--    {
-+        bi->alert_high_temp_charge_voltage_uv < 0){
-          bi->alert_high_temp_charge_current_ua = 300000;
-          bi->alert_high_temp_charge_voltage_uv = 4000000;
-      }
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r003-20230712   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                     haps_hs_smp_defconfig   gcc  
+arc                  randconfig-r024-20230710   gcc  
+arc                  randconfig-r043-20230710   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                     am200epdkit_defconfig   clang
+arm                     davinci_all_defconfig   clang
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230710   gcc  
+arm                       spear13xx_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r025-20230710   clang
+csky                                defconfig   gcc  
+hexagon              randconfig-r041-20230710   clang
+hexagon              randconfig-r045-20230710   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230711   clang
+i386         buildonly-randconfig-r005-20230711   clang
+i386         buildonly-randconfig-r006-20230711   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230711   clang
+i386                 randconfig-i002-20230711   clang
+i386                 randconfig-i003-20230711   clang
+i386                 randconfig-i004-20230711   clang
+i386                 randconfig-i005-20230711   clang
+i386                 randconfig-i006-20230711   clang
+i386                 randconfig-i011-20230711   gcc  
+i386                 randconfig-i012-20230711   gcc  
+i386                 randconfig-i013-20230711   gcc  
+i386                 randconfig-i014-20230711   gcc  
+i386                 randconfig-i015-20230711   gcc  
+i386                 randconfig-i016-20230711   gcc  
+i386                 randconfig-r013-20230712   clang
+i386                 randconfig-r032-20230711   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r022-20230710   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r026-20230710   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r001-20230712   gcc  
+nios2                randconfig-r023-20230710   gcc  
+openrisc             randconfig-r021-20230710   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r011-20230712   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r033-20230711   clang
+riscv                randconfig-r042-20230710   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r034-20230711   clang
+s390                 randconfig-r044-20230710   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r035-20230711   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r014-20230712   gcc  
+sparc64              randconfig-r036-20230711   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r031-20230711   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230711   clang
+x86_64       buildonly-randconfig-r002-20230711   clang
+x86_64       buildonly-randconfig-r003-20230711   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r015-20230712   clang
+x86_64               randconfig-r016-20230712   clang
+x86_64               randconfig-x001-20230711   gcc  
+x86_64               randconfig-x002-20230711   gcc  
+x86_64               randconfig-x003-20230711   gcc  
+x86_64               randconfig-x004-20230711   gcc  
+x86_64               randconfig-x005-20230711   gcc  
+x86_64               randconfig-x006-20230711   gcc  
+x86_64               randconfig-x011-20230711   clang
+x86_64               randconfig-x012-20230711   clang
+x86_64               randconfig-x013-20230711   clang
+x86_64               randconfig-x014-20230711   clang
+x86_64               randconfig-x015-20230711   clang
+x86_64               randconfig-x016-20230711   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r006-20230712   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
