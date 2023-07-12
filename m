@@ -2,201 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9E27508BC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529B87508CD
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbjGLMuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S232746AbjGLMyA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjGLMus (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:50:48 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357731739;
-        Wed, 12 Jul 2023 05:50:47 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBOZwL021802;
-        Wed, 12 Jul 2023 12:50:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=MSlRrlrkNONpM5Ltq+59x/PksIVcHq4OWeir5J/w6Co=;
- b=or1WzR2csVNn5PKv/lbPhcyuhhiKsfMHCh9nQ+5Tm57fT8yT7jMPXKV4QON67BbvQdyN
- 77DwwRUJJ6hQush3Jj6wCAIKGCOs0wu841xAhAL8d1G60CG6XiMfbLVKMoT+XT6Zf+Cr
- 2qWGLa+RPigQHhNWhWf2GhVrQLGAFwebuZyKMWf0zYqeszrkXR09HUOgGkmAqAwGUzzz
- OUfNbnRgGpCJH/lnNB3v6zeQTt+fsmrLa56A5JXFfXNSyjG/LB7yB2PTFp/8F5q1y4w/
- 9MNyLA9jqb8HrFqizl4Z/0mfAXFu64xJyA+ekHrxZ8vnh1tbWEVSkYoxZ8mafHohrewr ig== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgar9bq5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:50:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CCoe6r007232
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 12:50:40 GMT
-Received: from [10.201.3.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
- 2023 05:50:35 -0700
-Message-ID: <f4bc9c49-3db8-5ca5-7326-413d823e338d@quicinc.com>
-Date:   Wed, 12 Jul 2023 18:20:32 +0530
+        with ESMTP id S232191AbjGLMx7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:53:59 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B241BC2
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:53:55 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b703a0453fso110581931fa.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689166433; x=1691758433;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nBc63gZewZL8iaZK2IOeBqCKcy2zAJOBt2Jz+c038nk=;
+        b=Au4S9337dhhlibueQQOk2k+/9ELLnv1F8knGNc9Ui4OhDAcDiSCyHxIG2HUYLBxbwv
+         Ok6rtJKM5nmSuz5NTjPyJ+L+MUEYZeDY982cyR9KQOtmCu61TLwn/sT3v/iCmhW68Eap
+         yILluRD79+G1yjJMKF7IS5YzNbkgjWiktM1ZqGBu+83tX7/iqnF8T69Ia3JuWvxQT5R4
+         RiN7g58uiaEKQ5utipqWZL/Io/+rNeod3NrUjlKDrj5B2Nlw95qPmiWpZJ0MGNq/hTjU
+         LAHPW3Ayacn+O18VwCdj73BsXFX8/usTo1a4qvF7kttbJPs/jKVJQbjThKB7nAwZvsCt
+         jBAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689166433; x=1691758433;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nBc63gZewZL8iaZK2IOeBqCKcy2zAJOBt2Jz+c038nk=;
+        b=RtyyH1+Z4fmb62zxzvr+Z7uywCCA2k3l5kdYufpa2oaPGNBkDME1vYF7Et0i3iOftS
+         a9cz2ZGXZOmntQRjfgcJ71p3lFtua4ibDsez0uNYMh2VQlKDm3+WCoZfeyasgf5HBOhs
+         OvNkZ9gpDSMQo7kkOxbD1Tc39jmijFtte7iAEcM/WiVyh3D2rDX0EYC/IZ17v95KsXi6
+         itElNtpG/Y2IHG64YSQZl4v7vpfBJUDRcFSo3EWBFs5lFkvhyqIbsZSa1ToKEwgzi5xE
+         w7iOWH6HO5ai8Pue3CacHXMe8ByEP6p1ixx7VU48X0feYHYbmZixg4hSb7f+lnWFo/U8
+         PCcQ==
+X-Gm-Message-State: ABy/qLZHqo7R0GlyoXJGRizqWk0OQk8+q64X4/jcAaMy1ua9tDuzZXVi
+        hDEodro3UFWmcKxtRyiTNWxL6Q==
+X-Google-Smtp-Source: APBJJlEOK5nzhXK/DYiTOD2PXvlX0k83byqi39QQUlr+lNWZuEj17VECYcEc6z/ft6Wk4UO4/wVZuQ==
+X-Received: by 2002:a19:3819:0:b0:4f8:631b:bf77 with SMTP id f25-20020a193819000000b004f8631bbf77mr16040627lfa.22.1689166433135;
+        Wed, 12 Jul 2023 05:53:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id s8-20020a19ad48000000b004fba6d3eb82sm697646lfd.48.2023.07.12.05.53.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 05:53:52 -0700 (PDT)
+Message-ID: <538c3d99-a404-6847-dd04-f77a35aa6c77@linaro.org>
+Date:   Wed, 12 Jul 2023 15:53:52 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 4/5] arm64: dts: qcom: ipq5332: Add thermal zone nodes
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: ipq5332: Add tsens node
+Content-Language: en-GB
+To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
+        thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_varada@quicinc.com
 References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
- <20230712113539.4029941-5-quic_ipkumar@quicinc.com>
- <a33368ef-f68c-d7ee-922a-8896a5d1f158@linaro.org>
-From:   Praveenkumar I <quic_ipkumar@quicinc.com>
-In-Reply-To: <a33368ef-f68c-d7ee-922a-8896a5d1f158@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+ <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
+ <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
+ <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -IZUWQt9wmgEKBND0MxlwCH5f8NTpsqs
-X-Proofpoint-ORIG-GUID: -IZUWQt9wmgEKBND0MxlwCH5f8NTpsqs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_08,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120115
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 12/07/2023 15:48, Praveenkumar I wrote:
+> 
+> On 7/12/2023 5:54 PM, Dmitry Baryshkov wrote:
+>> On 12/07/2023 14:35, Praveenkumar I wrote:
+>>> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
+>>> node with nvmem cells for calibration data.
+>>>
+>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>> ---
+>>> [v2]:
+>>>     Included qfprom nodes only for available sensors and removed
+>>>     the offset suffix.
+>>>
+>>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 +++++++++++++++++++++++++++
+>>>   1 file changed, 66 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
+>>> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>>> index 8bfc2db44624..0eef77e36609 100644
+>>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>>> @@ -150,6 +150,46 @@ qfprom: efuse@a4000 {
+>>>               reg = <0x000a4000 0x721>;
+>>>               #address-cells = <1>;
+>>>               #size-cells = <1>;
+>>> +
+>>> +            tsens_mode: mode@3e1 {
+>>> +                reg = <0x3e1 0x1>;
+>>> +                bits = <0 3>;
+>>> +            };
+>>> +
+>>> +            tsens_base0: base0@3e1 {
+>>> +                reg = <0x3e1 0x2>;
+>>> +                bits = <3 10>;
+>>> +            };
+>>> +
+>>> +            tsens_base1: base1@3e2 {
+>>> +                reg = <0x3e2 0x2>;
+>>> +                bits = <5 10>;
+>>> +            };
 
-On 7/12/2023 5:55 PM, Dmitry Baryshkov wrote:
-> On 12/07/2023 14:35, Praveenkumar I wrote:
->> This patch adds thermal zone nodes for sensors present in
->> IPQ5332.
+Please order device nodes according to the address. So mode/base should 
+come after sensors data.
+
+>>> +
+>>> +            s11: s11@3a5 {
+>>> +                reg = <0x3a5 0x1>;
+>>> +                bits = <4 4>;
+>>> +            };
+>>> +
+>>> +            s12: s12@3a6 {
+>>> +                reg = <0x3a6 0x1>;
+>>> +                bits = <0 4>;
+>>> +            };
+>>> +
+>>> +            s13: s13@3a6 {
+>>> +                reg = <0x3a6 0x1>;
+>>> +                bits = <4 4>;
+>>> +            };
+>>> +
+>>> +            s14: s14@3ad {
+>>> +                reg = <0x3ad 0x2>;
+>>> +                bits = <7 4>;
+>>> +            };
+>>> +
+>>> +            s15: s15@3ae {
+>>> +                reg = <0x3ae 0x1>;
+>>> +                bits = <3 4>;
+>>> +            };
+>>>           };
+>>>             rng: rng@e3000 {
+>>> @@ -159,6 +199,32 @@ rng: rng@e3000 {
+>>>               clock-names = "core";
+>>>           };
+>>>   +        tsens: thermal-sensor@4a9000 {
+>>> +            compatible = "qcom,ipq5332-tsens";
+>>> +            reg = <0x4a9000 0x1000>,
+>>> +                  <0x4a8000 0x1000>;
+>>> +            nvmem-cells = <&tsens_mode>,
+>>> +                      <&tsens_base0>,
+>>> +                      <&tsens_base1>,
+>>> +                      <&s11>,
+>>> +                      <&s12>,
+>>> +                      <&s13>,
+>>> +                      <&s14>,
+>>> +                      <&s15>;
+>>> +            nvmem-cell-names = "mode",
+>>> +                       "base0",
+>>> +                       "base1",
+>>> +                       "s11",
+>>> +                       "s12",
+>>> +                       "s13",
+>>> +                       "s14",
+>>> +                       "s15";
 >>
->> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->> ---
->> [v2]:
->>     Added passive trips and alignment change.
+>> Previously you had data for other sensors here. Are they not used at 
+>> all, not wired, have no known-good placement? I think it might be 
+>> better to declare all sensors here (and in the driver too) and then 
+>> consider enabling only a pile of them in the thermal-zone node.
+> 
+> Remaining sensors are not used at all. It is not wired. Only above 
+> sensors are placed in SoC.
+
+Ack, thanks for the explanation. Then this is good.
+
+> 
+> - Praveenkumar
+> 
 >>
->>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 78 +++++++++++++++++++++++++++
->>   1 file changed, 78 insertions(+)
+>>> +            interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
+>>> +            interrupt-names = "combined";
+>>> +            #qcom,sensors = <5>;
+>>> +            #thermal-sensor-cells = <1>;
+>>> +        };
+>>> +
+>>>           tlmm: pinctrl@1000000 {
+>>>               compatible = "qcom,ipq5332-tlmm";
+>>>               reg = <0x01000000 0x300000>;
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
->> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> index 0eef77e36609..a1f59af97ee8 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->> @@ -480,4 +480,82 @@ timer {
->>                    <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | 
->> IRQ_TYPE_LEVEL_LOW)>,
->>                    <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | 
->> IRQ_TYPE_LEVEL_LOW)>;
->>       };
->> +
->> +    thermal-zones {
->> +        rfa-0-thermal {
->> +            polling-delay-passive = <0>;
->> +            polling-delay = <0>;
->> +            thermal-sensors = <&tsens 11>;
->> +
->> +            trips {
->> +                rfa-0-critical {
->> +                    temperature = <125000>;
->> +                    hysteresis = <1000>;
->> +                    type = "critical";
->> +                };
->> +            };
->> +        };
->> +
->> +        rfa-1-thermal {
->> +            polling-delay-passive = <0>;
->> +            polling-delay = <0>;
->> +            thermal-sensors = <&tsens 12>;
->> +
->> +            trips {
->> +                rfa-1-critical {
->> +                    temperature = <125000>;
->> +                    hysteresis = <1000>;
->> +                    type = "critical";
->> +                };
->> +            };
->> +        };
->> +
->> +        misc-thermal {
->> +            polling-delay-passive = <0>;
->> +            polling-delay = <0>;
->> +            thermal-sensors = <&tsens 13>;
->> +
->> +            trips {
->> +                misc-critical {
->> +                    temperature = <125000>;
->> +                    hysteresis = <1000>;
->> +                    type = "critical";
->> +                };
->> +            };
->> +        };
->> +
->> +        cpu-top-thermal {
->> +            polling-delay-passive = <0>;
->> +            polling-delay = <0>;
->> +            thermal-sensors = <&tsens 14>;
->> +
->> +            trips {
->> +                cpu-top-critical {
->> +                    temperature = <115000>;
->> +                    hysteresis = <1000>;
->> +                    type = "critical";
->> +                };
->> +
->> +                cpu-passive {
->> +                    temperature = <105000>;
->> +                    hysteresis = <1000>;
->> +                    type = "passive";
->
-> cooling device for this trip point?
 
-CPU Frequency scaling support is not yet added for IPQ5332. Planning to 
-add the cooling device after that in next set of patches.
+-- 
+With best wishes
+Dmitry
 
-- Praveenkumar
-
->
->> +                };
->> +            };
->> +        };
->> +
->> +        top-glue-thermal {
->> +            polling-delay-passive = <0>;
->> +            polling-delay = <0>;
->> +            thermal-sensors = <&tsens 15>;
->> +
->> +            trips {
->> +                top-glue-critical {
->> +                    temperature = <125000>;
->> +                    hysteresis = <1000>;
->> +                    type = "critical";
->> +                };
->> +            };
->> +        };
->> +    };
->>   };
->
