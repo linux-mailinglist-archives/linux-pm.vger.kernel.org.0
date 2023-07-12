@@ -2,114 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5120474FE15
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 06:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C7E74FF1C
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 08:16:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjGLEIp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 00:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47714 "EHLO
+        id S229983AbjGLGQ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 02:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjGLEIn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 00:08:43 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC05E69;
-        Tue, 11 Jul 2023 21:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=YChG1L30DPI1h5Tm1ppaAui5qRCoxqDSfR5uw5XSFq4=; b=DIFtzDM7DrG7bi3/cIyX1Qkmmq
-        /JVbO6spNTRVUG2Dxh8j+cxiBRVwVbcRF0YGOtdlaKPnP0Se4nfMLyzxP1IIggBvN5ciMAMJcS+pg
-        hlt+fwpEvXBj87n+BL2IXG+KSh1lXAZG61I/XFDYiPVpuKOOL40v1+BTujTcniJWq+FUARkvn+G9A
-        gnOvXrqFqfB5EUS+TS4aJXYKjeNp821BOEdri/3/zoNoh90mSp53EPkS7HM5CPClyDZuVChjc/G5/
-        votszxxw5DJjuphyNPpG0Iu65T9fPnm2qYfAlTFxs9KMkXnHWipgHqFbO4DdcGO0PTHJsrSM2wATr
-        plw6SWcg==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qJR9d-00GSqU-1O;
-        Wed, 12 Jul 2023 04:08:41 +0000
-Message-ID: <74f05266-e659-bd2f-e8be-1dc62d82084c@infradead.org>
-Date:   Tue, 11 Jul 2023 21:08:40 -0700
+        with ESMTP id S229524AbjGLGQ4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 02:16:56 -0400
+Received: from mail.208.org (unknown [183.242.55.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59F110C2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Jul 2023 23:16:53 -0700 (PDT)
+Received: from mail.208.org (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTP id 4R16vl4G0fzBR5lR
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 14:16:51 +0800 (CST)
+Authentication-Results: mail.208.org (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)" header.d=208.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=208.org; h=
+        content-transfer-encoding:content-type:message-id:user-agent
+        :references:in-reply-to:subject:to:from:date:mime-version; s=
+        dkim; t=1689142611; x=1691734612; bh=wfCG/SruIwuAsnB8Aw7zPE90r7M
+        G2A0S2zrw6C4ebX8=; b=jPww0/OU4JzMMNPQ6XpcmuM4SWqHcVuv9gNZdGW+x/a
+        a/kVx7eFwGymkOs/9d+kZcD6lClyDgZJXKDX7XGWMWRm84u7qEcLfXPuZ5oKl2c9
+        mhVtdYibTT16CuNMLLInXf1/tDC+p9L0aP1ay2wEGBum1CPOmHA3m8pO1GxwqF7H
+        sbDpztCLJp7hM6X7EojqWHK4HKi3HO45y0VBNiU5q2vS7UP0O3WMsvmgDOTtsLT+
+        uENSaEQdAzL3z1jmPbpJVqkfrinylcUto2x85TJSq/W5CD2/Howkp8o3IRFZwpjF
+        f7kLRekqS05+yOkZk6dRKMJny5bjbQ1bBFI70uTEO+g==
+X-Virus-Scanned: amavisd-new at mail.208.org
+Received: from mail.208.org ([127.0.0.1])
+        by mail.208.org (mail.208.org [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id njLYlRzbrOZ0 for <linux-pm@vger.kernel.org>;
+        Wed, 12 Jul 2023 14:16:51 +0800 (CST)
+Received: from localhost (email.208.org [127.0.0.1])
+        by mail.208.org (Postfix) with ESMTPSA id 4R16vl2G7kzBHXhD;
+        Wed, 12 Jul 2023 14:16:51 +0800 (CST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] cpufreq: sparc: Don't mark cpufreq callbacks with __init
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-kernel@vger.kernel.org
-References: <94682b1572da4a3c6afd31bddf93b797f73fff5e.1689055100.git.viresh.kumar@linaro.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <94682b1572da4a3c6afd31bddf93b797f73fff5e.1689055100.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 12 Jul 2023 14:16:51 +0800
+From:   hanyu001@208suo.com
+To:     sre@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] power: supply: Fix errors
+In-Reply-To: <tencent_6D69416A3BCF8704CCAA9D2A6DC60B891E09@qq.com>
+References: <tencent_6D69416A3BCF8704CCAA9D2A6DC60B891E09@qq.com>
+User-Agent: Roundcube Webmail
+Message-ID: <66805adb7db117206d4c0c943024dbac@208suo.com>
+X-Sender: hanyu001@208suo.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_FAIL,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Fix the below checkpatch errors:
 
+drivers/power/supply/ab8500_bmdata.c:186: ERROR: that open brace { 
+should be on the previous line
+drivers/power/supply/ab8500_bmdata.c:192: ERROR: that open brace { 
+should be on the previous line
 
-On 7/11/23 20:58, Viresh Kumar wrote:
-> These callbacks can be called again by the cpufreq core after the driver
-> is initialized and must be kept around. We currently get section
-> mismatch build warnings.
-> 
-> Don't mark them with __init.
-> 
-> Fixes: dcfce7c2cee4 ("cpufreq: sparc: Don't allocate cpufreq_driver dynamically")
-> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Yu Han <hanyu001@208suo.com>
+---
+  drivers/power/supply/ab8500_bmdata.c | 6 ++----
+  1 file changed, 2 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/power/supply/ab8500_bmdata.c 
+b/drivers/power/supply/ab8500_bmdata.c
+index 3e6ea22..a092727 100644
+--- a/drivers/power/supply/ab8500_bmdata.c
++++ b/drivers/power/supply/ab8500_bmdata.c
+@@ -184,14 +184,12 @@ int ab8500_bm_of_probe(struct power_supply *psy,
+      }
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
-Thanks.
-
-> ---
-> Rafael,
-> 
-> Please apply this for -rc2. Thanks.
-> 
->  drivers/cpufreq/sparc-us2e-cpufreq.c | 2 +-
->  drivers/cpufreq/sparc-us3-cpufreq.c  | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
-> index d3510cfdb3eb..2783d3d55fce 100644
-> --- a/drivers/cpufreq/sparc-us2e-cpufreq.c
-> +++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
-> @@ -269,7 +269,7 @@ static int us2e_freq_target(struct cpufreq_policy *policy, unsigned int index)
->  	return smp_call_function_single(cpu, __us2e_freq_target, &index, 1);
->  }
->  
-> -static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
-> +static int us2e_freq_cpu_init(struct cpufreq_policy *policy)
->  {
->  	unsigned int cpu = policy->cpu;
->  	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
-> diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
-> index 91d1ed558136..6c3657679a88 100644
-> --- a/drivers/cpufreq/sparc-us3-cpufreq.c
-> +++ b/drivers/cpufreq/sparc-us3-cpufreq.c
-> @@ -117,7 +117,7 @@ static int us3_freq_target(struct cpufreq_policy *policy, unsigned int index)
->  	return smp_call_function_single(cpu, update_safari_cfg, &new_bits, 1);
->  }
->  
-> -static int __init us3_freq_cpu_init(struct cpufreq_policy *policy)
-> +static int us3_freq_cpu_init(struct cpufreq_policy *policy)
->  {
->  	unsigned int cpu = policy->cpu;
->  	unsigned long clock_tick = sparc64_get_clock_tick(cpu) / 1000;
-
--- 
-~Randy
+      if (bi->alert_low_temp_charge_current_ua < 0 ||
+-        bi->alert_low_temp_charge_voltage_uv < 0)
+-    {
++        bi->alert_low_temp_charge_voltage_uv < 0){
+          bi->alert_low_temp_charge_current_ua = 300000;
+          bi->alert_low_temp_charge_voltage_uv = 4000000;
+      }
+      if (bi->alert_high_temp_charge_current_ua < 0 ||
+-        bi->alert_high_temp_charge_voltage_uv < 0)
+-    {
++        bi->alert_high_temp_charge_voltage_uv < 0){
+          bi->alert_high_temp_charge_current_ua = 300000;
+          bi->alert_high_temp_charge_voltage_uv = 4000000;
+      }
