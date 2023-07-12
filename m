@@ -2,132 +2,276 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DF0750D7E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159E8750E9F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233064AbjGLQGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 12:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S231882AbjGLQe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 12:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232448AbjGLQGu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:06:50 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DA7199D
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:06:47 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb96e2b573so11506605e87.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:06:47 -0700 (PDT)
+        with ESMTP id S230381AbjGLQe3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:34:29 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675391720
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:34:26 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6682909acadso4096839b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1689178006; x=1691770006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8X6ArMXh62A5UxRR3ZN+q1CvObhoeb8ltfmXU1xj+zw=;
-        b=V0Mwyzpfv5NHo344FebMkemb4OkDhqesSJzk3oLJrC1sXingJzi/DqoHJPX3cM7/kU
-         /daZbGumusx7p3ETz9bL+dV7+a249DzrdJ5ucaxUqFs1cH4q4UNK1aBbCP0kRMVezgvK
-         Gb0u18D1omT5qk875/bvJSIuyWWXlLKu5WnA0OT929rTcOY7rHqZVsWOvIcdQTq+Q4TI
-         Xty8IQiQ2uEFjkBqRHhjaYUeIIjdk3TlKuW6ZBNL29/kZI8LKdOXvAAi+FiRNxSMUXsG
-         92h/diWQ5jGfG/Pc/9JTOLcLZ2bS8Hyd3sIfxIs/rFITeR6YjIQmonhcUevYE5m/zN7s
-         SmPw==
+        d=linaro.org; s=google; t=1689179666; x=1691771666;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Zs0m/En6zIrHPDFl9JK0/9X5KfaIqeG5U/i/N6mUb18=;
+        b=dZmhTxuRn0Ggjtqs7Bh6lAMu4tfGvsu0WZ9SUdcFP/B4T6mX3uy70bUfhDi9042rfX
+         0w2Kpe9GqHgRfCFx3IM+/gbqCwLtw+CXi9WVCPfaswrkiEKvi9403vfoSv2flY8D4yGd
+         uIZF91XZiq2jv9EivTdtyijlpWU8Pqh4a47wGkKnRYl46WGwPaPutTTmbqLkTlrX6YGb
+         pcM/M2xeyKa+/n0qDlp54qDX4hxN4kSt+9se04uxdrzTffT/c7/svnbkJrTQKCqbXg5r
+         CXyaPlMqT34ZD0s1r0JEGKJPIWN4qqd3Pe7EsfwQEIX/obwZLxneXh4eamZZ3TH6EMNR
+         GdQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689178006; x=1691770006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8X6ArMXh62A5UxRR3ZN+q1CvObhoeb8ltfmXU1xj+zw=;
-        b=PrEabJWd5TMGaE3aK5uBZqdmeN7VfzetfqRUP/ESVcplpD+NRJlnvIL1l5vr0nhIH9
-         qGVG5nrF83MB6kEIZwh0DmhGBokA3AOdiyQNLR4YPk5a7+kBGAtmT/vylTaDWfU2DOnX
-         y/eNJS7F8M2vJX1seY/BLhpbZM/Z6z1BnEhflnxbSwSJjQB8t9iy0GA8fYYz6UwvKVlF
-         k6bOPXkkPcavJa0LLzIg2Ditf8IcVc0DXSw3FwsESVaUSe7zTS5bBXi+4cn97qIBAztW
-         YxEAxY06du21Xur8rmy9N3ZJ2dyss+2kgK4NkEbyfo9thcF6lYpG3xWjM9cd0wIFYCu/
-         aRWw==
-X-Gm-Message-State: ABy/qLZUtpq7Y42THquiFZtqdsoR5aA7HIxUcQbY28Sj/MVInnLEXTup
-        wx1w8gxydsFedkpPfpUmLOFqMclNC55wkrHFQ3dRcPhU5LVCyX7KNpB/WQ==
-X-Google-Smtp-Source: APBJJlHjPtNIqZNhhKZT3JSG1orBAozCwd3+TwwvFjulJuToD7D5iIrA7grwKZQU8Z67qc0UJ0oDxWof6WbkdfMRi3A=
-X-Received: by 2002:ac2:5b1d:0:b0:4fb:7a90:1abe with SMTP id
- v29-20020ac25b1d000000b004fb7a901abemr15797051lfn.49.1689178006211; Wed, 12
- Jul 2023 09:06:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689179666; x=1691771666;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zs0m/En6zIrHPDFl9JK0/9X5KfaIqeG5U/i/N6mUb18=;
+        b=V3lq5xfyGzYYdXXpvqZEAiUtv1nRn2roB2Z7DXlABOjqliB9qSDsWwwVKF1ty169IE
+         wpyx0iLJ0MMs1K8Qb2ofjO3vPcLRDwCr386f34GX8R0lvh6C8mML6/+58QMb+8vOe9QL
+         +a/T7n0cIb8sh9u1xwmqzhYPrn+VT2gwm6CvZeHDY4bRhIHUM8+vVks8tMsfmP/TP+NM
+         zMskEhuAyIqNr7uCl0Ff9MC6mPxMhD/7AYz9w/W6DdrjV1Rxw5fLiTQm5Eporj08IUxP
+         d5gdHUnGsuRW0hx1YhxnZHip/aap59ADhlKHetfHkxeXmiGbNOo+3FESmCoLcvqugcrh
+         EWpw==
+X-Gm-Message-State: ABy/qLb6CcqQanSwbGcTgvey9lf1+FYi7+PRNuHSMAS8ajulRtHOYHjH
+        T6+k2+5pf6VWYGemsTY/bE+H
+X-Google-Smtp-Source: APBJJlFlBHP5AZssL4vukJEogJn8IyXWQu0xoAEj5zrJvcKufJwQ5DgtTZWoi4X/WVf8dBDZKaVjCQ==
+X-Received: by 2002:a05:6a21:6d84:b0:126:a80d:4936 with SMTP id wl4-20020a056a216d8400b00126a80d4936mr17918871pzb.27.1689179665747;
+        Wed, 12 Jul 2023 09:34:25 -0700 (PDT)
+Received: from thinkpad ([117.207.27.131])
+        by smtp.gmail.com with ESMTPSA id v23-20020aa78517000000b0064f95bc04d3sm3818864pfn.20.2023.07.12.09.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Jul 2023 09:34:25 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 22:04:06 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
+Subject: Re: [PATCH 11/14] scsi: ufs: host: Add support for parsing OPP
+Message-ID: <20230712163406.GG102757@thinkpad>
+References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
+ <20230712103213.101770-14-manivannan.sadhasivam@linaro.org>
+ <e6a5129a-db07-977d-2ecd-328a52cbcdc0@linaro.org>
 MIME-Version: 1.0
-References: <20230629165206.383-1-jack@suse.cz> <20230704122224.16257-1-jack@suse.cz>
- <ZKbgAG5OoHVyUKOG@infradead.org>
-In-Reply-To: <ZKbgAG5OoHVyUKOG@infradead.org>
-From:   Haris Iqbal <haris.iqbal@ionos.com>
-Date:   Wed, 12 Jul 2023 18:06:35 +0200
-Message-ID: <CAJpMwyiUcw+mH0sZa8f8UJsaSZ7NSE65s2gZDEia+pASyP_gJQ@mail.gmail.com>
-Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Kleikamp <shaggy@kernel.org>,
-        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
-        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        jfs-discussion@lists.sourceforge.net,
-        Joern Engel <joern@lazybastard.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-xfs@vger.kernel.org, Mike Snitzer <snitzer@kernel.org>,
-        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Song Liu <song@kernel.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e6a5129a-db07-977d-2ecd-328a52cbcdc0@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 5:38=E2=80=AFPM Christoph Hellwig <hch@infradead.org=
-> wrote:
->
-> On Tue, Jul 04, 2023 at 02:21:28PM +0200, Jan Kara wrote:
-> > Create struct bdev_handle that contains all parameters that need to be
-> > passed to blkdev_put() and provide blkdev_get_handle_* functions that
-> > return this structure instead of plain bdev pointer. This will
-> > eventually allow us to pass one more argument to blkdev_put() without
-> > too much hassle.
->
-> Can we use the opportunity to come up with better names?  blkdev_get_*
-> was always a rather horrible naming convention for something that
-> ends up calling into ->open.
->
-> What about:
->
-> struct bdev_handle *bdev_open_by_dev(dev_t dev, blk_mode_t mode, void *ho=
-lder,
->                 const struct blk_holder_ops *hops);
-> struct bdev_handle *bdev_open_by_path(dev_t dev, blk_mode_t mode,
->                 void *holder, const struct blk_holder_ops *hops);
-> void bdev_release(struct bdev_handle *handle);
+On Wed, Jul 12, 2023 at 04:15:12PM +0300, Dmitry Baryshkov wrote:
+> On 12/07/2023 13:32, Manivannan Sadhasivam wrote:
+> > OPP framework can be used to scale the clocks along with other entities
+> > such as regulators, performance state etc... So let's add support for
+> > parsing OPP from devicetree. OPP support in devicetree is added through
+> > the "operating-points-v2" property which accepts the OPP table defining
+> > clock frequency, regulator voltage, power domain performance state etc...
+> > 
+> > Since the UFS controller requires multiple clocks to be controlled for
+> > proper working, devm_pm_opp_set_config() has been used which supports
+> > scaling multiple clocks through custom ufshcd_opp_config_clks() callback.
+> > 
+> > It should be noted that the OPP support is not compatible with the old
+> > "freq-table-hz" property. So only one can be used at a time even though
+> > the UFS core supports both.
+> > 
+> > Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >   drivers/ufs/host/ufshcd-pltfrm.c | 116 +++++++++++++++++++++++++++++++
+> >   1 file changed, 116 insertions(+)
+> > 
+> > diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
+> > index 0b7430033047..068c22378c88 100644
+> > --- a/drivers/ufs/host/ufshcd-pltfrm.c
+> > +++ b/drivers/ufs/host/ufshcd-pltfrm.c
+> > @@ -8,8 +8,10 @@
+> >    *	Vinayak Holikatti <h.vinayak@samsung.com>
+> >    */
+> > +#include <linux/clk.h>
+> >   #include <linux/module.h>
+> >   #include <linux/platform_device.h>
+> > +#include <linux/pm_opp.h>
+> >   #include <linux/pm_runtime.h>
+> >   #include <linux/of.h>
+> > @@ -17,6 +19,8 @@
+> >   #include "ufshcd-pltfrm.h"
+> >   #include <ufs/unipro.h>
+> > +#include <trace/events/ufs.h>
+> > +
+> >   #define UFSHCD_DEFAULT_LANES_PER_DIRECTION		2
+> >   static int ufshcd_parse_clock_info(struct ufs_hba *hba)
+> > @@ -205,6 +209,112 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
+> >   	}
+> >   }
+> > +static int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+> > +				  struct dev_pm_opp *opp, void *data,
+> > +				  bool scaling_down)
+> > +{
+> > +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> > +	struct list_head *head = &hba->clk_list_head;
+> > +	struct ufs_clk_info *clki;
+> > +	unsigned long freq;
+> > +	u8 idx = 0;
+> > +	int ret;
+> > +
+> > +	list_for_each_entry(clki, head, list) {
+> > +		if (!IS_ERR_OR_NULL(clki->clk)) {
+> > +			freq = dev_pm_opp_get_freq_indexed(opp, idx++);
+> > +
+> > +			/* Do not set rate for clocks having frequency as 0 */
+> > +			if (!freq)
+> > +				continue;
+> 
+> Can we omit these clocks from the opp table? I don't think they serve any
+> purpose.
+> 
 
-+1 to this.
-Also, if we are removing "handle" from the function, should the name
-of the structure it returns also change? Would something like bdev_ctx
-be better?
+No, we cannot. OPP requires the clocks and opp-hz to be of same length. And we
+cannot omit those clocks as well since linux needs to gate control them.
 
-(Apologies for the previous non-plaintext email)
+> Maybe it would even make sense to move this function to drivers/opp then, as
+> it will be generic enough.
+> 
 
->
-> ?
+There is already a generic function available in OPP core. But we cannot use it
+as we need to skip setting 0 freq and that's not applicable in OPP core as
+discussed with Viresh offline.
+
+- Mani
+
+> > +
+> > +			ret = clk_set_rate(clki->clk, freq);
+> > +			if (ret) {
+> > +				dev_err(dev, "%s: %s clk set rate(%ldHz) failed, %d\n",
+> > +					__func__, clki->name, freq, ret);
+> > +				return ret;
+> > +			}
+> > +
+> > +			trace_ufshcd_clk_scaling(dev_name(dev),
+> > +				(scaling_down ? "scaled down" : "scaled up"),
+> > +				clki->name, hba->clk_scaling.target_freq, freq);
+> > +		}
+> > +	}
+> > +
+> > +	return 0;
+> > +} > +
+> > +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+> > +{
+> > +	struct device *dev = hba->dev;
+> > +	struct device_node *np = dev->of_node;
+> > +	struct dev_pm_opp_config config = {};
+> > +	struct ufs_clk_info *clki;
+> > +	const char **clk_names;
+> > +	int cnt, i, ret;
+> > +
+> > +	if (!of_find_property(np, "operating-points-v2", NULL))
+> > +		return 0;
+> > +
+> > +	if (of_find_property(np, "freq-table-hz", NULL)) {
+> > +		dev_err(dev, "%s: operating-points and freq-table-hz are incompatible\n",
+> > +			 __func__);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	cnt = of_property_count_strings(np, "clock-names");
+> > +	if (cnt <= 0) {
+> > +		dev_err(dev, "%s: Missing clock-names\n",  __func__);
+> > +		return -ENODEV;
+> > +	}
+> > +
+> > +	/* OPP expects clk_names to be NULL terminated */
+> > +	clk_names = devm_kcalloc(dev, cnt + 1, sizeof(*clk_names), GFP_KERNEL);
+> > +	if (!clk_names)
+> > +		return -ENOMEM;
+> > +
+> > +	/*
+> > +	 * We still need to get reference to all clocks as the UFS core uses
+> > +	 * them separately.
+> > +	 */
+> > +	for (i = 0; i < cnt; i++) {
+> > +		ret = of_property_read_string_index(np, "clock-names", i,
+> > +						    &clk_names[i]);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
+> > +		if (!clki)
+> > +			return -ENOMEM;
+> > +
+> > +		clki->name = devm_kstrdup(dev, clk_names[i], GFP_KERNEL);
+> > +		if (!clki->name)
+> > +			return -ENOMEM;
+> > +
+> > +		if (!strcmp(clk_names[i], "ref_clk"))
+> > +			clki->keep_link_active = true;
+> > +
+> > +		list_add_tail(&clki->list, &hba->clk_list_head);
+> > +	}
+> > +
+> > +	config.clk_names = clk_names,
+> > +	config.config_clks = ufshcd_opp_config_clks;
+> > +
+> > +	ret = devm_pm_opp_set_config(dev, &config);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = devm_pm_opp_of_add_table(dev);
+> > +	if (ret) {
+> > +		dev_err(dev, "Failed to add OPP table: %d\n", ret);
+> > +		return ret;
+> > +	}
+> > +
+> > +	hba->use_pm_opp = true;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   /**
+> >    * ufshcd_get_pwr_dev_param - get finally agreed attributes for
+> >    *                            power mode change
+> > @@ -371,6 +481,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+> >   	ufshcd_init_lanes_per_dir(hba);
+> > +	err = ufshcd_parse_operating_points(hba);
+> > +	if (err) {
+> > +		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
+> > +		goto dealloc_host;
+> > +	}
+> > +
+> >   	err = ufshcd_init(hba, mmio_base, irq);
+> >   	if (err) {
+> >   		dev_err(dev, "Initialization failed\n");
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
