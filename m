@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D157275049B
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 12:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA0E75049F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 12:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjGLKed (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 06:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48236 "EHLO
+        id S231532AbjGLKet (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 06:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjGLKe0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 06:34:26 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3DF1BD3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 03:34:17 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666e6541c98so6149806b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 03:34:17 -0700 (PDT)
+        with ESMTP id S230352AbjGLKes (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 06:34:48 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12C51FD4
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 03:34:30 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id 5614622812f47-3a3e1152c23so4847425b6e.2
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 03:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689158057; x=1691750057;
+        d=linaro.org; s=google; t=1689158070; x=1691750070;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JVAw7udukL38zwKtT4457ZqK6it2VdBXoqf1V9p3kc4=;
-        b=isqILRp2HC9Ls4OVrM79cWWkM+2AF8/YyITwGQzkfdXJw2wS0o+KcnwFKgqBvuxVHc
-         gYvHjMAHw9JCmG50CSuwjv+Rq6MLi27bYXEAoqR2s3DEO9nphmtEogNIHYv4Xf/i3gGG
-         FqRMK5p3XcWzFQ6CPXFWPAmOe3Kqrg7eEy/MJ+FMq/fUN6z8JY4YTdeNEaCytQyJ4DdY
-         cgw1O+4mRHi7+JioR375dYmR166DXGrgZfu/E7ow84rYwxFBPdzXNiuXz3coYLhctzbm
-         zhiIm2ddU3gvLe5a8MbpLA4TecSMAoLkjhysgEQTb79wDzPRhdF8dXgLye0AeXIqd33F
-         vGxg==
+        bh=rUALOMVIIGKbG8JEVq4pp7kzPYcPWB7nny4Y+Kz5V+0=;
+        b=eNnbRg3YWKNGjvu+jrsMFLQ64vETpSFZUqgXVhu0rcdY0L33vZWZuguu5A8iyn4JTW
+         yU/RTXjQ6SknHP4nKCh85Vzg3IWf9GGIT7rNt1PJDKRF/qZl0zxI1q3rDKJCWyIUae6K
+         GrfZW8NnTmrqDsSVmdfkB3oWZLUTK++qkQmnzi6IB9kyiYwHKJiFpLN46XxKPjXCMQLv
+         l6XhCTs2MQc0TlauppGSqYPNNnQ2SUP4VJYnnmj7Y85G4nDbRw8CARV3TVisBfMczDyY
+         8gZkZASuucNUA1UHi5uDsB7NZs70P1zz20MbQx+PNhWJ0VqUfnEYZgbphnPFEhJEmZ/W
+         xuYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689158057; x=1691750057;
+        d=1e100.net; s=20221208; t=1689158070; x=1691750070;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JVAw7udukL38zwKtT4457ZqK6it2VdBXoqf1V9p3kc4=;
-        b=DzvB/u7uQAEWVdlbrLZGKODpunCl3VEEDn3+4ce3Kx61RnEn+Bvhpef9lXzz4p/u4a
-         8X+WgvTAfKJcLTeg2oxFu8hDt2GE+DX2olwsz3McOBCZe+o8w7DqSZyh/xeOd2OH0bhI
-         HiamYIMjVRrSN5nIarH8jJsbm1Kk2uYXIYxOvKLDkrw3pYerbQqrM3Ux9LDMddQVkUzJ
-         m+Uy86YCk5pXN6vy7y6Du69towJsKVEhINosRC734VerE4njRqb+NqwnTT6M+jLRiHFv
-         AoHAwtjSFS6yzD8iBEQtENdKTcarL4qoJfdYoo5WFnTan8vdaWm1vIWJe6ViXrJhqn/H
-         QVkQ==
-X-Gm-Message-State: ABy/qLb+xx7g0pVgQauz49PvOrwcn+5TcllrxJdnT56eVLa2gls+h+x+
-        rhSeScwERbh80NMUytmJXJ6Z
-X-Google-Smtp-Source: APBJJlFUWC255F6eLnf2C5UDQZ693UFhrIoIQkUc7luQxR8UfSsm7MLjxZeaNBUtDTEUU/rCVNd7Hw==
-X-Received: by 2002:a05:6a00:2307:b0:67e:18c6:d2c6 with SMTP id h7-20020a056a00230700b0067e18c6d2c6mr24028175pfh.5.1689158056990;
-        Wed, 12 Jul 2023 03:34:16 -0700 (PDT)
+        bh=rUALOMVIIGKbG8JEVq4pp7kzPYcPWB7nny4Y+Kz5V+0=;
+        b=Trl4uMzyjdY5+l2NhURGGWcTTt+aPiq3YBAjbFPZOjpXgxpLV81HU2Rgt65BecgYFw
+         +TbYeVa52irr6Cto6LriSnxUrZx77vQ43spPeoXrIBLrEjmzEcEht/6RDtb/BdyUf6lv
+         V3uPFjMHMWxPYR1TNYXKZRpAG5n6KX1FA1jiYwHOjLL6Z1dqX/32pOhReEVs9HCrkEoj
+         zYHkFonqirBe1v2XeqTpYC+si59+yZlus45mfOCZw4zjqvwhVX2Y59wfza+24tskGyHA
+         zyOUlIX7PgciSOwqMPuOF+k3lDTYVgkVKJDpY1iNlNjIQuxSmcVW3C22MFQotM8ZkyzB
+         62Jg==
+X-Gm-Message-State: ABy/qLbe/fZInQrwmEwq8totDjUUj/HslwNrGZf7Cqgv2omYuMKbI7bt
+        dfWw7DuWG5OLE2pwjUIS7V0I
+X-Google-Smtp-Source: APBJJlG4O6ScWRirgJ7JMJfafcAxZ7d/dk6K3JrfjQSHaG3l+x/ejV85Vp/0kjmOwVE1coD8i1HNbw==
+X-Received: by 2002:aca:6546:0:b0:3a3:c743:83dc with SMTP id j6-20020aca6546000000b003a3c74383dcmr15122365oiw.59.1689158069863;
+        Wed, 12 Jul 2023 03:34:29 -0700 (PDT)
 Received: from localhost.localdomain ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.34.04
+        by smtp.gmail.com with ESMTPSA id k15-20020aa790cf000000b00666b3706be6sm3247860pfk.107.2023.07.12.03.34.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 03:34:16 -0700 (PDT)
+        Wed, 12 Jul 2023 03:34:29 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -63,9 +63,9 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 08/14] OPP: Introduce dev_pm_opp_get_freq_indexed() API
-Date:   Wed, 12 Jul 2023 16:02:03 +0530
-Message-Id: <20230712103213.101770-9-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 09/14] PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+Date:   Wed, 12 Jul 2023 16:02:04 +0530
+Message-Id: <20230712103213.101770-10-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
 References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
@@ -81,76 +81,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the case of devices with multiple clocks, drivers need to specify the
-frequency index for the OPP framework to get the specific frequency within
-the required OPP. So let's introduce the dev_pm_opp_get_freq_indexed() API
-accepting the frequency index as an argument.
+Some devfreq consumers like UFS driver need to work with multiple clocks
+through the OPP framework. For this reason, OPP framework exposes the
+_indexed() APIs for finding the floor/ceil of the supplied frequency of
+the indexed clock. So let's use them in the devfreq driver.
+
+Currently, the clock index of 0 is used which works fine for multiple as
+well as single clock.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/opp/core.c     | 22 ++++++++++++++++++++++
- include/linux/pm_opp.h |  8 ++++++++
- 2 files changed, 30 insertions(+)
+ drivers/devfreq/devfreq.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index a6d0b6b18e0e..66dc0d0cfaed 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -197,6 +197,28 @@ unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq);
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index e36cbb920ec8..7686993d639f 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -88,7 +88,7 @@ static unsigned long find_available_min_freq(struct devfreq *devfreq)
+ 	struct dev_pm_opp *opp;
+ 	unsigned long min_freq = 0;
  
-+/**
-+ * dev_pm_opp_get_freq_indexed() - Gets the frequency corresponding to an
-+ *				   available opp with specified index
-+ * @opp: opp for which frequency has to be returned for
-+ * @index: index of the frequency within the required opp
-+ *
-+ * Return: frequency in hertz corresponding to the opp with specified index,
-+ * else return 0
-+ */
-+unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp, u32 index)
-+{
-+	struct opp_table *opp_table = opp->opp_table;
-+
-+	if (IS_ERR_OR_NULL(opp) || index >= opp_table->clk_count) {
-+		pr_err("%s: Invalid parameters\n", __func__);
-+		return 0;
-+	}
-+
-+	return opp->rates[index];
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq_indexed);
-+
- /**
-  * dev_pm_opp_get_level() - Gets the level corresponding to an available opp
-  * @opp:	opp for which level value has to be returned for
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 991f54da79b5..97eb6159fb93 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -105,6 +105,8 @@ unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp);
+-	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
++	opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &min_freq, 0);
+ 	if (IS_ERR(opp))
+ 		min_freq = 0;
+ 	else
+@@ -102,7 +102,7 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+ 	struct dev_pm_opp *opp;
+ 	unsigned long max_freq = ULONG_MAX;
  
- unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp);
+-	opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
++	opp = dev_pm_opp_find_freq_floor_indexed(devfreq->dev.parent, &max_freq, 0);
+ 	if (IS_ERR(opp))
+ 		max_freq = 0;
+ 	else
+@@ -196,7 +196,7 @@ static int set_freq_table(struct devfreq *devfreq)
+ 		return -ENOMEM;
  
-+unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp, u32 index);
-+
- unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp);
+ 	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
+-		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
++		opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &freq, 0);
+ 		if (IS_ERR(opp)) {
+ 			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
+ 			return PTR_ERR(opp);
+@@ -2034,18 +2034,18 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
  
- unsigned int dev_pm_opp_get_required_pstate(struct dev_pm_opp *opp,
-@@ -211,6 +213,12 @@ static inline unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
- 	return 0;
- }
+ 	if (flags & DEVFREQ_FLAG_LEAST_UPPER_BOUND) {
+ 		/* The freq is an upper bound. opp should be lower */
+-		opp = dev_pm_opp_find_freq_floor(dev, freq);
++		opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
  
-+static inline unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp,
-+						      u32 index)
-+{
-+	return 0;
-+}
-+
- static inline unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp)
- {
- 	return 0;
+ 		/* If not available, use the closest opp */
+ 		if (opp == ERR_PTR(-ERANGE))
+-			opp = dev_pm_opp_find_freq_ceil(dev, freq);
++			opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+ 	} else {
+ 		/* The freq is an lower bound. opp should be higher */
+-		opp = dev_pm_opp_find_freq_ceil(dev, freq);
++		opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+ 
+ 		/* If not available, use the closest opp */
+ 		if (opp == ERR_PTR(-ERANGE))
+-			opp = dev_pm_opp_find_freq_floor(dev, freq);
++			opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+ 	}
+ 
+ 	return opp;
 -- 
 2.25.1
 
