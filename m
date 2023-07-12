@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159E8750E9F
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25609750ECC
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjGLQe3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 12:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S233024AbjGLQl5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 12:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjGLQe3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:34:29 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675391720
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:34:26 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6682909acadso4096839b3a.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:34:26 -0700 (PDT)
+        with ESMTP id S233015AbjGLQlx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:41:53 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E0A2118
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:41:31 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666e97fcc60so5001449b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:41:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689179666; x=1691771666;
+        d=linaro.org; s=google; t=1689180091; x=1691772091;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Zs0m/En6zIrHPDFl9JK0/9X5KfaIqeG5U/i/N6mUb18=;
-        b=dZmhTxuRn0Ggjtqs7Bh6lAMu4tfGvsu0WZ9SUdcFP/B4T6mX3uy70bUfhDi9042rfX
-         0w2Kpe9GqHgRfCFx3IM+/gbqCwLtw+CXi9WVCPfaswrkiEKvi9403vfoSv2flY8D4yGd
-         uIZF91XZiq2jv9EivTdtyijlpWU8Pqh4a47wGkKnRYl46WGwPaPutTTmbqLkTlrX6YGb
-         pcM/M2xeyKa+/n0qDlp54qDX4hxN4kSt+9se04uxdrzTffT/c7/svnbkJrTQKCqbXg5r
-         CXyaPlMqT34ZD0s1r0JEGKJPIWN4qqd3Pe7EsfwQEIX/obwZLxneXh4eamZZ3TH6EMNR
-         GdQA==
+        bh=JG8l8l0Mu0+pNnnrqeaG4m1soj2ykxAUEUS5bx3yBLM=;
+        b=nOVty0dxCm9ug10ZW6YA4SiPykK8fhs51YLTIqnJH0kZlbVVhI7O9WUrwR6tjjNKjj
+         pjTJV5x3YzJdUXE/qZgKkXTCycTgxV8QhZT5b2tLGOsVvWg0iKKKn1NiGoSIelNMIFF8
+         wvVy/4WcmAgVSyEPfcfBP9GpE19ZH2CxfVWfCdrbDwsxh8Q1tHvTWMerWIQOQMdN0RKa
+         9uVX4w64lFAyVM3eKkqwxn2jIxsvuPIQLTvj4d42T2vXU2Bj1lJOlhZIrjllVHjfP+1z
+         l35/O6o9ObnWMvl5igPCdwrdL5FWv1qfezKmqBr/MJS7ujAumef6LFZnsKuft5dCUop4
+         LX3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689179666; x=1691771666;
+        d=1e100.net; s=20221208; t=1689180091; x=1691772091;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zs0m/En6zIrHPDFl9JK0/9X5KfaIqeG5U/i/N6mUb18=;
-        b=V3lq5xfyGzYYdXXpvqZEAiUtv1nRn2roB2Z7DXlABOjqliB9qSDsWwwVKF1ty169IE
-         wpyx0iLJ0MMs1K8Qb2ofjO3vPcLRDwCr386f34GX8R0lvh6C8mML6/+58QMb+8vOe9QL
-         +a/T7n0cIb8sh9u1xwmqzhYPrn+VT2gwm6CvZeHDY4bRhIHUM8+vVks8tMsfmP/TP+NM
-         zMskEhuAyIqNr7uCl0Ff9MC6mPxMhD/7AYz9w/W6DdrjV1Rxw5fLiTQm5Eporj08IUxP
-         d5gdHUnGsuRW0hx1YhxnZHip/aap59ADhlKHetfHkxeXmiGbNOo+3FESmCoLcvqugcrh
-         EWpw==
-X-Gm-Message-State: ABy/qLb6CcqQanSwbGcTgvey9lf1+FYi7+PRNuHSMAS8ajulRtHOYHjH
-        T6+k2+5pf6VWYGemsTY/bE+H
-X-Google-Smtp-Source: APBJJlFlBHP5AZssL4vukJEogJn8IyXWQu0xoAEj5zrJvcKufJwQ5DgtTZWoi4X/WVf8dBDZKaVjCQ==
-X-Received: by 2002:a05:6a21:6d84:b0:126:a80d:4936 with SMTP id wl4-20020a056a216d8400b00126a80d4936mr17918871pzb.27.1689179665747;
-        Wed, 12 Jul 2023 09:34:25 -0700 (PDT)
+        bh=JG8l8l0Mu0+pNnnrqeaG4m1soj2ykxAUEUS5bx3yBLM=;
+        b=QhhzrVIoEJoow/x4DCduY+U9tu5ufe699fDwWC3kix1sHpVT1W4xhtMwXPuMJ3Ohn+
+         R9CbcRojeEc9zFlcgSS/tnHewbTwi1ss2/WEoO7iZEC/1vUl60KB7JtQOUSNdadR972X
+         TpjX/FgoEk6gzVcyvLWJXvW0VOhZLaxDXYGsRIXhdfspaL+3uEHrcthPzD8u+/vVFD4o
+         7ceLvBd7+7EDE/KJJE2NPoPp8dvZDZB/phtSWs4Vxejit5CEwfwSVNWADN+4bLoP16EI
+         0oHA7+rANFad615A22AbAMB75z/SjiLLgjb7Oyw26TEt/n4+uodIrfBic/5VcnmlqNgB
+         s4Pg==
+X-Gm-Message-State: ABy/qLaE2zTvlRRIi6p2Gqdf7V/GPHZ481yNTs7DA5XrGBVtB3aApwOM
+        qNHffXmJkqeFEzdnGBnwKHvw
+X-Google-Smtp-Source: APBJJlEP45rbWedRrUg7MPlYZwbsPDhir8/t9WkxHshZaYuyK4SnAsKjBbOxXXv4A+DrfqbwTsIBSA==
+X-Received: by 2002:a05:6a00:2196:b0:64c:c5f9:1533 with SMTP id h22-20020a056a00219600b0064cc5f91533mr18788238pfi.33.1689180090850;
+        Wed, 12 Jul 2023 09:41:30 -0700 (PDT)
 Received: from thinkpad ([117.207.27.131])
-        by smtp.gmail.com with ESMTPSA id v23-20020aa78517000000b0064f95bc04d3sm3818864pfn.20.2023.07.12.09.34.12
+        by smtp.gmail.com with ESMTPSA id b20-20020aa78714000000b00682bbb65852sm3953029pfo.176.2023.07.12.09.41.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 09:34:25 -0700 (PDT)
-Date:   Wed, 12 Jul 2023 22:04:06 +0530
+        Wed, 12 Jul 2023 09:41:30 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 22:11:14 +0530
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
@@ -64,16 +64,17 @@ Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH 11/14] scsi: ufs: host: Add support for parsing OPP
-Message-ID: <20230712163406.GG102757@thinkpad>
+Subject: Re: [PATCH 14/14] scsi: ufs: qcom: Add support for scaling
+ interconnects
+Message-ID: <20230712164114.GH102757@thinkpad>
 References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <20230712103213.101770-14-manivannan.sadhasivam@linaro.org>
- <e6a5129a-db07-977d-2ecd-328a52cbcdc0@linaro.org>
+ <20230712103213.101770-19-manivannan.sadhasivam@linaro.org>
+ <107aad9f-40c0-f32b-9f74-6c82ee6785bf@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e6a5129a-db07-977d-2ecd-328a52cbcdc0@linaro.org>
+In-Reply-To: <107aad9f-40c0-f32b-9f74-6c82ee6785bf@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -84,189 +85,294 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 04:15:12PM +0300, Dmitry Baryshkov wrote:
+On Wed, Jul 12, 2023 at 04:22:51PM +0300, Dmitry Baryshkov wrote:
 > On 12/07/2023 13:32, Manivannan Sadhasivam wrote:
-> > OPP framework can be used to scale the clocks along with other entities
-> > such as regulators, performance state etc... So let's add support for
-> > parsing OPP from devicetree. OPP support in devicetree is added through
-> > the "operating-points-v2" property which accepts the OPP table defining
-> > clock frequency, regulator voltage, power domain performance state etc...
+> > Qcom SoCs require scaling the interconnect paths for proper working of the
+> > peripherals connected through interconnects. Even for accessing the UFS
+> > controller, someone should setup the interconnect paths. So far, the
+> > bootloaders used to setup the interconnect paths before booting linux as
+> > they need to access the UFS storage for things like fetching boot firmware.
+> > But with the advent of multi boot options, bootloader nowadays like in
+> > SA8540p SoC do not setup the interconnect paths at all.
 > > 
-> > Since the UFS controller requires multiple clocks to be controlled for
-> > proper working, devm_pm_opp_set_config() has been used which supports
-> > scaling multiple clocks through custom ufshcd_opp_config_clks() callback.
+> > So trying to configure UFS in the absence of the interconnect path
+> > configuration, results in boot crash.
 > > 
-> > It should be noted that the OPP support is not compatible with the old
-> > "freq-table-hz" property. So only one can be used at a time even though
-> > the UFS core supports both.
+> > To fix this issue and also to dynamically scale the interconnects (UFS-DDR
+> > and CPU-UFS), interconnect API support is added to the Qcom UFS driver.
+> > With this support, the interconnect paths are scaled dynamically based on
+> > the gear configuration.
 > > 
-> > Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > During the early stage of ufs_qcom_init(), ufs_qcom_icc_init() will setup
+> > the paths to max bandwidth to allow configuring the UFS registers. Touching
+> > the registers without configuring the icc paths would result in a crash.
+> > However, we don't really need to set max vote for the icc paths as any
+> > minimal vote would suffice. But the max value would allow initialization to
+> > be done faster. After init, the bandwidth will get updated using
+> > ufs_qcom_icc_update_bw() based on the gear and lane configuration.
+> > 
+> > The bandwidth values defined in ufs_qcom_bw_table struct are taken from
+> > Qcom downstream vendor devicetree source and are calculated as per the
+> > UFS3.1 Spec, Section 6.4.1, HS Gear Rates. So it is fixed across platforms.
+> > 
+> > Cc: Brian Masney <bmasney@redhat.com>
 > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > > ---
-> >   drivers/ufs/host/ufshcd-pltfrm.c | 116 +++++++++++++++++++++++++++++++
-> >   1 file changed, 116 insertions(+)
+> >   drivers/ufs/host/ufs-qcom.c | 131 +++++++++++++++++++++++++++++++++++-
+> >   drivers/ufs/host/ufs-qcom.h |   3 +
+> >   2 files changed, 133 insertions(+), 1 deletion(-)
 > > 
-> > diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-> > index 0b7430033047..068c22378c88 100644
-> > --- a/drivers/ufs/host/ufshcd-pltfrm.c
-> > +++ b/drivers/ufs/host/ufshcd-pltfrm.c
-> > @@ -8,8 +8,10 @@
-> >    *	Vinayak Holikatti <h.vinayak@samsung.com>
-> >    */
-> > +#include <linux/clk.h>
+> > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> > index 8d6fd4c3324f..8a3132d45a65 100644
+> > --- a/drivers/ufs/host/ufs-qcom.c
+> > +++ b/drivers/ufs/host/ufs-qcom.c
+> > @@ -7,6 +7,7 @@
+> >   #include <linux/time.h>
+> >   #include <linux/clk.h>
+> >   #include <linux/delay.h>
+> > +#include <linux/interconnect.h>
 > >   #include <linux/module.h>
-> >   #include <linux/platform_device.h>
-> > +#include <linux/pm_opp.h>
-> >   #include <linux/pm_runtime.h>
 > >   #include <linux/of.h>
-> > @@ -17,6 +19,8 @@
-> >   #include "ufshcd-pltfrm.h"
-> >   #include <ufs/unipro.h>
-> > +#include <trace/events/ufs.h>
+> >   #include <linux/platform_device.h>
+> > @@ -46,6 +47,49 @@ enum {
+> >   	TSTBUS_MAX,
+> >   };
+> > +#define QCOM_UFS_MAX_GEAR 4
+> > +#define QCOM_UFS_MAX_LANE 2
 > > +
-> >   #define UFSHCD_DEFAULT_LANES_PER_DIRECTION		2
-> >   static int ufshcd_parse_clock_info(struct ufs_hba *hba)
-> > @@ -205,6 +209,112 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
-> >   	}
-> >   }
-> > +static int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
-> > +				  struct dev_pm_opp *opp, void *data,
-> > +				  bool scaling_down)
-> > +{
-> > +	struct ufs_hba *hba = dev_get_drvdata(dev);
-> > +	struct list_head *head = &hba->clk_list_head;
-> > +	struct ufs_clk_info *clki;
-> > +	unsigned long freq;
-> > +	u8 idx = 0;
-> > +	int ret;
-> > +
-> > +	list_for_each_entry(clki, head, list) {
-> > +		if (!IS_ERR_OR_NULL(clki->clk)) {
-> > +			freq = dev_pm_opp_get_freq_indexed(opp, idx++);
-> > +
-> > +			/* Do not set rate for clocks having frequency as 0 */
-> > +			if (!freq)
-> > +				continue;
+> > +enum {
+> > +	MODE_MIN,
+> > +	MODE_PWM,
+> > +	MODE_HS_RA,
+> > +	MODE_HS_RB,
+> > +	MODE_MAX,
 > 
-> Can we omit these clocks from the opp table? I don't think they serve any
-> purpose.
+> MODE_MIN and MODE_MAX seem to be unused
 > 
 
-No, we cannot. OPP requires the clocks and opp-hz to be of same length. And we
-cannot omit those clocks as well since linux needs to gate control them.
+No, they are used in the driver.
 
-> Maybe it would even make sense to move this function to drivers/opp then, as
-> it will be generic enough.
+> > +};
+> > +
+> > +struct __ufs_qcom_bw_table {
+> > +	u32 bw1;
+> > +	u32 bw2;
+> 
+> Please consider:
+> 
+> s/bw1/mem_bw/
+> s/bw2/cfg_bw/
 > 
 
-There is already a generic function available in OPP core. But we cannot use it
-as we need to skip setting 0 freq and that's not applicable in OPP core as
-discussed with Viresh offline.
+Ok.
+
+> > +} ufs_qcom_bw_table[MODE_MAX + 1][QCOM_UFS_MAX_GEAR + 1][QCOM_UFS_MAX_LANE + 1] = {
+> 
+> I'd say, these +1's are slightly confusing and unnecessary.
+> 
+
+These max values itself are used in the table. Without adding 1 to them, we will
+end up with out of bounds access.
+
+> > +	[MODE_MIN][0][0] = { 0,		0 },	/* Bandwidth values are in KB/s */
+> 
+> I'd say, this becomes impossible to check. Can you please structure it?
+
+What do you mean by "impossible to check"?
+
+> Either by inclusion:
+> 
+> [MODE_PWM] = {
+>   [1] = {
+>      [1] = { .. },
+>      [2] = { .. },
+>   },
+>   // etc.
+
+Now, this seems confusion to me. The existing table looks fine IMO.
+
+> };
+> 
+> Also, do we have defines for gears? Can we use them instead of indices?
+> 
+
+There are defines for the gears but not for lanes. So I ended up using numbers
+for simplicity.
 
 - Mani
 
+> > +	[MODE_PWM][1][1] = { 922,	1000 },
+> > +	[MODE_PWM][2][1] = { 1844,	1000 },
+> > +	[MODE_PWM][3][1] = { 3688,	1000 },
+> > +	[MODE_PWM][4][1] = { 7376,	1000 },
+> > +	[MODE_PWM][1][2] = { 1844,	1000 },
+> > +	[MODE_PWM][2][2] = { 3688,	1000 },
+> > +	[MODE_PWM][3][2] = { 7376,	1000 },
+> > +	[MODE_PWM][4][2] = { 14752,	1000 },
+> > +	[MODE_HS_RA][1][1] = { 127796,	1000 },
+> > +	[MODE_HS_RA][2][1] = { 255591,	1000 },
+> > +	[MODE_HS_RA][3][1] = { 1492582,	102400 },
+> > +	[MODE_HS_RA][4][1] = { 2915200,	204800 },
+> > +	[MODE_HS_RA][1][2] = { 255591,	1000 },
+> > +	[MODE_HS_RA][2][2] = { 511181,	1000 },
+> > +	[MODE_HS_RA][3][2] = { 1492582,	204800 },
+> > +	[MODE_HS_RA][4][2] = { 2915200,	409600 },
+> > +	[MODE_HS_RB][1][1] = { 149422,	1000 },
+> > +	[MODE_HS_RB][2][1] = { 298189,	1000 },
+> > +	[MODE_HS_RB][3][1] = { 1492582,	102400 },
+> > +	[MODE_HS_RB][4][1] = { 2915200,	204800 },
+> > +	[MODE_HS_RB][1][2] = { 298189,	1000 },
+> > +	[MODE_HS_RB][2][2] = { 596378,	1000 },
+> > +	[MODE_HS_RB][3][2] = { 1492582,	204800 },
+> > +	[MODE_HS_RB][4][2] = { 2915200,	409600 },
+> > +	[MODE_MAX][0][0] = { 7643136, 307200 },
+> > +};
 > > +
-> > +			ret = clk_set_rate(clki->clk, freq);
-> > +			if (ret) {
-> > +				dev_err(dev, "%s: %s clk set rate(%ldHz) failed, %d\n",
-> > +					__func__, clki->name, freq, ret);
-> > +				return ret;
-> > +			}
+> >   static struct ufs_qcom_host *ufs_qcom_hosts[MAX_UFS_QCOM_HOSTS];
+> >   static void ufs_qcom_get_default_testbus_cfg(struct ufs_qcom_host *host);
+> > @@ -789,6 +833,51 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
+> >   	}
+> >   }
+> > +static int ufs_qcom_icc_set_bw(struct ufs_qcom_host *host, u32 bw1, u32 bw2)
+> > +{
+> > +	struct device *dev = host->hba->dev;
+> > +	int ret;
 > > +
-> > +			trace_ufshcd_clk_scaling(dev_name(dev),
-> > +				(scaling_down ? "scaled down" : "scaled up"),
-> > +				clki->name, hba->clk_scaling.target_freq, freq);
-> > +		}
+> > +	ret = icc_set_bw(host->icc_ddr, 0, bw1);
+> > +	if (ret < 0) {
+> > +		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = icc_set_bw(host->icc_cpu, 0, bw2);
+> > +	if (ret < 0) {
+> > +		dev_err(dev, "failed to set bandwidth request: %d\n", ret);
+> > +		return ret;
 > > +	}
 > > +
 > > +	return 0;
-> > +} > +
-> > +static int ufshcd_parse_operating_points(struct ufs_hba *hba)
+> > +}
+> > +
+> > +static struct __ufs_qcom_bw_table ufs_qcom_get_bw_table(struct ufs_qcom_host *host)
 > > +{
-> > +	struct device *dev = hba->dev;
-> > +	struct device_node *np = dev->of_node;
-> > +	struct dev_pm_opp_config config = {};
-> > +	struct ufs_clk_info *clki;
-> > +	const char **clk_names;
-> > +	int cnt, i, ret;
+> > +	struct ufs_pa_layer_attr *p = &host->dev_req_params;
+> > +	int gear = max_t(u32, p->gear_rx, p->gear_tx);
+> > +	int lane = max_t(u32, p->lane_rx, p->lane_tx);
 > > +
-> > +	if (!of_find_property(np, "operating-points-v2", NULL))
-> > +		return 0;
-> > +
-> > +	if (of_find_property(np, "freq-table-hz", NULL)) {
-> > +		dev_err(dev, "%s: operating-points and freq-table-hz are incompatible\n",
-> > +			 __func__);
-> > +		return -EINVAL;
+> > +	if (ufshcd_is_hs_mode(p)) {
+> > +		if (p->hs_rate == PA_HS_MODE_B)
+> > +			return ufs_qcom_bw_table[MODE_HS_RB][gear][lane];
+> > +		else
+> > +			return ufs_qcom_bw_table[MODE_HS_RA][gear][lane];
+> > +	} else {
+> > +		return ufs_qcom_bw_table[MODE_PWM][gear][lane];
 > > +	}
+> > +}
 > > +
-> > +	cnt = of_property_count_strings(np, "clock-names");
-> > +	if (cnt <= 0) {
-> > +		dev_err(dev, "%s: Missing clock-names\n",  __func__);
-> > +		return -ENODEV;
-> > +	}
+> > +static int ufs_qcom_icc_update_bw(struct ufs_qcom_host *host)
+> > +{
+> > +	struct __ufs_qcom_bw_table bw_table;
 > > +
-> > +	/* OPP expects clk_names to be NULL terminated */
-> > +	clk_names = devm_kcalloc(dev, cnt + 1, sizeof(*clk_names), GFP_KERNEL);
-> > +	if (!clk_names)
-> > +		return -ENOMEM;
+> > +	bw_table = ufs_qcom_get_bw_table(host);
+> > +
+> > +	return ufs_qcom_icc_set_bw(host, bw_table.bw1, bw_table.bw2);
+> > +}
+> > +
+> >   static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+> >   				enum ufs_notify_change_status status,
+> >   				struct ufs_pa_layer_attr *dev_max_params,
+> > @@ -852,6 +941,8 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
+> >   		memcpy(&host->dev_req_params,
+> >   				dev_req_params, sizeof(*dev_req_params));
+> > +		ufs_qcom_icc_update_bw(host);
+> > +
+> >   		/* disable the device ref clock if entered PWM mode */
+> >   		if (ufshcd_is_hs_mode(&hba->pwr_info) &&
+> >   			!ufshcd_is_hs_mode(dev_req_params))
+> > @@ -981,7 +1072,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
+> >   	switch (status) {
+> >   	case PRE_CHANGE:
+> > -		if (!on) {
+> > +		if (on) {
+> > +			ufs_qcom_icc_update_bw(host);
+> > +		} else {
+> >   			if (!ufs_qcom_is_link_active(hba)) {
+> >   				/* disable device ref_clk */
+> >   				ufs_qcom_dev_ref_clk_ctrl(host, false);
+> > @@ -993,6 +1086,9 @@ static int ufs_qcom_setup_clocks(struct ufs_hba *hba, bool on,
+> >   			/* enable the device ref clock for HS mode*/
+> >   			if (ufshcd_is_hs_mode(&hba->pwr_info))
+> >   				ufs_qcom_dev_ref_clk_ctrl(host, true);
+> > +		} else {
+> > +			ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MIN][0][0].bw1,
+> > +					    ufs_qcom_bw_table[MODE_MIN][0][0].bw2);
+> >   		}
+> >   		break;
+> >   	}
+> > @@ -1031,6 +1127,34 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
+> >   	.deassert = ufs_qcom_reset_deassert,
+> >   };
+> > +static int ufs_qcom_icc_init(struct ufs_qcom_host *host)
+> > +{
+> > +	struct device *dev = host->hba->dev;
+> > +	int ret;
+> > +
+> > +	host->icc_ddr = devm_of_icc_get(dev, "ufs-ddr");
+> > +	if (IS_ERR(host->icc_ddr))
+> > +		return dev_err_probe(dev, PTR_ERR(host->icc_ddr),
+> > +				    "failed to acquire interconnect path\n");
+> > +
+> > +	host->icc_cpu = devm_of_icc_get(dev, "cpu-ufs");
+> > +	if (IS_ERR(host->icc_cpu))
+> > +		return dev_err_probe(dev, PTR_ERR(host->icc_cpu),
+> > +				    "failed to acquire interconnect path\n");
 > > +
 > > +	/*
-> > +	 * We still need to get reference to all clocks as the UFS core uses
-> > +	 * them separately.
+> > +	 * Set Maximum bandwidth vote before initializing the UFS controller and
+> > +	 * device. Ideally, a minimal interconnect vote would suffice for the
+> > +	 * initialization, but a max vote would allow faster initialization.
 > > +	 */
-> > +	for (i = 0; i < cnt; i++) {
-> > +		ret = of_property_read_string_index(np, "clock-names", i,
-> > +						    &clk_names[i]);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		clki = devm_kzalloc(dev, sizeof(*clki), GFP_KERNEL);
-> > +		if (!clki)
-> > +			return -ENOMEM;
-> > +
-> > +		clki->name = devm_kstrdup(dev, clk_names[i], GFP_KERNEL);
-> > +		if (!clki->name)
-> > +			return -ENOMEM;
-> > +
-> > +		if (!strcmp(clk_names[i], "ref_clk"))
-> > +			clki->keep_link_active = true;
-> > +
-> > +		list_add_tail(&clki->list, &hba->clk_list_head);
-> > +	}
-> > +
-> > +	config.clk_names = clk_names,
-> > +	config.config_clks = ufshcd_opp_config_clks;
-> > +
-> > +	ret = devm_pm_opp_set_config(dev, &config);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = devm_pm_opp_of_add_table(dev);
-> > +	if (ret) {
-> > +		dev_err(dev, "Failed to add OPP table: %d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> > +	hba->use_pm_opp = true;
+> > +	ret = ufs_qcom_icc_set_bw(host, ufs_qcom_bw_table[MODE_MAX][0][0].bw1,
+> > +				  ufs_qcom_bw_table[MODE_MAX][0][0].bw2);
+> > +	if (ret < 0)
+> > +		return dev_err_probe(dev, ret, "failed to set bandwidth request\n");
 > > +
 > > +	return 0;
 > > +}
 > > +
 > >   /**
-> >    * ufshcd_get_pwr_dev_param - get finally agreed attributes for
-> >    *                            power mode change
-> > @@ -371,6 +481,12 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
-> >   	ufshcd_init_lanes_per_dir(hba);
-> > +	err = ufshcd_parse_operating_points(hba);
-> > +	if (err) {
-> > +		dev_err(dev, "%s: OPP parse failed %d\n", __func__, err);
-> > +		goto dealloc_host;
-> > +	}
+> >    * ufs_qcom_init - bind phy with controller
+> >    * @hba: host controller instance
+> > @@ -1085,6 +1209,10 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+> >   		}
+> >   	}
+> > +	err = ufs_qcom_icc_init(host);
+> > +	if (err)
+> > +		goto out_variant_clear;
 > > +
-> >   	err = ufshcd_init(hba, mmio_base, irq);
-> >   	if (err) {
-> >   		dev_err(dev, "Initialization failed\n");
+> >   	host->device_reset = devm_gpiod_get_optional(dev, "reset",
+> >   						     GPIOD_OUT_HIGH);
+> >   	if (IS_ERR(host->device_reset)) {
+> > @@ -1282,6 +1410,7 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
+> >   				    dev_req_params->pwr_rx,
+> >   				    dev_req_params->hs_rate,
+> >   				    false);
+> > +		ufs_qcom_icc_update_bw(host);
+> >   		ufshcd_uic_hibern8_exit(hba);
+> >   	}
+> > diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+> > index 6289ad5a42d0..dc27395ecba1 100644
+> > --- a/drivers/ufs/host/ufs-qcom.h
+> > +++ b/drivers/ufs/host/ufs-qcom.h
+> > @@ -206,6 +206,9 @@ struct ufs_qcom_host {
+> >   	struct clk *tx_l1_sync_clk;
+> >   	bool is_lane_clks_enabled;
+> > +	struct icc_path *icc_ddr;
+> > +	struct icc_path *icc_cpu;
+> > +
+> >   #ifdef CONFIG_SCSI_UFS_CRYPTO
+> >   	struct qcom_ice *ice;
+> >   #endif
 > 
 > -- 
 > With best wishes
