@@ -2,173 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F94975062A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 13:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5742F75067B
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 13:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232173AbjGLLgm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 07:36:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55428 "EHLO
+        id S230360AbjGLLnp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 12 Jul 2023 07:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjGLLgk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 07:36:40 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0A9173A;
-        Wed, 12 Jul 2023 04:36:39 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBJ836012804;
-        Wed, 12 Jul 2023 11:36:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=UY98KKQEC37GZcuG2jZi+zz7OsWO1FQWp2vXVkh896Q=;
- b=CqXbDwRNcEOvXY1rkmCZdOVZykWRj8t1UyquMkyQUZYV51nHysKzzqfdXFVC9isXTrxS
- 4ZkFonhflJTAfumChY5uiHGA/17vOH64o2VS+OAjlFlxuK9S+dZzfqLrzJZ+KlmINQFO
- bSawF+DCc/liyUoE0CNw8hS08dhPW79X3ujjhJ8V8zH8DD9or7eTvuxBhjmJYUT5pMOJ
- lN9HpmYP+BG2WtlYY8DHR/ioJTl1mrXQBVBYugLNGFsYPJdvADBhKJrPRZNDLRAiAl5o
- DiIiXwAQGOz8jXUSxWsmuB067LpGoT+UsrKlg0Op6Y83YP6CgKmQGm/hXJedxdDARLWX Tw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsghjh6tg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 11:36:33 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CBaWpn007983
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 Jul 2023 11:36:32 GMT
-Received: from hu-ipkumar-blr.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 12 Jul 2023 04:36:22 -0700
-From:   Praveenkumar I <quic_ipkumar@quicinc.com>
-To:     <amitk@kernel.org>, <thara.gopinath@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <quic_varada@quicinc.com>
-Subject: [PATCH v2 5/5] thermal/drivers/tsens: Add IPQ5332 support
-Date:   Wed, 12 Jul 2023 17:05:39 +0530
-Message-ID: <20230712113539.4029941-6-quic_ipkumar@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
-References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
+        with ESMTP id S230229AbjGLLnp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 07:43:45 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D08D1980;
+        Wed, 12 Jul 2023 04:43:44 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-57712d00cc1so80686747b3.3;
+        Wed, 12 Jul 2023 04:43:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689162223; x=1691754223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZFaa1eey2gFBEkQTz4+FvOqjiuJjKAg/tTkqzXxKkMw=;
+        b=AxMhJcDjOzPhmC8jTZE4lggCg763BS+rLs49ypbyQLRgnl4CCboi+S0WsrbwE9Zdow
+         Y2goESZX6RVk7Gst5+m4eHW+uAczxPq1TKKBMKdbUMqIpgpLgZ/XB043h6UbV1ZeGfS9
+         4ZCxAB5p5UgSf2p0QV45oU0rm2ahLesM4JDRWQ/VjWW4RqJidTpDviMnBsVpDC2FDLNV
+         OH3YYXOYcgPJaHgBHfElJlKGbqvZ/wi3A8YMjRaAfdqhERenwCyaarkoUS1Czr414Utf
+         4jwpY5mIA8UsesEHcakviOoNZZFJmALp4pkVLR/IFimfdq7+F2RZFflQ9oq+y2NWT5V7
+         vNIw==
+X-Gm-Message-State: ABy/qLZGwMy4vnbL5TCzb6XHfZpnyznicrdE96kBT5aQd4iFw3oEtmcK
+        D68b8Xe+sSDHFYJigdOuYFKO16RWvW1EHQ==
+X-Google-Smtp-Source: APBJJlGMIyJ2PM9Ugkvat2OdD8kl7nbkrUSZTKe+vV0IuzVh3mUiWX4qcTm1eQ/TYxVFXlAssSuvbg==
+X-Received: by 2002:a0d:ce43:0:b0:57a:f72:ebf8 with SMTP id q64-20020a0dce43000000b0057a0f72ebf8mr22549179ywd.28.1689162223181;
+        Wed, 12 Jul 2023 04:43:43 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id o123-20020a0dfe81000000b0057069c60799sm1116366ywf.53.2023.07.12.04.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Jul 2023 04:43:42 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-c49777d6e7aso7876166276.1;
+        Wed, 12 Jul 2023 04:43:42 -0700 (PDT)
+X-Received: by 2002:a25:68ca:0:b0:c85:a84:d87e with SMTP id
+ d193-20020a2568ca000000b00c850a84d87emr8445978ybc.10.1689162221895; Wed, 12
+ Jul 2023 04:43:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ij9PXJv6ST4wFbXB8EKmzd7WgDOwiwgz
-X-Proofpoint-ORIG-GUID: ij9PXJv6ST4wFbXB8EKmzd7WgDOwiwgz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-12_06,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
- mlxlogscore=999 mlxscore=0 impostorscore=0 priorityscore=1501 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307120103
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230712081258.29254-1-frank.li@vivo.com> <20230712081258.29254-21-frank.li@vivo.com>
+In-Reply-To: <20230712081258.29254-21-frank.li@vivo.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 12 Jul 2023 13:43:27 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWiAnN0a3wKGekvLSR7Gxh2kp-Bvmyb9o8EaxFWK8GC+Q@mail.gmail.com>
+Message-ID: <CAMuHMdWiAnN0a3wKGekvLSR7Gxh2kp-Bvmyb9o8EaxFWK8GC+Q@mail.gmail.com>
+Subject: Re: [PATCH 21/27] thermal/drivers/rcar_thermal: Convert to platform
+ remove callback returning void
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-IPQ5332 uses tsens v2.3.3 IP and it is having combined interrupt.
-It does not have RPM and kernel needs to take care of sensor
-enablement, calibration. Hence introduced new feature_config,
-ops and data for IPQ5332.
+On Wed, Jul 12, 2023 at 10:23 AM Yangtao Li <frank.li@vivo.com> wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+>
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>
+> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
----
-[v2]:
-	Added tsens_features for ipq5332 with VER_2_X_NO_RPM. Used
-	hw_ids to mention the available sensors. Dropped v2 in
-	ops_ipq5332.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
- drivers/thermal/qcom/tsens-v2.c | 25 +++++++++++++++++++++++++
- drivers/thermal/qcom/tsens.c    |  3 +++
- drivers/thermal/qcom/tsens.h    |  2 +-
- 3 files changed, 29 insertions(+), 1 deletion(-)
+Gr{oetje,eeting}s,
 
-diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-index ba74d971fe95..f95dce04fb17 100644
---- a/drivers/thermal/qcom/tsens-v2.c
-+++ b/drivers/thermal/qcom/tsens-v2.c
-@@ -62,6 +62,17 @@ static struct tsens_features ipq8074_feat = {
- 	.trip_max_temp	= 204000,
- };
- 
-+static struct tsens_features ipq5332_feat = {
-+	.ver_major	= VER_2_X_NO_RPM,
-+	.crit_int	= 1,
-+	.combo_int	= 1,
-+	.adc		= 0,
-+	.srot_split	= 1,
-+	.max_sensors	= 16,
-+	.trip_min_temp	= 0,
-+	.trip_max_temp	= 204000,
-+};
-+
- static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
- 	/* ----- SROT ------ */
- 	/* VERSION */
-@@ -265,6 +276,20 @@ struct tsens_plat_data data_ipq8074 = {
- 	.fields	= tsens_v2_regfields,
- };
- 
-+static const struct tsens_ops ops_ipq5332 = {
-+	.init		= init_tsens_v2,
-+	.get_temp	= get_temp_tsens_valid,
-+	.calibrate	= tsens_v2_calibration,
-+};
-+
-+struct tsens_plat_data data_ipq5332 = {
-+	.num_sensors	= 5,
-+	.ops		= &ops_ipq5332,
-+	.hw_ids		= (unsigned int []){11, 12, 13, 14, 15},
-+	.feat		= &ipq5332_feat,
-+	.fields		= tsens_v2_regfields,
-+};
-+
- /* Kept around for backward compatibility with old msm8996.dtsi */
- struct tsens_plat_data data_8996 = {
- 	.num_sensors	= 13,
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 5d2ad3b155ec..7d3b29bf14d4 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -1106,6 +1106,9 @@ static const struct of_device_id tsens_table[] = {
- 	}, {
- 		.compatible = "qcom,ipq8074-tsens",
- 		.data = &data_ipq8074,
-+	}, {
-+		.compatible = "qcom,ipq5332-tsens",
-+		.data = &data_ipq5332,
- 	}, {
- 		.compatible = "qcom,mdm9607-tsens",
- 		.data = &data_9607,
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index b2e8f0f2b466..1dde363914cd 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -648,6 +648,6 @@ extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8
- extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
- 
- /* TSENS v2 targets */
--extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
-+extern struct tsens_plat_data data_8996, data_ipq8074, data_ipq5332, data_tsens_v2;
- 
- #endif /* __QCOM_TSENS_H__ */
+                        Geert
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
