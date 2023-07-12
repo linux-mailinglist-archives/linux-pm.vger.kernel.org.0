@@ -2,57 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8A67508B2
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9E27508BC
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjGLMtl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
+        id S232588AbjGLMuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233358AbjGLMtk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:49:40 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55A5D1984
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:49:39 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJZHc-0005nV-F2; Wed, 12 Jul 2023 14:49:28 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJZHb-00DtNV-FD; Wed, 12 Jul 2023 14:49:27 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1qJZHa-004J0e-B0; Wed, 12 Jul 2023 14:49:26 +0200
-Date:   Wed, 12 Jul 2023 14:49:25 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 21/27] thermal/drivers/rcar_thermal: Convert to platform
- remove callback returning void
-Message-ID: <20230712124925.mssqxm3cvvgy2bbc@pengutronix.de>
-References: <20230712081258.29254-1-frank.li@vivo.com>
- <20230712081258.29254-21-frank.li@vivo.com>
+        with ESMTP id S231364AbjGLMus (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:50:48 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357731739;
+        Wed, 12 Jul 2023 05:50:47 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36CBOZwL021802;
+        Wed, 12 Jul 2023 12:50:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=MSlRrlrkNONpM5Ltq+59x/PksIVcHq4OWeir5J/w6Co=;
+ b=or1WzR2csVNn5PKv/lbPhcyuhhiKsfMHCh9nQ+5Tm57fT8yT7jMPXKV4QON67BbvQdyN
+ 77DwwRUJJ6hQush3Jj6wCAIKGCOs0wu841xAhAL8d1G60CG6XiMfbLVKMoT+XT6Zf+Cr
+ 2qWGLa+RPigQHhNWhWf2GhVrQLGAFwebuZyKMWf0zYqeszrkXR09HUOgGkmAqAwGUzzz
+ OUfNbnRgGpCJH/lnNB3v6zeQTt+fsmrLa56A5JXFfXNSyjG/LB7yB2PTFp/8F5q1y4w/
+ 9MNyLA9jqb8HrFqizl4Z/0mfAXFu64xJyA+ekHrxZ8vnh1tbWEVSkYoxZ8mafHohrewr ig== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rsgar9bq5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 12:50:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36CCoe6r007232
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Jul 2023 12:50:40 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 12 Jul
+ 2023 05:50:35 -0700
+Message-ID: <f4bc9c49-3db8-5ca5-7326-413d823e338d@quicinc.com>
+Date:   Wed, 12 Jul 2023 18:20:32 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tf26cdgvc5q2g7lq"
-Content-Disposition: inline
-In-Reply-To: <20230712081258.29254-21-frank.li@vivo.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 4/5] arm64: dts: qcom: ipq5332: Add thermal zone nodes
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_varada@quicinc.com>
+References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
+ <20230712113539.4029941-5-quic_ipkumar@quicinc.com>
+ <a33368ef-f68c-d7ee-922a-8896a5d1f158@linaro.org>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <a33368ef-f68c-d7ee-922a-8896a5d1f158@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -IZUWQt9wmgEKBND0MxlwCH5f8NTpsqs
+X-Proofpoint-ORIG-GUID: -IZUWQt9wmgEKBND0MxlwCH5f8NTpsqs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-12_08,2023-07-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 impostorscore=0
+ phishscore=0 clxscore=1015 adultscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2307120115
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,50 +87,116 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---tf26cdgvc5q2g7lq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 7/12/2023 5:55 PM, Dmitry Baryshkov wrote:
+> On 12/07/2023 14:35, Praveenkumar I wrote:
+>> This patch adds thermal zone nodes for sensors present in
+>> IPQ5332.
+>>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> ---
+>> [v2]:
+>>     Added passive trips and alignment change.
+>>
+>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 78 +++++++++++++++++++++++++++
+>>   1 file changed, 78 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
+>> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> index 0eef77e36609..a1f59af97ee8 100644
+>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+>> @@ -480,4 +480,82 @@ timer {
+>>                    <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | 
+>> IRQ_TYPE_LEVEL_LOW)>,
+>>                    <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | 
+>> IRQ_TYPE_LEVEL_LOW)>;
+>>       };
+>> +
+>> +    thermal-zones {
+>> +        rfa-0-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 11>;
+>> +
+>> +            trips {
+>> +                rfa-0-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        rfa-1-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 12>;
+>> +
+>> +            trips {
+>> +                rfa-1-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        misc-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 13>;
+>> +
+>> +            trips {
+>> +                misc-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        cpu-top-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 14>;
+>> +
+>> +            trips {
+>> +                cpu-top-critical {
+>> +                    temperature = <115000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +
+>> +                cpu-passive {
+>> +                    temperature = <105000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "passive";
+>
+> cooling device for this trip point?
 
-Hello,
+CPU Frequency scaling support is not yet added for IPQ5332. Planning to 
+add the cooling device after that in next set of patches.
 
-On Wed, Jul 12, 2023 at 04:12:52PM +0800, Yangtao Li wrote:
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+- Praveenkumar
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---tf26cdgvc5q2g7lq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSuoVQACgkQj4D7WH0S
-/k7K5AgAm0/HM7N+Wpid5+g4rZnR/veF450ephm3dGBsVNwsSsSyvzQJ3Vq5FMo/
-imp2YHjJFwmU5XgEt902XhgpOF/ABqWEeQaDUjdPnRTxLbTzhMBZLKx7Rgv1zUQW
-gZcswSMOkE2uFuvm4QbDoVxmIHsSZCrhxHv72Az2CWILdnENO90LjGMRxzxzVhyi
-7syCB+s+usqaKe9f0VNW43/AMGKAP8TywrLFM553EjTKtfNLtGX5uUZOwYIFCr5i
-1Kxvs7VHBAXrtfXO0S6wTQN1fcnsfR4UlqkBqxYu6Qf8kJaziWSN3oA8j4Pea511
-W1hpClUrNd/ira9dnJb5CyUocRlX0g==
-=0C0b
------END PGP SIGNATURE-----
-
---tf26cdgvc5q2g7lq--
+>
+>> +                };
+>> +            };
+>> +        };
+>> +
+>> +        top-glue-thermal {
+>> +            polling-delay-passive = <0>;
+>> +            polling-delay = <0>;
+>> +            thermal-sensors = <&tsens 15>;
+>> +
+>> +            trips {
+>> +                top-glue-critical {
+>> +                    temperature = <125000>;
+>> +                    hysteresis = <1000>;
+>> +                    type = "critical";
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>>   };
+>
