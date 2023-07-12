@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529B87508CD
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:54:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4957508D2
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232746AbjGLMyA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
+        id S231407AbjGLMzf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232191AbjGLMx7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:53:59 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B241BC2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:53:55 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b703a0453fso110581931fa.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:53:54 -0700 (PDT)
+        with ESMTP id S231494AbjGLMzd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:55:33 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087F119A6
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:55:31 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b69f958ef3so111521341fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:55:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689166433; x=1691758433;
+        d=linaro.org; s=google; t=1689166529; x=1691758529;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nBc63gZewZL8iaZK2IOeBqCKcy2zAJOBt2Jz+c038nk=;
-        b=Au4S9337dhhlibueQQOk2k+/9ELLnv1F8knGNc9Ui4OhDAcDiSCyHxIG2HUYLBxbwv
-         Ok6rtJKM5nmSuz5NTjPyJ+L+MUEYZeDY982cyR9KQOtmCu61TLwn/sT3v/iCmhW68Eap
-         yILluRD79+G1yjJMKF7IS5YzNbkgjWiktM1ZqGBu+83tX7/iqnF8T69Ia3JuWvxQT5R4
-         RiN7g58uiaEKQ5utipqWZL/Io/+rNeod3NrUjlKDrj5B2Nlw95qPmiWpZJ0MGNq/hTjU
-         LAHPW3Ayacn+O18VwCdj73BsXFX8/usTo1a4qvF7kttbJPs/jKVJQbjThKB7nAwZvsCt
-         jBAQ==
+        bh=SBxmHOlpZaMc8GI4pC8OI8U8ye4KRryJ3hcnoiDNA/E=;
+        b=Xks5iI1IpOfxgQoW0/abwCSoqyAAHCnArr6yLJl38bB7X6uxGbHKlEjpCieqMvRnHs
+         r4EyNoasuEHdjZNp0u4D38c+BJ4ApLtssv94Ffuw+p3+Lx7R0qqVSIVhec9l46l0GMWh
+         FxxzSMZQNIsHxbS3ohMjOJPbOS+nZZS5oBwPteuIXGFPY3QnbH1Noi6kDezuuarWMNap
+         h8MtjuWlTLr/YDE8Owz1dyWrawBCyUUqRKpH/gQgrqA4z6zNwZZympDHT7rk53Bkirlx
+         +JRnf15LvD20tjejuxcS8WSk8tvGImJz3yuxWAwQn0ZbEO44HPLWx4Oz+1noyDNThRjO
+         iBlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689166433; x=1691758433;
+        d=1e100.net; s=20221208; t=1689166529; x=1691758529;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nBc63gZewZL8iaZK2IOeBqCKcy2zAJOBt2Jz+c038nk=;
-        b=RtyyH1+Z4fmb62zxzvr+Z7uywCCA2k3l5kdYufpa2oaPGNBkDME1vYF7Et0i3iOftS
-         a9cz2ZGXZOmntQRjfgcJ71p3lFtua4ibDsez0uNYMh2VQlKDm3+WCoZfeyasgf5HBOhs
-         OvNkZ9gpDSMQo7kkOxbD1Tc39jmijFtte7iAEcM/WiVyh3D2rDX0EYC/IZ17v95KsXi6
-         itElNtpG/Y2IHG64YSQZl4v7vpfBJUDRcFSo3EWBFs5lFkvhyqIbsZSa1ToKEwgzi5xE
-         w7iOWH6HO5ai8Pue3CacHXMe8ByEP6p1ixx7VU48X0feYHYbmZixg4hSb7f+lnWFo/U8
-         PCcQ==
-X-Gm-Message-State: ABy/qLZHqo7R0GlyoXJGRizqWk0OQk8+q64X4/jcAaMy1ua9tDuzZXVi
-        hDEodro3UFWmcKxtRyiTNWxL6Q==
-X-Google-Smtp-Source: APBJJlEOK5nzhXK/DYiTOD2PXvlX0k83byqi39QQUlr+lNWZuEj17VECYcEc6z/ft6Wk4UO4/wVZuQ==
-X-Received: by 2002:a19:3819:0:b0:4f8:631b:bf77 with SMTP id f25-20020a193819000000b004f8631bbf77mr16040627lfa.22.1689166433135;
-        Wed, 12 Jul 2023 05:53:53 -0700 (PDT)
+        bh=SBxmHOlpZaMc8GI4pC8OI8U8ye4KRryJ3hcnoiDNA/E=;
+        b=AeFehF779pgspNg/VYGX2iK3lLVw++VGUs9DGtF5hNYPfIeQbGOHMJ8+gUr6RZqpmn
+         pQfx7EsH+cJv7KFuWXLzPi2uZgFVFiBPGx5RBpCfkYGWWm33oT3M+a19+7ieDG38pROo
+         VtBcMYDm5Lpi0DqDFdrAtnX5v2E0BA+vLZXaLoPjNhVnHme1mNQIx5vJnD9cAWZPikUV
+         81ZNmKv9xmezWTQFwlnjpAVU4cLIDtOCE5a8zheajLLwF18QbO4xWzS0/og/ICueKhmy
+         7j90EGbHjJc9a4hcfaXT4L+neWb7/dsGDEJwS6i8bqdPuFKnaaMxvgVEA1bMXRMg0nI6
+         taEw==
+X-Gm-Message-State: ABy/qLY6DvEeMXMsERgREoZkumTVVzL+MWGKnKJJ2BL28f/pb+cl0eEf
+        o7eZRzq42B+2gtRPQd/2wE7Msg==
+X-Google-Smtp-Source: APBJJlEJS+4iPPt48R/kKnJyxG3Vz4KyXDQgWDFnotbHIrfe7fPuvO1Y7IN9VVvNaEfetFo9ShrIiA==
+X-Received: by 2002:a2e:c49:0:b0:2b6:cf18:77e0 with SMTP id o9-20020a2e0c49000000b002b6cf1877e0mr14950795ljd.48.1689166529298;
+        Wed, 12 Jul 2023 05:55:29 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id s8-20020a19ad48000000b004fba6d3eb82sm697646lfd.48.2023.07.12.05.53.52
+        by smtp.gmail.com with ESMTPSA id a11-20020a2e88cb000000b002b6e77e87fcsm923536ljk.68.2023.07.12.05.55.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 05:53:52 -0700 (PDT)
-Message-ID: <538c3d99-a404-6847-dd04-f77a35aa6c77@linaro.org>
-Date:   Wed, 12 Jul 2023 15:53:52 +0300
+        Wed, 12 Jul 2023 05:55:28 -0700 (PDT)
+Message-ID: <2af2c9de-a7da-a154-e6cd-a3f72d0eb331@linaro.org>
+Date:   Wed, 12 Jul 2023 15:55:28 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v2 3/5] arm64: dts: qcom: ipq5332: Add tsens node
+Subject: Re: [PATCH v2 4/5] arm64: dts: qcom: ipq5332: Add thermal zone nodes
 Content-Language: en-GB
 To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
         thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
@@ -65,11 +65,11 @@ To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     quic_varada@quicinc.com
 References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
- <20230712113539.4029941-4-quic_ipkumar@quicinc.com>
- <a95dd01a-943f-e2d4-777f-a139fbc25238@linaro.org>
- <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
+ <20230712113539.4029941-5-quic_ipkumar@quicinc.com>
+ <a33368ef-f68c-d7ee-922a-8896a5d1f158@linaro.org>
+ <f4bc9c49-3db8-5ca5-7326-413d823e338d@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <61346e56-3877-37c0-0df5-2436f97064e7@quicinc.com>
+In-Reply-To: <f4bc9c49-3db8-5ca5-7326-413d823e338d@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,124 +82,125 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/07/2023 15:48, Praveenkumar I wrote:
+On 12/07/2023 15:50, Praveenkumar I wrote:
 > 
-> On 7/12/2023 5:54 PM, Dmitry Baryshkov wrote:
+> On 7/12/2023 5:55 PM, Dmitry Baryshkov wrote:
 >> On 12/07/2023 14:35, Praveenkumar I wrote:
->>> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsense
->>> node with nvmem cells for calibration data.
+>>> This patch adds thermal zone nodes for sensors present in
+>>> IPQ5332.
 >>>
 >>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 >>> ---
 >>> [v2]:
->>>     Included qfprom nodes only for available sensors and removed
->>>     the offset suffix.
+>>>     Added passive trips and alignment change.
 >>>
->>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 66 +++++++++++++++++++++++++++
->>>   1 file changed, 66 insertions(+)
+>>>   arch/arm64/boot/dts/qcom/ipq5332.dtsi | 78 +++++++++++++++++++++++++++
+>>>   1 file changed, 78 insertions(+)
 >>>
 >>> diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi 
 >>> b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->>> index 8bfc2db44624..0eef77e36609 100644
+>>> index 0eef77e36609..a1f59af97ee8 100644
 >>> --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
 >>> +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
->>> @@ -150,6 +150,46 @@ qfprom: efuse@a4000 {
->>>               reg = <0x000a4000 0x721>;
->>>               #address-cells = <1>;
->>>               #size-cells = <1>;
+>>> @@ -480,4 +480,82 @@ timer {
+>>>                    <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | 
+>>> IRQ_TYPE_LEVEL_LOW)>,
+>>>                    <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | 
+>>> IRQ_TYPE_LEVEL_LOW)>;
+>>>       };
 >>> +
->>> +            tsens_mode: mode@3e1 {
->>> +                reg = <0x3e1 0x1>;
->>> +                bits = <0 3>;
->>> +            };
+>>> +    thermal-zones {
+>>> +        rfa-0-thermal {
+>>> +            polling-delay-passive = <0>;
+>>> +            polling-delay = <0>;
+>>> +            thermal-sensors = <&tsens 11>;
 >>> +
->>> +            tsens_base0: base0@3e1 {
->>> +                reg = <0x3e1 0x2>;
->>> +                bits = <3 10>;
+>>> +            trips {
+>>> +                rfa-0-critical {
+>>> +                    temperature = <125000>;
+>>> +                    hysteresis = <1000>;
+>>> +                    type = "critical";
+>>> +                };
 >>> +            };
+>>> +        };
 >>> +
->>> +            tsens_base1: base1@3e2 {
->>> +                reg = <0x3e2 0x2>;
->>> +                bits = <5 10>;
->>> +            };
-
-Please order device nodes according to the address. So mode/base should 
-come after sensors data.
-
+>>> +        rfa-1-thermal {
+>>> +            polling-delay-passive = <0>;
+>>> +            polling-delay = <0>;
+>>> +            thermal-sensors = <&tsens 12>;
 >>> +
->>> +            s11: s11@3a5 {
->>> +                reg = <0x3a5 0x1>;
->>> +                bits = <4 4>;
+>>> +            trips {
+>>> +                rfa-1-critical {
+>>> +                    temperature = <125000>;
+>>> +                    hysteresis = <1000>;
+>>> +                    type = "critical";
+>>> +                };
 >>> +            };
+>>> +        };
 >>> +
->>> +            s12: s12@3a6 {
->>> +                reg = <0x3a6 0x1>;
->>> +                bits = <0 4>;
->>> +            };
+>>> +        misc-thermal {
+>>> +            polling-delay-passive = <0>;
+>>> +            polling-delay = <0>;
+>>> +            thermal-sensors = <&tsens 13>;
 >>> +
->>> +            s13: s13@3a6 {
->>> +                reg = <0x3a6 0x1>;
->>> +                bits = <4 4>;
+>>> +            trips {
+>>> +                misc-critical {
+>>> +                    temperature = <125000>;
+>>> +                    hysteresis = <1000>;
+>>> +                    type = "critical";
+>>> +                };
 >>> +            };
+>>> +        };
 >>> +
->>> +            s14: s14@3ad {
->>> +                reg = <0x3ad 0x2>;
->>> +                bits = <7 4>;
->>> +            };
+>>> +        cpu-top-thermal {
+>>> +            polling-delay-passive = <0>;
+>>> +            polling-delay = <0>;
+>>> +            thermal-sensors = <&tsens 14>;
 >>> +
->>> +            s15: s15@3ae {
->>> +                reg = <0x3ae 0x1>;
->>> +                bits = <3 4>;
->>> +            };
->>>           };
->>>             rng: rng@e3000 {
->>> @@ -159,6 +199,32 @@ rng: rng@e3000 {
->>>               clock-names = "core";
->>>           };
->>>   +        tsens: thermal-sensor@4a9000 {
->>> +            compatible = "qcom,ipq5332-tsens";
->>> +            reg = <0x4a9000 0x1000>,
->>> +                  <0x4a8000 0x1000>;
->>> +            nvmem-cells = <&tsens_mode>,
->>> +                      <&tsens_base0>,
->>> +                      <&tsens_base1>,
->>> +                      <&s11>,
->>> +                      <&s12>,
->>> +                      <&s13>,
->>> +                      <&s14>,
->>> +                      <&s15>;
->>> +            nvmem-cell-names = "mode",
->>> +                       "base0",
->>> +                       "base1",
->>> +                       "s11",
->>> +                       "s12",
->>> +                       "s13",
->>> +                       "s14",
->>> +                       "s15";
+>>> +            trips {
+>>> +                cpu-top-critical {
+>>> +                    temperature = <115000>;
+>>> +                    hysteresis = <1000>;
+>>> +                    type = "critical";
+>>> +                };
+>>> +
+>>> +                cpu-passive {
+>>> +                    temperature = <105000>;
+>>> +                    hysteresis = <1000>;
+>>> +                    type = "passive";
 >>
->> Previously you had data for other sensors here. Are they not used at 
->> all, not wired, have no known-good placement? I think it might be 
->> better to declare all sensors here (and in the driver too) and then 
->> consider enabling only a pile of them in the thermal-zone node.
+>> cooling device for this trip point?
 > 
-> Remaining sensors are not used at all. It is not wired. Only above 
-> sensors are placed in SoC.
+> CPU Frequency scaling support is not yet added for IPQ5332. Planning to 
+> add the cooling device after that in next set of patches.
 
-Ack, thanks for the explanation. Then this is good.
+Ack, thanks.
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
 > 
 > - Praveenkumar
 > 
 >>
->>> +            interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
->>> +            interrupt-names = "combined";
->>> +            #qcom,sensors = <5>;
->>> +            #thermal-sensor-cells = <1>;
+>>> +                };
+>>> +            };
 >>> +        };
 >>> +
->>>           tlmm: pinctrl@1000000 {
->>>               compatible = "qcom,ipq5332-tlmm";
->>>               reg = <0x01000000 0x300000>;
+>>> +        top-glue-thermal {
+>>> +            polling-delay-passive = <0>;
+>>> +            polling-delay = <0>;
+>>> +            thermal-sensors = <&tsens 15>;
+>>> +
+>>> +            trips {
+>>> +                top-glue-critical {
+>>> +                    temperature = <125000>;
+>>> +                    hysteresis = <1000>;
+>>> +                    type = "critical";
+>>> +                };
+>>> +            };
+>>> +        };
+>>> +    };
+>>>   };
 >>
 
 -- 
