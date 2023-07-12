@@ -2,185 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFA1750853
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64CE5750893
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjGLMcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S232178AbjGLMox (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbjGLMcy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:32:54 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56A6B0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:32:53 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666e97fcc60so4748132b3a.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689165173; x=1691757173;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rACnE74/tBBUilSh2kkRHaq0GaO9MP6PZWokReeRas=;
-        b=jVUGgf6FXmqcO5IMP0cD0CQEcHYnKqxOmEPhAAY9uAop0DYirNcDVunSXGBG8RdELj
-         ftR2y5f8bfXvLmpNllpl6gcn5/ipFPbjn+bU41MTJK0L6Uu96mNEu2D9jS3tNgqt2QC+
-         SdDfNQkZkhsm7KSubQFN3YwwYAOTu05aXbCL/D9Nf3Vwg4kvyn3FRm9tZYFzVWTNA27T
-         pLB9x+hTASECvJyuuLiUtDVp8h3WGWDsD7JDcKH0CHEUoO9j5vf7gDt9+Oxy5un+NjQU
-         n3o6HA87jYoGFl7mr2aC/g75pN0qHprTz8XRjpBvqvpqSgb3YUKSWSlrnL1l+7k9wCZH
-         AAQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689165173; x=1691757173;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1rACnE74/tBBUilSh2kkRHaq0GaO9MP6PZWokReeRas=;
-        b=JhpsFZCUUFSie8XPWFLDdk9tTEg1vCg7YFLVqhYBYSstwQrwYV7ZSYFu0RiV23oG5h
-         8n9VqhSb3/AcCTEto4E/WBTNGM7nJuvoW8Gp8Q26Bv72SiDZRQD2Q8WYfHFFnOAGcRdD
-         vucAkp8wBU4XB4qEWmooMyCDDrTmAJKdSXtH6vNrPV8388aBp2yinOmWwUZhHhroufX2
-         95ophs5SYVZwm0Wou/fchqZHYDLQ9MxZDnMFECGqPEwsZ5lAMGxD22b/hTOTlU8qMyqE
-         bl9omXdwFEi/9hw8iUUN7feovFUfbLxm03T/j2H3hTYtm54vjaHzFX1TgJ31UhE4yILC
-         bDaA==
-X-Gm-Message-State: ABy/qLYPceleG+z4y4pCjspH0M6gUwR8r9VKfEFaw8obXmlosmPycGh/
-        MbKRpNpUHfngEIiXeWzlG7dbGQ==
-X-Google-Smtp-Source: APBJJlGTN6moix+7kTB6f3AFjZiuU3kefD+6UmHoGMMLPOx30M14vMDtuJPgzdhZToz9tRQ1BkRNrg==
-X-Received: by 2002:a05:6a00:b47:b0:671:4b06:4ea7 with SMTP id p7-20020a056a000b4700b006714b064ea7mr18644718pfo.15.1689165173329;
-        Wed, 12 Jul 2023 05:32:53 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id h3-20020aa786c3000000b00682af82a9desm3614283pfo.98.2023.07.12.05.32.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 05:32:52 -0700 (PDT)
-Message-ID: <64ae9d74.a70a0220.46695.72d0@mx.google.com>
-Date:   Wed, 12 Jul 2023 05:32:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S231827AbjGLMov (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:44:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C961712
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:44:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZCz-0005Ae-07; Wed, 12 Jul 2023 14:44:41 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZCw-00DtMG-GD; Wed, 12 Jul 2023 14:44:38 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1qJZCv-004IzC-HB; Wed, 12 Jul 2023 14:44:37 +0200
+Date:   Wed, 12 Jul 2023 14:44:36 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/27] thermal/drivers/armada: Convert to platform remove
+ callback returning void
+Message-ID: <20230712124436.64lnwv2kuglnbvuz@pengutronix.de>
+References: <20230712081258.29254-1-frank.li@vivo.com>
+ <20230712081258.29254-2-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.5-rc1-21-g3c61a03588dd8
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 7 warnings (v6.5-rc1-21-g3c61a03588dd8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5rqmpg5rl7chtpsx"
+Content-Disposition: inline
+In-Reply-To: <20230712081258.29254-2-frank.li@vivo.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 7 warnings (v6.5-rc1-21-g3c=
-61a03588dd8)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-5-rc1-21-g3c61a03588dd8/
+--5rqmpg5rl7chtpsx
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tree: pm
-Branch: testing
-Git Describe: v6.5-rc1-21-g3c61a03588dd8
-Git Commit: 3c61a03588dd8486041f484e9b6c48b2c9a69b92
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+On Wed, Jul 12, 2023 at 04:12:33PM +0800, Yangtao Li wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+>=20
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+>=20
+> Cc: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Warnings Detected:
+Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-arc:
+Best regards
+Uwe
 
-arm64:
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-arm:
+--5rqmpg5rl7chtpsx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-i386:
+-----BEGIN PGP SIGNATURE-----
 
-mips:
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmSuoDQACgkQj4D7WH0S
+/k6mzgf/XpKByt+Ewo4xvdgoQLiLP2AMe1asCE7Q6NlLXz18dRQ7c/zfeby59HgQ
+Tqysw5QMkWeKv76fCfLUTZvfH6Vnk1nwdWGdQzKu42OcRZEWHugDWpnJti28CLKd
+Nf/IcfMi9F/qp6/axd2X2kDq6lfDfXY9nYJbqHYI2dBD79ved6gcI7splbC92FAt
+CvDKfXMMsCDxrPVJIGfpYCG47NpQwvjL1minSTDh/bOI1blrt6OJxRRAUaZ24LBn
+FstB8H2e6w+zECEUH8xbJBbbw9AqEZCCTxEj9QcYzbgeXVDcpjlBBMEFYZsem0Zn
+73Om5+a1SNPngkKv47/+v+lUrKKgAg==
+=7ExZ
+-----END PGP SIGNATURE-----
 
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 3 warnings
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_io=
-vec_from_user.part.0() with UACCESS enabled
-    1    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redunda=
-nt UACCESS disable
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: .altinstr_replacement+0x178b: redundant UA=
-CCESS disable
-    vmlinux.o: warning: objtool: iovec_from_user+0x88: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-    vmlinux.o: warning: objtool: __import_iovec+0x147: call to copy_iovec_f=
-rom_user.part.0() with UACCESS enabled
-
----
-For more info write to <info@kernelci.org>
+--5rqmpg5rl7chtpsx--
