@@ -2,118 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 594797501F7
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 10:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE0E77501FE
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 10:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjGLIrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 04:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S230361AbjGLItu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 04:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230360AbjGLIq7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 04:46:59 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1B94;
-        Wed, 12 Jul 2023 01:46:56 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 69E2F1BF205;
-        Wed, 12 Jul 2023 08:46:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689151615;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aibOqbCHqtQ94rqSgA1NeKBgTC97ZqqxHBicTgNuv6A=;
-        b=UUueM1MlhMbkJR87nN22cscz6BjMaeuTtQFICC2Q+v2VeISpIjF8ivjCngL2bZ0D7pY4zt
-        0xrJjVZI33zMvveQtlKndfcHg2hBps1mDBy2C/WdE+RnDfZ9DzVqvfZX4+pp/63V9ybl43
-        WlBBVSJ7QgTZztNbJVvQWu4FW4pBEZWeA9wg6/CswSZwmo3mJWXxdnZSwL+YbgtAmCi5zx
-        wvaVaieooJEAtsh559on7i1jPAFrgahRlfjsrdltJOUT3c3HppqBtiI0CgHIoXUVds32zS
-        KvNEijzloMHe2y8ffIr1rVlE1Mpa9rJRYo+ynS8VM4TkHdaBSkHSzpQqFuwVVA==
-Date:   Wed, 12 Jul 2023 10:46:49 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/27] thermal/drivers/armada: Convert to platform
- remove callback returning void
-Message-ID: <20230712104649.3d843fb3@xps-13>
-In-Reply-To: <20230712081258.29254-2-frank.li@vivo.com>
-References: <20230712081258.29254-1-frank.li@vivo.com>
-        <20230712081258.29254-2-frank.li@vivo.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231856AbjGLIts (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 04:49:48 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FDFB1;
+        Wed, 12 Jul 2023 01:49:44 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 36C8mjdd097455;
+        Wed, 12 Jul 2023 16:48:45 +0800 (+08)
+        (envelope-from Di.Shen@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4R1BFq1lLMz2MK44l;
+        Wed, 12 Jul 2023 16:47:43 +0800 (CST)
+Received: from bj10906pcu1.spreadtrum.com (10.0.73.63) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 12 Jul 2023 16:48:43 +0800
+From:   Di Shen <di.shen@unisoc.com>
+To:     <lukasz.luba@arm.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
+        <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuewen.yan@unisoc.com>, <jeson.gao@unisoc.com>,
+        <orsonzhai@gmail.com>, <zhanglyra@gmail.com>, <di.shen@unisoc.com>
+Subject: [PATCH] Revert "thermal: power allocator: change the 'k_*' always in estimate_pid_constants()"
+Date:   Wed, 12 Jul 2023 16:48:40 +0800
+Message-ID: <20230712084840.3594-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.73.63]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 36C8mjdd097455
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Yangtao,
+This reverts commit 90a996544946d1d4834ec2ec8add586edd905779.
 
-frank.li@vivo.com wrote on Wed, 12 Jul 2023 16:12:33 +0800:
+The commit ensures that the pid constants are updated when
+sustainable_power changes, but it makes it impossible for
+the driver to set the pid constants when the sustainable_power
+is not changed.
 
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Cc: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+When the driver tries to register a thermal zone device by
+thermal_zone_device_register_with_trips(const char *type,
+	struct thermal_trip *trips, int num_trips, int mask,
+	void *devdata, struct thermal_zone_device_ops *ops,
+	struct thermal_zone_params *tzp, int passive_delay,
+	int polling_delay)
+and passes the private thermal_zone_params structure data,
 
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+thermal_zone_devcice_register_with_trips
+	|
+thermal_set_governor
+	|
+bind_to_tz
+	|
+power_allocator_bind
+	|
+estimate_pid_constants
 
-> ---
->  drivers/thermal/armada_thermal.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_th=
-ermal.c
-> index 9f6dc4fc9112..94783e374d37 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -964,19 +964,17 @@ static int armada_thermal_probe(struct platform_dev=
-ice *pdev)
->  	return 0;
->  }
-> =20
-> -static int armada_thermal_exit(struct platform_device *pdev)
-> +static void armada_thermal_exit(struct platform_device *pdev)
->  {
->  	struct armada_drvdata *drvdata =3D platform_get_drvdata(pdev);
-> =20
->  	if (drvdata->type =3D=3D LEGACY)
->  		thermal_zone_device_unregister(drvdata->data.tz);
-> -
-> -	return 0;
->  }
-> =20
->  static struct platform_driver armada_thermal_driver =3D {
->  	.probe =3D armada_thermal_probe,
-> -	.remove =3D armada_thermal_exit,
-> +	.remove_new =3D armada_thermal_exit,
->  	.driver =3D {
->  		.name =3D "armada_thermal",
->  		.of_match_table =3D armada_thermal_id_table,
+the tzp->k_* will not be the data that driver have given,
+but the data estimated by sustainable_power.
 
+To make it possible for driver to add its own pid constants,
+the 'force' flag is needed to indicate whether the tzp->k_*
+should be estimated by sustainable_power or not.
 
-Thanks,
-Miqu=C3=A8l
+Signed-off-by: Di Shen <di.shen@unisoc.com>
+---
+ drivers/thermal/gov_power_allocator.c | 28 ++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 8642f1096b91..f1753291b827 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -116,13 +116,18 @@ static u32 estimate_sustainable_power(struct thermal_zone_device *tz)
+  * @sustainable_power:	sustainable power for the thermal zone
+  * @trip_switch_on:	trip point number for the switch on temperature
+  * @control_temp:	target temperature for the power allocator governor
++ * @force:	whether to force the update of the constants
+  *
+  * This function is used to update the estimation of the PID
+  * controller constants in struct thermal_zone_parameters.
++ *
++ * If @force is not set, the values in the thermal zone's parameters
++ * are preserved if they are not zero.  If @force is set, the values
++ * in thermal zone's parameters are overwritten.
+  */
+ static void estimate_pid_constants(struct thermal_zone_device *tz,
+ 				   u32 sustainable_power, int trip_switch_on,
+-				   int control_temp)
++				   int control_temp, bool force)
+ {
+ 	struct thermal_trip trip;
+ 	u32 temperature_threshold = control_temp;
+@@ -144,14 +149,18 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+ 	if (!temperature_threshold)
+ 		return;
+ 
+-	tz->tzp->k_po = int_to_frac(sustainable_power) /
+-		temperature_threshold;
++	if (!tz->tzp->k_po || force)
++		tz->tzp->k_po = int_to_frac(sustainable_power) /
++			temperature_threshold;
+ 
+-	tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
+-		temperature_threshold;
++	if (!tz->tzp->k_pu || force)
++		tz->tzp->k_pu = int_to_frac(2 * sustainable_power) /
++			temperature_threshold;
+ 
+-	k_i = tz->tzp->k_pu / 10;
+-	tz->tzp->k_i = k_i > 0 ? k_i : 1;
++	if (!tz->tzp->k_i || force) {
++		k_i = tz->tzp->k_pu / 10;
++		tz->tzp->k_i = k_i > 0 ? k_i : 1;
++	}
+ 
+ 	/*
+ 	 * The default for k_d and integral_cutoff is 0, so we can
+@@ -184,7 +193,8 @@ static u32 get_sustainable_power(struct thermal_zone_device *tz,
+ 	/* Check if it's init value 0 or there was update via sysfs */
+ 	if (sustainable_power != params->sustainable_power) {
+ 		estimate_pid_constants(tz, sustainable_power,
+-				       params->trip_switch_on, control_temp);
++				       params->trip_switch_on, control_temp,
++				       true);
+ 
+ 		/* Do the estimation only once and make available in sysfs */
+ 		tz->tzp->sustainable_power = sustainable_power;
+@@ -662,7 +672,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 		if (!ret)
+ 			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+ 					       params->trip_switch_on,
+-					       trip.temperature);
++					       trip.temperature, false);
+ 	}
+ 
+ 	reset_pid_controller(params);
+-- 
+2.17.1
+
