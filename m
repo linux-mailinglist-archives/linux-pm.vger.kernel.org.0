@@ -2,69 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37EF750964
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 15:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636BA75097F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 15:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjGLNQf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 09:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
+        id S232082AbjGLNWm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 09:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjGLNQe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 09:16:34 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC06B1994
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 06:16:33 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6682909acadso3900864b3a.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 06:16:33 -0700 (PDT)
+        with ESMTP id S233249AbjGLNWj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 09:22:39 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBFEDC0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 06:22:35 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b6ff1a637bso112361291fa.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 06:22:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689167793; x=1691759793;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGdoVKECxiz1rKe0OBiDdQU665x2VaaVfR9buHHDKik=;
-        b=pNEVwlV9O+qfqN9JbHWTuMnM3y930vBAQb6Br351W4w8LcrczHWjmpoqY8Raj2V5v4
-         Qrk9PWoZvv9kDMiOaZDXGDLAhFlorju3QqmYs74+SeEFtjmVoQ1ievV7WCMq+DgYqvX8
-         TchfRVa4qgNMaTS2n+mg+k3/tqFyfxrF8FGrhU2xaEiADcpZ08r6W0xOJSVmSl9aYXIY
-         MFiYSYHebgMjfvdFuZ6O/DzSYGkRArP+6+x5iQ02hNVfi4IZ4YSqFHXDxdzOhJnvbg+o
-         T8tTsxDrqUfybxXvmrLSOU0mLIGdnYUI1BKqwCIj1qKiS3jZhdRMD62ffdP1ZJm+ewg6
-         IxTQ==
+        d=ragnatech-se.20221208.gappssmtp.com; s=20221208; t=1689168154; x=1691760154;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=li3E/61ADcsZod/5LKw2HR315GVhjLDgclmxVHETTdU=;
+        b=vr4zuyl2lwmVevSgLN6VT7Lpy4p1zh2Px0CUy22opH8BhKEMTUw5CKdfR/cLCK8iPK
+         x4YyI8W8hnzF4e3rlBS0ynGh9WVddaYEqRwpmqb9ONcD92l/oELnz5CTL69U0Wvwah7q
+         f7JL9jpPIUkRKGuTstdsrsC4mjv1PYCEyo1A3RV+/nIzLudDBDWlaE5AkrcjZjQP5aNd
+         xnsWniweqY8WEhnXDQcry/0KfM3t+vw6+qyy+ADIlvY8VAEqJV+GdpFSxVEspbZb+ytM
+         wYKodM3e2prVxnhlGEk/0jQWBvdWvdhivzyRUbtBfQZGyNQ6ehrpSzZJ4xhtMZZXxwnc
+         BN4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689167793; x=1691759793;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QGdoVKECxiz1rKe0OBiDdQU665x2VaaVfR9buHHDKik=;
-        b=lJZxY+zZEy6w02nBjMsEZvsGnppOmoJ/hpMAXPvfYXqWeujYoVtRQIjGsCDcPjl65+
-         7pMjXfjfV5wEDon4bdWxNWI5N3yTKA7lAjDpxJN+nmHZpuV3UhJzcS1y99CelKa8dSHq
-         YD+3ZVroiCrv6+WdL1tntkj0ofNrWCSAv1wa5cWzcAujTpvFLyB7MzpZzToKPOG7HLgx
-         J09TzMn6Lza3J88E7jRgs9GFjZnfoQjZvJ7O2ppndvFyhxWZ1OH78KtI2jiXrFnOHhxv
-         WX2hQoAH0RQauJRVbe36Y1po8z5/nUwhM+BT60NpfRwf0o1nUMV4FuQva4HFtmV3NnsW
-         VFTg==
-X-Gm-Message-State: ABy/qLaGbHRHHHS6yU+1XkzAig8KzbXEAEfOdQ+dxqKjG6bvkARojOaf
-        AJ5cQkuFLBb3pOy43LpYoC7oeQ==
-X-Google-Smtp-Source: APBJJlF3H6YlwE9l+h31kZLoS1RlFDSQPrxoJkEdo3xJb+JP8ba0VM8QjMokYXOD54DPdqQeU6FfSw==
-X-Received: by 2002:a05:6a20:a113:b0:132:cd2d:16fd with SMTP id q19-20020a056a20a11300b00132cd2d16fdmr1349174pzk.38.1689167793148;
-        Wed, 12 Jul 2023 06:16:33 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id t9-20020a63b709000000b0055be951145csm3206341pgf.36.2023.07.12.06.16.32
+        d=1e100.net; s=20221208; t=1689168154; x=1691760154;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=li3E/61ADcsZod/5LKw2HR315GVhjLDgclmxVHETTdU=;
+        b=juv5kNA82ezzBu6yN2c0kZjxkpjh0GH351DE4/QimTmzcRciJFcTAaNbhrYjERI2kb
+         nGZUc7/jVOz+m1Dnhk9RwZH6Xya6LeAVbrnvNWlIXeZwcYDY+aU+xZ9L7bKSoTGiQed5
+         txU6/z8GXNfDfJTS6PGBpbbudX3HtyMckkp54RawKSYQP4t80PjkOY3FOGBGYxI7Te4M
+         CrbdU1WmucF1W7Sv5qYXpho+JekOJXGWBmW3g2esWGK5k+BDSMFfU9cSaT35pLhL721u
+         KONLepTKdUK8ubNSA7N3PGTxIFYZ3gBn+LJGc8zm12gENliTnoFbH54V7Yqus/Rxih/D
+         370Q==
+X-Gm-Message-State: ABy/qLbZqLKmFuiQZoDUaqNPa1dKqWlyK3rVua07amwDJv/9IUqZEfbE
+        +Ugs5pD88DfkQU2juBz1fEG55w==
+X-Google-Smtp-Source: APBJJlGdBgrCo61F9SOyQp2F2oByZi4gaqkoAQSJlEtoOkq/ftxZNCEkur9U9EKBzKrGwjTBOXqUSQ==
+X-Received: by 2002:a2e:8450:0:b0:2b6:d137:b5a1 with SMTP id u16-20020a2e8450000000b002b6d137b5a1mr17662236ljh.43.1689168154106;
+        Wed, 12 Jul 2023 06:22:34 -0700 (PDT)
+Received: from localhost (h-46-59-89-207.A463.priv.bahnhof.se. [46.59.89.207])
+        by smtp.gmail.com with ESMTPSA id u6-20020a2e8446000000b002b70ae126fasm966585ljh.129.2023.07.12.06.22.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 06:16:32 -0700 (PDT)
-Message-ID: <64aea7b0.630a0220.5ad52.55b1@mx.google.com>
-Date:   Wed, 12 Jul 2023 06:16:32 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 12 Jul 2023 06:22:33 -0700 (PDT)
+Date:   Wed, 12 Jul 2023 15:22:32 +0200
+From:   Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/27] drivers/thermal/rcar_gen3_thermal: Convert to
+ platform remove callback returning void
+Message-ID: <ZK6pGInuXe9wipWf@oden.dyn.berto.se>
+References: <20230712081258.29254-1-frank.li@vivo.com>
+ <20230712081258.29254-4-frank.li@vivo.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.5-rc1-21-g3c61a03588dd8
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 48 runs,
- 3 regressions (v6.5-rc1-21-g3c61a03588dd8)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230712081258.29254-4-frank.li@vivo.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,155 +80,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 48 runs, 3 regressions (v6.5-rc1-21-g3c61a03588dd8)
+On 2023-07-12 16:12:35 +0800, Yangtao Li wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> Trivially convert this driver from always returning zero in the remove
+> callback to the void returning variant.
+> 
+> Cc: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
-Regressions Summary
--------------------
+Reviewed-by: Niklas Söderlund <niklas.soderlund@ragnatech.se>
 
-platform               | arch  | lab           | compiler | defconfig | reg=
-ressions
------------------------+-------+---------------+----------+-----------+----=
---------
-bcm2711-rpi-4-b        | arm64 | lab-collabora | gcc-10   | defconfig | 1  =
-        =
+> ---
+>  drivers/thermal/rcar_gen3_thermal.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+> index 9029d01e029b..1405163caa34 100644
+> --- a/drivers/thermal/rcar_gen3_thermal.c
+> +++ b/drivers/thermal/rcar_gen3_thermal.c
+> @@ -432,14 +432,12 @@ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, rcar_gen3_thermal_dt_ids);
+>  
+> -static int rcar_gen3_thermal_remove(struct platform_device *pdev)
+> +static void rcar_gen3_thermal_remove(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  
+>  	pm_runtime_put(dev);
+>  	pm_runtime_disable(dev);
+> -
+> -	return 0;
+>  }
+>  
+>  static void rcar_gen3_hwmon_action(void *data)
+> @@ -594,7 +592,7 @@ static struct platform_driver rcar_gen3_thermal_driver = {
+>  		.of_match_table = rcar_gen3_thermal_dt_ids,
+>  	},
+>  	.probe		= rcar_gen3_thermal_probe,
+> -	.remove		= rcar_gen3_thermal_remove,
+> +	.remove_new	= rcar_gen3_thermal_remove,
+>  };
+>  module_platform_driver(rcar_gen3_thermal_driver);
+>  
+> -- 
+> 2.39.0
+> 
 
-fsl-lx2160a-rdb        | arm64 | lab-nxp       | gcc-10   | defconfig | 1  =
-        =
-
-sun50i-a64-pine64-plus | arm64 | lab-broonie   | gcc-10   | defconfig | 1  =
-        =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.5-rc1=
--21-g3c61a03588dd8/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.5-rc1-21-g3c61a03588dd8
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      3c61a03588dd8486041f484e9b6c48b2c9a69b92 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig | reg=
-ressions
------------------------+-------+---------------+----------+-----------+----=
---------
-bcm2711-rpi-4-b        | arm64 | lab-collabora | gcc-10   | defconfig | 1  =
-        =
-
-
-  Details:     https://kernelci.org/test/plan/id/64ae9def208f295625bb2afe
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc1-21-g3c61a0=
-3588dd8/arm64/defconfig/gcc-10/lab-collabora/baseline-bcm2711-rpi-4-b.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc1-21-g3c61a0=
-3588dd8/arm64/defconfig/gcc-10/lab-collabora/baseline-bcm2711-rpi-4-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64ae9def208f295625bb2=
-aff
-        new failure (last pass: v6.5-rc1-15-g61ca8e67fe61) =
-
- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig | reg=
-ressions
------------------------+-------+---------------+----------+-----------+----=
---------
-fsl-lx2160a-rdb        | arm64 | lab-nxp       | gcc-10   | defconfig | 1  =
-        =
-
-
-  Details:     https://kernelci.org/test/plan/id/64ae9e19208f295625bb2b04
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc1-21-g3c61a0=
-3588dd8/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc1-21-g3c61a0=
-3588dd8/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64ae9e19208f295625bb2b09
-        failing since 118 days (last pass: v6.1-rc5-55-g60453df62d30, first=
- fail: v6.3-rc2-33-g1240ce78c05e)
-
-    2023-07-12T12:35:14.565464  [   18.015002] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-1235759_1.5.2.4.1>
-    2023-07-12T12:35:14.670688  =
-
-    2023-07-12T12:35:14.771866  / # #export SHELL=3D/bin/sh
-    2023-07-12T12:35:14.772262  =
-
-    2023-07-12T12:35:14.873198  / # export SHELL=3D/bin/sh. /lava-1235759/e=
-nvironment
-    2023-07-12T12:35:14.873597  =
-
-    2023-07-12T12:35:14.974561  / # . /lava-1235759/environment/lava-123575=
-9/bin/lava-test-runner /lava-1235759/1
-    2023-07-12T12:35:14.975234  =
-
-    2023-07-12T12:35:14.979219  / # /lava-1235759/bin/lava-test-runner /lav=
-a-1235759/1
-    2023-07-12T12:35:15.002508  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform               | arch  | lab           | compiler | defconfig | reg=
-ressions
------------------------+-------+---------------+----------+-----------+----=
---------
-sun50i-a64-pine64-plus | arm64 | lab-broonie   | gcc-10   | defconfig | 1  =
-        =
-
-
-  Details:     https://kernelci.org/test/plan/id/64ae9e83f71eb5f14abb2a7a
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc1-21-g3c61a0=
-3588dd8/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.=
-txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc1-21-g3c61a0=
-3588dd8/arm64/defconfig/gcc-10/lab-broonie/baseline-sun50i-a64-pine64-plus.=
-html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/64ae9e83f71eb5f14abb2=
-a7b
-        failing since 0 day (last pass: v6.4-rc7-126-gf28ec6369334, first f=
-ail: v6.5-rc1-15-g61ca8e67fe61) =
-
- =20
+-- 
+Kind Regards,
+Niklas Söderlund
