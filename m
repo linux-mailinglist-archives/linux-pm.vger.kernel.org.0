@@ -2,185 +2,321 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E3C7507FC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46321750819
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 14:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjGLMSr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 08:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S232427AbjGLMWf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 08:22:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjGLMSn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:18:43 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC90A7
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:18:41 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b5c2433134so9035721fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:18:41 -0700 (PDT)
+        with ESMTP id S229506AbjGLMWe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 08:22:34 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3954910C7
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:22:32 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fb761efa7aso10863604e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 05:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689164320; x=1691756320;
+        d=linaro.org; s=google; t=1689164550; x=1691756550;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KRzOGtPl93LqwIcit/8B2J8xTg5w549lcCceqtPK13c=;
-        b=tCDrJCD89Wt0gVMdSNhPrGqhUsTLlpFiDzPiy56glkjoByl9oQOJwPYyb4wDnToVd6
-         fi47x/wQz9S3njsxCWSqaRT1P4iwEdtMnD1XcGujLV6u1+RZOSHGwU7JOvYafFzjWdm9
-         SE3t7IhLbEdpCxYM6Cr+mi2OPJenJwUR5tQ/EYLjDLQC5tjhzYQmjG76SEY0g6Fh3l5z
-         nZfkZOpvco9XJg9fL5149zPzCGC0REejpnVteJVrKd1A2n+ueKnLvSMxuue/r3wtb1v8
-         Es+B+rZ0OgrUiPynYJdivI00s+xS5ovkE4J2VyKexlqGsYBr5+sVp8nkrRJmAY/eLkUk
-         QUbg==
+        bh=q5S3zSEv0yO9SsxtBbGnOkP560bf6i4Hy58Sg3O0KaY=;
+        b=O2buq07F58l8H+wLvgYZrR2IsHS2NVscUoEgvXvp0Q1qrzsgzAyxNEJWhu39YdgtNp
+         lsdTL5koddHjai4I5RV7fmv0QFo5lv0vTNfMFMBhqJtkMdlajohSRt+ThcOV9QcJvJXj
+         yVJm1Vwn13j5HX12GOHY1z6Leoe0xh0j3/IqwR0aIIjetc3Jqr+5iaUAjQDT7AR2tUwY
+         zzOTYl0xrHE+7xYeFJrQdmjZFQP3DhyY7aVoeGmmhalT1aoo/tVMuX/n6zO6zR53lrHm
+         IP+EbwiGBkWPDaDJ55HYckiDycqYBnXcuBCo6sUzDJYcDRiBcr3/2k4zvNQu1q7V33FI
+         iElQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689164320; x=1691756320;
+        d=1e100.net; s=20221208; t=1689164550; x=1691756550;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KRzOGtPl93LqwIcit/8B2J8xTg5w549lcCceqtPK13c=;
-        b=Z/+TTrbylDKZQr2vt6tKq7pLhkeHOk6ZVn8yHyvXI+q9y33+pr6M+Xen07MJ0ZYYvy
-         ztOvSUcJT/NqrZbLpYXE6ucVyrN4wkElxH4U0rqY2wVFfyvx3hF3XaC7gOFL8kAgUd3U
-         0QWU2rgkm8GrGM9fDeAvDflnXZNGxOfQv3WxV6Xmgk2RI1HrHupl8kmAcAhQySa65jUV
-         CyMiibNAYsS5MEKCrsiBbpp8lcQJL+6VA0J/cYfWHdFubeBKg1udW17DgWERKaUDvPzh
-         HbfaJHhZRqR08jVhW2mLHrRBChiGhow777PE8Lb/418U4HV1a0i5scfr/q2hGiINJZW2
-         My4A==
-X-Gm-Message-State: ABy/qLbGhGMDuZdwXMq3DFlckOB5RKJ4upnNbwUuwCrEZSQkc2MFY5+z
-        Yony/Lhk0dHAygqCO+kCCkZtfA==
-X-Google-Smtp-Source: APBJJlEy3ljbiuF/7Y5CJsnpdfh++Sek1AynGnWFOwY7diqxzJeX/scCNlJvvMlSZusU620MBmKZnw==
-X-Received: by 2002:a2e:9f08:0:b0:2b4:677e:1433 with SMTP id u8-20020a2e9f08000000b002b4677e1433mr706188ljk.5.1689164319762;
-        Wed, 12 Jul 2023 05:18:39 -0700 (PDT)
+        bh=q5S3zSEv0yO9SsxtBbGnOkP560bf6i4Hy58Sg3O0KaY=;
+        b=hJGRj9twc/r7k7FZtySwzGQnFOde64rLVknecV8br7S3KexlVAhNxDRpQWD2PeKQc1
+         bG3cQK4RKe0sHPvO+Shd4fNvRulki21fDMKbIMTEAePMn+vbnDihVjoT9S7Yrpr/cs7C
+         F6UMd5D3bhraJHEOa19hcF/y50mh4ErvDSj7UvW8kPktZktynzVR7TFY+URKhrAbLFTF
+         jgHOVttEEfVKKkV/sIuXM1i48+iNRlX0GQ3k7PSo69RovpUNp0+QZ17Ec2ut4bdC+IlX
+         0PT6DemRadjFBf+OSngvI7UYYuQZwLJQOLFUJb6XnjiRlsllDLXMf4Q3UQItONMdzX6B
+         c+Ww==
+X-Gm-Message-State: ABy/qLbT3G8O6mdj4hcA7DGiDWpiks6qA1tMkgyKuuqv5anXx8BuoIgF
+        sgix/EXVyRlpVKqSOLokNeBTWA==
+X-Google-Smtp-Source: APBJJlGkOen3dIIxSEXeFzxeFbsqQh9z/9qhEqpAB3/vx8qovpT7q1OT3ojECQEj1hCvFTiw/FdCwQ==
+X-Received: by 2002:a05:6512:3149:b0:4fb:8de9:ac13 with SMTP id s9-20020a056512314900b004fb8de9ac13mr13710640lfi.23.1689164550426;
+        Wed, 12 Jul 2023 05:22:30 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id y21-20020a2e95d5000000b002b6d4a63cfdsm940990ljh.42.2023.07.12.05.18.38
+        by smtp.gmail.com with ESMTPSA id s14-20020ac25fae000000b004fba759bf44sm685436lfe.277.2023.07.12.05.22.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 05:18:39 -0700 (PDT)
-Message-ID: <3523988f-fa51-ce44-ded7-9f3c7acbf65e@linaro.org>
-Date:   Wed, 12 Jul 2023 15:18:38 +0300
+        Wed, 12 Jul 2023 05:22:30 -0700 (PDT)
+Message-ID: <44043ff6-e109-fa66-58c8-08cc25b9a4ad@linaro.org>
+Date:   Wed, 12 Jul 2023 15:22:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 00/14] UFS: Add OPP and interconnect support
+Subject: Re: [PATCH v2 1/5] thermal/drivers/tsens: Add TSENS enable and
+ calibration support for V2
 Content-Language: en-GB
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <20230712104044.GA102214@thinkpad>
+To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
+        thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_varada@quicinc.com
+References: <20230712113539.4029941-1-quic_ipkumar@quicinc.com>
+ <20230712113539.4029941-2-quic_ipkumar@quicinc.com>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230712104044.GA102214@thinkpad>
+In-Reply-To: <20230712113539.4029941-2-quic_ipkumar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/07/2023 13:40, Manivannan Sadhasivam wrote:
-> On Wed, Jul 12, 2023 at 04:01:55PM +0530, Manivannan Sadhasivam wrote:
->> Hi,
->>
->> This series adds OPP (Operating Points) support to UFSHCD driver and
->> interconnect support to Qcom UFS driver.
->>
+On 12/07/2023 14:35, Praveenkumar I wrote:
+> SoCs without RPM have to enable sensors and calibrate from the kernel.
+> Though TSENS IP supports 16 sensors, not all are used. So used hw_id
+> to enable the relevant sensors.
 > 
-> Missed to cc SCSI folks. Will be resending this series. Sorry for the noise.
+> Added new calibration function for V2 as the tsens.c calib function
+> only supports V1.
+> 
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> ---
+> [v2]:
+> 	Added separate init function for tsens v2 which calls init_common
+> 	and initialize the remaining fields. Reformatted calibrate function
+> 	and used hw_ids for sensors to enable.
+> 
+>   drivers/thermal/qcom/tsens-v2.c | 144 ++++++++++++++++++++++++++++++++
+>   drivers/thermal/qcom/tsens.c    |   2 +-
+>   drivers/thermal/qcom/tsens.h    |   3 +
+>   3 files changed, 148 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+> index 29a61d2d6ca3..ba74d971fe95 100644
+> --- a/drivers/thermal/qcom/tsens-v2.c
+> +++ b/drivers/thermal/qcom/tsens-v2.c
+> @@ -6,11 +6,23 @@
+>   
+>   #include <linux/bitops.h>
+>   #include <linux/regmap.h>
+> +#include <linux/nvmem-consumer.h>
+>   #include "tsens.h"
+>   
+>   /* ----- SROT ------ */
+>   #define SROT_HW_VER_OFF	0x0000
+>   #define SROT_CTRL_OFF		0x0004
+> +#define SROT_MEASURE_PERIOD	0x0008
+> +#define SROT_Sn_CONVERSION	0x0060
+> +#define V2_SHIFT_DEFAULT	0x0003
+> +#define V2_SLOPE_DEFAULT	0x0cd0
+> +#define V2_CZERO_DEFAULT	0x016a
+> +#define ONE_PT_SLOPE		0x0cd0
+> +#define TWO_PT_SHIFTED_GAIN	921600
+> +#define ONE_PT_CZERO_CONST	94
+> +#define SENSOR_CONVERSION(n)	(((n) * 4) + SROT_Sn_CONVERSION)
+> +#define CONVERSION_SLOPE_SHIFT	10
+> +#define CONVERSION_SHIFT_SHIFT	23
+>   
+>   /* ----- TM ------ */
+>   #define TM_INT_EN_OFF			0x0004
+> @@ -59,6 +71,11 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+>   	/* CTRL_OFF */
+>   	[TSENS_EN]     = REG_FIELD(SROT_CTRL_OFF,    0,  0),
+>   	[TSENS_SW_RST] = REG_FIELD(SROT_CTRL_OFF,    1,  1),
+> +	[SENSOR_EN]    = REG_FIELD(SROT_CTRL_OFF,    3,  18),
+> +	[CODE_OR_TEMP] = REG_FIELD(SROT_CTRL_OFF,    21, 21),
+> +
+> +	/* MAIN_MEASURE_PERIOD */
+> +	[MAIN_MEASURE_PERIOD] = REG_FIELD(SROT_MEASURE_PERIOD, 0, 7),
+>   
+>   	/* ----- TM ------ */
+>   	/* INTERRUPT ENABLE */
+> @@ -104,6 +121,133 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
+>   	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
+>   };
+>   
+> +static int tsens_v2_calibrate_sensor(struct device *dev, struct tsens_sensor *sensor,
+> +				     struct regmap *map,  u32 mode, u32 base0, u32 base1)
+> +{
+> +	u32 slope, czero, val;
+> +	char name[15];
+> +	int ret;
+> +
+> +	/* Read offset value */
+> +	ret = snprintf(name, sizeof(name), "s%d", sensor->hw_id);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = nvmem_cell_read_variable_le_u32(dev, name, &sensor->offset);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Based on calib mode, program SHIFT, SLOPE and CZERO */
+> +	switch (mode) {
+> +	case TWO_PT_CALIB:
+> +		slope = (TWO_PT_SHIFTED_GAIN / (base1 - base0));
+> +
+> +		czero = (base0 + sensor->offset - ((base1 - base0) / 3));
+> +
+> +		val = (V2_SHIFT_DEFAULT << CONVERSION_SHIFT_SHIFT) |
+> +		      (slope << CONVERSION_SLOPE_SHIFT) | czero;
+> +
+> +		fallthrough;
+> +	case ONE_PT_CALIB2:
+> +		czero = base0 + sensor->offset - ONE_PT_CZERO_CONST;
+> +
+> +		val = (V2_SHIFT_DEFAULT << CONVERSION_SHIFT_SHIFT) |
+> +		      (ONE_PT_SLOPE << CONVERSION_SLOPE_SHIFT) | czero;
+> +
+> +		break;
+> +	default:
+> +		dev_dbg(dev, "calibrationless mode\n");
+> +
+> +		val = (V2_SHIFT_DEFAULT << CONVERSION_SHIFT_SHIFT) |
+> +		      (V2_SLOPE_DEFAULT << CONVERSION_SLOPE_SHIFT) | V2_CZERO_DEFAULT;
+> +	}
+> +
+> +	regmap_write(map, SENSOR_CONVERSION(sensor->hw_id), val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tsens_v2_calibration(struct tsens_priv *priv)
+> +{
+> +	struct device *dev = priv->dev;
+> +	u32 mode, base0, base1;
+> +	int i, ret;
+> +
+> +	if (priv->num_sensors > MAX_SENSORS)
+> +		return -EINVAL;
+> +
+> +	ret = nvmem_cell_read_variable_le_u32(priv->dev, "mode", &mode);
+> +	if (ret == -ENOENT)
+> +		dev_warn(priv->dev, "Calibration data not present in DT\n");
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+> +
+> +	ret = nvmem_cell_read_variable_le_u32(priv->dev, "base0", &base0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = nvmem_cell_read_variable_le_u32(priv->dev, "base1", &base1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* Calibrate each sensor */
+> +	for (i = 0; i < priv->num_sensors; i++) {
+> +		ret = tsens_v2_calibrate_sensor(dev, &priv->sensor[i], priv->srot_map,
+> +						mode, base0, base1);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init init_tsens_v2(struct tsens_priv *priv)
+> +{
+> +	int i, ret;
+> +	u32 val = 0;
+> +	struct device *dev = priv->dev;
+> +
+> +	ret = init_common(priv);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (priv->feat->ver_major != VER_2_X_NO_RPM)
+> +		return 0;
 
-I'd say, there is a need for the resend anyway, the series got duplicate 
-patch indices.
+No need to, you can rename the function to init_tsens_v2_no_rpm(h?) and 
+use it just for non-rpm platforms.
 
-> 
-> - Mani
-> 
->> Motivation behind adding OPP support is to scale both clocks as well as
->> regulators/performance state dynamically. Currently, UFSHCD just scales
->> clock frequency during runtime with the help of "freq-table-hz" property
->> defined in devicetree. With the addition of OPP tables in devicetree (as
->> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
->> both clocks and performance state of power domain which helps in power
->> saving.
->>
->> For the addition of OPP support to UFSHCD, there are changes required to
->> the OPP framework and devfreq drivers which are also added in this series.
->>
->> Finally, interconnect support is added to Qcom UFS driver for scaling the
->> interconnect path dynamically. This is required to avoid boot crash in
->> recent SoCs and also to save power during runtime. More information is
->> available in patch 13/13.
->>
->> Credits
->> =======
->>
->> This series is a continuation of previous work by Krzysztof Kozlowski [1]
->> and Brian Masney [2]. Ideally, this could've split into two series (OPP
->> and interconnect) but since there will be a dependency in the devicetree,
->> I decided to keep them in a single series.
->>
->> Testing
->> =======
->>
->> This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
->> development boards.
->>
->> Merging Strategy
->> ================
->>
->> An immutable branch might be required between OPP and SCSI trees because of
->> the API dependency (devfreq too). And I leave it up to the maintainers to
->> decide.
->>
->> Thanks,
->> Mani
->>
->> [1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
->> [2] https://lore.kernel.org/all/20221117104957.254648-1-bmasney@redhat.com/
->>
->> Krzysztof Kozlowski (2):
->>    dt-bindings: ufs: common: add OPP table
->>    arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
->>
->> Manivannan Sadhasivam (12):
->>    dt-bindings: opp: Increase maxItems for opp-hz property
->>    arm64: dts: qcom: sdm845: Add missing RPMh power domain to GCC
->>    arm64: dts: qcom: sdm845: Fix the min frequency of "ice_core_clk"
->>    arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
->>    OPP: Introduce dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
->>    OPP: Introduce dev_pm_opp_get_freq_indexed() API
->>    PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed()
->>      APIs
->>    scsi: ufs: core: Add OPP support for scaling clocks and regulators
->>    scsi: ufs: host: Add support for parsing OPP
->>    arm64: dts: qcom: sdm845: Add interconnect paths to UFSHC
->>    arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
->>    scsi: ufs: qcom: Add support for scaling interconnects
->>
->>   .../devicetree/bindings/opp/opp-v2-base.yaml  |   2 +-
->>   .../devicetree/bindings/ufs/ufs-common.yaml   |  34 ++++-
->>   arch/arm64/boot/dts/qcom/sdm845.dtsi          |  47 ++++--
->>   arch/arm64/boot/dts/qcom/sm8250.dtsi          |  43 ++++--
->>   drivers/devfreq/devfreq.c                     |  14 +-
->>   drivers/opp/core.c                            |  76 ++++++++++
->>   drivers/ufs/core/ufshcd.c                     | 142 ++++++++++++++----
->>   drivers/ufs/host/ufs-qcom.c                   | 131 +++++++++++++++-
->>   drivers/ufs/host/ufs-qcom.h                   |   3 +
->>   drivers/ufs/host/ufshcd-pltfrm.c              | 116 ++++++++++++++
->>   include/linux/pm_opp.h                        |  26 ++++
->>   include/ufs/ufshcd.h                          |   4 +
->>   12 files changed, 574 insertions(+), 64 deletions(-)
->>
->> -- 
->> 2.25.1
->>
-> 
+> +
+> +	priv->rf[CODE_OR_TEMP] = devm_regmap_field_alloc(dev, priv->srot_map,
+> +							 priv->fields[CODE_OR_TEMP]);
+> +	if (IS_ERR(priv->rf[CODE_OR_TEMP]))
+> +		return PTR_ERR(priv->rf[CODE_OR_TEMP]);
+> +
+> +	priv->rf[MAIN_MEASURE_PERIOD] = devm_regmap_field_alloc(dev, priv->srot_map,
+> +								priv->fields[MAIN_MEASURE_PERIOD]);
+> +	if (IS_ERR(priv->rf[MAIN_MEASURE_PERIOD]))
+> +		return PTR_ERR(priv->rf[MAIN_MEASURE_PERIOD]);
+> +
+> +	regmap_field_write(priv->rf[TSENS_SW_RST], 0x1);
+> +
+> +	/* Update measure period to 2ms */
+> +	regmap_field_write(priv->rf[MAIN_MEASURE_PERIOD], 0x1);
+> +
+> +	/* Enable available sensors */
+> +	for (i = 0; i < priv->num_sensors; i++)
+> +		val |= 1 << priv->sensor[i].hw_id;
+> +
+> +	regmap_field_write(priv->rf[SENSOR_EN], val);
+> +
+> +	/* Real temperature format */
+> +	regmap_field_write(priv->rf[CODE_OR_TEMP], 0x1);
+> +
+> +	regmap_field_write(priv->rf[TSENS_SW_RST], 0x0);
+> +
+> +	/* Enable TSENS */
+> +	regmap_field_write(priv->rf[TSENS_EN], 0x1);
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct tsens_ops ops_generic_v2 = {
+>   	.init		= init_common,
+>   	.get_temp	= get_temp_tsens_valid,
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index 98c356acfe98..5d2ad3b155ec 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -974,7 +974,7 @@ int __init init_common(struct tsens_priv *priv)
+>   	ret = regmap_field_read(priv->rf[TSENS_EN], &enabled);
+>   	if (ret)
+>   		goto err_put_device;
+> -	if (!enabled) {
+> +	if (!enabled && !VER_2_X_NO_RPM) {
+
+You probably meant something else here. `!const' is going to evaluate to 
+false.
+
+>   		dev_err(dev, "%s: device not enabled\n", __func__);
+>   		ret = -ENODEV;
+>   		goto err_put_device;
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index 2805de1c6827..b2e8f0f2b466 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -35,6 +35,7 @@ enum tsens_ver {
+>   	VER_0_1,
+>   	VER_1_X,
+>   	VER_2_X,
+> +	VER_2_X_NO_RPM,
+>   };
+>   
+>   enum tsens_irq_type {
+> @@ -168,6 +169,8 @@ enum regfield_ids {
+>   	TSENS_SW_RST,
+>   	SENSOR_EN,
+>   	CODE_OR_TEMP,
+> +	/* MEASURE_PERIOD */
+> +	MAIN_MEASURE_PERIOD,
+>   
+>   	/* ----- TM ------ */
+>   	/* TRDY */
 
 -- 
 With best wishes
