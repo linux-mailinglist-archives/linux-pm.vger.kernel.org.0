@@ -2,187 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AEB974FFC6
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 08:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022DE7500B4
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 10:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjGLG4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 02:56:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47256 "EHLO
+        id S231438AbjGLIFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 04:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbjGLG4L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 02:56:11 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFEFDC;
-        Tue, 11 Jul 2023 23:56:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689144970; x=1720680970;
-  h=date:from:to:cc:subject:message-id;
-  bh=Aix+sebAr5d/cP/q9zYQR6XWltGXQhXYRkYcR4Ttjio=;
-  b=Q7pWQIHmqIChPSPebqE6a7zXTlzFnod+T3yrNqIEGjbVEp4bU49N2Ar4
-   Hi1z06nDFSD5RxO2WvlEQWw/ypuJxlgfX5fgL5SuWphQiUMU1MI6rXEbE
-   1ghZTlAbROZKj0UMlALnYgIb/4y29ysmE4IIMED8761OkSLPkSLgL1a3D
-   YLuUgU+3aSqtAg07m6N2QKm9kJsBRrm6fzgTWnSZPJ+sXWA2Dv/Y1tpyB
-   7+LeRfMYtm+OtPkUB6OFUh7LU7CswqMo4dog9aplUReXjElNlPrufhjWj
-   7oz5XsOgt92Gv56Q14AfIUTSHDTgzS3J10VWZh9Mg0eZujzn0GXU9hylG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="367437022"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="367437022"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2023 23:55:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10768"; a="715446531"
-X-IronPort-AV: E=Sophos;i="6.01,199,1684825200"; 
-   d="scan'208";a="715446531"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 11 Jul 2023 23:55:44 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qJTlH-0005Tv-1e;
-        Wed, 12 Jul 2023 06:55:43 +0000
-Date:   Wed, 12 Jul 2023 14:54:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- d26e5b690e4be2f96d55bdcf5d80bb42c2d55cc6
-Message-ID: <202307121441.LZ9vpvNt-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229470AbjGLIFS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 04:05:18 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B04FE42;
+        Wed, 12 Jul 2023 01:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5TWVCjFGRExPcN05bVzne/2B6BKN45D6agRtviLb2cw=; b=ifUBNQvneXGD6J7waajKoLIn5D
+        pG2U4BC29xw3bvWK+iSa+gOc5fps12nyXisO8GUjZ8wBkPcELGpNAi8PTuiQj86VL0sCdJPtz7/SJ
+        xDuH43rN8cRQBY3ejlqYEvDoSWs/I9KWpHX7l4ReCDlLbCJaKIVUiQ9cJY3maD4eCUpWtv19dQc9v
+        4jLvvZZcrFyGbrozGDxTtRXwc6xqFTZdD2LdxXi8stUAEqMLCPZuf/VMl13F1s0oHfVPzh5xGfpnq
+        2A2xfm09toEHq4IIK/6YuxkSg15wVtz4ZkfBoKGkw+JRBLJPojBFi0ryZN9ICESH+dDlfa0WzYGH0
+        ztv3GCvQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qJUqQ-00GTmW-3M; Wed, 12 Jul 2023 08:05:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BABA33001E7;
+        Wed, 12 Jul 2023 10:05:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A1024243A2F82; Wed, 12 Jul 2023 10:05:04 +0200 (CEST)
+Date:   Wed, 12 Jul 2023 10:05:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kernel-team@meta.com, Linux PM list <linux-pm@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        linux-rtc@vger.kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        netdev <netdev@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Subject: Re: Consider switching to WQ_UNBOUND messages (was: Re: [PATCH v2
+ 6/7] workqueue: Report work funcs that trigger automatic CPU_INTENSIVE
+ mechanism)
+Message-ID: <20230712080504.GA3100107@hirez.programming.kicks-ass.net>
+References: <20230511181931.869812-1-tj@kernel.org>
+ <20230511181931.869812-7-tj@kernel.org>
+ <ZF6WsSVGX3O1d0pL@slm.duckdns.org>
+ <CAMuHMdVCQmh6V182q4g---jvsWiTOP2hBPZKvma6oUN6535LEg@mail.gmail.com>
+ <CAMuHMdW1kxZ1RHKTRVRqDNAbj1Df2=v0fPn5KYK3kfX_kiXR6A@mail.gmail.com>
+ <ZK3MBfPS-3-tJgjO@slm.duckdns.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZK3MBfPS-3-tJgjO@slm.duckdns.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d26e5b690e4be2f96d55bdcf5d80bb42c2d55cc6  Merge branch 'powercap' into bleeding-edge
+On Tue, Jul 11, 2023 at 11:39:17AM -1000, Tejun Heo wrote:
 
-elapsed time: 726m
+> I wonder whether the right thing to do here is somehow scaling the threshold
+> according to the relative processing power. It's difficult to come up with a
+> threshold which works well across the latest & fastest and really tiny CPUs.
+> I'll think about it some more but if you have some ideas, please feel free
+> to suggest.
 
-configs tested: 109
-configs skipped: 7
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r003-20230712   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                  randconfig-r024-20230710   gcc  
-arc                  randconfig-r043-20230710   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                     am200epdkit_defconfig   clang
-arm                     davinci_all_defconfig   clang
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230710   gcc  
-arm                       spear13xx_defconfig   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r025-20230710   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230710   clang
-hexagon              randconfig-r045-20230710   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230711   clang
-i386         buildonly-randconfig-r005-20230711   clang
-i386         buildonly-randconfig-r006-20230711   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230711   clang
-i386                 randconfig-i002-20230711   clang
-i386                 randconfig-i003-20230711   clang
-i386                 randconfig-i004-20230711   clang
-i386                 randconfig-i005-20230711   clang
-i386                 randconfig-i006-20230711   clang
-i386                 randconfig-i011-20230711   gcc  
-i386                 randconfig-i012-20230711   gcc  
-i386                 randconfig-i013-20230711   gcc  
-i386                 randconfig-i014-20230711   gcc  
-i386                 randconfig-i015-20230711   gcc  
-i386                 randconfig-i016-20230711   gcc  
-i386                 randconfig-r013-20230712   clang
-i386                 randconfig-r032-20230711   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r022-20230710   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r026-20230710   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230712   gcc  
-nios2                randconfig-r023-20230710   gcc  
-openrisc             randconfig-r021-20230710   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r011-20230712   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r033-20230711   clang
-riscv                randconfig-r042-20230710   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r034-20230711   clang
-s390                 randconfig-r044-20230710   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r035-20230711   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r014-20230712   gcc  
-sparc64              randconfig-r036-20230711   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r031-20230711   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230711   clang
-x86_64       buildonly-randconfig-r002-20230711   clang
-x86_64       buildonly-randconfig-r003-20230711   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r015-20230712   clang
-x86_64               randconfig-r016-20230712   clang
-x86_64               randconfig-x001-20230711   gcc  
-x86_64               randconfig-x002-20230711   gcc  
-x86_64               randconfig-x003-20230711   gcc  
-x86_64               randconfig-x004-20230711   gcc  
-x86_64               randconfig-x005-20230711   gcc  
-x86_64               randconfig-x006-20230711   gcc  
-x86_64               randconfig-x011-20230711   clang
-x86_64               randconfig-x012-20230711   clang
-x86_64               randconfig-x013-20230711   clang
-x86_64               randconfig-x014-20230711   clang
-x86_64               randconfig-x015-20230711   clang
-x86_64               randconfig-x016-20230711   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r006-20230712   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+We could scale by BogoMIPS I suppose, it's a bogus measurement, as per
+the name, but it does have some relation to how fast the machine is.
