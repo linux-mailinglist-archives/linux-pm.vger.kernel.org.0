@@ -2,77 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76868750D7A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DF0750D7E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 18:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjGLQF6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 12:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S233064AbjGLQGu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 12:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232484AbjGLQF5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:05:57 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF96A1BE2;
-        Wed, 12 Jul 2023 09:05:55 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-3094910b150so7792635f8f.0;
-        Wed, 12 Jul 2023 09:05:55 -0700 (PDT)
+        with ESMTP id S232448AbjGLQGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 12:06:50 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DA7199D
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:06:47 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb96e2b573so11506605e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 09:06:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689177954; x=1691769954;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=ionos.com; s=google; t=1689178006; x=1691770006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n2UhWtOknxAONFk0+utWHnQitKmiwh4ry/tqUazjREk=;
-        b=bNhU0hXZyRBn0cyaqVhfAfcG4Er1AHGgnbVeFRJ/Swz0fIiFdPPPbfezGhTAgmGGb9
-         G1KSoT5dS7Sen7NB/GLXXXubKj7ZBhP1lIRoMMa0SLq6hYsFj+7ag71P3pTQsQci+xEA
-         ar4cGr83BfP3YwGM1tc75iVIU1SlilqzoqoQV/HekdFxXuSK39HA2U/btaqmSTQ0VSId
-         HJJGz5WJG6kJ7r3bgDeo8q/Mmz0GSGluJtjfM11ewp/4Vm0mRZkGo2rrbjeQspkPnVVG
-         WCIXag+JwQdZgdXF/pDx8HOVMxxzgfOy4DAO9jH7ajevcfSNS39c3ErD0XRPKBTzFd75
-         p+dg==
+        bh=8X6ArMXh62A5UxRR3ZN+q1CvObhoeb8ltfmXU1xj+zw=;
+        b=V0Mwyzpfv5NHo344FebMkemb4OkDhqesSJzk3oLJrC1sXingJzi/DqoHJPX3cM7/kU
+         /daZbGumusx7p3ETz9bL+dV7+a249DzrdJ5ucaxUqFs1cH4q4UNK1aBbCP0kRMVezgvK
+         Gb0u18D1omT5qk875/bvJSIuyWWXlLKu5WnA0OT929rTcOY7rHqZVsWOvIcdQTq+Q4TI
+         Xty8IQiQ2uEFjkBqRHhjaYUeIIjdk3TlKuW6ZBNL29/kZI8LKdOXvAAi+FiRNxSMUXsG
+         92h/diWQ5jGfG/Pc/9JTOLcLZ2bS8Hyd3sIfxIs/rFITeR6YjIQmonhcUevYE5m/zN7s
+         SmPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689177954; x=1691769954;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1689178006; x=1691770006;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n2UhWtOknxAONFk0+utWHnQitKmiwh4ry/tqUazjREk=;
-        b=iobvl1iwcePQZwxMSjAikmwVMK47rzswMcYiDibt65ncQesgZ7Wnwk24CWZpDIB4w6
-         Y+Motd/dOyQISi4OPCgHuo6Ye/sygbfiaXFSm/Gv/D3tLhc7HprSBUighuLcl2zYC3/s
-         bK+F4s5wu7A+YK6EApBt8Ejmp4k/JmjmyAlgq1UyhNPAC4KeSOhvTZGIhx37m2jXaHoI
-         yD86vvpjGaQBlTOYLoy4pE4KRO3PZY1nVyBiyZ9/Cl241j1XYxec2lcj+1+V6UcdXDxv
-         5fE3ti3s/wRO3RhobpzdPoOOJGZeMjXJReQ3BRMrAyn5lGVjEqGt2rBIlDDGlG1PkTnq
-         TAwQ==
-X-Gm-Message-State: ABy/qLY5aAoDz9EYlxwoMeWBblLn2w+Lpqb73xgy1EYPPVEnwYJK5M9p
-        mHj7FmzZX1dbpxLa4OP63X4=
-X-Google-Smtp-Source: APBJJlHsiKo6ByCouYojx1vB4RKxt1mZjIVaLkmFeXvoaDzpU5qzdIrG+dCWPX8MGwpXLNkLRoM9iA==
-X-Received: by 2002:a5d:6909:0:b0:313:f235:cd17 with SMTP id t9-20020a5d6909000000b00313f235cd17mr14934684wru.40.1689177953987;
-        Wed, 12 Jul 2023 09:05:53 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id r8-20020a056000014800b0030fa3567541sm5446714wrx.48.2023.07.12.09.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 09:05:47 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Yangtao Li <frank.li@vivo.com>
-Cc:     Yangtao Li <frank.li@vivo.com>,
-        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/19] cpufreq: sun50i: Convert to platform remove callback
- returning void
-Date:   Wed, 12 Jul 2023 18:05:40 +0200
-Message-ID: <2159659.Icojqenx9y@jernej-laptop>
-In-Reply-To: <20230712093322.37322-1-frank.li@vivo.com>
-References: <20230712093322.37322-1-frank.li@vivo.com>
+        bh=8X6ArMXh62A5UxRR3ZN+q1CvObhoeb8ltfmXU1xj+zw=;
+        b=PrEabJWd5TMGaE3aK5uBZqdmeN7VfzetfqRUP/ESVcplpD+NRJlnvIL1l5vr0nhIH9
+         qGVG5nrF83MB6kEIZwh0DmhGBokA3AOdiyQNLR4YPk5a7+kBGAtmT/vylTaDWfU2DOnX
+         y/eNJS7F8M2vJX1seY/BLhpbZM/Z6z1BnEhflnxbSwSJjQB8t9iy0GA8fYYz6UwvKVlF
+         k6bOPXkkPcavJa0LLzIg2Ditf8IcVc0DXSw3FwsESVaUSe7zTS5bBXi+4cn97qIBAztW
+         YxEAxY06du21Xur8rmy9N3ZJ2dyss+2kgK4NkEbyfo9thcF6lYpG3xWjM9cd0wIFYCu/
+         aRWw==
+X-Gm-Message-State: ABy/qLZUtpq7Y42THquiFZtqdsoR5aA7HIxUcQbY28Sj/MVInnLEXTup
+        wx1w8gxydsFedkpPfpUmLOFqMclNC55wkrHFQ3dRcPhU5LVCyX7KNpB/WQ==
+X-Google-Smtp-Source: APBJJlHjPtNIqZNhhKZT3JSG1orBAozCwd3+TwwvFjulJuToD7D5iIrA7grwKZQU8Z67qc0UJ0oDxWof6WbkdfMRi3A=
+X-Received: by 2002:ac2:5b1d:0:b0:4fb:7a90:1abe with SMTP id
+ v29-20020ac25b1d000000b004fb7a901abemr15797051lfn.49.1689178006211; Wed, 12
+ Jul 2023 09:06:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+References: <20230629165206.383-1-jack@suse.cz> <20230704122224.16257-1-jack@suse.cz>
+ <ZKbgAG5OoHVyUKOG@infradead.org>
+In-Reply-To: <ZKbgAG5OoHVyUKOG@infradead.org>
+From:   Haris Iqbal <haris.iqbal@ionos.com>
+Date:   Wed, 12 Jul 2023 18:06:35 +0200
+Message-ID: <CAJpMwyiUcw+mH0sZa8f8UJsaSZ7NSE65s2gZDEia+pASyP_gJQ@mail.gmail.com>
+Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Jan Kara <jack@suse.cz>, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org, Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,60 +99,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dne sreda, 12. julij 2023 ob 11:33:04 CEST je Yangtao Li napisal(a):
-> The .remove() callback for a platform driver returns an int which makes
-> many driver authors wrongly assume it's possible to do error handling by
-> returning an error code. However the value returned is (mostly) ignored
-> and this typically results in resource leaks. To improve here there is a
-> quest to make the remove callback return void. In the first step of this
-> quest all drivers are converted to .remove_new() which already returns
-> void.
->=20
-> Trivially convert this driver from always returning zero in the remove
-> callback to the void returning variant.
->=20
-> Cc: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+On Thu, Jul 6, 2023 at 5:38=E2=80=AFPM Christoph Hellwig <hch@infradead.org=
+> wrote:
+>
+> On Tue, Jul 04, 2023 at 02:21:28PM +0200, Jan Kara wrote:
+> > Create struct bdev_handle that contains all parameters that need to be
+> > passed to blkdev_put() and provide blkdev_get_handle_* functions that
+> > return this structure instead of plain bdev pointer. This will
+> > eventually allow us to pass one more argument to blkdev_put() without
+> > too much hassle.
+>
+> Can we use the opportunity to come up with better names?  blkdev_get_*
+> was always a rather horrible naming convention for something that
+> ends up calling into ->open.
+>
+> What about:
+>
+> struct bdev_handle *bdev_open_by_dev(dev_t dev, blk_mode_t mode, void *ho=
+lder,
+>                 const struct blk_holder_ops *hops);
+> struct bdev_handle *bdev_open_by_path(dev_t dev, blk_mode_t mode,
+>                 void *holder, const struct blk_holder_ops *hops);
+> void bdev_release(struct bdev_handle *handle);
 
-Acked-by: Jernej =C5=A0krabec <jernej.skrabec@gmail.com>
++1 to this.
+Also, if we are removing "handle" from the function, should the name
+of the structure it returns also change? Would something like bdev_ctx
+be better?
 
-Best regards,
-Jernej
+(Apologies for the previous non-plaintext email)
 
-> ---
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> b/drivers/cpufreq/sun50i-cpufreq-nvmem.c index 4321d7bbe769..32a9c88f8ff6
-> 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -137,7 +137,7 @@ static int sun50i_cpufreq_nvmem_probe(struct
-> platform_device *pdev) return ret;
->  }
->=20
-> -static int sun50i_cpufreq_nvmem_remove(struct platform_device *pdev)
-> +static void sun50i_cpufreq_nvmem_remove(struct platform_device *pdev)
->  {
->  	int *opp_tokens =3D platform_get_drvdata(pdev);
->  	unsigned int cpu;
-> @@ -148,13 +148,11 @@ static int sun50i_cpufreq_nvmem_remove(struct
-> platform_device *pdev) dev_pm_opp_put_prop_name(opp_tokens[cpu]);
->=20
->  	kfree(opp_tokens);
-> -
-> -	return 0;
->  }
->=20
->  static struct platform_driver sun50i_cpufreq_driver =3D {
->  	.probe =3D sun50i_cpufreq_nvmem_probe,
-> -	.remove =3D sun50i_cpufreq_nvmem_remove,
-> +	.remove_new =3D sun50i_cpufreq_nvmem_remove,
->  	.driver =3D {
->  		.name =3D "sun50i-cpufreq-nvmem",
->  	},
-
-
-
-
+>
+> ?
