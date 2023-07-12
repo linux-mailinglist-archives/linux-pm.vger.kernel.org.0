@@ -2,70 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1861750CB5
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 17:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE44750CB9
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Jul 2023 17:39:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbjGLPim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 11:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        id S233672AbjGLPjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 11:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233740AbjGLPij (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 11:38:39 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD0A1BE4
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:38:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6686c74183cso6332099b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:38:34 -0700 (PDT)
+        with ESMTP id S233733AbjGLPjH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 11:39:07 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 729EC1BEA
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:39:03 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b8b4749013so52483405ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 08:39:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1689176314; x=1691768314;
+        d=broadcom.com; s=google; t=1689176343; x=1691768343;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=b4WbyTW1o52fjawuSMt0sfLtiZRf7KxpOd8nMrq0E20=;
-        b=PKxZwWAd8SaWohVjoBDkoQyxlDLVjpDMGpzzSwoOwd3vuoWBkzpyMdO1g4/KwUd+Lm
-         U4bAlwDNKoEx83coAZoMUkrvzRThhgXNG1PTfrQNy3KKs13yuP6ffKH15wRyP2ZGfRZK
-         AyPJ+XQyCQTywyuofx9aXHdZVskvY72iS1vmM=
+        bh=/N9XP5KdlFxJsN+g1mUsgWQ1gCBdis7XeB3/M/pg7BY=;
+        b=d+PwTa5wZNEvE8zotvJNzqOnYfMMuyJ28/6LGJ5RmVn/s0/XQJxqFkdnVzBMW4MeZ+
+         I8ayjk+tfheepaljVGblpxwP6ZdFJpR8Gt5SmI4Chw6MfQ2mqCXZM0oTHwS4i4/AUct1
+         B9wfdEjyheZOT0AIaUBgQYTZsFBnDwUXWEe9A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689176314; x=1691768314;
+        d=1e100.net; s=20221208; t=1689176343; x=1691768343;
         h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b4WbyTW1o52fjawuSMt0sfLtiZRf7KxpOd8nMrq0E20=;
-        b=LZCSaIZV60MpXsI5qxzw9/NkZ7oCGPwrXCrY39uTZvs0th2xPNRXa1Rk/TjcGiDPha
-         QlMIiWBzWaUK0g6PR/M1ma/4h2he0XsuYfFLCOr/9Nb2E7n2OIq6ZvX4ZwgjDHlsctxV
-         CoYnZnltITIwjFXIuEj2mnmAGdSZ2t2QOg7e+YjHLT/BskjkPEPYopNpPQ9z/h94RCeO
-         463ii7JhB7wfOCxx2DpMSI7+SYsj/T/kWK0+sR18AWiQGW7/cND6+Xzpm6hkqAwmXCk4
-         5g8h5upgONauEPcdpzPmnZxrHCRHrtRT5TPgiwNs6m1c+VlxU1t261MHDM3liAvbKrea
-         iVpw==
-X-Gm-Message-State: ABy/qLbUh7nX2aGsNPqWlqOv8PHb6ngAOrnEq2zUI8LZcX5iBBGqxyiR
-        60ieHw50Pj7ZjD8TbcL0H8mI+t5/Zp9CsDQMaOzHcA==
-X-Google-Smtp-Source: APBJJlFRPtz2TqgyqUuA8lbGkvSeogOx4o4hQRRkx3QyXTeEEusGlL7lnilTYHJ2t/ScsX9h+U9zYw==
-X-Received: by 2002:a05:6a20:1394:b0:132:cd2c:f0f4 with SMTP id hn20-20020a056a20139400b00132cd2cf0f4mr2025031pzc.29.1689176314186;
-        Wed, 12 Jul 2023 08:38:34 -0700 (PDT)
+        bh=/N9XP5KdlFxJsN+g1mUsgWQ1gCBdis7XeB3/M/pg7BY=;
+        b=H/uTvsl5sIaNOzc/E6LIdhq7f2f/octXeHwmAwFqADzWPk4rDR/bkSw+TVf+0P64hG
+         v8DMdP/ParttS9WWs/MThI3uI76dEun0IoOnHSFBpJ8QLAyDfI8geo/Q9QgQOX7naQiI
+         WvdK2Lwm3xmNivNT5XJXPwz5wLQz+hoD4G6CI6H5DSLrCbxKSMwwwVMgss+v/T5qDiN4
+         VphPexfLbsLBDN07+mlSEzUJofsT9uoK1bAyZhkFyVl+S0qTsGk1p2StxLxPfEq3BDlz
+         xVTto2vKRYgLt7PYRHPFqFh9UQ5LMYk4HulwYsiATgc4DeEfgf12SnjSLayOUg2pgl39
+         KjJQ==
+X-Gm-Message-State: ABy/qLY1s3R8IIhvGtQD69wKutXqAdJU/fvqpPOy26idIkQXPm9PED6u
+        Xw7noKvHpRtRLhb+VZ92g91icg==
+X-Google-Smtp-Source: APBJJlF2Tw/zfqX4rKZthbvayMYQYZ5L6Y6ft2d+Cngiu0bDJG8CQyvyJoXr/ugrqMO3TObKC1IluQ==
+X-Received: by 2002:a17:902:bd8a:b0:1b7:ffb9:ea85 with SMTP id q10-20020a170902bd8a00b001b7ffb9ea85mr13333023pls.29.1689176342857;
+        Wed, 12 Jul 2023 08:39:02 -0700 (PDT)
 Received: from [192.168.47.133] ([37.175.79.111])
-        by smtp.gmail.com with ESMTPSA id h21-20020a62b415000000b0067b24701daasm3724158pfn.86.2023.07.12.08.38.30
+        by smtp.gmail.com with ESMTPSA id l3-20020a170902cf8300b001b9ce2c3baesm4128735ply.143.2023.07.12.08.38.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Jul 2023 08:38:33 -0700 (PDT)
-Message-ID: <42b9312e-7fcd-7df4-2a33-fd720f89c706@broadcom.com>
-Date:   Wed, 12 Jul 2023 17:38:29 +0200
+        Wed, 12 Jul 2023 08:39:02 -0700 (PDT)
+Message-ID: <5d58dae8-5e1a-24d8-f435-f3b8792902ff@broadcom.com>
+Date:   Wed, 12 Jul 2023 17:38:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 12/19] cpufreq: raspberrypi: Convert to platform remove
- callback returning void
+Subject: Re: [PATCH 03/27] thermal/drivers/broadcom: Convert to platform
+ remove callback returning void
 To:     Yangtao Li <frank.li@vivo.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
 Cc:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
         linux-pm@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230712093322.37322-1-frank.li@vivo.com>
- <20230712093322.37322-12-frank.li@vivo.com>
+References: <20230712081258.29254-1-frank.li@vivo.com>
+ <20230712081258.29254-3-frank.li@vivo.com>
 From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <20230712093322.37322-12-frank.li@vivo.com>
+In-Reply-To: <20230712081258.29254-3-frank.li@vivo.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003092e006004c0257"
+        boundary="000000000000e6444b06004c03ff"
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
@@ -76,14 +80,14 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---0000000000003092e006004c0257
+--000000000000e6444b06004c03ff
 Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 7/12/2023 11:33 AM, Yangtao Li wrote:
+On 7/12/2023 10:12 AM, Yangtao Li wrote:
 > The .remove() callback for a platform driver returns an int which makes
 > many driver authors wrongly assume it's possible to do error handling by
 > returning an error code. However the value returned is (mostly) ignored
@@ -102,7 +106,7 @@ Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 -- 
 Florian
 
---0000000000003092e006004c0257
+--000000000000e6444b06004c03ff
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -173,14 +177,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIOvzhEPm3RdHKWKY
-lw8H+fU3DkDSBaihbLbAjD53+21oMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDcxMjE1MzgzNFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILHGMysmD1iM1j86
+a5ApGNlJLObx9ueGJwL8q5rbC4NnMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDcxMjE1MzkwM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCy4IAkTHAB5T/8ygBEycDQbqQrepTLpxG5
-wkfZY0uQqBUl93jbGylkcXhGCtQbQgrXprhsOMZrne20KqFh1kbfsaYHf9/7RuQ8hKqddyt/S0ck
-r9MvuZwog9wCdYYDIhF2B6CSae0bl4Nth6xq4vdW0N1s9vxnIu6lnPAVuSosMyFDdNF1zpFxqNKd
-VEPmZ4Pt/s0L0IxnXB5L4VIAJQHKNtLIJ2v8w+GPuJOSG/5TDAU5FZ0lLPz/ohozve+mm2fJisD2
-wtLoJY+MGJHRaRbFwBhEadFUZaRPKnEphF2kmfYtlHevbbr/08/ZBlZHQ+R+HIyW26Ce/JoAz/MN
-BplQ
---0000000000003092e006004c0257--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQDskQPD0ZulsBdHyVSoCNhtEb5pPSpX8I/l
+Zs/73IJG10damk+2VVvG06Bnrl4TeZ24th7Eg/dWbg7i3QxMiPQGZb5fprUH1SQcS8GCLiV5Tr5A
+uZI8L1jtfgUkWHMEyNLBNx+gNF/rr4IW0V89IAzNBkKH87lAnwhHwKNs4o7o7tAvDcD2gnnCAKU/
+ToJWbaXdVcDnxaWVmpjxWeOT6fliZ6fHygFZj3Enxc0W4uxIxIQioP/ph1a2UMPfpQxYmzPhHW8s
+/RNvDM/cXCbdSkKd7fziqqzyM6fvpji25iN2y9Xk7h0xu4RPoi4L2JKgW3GGjqIROgcBXO/tj8B3
+VgCj
+--000000000000e6444b06004c03ff--
