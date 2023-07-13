@@ -2,102 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F184B751FEA
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 13:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7EE752018
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 13:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbjGMLal convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 13 Jul 2023 07:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
+        id S234080AbjGMLip (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 07:38:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233580AbjGMLak (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 07:30:40 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457A518E;
-        Thu, 13 Jul 2023 04:30:39 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-98502b12fd4so17946066b.1;
-        Thu, 13 Jul 2023 04:30:39 -0700 (PDT)
+        with ESMTP id S233019AbjGMLio (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 07:38:44 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A51980
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 04:38:42 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso1067392e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 04:38:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689248320; x=1691840320;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gkxaOO+CHvkkNHNAedQF2pdgDoOPgApXqdl51IGfcu4=;
+        b=s923okNqmRTL1o3NnbuwJ9dVf9F0FFkNU7AI7QAAPQmisbkv4iajKQU+/p4WgGSzbH
+         chdSzQzm5i9GlGc3f2MUrXEggFZv7hwRGMxQvD5IDp6eUYPOPGYCbvNVtmEprjU9bbxc
+         j5mM3vjUvvwUSYU5cQ3uL50UVNfNhkkf0Vh8IgWtX070Qe/v3dXUH+Wwy8emitQ7ag6j
+         f+eQorXU7oZhmFa/wfsCgl4jy0P4oWmR5BXLMNLd1CNd6YAxnPyX2Oxg7VzjEZCo0UoT
+         eskG3yGIE+VI7XrhT6ndu2CGRMFpaIzdEH4UAA2WDjGwEqJQ5wUFzFfFpjT+HDqRZ0cG
+         qCtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689247838; x=1689852638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IdSP6ezbFiKCfroZ5GX5zt/8h3KSlShTUnj+xRO1MX0=;
-        b=aDMfvld0Ajhf8X3DQxGr9+CTBVW1lYUBMVE570P8XBstUwqnwF+VapnUTfmSunwWnS
-         wJmKgBlZx5KTk6XWLFZMSd9iNEjKdv7XYAZHxIbxeno2O79tRDrpPF6ZCUvQ+hUG6AbM
-         bbKOAaXMnbvBsEmK4LexCIsreGs6/4+j1hRAZJK3q0UmaMOw9Lm3/iJK/lP0KJMnEIBe
-         qYDyHAviPAcdGx1tjVK77+wnVJGqLgSY46VFqnCTLpjdoaHFgHXl8U/nzs+MlCiEa5xr
-         QRcizstT2sJsJX/Qqfn0isCKWZXolPkcaZzGnMdTBBhLKlTE362DgDccoA37nPwZsWN5
-         +OLw==
-X-Gm-Message-State: ABy/qLbJe/lVT/2VzfdYw5awL46M5bxXkE2tX8wbzD9OGlidDX5RSlCO
-        niX4/kuYO1/w1tYR1cT/GoihCAL4KqZTOg+xh2s=
-X-Google-Smtp-Source: APBJJlEzNhHSm7/nas6ZGwAjLZGhL0q93TMstSkMzTvTz6R71uHqjNwcqtmwYNUZpOhi5hSE7bPSkAWEwq2ez+7AKgA=
-X-Received: by 2002:a17:906:73d3:b0:993:eed1:904 with SMTP id
- n19-20020a17090673d300b00993eed10904mr997537ejl.3.1689247837448; Thu, 13 Jul
- 2023 04:30:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689248320; x=1691840320;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gkxaOO+CHvkkNHNAedQF2pdgDoOPgApXqdl51IGfcu4=;
+        b=Kuy7kruprvbY7wWfBvZxLwMtFgWc2j1MmUlzA7jxDoLVpM0DT3zAyesiwjp+YZ/TIq
+         zToZnO33lPw3x0G2HwV18vjrcNafo8qtzNKl0RmQG4fueAut7N1qDACeX7R6RmL5ry2b
+         YNMltBVB68PJ3iWTnzJHW9Gvk1lfjp6CfqS7Yl9FQV/dJI8LP6lxLpWYCzLmZMWNje0q
+         qepbe786sgskvLOlgwoBSkGc31VqFXB1gPTmH/tySsJNQnXbiqygNU/LuOrJ0vc9QC/C
+         g8p7sw0hIqleiwMzulefAi2QP1oCJVMwI7Dlh8m+gDm89jd6HD1PjGl/x7rqI2G/svTB
+         KtdA==
+X-Gm-Message-State: ABy/qLaHeWI9/B8xIYO+0Rem7ppgNSVBl0CjLRUGPKQ9BU8EGsLAgG2l
+        FoVu+IVFveHTVQM07ZMpVo/U0w==
+X-Google-Smtp-Source: APBJJlFbztQimcm1kAYwn6R3xa11Hk9ZS9hMlJ0qmtnR5prNqridycqQPgwm1uohXWe0zuYeCXgQsA==
+X-Received: by 2002:a05:6512:b85:b0:4fb:9075:4fca with SMTP id b5-20020a0565120b8500b004fb90754fcamr1159049lfv.11.1689248320438;
+        Thu, 13 Jul 2023 04:38:40 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id i16-20020adffdd0000000b0030fb4b55c13sm7738058wrs.96.2023.07.13.04.38.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jul 2023 04:38:39 -0700 (PDT)
+Message-ID: <684ce378-a697-a352-eba7-c8f3ad62d8e4@linaro.org>
+Date:   Thu, 13 Jul 2023 13:38:37 +0200
 MIME-Version: 1.0
-References: <20230707203731.848188-1-daniel.lezcano@linaro.org> <82b2d4dc-4583-925a-9e3c-77ae30d0d261@linaro.org>
-In-Reply-To: <82b2d4dc-4583-925a-9e3c-77ae30d0d261@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 13 Jul 2023 13:30:25 +0200
-Message-ID: <CAJZ5v0iUyPjsyfcE6MB1gqeRvb8aM0d6TsrB1Oehw4p58SnFYQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] One more step to the thermal zone structure encapsulation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
-        srinivas.pandruvada@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/6] dt-bindings: thermal: tsens: Add nvmem cells for
+ calibration data
+Content-Language: en-US
+To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_varada@quicinc.com
+References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
+ <20230710103735.1375847-2-quic_ipkumar@quicinc.com>
+ <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
+ <59ea653e-c5da-71cb-eb85-1aa3c72e2089@quicinc.com>
+ <37aa7ae8-206e-3a48-b90d-22d49e86c675@linaro.org>
+ <1b050086-07c5-add6-6002-d7368d532566@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1b050086-07c5-add6-6002-d7368d532566@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 11:33 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 07/07/2023 22:37, Daniel Lezcano wrote:
-> > The series provides more changes to self-encapsulate the thermal zone device
-> > structure in order to protect wild accesses to the thermal zone device
-> > internals, especially the trip points and the locks.
-> >
-> > The first patch adds a macro to warn at compilation time if the
-> > thermal_core.h is included in a file not belonging to the thermal core
-> > code. One warning will happen with the nvidia drivers but this is in
-> > the way to be solved.
-> >
-> > The second patch reorders the headers inclusion in the core code.
-> >
-> > The next patches makes the int340x drivers to use the thermal trip
-> > update above and the different accessors for thermal zone structure.
-> >
-> > Daniel Lezcano (4):
-> >    thermal/core: Hardening the self-encapsulation
-> >    thermal/core: Reorder the headers inclusion
-> >    thermal/drivers/int3400: Use thermal zone device wrappers
-> >    thermal/drivers/int340x: Do not check the thermal zone state
-> >
-> >   drivers/thermal/gov_bang_bang.c               |  1 +
-> >   drivers/thermal/gov_fair_share.c              |  1 +
-> >   drivers/thermal/gov_power_allocator.c         |  7 +--
-> >   drivers/thermal/gov_step_wise.c               |  1 +
-> >   drivers/thermal/gov_user_space.c              |  1 +
-> >   .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++++++----------
-> >   drivers/thermal/thermal_acpi.c                |  1 +
-> >   drivers/thermal/thermal_core.c                |  7 +--
-> >   drivers/thermal/thermal_core.h                |  4 ++
-> >   drivers/thermal/thermal_helpers.c             |  1 +
-> >   drivers/thermal/thermal_hwmon.c               |  1 +
-> >   drivers/thermal/thermal_netlink.c             |  1 +
-> >   drivers/thermal/thermal_of.c                  |  1 +
-> >   drivers/thermal/thermal_sysfs.c               |  1 +
-> >   drivers/thermal/thermal_trip.c                |  1 +
-> >   15 files changed, 45 insertions(+), 28 deletions(-)
->
-> Applied
+On 11/07/2023 16:13, Praveenkumar I wrote:
+>>>>>              - const: calib
+>>>>> @@ -205,6 +209,24 @@ properties:
+>>>>>              - const: s9_p2_backup
+>>>>>              - const: s10_p1_backup
+>>>>>              - const: s10_p2_backup
+>>>>> +      - items:
+>>>>> +          - const: mode
+>>>>> +          - const: base0
+>>>>> +          - const: base1
+>>>>> +          - const: s0_offset
+>>>>> +          - const: s3_offset
+>>>>> +          - const: s4_offset
+>>>>> +          - const: s5_offset
+>>>>> +          - const: s6_offset
+>>>>> +          - const: s7_offset
+>>>>> +          - const: s8_offset
+>>>>> +          - const: s9_offset
+>>>>> +          - const: s10_offset
+>>>>> +          - const: s11_offset
+>>>>> +          - const: s12_offset
+>>>>> +          - const: s13_offset
+>>>>> +          - const: s14_offset
+>>>>> +          - const: s15_offset
+>>>> Don't introduce new naming style. Existing uses s[0-9]+, without offset
+>>>> suffix. Why this should be different?
+>>> As I mentioned above, s[0-9]+_p1 / s[0-9]+p2 is for TSENS V1. TSENS V2
+>>> QFPROM layout is different from the existing one.
+>> I know, I did not write about p1/p2.
+>>
+>>> I would like to add mode, base0, base1 and 16 patterns
+>>> '^s[0-15]+_offset$'. But DT binding check is failing in oneOf/ anyOf
+>>> condintion.
+>> This does not explain why you need different style - this "offset" suffix.
+> In QFPROM, the BIT field names are s0_offset, s3_offset to s15_offset. 
+> s1_offset and s2_offset not present in IPQ5332.
+> Hence used the same "offset" suffix here. May I know in this case, which 
+> nvmem-cells-names you are suggesting to use?
 
-OK
+"Existing uses s[0-9]+"
+
+so s[0-9]+
+
+Best regards,
+Krzysztof
+
