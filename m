@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405667521A3
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 14:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D397521AC
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 14:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbjGMMsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 08:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S234871AbjGMMs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 08:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234833AbjGMMrw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 08:47:52 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3694F26A0
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 05:47:26 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbc77e76abso5720665e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 05:47:26 -0700 (PDT)
+        with ESMTP id S234835AbjGMMsT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 08:48:19 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F345C2D45
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 05:47:54 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fbc656873eso6119415e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 05:47:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689252443; x=1691844443;
+        d=linaro.org; s=google; t=1689252459; x=1691844459;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BQ3qFqjqaXg+xhPM/OfBCqCifetSEr6v0qh2wFRe3uY=;
-        b=i92G8JKNvparwYPbnBagAXWtkyNe6OrAoGY9MTlkldD3dcYsmXZ3Bt9jlIdwM2BXw8
-         y7VwQuUjzVfo2hn/Z4OmMX5D4XvCfjpmVWf0+sN7AhHmbLD1K7WWAcxUskC/EWIteL8z
-         pgwUmWYhX8oZBy3/z3S3eTV3rj9qdeF+eLnSaryryK2Fn2XtSu1bcxYL6zRfHFZcWQbj
-         o95SzvzKnzTUxrsIQTRwhPZDtDeOX3bI0wN+8BVAJtYu5K496kx8UGOBm5TXXoXPyfxj
-         ahgWHaBBmBLhBgcffwYFyZzltxlkgbx/Ofx9KG2EfQV3SNejzzzEUu1cmN1xW095yUcD
-         p+vw==
+        bh=z+Z95kHJar6LgJuF8EaQ4xrWI5fsRo898PQkWtblwYA=;
+        b=ZWtafz1E6fk6SAsYpf4lGZD1+nSgipZ/1yHk8BiiBeCPmDYFNw/BHXw8sle+l2vVmS
+         HiRfDaiEutO8CKyd/tWcIbzDH68IKAq0P+wq6L3O+yCRnGWEZXF20jAOZurQ/poTKzrb
+         g2OnlU1tMldBasNoMoKBcVuVSBCTsyKGMaByUKioVd4KMVuWxyelDtQjMhVnKsq5Iagw
+         6P15f+uhPUS8d9HS9De43ANQUipGV+9v29ZgjBforFnnWFgsbssKQyogmv4hd+73mvAv
+         lE4BynPqwqichj7yZRCL2JXaPbqySmT8UZO4u9PrfLAkj4WOjTJ+83c7+Pw5b6vArAq9
+         /iXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689252443; x=1691844443;
+        d=1e100.net; s=20221208; t=1689252459; x=1691844459;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQ3qFqjqaXg+xhPM/OfBCqCifetSEr6v0qh2wFRe3uY=;
-        b=Ng5kQssRokCHXv40S13UROMPmleBR8eRYOIlWKjxeoV+axyHAJ0xTtw5LkRyQa9C4l
-         640BrIY9XCfZ6MDq2aMvI4XRRookOSPzHZ19SqUJzb53o1USMG3kf6MyIcaZcJCfBjn5
-         jlSAaQk2lOeO+nfWbVlcj6xNm8x5NylC3/fhvznSQyLZpToL1EzTfrrHBHiw4bpCIqrW
-         kO97Fp2oOVq+jwgDOQsrywRr6xteib9wXr7sT7LHi9SGh9DliR0rO3o0IBQ8kPteMHB8
-         fK93OeJV1DP1dHXeC9THkinZnvGXXCeQuvobwuUrK4y2t2iggROwE9JROPdNiNA77GnZ
-         Ni4Q==
-X-Gm-Message-State: ABy/qLbA5FIJuO6Ft5iAbzCLS/L39QIAbkFwG0W7r4gDE5I/rw8wD7BS
-        X8zRRQbkfzfhmJlnsNIWGatE+A==
-X-Google-Smtp-Source: APBJJlFv2JV2cNu6AAcxonI8NW8JRqwtxih4OqWDpmqP+QB4MCgD6qwhTqxWsmWLF+OTALNCxkZ9hQ==
-X-Received: by 2002:a7b:cd95:0:b0:3f7:3699:c294 with SMTP id y21-20020a7bcd95000000b003f73699c294mr1277212wmj.29.1689252442663;
-        Thu, 13 Jul 2023 05:47:22 -0700 (PDT)
+        bh=z+Z95kHJar6LgJuF8EaQ4xrWI5fsRo898PQkWtblwYA=;
+        b=iudnfZIdof7yHXcFs35SdfcKIDdjj0smvW065mYuJQ5OsIeaBKhEsW+xyyYmXAuARl
+         x31dlKG6CY5i6qn+LBjuT+jRgUyUpMXnalGvmFpvaLC4CbTW1So0vkIjNWtTA5t2wtqf
+         AA09q71/oJlSs4ivXD1C31Y4tRkPkuWyNw+g33fLB9f7y4lJLP1OSlbC7aLxakMKEl/m
+         Ldi+UtYDLumwjWFt6DYq6cJ322bML9BQwASG58hczrrg+fiFnIZgaUKiw9YNyKLC/b2Y
+         ZPeeP82oGEE+4bfXGV8o4vmplfAiUZTq+ufayZzhyAQvQymmhv1zOckVfDBYuC/gobHh
+         /C+A==
+X-Gm-Message-State: ABy/qLarjHckh5LOj6d5AdL+vT8dUSEl/j002qJIek4zOI6F6cud632V
+        100CuDLdv+KC8KDGetkkR/5SuQ==
+X-Google-Smtp-Source: APBJJlFbNLe7S8IsK2vPmgsjbKmKD9UvXXP3v3+dBxQYsKg50wEXZp6DtXoc8BrOfzOVUcWK2M8cHA==
+X-Received: by 2002:a05:6000:18f:b0:315:a1d5:a3d5 with SMTP id p15-20020a056000018f00b00315a1d5a3d5mr1544161wrx.22.1689252459616;
+        Thu, 13 Jul 2023 05:47:39 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id fa16-20020a05600c519000b003fbb1ce274fsm5488171wmb.0.2023.07.13.05.47.21
+        by smtp.googlemail.com with ESMTPSA id m15-20020adfdc4f000000b003142ea7a661sm7905018wrj.21.2023.07.13.05.47.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 05:47:22 -0700 (PDT)
-Message-ID: <2ddb2042-a654-bc60-2060-b21e3acd6f31@linaro.org>
-Date:   Thu, 13 Jul 2023 14:47:20 +0200
+        Thu, 13 Jul 2023 05:47:39 -0700 (PDT)
+Message-ID: <cb852190-2128-ee92-ff64-a47bd262154a@linaro.org>
+Date:   Thu, 13 Jul 2023 14:47:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2 03/15] clksource: timer-oxnas-rps: remove obsolete
- timer driver
+Subject: Re: [PATCH v2 04/15] dt-bindings: timer: oxsemi,rps-timer: remove
+ obsolete bindings
 Content-Language: en-US
 To:     Neil Armstrong <neil.armstrong@linaro.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -85,12 +85,13 @@ Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-oxnas@groups.io,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Daniel Golle <daniel@makrotopia.org>
 References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
- <20230630-topic-oxnas-upstream-remove-v2-3-fb6ab3dea87c@linaro.org>
+ <20230630-topic-oxnas-upstream-remove-v2-4-fb6ab3dea87c@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-3-fb6ab3dea87c@linaro.org>
+In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-4-fb6ab3dea87c@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -105,9 +106,10 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On 30/06/2023 18:58, Neil Armstrong wrote:
 > Due to lack of maintenance and stall of development for a few years now,
-> and since no new features will ever be added upstream, remove support
-> for OX810 and OX820 timer.
+> and since no new features will ever be added upstream, remove the
+> OX810 and OX820 timer bindings.
 > 
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > Acked-by: Linus Walleij <linus.walleij@linaro.org>
 > Acked-by: Arnd Bergmann <arnd@arndb.de>
 > Acked-by: Daniel Golle <daniel@makrotopia.org>
@@ -115,6 +117,7 @@ On 30/06/2023 18:58, Neil Armstrong wrote:
 > ---
 
 Applied, thanks
+
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
