@@ -2,79 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7EE752018
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 13:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DE6752138
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 14:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234080AbjGMLip (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 07:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
+        id S234717AbjGMMYw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 08:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbjGMLio (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 07:38:44 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4A51980
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 04:38:42 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fba8f2197bso1067392e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 04:38:42 -0700 (PDT)
+        with ESMTP id S234481AbjGMMYv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 08:24:51 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DE219A6
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 05:24:50 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-315adee6ac8so767365f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 05:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689248320; x=1691840320;
+        d=linaro.org; s=google; t=1689251088; x=1691843088;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gkxaOO+CHvkkNHNAedQF2pdgDoOPgApXqdl51IGfcu4=;
-        b=s923okNqmRTL1o3NnbuwJ9dVf9F0FFkNU7AI7QAAPQmisbkv4iajKQU+/p4WgGSzbH
-         chdSzQzm5i9GlGc3f2MUrXEggFZv7hwRGMxQvD5IDp6eUYPOPGYCbvNVtmEprjU9bbxc
-         j5mM3vjUvvwUSYU5cQ3uL50UVNfNhkkf0Vh8IgWtX070Qe/v3dXUH+Wwy8emitQ7ag6j
-         f+eQorXU7oZhmFa/wfsCgl4jy0P4oWmR5BXLMNLd1CNd6YAxnPyX2Oxg7VzjEZCo0UoT
-         eskG3yGIE+VI7XrhT6ndu2CGRMFpaIzdEH4UAA2WDjGwEqJQ5wUFzFfFpjT+HDqRZ0cG
-         qCtw==
+        bh=YhIL5guWN6zrYbL2+DFxlG7/O9jYKZvZYqtrGd9BNHY=;
+        b=PfkipBNr7iBAWN7Vr5tomfe5+E9TTO8mtzti8Tyil99CMspj+Q7gYJH6ydERk0tZFP
+         +bdQd/g4ir4PQKktlCODX0iWPOVF0qzxtDxq8KU+HxmGZOPBVqVw3WsR8Y75oBDg63um
+         Gy0E4u/JXt5z+pZr9Sfn+cYy6plx61iWSLkRMr1jsDy7Oahe9029u/s4TqLnONRQEHga
+         Rdbfwh4dzU1qv3rBA5hDFZw6mewkJwVygADvQTksYAYBJafKO+hQH+UqP65IooKqwWT5
+         HillHLVCzmZMFXqne9gqvBc4/sxfgRLx/rTBsYteFFP1sg8Bsi0HCdaihj4tm/MdyU1R
+         074g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689248320; x=1691840320;
+        d=1e100.net; s=20221208; t=1689251088; x=1691843088;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gkxaOO+CHvkkNHNAedQF2pdgDoOPgApXqdl51IGfcu4=;
-        b=Kuy7kruprvbY7wWfBvZxLwMtFgWc2j1MmUlzA7jxDoLVpM0DT3zAyesiwjp+YZ/TIq
-         zToZnO33lPw3x0G2HwV18vjrcNafo8qtzNKl0RmQG4fueAut7N1qDACeX7R6RmL5ry2b
-         YNMltBVB68PJ3iWTnzJHW9Gvk1lfjp6CfqS7Yl9FQV/dJI8LP6lxLpWYCzLmZMWNje0q
-         qepbe786sgskvLOlgwoBSkGc31VqFXB1gPTmH/tySsJNQnXbiqygNU/LuOrJ0vc9QC/C
-         g8p7sw0hIqleiwMzulefAi2QP1oCJVMwI7Dlh8m+gDm89jd6HD1PjGl/x7rqI2G/svTB
-         KtdA==
-X-Gm-Message-State: ABy/qLaHeWI9/B8xIYO+0Rem7ppgNSVBl0CjLRUGPKQ9BU8EGsLAgG2l
-        FoVu+IVFveHTVQM07ZMpVo/U0w==
-X-Google-Smtp-Source: APBJJlFbztQimcm1kAYwn6R3xa11Hk9ZS9hMlJ0qmtnR5prNqridycqQPgwm1uohXWe0zuYeCXgQsA==
-X-Received: by 2002:a05:6512:b85:b0:4fb:9075:4fca with SMTP id b5-20020a0565120b8500b004fb90754fcamr1159049lfv.11.1689248320438;
-        Thu, 13 Jul 2023 04:38:40 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id i16-20020adffdd0000000b0030fb4b55c13sm7738058wrs.96.2023.07.13.04.38.38
+        bh=YhIL5guWN6zrYbL2+DFxlG7/O9jYKZvZYqtrGd9BNHY=;
+        b=AqGVytRRoZ7Z4LlcuXjzs0jz/5YvdD8huK0OAwxU25lPEdBwL0a7jGUzCpnNZ+PiqU
+         qaOaBISxDgPLSk9IskEoqMrQWP7uXwpBNSkh2XrlaJREzF2AwB9IdZBTaITvo//4J9qQ
+         5cU6RlAdzE9l3xe3n9SsvapsJU36Df9K64e2rSVrnf+pKdVce1FFTobN0/wTJ7ED9ZaE
+         3P69yWYbt+lwXYZiFTp6Hs7Sw9B7PEMgK4NTzJxu0OV8/tRF5DX6BYilqf3jdu1E6H1U
+         7vpO9Dq3rnWjt9+OgI7h5asCPoIukFyWlLbJJFqj6RYiEO5SMx1bKzieRdRHat8837nU
+         WR2A==
+X-Gm-Message-State: ABy/qLZ0cb8oApTuwGq0Lk8zxpdljP40jlQD/vwcrdTRB3seyie7WMhj
+        W51iw31b60JMswz3hCskzym2cQ==
+X-Google-Smtp-Source: APBJJlGFOb5JDm5rhB/Cuv7x2z40VnxQBm2cKVopqR+aIDgwkbVnDOaE7q7jD8lgUVg8qLEp2D3YeQ==
+X-Received: by 2002:adf:f649:0:b0:314:55cd:ec6b with SMTP id x9-20020adff649000000b0031455cdec6bmr1316860wrp.71.1689251088437;
+        Thu, 13 Jul 2023 05:24:48 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q14-20020a05600000ce00b003062b2c5255sm7855972wrx.40.2023.07.13.05.24.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 04:38:39 -0700 (PDT)
-Message-ID: <684ce378-a697-a352-eba7-c8f3ad62d8e4@linaro.org>
-Date:   Thu, 13 Jul 2023 13:38:37 +0200
+        Thu, 13 Jul 2023 05:24:48 -0700 (PDT)
+Message-ID: <032bda42-ba99-c207-c30d-a5f69bd10095@linaro.org>
+Date:   Thu, 13 Jul 2023 14:24:47 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 1/6] dt-bindings: thermal: tsens: Add nvmem cells for
- calibration data
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 0/4] One more step to the thermal zone structure
+ encapsulation
 Content-Language: en-US
-To:     Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_varada@quicinc.com
-References: <20230710103735.1375847-1-quic_ipkumar@quicinc.com>
- <20230710103735.1375847-2-quic_ipkumar@quicinc.com>
- <09e33a89-c060-69b1-b94f-b21c45d1d249@linaro.org>
- <59ea653e-c5da-71cb-eb85-1aa3c72e2089@quicinc.com>
- <37aa7ae8-206e-3a48-b90d-22d49e86c675@linaro.org>
- <1b050086-07c5-add6-6002-d7368d532566@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1b050086-07c5-add6-6002-d7368d532566@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
+        linux-kernel@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+References: <20230707203731.848188-1-daniel.lezcano@linaro.org>
+ <82b2d4dc-4583-925a-9e3c-77ae30d0d261@linaro.org>
+ <CAJZ5v0iUyPjsyfcE6MB1gqeRvb8aM0d6TsrB1Oehw4p58SnFYQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0iUyPjsyfcE6MB1gqeRvb8aM0d6TsrB1Oehw4p58SnFYQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -85,49 +77,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/07/2023 16:13, Praveenkumar I wrote:
->>>>>              - const: calib
->>>>> @@ -205,6 +209,24 @@ properties:
->>>>>              - const: s9_p2_backup
->>>>>              - const: s10_p1_backup
->>>>>              - const: s10_p2_backup
->>>>> +      - items:
->>>>> +          - const: mode
->>>>> +          - const: base0
->>>>> +          - const: base1
->>>>> +          - const: s0_offset
->>>>> +          - const: s3_offset
->>>>> +          - const: s4_offset
->>>>> +          - const: s5_offset
->>>>> +          - const: s6_offset
->>>>> +          - const: s7_offset
->>>>> +          - const: s8_offset
->>>>> +          - const: s9_offset
->>>>> +          - const: s10_offset
->>>>> +          - const: s11_offset
->>>>> +          - const: s12_offset
->>>>> +          - const: s13_offset
->>>>> +          - const: s14_offset
->>>>> +          - const: s15_offset
->>>> Don't introduce new naming style. Existing uses s[0-9]+, without offset
->>>> suffix. Why this should be different?
->>> As I mentioned above, s[0-9]+_p1 / s[0-9]+p2 is for TSENS V1. TSENS V2
->>> QFPROM layout is different from the existing one.
->> I know, I did not write about p1/p2.
+On 13/07/2023 13:30, Rafael J. Wysocki wrote:
+> On Thu, Jul 13, 2023 at 11:33 AM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
 >>
->>> I would like to add mode, base0, base1 and 16 patterns
->>> '^s[0-15]+_offset$'. But DT binding check is failing in oneOf/ anyOf
->>> condintion.
->> This does not explain why you need different style - this "offset" suffix.
-> In QFPROM, the BIT field names are s0_offset, s3_offset to s15_offset. 
-> s1_offset and s2_offset not present in IPQ5332.
-> Hence used the same "offset" suffix here. May I know in this case, which 
-> nvmem-cells-names you are suggesting to use?
+>> On 07/07/2023 22:37, Daniel Lezcano wrote:
+>>> The series provides more changes to self-encapsulate the thermal zone device
+>>> structure in order to protect wild accesses to the thermal zone device
+>>> internals, especially the trip points and the locks.
+>>>
+>>> The first patch adds a macro to warn at compilation time if the
+>>> thermal_core.h is included in a file not belonging to the thermal core
+>>> code. One warning will happen with the nvidia drivers but this is in
+>>> the way to be solved.
+>>>
+>>> The second patch reorders the headers inclusion in the core code.
+>>>
+>>> The next patches makes the int340x drivers to use the thermal trip
+>>> update above and the different accessors for thermal zone structure.
+>>>
+>>> Daniel Lezcano (4):
+>>>     thermal/core: Hardening the self-encapsulation
+>>>     thermal/core: Reorder the headers inclusion
+>>>     thermal/drivers/int3400: Use thermal zone device wrappers
+>>>     thermal/drivers/int340x: Do not check the thermal zone state
+>>>
+>>>    drivers/thermal/gov_bang_bang.c               |  1 +
+>>>    drivers/thermal/gov_fair_share.c              |  1 +
+>>>    drivers/thermal/gov_power_allocator.c         |  7 +--
+>>>    drivers/thermal/gov_step_wise.c               |  1 +
+>>>    drivers/thermal/gov_user_space.c              |  1 +
+>>>    .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++++++----------
+>>>    drivers/thermal/thermal_acpi.c                |  1 +
+>>>    drivers/thermal/thermal_core.c                |  7 +--
+>>>    drivers/thermal/thermal_core.h                |  4 ++
+>>>    drivers/thermal/thermal_helpers.c             |  1 +
+>>>    drivers/thermal/thermal_hwmon.c               |  1 +
+>>>    drivers/thermal/thermal_netlink.c             |  1 +
+>>>    drivers/thermal/thermal_of.c                  |  1 +
+>>>    drivers/thermal/thermal_sysfs.c               |  1 +
+>>>    drivers/thermal/thermal_trip.c                |  1 +
+>>>    15 files changed, 45 insertions(+), 28 deletions(-)
+>>
+>> Applied
 
-"Existing uses s[0-9]+"
+Sorry, I did not think you may wanted pull them in.
 
-so s[0-9]+
+I can drop them from the tree if you prefer?
 
-Best regards,
-Krzysztof
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
