@@ -2,148 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F29751DB6
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 11:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F184B751FEA
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 13:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234047AbjGMJvI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 05:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
+        id S233086AbjGMLal convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 13 Jul 2023 07:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbjGMJvH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 05:51:07 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6132126
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 02:51:06 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bd77424c886so481180276.0
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 02:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689241865; x=1691833865;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qmboCy6O4VZ2QerNW0sFMiABzsIB0mZysPTru8Y01c0=;
-        b=X+8WGU6NKzCqjvvD/xjNcjLtelRyK4iDs5BbDHlVwg1VEjSYATF5eO6w6UvsQijYgc
-         LIdpy+8823AqRqqtHm/Byn5SnqU1jioj8iWBucyIO/8GGCKLPNopCe07qsbotbXNuZ/K
-         ZChW9oJeLkneHmewLrbX0xWrOgsVkbtD9LMsu/sfgvQyAM0EQ52A1JXSqIefW9fRHRwO
-         icCCl6CpS4rfSgfkpOpdEpz1JoFxgmdpRDMd28Fear69VP8cm55IvbgZKoA/6eMnyjBE
-         f77w9OCZLVZibWJbXZNWqcm9xxEZLbW/SsfVsql6cPXnbNLDdYQikWeVAg+gWJI3fOg6
-         WLuQ==
+        with ESMTP id S233580AbjGMLak (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 07:30:40 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457A518E;
+        Thu, 13 Jul 2023 04:30:39 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-98502b12fd4so17946066b.1;
+        Thu, 13 Jul 2023 04:30:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689241865; x=1691833865;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qmboCy6O4VZ2QerNW0sFMiABzsIB0mZysPTru8Y01c0=;
-        b=DHHgM+R9SVXQjVMbQRaJDUCtVTtntgMrV0zeq6osqd96I5N/ySokYtcv5nl6JFRs3x
-         A2+aQKWSw/d/5DnA4i4pdlOAdCjqIW8UrRgjdbJsXoBxUU5FxwJ1eIDjQZYCAwydeFV0
-         in45eydxc6rLQfSTX41TidTGZBI1afyrD2X89PvqFpIZqwkNjAu/jnwtyER1GDv7XWgZ
-         1NGxB+mbgn9Xewzpx/Fy3zvUYdu0rvZ8u61FcjmNwnPZ/266fGhz83TuGsCdSDS55ILi
-         YMy4K99G8ayzXtMARyXOgrLXez0KiFpLVckQMqRI3Uzyig0PebiAx3QTK+LzyT1O4UzJ
-         fb5Q==
-X-Gm-Message-State: ABy/qLbQC6WTzaBcKl2Lu69y9Kz3Rt2Wmgrx9d7E9SqMo3XBRRKcP0BX
-        7ayfFptalaIvMGyx5D71YKqzfsk2fJM0tE0uMmvCVA==
-X-Google-Smtp-Source: APBJJlFFmSyXB6CIf5q786088dWd85CG5uGJ6KY0/vrCcgZMUgfn7tKweyGDHdnOOxLB1Txzq8Ej/g9GKVXT25PnLoE=
-X-Received: by 2002:a81:7744:0:b0:577:189b:ad4 with SMTP id
- s65-20020a817744000000b00577189b0ad4mr1148836ywc.48.1689241865319; Thu, 13
- Jul 2023 02:51:05 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689247838; x=1689852638;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IdSP6ezbFiKCfroZ5GX5zt/8h3KSlShTUnj+xRO1MX0=;
+        b=aDMfvld0Ajhf8X3DQxGr9+CTBVW1lYUBMVE570P8XBstUwqnwF+VapnUTfmSunwWnS
+         wJmKgBlZx5KTk6XWLFZMSd9iNEjKdv7XYAZHxIbxeno2O79tRDrpPF6ZCUvQ+hUG6AbM
+         bbKOAaXMnbvBsEmK4LexCIsreGs6/4+j1hRAZJK3q0UmaMOw9Lm3/iJK/lP0KJMnEIBe
+         qYDyHAviPAcdGx1tjVK77+wnVJGqLgSY46VFqnCTLpjdoaHFgHXl8U/nzs+MlCiEa5xr
+         QRcizstT2sJsJX/Qqfn0isCKWZXolPkcaZzGnMdTBBhLKlTE362DgDccoA37nPwZsWN5
+         +OLw==
+X-Gm-Message-State: ABy/qLbJe/lVT/2VzfdYw5awL46M5bxXkE2tX8wbzD9OGlidDX5RSlCO
+        niX4/kuYO1/w1tYR1cT/GoihCAL4KqZTOg+xh2s=
+X-Google-Smtp-Source: APBJJlEzNhHSm7/nas6ZGwAjLZGhL0q93TMstSkMzTvTz6R71uHqjNwcqtmwYNUZpOhi5hSE7bPSkAWEwq2ez+7AKgA=
+X-Received: by 2002:a17:906:73d3:b0:993:eed1:904 with SMTP id
+ n19-20020a17090673d300b00993eed10904mr997537ejl.3.1689247837448; Thu, 13 Jul
+ 2023 04:30:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230707140434.723349-1-ulf.hansson@linaro.org>
- <20230707140434.723349-4-ulf.hansson@linaro.org> <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
- <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
- <1496b9c1-289a-c354-f0ae-e14fd4c9bcfa@linaro.org> <CAPDyKFr7Mqy5bisLcxcA_iEGWqL8SFt2mDDng7zYEaTD1vNisA@mail.gmail.com>
- <deyyt5r2wkxo7ily434gl3wudls2sbinkmnehssqshwnbzmlwf@lmqskj6zwfu2>
- <CAPDyKFoRtEXTGQkNzGza-sS_j1ajGmjtCTaoPB7PXVDE2bS0tQ@mail.gmail.com>
- <2ef84fb8-b5eb-4c9a-b8a1-0c5f33e7f572@app.fastmail.com> <sxyavxzvezu5dorysn3nmwq7ew5xdclpm7rg474cifnnzy54mb@jljrhirrir2i>
-In-Reply-To: <sxyavxzvezu5dorysn3nmwq7ew5xdclpm7rg474cifnnzy54mb@jljrhirrir2i>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 13 Jul 2023 11:50:29 +0200
-Message-ID: <CAPDyKFoQoKx1uEpFBNfsaCFEG_9TOzSdNW90h-+bVz+_3xYObA@mail.gmail.com>
-Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
- genpd dir
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Olof Johansson <olof@lixom.net>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
+References: <20230707203731.848188-1-daniel.lezcano@linaro.org> <82b2d4dc-4583-925a-9e3c-77ae30d0d261@linaro.org>
+In-Reply-To: <82b2d4dc-4583-925a-9e3c-77ae30d0d261@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 13 Jul 2023 13:30:25 +0200
+Message-ID: <CAJZ5v0iUyPjsyfcE6MB1gqeRvb8aM0d6TsrB1Oehw4p58SnFYQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] One more step to the thermal zone structure encapsulation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        thierry.reding@gmail.com, linux-kernel@vger.kernel.org,
+        srinivas.pandruvada@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 13 Jul 2023 at 02:45, Bjorn Andersson <andersson@kernel.org> wrote:
+On Thu, Jul 13, 2023 at 11:33 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Mon, Jul 10, 2023 at 02:45:12PM +0200, Arnd Bergmann wrote:
-> > On Mon, Jul 10, 2023, at 14:37, Ulf Hansson wrote:
-> > > On Sun, 9 Jul 2023 at 04:21, Bjorn Andersson <andersson@kernel.org> wrote:
-> > >> On Fri, Jul 07, 2023 at 05:27:39PM +0200, Ulf Hansson wrote:
-> > >
-> > > If I understand correctly, you are suggesting that each platform
-> > > maintainer should merge the immutable branch with patch1 - and that I
-> > > should send the patches (based on the immutable branch) to each of the
-> > > platform maintainers to manage. Instead of one pull request with
-> > > everything directly to Arnd, right?
-> > >
->
-> That's what I suggest, yes.
->
-> > > This still means that Arnd will have to resolve the conflicts as the
-> > > pull requests arrive in his inbox.
-> > >
->
-> Yes, we will have N maintainers modifying drivers/genpd/Makefile, all
-> adding their single obj-y line. A quite trivial conflict to manage.
->
-> > > Although, I guess what you are looking for is less work for the soc/
-> > > maintainers, which seems reasonable. Although, in that case, I might
-> > > as well share an immutable branch with the complete series, rather
-> > > than just patch1. That should help Arnd too, I think.
-> > >
-> > > Again, let's leave the call to Arnd on what to do.
+> On 07/07/2023 22:37, Daniel Lezcano wrote:
+> > The series provides more changes to self-encapsulate the thermal zone device
+> > structure in order to protect wild accesses to the thermal zone device
+> > internals, especially the trip points and the locks.
 > >
-> > I think it's much easier for me to pick up a single branch with
-> > all of your patches. For platform maintainers, other changes can
-> > go one of two ways:
+> > The first patch adds a macro to warn at compilation time if the
+> > thermal_core.h is included in a file not belonging to the thermal core
+> > code. One warning will happen with the nvidia drivers but this is in
+> > the way to be solved.
 > >
-> > - send a normal pull requests with changes against the same
-> >   files, and have me take care of any conflicts where they
-> >   arise. Since most of the changes are just simple file moves
-> >   rather than changing file contents, 'git mergetool' handles
-> >   these fine is most cases
+> > The second patch reorders the headers inclusion in the core code.
 > >
-> > - If there is a non-obvious merge, the entire genpd branch
-> >   can be shared as an immutable branch, with patches for
-> >   a particular platform rebased on top of that branch.
+> > The next patches makes the int340x drivers to use the thermal trip
+> > update above and the different accessors for thermal zone structure.
 > >
+> > Daniel Lezcano (4):
+> >    thermal/core: Hardening the self-encapsulation
+> >    thermal/core: Reorder the headers inclusion
+> >    thermal/drivers/int3400: Use thermal zone device wrappers
+> >    thermal/drivers/int340x: Do not check the thermal zone state
+> >
+> >   drivers/thermal/gov_bang_bang.c               |  1 +
+> >   drivers/thermal/gov_fair_share.c              |  1 +
+> >   drivers/thermal/gov_power_allocator.c         |  7 +--
+> >   drivers/thermal/gov_step_wise.c               |  1 +
+> >   drivers/thermal/gov_user_space.c              |  1 +
+> >   .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++++++----------
+> >   drivers/thermal/thermal_acpi.c                |  1 +
+> >   drivers/thermal/thermal_core.c                |  7 +--
+> >   drivers/thermal/thermal_core.h                |  4 ++
+> >   drivers/thermal/thermal_helpers.c             |  1 +
+> >   drivers/thermal/thermal_hwmon.c               |  1 +
+> >   drivers/thermal/thermal_netlink.c             |  1 +
+> >   drivers/thermal/thermal_of.c                  |  1 +
+> >   drivers/thermal/thermal_sysfs.c               |  1 +
+> >   drivers/thermal/thermal_trip.c                |  1 +
+> >   15 files changed, 45 insertions(+), 28 deletions(-)
 >
-> I already have a set of patches to these drivers in my tree for v6.6, in
-> their current location.
+> Applied
 
-Right.
-
->
-> I'm afraid I am unable to see how we're going to handle the merge
-> conflict you're going to create in linux-next. Perhaps you're proposing
-> to just never publish Ulf's patches to linux-next?
->
-> By me merging the immutable patch 1 and the qcom-patch, the conflicts
-> would be minimal, and except for the genpd/Makefile entirely handled by
-> me.
-
-If you would merge the immutable branch containing the complete
-series, that should work too, rather than just patch1, right?
-
-As a heads up, I am planning to send the pull request with the v2
-series tomorrow, allowing a few more acks to arrive. At that point I
-will announce the immutable branch too.
-
-Kind regards
-Uffe
+OK
