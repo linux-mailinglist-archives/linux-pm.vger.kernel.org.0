@@ -2,56 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C42751717
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 06:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F975751734
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 06:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjGMEB5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 00:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S233771AbjGMEJ6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 00:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233764AbjGMEBu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 00:01:50 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CAB210C
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 21:01:46 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-553ad54d3c6so223230a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 21:01:46 -0700 (PDT)
+        with ESMTP id S233777AbjGMEJf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 00:09:35 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE72D2737
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 21:09:22 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1b06ea7e7beso244569fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Jul 2023 21:09:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689220905; x=1691812905;
+        d=linaro.org; s=google; t=1689221361; x=1691813361;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=abCHUQktP5MJunGBbFxiEtMxCTOfDURCs+9p52JRh/8=;
-        b=HjK9iHX7wfTwt0WHdtpjWucYj2hidccMYbEbfsz2HaytzyZOvXzt78mua0lgl5IlIa
-         4n8pR0Ervv3ZNPQW0aiaotNEgrc8G9P7ubFkK2w6+uaoh03we3rfB9S9ynz9zWoOuOEz
-         lHkjkcidb1S9n5aecE1dD3vQEn9ynCHjjzLt0qGaEmQIz7BNLbOBxS0+eHcqJmGfAjN+
-         4x7A3nxiUvKyReshFuNjqmmRv5Pt09QZeyl8M7Jk6c4UzSh5ofl0w0VS8yDOH9hcFT0g
-         qHkL9jM9Syo7TkgngMA20/WvY1YNhHhCK6Px0eOGJ6rLaX45fFjBLShWD0A8YzBmFN+x
-         uHLw==
+        bh=6C1hFH1e1r14+LlLoW2U5T6jLyfkGUaKnsim50K84rk=;
+        b=MHk1ZLmI+NLEzwdzzXFJ2jjDX0NfoPhZMypbHUVS5rPsQUoutqeC37UymQQ2KZVbvw
+         y2FtVRnCNBZs0xLnERTZMH4wcoW9RnQv6EJ6TKI6g3bmoxZw6MuMKg7K0y6PPBNloVJI
+         KsDVSpgVpErLhM1X1m1JHigX65HcwWsMPBTGZG4AoRK6E15HwzyPfMIZbiflH0OZS4md
+         C0HHVu63WL2fwlqCv6wvAe69E3kVdpvwmvpeZ8v9A1oDy569bACXor3gBJgekbT+evjF
+         9qlEliA415d2cixtzugl6FUOQeQxXrVUfDzxEkF+1LzD+YTQx/QS5oU5O488h+QhdzwR
+         SObw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689220905; x=1691812905;
+        d=1e100.net; s=20221208; t=1689221361; x=1691813361;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=abCHUQktP5MJunGBbFxiEtMxCTOfDURCs+9p52JRh/8=;
-        b=Un+uaQZbT6ysUH3tYFTs5X7/UcwGZdbpaNdAmFl+V9Zk4TTqizY/cI1LQ/TUed+7bm
-         cqNIFknkzRY0zg2LBceJodia8kKS/yjsQ4HVtoYhzrOLufRMRN86H4LUNaDZfVP8+bWs
-         ObJui20v6r4AcMw4QiEPtH8aVzlhLTy2bek2UqMytynnIc0zjk4WhDON+TxxmAK2EbWG
-         R9dljONQ322fZCjkgFoTPtVHNNhJehMeRuQ0vmpBeHqlr88eZJbfHYrzSKXn3q4NBZ5M
-         oODAKiR4fcfb0maNHnQZg4VHkfdTME2dZV66k4JROH5hm78elRXH/HGNO2Yt2Wy6btWM
-         WYCg==
-X-Gm-Message-State: ABy/qLaAQR+Z9pf65XnXFRQ3v9wj6fIfdEk9MnsF/+48JtBDTWqz9ePj
-        QE+qugJ5vivQ7K4jS+PmER0gSw==
-X-Google-Smtp-Source: APBJJlFilkt4vdM3RaaiQYzF3nbBwT8MsRIDTapNiyPOosqYEeusiwuW4IQKRXYE04xw400mySQ6pg==
-X-Received: by 2002:a17:902:c40c:b0:1b9:f7dc:b4f6 with SMTP id k12-20020a170902c40c00b001b9f7dcb4f6mr395931plk.44.1689220905312;
-        Wed, 12 Jul 2023 21:01:45 -0700 (PDT)
+        bh=6C1hFH1e1r14+LlLoW2U5T6jLyfkGUaKnsim50K84rk=;
+        b=WJ9/3Bv9N1gz9v5btGrojYWmAkInhgfNGTNlVnFkp+YlXYNMu3CeYi/j1FoIv9bqpx
+         PYH4PBOlWzSmJhKLAT1wYOknJigp+qDaJTrcrd8asuDAxjGKXqM4PdGohQeZJ7+3t8ma
+         0srFK/9TRV2Vfw7WPQstChA962XUBN/PQGVsPDDHQU1Ry/GNm86UklyzSspAywcn8zpZ
+         uOJUh3WzxI5RM0NC/fX9QJQKR/DNoSyRjGUVTD6Dzm/krBN7a+wVhroNlOd4akMGFw25
+         v91rZzkD+Qv25eNvYYZus09spJJ0B3wjhFKHmnMfHoGN7Z03RiwFD1STS4IhfdCTiyv/
+         BzgA==
+X-Gm-Message-State: ABy/qLZ2mVE1ED7k7oAOOyuwr+bBKwenDIkXx4QMfj/jH5oYQhGNiux0
+        oqJTsRrbCDx9Tv1R+uQZHI22qA==
+X-Google-Smtp-Source: APBJJlHltuR/N+6Ns0BpUwIbzkwv42caxHmZintv/YBkjLmokXkXL5Q/QOp+ih2yXtk7i+F4MR8pIg==
+X-Received: by 2002:a05:6870:1fc8:b0:1b0:89e0:114f with SMTP id gp8-20020a0568701fc800b001b089e0114fmr713337oac.31.1689221361112;
+        Wed, 12 Jul 2023 21:09:21 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id c15-20020a170902cb0f00b001ae469ca0c0sm4771592ply.245.2023.07.12.21.01.44
+        by smtp.gmail.com with ESMTPSA id f12-20020a17090ac28c00b00262ff206931sm10788288pjt.42.2023.07.12.21.09.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Jul 2023 21:01:44 -0700 (PDT)
-Date:   Thu, 13 Jul 2023 09:31:42 +0530
+        Wed, 12 Jul 2023 21:09:20 -0700 (PDT)
+Date:   Thu, 13 Jul 2023 09:39:18 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, andersson@kernel.org,
         konrad.dybcio@linaro.org, robh+dt@kernel.org,
@@ -63,15 +64,17 @@ Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH 10/14] scsi: ufs: core: Add OPP support for scaling
- clocks and regulators
-Message-ID: <20230713040142.3nsrzezvi2hsp52e@vireshk-i7>
+Subject: Re: [PATCH 11/14] scsi: ufs: host: Add support for parsing OPP
+Message-ID: <20230713040918.jnf5oqiwymrdnrmq@vireshk-i7>
 References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <20230712103213.101770-11-manivannan.sadhasivam@linaro.org>
+ <20230712103213.101770-14-manivannan.sadhasivam@linaro.org>
+ <e6a5129a-db07-977d-2ecd-328a52cbcdc0@linaro.org>
+ <20230712163406.GG102757@thinkpad>
+ <CAA8EJpovHr1qxepVprk6UvnhKe+nu4VuziyKKgjV3UzommFz6g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230712103213.101770-11-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <CAA8EJpovHr1qxepVprk6UvnhKe+nu4VuziyKKgjV3UzommFz6g@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -82,23 +85,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12-07-23, 16:02, Manivannan Sadhasivam wrote:
-> +static int ufshcd_opp_set_rate(struct ufs_hba *hba, unsigned long freq)
-> +{
-> +	struct dev_pm_opp *opp;
-> +
-> +	opp = dev_pm_opp_find_freq_floor_indexed(hba->dev,
-> +						 &freq, 0);
-> +	if (IS_ERR(opp))
-> +		return PTR_ERR(opp);
-> +
-> +	dev_pm_opp_put(opp);
+On 12-07-23, 19:48, Dmitry Baryshkov wrote:
+> On Wed, 12 Jul 2023 at 19:34, Manivannan Sadhasivam
+> <manivannan.sadhasivam@linaro.org> wrote:
+> > On Wed, Jul 12, 2023 at 04:15:12PM +0300, Dmitry Baryshkov wrote:
+> > > On 12/07/2023 13:32, Manivannan Sadhasivam wrote:
 
-You can't free the OPP while you are still using it :)
+> > > > +static int ufshcd_opp_config_clks(struct device *dev, struct opp_table *opp_table,
+> > > > +                             struct dev_pm_opp *opp, void *data,
+> > > > +                             bool scaling_down)
+> > > > +{
+> > > > +   struct ufs_hba *hba = dev_get_drvdata(dev);
+> > > > +   struct list_head *head = &hba->clk_list_head;
+> > > > +   struct ufs_clk_info *clki;
+> > > > +   unsigned long freq;
+> > > > +   u8 idx = 0;
+> > > > +   int ret;
+> > > > +
+> > > > +   list_for_each_entry(clki, head, list) {
+> > > > +           if (!IS_ERR_OR_NULL(clki->clk)) {
+> > > > +                   freq = dev_pm_opp_get_freq_indexed(opp, idx++);
+> > > > +
+> > > > +                   /* Do not set rate for clocks having frequency as 0 */
+> > > > +                   if (!freq)
+> > > > +                           continue;
+> > >
+> > > Can we omit these clocks from the opp table? I don't think they serve any
+> > > purpose.
+> > >
+> >
+> > No, we cannot. OPP requires the clocks and opp-hz to be of same length.
 
-> +
-> +	return dev_pm_opp_set_opp(hba->dev, opp);
-> +}
+I am okay with having a patch for the OPP core to modify this
+behavior, as I told privately earlier.
+
+> > And we
+> > cannot omit those clocks as well since linux needs to gate control them.
+> 
+> Hmm, I thought we push the list of "interesting" clocks through
+> config->clock_names.
+
+Yes, another way to solve this would be keep the interesting clocks in
+the beginning in "clock-names" field and let the platform pass only
+those to the OPP core.
+
+> >
+> > > Maybe it would even make sense to move this function to drivers/opp then, as
+> > > it will be generic enough.
+> > >
+> >
+> > There is already a generic function available in OPP core. But we cannot use it
+> > as we need to skip setting 0 freq and that's not applicable in OPP core as
+> > discussed with Viresh offline.
+> 
+> Ack.
+
+I am okay with either of the solutions, it is for you guys to decide
+what works better for your platform.
 
 -- 
 viresh
