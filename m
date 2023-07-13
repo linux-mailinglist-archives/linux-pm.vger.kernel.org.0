@@ -2,143 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D1E7524E0
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 16:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2009C7524EF
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 16:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235118AbjGMOQV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 10:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S229454AbjGMOSZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 10:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235177AbjGMOQG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 10:16:06 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA17A30FA
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 07:15:46 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbea14700bso6696855e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 07:15:46 -0700 (PDT)
+        with ESMTP id S235135AbjGMOSL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 10:18:11 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC8A268D
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 07:18:10 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f122ff663eso1362873e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 07:18:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689257745; x=1691849745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sUgqDpBZ74sWqmYg8Ri9u/mrFE+UfDnQjDBviVPA/GM=;
-        b=M72dTklmTZEaD8bUxRCy1+B5MZeS6wQPD06zuBz5+qPSMiUIqWW/uq3EOXmhZ36rp9
-         UDbHW4N7Bdopy+shySfoH6lHrexf24cm6QxgeqWbiCdbuGUWO3CImFRH8GhDnNBfVqk4
-         ZcoQlHnFG0h839YEaNCcULGW7wUVgvI0zEB3GNafb/eHf2Lxe/g2w78FvwWd6EgPSd7w
-         g9tG4TrAW+Id9qdC1aNusbMieK6C5+JVZ0gmaQBZDAbpOFL8H8bhggqZKbCb/3qvtNE8
-         M2Jj9oIj/6C88Xw594nTgEqMjSEyS0CJsZiPLKYMnakDY4vB70pZ8buSRXwzudxY1tUD
-         ciDQ==
+        d=linaro.org; s=google; t=1689257889; x=1691849889;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ClKt2dqGr90pfJCDEIL5kBqRNqWrFunM9K2+lWl18hs=;
+        b=NAj+jbiM9Tu8MCcU1PxC+4e3LRO6omJn8LCyx/dBLFTyE8OUFBYmRF50ww0iVxvayg
+         fe1ZCuKEmCZEvhGiJ2mkjrfDfyaWlRiN5Zbncm73VFIEGrXvbwJPcUqLS7kpjE+BTf2s
+         E/NfyAdJAQkJM9jVer6opth2ysJ1JJqWwG78PwsFs4TqCbf3agpNiGrjCbTJLWArl+e+
+         7dwSvmpg89Y1qnZjsCZ5eNDuQFeLrq+0MccYzdfbOmKBvEiaxPtVYY70CJcRi+u7foIx
+         7+AHyjtgCQPqP15l5OHGXRre1KP3u7DYUWy/r7ZO+OS1GnyHiqJi35SEQhwtw5CWaEu9
+         aljg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689257745; x=1691849745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sUgqDpBZ74sWqmYg8Ri9u/mrFE+UfDnQjDBviVPA/GM=;
-        b=VZ15HaR/EALVR2MrWw5SVymLrSJY4WHfSI1Jdu6qhyor2G/FE9JvBid21z3XW4AR33
-         07Vo9x+3IbZBaEh8rM27Fkw5c6MYpRMx451sS1hPyJQ4OC8w9esctXDVFOC9f8WLaiXe
-         YXM2GSS1sras0XjSwvm2EB+53L2k8WK/RJ/ECFQZoUT8kPBlyNGeqsvUIUMSNPKDdzah
-         xd8eIrtW0/Iewt/h9OTH7s/SHJLfTfOn9pb58iwsHYk7VWS3XAAa6XcVVY9TSD6VLq+O
-         ystrRB/NAFDIWDjs/0ShtMKgTo+pJ2OVAegOHhgKzUeY+wSRjls8QMLi17aS5fd7UE1Y
-         0qvw==
-X-Gm-Message-State: ABy/qLbBurYaaE4N4z5qrY3OBJZILULFKSr2qyhu8yN1t1coGLvxF7St
-        MBqPALYGyjEwlL2PWcoaFkXzgHl4I0nKyz391Q0=
-X-Google-Smtp-Source: APBJJlGoSXGuvKHOIQI1GqBXjHPVj6v0YlmcmoK5atedfHpyJWSdsumLjEWgglcnangDwwjqixo45g==
-X-Received: by 2002:adf:e383:0:b0:314:dea:f1f8 with SMTP id e3-20020adfe383000000b003140deaf1f8mr1733806wrm.11.1689257745109;
-        Thu, 13 Jul 2023 07:15:45 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t16-20020a5d49d0000000b003143bb5ecd5sm8104610wrs.69.2023.07.13.07.15.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 07:15:44 -0700 (PDT)
-Message-ID: <c77fa256-7aec-cc3b-b487-ee5c5deb74f3@linaro.org>
-Date:   Thu, 13 Jul 2023 16:15:44 +0200
+        d=1e100.net; s=20221208; t=1689257889; x=1691849889;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ClKt2dqGr90pfJCDEIL5kBqRNqWrFunM9K2+lWl18hs=;
+        b=l4lZnKsHMDzPCuLHOY9MMsw4QSNgudUS+BIcRH2HWBCsaEiqnBxjrh+NqrtFJg8074
+         DhH7CQJyFSqwBoyXOPwNX1FrEuVgevrLV2XBu7fRutvNaen7cRe8MRjfd4eZHnmfoVGR
+         QLtYWD2niODiKpKcXGCduC9RDXqdaPwLJtOyvSjgYI3TekO9zklstmBWIVcuqd3M+AHH
+         TEOzvAyVihy8zxn/w0CieMiDgvmLPxPgtP9lOsf+V2zJC90C3SFvCNJmqh0+1T+YRdqF
+         BUtfvtm79m4uw3vE5cRM6E6SDuCme+Gi8M06XJpBEJvf0jLKFAwYglHr/Y6x9v2MjltU
+         jq0g==
+X-Gm-Message-State: ABy/qLY8TI3jXJp264JNC8ppMPrpCwilHSKFeQsA4Qc42OA4wLsX7A9R
+        RcDUqUIjfBIqFzThhYb2NVF+QQ==
+X-Google-Smtp-Source: APBJJlENcUAaIeNwgSOtgl6xNx6O2vsFm/Y12z+f41X65o7DgK13iulXHR6f0m0EzwNjn8xuzHvfaQ==
+X-Received: by 2002:ac2:5984:0:b0:4fb:82d8:994d with SMTP id w4-20020ac25984000000b004fb82d8994dmr1223532lfn.42.1689257888710;
+        Thu, 13 Jul 2023 07:18:08 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id w28-20020ac2599c000000b004fb759964a9sm1132426lfn.168.2023.07.13.07.18.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jul 2023 07:18:07 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 00/11] arm_scmi/cpufreq: Add generic performance scaling support
+Date:   Thu, 13 Jul 2023 16:17:27 +0200
+Message-Id: <20230713141738.23970-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/4] One more step to the thermal zone structure
- encapsulation
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-pm@vger.kernel.org, thierry.reding@gmail.com,
-        linux-kernel@vger.kernel.org, srinivas.pandruvada@linux.intel.com
-References: <20230707203731.848188-1-daniel.lezcano@linaro.org>
- <82b2d4dc-4583-925a-9e3c-77ae30d0d261@linaro.org>
- <CAJZ5v0iUyPjsyfcE6MB1gqeRvb8aM0d6TsrB1Oehw4p58SnFYQ@mail.gmail.com>
- <032bda42-ba99-c207-c30d-a5f69bd10095@linaro.org>
- <CAJZ5v0hvbKhqYu6epmr+vQ9xMe0CR3KWESjBRBGzaVxzwCLG3w@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hvbKhqYu6epmr+vQ9xMe0CR3KWESjBRBGzaVxzwCLG3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/07/2023 15:02, Rafael J. Wysocki wrote:
-> On Thu, Jul 13, 2023 at 2:24 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> On 13/07/2023 13:30, Rafael J. Wysocki wrote:
->>> On Thu, Jul 13, 2023 at 11:33 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 07/07/2023 22:37, Daniel Lezcano wrote:
->>>>> The series provides more changes to self-encapsulate the thermal zone device
->>>>> structure in order to protect wild accesses to the thermal zone device
->>>>> internals, especially the trip points and the locks.
->>>>>
->>>>> The first patch adds a macro to warn at compilation time if the
->>>>> thermal_core.h is included in a file not belonging to the thermal core
->>>>> code. One warning will happen with the nvidia drivers but this is in
->>>>> the way to be solved.
->>>>>
->>>>> The second patch reorders the headers inclusion in the core code.
->>>>>
->>>>> The next patches makes the int340x drivers to use the thermal trip
->>>>> update above and the different accessors for thermal zone structure.
->>>>>
->>>>> Daniel Lezcano (4):
->>>>>      thermal/core: Hardening the self-encapsulation
->>>>>      thermal/core: Reorder the headers inclusion
->>>>>      thermal/drivers/int3400: Use thermal zone device wrappers
->>>>>      thermal/drivers/int340x: Do not check the thermal zone state
->>>>>
->>>>>     drivers/thermal/gov_bang_bang.c               |  1 +
->>>>>     drivers/thermal/gov_fair_share.c              |  1 +
->>>>>     drivers/thermal/gov_power_allocator.c         |  7 +--
->>>>>     drivers/thermal/gov_step_wise.c               |  1 +
->>>>>     drivers/thermal/gov_user_space.c              |  1 +
->>>>>     .../intel/int340x_thermal/int3400_thermal.c   | 44 +++++++++----------
->>>>>     drivers/thermal/thermal_acpi.c                |  1 +
->>>>>     drivers/thermal/thermal_core.c                |  7 +--
->>>>>     drivers/thermal/thermal_core.h                |  4 ++
->>>>>     drivers/thermal/thermal_helpers.c             |  1 +
->>>>>     drivers/thermal/thermal_hwmon.c               |  1 +
->>>>>     drivers/thermal/thermal_netlink.c             |  1 +
->>>>>     drivers/thermal/thermal_of.c                  |  1 +
->>>>>     drivers/thermal/thermal_sysfs.c               |  1 +
->>>>>     drivers/thermal/thermal_trip.c                |  1 +
->>>>>     15 files changed, 45 insertions(+), 28 deletions(-)
->>>>
->>>> Applied
->>
->> Sorry, I did not think you may wanted pull them in.
->>
->> I can drop them from the tree if you prefer?
-> 
-> Let me apply them directly.
+Changes in v2:
+	- Split up the series, to get the basic support in place as the first
+	step. The part that remains is the integration with the OPP library, to
+	allow consumer drivers to change performance level using the OPP lib.
+	- Re-based on top v6.5-rc1.
+	- Other changes will be described for each patch.
 
-Ok
+The current SCMI performance scaling support is limited to cpufreq. This series
+extends the support, so it can be used for all kind of devices and not only for
+CPUs.
+
+The changes are spread over a couple of different subsystems, although the
+changes that affects the other subsystems than the arm_scmi directory are
+mostly smaller. The series is based upon v6.5-rc1.
+
+Note that, I am runing this on the Qemu virt platform with Optee running an SCMI
+server. If you want some more details about my test setup, I am certainly open
+to share that with you!
+
+Looking forward to your feedback!
+
+Kind regards
+Ulf Hansson
+
+
+Ulf Hansson (11):
+  firmware: arm_scmi: Extend perf protocol ops to get number of domains
+  firmware: arm_scmi: Extend perf protocol ops to get information of a
+    domain
+  cpufreq: scmi: Prepare to move OF parsing of domain-id to cpufreq
+  firmware: arm_scmi: Align perf ops to use domain-id as in-parameter
+  firmware: arm_scmi: Drop redundant ->device_domain_id() from perf ops
+  cpufreq: scmi: Avoid one OF parsing in scmi_get_sharing_cpus()
+  PM: domains: Allow genpd providers to manage OPP tables directly by
+    its FW
+  dt-bindings: firmware: arm,scmi: Extend bindings for protocol@13
+  cpufreq: scmi: Add support to parse domain-id using
+    #power-domain-cells
+  firmware: arm_scmi: Add the SCMI performance domain
+  cpufreq: scmi: Drop redundant ifdef in scmi_cpufreq_probe()
+
+ .../bindings/firmware/arm,scmi.yaml           |  11 +-
+ drivers/base/power/domain.c                   |  11 +-
+ drivers/cpufreq/scmi-cpufreq.c                |  48 ++++--
+ drivers/firmware/arm_scmi/Kconfig             |  12 ++
+ drivers/firmware/arm_scmi/Makefile            |   1 +
+ drivers/firmware/arm_scmi/perf.c              |  60 ++++---
+ drivers/firmware/arm_scmi/scmi_perf_domain.c  | 155 ++++++++++++++++++
+ include/linux/pm_domain.h                     |   5 +
+ include/linux/scmi_protocol.h                 |  18 +-
+ 9 files changed, 262 insertions(+), 59 deletions(-)
+ create mode 100644 drivers/firmware/arm_scmi/scmi_perf_domain.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
