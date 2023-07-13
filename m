@@ -2,106 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5380E7525F3
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 17:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A357527AB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 17:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjGMPBa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 11:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S231880AbjGMPsJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 11:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232422AbjGMPB1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 11:01:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDCF2706;
-        Thu, 13 Jul 2023 08:01:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S235107AbjGMPrz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 11:47:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740A0270D;
+        Thu, 13 Jul 2023 08:47:52 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D247618C5;
-        Thu, 13 Jul 2023 15:01:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99DE6C433C9;
-        Thu, 13 Jul 2023 15:01:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689260484;
-        bh=sfmiO7castT7ell5jqLJUhNTWtiJ35JhwDwk7KkRsoA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NelBhBDYU1VCxkGX+R4lWxNyD6GFU7dn8CYivAJvkjrp/4IbkoEXJT1Izk7xFLer6
-         XWQKXcUa4TxULl3Asd88+ui4GPlflFcszX8oc/7YRkqc6I+YfVmje20ShgrRI36udW
-         4thM3nbKxciLFpFegF9ryWOETfAwqzzLLKvwgUiZr0O+UmRXIGikFkSc/t0XYKFUjZ
-         ZDvn2gwJJy2JikDj4e84VBfyEoKwQXTk/5dXe7cO+YbIeg8bxs8SYLpsq9IPPE/H9K
-         CZ9j8s7Y7yoEw/JGVhqpecmvDo1vWOwe/HMZK7yNbyduZUoisVPPdQwEC9auC2awe0
-         jPbmfm79S692w==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1qJxor-0007vo-0y;
-        Thu, 13 Jul 2023 17:01:25 +0200
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>, stable@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: [PATCH 3/3] serial: qcom-geni: drop bogus runtime pm state update
-Date:   Thu, 13 Jul 2023 16:57:41 +0200
-Message-ID: <20230713145741.30390-4-johan+linaro@kernel.org>
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 990CB6607048;
+        Thu, 13 Jul 2023 16:47:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689263270;
+        bh=NmZWSJBtJogmZ1XmFkqp7N/SRJ1aRoSmIrbWDGiL4Yo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TZMD09Y3AycsOcBdEma+Wp2v2dnejJbZ/jERjnsTI/rEa0iyRmq4hPzm4atzRgWxd
+         4HQWF+/xlBagQDvhN5/5cWQxxuoYvSmZwG5YAh4fEHmA8xdB7Zbx+uEi8AanCl0QhT
+         z4WOQ3o0UCE/l0weymA1twrCVYiDzDkST3X7HXNBV6yBxJP9ILH41reEcLC0gZ7UJs
+         r4szl5NTX/NAOBTuld9nrf0onxW5NsxvjZlybR9O1/p8c4ue1SgjIcwN22fUZrqT6l
+         GoURnubugZo2c62BYcniSpmDY/+m+LK5t0CerzDnDYd1tmbxegBch9dJtvcLwj0B42
+         SoZo5oDDxcFkQ==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yangtao Li <frank.li@vivo.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH v2] thermal/drivers/mediatek/lvts_thermal: Make readings valid in filtered mode
+Date:   Thu, 13 Jul 2023 11:42:37 -0400
+Message-ID: <20230713154743.611870-1-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230713145741.30390-1-johan+linaro@kernel.org>
-References: <20230713145741.30390-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The runtime PM state should not be changed by drivers that do not
-implement runtime PM even if it happens to work around a bug in PM core.
+Currently, when a controller is configured to use filtered mode, thermal
+readings are valid only about 30% of the time.
 
-With the wake irq arming now fixed, drop the bogus runtime PM state
-update which left the device in active state (and could potentially
-prevent a parent device from suspending).
+Upon testing, it was noticed that lowering any of the interval settings
+resulted in an improved rate of valid data. The same was observed when
+decreasing the number of samples for each sensor (which also results in
+quicker measurements).
 
-Fixes: f3974413cf02 ("tty: serial: qcom_geni_serial: Wakeup IRQ cleanup")
-Cc: stable@vger.kernel.org      # 5.6
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Cc: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Retrying the read with a timeout longer than the time it takes to
+resample (about 344us with these settings and 4 sensors) also improves
+the rate.
+
+Lower all timing settings to the minimum, configure the filtering to
+single sample, and poll the measurement register for at least one period
+to improve the data validity on filtered mode.  With these changes in
+place, out of 100000 reads, a single one failed, ie 99.999% of the data
+was valid.
+
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
 ---
- drivers/tty/serial/qcom_geni_serial.c | 7 -------
- 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 88ed5bbe25a8..b825b05e6137 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1681,13 +1681,6 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
+Changes in v2:
+- Added macros for the wait and timeout times (and in the process made the wait
+  200us instead of 240us, just to simplify, gives the same result)
+- Rebased on thermal/bleeding-edge (since the
+  "thermal/drivers/mediatek/lvts_thermal: Fixes to the interrupt handling"
+  series was merged)
+
+ drivers/thermal/mediatek/lvts_thermal.c | 19 ++++++++++++-------
+ 1 file changed, 12 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index ea89b29ffe5f..1a3cb118ff32 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -58,11 +58,11 @@
+ #define LVTS_PROTTC(__base)		(__base + 0x00CC)
+ #define LVTS_CLKEN(__base)		(__base + 0x00E4)
  
--	/*
--	 * Set pm_runtime status as ACTIVE so that wakeup_irq gets
--	 * enabled/disabled from dev_pm_arm_wake_irq during system
--	 * suspend/resume respectively.
--	 */
--	pm_runtime_set_active(&pdev->dev);
--
- 	if (port->wakeup_irq > 0) {
- 		device_init_wakeup(&pdev->dev, true);
- 		ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
+-#define LVTS_PERIOD_UNIT			((118 * 1000) / (256 * 38))
+-#define LVTS_GROUP_INTERVAL			1
+-#define LVTS_FILTER_INTERVAL		1
+-#define LVTS_SENSOR_INTERVAL		1
+-#define LVTS_HW_FILTER				0x2
++#define LVTS_PERIOD_UNIT			0
++#define LVTS_GROUP_INTERVAL			0
++#define LVTS_FILTER_INTERVAL		0
++#define LVTS_SENSOR_INTERVAL		0
++#define LVTS_HW_FILTER				0x0
+ #define LVTS_TSSEL_CONF				0x13121110
+ #define LVTS_CALSCALE_CONF			0x300
+ #define LVTS_MONINT_CONF			0x8300318C
+@@ -86,6 +86,9 @@
+ #define LVTS_MSR_IMMEDIATE_MODE		0
+ #define LVTS_MSR_FILTERED_MODE		1
+ 
++#define LVTS_MSR_READ_TIMEOUT_US	400
++#define LVTS_MSR_READ_WAIT_US		(LVTS_MSR_READ_TIMEOUT_US / 2)
++
+ #define LVTS_HW_SHUTDOWN_MT8195		105000
+ 
+ #define LVTS_MINIMUM_THRESHOLD		20000
+@@ -268,6 +271,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
+ 	void __iomem *msr = lvts_sensor->msr;
+ 	u32 value;
++	int rc;
+ 
+ 	/*
+ 	 * Measurement registers:
+@@ -280,7 +284,8 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	 * 16	: Valid temperature
+ 	 * 15-0	: Raw temperature
+ 	 */
+-	value = readl(msr);
++	rc = readl_poll_timeout(msr, value, value & BIT(16),
++				LVTS_MSR_READ_WAIT_US, LVTS_MSR_READ_TIMEOUT_US);
+ 
+ 	/*
+ 	 * As the thermal zone temperature will read before the
+@@ -293,7 +298,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	 * functionning temperature and directly jump to a system
+ 	 * shutdown.
+ 	 */
+-	if (!(value & BIT(16)))
++	if (rc)
+ 		return -EAGAIN;
+ 
+ 	*temp = lvts_raw_to_temp(value & 0xFFFF);
 -- 
 2.41.0
 
