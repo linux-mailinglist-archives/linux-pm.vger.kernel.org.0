@@ -2,58 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5F375145F
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 01:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF1275157D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 02:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjGLXSO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Jul 2023 19:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S232626AbjGMApN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Jul 2023 20:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233505AbjGLXSL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 19:18:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0918110D4;
-        Wed, 12 Jul 2023 16:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689203891; x=1720739891;
-  h=date:from:to:cc:subject:message-id;
-  bh=2Ounp3OzKIAfcKRbE0X+fVZZzuJIsvfMNvBBRuKxW5U=;
-  b=da9HLBTWGcp+tfo3KwW7SKVJwJRZlYTlGtAFR+dswaF3YCywr+BW8XH6
-   Nv4m7b9LJv4hxC9fPMeO2JzF4t1lqvqJDw9c4pBeJonHM5h8M9X/dvuW4
-   AFPnPyoi7x04TM7PAl2f+fxZoiYRn46kPlq91BYRij6CPMJUdsK/YdU4T
-   KvUIBbGs203YQh7ERk7xG/2R5yKKeUpC3DbSAFidTF+VF7gbXfKzPtBDh
-   4lyX6k35Ws0kCCajy5sGAYtyOvBsHU5zM9hlQnlttxWZ5u1PqGaWy2z9q
-   v+Nd7p7G6n3pyw0e5ikMVd7HzguJ3NkDO10BBCsGBJDFEPDv9WkqvHQ8c
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="354944272"
-X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
-   d="scan'208";a="354944272"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jul 2023 16:18:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10769"; a="725061987"
-X-IronPort-AV: E=Sophos;i="6.01,200,1684825200"; 
-   d="scan'208";a="725061987"
-Received: from lkp-server01.sh.intel.com (HELO c544d7fc5005) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Jul 2023 16:18:08 -0700
-Received: from kbuild by c544d7fc5005 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qJj60-00062G-15;
-        Wed, 12 Jul 2023 23:18:08 +0000
-Date:   Thu, 13 Jul 2023 07:17:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- f56f47fd8f54ce29b240450f15d09bc13c76171a
-Message-ID: <202307130753.V77k5rl2-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        with ESMTP id S229471AbjGMApM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Jul 2023 20:45:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE321989;
+        Wed, 12 Jul 2023 17:45:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17AE3619E0;
+        Thu, 13 Jul 2023 00:45:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17CCC433C7;
+        Thu, 13 Jul 2023 00:45:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689209110;
+        bh=yFR665h9HRQk4pzANvQ3qHMfUBBBNqtYA9IDmea3bl4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h6Mhpi+vhSR90aqCx0cW1C4/k+xrLy1DIqs9jKvP11Np+NlifitcfNmKVxrp9qYsX
+         Nt2XBI02n6ugLfWwPQM3Jg5wsX9O/5rNAYmGx4y851kRmvhE2hp58kp0vUCaFG/2oi
+         oa1ODPQ93bKz+pl8HlRWxcsrydbnoKcPVQw+C3P2GIe6iK33gaLO+SgDDe/Q82lXiS
+         /gAZGF522pGGnPQMMMLEikQuWsLqbT5zZUyV7I1ApT4UziL6/gBr8U4FtBqyjvf+VF
+         dvWOMGrnq3rYzcqMa1Dy3d/IP9sgn2pUoqY0dBGfGdpM4/FpshuYYwuzM8b5djfOEm
+         m5IWUogCSIajw==
+Date:   Wed, 12 Jul 2023 17:48:41 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Olof Johansson <olof@lixom.net>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 03/18] soc: amlogic: Move power-domain drivers to the
+ genpd dir
+Message-ID: <sxyavxzvezu5dorysn3nmwq7ew5xdclpm7rg474cifnnzy54mb@jljrhirrir2i>
+References: <20230707140434.723349-1-ulf.hansson@linaro.org>
+ <20230707140434.723349-4-ulf.hansson@linaro.org>
+ <0c8938a9-7a26-bf97-51ee-0c271901ec21@linaro.org>
+ <CAPDyKFrOye96GyHS0tiTQ02Ve5S6Crtk8=bMsRS9Ljj=h5-nWQ@mail.gmail.com>
+ <1496b9c1-289a-c354-f0ae-e14fd4c9bcfa@linaro.org>
+ <CAPDyKFr7Mqy5bisLcxcA_iEGWqL8SFt2mDDng7zYEaTD1vNisA@mail.gmail.com>
+ <deyyt5r2wkxo7ily434gl3wudls2sbinkmnehssqshwnbzmlwf@lmqskj6zwfu2>
+ <CAPDyKFoRtEXTGQkNzGza-sS_j1ajGmjtCTaoPB7PXVDE2bS0tQ@mail.gmail.com>
+ <2ef84fb8-b5eb-4c9a-b8a1-0c5f33e7f572@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ef84fb8-b5eb-4c9a-b8a1-0c5f33e7f572@app.fastmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,128 +69,59 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f56f47fd8f54ce29b240450f15d09bc13c76171a  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On Mon, Jul 10, 2023 at 02:45:12PM +0200, Arnd Bergmann wrote:
+> On Mon, Jul 10, 2023, at 14:37, Ulf Hansson wrote:
+> > On Sun, 9 Jul 2023 at 04:21, Bjorn Andersson <andersson@kernel.org> wrote:
+> >> On Fri, Jul 07, 2023 at 05:27:39PM +0200, Ulf Hansson wrote:
+> >
+> > If I understand correctly, you are suggesting that each platform
+> > maintainer should merge the immutable branch with patch1 - and that I
+> > should send the patches (based on the immutable branch) to each of the
+> > platform maintainers to manage. Instead of one pull request with
+> > everything directly to Arnd, right?
+> >
 
-elapsed time: 722m
+That's what I suggest, yes.
 
-configs tested: 108
-configs skipped: 9
+> > This still means that Arnd will have to resolve the conflicts as the
+> > pull requests arrive in his inbox.
+> >
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Yes, we will have N maintainers modifying drivers/genpd/Makefile, all
+adding their single obj-y line. A quite trivial conflict to manage.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r013-20230712   gcc  
-arc                  randconfig-r036-20230712   gcc  
-arc                  randconfig-r043-20230712   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                                 defconfig   gcc  
-arm                           h3600_defconfig   gcc  
-arm                       imx_v6_v7_defconfig   gcc  
-arm                  randconfig-r003-20230712   clang
-arm                  randconfig-r046-20230712   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r002-20230712   gcc  
-arm64                randconfig-r005-20230712   gcc  
-arm64                randconfig-r015-20230712   clang
-csky                                defconfig   gcc  
-hexagon              randconfig-r041-20230712   clang
-hexagon              randconfig-r045-20230712   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230712   gcc  
-i386         buildonly-randconfig-r005-20230712   gcc  
-i386         buildonly-randconfig-r006-20230712   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230712   gcc  
-i386                 randconfig-i002-20230712   gcc  
-i386                 randconfig-i003-20230712   gcc  
-i386                 randconfig-i004-20230712   gcc  
-i386                 randconfig-i005-20230712   gcc  
-i386                 randconfig-i006-20230712   gcc  
-i386                 randconfig-i011-20230712   clang
-i386                 randconfig-i012-20230712   clang
-i386                 randconfig-i013-20230712   clang
-i386                 randconfig-i014-20230712   clang
-i386                 randconfig-i015-20230712   clang
-i386                 randconfig-i016-20230712   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r022-20230712   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                 randconfig-r034-20230712   clang
-nios2                               defconfig   gcc  
-nios2                randconfig-r012-20230712   gcc  
-openrisc             randconfig-r024-20230712   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r035-20230712   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r011-20230712   clang
-riscv                randconfig-r042-20230712   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r023-20230712   clang
-s390                 randconfig-r044-20230712   clang
-sh                               allmodconfig   gcc  
-sh                          rsk7201_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r033-20230712   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r025-20230712   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230712   gcc  
-x86_64       buildonly-randconfig-r002-20230712   gcc  
-x86_64       buildonly-randconfig-r003-20230712   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r006-20230712   gcc  
-x86_64               randconfig-r031-20230712   gcc  
-x86_64               randconfig-x001-20230712   clang
-x86_64               randconfig-x002-20230712   clang
-x86_64               randconfig-x003-20230712   clang
-x86_64               randconfig-x004-20230712   clang
-x86_64               randconfig-x005-20230712   clang
-x86_64               randconfig-x006-20230712   clang
-x86_64               randconfig-x011-20230712   gcc  
-x86_64               randconfig-x012-20230712   gcc  
-x86_64               randconfig-x013-20230712   gcc  
-x86_64               randconfig-x014-20230712   gcc  
-x86_64               randconfig-x015-20230712   gcc  
-x86_64               randconfig-x016-20230712   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r001-20230712   gcc  
+> > Although, I guess what you are looking for is less work for the soc/
+> > maintainers, which seems reasonable. Although, in that case, I might
+> > as well share an immutable branch with the complete series, rather
+> > than just patch1. That should help Arnd too, I think.
+> >
+> > Again, let's leave the call to Arnd on what to do.
+> 
+> I think it's much easier for me to pick up a single branch with
+> all of your patches. For platform maintainers, other changes can
+> go one of two ways:
+> 
+> - send a normal pull requests with changes against the same
+>   files, and have me take care of any conflicts where they
+>   arise. Since most of the changes are just simple file moves
+>   rather than changing file contents, 'git mergetool' handles
+>   these fine is most cases
+> 
+> - If there is a non-obvious merge, the entire genpd branch
+>   can be shared as an immutable branch, with patches for
+>   a particular platform rebased on top of that branch.
+> 
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I already have a set of patches to these drivers in my tree for v6.6, in
+their current location.
+
+I'm afraid I am unable to see how we're going to handle the merge
+conflict you're going to create in linux-next. Perhaps you're proposing
+to just never publish Ulf's patches to linux-next?
+
+By me merging the immutable patch 1 and the qcom-patch, the conflicts
+would be minimal, and except for the genpd/Makefile entirely handled by
+me.
+
+Regards,
+Bjorn
