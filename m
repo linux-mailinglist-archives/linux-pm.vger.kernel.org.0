@@ -2,106 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06470751CA9
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 11:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF28B751CDB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Jul 2023 11:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234372AbjGMJGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Jul 2023 05:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
+        id S234096AbjGMJLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Jul 2023 05:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234462AbjGMJFh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 05:05:37 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C729A30FB
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 02:04:39 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31297125334so257010f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 02:04:39 -0700 (PDT)
+        with ESMTP id S232181AbjGMJLE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Jul 2023 05:11:04 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDD82D4C
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 02:10:33 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3143b72c5ffso647155f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 13 Jul 2023 02:10:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689239078; x=1691831078;
+        d=linaro.org; s=google; t=1689239432; x=1691831432;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dU5KDiUEXkqyxb1dz2x3HHUapbhudnVUKqik8C6tDVE=;
-        b=dBd1WsIUF22756YKeYlcfQiSg5UUZ2nn+zJ4H3l3KTqOJl7Sr01C28kmD2ZhSs1dGh
-         boEnVOOrZ728+wluWVHunLyVWEdfGyUzceI+ObwQrPKv+a0Jc+r+7MUe/htY9+ovc3+X
-         awlZkv51RfM9NJWEiPe5iZl4RydZWvoWOeciRVJEuUz+XYROd5E//KRl9sI4mZrgrx53
-         KubgJEYQ7IghTzGezX406O7ROHs8ZK5L6/NZEIEavLb05mDLfDFYSr6EeFed8q0m+odF
-         qibIRMfQanAGk6O+UbXNX8EVkREtFxRfwSeRBw9iluB5wshx/YneefAfpiY8YXQt7G6M
-         KVzg==
+        bh=XznQUuiJb54uwYssnpziXtdB1g0ycFoSN01wYyxF/c0=;
+        b=FHeBakREsG4Z6rum1jL3V/EaDxVsP+vazLfvdtBwMKVlQ5rsBg2X8Es6ckTs4R1DOc
+         sS5A1ZZZz/4S3XRRFhkoZDGGO7bg1jvPazO5bo13XXJvoWdCtZczsDhI4V87qrB/EXK+
+         x+KOZuE66xkOoP8C/vJjqWPL//edg8WsgU9PXmKu7wjkBTe8qOLlqfRqVpvzCH8C3P08
+         xU92KmLZ6owDVyComAGhfeHDHd+VQtXFYE4TzSkIL4iT2g7GNIIgNN8yUIvSeXl2hF46
+         du+AeDp//Mi/i7Q81ZA98FOx00pKdhnwalFNnDBUt6LSIpSD6bgJsIZIb3WpBA7BhckA
+         qD+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689239078; x=1691831078;
+        d=1e100.net; s=20221208; t=1689239432; x=1691831432;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dU5KDiUEXkqyxb1dz2x3HHUapbhudnVUKqik8C6tDVE=;
-        b=covXZPip7C1pbk7dug6Vn+YYyNIqgmNvMgTKluFuIC29GPUy2if+gJdFewASotKJRX
-         iG5ifGxGrDIwnGjXd14nHPU5zNJc5rCKnfPES4JdTkgiOZNrHO0c5eJjsw/9vXH4ntJX
-         LAyoyxVe5tzNGcaUo2Yn+/07WIiNzcT+AXeG9HIEy2eJW00WCheFhXkv2iXjyiZkqzHq
-         uun7vLObxy2oGJsl9ZQxgBph289JxdAfgwKkKEIUjdopwKYy15X3CYooeuHCXusWUxxy
-         5MIYjeS0ce8y9U0HFEXFoxez/Rm044qXQqjQP96zrMGbuv25EpPmkP8AXcRFcQp2RA5Z
-         +dtQ==
-X-Gm-Message-State: ABy/qLagvFizhSzUmUq2R4SsST2ECPm6EQLUvTTQxV5Ez1YRUsZ1HA9a
-        AS+8YEVcy1HGPFedImp7phIj9A==
-X-Google-Smtp-Source: APBJJlHa7eA3YGzLEKLvvgvkWg8/+bqmncsrH8kSNAoE1KnD5WGcimF+bQJ6Yl3CogySwfzwhjQmbQ==
-X-Received: by 2002:adf:d0c3:0:b0:314:323b:9d3b with SMTP id z3-20020adfd0c3000000b00314323b9d3bmr3684448wrh.32.1689239077829;
-        Thu, 13 Jul 2023 02:04:37 -0700 (PDT)
+        bh=XznQUuiJb54uwYssnpziXtdB1g0ycFoSN01wYyxF/c0=;
+        b=RlyyO5L2yX6QdTb6eiBrHvbNb6M7VLBxZ6JYZ+Ep2hnsrI0mgVl4eBs6V5mLMXnytL
+         cCpwtprgI4fAhFe7SY1s0fmiGpVWEjnPfcpBr70Zht+mg28tixUpLxybXG7EDByX1wJW
+         V7ouFD6FSvEUEO6MUQHy1rOI1ca1fq+6AAJCL5WbnABuGhdks7A6Iuln7buTui1L/Nqt
+         o6jc4OCyKSU/wuiUBVeNOJRGr8uKJjISHavzhtNIssArHe9aMViNWexG8y5F0AJXsrZP
+         yBLBvS7odBfdVbNCodWoZMl6is2UjNmkl9BeYjA/wR+PBpPYxnTctLEcdW3yVn2WECzp
+         QpFw==
+X-Gm-Message-State: ABy/qLZkdCGDf3tyXVUUX6gPCMMOTf79ofwkaliU1eC/sd1QpYn/Sw05
+        0beqdmgT/xBQYganZEcOdYyeyQ==
+X-Google-Smtp-Source: APBJJlHhw9AYxg1hAv2II73+0rasYKMnkDxHEkSNwa5YORkhO8HmoSJ3UF4LYWWLNCqBqfFXl1cdyg==
+X-Received: by 2002:a05:6000:1c4:b0:314:7fb:92c2 with SMTP id t4-20020a05600001c400b0031407fb92c2mr1172184wrx.30.1689239431891;
+        Thu, 13 Jul 2023 02:10:31 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q14-20020a1cf30e000000b003fbb25da65bsm7235763wmq.30.2023.07.13.02.04.37
+        by smtp.googlemail.com with ESMTPSA id y17-20020adfee11000000b0031274a184d5sm7350195wrn.109.2023.07.13.02.10.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Jul 2023 02:04:37 -0700 (PDT)
-Message-ID: <58acd4bd-8694-9bdc-0e61-400120d8c14e@linaro.org>
-Date:   Thu, 13 Jul 2023 11:04:36 +0200
+        Thu, 13 Jul 2023 02:10:31 -0700 (PDT)
+Message-ID: <b2a5f64f-3861-6345-3c2c-acba6ed40ee2@linaro.org>
+Date:   Thu, 13 Jul 2023 11:10:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 0/6] thermal/drivers/mediatek/lvts_thermal: Fixes to
- the interrupt handling
+Subject: Re: [PATCH v1] drivers: mediatek: fix parameter check in
+ lvts_debugfs_init()
 Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Alexandre Bailon <abailon@baylibre.com>,
-        Balsam CHIHI <bchihi@baylibre.com>,
+To:     Minjie Du <duminjie@vivo.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        kernel@collabora.com, Amit Kucheria <amitk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230706153823.201943-1-nfraprado@collabora.com>
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230713042413.2519-1-duminjie@vivo.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230706153823.201943-1-nfraprado@collabora.com>
+In-Reply-To: <20230713042413.2519-1-duminjie@vivo.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/07/2023 17:37, Nícolas F. R. A. Prado wrote:
+On 13/07/2023 06:24, Minjie Du wrote:
+> Make IS_ERR() judge the debugfs_create_dir() function return
+> in lvts_debugfs_init().
 > 
-> This series fixes interrupt handling in the LVTS thermal driver. It not
-> only solves the interrupt storms currently happening, but also allows
-> the temperature monitoring interrupts to trigger when the thermal trip
-> temperature is reached.
-> 
-> This series was tested together with the MT8192 support series [1] on
-> the Spherion Chromebook (mt8192-asurada-spherion).
-> 
-> These are standalone fixes and don't depend on anything else.
-> 
-> [1] https://lore.kernel.org/all/20230530195132.2286163-1-bero@baylibre.com
+> Signed-off-by: Minjie Du <duminjie@vivo.com>
 
-Applied, thanks
+Applied (but massaged the changelog)
 
+Thanks for the fix
+
+> ---
+>   drivers/thermal/mediatek/lvts_thermal.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index b693fac2d..b46f351d1 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -190,7 +190,7 @@ static int lvts_debugfs_init(struct device *dev, struct lvts_domain *lvts_td)
+>   	int i;
+>   
+>   	lvts_td->dom_dentry = debugfs_create_dir(dev_name(dev), NULL);
+> -	if (!lvts_td->dom_dentry)
+> +	if (IS_ERR(lvts_td->dom_dentry))
+>   		return 0;
+>   
+>   	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
