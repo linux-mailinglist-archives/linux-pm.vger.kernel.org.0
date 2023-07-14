@@ -2,99 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9BC753654
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 11:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B34B7536CA
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 11:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbjGNJYF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jul 2023 05:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
+        id S234735AbjGNJky (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jul 2023 05:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234487AbjGNJYE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 05:24:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1E41FC9;
-        Fri, 14 Jul 2023 02:24:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F51A6600357;
-        Fri, 14 Jul 2023 10:24:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689326642;
-        bh=QFtwjZ7+j0imGIusFEtf/Z7au6dmUlgQo0NxyxN8Bss=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nIIB7B3dDe76meN/ttrtJJOY4QHQj+y+FRJ6a8YyZzsg35mekdmT3MjJ0xuyl2eSG
-         tHPRaRwgy8dRmQBI/fFLHLhzCSF/2iE0fhxnf0y7YYCKqyrz6wS9wEG3Sp/tx2jERJ
-         7u+IoUmb6p4iBUlGLKbPnT4Bw6cbxhCHtXAOV242zwfGyre1ceuec0aQHilvfqdeTU
-         qW49EmEv84gOBm5fBX8SSMtjI9VoWjv87pe+n2ThI2RcppT5SdZ4mqf569cB1RaWDh
-         W/XaMmckYOzENiMjaSIQHoBERaV/buSF5XMsB7leeRdGQIbygFa40mmqWk01b17D1V
-         9JM3yR2FWvnmw==
-Message-ID: <1ab4a9fb-caa4-f2c9-fbf4-d001e768dbe1@collabora.com>
-Date:   Fri, 14 Jul 2023 11:23:59 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] thermal/drivers/mediatek/lvts_thermal: Make readings
- valid in filtered mode
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     kernel@collabora.com, Chen-Yu Tsai <wenst@chromium.org>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Yangtao Li <frank.li@vivo.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20230713154743.611870-1-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230713154743.611870-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        with ESMTP id S234672AbjGNJkx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 05:40:53 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7749A12C;
+        Fri, 14 Jul 2023 02:40:52 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36E9eXDZ007302;
+        Fri, 14 Jul 2023 09:40:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=EOladUREwXyQgtzOGYpQ18+lQ8itlhY+pxWpN7ftXHI=;
+ b=myTritGK/+205UC+9wiWjYE+DFefUvx3FbXQMaWHHy/8z4NWS1ne8UYWr/mwjEs09yIY
+ VVJ1GDe+qcaxSNOUNFIec+jjiveeFXDuMAht5q++ntYVfRtQcYqsnVRK/pGAErnAMH0x
+ fr3Dh3UNV10WR4LdnLrhvsLjkp2HPyRLRZSxOkVQFjM+uLuJFlFOwnVpYCKj8Za6/7DC
+ /BL9GkZjqk0z0SsWMwWPABD+VJaIe25NpVUBgeoIsmBRxrcW38i30aD/npcT45W8Fuyb
+ JyxdPnibI+r9DlPHCEBVbBVsvvIj2tG30QhAyGTCAfSbO8XxyljRAirMaG2A0POFPcew lg== 
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ru3ke8hep-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jul 2023 09:40:42 +0000
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36E7dc6A031282;
+        Fri, 14 Jul 2023 09:40:41 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3rtpvu10j3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Jul 2023 09:40:41 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36E9edEK16581218
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Jul 2023 09:40:39 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EE68320043;
+        Fri, 14 Jul 2023 09:40:38 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A9C2220040;
+        Fri, 14 Jul 2023 09:40:35 +0000 (GMT)
+Received: from li-a1f1b24c-1ef0-11b2-a85c-b2994f3f6269.ibm.com.com (unknown [9.171.52.229])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 14 Jul 2023 09:40:35 +0000 (GMT)
+From:   Likhitha Korrapati <likhitha@linux.ibm.com>
+To:     shuah@kernel.org, trenn@suse.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
+        srikar@linux.vnet.ibm.com,
+        Likhitha Korrapati <likhitha@linux.ibm.com>,
+        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+Subject: [PATCH v3] cpupower: Fix cpuidle_set to accept only numeric values for idle-set operation.
+Date:   Fri, 14 Jul 2023 15:10:21 +0530
+Message-Id: <20230714094021.199611-1-likhitha@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7joR9lVc48FTlhKUdxduHbEMtPZn2-zI
+X-Proofpoint-ORIG-GUID: 7joR9lVc48FTlhKUdxduHbEMtPZn2-zI
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-14_04,2023-07-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307140087
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 13/07/23 17:42, Nícolas F. R. A. Prado ha scritto:
-> Currently, when a controller is configured to use filtered mode, thermal
-> readings are valid only about 30% of the time.
-> 
-> Upon testing, it was noticed that lowering any of the interval settings
-> resulted in an improved rate of valid data. The same was observed when
-> decreasing the number of samples for each sensor (which also results in
-> quicker measurements).
-> 
-> Retrying the read with a timeout longer than the time it takes to
-> resample (about 344us with these settings and 4 sensors) also improves
-> the rate.
-> 
-> Lower all timing settings to the minimum, configure the filtering to
-> single sample, and poll the measurement register for at least one period
-> to improve the data validity on filtered mode.  With these changes in
-> place, out of 100000 reads, a single one failed, ie 99.999% of the data
-> was valid.
-> 
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+For both the d and e options in 'cpupower idle_set' command, an
+atoi() conversion is done without checking if the input argument
+is all numeric. So, an atoi conversion is done on any character
+provided as input and the CPU idle_set operation continues with
+that integer value, which may not be what is intended or entirely
+correct.
 
-Good to go!
+The output of cpuidle-set before patch is as follows:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+[root@xxx cpupower]# cpupower idle-set -e 1$
+Idlestate 1 enabled on CPU 0
+[snip]
+Idlestate 1 enabled on CPU 47
 
+[root@xxx cpupower]# cpupower idle-set -e 11
+Idlestate 11 not available on CPU 0
+[snip]
+Idlestate 11 not available on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -d 12
+Idlestate 12 not available on CPU 0
+[snip]
+Idlestate 12 not available on CPU 47
+
+[root@xxx cpupower]# cpupower idle-set -d qw
+Idlestate 0 disabled on CPU 0
+[snip]
+Idlestate 0 disabled on CPU 47
+
+This patch adds a check for both d and e options in cpuidle-set.c
+to see that the idle_set value is all numeric before doing a
+string-to-int conversion using strtol().
+
+The output of cpuidle-set after the patch is as below:
+
+[root@xxx cpupower]# ./cpupower idle-set -e 1$
+Bad idle_set value: 1$. Integer expected
+
+[root@xxx cpupower]# ./cpupower idle-set -e 11
+Idlestate 11 not available on CPU 0
+[snip]
+Idlestate 11 not available on CPU 47
+
+[root@xxx cpupower]# ./cpupower idle-set -d 12
+Idlestate 12 not available on CPU 0
+[snip]
+Idlestate 12 not available on CPU 47
+
+[root@xxx cpupower]# ./cpupower idle-set -d qw
+Bad idle_set value: qw. Integer expected
+
+Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
+Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
+Tested-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
+Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
+---
+
+** changes since v1 [1] **
+
+- Addressed reviewed comments from v1.
+- Slightly reworded the commit for clarity.
+
+** changes since v2 [2] **
+
+- Addressed reviewed comments from v2.
+
+[1] https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
+[2] https://lore.kernel.org/all/20230410121054.61622-1-likhitha@linux.ibm.com/
+
+ tools/power/cpupower/utils/cpuidle-set.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/tools/power/cpupower/utils/cpuidle-set.c b/tools/power/cpupower/utils/cpuidle-set.c
+index 46158928f9ad..a551d1d4ac51 100644
+--- a/tools/power/cpupower/utils/cpuidle-set.c
++++ b/tools/power/cpupower/utils/cpuidle-set.c
+@@ -41,14 +41,6 @@ int cmd_idle_set(int argc, char **argv)
+ 			cont = 0;
+ 			break;
+ 		case 'd':
+-			if (param) {
+-				param = -1;
+-				cont = 0;
+-				break;
+-			}
+-			param = ret;
+-			idlestate = atoi(optarg);
+-			break;
+ 		case 'e':
+ 			if (param) {
+ 				param = -1;
+@@ -56,7 +48,13 @@ int cmd_idle_set(int argc, char **argv)
+ 				break;
+ 			}
+ 			param = ret;
+-			idlestate = atoi(optarg);
++			strtol(optarg, &endptr, 10);
++			if (*endptr != '\0') {
++				printf(_("Bad value: %s, Integer expected\n"), optarg);
++				exit(EXIT_FAILURE);
++			} else {
++				idlestate = atoi(optarg);
++			}
+ 			break;
+ 		case 'D':
+ 			if (param) {
+-- 
+2.31.1
 
