@@ -2,105 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 554ED753DB0
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 16:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2038B753EF4
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 17:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236075AbjGNOjw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 14 Jul 2023 10:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S234952AbjGNPe7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 14 Jul 2023 11:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235798AbjGNOjv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 10:39:51 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A244BC1;
-        Fri, 14 Jul 2023 07:39:50 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-98e1fc9d130so55767066b.0;
-        Fri, 14 Jul 2023 07:39:50 -0700 (PDT)
+        with ESMTP id S236264AbjGNPe6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 11:34:58 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CAF82D68
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jul 2023 08:34:57 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-98e2865e2f2so54696566b.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jul 2023 08:34:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689345589; x=1691937589;
+        d=1e100.net; s=20221208; t=1689348896; x=1689953696;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Uqk2kWFpKCNIHS0V3Eun0NY/W3j63YHRH1/UBNPRx40=;
-        b=l0wxbSkAh1fESKqddeMcijJa3scTgSqRyKFp5emISDGaQmOfBnK/6Yx/zDv2n6d95S
-         5MTuKyYnnDbCdBe91jzEwbvMf2SV3dUsTMKIukV7znzD+5NHZ+f1F5XYTKiuze89DZTH
-         20gklicBscJpwVH14mwYsF1DlUz1FQEXMs83rJf0GdvfHCuukZvuTVZG6LUgbCccCm1Y
-         QB2cyepUZs92wKbc5ZpC4u29X/6auoRxiwTUt2IOZmrLtDWMaYJTwgiipegd2Kmn5aCt
-         zWevuTB7fGS41YOMLPrj5YY9KIYS1o8ycwS7+9rOGxeV7ViGFyEJ/swTNGMvsoJyITTH
-         Ymzw==
-X-Gm-Message-State: ABy/qLYv+hdkb4f/96KWN5einQAYXHSAuR+h8k6AVRRuFQGLCWTqe0kO
-        D8fsriA0bHmqSrLVOxFisOkh56PYR/tAwDKJuwY=
-X-Google-Smtp-Source: APBJJlF49+bXOJw780PQQaOR/4uepS5BzQy3qzM2cgHLnsecGTO4wWEMweEjE0fJTDoer0NalhruZAbc60zTD44a8x0=
-X-Received: by 2002:a17:906:77cd:b0:994:33b2:c32d with SMTP id
- m13-20020a17090677cd00b0099433b2c32dmr3809694ejn.5.1689345588930; Fri, 14 Jul
- 2023 07:39:48 -0700 (PDT)
+        bh=9XPHBmq0TIOA1euXbS+4nIlI6UWd+FMwT1rRpO/HkvI=;
+        b=UMp6b3HOlV7NjZUhdzEwc0NmF5Z/l+64s8J8Oh1LAZ2Yv8b6tXQDI8h/XVu9QAwLV8
+         9X1GhzxHVwFfd8KX9TWpkn5w46O9fam1qdk8KZDCO3qyKwTLwqH0JNE2BIhL8gO2tA7n
+         QMkWkk17eo9k2eMUdJHXrZoYcZ/fyRHnKVfxLTOvf6G9ciunkWM6kWIyM+Mt/HTUJ4UB
+         +dcftvsTxTHgFCLuSDGujw9cfz+79KqIa9WKH/Ha55gCKTPvsu1v612vlI2XGnewF0hm
+         R6VYybIMVUKkhCnFWEve6CT/sL10jToQWaOagbQXwk9Yeh41mRzaItOdifmAhWZIkLkJ
+         gbMQ==
+X-Gm-Message-State: ABy/qLYFYcma/goJeNvCdtrY221LecU67sBOA4vM2j1XQWjzeFrgVwhw
+        m9QBgx2vDljbrbDF6AukbSlB9a2Mnr5RkMmlcqM=
+X-Google-Smtp-Source: APBJJlFwbvGBRVFmdJuNmA1fpDG64V/vruae2q24a7xuxg3CjpJsiW+esXlnq+WAHZPh492HktuYUdfFwEczUPm2Rdc=
+X-Received: by 2002:a17:906:2205:b0:993:d0e1:f308 with SMTP id
+ s5-20020a170906220500b00993d0e1f308mr3929072ejs.2.1689348895862; Fri, 14 Jul
+ 2023 08:34:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230704050238.712223-1-rui.zhang@intel.com> <CAJZ5v0gZz1RCqp=Do0RTOCwPvWW9E_SQSyFjuRVuBkR9jxCJjw@mail.gmail.com>
- <a6d032df2b664950a63518c83a7db3f3@AcuMS.aculab.com>
-In-Reply-To: <a6d032df2b664950a63518c83a7db3f3@AcuMS.aculab.com>
+References: <20230710093100.918337-1-dedekind1@gmail.com> <20230710093100.918337-4-dedekind1@gmail.com>
+In-Reply-To: <20230710093100.918337-4-dedekind1@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 14 Jul 2023 16:39:35 +0200
-Message-ID: <CAJZ5v0hu2Gimbxv+RSQVRyLXOPSCNSzQDdneS8ig4zn63VkUKA@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl_tpmi: Fix a sparse warning
-To:     David Laight <David.Laight@aculab.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lkp@intel.com" <lkp@intel.com>
+Date:   Fri, 14 Jul 2023 17:34:43 +0200
+Message-ID: <CAJZ5v0hb9ns2yZ==n83viqniCr4QqupY+FKR2Dy0jE0Obahq_g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] intel_idle: rename 'intel_idle_hlt_irq_on()'
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 3:34 PM David Laight <David.Laight@aculab.com> wrote:
+On Mon, Jul 10, 2023 at 11:31 AM Artem Bityutskiy <dedekind1@gmail.com> wrote:
 >
-> From: Rafael J. Wysocki
-> > Sent: 11 July 2023 19:14
-> ...
-> > On Tue, Jul 4, 2023 at 7:02 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> > >
-> > > Fix a sparse warning in intel_rapl_tpmi driver.
-> > >
-> > > ../drivers/powercap/intel_rapl_tpmi.c:141:41: sparse: warning: incorrect type in initializer
-> > (different address spaces)
-> > > ../drivers/powercap/intel_rapl_tpmi.c:141:41: sparse:    expected unsigned long long [usertype]
-> > *tpmi_rapl_regs
-> > > ../drivers/powercap/intel_rapl_tpmi.c:141:41: sparse:    got void [noderef] __iomem *
-> > >
-> > > Fixes: 9eef7f9da928 ("powercap: intel_rapl: Introduce RAPL TPMI interface driver")
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes: https://lore.kernel.org/oe-kbuild-all/202307031405.dy3druuy-lkp@intel.com/
-> > > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> > > ---
-> > >  drivers/powercap/intel_rapl_tpmi.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/powercap/intel_rapl_tpmi.c b/drivers/powercap/intel_rapl_tpmi.c
-> > > index 4f4f13ded225..05f664a096ab 100644
-> > > --- a/drivers/powercap/intel_rapl_tpmi.c
-> > > +++ b/drivers/powercap/intel_rapl_tpmi.c
-> > > @@ -138,7 +138,7 @@ static int parse_one_domain(struct tpmi_rapl_package *trp, u32 offset)
-> > >         enum tpmi_rapl_register reg_index;
-> > >         enum rapl_domain_reg_id reg_id;
-> > >         int tpmi_domain_size, tpmi_domain_flags;
-> > > -       u64 *tpmi_rapl_regs = trp->base + offset;
-> > > +       u64 *tpmi_rapl_regs = (u64 *)(trp->base + offset);
-> > >         u64 tpmi_domain_header = readq((void __iomem *)tpmi_rapl_regs);
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 >
-> Isn't the correct fix to add __iomem to the definition of
-> tpmi_rapi_regs and also remove the cast from the following
-> readq() line?
+> Rename 'intel_idle_hlt_irq_on()' to 'intel_idle_hlt_irq()' for consistency with
+> 'intel_idle_irq()'.
+>
+> While on it, fix indentation in 'intel_idle_hlt_irq()' declaration to use tabs
+> instead of white-spaces.
+>
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Good point.
+I think I can apply this right away without the rest of the series as
+it doesn't seem to depend on the other patches.
 
-Rui, can you take another look at this, please?
+Any concerns regarding this?
+
+> ---
+>  drivers/idle/intel_idle.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index b930036edbbe..0a835f97de72 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -224,8 +224,8 @@ static __cpuidle int intel_idle_hlt(struct cpuidle_device *dev,
+>         return __intel_idle_hlt(dev, drv, index);
+>  }
+>
+> -static __cpuidle int intel_idle_hlt_irq_on(struct cpuidle_device *dev,
+> -                                   struct cpuidle_driver *drv, int index)
+> +static __cpuidle int intel_idle_hlt_irq(struct cpuidle_device *dev,
+> +                                       struct cpuidle_driver *drv, int index)
+>  {
+>         int ret;
+>
+> @@ -1900,11 +1900,11 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+>         if (state->enter == intel_idle_hlt) {
+>                 if (force_irq_on) {
+>                         pr_info("forced intel_idle_irq for state %d\n", cstate);
+> -                       state->enter = intel_idle_hlt_irq_on;
+> +                       state->enter = intel_idle_hlt_irq;
+>                 }
+>                 return;
+>         }
+> -       if (state->enter == intel_idle_hlt_irq_on)
+> +       if (state->enter == intel_idle_hlt_irq)
+>                 return; /* no update scenarios */
+>
+>         if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
+> @@ -1949,7 +1949,7 @@ static bool should_verify_mwait(struct cpuidle_state *state)
+>  {
+>         if (state->enter == intel_idle_hlt)
+>                 return false;
+> -       if (state->enter == intel_idle_hlt_irq_on)
+> +       if (state->enter == intel_idle_hlt_irq)
+>                 return false;
+>
+>         return true;
+> --
+> 2.40.1
+>
