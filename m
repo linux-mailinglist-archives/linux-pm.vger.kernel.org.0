@@ -2,219 +2,363 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1D5753604
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 11:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AF3753653
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 11:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235450AbjGNJF1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jul 2023 05:05:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S235138AbjGNJXL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jul 2023 05:23:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235241AbjGNJFW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 05:05:22 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D4F30E9;
-        Fri, 14 Jul 2023 02:05:14 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36E8qmem018529;
-        Fri, 14 Jul 2023 09:05:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=bxIm0fdUOnrazPTgn9N/1DQLzfOepforDs5jVfGTaFE=;
- b=HydMc01rar3APdzJL21fPsiLM3RlgJg0CNVdLjNrR95Dhl7EH/wFnezr2N/IfwoDgrTT
- P4iWYqa/wU23cJttIjQJlV1GnQ8CzifANIE2cJ2jWmWEKRTve/+s4fKyLFRKQ3t+mc4E
- sNiVEmcDS1YygN8Ixhx0JCu3xX9I7ehQtbIyukjjnlVw2b7O0KRhmoIysdVmA49D3vwe
- edc5voTIuJ6U8lm+5jnUt0BJOm+kUuAV/3zKp/XjopVgmwQimMl73QnLBMdxn5wpq5A1
- K6omVpAtb6YrFRZU6ak5OGZZX2cJ1vzozQpUk9GaFoK9tT2sbUMRPhtz1x791A5euUWW pQ== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ru380085q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jul 2023 09:05:06 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 36E3e5on004142;
-        Fri, 14 Jul 2023 09:05:03 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3rtpxb875v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jul 2023 09:05:03 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 36E950eP12845616
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Jul 2023 09:05:01 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E8D862004B;
-        Fri, 14 Jul 2023 09:04:59 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D9AF20043;
-        Fri, 14 Jul 2023 09:04:56 +0000 (GMT)
-Received: from [9.171.52.229] (unknown [9.171.52.229])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 14 Jul 2023 09:04:55 +0000 (GMT)
-Message-ID: <248c3dc1-0e42-982a-01de-41b6dbf491f9@linux.ibm.com>
-Date:   Fri, 14 Jul 2023 14:34:53 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] cpupower: Fix cpuidle_set to accept only numeric
- values for idle-set operation.
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org,
-        trenn@suse.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ricklind@linux.vnet.ibm.com, latha@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com,
-        Pavithra Prakash <pavrampu@linux.vnet.ibm.com>,
-        likhitha@linux.ibm.com
-References: <20230410121054.61622-1-likhitha@linux.ibm.com>
- <0197f2b8-96a3-22f6-aa14-960afdfd2e8d@linuxfoundation.org>
-From:   Likhitha Korrapati <likhitha@linux.ibm.com>
-In-Reply-To: <0197f2b8-96a3-22f6-aa14-960afdfd2e8d@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: CcEWwWfxI00-_RuzKT67DQ0A0msCip1k
-X-Proofpoint-GUID: CcEWwWfxI00-_RuzKT67DQ0A0msCip1k
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        with ESMTP id S234778AbjGNJXJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 05:23:09 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1DE2D75
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jul 2023 02:23:06 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b703cbfaf5so24827531fa.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Jul 2023 02:23:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689326584; x=1691918584;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vVGIh/G1FqIKf0a/bpvjazsarPyTwft+F9eTqVTyiQc=;
+        b=g7AZhihssoVkwwcW1zRMw8UNCnt0tk5GUeIYCybVh2YFDbt4LOJg0YB6PJ5wfgaUdi
+         620Nku51QIxXhyzsF4PvFkbZAVdlOWcHlE9zQyYHtaDrysnjjc50E3eWLy3SETK/d47z
+         z+9mT43tT0okBTaRA7oGLCMmIX3/w3IacTqajfuEtifpFfe/6X0CKQroF1L+7xKF+P1C
+         WdShy9BjiHOk8ey6O447eo5QIXJJnAP+s0YyNX28vda64rKMs8n428Rdu/jhDcR14Qb8
+         pGxRD46FAvjciOXKwYjvaYeATqEzScmFl/gl59ZOjXNWk8HIBkWEgYCMq/1Qq/BXt/oe
+         SHzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689326584; x=1691918584;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vVGIh/G1FqIKf0a/bpvjazsarPyTwft+F9eTqVTyiQc=;
+        b=LUndC9ZqXOILKoENwtS3VirmUtICsuZM7mqacX/odL94fkIWxJKajuQVWgrsonX4MJ
+         b8Uhd7USbGeeorlG6bsmfewozm7x2hUbGbrukgoC5ctPfTLWR09xV2XJR1MV+IXogwBp
+         hfvNrdUlwYLGl6IU9oV06NlrRAzdmaYWjcfyBEZw7m6GcDqzI2S8gdIPr9ZZ1q9YhemP
+         aqRQ/nA/kdNbghSf08/NoRtffxHrlllTx8eFdv8L3k5W/wxmBk/x71EcCu+Sd0iWalk0
+         1xAzgUL6XO80u59Iw6FiwTdKDdnnE6HQCf1kp5Fd/Y+UQPZj+cW5CZ5j4H31MSV8ykZf
+         r7gA==
+X-Gm-Message-State: ABy/qLYoLRaB7bShVzFgnQ04pCwIuWekgtjHot7dtqjBtwiB5YbHpDf0
+        OI3HoDGwqan5qVtJR8CRlx+aBw==
+X-Google-Smtp-Source: APBJJlFHP+/p/WdyPHMNpUbubeLtkCIgr0z3wIRmyCu2YfhF46KiNr/v7q/0cYgxKTSlRpBrBiiE/g==
+X-Received: by 2002:a2e:9092:0:b0:2b6:c394:91dd with SMTP id l18-20020a2e9092000000b002b6c39491ddmr3371295ljg.10.1689326584506;
+        Fri, 14 Jul 2023 02:23:04 -0700 (PDT)
+Received: from uffe-tuxpro14.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
+        by smtp.gmail.com with ESMTPSA id t24-20020a2e9c58000000b002b6c5bbc9aesm1876908ljj.91.2023.07.14.02.23.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jul 2023 02:23:03 -0700 (PDT)
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, arm@kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Michal Simek <michal.simek@amd.com>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Conor Dooley <conor@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andreas Farber <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] Create the new genpd subsystem and start moving providers
+Date:   Fri, 14 Jul 2023 11:23:01 +0200
+Message-Id: <20230714092301.28690-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-14_04,2023-07-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- mlxscore=0 suspectscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- spamscore=0 priorityscore=1501 clxscore=1011 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307140082
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Shuah,
+Hi SoC maintainers,
 
-Thank you for reviewing.
+Here's a PR that creates a new genpd subsystem at drivers/genpd/ and moves most
+of the genpd providers from drivers/soc/ and arch/arm/ into the new directory.
 
-On 11/04/23 04:22, Shuah Khan wrote:
-> On 4/10/23 06:10, Korrapati Likhitha wrote:
->> From: Likhitha Korrapati <likhitha@linux.ibm.com>
->>
->> For both the d and e options in 'cpupower idle_set' command, an
->> atoi() conversion is done without checking if the input argument
->> is all numeric. So, an atoi conversion is done on any character
->> provided as input and the CPU idle_set operation continues with
->> that integer value, which may not be what is intended or entirely
->> correct.
->>
->> The output of cpuidle-set before patch is as follows:
->>
->> [root@xxx cpupower]# cpupower idle-set -e 1$
->> Idlestate 1 enabled on CPU 0
->> [snip]
->> Idlestate 1 enabled on CPU 47
->>
->> [root@xxx cpupower]# cpupower idle-set -e 11
->> Idlestate 11 not available on CPU 0
->> [snip]
->> Idlestate 11 not available on CPU 47
->>
->> [root@xxx cpupower]# cpupower idle-set -d 12
->> Idlestate 12 not available on CPU 0
->> [snip]
->> Idlestate 12 not available on CPU 47
->>
->> [root@xxx cpupower]# cpupower idle-set -d qw
->> Idlestate 0 disabled on CPU 0
->> [snip]
->> Idlestate 0 disabled on CPU 47
->>
->> This patch adds a check for both d and e options in cpuidle-set.c
->> to see that the idle_set value is all numeric before doing a
->> string-to-int conversion.
->>
->> The output of cpuidle-set after the patch is as below:
->>
->> [root@xxx cpupower]# ./cpupower idle-set -e 1$
->> Bad idle_set value: 1$. Integer expected
->>
->> [root@xxx cpupower]# ./cpupower idle-set -e 11
->> Idlestate 11 not available on CPU 0
->> [snip]
->> Idlestate 11 not available on CPU 47
->>
->> [root@xxx cpupower]# ./cpupower idle-set -d 12
->> Idlestate 12 not available on CPU 0
->> [snip]
->> Idlestate 12 not available on CPU 47
->>
->> [root@xxx cpupower]# ./cpupower idle-set -d qw
->> Bad idle_set value: qw. Integer expected
->>
->> Signed-off-by: Likhitha Korrapati <likhitha@linux.ibm.com>
->> Signed-off-by: Brahadambal Srinivasan <latha@linux.vnet.ibm.com>
->> Reported-by: Pavithra Prakash <pavrampu@linux.vnet.ibm.com>
->> Reviewed-by: Rick Lindsley <ricklind@linux.vnet.ibm.com>
->> ---
->>
->> ** changes since v1 [1] **
->>
->> - Addressed reviewed comments from v1.
->> - Slightly reworded the commit for clarity.
->>
->> [1] 
->> https://lore.kernel.org/all/20210105122452.8687-1-latha@linux.vnet.ibm.com/
->>
->>   tools/power/cpupower/utils/cpuidle-set.c     | 25 ++++++++++++++++----
->>   tools/power/cpupower/utils/helpers/helpers.h |  8 +++++++
->>   tools/power/cpupower/utils/helpers/misc.c    | 17 +++++++++++++
->>   3 files changed, 45 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/power/cpupower/utils/cpuidle-set.c 
->> b/tools/power/cpupower/utils/cpuidle-set.c
->> index 46158928f9ad..1bfe16d27c2d 100644
->> --- a/tools/power/cpupower/utils/cpuidle-set.c
->> +++ b/tools/power/cpupower/utils/cpuidle-set.c
->> @@ -47,7 +47,12 @@ int cmd_idle_set(int argc, char **argv)
->>                   break;
->>               }
->>               param = ret;
->> -            idlestate = atoi(optarg);
->> +            if (is_stringnumeric(optarg))
->> +                idlestate = atoi(optarg);
->> +            else {
->> +                printf(_("Bad idle_set value: %s. Integer 
->> expected\n"), optarg);
->> +                exit(EXIT_FAILURE);
->> +            }
->
-> Why can't we do this once instead of duplicating the code under
-> 'd' and 'e'
->
-> Also have you tried using isdigit(idlestate) - works just fine
-> for me.
-idlestate = atoi(optarg)
-The function atoi() is used to convert optarg to an integer. However, 
-optarg can potentially be a special character, alphanumeric, or an 
-alphabet, such as "q1", "1!", "qw", etc. In such cases, atoi converts 
-them to 0, which is an integer. Consequently, the value of idlestate 
-becomes 0. This is incorrect because the actual input provided by the 
-user is an invalid input like "q1", "1!", "qw", and idlestate gets set 
-to 0 in an invalid error condition. isdigit() on this unintended 0 will 
-be treated as a good case and not error out as invalid input. and also 
-idlestate is already an integer because it is from atoi() ouput. so 
-isdigit(idlestate) will be a redundant check.
+It looks like some platform maintainers may need to pull this too, especially to
+avoid conflicts in linux-next. Therefore I have also made this available at an
+immutable branch, see below.
 
-To handle all these scenarios, we used strtol, which is a string to long 
-integer converter. This function is similar to strtoull used in case D 
-for latency. This approach allows us to properly handle invalid inputs 
-and avoid relying on the isdigit function to determine the validity of 
-idlestate, as the value obtained from atoi(optarg) may not be a valid 
-idlestate.
+git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git genpd_create_dir
 
-I will address the duplication of code under 'd' and 'e' as part of v3.
+Please pull this in!
 
-Thanks,
-Likhitha
+Kind regards
+Ulf Hansson
 
+
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/genpd-v6.5-rc1-1
+
+for you to fetch changes up to b43f11e5b453a9c48159d7121c88d79d81901276:
+
+  ARM: ux500: Move power-domain driver to the genpd dir (2023-07-14 10:41:59 +0200)
+
+----------------------------------------------------------------
+Create the new genpd subsystem and start moving providers
+
+There are currently ~60 users of the genpd provider interface, which
+implementations are sprinkled across various subsystems. To help out with
+maintenance and to gain a bit better control, this creates a new subsystem
+(drivers/genpd) and moves some of the soc/platform specific providers in
+here.
+
+----------------------------------------------------------------
+Ulf Hansson (18):
+      genpd: Create a new subsystem directory to host genpd providers
+      soc: actions: Move power-domain driver to the genpd dir
+      soc: amlogic: Move power-domain drivers to the genpd dir
+      soc: apple: Move power-domain driver to the genpd dir
+      soc: bcm: Move power-domain drivers to the genpd dir
+      soc: imx: Move power-domain drivers to the genpd dir
+      soc: mediatek: Move power-domain drivers to the genpd dir
+      soc: qcom: Move power-domain drivers to the genpd dir
+      soc: renesas: Move power-domain drivers to the genpd dir
+      soc: rockchip: Mover power-domain driver to the genpd dir
+      soc: samsung: Move power-domain driver to the genpd dir
+      soc: starfive: Move the power-domain driver to the genpd dir
+      soc: sunxi: Move power-domain driver to the genpd dir
+      soc: tegra: Move powergate-bpmp driver to the genpd dir
+      soc: ti: Mover power-domain drivers to the genpd dir
+      soc: xilinx: Move power-domain driver to the genpd dir
+      ARM: ux500: Convert power-domain code into a regular platform driver
+      ARM: ux500: Move power-domain driver to the genpd dir
+
+ MAINTAINERS                                        | 22 ++++++++++++----
+ arch/arm/mach-ux500/Makefile                       |  1 -
+ arch/arm/mach-ux500/cpu-db8500.c                   |  5 ----
+ arch/arm/mach-ux500/pm_domains.h                   | 17 ------------
+ drivers/Makefile                                   |  1 +
+ drivers/genpd/Makefile                             | 16 ++++++++++++
+ drivers/genpd/actions/Makefile                     |  2 ++
+ drivers/{soc => genpd}/actions/owl-sps.c           |  0
+ drivers/genpd/amlogic/Makefile                     |  4 +++
+ drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c     |  0
+ drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c |  0
+ drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c |  0
+ drivers/genpd/apple/Makefile                       |  2 ++
+ .../apple/pmgr-pwrstate.c}                         |  0
+ drivers/genpd/bcm/Makefile                         |  5 ++++
+ drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c   |  0
+ drivers/{soc => genpd}/bcm/bcm2835-power.c         |  0
+ .../{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c |  0
+ drivers/{soc => genpd}/bcm/raspberrypi-power.c     |  0
+ drivers/genpd/imx/Makefile                         |  7 +++++
+ drivers/{soc => genpd}/imx/gpc.c                   |  0
+ drivers/{soc => genpd}/imx/gpcv2.c                 |  0
+ drivers/{soc => genpd}/imx/imx8m-blk-ctrl.c        |  0
+ drivers/{soc => genpd}/imx/imx8mp-blk-ctrl.c       |  0
+ drivers/{soc => genpd}/imx/imx93-blk-ctrl.c        |  0
+ drivers/{soc => genpd}/imx/imx93-pd.c              |  0
+ drivers/genpd/mediatek/Makefile                    |  3 +++
+ .../{soc => genpd}/mediatek/mt6795-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8167-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8173-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8183-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8186-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8188-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8192-pm-domains.h    |  0
+ .../{soc => genpd}/mediatek/mt8195-pm-domains.h    |  0
+ drivers/{soc => genpd}/mediatek/mtk-pm-domains.c   |  0
+ drivers/{soc => genpd}/mediatek/mtk-pm-domains.h   |  0
+ drivers/{soc => genpd}/mediatek/mtk-scpsys.c       |  0
+ drivers/genpd/qcom/Makefile                        |  4 +++
+ drivers/{soc => genpd}/qcom/cpr.c                  |  0
+ drivers/{soc => genpd}/qcom/rpmhpd.c               |  0
+ drivers/{soc => genpd}/qcom/rpmpd.c                |  0
+ drivers/genpd/renesas/Makefile                     | 30 ++++++++++++++++++++++
+ drivers/{soc => genpd}/renesas/r8a7742-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7743-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7745-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a77470-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a774a1-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a774b1-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a774c0-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a774e1-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a7779-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7790-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7791-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7792-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7794-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7795-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a7796-sysc.c      |  0
+ drivers/{soc => genpd}/renesas/r8a77965-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a77970-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a77980-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a77990-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a77995-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a779a0-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a779f0-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/r8a779g0-sysc.c     |  0
+ drivers/{soc => genpd}/renesas/rcar-gen4-sysc.c    |  0
+ drivers/{soc => genpd}/renesas/rcar-gen4-sysc.h    |  0
+ drivers/{soc => genpd}/renesas/rcar-sysc.c         |  0
+ drivers/{soc => genpd}/renesas/rcar-sysc.h         |  0
+ drivers/{soc => genpd}/renesas/rmobile-sysc.c      |  0
+ drivers/genpd/rockchip/Makefile                    |  2 ++
+ .../pm_domains.c => genpd/rockchip/pm-domains.c}   |  0
+ drivers/genpd/samsung/Makefile                     |  2 ++
+ .../samsung/exynos-pm-domains.c}                   |  0
+ drivers/genpd/st/Makefile                          |  2 ++
+ .../genpd/st/ste-ux500-pm-domain.c                 | 25 ++++++++++++++----
+ drivers/genpd/starfive/Makefile                    |  2 ++
+ .../jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c}   |  0
+ drivers/genpd/sunxi/Makefile                       |  2 ++
+ drivers/{soc => genpd}/sunxi/sun20i-ppu.c          |  0
+ drivers/genpd/tegra/Makefile                       |  2 ++
+ drivers/{soc => genpd}/tegra/powergate-bpmp.c      |  0
+ drivers/genpd/ti/Makefile                          |  3 +++
+ drivers/{soc => genpd}/ti/omap_prm.c               |  0
+ drivers/{soc => genpd}/ti/ti_sci_pm_domains.c      |  0
+ drivers/genpd/xilinx/Makefile                      |  2 ++
+ .../xilinx/zynqmp-pm-domains.c}                    |  0
+ drivers/soc/actions/Makefile                       |  1 -
+ drivers/soc/amlogic/Makefile                       |  3 ---
+ drivers/soc/apple/Makefile                         |  2 --
+ drivers/soc/bcm/Kconfig                            | 22 +++++++++++++++-
+ drivers/soc/bcm/Makefile                           |  3 ---
+ drivers/soc/bcm/bcm63xx/Kconfig                    | 21 ---------------
+ drivers/soc/bcm/bcm63xx/Makefile                   |  3 ---
+ drivers/soc/imx/Makefile                           |  7 +----
+ drivers/soc/mediatek/Makefile                      |  2 --
+ drivers/soc/qcom/Makefile                          |  3 ---
+ drivers/soc/renesas/Makefile                       | 27 -------------------
+ drivers/soc/rockchip/Makefile                      |  1 -
+ drivers/soc/samsung/Makefile                       |  1 -
+ drivers/soc/starfive/Makefile                      |  3 ---
+ drivers/soc/sunxi/Makefile                         |  1 -
+ drivers/soc/tegra/Makefile                         |  1 -
+ drivers/soc/ti/Makefile                            |  2 --
+ drivers/soc/xilinx/Makefile                        |  1 -
+ 106 files changed, 150 insertions(+), 115 deletions(-)
+ delete mode 100644 arch/arm/mach-ux500/pm_domains.h
+ create mode 100644 drivers/genpd/Makefile
+ create mode 100644 drivers/genpd/actions/Makefile
+ rename drivers/{soc => genpd}/actions/owl-sps.c (100%)
+ create mode 100644 drivers/genpd/amlogic/Makefile
+ rename drivers/{soc => genpd}/amlogic/meson-ee-pwrc.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-gx-pwrc-vpu.c (100%)
+ rename drivers/{soc => genpd}/amlogic/meson-secure-pwrc.c (100%)
+ create mode 100644 drivers/genpd/apple/Makefile
+ rename drivers/{soc/apple/apple-pmgr-pwrstate.c => genpd/apple/pmgr-pwrstate.c} (100%)
+ create mode 100644 drivers/genpd/bcm/Makefile
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm-pmb.c (100%)
+ rename drivers/{soc => genpd}/bcm/bcm2835-power.c (100%)
+ rename drivers/{soc/bcm/bcm63xx => genpd/bcm}/bcm63xx-power.c (100%)
+ rename drivers/{soc => genpd}/bcm/raspberrypi-power.c (100%)
+ create mode 100644 drivers/genpd/imx/Makefile
+ rename drivers/{soc => genpd}/imx/gpc.c (100%)
+ rename drivers/{soc => genpd}/imx/gpcv2.c (100%)
+ rename drivers/{soc => genpd}/imx/imx8m-blk-ctrl.c (100%)
+ rename drivers/{soc => genpd}/imx/imx8mp-blk-ctrl.c (100%)
+ rename drivers/{soc => genpd}/imx/imx93-blk-ctrl.c (100%)
+ rename drivers/{soc => genpd}/imx/imx93-pd.c (100%)
+ create mode 100644 drivers/genpd/mediatek/Makefile
+ rename drivers/{soc => genpd}/mediatek/mt6795-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8167-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8173-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8183-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8186-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8188-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8192-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mt8195-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.c (100%)
+ rename drivers/{soc => genpd}/mediatek/mtk-pm-domains.h (100%)
+ rename drivers/{soc => genpd}/mediatek/mtk-scpsys.c (100%)
+ create mode 100644 drivers/genpd/qcom/Makefile
+ rename drivers/{soc => genpd}/qcom/cpr.c (100%)
+ rename drivers/{soc => genpd}/qcom/rpmhpd.c (100%)
+ rename drivers/{soc => genpd}/qcom/rpmpd.c (100%)
+ create mode 100644 drivers/genpd/renesas/Makefile
+ rename drivers/{soc => genpd}/renesas/r8a7742-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7743-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7745-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77470-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774a1-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774b1-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774c0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a774e1-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7779-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7790-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7791-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7792-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7794-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7795-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a7796-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77965-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77970-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77980-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77990-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a77995-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a779a0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a779f0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/r8a779g0-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-gen4-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-gen4-sysc.h (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-sysc.c (100%)
+ rename drivers/{soc => genpd}/renesas/rcar-sysc.h (100%)
+ rename drivers/{soc => genpd}/renesas/rmobile-sysc.c (100%)
+ create mode 100644 drivers/genpd/rockchip/Makefile
+ rename drivers/{soc/rockchip/pm_domains.c => genpd/rockchip/pm-domains.c} (100%)
+ create mode 100644 drivers/genpd/samsung/Makefile
+ rename drivers/{soc/samsung/pm_domains.c => genpd/samsung/exynos-pm-domains.c} (100%)
+ create mode 100644 drivers/genpd/st/Makefile
+ rename arch/arm/mach-ux500/pm_domains.c => drivers/genpd/st/ste-ux500-pm-domain.c (75%)
+ create mode 100644 drivers/genpd/starfive/Makefile
+ rename drivers/{soc/starfive/jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c} (100%)
+ create mode 100644 drivers/genpd/sunxi/Makefile
+ rename drivers/{soc => genpd}/sunxi/sun20i-ppu.c (100%)
+ create mode 100644 drivers/genpd/tegra/Makefile
+ rename drivers/{soc => genpd}/tegra/powergate-bpmp.c (100%)
+ create mode 100644 drivers/genpd/ti/Makefile
+ rename drivers/{soc => genpd}/ti/omap_prm.c (100%)
+ rename drivers/{soc => genpd}/ti/ti_sci_pm_domains.c (100%)
+ create mode 100644 drivers/genpd/xilinx/Makefile
+ rename drivers/{soc/xilinx/zynqmp_pm_domains.c => genpd/xilinx/zynqmp-pm-domains.c} (100%)
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Kconfig
+ delete mode 100644 drivers/soc/bcm/bcm63xx/Makefile
+ delete mode 100644 drivers/soc/starfive/Makefile
