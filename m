@@ -2,64 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C0B7540ED
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 19:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8034D75411C
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 19:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbjGNRoy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jul 2023 13:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        id S236318AbjGNRsN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jul 2023 13:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236258AbjGNRor (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 13:44:47 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400563C01;
-        Fri, 14 Jul 2023 10:44:32 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-78362f57500so88976239f.3;
-        Fri, 14 Jul 2023 10:44:32 -0700 (PDT)
+        with ESMTP id S236403AbjGNRrz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 13:47:55 -0400
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 191C13AB7;
+        Fri, 14 Jul 2023 10:47:36 -0700 (PDT)
+Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7835ae70e46so89106739f.3;
+        Fri, 14 Jul 2023 10:47:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689356671; x=1691948671;
+        d=1e100.net; s=20221208; t=1689356821; x=1691948821;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YKCJUp4CqCgC2RTMueqPi4f10D3ol+zQTAqiaFzYSUI=;
-        b=OH1QJ40p0QRMc78EeWuZHI59DocxOZy5lkyAEkmMt+kUT38YoTeaEoUA1vN1/kCGDq
-         qQnDEk2mE7Av5jfXCCU3LDHoahfldmzyHkwKDz05lRY4CB5loNOORMi4Oubre7ZbH+sA
-         U8D8qIMyiz8/g3NQIVxcXLQQZIhr4rubL12fCquFMSVzlBv0gfqW4JQbG7IJi+zQthS0
-         btluRVdLAEaNs1OjBFQBquRLNRh3Rdpp7NpuzRyJwA3rGLFUFq7I6PQj01G33HSq2Aqa
-         3CTjzNpP3k+s0FXHRQ+TyB5JhgvhTMfEFeKT/8SexUR8uVdHRrjai/tlYF82fPl153t6
-         Wu9g==
-X-Gm-Message-State: ABy/qLab58IX8l21v0uVjZUmMPYq4CCL8fuVUczu+53lgJs+FwzfO5sb
-        6zo9gjd9bDboTQfv+bJkKQ==
-X-Google-Smtp-Source: APBJJlEyccik+TIwQfOddVchGfwmKZ7WoQdwb497EuKnOfrzKhIDHTtwjajstHQLl9YBsyUSMZLMNw==
-X-Received: by 2002:a5e:c010:0:b0:783:58d1:823a with SMTP id u16-20020a5ec010000000b0078358d1823amr5981939iol.9.1689356671351;
-        Fri, 14 Jul 2023 10:44:31 -0700 (PDT)
+        bh=vrS2k1UCIIMJ4emgSWk6h2fOgFxn4zWpWzOE6zZPTSk=;
+        b=CRbWkOxLo01XLL20JM8fbTo3jHbfTXyfBZqEIC8CF1slXfSCT9zPGvM90E1hfBo1wS
+         YyCrdGQM/f20rMAnQ3KEf9RNXh2mjDCuaXqOtp0okfiYwLHsUCYofPp/l9CPQOQetfey
+         Cyq3KDizq7mNGBcAWG2Ll0F/Xtaj0fWSCmt/9kO16kQV4fhWaGotMl5FnrDGI4AWWxSp
+         0zOwvutdyVWVPKAA1dmxW/Ech6Bsxr3ZIIVkyHfooXBX4TLTQwnlVcToFSzAGFeNUBfP
+         PDLbYdSgUAejN+zjhw00wIA7QW8qgcLXR1TQ1a6Y7wp9Cp8k7bYgRQRxgJj+qzd4a3J9
+         jTlA==
+X-Gm-Message-State: ABy/qLZYdqGx69DbeQ9Len52pu4tjvwqrc6eJOP51hnK9iO7nnXR5azX
+        BUMXKmB+Bk44xivCQkdP9g==
+X-Google-Smtp-Source: APBJJlHNSXAZg4PXiZD/+bR1XmGZn6D0Df2QfoHAVDa/88JS4Gk1XWrziOYhPcc7CZj6LMKEwiAmJQ==
+X-Received: by 2002:a92:cd47:0:b0:345:d284:5c49 with SMTP id v7-20020a92cd47000000b00345d2845c49mr4442240ilq.5.1689356820691;
+        Fri, 14 Jul 2023 10:47:00 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w11-20020a6bd60b000000b00787496dad4bsm1741226ioa.49.2023.07.14.10.44.29
+        by smtp.gmail.com with ESMTPSA id p2-20020a92d282000000b00345b34fcf34sm2847967ilp.38.2023.07.14.10.46.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 10:44:30 -0700 (PDT)
-Received: (nullmailer pid 4054490 invoked by uid 1000);
-        Fri, 14 Jul 2023 17:44:27 -0000
+        Fri, 14 Jul 2023 10:47:00 -0700 (PDT)
+Received: (nullmailer pid 4058361 invoked by uid 1000);
+        Fri, 14 Jul 2023 17:46:39 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Shawn Guo <shawnguo@kernel.org>,
+To:     Georgi Djakov <djakov@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: [PATCH] devfreq: imx: Explicitly include correct DT includes
-Date:   Fri, 14 Jul 2023 11:44:25 -0600
-Message-Id: <20230714174425.4054393-1-robh@kernel.org>
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH] interconnect: Explicitly include correct DT includes
+Date:   Fri, 14 Jul 2023 11:46:36 -0600
+Message-Id: <20230714174638.4058268-1-robh@kernel.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -85,65 +79,440 @@ explicitly include the correct includes.
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/devfreq/imx-bus.c         | 2 +-
- drivers/devfreq/imx8m-ddrc.c      | 2 +-
- drivers/devfreq/mtk-cci-devfreq.c | 1 -
- drivers/devfreq/tegra30-devfreq.c | 2 +-
- 4 files changed, 3 insertions(+), 4 deletions(-)
+ drivers/interconnect/imx/imx8mp.c    | 1 -
+ drivers/interconnect/qcom/icc-rpm.c  | 2 +-
+ drivers/interconnect/qcom/icc-rpmh.c | 2 +-
+ drivers/interconnect/qcom/msm8916.c  | 2 +-
+ drivers/interconnect/qcom/msm8939.c  | 2 +-
+ drivers/interconnect/qcom/msm8974.c  | 3 +--
+ drivers/interconnect/qcom/msm8996.c  | 3 +--
+ drivers/interconnect/qcom/osm-l3.c   | 2 +-
+ drivers/interconnect/qcom/qcm2290.c  | 3 +--
+ drivers/interconnect/qcom/qcs404.c   | 2 +-
+ drivers/interconnect/qcom/qdu1000.c  | 3 ++-
+ drivers/interconnect/qcom/sa8775p.c  | 3 ++-
+ drivers/interconnect/qcom/sc7180.c   | 3 ++-
+ drivers/interconnect/qcom/sc7280.c   | 3 ++-
+ drivers/interconnect/qcom/sc8180x.c  | 3 ++-
+ drivers/interconnect/qcom/sc8280xp.c | 3 ++-
+ drivers/interconnect/qcom/sdm660.c   | 3 +--
+ drivers/interconnect/qcom/sdm670.c   | 3 ++-
+ drivers/interconnect/qcom/sdm845.c   | 3 ++-
+ drivers/interconnect/qcom/sdx55.c    | 3 ++-
+ drivers/interconnect/qcom/sdx65.c    | 3 ++-
+ drivers/interconnect/qcom/sm6350.c   | 3 ++-
+ drivers/interconnect/qcom/sm8150.c   | 3 ++-
+ drivers/interconnect/qcom/sm8250.c   | 3 ++-
+ drivers/interconnect/qcom/sm8350.c   | 3 ++-
+ drivers/interconnect/qcom/sm8450.c   | 4 +++-
+ drivers/interconnect/qcom/sm8550.c   | 4 +++-
+ drivers/interconnect/qcom/smd-rpm.c  | 2 --
+ 28 files changed, 44 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
-index a727067980fb..86850b7dea09 100644
---- a/drivers/devfreq/imx-bus.c
-+++ b/drivers/devfreq/imx-bus.c
-@@ -7,7 +7,7 @@
- #include <linux/devfreq.h>
- #include <linux/device.h>
+diff --git a/drivers/interconnect/imx/imx8mp.c b/drivers/interconnect/imx/imx8mp.c
+index 8bfaf173f1da..a66ae3638b18 100644
+--- a/drivers/interconnect/imx/imx8mp.c
++++ b/drivers/interconnect/imx/imx8mp.c
+@@ -7,7 +7,6 @@
+  */
+ 
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/fsl,imx8mp.h>
+ 
+diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+index 6acc7686ed38..c538661d96dc 100644
+--- a/drivers/interconnect/qcom/icc-rpm.c
++++ b/drivers/interconnect/qcom/icc-rpm.c
+@@ -8,7 +8,7 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
  #include <linux/module.h>
 -#include <linux/of_device.h>
 +#include <linux/of.h>
- #include <linux/pm_opp.h>
+ #include <linux/of_platform.h>
  #include <linux/platform_device.h>
- #include <linux/slab.h>
-diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
-index 16636973eb10..e1348490c8aa 100644
---- a/drivers/devfreq/imx8m-ddrc.c
-+++ b/drivers/devfreq/imx8m-ddrc.c
-@@ -3,9 +3,9 @@
-  * Copyright 2019 NXP
-  */
- 
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/device.h>
--#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/devfreq.h>
- #include <linux/pm_opp.h>
-diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-index 6354622eda65..83a73f0ccd80 100644
---- a/drivers/devfreq/mtk-cci-devfreq.c
-+++ b/drivers/devfreq/mtk-cci-devfreq.c
-@@ -8,7 +8,6 @@
- #include <linux/minmax.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
+index fdb5e58e408b..8053ec8ab01b 100644
+--- a/drivers/interconnect/qcom/icc-rpmh.c
++++ b/drivers/interconnect/qcom/icc-rpmh.c
+@@ -7,7 +7,7 @@
+ #include <linux/interconnect-provider.h>
  #include <linux/module.h>
  #include <linux/of.h>
 -#include <linux/of_device.h>
- #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
- #include <linux/regulator/consumer.h>
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 503376b894b6..4a4f0106ab9d 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -13,7 +13,7 @@
++#include <linux/of_platform.h>
+ #include <linux/slab.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/msm8916.c b/drivers/interconnect/qcom/msm8916.c
+index 5c4ba2f37c8e..25259d7d8a3e 100644
+--- a/drivers/interconnect/qcom/msm8916.c
++++ b/drivers/interconnect/qcom/msm8916.c
+@@ -9,9 +9,9 @@
+ #include <linux/interconnect-provider.h>
  #include <linux/io.h>
- #include <linux/irq.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+-#include <linux/of_device.h>
+ 
+ #include <dt-bindings/interconnect/qcom,msm8916.h>
+ 
+diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
+index caf0aefad668..fc84ad271aee 100644
+--- a/drivers/interconnect/qcom/msm8939.c
++++ b/drivers/interconnect/qcom/msm8939.c
+@@ -10,9 +10,9 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+-#include <linux/of_device.h>
+ 
+ #include <dt-bindings/interconnect/qcom,msm8939.h>
+ 
+diff --git a/drivers/interconnect/qcom/msm8974.c b/drivers/interconnect/qcom/msm8974.c
+index 1828deaca443..5df05e7e4d21 100644
+--- a/drivers/interconnect/qcom/msm8974.c
++++ b/drivers/interconnect/qcom/msm8974.c
+@@ -33,8 +33,7 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
+index 20340fb62fe6..38101b63a80a 100644
+--- a/drivers/interconnect/qcom/msm8996.c
++++ b/drivers/interconnect/qcom/msm8996.c
+@@ -9,9 +9,8 @@
+ #include <linux/device.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+index a1f4f918b911..056ac91225c4 100644
+--- a/drivers/interconnect/qcom/osm-l3.c
++++ b/drivers/interconnect/qcom/osm-l3.c
+@@ -9,7 +9,7 @@
+ #include <linux/io.h>
+ #include <linux/kernel.h>
  #include <linux/module.h>
 -#include <linux/of_device.h>
 +#include <linux/of.h>
  #include <linux/platform_device.h>
- #include <linux/pm_opp.h>
- #include <linux/reset.h>
+ 
+ #include <dt-bindings/interconnect/qcom,osm-l3.h>
+diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
+index a29cdb4fac03..a6a99f8e7573 100644
+--- a/drivers/interconnect/qcom/qcm2290.c
++++ b/drivers/interconnect/qcom/qcm2290.c
+@@ -11,9 +11,8 @@
+ #include <linux/device.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+diff --git a/drivers/interconnect/qcom/qcs404.c b/drivers/interconnect/qcom/qcs404.c
+index fae155344332..2ec7ff57b578 100644
+--- a/drivers/interconnect/qcom/qcs404.c
++++ b/drivers/interconnect/qcom/qcs404.c
+@@ -9,8 +9,8 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+-#include <linux/of_device.h>
+ 
+ 
+ #include "smd-rpm.h"
+diff --git a/drivers/interconnect/qcom/qdu1000.c b/drivers/interconnect/qcom/qdu1000.c
+index a4cf559de2b0..bf800dd7d4ba 100644
+--- a/drivers/interconnect/qcom/qdu1000.c
++++ b/drivers/interconnect/qcom/qdu1000.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,qdu1000-rpmh.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
+index da21cc31a580..97014d0c5844 100644
+--- a/drivers/interconnect/qcom/sa8775p.c
++++ b/drivers/interconnect/qcom/sa8775p.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sc7180.c b/drivers/interconnect/qcom/sc7180.c
+index ef4e13fb4983..d16298e77906 100644
+--- a/drivers/interconnect/qcom/sc7180.c
++++ b/drivers/interconnect/qcom/sc7180.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sc7180.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sc7280.c b/drivers/interconnect/qcom/sc7280.c
+index 971f538bc98a..6592839b4d94 100644
+--- a/drivers/interconnect/qcom/sc7280.c
++++ b/drivers/interconnect/qcom/sc7280.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sc7280.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sc8180x.c b/drivers/interconnect/qcom/sc8180x.c
+index c76e3a6a98cd..0fb4898dabcf 100644
+--- a/drivers/interconnect/qcom/sc8180x.c
++++ b/drivers/interconnect/qcom/sc8180x.c
+@@ -7,7 +7,8 @@
+ #include <linux/device.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
+ 
+ #include <dt-bindings/interconnect/qcom,sc8180x.h>
+ 
+diff --git a/drivers/interconnect/qcom/sc8280xp.c b/drivers/interconnect/qcom/sc8280xp.c
+index e56df893ec3e..b82c5493cbb5 100644
+--- a/drivers/interconnect/qcom/sc8280xp.c
++++ b/drivers/interconnect/qcom/sc8280xp.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sc8280xp.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
+index 7ffaf70d62d3..1e3769975a05 100644
+--- a/drivers/interconnect/qcom/sdm660.c
++++ b/drivers/interconnect/qcom/sdm660.c
+@@ -9,9 +9,8 @@
+ #include <linux/device.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/io.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+diff --git a/drivers/interconnect/qcom/sdm670.c b/drivers/interconnect/qcom/sdm670.c
+index bda955035518..29128a9b63ae 100644
+--- a/drivers/interconnect/qcom/sdm670.c
++++ b/drivers/interconnect/qcom/sdm670.c
+@@ -6,8 +6,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sdm670-rpmh.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sdm845.c b/drivers/interconnect/qcom/sdm845.c
+index 954e7bd13fc4..b6e76cb43b0d 100644
+--- a/drivers/interconnect/qcom/sdm845.c
++++ b/drivers/interconnect/qcom/sdm845.c
+@@ -7,7 +7,8 @@
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
+ 
+ #include <dt-bindings/interconnect/qcom,sdm845.h>
+ 
+diff --git a/drivers/interconnect/qcom/sdx55.c b/drivers/interconnect/qcom/sdx55.c
+index 130a828c3873..cf4cde512613 100644
+--- a/drivers/interconnect/qcom/sdx55.c
++++ b/drivers/interconnect/qcom/sdx55.c
+@@ -10,8 +10,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sdx55.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sdx65.c b/drivers/interconnect/qcom/sdx65.c
+index b16d31d53e9b..f42392d505dd 100644
+--- a/drivers/interconnect/qcom/sdx65.c
++++ b/drivers/interconnect/qcom/sdx65.c
+@@ -6,8 +6,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sdx65.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sm6350.c b/drivers/interconnect/qcom/sm6350.c
+index a3d46e59444e..15c647c0e987 100644
+--- a/drivers/interconnect/qcom/sm6350.c
++++ b/drivers/interconnect/qcom/sm6350.c
+@@ -6,8 +6,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sm6350.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sm8150.c b/drivers/interconnect/qcom/sm8150.c
+index c5ab29322164..7fd19721e458 100644
+--- a/drivers/interconnect/qcom/sm8150.c
++++ b/drivers/interconnect/qcom/sm8150.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sm8150.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sm8250.c b/drivers/interconnect/qcom/sm8250.c
+index e3bb008cb219..069fb463d008 100644
+--- a/drivers/interconnect/qcom/sm8250.c
++++ b/drivers/interconnect/qcom/sm8250.c
+@@ -7,8 +7,9 @@
+ #include <linux/device.h>
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sm8250.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
+index 5398e7c8d826..0e02e1800e0c 100644
+--- a/drivers/interconnect/qcom/sm8350.c
++++ b/drivers/interconnect/qcom/sm8350.c
+@@ -7,7 +7,8 @@
+ 
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
+ #include <dt-bindings/interconnect/qcom,sm8350.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sm8450.c b/drivers/interconnect/qcom/sm8450.c
+index 2d7a8e7b85ec..8981f423a48a 100644
+--- a/drivers/interconnect/qcom/sm8450.c
++++ b/drivers/interconnect/qcom/sm8450.c
+@@ -8,7 +8,9 @@
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <dt-bindings/interconnect/qcom,sm8450.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/sm8550.c b/drivers/interconnect/qcom/sm8550.c
+index d823ba988ef6..cd2cbc1f9da2 100644
+--- a/drivers/interconnect/qcom/sm8550.c
++++ b/drivers/interconnect/qcom/sm8550.c
+@@ -10,7 +10,9 @@
+ #include <linux/interconnect.h>
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
+-#include <linux/of_platform.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <dt-bindings/interconnect/qcom,sm8550-rpmh.h>
+ 
+ #include "bcm-voter.h"
+diff --git a/drivers/interconnect/qcom/smd-rpm.c b/drivers/interconnect/qcom/smd-rpm.c
+index dc8ff8d133a9..63bf38e7cf8d 100644
+--- a/drivers/interconnect/qcom/smd-rpm.c
++++ b/drivers/interconnect/qcom/smd-rpm.c
+@@ -8,8 +8,6 @@
+ 
+ #include <linux/interconnect-provider.h>
+ #include <linux/module.h>
+-#include <linux/of.h>
+-#include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/soc/qcom/smd-rpm.h>
+ 
 -- 
 2.40.1
 
