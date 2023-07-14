@@ -2,118 +2,447 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC49F75423A
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 20:07:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF1C75422B
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 20:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbjGNSHC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jul 2023 14:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S236701AbjGNSCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jul 2023 14:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236339AbjGNSHC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 14:07:02 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54DB23C00;
-        Fri, 14 Jul 2023 11:06:33 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 36EEsO8q013531;
-        Fri, 14 Jul 2023 12:45:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding:content-type; s=PODMain02222019; bh=B
-        OxRHechdVLR5k0+UUuRMHYDBE3nu3fbPTbGYx6BRL8=; b=nsU+tywlpG5pgo2Ed
-        SKR0pvLcvX6jsqMq/WUlA+o3GMNNhmrQDc/+MM/LG2CHVUzatyr6C1Q2MV3InolO
-        2/DB5IZgQcrvyM0Yp9ZkiA5f2GNbgG1h5taqiY669pmWVj5mWh4GUvWpSrMmQ+uI
-        JlMy1rNH9tSijC/N1yDFUYNThZ2R6laPMbbELGXCwAL0fDfFj60RyPkgVpZbtcLN
-        737AielPTu+xUIHCf9gDmYf0/hCvce2WJOCXOGYlcdv92Zna8X+/2k4TNJmXqZ+G
-        oiPSazujzE6I1xNKJS2iFOMR+EBFcLDwUq/5W8b/JmNuBlXrE790sIpv/F6nMhbe
-        eFBUw==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3rtpuu14yb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 14 Jul 2023 12:45:38 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 14 Jul
- 2023 18:45:36 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.30 via Frontend
- Transport; Fri, 14 Jul 2023 18:45:36 +0100
-Received: from ricardo-lws.crystal.cirrus.com (ricardo-lws.ad.cirrus.com [141.131.206.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8B98215B9;
-        Fri, 14 Jul 2023 17:45:35 +0000 (UTC)
-From:   Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-To:     Sebastian Reichel <sre@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>,
-        David Rhodes <drhodes@opensource.cirrus.com>
-Subject: [PATCH] power: supply: bq24190: Considers FORCE_20PCT when getting IPRECHG
-Date:   Fri, 14 Jul 2023 12:45:29 -0500
-Message-ID: <20230714174529.287045-1-rriveram@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S236822AbjGNSCZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 14:02:25 -0400
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8BB422B;
+        Fri, 14 Jul 2023 11:01:50 -0700 (PDT)
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4036507ddadso16167571cf.3;
+        Fri, 14 Jul 2023 11:01:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689357640; x=1691949640;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tPaYytlE/dKDiPWONYGoHn0bUH6RRDwZOcpAYre31YM=;
+        b=lB3AE4oDZZ//mEqMKHZFj9FRFeGjQCVMkdDM/a0sBGXVM7AC7Kj3IqUR3TUQAGURBx
+         i7VPTXGXTd0nNdB/FsO0KXCxXcAAQ5h8xyCPh/dshfMsno+Ho/dXkzDIE7n6d1Jrp+dr
+         rE/PDC2F1TucvtSS0U2ttziupIvgWjBPdp97i3/1A4zWjkfb2O+sKoNq+CI2NU5pfxTM
+         8f5xeWH5iCDHOyEUiJRm8iLPDKmz+jLu6CfYasHAtAsTglnMJ70HU9/hsO/aHrJFxLa3
+         r5PegNDiX8dzVrGTHJ/vChQQicNIJbkNY3Nu5NYtC+QOgccVIdyiaSbLWJ4jP0aoU6I0
+         LzAw==
+X-Gm-Message-State: ABy/qLY3KWUn6R2pfPRAUivwQIDCdcwydnqoavmiT93rLkxOMC9DMonV
+        njryLXNib2D6SZ/X63LdX0gEI5sufhMA
+X-Google-Smtp-Source: APBJJlH0WZnWwucCN4gIdX66/gpDTQftSzdkzROwtscf9sh83/FTUUIIdbYbwXJ47kHQSsWbeUOR1g==
+X-Received: by 2002:a92:da88:0:b0:346:6d97:ffd1 with SMTP id u8-20020a92da88000000b003466d97ffd1mr4998380iln.18.1689357058408;
+        Fri, 14 Jul 2023 10:50:58 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id n13-20020a02a90d000000b0042b7b76b29fsm2629924jam.174.2023.07.14.10.50.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jul 2023 10:50:57 -0700 (PDT)
+Received: (nullmailer pid 4064720 invoked by uid 1000);
+        Fri, 14 Jul 2023 17:50:11 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Guillaume La Roque <glaroque@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] thermal: Explicitly include correct DT includes
+Date:   Fri, 14 Jul 2023 11:50:07 -0600
+Message-Id: <20230714175008.4064592-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 6pcGFg4A4HQaluY1_rVFShDbL1dYt0jy
-X-Proofpoint-ORIG-GUID: 6pcGFg4A4HQaluY1_rVFShDbL1dYt0jy
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Adds a check of the FORCE_20PCT bit when getting the precharge
-current value.
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-According to the bit description for the FORCE_20PCT bit, when
-FORCE_20PCT is true, the precharge current target is 50% of
-what is configured in the IPRECHG bit field.
-
-Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
-Reviewed-by: David Rhodes <drhodes@opensource.cirrus.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/power/supply/bq24190_charger.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ drivers/thermal/amlogic_thermal.c           | 2 --
+ drivers/thermal/broadcom/bcm2711_thermal.c  | 2 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c  | 2 +-
+ drivers/thermal/hisi_thermal.c              | 2 +-
+ drivers/thermal/imx8mm_thermal.c            | 1 -
+ drivers/thermal/imx_sc_thermal.c            | 1 -
+ drivers/thermal/imx_thermal.c               | 2 +-
+ drivers/thermal/k3_bandgap.c                | 2 +-
+ drivers/thermal/k3_j72xx_bandgap.c          | 2 +-
+ drivers/thermal/mediatek/auxadc_thermal.c   | 1 -
+ drivers/thermal/mediatek/lvts_thermal.c     | 2 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c    | 1 -
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 1 -
+ drivers/thermal/rcar_gen3_thermal.c         | 2 +-
+ drivers/thermal/rcar_thermal.c              | 2 +-
+ drivers/thermal/rzg2l_thermal.c             | 2 +-
+ drivers/thermal/samsung/exynos_tmu.c        | 2 +-
+ drivers/thermal/sprd_thermal.c              | 2 +-
+ drivers/thermal/st/stm_thermal.c            | 2 --
+ drivers/thermal/sun8i_thermal.c             | 2 +-
+ drivers/thermal/tegra/tegra30-tsensor.c     | 2 +-
+ drivers/thermal/thermal_of.c                | 3 +--
+ drivers/thermal/uniphier_thermal.c          | 1 -
+ 23 files changed, 15 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index ef8235848f56..3f99cb9590ba 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -965,7 +965,7 @@ static int bq24190_charger_get_precharge(struct bq24190_dev_info *bdi,
- 		union power_supply_propval *val)
- {
- 	u8 v;
--	int ret;
-+	int curr, ret;
+diff --git a/drivers/thermal/amlogic_thermal.c b/drivers/thermal/amlogic_thermal.c
+index 756b218880a7..81ebbf6de0de 100644
+--- a/drivers/thermal/amlogic_thermal.c
++++ b/drivers/thermal/amlogic_thermal.c
+@@ -22,8 +22,6 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/broadcom/bcm2711_thermal.c b/drivers/thermal/broadcom/bcm2711_thermal.c
+index c243a76a3471..03ac2d02e9d4 100644
+--- a/drivers/thermal/broadcom/bcm2711_thermal.c
++++ b/drivers/thermal/broadcom/bcm2711_thermal.c
+@@ -15,8 +15,8 @@
+ #include <linux/kernel.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+-#include <linux/of_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
  
- 	ret = bq24190_read_mask(bdi, BQ24190_REG_PCTCC,
- 			BQ24190_REG_PCTCC_IPRECHG_MASK,
-@@ -973,7 +973,20 @@ static int bq24190_charger_get_precharge(struct bq24190_dev_info *bdi,
- 	if (ret < 0)
- 		return ret;
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index 72d1dbe60b8f..0b73abdaa792 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -17,8 +17,8 @@
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+-#include <linux/of_device.h>
+ #include <linux/thermal.h>
  
--	val->intval = ++v * 128 * 1000;
-+	curr = ++v * 128 * 1000;
-+
-+	ret = bq24190_read_mask(bdi, BQ24190_REG_CCC,
-+			BQ24190_REG_CCC_FORCE_20PCT_MASK,
-+			BQ24190_REG_CCC_FORCE_20PCT_SHIFT, &v);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* If FORCE_20PCT is enabled, then current is 50% of IPRECHG value */
-+	if (v)
-+		curr /= 2;
-+
-+	val->intval = curr;
-+
- 	return 0;
- }
+ #define AVS_TMON_STATUS			0x00
+diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
+index 3f09ef8be41a..fb54ed4bf6f0 100644
+--- a/drivers/thermal/hisi_thermal.c
++++ b/drivers/thermal/hisi_thermal.c
+@@ -13,9 +13,9 @@
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
+-#include <linux/of_device.h>
+ #include <linux/thermal.h>
  
+ #define HI6220_TEMP0_LAG			(0x0)
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index d4b40869c7d7..e89b11b3f2b9 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -12,7 +12,6 @@
+ #include <linux/module.h>
+ #include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+index 8d6b4ef23746..7224f8d21db9 100644
+--- a/drivers/thermal/imx_sc_thermal.c
++++ b/drivers/thermal/imx_sc_thermal.c
+@@ -8,7 +8,6 @@
+ #include <linux/firmware/imx/sci.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index a94ec0a0c9dd..826358cbe810 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -11,7 +11,7 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
++#include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+ #include <linux/nvmem-consumer.h>
+diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
+index 1c3e590157ec..68f59b3735d3 100644
+--- a/drivers/thermal/k3_bandgap.c
++++ b/drivers/thermal/k3_bandgap.c
+@@ -11,7 +11,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/thermal.h>
+ #include <linux/types.h>
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 5be1f09eeb2c..a5a0fc9b9356 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -10,10 +10,10 @@
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/kernel.h>
++#include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/err.h>
+ #include <linux/types.h>
+-#include <linux/of_platform.h>
+ #include <linux/io.h>
+ #include <linux/thermal.h>
+ #include <linux/of.h>
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index f59d36de20a0..c537aed71017 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -15,7 +15,6 @@
+ #include <linux/nvmem-consumer.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/io.h>
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index b693fac2d677..054c965ae5e1 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -13,7 +13,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/nvmem-consumer.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/reset.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index 5ddc39b2be32..756ac6842ff9 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -14,7 +14,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+index 0e8ebfcd84c5..78c5cfe6a0c0 100644
+--- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
++++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+@@ -10,7 +10,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
+index 9029d01e029b..bd2fb8c2e968 100644
+--- a/drivers/thermal/rcar_gen3_thermal.c
++++ b/drivers/thermal/rcar_gen3_thermal.c
+@@ -11,7 +11,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+index b8571f7090aa..293f8dd9fe0a 100644
+--- a/drivers/thermal/rcar_thermal.c
++++ b/drivers/thermal/rcar_thermal.c
+@@ -11,7 +11,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reboot.h>
+diff --git a/drivers/thermal/rzg2l_thermal.c b/drivers/thermal/rzg2l_thermal.c
+index b56981f85306..6b2bf3426f52 100644
+--- a/drivers/thermal/rzg2l_thermal.c
++++ b/drivers/thermal/rzg2l_thermal.c
+@@ -9,8 +9,8 @@
+ #include <linux/io.h>
+ #include <linux/iopoll.h>
+ #include <linux/math.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+index 45e5c840d130..58f4d8f7a3fd 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -15,7 +15,7 @@
+ #include <linux/io.h>
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+ #include <linux/platform_device.h>
+diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+index 2fb90fdad76e..e27c4bdc8912 100644
+--- a/drivers/thermal/sprd_thermal.c
++++ b/drivers/thermal/sprd_thermal.c
+@@ -6,7 +6,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/nvmem-consumer.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+diff --git a/drivers/thermal/st/stm_thermal.c b/drivers/thermal/st/stm_thermal.c
+index 903fcf1763f1..142a7e5d12f4 100644
+--- a/drivers/thermal/st/stm_thermal.c
++++ b/drivers/thermal/st/stm_thermal.c
+@@ -14,8 +14,6 @@
+ #include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/thermal.h>
+ 
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 195f3c5d0b38..cca16d632d9f 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -14,7 +14,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/nvmem-consumer.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/reset.h>
+diff --git a/drivers/thermal/tegra/tegra30-tsensor.c b/drivers/thermal/tegra/tegra30-tsensor.c
+index c243e9d76d3c..d911fa60f100 100644
+--- a/drivers/thermal/tegra/tegra30-tsensor.c
++++ b/drivers/thermal/tegra/tegra30-tsensor.c
+@@ -18,7 +18,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/math.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/reset.h>
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 6fb14e521197..c36c7d235cba 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -10,8 +10,7 @@
+ 
+ #include <linux/err.h>
+ #include <linux/export.h>
+-#include <linux/of_device.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+ #include <linux/types.h>
+diff --git a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
+index aef6119cc004..6f32ab61d174 100644
+--- a/drivers/thermal/uniphier_thermal.c
++++ b/drivers/thermal/uniphier_thermal.c
+@@ -12,7 +12,6 @@
+ #include <linux/mfd/syscon.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
 -- 
-2.34.1
+2.40.1
 
