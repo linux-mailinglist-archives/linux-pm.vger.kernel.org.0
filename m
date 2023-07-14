@@ -2,71 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00729753FB6
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 18:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765AD754040
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Jul 2023 19:15:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236148AbjGNQRn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Jul 2023 12:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48380 "EHLO
+        id S235524AbjGNRPI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Jul 2023 13:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235736AbjGNQRm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 12:17:42 -0400
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716802707;
-        Fri, 14 Jul 2023 09:17:37 -0700 (PDT)
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3456fda4ed1so9958005ab.0;
-        Fri, 14 Jul 2023 09:17:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689351456; x=1691943456;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eDVAiCPgiCLUr/CSIMms8dz09Iz8VdUpjeBHbhE5dU0=;
-        b=ORKVKaveEiTnGf+EaiAtLkYTNz8Uish/FIhkyxP19Ic7ByVCgQGw0lx2Jft4R9jVdj
-         hQwyhK35c6eL2Wez4JwrAM2Nld1MayW419Jg71MWFDtdVdGFAtg+zR/oFeLcdE4JJA4Q
-         JOu3NY8iRj5QgZCfcH7wZ7zGGGEZgeuDOaBUu65oTxJJHsgrLEc1kSvDuONBm4OmMrUN
-         DlUok6KkvCCanWloH29rVvh5LoT7TUO7ec+W9pZ6sKj5+FDoCSVncdhtR/YB4OgGQL8J
-         ugIk7eN5WVzzFFJFdOSaSbyzbW7Bc2uVKvNJblpbjRH+TLKkIKUNMbRq/x1VyU0xoTp5
-         W8uQ==
-X-Gm-Message-State: ABy/qLbN4W6k3rkM0LSChlDs2Q3l9yjZiPSxIxix7O3QXGeHiQRZUi5h
-        8OTcTy/n8khNmpzo+K0Ymg==
-X-Google-Smtp-Source: APBJJlFY30LAu76EUJ9UBwm5e7258g1w+cX0Llt2LbQKg3PSkbN2a6y7yEPRihySrAFfWGw0WRTWwA==
-X-Received: by 2002:a92:d9cc:0:b0:346:1185:31d0 with SMTP id n12-20020a92d9cc000000b00346118531d0mr4693547ilq.9.1689351456663;
-        Fri, 14 Jul 2023 09:17:36 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id g11-20020a0566380bcb00b0042b48e5da4bsm2592963jad.134.2023.07.14.09.17.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 09:17:35 -0700 (PDT)
-Received: (nullmailer pid 3942584 invoked by uid 1000);
-        Fri, 14 Jul 2023 16:17:33 -0000
-Date:   Fri, 14 Jul 2023 10:17:33 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_asutoshd@quicinc.com,
-        quic_cang@quicinc.com, quic_nitirawa@quicinc.com,
-        quic_narepall@quicinc.com, quic_bhaskarv@quicinc.com,
-        quic_richardp@quicinc.com, quic_nguyenb@quicinc.com,
-        quic_ziqichen@quicinc.com, bmasney@redhat.com,
-        krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH 02/14] dt-bindings: opp: Increase maxItems for opp-hz
- property
-Message-ID: <20230714161733.GA3938393-robh@kernel.org>
-References: <20230712103213.101770-1-manivannan.sadhasivam@linaro.org>
- <20230712103213.101770-3-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S229557AbjGNRPH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Jul 2023 13:15:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CBB1BF3;
+        Fri, 14 Jul 2023 10:15:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0577B61D7E;
+        Fri, 14 Jul 2023 17:15:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B906C433C8;
+        Fri, 14 Jul 2023 17:15:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689354904;
+        bh=4cZN/0yPBRg716uGY862ik2lzGILyhxLtVW1gjub4RQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HrS1OMo40K9SGEnFXfWqSCA4sqVQpUw3vDGxvQs9MXbJrAA0cC7Ix/oUdbYrS1ITN
+         BqrYaZARZhbCLLzELlfnqqLeMPMECIbsBPzL26FPaG2HoipukDMciYCrfUCDZJaJLi
+         zh/WhS0PkeJwAg3u20Sq5GL9Atk+CkRA+D9da2o7/Vj0cTlBsBElZdblVCBGG3mnaU
+         NwfTh/prZEXznMzj+POGFuTmvAhJRYj2N8FBjtk0Fjw8QF1N/hudS60E7yTY3bUmCB
+         T0zoALchAviCcQRi414eHuGDa8+P+LAY/gypxeevTaNZzfqVu5FvkFLtoahFzZwI3w
+         /4hNmjiP1ee1A==
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2b6fbf0c0e2so33188901fa.2;
+        Fri, 14 Jul 2023 10:15:04 -0700 (PDT)
+X-Gm-Message-State: ABy/qLY3kaOkCBHS7yJX9ZWahqAE7uAPsOSJJhLazHY/+kmkbZ0+ck9C
+        OqLTNmV2Y1buJqejkeX8SA6xDNSXU18tKfgKrg==
+X-Google-Smtp-Source: APBJJlGIxEBd73gVlh9uEFRoSwIasdT7k7nyJT8l6WaM+W0IJi4Bvebcn1js9k4uyMMXWs5l7K6uQ9AJUu8BvgL7Pug=
+X-Received: by 2002:a2e:9158:0:b0:2b7:7b9:4767 with SMTP id
+ q24-20020a2e9158000000b002b707b94767mr4532281ljg.41.1689354902353; Fri, 14
+ Jul 2023 10:15:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230712103213.101770-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+References: <20230607124628.157465-1-ulf.hansson@linaro.org>
+ <20230607124628.157465-10-ulf.hansson@linaro.org> <20230614230044.GA3019052-robh@kernel.org>
+ <CAPDyKFoDQ12yUB-3f_V222kcUivP_NUcvcM+8s7CraLaBy7tBQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFoDQ12yUB-3f_V222kcUivP_NUcvcM+8s7CraLaBy7tBQ@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 14 Jul 2023 11:14:50 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+GMA62hey6+KYMmVSWsDEkGfD0B=0V9AbdmRqdE6VW1g@mail.gmail.com>
+Message-ID: <CAL_Jsq+GMA62hey6+KYMmVSWsDEkGfD0B=0V9AbdmRqdE6VW1g@mail.gmail.com>
+Subject: Re: [PATCH 09/16] dt-bindings: firmware: arm,scmi: Extend bindings
+ for protocol@13
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,36 +75,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 04:01:57PM +0530, Manivannan Sadhasivam wrote:
-> Current limit of 16 will be exhausted by platforms specifying the frequency
-> for 9 clocks using opp-hz, like Qcom SDM845 SoC: 9 * 2 (64 bits) = 18
+On Thu, Jun 15, 2023 at 3:11=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> On Thu, 15 Jun 2023 at 01:00, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Wed, Jun 07, 2023 at 02:46:21PM +0200, Ulf Hansson wrote:
+> > > The protocol@13 node is describing the performance scaling option for=
+ the
+> > > ARM SCMI interface, as a clock provider. This is unnecessary limiting=
+, as
+> > > performance scaling is in many cases not limited to switching a clock=
+'s
+> > > frequency.
+> > >
+> > > Therefore, let's extend the binding so the interface can be modelled =
+as a
+> > > generic "performance domain" too. The common way to describe this, is=
+ to
+> > > use the "power-domain" bindings, so let's use that.
+> >
+> > What's wrong with the performance-domain binding?
+>
+> In my opinion I think the performance-domain binding is superfluous.
+> We already have plenty of power-domains that do performance scaling
+> too - and they stick with the power-domain binding, as it's
+> sufficient.
 
-Are you sure about that? opp-hz is defined as uint64-matrix, so 16 
-64-bit entries should already be allowed. It doesn't matter how the .dts 
-is encoded (it used to though).
+IMO, power-domains should be for power islands which can be power
+gated. I know they are abused though. Of course, when things are
+hidden in firmware, you don't really know. A power-domain could be
+just a clock or a clock could be multiple physical clocks.
 
-> 
-> So let's increase the limit to 32 which should be enough for most platforms
-> (hopefully).
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> index 47e6f36b7637..e2f8f7af3cf4 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> @@ -56,7 +56,7 @@ patternProperties:
->            need to be configured and that is left for the implementation
->            specific binding.
->          minItems: 1
-> -        maxItems: 16
-> +        maxItems: 32
->          items:
->            maxItems: 1
->  
-> -- 
-> 2.25.1
-> 
+> That said, I would rather follow the defacto standard that has been
+> used for many years in the kernel. Do you have a preference that we
+> should stick to?
+
+If power-domains are sufficient, then why do we have
+performance-domains? We need clear rules for when to use what.
+
+Rob
