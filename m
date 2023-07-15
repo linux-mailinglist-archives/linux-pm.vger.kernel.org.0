@@ -2,173 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F82754921
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jul 2023 16:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7090F754998
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jul 2023 17:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjGOOGo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 15 Jul 2023 10:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
+        id S229944AbjGOPJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 15 Jul 2023 11:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229953AbjGOOGn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Jul 2023 10:06:43 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FF03588
-        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 07:06:40 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b70404a5a0so45224901fa.2
-        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 07:06:40 -0700 (PDT)
+        with ESMTP id S229494AbjGOPJh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Jul 2023 11:09:37 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCE02D57
+        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:36 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so4791586e87.3
+        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689429998; x=1692021998;
+        d=linaro.org; s=google; t=1689433775; x=1692025775;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6/oofZQPgGTrFm/xFNaCXYysHJE6rz/K210kWzBmMEo=;
-        b=kScAPAkOrbs0cNL+KxnjWOLdaO/mPqHzA+sHslTQlpCjMvTNqZORsHtDzp8WUPt3OH
-         bRsA8n41U01Tb/WWT6ruNe+f8Sa/3Gxr2geM588t33JOLYji+xcMkTL3VPofC07zozZI
-         YMbyqrDlJkbV28eCpWuy2w7tcUNChEkLPGVJ9EBy3mr7MRsL0BKJ2UctnWzUZwkeaTY1
-         NZMONWOZBYDvNqke55iPzYRPJohp+fftnfYmtoS2nnNP9EXRrzmx7l/FVUyHJr46TFYl
-         w4LVROATLDsbPKqfd2EokLOh95m9tde0vPAGpRp6iNzETaRiJi8BmRomYLjVM1XtHNEL
-         ym5g==
+        bh=SGa9xQaYwq0n16HqAxWg44ncoO3Biv87YQ0pHHY9Ofo=;
+        b=TdPg72x7UN3o7OWsHcoPnR/M8c8xPlSsKpd+CJ56q6yVkaGYsej4OulOcFeD0kvhZD
+         prx1rl9riVLQJXaa9NAyIvEhOtuxyQL01cUTAaLWEDLxK/2R+sWbRhQ6KJeHToWTeFlP
+         giSyrDqmWzTdLfkSTQx7c18qpXdDbaokX3oFUAPVLrjWiMRUBvwKm8Zr666LBr+2X3nU
+         ahpUz8TqZ2aV2L4omNuj4QeK3PzskdQnVSEJdwTjU7aKC+IdyrAlg5w1PZM2ziS9icDN
+         jRFkpMDX7FRv7U5AlVkE2Q+TR4r0RruPoq0IWSrR8T3Qs5AK8zDRBL6wb7fgtpAlBsJ+
+         ffOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689429998; x=1692021998;
+        d=1e100.net; s=20221208; t=1689433775; x=1692025775;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/oofZQPgGTrFm/xFNaCXYysHJE6rz/K210kWzBmMEo=;
-        b=Y7BCZlqkv6OMThAX/P1aHc+6/LeANQPxv+gy0uX1EL8NQMwkPcrMmFP/4QTuboG1TS
-         EA2Ej6a7qA10JXaMV3FUDNTJQ0sEnKB8QKwOB53WQwdEKpXOwBtqrSplOQErE5HXyjh7
-         MS85E5qOlNHyfH8hoo0+JJM4uOKzxn9bRYjfCQsGkd6ego+HQKWSpYvW22XqmxRjy6tY
-         Epjbc4rKQaFEloNS3QJA7MLUzoTXw/fLKNpoYQE209cxkvcM6MRMHkiyi1TKLVIkzo1q
-         r70/4NGdg5s0lLFjh43KFGXvPf/GXvYGe09DmJtCp6WitFIyDbav6UqjyXv2Nchw6wHQ
-         FkEQ==
-X-Gm-Message-State: ABy/qLYnkZP22cicvdRvaDARLsJjzIgk2zZStVzniHGbDl07r0b98jJf
-        t28skKwKNTH8r6n/WYS34tTdCA==
-X-Google-Smtp-Source: APBJJlFqmQmo8w0oIye5X/kZkI28eHRZL+MvDkUJ95TPmKGlWFWNqmpVlWavj+lPBVz4kOs0C0Xteg==
-X-Received: by 2002:a19:5016:0:b0:4f7:3ee8:eede with SMTP id e22-20020a195016000000b004f73ee8eedemr6416135lfb.61.1689429998294;
-        Sat, 15 Jul 2023 07:06:38 -0700 (PDT)
+        bh=SGa9xQaYwq0n16HqAxWg44ncoO3Biv87YQ0pHHY9Ofo=;
+        b=SdXE1jEW7CI0M6YM5I5rAx6y5CercOb9A0EM6lwJy4eesvpomb4JVlhJItK1gs/60b
+         /qjXZRK8piq/zfEyr2rXj+HlGu6fLwAAidTxNSescjQZ2tNQoqk+ahFhz9Cjkn2kpqvW
+         Yaj9gODf8ZHMocwDn9teZVl/K9BMQEEFqAESyCN8aLFwGrRiTJ3ZK58LHZ889S6LfNiC
+         +ac/z5CG4+oxNzzArzU3PJgy8vvTY5pIg92ueLadjRcdA40Cu34RRwFL40U2aqsmbPvy
+         bG/DOjvcbFHgFqh5Cb2HGQLxVkl7hhn5CzOzyfpbA7/WI7386KjuK5/hJD9+Kfv9hGyL
+         MSdw==
+X-Gm-Message-State: ABy/qLacQp7AmRd4FvodnzKE0si8Se2AureGptp+mIpum9+58xZELW8T
+        sPgtzxOJ9ix/jylw0l8/icvF1A==
+X-Google-Smtp-Source: APBJJlFH/Yo8cIGAb5QeEOdg6Z9p9FwimLUt6nDaACnwbOc/nYYlL1zvq/+Bg5EFnWgdmaSIBMA8sA==
+X-Received: by 2002:a19:7918:0:b0:4fb:9050:1d92 with SMTP id u24-20020a197918000000b004fb90501d92mr4508841lfc.51.1689433774714;
+        Sat, 15 Jul 2023 08:09:34 -0700 (PDT)
 Received: from [192.168.1.101] (abxi167.neoplus.adsl.tpnet.pl. [83.9.2.167])
-        by smtp.gmail.com with ESMTPSA id a13-20020ac2520d000000b004fb78984592sm1904245lfl.172.2023.07.15.07.06.37
+        by smtp.gmail.com with ESMTPSA id v6-20020ac25926000000b004f8555f7aa1sm1916688lfi.52.2023.07.15.08.09.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jul 2023 07:06:37 -0700 (PDT)
-Message-ID: <adc04328-d9c5-1c67-8396-08137334af1e@linaro.org>
-Date:   Sat, 15 Jul 2023 16:06:36 +0200
+        Sat, 15 Jul 2023 08:09:34 -0700 (PDT)
+Message-ID: <9201cb8d-845a-b5dc-02a5-9633572b5877@linaro.org>
+Date:   Sat, 15 Jul 2023 17:09:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 5/5] thermal/drivers/tsens: Add IPQ5332 support
+Subject: Re: [PATCH 02/53] dt-bindings: interconnect: qcom,bcm-voter: Add
+ qcom,bcm-voter-idx
 Content-Language: en-US
-To:     Praveenkumar I <quic_ipkumar@quicinc.com>, amitk@kernel.org,
-        thara.gopinath@gmail.com, agross@kernel.org, andersson@kernel.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_varada@quicinc.com
-References: <20230713052732.787853-1-quic_ipkumar@quicinc.com>
- <20230713052732.787853-6-quic_ipkumar@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        cros-qcom-dts-watchers@chromium.org
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
+ <68fb8e22-dd23-d4bf-eda0-444039fd8e26@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230713052732.787853-6-quic_ipkumar@quicinc.com>
+In-Reply-To: <68fb8e22-dd23-d4bf-eda0-444039fd8e26@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13.07.2023 07:27, Praveenkumar I wrote:
-> IPQ5332 uses tsens v2.3.3 IP and it is having combined interrupt.
-> It does not have RPM and kernel needs to take care of sensor
-> enablement, calibration. Hence introduced new feature_config,
-> ops and data for IPQ5332.
+On 12.07.2023 22:43, Krzysztof Kozlowski wrote:
+> On 11/07/2023 14:18, Konrad Dybcio wrote:
+>> In order to (at least partially) untangle the global BCM voter lookup
+>> (as again, they are shared throughout the entire system and not bound to
+>> individual buses/providers), introduce a new required property to assign
+>> a unique identifier to each BCM voter.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>  .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml       | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>> index eec987640b37..09321c1918bf 100644
+>> --- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>> @@ -38,8 +38,14 @@ properties:
+>>  
+>>      $ref: /schemas/types.yaml#/definitions/uint32
+>>  
+>> +  qcom,bcm-voter-idx:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>> +    description:
+>> +      A globally unique predefined discrimnator, identifying each BCM voter.
 > 
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> ---
-> [v3]:
-> 	No changes.
-> [v2]:
-> 	Added tsens_features for ipq5332 with VER_2_X_NO_RPM. Used
-> 	hw_ids to mention the available sensors. Dropped v2 in
-> 	ops_ipq5332.
+> s/each/this/ ?
+Right, this makes more sense
+
+> If I understand correctly, there might be more than one instance. The
+> problem is that I cannot find such case in upstream sources.
+I don't think there can be more than one per RSC.
+
+SM8550 splits some RSCs into "channels" and these channels have their
+individual voters, however they would still be attached to these
+channel subnodes/subdevices and no, we don't support that yet.
+
 > 
->  drivers/thermal/qcom/tsens-v2.c | 25 +++++++++++++++++++++++++
->  drivers/thermal/qcom/tsens.c    |  3 +++
->  drivers/thermal/qcom/tsens.h    |  2 +-
->  3 files changed, 29 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-> index 781595a9a622..e25d9d34e519 100644
-> --- a/drivers/thermal/qcom/tsens-v2.c
-> +++ b/drivers/thermal/qcom/tsens-v2.c
-> @@ -62,6 +62,17 @@ static struct tsens_features ipq8074_feat = {
->  	.trip_max_temp	= 204000,
->  };
->  
-> +static struct tsens_features ipq5332_feat = {
-> +	.ver_major	= VER_2_X_NO_RPM,
-> +	.crit_int	= 1,
-> +	.combo_int	= 1,
-> +	.adc		= 0,
-> +	.srot_split	= 1,
-> +	.max_sensors	= 16,
-> +	.trip_min_temp	= 0,
-> +	.trip_max_temp	= 204000,
-204 degrees Celcius?
+>> +
+>>  required:
+>>    - compatible
+>> +  - qcom,bcm-voter-idx
+> 
+> This should not be really required, because it affects the ABI.
+Hm.. can I deprecate lack of it somehow?
+
+> You also
+> need to fix the reported warning.
+Ack
 
 Konrad
-> +};
-> +
->  static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
->  	/* ----- SROT ------ */
->  	/* VERSION */
-> @@ -262,6 +273,20 @@ struct tsens_plat_data data_ipq8074 = {
->  	.fields	= tsens_v2_regfields,
->  };
->  
-> +static const struct tsens_ops ops_ipq5332 = {
-> +	.init		= init_tsens_v2_no_rpm,
-> +	.get_temp	= get_temp_tsens_valid,
-> +	.calibrate	= tsens_v2_calibration,
-> +};
-> +
-> +struct tsens_plat_data data_ipq5332 = {
-> +	.num_sensors	= 5,
-> +	.ops		= &ops_ipq5332,
-> +	.hw_ids		= (unsigned int []){11, 12, 13, 14, 15},
-> +	.feat		= &ipq5332_feat,
-> +	.fields		= tsens_v2_regfields,
-> +};
-> +
->  /* Kept around for backward compatibility with old msm8996.dtsi */
->  struct tsens_plat_data data_8996 = {
->  	.num_sensors	= 13,
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index 9dc0c2150948..af58a94628a8 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -1106,6 +1106,9 @@ static const struct of_device_id tsens_table[] = {
->  	}, {
->  		.compatible = "qcom,ipq8074-tsens",
->  		.data = &data_ipq8074,
-> +	}, {
-> +		.compatible = "qcom,ipq5332-tsens",
-> +		.data = &data_ipq5332,
->  	}, {
->  		.compatible = "qcom,mdm9607-tsens",
->  		.data = &data_9607,
-> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-> index b2e8f0f2b466..1dde363914cd 100644
-> --- a/drivers/thermal/qcom/tsens.h
-> +++ b/drivers/thermal/qcom/tsens.h
-> @@ -648,6 +648,6 @@ extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8
->  extern struct tsens_plat_data data_tsens_v1, data_8976, data_8956;
->  
->  /* TSENS v2 targets */
-> -extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
-> +extern struct tsens_plat_data data_8996, data_ipq8074, data_ipq5332, data_tsens_v2;
->  
->  #endif /* __QCOM_TSENS_H__ */
+> 
+> Best regards,
+> Krzysztof
+> 
