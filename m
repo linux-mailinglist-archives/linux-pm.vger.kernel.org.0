@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7090F754998
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jul 2023 17:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA18C75499C
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jul 2023 17:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjGOPJj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 15 Jul 2023 11:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
+        id S230029AbjGOPJx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 15 Jul 2023 11:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjGOPJh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Jul 2023 11:09:37 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCE02D57
-        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:36 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so4791586e87.3
-        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:36 -0700 (PDT)
+        with ESMTP id S230024AbjGOPJw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Jul 2023 11:09:52 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D45130EF
+        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:49 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fbf09a9139so4811063e87.2
+        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689433775; x=1692025775;
+        d=linaro.org; s=google; t=1689433787; x=1692025787;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SGa9xQaYwq0n16HqAxWg44ncoO3Biv87YQ0pHHY9Ofo=;
-        b=TdPg72x7UN3o7OWsHcoPnR/M8c8xPlSsKpd+CJ56q6yVkaGYsej4OulOcFeD0kvhZD
-         prx1rl9riVLQJXaa9NAyIvEhOtuxyQL01cUTAaLWEDLxK/2R+sWbRhQ6KJeHToWTeFlP
-         giSyrDqmWzTdLfkSTQx7c18qpXdDbaokX3oFUAPVLrjWiMRUBvwKm8Zr666LBr+2X3nU
-         ahpUz8TqZ2aV2L4omNuj4QeK3PzskdQnVSEJdwTjU7aKC+IdyrAlg5w1PZM2ziS9icDN
-         jRFkpMDX7FRv7U5AlVkE2Q+TR4r0RruPoq0IWSrR8T3Qs5AK8zDRBL6wb7fgtpAlBsJ+
-         ffOA==
+        bh=amPlcbDpulTFOsow/YvicAIG+61RE4wSP76UghvZkDc=;
+        b=LjFCnFxnREZGUDfhT4VW51KlYy0xfK1JrVIPprVF/fTyRuXnzlSJCcR3D2G2zyGHwz
+         CFv+FkkBMwc3AHzSBmW3W07hZD00AZmFjGEX46gs2cp+Yrq6Q8phQCXeD4I+vqZNHVWk
+         mnk+ep4pTkwvvpwBrpbOqJW5nBp4KtF+PG7bQNQD+nt3/TLzom7rnUDL/gnOy/9WxG6Y
+         6vdlUseXij7Tpx8Xs3lZz/m/vibG+LJKGUD0ObReboZaZDNHA7LO/SQSjqWVOsFQvkXb
+         aGku7+AYktrHEiLOUB+NswqcuFof9OunuEs4FNBuaryWPI8OKhNCjpQIHYhdPj9pCjIE
+         zxLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689433775; x=1692025775;
+        d=1e100.net; s=20221208; t=1689433787; x=1692025787;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SGa9xQaYwq0n16HqAxWg44ncoO3Biv87YQ0pHHY9Ofo=;
-        b=SdXE1jEW7CI0M6YM5I5rAx6y5CercOb9A0EM6lwJy4eesvpomb4JVlhJItK1gs/60b
-         /qjXZRK8piq/zfEyr2rXj+HlGu6fLwAAidTxNSescjQZ2tNQoqk+ahFhz9Cjkn2kpqvW
-         Yaj9gODf8ZHMocwDn9teZVl/K9BMQEEFqAESyCN8aLFwGrRiTJ3ZK58LHZ889S6LfNiC
-         +ac/z5CG4+oxNzzArzU3PJgy8vvTY5pIg92ueLadjRcdA40Cu34RRwFL40U2aqsmbPvy
-         bG/DOjvcbFHgFqh5Cb2HGQLxVkl7hhn5CzOzyfpbA7/WI7386KjuK5/hJD9+Kfv9hGyL
-         MSdw==
-X-Gm-Message-State: ABy/qLacQp7AmRd4FvodnzKE0si8Se2AureGptp+mIpum9+58xZELW8T
-        sPgtzxOJ9ix/jylw0l8/icvF1A==
-X-Google-Smtp-Source: APBJJlFH/Yo8cIGAb5QeEOdg6Z9p9FwimLUt6nDaACnwbOc/nYYlL1zvq/+Bg5EFnWgdmaSIBMA8sA==
-X-Received: by 2002:a19:7918:0:b0:4fb:9050:1d92 with SMTP id u24-20020a197918000000b004fb90501d92mr4508841lfc.51.1689433774714;
-        Sat, 15 Jul 2023 08:09:34 -0700 (PDT)
+        bh=amPlcbDpulTFOsow/YvicAIG+61RE4wSP76UghvZkDc=;
+        b=asBfjpzO8iQ8m+rC0U/2rEC9uvbmjlQwoRuzOUhRAvi7DG2M5j8U27jYLgTGD/Qt2u
+         zcv3ctWyEzrU98HNtYPlZF891mpJ9DEeJ0weS+jB5ygs3I3eIDaXNn8qR3jAcnLvSPBE
+         8evmxsVpbecsE9eVWVgrJzoW/W7CjGgHXkxlsI37Q/Lxfvr3ikm3yHwYZanULu2jARdq
+         dLYH7OaERHVrQxD4ldTpu7vvqhMKNlLFX93uc1VW6M1ZuAHGM/Th2AYioG35Hnrh4Gvr
+         v5UXk5YzKWhH8wUMW2CRt1/35CEG7FPPvCqNCfzrlG7E5prhoL4fjAd14KRFO8f5jPv0
+         PLUQ==
+X-Gm-Message-State: ABy/qLYnELTWcFQUSW73Hpal4abh9dLvsX5TLmLPQXTn43iHu25d6hWx
+        OFa+KMXaOtBlE/0qRlhh+GXoVg==
+X-Google-Smtp-Source: APBJJlEEbjLVhNpZlgevCjtFWDFvRtWdujxLD4TiNGl4wp+NxSuW5PaSXwBmHfbr2c6ro1RfEOb37A==
+X-Received: by 2002:a05:6512:3985:b0:4fd:b7fb:c9fa with SMTP id j5-20020a056512398500b004fdb7fbc9famr168026lfu.42.1689433787515;
+        Sat, 15 Jul 2023 08:09:47 -0700 (PDT)
 Received: from [192.168.1.101] (abxi167.neoplus.adsl.tpnet.pl. [83.9.2.167])
-        by smtp.gmail.com with ESMTPSA id v6-20020ac25926000000b004f8555f7aa1sm1916688lfi.52.2023.07.15.08.09.32
+        by smtp.gmail.com with ESMTPSA id j13-20020ac2454d000000b004faa2de9877sm1932342lfm.286.2023.07.15.08.09.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jul 2023 08:09:34 -0700 (PDT)
-Message-ID: <9201cb8d-845a-b5dc-02a5-9633572b5877@linaro.org>
-Date:   Sat, 15 Jul 2023 17:09:32 +0200
+        Sat, 15 Jul 2023 08:09:47 -0700 (PDT)
+Message-ID: <269bd956-6cf3-2215-a7ab-1b6b8b84b6d4@linaro.org>
+Date:   Sat, 15 Jul 2023 17:09:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 02/53] dt-bindings: interconnect: qcom,bcm-voter: Add
- qcom,bcm-voter-idx
+Subject: Re: [PATCH 01/53] dt-bindings: interconnect: qcom,icc: Introduce
+ fixed BCM voter indices
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -69,73 +69,61 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
- <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
- <68fb8e22-dd23-d4bf-eda0-444039fd8e26@linaro.org>
+ <20230708-topic-rpmh_icc_rsc-v1-1-b223bd2ac8dd@linaro.org>
+ <3b733848-2745-e6ef-f517-039712bbe7af@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <68fb8e22-dd23-d4bf-eda0-444039fd8e26@linaro.org>
+In-Reply-To: <3b733848-2745-e6ef-f517-039712bbe7af@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12.07.2023 22:43, Krzysztof Kozlowski wrote:
+On 12.07.2023 22:39, Krzysztof Kozlowski wrote:
 > On 11/07/2023 14:18, Konrad Dybcio wrote:
->> In order to (at least partially) untangle the global BCM voter lookup
->> (as again, they are shared throughout the entire system and not bound to
->> individual buses/providers), introduce a new required property to assign
->> a unique identifier to each BCM voter.
+>> It makes zero (or less) sense to consume BCM voters per interconnect
+>> provider. They are shared throughout the entire system and it's enough
+>> to keep a single reference to each of them.
+>>
+>> Storing them in a shared array at fixed indices will let us improve both
+>> the representation of the RPMh architecture (every RSC can hold a resource
+>> vote on any bus, they're not limited in that regard) and save as much as
+>> kilobytes worth of RAM.
 >>
 >> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 >> ---
->>  .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml       | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
+>>  include/dt-bindings/interconnect/qcom,icc.h | 8 ++++++++
+>>  1 file changed, 8 insertions(+)
 >>
->> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
->> index eec987640b37..09321c1918bf 100644
->> --- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
->> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
->> @@ -38,8 +38,14 @@ properties:
+>> diff --git a/include/dt-bindings/interconnect/qcom,icc.h b/include/dt-bindings/interconnect/qcom,icc.h
+>> index cd34f36daaaa..9c13ef8a044e 100644
+>> --- a/include/dt-bindings/interconnect/qcom,icc.h
+>> +++ b/include/dt-bindings/interconnect/qcom,icc.h
+>> @@ -23,4 +23,12 @@
+>>  #define QCOM_ICC_TAG_ALWAYS		(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
+>>  					 QCOM_ICC_TAG_SLEEP)
 >>  
->>      $ref: /schemas/types.yaml#/definitions/uint32
->>  
->> +  qcom,bcm-voter-idx:
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    description:
->> +      A globally unique predefined discrimnator, identifying each BCM voter.
-> 
-> s/each/this/ ?
-Right, this makes more sense
-
-> If I understand correctly, there might be more than one instance. The
-> problem is that I cannot find such case in upstream sources.
-I don't think there can be more than one per RSC.
-
-SM8550 splits some RSCs into "channels" and these channels have their
-individual voters, however they would still be attached to these
-channel subnodes/subdevices and no, we don't support that yet.
-
-> 
-> 
+>> +#define ICC_BCM_VOTER_APPS		0
+>> +#define ICC_BCM_VOTER_DISP		1
+>> +#define ICC_BCM_VOTER_CAM0		2
+>> +#define ICC_BCM_VOTER_CAM1		3
+>> +#define ICC_BCM_VOTER_CAM2		4
 >> +
->>  required:
->>    - compatible
->> +  - qcom,bcm-voter-idx
+>> +#define ICC_BCM_VOTER_MAX		64
 > 
-> This should not be really required, because it affects the ABI.
-Hm.. can I deprecate lack of it somehow?
-
-> You also
-> need to fix the reported warning.
-Ack
+> I proposed to skip the max. If you actually use it, you won't be able to
+> change it ever.
+I guess I can just add the max in the driver.
 
 Konrad
+
+> 
 > 
 > Best regards,
 > Krzysztof
