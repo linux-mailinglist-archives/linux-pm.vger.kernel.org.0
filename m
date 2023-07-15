@@ -2,129 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA18C75499C
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Jul 2023 17:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEAF754A57
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Jul 2023 19:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjGOPJx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 15 Jul 2023 11:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
+        id S230255AbjGORFi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 15 Jul 2023 13:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbjGOPJw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Jul 2023 11:09:52 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D45130EF
-        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:49 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4fbf09a9139so4811063e87.2
-        for <linux-pm@vger.kernel.org>; Sat, 15 Jul 2023 08:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689433787; x=1692025787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=amPlcbDpulTFOsow/YvicAIG+61RE4wSP76UghvZkDc=;
-        b=LjFCnFxnREZGUDfhT4VW51KlYy0xfK1JrVIPprVF/fTyRuXnzlSJCcR3D2G2zyGHwz
-         CFv+FkkBMwc3AHzSBmW3W07hZD00AZmFjGEX46gs2cp+Yrq6Q8phQCXeD4I+vqZNHVWk
-         mnk+ep4pTkwvvpwBrpbOqJW5nBp4KtF+PG7bQNQD+nt3/TLzom7rnUDL/gnOy/9WxG6Y
-         6vdlUseXij7Tpx8Xs3lZz/m/vibG+LJKGUD0ObReboZaZDNHA7LO/SQSjqWVOsFQvkXb
-         aGku7+AYktrHEiLOUB+NswqcuFof9OunuEs4FNBuaryWPI8OKhNCjpQIHYhdPj9pCjIE
-         zxLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689433787; x=1692025787;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=amPlcbDpulTFOsow/YvicAIG+61RE4wSP76UghvZkDc=;
-        b=asBfjpzO8iQ8m+rC0U/2rEC9uvbmjlQwoRuzOUhRAvi7DG2M5j8U27jYLgTGD/Qt2u
-         zcv3ctWyEzrU98HNtYPlZF891mpJ9DEeJ0weS+jB5ygs3I3eIDaXNn8qR3jAcnLvSPBE
-         8evmxsVpbecsE9eVWVgrJzoW/W7CjGgHXkxlsI37Q/Lxfvr3ikm3yHwYZanULu2jARdq
-         dLYH7OaERHVrQxD4ldTpu7vvqhMKNlLFX93uc1VW6M1ZuAHGM/Th2AYioG35Hnrh4Gvr
-         v5UXk5YzKWhH8wUMW2CRt1/35CEG7FPPvCqNCfzrlG7E5prhoL4fjAd14KRFO8f5jPv0
-         PLUQ==
-X-Gm-Message-State: ABy/qLYnELTWcFQUSW73Hpal4abh9dLvsX5TLmLPQXTn43iHu25d6hWx
-        OFa+KMXaOtBlE/0qRlhh+GXoVg==
-X-Google-Smtp-Source: APBJJlEEbjLVhNpZlgevCjtFWDFvRtWdujxLD4TiNGl4wp+NxSuW5PaSXwBmHfbr2c6ro1RfEOb37A==
-X-Received: by 2002:a05:6512:3985:b0:4fd:b7fb:c9fa with SMTP id j5-20020a056512398500b004fdb7fbc9famr168026lfu.42.1689433787515;
-        Sat, 15 Jul 2023 08:09:47 -0700 (PDT)
-Received: from [192.168.1.101] (abxi167.neoplus.adsl.tpnet.pl. [83.9.2.167])
-        by smtp.gmail.com with ESMTPSA id j13-20020ac2454d000000b004faa2de9877sm1932342lfm.286.2023.07.15.08.09.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Jul 2023 08:09:47 -0700 (PDT)
-Message-ID: <269bd956-6cf3-2215-a7ab-1b6b8b84b6d4@linaro.org>
-Date:   Sat, 15 Jul 2023 17:09:45 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 01/53] dt-bindings: interconnect: qcom,icc: Introduce
- fixed BCM voter indices
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        with ESMTP id S229483AbjGORFi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 15 Jul 2023 13:05:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303E7B5;
+        Sat, 15 Jul 2023 10:05:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B761760BD4;
+        Sat, 15 Jul 2023 17:05:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0321C433C8;
+        Sat, 15 Jul 2023 17:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689440736;
+        bh=ncuBs4kxzk2VlZm7kfJfgZlSPKeTybZkTtdYydKCK18=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k9TOh4ZDaNP4erpFLfnmoiw+h2TmkSY9NJv0apQm7CqXF3xU7UZA22oYIy3CmWXDL
+         S21PAMmPfcahzR3TC+SMWaYnKmDOIo4smNCrXt7gjGhtg86ICAxGeLV31ZUNCgTqZo
+         jcQoa016QrvOmJIxM0rCJbcdMTyDqTwvTuBTnlVWG69hTO22gQbWUtqM97oifq+5pE
+         1OM/nEiN/Nen1hIEM9lM3vNcoq4fuwL4uqc+acilKzQZ60iocC+Ro/lD6cewlLWdvi
+         eTaH9UxQLTgWebkdKCwnsKufKpIPtYIpVK+kTCgbKftUxiSk+TGmXAMBikgX7+G4AN
+         fiKJQAUS7Lsmw==
+Date:   Sat, 15 Jul 2023 10:09:03 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Leo Yan <leo.yan@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
- <20230708-topic-rpmh_icc_rsc-v1-1-b223bd2ac8dd@linaro.org>
- <3b733848-2745-e6ef-f517-039712bbe7af@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <3b733848-2745-e6ef-f517-039712bbe7af@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH v7 00/22] Restructure RPM SMD ICC
+Message-ID: <yytpipulsnqnrfgn6tftwje7cpghburt3aau54x5hwecpwus4t@ayqunqa4pm4a>
+References: <20230526-topic-smd_icc-v7-0-09c78c175546@linaro.org>
+ <de875511-7356-32cd-514a-ac532d75a8fd@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <de875511-7356-32cd-514a-ac532d75a8fd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12.07.2023 22:39, Krzysztof Kozlowski wrote:
-> On 11/07/2023 14:18, Konrad Dybcio wrote:
->> It makes zero (or less) sense to consume BCM voters per interconnect
->> provider. They are shared throughout the entire system and it's enough
->> to keep a single reference to each of them.
->>
->> Storing them in a shared array at fixed indices will let us improve both
->> the representation of the RPMh architecture (every RSC can hold a resource
->> vote on any bus, they're not limited in that regard) and save as much as
->> kilobytes worth of RAM.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  include/dt-bindings/interconnect/qcom,icc.h | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/include/dt-bindings/interconnect/qcom,icc.h b/include/dt-bindings/interconnect/qcom,icc.h
->> index cd34f36daaaa..9c13ef8a044e 100644
->> --- a/include/dt-bindings/interconnect/qcom,icc.h
->> +++ b/include/dt-bindings/interconnect/qcom,icc.h
->> @@ -23,4 +23,12 @@
->>  #define QCOM_ICC_TAG_ALWAYS		(QCOM_ICC_TAG_AMC | QCOM_ICC_TAG_WAKE |\
->>  					 QCOM_ICC_TAG_SLEEP)
->>  
->> +#define ICC_BCM_VOTER_APPS		0
->> +#define ICC_BCM_VOTER_DISP		1
->> +#define ICC_BCM_VOTER_CAM0		2
->> +#define ICC_BCM_VOTER_CAM1		3
->> +#define ICC_BCM_VOTER_CAM2		4
->> +
->> +#define ICC_BCM_VOTER_MAX		64
+On Thu, Jul 13, 2023 at 08:37:57PM +0300, Georgi Djakov wrote:
+> On 19.06.23 16:04, Konrad Dybcio wrote:
+> > This series reshuffles things around, moving the management of SMD RPM
+> > bus clocks to the interconnect framework where they belong. This helps
+> > us solve a couple of issues:
+> > 
+[..]
 > 
-> I proposed to skip the max. If you actually use it, you won't be able to
-> change it ever.
-I guess I can just add the max in the driver.
+> Thank you, Konrad!
+> 
+> Acked-by: Georgi Djakov <djakov@kernel.org>
 
-Konrad
+Thank you, Georgi.
 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+I've applied the patches to a branch based on v6.5-rc1, merged that into
+the qcom-tree and pushed the branch.
+
+Regards,
+Bjorn
+
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
+
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git 20230526-topic-smd_icc-v7-0-09c78c175546@linaro.org
+
+for you to fetch changes up to 17fc623e0f728c35b82a0e79cd4f3b8aab495663:
+
+  interconnect: qcom: icc-rpm: Fix bandwidth calculations (2023-07-15 09:54:45 -0700)
+
+----------------------------------------------------------------
+Konrad Dybcio (21):
+      dt-bindings: interconnect: Add Qcom RPM ICC bindings
+      soc: qcom: smd-rpm: Add QCOM_SMD_RPM_STATE_NUM
+      soc: qcom: smd-rpm: Use tabs for defines
+      clk: qcom: smd-rpm: Move some RPM resources to the common header
+      interconnect: qcom: icc-rpm: Introduce keep_alive
+      interconnect: qcom: Add missing headers in icc-rpm.h
+      interconnect: qcom: Fold smd-rpm.h into icc-rpm.h
+      interconnect: qcom: smd-rpm: Add rpmcc handling skeleton code
+      interconnect: qcom: Define RPM bus clocks
+      interconnect: qcom: sdm660: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8996: Hook up RPM bus clk definitions
+      interconnect: qcom: qcs404: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8939: Hook up RPM bus clk definitions
+      interconnect: qcom: msm8916: Hook up RPM bus clk definitions
+      interconnect: qcom: qcm2290: Hook up RPM bus clk definitions
+      interconnect: qcom: icc-rpm: Control bus rpmcc from icc
+      clk: qcom: smd-rpm: Separate out interconnect bus clocks
+      interconnect: qcom: icc-rpm: Fix bucket number
+      interconnect: qcom: icc-rpm: Set bandwidth on both contexts
+      interconnect: qcom: icc-rpm: Set correct bandwidth through RPM bw req
+      interconnect: qcom: icc-rpm: Fix bandwidth calculations
+
+Stephan Gerhold (1):
+      soc: qcom: smd-rpm: Move icc_smd_rpm registration to clk-smd-rpm
+
+ drivers/clk/qcom/clk-smd-rpm.c                  | 314 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ drivers/interconnect/qcom/Makefile              |   2 +-
+ drivers/interconnect/qcom/icc-rpm-clocks.c      |  77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/interconnect/qcom/icc-rpm.c             | 220 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-----------------------------------------------------------------------------------------------------------
+ drivers/interconnect/qcom/icc-rpm.h             |  56 +++++++++++++++++++++++++++++++++++++++++++++-----------
+ drivers/interconnect/qcom/msm8916.c             |   5 +++--
+ drivers/interconnect/qcom/msm8939.c             |   6 ++++--
+ drivers/interconnect/qcom/msm8974.c             |   2 +-
+ drivers/interconnect/qcom/msm8996.c             |  10 +++++++---
+ drivers/interconnect/qcom/qcm2290.c             |   8 ++++++--
+ drivers/interconnect/qcom/qcs404.c              |   5 +++--
+ drivers/interconnect/qcom/sdm660.c              |   8 +++++---
+ drivers/interconnect/qcom/smd-rpm.c             |  23 ++++++++++++++++++++++-
+ drivers/interconnect/qcom/smd-rpm.h             |  15 ---------------
+ drivers/soc/qcom/smd-rpm.c                      |  17 +----------------
+ include/dt-bindings/interconnect/qcom,rpm-icc.h |  13 +++++++++++++
+ include/linux/soc/qcom/smd-rpm.h                |  20 ++++++++++++++++++--
+ 17 files changed, 456 insertions(+), 345 deletions(-)
+ create mode 100644 drivers/interconnect/qcom/icc-rpm-clocks.c
+ delete mode 100644 drivers/interconnect/qcom/smd-rpm.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,rpm-icc.h
