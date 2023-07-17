@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AD7756D05
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72125756D0B
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231173AbjGQTTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S229917AbjGQTUP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjGQTTF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:19:05 -0400
+        with ESMTP id S229476AbjGQTUP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:20:15 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F8618D;
-        Mon, 17 Jul 2023 12:19:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F39EED;
+        Mon, 17 Jul 2023 12:20:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689621543;
+        s=mail; t=1689621612;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=N2cj6nzOloFnUedIE+sqlGYJXKAM8KXP3LA38uvlSgg=;
-        b=aMum8ykNR3O1EyRf6APapE/nrm/XIgEfrpD8ayt6JjIYHc+ZXXuoLqyzwoTFi2PMsEbFo0
-        8F9S9ZtTbKtbVAibRi4zQuAieo9ldUyxhzc5NMkbAJtj94tVSGeV2CfoYzoeBe1keU1UIX
-        0eqds2sfP9zZWoHFmwgWgbxzA1/ATLA=
-Message-ID: <a9c7064df30215878925206751a4017830938ede.camel@crapouillou.net>
-Subject: Re: [PATCH v2 01/10] pm: Introduce DEFINE_NOIRQ_DEV_PM_OPS() helper
+        bh=VH54V72aOY3ogSKUOINjMnAMtLyl5t2LpD7MwgpBD1k=;
+        b=yP2aG/l/BcAOIH9TVYi+sSms/ywPuGo+vB9qPeY/YWR/dpOVAMFasz5X3Lk79VnXxkuZJA
+        jahCOB2APvNis4xyyvFFGg6gWEuB8dYtA/S3NJHahOWyTmCy4lagb+zsg1mbE5CtfXHQgi
+        RXhFo+EX+9xJaQBIh/7VM7OitWq3rUA=
+Message-ID: <1f77bcc8ec861dc2abb9defb062ed9178d3d292e.camel@crapouillou.net>
+Subject: Re: [PATCH v2 02/10] pinctrl: baytrail: Make use of pm_ptr()
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -54,12 +54,12 @@ Cc:     Andy Shevchenko <andy@kernel.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Mon, 17 Jul 2023 21:19:00 +0200
-In-Reply-To: <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
+Date:   Mon, 17 Jul 2023 21:20:09 +0200
+In-Reply-To: <20230717172821.62827-3-andriy.shevchenko@linux.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-         <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-3-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -71,59 +71,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andy,
-
-Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
-=C2=A0:
-> _DEFINE_DEV_PM_OPS() helps to define PM operations for the system
-> sleep
-> and/or runtime PM cases. Some of the existing users want to have
-> _noirq()
-> variants to be set. For that purpose introduce a new helper which
-> sets
-> up _noirq() callbacks to be set and struct dev_pm_ops be provided.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> =C2=A0include/linux/pm.h | 9 +++++++++
-> =C2=A01 file changed, 9 insertions(+)
->=20
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index badad7d11f4f..0f19af8d5493 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -448,6 +448,15 @@ const struct dev_pm_ops __maybe_unused name =3D {
-> \
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SET_RUNTIME_PM_OPS(suspen=
-d_fn, resume_fn, idle_fn) \
-> =C2=A0}
-> =C2=A0
-> +/*
-> + * Use this if you want to have the suspend and resume callbacks be
-> called
-> + * with disabled IRQs.
-
-with disabled IRQs -> with IRQs disabled?
-
-I'm not really sure that we need this macro, but I don't really object
-either. As long as it has callers I guess it's fine, I just don't want
-<linux/pm.h> to become too bloated and confusing.
-
-Anyway:
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-
-Cheers,
--Paul
-
-> + */
-> +#define DEFINE_NOIRQ_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +const struct dev_pm_ops name =3D { \
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NOIRQ_SYSTEM_SLEEP_PM_OPS(susp=
-end_fn, resume_fn) \
-> +}
-> +
-> =C2=A0#define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
-> =C2=A0#define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP),
-> (_ptr))
-> =C2=A0
+SGkgQW5keSwKCkxlIGx1bmRpIDE3IGp1aWxsZXQgMjAyMyDDoCAyMDoyOCArMDMwMCwgQW5keSBT
+aGV2Y2hlbmtvIGEgw6ljcml0wqA6Cj4gQ2xlYW5pbmcgdXAgdGhlIGRyaXZlciB0byB1c2UgcG1f
+cHRyKCkgYW5kICpfUE1fT1BTKCkgbWFjcm9zIHRoYXQKPiBtYWtlIGl0IHNpbXBsZXIgYW5kIGFs
+bG93cyB0aGUgY29tcGlsZXIgdG8gcmVtb3ZlIHRob3NlIGZ1bmN0aW9ucwo+IGlmIGJ1aWx0IHdp
+dGhvdXQgQ09ORklHX1BNIGFuZCBDT05GSUdfUE1fU0xFRVAgc3VwcG9ydC4KPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBBbmR5IFNoZXZjaGVua28gPGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNv
+bT4KClJldmlld2VkLWJ5OiBQYXVsIENlcmN1ZWlsIDxwYXVsQGNyYXBvdWlsbG91Lm5ldD4KCkNo
+ZWVycywKLVBhdWwKCj4gLS0tCj4gwqBkcml2ZXJzL3BpbmN0cmwvaW50ZWwvcGluY3RybC1iYXl0
+cmFpbC5jIHwgMTEgKysrLS0tLS0tLS0KPiDCoDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMo
+KyksIDggZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGluY3RybC9pbnRl
+bC9waW5jdHJsLWJheXRyYWlsLmMKPiBiL2RyaXZlcnMvcGluY3RybC9pbnRlbC9waW5jdHJsLWJh
+eXRyYWlsLmMKPiBpbmRleCAyN2FlZjYyZmM3YzAuLjY2YWFiYWM2YmU5YyAxMDA2NDQKPiAtLS0g
+YS9kcml2ZXJzL3BpbmN0cmwvaW50ZWwvcGluY3RybC1iYXl0cmFpbC5jCj4gKysrIGIvZHJpdmVy
+cy9waW5jdHJsL2ludGVsL3BpbmN0cmwtYmF5dHJhaWwuYwo+IEBAIC0xNzMzLDcgKzE3MzMsNiBA
+QCBzdGF0aWMgaW50IGJ5dF9waW5jdHJsX3Byb2JlKHN0cnVjdAo+IHBsYXRmb3JtX2RldmljZSAq
+cGRldikKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7Cj4gwqB9Cj4gwqAKPiAtI2lmZGVmIENP
+TkZJR19QTV9TTEVFUAo+IMKgc3RhdGljIGludCBieXRfZ3Bpb19zdXNwZW5kKHN0cnVjdCBkZXZp
+Y2UgKmRldikKPiDCoHsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGludGVsX3BpbmN0cmwgKnZn
+ID0gZGV2X2dldF9kcnZkYXRhKGRldik7Cj4gQEAgLTE4MTcsOSArMTgxNiw3IEBAIHN0YXRpYyBp
+bnQgYnl0X2dwaW9fcmVzdW1lKHN0cnVjdCBkZXZpY2UgKmRldikKPiDCoMKgwqDCoMKgwqDCoMKg
+cmF3X3NwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmJ5dF9sb2NrLCBmbGFncyk7Cj4gwqDCoMKgwqDC
+oMKgwqDCoHJldHVybiAwOwo+IMKgfQo+IC0jZW5kaWYKPiDCoAo+IC0jaWZkZWYgQ09ORklHX1BN
+Cj4gwqBzdGF0aWMgaW50IGJ5dF9ncGlvX3J1bnRpbWVfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpk
+ZXYpCj4gwqB7Cj4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+IEBAIC0xODI5LDE5ICsxODI2
+LDE3IEBAIHN0YXRpYyBpbnQgYnl0X2dwaW9fcnVudGltZV9yZXN1bWUoc3RydWN0Cj4gZGV2aWNl
+ICpkZXYpCj4gwqB7Cj4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiAwOwo+IMKgfQo+IC0jZW5kaWYK
+PiDCoAo+IMKgc3RhdGljIGNvbnN0IHN0cnVjdCBkZXZfcG1fb3BzIGJ5dF9ncGlvX3BtX29wcyA9
+IHsKPiAtwqDCoMKgwqDCoMKgwqBTRVRfTEFURV9TWVNURU1fU0xFRVBfUE1fT1BTKGJ5dF9ncGlv
+X3N1c3BlbmQsCj4gYnl0X2dwaW9fcmVzdW1lKQo+IC3CoMKgwqDCoMKgwqDCoFNFVF9SVU5USU1F
+X1BNX09QUyhieXRfZ3Bpb19ydW50aW1lX3N1c3BlbmQsCj4gYnl0X2dwaW9fcnVudGltZV9yZXN1
+bWUsCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IE5VTEwpCj4gK8KgwqDCoMKgwqDCoMKgTEFURV9TWVNURU1fU0xFRVBfUE1fT1BTKGJ5dF9ncGlv
+X3N1c3BlbmQsIGJ5dF9ncGlvX3Jlc3VtZSkKPiArwqDCoMKgwqDCoMKgwqBSVU5USU1FX1BNX09Q
+UyhieXRfZ3Bpb19ydW50aW1lX3N1c3BlbmQsCj4gYnl0X2dwaW9fcnVudGltZV9yZXN1bWUsIE5V
+TEwpCj4gwqB9Owo+IMKgCj4gwqBzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciBieXRfZ3Bp
+b19kcml2ZXIgPSB7Cj4gwqDCoMKgwqDCoMKgwqDCoC5wcm9iZcKgwqDCoMKgwqDCoMKgwqDCoCA9
+IGJ5dF9waW5jdHJsX3Byb2JlLAo+IMKgwqDCoMKgwqDCoMKgwqAuZHJpdmVywqDCoMKgwqDCoMKg
+wqDCoCA9IHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5uYW1lwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA9ICJieXRfZ3BpbyIsCj4gLcKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoC5wbcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoD0gJmJ5dF9ncGlvX3BtX29wcywKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgLnBtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgPSBwbV9wdHIo
+JmJ5dF9ncGlvX3BtX29wcyksCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAuYWNw
+aV9tYXRjaF90YWJsZcKgwqDCoMKgwqDCoMKgPSBieXRfZ3Bpb19hY3BpX21hdGNoLAo+IMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLnN1cHByZXNzX2JpbmRfYXR0cnPCoMKgwqDCoD0g
+dHJ1ZSwKPiDCoMKgwqDCoMKgwqDCoMKgfSwKCg==
 
