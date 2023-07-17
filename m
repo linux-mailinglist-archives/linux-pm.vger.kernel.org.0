@@ -2,31 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7EA756CEA
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AD7756D05
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjGQTOR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S231173AbjGQTTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjGQTOQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:14:16 -0400
+        with ESMTP id S229476AbjGQTTF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:19:05 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D34F116;
-        Mon, 17 Jul 2023 12:14:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F8618D;
+        Mon, 17 Jul 2023 12:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689621254;
+        s=mail; t=1689621543;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WPytza0FzLurbgMNNTIgRyVfzPQAcL6r2G/Kltyw3k0=;
-        b=WDrNej2khKT49u/ZfzL6yobm0Zeq0Qp0TNdRO4GnsqipcI1U4g3vs8VJvik7jgqPbb+x/K
-        wI4DNWpNCRBaUxv2JjYJputr6VXkICPXLO+fYZFLN7mHFvzTlCvE7+z96AuKoK9PuM1tOU
-        ep6N1O1jqullaYEUkUSlrwzlhPyQY/M=
-Message-ID: <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
-Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
+        bh=N2cj6nzOloFnUedIE+sqlGYJXKAM8KXP3LA38uvlSgg=;
+        b=aMum8ykNR3O1EyRf6APapE/nrm/XIgEfrpD8ayt6JjIYHc+ZXXuoLqyzwoTFi2PMsEbFo0
+        8F9S9ZtTbKtbVAibRi4zQuAieo9ldUyxhzc5NMkbAJtj94tVSGeV2CfoYzoeBe1keU1UIX
+        0eqds2sfP9zZWoHFmwgWgbxzA1/ATLA=
+Message-ID: <a9c7064df30215878925206751a4017830938ede.camel@crapouillou.net>
+Subject: Re: [PATCH v2 01/10] pm: Introduce DEFINE_NOIRQ_DEV_PM_OPS() helper
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -55,10 +54,10 @@ Cc:     Andy Shevchenko <andy@kernel.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Mon, 17 Jul 2023 21:14:12 +0200
-In-Reply-To: <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
+Date:   Mon, 17 Jul 2023 21:19:00 +0200
+In-Reply-To: <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-         <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
@@ -76,39 +75,55 @@ Hi Andy,
 
 Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
 =C2=A0:
-> Since pm.h provides a helper for system no-IRQ PM callbacks,
-> switch the driver to use it instead of open coded variant.
+> _DEFINE_DEV_PM_OPS() helps to define PM operations for the system
+> sleep
+> and/or runtime PM cases. Some of the existing users want to have
+> _noirq()
+> variants to be set. For that purpose introduce a new helper which
+> sets
+> up _noirq() callbacks to be set and struct dev_pm_ops be provided.
 >=20
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> =C2=A0drivers/pinctrl/tegra/pinctrl-tegra.c | 5 +----
-> =C2=A01 file changed, 1 insertion(+), 4 deletions(-)
+> =C2=A0include/linux/pm.h | 9 +++++++++
+> =C2=A01 file changed, 9 insertions(+)
 >=20
-> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c
-> b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> index 4547cf66d03b..734c71ef005b 100644
-> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
-> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> @@ -747,10 +747,7 @@ static int tegra_pinctrl_resume(struct device
-> *dev)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> diff --git a/include/linux/pm.h b/include/linux/pm.h
+> index badad7d11f4f..0f19af8d5493 100644
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -448,6 +448,15 @@ const struct dev_pm_ops __maybe_unused name =3D {
+> \
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SET_RUNTIME_PM_OPS(suspen=
+d_fn, resume_fn, idle_fn) \
 > =C2=A0}
 > =C2=A0
-> -const struct dev_pm_ops tegra_pinctrl_pm =3D {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D &tegra_pinc=
-trl_suspend,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D &tegra_pinct=
-rl_resume
-> -};
-> +DEFINE_NOIRQ_DEV_PM_OPS(tegra_pinctrl_pm, tegra_pinctrl_suspend,
-> tegra_pinctrl_resume);
-> =C2=A0
-> =C2=A0static bool tegra_pinctrl_gpio_node_has_range(struct tegra_pmx *pmx=
-)
-> =C2=A0{
+> +/*
+> + * Use this if you want to have the suspend and resume callbacks be
+> called
+> + * with disabled IRQs.
 
-Another driver where using EXPORT_GPL_DEV_PM_OPS() would make more
-sense.
+with disabled IRQs -> with IRQs disabled?
+
+I'm not really sure that we need this macro, but I don't really object
+either. As long as it has callers I guess it's fine, I just don't want
+<linux/pm.h> to become too bloated and confusing.
+
+Anyway:
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
 Cheers,
 -Paul
+
+> + */
+> +#define DEFINE_NOIRQ_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> +const struct dev_pm_ops name =3D { \
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NOIRQ_SYSTEM_SLEEP_PM_OPS(susp=
+end_fn, resume_fn) \
+> +}
+> +
+> =C2=A0#define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+> =C2=A0#define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP),
+> (_ptr))
+> =C2=A0
+
