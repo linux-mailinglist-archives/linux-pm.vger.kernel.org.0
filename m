@@ -2,57 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787CC756DBD
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41011756DCD
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbjGQTzI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:55:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S231370AbjGQT4y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231352AbjGQTzH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:55:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC3E1B1;
-        Mon, 17 Jul 2023 12:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689623698; x=1721159698;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7UEb9hpETQGeiFvKLdueQSWqYeNmPjPAksNoPFwVZWI=;
-  b=cn44Kussnq2iJRR3SHHqY+wUsK7fAI65Q94qXOf1C3c/1BbzB3VPBRBw
-   Suh/3dQJKAp3X11VYy2uHYPTdeA5S1jV0CCq40MANgAWUSpeYcv7iY7um
-   hJFsKP4rU2H8gQSO84m/H0E1dQvhiPrELsMHWLbmiyANHIaqElVYzuU19
-   +ivF9f0ukyw8eZLl3zfwAlWr+6pv00JCeybhQpfSZOpjCPrDl6tH5/5/S
-   mz/dSzRV2MpbX03PkPs7zc2moALg6fktGwLl3lNtmzn92ICCSMynMEjiB
-   oavppWdVqDztWGby/L9CJHr/vLbIVRWsRuy6QYivFqnoxoIiQMU9lKHrf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="366064618"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="366064618"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 12:54:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="788770766"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="788770766"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Jul 2023 12:54:56 -0700
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH v2 7/7] selftests/thermel/intel: Add test to read workload hint
-Date:   Mon, 17 Jul 2023 12:54:05 -0700
-Message-Id: <20230717195405.730869-8-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230717195405.730869-1-srinivas.pandruvada@linux.intel.com>
-References: <20230717195405.730869-1-srinivas.pandruvada@linux.intel.com>
+        with ESMTP id S231352AbjGQT4r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:56:47 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BB2170D;
+        Mon, 17 Jul 2023 12:56:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1689623760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fEo4GP83lIE+lgHyH0OgrfVUmqIaUGHnS8773OANhBk=;
+        b=l0iyJWMpe6xSAJOeof6UhbOiLwEzGtfdQOenOHe7x1WEX87oLs/sqcILqWR/6F6vYNbyxW
+        0jHoBbsL1LxSF1a8umousHQ+ObYLfz2FWrXHnM3il1OBsIaAXM+DyopoqtpVwrV8RDMkRz
+        nihLU0iVibpyCgWAkHsF50Li29isdlU=
+Message-ID: <8c66f79025ddd8388eeb9bdb3f0e789fe9f362d9.camel@crapouillou.net>
+Subject: Re: [PATCH v2 04/10] pinctrl: intel: Switch to use
+ DEFINE_NOIRQ_DEV_PM_OPS() helper
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Date:   Mon, 17 Jul 2023 21:55:57 +0200
+In-Reply-To: <CAHp75Vcjq9=Q2_fsGJ9oCw=WYR3p3ot_cNLiDJV93psNcXXHLw@mail.gmail.com>
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-5-andriy.shevchenko@linux.intel.com>
+         <c47c26ba7ea5bcbdcbe1d001b6cc527cee6c7d03.camel@crapouillou.net>
+         <CAHp75Vcjq9=Q2_fsGJ9oCw=WYR3p3ot_cNLiDJV93psNcXXHLw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,220 +74,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some SoCs have in built firmware support to classify current running
-workload and pass to OS for making power management decisions.
+Le lundi 17 juillet 2023 =C3=A0 22:33 +0300, Andy Shevchenko a =C3=A9crit=
+=C2=A0:
+> On Mon, Jul 17, 2023 at 10:02=E2=80=AFPM Paul Cercueil <paul@crapouillou.=
+net>
+> wrote:
+> > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9cr=
+it :
+>=20
+> ...
+>=20
+> > Unrelated change.
+>=20
+> OK.
+>=20
+> ...
+>=20
+> > So the correct way to update this driver would be to have a
+> > conditionally-exported dev_pm_ops structure:
+> >=20
+> > EXPORT_GPL_DEV_PM_OPS(intel_pinctrl_pm_ops) =3D {
+> > =C2=A0=C2=A0=C2=A0 NOIRQ_SYSTEM_SLEEP_PM_OPS(intel_pinctrl_suspend_noir=
+q,
+> > intel_pinctrl_resume_noirq),
+> > };
+>=20
+> This looks ugly. I didn't know that EXPORT*PM_OPS designed that way,
+> but it seems pm.h in such case needs EXPORT for NOIRQ case as well.
 
-This test program waits for notification of workload type change
-and prints. This program can be used to test this feature and also
-allows other user space programs to use as a reference.
+It's designed so that when CONFIG_PM is disabled, the dev_pm_ops is
+garbage-collected along with all its callbacks.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-v2:
-Add a signal handler for interrupting poll and exit
-Also moved inside intel/workload_type_hint foler
-Update Makefile
+I know it looks ugly, but we already have 4 variants (regular,
+namespace, GPL, namespace + GPL), if we start to add macros for
+specific use-cases then it will become bloated really quick.
 
- tools/testing/selftests/Makefile              |   1 +
- .../thermal/intel/workload_hint/Makefile      |  12 ++
- .../intel/workload_hint/workload_hint_test.c  | 157 ++++++++++++++++++
- 3 files changed, 170 insertions(+)
- create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/Makefile
- create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+And the "bloat" I'm trying to avoid here is the extreme expansion of
+the API which makes it hard for people not familiar to the code to
+understand what should be used and how.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 666b56f22a41..eb0228965266 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -81,6 +81,7 @@ TARGETS += syscall_user_dispatch
- TARGETS += sysctl
- TARGETS += tc-testing
- TARGETS += tdx
-+TARGETS += thermal/intel/workload_hint
- TARGETS += timens
- ifneq (1, $(quicktest))
- TARGETS += timers
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/Makefile b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-new file mode 100644
-index 000000000000..37ff3286283b
---- /dev/null
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/Makefile
-@@ -0,0 +1,12 @@
-+# SPDX-License-Identifier: GPL-2.0
-+ifndef CROSS_COMPILE
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-+
-+ifeq ($(ARCH),x86)
-+TEST_GEN_PROGS := workload_hint_test
-+
-+include ../../../lib.mk
-+
-+endif
-+endif
-diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-new file mode 100644
-index 000000000000..217c3a641c53
---- /dev/null
-+++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
-@@ -0,0 +1,157 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+
-+#include <stdio.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <signal.h>
-+
-+#define WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/notification_delay_ms"
-+#define WORKLOAD_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_hint_enable"
-+#define WORKLOAD_TYPE_INDEX_ATTRIBUTE  "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_type_index"
-+
-+static const char * const workload_types[] = {
-+	"idle",
-+	"battery_life",
-+	"sustained",
-+	"bursty",
-+	NULL
-+};
-+
-+#define WORKLOAD_TYPE_MAX_INDEX	3
-+
-+void workload_hint_exit(int signum)
-+{
-+	int fd;
-+
-+	/* Disable feature via sysfs knob */
-+
-+	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
-+	if (fd < 0) {
-+		perror("Unable to open workload type feature enable file\n");
-+		exit(1);
-+	}
-+
-+	if (write(fd, "0\n", 2) < 0) {
-+		perror("Can' disable workload hints\n");
-+		exit(1);
-+	}
-+
-+	printf("Disabled workload type prediction\n");
-+
-+	close(fd);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	struct pollfd ufd;
-+	char index_str[4];
-+	int fd, ret, index;
-+	char delay_str[64];
-+	int delay = 0;
-+
-+	printf("Usage: workload_hint_test [notification delay in milli seconds]\n");
-+
-+	if (argc > 1) {
-+		ret = sscanf(argv[1], "%d", &delay);
-+		if (ret < 0) {
-+			printf("Invalid delay\n");
-+			exit(1);
-+		}
-+
-+		printf("Setting notification delay to %d ms\n", delay);
-+		if (delay < 0)
-+			exit(1);
-+
-+		sprintf(delay_str, "%s\n", argv[1]);
-+
-+		sprintf(delay_str, "%s\n", argv[1]);
-+		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
-+		if (fd < 0) {
-+			perror("Unable to open workload notification delay\n");
-+			exit(1);
-+		}
-+
-+		if (write(fd, delay_str, strlen(delay_str)) < 0) {
-+			perror("Can't set delay\n");
-+			exit(1);
-+		}
-+
-+		close(fd);
-+	}
-+
-+	if (signal(SIGINT, workload_hint_exit) == SIG_IGN)
-+		signal(SIGINT, SIG_IGN);
-+	if (signal(SIGHUP, workload_hint_exit) == SIG_IGN)
-+		signal(SIGHUP, SIG_IGN);
-+	if (signal(SIGTERM, workload_hint_exit) == SIG_IGN)
-+		signal(SIGTERM, SIG_IGN);
-+
-+	/* Enable feature via sysfs knob */
-+	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
-+	if (fd < 0) {
-+		perror("Unable to open workload type feature enable file\n");
-+		exit(1);
-+	}
-+
-+	if (write(fd, "1\n", 2) < 0) {
-+		perror("Can' enable workload hints\n");
-+		exit(1);
-+	}
-+
-+	close(fd);
-+
-+	printf("Enabled workload type prediction\n");
-+
-+	while (1) {
-+		fd = open(WORKLOAD_TYPE_INDEX_ATTRIBUTE, O_RDONLY);
-+		if (fd < 0) {
-+			perror("Unable to open workload type file\n");
-+			exit(1);
-+		}
-+
-+		if ((lseek(fd, 0L, SEEK_SET)) < 0) {
-+			fprintf(stderr, "Failed to set pointer to beginning\n");
-+			exit(1);
-+		}
-+
-+		if (read(fd, index_str, sizeof(index_str)) < 0) {
-+			fprintf(stderr, "Failed to read from:%s\n",
-+			WORKLOAD_TYPE_INDEX_ATTRIBUTE);
-+			exit(1);
-+		}
-+
-+		ufd.fd = fd;
-+		ufd.events = POLLPRI;
-+
-+		ret = poll(&ufd, 1, -1);
-+		if (ret < 0) {
-+			perror("poll error");
-+			exit(1);
-+		} else if (ret == 0) {
-+			printf("Poll Timeout\n");
-+		} else {
-+			if ((lseek(fd, 0L, SEEK_SET)) < 0) {
-+				fprintf(stderr, "Failed to set pointer to beginning\n");
-+				exit(1);
-+			}
-+
-+			if (read(fd, index_str, sizeof(index_str)) < 0)
-+				exit(0);
-+
-+			ret = sscanf(index_str, "%d", &index);
-+			if (ret < 0)
-+				break;
-+			if (index > WORKLOAD_TYPE_MAX_INDEX)
-+				printf("Invalid workload type index\n");
-+			else
-+				printf("workload type:%s\n", workload_types[index]);
-+		}
-+
-+		close(fd);
-+	}
-+}
--- 
-2.38.1
+> > Then your two callbacks can be "static" and without #ifdef guards.
+> >=20
+> > The resulting "intel_pinctrl_pm_ops" can be marked as "extern" in
+> > the
+> > pinctrl-intel.h without any guards, as long as it is only
+> > referenced
+> > with the pm_ptr() macro.
+>=20
+> I'm not sure I got this. Currently drivers do not have any guards.
+> Moreover, the correct one for noirq is pm_sleep_ptr(), isn't it?
+>=20
 
+The EXPORT_*_DEV_PM_OPS() macros do export the "dev_pm_ops"
+conditionally depending on CONFIG_PM. We could add variants that export
+it conditionally depending on CONFIG_PM_SLEEP, but we're back at the
+problem of adding bloat.
+
+You could use pm_sleep_ptr() indeed, with the existing macros, with the
+drawback that in the case where CONFIG_PM && !CONFIG_PM_SLEEP, the
+dev_pm_ops + callbacks are compiled in but never referenced.
+
+Cheers,
+-Paul
