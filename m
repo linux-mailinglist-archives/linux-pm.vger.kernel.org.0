@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08C6D756CC4
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A2D756CE1
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjGQTHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
+        id S230111AbjGQTM5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjGQTHF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:07:05 -0400
+        with ESMTP id S229652AbjGQTM5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:12:57 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A60CDA;
-        Mon, 17 Jul 2023 12:07:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E59D116;
+        Mon, 17 Jul 2023 12:12:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689620817;
+        s=mail; t=1689621174;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=EUbYZ8pSTKDyookB+Z63SW+UrzvlNrmn7Cc06biQ1RY=;
-        b=Vy1ZpdaCi5k3cwLDqwOtFWg7A3zS5kYwD68mlYCpmulFhmikPGznp1UU+O/FzmpYurkTQU
-        dE1B9mWihM5B463eQv1jcypFaAEP/zRd2Wqcerui3nFeqrtlJnmHBxpmHHYUQq6LE2xUnR
-        df3C1TFbJNELgy4uN2FVXJBkJfK6YxA=
-Message-ID: <f48a35d596694839665bc5883260cbae3ae01d9c.camel@crapouillou.net>
-Subject: Re: [PATCH v2 07/10] pinctrl: mediatek: Switch to use
+        bh=xjvSgydsLBAt+kJ9U/k9BFTw7JpoLGf2fEESmtZCfmw=;
+        b=qeVCdSL1DB214zwLBzzpgW1NMPnfeFgV+Ul4yuE7BcFhqMCwo87py2QaHCdb3WJ1HVLVPR
+        fkfBzWXAz4T9KH9iSCSzVhdwtSMTP+x2px4mS2rNi5fUY3UGIX3SJgUCiozeUlLvemRAVo
+        SrkwqmTGB3bGFYaRrjrRbuvZxeZ7nGc=
+Message-ID: <03592cf5d6854dd5e534e0416de946fd38e4380c.camel@crapouillou.net>
+Subject: Re: [PATCH v2 09/10] pinctrl: renesas: Switch to use
  DEFINE_NOIRQ_DEV_PM_OPS() helper
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -55,10 +55,10 @@ Cc:     Andy Shevchenko <andy@kernel.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Mon, 17 Jul 2023 21:06:54 +0200
-In-Reply-To: <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
+Date:   Mon, 17 Jul 2023 21:12:51 +0200
+In-Reply-To: <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-         <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
@@ -82,81 +82,78 @@ Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
 >=20
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> =C2=A0drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 5 +----
-> =C2=A0drivers/pinctrl/mediatek/pinctrl-paris.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 | 9 +++------
-> =C2=A02 files changed, 4 insertions(+), 10 deletions(-)
+> =C2=A0drivers/pinctrl/renesas/core.c | 16 +++++++---------
+> =C2=A01 file changed, 7 insertions(+), 9 deletions(-)
 >=20
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> index 665dec419e7c..2bf5082d3aa9 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> @@ -922,10 +922,7 @@ static int mtk_eint_resume(struct device
-> *device)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return mtk_eint_do_resume=
-(pctl->eint);
-> =C2=A0}
+> diff --git a/drivers/pinctrl/renesas/core.c
+> b/drivers/pinctrl/renesas/core.c
+> index 0c8d081da6a8..34232b016960 100644
+> --- a/drivers/pinctrl/renesas/core.c
+> +++ b/drivers/pinctrl/renesas/core.c
+> @@ -649,7 +649,7 @@ static const struct of_device_id
+> sh_pfc_of_table[] =3D {
+> =C2=A0};
+> =C2=A0#endif
 > =C2=A0
-> -const struct dev_pm_ops mtk_eint_pm_ops =3D {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D mtk_eint_su=
-spend,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D mtk_eint_res=
-ume,
+> -#if defined(CONFIG_PM_SLEEP) && defined(CONFIG_ARM_PSCI_FW)
+> +#if defined(CONFIG_ARM_PSCI_FW)
+> =C2=A0static void sh_pfc_nop_reg(struct sh_pfc *pfc, u32 reg, unsigned in=
+t
+> idx)
+> =C2=A0{
+> =C2=A0}
+> @@ -732,15 +732,13 @@ static int sh_pfc_resume_noirq(struct device
+> *dev)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0sh_pfc_walk_regs(pfc, sh_pfc_restore_reg);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> =C2=A0}
+> -
+> -static const struct dev_pm_ops sh_pfc_pm=C2=A0 =3D {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(=
+sh_pfc_suspend_noirq,
+> sh_pfc_resume_noirq)
 > -};
-> +DEFINE_NOIRQ_DEV_PM_OPS(mtk_eint_pm_ops, mtk_eint_suspend,
-> mtk_eint_resume);
+> -#define DEV_PM_OPS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&sh_pfc_pm
+> =C2=A0#else
+> =C2=A0static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
+> -#define DEV_PM_OPS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
+> -#endif /* CONFIG_PM_SLEEP && CONFIG_ARM_PSCI_FW */
+> +static int sh_pfc_suspend_noirq(struct device *dev) { return 0; }
+> +static int sh_pfc_resume_noirq(struct device *dev) { return 0; }
+> +#endif=C2=A0/* CONFIG_ARM_PSCI_FW */
+> +
+> +static DEFINE_NOIRQ_DEV_PM_OPS(sh_pfc_pm, sh_pfc_suspend_noirq,
+> sh_pfc_resume_noirq);
 > =C2=A0
-> =C2=A0static int mtk_pctrl_build_state(struct platform_device *pdev)
-> =C2=A0{
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> index 33d6c3fb7908..b1cbd5bafa2e 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> @@ -1119,24 +1119,21 @@ int mtk_paris_pinctrl_probe(struct
-> platform_device *pdev)
-> =C2=A0}
-> =C2=A0EXPORT_SYMBOL_GPL(mtk_paris_pinctrl_probe);
-> =C2=A0
-> -static int mtk_paris_pinctrl_suspend(struct device *device)
-> +static int mtk_paris_suspend(struct device *device)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mtk_pinctrl *pctl =
-=3D dev_get_drvdata(device);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return mtk_eint_do_suspen=
-d(pctl->eint);
-> =C2=A0}
-> =C2=A0
-> -static int mtk_paris_pinctrl_resume(struct device *device)
-> +static int mtk_paris_resume(struct device *device)
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mtk_pinctrl *pctl =
-=3D dev_get_drvdata(device);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return mtk_eint_do_resume=
-(pctl->eint);
-> =C2=A0}
-> =C2=A0
-> -const struct dev_pm_ops mtk_paris_pinctrl_pm_ops =3D {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D mtk_paris_p=
-inctrl_suspend,
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D mtk_paris_pi=
-nctrl_resume,
-> -};
-> +DEFINE_NOIRQ_DEV_PM_OPS(mtk_paris_pinctrl_pm_ops, mtk_paris_suspend,
-> mtk_paris_resume);
+> =C2=A0#ifdef DEBUG
+> =C2=A0#define SH_PFC_MAX_REGS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0300
+> @@ -1418,7 +1416,7 @@ static struct platform_driver sh_pfc_driver =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.name=C2=A0=C2=A0=C2=A0=3D DRV_NAME,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D of_match_ptr(sh_pfc_of_table),
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.pm=C2=A0=C2=A0=C2=A0=C2=A0 =3D DEV_PM_OPS,
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.pm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_sleep_ptr(&sh_pfc=
+_pm),
 
-It's a bit more work, but I think you should use EXPORT_GPL_DEV_PM_OPS
-(or even better, EXPORT_NS_GPL_DEV_PM_OPS) so that the dev_pm_ops is
-conditionally exported. All callers would have to be updated to use
-pm_ptr().
+I think you could do:
+
+.pm =3D IF_PTR(IS_ENABLED(CONFIG_ARM_PSCI_FW), pm_sleep_ptr(&sh_pfc_pm)),
+
+Then you wouldn't need the #if defined(CONFIG_ARM_PSCI_FW) guard either
+(as long as the code still compiles fine when that config option is
+disabled), and you wouldn't need those dummy callbacks.
 
 Cheers,
 -Paul
 
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
+> =C2=A0};
 > =C2=A0
-> =C2=A0MODULE_LICENSE("GPL v2");
-> =C2=A0MODULE_DESCRIPTION("MediaTek Pinctrl Common Driver V2 Paris");
 
