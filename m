@@ -2,114 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A98756D82
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:39:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8E4756DB1
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231608AbjGQTjy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S230527AbjGQTyK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjGQTjx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:39:53 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63AD39D;
-        Mon, 17 Jul 2023 12:39:52 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-992f6d7c7fbso699997966b.3;
-        Mon, 17 Jul 2023 12:39:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689622791; x=1692214791;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SOp2ZZ3wc36w9kvHwXp3awpd0wFGnA+hVpdKbz6GNXU=;
-        b=DheUe9jqHtnMNx6N40uCc5AiolO11iz7WAmfwD5rCkeOqGj09Sx8tR6PZERo3jKe1m
-         yaSa6GpCqRVUSf4+acnPacv2dNnsDZqeVxuPDfHw4Td6k3oLcEekxIHVL5DM7lUydvFZ
-         1yH4MXeuVnqFJR6JiFjmP4gXyjIUorYoxdLot1ekrL0gkrY6mjCO0iNwacJwU8c9fBaD
-         emJeHw+wYJaUYZTUsjKIXvMc6zD8+c9HU+BwD/q0gBAYdVVCZBwJXCBRrVJJgz75L9I3
-         qltW9FwH9S69mpWDlwv4/kUfAUFPPoUC25iZ/kMewrK0Gq+l2iI7fBTRnFlkzWzGH6za
-         OPZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689622791; x=1692214791;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SOp2ZZ3wc36w9kvHwXp3awpd0wFGnA+hVpdKbz6GNXU=;
-        b=LpEVLQMzuaPNZIYkqsyBbdWUEjPgCiKQzxPelZMtRHwzGrWi9O6wzjRGi52uZyWzGn
-         bgzf/oV6CLNetpbjuDegoJBQ3XcotvPY3LPeW1alaIcGy5HTgEwVG2VEM1Nu8K70u1AE
-         7Co+dcyvtCAsry8QMeiRNa3FMRgoqtJzUsLaeCcD0Rx1LYqwlWAyug5pO8mLgEZZZr70
-         RZCxGnjFOcP/D9e8dt3L9Y+VR0lGxmZ41+Y6iD2lkObV8b68i5Xjh9iZZ60wwStXn1pd
-         OUhhEbsuG0waJUCgcr4pUqCfW4/ICzgOLVl35hQIdeqG8830UAj/G3YTnPKyyGnJKL4X
-         4A1Q==
-X-Gm-Message-State: ABy/qLbnvYK8DHz3oug1p1BFYr1cJ+Czc2NSfaFSK+6eUw5vUKICFEMG
-        V+/NQCLk2pX9wGn4/rddNIbsUaBOVbSgxS93iuE=
-X-Google-Smtp-Source: APBJJlG66q2eVrKtgpAASjhMjhczg4W5QDeuTaoOb4zn9mrNG3umEbjvgyH7X6msZHAYfZ9gd95bh+fbUtFHCcQUtj8=
-X-Received: by 2002:a17:907:1c1a:b0:992:ef60:ab0d with SMTP id
- nc26-20020a1709071c1a00b00992ef60ab0dmr12390276ejc.69.1689622790750; Mon, 17
- Jul 2023 12:39:50 -0700 (PDT)
+        with ESMTP id S230165AbjGQTyH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:54:07 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A68D129;
+        Mon, 17 Jul 2023 12:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689623647; x=1721159647;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=55+F8jOsHvNsY85Vpz2l3HY0qmMTBWxPg4dFVbT6WT8=;
+  b=fG3cDEufTzdFoM1mrxgMX02k2YdKeAMu1SwHudClO3uPskpx8deREAOQ
+   2Hget0Yto9rpPyIZVgubfzsLypQFebiTdxlF0pP5iAnSZqbqnDYXZiE8P
+   9gAxkhCfH40oPB2vJdQdsQCU4bK91N/7oGaTVsd77a2s+ID4Hy4YOKZjR
+   VdUEIEQQ9Q5IpgbL14fuJNHxFEH2beqXlKuDOinEx9zH2v4oVfW3Vz/+b
+   OrKPQ4gA2YoVwJ/RFwYq3WZaHOUBs/B1yAporkMTjQ9mk0wxFDeFMjSYB
+   2VSNFTpYDyUpfDGysHATfA+TimgrZ2Pey2nK32ain/O5IO8+CtNRAd8It
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="366064449"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="366064449"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 12:54:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="788770692"
+X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
+   d="scan'208";a="788770692"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Jul 2023 12:54:06 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH v2 0/7] thermal: processor_thermal: Suport workload hint
+Date:   Mon, 17 Jul 2023 12:53:58 -0700
+Message-Id: <20230717195405.730869-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
- <20230717172821.62827-11-andriy.shevchenko@linux.intel.com> <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
-In-Reply-To: <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 17 Jul 2023 22:39:14 +0300
-Message-ID: <CAHp75VdVM87gbFX9sPKo-+eVRUsK8pmC_fyCQ-_6oMMm1aAQ9Q@mail.gmail.com>
-Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 10:14=E2=80=AFPM Paul Cercueil <paul@crapouillou.ne=
-t> wrote:
-> Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
- :
+Add support for Meteor Lake workload hints. Before adding this support,
+some reorganization and clean up is required.
+First four changes are for clean up and to reorganize code to add
+support for workload hint. The last patch adds a test program as part
+of self tests.
 
-...
+v2:
+Changes in comments and commit log
+Self test program is improved to disable workloadtype notification
+on exit
 
-> Another driver where using EXPORT_GPL_DEV_PM_OPS() would make more
-> sense.
+Srinivas Pandruvada (7):
+  thermal: int340x: processor_thermal: Move mailbox code to common
+    module
+  thermal: int340x: processor_thermal: Add interrupt configuration
+  thermal: int340x: processor_thermal: Use non MSI interrupts
+  thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
+    Meteor Lake
+  thermal: int340x: processor_thermal: Add workload type hint
+  thermal/drivers/int340x: Support workload hint interrupts
+  selftests/thermel/intel: Add test to read workload hint
 
-OK.
+ .../driver-api/thermal/intel_dptf.rst         |  38 +++
+ .../thermal/intel/int340x_thermal/Makefile    |   2 +
+ .../processor_thermal_device.c                |  17 +-
+ .../processor_thermal_device.h                |  21 +-
+ .../processor_thermal_device_pci.c            |  76 ++++--
+ .../processor_thermal_device_pci_legacy.c     |   3 +-
+ .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
+ .../processor_thermal_wlt_hint.c              | 238 ++++++++++++++++++
+ .../processor_thermal_wlt_req.c               | 136 ++++++++++
+ tools/testing/selftests/Makefile              |   1 +
+ .../thermal/intel/workload_hint/Makefile      |  12 +
+ .../intel/workload_hint/workload_hint_test.c  | 157 ++++++++++++
+ 12 files changed, 718 insertions(+), 162 deletions(-)
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_hint.c
+ create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_req.c
+ create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/Makefile
+ create mode 100644 tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
 
-...
+-- 
+2.38.1
 
-Thank you for the review of the series!
-
---=20
-With Best Regards,
-Andy Shevchenko
