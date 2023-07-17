@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A2D756CE1
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7EA756CEA
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjGQTM5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
+        id S229732AbjGQTOR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjGQTM5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:12:57 -0400
+        with ESMTP id S229601AbjGQTOQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:14:16 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E59D116;
-        Mon, 17 Jul 2023 12:12:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D34F116;
+        Mon, 17 Jul 2023 12:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689621174;
+        s=mail; t=1689621254;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xjvSgydsLBAt+kJ9U/k9BFTw7JpoLGf2fEESmtZCfmw=;
-        b=qeVCdSL1DB214zwLBzzpgW1NMPnfeFgV+Ul4yuE7BcFhqMCwo87py2QaHCdb3WJ1HVLVPR
-        fkfBzWXAz4T9KH9iSCSzVhdwtSMTP+x2px4mS2rNi5fUY3UGIX3SJgUCiozeUlLvemRAVo
-        SrkwqmTGB3bGFYaRrjrRbuvZxeZ7nGc=
-Message-ID: <03592cf5d6854dd5e534e0416de946fd38e4380c.camel@crapouillou.net>
-Subject: Re: [PATCH v2 09/10] pinctrl: renesas: Switch to use
+        bh=WPytza0FzLurbgMNNTIgRyVfzPQAcL6r2G/Kltyw3k0=;
+        b=WDrNej2khKT49u/ZfzL6yobm0Zeq0Qp0TNdRO4GnsqipcI1U4g3vs8VJvik7jgqPbb+x/K
+        wI4DNWpNCRBaUxv2JjYJputr6VXkICPXLO+fYZFLN7mHFvzTlCvE7+z96AuKoK9PuM1tOU
+        ep6N1O1jqullaYEUkUSlrwzlhPyQY/M=
+Message-ID: <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
+Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
  DEFINE_NOIRQ_DEV_PM_OPS() helper
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -55,10 +55,10 @@ Cc:     Andy Shevchenko <andy@kernel.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Mon, 17 Jul 2023 21:12:51 +0200
-In-Reply-To: <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
+Date:   Mon, 17 Jul 2023 21:14:12 +0200
+In-Reply-To: <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-         <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
@@ -74,7 +74,6 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Andy,
 
-
 Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
 =C2=A0:
 > Since pm.h provides a helper for system no-IRQ PM callbacks,
@@ -82,78 +81,34 @@ Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
 >=20
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> =C2=A0drivers/pinctrl/renesas/core.c | 16 +++++++---------
-> =C2=A01 file changed, 7 insertions(+), 9 deletions(-)
+> =C2=A0drivers/pinctrl/tegra/pinctrl-tegra.c | 5 +----
+> =C2=A01 file changed, 1 insertion(+), 4 deletions(-)
 >=20
-> diff --git a/drivers/pinctrl/renesas/core.c
-> b/drivers/pinctrl/renesas/core.c
-> index 0c8d081da6a8..34232b016960 100644
-> --- a/drivers/pinctrl/renesas/core.c
-> +++ b/drivers/pinctrl/renesas/core.c
-> @@ -649,7 +649,7 @@ static const struct of_device_id
-> sh_pfc_of_table[] =3D {
-> =C2=A0};
-> =C2=A0#endif
-> =C2=A0
-> -#if defined(CONFIG_PM_SLEEP) && defined(CONFIG_ARM_PSCI_FW)
-> +#if defined(CONFIG_ARM_PSCI_FW)
-> =C2=A0static void sh_pfc_nop_reg(struct sh_pfc *pfc, u32 reg, unsigned in=
-t
-> idx)
-> =C2=A0{
-> =C2=A0}
-> @@ -732,15 +732,13 @@ static int sh_pfc_resume_noirq(struct device
+> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c
+> b/drivers/pinctrl/tegra/pinctrl-tegra.c
+> index 4547cf66d03b..734c71ef005b 100644
+> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
+> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
+> @@ -747,10 +747,7 @@ static int tegra_pinctrl_resume(struct device
 > *dev)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0sh_pfc_walk_regs(pfc, sh_pfc_restore_reg);
 > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
 > =C2=A0}
-> -
-> -static const struct dev_pm_ops sh_pfc_pm=C2=A0 =3D {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(=
-sh_pfc_suspend_noirq,
-> sh_pfc_resume_noirq)
-> -};
-> -#define DEV_PM_OPS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0&sh_pfc_pm
-> =C2=A0#else
-> =C2=A0static int sh_pfc_suspend_init(struct sh_pfc *pfc) { return 0; }
-> -#define DEV_PM_OPS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NULL
-> -#endif /* CONFIG_PM_SLEEP && CONFIG_ARM_PSCI_FW */
-> +static int sh_pfc_suspend_noirq(struct device *dev) { return 0; }
-> +static int sh_pfc_resume_noirq(struct device *dev) { return 0; }
-> +#endif=C2=A0/* CONFIG_ARM_PSCI_FW */
-> +
-> +static DEFINE_NOIRQ_DEV_PM_OPS(sh_pfc_pm, sh_pfc_suspend_noirq,
-> sh_pfc_resume_noirq);
 > =C2=A0
-> =C2=A0#ifdef DEBUG
-> =C2=A0#define SH_PFC_MAX_REGS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0300
-> @@ -1418,7 +1416,7 @@ static struct platform_driver sh_pfc_driver =3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0.name=C2=A0=C2=A0=C2=A0=3D DRV_NAME,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D of_match_ptr(sh_pfc_of_table),
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.pm=C2=A0=C2=A0=C2=A0=C2=A0 =3D DEV_PM_OPS,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.pm=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D pm_sleep_ptr(&sh_pfc=
-_pm),
+> -const struct dev_pm_ops tegra_pinctrl_pm =3D {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D &tegra_pinc=
+trl_suspend,
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D &tegra_pinct=
+rl_resume
+> -};
+> +DEFINE_NOIRQ_DEV_PM_OPS(tegra_pinctrl_pm, tegra_pinctrl_suspend,
+> tegra_pinctrl_resume);
+> =C2=A0
+> =C2=A0static bool tegra_pinctrl_gpio_node_has_range(struct tegra_pmx *pmx=
+)
+> =C2=A0{
 
-I think you could do:
-
-.pm =3D IF_PTR(IS_ENABLED(CONFIG_ARM_PSCI_FW), pm_sleep_ptr(&sh_pfc_pm)),
-
-Then you wouldn't need the #if defined(CONFIG_ARM_PSCI_FW) guard either
-(as long as the code still compiles fine when that config option is
-disabled), and you wouldn't need those dummy callbacks.
+Another driver where using EXPORT_GPL_DEV_PM_OPS() would make more
+sense.
 
 Cheers,
 -Paul
-
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
-> =C2=A0};
-> =C2=A0
-
