@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25184756D55
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AF3756D65
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231572AbjGQTe2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:34:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35792 "EHLO
+        id S231509AbjGQTf4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbjGQTe0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:34:26 -0400
+        with ESMTP id S231368AbjGQTfz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:35:55 -0400
 Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9839D;
-        Mon, 17 Jul 2023 12:34:25 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991fe70f21bso662605266b.3;
-        Mon, 17 Jul 2023 12:34:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5ECBB;
+        Mon, 17 Jul 2023 12:35:54 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9939fbb7191so1009632366b.0;
+        Mon, 17 Jul 2023 12:35:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689622464; x=1692214464;
+        d=gmail.com; s=20221208; t=1689622552; x=1692214552;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gYQ8MaDMGhvh5jrKhzRgcfiYyE0M1SG6+4azBMBqudI=;
-        b=CmYsV+OUNE6OWix7qWg2NF9ksb+D4FwJEZz5BB5Bt/eEtlbnBpWxzX1hjxX7GWMqbP
-         QBss3SAYbf08ZGFzeGlGu8svA+436HShSfeRePvPl/5SsV4Fi73RrXgNqWoj/5aAHE+n
-         CSqV+P/yUXwSn/vt9QkACzC/YZqH/RF4Va2KFecfDefZJ1WQtq4cOWU0H5x1WXjQAXaf
-         X9btZnmo+RiAnZHQWN0shbzijTaFo7v1aF8zdleQKC3A7KRH+fDuqbGpdfDBIhfSpKuY
-         DdyLGY2oKZR3HC1qyeUtfB1POtC2MdmqdDR6cz0tcGI7drepjmRZnwDYY8bZV67pILK5
-         vbBg==
+        bh=NYJ6kOFjamhBvRAj7/wxocueNoAM4M+pGSMxfmWyQFo=;
+        b=PIP2Rn6tpp78cegzxLwoIVwZ4FoBHshqHfqr5nt5sFzhQBvh53GF/tVZ6bCY4fOp/5
+         KetATrSe/jBBRw8duCXzr0oy0PkUOSeVKHyxaTYZY3cg3IEcD4wp68j156/IDK7juTqa
+         PUQQSHBBwReNEkc4GfkEqyqyUQbnEzxSq4K3Oj8piOrGRe4QbZF6bCw6SYmY93TDBJnm
+         9LMTy0R/Cvm3TEhwgFe6oVgVZ6EDWHLMBpZoM120061PxwrCycG3JFe3B2ac4nC5MUac
+         UGwJJulRDn+UFcdkYS1OBa9V09CD++NvoB3oSd7vUTk6IZqcVKkREUhTvZHhWd17hT4x
+         0GZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689622464; x=1692214464;
+        d=1e100.net; s=20221208; t=1689622552; x=1692214552;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gYQ8MaDMGhvh5jrKhzRgcfiYyE0M1SG6+4azBMBqudI=;
-        b=RGNTGhrRbyqN/XlOa3fJJLuRG3ieYjYizO8wXAGAQosG2GvwBctVNhKTcLgQmcwsHH
-         mnlOJDWP+RUgoJhw+IgwB7huVioNKLGN5TVK3c5OLrinQgQZR+Jj9FLUOLjffGVnle7J
-         efQ+e4eKij5KY5tNoL+WVNRjP1L7ioQfVc9M29Is12PQhSOLJvRPX/9R/5FyuctQGt0A
-         iBQIklwvddVynXK3BkF+LplZ+EzyYtoNIBC2stGr40ZgP5n24pbi7tJaETGgmc7/KuxQ
-         Z5yVuAmbFZfzqro+Z62ifRYdm0EB1ouQPzm0lulpD7PEV1emR4MOhvD+ffEw8H/7Cjbc
-         zALw==
-X-Gm-Message-State: ABy/qLaDp+uwwlg0U8fRGzlL8Rv5HjV+huHKn3C6+GfIEGRw6A+noX27
-        mkw0WzqxzX/EeFom3ltIAKJ4eWZkYgu/WgoztTE=
-X-Google-Smtp-Source: APBJJlGurTqxANGgZNeReihcfNiVDUQt3bLiY5il/O2f15miMPKQEnW6eArvtv8YdY0XGgskr4ratb3Fb7Qvh+aEAis=
-X-Received: by 2002:a17:906:841:b0:991:cfce:7a09 with SMTP id
- f1-20020a170906084100b00991cfce7a09mr9440149ejd.67.1689622464190; Mon, 17 Jul
- 2023 12:34:24 -0700 (PDT)
+        bh=NYJ6kOFjamhBvRAj7/wxocueNoAM4M+pGSMxfmWyQFo=;
+        b=gi1F9r9h9fHiP780En7mEJh2Se4p8VCjDXJfncqZ90/Ga9DV8UHC+EFKMEFTy+fSGg
+         ni9RRba1Xb57i9l2EoolwxM7swdBOX4EtJjkIe8ROrygyneJu1C4lAYrQyOIalorOLi0
+         x6EzneQN+XW0pC+KNDveQRS/jvDvsbyCGJunro/uK3EGKbKBJF2BLYAalJ0oebgraTZS
+         doLubK5Iz0/d6jq1J0dYW0z3fL7hRU5Iw3we8DYLexaaoKf/h6LyEtSN+8nuwqF2Lpxr
+         EJjUisjL3rLk6OCvBwsu/GAXa4fHXhbNL9SN9DkCdzu22FkLFgQwhgjnv0kvPikLMQBZ
+         t5Qg==
+X-Gm-Message-State: ABy/qLZjHClLGacAxmseGQ/ObjfZyMwaPotTY+RxOL2ZeUMDhq6h/8Di
+        VIZdMTo9Dr80cWXXlzUETswiSM07HICFixYl+vA=
+X-Google-Smtp-Source: APBJJlGW4673ZXUdmH9EyALyJYqmzpqtgm1SGTb0UF42kwcQ8Wh+SSnyIk9sxfrz+X4Pht1lQFCoW9Rx+xQJMZNrq+c=
+X-Received: by 2002:a17:906:1da:b0:994:54d1:ff57 with SMTP id
+ 26-20020a17090601da00b0099454d1ff57mr10191773ejj.4.1689622552398; Mon, 17 Jul
+ 2023 12:35:52 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
- <20230717172821.62827-5-andriy.shevchenko@linux.intel.com> <c47c26ba7ea5bcbdcbe1d001b6cc527cee6c7d03.camel@crapouillou.net>
-In-Reply-To: <c47c26ba7ea5bcbdcbe1d001b6cc527cee6c7d03.camel@crapouillou.net>
+ <20230717172821.62827-7-andriy.shevchenko@linux.intel.com> <e356066d5e4001d5ae26a1f55996086ce0b59cf2.camel@crapouillou.net>
+In-Reply-To: <e356066d5e4001d5ae26a1f55996086ce0b59cf2.camel@crapouillou.net>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 17 Jul 2023 22:33:47 +0300
-Message-ID: <CAHp75Vcjq9=Q2_fsGJ9oCw=WYR3p3ot_cNLiDJV93psNcXXHLw@mail.gmail.com>
-Subject: Re: [PATCH v2 04/10] pinctrl: intel: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
+Date:   Mon, 17 Jul 2023 22:35:16 +0300
+Message-ID: <CAHp75VfkTUjv51MsLrZf3Zsg9Pn+6E-TkqW_c7fcwggD71RHrA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/10] pinctrl: at91: Switch to use DEFINE_NOIRQ_DEV_PM_OPS()
+ helper
 To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -94,38 +94,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 10:02=E2=80=AFPM Paul Cercueil <paul@crapouillou.ne=
+On Mon, Jul 17, 2023 at 10:26=E2=80=AFPM Paul Cercueil <paul@crapouillou.ne=
 t> wrote:
 > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
  :
-
-...
-
-> Unrelated change.
-
-OK.
-
-...
-
-> So the correct way to update this driver would be to have a
-> conditionally-exported dev_pm_ops structure:
+> > Since pm.h provides a helper for system no-IRQ PM callbacks,
+> > switch the driver to use it instead of open coded variant.
+> >
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 >
-> EXPORT_GPL_DEV_PM_OPS(intel_pinctrl_pm_ops) =3D {
->     NOIRQ_SYSTEM_SLEEP_PM_OPS(intel_pinctrl_suspend_noirq,
-> intel_pinctrl_resume_noirq),
-> };
+> Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-This looks ugly. I didn't know that EXPORT*PM_OPS designed that way,
-but it seems pm.h in such case needs EXPORT for NOIRQ case as well.
+Thank you!
 
-> Then your two callbacks can be "static" and without #ifdef guards.
->
-> The resulting "intel_pinctrl_pm_ops" can be marked as "extern" in the
-> pinctrl-intel.h without any guards, as long as it is only referenced
-> with the pm_ptr() macro.
+> Although you could add a bit more info in the message of this patch, to
+> explain why it's OK to remove the __maybe_unused tags (the code is
+> always visible) and why switch from pm_ptr() to pm_sleep_ptr() (it's
+> only used for system-PM callbacks).
 
-I'm not sure I got this. Currently drivers do not have any guards.
-Moreover, the correct one for noirq is pm_sleep_ptr(), isn't it?
+Sure.
 
 --=20
 With Best Regards,
