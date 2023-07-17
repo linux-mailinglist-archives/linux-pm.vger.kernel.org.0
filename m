@@ -2,171 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCFF756BCC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 20:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C6D756CC4
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:07:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjGQSWG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 14:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S231240AbjGQTHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjGQSVi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 14:21:38 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8F10D9
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jul 2023 11:21:12 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742eso50877005e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 17 Jul 2023 11:21:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689618070; x=1692210070;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0+cnXP+tRfU9RzsyLkHrPlPDYsaNLXEDZaNzezEt64o=;
-        b=1/olb9Q8/7SAxFzfgmIPKq6ZX3Fn2wWryMrrhligpVsqHoMIY4a/7tOll8HeiPY+2D
-         WPdjWRikLCLiP2//oDmmrX33vxRCcvZhB12Rg3IzDpmS3JdFspyUJmUL1EKM8Z5dCD4h
-         Ys0zucu0gvnQxegGKvtTxu2kEkC0Ue/S8/pwBx1PngZ0gp/V/n6vlf6aGUQ5u3UJnoPA
-         OrKLlRge+y+Qi6HS5dzuLYmDGZr9RQsyBwctZIRUsRIbkVuWZUbQec71qIAMYXexaYQi
-         hXvS5NtKqrkn0zecUGC5APv3FPTH6hPG8N5YGB59V0ijrm6dlvEoEWS0w8rNKIDuJBbU
-         g/xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689618070; x=1692210070;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0+cnXP+tRfU9RzsyLkHrPlPDYsaNLXEDZaNzezEt64o=;
-        b=E6Eo8z9npVYI+NB4gM6fzWdxDJ7cl6ovdjx2xcC4ep0APcG+QLvtrAJxQ+Pqpc2Qao
-         0ckIv03na9xUxx65tZdfnHI+uwKzuzAgKSBy284iuY0uMBN3DwpGLSruhDnF4+bMQq8/
-         F47NPSav3/Lv6IUlnbLvoofIiq2TrdGV1AysZzJM+i2qhW7qffvx+gOO3PqFtRAD71QR
-         w8/6PpuUn4NCjygj6/fFXn01MKnR8DWxPWp6YbWIDBePyXidGKIWzB73Bw4XDzK1BTh0
-         F0p5JjJnutFn+sJCULCIRtSccgvHvmWr+6Nb9LdpoYRpBNnenS/i1rxWTimp0ZtEOJyM
-         +lyQ==
-X-Gm-Message-State: ABy/qLbaRUhs9TyUSko2s4PW+sCKG0yh0q5icfACBGjJRxF93LqPI5Ny
-        CzLA8ym+rWgzgPP37SaCZFX+5Q==
-X-Google-Smtp-Source: APBJJlG2spVP+ZKk5RN1uUCXHb4BWS+XNEnf2J7fLCbRinmyF8G0ySobBFdPh2f0Ixt6PIrfeQum/A==
-X-Received: by 2002:a1c:7c0e:0:b0:3f7:3685:1e10 with SMTP id x14-20020a1c7c0e000000b003f736851e10mr97205wmc.40.1689618069200;
-        Mon, 17 Jul 2023 11:21:09 -0700 (PDT)
-Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id u13-20020a7bcb0d000000b003fbd597bccesm8489734wmj.41.2023.07.17.11.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 11:21:08 -0700 (PDT)
-Date:   Mon, 17 Jul 2023 19:21:06 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <20230717182106.g6j3jpsjp35psl5y@airbuntu>
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com>
- <20230711175814.zfavcn7xn3ia5va4@airbuntu>
- <aa4a22b8-fc23-8c67-bdea-b6aac8f7e250@arm.com>
+        with ESMTP id S230408AbjGQTHF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:07:05 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A60CDA;
+        Mon, 17 Jul 2023 12:07:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1689620817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EUbYZ8pSTKDyookB+Z63SW+UrzvlNrmn7Cc06biQ1RY=;
+        b=Vy1ZpdaCi5k3cwLDqwOtFWg7A3zS5kYwD68mlYCpmulFhmikPGznp1UU+O/FzmpYurkTQU
+        dE1B9mWihM5B463eQv1jcypFaAEP/zRd2Wqcerui3nFeqrtlJnmHBxpmHHYUQq6LE2xUnR
+        df3C1TFbJNELgy4uN2FVXJBkJfK6YxA=
+Message-ID: <f48a35d596694839665bc5883260cbae3ae01d9c.camel@crapouillou.net>
+Subject: Re: [PATCH v2 07/10] pinctrl: mediatek: Switch to use
+ DEFINE_NOIRQ_DEV_PM_OPS() helper
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Date:   Mon, 17 Jul 2023 21:06:54 +0200
+In-Reply-To: <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aa4a22b8-fc23-8c67-bdea-b6aac8f7e250@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+CC Vincent and Peter
-
-On 07/17/23 14:47, Lukasz Luba wrote:
-> Hi Qais,
-> 
-> The rule is 'one size doesn't fit all', please see below.
-> 
-> On 7/11/23 18:58, Qais Yousef wrote:
-> > Hi Kajetan
-> > 
-> > On 01/05/23 14:51, Kajetan Puchalski wrote:
-> > 
-> > [...]
-> > 
-> > > @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
-> > >   			     struct cpuidle_device *dev)
-> > >   {
-> > >   	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> > > +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
-> > >   	int i;
-> > >   	memset(cpu_data, 0, sizeof(*cpu_data));
-> > > +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-> > 
-> > Given that utilization is invariant, why do we set the threshold based on
-> > cpu capacity?
-> 
-> 
-> To treat CPUs differently, not with the same policy.
-> 
-> 
-> > 
-> > I'm not sure if this is a problem, but on little cores this threshold would be
-> > too low. Given that util is invariant - I wondered if we need to have a single
-> > threshold for all type of CPUs instead. Have you tried something like that
-> 
-> A single threshold for all CPUs might be biased towards some CPUs. Let's
-> pick the value 15 - which was tested to work really good in benchmarks
-> for the big CPUs. On the other hand when you set that value to little
-> CPUs, with max_capacity = 124, than you have 15/124 ~= 13% threshold.
-> That means you prefer to enter deeper idle state ~9x times (at max
-> freq). What if the Little's freq is set to e.g. < ~20% fmax, which
-> corresponds to capacity < ~25? Let's try to simulate such scenario.
-
-Hmm what I'm struggling with is that PELT is invariant. So the time it takes to
-rise and decay to threshold of 15 should be the same for all CPUs, no?
-
-> 
-> In a situation we could have utilization 14 on Little CPU, than CPU capacity
-> (effectively frequency) voting based on utilization would be
-> 1.2 * 14 = ~17 so let's pick OPP corresponding to 17 capacity.
-> In such condition the little CPU would run the 14-util-periodic-task for
-> 14/17= ~82% of wall-clock time. That's a lot, and not suited for
-> entering deeper idle state on that CPU, isn't it?
-
-Yes runtime is stretched. But we counter this at utilization level by making
-PELT invariant. I thought that any CPU in the system will now take the same
-amount of time to ramp-up and decay to the same util level. No?
-
-But maybe what you're saying is that we don't need to take the invariance into
-account?
-
-My concern (that is not backed by real problem yet) is that the threshold is
-near 0, and since PELT is invariant, the time to gain few points is constant
-irrespective of any CPU/capacity/freq and this means the little CPUs has to be
-absolutely idle with no activity almost at all, IIUC.
-
-> 
-> Apart from that, the little CPUs are tiny in terms of silicon area
-> and are less leaky in WFI than big cores. Therefore, they don't need
-> aggressive entries into deeper idle state. At the same time, they
-> are often used for serving interrupts, where the latency is important
-> factor.
-
-On Pixel 6 this threshold will translate to util_threshold of 2. Which looks
-too low to me. Can't TEO do a good job before we reach such extremely low level
-of inactivity?
+Hi Andy,
 
 
-Thanks
+Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
+=C2=A0:
+> Since pm.h provides a helper for system no-IRQ PM callbacks,
+> switch the driver to use it instead of open coded variant.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+> =C2=A0drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 5 +----
+> =C2=A0drivers/pinctrl/mediatek/pinctrl-paris.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 | 9 +++------
+> =C2=A02 files changed, 4 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+> b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+> index 665dec419e7c..2bf5082d3aa9 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+> @@ -922,10 +922,7 @@ static int mtk_eint_resume(struct device
+> *device)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return mtk_eint_do_resume=
+(pctl->eint);
+> =C2=A0}
+> =C2=A0
+> -const struct dev_pm_ops mtk_eint_pm_ops =3D {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D mtk_eint_su=
+spend,
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D mtk_eint_res=
+ume,
+> -};
+> +DEFINE_NOIRQ_DEV_PM_OPS(mtk_eint_pm_ops, mtk_eint_suspend,
+> mtk_eint_resume);
+> =C2=A0
+> =C2=A0static int mtk_pctrl_build_state(struct platform_device *pdev)
+> =C2=A0{
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c
+> b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> index 33d6c3fb7908..b1cbd5bafa2e 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
+> @@ -1119,24 +1119,21 @@ int mtk_paris_pinctrl_probe(struct
+> platform_device *pdev)
+> =C2=A0}
+> =C2=A0EXPORT_SYMBOL_GPL(mtk_paris_pinctrl_probe);
+> =C2=A0
+> -static int mtk_paris_pinctrl_suspend(struct device *device)
+> +static int mtk_paris_suspend(struct device *device)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mtk_pinctrl *pctl =
+=3D dev_get_drvdata(device);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return mtk_eint_do_suspen=
+d(pctl->eint);
+> =C2=A0}
+> =C2=A0
+> -static int mtk_paris_pinctrl_resume(struct device *device)
+> +static int mtk_paris_resume(struct device *device)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct mtk_pinctrl *pctl =
+=3D dev_get_drvdata(device);
+> =C2=A0
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return mtk_eint_do_resume=
+(pctl->eint);
+> =C2=A0}
+> =C2=A0
+> -const struct dev_pm_ops mtk_paris_pinctrl_pm_ops =3D {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D mtk_paris_p=
+inctrl_suspend,
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D mtk_paris_pi=
+nctrl_resume,
+> -};
+> +DEFINE_NOIRQ_DEV_PM_OPS(mtk_paris_pinctrl_pm_ops, mtk_paris_suspend,
+> mtk_paris_resume);
 
---
-Qais Yousef
+It's a bit more work, but I think you should use EXPORT_GPL_DEV_PM_OPS
+(or even better, EXPORT_NS_GPL_DEV_PM_OPS) so that the dev_pm_ops is
+conditionally exported. All callers would have to be updated to use
+pm_ptr().
 
-> 
-> > while developing the patch?
-> 
-> We have tried different threshold values in terms of %, but for all CPUs
-> (at the same time) not per-cluster. The reason was to treat those CPUs
-> differently as described above.
-> 
-> Regards,
-> Lukasz
+Cheers,
+-Paul
+
+> =C2=A0
+> =C2=A0MODULE_LICENSE("GPL v2");
+> =C2=A0MODULE_DESCRIPTION("MediaTek Pinctrl Common Driver V2 Paris");
+
