@@ -2,121 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEFC7563BD
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 15:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0B3756565
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 15:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjGQNEN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 09:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
+        id S229994AbjGQNr1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 09:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231357AbjGQNEM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 09:04:12 -0400
-Received: from mo4-p00-ob.smtp.rzone.de (mo4-p00-ob.smtp.rzone.de [85.215.255.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EEEDE49;
-        Mon, 17 Jul 2023 06:04:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1689599047; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=XTDOArih5o6BzN2MYBt+zOEW/UXSiLkO5/SSIQLE+U1Q3Ar++ZsH8Q1LFnqY/0uGNW
-    YnHYFAdf7OfQPAQzPofR4pOowM9aGIVTLW7tg9rFprDS6kLRrO3lzGsU39dGl0GS28ku
-    eJyWIcZCK33T6OzBkOlOF9AjPeX2878vjZ6bERv1FAckZ5BMbco56IwJoI75CGDLxYcT
-    ppAFNlOvbZ9thmxn/tHYzMobdJ4KugklSRH619j/NlOQGntWV63ClPZ6NbhlwFAgEyIL
-    haCLdL0yZY7rLG8FAtHTSWIOJwNG7fSg010OZNptbsvbHTndhhiopWpJwMKXFl54WVvk
-    AWqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1689599047;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=aC+HCap+ve6OrQHjV7mHANk9IXPlf8/jagAitf7Rz3M=;
-    b=cCSf//sa3sRIQn0VcCeRQ9lO4bUufCPjscol3P3oq0MFy1Ba6SE0unFwwEwPvatN33
-    aCResKf869PqokyXEWYobRyVkHNcqT0bzGRv5Gf3Jakr4twWQjlDUlUCRIiVlrMQxrKT
-    lXXiI8X/Fj1X67qmvK5bvqkJSHdGdHAa1mt6UpoYcKqmkqImD3+jWx/3ZNsVvucNfQbb
-    euR2mZQhcyPLzJK++vByRcZL85CHZ2vsdJOZLChZawQ2mKOUjDUx5sSC7DdocjBj2Fws
-    sk2G3HcXmr2717zzlTQxJjDT8qH2NKVFMATn2PkFsK27eWhdP7e+mqNxpSTHftVsymNN
-    GTNw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo00
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1689599047;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=aC+HCap+ve6OrQHjV7mHANk9IXPlf8/jagAitf7Rz3M=;
-    b=b0h8ZapQaYbjYqWolkzMFNfEkNjd7Ub4/ALF9EGtNEIjIcIBZwXMPvkRM2q48xEn6Q
-    G8RY2VjEg38wl6j1IhEPz1Z8QdILzoetBJR/UxviX9Fo7z+7wVfys4Wu1B704kk6P9KL
-    ckjUKCJ4VH5fPK5db169XZUP8GfV4ce/MwOFZiv9XpGgXu/zjiyeAutaPLnbwwxgBI0E
-    ZysTXi5RV8+q14r52T++edo2VUdvmj2Y9lQHSSqWSBITsvDzg0HZsI3AdH4M0vjGbe3t
-    sSEuAMl0kW75rRXEaLn2LKXU0nkYIhU4ANWbIALasfrq0FSbcWcVlPIUAwuRn6jQXI3A
-    5xwg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1689599047;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=aC+HCap+ve6OrQHjV7mHANk9IXPlf8/jagAitf7Rz3M=;
-    b=mNBOhNvpUL0bSH9Ybp+PvmRlEMwi4me92vj7BipOglvZMVJVs2n8Y95HejSxI+I/iF
-    qhbx+PbnkapLN0zMPJAg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z2L1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z6HD47YVD
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 17 Jul 2023 15:04:07 +0200 (CEST)
-Date:   Mon, 17 Jul 2023 15:04:00 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     djakov@kernel.org
-Cc:     konrad.dybcio@linaro.org, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] interconnect: qcom: icc-rpm: Explicitly return 0 at
- the end of the function
-Message-ID: <ZLU8QKDUC_oGwIDz@gerhold.net>
-References: <ZLUdXBoMJdSzeZdq@gerhold.net>
- <20230717125534.2455745-1-djakov@kernel.org>
+        with ESMTP id S231164AbjGQNrY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 09:47:24 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4501126;
+        Mon, 17 Jul 2023 06:47:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 089BEC15;
+        Mon, 17 Jul 2023 06:48:06 -0700 (PDT)
+Received: from [10.57.31.114] (unknown [10.57.31.114])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 162893F67D;
+        Mon, 17 Jul 2023 06:47:20 -0700 (PDT)
+Message-ID: <aa4a22b8-fc23-8c67-bdea-b6aac8f7e250@arm.com>
+Date:   Mon, 17 Jul 2023 14:47:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230717125534.2455745-1-djakov@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+ <20230105145159.1089531-3-kajetan.puchalski@arm.com>
+ <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 03:55:34PM +0300, djakov@kernel.org wrote:
-> From: Georgi Djakov <djakov@kernel.org>
-> 
-> Fix the following smatch error:
-> drivers/interconnect/qcom/icc-rpm.c:243 qcom_icc_rpm_set() error: uninitialized symbol 'ret'.
-> 
-> Fixes: 32846c4a8f2a ("interconnect: qcom: icc-rpm: Set bandwidth on both contexts")
-> Signed-off-by: Georgi Djakov <djakov@kernel.org>
-> ---
-> v2: Just return 0 when reaching the end of the function. (Thanks Stephan!)
-> v1: https://lore.kernel.org/r/20230717073429.2115015-1-djakov@kernel.org
-> 
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 612390b9eb18..2c16917ba1fd 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -240,7 +240,7 @@ static int qcom_icc_rpm_set(struct qcom_icc_node *qn, u64 *bw)
->  		}
->  	}
->  
-> -	return ret;
-> +	return 0;
->  }
->  
->  /**
+Hi Qais,
 
-Thanks!
+The rule is 'one size doesn't fit all', please see below.
 
-Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
+On 7/11/23 18:58, Qais Yousef wrote:
+> Hi Kajetan
+> 
+> On 01/05/23 14:51, Kajetan Puchalski wrote:
+> 
+> [...]
+> 
+>> @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+>>   			     struct cpuidle_device *dev)
+>>   {
+>>   	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+>> +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
+>>   	int i;
+>>   
+>>   	memset(cpu_data, 0, sizeof(*cpu_data));
+>> +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
+> 
+> Given that utilization is invariant, why do we set the threshold based on
+> cpu capacity?
+
+
+To treat CPUs differently, not with the same policy.
+
+
+> 
+> I'm not sure if this is a problem, but on little cores this threshold would be
+> too low. Given that util is invariant - I wondered if we need to have a single
+> threshold for all type of CPUs instead. Have you tried something like that
+
+A single threshold for all CPUs might be biased towards some CPUs. Let's
+pick the value 15 - which was tested to work really good in benchmarks
+for the big CPUs. On the other hand when you set that value to little
+CPUs, with max_capacity = 124, than you have 15/124 ~= 13% threshold.
+That means you prefer to enter deeper idle state ~9x times (at max
+freq). What if the Little's freq is set to e.g. < ~20% fmax, which
+corresponds to capacity < ~25? Let's try to simulate such scenario.
+
+In a situation we could have utilization 14 on Little CPU, than CPU 
+capacity (effectively frequency) voting based on utilization would be
+1.2 * 14 = ~17 so let's pick OPP corresponding to 17 capacity.
+In such condition the little CPU would run the 14-util-periodic-task for
+14/17= ~82% of wall-clock time. That's a lot, and not suited for
+entering deeper idle state on that CPU, isn't it?
+
+Apart from that, the little CPUs are tiny in terms of silicon area
+and are less leaky in WFI than big cores. Therefore, they don't need
+aggressive entries into deeper idle state. At the same time, they
+are often used for serving interrupts, where the latency is important
+factor.
+
+> while developing the patch?
+
+We have tried different threshold values in terms of %, but for all CPUs
+(at the same time) not per-cluster. The reason was to treat those CPUs
+differently as described above.
+
+Regards,
+Lukasz
