@@ -2,30 +2,31 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01418756D47
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D2B9756D23
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 21:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjGQTco (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 15:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S231297AbjGQT0A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 15:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjGQTcn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:32:43 -0400
+        with ESMTP id S231294AbjGQTZ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 15:25:59 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEBD12A;
-        Mon, 17 Jul 2023 12:32:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8010B1B1;
+        Mon, 17 Jul 2023 12:25:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689621782;
+        s=mail; t=1689621956;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=f2FsRW/iD1SQYNbltu5CgyPfz65E+yDxeasl/fxtjIM=;
-        b=QUSTalgEXSQDjPMLrB5o7QMCahRiCifDFiugm9rnJcn71JCyT7aOLymUOW/gQZyyCiY6hr
-        lbE3nKSj+Z4PhaVzbZbruA3x7Vy7tFZknM9Ts+Ht4ZWqsyw8XWam2OvmFRb7OQ5mbs1LP6
-        Ru1DyJG3Rjmuhfv6vH5laLD4/TLKACc=
-Message-ID: <108dbf8d020d7a4335743aa196ec7be9c8a777a3.camel@crapouillou.net>
-Subject: Re: [PATCH v2 05/10] pinctrl: lynxpoint: Make use of pm_ptr()
+        bh=eOtYH4hKBzhGlvN/2fJcmQb/NBgM69hMecTKLntsWYw=;
+        b=fHjDCzU4z1U9SSlFa3/lUwZK96EDFjpO/zr6IzuhUvDGLP7d8yoCF79Jk5d8FEC1OUnO65
+        hHw88RTt5nyzHziz9KI8NhteJirq0XzqMM+He1hvrnBAre+PYf2PfrVO8Jy6Cs9fmjo9WE
+        ww3ao4cdyfwmSh+hig5l1G/je/6rhGY=
+Message-ID: <e356066d5e4001d5ae26a1f55996086ce0b59cf2.camel@crapouillou.net>
+Subject: Re: [PATCH v2 06/10] pinctrl: at91: Switch to use
+ DEFINE_NOIRQ_DEV_PM_OPS() helper
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -54,12 +55,12 @@ Cc:     Andy Shevchenko <andy@kernel.org>,
         Jonathan Hunter <jonathanh@nvidia.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Mon, 17 Jul 2023 21:23:00 +0200
-In-Reply-To: <20230717172821.62827-6-andriy.shevchenko@linux.intel.com>
+Date:   Mon, 17 Jul 2023 21:25:53 +0200
+In-Reply-To: <20230717172821.62827-7-andriy.shevchenko@linux.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-         <20230717172821.62827-6-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-7-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -71,36 +72,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGkgQW5keSwKCkxlIGx1bmRpIDE3IGp1aWxsZXQgMjAyMyDDoCAyMDoyOCArMDMwMCwgQW5keSBT
-aGV2Y2hlbmtvIGEgw6ljcml0wqA6Cj4gQ2xlYW5pbmcgdXAgdGhlIGRyaXZlciB0byB1c2UgcG1f
-cHRyKCkgYW5kICpfUE1fT1BTKCkgbWFjcm9zIHRoYXQKPiBtYWtlIGl0IHNpbXBsZXIgYW5kIGFs
-bG93cyB0aGUgY29tcGlsZXIgdG8gcmVtb3ZlIHRob3NlIGZ1bmN0aW9ucwo+IGlmIGJ1aWx0IHdp
-dGhvdXQgQ09ORklHX1BNIGFuZCBDT05GSUdfUE1fU0xFRVAgc3VwcG9ydC4KPiAKPiBTaWduZWQt
-b2ZmLWJ5OiBBbmR5IFNoZXZjaGVua28gPGFuZHJpeS5zaGV2Y2hlbmtvQGxpbnV4LmludGVsLmNv
-bT4KClJldmlld2VkLWJ5OiBQYXVsIENlcmN1ZWlsIDxwYXVsQGNyYXBvdWlsbG91Lm5ldD4KCkNo
-ZWVycywKLVBhdWwKCj4gLS0tCj4gwqBkcml2ZXJzL3BpbmN0cmwvaW50ZWwvcGluY3RybC1seW54
-cG9pbnQuYyB8IDcgKysrLS0tLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwg
-NCBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9waW5jdHJsL2ludGVsL3Bp
-bmN0cmwtbHlueHBvaW50LmMKPiBiL2RyaXZlcnMvcGluY3RybC9pbnRlbC9waW5jdHJsLWx5bnhw
-b2ludC5jCj4gaW5kZXggY2RhY2U1NWFhZWFjLi41MGQ5MmJmODBlMjAgMTAwNjQ0Cj4gLS0tIGEv
-ZHJpdmVycy9waW5jdHJsL2ludGVsL3BpbmN0cmwtbHlueHBvaW50LmMKPiArKysgYi9kcml2ZXJz
-L3BpbmN0cmwvaW50ZWwvcGluY3RybC1seW54cG9pbnQuYwo+IEBAIC05NDgsOSArOTQ4LDggQEAg
-c3RhdGljIGludCBscF9ncGlvX3Jlc3VtZShzdHJ1Y3QgZGV2aWNlICpkZXYpCj4gwqB9Cj4gwqAK
-PiDCoHN0YXRpYyBjb25zdCBzdHJ1Y3QgZGV2X3BtX29wcyBscF9ncGlvX3BtX29wcyA9IHsKPiAt
-wqDCoMKgwqDCoMKgwqAucnVudGltZV9zdXNwZW5kID0gbHBfZ3Bpb19ydW50aW1lX3N1c3BlbmQs
-Cj4gLcKgwqDCoMKgwqDCoMKgLnJ1bnRpbWVfcmVzdW1lID0gbHBfZ3Bpb19ydW50aW1lX3Jlc3Vt
-ZSwKPiAtwqDCoMKgwqDCoMKgwqAucmVzdW1lID0gbHBfZ3Bpb19yZXN1bWUsCj4gK8KgwqDCoMKg
-wqDCoMKgU1lTVEVNX1NMRUVQX1BNX09QUyhOVUxMLCBscF9ncGlvX3Jlc3VtZSkKPiArwqDCoMKg
-wqDCoMKgwqBSVU5USU1FX1BNX09QUyhscF9ncGlvX3J1bnRpbWVfc3VzcGVuZCwKPiBscF9ncGlv
-X3J1bnRpbWVfcmVzdW1lLCBOVUxMKQo+IMKgfTsKPiDCoAo+IMKgc3RhdGljIGNvbnN0IHN0cnVj
-dCBhY3BpX2RldmljZV9pZCBseW54cG9pbnRfZ3Bpb19hY3BpX21hdGNoW10gPSB7Cj4gQEAgLTk2
-NSw3ICs5NjQsNyBAQCBzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciBscF9ncGlvX2RyaXZl
-ciA9IHsKPiDCoMKgwqDCoMKgwqDCoMKgLnJlbW92ZcKgwqDCoMKgwqDCoMKgwqAgPSBscF9ncGlv
-X3JlbW92ZSwKPiDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlcsKgwqDCoMKgwqDCoMKgwqAgPSB7Cj4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAubmFtZcKgwqAgPSAibHBfZ3BpbyIsCj4g
-LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5wbcKgwqDCoMKgwqA9ICZscF9ncGlvX3Bt
-X29wcywKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLnBtwqDCoMKgwqDCoD0gcG1f
-cHRyKCZscF9ncGlvX3BtX29wcyksCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAu
-YWNwaV9tYXRjaF90YWJsZSA9IGx5bnhwb2ludF9ncGlvX2FjcGlfbWF0Y2gsCj4gwqDCoMKgwqDC
-oMKgwqDCoH0sCj4gwqB9OwoK
+Hi Andy,
+
+Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9crit=
+=C2=A0:
+> Since pm.h provides a helper for system no-IRQ PM callbacks,
+> switch the driver to use it instead of open coded variant.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+
+Although you could add a bit more info in the message of this patch, to
+explain why it's OK to remove the __maybe_unused tags (the code is
+always visible) and why switch from pm_ptr() to pm_sleep_ptr() (it's
+only used for system-PM callbacks).
+
+Cheers,
+-Paul
+
+> ---
+> =C2=A0drivers/pinctrl/pinctrl-at91.c | 10 ++++------
+> =C2=A01 file changed, 4 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/pinctrl/pinctrl-at91.c
+> b/drivers/pinctrl/pinctrl-at91.c
+> index 39956d821ad7..608f55c5ba5f 100644
+> --- a/drivers/pinctrl/pinctrl-at91.c
+> +++ b/drivers/pinctrl/pinctrl-at91.c
+> @@ -1657,7 +1657,7 @@ static int gpio_irq_set_wake(struct irq_data
+> *d, unsigned state)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> =C2=A0}
+> =C2=A0
+> -static int __maybe_unused at91_gpio_suspend(struct device *dev)
+> +static int at91_gpio_suspend(struct device *dev)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct at91_gpio_chip *at=
+91_chip =3D dev_get_drvdata(dev);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void __iomem *pio =3D at9=
+1_chip->regbase;
+> @@ -1675,7 +1675,7 @@ static int __maybe_unused
+> at91_gpio_suspend(struct device *dev)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> =C2=A0}
+> =C2=A0
+> -static int __maybe_unused at91_gpio_resume(struct device *dev)
+> +static int at91_gpio_resume(struct device *dev)
+> =C2=A0{
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct at91_gpio_chip *at=
+91_chip =3D dev_get_drvdata(dev);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0void __iomem *pio =3D at9=
+1_chip->regbase;
+> @@ -1903,15 +1903,13 @@ static int at91_gpio_probe(struct
+> platform_device *pdev)
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> =C2=A0}
+> =C2=A0
+> -static const struct dev_pm_ops at91_gpio_pm_ops =3D {
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0NOIRQ_SYSTEM_SLEEP_PM_OPS(at91=
+_gpio_suspend,
+> at91_gpio_resume)
+> -};
+> +static DEFINE_NOIRQ_DEV_PM_OPS(at91_gpio_pm_ops, at91_gpio_suspend,
+> at91_gpio_resume);
+> =C2=A0
+> =C2=A0static struct platform_driver at91_gpio_driver =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.driver =3D {
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.name =3D "gpio-at91",
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D at91_gpio_of_match,
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.pm =3D pm_ptr(&at91_gpio_pm_ops),
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0.pm =3D pm_sleep_ptr(&at91_gpio_pm_ops),
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe =3D at91_gpio_prob=
+e,
+> =C2=A0};
 
