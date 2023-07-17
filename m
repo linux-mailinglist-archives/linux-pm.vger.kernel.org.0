@@ -2,124 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051247560ED
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 12:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE0F756140
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 13:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjGQKwW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 06:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S229934AbjGQLJC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 07:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjGQKwV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 06:52:21 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [81.169.146.165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5E011F;
-        Mon, 17 Jul 2023 03:52:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1689591138; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=ox+TWn0YjWuCr9ogTPXRx5BLCMQ3yFwQY2Ra598jHHESf5+0UYplUvEAoi4BWpjLlG
-    BsjBZMBXNt8EkI7TtS1dFoEtYrILDF5XwvuEMvBwh+wmBCcEv4NCKcYea7N4xj/KuxN5
-    kmxTkamuDfzzYml4ko23t751pjljAc6V6luXkq0vxflnJUZ07sipaFBdzcVX/bhByPLb
-    wcsUqoJFagY5mxQGU613XNhADpFuuH21Vpl6sl7qi3XM62GLNUfVnHfJUq/SderbFB30
-    WQ0Rj/vv8eQPtaV74snQRZ8XOKIgS/T8yE1UadYMAQLY+GP2wzX4m9piFv3i1hl3dPi0
-    elfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1689591138;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=YYfzMVB1ks/ozCqaRZGCAgoaf2X54ab3g5vvPYZoYkg=;
-    b=ZNHyvBjd7TOIHnhT2KGE516JQJ3LPqdADolyXv0JIuBKs25YW5/iAJc4RjlkjrfFOG
-    7eYu1MG/ufAjUQ8z+KBrwXljahT5PKETmlDgkJz3TfySqI+cuv6TluqCA02uKpb3JuuM
-    gaxWNYlJAS7/JV2+XLQi6jdwMJhqEl8+Np12+ZmmsZ+7ai32kOyMltbdAiLSn4xAjfZl
-    c3RVme4DiKgO+E/eo6+d+57GZE0hCScQecxWePeFuyMzNE8u8k8/8SBaOqahH/p9uUie
-    E0iYMUsaYL28ilzgoLtDoC8Nes2naWIPofo/Db4Ud8KC3N8WOjJYl3rZEY+68RVXIQZm
-    ayXw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1689591138;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=YYfzMVB1ks/ozCqaRZGCAgoaf2X54ab3g5vvPYZoYkg=;
-    b=Utp816/NmO5yy4i1ZiSkcp+XPWLk2QuGb2RaawgyY5ns19+MFvzUm4B1C3eMSQLomF
-    7kIWfX+oJ2vAqIRKOAkWGBpIQgoA2yJ2ESCgvCFr5Yy2LokGriFpUGCpbMrIHP0wxSdf
-    727vusGS684tWHh//Aeb9S1mZj9KPJqfAeXfJ3D151l+l1yc4zwleE9aTObSL8GmSq/j
-    qP7dY2UTbL8ECb1tj8B309nZygO7jn3M4qkO1BDnqTIDKBDWBIHnsCOHGadCpclrUvUb
-    +Cg/sQC0f5CIAbNI6TR91jcHGS2ql+aKiZUGxiLAz4K1Ii7XgdGS+rUthienqAQ0O7jK
-    S2BQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1689591138;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=YYfzMVB1ks/ozCqaRZGCAgoaf2X54ab3g5vvPYZoYkg=;
-    b=FO6XUvjXoaKszkTP/sSE4aHR1pJ0Msi1VwxihSi4NtNrWbWSHNTggS2PVF9yYmqwGJ
-    B6/9sHQVwUmvlD2qkcBw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z2L1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z6HAqHXry
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 17 Jul 2023 12:52:17 +0200 (CEST)
-Date:   Mon, 17 Jul 2023 12:52:12 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     djakov@kernel.org
-Cc:     konrad.dybcio@linaro.org, andersson@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] interconnect: qcom: icc-rpm: Initialize ret variable to
- fix smatch error
-Message-ID: <ZLUdXBoMJdSzeZdq@gerhold.net>
-References: <20230717073429.2115015-1-djakov@kernel.org>
+        with ESMTP id S229514AbjGQLJB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 07:09:01 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1992C1B9
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jul 2023 04:08:59 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b933bbd3eeso29055121fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jul 2023 04:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689592137; x=1692184137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eQuNLrwbJ2AdsFbKd9SBZgt7zHVZW51vp7qPZgcDweg=;
+        b=MtFO/Mvc0xspnkoMEh5fsDNS+VVWirzNRAvB3fitk0Dm1zi/YTGv2jOL7Uk8ZI/7B1
+         Y6xasr3dN+h4JKJOdCQLyigRLxdVVZmSpRwZlVCIzZ4dh5hXKGqTmVkPzvKR0dJV2o6a
+         EwepnhROHZ3tM6JAqt/PxVT3mwA4Ue+IjCJWFwI6spHEqNVvKTBiMdIvwTzydidas5Kc
+         PNKkM8pVa+21nvblq8PkjAdVhSDpEWe6PwVA2Hsyd1jXaENlfmfekeWdHfLssfI0dNmd
+         ROb5AZnYMr7mpnhw+TycOgiWldFHoWZpw8KGneC8ulwk8pm/gC2WYUJbbPnufoiIa4RC
+         85Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689592137; x=1692184137;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eQuNLrwbJ2AdsFbKd9SBZgt7zHVZW51vp7qPZgcDweg=;
+        b=CVMy9bUtnrFlamK19lwDuJj5B1HU0JgT/FAsX7F8i1r2AniiDcx7BCFxs8yZtFdbjJ
+         3iGTE6++enb5Jddh9vtSUZJs6TLgnPmR1Yrd1RBimLB8842QenbVN1ca4oLdHxDmwRqH
+         rONQEjH0iS4j455tMvib1oDt5JtS6NU0OTPanR9q6gw/cqmFbuUJfrmxSuvJGpoK/wV2
+         sMeEiDI/a40pUt5Sp97vmiP1/dehlD8EEK0Z5rHhJOZzK2e8bSKJCbf3jhw5jtNg+paZ
+         MwbgRV5nIPsrFHoJfInqWtVKwUmtQgYW3/eOEHC5B7lEnO5G3imYoKkY/RKPs9422jum
+         eLRA==
+X-Gm-Message-State: ABy/qLYmB61498738t31R1fHgx2jsiKh+91dKJ9joptOPjiMy6RniiK/
+        CAaf2vp7/cmF3uL3Tsw4x9zeGg==
+X-Google-Smtp-Source: APBJJlErSTd9piiodlW+ToCtAf2Q4Jwxz8C8FI1Iin32AwNZNKHAg7wzx7U496d2ZHQO+2dysJbLUw==
+X-Received: by 2002:a05:651c:20a:b0:2b6:d8d4:161 with SMTP id y10-20020a05651c020a00b002b6d8d40161mr10907844ljn.43.1689592137230;
+        Mon, 17 Jul 2023 04:08:57 -0700 (PDT)
+Received: from linaro.org ([82.78.74.213])
+        by smtp.gmail.com with ESMTPSA id z3-20020a1709064e0300b00992afee724bsm8989196eju.76.2023.07.17.04.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 04:08:56 -0700 (PDT)
+Date:   Mon, 17 Jul 2023 14:08:54 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Taniya Das <quic_tdas@quicinc.com>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        avel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/2] clk: qcom: gdsc: Add support for set_hwmode_dev
+Message-ID: <ZLUhRlm20xlZ3OJj@linaro.org>
+References: <20230628105652.1670316-1-abel.vesa@linaro.org>
+ <20230628105652.1670316-3-abel.vesa@linaro.org>
+ <42b1167d-da60-f6c3-67b6-3f6857327396@linaro.org>
+ <e94f187e-e444-d18d-eba9-b9a699abdb95@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230717073429.2115015-1-djakov@kernel.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e94f187e-e444-d18d-eba9-b9a699abdb95@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 10:34:29AM +0300, djakov@kernel.org wrote:
-> From: Georgi Djakov <djakov@kernel.org>
+On 23-07-10 09:40:14, Taniya Das wrote:
+> Hi Abel,
 > 
-> Fix the following smatch error:
-> drivers/interconnect/qcom/icc-rpm.c:243 qcom_icc_rpm_set() error: uninitialized symbol 'ret'.
+> Thanks for the patch.
 > 
-> Fixes: 32846c4a8f2a ("interconnect: qcom: icc-rpm: Set bandwidth on both contexts")
-> Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-Thanks for spotting this!
-
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 6/28/2023 10:48 PM, Konrad Dybcio wrote:
+> > On 28.06.2023 12:56, Abel Vesa wrote:
+> > > Implement the GDSC specific genpd set_hwmode_dev callback in order to
+> > > switch the HW control on or off. For any GDSC that supports HW control
+> > > set this callback in order to allow its consumers to control it.
+> > > 
+> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > ---
+> > This still does nothing to prevent the HW_CTRL state being changed in
+> > init, enable and disable functions.
+> > 
+> > Konrad
+> > >   drivers/clk/qcom/gdsc.c | 22 ++++++++++++++++++++++
+> > >   1 file changed, 22 insertions(+)
+> > > 
+> > > diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> > > index 5358e28122ab..9a04bf2e4379 100644
+> > > --- a/drivers/clk/qcom/gdsc.c
+> > > +++ b/drivers/clk/qcom/gdsc.c
+> > > @@ -314,6 +314,26 @@ static int gdsc_enable(struct generic_pm_domain *domain)
+> > >   	return 0;
+> > >   }
+> > > +static int gdsc_set_hwmode_dev(struct generic_pm_domain *domain,
+> > > +			       struct device *dev, bool enable)
+> > > +{
+> > > +	int ret = gdsc_hwctrl(domain_to_gdsc(domain), enable);
+> > > +
+> > > +	if (ret)
+> > > +		goto out;
+> > > +
+> > > +	/*
+> > > +	 * Wait for the GDSC to go through a power down and
+> > > +	 * up cycle.  In case there is a status polling going on
+> > > +	 * before the power cycle is completed it might read an
+> > > +	 * wrong status value.
+> > > +	 */
+> > > +	udelay(1);
+> > > +
+> > > +out:
+> > > +	return ret;
+> > > +}
+> > > +
+> > >   static int gdsc_disable(struct generic_pm_domain *domain)
+> > >   {
+> > >   	struct gdsc *sc = domain_to_gdsc(domain);
+> > > @@ -451,6 +471,8 @@ static int gdsc_init(struct gdsc *sc)
+> > >   		sc->pd.power_off = gdsc_disable;
+> > >   	if (!sc->pd.power_on)
+> > >   		sc->pd.power_on = gdsc_enable;
+> > > +	if (sc->flags & HW_CTRL)
+> > > +		sc->pd.set_hwmode_dev = gdsc_set_hwmode_dev;
+> We do not want to move to SW mode without consumers wanting to move to this
+> mode.
 > 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 612390b9eb18..6718cc648d75 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -206,7 +206,7 @@ static int qcom_icc_qos_set(struct icc_node *node)
->  
->  static int qcom_icc_rpm_set(struct qcom_icc_node *qn, u64 *bw)
->  {
-> -	int ret, rpm_ctx = 0;
-> +	int ret = 0, rpm_ctx = 0;
->  	u64 bw_bps;
->  
->  	if (qn->qos.ap_owned)
+> We want a new flag for the consumers wanting to move to this mode. The mode
+> in which the GDSC would be enabled would be in SW mode only.
+> +	if (sc->flags & HW_CTRL_TRIGGER) {
+> +		sc->pd.set_hwmode_dev = gdsc_set_mode;
+> +	}
+> +
 
-I think it would be a bit clearer to change the "return ret;" at the end
-of the function to "return 0;". The ret variable is only used inside the
-for loop and always handled there, so we always want to return 0 when
-reaching the end of the function.
+OK, maybe I'm missing something here.
 
-Thanks,
-Stephan
+Do you suggest we have GDSCs that, even though they support HW ctrl,
+should not be controllable by the consumer?
+
+Why isn't dev_pm_genpd_set_hwmode good enough? If a consumer doesn't
+want to control it then the consumer can just skip calling the mentioned
+function.
+
+Or maybe you want this all hidden into the genpd provider?
+
+> 
+> > >   	ret = pm_genpd_init(&sc->pd, NULL, !on);
+> > >   	if (ret)
+> 
+> -- 
+> Thanks & Regards,
+> Taniya Das.
