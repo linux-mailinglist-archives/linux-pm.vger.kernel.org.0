@@ -2,115 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EAF756A84
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 19:30:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCFF756BCC
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Jul 2023 20:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjGQR36 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Jul 2023 13:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45896 "EHLO
+        id S231915AbjGQSWG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Jul 2023 14:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231303AbjGQR3x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 13:29:53 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 572C41720;
-        Mon, 17 Jul 2023 10:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689614970; x=1721150970;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=B7c/2IAOq+QysQrRwOIUK5uC4eESX4PCd4P3LMdk97c=;
-  b=WuRzze1Y+/L64c2n/xwY175f+SEXpd4tlEJNKcYs3U99ggHUtsQMhNfC
-   Cr26z/NJLVw/LC8402ErDLEy/AKaF+mM/IULQ/amcK2OfVK4FgaG/oqz+
-   n4+wli124n9/35DOH8MymHBhSTVMaXlxFLq1xmaz9JXBhWPgFAA63BkY7
-   CIBbSR+iLM0YyQ1xac3D/LTEzDjvmq6SjX3zIY3N06o8U5pAF9d3YzA46
-   qOMA3Vt3KtlQUDaRuqkWI8GgI3uxPt7cpKPUn5H7kDc0t297BHpz21hVO
-   KORRGhm+kCMVDKuvU/Lywsd7ZHb0JjmLVLU+CNehGc2jI4WJASj5IGM0s
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="355927005"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="355927005"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2023 10:28:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10774"; a="673604218"
-X-IronPort-AV: E=Sophos;i="6.01,211,1684825200"; 
-   d="scan'208";a="673604218"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 17 Jul 2023 10:28:40 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 51B8F748; Mon, 17 Jul 2023 20:28:40 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v2 10/10] pinctrl: tegra: Switch to use DEFINE_NOIRQ_DEV_PM_OPS() helper
-Date:   Mon, 17 Jul 2023 20:28:21 +0300
-Message-Id: <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+        with ESMTP id S229892AbjGQSVi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Jul 2023 14:21:38 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC8F10D9
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jul 2023 11:21:12 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fbc5d5742eso50877005e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 17 Jul 2023 11:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689618070; x=1692210070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0+cnXP+tRfU9RzsyLkHrPlPDYsaNLXEDZaNzezEt64o=;
+        b=1/olb9Q8/7SAxFzfgmIPKq6ZX3Fn2wWryMrrhligpVsqHoMIY4a/7tOll8HeiPY+2D
+         WPdjWRikLCLiP2//oDmmrX33vxRCcvZhB12Rg3IzDpmS3JdFspyUJmUL1EKM8Z5dCD4h
+         Ys0zucu0gvnQxegGKvtTxu2kEkC0Ue/S8/pwBx1PngZ0gp/V/n6vlf6aGUQ5u3UJnoPA
+         OrKLlRge+y+Qi6HS5dzuLYmDGZr9RQsyBwctZIRUsRIbkVuWZUbQec71qIAMYXexaYQi
+         hXvS5NtKqrkn0zecUGC5APv3FPTH6hPG8N5YGB59V0ijrm6dlvEoEWS0w8rNKIDuJBbU
+         g/xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689618070; x=1692210070;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0+cnXP+tRfU9RzsyLkHrPlPDYsaNLXEDZaNzezEt64o=;
+        b=E6Eo8z9npVYI+NB4gM6fzWdxDJ7cl6ovdjx2xcC4ep0APcG+QLvtrAJxQ+Pqpc2Qao
+         0ckIv03na9xUxx65tZdfnHI+uwKzuzAgKSBy284iuY0uMBN3DwpGLSruhDnF4+bMQq8/
+         F47NPSav3/Lv6IUlnbLvoofIiq2TrdGV1AysZzJM+i2qhW7qffvx+gOO3PqFtRAD71QR
+         w8/6PpuUn4NCjygj6/fFXn01MKnR8DWxPWp6YbWIDBePyXidGKIWzB73Bw4XDzK1BTh0
+         F0p5JjJnutFn+sJCULCIRtSccgvHvmWr+6Nb9LdpoYRpBNnenS/i1rxWTimp0ZtEOJyM
+         +lyQ==
+X-Gm-Message-State: ABy/qLbaRUhs9TyUSko2s4PW+sCKG0yh0q5icfACBGjJRxF93LqPI5Ny
+        CzLA8ym+rWgzgPP37SaCZFX+5Q==
+X-Google-Smtp-Source: APBJJlG2spVP+ZKk5RN1uUCXHb4BWS+XNEnf2J7fLCbRinmyF8G0ySobBFdPh2f0Ixt6PIrfeQum/A==
+X-Received: by 2002:a1c:7c0e:0:b0:3f7:3685:1e10 with SMTP id x14-20020a1c7c0e000000b003f736851e10mr97205wmc.40.1689618069200;
+        Mon, 17 Jul 2023 11:21:09 -0700 (PDT)
+Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
+        by smtp.gmail.com with ESMTPSA id u13-20020a7bcb0d000000b003fbd597bccesm8489734wmj.41.2023.07.17.11.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 11:21:08 -0700 (PDT)
+Date:   Mon, 17 Jul 2023 19:21:06 +0100
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
+Message-ID: <20230717182106.g6j3jpsjp35psl5y@airbuntu>
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+ <20230105145159.1089531-3-kajetan.puchalski@arm.com>
+ <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+ <aa4a22b8-fc23-8c67-bdea-b6aac8f7e250@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aa4a22b8-fc23-8c67-bdea-b6aac8f7e250@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since pm.h provides a helper for system no-IRQ PM callbacks,
-switch the driver to use it instead of open coded variant.
++CC Vincent and Peter
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/tegra/pinctrl-tegra.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+On 07/17/23 14:47, Lukasz Luba wrote:
+> Hi Qais,
+> 
+> The rule is 'one size doesn't fit all', please see below.
+> 
+> On 7/11/23 18:58, Qais Yousef wrote:
+> > Hi Kajetan
+> > 
+> > On 01/05/23 14:51, Kajetan Puchalski wrote:
+> > 
+> > [...]
+> > 
+> > > @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+> > >   			     struct cpuidle_device *dev)
+> > >   {
+> > >   	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+> > > +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
+> > >   	int i;
+> > >   	memset(cpu_data, 0, sizeof(*cpu_data));
+> > > +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
+> > 
+> > Given that utilization is invariant, why do we set the threshold based on
+> > cpu capacity?
+> 
+> 
+> To treat CPUs differently, not with the same policy.
+> 
+> 
+> > 
+> > I'm not sure if this is a problem, but on little cores this threshold would be
+> > too low. Given that util is invariant - I wondered if we need to have a single
+> > threshold for all type of CPUs instead. Have you tried something like that
+> 
+> A single threshold for all CPUs might be biased towards some CPUs. Let's
+> pick the value 15 - which was tested to work really good in benchmarks
+> for the big CPUs. On the other hand when you set that value to little
+> CPUs, with max_capacity = 124, than you have 15/124 ~= 13% threshold.
+> That means you prefer to enter deeper idle state ~9x times (at max
+> freq). What if the Little's freq is set to e.g. < ~20% fmax, which
+> corresponds to capacity < ~25? Let's try to simulate such scenario.
 
-diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
-index 4547cf66d03b..734c71ef005b 100644
---- a/drivers/pinctrl/tegra/pinctrl-tegra.c
-+++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-@@ -747,10 +747,7 @@ static int tegra_pinctrl_resume(struct device *dev)
- 	return 0;
- }
- 
--const struct dev_pm_ops tegra_pinctrl_pm = {
--	.suspend_noirq = &tegra_pinctrl_suspend,
--	.resume_noirq = &tegra_pinctrl_resume
--};
-+DEFINE_NOIRQ_DEV_PM_OPS(tegra_pinctrl_pm, tegra_pinctrl_suspend, tegra_pinctrl_resume);
- 
- static bool tegra_pinctrl_gpio_node_has_range(struct tegra_pmx *pmx)
- {
--- 
-2.40.0.1.gaa8946217a0b
+Hmm what I'm struggling with is that PELT is invariant. So the time it takes to
+rise and decay to threshold of 15 should be the same for all CPUs, no?
 
+> 
+> In a situation we could have utilization 14 on Little CPU, than CPU capacity
+> (effectively frequency) voting based on utilization would be
+> 1.2 * 14 = ~17 so let's pick OPP corresponding to 17 capacity.
+> In such condition the little CPU would run the 14-util-periodic-task for
+> 14/17= ~82% of wall-clock time. That's a lot, and not suited for
+> entering deeper idle state on that CPU, isn't it?
+
+Yes runtime is stretched. But we counter this at utilization level by making
+PELT invariant. I thought that any CPU in the system will now take the same
+amount of time to ramp-up and decay to the same util level. No?
+
+But maybe what you're saying is that we don't need to take the invariance into
+account?
+
+My concern (that is not backed by real problem yet) is that the threshold is
+near 0, and since PELT is invariant, the time to gain few points is constant
+irrespective of any CPU/capacity/freq and this means the little CPUs has to be
+absolutely idle with no activity almost at all, IIUC.
+
+> 
+> Apart from that, the little CPUs are tiny in terms of silicon area
+> and are less leaky in WFI than big cores. Therefore, they don't need
+> aggressive entries into deeper idle state. At the same time, they
+> are often used for serving interrupts, where the latency is important
+> factor.
+
+On Pixel 6 this threshold will translate to util_threshold of 2. Which looks
+too low to me. Can't TEO do a good job before we reach such extremely low level
+of inactivity?
+
+
+Thanks
+
+--
+Qais Yousef
+
+> 
+> > while developing the patch?
+> 
+> We have tried different threshold values in terms of %, but for all CPUs
+> (at the same time) not per-cluster. The reason was to treat those CPUs
+> differently as described above.
+> 
+> Regards,
+> Lukasz
