@@ -2,202 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8841758495
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 20:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43EE7758529
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 20:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjGRSVf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 14:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S230490AbjGRSya (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 14:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjGRSVe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 14:21:34 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B59DF4;
-        Tue, 18 Jul 2023 11:21:26 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 9e94cc40b5da1c6f; Tue, 18 Jul 2023 20:21:24 +0200
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 868D26614F7;
-        Tue, 18 Jul 2023 20:21:23 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 7/7] ACPI: thermal: Drop unnecessary thermal zone callbacks
-Date:   Tue, 18 Jul 2023 20:19:41 +0200
-Message-ID: <1776080.VLH7GnMWUR@kreacher>
-In-Reply-To: <13318886.uLZWGnKmhe@kreacher>
-References: <13318886.uLZWGnKmhe@kreacher>
+        with ESMTP id S229874AbjGRSya (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 14:54:30 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F3A19A
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 11:54:16 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fbc0314a7bso9943290e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 11:54:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689706454; x=1692298454;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NvHXXC5n1uZ0AxYD49mZD4I5ePIf6P0IGN301whWC4Y=;
+        b=YCw2FxaQe0fS746f3Zg6kyy0mPHJFPcxQCuz3iBYO6KWAVJR8biEfK+xTD235L54HY
+         y5UnQ8yOUM13/lODRTtZGLicYIbcAnbgvQJA6rWXGC5Af/eIhkuTMF1C2uOe2wBKktDh
+         L4FiJm8+ZJPPFgRaqOP06mdrXOqnezk06nq3DpdjCfdFO9kKkuNB1FNg6GuPwil7+Ft4
+         emC3DdI9a1DWGEmVYUR7XNE4IJMTpdd9q11l0uTDp/t5kQaglbLVgV3K/2s4ayH1BP/1
+         UfymOZncKXJJp79doaeRDjUEKhK/ayHBPYK2GqLwY82fU3Mtxh5mU3DTxmc8wVmFLdoN
+         Qj+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689706454; x=1692298454;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NvHXXC5n1uZ0AxYD49mZD4I5ePIf6P0IGN301whWC4Y=;
+        b=lveI9tDibTueUA7LVLq0eGsiGcAq5YfgcjGFjMDicOxLjZd8JvF/bi/jyk2scV4a/a
+         izHlCzSjO+56whLKJ5kQztAK0mUMIy1ikNpDFB/tUcVwdhKzDuNeYpwH+Vd7hiy/9Y6r
+         Ge/J2xxNy6TTa9pjFKTRm/v0PwKSVtiZCOV1RIRUtRxbXTenA6xGv22SrCg6NvAONoD+
+         m1GhLZnp2T3AA4w82pvHg6//Hjks9zNohQrRddDl/0O3ftY3CwRIxDRw00vaBxXN6w6x
+         MoT5uNhbNuFKkVje1+1CsLMcLAg4gkhkO4S13qFh3wOaEHdWR60KUeJbjG6oXhsxhdrB
+         TBJg==
+X-Gm-Message-State: ABy/qLak2t4IKpNNPhH/GdW7AyMyWIoiBRBvJvwEekRkudDZ1SKXtC0V
+        HhtghYq7yhSJ4k4U290kRCgEZg==
+X-Google-Smtp-Source: APBJJlEmJtRDRmErj1dWjqW5H0FvmW0qCWd77Rraj/v2e0/CrlF8S9Qa+VC3Pmb+EFFauDws5ZkCFA==
+X-Received: by 2002:a05:6512:1320:b0:4f8:7803:64e6 with SMTP id x32-20020a056512132000b004f8780364e6mr10007681lfu.41.1689706454522;
+        Tue, 18 Jul 2023 11:54:14 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id z11-20020aa7cf8b000000b0051df13f1d8fsm1608611edx.71.2023.07.18.11.54.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jul 2023 11:54:14 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] memory: Explicitly include correct DT includes
+Date:   Tue, 18 Jul 2023 20:53:55 +0200
+Message-Id: <168970643388.118933.13930948330074254710.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230714174717.4059518-1-robh@kernel.org>
+References: <20230714174717.4059518-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrgeeggdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmihgthhgrlhdrfihilhgtiiihnhhskhhisehinhhtvghlrdgtohhmpdhr
- tghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Drop the .get_trip_type(), .get_trip_temp() and .get_crit_temp() thermal
-zone callbacks that are not necessary any more from the ACPI thermal
-driver along with the corresponding callback functions.
+On Fri, 14 Jul 2023 11:47:16 -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+> 
+> [...]
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/thermal.c |  115 -------------------------------------------------
- 1 file changed, 115 deletions(-)
+Applied, thanks!
 
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -460,118 +460,6 @@ static int thermal_get_temp(struct therm
- 	return 0;
- }
- 
--static int thermal_get_trip_type(struct thermal_zone_device *thermal,
--				 int trip, enum thermal_trip_type *type)
--{
--	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
--	int i;
--
--	if (!tz || trip < 0)
--		return -EINVAL;
--
--	if (tz->trips.critical.valid) {
--		if (!trip) {
--			*type = THERMAL_TRIP_CRITICAL;
--			return 0;
--		}
--		trip--;
--	}
--
--	if (tz->trips.hot.valid) {
--		if (!trip) {
--			*type = THERMAL_TRIP_HOT;
--			return 0;
--		}
--		trip--;
--	}
--
--	if (tz->trips.passive.valid) {
--		if (!trip) {
--			*type = THERMAL_TRIP_PASSIVE;
--			return 0;
--		}
--		trip--;
--	}
--
--	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE && tz->trips.active[i].valid; i++) {
--		if (!trip) {
--			*type = THERMAL_TRIP_ACTIVE;
--			return 0;
--		}
--		trip--;
--	}
--
--	return -EINVAL;
--}
--
--static int thermal_get_trip_temp(struct thermal_zone_device *thermal,
--				 int trip, int *temp)
--{
--	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
--	int i;
--
--	if (!tz || trip < 0)
--		return -EINVAL;
--
--	if (tz->trips.critical.valid) {
--		if (!trip) {
--			*temp = deci_kelvin_to_millicelsius_with_offset(
--					tz->trips.critical.temperature,
--					tz->kelvin_offset);
--			return 0;
--		}
--		trip--;
--	}
--
--	if (tz->trips.hot.valid) {
--		if (!trip) {
--			*temp = deci_kelvin_to_millicelsius_with_offset(
--					tz->trips.hot.temperature,
--					tz->kelvin_offset);
--			return 0;
--		}
--		trip--;
--	}
--
--	if (tz->trips.passive.valid) {
--		if (!trip) {
--			*temp = deci_kelvin_to_millicelsius_with_offset(
--					tz->trips.passive.temperature,
--					tz->kelvin_offset);
--			return 0;
--		}
--		trip--;
--	}
--
--	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE &&
--		tz->trips.active[i].valid; i++) {
--		if (!trip) {
--			*temp = deci_kelvin_to_millicelsius_with_offset(
--					tz->trips.active[i].temperature,
--					tz->kelvin_offset);
--			return 0;
--		}
--		trip--;
--	}
--
--	return -EINVAL;
--}
--
--static int thermal_get_crit_temp(struct thermal_zone_device *thermal,
--				int *temperature)
--{
--	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
--
--	if (tz->trips.critical.valid) {
--		*temperature = deci_kelvin_to_millicelsius_with_offset(
--					tz->trips.critical.temperature,
--					tz->kelvin_offset);
--		return 0;
--	}
--
--	return -EINVAL;
--}
--
- static struct thermal_trip *acpi_thermal_get_trip(struct acpi_thermal *tz,
- 					   int trip_index)
- {
-@@ -775,9 +663,6 @@ static struct thermal_zone_device_ops ac
- 	.bind = acpi_thermal_bind_cooling_device,
- 	.unbind	= acpi_thermal_unbind_cooling_device,
- 	.get_temp = thermal_get_temp,
--	.get_trip_type = thermal_get_trip_type,
--	.get_trip_temp = thermal_get_trip_temp,
--	.get_crit_temp = thermal_get_crit_temp,
- 	.get_trend = thermal_get_trend,
- 	.hot = acpi_thermal_zone_device_hot,
- 	.critical = acpi_thermal_zone_device_critical,
+[1/1] memory: Explicitly include correct DT includes
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/0b7fd1fa7a048b444b56f9d217c5917aa255d5a5
 
-
-
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
