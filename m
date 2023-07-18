@@ -2,176 +2,534 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA40F757E4D
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 15:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43CA0757F87
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 16:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232701AbjGRNzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 09:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S232527AbjGROaz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 10:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232974AbjGRNzo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 09:55:44 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1106BEA;
-        Tue, 18 Jul 2023 06:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689688538;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dIIcx1SGAw9uYYN1avMxPsLqak5l24gEpGFmCR8wXQs=;
-        b=MeGV0ommnDXY0bZLzz2aUDd3eORngKqqpm/czs4W5fC56SGEpuHkxL+e3H80XeL4olpT4w
-        1ApOAoo+UVumdCRRcw4QCgk1bWX8vFzXQhxjA1hdPhx0ybjBisPaXhX4AezSFzKDJcy2CL
-        4umq/NBxiWzrvybq7Sv34wmBua/EBa4=
-Message-ID: <d674ed791e4e7a71b671d1a66a03796cd6867fde.camel@crapouillou.net>
-Subject: Re: [PATCH v2 04/10] pinctrl: intel: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Tue, 18 Jul 2023 15:55:35 +0200
-In-Reply-To: <CAHp75VdPNCvhVSeKESbd7VNVPa8GVXVnw04jaE4HMUjK_b8+dA@mail.gmail.com>
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-         <20230717172821.62827-5-andriy.shevchenko@linux.intel.com>
-         <c47c26ba7ea5bcbdcbe1d001b6cc527cee6c7d03.camel@crapouillou.net>
-         <CAHp75Vcjq9=Q2_fsGJ9oCw=WYR3p3ot_cNLiDJV93psNcXXHLw@mail.gmail.com>
-         <8c66f79025ddd8388eeb9bdb3f0e789fe9f362d9.camel@crapouillou.net>
-         <CAHp75VdPNCvhVSeKESbd7VNVPa8GVXVnw04jaE4HMUjK_b8+dA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S232261AbjGROay (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 10:30:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6029E;
+        Tue, 18 Jul 2023 07:30:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8856C615F0;
+        Tue, 18 Jul 2023 14:30:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D957C433C9;
+        Tue, 18 Jul 2023 14:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689690651;
+        bh=oYbQlPAPjST5dLb2iSP7+pTQX0En+nYQKfG/SDG291Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ADBTFBmbc7dNBajlp+i+VMiUc8JlBDADTyImq5Njf21sFa3PqSpXLWbl9JJMr2I2/
+         pcuVUlWhvnPaWrZELXrFRYTu8NpGp24VEFQa4Nj3C92qaehqi/ICoQmqA+ZdRPzQ1l
+         kur6G4R2z4rSWcrSmhUjYHBNvkq40fe7hz2z3Jo3CrhjVw45vyz3Gb4/5EMVUIW0Yb
+         HI632uepsNuxa3iEEgtb0occeQXlytTuhTlhNfDs2+HAw+gHIOzOOIWliB6CNgRWg5
+         GXSn1CEc66xPhGUs7oK8Mp/SVA2gQvmQXSqqvyvahHH1hhuJ0oyljFOUwTswTEym3e
+         bBas8SXJg4zSg==
+Received: (nullmailer pid 1065208 invoked by uid 1000);
+        Tue, 18 Jul 2023 14:30:48 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        David Lechner <david@lechnology.com>,
+        Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-oxnas@groups.io
+Subject: [PATCH v2] power: Explicitly include correct DT includes
+Date:   Tue, 18 Jul 2023 08:30:43 -0600
+Message-Id: <20230718143045.1065100-1-robh@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Andy,
+The DT of_device.h and of_platform.h date back to the separate
+of_platform_bus_type before it as merged into the regular platform bus.
+As part of that merge prepping Arm DT support 13 years ago, they
+"temporarily" include each other. They also include platform_device.h
+and of.h. As a result, there's a pretty much random mix of those include
+files used throughout the tree. In order to detangle these headers and
+replace the implicit includes with struct declarations, users need to
+explicitly include the correct includes.
 
-Le mardi 18 juillet 2023 =C3=A0 15:57 +0300, Andy Shevchenko a =C3=A9crit=
-=C2=A0:
-> On Mon, Jul 17, 2023 at 10:56=E2=80=AFPM Paul Cercueil <paul@crapouillou.=
-net>
-> wrote:
-> > Le lundi 17 juillet 2023 =C3=A0 22:33 +0300, Andy Shevchenko a =C3=A9cr=
-it :
-> > > On Mon, Jul 17, 2023 at 10:02=E2=80=AFPM Paul Cercueil
-> > > <paul@crapouillou.net>
-> > > wrote:
-> > > > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=
-=A9crit
-> > > > :
->=20
-> ...
->=20
-> > > > So the correct way to update this driver would be to have a
-> > > > conditionally-exported dev_pm_ops structure:
-> > > >=20
-> > > > EXPORT_GPL_DEV_PM_OPS(intel_pinctrl_pm_ops) =3D {
-> > > > =C2=A0=C2=A0=C2=A0 NOIRQ_SYSTEM_SLEEP_PM_OPS(intel_pinctrl_suspend_=
-noirq,
-> > > > intel_pinctrl_resume_noirq),
-> > > > };
-> > >=20
-> > > This looks ugly. I didn't know that EXPORT*PM_OPS designed that
-> > > way,
-> > > but it seems pm.h in such case needs EXPORT for NOIRQ case as
-> > > well.
-> >=20
-> > It's designed so that when CONFIG_PM is disabled, the dev_pm_ops is
-> > garbage-collected along with all its callbacks.
-> >=20
-> > I know it looks ugly, but we already have 4 variants (regular,
-> > namespace, GPL, namespace + GPL), if we start to add macros for
-> > specific use-cases then it will become bloated really quick.
->=20
-> Maybe macros can be replaced / changed to make it scale?
+Acked-by: David Lechner <david@lechnology.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+- Fix double include of of.h
+---
+ drivers/power/reset/as3722-poweroff.c            | 1 -
+ drivers/power/reset/brcm-kona-reset.c            | 4 ++--
+ drivers/power/reset/gpio-poweroff.c              | 3 ++-
+ drivers/power/reset/gpio-restart.c               | 2 +-
+ drivers/power/reset/keystone-reset.c             | 3 ++-
+ drivers/power/reset/ocelot-reset.c               | 4 ++--
+ drivers/power/reset/odroid-go-ultra-poweroff.c   | 3 ++-
+ drivers/power/reset/oxnas-restart.c              | 2 --
+ drivers/power/reset/st-poweroff.c                | 2 +-
+ drivers/power/reset/syscon-poweroff.c            | 3 +--
+ drivers/power/reset/syscon-reboot.c              | 3 +--
+ drivers/power/reset/xgene-reboot.c               | 2 +-
+ drivers/power/supply/axp20x_ac_power.c           | 1 -
+ drivers/power/supply/axp20x_battery.c            | 1 -
+ drivers/power/supply/axp20x_usb_power.c          | 1 -
+ drivers/power/supply/cpcap-battery.c             | 2 +-
+ drivers/power/supply/da9150-charger.c            | 2 --
+ drivers/power/supply/da9150-fg.c                 | 1 -
+ drivers/power/supply/lego_ev3_battery.c          | 2 +-
+ drivers/power/supply/ltc2941-battery-gauge.c     | 2 +-
+ drivers/power/supply/ltc4162-l-charger.c         | 2 +-
+ drivers/power/supply/max14656_charger_detector.c | 2 +-
+ drivers/power/supply/max17040_battery.c          | 2 +-
+ drivers/power/supply/max8903_charger.c           | 1 -
+ drivers/power/supply/rn5t618_power.c             | 1 -
+ drivers/power/supply/rt5033_charger.c            | 2 +-
+ drivers/power/supply/rt9455_charger.c            | 3 +--
+ drivers/power/supply/sbs-battery.c               | 2 +-
+ drivers/power/supply/tps65090-charger.c          | 2 +-
+ drivers/power/supply/tps65217_charger.c          | 1 -
+ drivers/power/supply/twl4030_charger.c           | 1 +
+ 31 files changed, 26 insertions(+), 37 deletions(-)
 
-If you have any ideas, then yes absolutely.
+diff --git a/drivers/power/reset/as3722-poweroff.c b/drivers/power/reset/as3722-poweroff.c
+index 80edff1a556f..829e0dba2fda 100644
+--- a/drivers/power/reset/as3722-poweroff.c
++++ b/drivers/power/reset/as3722-poweroff.c
+@@ -10,7 +10,6 @@
+ #include <linux/mfd/as3722.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+ 
+diff --git a/drivers/power/reset/brcm-kona-reset.c b/drivers/power/reset/brcm-kona-reset.c
+index 3de024e3ceb7..64e241c77f83 100644
+--- a/drivers/power/reset/brcm-kona-reset.c
++++ b/drivers/power/reset/brcm-kona-reset.c
+@@ -2,8 +2,8 @@
+ // Copyright (C) 2016 Broadcom
+ 
+ #include <linux/io.h>
+-#include <linux/of_address.h>
+-#include <linux/of_platform.h>
++#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
+ #include <linux/reboot.h>
+ 
+ #define RSTMGR_REG_WR_ACCESS_OFFSET	0
+diff --git a/drivers/power/reset/gpio-poweroff.c b/drivers/power/reset/gpio-poweroff.c
+index 84b3c3528afa..b28f24da1b3c 100644
+--- a/drivers/power/reset/gpio-poweroff.c
++++ b/drivers/power/reset/gpio-poweroff.c
+@@ -11,8 +11,9 @@
+ #include <linux/init.h>
+ #include <linux/delay.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/gpio/consumer.h>
+-#include <linux/of_platform.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ 
+ #define DEFAULT_TIMEOUT_MS 3000
+diff --git a/drivers/power/reset/gpio-restart.c b/drivers/power/reset/gpio-restart.c
+index a479d3536eb1..3aa19765772d 100644
+--- a/drivers/power/reset/gpio-restart.c
++++ b/drivers/power/reset/gpio-restart.c
+@@ -12,8 +12,8 @@
+ #include <linux/delay.h>
+ #include <linux/platform_device.h>
+ #include <linux/gpio/consumer.h>
+-#include <linux/of_platform.h>
+ #include <linux/module.h>
++#include <linux/of.h>
+ 
+ struct gpio_restart {
+ 	struct gpio_desc *reset_gpio;
+diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/keystone-reset.c
+index 83a4e1c9bf94..dbc4ff61cd74 100644
+--- a/drivers/power/reset/keystone-reset.c
++++ b/drivers/power/reset/keystone-reset.c
+@@ -10,10 +10,11 @@
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/notifier.h>
++#include <linux/platform_device.h>
+ #include <linux/reboot.h>
+ #include <linux/regmap.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
+ 
+ #define RSTYPE_RG			0x0
+ #define RSCTRL_RG			0x4
+diff --git a/drivers/power/reset/ocelot-reset.c b/drivers/power/reset/ocelot-reset.c
+index 8caa90cb58fc..44c7730086e4 100644
+--- a/drivers/power/reset/ocelot-reset.c
++++ b/drivers/power/reset/ocelot-reset.c
+@@ -8,10 +8,10 @@
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/notifier.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/reboot.h>
+ #include <linux/regmap.h>
+ 
+diff --git a/drivers/power/reset/odroid-go-ultra-poweroff.c b/drivers/power/reset/odroid-go-ultra-poweroff.c
+index f46271da4e8e..9cac7aef77f0 100644
+--- a/drivers/power/reset/odroid-go-ultra-poweroff.c
++++ b/drivers/power/reset/odroid-go-ultra-poweroff.c
+@@ -4,7 +4,8 @@
+  */
+ #include <linux/kernel.h>
+ #include <linux/init.h>
+-#include <linux/of_platform.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
+ #include <linux/mfd/rk808.h>
+ #include <linux/regmap.h>
+ #include <linux/module.h>
+diff --git a/drivers/power/reset/oxnas-restart.c b/drivers/power/reset/oxnas-restart.c
+index 13090bec058a..dd321caa28b6 100644
+--- a/drivers/power/reset/oxnas-restart.c
++++ b/drivers/power/reset/oxnas-restart.c
+@@ -13,8 +13,6 @@
+ #include <linux/io.h>
+ #include <linux/notifier.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/power/reset/st-poweroff.c b/drivers/power/reset/st-poweroff.c
+index 5ccaacffab54..56ba21873882 100644
+--- a/drivers/power/reset/st-poweroff.c
++++ b/drivers/power/reset/st-poweroff.c
+@@ -9,7 +9,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_platform.h>
++#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/mfd/syscon.h>
+ #include <linux/reboot.h>
+diff --git a/drivers/power/reset/syscon-poweroff.c b/drivers/power/reset/syscon-poweroff.c
+index ed58bdf41e27..430d440d55c6 100644
+--- a/drivers/power/reset/syscon-poweroff.c
++++ b/drivers/power/reset/syscon-poweroff.c
+@@ -10,8 +10,7 @@
+ #include <linux/io.h>
+ #include <linux/notifier.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/power/reset/syscon-reboot.c b/drivers/power/reset/syscon-reboot.c
+index 45e34e6885f7..4d622c19bc48 100644
+--- a/drivers/power/reset/syscon-reboot.c
++++ b/drivers/power/reset/syscon-reboot.c
+@@ -9,8 +9,7 @@
+ #include <linux/io.h>
+ #include <linux/notifier.h>
+ #include <linux/mfd/syscon.h>
+-#include <linux/of_address.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/power/reset/xgene-reboot.c b/drivers/power/reset/xgene-reboot.c
+index 0b0d2fd2bd0c..3260bd93158e 100644
+--- a/drivers/power/reset/xgene-reboot.c
++++ b/drivers/power/reset/xgene-reboot.c
+@@ -13,7 +13,7 @@
+ #include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/notifier.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ #include <linux/reboot.h>
+diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
+index 57e50208d537..19a118633115 100644
+--- a/drivers/power/supply/axp20x_ac_power.c
++++ b/drivers/power/supply/axp20x_ac_power.c
+@@ -13,7 +13,6 @@
+ #include <linux/mfd/axp20x.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/power_supply.h>
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+index 9106077c0dbb..6ac5c80cfda2 100644
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -22,7 +22,6 @@
+ #include <linux/irq.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+index 51c3f9b6458d..bde17406c130 100644
+--- a/drivers/power/supply/axp20x_usb_power.c
++++ b/drivers/power/supply/axp20x_usb_power.c
+@@ -15,7 +15,6 @@
+ #include <linux/mfd/axp20x.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm.h>
+ #include <linux/power_supply.h>
+diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+index d98d9244e394..5dd76c0ac98d 100644
+--- a/drivers/power/supply/cpcap-battery.c
++++ b/drivers/power/supply/cpcap-battery.c
+@@ -15,7 +15,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/reboot.h>
+diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supply/da9150-charger.c
+index a87aeaea38e1..27f897067aa3 100644
+--- a/drivers/power/supply/da9150-charger.c
++++ b/drivers/power/supply/da9150-charger.c
+@@ -11,8 +11,6 @@
+ #include <linux/slab.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+-#include <linux/of.h>
+-#include <linux/of_platform.h>
+ #include <linux/interrupt.h>
+ #include <linux/power_supply.h>
+ #include <linux/notifier.h>
+diff --git a/drivers/power/supply/da9150-fg.c b/drivers/power/supply/da9150-fg.c
+index 8c5e2c49d6c1..652c1f213af1 100644
+--- a/drivers/power/supply/da9150-fg.c
++++ b/drivers/power/supply/da9150-fg.c
+@@ -11,7 +11,6 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/of.h>
+-#include <linux/of_platform.h>
+ #include <linux/slab.h>
+ #include <linux/interrupt.h>
+ #include <linux/delay.h>
+diff --git a/drivers/power/supply/lego_ev3_battery.c b/drivers/power/supply/lego_ev3_battery.c
+index ccb00be38e2c..9085de0ae1b2 100644
+--- a/drivers/power/supply/lego_ev3_battery.c
++++ b/drivers/power/supply/lego_ev3_battery.c
+@@ -20,7 +20,7 @@
+ #include <linux/iio/types.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ 
+diff --git a/drivers/power/supply/ltc2941-battery-gauge.c b/drivers/power/supply/ltc2941-battery-gauge.c
+index cad39a8f829d..a1ddc4b060ce 100644
+--- a/drivers/power/supply/ltc2941-battery-gauge.c
++++ b/drivers/power/supply/ltc2941-battery-gauge.c
+@@ -11,7 +11,7 @@
+ #include <linux/devm-helpers.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/types.h>
+ #include <linux/errno.h>
+ #include <linux/swab.h>
+diff --git a/drivers/power/supply/ltc4162-l-charger.c b/drivers/power/supply/ltc4162-l-charger.c
+index ec5b4a20ad43..f0eace731480 100644
+--- a/drivers/power/supply/ltc4162-l-charger.c
++++ b/drivers/power/supply/ltc4162-l-charger.c
+@@ -6,7 +6,7 @@
+ 
+ #include <linux/module.h>
+ #include <linux/delay.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/power_supply.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/power/supply/max14656_charger_detector.c b/drivers/power/supply/max14656_charger_detector.c
+index fbdf12cf64eb..89f2af72dfcd 100644
+--- a/drivers/power/supply/max14656_charger_detector.c
++++ b/drivers/power/supply/max14656_charger_detector.c
+@@ -14,8 +14,8 @@
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/slab.h>
+-#include <linux/of_device.h>
+ #include <linux/workqueue.h>
+ #include <linux/power_supply.h>
+ #include <linux/devm-helpers.h>
+diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
+index 22ea7de47a53..ff42db672899 100644
+--- a/drivers/power/supply/max17040_battery.c
++++ b/drivers/power/supply/max17040_battery.c
+@@ -15,7 +15,7 @@
+ #include <linux/delay.h>
+ #include <linux/interrupt.h>
+ #include <linux/power_supply.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/regmap.h>
+ #include <linux/slab.h>
+ 
+diff --git a/drivers/power/supply/max8903_charger.c b/drivers/power/supply/max8903_charger.c
+index 54d50b55fbae..e65d0141f260 100644
+--- a/drivers/power/supply/max8903_charger.c
++++ b/drivers/power/supply/max8903_charger.c
+@@ -10,7 +10,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/slab.h>
+ #include <linux/power_supply.h>
+ #include <linux/platform_device.h>
+diff --git a/drivers/power/supply/rn5t618_power.c b/drivers/power/supply/rn5t618_power.c
+index a5e09ac78a50..ebea3522a2ac 100644
+--- a/drivers/power/supply/rn5t618_power.c
++++ b/drivers/power/supply/rn5t618_power.c
+@@ -14,7 +14,6 @@
+ #include <linux/interrupt.h>
+ #include <linux/module.h>
+ #include <linux/mfd/rn5t618.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/power/supply/rt5033_charger.c b/drivers/power/supply/rt5033_charger.c
+index 5218dfbf5e1b..c0c516f22c66 100644
+--- a/drivers/power/supply/rt5033_charger.c
++++ b/drivers/power/supply/rt5033_charger.c
+@@ -6,8 +6,8 @@
+  * Author: Beomho Seo <beomho.seo@samsung.com>
+  */
+ 
++#include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/regmap.h>
+diff --git a/drivers/power/supply/rt9455_charger.c b/drivers/power/supply/rt9455_charger.c
+index ff4dcf77c788..c345a77f9f78 100644
+--- a/drivers/power/supply/rt9455_charger.c
++++ b/drivers/power/supply/rt9455_charger.c
+@@ -8,8 +8,7 @@
+ #include <linux/module.h>
+ #include <linux/interrupt.h>
+ #include <linux/delay.h>
+-#include <linux/of_irq.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/power_supply.h>
+ #include <linux/i2c.h>
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index 62a354e01204..cdfc8466d129 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -16,7 +16,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/property.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/power/sbs-battery.h>
+ #include <linux/power_supply.h>
+ #include <linux/slab.h>
+diff --git a/drivers/power/supply/tps65090-charger.c b/drivers/power/supply/tps65090-charger.c
+index 0990b2fa6cd8..f96c705e0a9f 100644
+--- a/drivers/power/supply/tps65090-charger.c
++++ b/drivers/power/supply/tps65090-charger.c
+@@ -13,7 +13,7 @@
+ #include <linux/kernel.h>
+ #include <linux/kthread.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
+ #include <linux/slab.h>
+diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supply/tps65217_charger.c
+index a4bc9f2a10bc..96341cbde4fa 100644
+--- a/drivers/power/supply/tps65217_charger.c
++++ b/drivers/power/supply/tps65217_charger.c
+@@ -17,7 +17,6 @@
+ #include <linux/slab.h>
+ #include <linux/err.h>
+ #include <linux/of.h>
+-#include <linux/of_device.h>
+ #include <linux/power_supply.h>
+ 
+ #include <linux/mfd/core.h>
+diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
+index 7adfd69fe649..e78d061d8d32 100644
+--- a/drivers/power/supply/twl4030_charger.c
++++ b/drivers/power/supply/twl4030_charger.c
+@@ -12,6 +12,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/err.h>
++#include <linux/of.h>
+ #include <linux/platform_device.h>
+ #include <linux/interrupt.h>
+ #include <linux/mfd/twl.h>
+-- 
+2.40.1
 
->=20
-> > And the "bloat" I'm trying to avoid here is the extreme expansion
-> > of
-> > the API which makes it hard for people not familiar to the code to
-> > understand what should be used and how.
->=20
-> So far, based on the rest of the messages in the thread the
-> EXPORT*PM_OPS() have the following issues:
-> 1) do not scale (for variants with different scope we need new set of
-> macros);
-> 2) do not cover cases with pm_sleep_ptr();
-> 3) export symbols in case when it's not needed.
->=20
-> Am I right?
-
-I think that's right yes.
-
->=20
-> > > > Then your two callbacks can be "static" and without #ifdef
-> > > > guards.
-> > > >=20
-> > > > The resulting "intel_pinctrl_pm_ops" can be marked as "extern"
-> > > > in
-> > > > the
-> > > > pinctrl-intel.h without any guards, as long as it is only
-> > > > referenced
-> > > > with the pm_ptr() macro.
-> > >=20
-> > > I'm not sure I got this. Currently drivers do not have any
-> > > guards.
-> > > Moreover, the correct one for noirq is pm_sleep_ptr(), isn't it?
-> >=20
-> > The EXPORT_*_DEV_PM_OPS() macros do export the "dev_pm_ops"
-> > conditionally depending on CONFIG_PM. We could add variants that
-> > export
-> > it conditionally depending on CONFIG_PM_SLEEP, but we're back at
-> > the
-> > problem of adding bloat.
->=20
-> Exactly.
->=20
-> > You could use pm_sleep_ptr() indeed, with the existing macros, with
-> > the
-> > drawback that in the case where CONFIG_PM && !CONFIG_PM_SLEEP, the
-> > dev_pm_ops + callbacks are compiled in but never referenced.
->=20
-> And exactly.
->=20
-> I don't think they are ready to use (in the current form). But let's
-> see what we may do better here...
-
-They were OK when Jonathan and myself were updating the IIO drivers -
-but now they definitely show their limitations.
-
-Cheers,
--Paul
