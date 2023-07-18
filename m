@@ -2,170 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848FC75885F
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 00:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BA007588B1
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 00:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjGRWYX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 18:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47216 "EHLO
+        id S231289AbjGRWqC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 18:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjGRWYV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 18:24:21 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FBFBD
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 15:24:17 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6687466137bso4136626b3a.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 15:24:17 -0700 (PDT)
+        with ESMTP id S230187AbjGRWqB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 18:46:01 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E55819AF
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 15:45:43 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fbd33a57dcso64766235e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 15:45:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689719057; x=1692311057;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Njm4OZMFGbz9kj2acOQenVAP6K4V8zxn1UEaaH8iSVo=;
-        b=EIcPsZGAjudB9VkPgbB0bChs4NrnzXZ2nvLrjll2GHtFaYlwkd5iENDo69UjHxYpCr
-         lMZ3HMy0qVcpsaldmXe4limDQw1yLny0g+qDQeo+BcuW1vHFKburORz5PubrVHwx/TSw
-         iBWSzN8W6FcWolgf1o+nlG5JkcNVe3KOaTxkWCf7RxupA9zcb7fub84+Uent+H4AxUbI
-         2jQ7UIzFMTSZ9FrAGFdWj1CJ1M3WhXPkqNFIQi1LHiCEBX+PB9n4RRwjtdZDxiBbJ/Gw
-         h7t6AJwbB7fdi8vALLXzuMlol1lT6UHTsEzJUBCCfxpXRJ57kckJcQd8Ll3VO1lbLjBO
-         xvMA==
+        d=linaro.org; s=google; t=1689720341; x=1692312341;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0dM6vGQp7Yzqc9VcgY+1jMISgn/S3Msr5TJcQ3ba1vA=;
+        b=w0bArvFa/qc2nxE5FLuei55K0a3o16zZL9S7p7nipeYsKhDa0w8YtFoBwLugBATvKk
+         KQxIabqNDG0GX89legNxHyZRa5xlIt6r2E5wbTv6a/Nqy8tMYuhoSfHmQFB854Sf88K6
+         N4N9dQilcLw9j/LtBXeCqty8DiDzW34bEbyTEMEzfWSxUfM33DgfvckRS3w0catafznn
+         Kwp92At82HRvKajEG7SAi5XVQ0TaJLuB/mq5/20S8CDsaYefiiil/bddj/af0shg6Tyq
+         BPTiTpSi2oGyFmFoB+i8MCmGfgwAFlvegtXdyBdhz2+VAunIRMV0c3ngDQCfrsgzhuf1
+         RoYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689719057; x=1692311057;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Njm4OZMFGbz9kj2acOQenVAP6K4V8zxn1UEaaH8iSVo=;
-        b=l5sqjDTVshZxplLjlmVEs1Inj6OGkVegx3uKeM8WgumF36eqvIvyPsCgAH6Ycbe8qy
-         Ba6XWsTdjmbrOunqsLGyekchnHo/VK6tezmS8WfT6+ITwXPOgevvY3B5ZI1IOjKKy6BC
-         EjNVQ9Grf3ECLxvMZNIYnZMCoEx7knfeSbuwCNXGJ4hK7Pz7BXiBH4K20mfhWTAlEqm5
-         TXkjFmM4xqd43f3rXGlUt0lm+Jt6VJE0jGSgN3K1WSRIi23LLz9+jjM5VEGv5qwPLNiF
-         yJsyprbl42wqwiH58usmitwstPrJrpfDYoAHshXuHMTV23iUIOULa4t3A0iGjL+wXy5F
-         FO0Q==
-X-Gm-Message-State: ABy/qLYznsaZY/l469NixsMa/B405DHuckEdaCX9xGyst6Ez31cD7Ggb
-        39bjPzXXW639CSQnZCbc0R0/sg==
-X-Google-Smtp-Source: APBJJlHSvooChuFu1dwfU87PGi5Krd2A3WOyAOejRkrLbfAz2hYt9eo5Ym3VaOewtuJlVer3ORqBkA==
-X-Received: by 2002:a05:6a20:3d17:b0:12f:8755:96ba with SMTP id y23-20020a056a203d1700b0012f875596bamr623431pzi.28.1689719057248;
-        Tue, 18 Jul 2023 15:24:17 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id v11-20020aa7808b000000b0064f95bc04d3sm1999516pff.20.2023.07.18.15.24.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 15:24:16 -0700 (PDT)
-Message-ID: <64b71110.a70a0220.3bee.4908@mx.google.com>
-Date:   Tue, 18 Jul 2023 15:24:16 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1689720341; x=1692312341;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0dM6vGQp7Yzqc9VcgY+1jMISgn/S3Msr5TJcQ3ba1vA=;
+        b=HNCyVjt8sQyo1PPCNcDn8XIjUHoi7t+lTqQ7lvBaqC2bjIPwWpN7QJfJYUKOUX6jk2
+         LSf0i/k88OBeo2hfTsJJgXvH07Mc4eRlmqxt87nCfOjaVejI/UdY3096PqBXWOKvzOy+
+         299DT8b+hyjoeqBW9d7xcC+riMjzP0QLV9XJJQ7IzQrXdqKpuPkkCAK3KEW22p5NF5LB
+         ngLidyFthl2xQThnv+8aaDe4W+vc6drNcwwpqRppbtgBWUbFMf7QEKFyid+szO5KwZDs
+         rjdXbkvW++kgbzgRGuaB0r9Q6PA02/tHbaNmDFradaiycutD1XgHdwSsYpaTjma4TteU
+         aUVQ==
+X-Gm-Message-State: ABy/qLZ2ZzNqUZAo5jsKdKMmWEPt+1QZY4sGeCviqntByazzHvMPMgdU
+        XURX71Id/NVypbT8MvsMY5Cv5Q==
+X-Google-Smtp-Source: APBJJlGhrcrJnFIlEMLY7hs8MezIOypcFTEuP+BkeBlFBEbnXYeMU1V6y+qZVPPihG8UxOO6tUbYbA==
+X-Received: by 2002:a1c:740d:0:b0:3fc:70:2f76 with SMTP id p13-20020a1c740d000000b003fc00702f76mr3048258wmc.20.1689720341326;
+        Tue, 18 Jul 2023 15:45:41 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003fbb1ce274fsm4382033wmb.0.2023.07.18.15.45.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jul 2023 15:45:41 -0700 (PDT)
+Message-ID: <8b89f009-bcfe-3a90-f19e-0b5894a5ebd1@linaro.org>
+Date:   Wed, 19 Jul 2023 00:45:40 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.5-rc2-42-g6e9908abf1d1
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.5-rc2-42-g6e9908abf1d1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 0/7] ACPI: thermal: Use trip point table to register
+ thermal zones
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <13318886.uLZWGnKmhe@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc2-42-g6e=
-9908abf1d1)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-5-rc2-42-g6e9908abf1d1/
+Hi Rafael,
 
-Tree: pm
-Branch: testing
-Git Describe: v6.5-rc2-42-g6e9908abf1d1
-Git Commit: 6e9908abf1d156c4be5736acfdbd73974b8af772
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+On 18/07/2023 20:01, Rafael J. Wysocki wrote:
+> Hi Everyone,
+> 
+> This patch series makes the ACPI thermal driver register thermal zones
+> with the help of thermal_zone_device_register_with_trips(), so it
+> doesn't need to use the thermal zone callbacks related to trip points
+> any more (and they are dropped in the last patch).
 
-Warnings Detected:
+Yay!
 
-arc:
+> The approach presented here is quite radically different from the
+> previous attempts, as it doesn't really rearrange the driver's
+> internal data structures, but adds the trip table support on top of
+> them.  For this purpose, it uses an additional field in struct thermal_trip
+> introduced in the first patch.
+> 
+> I have run it on my test-bed systems, but this is not too representative,
+> because they each have only one ACPI thermal zone with only one (critical)
+> trip point in it.
 
-arm64:
+Rui created some ACPI fake tables I was able to run them in a KVM 
+machine with fake thermal zones.
 
-arm:
+I can share the setup if you are interested in
 
-i386:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-mips:
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
