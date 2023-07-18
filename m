@@ -2,26 +2,26 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A29D7578FE
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 12:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28A875790A
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 12:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjGRKKi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 06:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32844 "EHLO
+        id S230285AbjGRKL7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 06:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjGRKKh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 06:10:37 -0400
+        with ESMTP id S231506AbjGRKLr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 06:11:47 -0400
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE673EA;
-        Tue, 18 Jul 2023 03:10:36 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4vkt1Ggrz6D9CJ;
-        Tue, 18 Jul 2023 18:07:18 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF8A0188;
+        Tue, 18 Jul 2023 03:11:46 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4vmD14XFz67nfn;
+        Tue, 18 Jul 2023 18:08:28 +0800 (CST)
 Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
  (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 18 Jul
- 2023 11:10:33 +0100
-Date:   Tue, 18 Jul 2023 11:10:33 +0100
+ 2023 11:11:43 +0100
+Date:   Tue, 18 Jul 2023 11:11:43 +0100
 From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -50,12 +50,12 @@ CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 09/10] pinctrl: renesas: Switch to use
+Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
  DEFINE_NOIRQ_DEV_PM_OPS() helper
-Message-ID: <20230718111033.00001f59@Huawei.com>
-In-Reply-To: <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
+Message-ID: <20230718111143.000067dc@Huawei.com>
+In-Reply-To: <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-        <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
+        <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
 Organization: Huawei Technologies Research and Development (UK) Ltd.
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
@@ -75,13 +75,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 17 Jul 2023 20:28:20 +0300
+On Mon, 17 Jul 2023 20:28:21 +0300
 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
 > Since pm.h provides a helper for system no-IRQ PM callbacks,
 > switch the driver to use it instead of open coded variant.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Slightly more complex case, but looks fine to me.
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+No pm_sleep_ptr()?
+
+> ---
+>  drivers/pinctrl/tegra/pinctrl-tegra.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c b/drivers/pinctrl/tegra/pinctrl-tegra.c
+> index 4547cf66d03b..734c71ef005b 100644
+> --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
+> +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
+> @@ -747,10 +747,7 @@ static int tegra_pinctrl_resume(struct device *dev)
+>  	return 0;
+>  }
+>  
+> -const struct dev_pm_ops tegra_pinctrl_pm = {
+> -	.suspend_noirq = &tegra_pinctrl_suspend,
+> -	.resume_noirq = &tegra_pinctrl_resume
+> -};
+> +DEFINE_NOIRQ_DEV_PM_OPS(tegra_pinctrl_pm, tegra_pinctrl_suspend, tegra_pinctrl_resume);
+>  
+>  static bool tegra_pinctrl_gpio_node_has_range(struct tegra_pmx *pmx)
+>  {
 
