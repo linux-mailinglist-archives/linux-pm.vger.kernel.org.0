@@ -2,106 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF430758283
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 18:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 971BB758345
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 19:14:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjGRQuy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 12:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S232204AbjGRROY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 13:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjGRQux (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 12:50:53 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF1E319A;
-        Tue, 18 Jul 2023 09:50:51 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fa86b08efcso9885825e9.1;
-        Tue, 18 Jul 2023 09:50:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689699050; x=1692291050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oB4ZyTPiRMh8uiHtJckpmyXEBsp+YxvtmLWlUvgMk/M=;
-        b=Y1+OUm+KfnhNxz2FsnvadTldRBXR977AylELwvjFF8aABcT5TuWYDrR1jsjviIpW83
-         OAF/Ux11x6X+51dIzA62iasPzvSM4umD/lUeeUAhk/mh0NBfJu1exB+uSFtZfqNQB5Nl
-         eOp8M46GxxHQJ8glNcis3nOErtYTNxsNbh+g0yph0R9gNTj8Y1bQNza+BS2DyBHkJDhg
-         DKxfWVmiQMnyQDGcMAR1QSsQTWU+jK70mdkdhS3O0VgmrMuuA26DcNKXFVA3qy7KhzmU
-         FdV0sPn04MJctdvZDYGSQQ66j/fLDDKiHsLlMJs+9uehKQxagFCXOeWjTlDhRxBwXmFG
-         eT0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689699050; x=1692291050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oB4ZyTPiRMh8uiHtJckpmyXEBsp+YxvtmLWlUvgMk/M=;
-        b=fTl7lD1skAulnkgDuxESq+p2Zciu/Jt87zh+SFYhYBgaMQ6ZDSDvxzsyFQcokzn7RK
-         5ApUKJM7eEOCHyae4iAlRsAWGVytERmrrV9EK5XGCzQFwvqDFdZlbOXx/4niLs0VU2VG
-         KL+IoncWM0F0AuPE95nTk7FsIuzeWIjbnDMh+dLOddbQKUuf454VOup4dXA1ZtCHtvV1
-         fS/5scNJHtDi6aIrosxOMDQS5OauiQTgdc3sHMklq7bxDCY8J4SzreMX0pYb646J3iWN
-         5Cr73pq+64qjVBnM/i06lfhQ2N5kgAbbQqlxv/RjBDWzbwz0/ykGYJRhgqobpinh/wIy
-         SL4g==
-X-Gm-Message-State: ABy/qLY2VzBhXwunMdTgWGDaQxND4SXsoC7fXE61c2MzP1fGo8d6p/7Q
-        bhjB5evBqHeZC8iIpTXHtKKOh9UOhx1k3AylUk8=
-X-Google-Smtp-Source: APBJJlHv0cXnhyUAmRhq8/SgUT8OUQAJDxLPpI/PxYmchWVx6/iDfgSesWfaOELdt2qAkI5m3P4LygqZPZvXw2DAxkY=
-X-Received: by 2002:a05:600c:3b1d:b0:3f9:bf0e:a312 with SMTP id
- m29-20020a05600c3b1d00b003f9bf0ea312mr22373wms.1.1689699049984; Tue, 18 Jul
- 2023 09:50:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org>
-In-Reply-To: <20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Tue, 18 Jul 2023 09:50:23 -0700
-Message-ID: <CA+E=qVej1K7x=8-27J-Xw2E5JrJ0hgqf__XRzBdewujFsr2cPw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/sun8i: Don't fail probe due to zone
- registration failure
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Hugh Dickins <hughd@google.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
+        with ESMTP id S232117AbjGRROW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 13:14:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E6A188
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 10:14:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D79C661689
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 17:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E3E3C433D9
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 17:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689700460;
+        bh=oLe9tm4kmVTiRwGfjJlhWYaxXK13kMuN4ZeWrQvCDrM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=uOlRBatXISBpT+TEg8GIyyaEE+xZFPlY5f35Vp7ETxJxyUu2ixz6y1KBPSvJgk0/c
+         uYHRS/XlvjNJXBRq5WA8JvYJLg4tPWuytZumA8Yb28MMwi6l5N9S9LaMsY0/dkssCw
+         ZaE5jYW2dlYC4dU04Z+oD9//tAnxc8vUDJfrezeyCuIPLEAlYHYsilezNhlNQprG1O
+         fE6Z39GFoSrlP3B9/7DwbE8ucP+1e9rLGjlNJEVwoXG4aFDM6SMtqoRrabEWH6v0/C
+         VhfJURuOlh4iuiJFn24z4kmhYVyZCYIrx8OpnOz9WkucSv/ROEzDLv+ciDFZCwYRtV
+         i8oBmkncKDyBg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 0D87CC53BCD; Tue, 18 Jul 2023 17:14:20 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217589] Intel CPU maximum boost frequency reduced after resume
+ from suspend to RAM
+Date:   Tue, 18 Jul 2023 17:14:19 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bjackson0971@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217589-137361-D3lb6TeC2h@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217589-137361@https.bugzilla.kernel.org/>
+References: <bug-217589-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 8:05=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> Currently the sun8i thermal driver will fail to probe if any of the
-> thermal zones it is registering fails to register with the thermal core.
-> Since we currently do not define any trip points for the GPU thermal
-> zones on at least A64 or H5 this means that we have no thermal support
-> on these platforms:
->
-> [    1.698703] thermal_sys: Failed to find 'trips' node
-> [    1.698707] thermal_sys: Failed to find trip points for thermal-sensor=
- id=3D1
->
-> even though the main CPU thermal zone on both SoCs is fully configured.
-> This does not seem ideal, while we may not be able to use all the zones
-> it seems better to have those zones which are usable be operational.
-> Instead just carry on registering zones if we get any non-deferral
-> error, allowing use of those zones which are usable.
->
-> This means that we also need to update the interrupt handler to not
-> attempt to notify the core for events on zones which we have not
-> registered, I didn't see an ability to mask individual interrupts and
-> I would expect that interrupts would still be indicated in the ISR even
-> if they were masked.
->
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217589
 
-Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
+--- Comment #11 from Brad  Jackson (bjackson0971@gmail.com) ---
+MSI has ignored my support ticket for weeks, but after chatting with a supp=
+ort
+person, they don't provide support for Linux or seemingly overclocking eith=
+er.
+I don't have a convenient way to test Windows on my PC to prove it's a BIOS
+bug.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
