@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0180757E3E
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 15:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 180BB757E52
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 15:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232929AbjGRNxo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 09:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S232974AbjGRNzu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 09:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232921AbjGRNxm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 09:53:42 -0400
+        with ESMTP id S232981AbjGRNzp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 09:55:45 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C251D99;
-        Tue, 18 Jul 2023 06:53:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A3D135;
+        Tue, 18 Jul 2023 06:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689688419; x=1721224419;
+  t=1689688543; x=1721224543;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=9ophA10kUFzoNAqizRgztDPJPsGfNIY1vmJXIIYiDlc=;
-  b=Y8YvhyqVPA1qHR0TnpJUsZPlfS/Dd9z2AnZMrJblXfFFm3Iqwrb6pU9l
-   WkPMHCN56uK0gyw6B2wVRoV2Q3rLPPzSI/xrpqI+BhQQUv8GnZT65HXOX
-   JKt2Dajs03neBM+4dCXxeXBpfEBY3fidyl1SArrQJc2oGVbKl70XLY+F+
-   WGlTTHueeI7if3U3Evz8DZ58k4i5wkBQ/jQ3pYA+SNxHTCfI/7jfjmvX2
-   vWRpyNwMm/q73Ay4UpzzItnZ+LFXHFw6Nam58SxFZGZNTD47Y+HfAvRVt
-   FNrabsyTfCiLI3SkDoir3sBSs6XOauXzKmeVyA1zyLWYLN4A9iWSFLcEX
+  bh=V7uObewKKMsSFKcANEcQ6EZsbUKYMZQzdkpGT+xME/c=;
+  b=iQsKPcpXfE/c07KBnfQ2BDwNCXr+4+nFDCXSq6yK/qVIn5XJR6KVxx0y
+   9qcRJ999as8l0YPJP2h7nkjxe7YVNW5b6mlvW4v3GPw/IcXr8Sggd1dEP
+   mCoOiJRYdpJVEtHPzCw2MnKua6uQhjWqY5pSTpOMkzvTDJQ2qp57Dck8d
+   dGFBPxbvAUEsEw8REH8lABAOqE9DQYrWShk8H4TuFYioAHPkmSEyzgvZl
+   O1UwFbe4bGSfsXAnvP1N9IV8FhYBjbzp6Jn0NJcjqOtZ0ARYgp9N9IzIH
+   0cA/Vh/WbP5MipJdvdUFyHjIILtHZBUAKDsIUpYs/2V6hN2xLVRRJaBuP
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345803481"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="345803877"
 X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
-   d="scan'208";a="345803481"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 06:53:39 -0700
+   d="scan'208";a="345803877"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 06:55:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="847708035"
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="793630354"
 X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
-   d="scan'208";a="847708035"
+   d="scan'208";a="793630354"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jul 2023 06:53:32 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 18 Jul 2023 06:55:36 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.96)
         (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qLl8r-00Fuul-36;
-        Tue, 18 Jul 2023 16:53:29 +0300
-Date:   Tue, 18 Jul 2023 16:53:29 +0300
+        id 1qLlAr-00FzOP-0Z;
+        Tue, 18 Jul 2023 16:55:33 +0300
+Date:   Tue, 18 Jul 2023 16:55:32 +0300
 From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
@@ -70,16 +70,15 @@ Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 04/10] pinctrl: intel: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
-Message-ID: <ZLaZWcyJAnQMK87f@smile.fi.intel.com>
+Subject: Re: [PATCH v2 05/10] pinctrl: lynxpoint: Make use of pm_ptr()
+Message-ID: <ZLaZ1NLcACjqB02i@smile.fi.intel.com>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
- <20230717172821.62827-5-andriy.shevchenko@linux.intel.com>
- <20230718110451.00001227@Huawei.com>
+ <20230717172821.62827-6-andriy.shevchenko@linux.intel.com>
+ <20230718110620.0000218e@Huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230718110451.00001227@Huawei.com>
+In-Reply-To: <20230718110620.0000218e@Huawei.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
@@ -91,24 +90,24 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 11:04:51AM +0100, Jonathan Cameron wrote:
-> On Mon, 17 Jul 2023 20:28:15 +0300
+On Tue, Jul 18, 2023 at 11:06:20AM +0100, Jonathan Cameron wrote:
+> On Mon, 17 Jul 2023 20:28:16 +0300
 > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
-...
-
-> >  EXPORT_SYMBOL_GPL(intel_pinctrl_resume_noirq);
 > 
-> Can you check if this is successfully removed?  I think it won't be.
-> Not immediately obvious how to tidy that up given these are used
-> in a macro called from lots of drivers.
+> > Cleaning up the driver to use pm_ptr() and *_PM_OPS() macros that
+> > make it simpler and allows the compiler to remove those functions
+> > if built without CONFIG_PM and CONFIG_PM_SLEEP support.
 
-That's what Paul noticed I think with his proposal to export only the ops
-variable and make these to be static.
+> Those macros
 
-> Maybe just leaving the ifdef is best we can do here.
+I believe you meant here "The SYSTEM_SLEEP... macro..."
 
-See above.
+Or is runtime PM also altered? Hmm...
+
+> add a load more callbacks... Whilst that may well be fine,
+> you should definitely mention that in this patch description.
+
+Sure.
 
 -- 
 With Best Regards,
