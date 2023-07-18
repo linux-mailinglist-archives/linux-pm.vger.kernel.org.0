@@ -2,79 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73399757862
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 11:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6528475788A
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 11:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231926AbjGRJrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 05:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46266 "EHLO
+        id S231251AbjGRJy4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 05:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231827AbjGRJrp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 05:47:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE45128;
-        Tue, 18 Jul 2023 02:47:44 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 792D1660704F;
-        Tue, 18 Jul 2023 10:47:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689673662;
-        bh=xlkvCFSIyUU/M7gkrwgIXP7wr6bqg7L/fte3NfnuGE4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kpNw5uiQpRxgVIR/cZolWOBcgtgrIh5Qjc90he0kMFkFvs1JnWQ4MgAnaw9HgDhan
-         J+x56N3uYtgBjZoxA6i5Ljwzng0/OHxWegzoPcveF0qv8BhdHpqkgHPswzycJ8Iu5j
-         mT96yOFMrX+tDz7Ezg7vg1tvSr/HmUSjZVHcUdslSvKmr3Pii+2u833Og6T+Wc831J
-         VMzRDzaw3bLI2vrqJdkM51ygFoAaf1KxokL046C2rSmYNJlztSwIdnQz9OHvYm9A7s
-         OtGccP6zdwc2De1Lh9M1fthZwYbRUsXKsL9+QPj0Cnewr3C3oiYOGpsZAw/cFTzJjP
-         F5bEbkHAJiFxw==
-Message-ID: <64741cb9-3bcb-ba50-6e09-f30847bda669@collabora.com>
-Date:   Tue, 18 Jul 2023 11:47:38 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 07/10] pinctrl: mediatek: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        with ESMTP id S231248AbjGRJyR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 05:54:17 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEE61715;
+        Tue, 18 Jul 2023 02:53:27 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4vMx5rg8z6J6ts;
+        Tue, 18 Jul 2023 17:50:53 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 18 Jul
+ 2023 10:53:23 +0100
+Date:   Tue, 18 Jul 2023 10:53:22 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Balsam CHIHI <bchihi@baylibre.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-renesas-soc@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Andy Shevchenko <andy@kernel.org>,
         Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Len Brown <len.brown@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
- <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        "Jonathan Hunter" <jonathanh@nvidia.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 02/10] pinctrl: baytrail: Make use of pm_ptr()
+Message-ID: <20230718105322.000074ca@Huawei.com>
+In-Reply-To: <20230717172821.62827-3-andriy.shevchenko@linux.intel.com>
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+        <20230717172821.62827-3-andriy.shevchenko@linux.intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,69 +74,67 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 17/07/23 19:28, Andy Shevchenko ha scritto:
-> Since pm.h provides a helper for system no-IRQ PM callbacks,
-> switch the driver to use it instead of open coded variant.
+On Mon, 17 Jul 2023 20:28:13 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> Cleaning up the driver to use pm_ptr() and *_PM_OPS() macros that
+> make it simpler and allows the compiler to remove those functions
+> if built without CONFIG_PM and CONFIG_PM_SLEEP support.
 > 
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+LGTM but why is it in a set that claims to be about NOIRQ PM helper?
+
+FWIW
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
 > ---
->   drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 5 +----
->   drivers/pinctrl/mediatek/pinctrl-paris.c      | 9 +++------
->   2 files changed, 4 insertions(+), 10 deletions(-)
+>  drivers/pinctrl/intel/pinctrl-baytrail.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> index 665dec419e7c..2bf5082d3aa9 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
-> @@ -922,10 +922,7 @@ static int mtk_eint_resume(struct device *device)
->   	return mtk_eint_do_resume(pctl->eint);
->   }
->   
-> -const struct dev_pm_ops mtk_eint_pm_ops = {
-> -	.suspend_noirq = mtk_eint_suspend,
-> -	.resume_noirq = mtk_eint_resume,
-> -};
-> +DEFINE_NOIRQ_DEV_PM_OPS(mtk_eint_pm_ops, mtk_eint_suspend, mtk_eint_resume);
->   
->   static int mtk_pctrl_build_state(struct platform_device *pdev)
->   {
-> diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> index 33d6c3fb7908..b1cbd5bafa2e 100644
-> --- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-> +++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-> @@ -1119,24 +1119,21 @@ int mtk_paris_pinctrl_probe(struct platform_device *pdev)
->   }
->   EXPORT_SYMBOL_GPL(mtk_paris_pinctrl_probe);
->   
-> -static int mtk_paris_pinctrl_suspend(struct device *device)
-> +static int mtk_paris_suspend(struct device *device)
->   {
->   	struct mtk_pinctrl *pctl = dev_get_drvdata(device);
->   
->   	return mtk_eint_do_suspend(pctl->eint);
->   }
->   
-> -static int mtk_paris_pinctrl_resume(struct device *device)
-> +static int mtk_paris_resume(struct device *device)
-
-What's the reason why you changed the suspend/resume function names?
-I don't really mind, but please at least mention that in the commit description.
-
-Thanks,
-Angelo
-
->   {
->   	struct mtk_pinctrl *pctl = dev_get_drvdata(device);
->   
->   	return mtk_eint_do_resume(pctl->eint);
->   }
->   
-> -const struct dev_pm_ops mtk_paris_pinctrl_pm_ops = {
-> -	.suspend_noirq = mtk_paris_pinctrl_suspend,
-> -	.resume_noirq = mtk_paris_pinctrl_resume,
-> -};
-> +DEFINE_NOIRQ_DEV_PM_OPS(mtk_paris_pinctrl_pm_ops, mtk_paris_suspend, mtk_paris_resume);
->   
->   MODULE_LICENSE("GPL v2");
->   MODULE_DESCRIPTION("MediaTek Pinctrl Common Driver V2 Paris");
+> diff --git a/drivers/pinctrl/intel/pinctrl-baytrail.c b/drivers/pinctrl/intel/pinctrl-baytrail.c
+> index 27aef62fc7c0..66aabac6be9c 100644
+> --- a/drivers/pinctrl/intel/pinctrl-baytrail.c
+> +++ b/drivers/pinctrl/intel/pinctrl-baytrail.c
+> @@ -1733,7 +1733,6 @@ static int byt_pinctrl_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_PM_SLEEP
+>  static int byt_gpio_suspend(struct device *dev)
+>  {
+>  	struct intel_pinctrl *vg = dev_get_drvdata(dev);
+> @@ -1817,9 +1816,7 @@ static int byt_gpio_resume(struct device *dev)
+>  	raw_spin_unlock_irqrestore(&byt_lock, flags);
+>  	return 0;
+>  }
+> -#endif
+>  
+> -#ifdef CONFIG_PM
+>  static int byt_gpio_runtime_suspend(struct device *dev)
+>  {
+>  	return 0;
+> @@ -1829,19 +1826,17 @@ static int byt_gpio_runtime_resume(struct device *dev)
+>  {
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static const struct dev_pm_ops byt_gpio_pm_ops = {
+> -	SET_LATE_SYSTEM_SLEEP_PM_OPS(byt_gpio_suspend, byt_gpio_resume)
+> -	SET_RUNTIME_PM_OPS(byt_gpio_runtime_suspend, byt_gpio_runtime_resume,
+> -			   NULL)
+> +	LATE_SYSTEM_SLEEP_PM_OPS(byt_gpio_suspend, byt_gpio_resume)
+> +	RUNTIME_PM_OPS(byt_gpio_runtime_suspend, byt_gpio_runtime_resume, NULL)
+>  };
+>  
+>  static struct platform_driver byt_gpio_driver = {
+>  	.probe          = byt_pinctrl_probe,
+>  	.driver         = {
+>  		.name			= "byt_gpio",
+> -		.pm			= &byt_gpio_pm_ops,
+> +		.pm			= pm_ptr(&byt_gpio_pm_ops),
+>  		.acpi_match_table	= byt_gpio_acpi_match,
+>  		.suppress_bind_attrs	= true,
+>  	},
 
