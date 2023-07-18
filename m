@@ -2,151 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5501757B17
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B583B757C0F
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjGRMDI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 08:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S232138AbjGRMoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 08:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbjGRMDE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:03:04 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EE591B1;
-        Tue, 18 Jul 2023 05:03:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E56D2F4;
-        Tue, 18 Jul 2023 05:03:46 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.79.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 42BAC3F6C4;
-        Tue, 18 Jul 2023 05:03:00 -0700 (PDT)
-Date:   Tue, 18 Jul 2023 13:02:54 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kajetan.puchalski@arm.com
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com>
- <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+        with ESMTP id S231268AbjGRMoR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:44:17 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1CE8170E;
+        Tue, 18 Jul 2023 05:44:13 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9936b3d0286so801042066b.0;
+        Tue, 18 Jul 2023 05:44:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689684252; x=1692276252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rjafSjwhPYU7xqZqTIKooSTK5vgwuXrvEkZkgBS1tpQ=;
+        b=svWBMpAzUIcAKZFhbHmS1VForkB52Iwtil3hYos/NhMBLkdcnjFkQYfMA27oQkeQ0c
+         J8gz0UU9uTFqvcyqYgZItHaSIGB9kZpwgzHISgERQJAXsUOB2kdPZJk2GEOJ7TvDhA91
+         oltJy+6JfEkrHkOzlR2nmE22d1ttxlNPAs+b7TUOyNW9gwl4anIMdjZab5YvdHSMHCAB
+         rHEv6KI1D7LUHjErwNrACg0CbZeFJmTBkY6pdFswB7i1RrOuBU80ZlNb31wgTtpX+T8C
+         602eYVK4LPPZ+vyCtu0zQWz6sM4CVSq9dFS9vQjUaWIQYCzVmQUPT4HexvKIFyGUEqrM
+         3Prg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689684252; x=1692276252;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rjafSjwhPYU7xqZqTIKooSTK5vgwuXrvEkZkgBS1tpQ=;
+        b=g8dbbgtcUNI+9LXkfG2uyzjho9Omtf9UaMj+nL0/zvTOG6i6tsa+HvgdDnzPIWqKWI
+         THk0FqlygpI5RUoUf9R+209HKqhzFO8yGAiQeBm4qfaUvBK3vIOYjl9KUgSyJ/u7zjpQ
+         rSZsgDgNmK19Gzd6aWJl790DZOlPZk+MIhQNtfvcxhTB5qq9NtWejt8eARrVRIJsFmwh
+         BfMIyVROPPJXBtmW3wFHz9L4TIVuVnxIc4SqA88fwFT4w+J8ppVfqVB8cemZavbvCVNt
+         HIxWVOzGhVcbWLcqy/xAr+9mx2Le2etxPlobq7ch7SFk5IJJjMeYWhpG2JgZvzolF/Xs
+         u5HA==
+X-Gm-Message-State: ABy/qLbwCkk3sYe7K8DTkbDDg5CsLUdNEC0LZiom8QlevOxCVemRAMlJ
+        XgtKBhnrwXPCzfQEpG8UTjbmrJHfKThYMg29fEA=
+X-Google-Smtp-Source: APBJJlG9m2BdQIW7onW1xnE8sV9rYPKp5JUOVkqIggApCTArboC/1wLbwqqnhKpHXdE0VmBN/AdKoTT/9mSwxAThd1A=
+X-Received: by 2002:a17:906:1054:b0:994:569b:61b4 with SMTP id
+ j20-20020a170906105400b00994569b61b4mr9894424ejj.28.1689684251957; Tue, 18
+ Jul 2023 05:44:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230711175814.zfavcn7xn3ia5va4@airbuntu>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+ <20230717172821.62827-10-andriy.shevchenko@linux.intel.com>
+ <03592cf5d6854dd5e534e0416de946fd38e4380c.camel@crapouillou.net> <CAMuHMdWMHjFdh0Ze9k8gZC_Cjp62zdwDK1cvehHb5WXYw+p1XQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdWMHjFdh0Ze9k8gZC_Cjp62zdwDK1cvehHb5WXYw+p1XQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Jul 2023 15:43:35 +0300
+Message-ID: <CAHp75VeVvUL29KUKaLHMpBnQE+WTkQmp=cC2y=dcjjv_d=D8vQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/10] pinctrl: renesas: Switch to use
+ DEFINE_NOIRQ_DEV_PM_OPS() helper
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Qais,
+On Tue, Jul 18, 2023 at 1:12=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+> On Mon, Jul 17, 2023 at 9:12=E2=80=AFPM Paul Cercueil <paul@crapouillou.n=
+et> wrote:
+> > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9cr=
+it :
 
-On Tue, Jul 11, 2023 at 06:58:14PM +0100, Qais Yousef wrote:
-> Hi Kajetan
-> 
-> On 01/05/23 14:51, Kajetan Puchalski wrote:
-> 
-> [...]
-> 
-> > @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
-> >  			     struct cpuidle_device *dev)
-> >  {
-> >  	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> > +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
-> >  	int i;
-> >  
-> >  	memset(cpu_data, 0, sizeof(*cpu_data));
-> > +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-> 
-> Given that utilization is invariant, why do we set the threshold based on
-> cpu capacity?
+...
 
-Conceptually, the threshold is meant to represent a level at which the
-core is considered 'utilized'. I appreciate the definitions here can get
-a little fuzzy but I think of it as "generally doing a non-insignificant
-amount of work" even if there are currently no tasks scheduled on the core.
-This comes in handy in real-world workloads where the core will go
-through multiple cycles of busy-idle-busy-idle within each second.
-The intention here is to be able to distinguish a scenario of "going
-into idle for a few us because of the nature of the workload" from
-"going into idle for longer because there is no workload".
+> > I think you could do:
+> >
+> > .pm =3D IF_PTR(IS_ENABLED(CONFIG_ARM_PSCI_FW), pm_sleep_ptr(&sh_pfc_pm)=
+),
+> >
+> > Then you wouldn't need the #if defined(CONFIG_ARM_PSCI_FW) guard either
+> > (as long as the code still compiles fine when that config option is
+> > disabled), and you wouldn't need those dummy callbacks.
+>
+> Unfortunately not, as the code refers to psci_ops.cpu_suspend.
+>
+> You could create a small wrapper for that, though.
 
-I set the threshold based on capacity because I think conceptually it
-makes more sense to say "every CPU is consireded to be utilized if the
-util is above X% of its capacity" than to effectively have a varying
-percentage based on the size of the core. 60 util is not that
-much work for a 1024-util big core but it's almost half the capacity of
-a little one, using a percentage/shift on capacity lets us account for that
-while using a raw value would not.
+ I think it's already too many wrappers mentioned and since you
+reviewed and acknowledged the change (thanks!) I will stick with my
+initial version.
 
-There's also very practical issues but I'll describe those below.
-
-> I'm not sure if this is a problem, but on little cores this threshold would be
-> too low. Given that util is invariant - I wondered if we need to have a single
-> threshold for all type of CPUs instead. Have you tried something like that
-> while developing the patch?
-
-Yes, the problem there is that it's very difficult to define what "too low"
-actually means :)
-Namely, do we define 'too low' based on the effects it has on
-performance in terms of latency, on the resulting power usage or on the
-prediction accuracy? In terms of the prediction accuracy, how do we
-weigh the two possible types of mispredictions? I'll just try to explain
-my thinking and how I got to my conclusions.
-
-Based on my tests, on the types of platforms we both work with our
-state0/wfi is very power efficient to stay in, very power efficient
-to enter/exit and also very fast so it has very little impact on
-latency. On the other hand, state1 is power efficient to *stay in* but
-very costly to enter/exit in terms of *both* power and latency. The
-effect this has is that there's many cases where going through a cycle
-of busy-state1-busy-state1-busy and so on will actually use up more
-power than if you only kept the core in wfi.
-
-I had some tests done with effectively making the governor do "return 0"
-in state selection, never using any state1 and the results were still
-pretty good, only slightly worse than e.g. menu. The problem there was
-that not using state1 on big cores would not leave them time to cool
-down and we'd burn through the thermal budget too quickly then tank the
-performance.
-
-I don't have the numbers on hand but even completely disabling state1 on
-the entire little cluster will work perfectly fine - your latency for
-tasks that run on littles will improve and the thermal budget/power
-won't take a particularly noticeable hit because of how small they are
-in the first place.
-
-This is why the governor is intentionally skewed towards shallower
-states, they just work better most of the time. If you try to skew it
-the other way the results just come out much worse because even a
-relatively small amount of mispredicted state1 entries can completely
-nullify any benefits that selecting state1 could bring.
-
-The percentage approach does make the threshold for littles pretty small
-but as desccribed above that's perfectly fine, could say a feature not a
-bug :) If we tried setting a fixed one across all CPUs then we'd need to
-pick one high enough for the big cores which would end up being too high
-for the littles, lead to excessive state1 entries and all the issues
-I've just described. TLDR: there's just more downsides on the other side.
-
-In development I just had a sysctl to set the threshold shift and iirc I
-tested values from 3 to 10-12 eventually arriving at 6 being the one
-with best results across different metrics and benchmarks. If you're
-backporting the patch somewhere and have a specific platform feel free
-to test it with different shift values, it's possible that different
-platforms will behave differently with this. I doubt there's any
-appetite to make the shift tweakable at runtime rather than a
-compile-time constant but if you'd like to push for that I'm happy to
-sign off on it, would work just as well as it does now.
-
-
-> Thanks
-> 
-> --
-> Qais Yousef
+--=20
+With Best Regards,
+Andy Shevchenko
