@@ -2,235 +2,221 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED56757D57
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 15:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508B6757E18
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 15:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjGRNYi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 09:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
+        id S229864AbjGRNsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 09:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjGRNYh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 09:24:37 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB1FF0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 06:24:35 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso52360165e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 06:24:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689686674; x=1692278674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y2l5FFah3jYSjLqjstwHtrt0TcczEdVlcCTTyaq83Sg=;
-        b=ftXHGk6UZloCTM5CHVkVaUMgSOZSoH/5XZb0S0HvhrL7aDA53rwSmAQlBAzggptsHr
-         KUg6fKmD95BI9Y91zjkPvW7fjNWvQjRsPAe7FmLApMDkubA/xTUsWHi/SINu6UFiVhor
-         QLxIuyMRE5vMfOYAFB/mhTjyaocD5BIKOSp3Eoltd9vtNBX3s/FkwfCEKS7bCW56tVeO
-         J2GhBau//K8k88kFeHaBCRnr0mTXk3leIMdTPMHum+WOl34eFbdbXVjajRlyk34M1HMC
-         Y3kkYZsGU1aK1hJ8IBlI3dd5XC9uqkoKJJhqgqbmv45EyM+Ubs1FnmUvDyJ8HOTyhfD+
-         ZU3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689686674; x=1692278674;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y2l5FFah3jYSjLqjstwHtrt0TcczEdVlcCTTyaq83Sg=;
-        b=PDo54SodZY2ouIUJywth0tVRvoIGF6x6vImg/6Q+xO27fDSAQaV//QKd+p1SVnuppm
-         6Junb0R54P4T+R+FzL0hrMl5pQImMpfYok3x8q56mQMHh2g7okhn3qzTqaFqGCYfRJ1a
-         ac0miXtSGW4398A5qFlvqgmvTXw23XLCW9gy00dTsNt8mOdoQRtkL7Wh1afVdh9KvTYc
-         nn7Z+V9uUVJfl0sa1HNs4baOp1uNg96VjFl4ZdAxVa7LjNbo3r9M1qE/kOBrNq7td6Pa
-         ZaTjN6+3OwQ3MvBOR/98SoEjGS9KFn8ZTEumhUWjDjoSvhCX+ZEM6kOJV71Pq1qQvPKQ
-         aW6g==
-X-Gm-Message-State: ABy/qLYp5bVE+NaWJqieHnu7wJUzzloHFparyqOln45XKnkX+iWL8wfB
-        JSNr7r4wEaZKJpeQ3SaNJFdPncX3STqVS2WYMtQ=
-X-Google-Smtp-Source: APBJJlGWv+ToOegiIFCS4/7/NEShK0AVDTUYaUjvklN4Utdi52zX5czKAgj4+Rl0H0Ag46DDceEHbg==
-X-Received: by 2002:a7b:c3cf:0:b0:3fc:f9c:a3e2 with SMTP id t15-20020a7bc3cf000000b003fc0f9ca3e2mr2012392wmj.6.1689686673879;
-        Tue, 18 Jul 2023 06:24:33 -0700 (PDT)
-Received: from airbuntu ([104.132.45.110])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05600c230c00b003fc01189b0dsm2162775wmo.42.2023.07.18.06.24.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 06:24:33 -0700 (PDT)
-Date:   Tue, 18 Jul 2023 14:24:32 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com>
- <20230711175814.zfavcn7xn3ia5va4@airbuntu>
- <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
+        with ESMTP id S230198AbjGRNse (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 09:48:34 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F948F;
+        Tue, 18 Jul 2023 06:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1689688111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KihHBXzQ5YscflwfpTqH3zKYKGvYlYBWepP0Q5n+rtU=;
+        b=UNdTDGqa0OtoBQaI2l3ghDjFxpMFaBpM9l/Ykjhq7diTw50XCdiPIhpvvlr1SxESWzw6G6
+        eKk/Z+BPbTVo1rMmomxkPZJtkaxvHfHzhBb4ZpemqpEKMHvEKSuxYE4JJxjQW1a4PGMsWH
+        QtcsjXWqbehZKL69FjxVnejBKvKxNTE=
+Message-ID: <ae93b34812c04e499fae93dde833422c78d86b63.camel@crapouillou.net>
+Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
+ DEFINE_NOIRQ_DEV_PM_OPS() helper
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Date:   Tue, 18 Jul 2023 15:48:27 +0200
+In-Reply-To: <ZLaRlyzkqRLSqjQc@orome>
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+         <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
+         <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
+         <ZLZDL27zzDpY4q8E@orome>
+         <5e4b5bc23f3edb3ed30cb465420a51ffceceb53d.camel@crapouillou.net>
+         <ZLZ6amp5HKUbm5w3@orome>
+         <8f32cb8377808a073b043e0adf3ccf5ae5a84c92.camel@crapouillou.net>
+         <ZLaRlyzkqRLSqjQc@orome>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/18/23 13:02, Kajetan Puchalski wrote:
-> Hi Qais,
-> 
-> On Tue, Jul 11, 2023 at 06:58:14PM +0100, Qais Yousef wrote:
-> > Hi Kajetan
-> > 
-> > On 01/05/23 14:51, Kajetan Puchalski wrote:
-> > 
-> > [...]
-> > 
-> > > @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
-> > >  			     struct cpuidle_device *dev)
-> > >  {
-> > >  	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> > > +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
-> > >  	int i;
-> > >  
-> > >  	memset(cpu_data, 0, sizeof(*cpu_data));
-> > > +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-> > 
-> > Given that utilization is invariant, why do we set the threshold based on
-> > cpu capacity?
-> 
-> Conceptually, the threshold is meant to represent a level at which the
-> core is considered 'utilized'. I appreciate the definitions here can get
-> a little fuzzy but I think of it as "generally doing a non-insignificant
-> amount of work" even if there are currently no tasks scheduled on the core.
-> This comes in handy in real-world workloads where the core will go
-> through multiple cycles of busy-idle-busy-idle within each second.
-> The intention here is to be able to distinguish a scenario of "going
-> into idle for a few us because of the nature of the workload" from
-> "going into idle for longer because there is no workload".
-> 
-> I set the threshold based on capacity because I think conceptually it
-> makes more sense to say "every CPU is consireded to be utilized if the
-> util is above X% of its capacity" than to effectively have a varying
-> percentage based on the size of the core. 60 util is not that
-> much work for a 1024-util big core but it's almost half the capacity of
-> a little one, using a percentage/shift on capacity lets us account for that
-> while using a raw value would not.
+Hi Thierry,
 
-Thanks for the explanation.
+Le mardi 18 juillet 2023 =C3=A0 15:20 +0200, Thierry Reding a =C3=A9crit=C2=
+=A0:
+> On Tue, Jul 18, 2023 at 01:55:05PM +0200, Paul Cercueil wrote:
+> > Le mardi 18 juillet 2023 =C3=A0 13:41 +0200, Thierry Reding a =C3=A9cri=
+t=C2=A0:
+> > > On Tue, Jul 18, 2023 at 10:42:47AM +0200, Paul Cercueil wrote:
+> > > > Hi Thierry,
+> > > >=20
+> > > > Le mardi 18 juillet 2023 =C3=A0 09:45 +0200, Thierry Reding a
+> > > > =C3=A9crit=C2=A0:
+> > > > > On Mon, Jul 17, 2023 at 09:14:12PM +0200, Paul Cercueil
+> > > > > wrote:
+> > > > > > Hi Andy,
+> > > > > >=20
+> > > > > > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a
+> > > > > > =C3=A9crit=C2=A0:
+> > > > > > > Since pm.h provides a helper for system no-IRQ PM
+> > > > > > > callbacks,
+> > > > > > > switch the driver to use it instead of open coded
+> > > > > > > variant.
+> > > > > > >=20
+> > > > > > > Signed-off-by: Andy Shevchenko
+> > > > > > > <andriy.shevchenko@linux.intel.com>
+> > > > > > > ---
+> > > > > > > =C2=A0drivers/pinctrl/tegra/pinctrl-tegra.c | 5 +----
+> > > > > > > =C2=A01 file changed, 1 insertion(+), 4 deletions(-)
+> > > > > > >=20
+> > > > > > > diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c
+> > > > > > > b/drivers/pinctrl/tegra/pinctrl-tegra.c
+> > > > > > > index 4547cf66d03b..734c71ef005b 100644
+> > > > > > > --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
+> > > > > > > +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
+> > > > > > > @@ -747,10 +747,7 @@ static int
+> > > > > > > tegra_pinctrl_resume(struct
+> > > > > > > device
+> > > > > > > *dev)
+> > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > > > > > =C2=A0}
+> > > > > > > =C2=A0
+> > > > > > > -const struct dev_pm_ops tegra_pinctrl_pm =3D {
+> > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D=
+ &tegra_pinctrl_suspend,
+> > > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D =
+&tegra_pinctrl_resume
+> > > > > > > -};
+> > > > > > > +DEFINE_NOIRQ_DEV_PM_OPS(tegra_pinctrl_pm,
+> > > > > > > tegra_pinctrl_suspend,
+> > > > > > > tegra_pinctrl_resume);
+> > > > > > > =C2=A0
+> > > > > > > =C2=A0static bool tegra_pinctrl_gpio_node_has_range(struct
+> > > > > > > tegra_pmx
+> > > > > > > *pmx)
+> > > > > > > =C2=A0{
+> > > > > >=20
+> > > > > > Another driver where using EXPORT_GPL_DEV_PM_OPS() would
+> > > > > > make
+> > > > > > more
+> > > > > > sense.
+> > > > >=20
+> > > > > We don't currently export these PM ops because none of the
+> > > > > Tegra
+> > > > > pinctrl
+> > > > > drivers can be built as a module.
+> > > >=20
+> > > > This doesn't change anything. You'd want to use
+> > > > EXPORT_GPL_DEV_PM_OPS
+> > > > (or better, the namespaced version) so that the PM ops can be
+> > > > defined
+> > > > in one file and referenced in another, while still having them
+> > > > garbage-
+> > > > collected when CONFIG_PM is disabled.
+> > >=20
+> > > Looking at the definition of EXPORT_GPL_DEV_PM_OPS(), it will
+> > > cause
+> > > an
+> > > EXPORT_SYMBOL_GPL() to be added. So there very well is a change.
+> > > And
+> > > it's a completely bogus change because no module is ever going to
+> > > use
+> > > that symbol. If we were to ever support building the pinctrl
+> > > driver
+> > > as
+> > > a module, then this would perhaps make sense, but we don't.
+> >=20
+> > In this particular case the EXPORT_SYMBOL_GPL() isn't really
+> > important,
+> > the rest of EXPORT_GPL_DEV_PM_OPS() is.
+> >=20
+> > I don't think having a symbol exported it is a big deal, TBH, if
+> > you
+> > use the namespaced version. If you really don't want that, we need
+> > a
+> > version of EXPORT_GPL_DEV_PM_OPS() that doesn't export the symbol.
+>=20
+> I do think it's a big deal to export a symbol if there's no reason to
+> do
+> so.
+>=20
+> And please, can we stop adding these macros for every possible
+> scenario?
 
-I did try the busy perspective, but I think I still view this as 60util means
-we've are running on average for X ms. which I think what matters more than how
-much this is of a work to the big core. I look at this; we still have few ms
-worth of runtime on the CPU and it's not worth going to deeper idle state
-yet.
+Yes, as you can read from my other responses, I am not really keen on
+having a multiplication of these macros.
 
-I can appreciate you think that this percentage of runtime should be lower for
-smaller cores. My doubt (which again is not backed by real problem - so I'm not
-questioning but rather trying to understand :)) is that if this becomes too low
-is it better than letting usual TEO logic to operate. The series in its current
-shape is great and offers good improvement already, no doubt :)
+> Maybe I'm just getting old, but I find it increasingly difficult to
+> understand what all of these are supposed to be. I get that people
+> want
+> to get rid of boilerplate, but I think we need to more carefully
+> balance
+> boilerplate vs. simplicity.
 
-By the way, by default big will get a threshold of 16, the little will get
-a threshold of around 2. I think the latter will translate to few hundreds of
-us of activity (haven't done proper measurement to be honest, so this could be
-off but I don't think  by much).
+The EXPORT_GPL_DEV_PM_OPS() macro does more than get rid of
+boilerplate, it gets rid of dead code.
 
-> 
-> There's also very practical issues but I'll describe those below.
-> 
-> > I'm not sure if this is a problem, but on little cores this threshold would be
-> > too low. Given that util is invariant - I wondered if we need to have a single
-> > threshold for all type of CPUs instead. Have you tried something like that
-> > while developing the patch?
-> 
-> Yes, the problem there is that it's very difficult to define what "too low"
-> actually means :)
+If we take this driver as an example, before the patch the
+"tegra_pinctrl_pm" struct, as well as the "tegra_pinctrl_suspend" and
+"tegra_pinctrl_resume" functions were always compiled in, even if
+CONFIG_PM_SLEEP is disabled in the config.
 
-target residency maybe?
+The status-quo before the introduction of the new PM macros was to just
+wrap the dev_pm_ops struct + callbacks with a #ifdef CONFIG_PM_SLEEP.
+This was pretty bad as the code was then conditionally compiled. With
+the new PM macros this code is always compiled, independently of any
+Kconfig option; and thanks to that, bugs and regressions are
+subsequently easier to catch.
 
-> Namely, do we define 'too low' based on the effects it has on
-> performance in terms of latency, on the resulting power usage or on the
-> prediction accuracy? In terms of the prediction accuracy, how do we
-> weigh the two possible types of mispredictions? I'll just try to explain
-> my thinking and how I got to my conclusions.
-> 
-> Based on my tests, on the types of platforms we both work with our
-> state0/wfi is very power efficient to stay in, very power efficient
-> to enter/exit and also very fast so it has very little impact on
-> latency. On the other hand, state1 is power efficient to *stay in* but
-> very costly to enter/exit in terms of *both* power and latency. The
-> effect this has is that there's many cases where going through a cycle
-> of busy-state1-busy-state1-busy and so on will actually use up more
-> power than if you only kept the core in wfi.
-> 
-> I had some tests done with effectively making the governor do "return 0"
-> in state selection, never using any state1 and the results were still
-> pretty good, only slightly worse than e.g. menu. The problem there was
-> that not using state1 on big cores would not leave them time to cool
-> down and we'd burn through the thermal budget too quickly then tank the
-> performance.
-> 
-> I don't have the numbers on hand but even completely disabling state1 on
-> the entire little cluster will work perfectly fine - your latency for
-> tasks that run on littles will improve and the thermal budget/power
-> won't take a particularly noticeable hit because of how small they are
-> in the first place.
-> 
-> This is why the governor is intentionally skewed towards shallower
-> states, they just work better most of the time. If you try to skew it
-> the other way the results just come out much worse because even a
-> relatively small amount of mispredicted state1 entries can completely
-> nullify any benefits that selecting state1 could bring.
-> 
-> The percentage approach does make the threshold for littles pretty small
-> but as desccribed above that's perfectly fine, could say a feature not a
-> bug :) If we tried setting a fixed one across all CPUs then we'd need to
+Cheers,
+-Paul
 
-I didn't think it's a bug. But it seemed too low, hence the question.
-I actually thought a single value is enough for all CPUs since util is
-invariant and the tipping point where TEO normal predictions should work should
-be the same.
+> I'm seeing the same thing with stuff like those mass conversions to
+> atrocities like devm_platform_ioremap_resource() and
+> devm_platform_get_and_ioremap_resource(). There's so much churn
+> involved
+> in getting those merged for usually saving a single line of code. And
+> it's not even mass conversions, but people tend to send these as one
+> patch per driver, which doesn't exactly help (except perhaps for
+> patch
+> statistics).
+>=20
+> Thierry
 
-Thanks for the detailed explanation :)
-
-> pick one high enough for the big cores which would end up being too high
-> for the littles, lead to excessive state1 entries and all the issues
-> I've just described. TLDR: there's just more downsides on the other side.
-
-This is an artifact of the shifting algorithm you used to derive it. It is not
-a real restriction. But I appreciate that simple approach proved to be good
-enough, and I have nothing against it.
-
-> 
-> In development I just had a sysctl to set the threshold shift and iirc I
-> tested values from 3 to 10-12 eventually arriving at 6 being the one
-> with best results across different metrics and benchmarks. If you're
-> backporting the patch somewhere and have a specific platform feel free
-> to test it with different shift values, it's possible that different
-> platforms will behave differently with this. I doubt there's any
-> appetite to make the shift tweakable at runtime rather than a
-> compile-time constant but if you'd like to push for that I'm happy to
-> sign off on it, would work just as well as it does now.
-
-These patches are in GKI. So we'll if there are uncaught problems I guess :)
-
-No appetite for a knob, but the very low value for littles did strike me and
-thought I better ask at least. Today's littles are too tiny for their own good
-and it seemed the threshold could end up being too aggressive especially in low
-activity state. You effectively are saying that if we have few 100us of
-activity, normal TEO predictions based on timers are no good and better to stay
-shallower anyway.
-
-Note that due to NOHZ, if we go to idle for an extended period the util value
-might not decay for a while and miss some opportunities. Especially that when
-it next wakes up, it's enough for this wake up to run for few 100s us to block
-a deeper state before going back to sleep for extended period of time.
-
-But we shall see. I got the answer I was looking for for now.
-
-
-Thanks for the help!
-
---
-Qais Yousef
