@@ -2,33 +2,34 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BC9757AFC
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 13:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 389B2757B11
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjGRLzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 07:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S229904AbjGRMBe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 08:01:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbjGRLzM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 07:55:12 -0400
+        with ESMTP id S229678AbjGRMBd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:01:33 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4171A5;
-        Tue, 18 Jul 2023 04:55:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989B618E;
+        Tue, 18 Jul 2023 05:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1689681308;
+        s=mail; t=1689681689;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cUcNwMpkRou4HoWP59j29IOth9JECxsyonqdKzM916o=;
-        b=3Uf7/QWlCCH5tyFroVybd1Qgx2JU1l06CTuA9m3ghJn+G0lPlIIF/07/Hxm/ZxptzHo46Z
-        h2OZUg6m/lQhQJIB6Il4yacDOBHUwVFFbI50WGHrQQU43CQxBY24dhU5MIPMJCetRF/jeH
-        v8qQUt4kIp37e6JvSTUVskqe2fHxiMw=
-Message-ID: <8f32cb8377808a073b043e0adf3ccf5ae5a84c92.camel@crapouillou.net>
+        bh=sFkovm95/NomURdsGPIAPD0hFqphahW/5HgAnQNo7ZA=;
+        b=tq0JK9YFWofWplFZTCbhVKU/E4dCyURCFTQ+mh315DhR29FezVDG+WSSgKtpw2nIhggtQE
+        c9lZeQCC+ShIJCgXLdnYzKas1cnC52mqtxqMY6I6t9RUUHTxyj4eM1JB2rg5hGXoNoPm8w
+        PLzaccWdEndc+qisR8UbQytF3Typ3fo=
+Message-ID: <f002fe945307d0904bcee8bd1f21d9e589d32ffb.camel@crapouillou.net>
 Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
  DEFINE_NOIRQ_DEV_PM_OPS() helper
 From:   Paul Cercueil <paul@crapouillou.net>
-To:     Thierry Reding <thierry.reding@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -41,27 +42,24 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
         Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        Len Brown <len.brown@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Date:   Tue, 18 Jul 2023 13:55:05 +0200
-In-Reply-To: <ZLZ6amp5HKUbm5w3@orome>
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Date:   Tue, 18 Jul 2023 14:01:27 +0200
+In-Reply-To: <ZLZ5obLK89E1S_2R@orome>
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
          <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
-         <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
-         <ZLZDL27zzDpY4q8E@orome>
-         <5e4b5bc23f3edb3ed30cb465420a51ffceceb53d.camel@crapouillou.net>
-         <ZLZ6amp5HKUbm5w3@orome>
+         <20230718111143.000067dc@Huawei.com> <ZLZ5obLK89E1S_2R@orome>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
@@ -75,82 +73,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le mardi 18 juillet 2023 =C3=A0 13:41 +0200, Thierry Reding a =C3=A9crit=C2=
+Hi Thierry,
+
+Le mardi 18 juillet 2023 =C3=A0 13:38 +0200, Thierry Reding a =C3=A9crit=C2=
 =A0:
-> On Tue, Jul 18, 2023 at 10:42:47AM +0200, Paul Cercueil wrote:
-> > Hi Thierry,
+> On Tue, Jul 18, 2023 at 11:11:43AM +0100, Jonathan Cameron wrote:
+> > On Mon, 17 Jul 2023 20:28:21 +0300
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 > >=20
-> > Le mardi 18 juillet 2023 =C3=A0 09:45 +0200, Thierry Reding a =C3=A9cri=
-t=C2=A0:
-> > > On Mon, Jul 17, 2023 at 09:14:12PM +0200, Paul Cercueil wrote:
-> > > > Hi Andy,
-> > > >=20
-> > > > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a
-> > > > =C3=A9crit=C2=A0:
-> > > > > Since pm.h provides a helper for system no-IRQ PM callbacks,
-> > > > > switch the driver to use it instead of open coded variant.
-> > > > >=20
-> > > > > Signed-off-by: Andy Shevchenko
-> > > > > <andriy.shevchenko@linux.intel.com>
-> > > > > ---
-> > > > > =C2=A0drivers/pinctrl/tegra/pinctrl-tegra.c | 5 +----
-> > > > > =C2=A01 file changed, 1 insertion(+), 4 deletions(-)
-> > > > >=20
-> > > > > diff --git a/drivers/pinctrl/tegra/pinctrl-tegra.c
-> > > > > b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> > > > > index 4547cf66d03b..734c71ef005b 100644
-> > > > > --- a/drivers/pinctrl/tegra/pinctrl-tegra.c
-> > > > > +++ b/drivers/pinctrl/tegra/pinctrl-tegra.c
-> > > > > @@ -747,10 +747,7 @@ static int tegra_pinctrl_resume(struct
-> > > > > device
-> > > > > *dev)
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > > > > =C2=A0}
-> > > > > =C2=A0
-> > > > > -const struct dev_pm_ops tegra_pinctrl_pm =3D {
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.suspend_noirq =3D &te=
-gra_pinctrl_suspend,
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.resume_noirq =3D &teg=
-ra_pinctrl_resume
-> > > > > -};
-> > > > > +DEFINE_NOIRQ_DEV_PM_OPS(tegra_pinctrl_pm,
-> > > > > tegra_pinctrl_suspend,
-> > > > > tegra_pinctrl_resume);
-> > > > > =C2=A0
-> > > > > =C2=A0static bool tegra_pinctrl_gpio_node_has_range(struct
-> > > > > tegra_pmx
-> > > > > *pmx)
-> > > > > =C2=A0{
-> > > >=20
-> > > > Another driver where using EXPORT_GPL_DEV_PM_OPS() would make
-> > > > more
-> > > > sense.
+> > > Since pm.h provides a helper for system no-IRQ PM callbacks,
+> > > switch the driver to use it instead of open coded variant.
 > > >=20
-> > > We don't currently export these PM ops because none of the Tegra
-> > > pinctrl
-> > > drivers can be built as a module.
+> > > Signed-off-by: Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com>
 > >=20
-> > This doesn't change anything. You'd want to use
-> > EXPORT_GPL_DEV_PM_OPS
-> > (or better, the namespaced version) so that the PM ops can be
-> > defined
-> > in one file and referenced in another, while still having them
-> > garbage-
-> > collected when CONFIG_PM is disabled.
+> > No pm_sleep_ptr()?
 >=20
-> Looking at the definition of EXPORT_GPL_DEV_PM_OPS(), it will cause
-> an
-> EXPORT_SYMBOL_GPL() to be added. So there very well is a change. And
-> it's a completely bogus change because no module is ever going to use
-> that symbol. If we were to ever support building the pinctrl driver
-> as
-> a module, then this would perhaps make sense, but we don't.
+> pm_sleep_ptr() is pointless on this driver. This driver is selected
+> by
+> ARCH_TEGRA and ARCH_TEGRA also always selects PM.
 
-In this particular case the EXPORT_SYMBOL_GPL() isn't really important,
-the rest of EXPORT_GPL_DEV_PM_OPS() is.
+If I'm not mistaken, ARCH_TEGRA selects CONFIG_PM, not CONFIG_PM_SLEEP.
 
-I don't think having a symbol exported it is a big deal, TBH, if you
-use the namespaced version. If you really don't want that, we need a
-version of EXPORT_GPL_DEV_PM_OPS() that doesn't export the symbol.
-
+Cheers,
 -Paul
