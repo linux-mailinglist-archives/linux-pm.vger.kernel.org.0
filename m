@@ -2,213 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D48757C1A
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0140757C22
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjGRMp2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 08:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
+        id S230325AbjGRMrZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 08:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbjGRMp0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:45:26 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43787118
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 05:45:24 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fb4146e8deso58821025e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 05:45:24 -0700 (PDT)
+        with ESMTP id S229765AbjGRMrY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:47:24 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3DEE7E;
+        Tue, 18 Jul 2023 05:47:23 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-993a37b79e2so764508266b.1;
+        Tue, 18 Jul 2023 05:47:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689684323; x=1692276323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1r09zFzL3DdBWkTL26HjzBBO/TZuWfpjYf8w+kzaQb4=;
-        b=5mmrpqcHkHulOpTGUKAJxIzDUeWsiREpjiQqNZndcuAJMzrCg3qjov9efhx8R+JDqC
-         OMSSO0GFRgZPaq0bmuxhlGry71zzwhdZJ2CEPm1/Je4SDwy95LG5e/jnTVa1zejm95K6
-         J4Hg9k0RhQ5FUl4FkS9C+798W84FDzwYuqduNa90Hcpt8IPAtKBoBEZ5FaFadlW7hEV5
-         a4+TuvS9oY6/puOhBoIXcakKXc6haxW42Y6tu/FdI69umGtHj+p4rqr42iNtpfDaf3ud
-         dxVKJXm4A+DmVsL/oVgnJSmJ1R37W6wXE1tIDsHZX8CjnAITX5nCbac2Q2wABU5Y5X2D
-         PE/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689684323; x=1692276323;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1689684442; x=1692276442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1r09zFzL3DdBWkTL26HjzBBO/TZuWfpjYf8w+kzaQb4=;
-        b=QXe8X6Js2k/l7SK555mMFkZPXxXgAEhhXO1bsIjG59Nq6PwiUgLTlvPiBzw4LUEuaU
-         TvL5teJIv+Ek/ZZnNbpv2URJmWFPObKeuTZRo/f/I5gbX+aAufjav/3+yYYXb142bYS/
-         KRQEsr/bRNTAJiTfXlPchXOrTLeXpgsYKXj8iH7TZPLGLV9bvnEzhCIgyicaYgV+6wte
-         53+iHb8XRQrehngMsEzN1AOCTZGiTvrzJFXao03Yt1vUn8lCUiMEDUYtgWEZdZ+YMNUh
-         roqMgLdNItjlUdYFXl+b253u0rKkAAdf/KQHKvnZ1Z9tmaxBH+TSxVlO3E0oKQ/W5OhK
-         gqOQ==
-X-Gm-Message-State: ABy/qLbkyCL3n7IApVQP/OF8OPntHyPbvpsssBZiyBmorf+lDf9p2Dh4
-        KL7E0cWG7V9JiqtQlgJBO3ue+w==
-X-Google-Smtp-Source: APBJJlEzjZgwvQT2ivJzetlMMoX3HVoFEzqtuLWEL/wNZfP6L9mKawcUrySXXNIOqOmfbj9wO8apdg==
-X-Received: by 2002:a1c:7319:0:b0:3fb:d1db:5444 with SMTP id d25-20020a1c7319000000b003fbd1db5444mr2130175wmb.19.1689684322421;
-        Tue, 18 Jul 2023 05:45:22 -0700 (PDT)
-Received: from airbuntu ([104.132.45.110])
-        by smtp.gmail.com with ESMTPSA id y20-20020a7bcd94000000b003fa96620b23sm10365909wmj.12.2023.07.18.05.45.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 05:45:19 -0700 (PDT)
-Date:   Tue, 18 Jul 2023 13:45:17 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <20230718124517.3pvgvmesdh6eevqb@airbuntu>
-References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
- <20230105145159.1089531-3-kajetan.puchalski@arm.com>
- <20230711175814.zfavcn7xn3ia5va4@airbuntu>
- <aa4a22b8-fc23-8c67-bdea-b6aac8f7e250@arm.com>
- <20230717182106.g6j3jpsjp35psl5y@airbuntu>
- <2bfa9dda-410f-5c8a-bff4-54a5ea308a93@arm.com>
+        bh=OGJYHhuupeLvD7iUldP9gnEGkr9rwuBLn1dMa+Ew/24=;
+        b=VtcOZtNqJWG8/eO0W1GhqAZLKZOFgVOETWyaoKVn0z/TT2Ts9Tb1e3h933FhL10+ZZ
+         DDMS6W2h5xtqTSg04fncdtozKVtCNJiTtgxuAt6iQyY+Q+ONFfWYWY+jl0Oq2wUZarCP
+         +uQgony4GCEpdt+cIKVGX9obZkVXwGs/mreeaKjD84xFqP20y0/fQtDYIkTWOAtBm7vg
+         MRXVINgDtCgfMyNrLjeAuMKMabGfhbtUlVSYqktym5jf2OPLNKxI7LZlKLg+T68up0YF
+         uaHTSmgsC2n4yeJtoUIrSZ3r+nnzsZgA3jyrDF9zagZ4CKqBac+iVifM4xfdPylCGWQ0
+         bD5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689684442; x=1692276442;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OGJYHhuupeLvD7iUldP9gnEGkr9rwuBLn1dMa+Ew/24=;
+        b=M/RaL74uN7lV8lfixXlsnW27IPSBHnnUy6BgaED6ebqeZznxhvCHDwldZeaxtSVIao
+         m/OWVKkfSJq/E0+ioiosaaMCQa/Xb4LSmoHkUaRXw5vvx6tPHx9d3avInb7by2o0RS0v
+         rEkouaVhBv6ngmRr3eU1QkBxYEtqr1/9w8fElwWj6W5xk5klTdn4mPGYVoPQWsZJTM+7
+         kiQ33IhHFAMYZZV71kEf3xaxiR5lHzTNV2LYcNHizlDnMGgxFm3iJ4Cz6zFl2nerO9cG
+         3OAU2M4mOZwB0Xa4KMbKRyp4kD/6QuSVR5CtFCeR4WePcU+xGn8wy+FxuLwDICE3tSll
+         tfDA==
+X-Gm-Message-State: ABy/qLYxpS6vlg7T1ibcnLMYBcMR2Dg3F1BuOvK1Q377p3BdDfYMtaMh
+        E3wXqsI6S0GKInRaHVgBF24uv+Y6N6r/LHMhJPA=
+X-Google-Smtp-Source: APBJJlFWv/5l9OJf010RuvZ9Y5zmoeMZFAeyTTu73opyEbrIbXnZfVJSDMIhH8II3cHyjZ0u2hBQXv0rFIDUJ2ed/J8=
+X-Received: by 2002:a17:906:4987:b0:997:e836:6c4 with SMTP id
+ p7-20020a170906498700b00997e83606c4mr559158eju.9.1689684441861; Tue, 18 Jul
+ 2023 05:47:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2bfa9dda-410f-5c8a-bff4-54a5ea308a93@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+ <20230717172821.62827-8-andriy.shevchenko@linux.intel.com> <64741cb9-3bcb-ba50-6e09-f30847bda669@collabora.com>
+In-Reply-To: <64741cb9-3bcb-ba50-6e09-f30847bda669@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Jul 2023 15:46:45 +0300
+Message-ID: <CAHp75VcEptnG7SvKNdnjW8xmS9z5VVUJvpyD1ygmm-6dCjgWNA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/10] pinctrl: mediatek: Switch to use
+ DEFINE_NOIRQ_DEV_PM_OPS() helper
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Balsam CHIHI <bchihi@baylibre.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Sean Wang <sean.wang@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/18/23 11:23, Lukasz Luba wrote:
-> 
-> 
-> On 7/17/23 19:21, Qais Yousef wrote:
-> > +CC Vincent and Peter
-> > 
-> > On 07/17/23 14:47, Lukasz Luba wrote:
-> > > Hi Qais,
-> > > 
-> > > The rule is 'one size doesn't fit all', please see below.
-> > > 
-> > > On 7/11/23 18:58, Qais Yousef wrote:
-> > > > Hi Kajetan
-> > > > 
-> > > > On 01/05/23 14:51, Kajetan Puchalski wrote:
-> > > > 
-> > > > [...]
-> > > > 
-> > > > > @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
-> > > > >    			     struct cpuidle_device *dev)
-> > > > >    {
-> > > > >    	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> > > > > +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
-> > > > >    	int i;
-> > > > >    	memset(cpu_data, 0, sizeof(*cpu_data));
-> > > > > +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
-> > > > 
-> > > > Given that utilization is invariant, why do we set the threshold based on
-> > > > cpu capacity?
-> > > 
-> > > 
-> > > To treat CPUs differently, not with the same policy.
-> > > 
-> > > 
-> > > > 
-> > > > I'm not sure if this is a problem, but on little cores this threshold would be
-> > > > too low. Given that util is invariant - I wondered if we need to have a single
-> > > > threshold for all type of CPUs instead. Have you tried something like that
-> > > 
-> > > A single threshold for all CPUs might be biased towards some CPUs. Let's
-> > > pick the value 15 - which was tested to work really good in benchmarks
-> > > for the big CPUs. On the other hand when you set that value to little
-> > > CPUs, with max_capacity = 124, than you have 15/124 ~= 13% threshold.
-> > > That means you prefer to enter deeper idle state ~9x times (at max
-> > > freq). What if the Little's freq is set to e.g. < ~20% fmax, which
-> > > corresponds to capacity < ~25? Let's try to simulate such scenario.
-> > 
-> > Hmm what I'm struggling with is that PELT is invariant. So the time it takes to
-> > rise and decay to threshold of 15 should be the same for all CPUs, no?
-> 
-> Yes, but that's not an issue. The idea is to have a threshold value
-> set to a level which corresponds to a long enough slip time (in
-> wall-clock). Then you don't waste the energy for turning on/off the
-> core too often.
-> 
-> > 
-> > > 
-> > > In a situation we could have utilization 14 on Little CPU, than CPU capacity
-> > > (effectively frequency) voting based on utilization would be
-> > > 1.2 * 14 = ~17 so let's pick OPP corresponding to 17 capacity.
-> > > In such condition the little CPU would run the 14-util-periodic-task for
-> > > 14/17= ~82% of wall-clock time. That's a lot, and not suited for
-> > > entering deeper idle state on that CPU, isn't it?
-> > 
-> > Yes runtime is stretched. But we counter this at utilization level by making
-> > PELT invariant. I thought that any CPU in the system will now take the same
-> > amount of time to ramp-up and decay to the same util level. No?
-> 
-> The stretched runtime is what we want to derived out of rq util
-> information, mostly after task migration to some next cpu.
-> 
-> > 
-> > But maybe what you're saying is that we don't need to take the invariance into
-> > account?
-> 
-> Invariance is OK, since is the common ground when we migrate those tasks
-> across cores and we still can conclude based on util the sleeping
-> cpu time.
-> 
-> > 
-> > My concern (that is not backed by real problem yet) is that the threshold is
-> > near 0, and since PELT is invariant, the time to gain few points is constant
-> > irrespective of any CPU/capacity/freq and this means the little CPUs has to be
-> > absolutely idle with no activity almost at all, IIUC.
-> 
-> As I said, that is good for those Little CPU in term of better latency
-> for the tasks they serve and also doesn't harm the energy. The
-> deeper idle state for those tiny silicon area cores (and low-power
-> cells) doesn't bring much in avg for real workloads.
-> This is the trade-off: you don't want to sacrifice the latency factor,
-> you would rather pay a bit more energy not entering deep idle
-> on Little cores, but get better latency there.
+On Tue, Jul 18, 2023 at 12:47=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+> Il 17/07/23 19:28, Andy Shevchenko ha scritto:
 
-I can follow this argument much better than the time stretch one for sure.
+...
 
-I sort of agree, but feel cautious still this is too aggressive. I guess time
-will let us know how suitable this is or we'll need to evolve :-)
+> > -static int mtk_paris_pinctrl_suspend(struct device *device)
+> > +static int mtk_paris_suspend(struct device *device)
 
-FWIW, these patches are now in GKI, so we should get complaints if it is
-a real problem.
+> > -static int mtk_paris_pinctrl_resume(struct device *device)
+> > +static int mtk_paris_resume(struct device *device)
+>
+> What's the reason why you changed the suspend/resume function names?
+> I don't really mind, but please at least mention that in the commit descr=
+iption.
 
-> For the big cores, which occupy bigger silicon area and are made from
-> High-Performance (HP) cells (and low V-threshold) leaking more, that
-> trade-off is set differently. That's why a similar small util task on
-> big core might be facing larger latency do to facing the need to
-> wake-up cpu from deeper idle state.
-> 
-> > 
-> > > 
-> > > Apart from that, the little CPUs are tiny in terms of silicon area
-> > > and are less leaky in WFI than big cores. Therefore, they don't need
-> > > aggressive entries into deeper idle state. At the same time, they
-> > > are often used for serving interrupts, where the latency is important
-> > > factor.
-> > 
-> > On Pixel 6 this threshold will translate to util_threshold of 2. Which looks
-> > too low to me. Can't TEO do a good job before we reach such extremely low level
-> > of inactivity?
-> 
-> Kajetan has introduced a new trace event 'cpu_idle_miss' which was
-> helping us to say how to set the trade-off in different thresholds.
-> It appeared that we would rather prefer to miss-predict and be wrong
-> about missing opportunity to enter deeper idle. The opposite was more
-> harmful. You can enable that trace event on your platform and analyze
-> your use cases.
+To put it on a single line. I will amend the commit message, thank you
+for review!
 
-Okay, thanks for the info.
+...
 
+> > +DEFINE_NOIRQ_DEV_PM_OPS(mtk_paris_pinctrl_pm_ops, mtk_paris_suspend, m=
+tk_paris_resume);
 
-Cheers
+...here ^^^
 
---
-Qais Yousef
+--=20
+With Best Regards,
+Andy Shevchenko
