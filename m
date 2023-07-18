@@ -2,153 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA09758013
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 16:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D094B758058
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 17:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232460AbjGROtB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 10:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S231618AbjGRPFC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 11:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233395AbjGROso (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 10:48:44 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2691997
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 07:48:33 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fc03aa6e04so53977505e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 07:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1689691711; x=1692283711;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z3PeHDGShv0/Y1SaTBcwWlp0DgIC2lqoORc+f/lyUag=;
-        b=a8ZhbREt0uH7gJ9cBW17TnUuIeY9lua9HO/AozN0hssszX/Phmw738FVOnzPEoqKPM
-         9g4ej6yAf/cuK4nEWyxjfBYtwq2t48q5q+nSJ+5OQlOzhsONtMZQnc+j6RCyZcUN1oz/
-         WJHBxQoDbrIWi0QyPl72CzT34+UDqSNvbRnQbvEHLyPBKdnn5nr3RT3iXFXMDi5NLpyh
-         FK1WZibGA4JoIsa4IL/UxG9P0jvEctbL10XGpyZRaKz+cEvrufbngxfwDfXOD15lMLC7
-         etDDOD4GaZZtjqltQf05sbbfL2Pe45hszeZCcAgOKSgMQQVmIrrOfYsXhwu4Vt/0vXQy
-         ekaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689691711; x=1692283711;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z3PeHDGShv0/Y1SaTBcwWlp0DgIC2lqoORc+f/lyUag=;
-        b=EzN6j4qbDakhvuVwAu0qxBe6zxgHAWULFBMCOEGrKTfhgjED57fytfgEmCK0Me/ojh
-         /lDr3ShKEhDKoPygPl/HLZ0JNPnWorGdk2E8f194OKuuW8aGWCAtHR2GQrwLB+9rHPpr
-         AYZ3SE2UII7MyeDm92QoWjlafslmJSVClJ8pBbdmPa+RlPIp8odl9RWszHWiXy2Jh2DI
-         KAsAlc7mcBtFZCbzoq1on4bDv/k66eI2vEiMTnGZ9lp71eEw6PwVTTb2+hZ52eVbn3K5
-         +TQ5rB1Ue247oGX7HtIkZ3JSKt7eogw0cU22V7tpPpYUbo6CN1vQpDlVL/SVNBnwo3gm
-         sPeg==
-X-Gm-Message-State: ABy/qLYBcjB7lHxFtCyTRK8bSatUbLWlF0T/APBXFfHLTkh9iG3Obe1N
-        4F753fSPe3C5yKvZ6TJ6Y0Iosw==
-X-Google-Smtp-Source: APBJJlH8FgksFnhHrYa/bYaQB7Lf3bViTB+cyeDz8GdO0wx0X43DqCQgnSsDAnuYgKuzpQVErJxIqg==
-X-Received: by 2002:a05:600c:d5:b0:3fc:5606:c246 with SMTP id u21-20020a05600c00d500b003fc5606c246mr2052029wmm.22.1689691711290;
-        Tue, 18 Jul 2023 07:48:31 -0700 (PDT)
-Received: from [10.0.2.15] ([82.78.167.79])
-        by smtp.gmail.com with ESMTPSA id f22-20020a7bc8d6000000b003fbb5142c4bsm10659329wml.18.2023.07.18.07.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 07:48:30 -0700 (PDT)
-Message-ID: <b0bdccb7-e10e-8d8a-fb64-0d41248adf8a@tuxon.dev>
-Date:   Tue, 18 Jul 2023 17:48:25 +0300
+        with ESMTP id S230223AbjGRPFB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 11:05:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFA7FC;
+        Tue, 18 Jul 2023 08:05:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBDCF61616;
+        Tue, 18 Jul 2023 15:04:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4045C433C7;
+        Tue, 18 Jul 2023 15:04:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689692699;
+        bh=dC6xVfoZAu1dLbggSONL4fKCtfqFkZexMTtlfTvKgfQ=;
+        h=From:Date:Subject:To:Cc:From;
+        b=gxNRHk6jXJH/sG6nAzOBErvD+wxObBarcDNUB6t09I3NPMoYDs8QMY/+xAlDmLZpZ
+         HrBgUUGG9jB+y8aiTLSQ1wXsLnpNVB6j6mmkzC1H3NycyIxBQ83ra7piSD8fOl5N7y
+         6+l7IyikBmGQoBJcXg8WJU7UmOQjl5RkMMHVDRdWRsnxy+oX2wXy1tXDpqlrle//BO
+         t/19NuIW5ZYvCKAqHhpmB0oeialXBbX/ZWLqVwb7zAxby2FJxD4wCEdbxPSUn4ukDX
+         M2UTDfSYcEcoXlXKOXLBcsFEvgYbuf5lqJMSXxWPdRiMUyJrmhwxexp9GhAAi5v5PM
+         A/+EPCsgpEyUA==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 18 Jul 2023 16:04:22 +0100
+Subject: [PATCH] thermal/drivers/sun8i: Don't fail probe due to zone
+ registration failure
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 06/10] pinctrl: at91: Switch to use
- DEFINE_NOIRQ_DEV_PM_OPS() helper
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
- <20230717172821.62827-7-andriy.shevchenko@linux.intel.com>
-From:   claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20230717172821.62827-7-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Message-Id: <20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAPWptmQC/x3MQQqEMAxA0atI1hOwFlS8irgINdWAdoakI4J4d
+ 4vLt/j/AmMVNhiqC5QPMfmmAvepIKyUFkaZi6GpG193rse8su60of1TL6i8iGWlXDKcoyfn2xA
+ oEpTBTznK+c7H6b4fh5UeimwAAAA=
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Hugh Dickins <hughd@google.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3509; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=dC6xVfoZAu1dLbggSONL4fKCtfqFkZexMTtlfTvKgfQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBktqoWNHLFaGMbLnk71Po+ikg0HmEFb2Er2KcvO
+ TdEj449f3GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLaqFgAKCRAk1otyXVSH
+ 0LBjB/9h8x5fbbbKuVsnCClJlyBKWsag8KbTFfpYMqgbuOYaRUZZEvIbLBoNKoSImBBiumXjCkP
+ haBO3wVDrdvIpH90ub6r0UBAN7Z8F6ncmgNkWN7TlZwqymZdzXpucPHXbubWMT7BiiIirajZHvs
+ D6A1s9yzq1Ac2htEyg4MraFxIM0Ew5LHtzTT/as0yE1VFUGzuuwl84dItvJu4N8XMAwIzlYfkIU
+ Yrw0HUMNKWviJgjPcTjNvktREwhEjTNu5P/3XsEs6nklQCNk5JxbA7XnP6lbXoeHF6tH+e2Wx4k
+ ofnYisR3/Q80C3IFmHKy6u09jteOqH0mYOw/KTG/6gHbxoDc
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17.07.2023 20:28, Andy Shevchenko wrote:
-> Since pm.h provides a helper for system no-IRQ PM callbacks,
-> switch the driver to use it instead of open coded variant.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Currently the sun8i thermal driver will fail to probe if any of the
+thermal zones it is registering fails to register with the thermal core.
+Since we currently do not define any trip points for the GPU thermal
+zones on at least A64 or H5 this means that we have no thermal support
+on these platforms:
 
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+[    1.698703] thermal_sys: Failed to find 'trips' node
+[    1.698707] thermal_sys: Failed to find trip points for thermal-sensor id=1
 
-> ---
->   drivers/pinctrl/pinctrl-at91.c | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
-> index 39956d821ad7..608f55c5ba5f 100644
-> --- a/drivers/pinctrl/pinctrl-at91.c
-> +++ b/drivers/pinctrl/pinctrl-at91.c
-> @@ -1657,7 +1657,7 @@ static int gpio_irq_set_wake(struct irq_data *d, unsigned state)
->   	return 0;
->   }
->   
-> -static int __maybe_unused at91_gpio_suspend(struct device *dev)
-> +static int at91_gpio_suspend(struct device *dev)
->   {
->   	struct at91_gpio_chip *at91_chip = dev_get_drvdata(dev);
->   	void __iomem *pio = at91_chip->regbase;
-> @@ -1675,7 +1675,7 @@ static int __maybe_unused at91_gpio_suspend(struct device *dev)
->   	return 0;
->   }
->   
-> -static int __maybe_unused at91_gpio_resume(struct device *dev)
-> +static int at91_gpio_resume(struct device *dev)
->   {
->   	struct at91_gpio_chip *at91_chip = dev_get_drvdata(dev);
->   	void __iomem *pio = at91_chip->regbase;
-> @@ -1903,15 +1903,13 @@ static int at91_gpio_probe(struct platform_device *pdev)
->   	return 0;
->   }
->   
-> -static const struct dev_pm_ops at91_gpio_pm_ops = {
-> -	NOIRQ_SYSTEM_SLEEP_PM_OPS(at91_gpio_suspend, at91_gpio_resume)
-> -};
-> +static DEFINE_NOIRQ_DEV_PM_OPS(at91_gpio_pm_ops, at91_gpio_suspend, at91_gpio_resume);
->   
->   static struct platform_driver at91_gpio_driver = {
->   	.driver = {
->   		.name = "gpio-at91",
->   		.of_match_table = at91_gpio_of_match,
-> -		.pm = pm_ptr(&at91_gpio_pm_ops),
-> +		.pm = pm_sleep_ptr(&at91_gpio_pm_ops),
->   	},
->   	.probe = at91_gpio_probe,
->   };
+even though the main CPU thermal zone on both SoCs is fully configured.
+This does not seem ideal, while we may not be able to use all the zones
+it seems better to have those zones which are usable be operational.
+Instead just carry on registering zones if we get any non-deferral
+error, allowing use of those zones which are usable.
+
+This means that we also need to update the interrupt handler to not
+attempt to notify the core for events on zones which we have not
+registered, I didn't see an ability to mask individual interrupts and
+I would expect that interrupts would still be indicated in the ISR even
+if they were masked.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+I noticed this while trying to debug an issue with memory corruption on
+boot which since the merge window has prevented Pine64 Plus (an A64)
+from booting at all:
+
+   https://storage.kernelci.org/mainline/master/v6.5-rc2/arm64/defconfig/gcc-10/lab-baylibre/baseline-sun50i-a64-pine64-plus.txt
+
+(which I bisected to a random memory management change that clearly
+wasn't at fault) and has been causing less consistent but still very
+severe boot issues on Libretech Tritium (a H3).  The corruption appears
+to happen when unbinding a the one thermal zone that does register, I've
+not figured out exactly where.
+
+The memory corruption issue obviously needs to be dealt with properly
+(I'm still digging into it) but this does allow both platforms to boot
+reliably and seems like a sensible thing to do independently, ideally we
+could get this in as a fix.
+---
+ drivers/thermal/sun8i_thermal.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 195f3c5d0b38..b69134538867 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -190,6 +190,9 @@ static irqreturn_t sun8i_irq_thread(int irq, void *data)
+ 	int i;
+ 
+ 	for_each_set_bit(i, &irq_bitmap, tmdev->chip->sensor_num) {
++		/* We allow some zones to not register. */
++		if (IS_ERR(tmdev->sensor[i].tzd))
++			continue;
+ 		thermal_zone_device_update(tmdev->sensor[i].tzd,
+ 					   THERMAL_EVENT_UNSPECIFIED);
+ 	}
+@@ -465,8 +468,17 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+ 						      i,
+ 						      &tmdev->sensor[i],
+ 						      &ths_ops);
+-		if (IS_ERR(tmdev->sensor[i].tzd))
+-			return PTR_ERR(tmdev->sensor[i].tzd);
++
++		/*
++		 * If an individual zone fails to register for reasons
++		 * other than probe deferral (eg, a bad DT) then carry
++		 * on, other zones might register successfully.
++		 */
++		if (IS_ERR(tmdev->sensor[i].tzd)) {
++			if (PTR_ERR(tmdev->sensor[i].tzd) == -EPROBE_DEFER)
++				return PTR_ERR(tmdev->sensor[i].tzd);
++			continue;
++		}
+ 
+ 		devm_thermal_add_hwmon_sysfs(tmdev->dev, tmdev->sensor[i].tzd);
+ 	}
+
+---
+base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+change-id: 20230718-thermal-sun8i-registration-df3a136ccafa
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
