@@ -2,61 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0140757C22
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A94757C2D
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjGRMrZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 08:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
+        id S232001AbjGRMsn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 08:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjGRMrY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:47:24 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3DEE7E;
-        Tue, 18 Jul 2023 05:47:23 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-993a37b79e2so764508266b.1;
-        Tue, 18 Jul 2023 05:47:23 -0700 (PDT)
+        with ESMTP id S231435AbjGRMsm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:48:42 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7905E1701;
+        Tue, 18 Jul 2023 05:48:38 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-52176fdad9dso5353305a12.0;
+        Tue, 18 Jul 2023 05:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689684442; x=1692276442;
+        d=gmail.com; s=20221208; t=1689684517; x=1692276517;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OGJYHhuupeLvD7iUldP9gnEGkr9rwuBLn1dMa+Ew/24=;
-        b=VtcOZtNqJWG8/eO0W1GhqAZLKZOFgVOETWyaoKVn0z/TT2Ts9Tb1e3h933FhL10+ZZ
-         DDMS6W2h5xtqTSg04fncdtozKVtCNJiTtgxuAt6iQyY+Q+ONFfWYWY+jl0Oq2wUZarCP
-         +uQgony4GCEpdt+cIKVGX9obZkVXwGs/mreeaKjD84xFqP20y0/fQtDYIkTWOAtBm7vg
-         MRXVINgDtCgfMyNrLjeAuMKMabGfhbtUlVSYqktym5jf2OPLNKxI7LZlKLg+T68up0YF
-         uaHTSmgsC2n4yeJtoUIrSZ3r+nnzsZgA3jyrDF9zagZ4CKqBac+iVifM4xfdPylCGWQ0
-         bD5g==
+        bh=wxhlaudfrVWECFV1Jg1vpXKt16R6kpyS29S9patDTO4=;
+        b=fVSpB/MPdEPpD5mWKQe0IChxg2s3WZfPkNpBCHhqpZjj648drB+NvNhNdLf85e3P+t
+         0s63bmVRtfumS6L0d/MRmrwu86sA2uLxAKLyz9QRrK5/s49KBSJWYnmLYhpCXbqBCZvk
+         RrP4iHQjDESXl09EiBVtu0DemVK/sav+ATktJDcFoPczdqpBsmXHqkwZGwlxhnFDTXSH
+         bF/cPlbGrlKDRBayoydjMjGSuheaUtq9JXeABTLysP33Gm3Lvjc5E47bBTCAZ4AF9xgV
+         IlAjyPE2P37RsWLGpAqO92h+UeQcyhh4GVGl0aAMp7GeO05y+zo1ltv4mE6txeUEiIhI
+         CXAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689684442; x=1692276442;
+        d=1e100.net; s=20221208; t=1689684517; x=1692276517;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OGJYHhuupeLvD7iUldP9gnEGkr9rwuBLn1dMa+Ew/24=;
-        b=M/RaL74uN7lV8lfixXlsnW27IPSBHnnUy6BgaED6ebqeZznxhvCHDwldZeaxtSVIao
-         m/OWVKkfSJq/E0+ioiosaaMCQa/Xb4LSmoHkUaRXw5vvx6tPHx9d3avInb7by2o0RS0v
-         rEkouaVhBv6ngmRr3eU1QkBxYEtqr1/9w8fElwWj6W5xk5klTdn4mPGYVoPQWsZJTM+7
-         kiQ33IhHFAMYZZV71kEf3xaxiR5lHzTNV2LYcNHizlDnMGgxFm3iJ4Cz6zFl2nerO9cG
-         3OAU2M4mOZwB0Xa4KMbKRyp4kD/6QuSVR5CtFCeR4WePcU+xGn8wy+FxuLwDICE3tSll
-         tfDA==
-X-Gm-Message-State: ABy/qLYxpS6vlg7T1ibcnLMYBcMR2Dg3F1BuOvK1Q377p3BdDfYMtaMh
-        E3wXqsI6S0GKInRaHVgBF24uv+Y6N6r/LHMhJPA=
-X-Google-Smtp-Source: APBJJlFWv/5l9OJf010RuvZ9Y5zmoeMZFAeyTTu73opyEbrIbXnZfVJSDMIhH8II3cHyjZ0u2hBQXv0rFIDUJ2ed/J8=
-X-Received: by 2002:a17:906:4987:b0:997:e836:6c4 with SMTP id
- p7-20020a170906498700b00997e83606c4mr559158eju.9.1689684441861; Tue, 18 Jul
- 2023 05:47:21 -0700 (PDT)
+        bh=wxhlaudfrVWECFV1Jg1vpXKt16R6kpyS29S9patDTO4=;
+        b=Fr/x4wxBMVbvOe5dh7/EOrGSOHxSSVbNbynk8juMhgd4tUg219HLjUBHJ2ZYcp9QK/
+         dCXlGAAkIN0R/IU19Q0xloN8B3TCex9ZBB0eHTD8D991HetZ0BeB2Jo9qlyY5zTRJow4
+         BTEjFTSX+ZYOfU0KkuyLlnBGGYyxvXY1yu+SIuB0H09MiipqRW/Ngjkr9NUEgpyf1HDV
+         RePALCE5SWgsJHgY5cYGNMNXX0rU+IoH7dWInlQti8WXbJqCoJvnevwsVZ/soxlG7PsQ
+         X/hc/tzLd61RhiXlDXB7e0cqo2A+uWej1I74ZX0xsGyh/PO8bc6LM8JPv9Pk8SGfcJQN
+         IppQ==
+X-Gm-Message-State: ABy/qLavzmxZZ5WxYAvqwcRqhMk1P4Fff01vKZEbwzV9A358O3VmGlmJ
+        bYCBh3EvYSmIjIzWBk8ddg6Gs+tdEN0QHkdGbIw=
+X-Google-Smtp-Source: APBJJlFHZoGo5cMXz5ZPoaXb8GQZF2yrH4fr5l8DeDddHglvOBiZmH4dtEo+coI2p2aE1zI2oNE0z2/uarXLB4bzRvc=
+X-Received: by 2002:a17:907:e92:b0:975:63f4:4b with SMTP id
+ ho18-20020a1709070e9200b0097563f4004bmr2250208ejc.36.1689684516758; Tue, 18
+ Jul 2023 05:48:36 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
- <20230717172821.62827-8-andriy.shevchenko@linux.intel.com> <64741cb9-3bcb-ba50-6e09-f30847bda669@collabora.com>
-In-Reply-To: <64741cb9-3bcb-ba50-6e09-f30847bda669@collabora.com>
+ <20230717172821.62827-8-andriy.shevchenko@linux.intel.com>
+ <f48a35d596694839665bc5883260cbae3ae01d9c.camel@crapouillou.net>
+ <CAHp75VfSd6giH0Hvt4m_cai5+qhhBfMa6R0fDhzpN4U7WxYzSw@mail.gmail.com> <7dc59ec83ceb6b7c101039570652fb9c8122d15a.camel@crapouillou.net>
+In-Reply-To: <7dc59ec83ceb6b7c101039570652fb9c8122d15a.camel@crapouillou.net>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 18 Jul 2023 15:46:45 +0300
-Message-ID: <CAHp75VcEptnG7SvKNdnjW8xmS9z5VVUJvpyD1ygmm-6dCjgWNA@mail.gmail.com>
+Date:   Tue, 18 Jul 2023 15:48:00 +0300
+Message-ID: <CAHp75VdehQnE+NvD1Pj_VZrj-gdHZow+kqyud_T8=3Z-YB-C7g@mail.gmail.com>
 Subject: Re: [PATCH v2 07/10] pinctrl: mediatek: Switch to use
  DEFINE_NOIRQ_DEV_PM_OPS() helper
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
+To:     Paul Cercueil <paul@crapouillou.net>
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
@@ -65,7 +66,6 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Geert Uytterhoeven <geert+renesas@glider.be>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Thierry Reding <thierry.reding@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
         linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org,
@@ -73,6 +73,8 @@ Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
         Sean Wang <sean.wang@kernel.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
         Andrew Lunn <andrew@lunn.ch>,
         Gregory Clement <gregory.clement@bootlin.com>,
         Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
@@ -94,31 +96,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 12:47=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
-> Il 17/07/23 19:28, Andy Shevchenko ha scritto:
+On Mon, Jul 17, 2023 at 10:57=E2=80=AFPM Paul Cercueil <paul@crapouillou.ne=
+t> wrote:
+> Le lundi 17 juillet 2023 =C3=A0 22:36 +0300, Andy Shevchenko a =C3=A9crit=
+ :
+> > On Mon, Jul 17, 2023 at 10:07=E2=80=AFPM Paul Cercueil <paul@crapouillo=
+u.net>
+> > wrote:
+> > > Le lundi 17 juillet 2023 =C3=A0 20:28 +0300, Andy Shevchenko a =C3=A9=
+crit :
 
 ...
 
-> > -static int mtk_paris_pinctrl_suspend(struct device *device)
-> > +static int mtk_paris_suspend(struct device *device)
-
-> > -static int mtk_paris_pinctrl_resume(struct device *device)
-> > +static int mtk_paris_resume(struct device *device)
+> > > > +DEFINE_NOIRQ_DEV_PM_OPS(mtk_paris_pinctrl_pm_ops,
+> > > > mtk_paris_suspend,
+> > > > mtk_paris_resume);
+> > >
+> > > It's a bit more work, but I think you should use
+> > > EXPORT_GPL_DEV_PM_OPS
+> > > (or even better, EXPORT_NS_GPL_DEV_PM_OPS) so that the dev_pm_ops
+> > > is
+> > > conditionally exported. All callers would have to be updated to use
+> > > pm_ptr().
+> >
+> > Why pm_ptr()? What did I miss?
+> > The rest is OK.
 >
-> What's the reason why you changed the suspend/resume function names?
-> I don't really mind, but please at least mention that in the commit descr=
-iption.
+> Or pm_sleep_ptr(). As I said in my answer to the other patch,
+> EXPORT_*_DEV_PM_OPS() currently only exports on CONFIG_PM, so it
+> doesn't really matter which one you use.
 
-To put it on a single line. I will amend the commit message, thank you
-for review!
-
-...
-
-> > +DEFINE_NOIRQ_DEV_PM_OPS(mtk_paris_pinctrl_pm_ops, mtk_paris_suspend, m=
-tk_paris_resume);
-
-...here ^^^
+Yes, I need to think about it. I don't like the inconsistency the
+EXPORT*PM_OPS() brings in this case.
 
 --=20
 With Best Regards,
