@@ -2,114 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 323FF7578A6
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 11:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF4E7578C0
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 12:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232442AbjGRJ5G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 05:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S232462AbjGRKBj convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 18 Jul 2023 06:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjGRJ4g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 05:56:36 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653D810E0;
-        Tue, 18 Jul 2023 02:55:47 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4R4vQf6KT9z6J6rL;
-        Tue, 18 Jul 2023 17:53:14 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 18 Jul
- 2023 10:55:44 +0100
-Date:   Tue, 18 Jul 2023 10:55:43 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+        with ESMTP id S232260AbjGRKBf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 06:01:35 -0400
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B316E4F;
+        Tue, 18 Jul 2023 03:01:27 -0700 (PDT)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-1bac0e25891so79814fac.2;
+        Tue, 18 Jul 2023 03:01:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689674486; x=1692266486;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iMWNFsiRP079B5LYbYLQZfm+Mzjz5LU2gLm2aCCBKHU=;
+        b=gQmr3YApxV2Jhjpqyvd72TBslFNKanvStKead9ackCb+XfH1HfKfOeFsWE+MnmHnxd
+         u8ULDNZ+uBzApx/sEdncdt8/3ST1LFWbgKDKgJvUiskmOzlrFfdTeUI0o6E66s8gVfI9
+         QlbziFW7SPaAEaPXcIATqr8xD4H2OUHDd/n/KVsVEGv4fYUC5UQh99FMEKM/47HRxa99
+         lo9WEvv8VBwrvY5Bj1LsOveJdkIpGvmYw1eVBSDsbjprgaQ/9R9sjOjz+9uY5IjCy536
+         YACC/AXrch9DB9bXN6GaKE+yhC0J+AQ/MUfBsCUNsfNGy6zW0vWrtqZXChuLp5APiwhc
+         y71Q==
+X-Gm-Message-State: ABy/qLb1ENz5f2W4v22OqgpZa3UNgv+jEq4yezx2EaOX/92iC1+z/Hzd
+        7ezETDY3+VGvaa0zvc2kUYwh86sAPud+iA==
+X-Google-Smtp-Source: APBJJlGpPMp+VLxaQawE6UPllhsXVy9xKvYavIrRlsmt/g8J7Uxueo9LVlIW53BnfC3abFoolGYlmw==
+X-Received: by 2002:aca:bd06:0:b0:3a4:11a1:4cd8 with SMTP id n6-20020acabd06000000b003a411a14cd8mr11993989oif.4.1689674486551;
+        Tue, 18 Jul 2023 03:01:26 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id w207-20020a8149d8000000b00570589c5aedsm369201ywa.7.2023.07.18.03.01.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Jul 2023 03:01:26 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-bdd069e96b5so5634794276.2;
+        Tue, 18 Jul 2023 03:01:26 -0700 (PDT)
+X-Received: by 2002:a5b:c47:0:b0:ced:271:950a with SMTP id d7-20020a5b0c47000000b00ced0271950amr437150ybr.47.1689674485821;
+ Tue, 18 Jul 2023 03:01:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com> <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 18 Jul 2023 12:01:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVgRDrWwQ6PKtgDE1Kmbp_zsmfrbswvG9Sq30zUVMZRAw@mail.gmail.com>
+Message-ID: <CAMuHMdVgRDrWwQ6PKtgDE1Kmbp_zsmfrbswvG9Sq30zUVMZRAw@mail.gmail.com>
+Subject: Re: [PATCH v2 01/10] pm: Introduce DEFINE_NOIRQ_DEV_PM_OPS() helper
 To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Balsam CHIHI <bchihi@baylibre.com>,
-        "Claudiu Beznea" <claudiu.beznea@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Thierry Reding <thierry.reding@gmail.com>,
         Paul Cercueil <paul@crapouillou.net>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Andy Shevchenko <andy@kernel.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
         Sean Wang <sean.wang@kernel.org>,
-        "Jonathan Hunter" <jonathanh@nvidia.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v2 01/10] pm: Introduce DEFINE_NOIRQ_DEV_PM_OPS() helper
-Message-ID: <20230718105543.00006395@Huawei.com>
-In-Reply-To: <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-        <20230717172821.62827-2-andriy.shevchenko@linux.intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
-MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        <angelogioacchino.delregno@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 17 Jul 2023 20:28:12 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-
+On Mon, Jul 17, 2023 at 7:28 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 > _DEFINE_DEV_PM_OPS() helps to define PM operations for the system sleep
 > and/or runtime PM cases. Some of the existing users want to have _noirq()
 > variants to be set. For that purpose introduce a new helper which sets
 > up _noirq() callbacks to be set and struct dev_pm_ops be provided.
-> 
+>
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Seems reasonable to me given it is fairly common
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Gr{oetje,eeting}s,
 
-> ---
->  include/linux/pm.h | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index badad7d11f4f..0f19af8d5493 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -448,6 +448,15 @@ const struct dev_pm_ops __maybe_unused name = { \
->  	SET_RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn) \
->  }
->  
-> +/*
-> + * Use this if you want to have the suspend and resume callbacks be called
-> + * with disabled IRQs.
-> + */
-> +#define DEFINE_NOIRQ_DEV_PM_OPS(name, suspend_fn, resume_fn) \
-> +const struct dev_pm_ops name = { \
-> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
-> +}
-> +
->  #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
->  #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
->  
+                        Geert
 
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
