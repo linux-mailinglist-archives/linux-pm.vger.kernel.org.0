@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76270757C3B
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E72757C44
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Jul 2023 14:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjGRMvR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 08:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S231708AbjGRMxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 08:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbjGRMvP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:51:15 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2511701;
-        Tue, 18 Jul 2023 05:51:13 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-99454855de1so504566866b.2;
-        Tue, 18 Jul 2023 05:51:13 -0700 (PDT)
+        with ESMTP id S230193AbjGRMxt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 08:53:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25441126;
+        Tue, 18 Jul 2023 05:53:48 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9936b3d0286so802452466b.0;
+        Tue, 18 Jul 2023 05:53:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689684671; x=1692276671;
+        d=gmail.com; s=20221208; t=1689684826; x=1692276826;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b/2563u5cOH3TFQnC6K2RUUtmAlaSoZJQm9HbnJPi6A=;
-        b=iKKsUwLsrqwRmioG2l6VIuQCDdWIS+x7OvqTLH5gDfCTMpT+PYaav8SRQuyzIFdRK7
-         xzPpn4SashCJNbr5fW/ErJIsUpoaGXJaa+RJDZXBKScdLc02p9LndavEuCl4RQRnTX9h
-         3ZTYVLgnXzWVBt8H0toSOGPpXH28ikivdDHOj1voaDmtk6XEmYRXA+wPRH6qnqnMH4/M
-         MPPAAXs/tmbovBrq6LkwpfZneVLY35A9HrthHuwr/Qwc9fyuZI/3MgISQ6meI/VrFnCP
-         tCX7kFl6R7ED8YzzGfuqQfjnxbmJBTqYBWAXcYkNxgO+oztxChqdSdyATVA6ufkBPUId
-         3lwQ==
+        bh=79kLUvgjaFzQrWOgx008zsF/7GOXg8shTx0H5AGYDQw=;
+        b=Tks5q0JcRPcKf7Kf/5sMNv0WyprOQ5QOCm+wFinM49VOX0OPVPh+czO3QBSvYJlbZs
+         99Dqxi9UZ0XzbWLIpQssTKSRP/ibR01+OZ6gPO8G735PMobOMqBZMJ7ItLKFDJGq4mVE
+         L6Gp/kXJT7E60Vbz13h+JeVrhe9nq31SBP6WJDXk2r0HxYjdmtAFAR1q+X0fPT1ysJ1n
+         U0CKU/xFTsOavOkaJci2k1okA1j1f+aPXviX7pPeDadhzYYPlWWG65eFqNiNGRDyv3yU
+         WK2LkwXO09tPOZ/uycvS/9DAn9g1M57tOccnl5zRlWN8fD6udXDPzl//1L/4NA4OHolo
+         Lb2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689684671; x=1692276671;
+        d=1e100.net; s=20221208; t=1689684826; x=1692276826;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b/2563u5cOH3TFQnC6K2RUUtmAlaSoZJQm9HbnJPi6A=;
-        b=BfKZ3TtwoKD9PKWIBK0qtNP01SzzdW7o/cmkH/UdHZ1cMTmp0UHeBmQjdSw/f8Iwyk
-         q75eQlJT5khdHuvOozHAry9XA+CKqOWPcug2LAReb04eRywT+ZjLsnTkMK2s2agokvSt
-         sQFee0iwlL01oN+tjlqCHDgms9AgGta+PWl1BLaNLiDcxnFyHV4+aYZcmhxsF0V58Zbu
-         FJCHNf1J4S11rIWQA6iTaFFUd688BeG/emoGnZ1Xhk249AoKI25s06jYhUVvzsvdPbdT
-         6Z9ZkmBZGWnLtyUEFqg31N87Mwmvy2uSJGtn/TzU+HQgLu2kPceidvT3aSrH+ZJWYBcv
-         XYeQ==
-X-Gm-Message-State: ABy/qLb61LkyjXSSpVNSVnJjynICkDJN7CALlJk3LBWUUUYDj5TR3/Np
-        dt9xvnnylCrpkSMSFLLstMH3BGBbI8xMZTRIJ18=
-X-Google-Smtp-Source: APBJJlEx07+dHAg1uNrR6U3SipVk2wgw6hkfeWbxoh6BDo4Hww7sGADxDz9h6Wu1gtnWGybAPUizheA0hRtDoVEKRpQ=
-X-Received: by 2002:a17:906:749c:b0:994:5544:3aea with SMTP id
- e28-20020a170906749c00b0099455443aeamr10270194ejl.51.1689684671561; Tue, 18
- Jul 2023 05:51:11 -0700 (PDT)
+        bh=79kLUvgjaFzQrWOgx008zsF/7GOXg8shTx0H5AGYDQw=;
+        b=DeVLYelu2269a8Pkj8YNJ3JE28qpVpkxS8oppNTaxtomOywRICn/r68lXAuE+hWCH1
+         2jrv3N+CTNxOh3SEXyVN1QhE1yBFZWX7Oq4Lq5EKFBduYygOq5vsx9T/HwrYNy7t1b46
+         +pSZI392SwKkV4Obg1ouQQmNpLVPmi0r/cQUlKGEvCFanYVJMWPHT1Zf9ZKYOwg7Dpla
+         tQLYS/HxE/JouKEgXYgi1fdSzaYQJDPIzaSf7DnMwwb4IhIspl/HTCBskCv2VKquH0AZ
+         UJjQQTwmQqwZZBKbmUDUFaLMtw8bDm+HSNG7eLexbRMVR/1BouFLtPYPV5CMZrdlKoWC
+         vOug==
+X-Gm-Message-State: ABy/qLYMBUhWJY32F7UZgSnd67zl7nJTkafeZNP/Ow7B3zoVjt8B/yX/
+        s57SNiwPAqQCeevjT98Uur6VlbMgfGL1oKzbW8Q=
+X-Google-Smtp-Source: APBJJlEiNMwdGUgpHIKMmnEgRY+QNSS28oQH2q/Czd9HAANojvR1sxg1GKNIsNiHyHioOrvxRuwFkor+DKPaLczWNdQ=
+X-Received: by 2002:a17:906:109:b0:967:e015:f542 with SMTP id
+ 9-20020a170906010900b00967e015f542mr12775335eje.44.1689684826263; Tue, 18 Jul
+ 2023 05:53:46 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
  <20230717172821.62827-11-andriy.shevchenko@linux.intel.com>
  <13f7153786cfcdc3c6185a3a674686f7fbf480dc.camel@crapouillou.net>
  <ZLZDL27zzDpY4q8E@orome> <5e4b5bc23f3edb3ed30cb465420a51ffceceb53d.camel@crapouillou.net>
- <ZLZ6amp5HKUbm5w3@orome> <8f32cb8377808a073b043e0adf3ccf5ae5a84c92.camel@crapouillou.net>
-In-Reply-To: <8f32cb8377808a073b043e0adf3ccf5ae5a84c92.camel@crapouillou.net>
+In-Reply-To: <5e4b5bc23f3edb3ed30cb465420a51ffceceb53d.camel@crapouillou.net>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 18 Jul 2023 15:50:35 +0300
-Message-ID: <CAHp75Vc7W1EcHSoCaRCbJEcWb4naOez6d=W+kJVtMSifkPAozQ@mail.gmail.com>
+Date:   Tue, 18 Jul 2023 15:53:10 +0300
+Message-ID: <CAHp75Vf3mijhiS6JNhD4Dq4EpbKmok5m8MYNaguUgpUBak9hTA@mail.gmail.com>
 Subject: Re: [PATCH v2 10/10] pinctrl: tegra: Switch to use
  DEFINE_NOIRQ_DEV_PM_OPS() helper
 To:     Paul Cercueil <paul@crapouillou.net>
@@ -97,33 +96,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 2:55=E2=80=AFPM Paul Cercueil <paul@crapouillou.net=
-> wrote:
-> Le mardi 18 juillet 2023 =C3=A0 13:41 +0200, Thierry Reding a =C3=A9crit =
+On Tue, Jul 18, 2023 at 11:43=E2=80=AFAM Paul Cercueil <paul@crapouillou.ne=
+t> wrote:
+> Le mardi 18 juillet 2023 =C3=A0 09:45 +0200, Thierry Reding a =C3=A9crit =
 :
-> > On Tue, Jul 18, 2023 at 10:42:47AM +0200, Paul Cercueil wrote:
 
 ...
 
-> > Looking at the definition of EXPORT_GPL_DEV_PM_OPS(), it will cause
-> > an
-> > EXPORT_SYMBOL_GPL() to be added. So there very well is a change. And
-> > it's a completely bogus change because no module is ever going to use
-> > that symbol. If we were to ever support building the pinctrl driver
-> > as
-> > a module, then this would perhaps make sense, but we don't.
->
-> In this particular case the EXPORT_SYMBOL_GPL() isn't really important,
-> the rest of EXPORT_GPL_DEV_PM_OPS() is.
->
-> I don't think having a symbol exported it is a big deal, TBH, if you
-> use the namespaced version. If you really don't want that, we need a
-> version of EXPORT_GPL_DEV_PM_OPS() that doesn't export the symbol.
+> (or better, the namespaced version)
 
-Ah, I agree with Thierry and it is another point why I do not like
-those EXPORT*PM_OPS() macros.
-Polluting an exported space (even namespaced) is a big deal, so,
-definitely no from my side.
+I am all for consistency, I agree on this whenever the driver is
+_already_ using namespaces. Having one macro with namespace and
+disrupting tons of the drivers (MediaTek case?) is not an option in my
+opinion.
 
 --=20
 With Best Regards,
