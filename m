@@ -2,58 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A20D075A0A8
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 23:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8690E75A0B6
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 23:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjGSViG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 17:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
+        id S229613AbjGSVoS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 17:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjGSViF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 17:38:05 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0B81FD7;
-        Wed, 19 Jul 2023 14:38:03 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
+        with ESMTP id S229450AbjGSVoS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 17:44:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D2D01FD7;
+        Wed, 19 Jul 2023 14:44:15 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B1A4B660297B;
-        Wed, 19 Jul 2023 22:38:02 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A5766600011;
+        Wed, 19 Jul 2023 22:44:13 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689802682;
-        bh=EnEs82eF+dr1j4F/YP1kngG0fotAyDYVnHdP/EJWms0=;
+        s=mail; t=1689803053;
+        bh=6VQ8lf+HrOctgWEaFNffFLBushL6K14eiELd11iJT+s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hyqzAd41kmVn2VbW1QE7z3FsqbVDaKRa6y3OQ25KLW4/abvSjIjeMGzRWVSTnfZop
-         Zzd7ZjijIV1e+UtfO2UfuxWcvEwTh0tGnWt3oQ2Y+4ZPmLhlZsLZiNgNdAyEcUVevY
-         dO4CdJORmwvqKaqSaFYBU3GLMrsgW/NMMJPErLH3cI75GUAbrOhfC9evBzY4dooiA9
-         DMDzimrFuU9Le9uYefgZ2PEZvFKUcuvcb3xip0Gbcn15KFpW6InYt/tOtfn7o9s7Xt
-         W3vVdiup2rYEJuRT2EFZULkrqwk3HCL0I7F091nEWtqSYH8L7GyuYg8z7+9Lbjr0hh
-         8F+wKDoEs10pw==
+        b=jMgtNT+OET8285KG/sp0BPNqspQzGRkXD3ECbLQfNyD/WYhbFwuU+mHmkVe9UcXpE
+         Qh/IcMcy7mOo48A795xZa3Kp3hiCZQnpFzb+lcPnRdwMjVje2yTI9ZWVRCohCcwWW+
+         CCYqxz7fUDuxQdIKH8DscEf774GBZYrbGpyYI4lcsjvisvhlHXQelBqQUkWCXiON/H
+         mEe4G2I/QxfCi3erRn6V22xBU+glbt4y+X4ZqbjLQbzUXnLI6dhD7Kn5zVIjpkFPnw
+         baG107Z4TtqJOU8pTPkqSLBYe8x4drlk/Eu3BEzdqgQvsCcGUufpQ62fmhx24n11m1
+         LtGfsIjFhhUiw==
 Received: by mercury (Postfix, from userid 1000)
-        id F14141061639; Wed, 19 Jul 2023 23:37:59 +0200 (CEST)
-Date:   Wed, 19 Jul 2023 23:37:59 +0200
+        id 274EE1061639; Wed, 19 Jul 2023 23:44:10 +0200 (CEST)
+Date:   Wed, 19 Jul 2023 23:44:10 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] power: reset: at91-poweroff: Convert to
- devm_platform_ioremap_resource()
-Message-ID: <20230719213759.y73xa2wjru7jjryl@mercury.elektranox.org>
-References: <20230704130309.16444-1-frank.li@vivo.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Marcus Cooper <codekipper@gmail.com>, linux-pm@vger.kernel.org,
+        Stefan Hansson <newbyte@disroot.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] power: supply: ab8500: Set typing and props
+Message-ID: <20230719214410.f4o6lqnsle73xtk4@mercury.elektranox.org>
+References: <20230613213150.908462-1-linus.walleij@linaro.org>
+ <CACRpkdbp0STSKxBG6qgpqu=xg0+-zAdK2se11oKhjD9MGQZ1NA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="as4yegxfbg2texhw"
+        protocol="application/pgp-signature"; boundary="ufv35idcc564jfnh"
 Content-Disposition: inline
-In-Reply-To: <20230704130309.16444-1-frank.li@vivo.com>
+In-Reply-To: <CACRpkdbp0STSKxBG6qgpqu=xg0+-zAdK2se11oKhjD9MGQZ1NA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,69 +58,42 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---as4yegxfbg2texhw
+--ufv35idcc564jfnh
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Linus,
 
-On Tue, Jul 04, 2023 at 09:03:03PM +0800, Yangtao Li wrote:
-> Use devm_platform_ioremap_resource() to simplify code.
+On Sun, Jul 16, 2023 at 10:59:42PM +0200, Linus Walleij wrote:
+> could you apply this patch please?
 >=20
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
+> It's a regression.
 
-Thanks, whole series queued.
+Sorry for the delay; it's merged to my fixes branch now.
+
+Greetings,
 
 -- Sebastian
 
->  drivers/power/reset/at91-poweroff.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at=
-91-poweroff.c
-> index 9e74e131c675..dd5399785b69 100644
-> --- a/drivers/power/reset/at91-poweroff.c
-> +++ b/drivers/power/reset/at91-poweroff.c
-> @@ -151,13 +151,11 @@ static void at91_poweroff_dt_set_wakeup_mode(struct=
- platform_device *pdev)
-> =20
->  static int __init at91_poweroff_probe(struct platform_device *pdev)
->  {
-> -	struct resource *res;
->  	struct device_node *np;
->  	u32 ddr_type;
->  	int ret;
-> =20
-> -	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	at91_shdwc.shdwc_base =3D devm_ioremap_resource(&pdev->dev, res);
-> +	at91_shdwc.shdwc_base =3D devm_platform_ioremap_resource(pdev, 0);
->  	if (IS_ERR(at91_shdwc.shdwc_base))
->  		return PTR_ERR(at91_shdwc.shdwc_base);
-> =20
-> --=20
-> 2.39.0
->=20
-
---as4yegxfbg2texhw
+--ufv35idcc564jfnh
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4V7EACgkQ2O7X88g7
-+ppt5w/+PPKuf20lGBmwO8uWzO/WVSzFUkLfDLf4W6BB48ISIv3BA6WKV505f6Z/
-ISjTh97lvssI8vNxrntWD6U4EfV/+nuz7CCkl/WhGlQ8ktg7MeMmWMdEOLQFJov4
-DYp3Bq2xuDmKTrobfjELeeBUyiIPO8n3YKzg0R8OT2dVQFknwnlSXnS3gbUkDsdJ
-K0h8r5YAsl2afDjU+aN/e/6Wga8ZfuBiPUo52RftpJacTaoIfOjT5O6sOcm4WnjC
-ZEyo/qNbfT1i2+IdkGqL57pYFYS9ocHjCdapbjkTWSbbeb64A8qQ+84+l7ObogYP
-mqruS5VlLMwCVq1jjRh+ODTJygT/xdvL4/aYmMEJqbi3TDSUGMuHnAs7H3Qcshbm
-OOKcnaTKyg/J1ej5nDf/XswFtmHoLcOqaXL7vQ3Gdwx1y2T2MCENzRqu/H7oowsa
-ByBdRVBRL5Uo5CC+NLC2KHsAv7oDbZpEsD2l3TaM+j9jULxFIuxKvCrTThebU339
-l/7Z9WD0msWt9TmkxD/L3JyLAT73G8D81x3PsODZDrSZvvfbEL4XdomBrgvaQVKk
-G/uPxJRoEWOHIJsvMh7CoWmfm9E4lEl+9RlrvCw9+Zx28uOCGoXHEE8FcOMmOV5Y
-sfMTvycOqZZTuCX78DIMbjZ64/K7ZXWRd7COp7KxwuV8FK0yUy0=
-=y7wK
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4WSkACgkQ2O7X88g7
++pqfWg/9G+eovlj68LYeO2I0SoG7Q37gwsBsfVJB8aCkedhtGEmWd9uE3NYKhnSB
+GIqjyAgxmW7P9StfAFsMjdnTwsZK0FLz8P9arnAkfEysNIrVCEuJlsB+554Bba8c
+bSyfL2ra9XJQu4HHP/oXe0o6lMWshLh7h+ye1DibgJriG8tt1X1vAiyknz0Ef2rS
+mos5Lhd8xb8Swk2d7LMz+Aymviaxj5HFUUcXlVLIYE7QTNNv/TJBgnQU7zmhcceV
+HRtks93I0tBQrOwgF49OCzbY6tTh1OQNcsF7rYXVy+3K1uw3jysujUsGL0sR/IK6
+eXly11gORYsk65vJTsxESGcNK9GAq/4er5tO5SZK+Kj+AmBKHpp+J//arGplqo/2
+sBX11hRnqjgkGRg6Uxk3D0UvEJ2ML8mll5QV9mhMe0Nd+VdkUsvm+fW/KnLxNQFA
+GzskQPvsFPUP9RKtp776cCG0YTOFh7PV2TaTLpkrUZluGWyuZQBRkcpbFtxwpOoM
+m7oB2PQMdCvxl1Bs2emQx2poVF1q9PqgXtobrnxYhpt1Gb7ebq3Mt+iQf7iTXx8C
+d9g9tMheV9f0fz9Q4Zn/vp5uiM+bxpTa1Zzb25Ghhz/pwAQKvUucbS3H5bfl0yfC
+dKt6Y/3rTIrXyu+nMF3O+2g54cS2M7RzqEx0rHPnFgKmNWNTGi0=
+=r3So
 -----END PGP SIGNATURE-----
 
---as4yegxfbg2texhw--
+--ufv35idcc564jfnh--
