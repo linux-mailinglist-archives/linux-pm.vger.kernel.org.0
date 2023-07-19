@@ -2,67 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A73F75A034
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 22:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C95875A046
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 22:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjGSUvj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 16:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
+        id S229736AbjGSU7d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 16:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjGSUvi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 16:51:38 -0400
+        with ESMTP id S229536AbjGSU7c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 16:59:32 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A971FE2;
-        Wed, 19 Jul 2023 13:51:35 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708041B9;
+        Wed, 19 Jul 2023 13:59:31 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id E2E156607078;
-        Wed, 19 Jul 2023 21:51:33 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37BC3660707B;
+        Wed, 19 Jul 2023 21:59:30 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689799894;
-        bh=c3uH/gG1XWxCmsfa/PtfUqtSiWqoIU9tT6WvHwLXMgM=;
+        s=mail; t=1689800370;
+        bh=cXRYIzQdseRHmaYd1OD7u2mYqJ0lfpwzolfl9iDjYCg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NHxWKfjTdramqP30Ar8ukCkAzRt5qmjDXa/OA6fMDnoIAfYN+sRNUe7t2CTXt5CVp
-         xDIJfwcPhY7p2FuTzRLQv6qKHoheJtYTX8nMFwmxHBN0TWPZiuXnESnkEu5uAgXcyq
-         FNEWy89JfqlQ0bFQn8jwnGjgZ0NeIdz+7OH1YhucUn5Ke9r8f7b+z209X/uGDCc0Nd
-         K9qqMu/PDT92oYjRnmNX1Ijj76unq76IckCkJCftmPoMFNmqEksETXwB9V3DrdF/D4
-         GKWcLVDDYZYcbuXPFJwFbC9ouH4DkxPwEy9C8M0owQa80PnadMWr6duuVuxq5PpUML
-         I0konnbQTjCQg==
+        b=Bso5CMvAutuxB+K6shilAFIjHVoB/0W8tzBGg0L77Jz4HpY6K1JWihPgWWAy78/sx
+         H4rvlCGz1CWwIjs4w2IRTRnhgz0jDwBNntcsO/3vUo96SSNaG6GzsKQg+DTr8T4AS9
+         Qwo8hWuIMOVpCQosuAvT/8rshDGGP16xA+3yEe739pUMeNA5m6Uq8+tn4DC1INXQGt
+         95uZ3cPB/MCdCGEtXL5NQ8qM9cOPbdJgfC0koqH6KPG+nfagplJCKyozE0C9iccLKE
+         ptJV36VAkkw3LmXsYURZZ1r0Azalr6oV3uN6jLAM3DiSGLx2E4M8krNZ7jeNhOrDqW
+         f0fEwhS720u2A==
 Received: by mercury (Postfix, from userid 1000)
-        id 2A3571061387; Wed, 19 Jul 2023 22:51:31 +0200 (CEST)
-Date:   Wed, 19 Jul 2023 22:51:31 +0200
+        id 6A41D1061387; Wed, 19 Jul 2023 22:59:27 +0200 (CEST)
+Date:   Wed, 19 Jul 2023 22:59:27 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Simon Glass <sjg@chromium.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Support Opensource <support.opensource@diasemi.com>,
-        David Lechner <david@lechnology.com>,
-        Iskren Chernev <me@iskren.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-oxnas@groups.io
-Subject: Re: [PATCH v2] power: Explicitly include correct DT includes
-Message-ID: <20230719205131.xmfyggy7y2dusjrx@mercury.elektranox.org>
-References: <20230718143045.1065100-1-robh@kernel.org>
- <CAPnjgZ0H077Hdq2HoOyrYxjAmXLigRrj+6H3sPLidtDa2w=Wcw@mail.gmail.com>
+To:     Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Rhodes <drhodes@opensource.cirrus.com>
+Subject: Re: [PATCH] power: supply: bq24190: Considers FORCE_20PCT when
+ getting IPRECHG
+Message-ID: <20230719205927.5gdxmwsj4tgeckwq@mercury.elektranox.org>
+References: <20230714174529.287045-1-rriveram@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o4yglry5cm6klniy"
+        protocol="application/pgp-signature"; boundary="dg2nkogywbg63pik"
 Content-Disposition: inline
-In-Reply-To: <CAPnjgZ0H077Hdq2HoOyrYxjAmXLigRrj+6H3sPLidtDa2w=Wcw@mail.gmail.com>
+In-Reply-To: <20230714174529.287045-1-rriveram@opensource.cirrus.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -74,87 +58,92 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---o4yglry5cm6klniy
+--dg2nkogywbg63pik
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Jul 18, 2023 at 07:08:01PM -0600, Simon Glass wrote:
-> On Tue, 18 Jul 2023 at 08:31, Rob Herring <robh@kernel.org> wrote:
-> > The DT of_device.h and of_platform.h date back to the separate
-> > of_platform_bus_type before it as merged into the regular platform bus.
-> > As part of that merge prepping Arm DT support 13 years ago, they
-> > "temporarily" include each other. They also include platform_device.h
-> > and of.h. As a result, there's a pretty much random mix of those include
-> > files used throughout the tree. In order to detangle these headers and
-> > replace the implicit includes with struct declarations, users need to
-> > explicitly include the correct includes.
-> >
-> > Acked-by: David Lechner <david@lechnology.com>
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > v2:
-> > - Fix double include of of.h
-> > ---
-> >  drivers/power/reset/as3722-poweroff.c            | 1 -
-> >  drivers/power/reset/brcm-kona-reset.c            | 4 ++--
-> >  drivers/power/reset/gpio-poweroff.c              | 3 ++-
-> >  drivers/power/reset/gpio-restart.c               | 2 +-
-> >  drivers/power/reset/keystone-reset.c             | 3 ++-
-> >  drivers/power/reset/ocelot-reset.c               | 4 ++--
-> >  drivers/power/reset/odroid-go-ultra-poweroff.c   | 3 ++-
-> >  drivers/power/reset/oxnas-restart.c              | 2 --
-> >  drivers/power/reset/st-poweroff.c                | 2 +-
-> >  drivers/power/reset/syscon-poweroff.c            | 3 +--
-> >  drivers/power/reset/syscon-reboot.c              | 3 +--
-> >  drivers/power/reset/xgene-reboot.c               | 2 +-
-> >  drivers/power/supply/axp20x_ac_power.c           | 1 -
-> >  drivers/power/supply/axp20x_battery.c            | 1 -
-> >  drivers/power/supply/axp20x_usb_power.c          | 1 -
-> >  drivers/power/supply/cpcap-battery.c             | 2 +-
-> >  drivers/power/supply/da9150-charger.c            | 2 --
-> >  drivers/power/supply/da9150-fg.c                 | 1 -
-> >  drivers/power/supply/lego_ev3_battery.c          | 2 +-
-> >  drivers/power/supply/ltc2941-battery-gauge.c     | 2 +-
-> >  drivers/power/supply/ltc4162-l-charger.c         | 2 +-
-> >  drivers/power/supply/max14656_charger_detector.c | 2 +-
-> >  drivers/power/supply/max17040_battery.c          | 2 +-
-> >  drivers/power/supply/max8903_charger.c           | 1 -
-> >  drivers/power/supply/rn5t618_power.c             | 1 -
-> >  drivers/power/supply/rt5033_charger.c            | 2 +-
-> >  drivers/power/supply/rt9455_charger.c            | 3 +--
-> >  drivers/power/supply/sbs-battery.c               | 2 +-
-> >  drivers/power/supply/tps65090-charger.c          | 2 +-
-> >  drivers/power/supply/tps65217_charger.c          | 1 -
-> >  drivers/power/supply/twl4030_charger.c           | 1 +
-> >  31 files changed, 26 insertions(+), 37 deletions(-)
+On Fri, Jul 14, 2023 at 12:45:29PM -0500, Ricardo Rivera-Matos wrote:
+> Adds a check of the FORCE_20PCT bit when getting the precharge
+> current value.
 >=20
-> Reviewed-by: Simon Glass <sjg@chromium.org>
+> According to the bit description for the FORCE_20PCT bit, when
+> FORCE_20PCT is true, the precharge current target is 50% of
+> what is configured in the IPRECHG bit field.
+>=20
+> Signed-off-by: Ricardo Rivera-Matos <rriveram@opensource.cirrus.com>
+> Reviewed-by: David Rhodes <drhodes@opensource.cirrus.com>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
---o4yglry5cm6klniy
+>  drivers/power/supply/bq24190_charger.c | 17 +++++++++++++++--
+>  1 file changed, 15 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/suppl=
+y/bq24190_charger.c
+> index ef8235848f56..3f99cb9590ba 100644
+> --- a/drivers/power/supply/bq24190_charger.c
+> +++ b/drivers/power/supply/bq24190_charger.c
+> @@ -965,7 +965,7 @@ static int bq24190_charger_get_precharge(struct bq241=
+90_dev_info *bdi,
+>  		union power_supply_propval *val)
+>  {
+>  	u8 v;
+> -	int ret;
+> +	int curr, ret;
+> =20
+>  	ret =3D bq24190_read_mask(bdi, BQ24190_REG_PCTCC,
+>  			BQ24190_REG_PCTCC_IPRECHG_MASK,
+> @@ -973,7 +973,20 @@ static int bq24190_charger_get_precharge(struct bq24=
+190_dev_info *bdi,
+>  	if (ret < 0)
+>  		return ret;
+> =20
+> -	val->intval =3D ++v * 128 * 1000;
+> +	curr =3D ++v * 128 * 1000;
+> +
+> +	ret =3D bq24190_read_mask(bdi, BQ24190_REG_CCC,
+> +			BQ24190_REG_CCC_FORCE_20PCT_MASK,
+> +			BQ24190_REG_CCC_FORCE_20PCT_SHIFT, &v);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	/* If FORCE_20PCT is enabled, then current is 50% of IPRECHG value */
+> +	if (v)
+> +		curr /=3D 2;
+> +
+> +	val->intval =3D curr;
+> +
+>  	return 0;
+>  }
+> =20
+> --=20
+> 2.34.1
+>=20
+
+--dg2nkogywbg63pik
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4TMkACgkQ2O7X88g7
-+pq7lg//WgZTHis+b/+aR3UeuhJImAXVAknxQX4lPsDZ9Q4pMWR8h1FlZPpwhIol
-YkNrPwE1yK6Xxe8kUSnFDI/gqFD+vRqeEaMNSxcwjlzNX+XVe5NPA37mdAruHnNI
-JTH5n1isMVQrT3kulswPgAz+X2/CUI31FJQURqHob1c52cS2edrqv2VwWDVC/ozY
-NpyhgzJgYwXLODp/SmOW4bo2Lq9Dx8GlqiiNWaPnUu96Z4zW0WEQEYvxRbTWky0Q
-SHmKXDzaxbbTRYJ5B4Fbygtoy7cmbN5FKN4Reh6GfieDf5+/VTXiEVUsw1Volas7
-bEuSqdw9lICEx0YIpf2WCxP7+R7dZ1UHzgs9CoI8dBpZMNAoMNV48VLoLgDgyBYS
-s7IffoU4bs0jMzdBSkCseeEyOUV0wGqQPUbJAJyH7feCrGjVLUf01ay/gyiFy6eu
-v64+5g35xbw0Yq6WPG82WsWsZYb7xox3gFFosWLD2O3k6CjIm/AAydx71IIwBiHI
-43argw9f+njfusK7PVWwMqQiEkJLcv37M78ZrK/RX3TIy/GdLOpFgPbUovRlF3dk
-ojIlqOwDFx9qhwij3Gy6cSawaEeK6A2TnUIdxEi0/QN+ukUcGQHAWetG9aCtPyTq
-+RTMvoOUC1qwZJqsrvihAhnnKu5e6XP3rkTshqIYmQUav3z1OO4=
-=yzKh
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4Tq8ACgkQ2O7X88g7
++ppWcQ/8DAiXQiXRfk+oNyczvgd0/Pp5Vtz0VPPWthWX9CkPR1fs19Y2vTcAyO0B
+utjPHuCaOyPoqzeb9idcJrsO6GOpOMGkMMBMlJnQvrRiK+Ygj/mmXncfks6Hub4N
+OJwU6bZnX8syy8i1BB7VI0gY8uxw9IAYtd9nzhdx4NC9c2oW+07bCltMv9hXVfx3
+FaaKUYjG/rHldjO1yrQNy8JGkejP0u/CiRm+WGTVakKHWRPjWLXqY0/a75M+FrA/
+tOiJaWdhVTU4PGhMQ8slhi7UpEB3eK3y/lKgonVGw3qCLt1xakQAfDME9WhthqQR
+mGPxINxZfRLyLqvPb3WkcvTpXXOM3C2VinjaNACF9MzanJN+2yT3TkUd1NS3EWBH
+R3prTVaAGMk29NGAwtWpZeDUVzBbfmAhwfdiZ0s5j2A+YjI2sNumGPgdD3SeftZY
+nYEVjcSDvyWOa/u+g7Y1MEcJh8vdQkchIN9y8h4/lQzYph9EUp5J4r0aQMXMrenx
+J0FTOdp5xn7Qyx+X/JT2EAmtvo+1sEXcY+VPjmBpvupLSp6IXNpNC6UqqMIwIgq8
+5sTDhab5/B8jv6WnT8d+QHxudnEbrCV70CLITJcPlkjhS/BjhrOyPELXTXxAxiCf
+pbeGFRTxYpRfTmbi+4k1OSzDbw7FVSj6yLLpC6HLzzv97+aaKfI=
+=eIi4
 -----END PGP SIGNATURE-----
 
---o4yglry5cm6klniy--
+--dg2nkogywbg63pik--
