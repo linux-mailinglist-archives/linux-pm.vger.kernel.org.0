@@ -2,106 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61379759638
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 15:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FF0759664
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 15:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjGSNHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 09:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S229942AbjGSNSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 09:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjGSNHO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 09:07:14 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9841A6
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 06:07:12 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 36JD5Zqj043653;
-        Wed, 19 Jul 2023 21:05:35 +0800 (+08)
-        (envelope-from Xuewen.Yan@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4R5bch0SXJz2K1r9p;
-        Wed, 19 Jul 2023 21:04:20 +0800 (CST)
-Received: from BJ10918NBW01.spreadtrum.com (10.0.73.72) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 19 Jul 2023 21:05:33 +0800
-From:   Xuewen Yan <xuewen.yan@unisoc.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <vincent.guittot@linaro.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <guohua.yan@unisoc.com>,
-        <qyousef@layalina.io>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] cpufreq: schedutil: next_freq need update when cpufreq_limits changed
-Date:   Wed, 19 Jul 2023 21:05:27 +0800
-Message-ID: <20230719130527.8074-1-xuewen.yan@unisoc.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231145AbjGSNR6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 09:17:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57BAC172A;
+        Wed, 19 Jul 2023 06:17:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3486B2F4;
+        Wed, 19 Jul 2023 06:18:34 -0700 (PDT)
+Received: from [10.57.31.26] (unknown [10.57.31.26])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3C2A3F6C4;
+        Wed, 19 Jul 2023 06:17:47 -0700 (PDT)
+Message-ID: <42118979-5f86-75df-72a5-e5fc8592eb82@arm.com>
+Date:   Wed, 19 Jul 2023 14:18:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.73.72]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 36JD5Zqj043653
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
+ uclamp set from user-space
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, delyank@fb.com, qyousef@google.com,
+        Qais Yousef <qyousef@layalina.io>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-2-lukasz.luba@arm.com>
+ <20230531182629.nztie5rwhjl53v3d@airbuntu>
+ <20230706111443.GH2833176@hirez.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230706111443.GH2833176@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When cpufreq's policy is single, there is a scenario that will
-cause sg_policy's next_freq to be unable to update.
 
-When the cpu's util is always max, the cpufreq will be max,
-and then if we change the policy's scaling_max_freq to be a
-lower freq, indeed, the sg_policy's next_freq need change to
-be the lower freq, however, because the cpu_is_busy, the next_freq
-would keep the max_freq.
 
-For example:
-The cpu7 is single cpu:
+On 7/6/23 12:14, Peter Zijlstra wrote:
+> On Wed, May 31, 2023 at 07:26:29PM +0100, Qais Yousef wrote:
+>> On 05/22/23 15:57, Lukasz Luba wrote:
+>>> The user-space can set uclamp value for a given task. It impacts task
+>>> placement decisions made by the scheduler. This is very useful information
+>>> and helps to understand the system behavior or track improvements in
+>>> middleware and applications which start using uclamp mechanisms and report
+>>> better performance in tests.
+>>
+>> Do you mind adding a generic one instead please? And explain why we can't just
+>> attach to the syscall via kprobes? I think you want to bypass the permission
+>> checks, so maybe a generic tracepoint after that might be justifiable?
+>> Then anyone can use it to track how userspace has changed any attributes for
+>> a task, not just uclamp.
+> 
+> Yeah, so I'm leaning towards the same, if you want to put a tracepoint
+> in __sched_setscheduler(), just trace the whole attr and leave it at
+> that:
+> 
+> 	trace_update_sched_attr_tp(p, attr);
+> 
+> or somesuch.
+> 
 
-unisoc:/sys/devices/system/cpu/cpufreq/policy7 # while true;do done&
-[1] 4737
-unisoc:/sys/devices/system/cpu/cpufreq/policy7 # taskset -p 80 4737
-pid 4737's current affinity mask: ff
-pid 4737's new affinity mask: 80
-unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-2301000
-unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_cur_freq
-2301000
-unisoc:/sys/devices/system/cpu/cpufreq/policy7 # echo 2171000 > scaling_max_freq
-unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-2171000
+OK, fair enough, I'll do that. Thanks Peter!
+(I'm sorry for the delay, I was on vacation)
 
-At this time, the sg_policy's next_freq would keep 2301000.
-
-To prevent the case happen, add the judgment of the need_freq_update flag.
-
-Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
-Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
----
- kernel/sched/cpufreq_schedutil.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 4492608b7d7f..458d359f5991 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -350,7 +350,8 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
- 	 * Except when the rq is capped by uclamp_max.
- 	 */
- 	if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
--	    sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
-+	    sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq &&
-+	    !sg_policy->need_freq_update) {
- 		next_f = sg_policy->next_freq;
- 
- 		/* Restore cached freq as next_freq has changed */
--- 
-2.25.1
-
+Lukasz
