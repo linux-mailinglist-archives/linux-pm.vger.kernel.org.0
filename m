@@ -2,84 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FF0759664
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 15:18:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0310E7596F0
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 15:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjGSNSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 09:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S231252AbjGSNeF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 19 Jul 2023 09:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjGSNR6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 09:17:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 57BAC172A;
-        Wed, 19 Jul 2023 06:17:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3486B2F4;
-        Wed, 19 Jul 2023 06:18:34 -0700 (PDT)
-Received: from [10.57.31.26] (unknown [10.57.31.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D3C2A3F6C4;
-        Wed, 19 Jul 2023 06:17:47 -0700 (PDT)
-Message-ID: <42118979-5f86-75df-72a5-e5fc8592eb82@arm.com>
-Date:   Wed, 19 Jul 2023 14:18:17 +0100
+        with ESMTP id S230131AbjGSNeF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 09:34:05 -0400
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45083113;
+        Wed, 19 Jul 2023 06:34:04 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b951a1a03bso6194601fa.0;
+        Wed, 19 Jul 2023 06:34:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689773642; x=1692365642;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ch5QBOhh4FZKc92//FFcj4rG6CE12dmRlZdD1fLxA40=;
+        b=L07nUKD+/ml8+7b5I0twxAypEacuMgj7lNsOwNq6nXY1SBnxmtbK0tJ/NDlE2TVC28
+         eiGfF1PA+XmnJCwdru6XdpH5NiColQVwhNICjtgO8+LoO0grbSzZrdneD4y06IqfAbpW
+         UJFcLRgcz9T5k0+kqi5N4N9OFI4qrVL7fyZ3mXyHmF8TlXy5GD5RpI7+PrRDSmQMGd71
+         IRgbNfTj6hRrYlFX0CJ9COhRvBWTnIl1+23dWtZkK5oPDR6IDMNCuBgR4DJjm5vlf+Y7
+         qaJuLAna59b/rv2YPMR/c6oM5aljchdJymfZdGoJYuaAZQU2Wx28PWjhfijTw3OvQZwX
+         N3Fg==
+X-Gm-Message-State: ABy/qLaTx6LKhC0t11kAAUvtkn4q2pLGM8p/YSpkyMGe6K+VFlkchyAn
+        DnYw0i1GYnfHJjJqGpzVYxQpAPS8enNluDUKvLey3ZwX
+X-Google-Smtp-Source: APBJJlEVZcLjenwjTLNBPdv1a9AnoryDrpjTyoR3PbXJbY0i44z3kMPeXQEUrIF64jlEoHPGcZlMtK95X3C3x1VdX3E=
+X-Received: by 2002:a2e:1655:0:b0:2b9:4bc3:c367 with SMTP id
+ 21-20020a2e1655000000b002b94bc3c367mr1416178ljw.5.1689773642193; Wed, 19 Jul
+ 2023 06:34:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
- uclamp set from user-space
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
-        mhiramat@kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com,
-        Qais Yousef <qyousef@layalina.io>
-References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-2-lukasz.luba@arm.com>
- <20230531182629.nztie5rwhjl53v3d@airbuntu>
- <20230706111443.GH2833176@hirez.programming.kicks-ass.net>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230706111443.GH2833176@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <13318886.uLZWGnKmhe@kreacher> <8b89f009-bcfe-3a90-f19e-0b5894a5ebd1@linaro.org>
+In-Reply-To: <8b89f009-bcfe-3a90-f19e-0b5894a5ebd1@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 19 Jul 2023 15:33:50 +0200
+Message-ID: <CAJZ5v0j1gF15vXKw7EdLLh629wisNr8niXQ8eYPY56rvzyNSKw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/7] ACPI: thermal: Use trip point table to register
+ thermal zones
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Jul 19, 2023 at 12:46 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> On 18/07/2023 20:01, Rafael J. Wysocki wrote:
+> > Hi Everyone,
+> >
+> > This patch series makes the ACPI thermal driver register thermal zones
+> > with the help of thermal_zone_device_register_with_trips(), so it
+> > doesn't need to use the thermal zone callbacks related to trip points
+> > any more (and they are dropped in the last patch).
+>
+> Yay!
+>
+> > The approach presented here is quite radically different from the
+> > previous attempts, as it doesn't really rearrange the driver's
+> > internal data structures, but adds the trip table support on top of
+> > them.  For this purpose, it uses an additional field in struct thermal_trip
+> > introduced in the first patch.
+> >
+> > I have run it on my test-bed systems, but this is not too representative,
+> > because they each have only one ACPI thermal zone with only one (critical)
+> > trip point in it.
+>
+> Rui created some ACPI fake tables I was able to run them in a KVM
+> machine with fake thermal zones.
+>
+> I can share the setup if you are interested in
 
-
-On 7/6/23 12:14, Peter Zijlstra wrote:
-> On Wed, May 31, 2023 at 07:26:29PM +0100, Qais Yousef wrote:
->> On 05/22/23 15:57, Lukasz Luba wrote:
->>> The user-space can set uclamp value for a given task. It impacts task
->>> placement decisions made by the scheduler. This is very useful information
->>> and helps to understand the system behavior or track improvements in
->>> middleware and applications which start using uclamp mechanisms and report
->>> better performance in tests.
->>
->> Do you mind adding a generic one instead please? And explain why we can't just
->> attach to the syscall via kprobes? I think you want to bypass the permission
->> checks, so maybe a generic tracepoint after that might be justifiable?
->> Then anyone can use it to track how userspace has changed any attributes for
->> a task, not just uclamp.
-> 
-> Yeah, so I'm leaning towards the same, if you want to put a tracepoint
-> in __sched_setscheduler(), just trace the whole attr and leave it at
-> that:
-> 
-> 	trace_update_sched_attr_tp(p, attr);
-> 
-> or somesuch.
-> 
-
-OK, fair enough, I'll do that. Thanks Peter!
-(I'm sorry for the delay, I was on vacation)
-
-Lukasz
+Yes, please!
