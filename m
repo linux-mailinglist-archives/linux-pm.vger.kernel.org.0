@@ -2,52 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525B075A063
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 23:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1EFC75A086
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 23:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbjGSVOi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 17:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S230383AbjGSVXx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 17:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGSVOi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 17:14:38 -0400
+        with ESMTP id S229610AbjGSVXx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 17:23:53 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4FE1FC0;
-        Wed, 19 Jul 2023 14:14:37 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2296E1FC1
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 14:23:52 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 22D196607078;
-        Wed, 19 Jul 2023 22:14:36 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA9916607078;
+        Wed, 19 Jul 2023 22:23:50 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1689801276;
-        bh=JMyQEP3od9PZOBsKRjkFxXdi2lvzCZLQhxvRz72H9to=;
+        s=mail; t=1689801831;
+        bh=icVO9kwnde8EmFEddhZNuImUN/tsfWN1GD/OVsXoz9g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HE5y3hiXQcOixAs3n0zNF4bMBfYzm7JL+CW6REiwSEjXA+TCJYdY556/PjXwAjAas
-         dvqagZ/hG87rcrHH2CryR7DO7T61NpsGvAPqRlfWuvgR92WNgxXYMYY6w9y71bfPOp
-         U/D+0uADFNZeyBNgwSXmFJNZwlTBxipeZFPqJHNZNTBpBFf6FxWzydIvTpJ7j5O3r4
-         ds8nnJjcfLTOGMJH99pQ3WDJF+RMUr3Mr5CVjdfmHQVXTaTvn7oLVTqU46dNNtLnUL
-         vNvyl3IMgXcE54P3Q7tBdfG7KFOd5DnqvCdECk9Q5zZX4wewX8SGTz53ngt6y8sX3U
-         mRucVyYZLXEjA==
+        b=n4I1QHLbQN60JHQnkLwYwxqevkMeAhir9fh197sNBuWOa8e8BQRYhcJzCcsU1e/jk
+         ynmvOLR+oZB2falVhPd5rnsO4IY/uOX+lgGsbDve4XpF8bc9RY79tiozJG0qA0wusP
+         qk6LQdTe63yiRJcbpNVj9NWx7/a+iTA69Ap0yF8Sae4Ryza8LP1kWLay0oipD1cjg0
+         avJRzxD/Gq9c/VMgYf4vci25PkPFuvBSmYtoFTryZ4XW/xIEFZdAfq28NCj022Cx18
+         E71tuUPiGBONBGbap59OONufEOcxRyl+hWAznECZ5yB90W5t0QXqN4zUlTPvO4zLSA
+         UW9TbAucE+Oog==
 Received: by mercury (Postfix, from userid 1000)
-        id 655DC1061639; Wed, 19 Jul 2023 23:14:33 +0200 (CEST)
-Date:   Wed, 19 Jul 2023 23:14:33 +0200
+        id 3D5861061639; Wed, 19 Jul 2023 23:23:48 +0200 (CEST)
+Date:   Wed, 19 Jul 2023 23:23:48 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Colin Ian King <colin.i.king@gmail.com>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] power: supply: bd99954: make read-only array
- sub_status_reg
-Message-ID: <20230719211433.cfqz3c5pki4xi6rl@mercury.elektranox.org>
-References: <20230627121707.722021-1-colin.i.king@gmail.com>
- <94dca2c3-e5fc-c4bc-a945-31ebb728e353@gmail.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Kamel Bouhara <kamel.bouhara@bootlin.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Subject: Re: [PATCH v4] power: reset: at91-reset: add sysfs interface to the
+ power on reason
+Message-ID: <20230719212348.givbagnsudomdwte@mercury.elektranox.org>
+References: <20230620062657.3127468-1-miquel.raynal@bootlin.com>
+ <20230712175853.35184e92@xps-13>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ihp5cv6merpfazba"
+        protocol="application/pgp-signature"; boundary="oxafe4xibol3usvk"
 Content-Disposition: inline
-In-Reply-To: <94dca2c3-e5fc-c4bc-a945-31ebb728e353@gmail.com>
+In-Reply-To: <20230712175853.35184e92@xps-13>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -59,44 +63,50 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ihp5cv6merpfazba
+--oxafe4xibol3usvk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Jun 27, 2023 at 03:38:35PM +0300, Matti Vaittinen wrote:
-> On 6/27/23 15:17, Colin Ian King wrote:
-> > Don't populate the read-only array on the stack, instead make it
-> > static const.
+On Wed, Jul 12, 2023 at 05:58:53PM +0200, Miquel Raynal wrote:
+> > From: Kamel Bouhara <kamel.bouhara@bootlin.com>
 > >=20
-> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> > Introduce a list of generic reset sources and use them to export the
+> > power on reason through sysfs. Update the ABI documentation to describe
+> > this new interface.
 >=20
-> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> I just rebased this patch on top of -rc1, no conflict whatsoever, do
+> you need a resend or are you still considering this version?
+>=20
+> > Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
+> > Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+> > [Miquel Raynal: Follow-up on Kamel's work, 4 years later]
+> > Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
 Thanks, queued.
 
 -- Sebastian
 
---ihp5cv6merpfazba
+--oxafe4xibol3usvk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4UjMACgkQ2O7X88g7
-+ppYgg//dORO/aqPrYARCr7Yl2RBHeIbi5cvuQTT86ZWSiB2tTe4pxHibBXRXh5h
-rynWngtMqxgQUGGPawi6HiM/esBkp2Pvz6lwAhxCi2e6ZoXe7MO9+fcDRNZRrsKD
-LENS2c5yH+N8jgNg1ek8GJv17tjRW0z9X9SH2eCAG7fSikmmzbkm0Xrzu4kdtfNL
-ubUrb3GPOms1TJPxTbQO+EmzIEcUC7p2kU5U2T2IBy4SNcLY1Ts/TZ7gtQFMX3Ea
-Pj4MUUxRGnTFgfArqviaPNtSJ7hMmQBB0VTgcHRvBWY83tZuazi5a/DhaTZLwuYn
-HR9IwfUtHBlxwdc4aWaL9yEV5HONXMBkln59Z9l8v7StPRBjKUtZxQMtVnkwA872
-cF9i9TZMRfD6Q2ujY9nA7OWODLammkJYs2aAMcsI5oqGl9QxPNkea8YUOwHgpFEw
-9MR5oUqvqgA7HK0EgE6zvf7oW5OFCGQy5LflL44nl8JFHkgLChpFibOCvL6rZslg
-2xAvlsFT/YzKtTv+cNgXnfkZwrOeHjq6ue+JYD9ltwfbmljKEBPHyEVMsDtF6tps
-KJj096/+EmzvcI4bK6DaWqEg8KmHTcygYd6dCP77xHLKG9MQhyzbcCtOwPmJUfhe
-q7AP2asYFVIalrm3oAK1NZ8xtnZdv5ff8ocXFWfvrgTiBd35JeA=
-=f2XX
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4VGMACgkQ2O7X88g7
++pqzIg//ZmcUJ5fqx9hj+K6EaA8YUkk9OCaxpxcF3pPuAmmP7gqR10FoHKLhrVXv
+h8r8vb0jXPAdv3PhefckC3SHKIQOv5nLMa2f7g+6BRbhMHdnyaEfGb4CF9f1sWyJ
+HGVXjlLyOF5rEBK6ePPPiAXNiIfl30mFTlxtb8LZUVObdpZqp4Cwn/kycB4IaaWX
+bxZ/rsJptvORNlP6kZpV7qEMtoWFMtPEjJQQAmFs9c6E6Aee/dMAB9mQv3Gkz+/6
+K7dKE59bh+me+Bs19Ui2j9hwCNTCA4bCpeO+AwXlOBC06HHI9iEKrYBDOZ6Ms/oH
+ufLm77JyoxjVIuWi86FRYLred2rWJOop3qP0i7G3ktQHZe0TI3W1vT3eYAYnJCLL
+KxPG98L3OOw7g6RxKW+Ap488etufFHwGKUaosFfrwb+54B2p37x+8j/kS67ZZ7Yi
+PdL5Ua8Burv2LQEhIAuXL3fudD+7U8YGpy5Xl4HhNvLPqtP+369TJlcwA1AWUAHb
+b2z+A0FpOnSGcs3SRD78Qw3FUQXiCkZRECd7njykxBF4VFvC/oQIqmk7zXMayNQg
+nfQUTNsLm4kdVbZdZj9JpcqXAbt7rcWb+RN3Hhsk7wVp7O7SKWRf2zTSXmeY/diO
+mz3kRQkLiYJdHI1+1mycTNc9I6RQa5/lKqkUPGcB/6fK1PMsSVc=
+=jgIH
 -----END PGP SIGNATURE-----
 
---ihp5cv6merpfazba--
+--oxafe4xibol3usvk--
