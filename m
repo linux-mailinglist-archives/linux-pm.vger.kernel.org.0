@@ -2,170 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23F375A031
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 22:51:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A73F75A034
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 22:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjGSUvK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 16:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49340 "EHLO
+        id S230218AbjGSUvj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 16:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjGSUvJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 16:51:09 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 398C81FC1
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 13:51:08 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-67ef5af0ce8so31352b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 13:51:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1689799867; x=1692391867;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jSkaGOQsHq6BSGNOSrtfXde78PEWclvfuGzFU9ARFJ4=;
-        b=pPXs1vh0RhADyXQWcNtjRkvbIk0DJOkYhQTEZ4OHLhoqNUizsI3Deh6SElrShVs9VB
-         oG20VNHMjmHsTywFAKf6k+PbflWT8/pXSG9f6Y8lArGkiPJ1jeCgZqyIaswAkKAE9oeK
-         on/7tKSyYylBRWkeROwpkzN4mhIkHQDKRzlv/WEQtUpK2QDTYKb7L3r7oM9WVC1Fz7Iw
-         ixzd8T3jbPNk6bAJJDc3NB6J0uOny4H/3ZsZQeg1IrXCixMzXbkZATHLVei3CV5T2l3u
-         OpAi6sJidcGP2jXxtsbuyf6unxHBYgTslEHsTOgsP+UdpBUTOsHtgujmjmb5sMF95eUj
-         LO4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689799867; x=1692391867;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jSkaGOQsHq6BSGNOSrtfXde78PEWclvfuGzFU9ARFJ4=;
-        b=X9jeDhX9WH4pI3ZMUt64oFmv7bodZ9jOe/OdIsp1GNqHHeUdwtrPAeF6iclGv/bL3j
-         Kuex7d9A2qvqxNBuvvvZeIYhbOs+Ca7317WvnWG3yvJUQ3aVA4kBuo7itGAaW7qClbK7
-         aKCG2WtAnN7rWlSlPJe2NtYlFTUQNPa26/1N/Za97hrpEc57SQmHTaYJFrTWxzYA6iui
-         cFzKaeIEJ7nH0z9vwF8RM0gqOUAWM2RwmVCnrML/yzZdKolNWCUd2KgQrIY5S0U9xisD
-         yP1NwqhEP0oIAEZ9WhdfyU4m/N511ituPI4NThdGfrJYDw1ZN4U9WJUsSmwgjGUhZ6aL
-         pIqA==
-X-Gm-Message-State: ABy/qLa0XMTkUiEyBCCumBAGNtcxVZ6/0tyIJ4l8Wh5PPYtW4tmFYYRQ
-        v/p2UYd3HktON9EuSW8jJckLBA==
-X-Google-Smtp-Source: APBJJlFwFG1Gs5kpLSMS6QQu0LEH+IvhUQ2XLY1EItQelKszuW1oFIi677/s2hKv6IiQk7vZaZ+U+w==
-X-Received: by 2002:a05:6a00:1683:b0:677:c5bf:dcc7 with SMTP id k3-20020a056a00168300b00677c5bfdcc7mr4661522pfc.17.1689799867647;
-        Wed, 19 Jul 2023 13:51:07 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id fe27-20020a056a002f1b00b00682a27905b9sm3823482pfb.13.2023.07.19.13.51.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 13:51:07 -0700 (PDT)
-Message-ID: <64b84cbb.050a0220.63eb9.917b@mx.google.com>
-Date:   Wed, 19 Jul 2023 13:51:07 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230239AbjGSUvi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 16:51:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A971FE2;
+        Wed, 19 Jul 2023 13:51:35 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E2E156607078;
+        Wed, 19 Jul 2023 21:51:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689799894;
+        bh=c3uH/gG1XWxCmsfa/PtfUqtSiWqoIU9tT6WvHwLXMgM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NHxWKfjTdramqP30Ar8ukCkAzRt5qmjDXa/OA6fMDnoIAfYN+sRNUe7t2CTXt5CVp
+         xDIJfwcPhY7p2FuTzRLQv6qKHoheJtYTX8nMFwmxHBN0TWPZiuXnESnkEu5uAgXcyq
+         FNEWy89JfqlQ0bFQn8jwnGjgZ0NeIdz+7OH1YhucUn5Ke9r8f7b+z209X/uGDCc0Nd
+         K9qqMu/PDT92oYjRnmNX1Ijj76unq76IckCkJCftmPoMFNmqEksETXwB9V3DrdF/D4
+         GKWcLVDDYZYcbuXPFJwFbC9ouH4DkxPwEy9C8M0owQa80PnadMWr6duuVuxq5PpUML
+         I0konnbQTjCQg==
+Received: by mercury (Postfix, from userid 1000)
+        id 2A3571061387; Wed, 19 Jul 2023 22:51:31 +0200 (CEST)
+Date:   Wed, 19 Jul 2023 22:51:31 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Simon Glass <sjg@chromium.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        David Lechner <david@lechnology.com>,
+        Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-oxnas@groups.io
+Subject: Re: [PATCH v2] power: Explicitly include correct DT includes
+Message-ID: <20230719205131.xmfyggy7y2dusjrx@mercury.elektranox.org>
+References: <20230718143045.1065100-1-robh@kernel.org>
+ <CAPnjgZ0H077Hdq2HoOyrYxjAmXLigRrj+6H3sPLidtDa2w=Wcw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.5-rc2-44-g6384f300e9f3
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.5-rc2-44-g6384f300e9f3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="o4yglry5cm6klniy"
+Content-Disposition: inline
+In-Reply-To: <CAPnjgZ0H077Hdq2HoOyrYxjAmXLigRrj+6H3sPLidtDa2w=Wcw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc2-44-g63=
-84f300e9f3)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-5-rc2-44-g6384f300e9f3/
+--o4yglry5cm6klniy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tree: pm
-Branch: testing
-Git Describe: v6.5-rc2-44-g6384f300e9f3
-Git Commit: 6384f300e9f3c5baed9ea999c386cf95c9dc6ba0
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Hi,
 
-Warnings Detected:
+On Tue, Jul 18, 2023 at 07:08:01PM -0600, Simon Glass wrote:
+> On Tue, 18 Jul 2023 at 08:31, Rob Herring <robh@kernel.org> wrote:
+> > The DT of_device.h and of_platform.h date back to the separate
+> > of_platform_bus_type before it as merged into the regular platform bus.
+> > As part of that merge prepping Arm DT support 13 years ago, they
+> > "temporarily" include each other. They also include platform_device.h
+> > and of.h. As a result, there's a pretty much random mix of those include
+> > files used throughout the tree. In order to detangle these headers and
+> > replace the implicit includes with struct declarations, users need to
+> > explicitly include the correct includes.
+> >
+> > Acked-by: David Lechner <david@lechnology.com>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> > v2:
+> > - Fix double include of of.h
+> > ---
+> >  drivers/power/reset/as3722-poweroff.c            | 1 -
+> >  drivers/power/reset/brcm-kona-reset.c            | 4 ++--
+> >  drivers/power/reset/gpio-poweroff.c              | 3 ++-
+> >  drivers/power/reset/gpio-restart.c               | 2 +-
+> >  drivers/power/reset/keystone-reset.c             | 3 ++-
+> >  drivers/power/reset/ocelot-reset.c               | 4 ++--
+> >  drivers/power/reset/odroid-go-ultra-poweroff.c   | 3 ++-
+> >  drivers/power/reset/oxnas-restart.c              | 2 --
+> >  drivers/power/reset/st-poweroff.c                | 2 +-
+> >  drivers/power/reset/syscon-poweroff.c            | 3 +--
+> >  drivers/power/reset/syscon-reboot.c              | 3 +--
+> >  drivers/power/reset/xgene-reboot.c               | 2 +-
+> >  drivers/power/supply/axp20x_ac_power.c           | 1 -
+> >  drivers/power/supply/axp20x_battery.c            | 1 -
+> >  drivers/power/supply/axp20x_usb_power.c          | 1 -
+> >  drivers/power/supply/cpcap-battery.c             | 2 +-
+> >  drivers/power/supply/da9150-charger.c            | 2 --
+> >  drivers/power/supply/da9150-fg.c                 | 1 -
+> >  drivers/power/supply/lego_ev3_battery.c          | 2 +-
+> >  drivers/power/supply/ltc2941-battery-gauge.c     | 2 +-
+> >  drivers/power/supply/ltc4162-l-charger.c         | 2 +-
+> >  drivers/power/supply/max14656_charger_detector.c | 2 +-
+> >  drivers/power/supply/max17040_battery.c          | 2 +-
+> >  drivers/power/supply/max8903_charger.c           | 1 -
+> >  drivers/power/supply/rn5t618_power.c             | 1 -
+> >  drivers/power/supply/rt5033_charger.c            | 2 +-
+> >  drivers/power/supply/rt9455_charger.c            | 3 +--
+> >  drivers/power/supply/sbs-battery.c               | 2 +-
+> >  drivers/power/supply/tps65090-charger.c          | 2 +-
+> >  drivers/power/supply/tps65217_charger.c          | 1 -
+> >  drivers/power/supply/twl4030_charger.c           | 1 +
+> >  31 files changed, 26 insertions(+), 37 deletions(-)
+>=20
+> Reviewed-by: Simon Glass <sjg@chromium.org>
 
-arc:
+Thanks, queued.
 
-arm64:
+-- Sebastian
 
-arm:
+--o4yglry5cm6klniy
+Content-Type: application/pgp-signature; name="signature.asc"
 
-i386:
+-----BEGIN PGP SIGNATURE-----
 
-mips:
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmS4TMkACgkQ2O7X88g7
++pq7lg//WgZTHis+b/+aR3UeuhJImAXVAknxQX4lPsDZ9Q4pMWR8h1FlZPpwhIol
+YkNrPwE1yK6Xxe8kUSnFDI/gqFD+vRqeEaMNSxcwjlzNX+XVe5NPA37mdAruHnNI
+JTH5n1isMVQrT3kulswPgAz+X2/CUI31FJQURqHob1c52cS2edrqv2VwWDVC/ozY
+NpyhgzJgYwXLODp/SmOW4bo2Lq9Dx8GlqiiNWaPnUu96Z4zW0WEQEYvxRbTWky0Q
+SHmKXDzaxbbTRYJ5B4Fbygtoy7cmbN5FKN4Reh6GfieDf5+/VTXiEVUsw1Volas7
+bEuSqdw9lICEx0YIpf2WCxP7+R7dZ1UHzgs9CoI8dBpZMNAoMNV48VLoLgDgyBYS
+s7IffoU4bs0jMzdBSkCseeEyOUV0wGqQPUbJAJyH7feCrGjVLUf01ay/gyiFy6eu
+v64+5g35xbw0Yq6WPG82WsWsZYb7xox3gFFosWLD2O3k6CjIm/AAydx71IIwBiHI
+43argw9f+njfusK7PVWwMqQiEkJLcv37M78ZrK/RX3TIy/GdLOpFgPbUovRlF3dk
+ojIlqOwDFx9qhwij3Gy6cSawaEeK6A2TnUIdxEi0/QN+ukUcGQHAWetG9aCtPyTq
++RTMvoOUC1qwZJqsrvihAhnnKu5e6XP3rkTshqIYmQUav3z1OO4=
+=yzKh
+-----END PGP SIGNATURE-----
 
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--o4yglry5cm6klniy--
