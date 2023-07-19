@@ -2,219 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADCF5759DDC
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 20:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E741759F15
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 21:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjGSSuQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 19 Jul 2023 14:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S230210AbjGST4g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 15:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjGSSuP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 14:50:15 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1218B6;
-        Wed, 19 Jul 2023 11:50:14 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-98dfd15aae1so1078066b.0;
-        Wed, 19 Jul 2023 11:50:14 -0700 (PDT)
+        with ESMTP id S229981AbjGST4e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 15:56:34 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBA392;
+        Wed, 19 Jul 2023 12:56:33 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbc12181b6so75084895e9.2;
+        Wed, 19 Jul 2023 12:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689796591; x=1692388591;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HkXfqP5HTc7LAT471rM4RtSLWgyDDA4RKqfhTSA/bHM=;
+        b=Ur6fXRxqNVu6iJfQVwhSvCj8F/Ub6ioJGh7LOMqSUduRNJ5g723VsQ3iS5DTqLbDPi
+         LM3fTKR8y2LLZkbP/K1+550CBQ6qVN7I/j9R/2LfV47wk0ygWxvRbAD+bJu0uxO0vJCS
+         1qTuPTjblcCvUd5+R2JwFuLqpVdGC02ud8M2sPOomwQNJKcUPCceKjlbI/Yi26s8fv8O
+         tGFgSvHwXxNIEG136IZMdJYdeeGHq0NxbPfFMJ+cTHnL6YHY1ipyWJuVZhq4JnkMaWfl
+         5gdcBXWA8wxg7fW99UtS5X9wAeO3FEIfL6xEaA2OIoFO/z5d4jLZetn6i4xm97sfv1r6
+         0jUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689792613; x=1690397413;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1689796591; x=1692388591;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=04YX9R3mG7CuWz76OohlmuJRDoflU0LoC/zLXWiywQ0=;
-        b=PAKwjSDjk1UTM7ukFkHNH7ZIRoiDhI7k8dwEjeG/V9q7vwqyH/xXFs3aWLlZQmD0Dq
-         Wurr0ufblsyFoe0lssQ5LbGpM7b3vzuIgJ/nOtwhrEtjopvQZlhdfsfM6cnetjqfhuU/
-         fUXZBoGi143DpkEFoLCqC+9UZaOeU/4GF9bBAPi94lZ2SvFHib4DjATOEqBrhYWQaJox
-         /v/sxAw4dt3yQHFynU01aUuW6tONJ2VXeC6CPuGXPbfpRSe5YD4JW4fwOTSoeV5+ulBb
-         FZ8LpHOuCUAeAdch0+rirzS665B+DpTF71dxliagsU6/GcbknPVX9wNIbE6atb2NhkRJ
-         HTPA==
-X-Gm-Message-State: ABy/qLZ+H/dPncKr9ySoEO1Qta1lSf1qzjdWKmIt2ADl0uGnGEFCkZgF
-        pZTqGligaEyRDgKwM9znwJq7R/4RnKnofskm54iOIg0V
-X-Google-Smtp-Source: APBJJlHgHeKbdvSsNplqi4vWbixWg+++up+haAXbtRAIyyTIz89ixN+GxcA8YMcmgzYGSYjlhGvshRP7V6anXRo3HdM=
-X-Received: by 2002:a17:906:5192:b0:994:1808:176b with SMTP id
- y18-20020a170906519200b009941808176bmr318089ejk.6.1689792612991; Wed, 19 Jul
- 2023 11:50:12 -0700 (PDT)
+        bh=HkXfqP5HTc7LAT471rM4RtSLWgyDDA4RKqfhTSA/bHM=;
+        b=mH4+codFjN+dEuv4m6zMQA4AFBIeENO+63sAouyvMlJwHLHyW2QovcFEmFENaaRexg
+         X11+ddhIUT9qMW6zCz4oGeowgePLqDVUICmuu2QVENKTKWTDu+AKGR257fWf4b42iBgX
+         0s8AMBCKpmlLXu7/bFsm1hZboajJyQSo5iG1B/b6WhwHBY4v0BMZ0lua43eKVcbpd2mR
+         eMpevKJelYYgiHSFWQEL9s56QankdPI263qUaA2X9v7qlR6tjWfom1Q2NIdCU2SXPW6l
+         xM+TYMw3qsluyPfR1Of5WvGgO1c+q3j1KJoLr3yQRmdRNU8XIu0+0A7GuaJaCtUbVZVc
+         Gdvg==
+X-Gm-Message-State: ABy/qLaijR9epKlTjtQUnhSfutbqa0LXWmsfLO6o/3xI8WmTcCBM9qH0
+        LJeJimd3o3ZwG/cf8OKKiF4=
+X-Google-Smtp-Source: APBJJlFr+x78/f/4ot76lC8mJxJeAa7g9BNSia7Aug5kEv7lgO0VS3TFcD/HAU9e5hLbCT97nsVT4w==
+X-Received: by 2002:a05:600c:2494:b0:3fb:b1fd:4183 with SMTP id 20-20020a05600c249400b003fbb1fd4183mr316396wms.12.1689796591016;
+        Wed, 19 Jul 2023 12:56:31 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id w13-20020a5d680d000000b00313e2abfb8dsm6093571wru.92.2023.07.19.12.56.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jul 2023 12:56:30 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] thermal/drivers/sun8i: Free calibration nvmem after reading it
+Date:   Wed, 19 Jul 2023 21:56:27 +0200
+Message-ID: <13308789.uLZWGnKmhe@jernej-laptop>
+In-Reply-To: <20230719-thermal-sun8i-free-nvmem-v1-1-f553d5afef79@kernel.org>
+References: <20230719-thermal-sun8i-free-nvmem-v1-1-f553d5afef79@kernel.org>
 MIME-Version: 1.0
-References: <13318886.uLZWGnKmhe@kreacher> <9147669.CDJkKcVGEf@kreacher>
-In-Reply-To: <9147669.CDJkKcVGEf@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 19 Jul 2023 20:50:01 +0200
-Message-ID: <CAJZ5v0jWQHq-YSQtsOPeriH1_7-3gFQvNHawv7J9D8rzxXichQ@mail.gmail.com>
-Subject: Re: [PATCH v1 6/7] ACPI: thermal: Rework thermal_get_trend()
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 8:21 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Rework the ACPI thermal driver's .get_trend() callback function,
-> thermal_get_trend(), to use trip point data stored in the generic
-> trip structures instead of calling thermal_get_trip_type() and
-> thermal_get_trip_temp() and make it hold thermal_check_lock to
-> protect against possible races against trip point updates.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Dne sreda, 19. julij 2023 ob 02:58:54 CEST je Mark Brown napisal(a):
+> The sun8i thermal driver reads calibration data via the nvmem API at
+> startup, updating the device configuration and not referencing the data
+> again.  Rather than explicitly freeing the nvmem data the driver relies
+> on devm_ to release it, even though the data is never referenced again.
+> The allocation is still tracked so it's not leaked but this is notable
+> when looking at the code and is a little wasteful so let's instead
+> explicitly free the nvmem after we're done with it.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
 > ---
->  drivers/acpi/thermal.c |  107 +++++++++++++++++++++++++++++++++++--------------
->  1 file changed, 78 insertions(+), 29 deletions(-)
->
-> Index: linux-pm/drivers/acpi/thermal.c
-> ===================================================================
-> --- linux-pm.orig/drivers/acpi/thermal.c
-> +++ linux-pm/drivers/acpi/thermal.c
-> @@ -572,47 +572,96 @@ static int thermal_get_crit_temp(struct
->         return -EINVAL;
+>  drivers/thermal/sun8i_thermal.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/sun8i_thermal.c
+> b/drivers/thermal/sun8i_thermal.c index 195f3c5d0b38..af3098717e3c 100644
+> --- a/drivers/thermal/sun8i_thermal.c
+> +++ b/drivers/thermal/sun8i_thermal.c
+> @@ -286,7 +286,7 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> size_t callen;
+>  	int ret = 0;
+> 
+> -	calcell = devm_nvmem_cell_get(dev, "calibration");
+> +	calcell = nvmem_cell_get(dev, "calibration");
+>  	if (IS_ERR(calcell)) {
+>  		if (PTR_ERR(calcell) == -EPROBE_DEFER)
+>  			return -EPROBE_DEFER;
+> @@ -316,6 +316,8 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> 
+>  	kfree(caldata);
+>  out:
+> +	if (!IS_ERR(calcell))
+> +		nvmem_cell_put(calcell);
+>  	return ret;
 >  }
->
-> +static struct thermal_trip *acpi_thermal_get_trip(struct acpi_thermal *tz,
-> +                                          int trip_index)
-> +{
-> +       struct thermal_trip *trip;
-> +       int i;
-> +
-> +       if (!tz || trip_index < 0)
-> +               return NULL;
-> +
-> +       trip = tz->trips.critical.trip_ref.trip;
-> +       if (trip) {
-> +               if (!trip_index)
-> +                       return trip;
-> +
-> +               trip_index--;
-> +       }
-> +
-> +       trip = tz->trips.hot.trip_ref.trip;
-> +       if (trip) {
-> +               if (!trip_index)
-> +                       return trip;
-> +
-> +               trip_index--;
-> +       }
-> +
-> +       trip = tz->trips.passive.trip_ref.trip;
-> +       if (trip) {
-> +               if (!trip_index)
-> +                       return trip;
-> +
-> +               trip_index--;
-> +       }
-> +
-> +       for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-> +               trip = tz->trips.active[i].trip_ref.trip;
-> +               if (trip) {
-> +                       if (!trip_index)
-> +                               return trip;
-> +
-> +                       trip_index--;
-> +               }
-> +       }
-> +
-> +       return NULL;
-> +}
-> +
->  static int thermal_get_trend(struct thermal_zone_device *thermal,
-> -                            int trip, enum thermal_trend *trend)
-> +                            int trip_index, enum thermal_trend *trend)
->  {
->         struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
-> -       enum thermal_trip_type type;
-> -       int i;
-> +       struct thermal_trip *trip;
-> +       int ret = 0;
->
-> -       if (thermal_get_trip_type(thermal, trip, &type))
-> -               return -EINVAL;
-> +       mutex_lock(&tz->thermal_check_lock);
->
-> -       if (type == THERMAL_TRIP_ACTIVE) {
-> -               int trip_temp;
-> +       trip = acpi_thermal_get_trip(tz, trip_index);
-> +       if (!trip) {
+> 
+> 
+> ---
+> base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+> change-id: 20230718-thermal-sun8i-free-nvmem-3e9e21306e3e
+> 
+> Best regards,
 
-This should also return an error for trips with invalid temperature.
 
-Moreover, an error should be returned for the critical and hot trips,
-because it doesn't make sense to deal with them here.
 
-It looks like a new version of this patch is needed.
 
-> +               ret = -EINVAL;
-> +               goto out;
-> +       }
-> +       if (trip->type == THERMAL_TRIP_ACTIVE) {
->                 int temp = deci_kelvin_to_millicelsius_with_offset(
->                                         tz->temperature, tz->kelvin_offset);
-> -               if (thermal_get_trip_temp(thermal, trip, &trip_temp))
-> -                       return -EINVAL;
->
-> -               if (temp > trip_temp) {
-> +               if (temp > trip->temperature)
->                         *trend = THERMAL_TREND_RAISING;
-> -                       return 0;
-> -               } else {
-> -                       /* Fall back on default trend */
-> -                       return -EINVAL;
-> -               }
-> +               else /* Fall back on default trend */
-> +                       ret = -EINVAL;
-> +       } else {
-> +               /*
-> +                * tz->temperature has already been updated by generic thermal
-> +                * layer, before this callback being invoked.
-> +                */
-> +               int i = tz->trips.passive.tc1 * (tz->temperature -
-> +                               tz->last_temperature) +
-> +                       tz->trips.passive.tc2 * (tz->temperature -
-> +                               tz->trips.passive.temperature);
-> +
-> +               if (i > 0)
-> +                       *trend = THERMAL_TREND_RAISING;
-> +               else if (i < 0)
-> +                       *trend = THERMAL_TREND_DROPPING;
-> +               else
-> +                       *trend = THERMAL_TREND_STABLE;
->         }
->
-> -       /*
-> -        * tz->temperature has already been updated by generic thermal layer,
-> -        * before this callback being invoked
-> -        */
-> -       i = tz->trips.passive.tc1 * (tz->temperature - tz->last_temperature) +
-> -           tz->trips.passive.tc2 * (tz->temperature - tz->trips.passive.temperature);
-> -
-> -       if (i > 0)
-> -               *trend = THERMAL_TREND_RAISING;
-> -       else if (i < 0)
-> -               *trend = THERMAL_TREND_DROPPING;
-> -       else
-> -               *trend = THERMAL_TREND_STABLE;
-> +out:
-> +       mutex_unlock(&tz->thermal_check_lock);
->
-> -       return 0;
-> +       return ret;
->  }
->
->  static void acpi_thermal_zone_device_hot(struct thermal_zone_device *thermal)
->
->
->
