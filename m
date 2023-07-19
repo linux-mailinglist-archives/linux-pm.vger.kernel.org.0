@@ -2,180 +2,262 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649057598D1
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 16:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1289A75992C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 17:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjGSOvx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 10:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S231627AbjGSPI1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 11:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbjGSOvv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 10:51:51 -0400
+        with ESMTP id S231670AbjGSPIM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 11:08:12 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAC9B11B;
-        Wed, 19 Jul 2023 07:51:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84AD62128;
+        Wed, 19 Jul 2023 08:07:24 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C26162F4;
-        Wed, 19 Jul 2023 07:52:32 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5C0E3F6C4;
-        Wed, 19 Jul 2023 07:51:47 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 15:51:45 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 10/11] firmware: arm_scmi: Add the SCMI performance
- domain
-Message-ID: <ZLf4c7ejFBJLH7iN@e120937-lin>
-References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-11-ulf.hansson@linaro.org>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 891802F4;
+        Wed, 19 Jul 2023 08:08:07 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.76.133])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B7843F6C4;
+        Wed, 19 Jul 2023 08:07:21 -0700 (PDT)
+Date:   Wed, 19 Jul 2023 16:07:16 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 2/2] cpuidle: teo: Introduce util-awareness
+Message-ID: <ZLf8JHjrdgmlWQAz@e126311.manchester.arm.com>
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+ <20230105145159.1089531-3-kajetan.puchalski@arm.com>
+ <20230711175814.zfavcn7xn3ia5va4@airbuntu>
+ <ZLZ/btJw5LNVxVy8@e126311.manchester.arm.com>
+ <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230713141738.23970-11-ulf.hansson@linaro.org>
+In-Reply-To: <20230718132432.w5xoxbqm54jmu6n5@airbuntu>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 04:17:37PM +0200, Ulf Hansson wrote:
-> To enable support for performance scaling (DVFS) for generic devices with
-> the SCMI performance protocol, let's add an SCMI performance domain. This
-> is being modelled as a genpd provider, with support for performance scaling
-> through genpd's ->set_performance_state() callback.
+On Tue, Jul 18, 2023 at 02:24:32PM +0100, Qais Yousef wrote:
+> On 07/18/23 13:02, Kajetan Puchalski wrote:
+> > Hi Qais,
+> > 
+> > On Tue, Jul 11, 2023 at 06:58:14PM +0100, Qais Yousef wrote:
+> > > Hi Kajetan
+> > > 
+> > > On 01/05/23 14:51, Kajetan Puchalski wrote:
+> > > 
+> > > [...]
+> > > 
+> > > > @@ -510,9 +598,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
+> > > >  			     struct cpuidle_device *dev)
+> > > >  {
+> > > >  	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+> > > > +	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
+> > > >  	int i;
+> > > >  
+> > > >  	memset(cpu_data, 0, sizeof(*cpu_data));
+> > > > +	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
+> > > 
+> > > Given that utilization is invariant, why do we set the threshold based on
+> > > cpu capacity?
+> > 
+> > Conceptually, the threshold is meant to represent a level at which the
+> > core is considered 'utilized'. I appreciate the definitions here can get
+> > a little fuzzy but I think of it as "generally doing a non-insignificant
+> > amount of work" even if there are currently no tasks scheduled on the core.
+> > This comes in handy in real-world workloads where the core will go
+> > through multiple cycles of busy-idle-busy-idle within each second.
+> > The intention here is to be able to distinguish a scenario of "going
+> > into idle for a few us because of the nature of the workload" from
+> > "going into idle for longer because there is no workload".
+> > 
+> > I set the threshold based on capacity because I think conceptually it
+> > makes more sense to say "every CPU is consireded to be utilized if the
+> > util is above X% of its capacity" than to effectively have a varying
+> > percentage based on the size of the core. 60 util is not that
+> > much work for a 1024-util big core but it's almost half the capacity of
+> > a little one, using a percentage/shift on capacity lets us account for that
+> > while using a raw value would not.
 > 
-> Note that, this adds the initial support that allows consumer drivers for
-> attached devices, to vote for a new performance state via calling the
-> dev_pm_genpd_set_performance_state(). However, this should be avoided as
-> it's in most cases preferred to use the OPP library to vote for a new OPP
-> instead. The support using the OPP library isn't part of this change, but
-> needs to be implemented from subsequent changes.
+> Thanks for the explanation.
 > 
-
-Hi Ulf,
-
-a couple of remarks down below.
-
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
+> I did try the busy perspective, but I think I still view this as 60util means
+> we've are running on average for X ms. which I think what matters more than how
+> much this is of a work to the big core. I look at this; we still have few ms
+> worth of runtime on the CPU and it's not worth going to deeper idle state
+> yet.
 > 
-> Changes in v2:
-> 	- Converted to use the new ->domain_info_get() callback.
+> I can appreciate you think that this percentage of runtime should be lower for
+> smaller cores. My doubt (which again is not backed by real problem - so I'm not
+> questioning but rather trying to understand :)) is that if this becomes too low
+> is it better than letting usual TEO logic to operate. The series in its current
+> shape is great and offers good improvement already, no doubt :)
+
+No worries! In my experience it does tend to be better than just letting
+the metrics logic operate as the metrics logic is pretty much just
+reasonably good maths-based guessing and it relies on making mistakes
+before adjusting - the util approach tries to just not make those
+mistakes. Again, too shallow decisions most of the time are perfectly
+fine, too deep decisions are an actual problem for both power and
+performance.
+
+> By the way, by default big will get a threshold of 16, the little will get
+> a threshold of around 2. I think the latter will translate to few hundreds of
+> us of activity (haven't done proper measurement to be honest, so this could be
+> off but I don't think  by much).
+
+Yeah that sounds about right but I don't think that's really an issue -
+I'm pretty sure a case could be made to just never use deep idle on
+littles anyway. Having some threshold above 0 at least accounts for the
+"the phone is in your pocket" scenario. Because littles tend to run
+many small background tasks over time in my testing they end up getting
+tons of too deep decisions that mess things up so avoiding it tends
+to be more beneficial. Especially I saw better results in UI benchmarks
+like Jankbench that mainly run on littles.
+
+> > 
+> > There's also very practical issues but I'll describe those below.
+> > 
+> > > I'm not sure if this is a problem, but on little cores this threshold would be
+> > > too low. Given that util is invariant - I wondered if we need to have a single
+> > > threshold for all type of CPUs instead. Have you tried something like that
+> > > while developing the patch?
+> > 
+> > Yes, the problem there is that it's very difficult to define what "too low"
+> > actually means :)
 > 
-> ---
->  drivers/firmware/arm_scmi/Kconfig            |  12 ++
->  drivers/firmware/arm_scmi/Makefile           |   1 +
->  drivers/firmware/arm_scmi/scmi_perf_domain.c | 155 +++++++++++++++++++
->  3 files changed, 168 insertions(+)
->  create mode 100644 drivers/firmware/arm_scmi/scmi_perf_domain.c 
+> target residency maybe?
 
-[snip]
+Target residency refers to how long the cpu stays in idle, we're talking
+about a threshold determining the avg util at which we allow deeper
+idle in the first place. I don't think one really impacts the other? I
+don't think we can really extrapolate from avg util the precise amount
+of time we have until the next wakeup on the CPU apart from the
+"probably soon" that the threshold is meant to determine.
 
-> +static int scmi_perf_domain_probe(struct scmi_device *sdev)
-> +{
-> +	struct device *dev = &sdev->dev;
-> +	const struct scmi_handle *handle = sdev->handle;
-> +	const struct scmi_perf_proto_ops *perf_ops;
-> +	struct scmi_protocol_handle *ph;
-> +	struct scmi_perf_domain *scmi_pd;
-> +	struct genpd_onecell_data *scmi_pd_data;
-> +	struct generic_pm_domain **domains;
-> +	int num_domains, i, ret = 0;
-> +	u32 perf_level;
-> +
-> +	if (!handle)
-> +		return -ENODEV;
-> +
-> +	/* The OF node must specify us as a power-domain provider. */
-> +	if (!of_find_property(dev->of_node, "#power-domain-cells", NULL))
-> +		return 0;
-> +
-> +	perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
-> +	if (IS_ERR(perf_ops))
-> +		return PTR_ERR(perf_ops);
-> +
-> +	num_domains = perf_ops->num_domains_get(ph);
-> +	if (num_domains < 0) {
-> +		dev_warn(dev, "Failed with %d when getting num perf domains\n",
-> +			 num_domains);
-> +		return num_domains;
-> +	} else if (!num_domains) {
-> +		return 0;
-> +	}
-> +
-> +	scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
-> +	if (!scmi_pd)
-> +		return -ENOMEM;
-> +
-> +	scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
-> +	if (!scmi_pd_data)
-> +		return -ENOMEM;
-> +
-> +	domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
-> +	if (!domains)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < num_domains; i++, scmi_pd++) {
-> +		scmi_pd->info = perf_ops->domain_info_get(ph, i);
- 
-So here you are grabbing all the performance domains exposed by the
-platform via PERF protocol and then a few lines down below you are
-registering them with pm_genpd_init(), but the list of domains obtained
-from the platform will contain NOT only devices but also CPUs possibly,
-already managed by the SCMI CPUFreq driver.
+> > Namely, do we define 'too low' based on the effects it has on
+> > performance in terms of latency, on the resulting power usage or on the
+> > prediction accuracy? In terms of the prediction accuracy, how do we
+> > weigh the two possible types of mispredictions? I'll just try to explain
+> > my thinking and how I got to my conclusions.
+> > 
+> > Based on my tests, on the types of platforms we both work with our
+> > state0/wfi is very power efficient to stay in, very power efficient
+> > to enter/exit and also very fast so it has very little impact on
+> > latency. On the other hand, state1 is power efficient to *stay in* but
+> > very costly to enter/exit in terms of *both* power and latency. The
+> > effect this has is that there's many cases where going through a cycle
+> > of busy-state1-busy-state1-busy and so on will actually use up more
+> > power than if you only kept the core in wfi.
+> > 
+> > I had some tests done with effectively making the governor do "return 0"
+> > in state selection, never using any state1 and the results were still
+> > pretty good, only slightly worse than e.g. menu. The problem there was
+> > that not using state1 on big cores would not leave them time to cool
+> > down and we'd burn through the thermal budget too quickly then tank the
+> > performance.
+> > 
+> > I don't have the numbers on hand but even completely disabling state1 on
+> > the entire little cluster will work perfectly fine - your latency for
+> > tasks that run on littles will improve and the thermal budget/power
+> > won't take a particularly noticeable hit because of how small they are
+> > in the first place.
+> > 
+> > This is why the governor is intentionally skewed towards shallower
+> > states, they just work better most of the time. If you try to skew it
+> > the other way the results just come out much worse because even a
+> > relatively small amount of mispredicted state1 entries can completely
+> > nullify any benefits that selecting state1 could bring.
+> > 
+> > The percentage approach does make the threshold for littles pretty small
+> > but as desccribed above that's perfectly fine, could say a feature not a
+> > bug :) If we tried setting a fixed one across all CPUs then we'd need to
+> 
+> I didn't think it's a bug. But it seemed too low, hence the question.
+> I actually thought a single value is enough for all CPUs since util is
+> invariant and the tipping point where TEO normal predictions should work should
+> be the same.
 
-In fact the SCMI CPUFreq driver, on his side, takes care to pick only
-domains that are bound in the DT to a CPU (via scmi_cpu_domain_id DT
-parsing) but here you are registering all domains with GenPD upfront.
+Makes sense of course, I was saying it in the sense of "yes it's
+intentionally that low" :)
+From what I recall when I was testing it higher thresholds just didn't
+work as well for the activity on the littles but could be
+platform-specifc, always worth testing I suppose.
 
-Is it not possible that, once registered, GenPD can decide, at some point
-in the future, to try act on some of these domains associated with a CPU ?
-(like Clock framework does at the end of boot trying to disable unused
- clocks...not familiar with internals of GenPD, though)
+> Thanks for the detailed explanation :)
+> 
+> > pick one high enough for the big cores which would end up being too high
+> > for the littles, lead to excessive state1 entries and all the issues
+> > I've just described. TLDR: there's just more downsides on the other side.
+> 
+> This is an artifact of the shifting algorithm you used to derive it. It is not
+> a real restriction. But I appreciate that simple approach proved to be good
+> enough, and I have nothing against it.
 
-> +		scmi_pd->domain_id = i;
-> +		scmi_pd->perf_ops = perf_ops;
-> +		scmi_pd->ph = ph;
-> +		scmi_pd->genpd.name = scmi_pd->info->name;
-> +		scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
-> +		scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
-> +
-> +		ret = perf_ops->level_get(ph, i, &perf_level, false);
-> +		if (ret) {
-> +			dev_dbg(dev, "Failed to get perf level for %s",
-> +				 scmi_pd->genpd.name);
-> +			perf_level = 0;
-> +		}
-> +
-> +		/* Let the perf level indicate the power-state too. */
-> +		ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
+True but even without the shifting just putting in a fixed number across
+all clusters would have the same effect I'm pretty sure. E.g. if we go
+with 16 that's fine for the big cluster but will let through a big chunk
+of the too deep sleeps on the littles. If we pick 5 it's better for the
+littles but suddenly the big cores which tend to get bigger-util tasks
+will almost never go into deep idle.
 
-In SCMI world PERF levels should have nothing to do with the Power
-state of a domain: you have the POWER protocol for that, so you should
-not assume that perf level 0 means OFF, but you can use the POWER protocol
-operation .state_get() to lookup the power state. (and you can grab both
-perf and power ops from the same driver)
+> > 
+> > In development I just had a sysctl to set the threshold shift and iirc I
+> > tested values from 3 to 10-12 eventually arriving at 6 being the one
+> > with best results across different metrics and benchmarks. If you're
+> > backporting the patch somewhere and have a specific platform feel free
+> > to test it with different shift values, it's possible that different
+> > platforms will behave differently with this. I doubt there's any
+> > appetite to make the shift tweakable at runtime rather than a
+> > compile-time constant but if you'd like to push for that I'm happy to
+> > sign off on it, would work just as well as it does now.
+> 
+> These patches are in GKI. So we'll if there are uncaught problems I guess :)
 
-The tricky part would be to match the PERF domain at hand with the
-related POWER domain to query the state for, I suppose.
+More testing platform is always a good idea, maybe we'll find some new
+things out :)
 
-Indeed, recently, while looking at SCMI v3.2 PERF evolutions, I was
-tempted to just start rejecting any level_set() or set_freq() request
-for ZERO since they really can be abused to power off a domain. (if the
-platform complies...)
+> 
+> No appetite for a knob, but the very low value for littles did strike me and
+> thought I better ask at least. Today's littles are too tiny for their own good
+> and it seemed the threshold could end up being too aggressive especially in low
+> activity state. You effectively are saying that if we have few 100us of
+> activity, normal TEO predictions based on timers are no good and better to stay
+> shallower anyway.
 
-Apologize if I missed something about how GenPD behaviour...
+It probably would be too aggressive if our state0 was a polling state
+like on Intel cores, here we're very much leveraging the fact that arm
+wfi is already very efficient. This makes it possible to afford multiple
+'too shallow' sleeps that give us better latency + not a big power
+difference as opposed to the 'too deep' ones that seriously harm both.
 
-Thanks,
-Cristian
+> Note that due to NOHZ, if we go to idle for an extended period the util value
+> might not decay for a while and miss some opportunities. Especially that when
+> it next wakes up, it's enough for this wake up to run for few 100s us to block
+> a deeper state before going back to sleep for extended period of time.
+
+That's true, again a tradeoff that usually comes out better - it's much
+better overall to miss a deep sleep opportunity than to go into deep
+idle and then not hit the residency.
+
+> But we shall see. I got the answer I was looking for for now.
+
+You're welcome, good luck!
+
+> 
+> Thanks for the help!
+> 
+> --
+> Qais Yousef
