@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D96DA75999E
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 17:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2852B7599CB
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 17:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231752AbjGSPZQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Jul 2023 11:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34626 "EHLO
+        id S231146AbjGSPcr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Jul 2023 11:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjGSPZP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 11:25:15 -0400
+        with ESMTP id S229777AbjGSPcq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Jul 2023 11:32:46 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ACBA1B5;
-        Wed, 19 Jul 2023 08:24:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E0B3BE;
+        Wed, 19 Jul 2023 08:32:45 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2A062F4;
-        Wed, 19 Jul 2023 08:25:13 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 433EB2F4;
+        Wed, 19 Jul 2023 08:33:28 -0700 (PDT)
 Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C606D3F6C4;
-        Wed, 19 Jul 2023 08:24:28 -0700 (PDT)
-Date:   Wed, 19 Jul 2023 16:24:26 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 671393F6C4;
+        Wed, 19 Jul 2023 08:32:43 -0700 (PDT)
+Date:   Wed, 19 Jul 2023 16:32:40 +0100
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     Cristian Marussi <cristian.marussi@arm.com>,
@@ -31,36 +31,59 @@ Cc:     Cristian Marussi <cristian.marussi@arm.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/11] cpufreq: scmi: Add support to parse domain-id
- using #power-domain-cells
-Message-ID: <20230719152426.qwc5qqewrfjsarlz@bogus>
+Subject: Re: [PATCH v2 11/11] cpufreq: scmi: Drop redundant ifdef in
+ scmi_cpufreq_probe()
+Message-ID: <20230719153240.khiuqehl2r2dd6l7@bogus>
 References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-10-ulf.hansson@linaro.org>
+ <20230713141738.23970-12-ulf.hansson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230713141738.23970-10-ulf.hansson@linaro.org>
+In-Reply-To: <20230713141738.23970-12-ulf.hansson@linaro.org>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 04:17:36PM +0200, Ulf Hansson wrote:
-> The performance domain-id can be described in DT using the power-domains
-> property or the clock property. The latter is already supported, so let's
-> add support for the power-domains too.
->
+On Thu, Jul 13, 2023 at 04:17:38PM +0200, Ulf Hansson wrote:
+> We have stubs for devm_of_clk_add_hw_provider(), so there should be no need
+> to protect this with the '#ifdef CONFIG_COMMON_CLK'. Let's drop it to clean
+> up the code a bit.
+> 
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+> 
+> Changes in v2:
+> 	- New patch.
+> 
+> ---
+> 
+>  drivers/cpufreq/scmi-cpufreq.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+> index b42f43d9bd89..ab967e520355 100644
+> --- a/drivers/cpufreq/scmi-cpufreq.c
+> +++ b/drivers/cpufreq/scmi-cpufreq.c
+> @@ -326,11 +326,9 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
+>  	if (IS_ERR(perf_ops))
+>  		return PTR_ERR(perf_ops);
+>  
+> -#ifdef CONFIG_COMMON_CLK
 
-How is this supposed to work for the CPUs ? The CPU power domains are
-generally PSCI on most of the platforms and the one using OSI explicitly
-need to specify the details while ones using PC will not need to. Also they
-can never be performance domains too. So I am not sure if I am following this
-correctly.
+I am not sure if it is no longer possible but at the time of addition of this
+it was possible to build with CONFIG_COMMON_CLK=n and any error was reported[1]
+I didn't want to add Kconfig dependency as this driver doesn't use any other
+clock apis and this was added to meet some OPP(?) requirement IIRC. We can
+drop the call to devm_of_clk_add_hw_provider if that is not the case. I need
+to check it again as I can't recall all the details right now.
 
 --
 Regards,
 Sudeep
+
+[1] https://www.uwsg.indiana.edu/hypermail/linux/kernel/2012.0/04953.html
