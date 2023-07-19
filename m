@@ -2,121 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41D2758A88
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 02:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DDD758AB2
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Jul 2023 03:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjGSA7G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Jul 2023 20:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
+        id S229835AbjGSBLe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Jul 2023 21:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjGSA7G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 20:59:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D83F1;
-        Tue, 18 Jul 2023 17:59:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E02BA615F8;
-        Wed, 19 Jul 2023 00:59:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB324C433C8;
-        Wed, 19 Jul 2023 00:59:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689728344;
-        bh=m+DQXW5oOBBKiDq+gqnKrZk+GHqHZgupJCPrOePrckM=;
-        h=From:Date:Subject:To:Cc:From;
-        b=n1x+oYfzNnx9aUiCysKEHFobDcDr4Rg8FBVHYbKKgGjw1eA0amX9CDQSbWFbcW1l6
-         MRpxyj6VU17Ymgzan6vIympW5XZ5rI7KBJ6ogrlB6qw0hSTYWbBHh8m1PQtq3vQlmg
-         1SvenkkIGROm+l8lP9i5fDHl3Pe8IA+bzz0aqhOfcPbib1rfk5psWQpDg5Rv5jm6E8
-         qBZAOmHuYUZn1aOZHrUAt4wXj8ybfDFUbBdNY48N07T4KeYbwVwUydqrAA33Q84+pE
-         /9pmaNyooiG/alZVXiVwbJDx1SiVOKlUAPepH6nv4YCuf8o8PhRRkP+yQAKEwW0UGj
-         CQsa00oqxtPgg==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 19 Jul 2023 01:58:54 +0100
-Subject: [PATCH] thermal/drivers/sun8i: Free calibration nvmem after
- reading it
+        with ESMTP id S229713AbjGSBLd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Jul 2023 21:11:33 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3871BCA
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 18:11:32 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ca4a6e11f55so4754647276.1
+        for <linux-pm@vger.kernel.org>; Tue, 18 Jul 2023 18:11:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1689729091; x=1692321091;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xk4472MbQ0aONiK6ZtIfH665Wri1/wSc0QB/UZUqhk=;
+        b=EHQ8krW39V/sbOi+DKhI1PMxM/sjS73lureK8IoE+d91eZY3vwuWy95pieu4fPe2Gs
+         qgDS6zMd/e10X/+m9kpWSFFdZucDScjJ0xNbnzd1HdU52AJMAlh/KjTM2zHE7mK/JCg/
+         uikl2pkgUY6wIKiHWr30hoqYwThHW9LJ4nT1I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689729091; x=1692321091;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8xk4472MbQ0aONiK6ZtIfH665Wri1/wSc0QB/UZUqhk=;
+        b=AJeu5p6tpxWKuw2cuMFaXN1nOqlG2mmNAybsSwbEdULQZZmpxKoLxfWbrtst7iXkUk
+         ZuPrQSSBUh996k+j8/uHdiPsPIrmV2jD0jMDOYfzz5Yfi5bPCSZ2MWAJKiKVpPVCJiCA
+         TbsYxoPBu8UAKoAkfaDT3JnBwKHPaPXU5ur8g+UkNXo4TiTwZO3cCeUsMaf/P8sDcGJi
+         R7/ZuXD8pIvANQqZZ9gkSgZwgnErLu29gsTyn9ur5o9Nv2yFONGfDvYw7FC0dYvVQnNy
+         3XbaCh4RnZY/tKLULHSZaNivuaCqW/q0jcTDm1OoEb2i+rHUg6VaM6szHjYxaOS6U+rS
+         IOUw==
+X-Gm-Message-State: ABy/qLZGedLv3lACxlfSbSvVFtX2ac/FVZONddEzFsEQUBrZEehqgXkB
+        ZQWG3EPLlDWtgX5jQ8S4pHrePw/Y1txUJ/Vi9RWVYQ==
+X-Google-Smtp-Source: APBJJlFru+d/U81Pb9ePkPrJKq43uASadD6AsRc7NSkUAAz8pFffpSMk41RYr0j/v1SdEfDOedDhi391SuLe3Lq39G4=
+X-Received: by 2002:a25:9f0f:0:b0:bfe:e383:6297 with SMTP id
+ n15-20020a259f0f000000b00bfee3836297mr1279983ybq.19.1689729091455; Tue, 18
+ Jul 2023 18:11:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230719-thermal-sun8i-free-nvmem-v1-1-f553d5afef79@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAE01t2QC/x3MywqDMBBG4VeRWXcgF2jVV5EuRP80AybKxEpBf
- HdDl9/inJMKVFCob05SHFJkzRX20dAUx/wBy1xNzjhvXrblPULTuHD55lY4KMD5SEjs0cFZb57
- woJpviiC//3p4X9cN1Am1wWoAAAA=
-To:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1503; i=broonie@kernel.org;
- h=from:subject:message-id; bh=m+DQXW5oOBBKiDq+gqnKrZk+GHqHZgupJCPrOePrckM=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBktzVTom85+f/CsiB3tDq5aRty+QLY7GiyI2QXE
- 45eZI49muaJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLc1UwAKCRAk1otyXVSH
- 0NPMB/sGvVdLD3D+bb6SkCXEGskTVhY3pzkBBDYQpA9CssD24JsbsElftzoztvE8sNMWNOTB9IL
- ZdzrPxjPkpJhNOxUee+uMML6eg0lVtsSIobZe1fWidnN8/B4EE4IzywkOXiQdpiDSFlGgDJ23FX
- Yrto56HDP/bE4eFMxQmixvC2sQ3ZsnSrbfU90AiDkJAs6cxrh6GaTKvZ8PUOxSd5PTGHsHnGgKY
- beBzLXkLBl62wFZXghrfoIOVPRwJpwOaaObPnrTiBt3agCEF6hKDWLLVpSYe4YU4I+9l5Xz1Lmp
- HMup7rGvqY+EJincYrtBcOQ0fwDXCmsJPnsoHr5iOj2KdsAs
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230718143045.1065100-1-robh@kernel.org>
+In-Reply-To: <20230718143045.1065100-1-robh@kernel.org>
+From:   Simon Glass <sjg@chromium.org>
+Date:   Tue, 18 Jul 2023 19:08:01 -0600
+Message-ID: <CAPnjgZ0H077Hdq2HoOyrYxjAmXLigRrj+6H3sPLidtDa2w=Wcw@mail.gmail.com>
+Subject: Re: [PATCH v2] power: Explicitly include correct DT includes
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        David Lechner <david@lechnology.com>,
+        Iskren Chernev <me@iskren.info>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-oxnas@groups.io
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The sun8i thermal driver reads calibration data via the nvmem API at
-startup, updating the device configuration and not referencing the data
-again.  Rather than explicitly freeing the nvmem data the driver relies
-on devm_ to release it, even though the data is never referenced again.
-The allocation is still tracked so it's not leaked but this is notable
-when looking at the code and is a little wasteful so let's instead
-explicitly free the nvmem after we're done with it.
+On Tue, 18 Jul 2023 at 08:31, Rob Herring <robh@kernel.org> wrote:
+>
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+>
+> Acked-by: David Lechner <david@lechnology.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> v2:
+> - Fix double include of of.h
+> ---
+>  drivers/power/reset/as3722-poweroff.c            | 1 -
+>  drivers/power/reset/brcm-kona-reset.c            | 4 ++--
+>  drivers/power/reset/gpio-poweroff.c              | 3 ++-
+>  drivers/power/reset/gpio-restart.c               | 2 +-
+>  drivers/power/reset/keystone-reset.c             | 3 ++-
+>  drivers/power/reset/ocelot-reset.c               | 4 ++--
+>  drivers/power/reset/odroid-go-ultra-poweroff.c   | 3 ++-
+>  drivers/power/reset/oxnas-restart.c              | 2 --
+>  drivers/power/reset/st-poweroff.c                | 2 +-
+>  drivers/power/reset/syscon-poweroff.c            | 3 +--
+>  drivers/power/reset/syscon-reboot.c              | 3 +--
+>  drivers/power/reset/xgene-reboot.c               | 2 +-
+>  drivers/power/supply/axp20x_ac_power.c           | 1 -
+>  drivers/power/supply/axp20x_battery.c            | 1 -
+>  drivers/power/supply/axp20x_usb_power.c          | 1 -
+>  drivers/power/supply/cpcap-battery.c             | 2 +-
+>  drivers/power/supply/da9150-charger.c            | 2 --
+>  drivers/power/supply/da9150-fg.c                 | 1 -
+>  drivers/power/supply/lego_ev3_battery.c          | 2 +-
+>  drivers/power/supply/ltc2941-battery-gauge.c     | 2 +-
+>  drivers/power/supply/ltc4162-l-charger.c         | 2 +-
+>  drivers/power/supply/max14656_charger_detector.c | 2 +-
+>  drivers/power/supply/max17040_battery.c          | 2 +-
+>  drivers/power/supply/max8903_charger.c           | 1 -
+>  drivers/power/supply/rn5t618_power.c             | 1 -
+>  drivers/power/supply/rt5033_charger.c            | 2 +-
+>  drivers/power/supply/rt9455_charger.c            | 3 +--
+>  drivers/power/supply/sbs-battery.c               | 2 +-
+>  drivers/power/supply/tps65090-charger.c          | 2 +-
+>  drivers/power/supply/tps65217_charger.c          | 1 -
+>  drivers/power/supply/twl4030_charger.c           | 1 +
+>  31 files changed, 26 insertions(+), 37 deletions(-)
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- drivers/thermal/sun8i_thermal.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 195f3c5d0b38..af3098717e3c 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -286,7 +286,7 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
- 	size_t callen;
- 	int ret = 0;
- 
--	calcell = devm_nvmem_cell_get(dev, "calibration");
-+	calcell = nvmem_cell_get(dev, "calibration");
- 	if (IS_ERR(calcell)) {
- 		if (PTR_ERR(calcell) == -EPROBE_DEFER)
- 			return -EPROBE_DEFER;
-@@ -316,6 +316,8 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
- 
- 	kfree(caldata);
- out:
-+	if (!IS_ERR(calcell))
-+		nvmem_cell_put(calcell);
- 	return ret;
- }
- 
-
----
-base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
-change-id: 20230718-thermal-sun8i-free-nvmem-3e9e21306e3e
-
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
-
+Reviewed-by: Simon Glass <sjg@chromium.org>
