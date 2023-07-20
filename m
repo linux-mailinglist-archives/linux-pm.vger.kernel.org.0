@@ -2,149 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC3475B567
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 19:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CCF75B5DD
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 19:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjGTRRT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jul 2023 13:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
+        id S231828AbjGTRuI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 20 Jul 2023 13:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjGTRRR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 13:17:17 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C82CB3;
-        Thu, 20 Jul 2023 10:17:16 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-666edfc50deso756139b3a.0;
-        Thu, 20 Jul 2023 10:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689873435; x=1690478235;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0uAt1FpVvgdk69DWGVo/B/WilumnjHo3ckls2wQj2c=;
-        b=MK+qmNNORXwB0I5M1ECJrML+kKdViRer5kBwEH13jqFqWPrvH9qpVwD+NCq/1d018c
-         dmHLfc1tu6kO/ikoIBoIR1krTQBsGZ3+q9u5v3XSZyYbOkyC67YXvHVlcxgsQWsqZgtm
-         4SH2TD93EzA0VP1rFamx/Cxpixhc1xvinZAjcekhOe3ngbMxphygvDdsOviDfTtnsbmZ
-         umZ7UPenNo+uzSz1TkMIjeWQt9QLKY1ACnKSlpgNnzP7MRX/LNX+PoEOdVdbQQ+Lidiy
-         cOGFq119CJN/FS7RftR/9pmwUsBDbw0jIdcDb2SJf2KjVezldwj7jUFTSW8pAI6VW6KZ
-         ONLQ==
+        with ESMTP id S231635AbjGTRuH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 13:50:07 -0400
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C92268F;
+        Thu, 20 Jul 2023 10:50:06 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2b9363d069bso3077211fa.0;
+        Thu, 20 Jul 2023 10:50:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689873435; x=1690478235;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J0uAt1FpVvgdk69DWGVo/B/WilumnjHo3ckls2wQj2c=;
-        b=SLm+b5tlr6idsm/Yh1OQVSEsFtlc4bsB3oIrbg7a6piuUQm/ZuPan8n2n9DoPkTLMu
-         wOouxBPgOKjtdycelh+Owyg+FDTD0XDr5FkceD9DjC2JO9ZGhEkYrn2RgXAIzMDXsPGf
-         1LYkpSfQ4zZ4qa5xSLiLDYP0dRKJZfvektyxQHUzLoAw9Qbkcx88gONRfKUEjNfWOov5
-         zF/IbP/LYpNHxyPMk3dvhisJ13icMpMyjE1vecx4ABbVH0H+VJGPWgs4YzcvcofaYH4U
-         OQMa9/VHWCtt1o/JRYPVylphSmNgbiBQ3tnl3FjdrUeiu+1sF1cbQbhq+/T36KjnLrHn
-         jaYg==
-X-Gm-Message-State: ABy/qLar+Z0aibssi6q/TIvf/KkwNyztO8QdBYkuDZzdKZQurFJJ8eFs
-        6fxfpq4tfyo3GsfUyGmvies=
-X-Google-Smtp-Source: APBJJlEkTI4A4ZrOCc+WXlC2nBipWy2JSRmd1c5HMwU8MruA6yjpC2qz2tfZemAEl4HUzSYjKYO5qQ==
-X-Received: by 2002:a05:6a00:24d1:b0:668:8ad5:778f with SMTP id d17-20020a056a0024d100b006688ad5778fmr10559001pfv.17.1689873434754;
-        Thu, 20 Jul 2023 10:17:14 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:e754:74d1:c368:67a2])
-        by smtp.gmail.com with ESMTPSA id h18-20020a62b412000000b00682a75a50e3sm1502944pfn.17.2023.07.20.10.17.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 10:17:14 -0700 (PDT)
-Date:   Thu, 20 Jul 2023 10:17:09 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v3 28/42] input: keypad: ep93xx: add DT support for
- Cirrus EP93xx
-Message-ID: <ZLlsFTe2nvFw698l@google.com>
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
- <20230605-ep93xx-v3-28-3d63a5f1103e@maquefel.me>
+        d=1e100.net; s=20221208; t=1689875405; x=1690480205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pGc1aqPPtyxg0PRnJa5Ahk+dl05+JvzfRAEGe6SQTJY=;
+        b=Azwcdj7sKxa5DljBJ5aTk8edf8LbCuAR/NlUevsriOQgLfNAvHza8qj8H+xdRTwozM
+         GXpc8B46+vYXcWWA56jPBMWvrZQkNJWj0pVcgC0Li2++5FCZyIC9htm75mPUPhXLxNzp
+         xAnne8/1prZ0WLnBCnIVAmjKpJ1WN83QAZo0gMrNBeaVMLQwxB1wxIduyZ6/+EQSxZNy
+         ANpUnAr/wwGQ+aT9RVpvxiRVRJzD1sT7KDytyWF+6JNtrplp2E4q8MiLM9U2Psj4+Xe0
+         Bp8ZT+wXXs0e2TmgMjRVRvmsVjTPpANNafgCB8bsqsjObMr+mqPgRKH71n2UvwqL5Y2m
+         V8NA==
+X-Gm-Message-State: ABy/qLZTWSwn8R9PU3CNp2sB6MnSUES/nQrS/3Wz6jXkFb5q9jmykfqw
+        /UzcCuPPA152z9mO+HsdMp4OEncCN9WhMRviVjUPUS21
+X-Google-Smtp-Source: APBJJlHkUcpdCZU8rW/oi+Dw2XYYmLzOWcSzH1QNey2QWQ8sTjMRKS8EKZ1x/GjD10wtpEpDFaHXZurNt9/PzdUmmOY=
+X-Received: by 2002:a2e:5455:0:b0:2b9:34b6:b47a with SMTP id
+ y21-20020a2e5455000000b002b934b6b47amr2202129ljd.2.1689875405029; Thu, 20 Jul
+ 2023 10:50:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230605-ep93xx-v3-28-3d63a5f1103e@maquefel.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230713145741.30390-1-johan+linaro@kernel.org>
+In-Reply-To: <20230713145741.30390-1-johan+linaro@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 20 Jul 2023 19:49:54 +0200
+Message-ID: <CAJZ5v0gGPvvm-AyAb8QfZfkO5G4PL0T7NMHZ5xt_2KCC3wBB2A@mail.gmail.com>
+Subject: Re: [PATCH 0/3] PM / wakeirq: fix wake irq arming
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 02:29:28PM +0300, Nikita Shubin via B4 Relay wrote:
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
-> 
-> - drop flags, they were not used anyway
-> - add OF ID match table
-> - process "autorepeat", "debounce-delay-ms", prescale from device tree
-> - drop platform data usage and it's header
-> - keymap goes from device tree now on
-> 
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+On Thu, Jul 13, 2023 at 5:01 PM Johan Hovold <johan+linaro@kernel.org> wrote:
+>
+> When reviewing the Qualcomm serial-driver suspend implementation I
+> noticed the odd runtime PM state update which had snuck in. Turns out it
+> was added to work around a bug in PM core which prevented drivers not
+> implementing runtime PM from using dedicated wake irqs.
+>
+> This series fixes the wake irq arming and drops the unused wake irq
+> enable helpers before dropping the bogus runtime PM state update in the
+> Qualcomm driver.
+>
+> I suggest that Rafael takes all of these through his tree.
+>
+> Johan
+>
+>
+> Johan Hovold (3):
+>   PM / wakeirq: fix wake irq arming
+>   PM / wakeirq: drop unused enable helpers
+>   serial: qcom-geni: drop bogus runtime pm state update
 
-This is awesome, thank you!
-
->  
->  #include <linux/bits.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
-
-Are you sure you need this? I think the only OF-specific structure that
-is being used is of_device_id, which comes from mod_devicetable.h that
-you include below.
-
-Otherwise:
-
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-Please feel free to merge with the rest of the series.
-
-Thanks.
-
--- 
-Dmitry
+All applied and I'm inclined to push them as fixed for 6.5-rc, thanks!
