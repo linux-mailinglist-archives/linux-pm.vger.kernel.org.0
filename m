@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A2B75A590
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 07:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5CB75A596
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 07:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjGTFly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jul 2023 01:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S229707AbjGTFmK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jul 2023 01:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjGTFls (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 01:41:48 -0400
+        with ESMTP id S229743AbjGTFmE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 01:42:04 -0400
 Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0FD2130
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 22:41:45 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1bb119be881so2793655ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 22:41:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F5519A7
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 22:41:53 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b8ad356f03so2229745ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 19 Jul 2023 22:41:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689831704; x=1690436504;
+        d=linaro.org; s=google; t=1689831712; x=1690436512;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3XqdszzNXl0iGLUqn70eMf6bYl+0XxF6aThipavUI1U=;
-        b=CCpuZSLAv4mIw9enQakiM7AssvWm2KvtnySDXhurdzO2yRaaciCQ9Fvyg+f8c6iB2b
-         l6pV4U7qiwHYGlO7vQLop7oWoZHnFLMA0HmPyOEsdcu09qdcYRsMgbAoz8egb84mGA/n
-         CGopBFTVmnixaUK9NAm0C/ygM/dkjB+dc5P3Z91CMcP5oTu/SZYB8Nd5VpDwChUKX9gn
-         KUnyxkG8kLMkKq2/zkz/pD2YTJhvopag/Ebptwz5aE/ihHdgHM0MaQ01HVnE6xJQdld+
-         2BpVhylFSAecPrswhy1Kiu3vcvcWEDcmrYhiqTaAIhfqK9XM5+1tw0ACl8Eb7d3/2sbY
-         bSOA==
+        bh=Va2eBrtKbuaaEbPPwCKeC0Kyjq5LXg7paK5APhMFzEM=;
+        b=xLnxGFd2HmtSF3PXpB0D5d0+/m2n7fsIorTavzRqm9BqcyAc1fHRBo3LxPy7jpHpdS
+         Ecz6g64YmNpneeW5rmjWCEE5bHwyCPDwc5YsU2Bojhbq/uB9LGdbxPPhR+9dzWbu0kEk
+         0uJrON9rpWMe5ncnVO0mdkQDIE2HxB3MyVboe8dSf46ETE972cTdbtFOw3MKzyWR/uxr
+         Z0VcXH1IGFs4BPLk/lZMfWmddSWM++mab4SaO7SSGnOOkuU6neTKeeEWlKR8tN6+G1tK
+         Rgnj2T3fzcrJBFaLsSxh6qwjOe9BB17JMjyJkqqrhMHSJC+Kpk4YDMP8FEgD5+HEAZXi
+         U9Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689831704; x=1690436504;
+        d=1e100.net; s=20221208; t=1689831712; x=1690436512;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3XqdszzNXl0iGLUqn70eMf6bYl+0XxF6aThipavUI1U=;
-        b=kHNpkp8gVkz+U8ELF6zYbWuQy0cihFFWkBeb44eMKltWD4TnPSPisla1ivBM2PqQ9O
-         MydpE4RsE5rF+10Z9/0sYIpG+5AI3vlhdcJGuWFLXG9h/cdsml3NwvcMWowPLFPBjfo9
-         GPO/c/MOX9qqP2JFrrpmEV80NSahB2QkKOtSg9zeqq9zXktskb04zaShmvte4QOIcuq6
-         f4flrQ1xRctFDfH4NjwbAI8Cf1Syn0qDIRCj1IVIqnTe16DQnCCGnmGMlgBPthjc1lZz
-         DIueG4LQ2fF6S6f69zjh6YhtyPjV+veZJZSHGAed5TSib2z7BDFd/ZtoskvkbzbdGpZb
-         qckg==
-X-Gm-Message-State: ABy/qLaama5NsLWD6miDrlqJq9HbYxttN63LbeY/GNltpADVEzrptejB
-        8KlKHbQ/G5jEsA/0i15mIQQe
-X-Google-Smtp-Source: APBJJlFtA4mXtOl8jmGLyYaSajSP/ArONwQmk0FfD51LF8n93HyBqmCspIiV8+ubnvEC4ZETfoTZxA==
-X-Received: by 2002:a17:902:8a8a:b0:1b9:e913:b5b7 with SMTP id p10-20020a1709028a8a00b001b9e913b5b7mr1035999plo.44.1689831704434;
-        Wed, 19 Jul 2023 22:41:44 -0700 (PDT)
+        bh=Va2eBrtKbuaaEbPPwCKeC0Kyjq5LXg7paK5APhMFzEM=;
+        b=YInRbajNxYUZ0WK+tqr/acd+hLNK1OXQSG75CbnFhFVCUo6L5y4ZaUHEazPSi+ftAI
+         P6Y+92uweJN9leEVZJVMzCV1YM5T/8CtDE1Rwb2fyZa4x+w41Pt/F1ODb2EpunG/eAkH
+         0wkNDPq8t6S8ETPDirvxG+p7nzfDQvoF3iDWNuzkbNIkBs2MNtOIWaaNAgaNdmXV0a4x
+         T4kykdRB6zU98iV5kq4kBsp13KjobUxV2W3cEhdi89ihQX1RR8oUDiDmNwFI5k2Hv6c1
+         B3OS1RcoYytzjgbUAjQz7zaus/Eh4FYzczFBMhlBM5dhLgE/kR2I2u/ctRX4pQKNrZHP
+         HVPA==
+X-Gm-Message-State: ABy/qLYLmd5fpKBUJxB4/YhHOahav0tTo7NgYYgdmm7Dk4sPrKzk28FZ
+        MlDWaM4Tn02/cxhIS+BNSSjG
+X-Google-Smtp-Source: APBJJlFdRfTp2IRPTIrY/3bl9a41Yqj5CMCNFidrfdwoLr3tasQ9Tx6F4f5gzDmX6/s5JXl5+d68XA==
+X-Received: by 2002:a17:902:d50c:b0:1b8:9b74:636b with SMTP id b12-20020a170902d50c00b001b89b74636bmr4266761plg.68.1689831712348;
+        Wed, 19 Jul 2023 22:41:52 -0700 (PDT)
 Received: from localhost.localdomain ([117.206.119.70])
-        by smtp.gmail.com with ESMTPSA id r2-20020a170902be0200b001b85bb5fd77sm263367pls.119.2023.07.19.22.41.36
+        by smtp.gmail.com with ESMTPSA id r2-20020a170902be0200b001b85bb5fd77sm263367pls.119.2023.07.19.22.41.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Jul 2023 22:41:44 -0700 (PDT)
+        Wed, 19 Jul 2023 22:41:51 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
@@ -66,9 +66,9 @@ Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 02/15] dt-bindings: opp: Increase maxItems for opp-hz property
-Date:   Thu, 20 Jul 2023 11:10:47 +0530
-Message-Id: <20230720054100.9940-3-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 03/15] arm64: dts: qcom: sdm845: Add missing RPMh power domain to GCC
+Date:   Thu, 20 Jul 2023 11:10:48 +0530
+Message-Id: <20230720054100.9940-4-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
 References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
@@ -76,7 +76,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,44 +84,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Current limit of 16 will be exhausted by platforms specifying the frequency
-for 9 clocks using opp-hz, like Qcom SDM845 SoC. For instance, specifying
-the frequency for 9 clocks with 64bit specifier as below would consume
-(9 * 2 = 18) items.
+GCC and it's GDSCs are under the RPMh CX power domain. So let's add the
+missing RPMh power domain to the GCC node.
 
-	opp-50000000 {
-		opp-hz = /bits/ 64 <50000000>,
-			 /bits/ 64 <0>,
-			 /bits/ 64 <0>,
-			 /bits/ 64 <37500000>,
-			 /bits/ 64 <0>,
-			 /bits/ 64 <0>,
-			 /bits/ 64 <0>,
-			 /bits/ 64 <0>,
-			 /bits/ 64 <75000000>;
-	};
-
-So let's increase the limit to 32 which should be enough for most platforms
-(hopefully).
-
+Fixes: 6d4cf750d03a ("arm64: dts: sdm845: Add minimal dts/dtsi files for sdm845 SoC and MTP")
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Co-developed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-index 47e6f36b7637..e2f8f7af3cf4 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-@@ -56,7 +56,7 @@ patternProperties:
-           need to be configured and that is left for the implementation
-           specific binding.
-         minItems: 1
--        maxItems: 16
-+        maxItems: 32
-         items:
-           maxItems: 1
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 02a6ea0b8b2c..9ed74bf72d05 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -1207,6 +1207,7 @@ gcc: clock-controller@100000 {
+ 			#clock-cells = <1>;
+ 			#reset-cells = <1>;
+ 			#power-domain-cells = <1>;
++			power-domains = <&rpmhpd SDM845_CX>;
+ 		};
  
+ 		qfprom@784000 {
 -- 
 2.25.1
 
