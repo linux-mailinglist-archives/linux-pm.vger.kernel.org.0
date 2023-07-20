@@ -2,135 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992C175B1B4
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 16:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FB275B4C9
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 18:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbjGTOvZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jul 2023 10:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
+        id S231169AbjGTQoy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jul 2023 12:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbjGTOvY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 10:51:24 -0400
-Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C05A26B5
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 07:51:20 -0700 (PDT)
-Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-481389cd087so311963e0c.2
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 07:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1689864679; x=1690469479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/+O/muW1Nk3sbzumyk3oSyUNsgXn5aAFedNJT9XhjpY=;
-        b=qHklILRYK8e+9ECBbaFZ7M9L25U5jR9UnSBshRGFdRVHmqpzNlXreFLJxybGBGyMLA
-         JjOIhtWXcXsFXDkQWzdryG/qS0K+qMEB1GG285OY5nANiF5bBiiZqSfRjpAq4JN3qO/G
-         VE1wh3ub6GNTxKYli8B9etbv3Syi4YaZAm8ewJzKDcudPtWv+mpGQnUWLOEpUyVi77HA
-         L1nzjHd9LR1jd0d99mpisIGonQLildHSrZJKuMS/WToklyjf8Qvdn/zjfWDpMZSAG7cZ
-         /maT4QCA9HKlmwzmuyLH+08Sr6TprdvFrIAJ1FYorUt4VLFQyyL7VA770EhWjclKTvfj
-         KjvQ==
+        with ESMTP id S231199AbjGTQoo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 12:44:44 -0400
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BD2E43;
+        Thu, 20 Jul 2023 09:44:42 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-262f7b67da8so540259a91.0;
+        Thu, 20 Jul 2023 09:44:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689864679; x=1690469479;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/+O/muW1Nk3sbzumyk3oSyUNsgXn5aAFedNJT9XhjpY=;
-        b=eYtgPqT/uMcYo7Ooqf+c3/wJlikC/U8F9MibUQNYhk8sQpZSA4Vk39Vvy3AzsZfKyN
-         8OqZircktG3VDH7eD9wk23AIebTdu5aF1odRgQDnH3bbfHHDOVKvD+UrLIwp0JdZUVwb
-         zBCHMdwmmvQoVxC7PkL0PcCbzEziJr4ZIvUV/ZwL2vB+pAU2fmwrda2vqD8FvliZnBro
-         CcIBc4AKxPr84ZmbuK8OMSHjXgGreUxTfnNWu9iodEHIOQy01YIBLyRb/eaC2hZyQpyy
-         hCKZtFkEPw6gvBmYwNhGuhmuz9ufGgybFDZXeeMcAZMJtwaniRkvkwoElE7g6DyAb2H3
-         BBWg==
-X-Gm-Message-State: ABy/qLZbmYhARSw0ZJnm43/6Gg4GvwBD1Lo8SqE6BqFkWpnkAVs6p4D/
-        PzJdRwFs7hiHq3rUyMmqYv1BqxkDN5dS2TPL533X9A==
-X-Google-Smtp-Source: APBJJlHzLfxkreBCbbsehsgY/9oCLGFmqhlHHCGSC7psLizhDkF/J99lwZeHjlYsqKv5zg/EMj03GOKDYYgPtq4NGEY=
-X-Received: by 2002:a1f:3d44:0:b0:481:4092:99c with SMTP id
- k65-20020a1f3d44000000b004814092099cmr2773384vka.0.1689864676288; Thu, 20 Jul
- 2023 07:51:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689871482; x=1690476282;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ctqaYU09ArSRwQw32H48XIaLjIzfILrKXlWnxf+Rzg8=;
+        b=LVmm2XiDs7ekH/orM9CiULtttCWH04AO3FF1rlPXHaOfp30d9gnaWrRMnT29UIu9Gb
+         rrJ+VYVUXAsyXep8VmobnFpvytPKkeD1EYdygbZzeBLUz0lrd1G/ukciS6sPxkRzu0cv
+         hNCXKZVzm+vxaLR96O0EOaj92ZsAJcGyfcZePoPFXlTxm3A5LPXoB8hfNFYlr/zoquOF
+         expOd9zIKzAIpaqusnSFuHCcmDBv1veYRXobppBZCfAUwpNcUT3JWvvTxVtM/HBSyjgc
+         aNDDM6e4+ZZLLDS0cxPjTQdmNTSQoTmjK89Ly4hiDW5iq3v0DHpoRf81lDvSSO0gL1w8
+         BB7w==
+X-Gm-Message-State: ABy/qLbUrC4n0hWYxQwhEr0UpKbSp803jV54Wf3N82jpDwOSa7HHYIJd
+        SV/Ed0S9rcxY2rf5woDTbRNf3gsitjK0IQ==
+X-Google-Smtp-Source: APBJJlHgtgbpjNMR0O6O6wWRcFlkIp0IcCyDcaCcC2tZFJGOAcGugdM7LWjtbzfr/AjZ++6ILh/EQA==
+X-Received: by 2002:a17:90b:4f84:b0:263:5c78:4b63 with SMTP id qe4-20020a17090b4f8400b002635c784b63mr2131882pjb.45.1689871482028;
+        Thu, 20 Jul 2023 09:44:42 -0700 (PDT)
+Received: from ?IPV6:2601:642:4c05:946:30b8:ec2e:fe9b:4835? ([2601:642:4c05:946:30b8:ec2e:fe9b:4835])
+        by smtp.gmail.com with ESMTPSA id h13-20020a17090a648d00b00259e553f59bsm2912247pjj.20.2023.07.20.09.44.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 09:44:41 -0700 (PDT)
+Message-ID: <e46f077f-4602-1882-bc14-e8df2a216773@acm.org>
+Date:   Thu, 20 Jul 2023 09:44:38 -0700
 MIME-Version: 1.0
-References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me> <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
-In-Reply-To: <20230605-ep93xx-v3-1-3d63a5f1103e@maquefel.me>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 20 Jul 2023 16:51:05 +0200
-Message-ID: <CAMRc=MeXCLzwjPEap_OD7tA+xVsMOU1DNxMbxbZVPaWg4Xdr8w@mail.gmail.com>
-Subject: Re: [PATCH v3 01/42] gpio: ep93xx: split device in multiple
-To:     nikita.shubin@maquefel.me
-Cc:     Hartley Sweeten <hsweeten@visionengravers.com>,
-        Lennert Buytenhek <kernel@wantstofly.org>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Lukasz Majewski <lukma@denx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sebastian Reichel <sre@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Mark Brown <broonie@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
-        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 00/15] UFS: Add OPP and interconnect support
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 10:29=E2=80=AFAM Nikita Shubin via B4 Relay
-<devnull+nikita.shubin.maquefel.me@kernel.org> wrote:
->
-> From: Nikita Shubin <nikita.shubin@maquefel.me>
->
-> This prepares ep93xx SOC gpio to convert into device tree driver:
-> - dropped banks and legacy defines
-> - split AB IRQ and make it shared
->
-> We are relying on IRQ number information A, B ports have single shared
-> IRQ, while F port have dedicated IRQ for each line.
->
-> Also we had to split single ep93xx platform_device into multiple, one
-> for each port, without this we can't do a full working transition from
-> legacy platform code into device tree capable. All GPIO_LOOKUP were
-> change to match new chip namings.
->
-> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
+On 7/19/23 22:40, Manivannan Sadhasivam wrote:
+> This series adds OPP (Operating Points) support to UFSHCD driver and
+> interconnect support to Qcom UFS driver.
+> 
+> Motivation behind adding OPP support is to scale both clocks as well as
+> regulators/performance state dynamically. Currently, UFSHCD just scales
+> clock frequency during runtime with the help of "freq-table-hz" property
+> defined in devicetree. With the addition of OPP tables in devicetree (as
+> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+> both clocks and performance state of power domain which helps in power
+> saving.
+> 
+> For the addition of OPP support to UFSHCD, there are changes required to
+> the OPP framework and devfreq drivers which are also added in this series.
+> 
+> Finally, interconnect support is added to Qcom UFS driver for scaling the
+> interconnect path dynamically. This is required to avoid boot crash in
+> recent SoCs and also to save power during runtime. More information is
+> available in patch 13/13.
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+How much power can OPP save? I'm asking this since I'm wondering whether
+the power saved by OPP outweighs the complexity added by this patch series.
+
+Thanks,
+
+Bart.
