@@ -2,145 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE88F75AA03
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 10:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10AB75AA05
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 10:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjGTI5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jul 2023 04:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37886 "EHLO
+        id S229688AbjGTI5p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jul 2023 04:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjGTIqA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 04:46:00 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2048.outbound.protection.outlook.com [40.107.14.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFF82690;
-        Thu, 20 Jul 2023 01:45:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N3ln6wv9wgggE+sViIfBmqSyVxBT3NheHap5qfzp0FQw8A/rMN9/7BwN5bGoQ6oBTrsev51ki2uVqO0/WBZikT+5Oed4uw/zFNszIDJS4HDY7TEhnbg1EVd+lUkZtOw6lQMlFltgzfKqThW8nhmH5u4g3TAkiXQATvlxh3lm8OYv64NHjrVOQwxPyN0szsWgIbjNGHPLY9CBP/uWWUUiKhF5Uinmf7AmjBG89aVebR0DNlWKt8lND8ex1dMwrffmfxFsQs6NWaYyZu9OfuscLAW5sAnD+xtrzeN1uCgXM87T6Mgieu+0cEM1H1UtyjgIHV9G5OjLxbttMx1e7kFKcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oqXuJob1MKcmKEhzOn1N85uEhqNHdw1Wt8Esnxw13+A=;
- b=akF3Y86FqUUayEIpMXaj5GsYGKYOLp1JffGiFfQ/Gxk2fs9Q1OKNp/Xh3El/HM34gtKrm5UzR27hIoVDAK47xwSYcIDDX2BR9c6tEQrzfTXKLM32/KUeUZds1JdGkktBQzvQaBST7G9xP81Plb3pjR/qy+fCJDYxOfk1jry6JVUqa80gcT3XaOubeZd+Lz6wZu4plAPYkZzCR57ytD8dXwJyybODnoR35fpcmPOX0zwhWgSKiLYTavpVNqKnxC+3xcqovJaBFgmxpiWu/QuG+aMPFAOSeEFWyv2tNUV/xD1iyFCgfh6pMK4mS7+wj41p4qc7h5SFtc5KDroa1Rp0BA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oqXuJob1MKcmKEhzOn1N85uEhqNHdw1Wt8Esnxw13+A=;
- b=XRjcnQVn0R4QPUIQ8zLiip1us96VVcfE64GiDJj8p0Nfe5VFm9oUb5qzcCcJiT68JTRIzw1AwXQN7rVFcbHEWH7x4dGkMpl5b0/XedvHRH3kHDfWHXJNUnljdJq+W4OeZDdJOpXNVdogMaG463sTElNHEU1D38PSOKvC2jSnLcI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by AM9PR04MB8537.eurprd04.prod.outlook.com (2603:10a6:20b:434::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.25; Thu, 20 Jul
- 2023 08:45:55 +0000
-Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::c874:7c87:c13b:64f8]) by DU0PR04MB9417.eurprd04.prod.outlook.com
- ([fe80::c874:7c87:c13b:64f8%5]) with mapi id 15.20.6609.024; Thu, 20 Jul 2023
- 08:45:55 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     ulf.hansson@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH] genpd: Makefile: build imx
-Date:   Thu, 20 Jul 2023 16:50:41 +0800
-Message-Id: <20230720085041.501344-1-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0024.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:190::13) To DU0PR04MB9417.eurprd04.prod.outlook.com
- (2603:10a6:10:358::11)
+        with ESMTP id S231415AbjGTIyX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 04:54:23 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6936126A3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 01:54:20 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fb96e2b573so775181e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 01:54:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689843258; x=1692435258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hr3GYuI4RGrQA8MLYXyJLt2ld5PTqpatMnFPkHbCrNI=;
+        b=Shpu1expb9UmeNTzkrqLpZgKTTgNTFnWaaLHFYEs8X9t52qsEc2qqYzhSS1wKDUyy1
+         n4EpvR8sgcpL9FLYrJpRYmBpPkbJYzeu10lN6wdKe7Ba3JMVPmK04th61cyw1jW0vioh
+         2k3CoD0TVIieY7nwHyzHbt5z0gDLKPnvLw6UMDKlMyXki3gNfYPvuUq+SrKIZ7RFQuBd
+         Px9Xf/3N008B/kEnqXS6fqGuDaol6sbJt4f/XDWyLT7f7F4gTOg0Y1UdNeEYpRgxFEy7
+         DaXKvwDjYnKA9he3hNDcHOhrri5jmEMFtNNli0s0ezLRD1kzQDFHIjgsiSo66GqPF4gC
+         ZR0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689843258; x=1692435258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hr3GYuI4RGrQA8MLYXyJLt2ld5PTqpatMnFPkHbCrNI=;
+        b=kFrg7RsqGQJvOVx8HPxSPJxgGXelpLg7v19dqYW0QgR/1vxRdU1tAjdF7W7cu9w5DL
+         poBJ8bDDVGWV4k3ZV6tLSZGS8OcMbQIFzh1mg/BL4XLSawBvKRDIlVoIyrxxMGiOBCK0
+         iLcQ+7qpb1IH5W6dWqoURt2nAFPv1mtqWZEwPhdFLzZA6wlhX+pAl0neyW9Ae99dl/gL
+         OvmZpqIlw9UIZin9kI+i19UESicc9/uk7vMT3ZVzbaGfFVSfIrqrjhBHDwg8SOYNGJvY
+         O/bCi/heZ5h0kbuLHU32TDL77vr/+B32crKSTCDg5OXzfb7daUuD+gox76Rr55GKDt/8
+         kTRg==
+X-Gm-Message-State: ABy/qLZ3/DrjRuj/KcyVdkv/Cb8v33BsRHMa56QFVmOEXJNMgi5qmRiB
+        M3oc8iclDSlSVryNBFdxDGANLA==
+X-Google-Smtp-Source: APBJJlEh3NvNHBbbxheUFFyvpgKd2C0hcz7XJqCW4yZ6/zAz5ujRsINO2b569mPpxzPaezD6Arr+tg==
+X-Received: by 2002:a19:ca4a:0:b0:4fb:8dcc:59e5 with SMTP id h10-20020a19ca4a000000b004fb8dcc59e5mr1681346lfj.39.1689843258307;
+        Thu, 20 Jul 2023 01:54:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id a12-20020a5d53cc000000b00313f9a0c521sm657889wrw.107.2023.07.20.01.54.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 01:54:17 -0700 (PDT)
+Message-ID: <a6006558-5eca-a8a0-ed61-dfa746f223ae@linaro.org>
+Date:   Thu, 20 Jul 2023 10:54:12 +0200
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8537:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30b9af24-3b17-4227-256a-08db88fdbb32
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mQQyJSnKrk/tmbn/ppGwDd5uogG09Et8rH1RvP9WMi04bFWRc+dZVriiOZ/X9JUzvgu5nY/BHN7OV+t9J4Lhz9h013oFX32nGoWcEeVD4yshiRGBQrfiOIwjVZsOQb3pA+tI5Oe90dzluoQtQZHsD4WceMn8oXNfXPL66zkofC44+MBE9yt395PXyT8V079fXmxyMxyLhwtqtXrsWYKj7sH99wPYWkh1ZfaOkEzQmkPSOZ2JRE4kAmO/uMZ2duMHD78djFeRa7ZIh4T4nF/cVscD2jhxdSsP6N9S2iz1j1YzX+35sTjbfRxqo1dpNskoR5tOstzNVdj6NaU47YkjsRF9E/A9GkyvbDIN3NqQcjawsAC72N+SB35en4XrM/DZNe9kDnxV4zxu2pYowcJ2Z6H/FCRqJbMIUmNaH1qDwI/rdFLb85pq0HWiFcj744lrjk3K3BJqL7q9v5qGXFR1IJSsxQObz1JFuHe19IqQFXYNNjZvO1VnE+o4uBCZlop/E9wotU6mNf7YiebeL8ftRes6CHaKB0A1mXHdAK+WYiEWcwJVthtnjCbuwZg9AWMS3+UAR4jRlc4yxitLS9nbDqIJhbMnJJTBbEFSJCCtg3PFjQeyfR5/xl8KcMHR1nRP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(136003)(366004)(346002)(451199021)(4744005)(2906002)(2616005)(86362001)(38350700002)(38100700002)(66476007)(66556008)(316002)(66946007)(26005)(1076003)(41300700001)(186003)(6506007)(4326008)(478600001)(52116002)(6666004)(6512007)(6486002)(8936002)(8676002)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2w9Mq+4emCj5lta30WXbAYBtP58jf7KJkEGze1PlWdovgWHM7q7x1/YGbXsH?=
- =?us-ascii?Q?SJrPOiXxka/GKl+eKvWoykxGfBcsPFNu5oc+staCe452kvwQsUu09zYzUJ98?=
- =?us-ascii?Q?iUHXLI8Vp0EZqBEHeeKn/T3dbyNVyRRuspU1GFHkeFiGcER2EreDXL7Vsr4V?=
- =?us-ascii?Q?B9qcyL7al9PUj5jNr+BC92Y63x8Zi/0Up3q4/Cuhcw0+KWW/itomhgvaZULR?=
- =?us-ascii?Q?U77ol8G1x1tfLkYcqTt5Vn4vAGIlucrhkGqmdAr4OPE0TJ4jkLyfRvnYNtX6?=
- =?us-ascii?Q?plVoks7To6gIidNvEyiTLAz3G0EBuFHAaxVtY24yaph4t5tpbCCeNfjKwBIk?=
- =?us-ascii?Q?vevE+LHjNo4PgzBbwFUWh4wnYt1X4R4PVVtgGWSyDhOwRUOI/rnAeonk5yj0?=
- =?us-ascii?Q?1SXWaT5QJ7X1GriZcTW+TkIeQoiA3eLtVQJtFETh2tQ4/ibMrL2ZYoN0iIW9?=
- =?us-ascii?Q?PqoMzUfzpF+X4wT7o0Ksal/FZwVC1pot11/6/eGfGwVoG5lOhilI4j7VN7w4?=
- =?us-ascii?Q?a7psNrLokT6o680s7BYYtWHpokIzGW9pe+Bll85Fj7FKM/hYNc/z08W3OFyU?=
- =?us-ascii?Q?fhMcLGLpbCbyKhrOxzo7wfQ/j9eeSAil4J4/x8yMKKwgWJf9osOEAIH4/GMq?=
- =?us-ascii?Q?wZI2qmm84CBNOg7wRLlaMpbNpwkbWeZoSVN8BB+swjjfwCRukD9xyhOtRVes?=
- =?us-ascii?Q?ojb/a80/3befkIiGiuv9m7ODg8YvpcjVnRG02SU5FTbCQp+V6rSgsW7pYayn?=
- =?us-ascii?Q?rB0GTbaiw19RE1vlX23pjmXLHgsmpW4+4kiknx2bxCC1VdWWOn7h5m7BR0Is?=
- =?us-ascii?Q?PpTgj2MTEgvVWum5Dx0SurhmqVSOIrYjPyGjmb7DIe1aHbCEewMPDonAbs04?=
- =?us-ascii?Q?Qow7dbauNZsKJVw86lcfTyyVgKGX5CUJUZXIwZYAzwGjw7cENPHHdOz1LI8f?=
- =?us-ascii?Q?p07kS95S1wQx8uujKefRR5Nn2PIbMVM3buUZzzeTlC7pPILstb0qG7MgKf3b?=
- =?us-ascii?Q?c6/RxPNE3ChCDGY14dWYzfWm5Yclm+YTndo4ZzkY2ML8JSX9VhdUl9A4J8fM?=
- =?us-ascii?Q?j408RgrE/8rEZJCuUwD2Uucxo5052cD/buCob0e6JGCiL8YSbZ74NORtlgwD?=
- =?us-ascii?Q?KEJZxXEFAnGf9Zkw22OO8kaTX7hUQytxZoIR5ASKCMzfg3av+9Gl1x3teO/C?=
- =?us-ascii?Q?4hVQU6kwXN24RIjutXCrEIMk6GLlbNRUF2mar+I3L1IkDybmwaVO4aTdmauv?=
- =?us-ascii?Q?PTTlQRxH2VQxpm6acyKnMFam6DJ9HPWmbXGtl7ouCQ6HDPnqpirS+lt45t0Q?=
- =?us-ascii?Q?sHe84XbM2KojYL3Kk9J4YulsuXkTYYJFZq6MjxiXQkhDSnklb71ka8+VLCq4?=
- =?us-ascii?Q?u1BXMlyvT+uPyBUwuXAxxMXwTKbJSFC4slGeySpGlPRV0JgM2zqBRhxWiRIL?=
- =?us-ascii?Q?TNEOOhGCvs5doNje07xSLC/bryPCmSM1ELcqwRKg9m38Al7lLjRJprnZdgcs?=
- =?us-ascii?Q?QdNwF9t4J+yfhIWk9cBzoQMnDwjrcx6T+aGZxplkfi2Rx9q8lLX5dokeKWbJ?=
- =?us-ascii?Q?Mkg/zoup8kVgLf1H9ZuJmiKJKyNfZlPQIcqppUP5?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30b9af24-3b17-4227-256a-08db88fdbb32
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jul 2023 08:45:55.5175
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HbY+ZfyFHOrQVGEbxCLtMap4zPXE4OsdgLoNyhfam3qCGWH+MwX/9mGvnWr0swB/47J7lWUAAUXMYqayiKIjAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8537
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 00/42] ep93xx device tree conversion
+Content-Language: en-US
+To:     nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
+> This series aims to convert ep93xx from platform to full device tree support.
+> 
+> The main goal is to receive ACK's to take it via Arnd's arm-soc branch.
+> 
+> I've moved to b4, tricking it to consider v0 as v1, so it consider's
+> this version to be v3, this exactly the third version.
 
-The imx genpd was missed to be built out, add it in Makefile
+Fix your clock/timezone, so your patches are not sent in the future.
+Unfortunately this will stay at top of my queue, which is unfair, so I
+will just ignore for now.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- drivers/genpd/Makefile                   | 1 +
- drivers/{firmware => genpd}/imx/scu-pd.c | 0
- 2 files changed, 1 insertion(+)
- rename drivers/{firmware => genpd}/imx/scu-pd.c (100%)
-
-diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
-index c429485c13f6..666753676e5c 100644
---- a/drivers/genpd/Makefile
-+++ b/drivers/genpd/Makefile
-@@ -3,6 +3,7 @@ obj-y					+= actions/
- obj-y					+= amlogic/
- obj-y					+= apple/
- obj-y					+= bcm/
-+obj-y					+= imx/
- obj-y					+= mediatek/
- obj-y					+= qcom/
- obj-y					+= renesas/
-diff --git a/drivers/firmware/imx/scu-pd.c b/drivers/genpd/imx/scu-pd.c
-similarity index 100%
-rename from drivers/firmware/imx/scu-pd.c
-rename to drivers/genpd/imx/scu-pd.c
--- 
-2.37.1
+Best regards,
+Krzysztof
 
