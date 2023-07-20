@@ -2,67 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A803175AE78
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 14:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C834075AE81
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Jul 2023 14:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjGTMd3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Jul 2023 08:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
+        id S229925AbjGTMf4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Jul 2023 08:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjGTMd3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 08:33:29 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171F5A2;
-        Thu, 20 Jul 2023 05:33:28 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so2415619e87.1;
-        Thu, 20 Jul 2023 05:33:28 -0700 (PDT)
+        with ESMTP id S229613AbjGTMfz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Jul 2023 08:35:55 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3B12122
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 05:35:53 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-997c4107d62so117351666b.0
+        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 05:35:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689856406; x=1690461206;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=00TBgGs9/x2395DFaQcI1ejZAz1FlgitzxZyGoIQYBo=;
-        b=b9nmxZy6KVcznno15iMSw8WsAHn9FeWVx1/TB89iEhUO4keTXVQqlhbPQJt0Rg6VzM
-         LZXw6KkF+Rdkfnud3nxa14JcoyWllCyHhKtoR8ZlJ0tQXbwKb8Vr+5vu5DUNq7qv0STb
-         H5RQtCoPB6pYfgFoEZhsYv1L4PJ9S2AkPiQKzrG3PbOTwvml7EGbZ26D/8W22VFVtEDJ
-         ubNnafFWdxu5b1HSnCgqFzROgQNYigRtLtyiuCGjYWitvJrq0xXj2Xg6/JkxuXV8u55J
-         GbRwfP/ZoMnEw5v/NHbY1F4mMvoLJI5tfNgsy5Ox5FiftQLLkQOxZHE9po5wVNQbAw+7
-         r7zw==
+        d=linaro.org; s=google; t=1689856552; x=1690461352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=myw7PI+FCyKio3g/zcLcGlSy11Ejvz7tGQQF7fcbIUI=;
+        b=RsjO8PUnjdufXpf/tArBv4Te7lbY/T9GNu1DCIgU+a/WxaPrkl2rNfnnV7ZjBNNlpK
+         FJEZ3j4zE/pDBbjEgOoHKp7xQf1Cstx0AtiY8zKNuj8BCi/TP8JSeoz7ECIIMestnaNZ
+         oaBl/ncmXZCbFgqszHvlNp1VR8CFg3T+HRoHrC/JwZUBL09Fk66RsQwBbQx/oxfl4j8A
+         cgt+5Q9F/7CvccRVaNSI2qRAKkDByHHMrHHy2VjtkQL/jWjUgOYFcgxaxwbwgfngrZzw
+         apdkD5Uz1pkXQLvGrMHVkR2n08+LOcDgSm9P7pTmbmwdWiCKIA9y1BkrHTRHxkNwkMVq
+         EQZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689856406; x=1690461206;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=00TBgGs9/x2395DFaQcI1ejZAz1FlgitzxZyGoIQYBo=;
-        b=F3f+17MV/HNzG2dMH3GyhUYql9chkEAT+l1nJbXq7r6J9HMsv1OVsNHqPVE405bnuF
-         J0yATHiavlX8dw/0QMo/tF55J+hodjHufMQmzSmQcGnY0YCUdHEfYzFYWmpZ1Yw36L5E
-         piyk9BX0sN6tEpkV82EEj9nyM9L59z/2mdR/JiDdWuO7extK0xdmFXm8DYGHfyVsIAoj
-         0xoCZFVYXV54LybElVGrfdSBI9swL1cwBvVax+sn3fwCsVI7vshtZP3tEhtfycJa4CkJ
-         wEMmzSSpaIC6D+kfkQnfRVzeUgq5+IVFhQYyE7Zzi9hiHUVQUrcaRjVCLM//KYQH0/U/
-         0fRA==
-X-Gm-Message-State: ABy/qLaw94IZG35xa5fMxvKPTbUFpBRmyHMsGnaI43RLxIdC2lOM8K4Q
-        AkSD9Nxf5bZnZ+kCMyWhkXKBFzr35T0Aig==
-X-Google-Smtp-Source: APBJJlGBWbeKkuAroHYB1XufGk1hhNt3Suw/M9bvbKZkt4URe3D7vm19QJDdXwePvkkwqk7AXWHJCQ==
-X-Received: by 2002:a2e:8ec4:0:b0:2b6:d0c1:7cd0 with SMTP id e4-20020a2e8ec4000000b002b6d0c17cd0mr973716ljl.22.1689856406159;
-        Thu, 20 Jul 2023 05:33:26 -0700 (PDT)
-Received: from wro1-ldl-p01774.synapse.com ([94.42.83.62])
-        by smtp.gmail.com with ESMTPSA id z5-20020a19f705000000b004ec84d24818sm182767lfe.282.2023.07.20.05.33.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 05:33:25 -0700 (PDT)
-From:   Przemyslaw <przemekchwiala@gmail.com>
-To:     hdegoede@redhat.com, krzysztof.kozlowski@linaro.org,
+        d=1e100.net; s=20221208; t=1689856552; x=1690461352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=myw7PI+FCyKio3g/zcLcGlSy11Ejvz7tGQQF7fcbIUI=;
+        b=D3ZcFn+QCo95Ka06tqRle3k/zxU1F9bLSNfdrUebHbZkmYgxLTtBk4au9568Mj+uha
+         Fcf8kEs9P2MnQNRfDrD9ynf+AbDBT5x7SqN44VlZx5HRW/H1UL+zMmJe5XFJH9QahE3T
+         0n1HrG6CzOqE4/Mi/2viSqFrIKAPdvpxVNLTzCfDSJUhy4gcUUGArI2350yoRA3VYAUA
+         Mz0WvwTX1Ghn5mCTPKK+6ibaG+/b3hVxPR35ksHOM6y2oAsPPEY/eDxh31/82StE7hsr
+         DMrjcUPJdkQhBKz+t0zSMscx4/bcqUkC6G1rPcn8jvBUkVGkKypx0/VDx0TEbUhGulYJ
+         FCKA==
+X-Gm-Message-State: ABy/qLZDyTRnn0GGsMzqiQMM/z+d0CrNAqIcUryaPBov39V5NFdK76AR
+        g/0cMrK6fJoEYfwInhjpoJGvFSiD0oIsDgXyfEY=
+X-Google-Smtp-Source: APBJJlFpvMhS2TEhv5fL1Q0u/TaVzbThZGzpVmQnOCFKoEtb2tA2UwQYxJ1IFcodeUas7VvAgXbrFA==
+X-Received: by 2002:a17:906:d04d:b0:997:e385:6597 with SMTP id bo13-20020a170906d04d00b00997e3856597mr4774366ejb.45.1689856552333;
+        Thu, 20 Jul 2023 05:35:52 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id lc7-20020a170906dfe700b0098e4aef0791sm654842ejc.66.2023.07.20.05.35.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Jul 2023 05:35:51 -0700 (PDT)
+Message-ID: <ebb3267e-7257-654e-4a57-a55c626087f9@linaro.org>
+Date:   Thu, 20 Jul 2023 14:35:50 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] power: supply: max17042_battery: Do not use CONFIG_
+ prefix in regular C code
+Content-Language: en-US
+To:     Przemyslaw <przemekchwiala@gmail.com>, hdegoede@redhat.com,
         m.szyprowski@samsung.com, sebastian.krzyszkowiak@puri.sm,
         kernel@puri.sm, sre@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     lukas.bulwahn@gmail.com,
-        Przemyslaw Chwiala <przemekchwiala@gmail.com>
-Subject: [PATCH] power: supply: max17042_battery: Do not use CONFIG_ prefix in regular C code
-Date:   Thu, 20 Jul 2023 14:31:02 +0200
-Message-Id: <20230720123102.154699-1-przemekchwiala@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+Cc:     lukas.bulwahn@gmail.com
+References: <20230720123102.154699-1-przemekchwiala@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230720123102.154699-1-przemekchwiala@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,40 +77,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Przemyslaw Chwiala <przemekchwiala@gmail.com>
+On 20/07/2023 14:31, Przemyslaw wrote:
+> From: Przemyslaw Chwiala <przemekchwiala@gmail.com>
+> 
+> Using CONFIG_ prefix for macros is not a good practice.
+> Use CONFIG_ prefix in Kconfig only.
+> 
+> Signed-off-by: Przemyslaw Chwiala <przemekchwiala@gmail.com>
+> ---
 
-Using CONFIG_ prefix for macros is not a good practice.
-Use CONFIG_ prefix in Kconfig only.
+For future:
+Please provide changelog after --- and version your patches (git
+format-patch -v2, or use b4).
 
-Signed-off-by: Przemyslaw Chwiala <przemekchwiala@gmail.com>
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
 ---
- drivers/power/supply/max17042_battery.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
-index 17ac2ab78c4e..e7d37e422c3f 100644
---- a/drivers/power/supply/max17042_battery.c
-+++ b/drivers/power/supply/max17042_battery.c
-@@ -36,7 +36,7 @@
- #define STATUS_BR_BIT          (1 << 15)
- 
- /* Interrupt mask bits */
--#define CONFIG_ALRT_BIT_ENBL	(1 << 2)
-+#define CFG_ALRT_BIT_ENBL	(1 << 2)
- 
- #define VFSOC0_LOCK		0x0000
- #define VFSOC0_UNLOCK		0x0080
-@@ -1116,8 +1116,8 @@ static int max17042_probe(struct i2c_client *client)
- 						chip);
- 		if (!ret) {
- 			regmap_update_bits(chip->regmap, MAX17042_CONFIG,
--					CONFIG_ALRT_BIT_ENBL,
--					CONFIG_ALRT_BIT_ENBL);
-+					CFG_ALRT_BIT_ENBL,
-+					CFG_ALRT_BIT_ENBL);
- 			max17042_set_soc_threshold(chip, 1);
- 		} else {
- 			client->irq = 0;
--- 
-2.25.1
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for acks received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+Best regards,
+Krzysztof
 
