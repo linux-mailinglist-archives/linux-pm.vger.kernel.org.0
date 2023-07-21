@@ -2,150 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D153175C623
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 13:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0079875C62A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 13:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjGULzM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 07:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S230368AbjGUL4L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 07:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbjGULzL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 07:55:11 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471542D76
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 04:55:09 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b89d47ffb6so11014805ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 04:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689940509; x=1690545309;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=On8b445xAkLYUxpJLOmZ0YWWWQZf3nyJOOroUboklMM=;
-        b=T3pZqcf1DO1Oj8nR4yrRDfIASwhXLhR/wRmcZyfEHEtdvRFSMpR9mLda4++5e0L4jp
-         +w1msJRSSMqo4TvG2EEMVYWGXRwbbjZCbBDRKahAOsBeng1DJE0VANDVoC1/D0p/Wsnp
-         CO9NXuSntfstKdVBC/vknWCVHuJDbdwQG5aKZHuvg4X7lCD8NNyuFe+DqA424uAnvH1p
-         iA3rL9+A1bk2S6DvC+MdSDuqsYlt3/fUMWwA3xkblOfh3VBLvcy1WhBs0/fOs93WWW8K
-         kpqZROU4xfGnj4muW9lBHYSCvJKEItGoq9pYUoiTI+b72ROx2xAGD9OuQSyG7Z8sK2hG
-         vRSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689940509; x=1690545309;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=On8b445xAkLYUxpJLOmZ0YWWWQZf3nyJOOroUboklMM=;
-        b=FZsWvmnvAHGRryO1MfXR3Re140gnXgwHKnCue2JpQdJpmoih2r87Sgs+elStIwB8Pm
-         DzQbhcxbX8+dK1O7RZVXGeRTjlE87dMKpunYiQr8huDcdo1pkplI7Aiig4+jP/0eSAU+
-         6WbLZhEugu1UJDqCKxn4V6YHw1xZoFUoDik8wTXFj/y/lYtEnp7i/Da4umxJ/piOX2bI
-         MzXL8EQA5p2hL7tddOB+y2cNxl09e1jx3r+bcqpbkN14Yz8wfX4dJLzTEoBWENkqVEZe
-         ILTxzNoCv57VT7/rJJYHg2q6/pUXWce4dGF/FjyL2hbNvUY9lanOS1Vh2noinyEFCA1t
-         D5ww==
-X-Gm-Message-State: ABy/qLbrSQkv9nNbVFt5YynZoqXyLbEPVswg7OPYrxlf6jW4nW8Mwcfd
-        +q8UDZAEXT2XP9av5x7j1l+l
-X-Google-Smtp-Source: APBJJlFNRGbewBgg9HiacJ4fpesbUAVMolRzK2jP1QYCQXrzycHh/FWUEtZJyRIKO78u2hoKFzxzfw==
-X-Received: by 2002:a17:902:9f8f:b0:1ac:8be5:8787 with SMTP id g15-20020a1709029f8f00b001ac8be58787mr1269158plq.21.1689940508620;
-        Fri, 21 Jul 2023 04:55:08 -0700 (PDT)
-Received: from thinkpad ([117.206.118.181])
-        by smtp.gmail.com with ESMTPSA id d24-20020a170902b71800b001b9cea4e8a2sm3245155pls.293.2023.07.21.04.54.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 04:55:08 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 17:24:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 00/15] UFS: Add OPP and interconnect support
-Message-ID: <20230721115453.GA2536@thinkpad>
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230721094206.dfgnn73kmzzj6rtw@vireshk-i7>
+        with ESMTP id S230362AbjGUL4K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 07:56:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C3F002D75;
+        Fri, 21 Jul 2023 04:56:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E0132F4;
+        Fri, 21 Jul 2023 04:56:49 -0700 (PDT)
+Received: from bogus (unknown [10.57.96.100])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D467C3F6C4;
+        Fri, 21 Jul 2023 04:56:02 -0700 (PDT)
+Date:   Fri, 21 Jul 2023 12:55:35 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 08/11] dt-bindings: firmware: arm,scmi: Extend
+ bindings for protocol@13
+Message-ID: <20230721115535.mx46dg56pxjnzbuv@bogus>
+References: <20230713141738.23970-1-ulf.hansson@linaro.org>
+ <20230713141738.23970-9-ulf.hansson@linaro.org>
+ <20230719151716.qhobfnclrjf4yqkg@bogus>
+ <CAPDyKFpjMWOAbV+b2DcxDWqvRDQCbSC6Ti+KGGPWJoC4Ghp7=w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230721094206.dfgnn73kmzzj6rtw@vireshk-i7>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFpjMWOAbV+b2DcxDWqvRDQCbSC6Ti+KGGPWJoC4Ghp7=w@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 03:12:06PM +0530, Viresh Kumar wrote:
-> On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
-> > Hi,
-> > 
-> > This series adds OPP (Operating Points) support to UFSHCD driver and
-> > interconnect support to Qcom UFS driver.
-> > 
-> > Motivation behind adding OPP support is to scale both clocks as well as
-> > regulators/performance state dynamically. Currently, UFSHCD just scales
-> > clock frequency during runtime with the help of "freq-table-hz" property
-> > defined in devicetree. With the addition of OPP tables in devicetree (as
-> > done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
-> > both clocks and performance state of power domain which helps in power
-> > saving.
-> > 
-> > For the addition of OPP support to UFSHCD, there are changes required to
-> > the OPP framework and devfreq drivers which are also added in this series.
-> > 
-> > Finally, interconnect support is added to Qcom UFS driver for scaling the
-> > interconnect path dynamically. This is required to avoid boot crash in
-> > recent SoCs and also to save power during runtime. More information is
-> > available in patch 13/13.
+On Fri, Jul 21, 2023 at 01:42:43PM +0200, Ulf Hansson wrote:
+> On Wed, 19 Jul 2023 at 17:17, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Thu, Jul 13, 2023 at 04:17:35PM +0200, Ulf Hansson wrote:
+> > > The protocol@13 node is describing the performance scaling option for the
+> > > ARM SCMI interface, as a clock provider. This is unnecessary limiting, as
+> > > performance scaling is in many cases not limited to switching a clock's
+> > > frequency.
+> > >
+> > > Therefore, let's extend the binding so the interface can be modelled as a
+> > > generic performance domaintoo. The common way to describe this, is to use
+> > > the "power-domain" DT bindings, so let's use that.
+> > >
+> >
+> > One thing I forgot to ask earlier is how we can manage different domain IDs
+> > for perf and power domains which is the case with current SCMI platforms as
+> > the spec never mandated or can ever mandate the perf and power domains IDs
+> > to match. They need not be same anyways.
 > 
-> Hi Mani,
+> Based upon what you describe above, I have modelled the perf-domain
+> and the power-domain as two separate power-domain providers.
 > 
-> I have picked the OPP related patches from here (apart from DT one)
-> and sent them separately in a series, along with few changes from me.
-> Also pushed them in my linux-next branch.
+> A consumer device being hooked up to both domains, would specify the
+> domain IDs in the second power-domain-cell, along the lines of the
+> below. Then we would use power-domain-names to specify what each
+> power-domain represents.
 > 
+> power-domains = <&scmi_pd 2>, <&scmi_dvfs 4>;
+> power-domain-names = "power", "perf";
+>
+> I hope this makes it clearer!?
 
-Thanks Viresh! For patch 8/15, Kbuild bot has identified one potential null ptr
-dereference issue. Could you please fix that in your branch?
+Yes it make is clear definitely, but it does change the definition of the
+generic binding of the "power-domains" property now. I am interesting in
+the feedback from the binding maintainers with respect to that. Or is it
+already present ? IIUC, the ones supported already are generally both
+power and performance providers. May be it doesn't matter much, just
+wanted to explicit ask and confirm those details.
 
-You just need to remove the opp dereference in dev_pm_opp_get_freq_indexed()
-before the IS_ERR_OR_NULL() check as below:
-
-```
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 66dc0d0cfaed..683e6e61f80b 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -208,9 +208,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq);
-  */
- unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp, u32 index)
- {
--       struct opp_table *opp_table = opp->opp_table;
--
--       if (IS_ERR_OR_NULL(opp) || index >= opp_table->clk_count) {
-+       if (IS_ERR_OR_NULL(opp) || index >= opp->opp_table->clk_count) {
-                pr_err("%s: Invalid parameters\n", __func__);
-                return 0;
-        }
-```
-
-- Mani
-
-> Thanks.
-> 
-> -- 
-> viresh
-
--- 
-மணிவண்ணன் சதாசிவம்
+--
+Regards,
+Sudeep
