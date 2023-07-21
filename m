@@ -2,140 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8841F75C66C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 14:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD7775C6A8
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 14:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjGUMDq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 08:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
+        id S231402AbjGUMM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 08:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjGUMDo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 08:03:44 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1C935A0
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 05:03:23 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so3055701e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 05:03:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689941000; x=1690545800;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=IhkoDF78CCv7y5GQYbbsjZT44iTH15rIG128hk87YQc=;
-        b=JBT7HZNg/+51OOwGNYhejjohC3pQ8vhkr4nA5qcrwkIWAETyzDUWiCAEpzh4SK1YkZ
-         JveSjdBTPPbpZflUrtS93foCZMRht4kIgbltSJ/UFedBgJyDLN7C5S0uoDmH4WGSbl+w
-         /SBZlTNx1u3NQog52Pxqm5MFiDKTEtBw9/xlSQE3bXIRrOK604PrdKhzaTCB/d5Upo1K
-         ByTHDugbdPIE51TWQ0zgfrDyFrNgp+cZKJEVvefKqbJk4txy8VMxt7Y2gejrB0B3tfvV
-         gwQ4YxEIsmVJWNuXcuOgPbOvztUqp3CQz9XoVobyMPTyHrrakFkKR/Lv9geknSs0tlM6
-         fjrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689941000; x=1690545800;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IhkoDF78CCv7y5GQYbbsjZT44iTH15rIG128hk87YQc=;
-        b=PNj1EFr/JNtUSWdXSX8msVgy/qmCsmZwLmvGClOoQ6jOGDdb+oBtC7yfOHFEhESTIT
-         mh2Id3rXnaZOBhwvlfvWN4HjW7A3dDFAP3NY08meQTDzxiThAeLvIOL+o6CyoALGHSOG
-         BJDY3jJ8949Kk0Kyt5Euv0UfrODrrCxnx/yMHH2bpXGO/ooojWvg9ozJYasWZUQJMshO
-         61XJZbtkNcTC2xB1UM6JCTqrIaWuOSZdTn17AScAMkM/RuAw8Aws4BIV025n3TuIbPse
-         USIs+OYF7NSIoOLM8i+35nf14mc6jmxPstG2rpKqiua0dWiBz2yQcyQXsp9jfote25MX
-         5LAA==
-X-Gm-Message-State: ABy/qLZKKVSM67VY8KSMyq4/WlXvNCwFpzbUY+UxulMW4WI+9xyO/hGk
-        lj8jZw5FK31HJmM7YhznFCiUVQ==
-X-Google-Smtp-Source: APBJJlFGmpYr3UvI/UTEAO4mdaH2ulDlpGO5iK6eLCqJ87k4vm0gVfwsJpQK9hsB1IjkHPsU27C2tQ==
-X-Received: by 2002:a19:6541:0:b0:4f9:5404:af5 with SMTP id c1-20020a196541000000b004f954040af5mr1091273lfj.46.1689940999971;
-        Fri, 21 Jul 2023 05:03:19 -0700 (PDT)
-Received: from [192.168.1.101] (abyj181.neoplus.adsl.tpnet.pl. [83.9.29.181])
-        by smtp.gmail.com with ESMTPSA id l14-20020ac2554e000000b004fbacee6028sm698628lfk.110.2023.07.21.05.03.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Jul 2023 05:03:19 -0700 (PDT)
-Message-ID: <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
-Date:   Fri, 21 Jul 2023 14:03:16 +0200
+        with ESMTP id S230349AbjGUMM0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 08:12:26 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A55B19B6;
+        Fri, 21 Jul 2023 05:12:20 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R6pJq3nVvzHqXN;
+        Fri, 21 Jul 2023 20:09:47 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 21 Jul
+ 2023 20:12:17 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <rafael@kernel.org>, <paul@crapouillou.net>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] PM-runtime: Remove unsued extern declaration pm_runtime_update_max_time_suspended()
+Date:   Fri, 21 Jul 2023 20:12:16 +0800
+Message-ID: <20230721121216.21816-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] interconnect: qcom: qcm2290: Enable sync state
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230720-topic-qcm2290_icc-v1-0-7f67f2e259c1@linaro.org>
- <20230720-topic-qcm2290_icc-v1-2-7f67f2e259c1@linaro.org>
- <ZLmQdjDgIbbhyTMJ@gerhold.net>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <ZLmQdjDgIbbhyTMJ@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20.07.2023 21:52, Stephan Gerhold wrote:
-> On Thu, Jul 20, 2023 at 08:24:01PM +0200, Konrad Dybcio wrote:
->> Very surprisingly, qcm2290 does not seem to require any interface
->> clocks.
-> 
-> What does this mean exactly? The interconnect .sync_state() is
-> responsible to drop the initial maximum bandwidth votes, with the
-> assumption that all active devices have voted for the bandwidth they
-> need. How does this relate to "requiring interface clocks"?
-If it required such clocks to be present, sync_state could not
-complete, as trying to access some nodes would crash the platform
-due to unclocked access.
+commit 76e267d822f2 ("PM / Runtime: Remove device fields related to suspend time, v2")
+left behind this.
 
-> 
->> It's therefore safe to enable sync_state to park unused devices.
->> Do so.
-> 
-> Doesn't this make everything painfully slow? There are no interconnect
-> consumers at all in qcm2290.dtsi. I would expect that all bandwidths
-> end up at minimum.
-There are no interconnect providers defined in qcm2290.dtsi.
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ include/linux/pm_runtime.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-Konrad
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 9a8151a2bdea..7c9b35448563 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -85,8 +85,6 @@ extern void pm_runtime_irq_safe(struct device *dev);
+ extern void __pm_runtime_use_autosuspend(struct device *dev, bool use);
+ extern void pm_runtime_set_autosuspend_delay(struct device *dev, int delay);
+ extern u64 pm_runtime_autosuspend_expiration(struct device *dev);
+-extern void pm_runtime_update_max_time_suspended(struct device *dev,
+-						 s64 delta_ns);
+ extern void pm_runtime_set_memalloc_noio(struct device *dev, bool enable);
+ extern void pm_runtime_get_suppliers(struct device *dev);
+ extern void pm_runtime_put_suppliers(struct device *dev);
+-- 
+2.34.1
+
