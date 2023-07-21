@@ -2,348 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101C075C884
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 15:54:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F7575C8C3
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 15:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjGUNy4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 09:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S231438AbjGUN6y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 09:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjGUNyr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 09:54:47 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE1E358C
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 06:54:33 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b93fba1f62so28541311fa.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 06:54:33 -0700 (PDT)
+        with ESMTP id S231472AbjGUN6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 09:58:51 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5224B3A98
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 06:58:29 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fbf09a9139so3243633e87.2
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 06:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689947671; x=1690552471;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BpX4cT8wPV+NQfH+IImmqD1hdn6km50iOH+4WrfJWg8=;
-        b=yCjR6tdX/gl2oyIl+4eD24upwiujU/zwrEtEmDq9IctO0lYxoDiJ62S44TfIy3rcs/
-         25WPeU5SQ4B5S+pT8cm/FnEA7lT3x6o55b13OdnkdyV0fSVMHULXeNb6Fw088OVHatqI
-         vYJ36nZ0toihwf+93ttE8dB/uJDGTL4dxXo8ts8jJcS3CSKl5Jdmb3JIWKVW/DVsYLCA
-         DxwjPGKbseCBqnLQG9xeVgDlCOz9lR3JTq9v4GGXUns6dmqGQdZQ1zcMGn941OQ7VobX
-         GrZrHtsazHLRy4ilVc34BR2ML2iPOt+tvIcYBzK5nDfmnja1deulnuSrEddk+KFZ5WCR
-         WVOA==
+        d=linaro.org; s=google; t=1689947907; x=1690552707;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Uoi5Y4jjgnWGfQC+MA3PSzDO/nJ69a0U86XqjtM9qm4=;
+        b=hovoUSXRq28HNft26oRNivk53rfhvkFzFlsE+3eJGaPu6W9o4Hh4e/ClQ4euEk52Lc
+         Ek5BSaAroh2dCUY6scEF0qTX6SJCRLeM3gAKGHAwhgN2TXx3tl8zBKhqZNypY/tWkFHc
+         oe7SRYPVtulOU518is+mkTPudusWNGrbXpmSCwGn9SIS+3Qdck423+6xju48zvzmYRLu
+         SrCXzGzyT5RKNGORyZpIV27gIbAKSA970kJAUEzrStzCaI6yIn2cD69S96IGPnLOrWz9
+         MC4iNZlM1SAONUv1Jf8RdW+s5o5HTVZUOtOFBP3reutBNZI02r+6aCCx7r231ZzUbq/y
+         Rnqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689947671; x=1690552471;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BpX4cT8wPV+NQfH+IImmqD1hdn6km50iOH+4WrfJWg8=;
-        b=C885U9gu+xSi0Cqyr32y5pDIzumATSa8VcsDUIPYrITwFZFv/b+pRql+6d8bj3aiDZ
-         zu/ZXEwW9REM4SIDweSQXMbe/tcXyyf27hMu9AMZ24NkWyjCAV14OZ24y57sUuPhyCb9
-         8gvkXumEA9gKaY5uhDMYhSDl6BQsP2s9h9VONZqcrORZVQSap/UAprq1tzFL9dImHA9i
-         enDtv8mRh3mOKf8w/SDT7VdL5KOJIDS2Hr20K6zIq2HM0/nJpfHZFrTwrKQyN6DOiaJL
-         3C+FYadG0IEuCSEUPZl6FQLZXUGpKsbEdb54ac0dhbyyb/BC+IEIVeG9LDmKHWGAJNJ+
-         aCfw==
-X-Gm-Message-State: ABy/qLaD83Sc30D15K1ckxYqGfnmanfsOQn8nsQ47YTw9n7vGzjZ4xMx
-        RjYTGBE/wn7slF+w6hzax904PA==
-X-Google-Smtp-Source: APBJJlHgIaRtr1McXoxhDuFZTQC/N+rwooAH0qB8pe7oyGzpGS4Qm+x0cQqulgqiXKZjxneBZ96Crw==
-X-Received: by 2002:a2e:3806:0:b0:2b6:d326:156d with SMTP id f6-20020a2e3806000000b002b6d326156dmr1489191lja.19.1689947671167;
-        Fri, 21 Jul 2023 06:54:31 -0700 (PDT)
-Received: from [192.168.1.101] (abyj181.neoplus.adsl.tpnet.pl. [83.9.29.181])
-        by smtp.gmail.com with ESMTPSA id k21-20020a2e92d5000000b002b6ad323248sm953838ljh.10.2023.07.21.06.54.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 06:54:30 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 21 Jul 2023 15:54:17 +0200
-Subject: [PATCH 7/7] dt-bindings: interconnect: qcom: Fix and separate out
- MSM8939
+        d=1e100.net; s=20221208; t=1689947907; x=1690552707;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uoi5Y4jjgnWGfQC+MA3PSzDO/nJ69a0U86XqjtM9qm4=;
+        b=fjRdu6HVgAVtb2xAfk1dKU9gHZribclqgY5Qz12ktaTykhbLmCJe1F11S+DT96Eo8t
+         +zht1ARokTab52nebLTYMXXQROYJlU0LwmjlQeoROgBLmuhKK1WFp5U7JAfNa4wsDI08
+         m7NhDlTPcDpOhh5wZSIxIG1TfIVGxXCYa4Wzvs/6pzez8b5JeKq+HuYB0PokIRd133kP
+         c94CqwaViHBpxX1d1ysS2EBh6QKhVTxDgLAdTn6sTRMwX1h3Tb2nizQVCnaSg05rUR4g
+         SM89/MOEzlr34XeJgTskEZffzATDzoSrpVC9dgXqmZ0JyHiA8GA+W7gf8pYMro111OZw
+         qyaA==
+X-Gm-Message-State: ABy/qLZk+qDAWCEVIyKwhFuofw7N1Z6KErciMxIGEDHhk9hGsNw+F9EK
+        1ixZ4UGg1gbLzoz4VSP2Hrn6SA==
+X-Google-Smtp-Source: APBJJlFJQPGeO+dM+/CogGYGFX3IbIoIu/R+CmmEzNoP5XS6uM+gVvd5Uqi6hxrOAM8nRxnGkKL4wA==
+X-Received: by 2002:a05:6512:1095:b0:4f8:cd67:88e6 with SMTP id j21-20020a056512109500b004f8cd6788e6mr1382568lfg.44.1689947907244;
+        Fri, 21 Jul 2023 06:58:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id h15-20020aa7c94f000000b0051d890b2407sm2111001edt.81.2023.07.21.06.58.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jul 2023 06:58:26 -0700 (PDT)
+Message-ID: <53c26a74-3374-cbc4-57cf-3b1cc0904300@linaro.org>
+Date:   Fri, 21 Jul 2023 15:58:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230721-topic-icc_bindings-v1-7-93e2bc728fb7@linaro.org>
-References: <20230721-topic-icc_bindings-v1-0-93e2bc728fb7@linaro.org>
-In-Reply-To: <20230721-topic-icc_bindings-v1-0-93e2bc728fb7@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 02/42] dt-bindings: clock: Add Cirrus EP93xx
+To:     nikita.shubin@maquefel.me,
+        Hartley Sweeten <hsweeten@visionengravers.com>,
+        Lennert Buytenhek <kernel@wantstofly.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Lukasz Majewski <lukma@denx.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1689947656; l=7038;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=IQUTBiDEvFP7VrKldMNLzy8w9qoar1n9X231aFtNUqQ=;
- b=wcAd3kkT91A4SpXAWDtGg37iM1f2Q2aFmD3WGys3R5+JHy+QiOY1VuRjx5V2J/qelS/7W7ZDN
- c1TYhlR6H2YA+UgNPNS6VGjuEU3fP6kbY8zEgmRCsvxnwpnu75XD1lJ
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sebastian Reichel <sre@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Vinod Koul <vkoul@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+        netdev@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+        linux-input@vger.kernel.org, alsa-devel@alsa-project.org
+References: <20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me>
+ <20230605-ep93xx-v3-2-3d63a5f1103e@maquefel.me>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230605-ep93xx-v3-2-3d63a5f1103e@maquefel.me>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Separate out MSM8939 icc bindings from the common file and fix the
-clocks description by removing the wrong internal RPM bus clock
-representation that we've been carrying for years.
+On 20/07/2023 13:29, Nikita Shubin via B4 Relay wrote:
+> From: Nikita Shubin <nikita.shubin@maquefel.me>
+> 
+> This adds device tree bindings for the Cirrus Logic EP93xx
+> clock block used in these SoCs.
+> 
+> Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> ---
+>  .../bindings/clock/cirrus,ep9301-clk.yaml          | 46 ++++++++++++++++++++++
+>  include/dt-bindings/clock/cirrus,ep93xx-clock.h    | 41 +++++++++++++++++++
+>  2 files changed, 87 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/cirrus,ep9301-clk.yaml b/Documentation/devicetree/bindings/clock/cirrus,ep9301-clk.yaml
+> new file mode 100644
+> index 000000000000..111e016601fb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/cirrus,ep9301-clk.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/cirrus,ep9301-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus Logic ep93xx SoC's clock controller
+> +
+> +maintainers:
+> +  - Nikita Shubin <nikita.shubin@maquefel.me>
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: cirrus,ep9301-clk
+> +      - items:
+> +          - enum:
+> +              - cirrus,ep9302-clk
+> +              - cirrus,ep9307-clk
+> +              - cirrus,ep9312-clk
+> +              - cirrus,ep9315-clk
+> +          - const: cirrus,ep9301-clk
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: reference clock
+> +
+> +required:
+> +  - compatible
+> +  - "#clock-cells"
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    clock-controller {
+> +      compatible = "cirrus,ep9301-clk";
+> +      #clock-cells = <1>;
+> +      clocks = <&xtali>;
+> +    };
+> +...
+> diff --git a/include/dt-bindings/clock/cirrus,ep93xx-clock.h b/include/dt-bindings/clock/cirrus,ep93xx-clock.h
+> new file mode 100644
+> index 000000000000..3cd053c0fdea
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/cirrus,ep93xx-clock.h
 
-This was the final one, so also retire the shared file.
+Keep the same filename as bindings file.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../bindings/interconnect/qcom,msm8939.yaml        |  74 ++++++++++
- .../devicetree/bindings/interconnect/qcom,rpm.yaml | 156 ---------------------
- 2 files changed, 74 insertions(+), 156 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
-new file mode 100644
-index 000000000000..00378c1ef9d6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8939.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interconnect/qcom,msm8939.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm MSM8939 Network-On-Chip interconnect
-+
-+maintainers:
-+  - Konrad Dybcio <konradybcio@kernel.org>
-+
-+description: |
-+  The Qualcomm MSM8939 interconnect providers support adjusting the
-+  bandwidth requirements between the various NoC fabrics.
-+
-+allOf:
-+  - $ref: qcom,rpm-common.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,msm8939-bimc
-+      - qcom,msm8939-pcnoc
-+      - qcom,msm8939-snoc
-+
-+patternProperties:
-+  '^interconnect-[a-z0-9\-]+$':
-+    type: object
-+    $ref: qcom,rpm-common.yaml#
-+    description:
-+      The interconnect providers do not have a separate QoS register space,
-+      but share parent's space.
-+
-+    properties:
-+      compatible:
-+        const: qcom,msm8939-snoc-mm
-+
-+    required:
-+      - compatible
-+
-+    unevaluatedProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,rpmcc.h>
-+
-+    snoc: interconnect@580000 {
-+        compatible = "qcom,msm8939-snoc";
-+        reg = <0x00580000 0x14000>;
-+        #interconnect-cells = <1>;
-+    };
-+
-+    pcnoc: interconnect@500000 {
-+        compatible = "qcom,msm8939-pcnoc";
-+        reg = <0x00500000 0x11000>;
-+        #interconnect-cells = <1>;
-+    };
-+
-+    bimc: interconnect@400000 {
-+        compatible = "qcom,msm8939-bimc";
-+        reg = <0x00400000 0x62000>;
-+        #interconnect-cells = <1>;
-+
-+          snoc_mm: interconnect-snoc {
-+              compatible = "qcom,msm8939-snoc-mm";
-+              #interconnect-cells = <1>;
-+          };
-+    };
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-deleted file mode 100644
-index 6f8836312496..000000000000
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-+++ /dev/null
-@@ -1,156 +0,0 @@
--# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
--%YAML 1.2
-----
--$id: http://devicetree.org/schemas/interconnect/qcom,rpm.yaml#
--$schema: http://devicetree.org/meta-schemas/core.yaml#
--
--title: Qualcomm RPM Network-On-Chip Interconnect
--
--maintainers:
--  - Georgi Djakov <georgi.djakov@linaro.org>
--
--description: |
--  RPM interconnect providers support system bandwidth requirements through
--  RPM processor. The provider is able to communicate with the RPM through
--  the RPM shared memory device.
--
--properties:
--  reg:
--    maxItems: 1
--
--  compatible:
--    enum:
--      - qcom,msm8939-bimc
--      - qcom,msm8939-pcnoc
--      - qcom,msm8939-snoc
--
--  '#interconnect-cells':
--    description: |
--      Value: <1> is one cell in an interconnect specifier for the
--      interconnect node id, <2> requires the interconnect node id and an
--      extra path tag.
--    enum: [ 1, 2 ]
--
--  clocks:
--    minItems: 2
--    maxItems: 7
--
--  clock-names:
--    minItems: 2
--    maxItems: 7
--
--  power-domains:
--    maxItems: 1
--
--# Child node's properties
--patternProperties:
--  '^interconnect-[a-z0-9]+$':
--    type: object
--    additionalProperties: false
--    description:
--      snoc-mm is a child of snoc, sharing snoc's register address space.
--
--    properties:
--      compatible:
--        enum:
--          - qcom,msm8939-snoc-mm
--
--      '#interconnect-cells':
--        const: 1
--
--      clock-names:
--        items:
--          - const: bus
--          - const: bus_a
--
--      clocks:
--        items:
--          - description: Bus Clock
--          - description: Bus A Clock
--
--    required:
--      - compatible
--      - '#interconnect-cells'
--      - clock-names
--      - clocks
--
--required:
--  - compatible
--  - reg
--  - '#interconnect-cells'
--  - clock-names
--  - clocks
--
--additionalProperties: false
--
--allOf:
--  - if:
--      properties:
--        compatible:
--          contains:
--            enum:
--              - qcom,msm8939-bimc
--              - qcom,msm8939-pcnoc
--              - qcom,msm8939-snoc
--
--    then:
--      properties:
--        clock-names:
--          items:
--            - const: bus
--            - const: bus_a
--
--        clocks:
--          items:
--            - description: Bus Clock
--            - description: Bus A Clock
--
--  - if:
--      not:
--        properties:
--          compatible:
--            contains:
--              enum:
--                - qcom,msm8939-snoc
--    then:
--      patternProperties:
--        '^interconnect-[a-z0-9]+$': false
--
--examples:
--  - |
--      #include <dt-bindings/clock/qcom,rpmcc.h>
--
--      bimc: interconnect@400000 {
--              compatible = "qcom,msm8939-bimc";
--              reg = <0x00400000 0x62000>;
--              #interconnect-cells = <1>;
--              clock-names = "bus", "bus_a";
--              clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
--                       <&rpmcc RPM_SMD_BIMC_A_CLK>;
--      };
--
--      pcnoc: interconnect@500000 {
--              compatible = "qcom,msm8939-pcnoc";
--              reg = <0x00500000 0x11000>;
--              #interconnect-cells = <1>;
--              clock-names = "bus", "bus_a";
--              clocks = <&rpmcc RPM_SMD_PCNOC_CLK>,
--                       <&rpmcc RPM_SMD_PCNOC_A_CLK>;
--      };
--
--      snoc: interconnect@580000 {
--              compatible = "qcom,msm8939-snoc";
--              reg = <0x00580000 0x14080>;
--              clock-names = "bus", "bus_a";
--              clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
--                       <&rpmcc RPM_SMD_SNOC_A_CLK>;
--              #interconnect-cells = <1>;
--
--              snoc_mm: interconnect-snoc {
--                      compatible = "qcom,msm8939-snoc-mm";
--                      clock-names = "bus", "bus_a";
--                      clocks = <&rpmcc RPM_SMD_SYSMMNOC_CLK>,
--                               <&rpmcc RPM_SMD_SYSMMNOC_A_CLK>;
--                      #interconnect-cells = <1>;
--              };
--      };
-
--- 
-2.41.0
+Best regards,
+Krzysztof
 
