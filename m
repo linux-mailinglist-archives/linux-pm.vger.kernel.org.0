@@ -2,154 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758AA75C33D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 11:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C4375C34A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 11:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjGUJlr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 05:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53422 "EHLO
+        id S229554AbjGUJnJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 05:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjGUJlh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 05:41:37 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B8E30E3
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 02:41:29 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8bbcfd89aso10523415ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 02:41:29 -0700 (PDT)
+        with ESMTP id S231514AbjGUJmw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 05:42:52 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BDE35AF
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 02:42:29 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6686a05bc66so1234614b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 02:42:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689932489; x=1690537289;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wV1Dq3qxy3owBxFZT6zTX4jA+LGfZlUCj9m2f/LMDI4=;
-        b=PX7uG1KzgJBF9OqFkdVoGQGowY0yc8uyhhSfAf0grrqIE31HiSaobdTHh3woQlGXGl
-         AFqxibmxcYe39UOHeBHgoboxh9JYggzuUuvt1gJCi3ouJBIdUMoF4ixPcx8eJN3OK+ki
-         btdQ/IoO87PY9n2Su1E4ChD5X10ObsuPDki1Rx/1aBCFcdc0ZdGVGdfetwIkwd4MKWeJ
-         bJJqDzcGmqQUmyZtwGJPIyHwHDwculDG0IBmUXRxtWgTrZCBt4aD8Bdicjs7GNHauexv
-         CtVk4Y80Atp8Fu256ntEOo/AGfDuZyhUX4EgdG9q7xiblOoGPCtYOssK23WQuWvV/B85
-         uh+w==
+        d=linaro.org; s=google; t=1689932529; x=1690537329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IFcU7/ffJj4GpqTDJrXsJdgjnuOhtBeWbIDJjevNDPU=;
+        b=hiqCACW2e6ToVhtF/uGbndLMELQTUVszaKBSFRTyxHpLpZWPVTlffOehyOxsrk91e/
+         zp2RgL/2DLad18tMqmIMWvSSwonUi5XvydaEaGjZA7GuFnusqAphYfg9qVnjYuR+AR9w
+         Y2bTY/rACSniqAgu2PwGuAtmYeeusYUwnyxcaimdcRhux+6Y2ce8u4ai83/TEod5z0v5
+         m/esqcISu4CTa64qDKf90ooAXLrz+22Njc3B3AZlINViptNVeGBwJQgRoxfdV1lX4EmL
+         W5/MYUQP+m5KHhCHguV5BEPdG/N/1oL+HG/l2fzkwVcbiBFZLa9b31YA46HmosANomkQ
+         GwLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689932489; x=1690537289;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wV1Dq3qxy3owBxFZT6zTX4jA+LGfZlUCj9m2f/LMDI4=;
-        b=ftJdB+blzZ0Xk43lArYgwzJKIG+R3GvFz0XNwIgE3fNUUTt5hBXqr0DlFrha5Sgg9D
-         e2IXBfRYDIrz6FeKAYQXrHeB862E0gBkira1oladpJ4AKChZ7eMNAH91BRk24T8GbWzs
-         5Oi6vRQfdB+Yop7ESv9Lw3qWf4V+uMswaUpNdZ9oXI9fGlDBF+CNYYRBMocubiuXozAU
-         l9ClqWgS3pLSq5/a3X8L8EYiS8i9ODZxyhLSsoGQ+1iqDaV0S8aTpwL3yyMVfufsb2lG
-         3fSf1+KOPSvFNM/foyTyg2upybp2GkHqe4K8bI9TzwHxSYWuOOW0p7yYhszwYpsL8Pgf
-         NqHw==
-X-Gm-Message-State: ABy/qLaeIPupq/5Ea87DJhPTfXW8ZhbMZAzctbTVvWKRFBrgXx9/ZrU8
-        foLGeXrXZ8ebABJi5OwH099LLg==
-X-Google-Smtp-Source: APBJJlFwLBVVI5u6w9IjfM/dmNtJVCNAkIhF1rY/8iqPtscxzS4IN3fls6jffvT2kO3RWDvl6CRYyw==
-X-Received: by 2002:a17:902:ce84:b0:1b6:ba60:77f0 with SMTP id f4-20020a170902ce8400b001b6ba6077f0mr1347697plg.10.1689932489156;
-        Fri, 21 Jul 2023 02:41:29 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689932529; x=1690537329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IFcU7/ffJj4GpqTDJrXsJdgjnuOhtBeWbIDJjevNDPU=;
+        b=cBdyTQoWlh7ApA1TSgQGJDw8VYD5tj9ubuzS6uo1YN1WZxMHScqhmel+eMlWNbrbHS
+         uDVL66BEI2paIvehaEmhyB0EaESkAQSRDOkyo6fI/Tqq6C9OpJYbePpjbkV/kwPAS3Gd
+         sg56h53yJvp+DRiXTVbFfEe97vJZOCsLGF0wbZ0vxUk2b9GDAHIk9OYGu7TkiHMZHDRi
+         FuEJeMbGq1vBkjeItsLjEZicBvgvlFhllkC2CF2l5xP/YrLDzQPZssTk0UeSRb5Y0B/L
+         TuT2AmI+iNogc/e0R20HlcbQtWkB18NBsws05gu+oTXw/DFMQV4y91rVwoS5vZRFi7VL
+         egLw==
+X-Gm-Message-State: ABy/qLb/ZOhUjHshMvoWXLV8tC2pSnHt8Ql/0wBNKj6T3jvFFY6AAklP
+        Kmx1W2y2ExerrFmNhNR/f3OZvA==
+X-Google-Smtp-Source: APBJJlHkH7Uv7pWn/MP4FMrAIT/Cc7VTogZMZvc6nxyeSZL/vi3Feh7E3jJubjRUzodKuGKTOER0ag==
+X-Received: by 2002:a05:6a20:841e:b0:11f:6dc:4f38 with SMTP id c30-20020a056a20841e00b0011f06dc4f38mr1573730pzd.55.1689932529270;
+        Fri, 21 Jul 2023 02:42:09 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id u22-20020a170902a61600b001b2069072ccsm3005270plq.18.2023.07.21.02.41.28
+        by smtp.gmail.com with ESMTPSA id e3-20020a170902b78300b001b88af04175sm2997093pls.41.2023.07.21.02.42.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 02:41:28 -0700 (PDT)
+        Fri, 21 Jul 2023 02:42:08 -0700 (PDT)
+Date:   Fri, 21 Jul 2023 15:12:06 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] OPP: Reuse dev_pm_opp_get_freq_indexed()
-Date:   Fri, 21 Jul 2023 15:10:59 +0530
-Message-Id: <5ddded46303f9d034ecb79f1fcc48abcc590f7db.1689932341.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1689932341.git.viresh.kumar@linaro.org>
-References: <cover.1689932341.git.viresh.kumar@linaro.org>
+Subject: Re: [PATCH v2 00/15] UFS: Add OPP and interconnect support
+Message-ID: <20230721094206.dfgnn73kmzzj6rtw@vireshk-i7>
+References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reuse dev_pm_opp_get_freq_indexed() from dev_pm_opp_get_freq().
+On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
+> Hi,
+> 
+> This series adds OPP (Operating Points) support to UFSHCD driver and
+> interconnect support to Qcom UFS driver.
+> 
+> Motivation behind adding OPP support is to scale both clocks as well as
+> regulators/performance state dynamically. Currently, UFSHCD just scales
+> clock frequency during runtime with the help of "freq-table-hz" property
+> defined in devicetree. With the addition of OPP tables in devicetree (as
+> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+> both clocks and performance state of power domain which helps in power
+> saving.
+> 
+> For the addition of OPP support to UFSHCD, there are changes required to
+> the OPP framework and devfreq drivers which are also added in this series.
+> 
+> Finally, interconnect support is added to Qcom UFS driver for scaling the
+> interconnect path dynamically. This is required to avoid boot crash in
+> recent SoCs and also to save power during runtime. More information is
+> available in patch 13/13.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c     | 21 ---------------------
- include/linux/pm_opp.h | 12 +++++-------
- 2 files changed, 5 insertions(+), 28 deletions(-)
+Hi Mani,
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 95f49fbe431c..16a103e6695b 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -176,27 +176,6 @@ unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp)
- }
- EXPORT_SYMBOL_GPL(dev_pm_opp_get_power);
- 
--/**
-- * dev_pm_opp_get_freq() - Gets the frequency corresponding to an available opp
-- * @opp:	opp for which frequency has to be returned for
-- *
-- * Return: frequency in hertz corresponding to the opp, else
-- * return 0
-- */
--unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
--{
--	if (IS_ERR_OR_NULL(opp)) {
--		pr_err("%s: Invalid parameters\n", __func__);
--		return 0;
--	}
--
--	if (!assert_single_clk(opp->opp_table))
--		return 0;
--
--	return opp->rates[0];
--}
--EXPORT_SYMBOL_GPL(dev_pm_opp_get_freq);
--
- /**
-  * dev_pm_opp_get_freq_indexed() - Gets the frequency corresponding to an
-  *				   available opp with specified index
-diff --git a/include/linux/pm_opp.h b/include/linux/pm_opp.h
-index 23e4e4eaaa42..91f87d7e807c 100644
---- a/include/linux/pm_opp.h
-+++ b/include/linux/pm_opp.h
-@@ -103,8 +103,6 @@ int dev_pm_opp_get_supplies(struct dev_pm_opp *opp, struct dev_pm_opp_supply *su
- 
- unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp);
- 
--unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp);
--
- unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp, u32 index);
- 
- unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp);
-@@ -214,11 +212,6 @@ static inline unsigned long dev_pm_opp_get_power(struct dev_pm_opp *opp)
- 	return 0;
- }
- 
--static inline unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
--{
--	return 0;
--}
--
- static inline unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp, u32 index)
- {
- 	return 0;
-@@ -669,4 +662,9 @@ static inline void dev_pm_opp_put_prop_name(int token)
- 	dev_pm_opp_clear_config(token);
- }
- 
-+static inline unsigned long dev_pm_opp_get_freq(struct dev_pm_opp *opp)
-+{
-+	return dev_pm_opp_get_freq_indexed(opp, 0);
-+}
-+
- #endif		/* __LINUX_OPP_H__ */
+I have picked the OPP related patches from here (apart from DT one)
+and sent them separately in a series, along with few changes from me.
+Also pushed them in my linux-next branch.
+
+Thanks.
+
 -- 
-2.31.1.272.g89b43f80a514
-
+viresh
