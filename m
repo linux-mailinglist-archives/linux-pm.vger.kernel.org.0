@@ -2,134 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F9C975C637
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 13:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FB275C63F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 13:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230512AbjGUL5x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 07:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50690 "EHLO
+        id S230193AbjGUL7t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 07:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjGUL5q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 07:57:46 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DA31722
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 04:57:43 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-666e6ecb52dso1241690b3a.2
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 04:57:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689940663; x=1690545463;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gZeVRbN8i3RBrNfW3X1oiz7Rg1AaV6+VX/SLakSfZZA=;
-        b=iKCl353NEddqXRkMvTc4WhEeB5hqbKgT/AUtGB7CfQ3YsTpdC12YZHueB2HFGxILa4
-         2pNgMS7KN3+B/t+ZVNJ6rAciQHePdD+PGsiRPXItha92UsFbSShlGk5dC5uVq+/P85u+
-         qeEpAkebRFfP395V1y6H+WCmtXlJtlMBhyzgnjXPDV7BIZu40cDh5nZcPzfX3lxoZJxn
-         eMq8MPrY+6v0LcHnCapxqWDswAjp9tMbhbbeeT0Z60Cx8+hHLUvWQKwXzHn7Of/a1S6b
-         yEWlmQQAfuncH9J1eYTu2cQLGjm6hMskc8C65A7yzBtJN/85tWwwZvbzERH6Fk2BbCnH
-         feUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689940663; x=1690545463;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gZeVRbN8i3RBrNfW3X1oiz7Rg1AaV6+VX/SLakSfZZA=;
-        b=bBRQT+P1WrmBxjc+iS1/IATAr3O7rRcKBzjwkNelU/+AT06KM5qpgMxEwSjmwkdG/M
-         Ya3Yl0vVsNfarlJKMy9js+ax1TSUwJEjJxDVO3bxHObvSlKafHahHgetpsDXcgfWKKRa
-         h9Hb9+It4ohjrMIQiRVHr7Js6wG8zJFjZ4vYDGOIz/pBLYFUttRMKtysKK1/+RKhm9Y2
-         91msbEf5tn2PehxcgsACI7AaE2LUxBioxNLRZcVjegwIiNjx/cdpufca9++gClMcRHnf
-         BVAD97W6d08apI3JdDIYgndSv4fhhP60S9eXe8k6y0zBz15G8BAV6Fdz0tKvrvaHMisF
-         6eLw==
-X-Gm-Message-State: ABy/qLZKjzp3oDSx31+eMzgwn4/+JjFZAGzY0WbamnPibUWdYQxSkV1J
-        xz9S6I63FV4ByylGOd6lQWnu
-X-Google-Smtp-Source: APBJJlEvmEp/uWX9S9crTApKWRrgbE4M1ih0yNWyhpPGUZogOYzA/q6Zy/eF3S72X0sFN2yoWHinGA==
-X-Received: by 2002:a05:6a00:2404:b0:681:3ed2:b493 with SMTP id z4-20020a056a00240400b006813ed2b493mr1319785pfh.26.1689940662836;
-        Fri, 21 Jul 2023 04:57:42 -0700 (PDT)
-Received: from thinkpad ([117.206.118.181])
-        by smtp.gmail.com with ESMTPSA id ff17-20020a056a002f5100b006675c242548sm2803366pfb.182.2023.07.21.04.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 04:57:42 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 17:27:31 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        with ESMTP id S229453AbjGUL7s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 07:59:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DAB3171B;
+        Fri, 21 Jul 2023 04:59:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FB2C2F4;
+        Fri, 21 Jul 2023 05:00:30 -0700 (PDT)
+Received: from bogus (unknown [10.57.96.100])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD21C3F6C4;
+        Fri, 21 Jul 2023 04:59:44 -0700 (PDT)
+Date:   Fri, 21 Jul 2023 12:59:17 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/15] arm64: dts: qcom: sdm845: Fix the min frequency
- of "ice_core_clk"
-Message-ID: <20230721115731.GB2536@thinkpad>
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
- <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
+Subject: Re: [PATCH v2 09/11] cpufreq: scmi: Add support to parse domain-id
+ using #power-domain-cells
+Message-ID: <20230721115917.lescikl75kmeqkw4@bogus>
+References: <20230713141738.23970-1-ulf.hansson@linaro.org>
+ <20230713141738.23970-10-ulf.hansson@linaro.org>
+ <20230719152426.qwc5qqewrfjsarlz@bogus>
+ <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 12:48:01PM +0530, Viresh Kumar wrote:
-> On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
-> > Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
-> > downstream vendor devicetree. So fix it!
-> > 
-> > https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > 
-> > Fixes: 433f9a57298f ("arm64: dts: sdm845: add Inline Crypto Engine registers and clock")
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > index 9ed74bf72d05..89520a9fe1e3 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
-> >  				<0 0>,
-> >  				<0 0>,
-> >  				<0 0>,
-> > -				<0 300000000>;
-> > +				<75000000 300000000>;
-> >  
-> >  			status = "disabled";
-> >  		};
+On Fri, Jul 21, 2023 at 01:52:17PM +0200, Ulf Hansson wrote:
+> On Wed, 19 Jul 2023 at 17:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Thu, Jul 13, 2023 at 04:17:36PM +0200, Ulf Hansson wrote:
+> > > The performance domain-id can be described in DT using the power-domains
+> > > property or the clock property. The latter is already supported, so let's
+> > > add support for the power-domains too.
+> > >
+> >
+> > How is this supposed to work for the CPUs ? The CPU power domains are
+> > generally PSCI on most of the platforms and the one using OSI explicitly
+> > need to specify the details while ones using PC will not need to. Also they
+> > can never be performance domains too. So I am not sure if I am following this
+> > correctly.
 > 
-> Please keep new feature and fixes like this in separate series. This
-> could be merged directly in the currently ongoing kernel rc and
-> doesn't need to wait for this series.
+> Your concerns are certainly correct, I completely forgot about this.
+> We need to specify what power-domain index belongs to what, by using
+> power-domain-names in DT. So a CPU node, that has both psci for power
+> and scmi for performance would then typically look like this:
 > 
-> Or at least keep the commit at the top, so another maintainer can
-> simply pick it.
+> power-domains = <&CPU_PD0>, <&scmi_dvfs 4>;
+> power-domain-names = "psci", "scmi";
 > 
+> I will take care of this in the next version - and thanks a lot for
+> pointing this out!
 
-That's what I did. This patch and previous patch are the fixes patches, so they
-are posted on top of other dts patches to be merged separately if required.
 
-- Mani
-
-> -- 
-> viresh
+Yes something like this will work. Just curious will this impact the idle
+paths ? By that I mean will the presence of additional domains add more
+work or will they be skipped as early as possible with just one additional
+check ?
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Regards,
+Sudeep
