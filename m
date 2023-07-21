@@ -2,63 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F7075BE10
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 07:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD1875BF6F
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 09:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjGUFzD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 01:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39596 "EHLO
+        id S229713AbjGUHSJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 03:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjGUFzC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 01:55:02 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1620E62
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 22:54:59 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b933bbd3eeso23406781fa.1
-        for <linux-pm@vger.kernel.org>; Thu, 20 Jul 2023 22:54:59 -0700 (PDT)
+        with ESMTP id S229663AbjGUHSH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 03:18:07 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45109FC
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 00:18:05 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8a44ee159so10592295ad.3
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 00:18:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689918898; x=1690523698;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tx9jl7D+lvBMqXnZpoQLi2KuMPWDp5XwCqZnDLqYhH4=;
-        b=P+5zACJptGbFTgXVDRkqTPIryzqqm6xnTBqa144mWW3vJUlBHW3fug8z5qezx3wt1U
-         dt5bYw3bEVeG/4je9TPGsRbpQ8Mhov1V8II6azJbJDnbdJDDqbSqV1XiYHWemaz56QtB
-         JVxsgy0prKVQ/44GZLMv1ewSH9q1wFE0fZ+yQD0xhoM3W8VbFXUVXS1cbp68V1ss/3ii
-         Sa4xYlacIbLNYCdhIwtJ4he+UdTZduqbUVMZjOI8jaSQpLdQjtVdn04uCp+mtdrAqS1e
-         I+60ZNkJXtWLTaibJ9N03V4nBruOd/t2a9jvc/pRermLahFbfvPr1RLnkNeIRtKUEHrH
-         tbNg==
+        d=linaro.org; s=google; t=1689923885; x=1690528685;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xgra1BbjJ2TX4LJXSTiv0VpjCyIk0jpZ//hvoXBk3V0=;
+        b=b4MYGFDLTZkoT24IR8U5mw8aCuPkq5W9pn72K+9QLHAx4bD9fuTYh7Zd6jJqTDulFi
+         Q5+UClv+pgLMRp5nq8gyjLmgoTf0RO4/Taky/8lu1VVPc4XzV47YX5/XXrBw2GblMIeZ
+         BJj7rjghVciP1AbWBdCiOfSfsDZuJW9AOAHjyiLml4BW4LjwlB2LFC32pVz0rxHQtot/
+         2bZG31h0NQcdRWgDP6skU6BVrnuoWcTv0ildGVJtsTO9nPNdIuc+0c74pcJXMk0NWdHJ
+         8J5lkgokPLJJqhLzuTHIVkH1Ti8SAF9TmzUbKJfA07iHtqgc+TmkaJEzZL8PGKmmuxDD
+         FQTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689918898; x=1690523698;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tx9jl7D+lvBMqXnZpoQLi2KuMPWDp5XwCqZnDLqYhH4=;
-        b=AImZHQumoY9zF9iQ5SZHva/M74cbbW1nzM4xrws2lgKStO+ukoNj+4kG7ft0yD+59D
-         4AVs00uSwGMK5sOpNiAkyae+La+PpBydoMIIm6MlXQpBn3ArUeQuR3d6h4XO35ogpk8f
-         mRjgju3jvNuCYwc5mXnQRT5zT2w2RmFfy9eP3Yf3/kqFUVpWg+5ZWMDyfWohuFMK1X0o
-         rPZma/TkDapuVEi3Xsx/ypZJLxTKpAajXStS/HdtbOU38NJRQD3ne8OA9ZMOc4fL8Znc
-         dEstK1YtTRoapGcnURwl1tE38o1D5Acs2YCgIg0SiEOs/oOLIq5T2vcSuxrhVL+a53KX
-         YTtQ==
-X-Gm-Message-State: ABy/qLbVcl8ojFjoLWKKrEgPmPTd8ksnQsEwyutIJAf3SmXeP3Fi5n9F
-        OnZ/stSo0jG6pH2Gy1X8vmCmDw==
-X-Google-Smtp-Source: APBJJlEa4kryPI3nUrwB9m9RmaeAPUjTod8HmpUxn0EKJgY2ZRTgF8NnuoRZdgKFcVWrJlzcH2Xv/w==
-X-Received: by 2002:a2e:9bd9:0:b0:2b7:3656:c594 with SMTP id w25-20020a2e9bd9000000b002b73656c594mr846381ljj.3.1689918898068;
-        Thu, 20 Jul 2023 22:54:58 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id o20-20020a5d58d4000000b0031433443265sm3170654wrf.53.2023.07.20.22.54.56
+        d=1e100.net; s=20221208; t=1689923885; x=1690528685;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xgra1BbjJ2TX4LJXSTiv0VpjCyIk0jpZ//hvoXBk3V0=;
+        b=T62ZxI4FxNuc5/xoWG/lITYrEwG1YkGOc6aYCWWpZbo0Wuc8en5jc6KKB/Ps0sXI4O
+         aSwhVUaJzLErA096T9O7WSKR5p3/2xp90DRqNqD8XoWPdLgZ4d6QzykahKxOTEIGgWQW
+         cKcrl1jodyEJuDpnFDeu15pDWmhhVEAEPpfV+wsjSqZGT1UMQ4BibAqhIt/Xkj8GVcBA
+         5uenL1gV7pqMpgbseU6Jd/7hvbmftOTeAhKrzMg06ai7WalpjtPo1LTLGY2uyQgybK7b
+         wTWHChUjNyGRCtbdK3ogf9n5FMAwnt3K5R/cKc5iYUEbn5CfXny2mFnfkiMvHXzp/9bw
+         +1VA==
+X-Gm-Message-State: ABy/qLZrf+SD+/i864kQTDP5A3dAQ/0HdB4I+YQbxGWy24xJ/ctYAt83
+        dHKvSwIZoHWQ+OssendPTvsZnw==
+X-Google-Smtp-Source: APBJJlGOEY7gHS/A9+kCu38TOUt7LFXF5kKuzGNRk2oieuEA63WC3YwDiKytWENvZdB/oVsM0A7/Lg==
+X-Received: by 2002:a17:902:934a:b0:1b8:af85:e959 with SMTP id g10-20020a170902934a00b001b8af85e959mr894543plp.53.1689923884709;
+        Fri, 21 Jul 2023 00:18:04 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id a17-20020a170902ecd100b001ba066c589dsm2671961plh.137.2023.07.21.00.18.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Jul 2023 22:54:56 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 08:54:53 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        Fri, 21 Jul 2023 00:18:04 -0700 (PDT)
+Date:   Fri, 21 Jul 2023 12:48:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
         myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
         cw00.choi@samsung.com, andersson@kernel.org,
         konrad.dybcio@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
         alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
         linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
@@ -66,74 +64,59 @@ Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
         quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
         quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org
-Subject: Re: [PATCH v2 08/15] OPP: Introduce dev_pm_opp_get_freq_indexed() API
-Message-ID: <95878fdc-6b98-4be8-84e7-6bfdbf902a9f@kadam.mountain>
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 04/15] arm64: dts: qcom: sdm845: Fix the min frequency
+ of "ice_core_clk"
+Message-ID: <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
+References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+ <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230720054100.9940-9-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Manivannan,
+On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
+> Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
+> downstream vendor devicetree. So fix it!
+> 
+> https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> 
+> Fixes: 433f9a57298f ("arm64: dts: sdm845: add Inline Crypto Engine registers and clock")
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> index 9ed74bf72d05..89520a9fe1e3 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
+>  				<0 0>,
+>  				<0 0>,
+>  				<0 0>,
+> -				<0 300000000>;
+> +				<75000000 300000000>;
+>  
+>  			status = "disabled";
+>  		};
 
-kernel test robot noticed the following build warnings:
+Please keep new feature and fixes like this in separate series. This
+could be merged directly in the currently ongoing kernel rc and
+doesn't need to wait for this series.
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam/dt-bindings-ufs-common-add-OPP-table/20230720-134720
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230720054100.9940-9-manivannan.sadhasivam%40linaro.org
-patch subject: [PATCH v2 08/15] OPP: Introduce dev_pm_opp_get_freq_indexed() API
-config: i386-randconfig-m041-20230720 (https://download.01.org/0day-ci/archive/20230721/202307210431.3S4SeXVw-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230721/202307210431.3S4SeXVw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202307210431.3S4SeXVw-lkp@intel.com/
-
-New smatch warnings:
-drivers/opp/core.c:213 dev_pm_opp_get_freq_indexed() warn: variable dereferenced before IS_ERR check 'opp' (see line 211)
-
-Old smatch warnings:
-drivers/opp/core.c:254 dev_pm_opp_get_required_pstate() warn: variable dereferenced before IS_ERR check 'opp' (see line 252)
-drivers/opp/core.c:2458 _opp_attach_genpd() warn: passing zero to 'PTR_ERR'
-
-vim +/opp +213 drivers/opp/core.c
-
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  209  unsigned long dev_pm_opp_get_freq_indexed(struct dev_pm_opp *opp, u32 index)
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  210  {
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20 @211  	struct opp_table *opp_table = opp->opp_table;
-                                                                                                              ^^^^^^^^^^^^^^^
-Dereference
-
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  212  
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20 @213  	if (IS_ERR_OR_NULL(opp) || index >= opp_table->clk_count) {
-                                                                                                   ^^^
-Checked too late
-
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  214  		pr_err("%s: Invalid parameters\n", __func__);
-
-This should be a dev_err(), btw.
-
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  215  		return 0;
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  216  	}
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  217  
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  218  	return opp->rates[index];
-a772c36cb3fb41 drivers/opp/core.c       Manivannan Sadhasivam 2023-07-20  219  }
+Or at least keep the commit at the top, so another maintainer can
+simply pick it.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+viresh
