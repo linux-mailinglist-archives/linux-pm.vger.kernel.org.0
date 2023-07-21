@@ -2,87 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FB275C63F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 13:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8841F75C66C
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 14:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjGUL7t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 07:59:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
+        id S230171AbjGUMDq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 08:03:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjGUL7s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 07:59:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5DAB3171B;
-        Fri, 21 Jul 2023 04:59:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FB2C2F4;
-        Fri, 21 Jul 2023 05:00:30 -0700 (PDT)
-Received: from bogus (unknown [10.57.96.100])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD21C3F6C4;
-        Fri, 21 Jul 2023 04:59:44 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 12:59:17 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/11] cpufreq: scmi: Add support to parse domain-id
- using #power-domain-cells
-Message-ID: <20230721115917.lescikl75kmeqkw4@bogus>
-References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-10-ulf.hansson@linaro.org>
- <20230719152426.qwc5qqewrfjsarlz@bogus>
- <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com>
+        with ESMTP id S230344AbjGUMDo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 08:03:44 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1C935A0
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 05:03:23 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb5bcb9a28so3055701e87.3
+        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 05:03:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689941000; x=1690545800;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=IhkoDF78CCv7y5GQYbbsjZT44iTH15rIG128hk87YQc=;
+        b=JBT7HZNg/+51OOwGNYhejjohC3pQ8vhkr4nA5qcrwkIWAETyzDUWiCAEpzh4SK1YkZ
+         JveSjdBTPPbpZflUrtS93foCZMRht4kIgbltSJ/UFedBgJyDLN7C5S0uoDmH4WGSbl+w
+         /SBZlTNx1u3NQog52Pxqm5MFiDKTEtBw9/xlSQE3bXIRrOK604PrdKhzaTCB/d5Upo1K
+         ByTHDugbdPIE51TWQ0zgfrDyFrNgp+cZKJEVvefKqbJk4txy8VMxt7Y2gejrB0B3tfvV
+         gwQ4YxEIsmVJWNuXcuOgPbOvztUqp3CQz9XoVobyMPTyHrrakFkKR/Lv9geknSs0tlM6
+         fjrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689941000; x=1690545800;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IhkoDF78CCv7y5GQYbbsjZT44iTH15rIG128hk87YQc=;
+        b=PNj1EFr/JNtUSWdXSX8msVgy/qmCsmZwLmvGClOoQ6jOGDdb+oBtC7yfOHFEhESTIT
+         mh2Id3rXnaZOBhwvlfvWN4HjW7A3dDFAP3NY08meQTDzxiThAeLvIOL+o6CyoALGHSOG
+         BJDY3jJ8949Kk0Kyt5Euv0UfrODrrCxnx/yMHH2bpXGO/ooojWvg9ozJYasWZUQJMshO
+         61XJZbtkNcTC2xB1UM6JCTqrIaWuOSZdTn17AScAMkM/RuAw8Aws4BIV025n3TuIbPse
+         USIs+OYF7NSIoOLM8i+35nf14mc6jmxPstG2rpKqiua0dWiBz2yQcyQXsp9jfote25MX
+         5LAA==
+X-Gm-Message-State: ABy/qLZKKVSM67VY8KSMyq4/WlXvNCwFpzbUY+UxulMW4WI+9xyO/hGk
+        lj8jZw5FK31HJmM7YhznFCiUVQ==
+X-Google-Smtp-Source: APBJJlFGmpYr3UvI/UTEAO4mdaH2ulDlpGO5iK6eLCqJ87k4vm0gVfwsJpQK9hsB1IjkHPsU27C2tQ==
+X-Received: by 2002:a19:6541:0:b0:4f9:5404:af5 with SMTP id c1-20020a196541000000b004f954040af5mr1091273lfj.46.1689940999971;
+        Fri, 21 Jul 2023 05:03:19 -0700 (PDT)
+Received: from [192.168.1.101] (abyj181.neoplus.adsl.tpnet.pl. [83.9.29.181])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac2554e000000b004fbacee6028sm698628lfk.110.2023.07.21.05.03.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jul 2023 05:03:19 -0700 (PDT)
+Message-ID: <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
+Date:   Fri, 21 Jul 2023 14:03:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] interconnect: qcom: qcm2290: Enable sync state
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230720-topic-qcm2290_icc-v1-0-7f67f2e259c1@linaro.org>
+ <20230720-topic-qcm2290_icc-v1-2-7f67f2e259c1@linaro.org>
+ <ZLmQdjDgIbbhyTMJ@gerhold.net>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <ZLmQdjDgIbbhyTMJ@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 01:52:17PM +0200, Ulf Hansson wrote:
-> On Wed, 19 Jul 2023 at 17:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Thu, Jul 13, 2023 at 04:17:36PM +0200, Ulf Hansson wrote:
-> > > The performance domain-id can be described in DT using the power-domains
-> > > property or the clock property. The latter is already supported, so let's
-> > > add support for the power-domains too.
-> > >
-> >
-> > How is this supposed to work for the CPUs ? The CPU power domains are
-> > generally PSCI on most of the platforms and the one using OSI explicitly
-> > need to specify the details while ones using PC will not need to. Also they
-> > can never be performance domains too. So I am not sure if I am following this
-> > correctly.
+On 20.07.2023 21:52, Stephan Gerhold wrote:
+> On Thu, Jul 20, 2023 at 08:24:01PM +0200, Konrad Dybcio wrote:
+>> Very surprisingly, qcm2290 does not seem to require any interface
+>> clocks.
 > 
-> Your concerns are certainly correct, I completely forgot about this.
-> We need to specify what power-domain index belongs to what, by using
-> power-domain-names in DT. So a CPU node, that has both psci for power
-> and scmi for performance would then typically look like this:
+> What does this mean exactly? The interconnect .sync_state() is
+> responsible to drop the initial maximum bandwidth votes, with the
+> assumption that all active devices have voted for the bandwidth they
+> need. How does this relate to "requiring interface clocks"?
+If it required such clocks to be present, sync_state could not
+complete, as trying to access some nodes would crash the platform
+due to unclocked access.
+
 > 
-> power-domains = <&CPU_PD0>, <&scmi_dvfs 4>;
-> power-domain-names = "psci", "scmi";
+>> It's therefore safe to enable sync_state to park unused devices.
+>> Do so.
 > 
-> I will take care of this in the next version - and thanks a lot for
-> pointing this out!
+> Doesn't this make everything painfully slow? There are no interconnect
+> consumers at all in qcm2290.dtsi. I would expect that all bandwidths
+> end up at minimum.
+There are no interconnect providers defined in qcm2290.dtsi.
 
-
-Yes something like this will work. Just curious will this impact the idle
-paths ? By that I mean will the presence of additional domains add more
-work or will they be skipped as early as possible with just one additional
-check ?
-
--- 
-Regards,
-Sudeep
+Konrad
