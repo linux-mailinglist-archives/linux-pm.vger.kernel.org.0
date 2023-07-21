@@ -2,121 +2,202 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD1875BF6F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 09:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA2D75C058
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Jul 2023 09:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbjGUHSJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 03:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
+        id S229804AbjGUHs2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 03:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjGUHSH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 03:18:07 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45109FC
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 00:18:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b8a44ee159so10592295ad.3
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 00:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689923885; x=1690528685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xgra1BbjJ2TX4LJXSTiv0VpjCyIk0jpZ//hvoXBk3V0=;
-        b=b4MYGFDLTZkoT24IR8U5mw8aCuPkq5W9pn72K+9QLHAx4bD9fuTYh7Zd6jJqTDulFi
-         Q5+UClv+pgLMRp5nq8gyjLmgoTf0RO4/Taky/8lu1VVPc4XzV47YX5/XXrBw2GblMIeZ
-         BJj7rjghVciP1AbWBdCiOfSfsDZuJW9AOAHjyiLml4BW4LjwlB2LFC32pVz0rxHQtot/
-         2bZG31h0NQcdRWgDP6skU6BVrnuoWcTv0ildGVJtsTO9nPNdIuc+0c74pcJXMk0NWdHJ
-         8J5lkgokPLJJqhLzuTHIVkH1Ti8SAF9TmzUbKJfA07iHtqgc+TmkaJEzZL8PGKmmuxDD
-         FQTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689923885; x=1690528685;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xgra1BbjJ2TX4LJXSTiv0VpjCyIk0jpZ//hvoXBk3V0=;
-        b=T62ZxI4FxNuc5/xoWG/lITYrEwG1YkGOc6aYCWWpZbo0Wuc8en5jc6KKB/Ps0sXI4O
-         aSwhVUaJzLErA096T9O7WSKR5p3/2xp90DRqNqD8XoWPdLgZ4d6QzykahKxOTEIGgWQW
-         cKcrl1jodyEJuDpnFDeu15pDWmhhVEAEPpfV+wsjSqZGT1UMQ4BibAqhIt/Xkj8GVcBA
-         5uenL1gV7pqMpgbseU6Jd/7hvbmftOTeAhKrzMg06ai7WalpjtPo1LTLGY2uyQgybK7b
-         wTWHChUjNyGRCtbdK3ogf9n5FMAwnt3K5R/cKc5iYUEbn5CfXny2mFnfkiMvHXzp/9bw
-         +1VA==
-X-Gm-Message-State: ABy/qLZrf+SD+/i864kQTDP5A3dAQ/0HdB4I+YQbxGWy24xJ/ctYAt83
-        dHKvSwIZoHWQ+OssendPTvsZnw==
-X-Google-Smtp-Source: APBJJlGOEY7gHS/A9+kCu38TOUt7LFXF5kKuzGNRk2oieuEA63WC3YwDiKytWENvZdB/oVsM0A7/Lg==
-X-Received: by 2002:a17:902:934a:b0:1b8:af85:e959 with SMTP id g10-20020a170902934a00b001b8af85e959mr894543plp.53.1689923884709;
-        Fri, 21 Jul 2023 00:18:04 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id a17-20020a170902ecd100b001ba066c589dsm2671961plh.137.2023.07.21.00.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 00:18:04 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 12:48:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/15] arm64: dts: qcom: sdm845: Fix the min frequency
- of "ice_core_clk"
-Message-ID: <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231274AbjGUHsY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 03:48:24 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EBA2D77;
+        Fri, 21 Jul 2023 00:48:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689925701; x=1721461701;
+  h=date:from:to:cc:subject:message-id;
+  bh=Cwmw0fdtugvHVBkzsTtORuS1mzEtCtrt39OsrwdxhBg=;
+  b=QEHRRLh3MUgHsDDsYmXTDbSGN7dOog4Ze+kUiN0SrQ/6I/YRYxPVAvtT
+   Z2gPV9s5mJw64AYPk4RPgZMmdJERoLdivqrtR5Xh8kE+YvD56JyRV3gWX
+   KgGplmkdnGOdByznap5ljCRaScNFtldkJTSww0J8yyeXhnylAnxE+HIyw
+   j8U0geSAZIQcI97XcgHPlKIojEzC5PVTvNIN0hla7p3NgeR2DQtCTgseC
+   np6/JKiacDxEEZUltg87Q95SzgSkEhqnRNb2it3eAyqRNpYznPqHBRRvY
+   LINFFUSUe0VZ/slsOQX5y9PWGTirqcGcGozvDfGDmaYHPh2sw1llrfWX8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="366999801"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="366999801"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2023 00:46:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10777"; a="790107747"
+X-IronPort-AV: E=Sophos;i="6.01,220,1684825200"; 
+   d="scan'208";a="790107747"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 21 Jul 2023 00:46:55 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qMkqk-00071r-1T;
+        Fri, 21 Jul 2023 07:46:54 +0000
+Date:   Fri, 21 Jul 2023 15:46:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 7c6b9c89d65659ecbc8c634f6f7e1fe0c6c2c5a5
+Message-ID: <202307211502.zFsHcuLs-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
-> Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
-> downstream vendor devicetree. So fix it!
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> 
-> Fixes: 433f9a57298f ("arm64: dts: sdm845: add Inline Crypto Engine registers and clock")
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index 9ed74bf72d05..89520a9fe1e3 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
->  				<0 0>,
->  				<0 0>,
->  				<0 0>,
-> -				<0 300000000>;
-> +				<75000000 300000000>;
->  
->  			status = "disabled";
->  		};
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 7c6b9c89d65659ecbc8c634f6f7e1fe0c6c2c5a5  Merge branch 'acpi-processor' into bleeding-edge
 
-Please keep new feature and fixes like this in separate series. This
-could be merged directly in the currently ongoing kernel rc and
-doesn't need to wait for this series.
+elapsed time: 724m
 
-Or at least keep the commit at the top, so another maintainer can
-simply pick it.
+configs tested: 125
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r004-20230720   gcc  
+arc                  randconfig-r023-20230720   gcc  
+arc                  randconfig-r035-20230720   gcc  
+arc                  randconfig-r043-20230720   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230720   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230720   gcc  
+arm64                randconfig-r016-20230720   clang
+arm64                randconfig-r026-20230720   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r011-20230720   gcc  
+csky                 randconfig-r014-20230720   gcc  
+csky                 randconfig-r034-20230720   gcc  
+hexagon              randconfig-r036-20230720   clang
+hexagon              randconfig-r041-20230720   clang
+hexagon              randconfig-r045-20230720   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230720   gcc  
+i386         buildonly-randconfig-r005-20230720   gcc  
+i386         buildonly-randconfig-r006-20230720   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230720   gcc  
+i386                 randconfig-i002-20230720   gcc  
+i386                 randconfig-i003-20230720   gcc  
+i386                 randconfig-i004-20230720   gcc  
+i386                 randconfig-i005-20230720   gcc  
+i386                 randconfig-i006-20230720   gcc  
+i386                 randconfig-i011-20230720   clang
+i386                 randconfig-i012-20230720   clang
+i386                 randconfig-i013-20230720   clang
+i386                 randconfig-i014-20230720   clang
+i386                 randconfig-i015-20230720   clang
+i386                 randconfig-i016-20230720   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r032-20230720   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                          amiga_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze           randconfig-r022-20230720   gcc  
+microblaze           randconfig-r033-20230720   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      malta_kvm_defconfig   clang
+mips                        omega2p_defconfig   clang
+mips                        qi_lb60_defconfig   clang
+mips                 randconfig-r013-20230720   gcc  
+nios2                               defconfig   gcc  
+openrisc             randconfig-r024-20230720   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r005-20230720   gcc  
+parisc               randconfig-r015-20230720   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     ksi8560_defconfig   clang
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc                 mpc8315_rdb_defconfig   clang
+powerpc                      ppc64e_defconfig   clang
+powerpc                     stx_gp3_defconfig   gcc  
+powerpc                     tqm8555_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r002-20230720   gcc  
+riscv                randconfig-r042-20230720   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r031-20230720   gcc  
+s390                 randconfig-r044-20230720   clang
+sh                               allmodconfig   gcc  
+sh                                  defconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                     magicpanelr2_defconfig   gcc  
+sh                   randconfig-r003-20230720   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64              randconfig-r025-20230720   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230720   gcc  
+x86_64       buildonly-randconfig-r002-20230720   gcc  
+x86_64       buildonly-randconfig-r003-20230720   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r021-20230720   clang
+x86_64               randconfig-x001-20230720   clang
+x86_64               randconfig-x002-20230720   clang
+x86_64               randconfig-x003-20230720   clang
+x86_64               randconfig-x004-20230720   clang
+x86_64               randconfig-x005-20230720   clang
+x86_64               randconfig-x006-20230720   clang
+x86_64               randconfig-x011-20230720   gcc  
+x86_64               randconfig-x012-20230720   gcc  
+x86_64               randconfig-x013-20230720   gcc  
+x86_64               randconfig-x014-20230720   gcc  
+x86_64               randconfig-x015-20230720   gcc  
+x86_64               randconfig-x016-20230720   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                          iss_defconfig   gcc  
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
