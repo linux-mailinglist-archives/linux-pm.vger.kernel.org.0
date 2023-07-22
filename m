@@ -2,141 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9252375DB79
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 11:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BFD75DC65
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 14:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjGVJmD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jul 2023 05:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60210 "EHLO
+        id S229554AbjGVMM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jul 2023 08:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjGVJmC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 05:42:02 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8824EAB
-        for <linux-pm@vger.kernel.org>; Sat, 22 Jul 2023 02:42:01 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbd33a57ddso23107675e9.1
-        for <linux-pm@vger.kernel.org>; Sat, 22 Jul 2023 02:42:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690018920; x=1690623720;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vIiKd8WhXPxz7X6XYM8LX2pk87FlZNE/jREJGMzG5bc=;
-        b=lTr70M+v01b1HK/Rs0QIfQheuBdH7tjoJmDoxRUdvtjVgBjSwBMUdItWDtUOeZOJEe
-         pTxTAh5/BNzKSBPIjWobW1QJUnmOeKQ70Ryb9g9E3sd/AT8i5hIvKS1xHQoe2jtR9MZY
-         Es6jc9JuuAqCz4BnUd3BZlEVxhq/UQx69PJgG9HprXxj6R/sJmE1cG3oX2F7q7wD6Vh/
-         JT+rw6Gb1fUyhQRa0oghXSPxF9GkRwPIPk5Fvgw15Y7O91tyJhavGnpZRrfkTU938u21
-         4ZGXF8Ejwrq9o4L81HlZYhpcV3IgsLDQ4p5yrKSVwlc939M6MBFlZ91O4Kh7HrEQmVRr
-         Kz1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690018920; x=1690623720;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vIiKd8WhXPxz7X6XYM8LX2pk87FlZNE/jREJGMzG5bc=;
-        b=IyPXPWLTDhVSBcvwrLhs40uK8uj/bUHYTTj3f5LJXcRRIwplV2UGtu4A7AIpl8n7yr
-         h2NYzemJ4b9XwrfmGuGwllO/Cx1NdeCnp4l7ZYmCae755Wb8uIiGcmmoxOtZ6b+2YBPu
-         1iaYD3RGnWiXhuEaJG+C4aWB+mxo0USc+x8eVCKY5xwBTwAE7fPP9/cfQ2zQbiN44v/4
-         Bf29qVF286qrhiHGoI8jnj7tv2I3S7CN5CVfyPcIhl/XegssDImncp87Bb6CzXDdcbfw
-         n/2izChcqNn372HZvqo7LfkGDOzW75KCdNSEHmQ/3pNi1yYSZaKsBTgO7BAxslQ27+TH
-         C84w==
-X-Gm-Message-State: ABy/qLaF1w8wrZdJ9OqNEbdftPGUN/TkLRF36J/Ajf8MELQnTdtmhfS9
-        736R/5neBfazbSUt3w29tBMYnQ==
-X-Google-Smtp-Source: APBJJlFi9gcxEqT8Nrf3W3sLqaEiCNa3FbHoebyV+XTi/Z0TwxbzXjy2gMsN4FU1Y1OAcLSTdClcdQ==
-X-Received: by 2002:adf:fec8:0:b0:313:f86f:2851 with SMTP id q8-20020adffec8000000b00313f86f2851mr4007408wrs.3.1690018920017;
-        Sat, 22 Jul 2023 02:42:00 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d65d2000000b00314172ba213sm6405562wrw.108.2023.07.22.02.41.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Jul 2023 02:41:59 -0700 (PDT)
-Message-ID: <b2b68cc6-1dd9-25ed-c65b-c4bf3a5a4f16@linaro.org>
-Date:   Sat, 22 Jul 2023 11:41:57 +0200
+        with ESMTP id S229567AbjGVMM0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 08:12:26 -0400
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CF4FE;
+        Sat, 22 Jul 2023 05:12:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1690027912; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=BxlRx5NQZXcUCGSt+n3ej6CGzJFx+3G8tpxFmPdUgkBoJUy9iS6ACE0GZqyfbGY+SIGw8KECkqeMO1vy8pRoWmFy7EFGXSkQR25+XVzeQMX9tgEJIJIua7MLVs1DM4r/jJ/3jRHRNhRDoVlGND8GkZDOnnQx3oI7U3fXRfm9Afo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1690027912; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=el7ZrIrO9UyXzVKE3KwU/q6tYq8IYFl5e7HnxaVFfq8=; 
+        b=CXqycX3sc0Hh2suMQ1WAYK8A2DPy5ProMLOFUNuRN/Vci2QaMC/zBkoxjUEy1pSjk7CZcIYruCiQSFb+r9LAMq2Mc30s/wKw1SrZ1iRWw+Atw85xvQEOTgLXvhFhPeMhxE2yTocMPurXqcqGjpujXqhOjqWc4YcmiEcOpxNxIgU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1690027912;
+        s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=el7ZrIrO9UyXzVKE3KwU/q6tYq8IYFl5e7HnxaVFfq8=;
+        b=dmWYzTMEmXx/zxeZM9mpfIn6To3SpiR8DEQBPPE4qTKpqpXWqmNjB3W3qIgZAvRv
+        lMKrFKReNtHqwLqTnDBN1j+/EcfHzbcVlgDnSoGqTxsUnU93x36XIZSVUSszL1txCNs
+        ugfn+FkqYYCM1xxIcHEFfgSQmGSIl3jqOJVwXYXwcvw1nlIS3TXVsCPqexKk2AgM8jq
+        del+lngdX863PdJGqZluwQsKwmEeES7MQtmbd+MpbTjX+wRqMMSBxO9qIuRMuDiYHRv
+        LfKfQcUR1JR1+ENPob77WnZPopLqzRVS5S9ULR565yLP1V2pwCR/QszdPgPixBSSEi2
+        PF03wm8Fgw==
+Received: from edelgard.fodlan.icenowy.me (120.85.97.227 [120.85.97.227]) by mx.zohomail.com
+        with SMTPS id 1690027909589553.9788050686577; Sat, 22 Jul 2023 05:11:49 -0700 (PDT)
+Message-ID: <5a9ccb708f004e70e2102417eb48b766b03777cd.camel@icenowy.me>
+Subject: Re: [PATCH] thermal/drivers/sun8i: Don't fail probe due to zone
+ registration failure
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Mark Brown <broonie@kernel.org>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     Hugh Dickins <hughd@google.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 22 Jul 2023 20:11:43 +0800
+In-Reply-To: <20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org>
+References: <20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 5/7] dt-bindings: interconnect: qcom: Fix and separate out
- SDM660
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230721-topic-icc_bindings-v1-0-93e2bc728fb7@linaro.org>
- <20230721-topic-icc_bindings-v1-5-93e2bc728fb7@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230721-topic-icc_bindings-v1-5-93e2bc728fb7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/07/2023 15:54, Konrad Dybcio wrote:
-> Separate out SDM660 icc bindings from the common file and fix the
-> clocks description by removing the wrong internal RPM bus clock
-> representation that we've been carrying for years.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-...
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,gcc-sdm660.h>
-> +    #include <dt-bindings/clock/qcom,mmcc-sdm660.h>
-> +    #include <dt-bindings/clock/qcom,rpmcc.h>
-> +
-> +    bimc: interconnect@1008000 {
-> +        compatible = "qcom,sdm660-bimc";
-> +        reg = <0x01008000 0x78000>;
-> +        #interconnect-cells = <1>;
-> +    };
-> +
-> +    cnoc: interconnect@1500000 {
-> +        compatible = "qcom,sdm660-cnoc";
-> +        reg = <0x01500000 0x10000>;
-> +        #interconnect-cells = <1>;
-> +    };
-> +
-> +    snoc: interconnect@1626000 {
-> +        compatible = "qcom,sdm660-snoc";
-> +        reg = <0x01626000 0x7090>;
-> +        #interconnect-cells = <1>;
-> +    };
-> +
-> +    a2noc: interconnect@1704000 {
-> +        compatible = "qcom,sdm660-a2noc";
-> +        reg = <0x01704000 0xc100>;
-> +        #interconnect-cells = <1>;
-> +        clocks = <&rpmcc RPM_SMD_IPA_CLK>,
-> +                 <&gcc GCC_UFS_AXI_CLK>,
-> +                 <&gcc GCC_AGGRE2_UFS_AXI_CLK>,
-> +                 <&gcc GCC_AGGRE2_USB3_AXI_CLK>,
-> +                 <&gcc GCC_CFG_NOC_USB2_AXI_CLK>;
-> +        clock-names = "ipa",
-> +                      "ufs_axi",
-> +                      "aggre2_ufs_axi",
-> +                      "aggre2_usb3_axi",
-> +                      "cfg_noc_usb2_axi";
-> +    };
-
-Keep only two examples.
-
-Best regards,
-Krzysztof
+5ZyoIDIwMjMtMDctMTjmmJ/mnJ/kuoznmoQgMTY6MDQgKzAxMDDvvIxNYXJrIEJyb3du5YaZ6YGT
+77yaCj4gQ3VycmVudGx5IHRoZSBzdW44aSB0aGVybWFsIGRyaXZlciB3aWxsIGZhaWwgdG8gcHJv
+YmUgaWYgYW55IG9mIHRoZQo+IHRoZXJtYWwgem9uZXMgaXQgaXMgcmVnaXN0ZXJpbmcgZmFpbHMg
+dG8gcmVnaXN0ZXIgd2l0aCB0aGUgdGhlcm1hbAo+IGNvcmUuCj4gU2luY2Ugd2UgY3VycmVudGx5
+IGRvIG5vdCBkZWZpbmUgYW55IHRyaXAgcG9pbnRzIGZvciB0aGUgR1BVIHRoZXJtYWwKPiB6b25l
+cyBvbiBhdCBsZWFzdCBBNjQgb3IgSDUgdGhpcyBtZWFucyB0aGF0IHdlIGhhdmUgbm8gdGhlcm1h
+bAo+IHN1cHBvcnQKPiBvbiB0aGVzZSBwbGF0Zm9ybXM6Cj4gCj4gW8KgwqDCoCAxLjY5ODcwM10g
+dGhlcm1hbF9zeXM6IEZhaWxlZCB0byBmaW5kICd0cmlwcycgbm9kZQo+IFvCoMKgwqAgMS42OTg3
+MDddIHRoZXJtYWxfc3lzOiBGYWlsZWQgdG8gZmluZCB0cmlwIHBvaW50cyBmb3IgdGhlcm1hbC0K
+PiBzZW5zb3IgaWQ9MQoKSSB0aGluayB0aGlzIGlzIGFuIGlzc3VlIGluIHRoZSBjb3JlIHRoZXJt
+YWwgc3Vic3lzdGVtLCBhbmQgc2VudCBhCnBhdGNoOyBVbmZvcnR1bmF0ZWx5IHRoZSBwYXRjaCBz
+ZWVtcyB0byBiZSByZWplY3RlZCBieSBsaW51eC1hcm0ta2VybmVsCihhbmQgc29tZSBvdGhlciBt
+YWlsaW5nIGxpc3RzKS4uLgoKSSB3aWxsIHRoZW4gcmVzZW5kIGl0IGFnYWluIGFuZCBwdXQgTWFy
+ayBpbnRvIENDIGxpc3QuCgo+IAo+IGV2ZW4gdGhvdWdoIHRoZSBtYWluIENQVSB0aGVybWFsIHpv
+bmUgb24gYm90aCBTb0NzIGlzIGZ1bGx5Cj4gY29uZmlndXJlZC4KPiBUaGlzIGRvZXMgbm90IHNl
+ZW0gaWRlYWwsIHdoaWxlIHdlIG1heSBub3QgYmUgYWJsZSB0byB1c2UgYWxsIHRoZQo+IHpvbmVz
+Cj4gaXQgc2VlbXMgYmV0dGVyIHRvIGhhdmUgdGhvc2Ugem9uZXMgd2hpY2ggYXJlIHVzYWJsZSBi
+ZSBvcGVyYXRpb25hbC4KPiBJbnN0ZWFkIGp1c3QgY2Fycnkgb24gcmVnaXN0ZXJpbmcgem9uZXMg
+aWYgd2UgZ2V0IGFueSBub24tZGVmZXJyYWwKPiBlcnJvciwgYWxsb3dpbmcgdXNlIG9mIHRob3Nl
+IHpvbmVzIHdoaWNoIGFyZSB1c2FibGUuCj4gCj4gVGhpcyBtZWFucyB0aGF0IHdlIGFsc28gbmVl
+ZCB0byB1cGRhdGUgdGhlIGludGVycnVwdCBoYW5kbGVyIHRvIG5vdAo+IGF0dGVtcHQgdG8gbm90
+aWZ5IHRoZSBjb3JlIGZvciBldmVudHMgb24gem9uZXMgd2hpY2ggd2UgaGF2ZSBub3QKPiByZWdp
+c3RlcmVkLCBJIGRpZG4ndCBzZWUgYW4gYWJpbGl0eSB0byBtYXNrIGluZGl2aWR1YWwgaW50ZXJy
+dXB0cyBhbmQKPiBJIHdvdWxkIGV4cGVjdCB0aGF0IGludGVycnVwdHMgd291bGQgc3RpbGwgYmUg
+aW5kaWNhdGVkIGluIHRoZSBJU1IKPiBldmVuCj4gaWYgdGhleSB3ZXJlIG1hc2tlZC4KPiAKPiBT
+aWduZWQtb2ZmLWJ5OiBNYXJrIEJyb3duIDxicm9vbmllQGtlcm5lbC5vcmc+Cj4gLS0tCj4gSSBu
+b3RpY2VkIHRoaXMgd2hpbGUgdHJ5aW5nIHRvIGRlYnVnIGFuIGlzc3VlIHdpdGggbWVtb3J5IGNv
+cnJ1cHRpb24KPiBvbgo+IGJvb3Qgd2hpY2ggc2luY2UgdGhlIG1lcmdlIHdpbmRvdyBoYXMgcHJl
+dmVudGVkIFBpbmU2NCBQbHVzIChhbiBBNjQpCj4gZnJvbSBib290aW5nIGF0IGFsbDoKPiAKPiDC
+oMKgCj4gaHR0cHM6Ly9zdG9yYWdlLmtlcm5lbGNpLm9yZy9tYWlubGluZS9tYXN0ZXIvdjYuNS1y
+YzIvYXJtNjQvZGVmY29uZmlnL2djYy0xMC9sYWItYmF5bGlicmUvYmFzZWxpbmUtc3VuNTBpLWE2
+NC1waW5lNjQtcGx1cy50eHQKPiAKPiAod2hpY2ggSSBiaXNlY3RlZCB0byBhIHJhbmRvbSBtZW1v
+cnkgbWFuYWdlbWVudCBjaGFuZ2UgdGhhdCBjbGVhcmx5Cj4gd2Fzbid0IGF0IGZhdWx0KSBhbmQg
+aGFzIGJlZW4gY2F1c2luZyBsZXNzIGNvbnNpc3RlbnQgYnV0IHN0aWxsIHZlcnkKPiBzZXZlcmUg
+Ym9vdCBpc3N1ZXMgb24gTGlicmV0ZWNoIFRyaXRpdW0gKGEgSDMpLsKgIFRoZSBjb3JydXB0aW9u
+Cj4gYXBwZWFycwo+IHRvIGhhcHBlbiB3aGVuIHVuYmluZGluZyBhIHRoZSBvbmUgdGhlcm1hbCB6
+b25lIHRoYXQgZG9lcyByZWdpc3RlciwKPiBJJ3ZlCj4gbm90IGZpZ3VyZWQgb3V0IGV4YWN0bHkg
+d2hlcmUuCj4gCj4gVGhlIG1lbW9yeSBjb3JydXB0aW9uIGlzc3VlIG9idmlvdXNseSBuZWVkcyB0
+byBiZSBkZWFsdCB3aXRoIHByb3Blcmx5Cj4gKEknbSBzdGlsbCBkaWdnaW5nIGludG8gaXQpIGJ1
+dCB0aGlzIGRvZXMgYWxsb3cgYm90aCBwbGF0Zm9ybXMgdG8KPiBib290Cj4gcmVsaWFibHkgYW5k
+IHNlZW1zIGxpa2UgYSBzZW5zaWJsZSB0aGluZyB0byBkbyBpbmRlcGVuZGVudGx5LCBpZGVhbGx5
+Cj4gd2UKPiBjb3VsZCBnZXQgdGhpcyBpbiBhcyBhIGZpeC4KPiAtLS0KPiDCoGRyaXZlcnMvdGhl
+cm1hbC9zdW44aV90aGVybWFsLmMgfCAxNiArKysrKysrKysrKysrKy0tCj4gwqAxIGZpbGUgY2hh
+bmdlZCwgMTQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKPiAKPiBkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy90aGVybWFsL3N1bjhpX3RoZXJtYWwuYwo+IGIvZHJpdmVycy90aGVybWFsL3N1bjhp
+X3RoZXJtYWwuYwo+IGluZGV4IDE5NWYzYzVkMGIzOC4uYjY5MTM0NTM4ODY3IDEwMDY0NAo+IC0t
+LSBhL2RyaXZlcnMvdGhlcm1hbC9zdW44aV90aGVybWFsLmMKPiArKysgYi9kcml2ZXJzL3RoZXJt
+YWwvc3VuOGlfdGhlcm1hbC5jCj4gQEAgLTE5MCw2ICsxOTAsOSBAQCBzdGF0aWMgaXJxcmV0dXJu
+X3Qgc3VuOGlfaXJxX3RocmVhZChpbnQgaXJxLCB2b2lkCj4gKmRhdGEpCj4gwqDCoMKgwqDCoMKg
+wqDCoGludCBpOwo+IMKgCj4gwqDCoMKgwqDCoMKgwqDCoGZvcl9lYWNoX3NldF9iaXQoaSwgJmly
+cV9iaXRtYXAsIHRtZGV2LT5jaGlwLT5zZW5zb3JfbnVtKSB7Cj4gK8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoC8qIFdlIGFsbG93IHNvbWUgem9uZXMgdG8gbm90IHJlZ2lzdGVyLiAqLwo+
+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoSVNfRVJSKHRtZGV2LT5zZW5zb3Jb
+aV0udHpkKSkKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oGNvbnRpbnVlOwo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgdGhlcm1hbF96b25l
+X2RldmljZV91cGRhdGUodG1kZXYtPnNlbnNvcltpXS50emQsCj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgCj4gVEhFUk1BTF9FVkVOVF9VTlNQRUNJRklFRCk7Cj4gwqDCoMKgwqDCoMKgwqDC
+oH0KPiBAQCAtNDY1LDggKzQ2OCwxNyBAQCBzdGF0aWMgaW50IHN1bjhpX3Roc19yZWdpc3Rlcihz
+dHJ1Y3QgdGhzX2RldmljZQo+ICp0bWRldikKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGksCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCAmdG1kZXYtCj4gPnNlbnNvcltpXSwKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICZ0aHNfb3BzKTsKPiAtwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKElTX0VSUih0bWRldi0+c2Vuc29yW2ldLnR6ZCkp
+Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
+UFRSX0VSUih0bWRldi0+c2Vuc29yW2ldLnR6ZCk7Cj4gKwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAvKgo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBJZiBhbiBp
+bmRpdmlkdWFsIHpvbmUgZmFpbHMgdG8gcmVnaXN0ZXIgZm9yCj4gcmVhc29ucwo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKiBvdGhlciB0aGFuIHByb2JlIGRlZmVycmFsIChlZywg
+YSBiYWQgRFQpIHRoZW4KPiBjYXJyeQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+KiBvbiwgb3RoZXIgem9uZXMgbWlnaHQgcmVnaXN0ZXIgc3VjY2Vzc2Z1bGx5Lgo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgaWYgKElTX0VSUih0bWRldi0+c2Vuc29yW2ldLnR6ZCkpIHsKPiArwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmIChQVFJfRVJSKHRtZGV2LT5zZW5zb3Jb
+aV0udHpkKSA9PSAtCj4gRVBST0JFX0RFRkVSKQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiBQVFJfRVJSKHRtZGV2
+LT5zZW5zb3JbaV0udHpkKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoGNvbnRpbnVlOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4g
+wqAKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGRldm1fdGhlcm1hbF9hZGRfaHdt
+b25fc3lzZnModG1kZXYtPmRldiwgdG1kZXYtCj4gPnNlbnNvcltpXS50emQpOwo+IMKgwqDCoMKg
+wqDCoMKgwqB9Cj4gCj4gLS0tCj4gYmFzZS1jb21taXQ6IGZkZjBlYWYxMTQ1MmQ3Mjk0NWFmMzE4
+MDRlMmExMDQ4ZWUxYjU3NGMKPiBjaGFuZ2UtaWQ6IDIwMjMwNzE4LXRoZXJtYWwtc3VuOGktcmVn
+aXN0cmF0aW9uLWRmM2ExMzZjY2FmYQo+IAo+IEJlc3QgcmVnYXJkcywKCg==
 
