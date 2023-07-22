@@ -2,54 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE0B75DE70
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 22:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612EE75DF51
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 01:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjGVUMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jul 2023 16:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S229651AbjGVX11 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jul 2023 19:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGVUMC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 16:12:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE6D1AB;
-        Sat, 22 Jul 2023 13:11:59 -0700 (PDT)
+        with ESMTP id S229625AbjGVX10 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 19:27:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E9A819A6;
+        Sat, 22 Jul 2023 16:27:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3DC560BAF;
-        Sat, 22 Jul 2023 20:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C120C433C7;
-        Sat, 22 Jul 2023 20:11:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B67A60BD8;
+        Sat, 22 Jul 2023 23:27:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88B7FC433C8;
+        Sat, 22 Jul 2023 23:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690056718;
-        bh=/9qrpDonabY7Xm8MCIwJtyIeTf31N3Re/7USWMHRKcs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FAbEVh9Heu4E8u7iKDY+e64+Tk7EG3xFaFcSkA/oiTpv72taAYk9Q+td/YzDreOuA
-         +2RDHN4MfVsWILebbSVVmIsaG9fSxAwkQ414cfBokjn5dic+30jaw0UExsHy96+Jxb
-         a1dDPxRZDeutnFDey2kOvsgVzeuqTNNDxVsNhR66qbUcVZWcT+eN1SWU2QnfsSK1l6
-         V19jdwhKq1ar2D2PS5GmhV0j8vkFyeR6/fSOVSYONuzecfx0FOgzLgn3fknlSs7SxH
-         Gs2UVudmYXXi6Z0YnplijX7e8pduAdtiuX+Htc3Cj0jZFbfJqUb/vkFpQ8yW7wpY06
-         VfyppHg6NsFcw==
-Date:   Sat, 22 Jul 2023 21:11:54 +0100
+        s=k20201202; t=1690068443;
+        bh=C5VTDtOqdmj6Bz6JgxfHCEKJHYyIn7v2H/pyJ1qHGCM=;
+        h=From:Date:Subject:To:Cc:From;
+        b=fumBeebR/fj9xdn8EzaaqJ9QKok8wxdstGCw6EiJin3k5PiQAkG2KkNz6Gz1Ds0LN
+         GDotCebW5AX3X2f+BFcvxqW1q1McAvTRUDK93mXtfZEIrLVfebrXeHyyjEb1ZyLFNv
+         uyYNrjOx1HH8Tpx1X62ur6o/H9HLwIVllLVbCd1EsZTQ6KrV09RJGrn38NucQtDdgn
+         5mdHBKFRU9R1009c0gEAMfbpcl0aQ+t7hhD1xcygkiiaAXMoP5zAnSR5rNtXKGFgKN
+         sWyuVPCRaJEvsu1UFB2vMYHFZIUDhb+AbpATIjlhnP429Ec8yeecDHpZcGQaDdrVNh
+         cp/5igG+AETrA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o
- trips subnode
-Message-ID: <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
-References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
+Date:   Sun, 23 Jul 2023 00:26:54 +0100
+Subject: [PATCH] thermal/of: Fix double free of params during
+ unregistration
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qmlxt8wSsnvuRw3d"
-Content-Disposition: inline
-In-Reply-To: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
-X-Cookie: Give him an evasive answer.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230723-thermal-fix-of-memory-corruption-v1-1-ed4fa16d199d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAL1lvGQC/x2N0QqDMAxFf0XybKBG0LFfGT64mtrAaiV1YyL+u
+ 8HHA+eee0BhFS7wrA5Q/kmRvBg0dQU+jsvMKJMxkKPW9US4RdY0fjDIH3PAxCnrjj6rftfNxti
+ 33tzw6Bp6g2VWZXPvi9dwnheUwZCCcgAAAA==
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Hugh Dickins <hughd@google.com>, Will Deacon <will@kernel.org>,
+        Icenowy Zheng <uwu@icenowy.me>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2606; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=C5VTDtOqdmj6Bz6JgxfHCEKJHYyIn7v2H/pyJ1qHGCM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBkvGXVA478VBnEpmpTCC3lkhtcVWQsWgJ581sVm
+ 3BnS4HC/CyJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZLxl1QAKCRAk1otyXVSH
+ 0JDuB/9a/lDjye3WC1siBtiAlqrJwcRmcgSVvUyChe5ZEPX/NPDNQV2sE4Y/pEBW9r7bEfVgWug
+ tqEcqEuB5WtxrvMT6cCbg3BEFKMjy+JCJFExYChP5N6bJMwqicSzBsfF0YDBC5Th4H6pGTLP9u8
+ ZHlsg4d/3wYEVC/quGwLSSWgn3CulLd/rFDMzIMkYCc5y6XOChONE8A6Su5Bl+G03bQbY7AIEdL
+ NS9IMolnTV9NYXaJImgQhjn1AhNHrCbosXp5PNQ6ya6ZK7B0OMWOB4Tee6EGDjJRuegJLqa4GhQ
+ pu96tBHNv4NrjuxjnhnBtIPamTSl7r0Yh03594DCXVyhBFVf
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -60,47 +76,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Unlike the other data structures provided during registration the
+thermal core takes a copy of the thermal_zone_params provided to it and
+stores that copy in the thermal_zone_device, taking care to free it on
+unregistration.  This is done because the parameters will be modified at
+runtime.
 
---qmlxt8wSsnvuRw3d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Unfortunately the thermal_of code assumes that the params structure it
+provides will be used throughout the lifetime of the device and since
+the params are dynamically allocated based on the bindings it attempts
+to free it on unregistration.  This results in not only leaking the
+original params but also double freeing the copy the core made, leading
+to memory corruption.
 
-On Sat, Jul 22, 2023 at 08:25:34PM +0800, Icenowy Zheng wrote:
-> From: Icenowy Zheng <uwu@icenowy.me>
->=20
-> Although the current device tree binding of thermal zones require the
-> trips subnode, the binding in kernel v5.15 does not require it, and many
-> device trees shipped with the kernel, for example,
-> allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
-> comply to the old binding and contain no trips subnode.
->=20
-> Allow the code to successfully register thermal zones w/o trips subnode
-> for DT binding compatibility now.
->=20
-> Furtherly, the inconsistency between DTs and bindings should be resolved
-> by either adding empty trips subnode or dropping the trips subnode
-> requirement.
+Fix this by instead freeing the params parsed from the DT during
+registration.
 
-This makes sense to me - it allows people to see the reported
-temperature even if there's no trips defined which seems more
-helpful than refusing to register.
+This issue causing instability on systems where thermal zones are
+unregistered, especially visble on those systems where some zones
+provided by a device have no trip points such as Allwinner systems.
+For example with current mainline an arm64 defconfig is unbootable on
+Pine64 Plus and LibreTech Tritium is massively unstable.  These issues
+have been there for a while and have been made more prominent by recent
+memory management changes.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Fixes: 3fd6d6e2b4e80 ("thermal/of: Rework the thermal device tree initialization")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Cc: stable@vger.kernel.org
+---
+ drivers/thermal/thermal_of.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---qmlxt8wSsnvuRw3d
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 6fb14e521197..0af11cdfa2c1 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -442,13 +442,11 @@ static int thermal_of_unbind(struct thermal_zone_device *tz,
+ static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+ {
+ 	struct thermal_trip *trips = tz->trips;
+-	struct thermal_zone_params *tzp = tz->tzp;
+ 	struct thermal_zone_device_ops *ops = tz->ops;
+ 
+ 	thermal_zone_device_disable(tz);
+ 	thermal_zone_device_unregister(tz);
+ 	kfree(trips);
+-	kfree(tzp);
+ 	kfree(ops);
+ }
+ 
+@@ -530,6 +528,9 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+ 		goto out_kfree_tzp;
+ 	}
+ 
++	/* The core will take a copy of tzp, free our copy here. */
++	kfree(tzp);
++
+ 	ret = thermal_zone_device_enable(tz);
+ 	if (ret) {
+ 		pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
 
------BEGIN PGP SIGNATURE-----
+---
+base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+change-id: 20230722-thermal-fix-of-memory-corruption-73c023f8612b
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS8OAkACgkQJNaLcl1U
-h9CRvwf9EgwMjwx2a6iutkecp3uFZwWNnW29QRQ4CiMFagDVw0T4QBY1c9lZHt+G
-gWpeUxAmdhOlFOPqUjsECVD4WLb0jgBLR/mTStJlVTfRDh19L7sqdPjv1wusWJRC
-EpvO18flHCvptt/uGpGJSpgSjvsdno2UN15ItUv21WPUo1fcyKymyRDoEREAETHy
-TQNRktd6GG6MxGdDPYtg+H/2UrI80IFS5r608F+lmcjo4J67dI2+x/TiuX5MQ3dD
-zR1NUdaACpYwjEctJ23troInehqwwglXs+CNm/p/WC9sWgfYaKSYdJXpjlS+mHFt
-NVJaVP9uS0BcAJL7sGXEapQApo6Beg==
-=Anzg
------END PGP SIGNATURE-----
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
---qmlxt8wSsnvuRw3d--
