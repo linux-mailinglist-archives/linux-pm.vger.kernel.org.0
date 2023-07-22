@@ -2,46 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8A175D958
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 05:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0680B75DA07
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 07:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjGVDM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 23:12:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S231433AbjGVFOa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jul 2023 01:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbjGVDM1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 23:12:27 -0400
+        with ESMTP id S231360AbjGVFOW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 01:14:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BAB3A9D;
-        Fri, 21 Jul 2023 20:12:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2223586;
+        Fri, 21 Jul 2023 22:14:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E21961DCC;
-        Sat, 22 Jul 2023 03:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3728C433C8;
-        Sat, 22 Jul 2023 03:12:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B78260AF5;
+        Sat, 22 Jul 2023 05:14:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B47C433CC;
+        Sat, 22 Jul 2023 05:14:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689995538;
-        bh=q1c9De4MZ8uHRRY3FXPMx0Q6xjMl4701oGCk+c4Jqwo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ThsnjbhhkdJboBKAIljvSTt4F6WS4F7yVXJDvUYmZwYzpnc8ARgfaqzuR5yOE1+FR
-         b+b36ZyKB99VWSgGvSxqjtisOx1P4zfddWQZIGpYAdln+IkYsZF2qKeCozo7Kr7l6P
-         /9VK+5CgojUirOPI1vjvAWyPckb+9wqGygVTNEsptCCdzPqbgReqzERlDxHLy2ZWLG
-         om/GBJ1ROwxrlcRxvyCuswS+hcxNg0TEZq4U/WfOTi6p8ktd6/vGK/YssWoFmuNlDF
-         c+c2A5HsbJ6bWS5C01uGLt+S5RSk/bdp5fBrc9fiXgUwauEdVL31u/C2h7qkC842Fw
-         mGzao7XYgOUxA==
-Date:   Fri, 21 Jul 2023 20:15:36 -0700
+        s=k20201202; t=1690002860;
+        bh=N48eNrYOPVb4qA4aVnayJ5kxJHiGkGy/wJc//3LWd+8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bW+V+YmxfeI3Va76g0M7sBxJ8iHj7s1rhagVsme3cWQbsLbj5iILfOZlroskupaJe
+         LxuUeiGrERMhT9BeiyIzCsHsp0UmU54KPHl7g9m22MuYYu+HlKpCKzpVpkSCILDs32
+         ZoKGrXUhbNJZdIKOI5d+M6f9hwbweLJa7w6EV2Z+7/eI9lVWIt8DgfB5N7orzn+YjY
+         GqwmFU6HWuC/ErxAfjySzxEUx3XY2wzLoXrILuHNwPG4LrVF3oMYZ7M4jZMKKZMYke
+         3aKGsPF/v1mGg0RLiZtD0cRaagE8XeC+fH1dxnqVbSGKBRixoR4N+SHcuqikHZEBL8
+         Mo7t7LdD3NbMA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, vireshk@kernel.org,
-        nm@ti.com, sboyd@kernel.org, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, Manivannan Sadhasivam <mani@kernel.org>
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
         linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
@@ -50,20 +48,18 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, vireshk@kernel.org,
         quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
         bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/15] arm64: dts: qcom: sdm845: Fix the min frequency
- of "ice_core_clk"
-Message-ID: <q36uuwhjmolgf3kjn3rrtw5fgfobatav334fez4cofzmrvge2h@cgwfhhhy6b6s>
+Subject: Re: (subset) [PATCH v2 00/15] UFS: Add OPP and interconnect support
+Date:   Fri, 21 Jul 2023 22:17:17 -0700
+Message-ID: <169000304201.3611206.17689917610174130629.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
 References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
- <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
- <20230721115731.GB2536@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230721115731.GB2536@thinkpad>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,58 +67,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 05:27:31PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Jul 21, 2023 at 12:48:01PM +0530, Viresh Kumar wrote:
-> > On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
-> > > Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
-> > > downstream vendor devicetree. So fix it!
-> > > 
-> > > https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > 
-> > > Fixes: 433f9a57298f ("arm64: dts: sdm845: add Inline Crypto Engine registers and clock")
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > index 9ed74bf72d05..89520a9fe1e3 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> > > @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
-> > >  				<0 0>,
-> > >  				<0 0>,
-> > >  				<0 0>,
-> > > -				<0 300000000>;
-> > > +				<75000000 300000000>;
-> > >  
-> > >  			status = "disabled";
-> > >  		};
-> > 
-> > Please keep new feature and fixes like this in separate series. This
-> > could be merged directly in the currently ongoing kernel rc and
-> > doesn't need to wait for this series.
-> > 
-> > Or at least keep the commit at the top, so another maintainer can
-> > simply pick it.
-> > 
+
+On Thu, 20 Jul 2023 11:10:45 +0530, Manivannan Sadhasivam wrote:
+> This series adds OPP (Operating Points) support to UFSHCD driver and
+> interconnect support to Qcom UFS driver.
 > 
-> That's what I did. This patch and previous patch are the fixes patches, so they
-> are posted on top of other dts patches to be merged separately if required.
+> Motivation behind adding OPP support is to scale both clocks as well as
+> regulators/performance state dynamically. Currently, UFSHCD just scales
+> clock frequency during runtime with the help of "freq-table-hz" property
+> defined in devicetree. With the addition of OPP tables in devicetree (as
+> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+> both clocks and performance state of power domain which helps in power
+> saving.
 > 
+> [...]
 
-I agree with Viresh, this is patch 4 in a series where 1-2, 7- are new
-things.
+Applied, thanks!
 
-I can pick this from here, but I think it would have been better to send
-this as 3-4 different series; 1 with DeviceTree fixes, 1 with driver
-fixes, one that adds interconnect support and one that adds opp support
-- the latter two with dts changes last...
+[03/15] arm64: dts: qcom: sdm845: Add missing RPMh power domain to GCC
+        commit: 4b6ea15c0a1122422b44bf6c47a3c22fc8d46777
+[04/15] arm64: dts: qcom: sdm845: Fix the min frequency of "ice_core_clk"
+        commit: bbbef6e24bc4493602df68b052f6f48d48e3184a
+[12/15] arm64: dts: qcom: sdm845: Add interconnect paths to UFSHC
+        commit: 84e2e371f4f911337604e8ba9281e950230d1189
+[13/15] arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
+        commit: aeea56072cc8cb0af2b35798aa7d72047f4c8ffa
 
-
-And, the freq-table-hz -> opp transition in dts files must be merged
-after the driver changes, so this will likely have to wait until 1
-release after the driver changes.
-
-Regards,
-Bjorn
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
