@@ -2,141 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19B875D759
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 00:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8A175D958
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 05:12:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjGUWTw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Jul 2023 18:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
+        id S230336AbjGVDM3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Jul 2023 23:12:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbjGUWTv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 18:19:51 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30262733
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 15:19:47 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fbc1218262so21295115e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 21 Jul 2023 15:19:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1689977986; x=1690582786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HA79BQgwsJeaJ+dBBhrIgaZ5KRLkKi7x8npwgQbblx4=;
-        b=dBCH6sMwMn4TDQpacWLOVfOTp2mrC+B40sU8xl6DAMIrhZBwh3ocMRNHPJzuU1n9ks
-         vjrzz8Dwd3Lhq1jeBCRadGmlRT+ORMnog7W4Mr7BaUYRy45D3AI7MKe4uAxYotEr0hQi
-         Au4Nqys2M7JyO07DLKdXpqGaY6vUeQPZP0Wtk4W22uUM79clFw4l/brDDPYRbeEZ7crv
-         Bryk6GGKx9OcPf4EbvYhXWfLDcBxw2lrRbgmojUsjqtnSZEBd4UFoSghDGTMhVKNRyv7
-         u2YxlS0HV9CXalGTcLofC5j4ehSl/rYNdooJEU+/w6KkkwrDIIaTqyNtyYLQ6RetKB9e
-         bdUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689977986; x=1690582786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HA79BQgwsJeaJ+dBBhrIgaZ5KRLkKi7x8npwgQbblx4=;
-        b=Pywow9A6T/GzD+t0H6ieal1ACxxCw+o95eKUtcN+Toty8wtpDM5R8VPq/ZMqqHPdJ/
-         3PQm/5MU+qV2KfrICHdBYkukQgUGY4hgwpOZUdqoEUXnENToilLI0S+nWlC+qv5lp4tB
-         Lckbz/RviQOcsD3ffa0lrx4IvNYnQxR00vtBIz+TNQED/3kvvh31LGTx/aHJYQFaxaHH
-         t6EjpGU6crIlb4g/RwGEXQQKA1HU6DNCSchwNFuKbGxc9Wla5JzMuhMa8FN1tfBWh88x
-         AWd6ReE37dpfGEKZHH0u5vau9HFUrdh3YnhNU8SRFbrRXAz6liEEO/7oaOySuX60eCia
-         1S8A==
-X-Gm-Message-State: ABy/qLZPBXNLd/9LtAlvzaQEPYBrYJg+LfK5AmTj5I9LGN8er6SnZ5oo
-        r+aPzB5nIut8b8Pyv/n3OJUXEA==
-X-Google-Smtp-Source: APBJJlF5p72aGKNasqZOBHXYJz7M25ePp1XGrrf3bFB8WVjC8iNzcb7aeTkbnyTzhzRH2KMJOuITkg==
-X-Received: by 2002:a7b:cd8e:0:b0:3fc:8e:4287 with SMTP id y14-20020a7bcd8e000000b003fc008e4287mr2372705wmj.12.1689977985982;
-        Fri, 21 Jul 2023 15:19:45 -0700 (PDT)
-Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05600c290700b003fbb06af219sm4040690wmd.32.2023.07.21.15.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Jul 2023 15:19:45 -0700 (PDT)
-Date:   Fri, 21 Jul 2023 23:19:44 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        guohua.yan@unisoc.com, linux-pm@vger.kernel.org,
+        with ESMTP id S230340AbjGVDM1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Jul 2023 23:12:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BAB3A9D;
+        Fri, 21 Jul 2023 20:12:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E21961DCC;
+        Sat, 22 Jul 2023 03:12:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3728C433C8;
+        Sat, 22 Jul 2023 03:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689995538;
+        bh=q1c9De4MZ8uHRRY3FXPMx0Q6xjMl4701oGCk+c4Jqwo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ThsnjbhhkdJboBKAIljvSTt4F6WS4F7yVXJDvUYmZwYzpnc8ARgfaqzuR5yOE1+FR
+         b+b36ZyKB99VWSgGvSxqjtisOx1P4zfddWQZIGpYAdln+IkYsZF2qKeCozo7Kr7l6P
+         /9VK+5CgojUirOPI1vjvAWyPckb+9wqGygVTNEsptCCdzPqbgReqzERlDxHLy2ZWLG
+         om/GBJ1ROwxrlcRxvyCuswS+hcxNg0TEZq4U/WfOTi6p8ktd6/vGK/YssWoFmuNlDF
+         c+c2A5HsbJ6bWS5C01uGLt+S5RSk/bdp5fBrc9fiXgUwauEdVL31u/C2h7qkC842Fw
+         mGzao7XYgOUxA==
+Date:   Fri, 21 Jul 2023 20:15:36 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, vireshk@kernel.org,
+        nm@ti.com, sboyd@kernel.org, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: schedutil: next_freq need update when
- cpufreq_limits changed
-Message-ID: <20230721221944.dthg3tf25j4qgc2z@airbuntu>
-References: <20230719130527.8074-1-xuewen.yan@unisoc.com>
+Subject: Re: [PATCH v2 04/15] arm64: dts: qcom: sdm845: Fix the min frequency
+ of "ice_core_clk"
+Message-ID: <q36uuwhjmolgf3kjn3rrtw5fgfobatav334fez4cofzmrvge2h@cgwfhhhy6b6s>
+References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+ <20230720054100.9940-5-manivannan.sadhasivam@linaro.org>
+ <20230721071801.e6ngfnkwg2ujsklg@vireshk-i7>
+ <20230721115731.GB2536@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230719130527.8074-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230721115731.GB2536@thinkpad>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/19/23 21:05, Xuewen Yan wrote:
-> When cpufreq's policy is single, there is a scenario that will
-> cause sg_policy's next_freq to be unable to update.
+On Fri, Jul 21, 2023 at 05:27:31PM +0530, Manivannan Sadhasivam wrote:
+> On Fri, Jul 21, 2023 at 12:48:01PM +0530, Viresh Kumar wrote:
+> > On 20-07-23, 11:10, Manivannan Sadhasivam wrote:
+> > > Minimum frequency of the "ice_core_clk" should be 75MHz as specified in the
+> > > downstream vendor devicetree. So fix it!
+> > > 
+> > > https://git.codelinaro.org/clo/la/kernel/msm-4.9/-/blob/LA.UM.7.3.r1-09300-sdm845.0/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > > 
+> > > Fixes: 433f9a57298f ("arm64: dts: sdm845: add Inline Crypto Engine registers and clock")
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > > ---
+> > >  arch/arm64/boot/dts/qcom/sdm845.dtsi | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > > index 9ed74bf72d05..89520a9fe1e3 100644
+> > > --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > > +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+> > > @@ -2614,7 +2614,7 @@ ufs_mem_hc: ufshc@1d84000 {
+> > >  				<0 0>,
+> > >  				<0 0>,
+> > >  				<0 0>,
+> > > -				<0 300000000>;
+> > > +				<75000000 300000000>;
+> > >  
+> > >  			status = "disabled";
+> > >  		};
+> > 
+> > Please keep new feature and fixes like this in separate series. This
+> > could be merged directly in the currently ongoing kernel rc and
+> > doesn't need to wait for this series.
+> > 
+> > Or at least keep the commit at the top, so another maintainer can
+> > simply pick it.
+> > 
 > 
-> When the cpu's util is always max, the cpufreq will be max,
-> and then if we change the policy's scaling_max_freq to be a
-> lower freq, indeed, the sg_policy's next_freq need change to
-> be the lower freq, however, because the cpu_is_busy, the next_freq
-> would keep the max_freq.
+> That's what I did. This patch and previous patch are the fixes patches, so they
+> are posted on top of other dts patches to be merged separately if required.
 > 
-> For example:
-> The cpu7 is single cpu:
-> 
-> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # while true;do done&
-> [1] 4737
-> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # taskset -p 80 4737
-> pid 4737's current affinity mask: ff
-> pid 4737's new affinity mask: 80
-> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-> 2301000
-> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_cur_freq
-> 2301000
-> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # echo 2171000 > scaling_max_freq
-> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-> 2171000
-> 
-> At this time, the sg_policy's next_freq would keep 2301000.
-> 
-> To prevent the case happen, add the judgment of the need_freq_update flag.
-> 
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
-> Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 4492608b7d7f..458d359f5991 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -350,7 +350,8 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
->  	 * Except when the rq is capped by uclamp_max.
->  	 */
->  	if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
-> -	    sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
-> +	    sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq &&
-> +	    !sg_policy->need_freq_update) {
 
-What about sugov_update_single_perf()? It seems to have the same problem, no?
+I agree with Viresh, this is patch 4 in a series where 1-2, 7- are new
+things.
 
-LGTM otherwise.
+I can pick this from here, but I think it would have been better to send
+this as 3-4 different series; 1 with DeviceTree fixes, 1 with driver
+fixes, one that adds interconnect support and one that adds opp support
+- the latter two with dts changes last...
 
 
-Cheers
+And, the freq-table-hz -> opp transition in dts files must be merged
+after the driver changes, so this will likely have to wait until 1
+release after the driver changes.
 
---
-Qais Yousef
-
->  		next_f = sg_policy->next_freq;
->  
->  		/* Restore cached freq as next_freq has changed */
-> -- 
-> 2.25.1
-> 
+Regards,
+Bjorn
