@@ -2,189 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E6A75DCA5
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 14:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C3675DD7C
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 18:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjGVMmc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jul 2023 08:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51454 "EHLO
+        id S229509AbjGVQqv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jul 2023 12:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbjGVMmb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 08:42:31 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BBF10DE;
-        Sat, 22 Jul 2023 05:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690029749; x=1721565749;
-  h=date:from:to:cc:subject:message-id;
-  bh=z0JWj68Br/Iy6F6tHdpJ2c2/bNOwCwUnte/SK+y06h8=;
-  b=LNP+44BnTWbm/z7dTUDzwbSOBOV/rwP9RazP4f1ss6n5pQnWmBT0Ky7K
-   F4iTlKJV6fgjjhmzYplnQP7WEBElqsZWdJAWNSVaSicGuvFgCVIyo5S20
-   zHRgj1V3X6molTkGnArr/5YcDmMLfjEQwD+f1CPiAcknU8HNtXBbjUORB
-   dwx4HgFVBTFVPTgbDThqoFa8mBerTnAH60OcVG3FT2YJnIIcZIIk/tSI8
-   SEzSPu7mGcpTN420R2B7wtL+1/h++DRtZFEWc8XGa9k+isgBenbCy/Kc0
-   swJucDYNdWmEX/ptwjhFfBLndmg9FvjSq41rnjaButT8OM3lOBAb219Ny
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="433423831"
-X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="433423831"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jul 2023 05:42:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10779"; a="795276114"
-X-IronPort-AV: E=Sophos;i="6.01,224,1684825200"; 
-   d="scan'208";a="795276114"
-Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Jul 2023 05:42:28 -0700
-Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qNBwJ-0008JT-3A;
-        Sat, 22 Jul 2023 12:42:27 +0000
-Date:   Sat, 22 Jul 2023 20:41:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- ec7d45e9a07db059dfc070680296ce2fbfef0e5d
-Message-ID: <202307222041.TpN6xkkS-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229468AbjGVQqv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 12:46:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419C5E73;
+        Sat, 22 Jul 2023 09:46:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA3C660B9F;
+        Sat, 22 Jul 2023 16:46:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81091C433C7;
+        Sat, 22 Jul 2023 16:46:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690044409;
+        bh=FUcJ5kyCBceu8cNLWIvq9oyoWX1mBM/NTa8B3HLsfeY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hq9BFN+Qb8kL3PirNWumZYTFEez3EDB0Dy4bM/dvbTvUhL7MSsTBV0Zq1OHrHqzZi
+         fsUAhXykmE171UPRY0tmDtOhJ3ESTAZNYnEzdA7R4uhJxBCA8B8gihyx2uxgNH1XBd
+         FXVedcdFt9PjZVqbggvh0wgscpS0K3c2345OF7CXXZ5dpK8AsXMWSMo6XR929DmNto
+         OeDFDNbRrXw4giBuI24t7VQBOeOlCwqjbZKxKlsZljcnHkVm4lynj7aNLq16ZCoJM4
+         ohYxvMbVHnyjcwcHa6imFWUEQNPWj4KTKFB4J/U91V3fqLf+nrZU064jO07z+b5Xcb
+         KLhR80it9bWpg==
+Date:   Sat, 22 Jul 2023 17:46:45 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Hugh Dickins <hughd@google.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/sun8i: Don't fail probe due to zone
+ registration failure
+Message-ID: <ZLwH9RFnJymdy7YD@finisterre.sirena.org.uk>
+References: <20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org>
+ <5a9ccb708f004e70e2102417eb48b766b03777cd.camel@icenowy.me>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pJ7zt3hWz8YVEKZz"
+Content-Disposition: inline
+In-Reply-To: <5a9ccb708f004e70e2102417eb48b766b03777cd.camel@icenowy.me>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ec7d45e9a07db059dfc070680296ce2fbfef0e5d  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-elapsed time: 922m
+--pJ7zt3hWz8YVEKZz
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 112
-configs skipped: 4
+On Sat, Jul 22, 2023 at 08:11:43PM +0800, Icenowy Zheng wrote:
+> =E5=9C=A8 2023-07-18=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 16:04 +0100=EF=
+=BC=8CMark Brown=E5=86=99=E9=81=93=EF=BC=9A
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> > Since we currently do not define any trip points for the GPU thermal
+> > zones on at least A64 or H5 this means that we have no thermal
+> > support
+> > on these platforms:
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r001-20230720   gcc  
-alpha                randconfig-r022-20230720   gcc  
-alpha                randconfig-r024-20230720   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r043-20230720   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         assabet_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r011-20230720   gcc  
-arm                  randconfig-r046-20230720   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r014-20230720   clang
-csky                                defconfig   gcc  
-csky                 randconfig-r004-20230720   gcc  
-csky                 randconfig-r005-20230720   gcc  
-csky                 randconfig-r021-20230720   gcc  
-hexagon              randconfig-r041-20230720   clang
-hexagon              randconfig-r045-20230720   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230721   clang
-i386         buildonly-randconfig-r005-20230721   clang
-i386         buildonly-randconfig-r006-20230721   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230720   gcc  
-i386                 randconfig-i002-20230720   gcc  
-i386                 randconfig-i003-20230720   gcc  
-i386                 randconfig-i004-20230720   gcc  
-i386                 randconfig-i005-20230720   gcc  
-i386                 randconfig-i006-20230720   gcc  
-i386                 randconfig-i011-20230720   clang
-i386                 randconfig-i012-20230720   clang
-i386                 randconfig-i013-20230720   clang
-i386                 randconfig-i014-20230720   clang
-i386                 randconfig-i015-20230720   clang
-i386                 randconfig-i016-20230720   clang
-i386                 randconfig-r002-20230720   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r033-20230720   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r006-20230720   gcc  
-m68k                 randconfig-r023-20230720   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ip27_defconfig   clang
-mips                 randconfig-r034-20230720   clang
-nios2                               defconfig   gcc  
-openrisc             randconfig-r013-20230720   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r003-20230720   gcc  
-parisc               randconfig-r012-20230720   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r026-20230720   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230720   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r016-20230720   clang
-s390                 randconfig-r044-20230720   clang
-sh                               allmodconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                   randconfig-r015-20230720   gcc  
-sh                   randconfig-r031-20230720   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r036-20230720   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230721   clang
-x86_64       buildonly-randconfig-r002-20230721   clang
-x86_64       buildonly-randconfig-r003-20230721   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-x001-20230720   clang
-x86_64               randconfig-x002-20230720   clang
-x86_64               randconfig-x003-20230720   clang
-x86_64               randconfig-x004-20230720   clang
-x86_64               randconfig-x005-20230720   clang
-x86_64               randconfig-x006-20230720   clang
-x86_64               randconfig-x011-20230720   gcc  
-x86_64               randconfig-x012-20230720   gcc  
-x86_64               randconfig-x013-20230720   gcc  
-x86_64               randconfig-x014-20230720   gcc  
-x86_64               randconfig-x015-20230720   gcc  
-x86_64               randconfig-x016-20230720   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r032-20230720   gcc  
+> > [=C2=A0=C2=A0=C2=A0 1.698703] thermal_sys: Failed to find 'trips' node
+> > [=C2=A0=C2=A0=C2=A0 1.698707] thermal_sys: Failed to find trip points f=
+or thermal-
+> > sensor id=3D1
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> I think this is an issue in the core thermal subsystem, and sent a
+> patch; Unfortunately the patch seems to be rejected by linux-arm-kernel
+> (and some other mailing lists)...
+
+It did seem to be a bit of an excessively strict requirement, I was
+going to poke at that myself.  It does seem worthwhile doing the change
+in the sun8i driver anyway, there might be some other issue that causes
+registration to fail which would have the same issue.
+
+> I will then resend it again and put Mark into CC list.
+
+Thanks.
+
+--pJ7zt3hWz8YVEKZz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS8B/UACgkQJNaLcl1U
+h9DbHQf/R/NTGVJ5ZHb5w5mBluOwQ43U4PSsTff9jY6HVWrnJNEXSSVFbmfADsWJ
+4nPr/Sv5UEHRMt9fvjV2mm96TwXIk6PcRyoOZ2UYSbth6gmaotVUKfZquoKmvaHJ
+Yi9UmOdbIz1i6Eil0s7UL/ZwuRShzzhxfQRdfyvTix9vryxtd6xkYDqMStdHqwc5
+5SCuPjyK9SvgWG0Rv50qCvS8DOfmOt0wJ22senQ9EWpoQVQzfOz7a/iReEUKBiLe
+15QFff1NN5i2mMzTN6jE0qa4+yxb/SP8LlJ1x/bar6pEZP6YLH3rN/TGEkczo4ej
+ZXV/HHHOmErXSt+FGKjXTJVb93AmGw==
+=W9D9
+-----END PGP SIGNATURE-----
+
+--pJ7zt3hWz8YVEKZz--
