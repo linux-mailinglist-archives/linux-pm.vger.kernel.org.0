@@ -2,97 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0680B75DA07
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 07:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DE275DB68
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 11:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjGVFOa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jul 2023 01:14:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
+        id S230181AbjGVJhB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jul 2023 05:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbjGVFOW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 01:14:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2223586;
-        Fri, 21 Jul 2023 22:14:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B78260AF5;
-        Sat, 22 Jul 2023 05:14:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11B47C433CC;
-        Sat, 22 Jul 2023 05:14:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690002860;
-        bh=N48eNrYOPVb4qA4aVnayJ5kxJHiGkGy/wJc//3LWd+8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bW+V+YmxfeI3Va76g0M7sBxJ8iHj7s1rhagVsme3cWQbsLbj5iILfOZlroskupaJe
-         LxuUeiGrERMhT9BeiyIzCsHsp0UmU54KPHl7g9m22MuYYu+HlKpCKzpVpkSCILDs32
-         ZoKGrXUhbNJZdIKOI5d+M6f9hwbweLJa7w6EV2Z+7/eI9lVWIt8DgfB5N7orzn+YjY
-         GqwmFU6HWuC/ErxAfjySzxEUx3XY2wzLoXrILuHNwPG4LrVF3oMYZ7M4jZMKKZMYke
-         3aKGsPF/v1mGg0RLiZtD0cRaagE8XeC+fH1dxnqVbSGKBRixoR4N+SHcuqikHZEBL8
-         Mo7t7LdD3NbMA==
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, Manivannan Sadhasivam <mani@kernel.org>
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 00/15] UFS: Add OPP and interconnect support
-Date:   Fri, 21 Jul 2023 22:17:17 -0700
-Message-ID: <169000304201.3611206.17689917610174130629.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S229898AbjGVJge (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 05:36:34 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 720CD3586
+        for <linux-pm@vger.kernel.org>; Sat, 22 Jul 2023 02:35:54 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9924ac01f98so437454166b.1
+        for <linux-pm@vger.kernel.org>; Sat, 22 Jul 2023 02:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690018531; x=1690623331;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mCIS2uTebsocjvDgAv2fQsB5I/jrohTaosOQPFj6fGk=;
+        b=UYIQ093u+tNZP3ENIS84pw8eRjfe3BPmLcHuHH8yM7JniqpE0VdIl84EyFzDtW6ojs
+         G6tG9n5jqUQyWud/NT6bBpFI66fEMLpNU1SXPgssJeMO+a1cd6FBiGGXPTVGdETRSjpw
+         9WrYblC4bEqk7c0X2sVKE26GAm1VcqbnPLvMt4Cqc9ptd1vv7kBOteJTgzZhiGju33UK
+         6UMvswsZpVwkeiRfsNtFXc7ahlrPzifSNCUzQYJS0+GHtvEJp6jKiXl5pALzC6im2T/A
+         meSLNHEjV+qK0GGoY/fSSPH/U2zGjlEyi8hz1GF95374GEYkGDZSzIfpzVMVVwDQxMn0
+         W/Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690018531; x=1690623331;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mCIS2uTebsocjvDgAv2fQsB5I/jrohTaosOQPFj6fGk=;
+        b=cAs4HVNc37rIwbGlH91BTpmyLPcP+E7Rx5327E1vZHawmbL9qtt1g0+J1QNPbm/Ga+
+         5hOkcN+7fCUrDSY8iqXGtXBHm5t0za/I9l0OObxY8+b3wz/e3vZ9FX6klLtRDFH/Gdja
+         TeywlGi2GgGqmZ8KJsxB1nb1elx7sSDz6Aup6gb+PkzGIYBWn6b39XRVbuvfnlZOpIqa
+         31XujpJzPaxqzBLClLdz0K43JyfFB22yXjv6szBDzUMDBotjEhwcj5LZ6VOJ2zsFwGIf
+         XUDxuCZ8rK/qtLH1jXhG873Gwzf/NQ8x5m7gtV8hxkOatZY4svrALLyrg5MnAYcifogI
+         8oQw==
+X-Gm-Message-State: ABy/qLZ3pmhJkE3xlGN6xLL8vN3Euq9kA35cmJdUJOdXrnJhYD+2I7e9
+        iwz+X8leFNgtg5KbyxPYrKQ0Vw==
+X-Google-Smtp-Source: APBJJlH4IBRWY62H6Zuudk2bWPiFDp43Bc9QkHMhORCXbREh/tTDGLk+BMjOhhehABKyOOgOHx9HVA==
+X-Received: by 2002:a17:907:2715:b0:993:e691:6dd5 with SMTP id w21-20020a170907271500b00993e6916dd5mr3848491ejk.7.1690018531272;
+        Sat, 22 Jul 2023 02:35:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id mc13-20020a170906eb4d00b00988c0c175c6sm3272997ejb.189.2023.07.22.02.35.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Jul 2023 02:35:30 -0700 (PDT)
+Message-ID: <4bb6c559-2bf4-3bcd-c154-60ec6dd2d58b@linaro.org>
+Date:   Sat, 22 Jul 2023 11:35:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/7] dt-bindings: interconnect: qcom: Introduce
+ qcom,rpm-common
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230721-topic-icc_bindings-v1-0-93e2bc728fb7@linaro.org>
+ <20230721-topic-icc_bindings-v1-1-93e2bc728fb7@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230721-topic-icc_bindings-v1-1-93e2bc728fb7@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Thu, 20 Jul 2023 11:10:45 +0530, Manivannan Sadhasivam wrote:
-> This series adds OPP (Operating Points) support to UFSHCD driver and
-> interconnect support to Qcom UFS driver.
+On 21/07/2023 15:54, Konrad Dybcio wrote:
+> The current RPM interconnect bindings are messy. Start cleaning them
+> up with a common include.
 > 
-> Motivation behind adding OPP support is to scale both clocks as well as
-> regulators/performance state dynamically. Currently, UFSHCD just scales
-> clock frequency during runtime with the help of "freq-table-hz" property
-> defined in devicetree. With the addition of OPP tables in devicetree (as
-> done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
-> both clocks and performance state of power domain which helps in power
-> saving.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../bindings/interconnect/qcom,qcm2290.yaml        | 12 +++------
+>  .../bindings/interconnect/qcom,rpm-common.yaml     | 31 ++++++++++++++++++++++
+>  2 files changed, 35 insertions(+), 8 deletions(-)
 > 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml b/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+> index f65a2fe846de..edee78c456b7 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,qcm2290.yaml
+> @@ -13,19 +13,16 @@ description: |
+>    The Qualcomm QCM2290 interconnect providers support adjusting the
+>    bandwidth requirements between the various NoC fabrics.
+>  
+> -properties:
+> -  reg:
+> -    maxItems: 1
+> +allOf:
+> +  - $ref: qcom,rpm-common.yaml#
+>  
+> +properties:
+>    compatible:
+>      enum:
+>        - qcom,qcm2290-bimc
+>        - qcom,qcm2290-cnoc
+>        - qcom,qcm2290-snoc
+>  
+> -  '#interconnect-cells':
+> -    const: 1
+> -
+>    clock-names:
+>      items:
+>        - const: bus
 
-Applied, thanks!
+What about the children? Aren't they also rpm-common?
 
-[03/15] arm64: dts: qcom: sdm845: Add missing RPMh power domain to GCC
-        commit: 4b6ea15c0a1122422b44bf6c47a3c22fc8d46777
-[04/15] arm64: dts: qcom: sdm845: Fix the min frequency of "ice_core_clk"
-        commit: bbbef6e24bc4493602df68b052f6f48d48e3184a
-[12/15] arm64: dts: qcom: sdm845: Add interconnect paths to UFSHC
-        commit: 84e2e371f4f911337604e8ba9281e950230d1189
-[13/15] arm64: dts: qcom: sm8250: Add interconnect paths to UFSHC
-        commit: aeea56072cc8cb0af2b35798aa7d72047f4c8ffa
+> @@ -75,11 +72,10 @@ patternProperties:
+>  required:
+>    - compatible
+>    - reg
+> -  - '#interconnect-cells'
+>    - clock-names
+>    - clocks
+>  
+> -additionalProperties: false
+> +unevaluatedProperties: false
+>  
+>  examples:
+>    - |
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm-common.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm-common.yaml
+> new file mode 100644
+> index 000000000000..87995b40a856
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm-common.yaml
+> @@ -0,0 +1,31 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,rpm-common.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm RPMh Network-On-Chip Interconnect
+> +
+> +maintainers:
+> +  - Konrad Dybcio <konradybcio@kernel.org>
+> +
+> +description:
+> +  RPM interconnect providers support for managing system bandwidth requirements
+> +  through manual requests based on either predefined values or as indicated by
+> +  the bus monitor hardware. Each provider node represents a NoC bus master,
+> +  driven by a dedicated clock source.
+> +
+> +properties:
+> +  reg:
+> +    maxItems: 1
+
+I would drop the reg from common parts because some of the children here
+don't use it.
 
 Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+Krzysztof
+
