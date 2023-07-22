@@ -2,72 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4242075DDE3
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 19:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE0B75DE70
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Jul 2023 22:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjGVRdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Jul 2023 13:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S229545AbjGVUMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Jul 2023 16:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjGVRdg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 13:33:36 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F342708
-        for <linux-pm@vger.kernel.org>; Sat, 22 Jul 2023 10:33:33 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-263374f2f17so1272366a91.0
-        for <linux-pm@vger.kernel.org>; Sat, 22 Jul 2023 10:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690047213; x=1690652013;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XwQ9KTk0AvNg4YEGpLO6Mzd1tQ0NGTk2GH4qBYSzWYc=;
-        b=VgzZMptrmZ8TWZlxmL7uj46LqGTn5bcQsDytmauMeEb7890xlnF7daq2CEEGMnZ9/Z
-         2YeM29/AwkqHTH0jS1CpvSk9kZVtYGiyBT6f7RMo9cKuvHoe9kZi0PhVT9S16QwWl6IJ
-         hKylPvfYWtUMI1hzwsNnorESKbmngUKjbDcVWCqohrvzxnrnZ1diQfvsyNAPN33EhcDw
-         /D3WxcSxyY44lsDuJ+oKIB1HMNlws0smCwwol4ecOLZkv5tgkze8FDT79naNiVl3ANsv
-         u8OnTj2mk9bfWSZSexMMF0mPnUX8wekGS356PXJXTSnIGQioil1IOh0CHgMKRQ/Dc5vP
-         IDcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690047213; x=1690652013;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XwQ9KTk0AvNg4YEGpLO6Mzd1tQ0NGTk2GH4qBYSzWYc=;
-        b=HJhoW3H0O4CyPsTBIhXQmUFjLtH6tDZ2whMTuFCbvr+NChi06ROp1gKgrJZG5Wtsyp
-         JwT2JkfQfC7r7/yG23aySaeL8Yiih0WYB/F5X4OZfmaXlUA7IN+CfFrsJgSRbII7tmsc
-         D9LKBkf4Hvd3La00L+LZyei8OkLnxuG4GcErbvSSBBYa+Karz+o5VfFkzIoEBUj575jw
-         tacEPocukz2oc+OzrWvtrw0iRm2Nml1nrqWhxy4hXEAz+p4HNCuUJArzFO5cqrCCAat0
-         BVrHtXPYq0FxycJV5lw2/IJPIozNs+kODTbeWhCyECtBBapQwyKrA//Xu1aJdQKCgsQR
-         HSoA==
-X-Gm-Message-State: ABy/qLY4HSvfqW91kp1vL7n/xytzTY2oUzxFtJLpxnEGamnxK1y8zD2r
-        pccQMELf/V7AKdAWBX/oPHdhhyFIRZ4EH7HiD/4=
-X-Google-Smtp-Source: APBJJlGaafNiiHf9/1O0psWPRSU+7sNla2aMoOYF66iC/Xrx4mVCb4Rkkl5MrHBWY+m5yeh1LUIwdQAeleHpZGArl9Y=
-X-Received: by 2002:a17:90b:d8f:b0:250:6c76:fd9b with SMTP id
- bg15-20020a17090b0d8f00b002506c76fd9bmr3433350pjb.38.1690047212899; Sat, 22
- Jul 2023 10:33:32 -0700 (PDT)
+        with ESMTP id S229534AbjGVUMC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Jul 2023 16:12:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE6D1AB;
+        Sat, 22 Jul 2023 13:11:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3DC560BAF;
+        Sat, 22 Jul 2023 20:11:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C120C433C7;
+        Sat, 22 Jul 2023 20:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690056718;
+        bh=/9qrpDonabY7Xm8MCIwJtyIeTf31N3Re/7USWMHRKcs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FAbEVh9Heu4E8u7iKDY+e64+Tk7EG3xFaFcSkA/oiTpv72taAYk9Q+td/YzDreOuA
+         +2RDHN4MfVsWILebbSVVmIsaG9fSxAwkQ414cfBokjn5dic+30jaw0UExsHy96+Jxb
+         a1dDPxRZDeutnFDey2kOvsgVzeuqTNNDxVsNhR66qbUcVZWcT+eN1SWU2QnfsSK1l6
+         V19jdwhKq1ar2D2PS5GmhV0j8vkFyeR6/fSOVSYONuzecfx0FOgzLgn3fknlSs7SxH
+         Gs2UVudmYXXi6Z0YnplijX7e8pduAdtiuX+Htc3Cj0jZFbfJqUb/vkFpQ8yW7wpY06
+         VfyppHg6NsFcw==
+Date:   Sat, 22 Jul 2023 21:11:54 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Icenowy Zheng <zhengxingda@iscas.ac.cn>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, Icenowy Zheng <uwu@icenowy.me>
+Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o
+ trips subnode
+Message-ID: <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
+References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:556:b0:130:f967:83dc with HTTP; Sat, 22 Jul 2023
- 10:33:32 -0700 (PDT)
-Reply-To: mrsvl06@gmail.com
-From:   Veronica Lee <barr.freemanukoh@gmail.com>
-Date:   Sat, 22 Jul 2023 19:33:32 +0200
-Message-ID: <CAB6WZPoaKVWPbmVCghccn8Ed=43UndtTt_gOWQ-F7rurprkDnQ@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qmlxt8wSsnvuRw3d"
+Content-Disposition: inline
+In-Reply-To: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-16nXnNeV150g15nXp9eZ16jXmSwg15DXoNeZINek15XXoNeUINeQ15zXmdeaINec157XmdeT16Ig
-16nXkdeo16bXldeg15kg15zXl9ec15XXpyDXkNeZ16rXmiDXkNecINeq15TXodehINec15TXqdeZ
-15Eg15zXpNeo15jXmdedDQo=
+
+--qmlxt8wSsnvuRw3d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Jul 22, 2023 at 08:25:34PM +0800, Icenowy Zheng wrote:
+> From: Icenowy Zheng <uwu@icenowy.me>
+>=20
+> Although the current device tree binding of thermal zones require the
+> trips subnode, the binding in kernel v5.15 does not require it, and many
+> device trees shipped with the kernel, for example,
+> allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
+> comply to the old binding and contain no trips subnode.
+>=20
+> Allow the code to successfully register thermal zones w/o trips subnode
+> for DT binding compatibility now.
+>=20
+> Furtherly, the inconsistency between DTs and bindings should be resolved
+> by either adding empty trips subnode or dropping the trips subnode
+> requirement.
+
+This makes sense to me - it allows people to see the reported
+temperature even if there's no trips defined which seems more
+helpful than refusing to register.
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--qmlxt8wSsnvuRw3d
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS8OAkACgkQJNaLcl1U
+h9CRvwf9EgwMjwx2a6iutkecp3uFZwWNnW29QRQ4CiMFagDVw0T4QBY1c9lZHt+G
+gWpeUxAmdhOlFOPqUjsECVD4WLb0jgBLR/mTStJlVTfRDh19L7sqdPjv1wusWJRC
+EpvO18flHCvptt/uGpGJSpgSjvsdno2UN15ItUv21WPUo1fcyKymyRDoEREAETHy
+TQNRktd6GG6MxGdDPYtg+H/2UrI80IFS5r608F+lmcjo4J67dI2+x/TiuX5MQ3dD
+zR1NUdaACpYwjEctJ23troInehqwwglXs+CNm/p/WC9sWgfYaKSYdJXpjlS+mHFt
+NVJaVP9uS0BcAJL7sGXEapQApo6Beg==
+=Anzg
+-----END PGP SIGNATURE-----
+
+--qmlxt8wSsnvuRw3d--
