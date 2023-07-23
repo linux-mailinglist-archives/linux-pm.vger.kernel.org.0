@@ -2,64 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B07075E4B2
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 22:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A631675E4CE
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 22:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjGWUGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jul 2023 16:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
+        id S229790AbjGWUYV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jul 2023 16:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbjGWUGK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 16:06:10 -0400
+        with ESMTP id S229493AbjGWUYU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 16:24:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7741B1BE;
-        Sun, 23 Jul 2023 13:06:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF50B1BB;
+        Sun, 23 Jul 2023 13:24:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04FBA60E9A;
-        Sun, 23 Jul 2023 20:06:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE29FC433C8;
-        Sun, 23 Jul 2023 20:06:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4407260E97;
+        Sun, 23 Jul 2023 20:24:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F886C433C8;
+        Sun, 23 Jul 2023 20:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690142768;
-        bh=MYDNII/nRbpdhoxLfX/zeWMDQLkBfuAoQG5un5EegG8=;
+        s=k20201202; t=1690143858;
+        bh=f8gObTjVO0ERFlmH3AL/oRX017qbf1NfDe3+e3e3X1c=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=i04gOhYl/e9pCTC+Qjr0+IHT70ErCt815FZsNDMNWXOyWLAtfFsG5RRDgy/ifMEYi
-         ocuIRDmhrayU0SnG3tshMAydV1PAx5CqH6z636iru4IYvtGpvzPlkrKyAXwVcporwo
-         xN7gQ8SSCjeGdg5g3sHi+/+PXffTeKrzQbsJ7Ba1tyxmDeXLPCWXSP7nMhB7Zt21Kb
-         xzTthLBnKMf4WlOuXZE2aW4YkWJgrKhkOPlIBw48KjZHkV3U+OUUh7Jgh645JuBoRg
-         5pXX9f85FgT316SIJ0WqprfJYTbt/k3S85n2UugXt5ZXSgq3h6aOvObqny3LV/lRzA
-         VeVGP5CPUOpmw==
-Message-ID: <1703ab6e-8567-8574-f011-af19813f97e8@kernel.org>
-Date:   Mon, 24 Jul 2023 05:06:04 +0900
+        b=B76f5Ogiw5r+ZSnn4N6mc/puCTJCuYQEDJq+DYeWnOLidGSnc2Z3RuO09pWNEQr1U
+         Od6xSr7PB9qQJpENwyCDWgQoWieE1x/9iuwMHvintNhJNDiDHIBgJjiw0y3heGLGAz
+         ToLj2vuYb8J5kojRYF+IiLsOibiE0TqgEezapcRPeUYNXL4H8s8LbhGbTqDS7Mdpy/
+         ZHdCddNFbNRTd1oKGuURq7TGolqT0n6yW5wZxXyVDpk96AdYFygUEBwlCiy5nlTCPa
+         IlT+q75wKR3lodezANXotV8ujPgcIYuAyYzqQqA/WxEmzxDiDh3KEJiPJ+m3xc5Zvc
+         k7Pv54rli/baA==
+Message-ID: <87dfe310-520d-b3d7-a3ff-2bf5a19f9155@kernel.org>
+Date:   Mon, 24 Jul 2023 05:24:12 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v2 09/15] PM / devfreq: Switch to
- dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-10-manivannan.sadhasivam@linaro.org>
-From:   Chanwoo Choi <chanwoo@kernel.org>
+Subject: Re: [PATCH] devfreq: imx: Explicitly include correct DT includes
 Content-Language: en-US
-In-Reply-To: <20230720054100.9940-10-manivannan.sadhasivam@linaro.org>
+To:     Rob Herring <robh@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-tegra@vger.kernel.org
+References: <20230714174425.4054393-1-robh@kernel.org>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+In-Reply-To: <20230714174425.4054393-1-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -72,84 +72,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 23. 7. 20. 14:40, Manivannan Sadhasivam wrote:
-> Some devfreq consumers like UFS driver need to work with multiple clocks
-> through the OPP framework. For this reason, OPP framework exposes the
-> _indexed() APIs for finding the floor/ceil of the supplied frequency of
-> the indexed clock. So let's use them in the devfreq driver.
+On 23. 7. 15. 02:44, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
 > 
-> Currently, the clock index of 0 is used which works fine for multiple as
-> well as single clock.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/devfreq/devfreq.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+>  drivers/devfreq/imx-bus.c         | 2 +-
+>  drivers/devfreq/imx8m-ddrc.c      | 2 +-
+>  drivers/devfreq/mtk-cci-devfreq.c | 1 -
+>  drivers/devfreq/tegra30-devfreq.c | 2 +-
+>  4 files changed, 3 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index e36cbb920ec8..7686993d639f 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -88,7 +88,7 @@ static unsigned long find_available_min_freq(struct devfreq *devfreq)
->  	struct dev_pm_opp *opp;
->  	unsigned long min_freq = 0;
+> diff --git a/drivers/devfreq/imx-bus.c b/drivers/devfreq/imx-bus.c
+> index a727067980fb..86850b7dea09 100644
+> --- a/drivers/devfreq/imx-bus.c
+> +++ b/drivers/devfreq/imx-bus.c
+> @@ -7,7 +7,7 @@
+>  #include <linux/devfreq.h>
+>  #include <linux/device.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+> diff --git a/drivers/devfreq/imx8m-ddrc.c b/drivers/devfreq/imx8m-ddrc.c
+> index 16636973eb10..e1348490c8aa 100644
+> --- a/drivers/devfreq/imx8m-ddrc.c
+> +++ b/drivers/devfreq/imx8m-ddrc.c
+> @@ -3,9 +3,9 @@
+>   * Copyright 2019 NXP
+>   */
 >  
-> -	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
-> +	opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &min_freq, 0);
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/device.h>
+> -#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/devfreq.h>
+>  #include <linux/pm_opp.h>
+> diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
+> index 6354622eda65..83a73f0ccd80 100644
+> --- a/drivers/devfreq/mtk-cci-devfreq.c
+> +++ b/drivers/devfreq/mtk-cci-devfreq.c
+> @@ -8,7 +8,6 @@
+>  #include <linux/minmax.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> -#include <linux/of_device.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/regulator/consumer.h>
+> diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
+> index 503376b894b6..4a4f0106ab9d 100644
+> --- a/drivers/devfreq/tegra30-devfreq.c
+> +++ b/drivers/devfreq/tegra30-devfreq.c
+> @@ -13,7 +13,7 @@
+>  #include <linux/io.h>
+>  #include <linux/irq.h>
+>  #include <linux/module.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_opp.h>
+>  #include <linux/reset.h>
 
-This patch changed the used function from dev_pm_opp_find_freq_ceil
-to dev_pm_opp_find_freq_ceil_indexed even if there are no supporting of the multiple clocks
-and then dev_pm_opp_find_freq_ceil is not removed from OPP.
+Looks good to me.
+But, need to change the patch title with 'PM / ' prefix 
+to keep the consistency of previous devfreq patch and then
+this patch touched the other devfreq drivers except for imx drivers.
 
-I think that it is better to use dev_pm_opp_find_freq_ceil_indexed
-when need to support multiple clocks with real case.
-
->  	if (IS_ERR(opp))
->  		min_freq = 0;
->  	else
-> @@ -102,7 +102,7 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
->  	struct dev_pm_opp *opp;
->  	unsigned long max_freq = ULONG_MAX;
->  
-> -	opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
-> +	opp = dev_pm_opp_find_freq_floor_indexed(devfreq->dev.parent, &max_freq, 0);
->  	if (IS_ERR(opp))
->  		max_freq = 0;
->  	else
-> @@ -196,7 +196,7 @@ static int set_freq_table(struct devfreq *devfreq)
->  		return -ENOMEM;
->  
->  	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
-> -		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
-> +		opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &freq, 0);
->  		if (IS_ERR(opp)) {
->  			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
->  			return PTR_ERR(opp);
-> @@ -2034,18 +2034,18 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
->  
->  	if (flags & DEVFREQ_FLAG_LEAST_UPPER_BOUND) {
->  		/* The freq is an upper bound. opp should be lower */
-> -		opp = dev_pm_opp_find_freq_floor(dev, freq);
-> +		opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
->  
->  		/* If not available, use the closest opp */
->  		if (opp == ERR_PTR(-ERANGE))
-> -			opp = dev_pm_opp_find_freq_ceil(dev, freq);
-> +			opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
->  	} else {
->  		/* The freq is an lower bound. opp should be higher */
-> -		opp = dev_pm_opp_find_freq_ceil(dev, freq);
-> +		opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
->  
->  		/* If not available, use the closest opp */
->  		if (opp == ERR_PTR(-ERANGE))
-> -			opp = dev_pm_opp_find_freq_floor(dev, freq);
-> +			opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
->  	}
->  
->  	return opp;
+So that I think that it is better to change the patch title as following
+and then applied it. Thanks.
+- "PM / devfreq: Explicitly include correct DT includes"
 
 -- 
 Best Regards,
