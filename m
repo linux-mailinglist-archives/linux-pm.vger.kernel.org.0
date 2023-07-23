@@ -2,128 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EE875E2C6
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 17:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B07075E4B2
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 22:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjGWPFa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jul 2023 11:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
+        id S229599AbjGWUGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jul 2023 16:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGWPF3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 11:05:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92157D1;
-        Sun, 23 Jul 2023 08:05:28 -0700 (PDT)
+        with ESMTP id S229491AbjGWUGK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 16:06:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7741B1BE;
+        Sun, 23 Jul 2023 13:06:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FA9760DCE;
-        Sun, 23 Jul 2023 15:05:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17C40C433C8;
-        Sun, 23 Jul 2023 15:05:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04FBA60E9A;
+        Sun, 23 Jul 2023 20:06:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE29FC433C8;
+        Sun, 23 Jul 2023 20:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690124727;
-        bh=WcXx4NgqcHBwrVmmKu93EsH2r7eDAFkO3ZuwoqC1YYs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vHFIkgxv1Rlc1mnL6cK/9dJHedqR8geu3dqcf6azy+dG/D7deNWK+L/xFNaGtwQd4
-         6bxyG+NsZI0ScCL4rqmudh5IkBr1PsDoeQ5QeJexSlFxOnajcwuj2I9uwVRtXR1jHT
-         k62wBJzeoXp/cAZRTE+Q1IRuEZIEjRny/+hBga0fYbUnWLwREZHxS4iFAgGwcKsBjw
-         N9uUEy9yAt2eb9Mu9S6oyMd8hrg9IRKZLkYfkn2kjyavR7AAz6nY36DebcIRD+vznE
-         XLRXQK8kOMDhJWV6e6uGaiYgLruBi0Ul2BleUgiuMpU+5kW8WfuK+Twgh8oHs5Fn4G
-         8bxqvD1DpGeMA==
-Date:   Sun, 23 Jul 2023 16:05:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Icenowy Zheng <zhengxingda@iscas.ac.cn>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o
- trips subnode
-Message-ID: <ZL1BtOZp/2Sw5sFL@finisterre.sirena.org.uk>
-References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
- <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
- <6d1c0915-1485-d9d6-9fff-0413fb16bd3f@linaro.org>
+        s=k20201202; t=1690142768;
+        bh=MYDNII/nRbpdhoxLfX/zeWMDQLkBfuAoQG5un5EegG8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i04gOhYl/e9pCTC+Qjr0+IHT70ErCt815FZsNDMNWXOyWLAtfFsG5RRDgy/ifMEYi
+         ocuIRDmhrayU0SnG3tshMAydV1PAx5CqH6z636iru4IYvtGpvzPlkrKyAXwVcporwo
+         xN7gQ8SSCjeGdg5g3sHi+/+PXffTeKrzQbsJ7Ba1tyxmDeXLPCWXSP7nMhB7Zt21Kb
+         xzTthLBnKMf4WlOuXZE2aW4YkWJgrKhkOPlIBw48KjZHkV3U+OUUh7Jgh645JuBoRg
+         5pXX9f85FgT316SIJ0WqprfJYTbt/k3S85n2UugXt5ZXSgq3h6aOvObqny3LV/lRzA
+         VeVGP5CPUOpmw==
+Message-ID: <1703ab6e-8567-8574-f011-af19813f97e8@kernel.org>
+Date:   Mon, 24 Jul 2023 05:06:04 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0yLVx62uXzvty8Jv"
-Content-Disposition: inline
-In-Reply-To: <6d1c0915-1485-d9d6-9fff-0413fb16bd3f@linaro.org>
-X-Cookie: Give him an evasive answer.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2 09/15] PM / devfreq: Switch to
+ dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+ <20230720054100.9940-10-manivannan.sadhasivam@linaro.org>
+From:   Chanwoo Choi <chanwoo@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20230720054100.9940-10-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
 
---0yLVx62uXzvty8Jv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 23. 7. 20. 14:40, Manivannan Sadhasivam wrote:
+> Some devfreq consumers like UFS driver need to work with multiple clocks
+> through the OPP framework. For this reason, OPP framework exposes the
+> _indexed() APIs for finding the floor/ceil of the supplied frequency of
+> the indexed clock. So let's use them in the devfreq driver.
+> 
+> Currently, the clock index of 0 is used which works fine for multiple as
+> well as single clock.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/devfreq/devfreq.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index e36cbb920ec8..7686993d639f 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -88,7 +88,7 @@ static unsigned long find_available_min_freq(struct devfreq *devfreq)
+>  	struct dev_pm_opp *opp;
+>  	unsigned long min_freq = 0;
+>  
+> -	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
+> +	opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &min_freq, 0);
 
-On Sun, Jul 23, 2023 at 12:12:49PM +0200, Daniel Lezcano wrote:
-> On 22/07/2023 22:11, Mark Brown wrote:
+This patch changed the used function from dev_pm_opp_find_freq_ceil
+to dev_pm_opp_find_freq_ceil_indexed even if there are no supporting of the multiple clocks
+and then dev_pm_opp_find_freq_ceil is not removed from OPP.
 
-> > This makes sense to me - it allows people to see the reported
-> > temperature even if there's no trips defined which seems more
-> > helpful than refusing to register.
+I think that it is better to use dev_pm_opp_find_freq_ceil_indexed
+when need to support multiple clocks with real case.
 
-...
+>  	if (IS_ERR(opp))
+>  		min_freq = 0;
+>  	else
+> @@ -102,7 +102,7 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+>  	struct dev_pm_opp *opp;
+>  	unsigned long max_freq = ULONG_MAX;
+>  
+> -	opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
+> +	opp = dev_pm_opp_find_freq_floor_indexed(devfreq->dev.parent, &max_freq, 0);
+>  	if (IS_ERR(opp))
+>  		max_freq = 0;
+>  	else
+> @@ -196,7 +196,7 @@ static int set_freq_table(struct devfreq *devfreq)
+>  		return -ENOMEM;
+>  
+>  	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
+> -		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
+> +		opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &freq, 0);
+>  		if (IS_ERR(opp)) {
+>  			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
+>  			return PTR_ERR(opp);
+> @@ -2034,18 +2034,18 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+>  
+>  	if (flags & DEVFREQ_FLAG_LEAST_UPPER_BOUND) {
+>  		/* The freq is an upper bound. opp should be lower */
+> -		opp = dev_pm_opp_find_freq_floor(dev, freq);
+> +		opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+>  
+>  		/* If not available, use the closest opp */
+>  		if (opp == ERR_PTR(-ERANGE))
+> -			opp = dev_pm_opp_find_freq_ceil(dev, freq);
+> +			opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+>  	} else {
+>  		/* The freq is an lower bound. opp should be higher */
+> -		opp = dev_pm_opp_find_freq_ceil(dev, freq);
+> +		opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+>  
+>  		/* If not available, use the closest opp */
+>  		if (opp == ERR_PTR(-ERANGE))
+> -			opp = dev_pm_opp_find_freq_floor(dev, freq);
+> +			opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+>  	}
+>  
+>  	return opp;
 
-> If the goal is to report the temperature only, then hwmon should be used
-> instead.
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-Sure, that doesn't seem to be the case in the impacted systems though -
-AFAICT the issue with these is that it's a generic SoC DT that's not
-fully fleshed out, either because more data is needed for the silicon or
-because the numbers need to be system specific for some reason.
-
-> If the goal is to mitigate by userspace, then the trip point *must* be used
-> to prevent the userspace polling the temperature. With the trip point the
-> sensor will be set to fire an interrupt at the given trip temperature.
-
-I'm not clear a trip point prevent userspace polling if it feels so
-moved?  Is it just that it makes it more likely that someone will
-implement something that polls?
-
-> IOW, trip points are not optional
-
-I can see printing a loud warning given that the system is not fully
-configured (there's a warning already, I did nearly comment on this
-patch downgrading it all the way to a debug log), perhaps even
-suppressing the registraton of the userspace interface, but returning a
-failure to the registering driver feels like it's escalating the problem
-and complicating the driver code.  Suppressing the registration to
-userspace seemed like it was adding more complexity in the core but it
-would avoid any potential confusion for userspace.
-
-For me the main issue is the impact on devices that support multiple
-thermal zones, in order to avoid having working zones stay registered
-their drivers will all have to handle the possibility of some of the
-zones failing to register due to missing configuration which is going to
-add complexity both at both registration and runtime and be easy to miss.
-If the core just accepts the zones then whatever complexity there is
-gets factored out into the core.
-
---0yLVx62uXzvty8Jv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS9QbMACgkQJNaLcl1U
-h9DjxAf/SNrHtzc1AbU+CBWeWdCjcn8YM2RPDP8lWcvrVBLBy/DndTm+zf7kdxSU
-pmTIIia9nc9Xy0InPTq0lrxTALv9KBqqihXxrkjp5wzBmviBCRgy/p4zw32phlEh
-b/Di1wpHttDFt62t2jofB6JrG1ZGWbgLCX7yS1iyexMol53aQfECNPUT9k6uKuIf
-6pba2ACFAgWJ5vQ67k6aFB2hfjj272+gf3eS7aq1gR7TLdjecA2dY6Q6ONlPCaTo
-vS8JzyJUqb3G/l+nqdMx/or08+NrYkSTsW2XcbpMVlA50l6ffp2CpFJZMwjG1prV
-qmmC4fCTisbgvkazd7cQ0XY4SwCzkw==
-=0EMm
------END PGP SIGNATURE-----
-
---0yLVx62uXzvty8Jv--
