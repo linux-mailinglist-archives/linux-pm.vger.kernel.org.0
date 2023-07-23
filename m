@@ -2,129 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0770575E12C
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 12:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC4975E18B
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 13:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjGWKT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jul 2023 06:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S229546AbjGWLCB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jul 2023 07:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjGWKT1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 06:19:27 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9386120
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 03:19:25 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31427ddd3fbso2461845f8f.0
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 03:19:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690107564; x=1690712364;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sQnaHUD9wuMOE3wezpKDM9nUt7ND/gLr6iVuqLZzBH4=;
-        b=XzLZ9kIQIPdAT2k56oxPsSoqbz+G1OM4yafqVUQgldpGNve6mYzAXJasO+quR2LeXX
-         QbR7hyaXoq+9WWS9zJfRi0jzj1BeaGg1p6NgGDKnQGWZyBEuWrRUb/ph5OHsfk5r/COx
-         5h9n11aITNmrOVTaHmOTAbYUy0gpU/SjMwKDgrdZR1RW27NFCEjNEQKqPGX97F45S+sR
-         ItpDU4WrRGC2rRr0CqH6btFrLcL6ee11TYh209HJFTWEvXJcscAnxNHDEm2oL7cDIqeA
-         Mt9sAO5OwxLSfhOb/UcbxkNj1obGZqA4vA1+aanPwhN0Ce13uj9ox9k1lWIdkwuDjk9G
-         JrvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690107564; x=1690712364;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sQnaHUD9wuMOE3wezpKDM9nUt7ND/gLr6iVuqLZzBH4=;
-        b=KSK4k1Igcdfx4Liyq5BLYOdDLbhJjARTVbXzS1suoyGorWeMOBH4uRSzqOF8g789Xk
-         bcKJ4d/BjLTr8b8QjFqEljkY2WETw2pBPaqJncys9emVwMZA6h2YVx6uVHNC1JmDTi+m
-         dUKHiv0Oai73clGriUbMMC6/fCI+FGJGht7b6/T/D4x4fQqR5B4Yokfq8LsOY2cS1Y3H
-         gi6G5NZdIbkhD3np7vZ0A/0ALKjpp7m2WM0jX51enPH9VeW/au5zP62IuYUHiEoviVH4
-         9azCt71tmjfTDYTu/UsqpeC0xSEWiCl/EnBFt7amDzKDRhzojLb0c1vSamDqvbR8/6tF
-         5GQg==
-X-Gm-Message-State: ABy/qLY81JnOW+G6Swef7lnoySVMhSX8d7zD5C7FaxNvXEnrMwPwoF4c
-        6QCWo/xoEO29rEVozOzW2oA7Lg/yXfuJqiO5qkw=
-X-Google-Smtp-Source: APBJJlG0zlSmLSbU8uURWCUktFiC361bYbJmxoldBGQF58ttb/xv9nOdCNBk6gzW5OCQ8fa2RT/izw==
-X-Received: by 2002:a5d:4845:0:b0:317:5b29:f10a with SMTP id n5-20020a5d4845000000b003175b29f10amr634212wrs.47.1690107564264;
-        Sun, 23 Jul 2023 03:19:24 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id m24-20020a056000181800b003143ac73fd0sm9319421wrh.1.2023.07.23.03.19.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Jul 2023 03:19:23 -0700 (PDT)
-Message-ID: <2e0bf65f-0452-c859-d287-a9762bd965ef@linaro.org>
-Date:   Sun, 23 Jul 2023 12:19:23 +0200
+        with ESMTP id S229534AbjGWLCA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 07:02:00 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3197E79;
+        Sun, 23 Jul 2023 04:01:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1690110114; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=itBHUgVWw+1H1AyvmMuLnCjl6KYYeNbbu5HvJn+py+fJ8gVzGRImfhlWqQ48JggDFR
+    WYJnzbAa0A9aYmBCgHDnFK3jfdFkZeggltkwTo8LK5ppuD59AC0NnYKQP1UwyZNEh7t2
+    8ua7Nx61VvbWj9sEEN9p4FkTuNgpqdl5F6gVGDHZtReeG62CeZ/WqPQPrQ7JLIX402S2
+    Qz7+jJLbvEGbfIezuefkZNNz0LICkId9/Ckf1lpeb/HjxFUlIMw2LKvkALdABNYmfeCS
+    8DH22n/TEBfFUD1cojAeyMNUoxwlRj6r7+1b8YVR41wofK5kcmhr2Wap75xuzCSGuLHG
+    o+TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1690110114;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=bMEA9P1xZg+7wXNCY5oLz3njvCClnHVxBBvE+kvx+fY=;
+    b=nrqknRiAOMYBvr7pywL9h6lng3I2jyQs5yRa1Dm85YvWSPtqHF95GaofMdByQTBidl
+    jFto/THDMp4v9bRIE3CPOowg3ivJu31vzau+mKuq82XE3I/NnLMbJpmTcIrZS4PAdD1G
+    TmxAD1jjiD+iaqPpAxPEHnkVDF240IyZrtNViEf5t6GydDny4c27MCWpQULN2kT0caCh
+    i9//rfcofZ47Wcax06UM9Mt3eXL/vUZzAfqSHEJGEPXO16vmEeO40hTHrs8kj2532cle
+    XcfdrH6s5ZKWS+DDrFFs8RQmcbatN20kxf2xjNCEKd82GPTbyxZKtCC0uvikXyht3U7K
+    CjZA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1690110114;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=bMEA9P1xZg+7wXNCY5oLz3njvCClnHVxBBvE+kvx+fY=;
+    b=J0aWpBYiV3ufk3SEV4OOYGjMF1LVGbqn90t99Hr+axMSS6HZonax2DNo0O7vYDx33U
+    SQRhLBQSKis/1WCsylY+MGUxg9+dwuoWs8OUyN3B/yb+RZcv3yUHpa/9fV0I6KH28G70
+    y6FHExgSm4AE30Hyi0tgL+4I4kX+io/SuN1fomlRXChslmraiJrWWwEj+0f9jYwaPtl9
+    e/xHn/zTN7oTAf+V898mLISuflWcBfuFcVKHtLH0F9pX3xLO0w6AwnNt+F+CV23GOaz2
+    4bImC1oWmAZ0sAcaMqYHPNbKNk7L6GRsgEXR82gnOVDLcpyH/WCNG7KH6FAai4E9r31W
+    95gg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1690110114;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=bMEA9P1xZg+7wXNCY5oLz3njvCClnHVxBBvE+kvx+fY=;
+    b=3xZ3SUxyANjKWunm+nKULfxJ8zatT2UVBAFbFRWaTGD3ReyvxyYtAaMohsLk6V2WmQ
+    Dbzf3+Py0Z3oselbvvBg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8p+L1A=="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.6.4 DYNA|AUTH)
+    with ESMTPSA id V0b383z6NB1sCdu
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Sun, 23 Jul 2023 13:01:54 +0200 (CEST)
+Date:   Sun, 23 Jul 2023 13:01:48 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] interconnect: qcom: qcm2290: Enable sync state
+Message-ID: <ZL0InL6slLRNcVkI@gerhold.net>
+References: <20230720-topic-qcm2290_icc-v1-0-7f67f2e259c1@linaro.org>
+ <20230720-topic-qcm2290_icc-v1-2-7f67f2e259c1@linaro.org>
+ <ZLmQdjDgIbbhyTMJ@gerhold.net>
+ <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 0/8] ACPI: thermal: Use trip point table to register
- thermal zones
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13318886.uLZWGnKmhe@kreacher> <5710197.DvuYhMxLoT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5710197.DvuYhMxLoT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Fri, Jul 21, 2023 at 02:03:16PM +0200, Konrad Dybcio wrote:
+> On 20.07.2023 21:52, Stephan Gerhold wrote:
+> > On Thu, Jul 20, 2023 at 08:24:01PM +0200, Konrad Dybcio wrote:
+> >> Very surprisingly, qcm2290 does not seem to require any interface
+> >> clocks.
+> > 
+> > What does this mean exactly? The interconnect .sync_state() is
+> > responsible to drop the initial maximum bandwidth votes, with the
+> > assumption that all active devices have voted for the bandwidth they
+> > need. How does this relate to "requiring interface clocks"?
+> If it required such clocks to be present, sync_state could not
+> complete, as trying to access some nodes would crash the platform
+> due to unclocked access.
 
-Hi Rafael,
+You mean something like the IPA clock that must be active to do the QoS
+writes?
 
-could you wait before applying I would like to review the series but I'm 
-OoO ATM, coming back next week?
+Wouldn't it already crash before .sync_state() then, when the initial
+max bandwidth votes are being made?
 
+> 
+> > 
+> >> It's therefore safe to enable sync_state to park unused devices.
+> >> Do so.
+> > 
+> > Doesn't this make everything painfully slow? There are no interconnect
+> > consumers at all in qcm2290.dtsi. I would expect that all bandwidths
+> > end up at minimum.
+> There are no interconnect providers defined in qcm2290.dtsi.
 
+Ack, so I guess you're going to add them together with the actual
+consumers?
 
-On 21/07/2023 14:44, Rafael J. Wysocki wrote:
-> Hi Everyone,
-> 
-> This is the second iteration of the $subject patch series and its original
-> description below is still applicable
-> 
-> On Tuesday, July 18, 2023 8:01:20 PM CEST Rafael J. Wysocki wrote:
->>
->> This patch series makes the ACPI thermal driver register thermal zones
->> with the help of thermal_zone_device_register_with_trips(), so it
->> doesn't need to use the thermal zone callbacks related to trip points
->> any more (and they are dropped in the last patch).
->>
->> The approach presented here is quite radically different from the
->> previous attempts, as it doesn't really rearrange the driver's
->> internal data structures, but adds the trip table support on top of
->> them.  For this purpose, it uses an additional field in struct thermal_trip
->> introduced in the first patch.
-> 
-> In the meantime I have updated the patches and tested them on a system with
-> a couple of ACPI thermal zones.  No differences in functionality after applying
-> the patches have been observed.
-> 
-> The update is mostly related to adding extra locking around trip point
-> temperature updates and some hardening of the .get_trend() callback routine
-> against invalid trip point indices.
-> 
-> Please see patch changelogs for details.
-> 
-> Thanks!
-> 
-> 
-> 
+I think the patch itself is fine. Only the commit message is a bit
+misleading. The actual change that is being done here is enabling the
+bandwidth scaling (dropping the max bandwidth votes after
+.sync_state()). Can you try to clarify the commit message a bit?
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks,
+Stephan
 
