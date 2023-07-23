@@ -2,135 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC4975E18B
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 13:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC0975E2A7
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 16:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbjGWLCB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jul 2023 07:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34344 "EHLO
+        id S229553AbjGWOcG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jul 2023 10:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjGWLCA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 07:02:00 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3197E79;
-        Sun, 23 Jul 2023 04:01:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1690110114; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=itBHUgVWw+1H1AyvmMuLnCjl6KYYeNbbu5HvJn+py+fJ8gVzGRImfhlWqQ48JggDFR
-    WYJnzbAa0A9aYmBCgHDnFK3jfdFkZeggltkwTo8LK5ppuD59AC0NnYKQP1UwyZNEh7t2
-    8ua7Nx61VvbWj9sEEN9p4FkTuNgpqdl5F6gVGDHZtReeG62CeZ/WqPQPrQ7JLIX402S2
-    Qz7+jJLbvEGbfIezuefkZNNz0LICkId9/Ckf1lpeb/HjxFUlIMw2LKvkALdABNYmfeCS
-    8DH22n/TEBfFUD1cojAeyMNUoxwlRj6r7+1b8YVR41wofK5kcmhr2Wap75xuzCSGuLHG
-    o+TA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1690110114;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=bMEA9P1xZg+7wXNCY5oLz3njvCClnHVxBBvE+kvx+fY=;
-    b=nrqknRiAOMYBvr7pywL9h6lng3I2jyQs5yRa1Dm85YvWSPtqHF95GaofMdByQTBidl
-    jFto/THDMp4v9bRIE3CPOowg3ivJu31vzau+mKuq82XE3I/NnLMbJpmTcIrZS4PAdD1G
-    TmxAD1jjiD+iaqPpAxPEHnkVDF240IyZrtNViEf5t6GydDny4c27MCWpQULN2kT0caCh
-    i9//rfcofZ47Wcax06UM9Mt3eXL/vUZzAfqSHEJGEPXO16vmEeO40hTHrs8kj2532cle
-    XcfdrH6s5ZKWS+DDrFFs8RQmcbatN20kxf2xjNCEKd82GPTbyxZKtCC0uvikXyht3U7K
-    CjZA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1690110114;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=bMEA9P1xZg+7wXNCY5oLz3njvCClnHVxBBvE+kvx+fY=;
-    b=J0aWpBYiV3ufk3SEV4OOYGjMF1LVGbqn90t99Hr+axMSS6HZonax2DNo0O7vYDx33U
-    SQRhLBQSKis/1WCsylY+MGUxg9+dwuoWs8OUyN3B/yb+RZcv3yUHpa/9fV0I6KH28G70
-    y6FHExgSm4AE30Hyi0tgL+4I4kX+io/SuN1fomlRXChslmraiJrWWwEj+0f9jYwaPtl9
-    e/xHn/zTN7oTAf+V898mLISuflWcBfuFcVKHtLH0F9pX3xLO0w6AwnNt+F+CV23GOaz2
-    4bImC1oWmAZ0sAcaMqYHPNbKNk7L6GRsgEXR82gnOVDLcpyH/WCNG7KH6FAai4E9r31W
-    95gg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1690110114;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=bMEA9P1xZg+7wXNCY5oLz3njvCClnHVxBBvE+kvx+fY=;
-    b=3xZ3SUxyANjKWunm+nKULfxJ8zatT2UVBAFbFRWaTGD3ReyvxyYtAaMohsLk6V2WmQ
-    Dbzf3+Py0Z3oselbvvBg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA8p+L1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.4 DYNA|AUTH)
-    with ESMTPSA id V0b383z6NB1sCdu
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Sun, 23 Jul 2023 13:01:54 +0200 (CEST)
-Date:   Sun, 23 Jul 2023 13:01:48 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] interconnect: qcom: qcm2290: Enable sync state
-Message-ID: <ZL0InL6slLRNcVkI@gerhold.net>
-References: <20230720-topic-qcm2290_icc-v1-0-7f67f2e259c1@linaro.org>
- <20230720-topic-qcm2290_icc-v1-2-7f67f2e259c1@linaro.org>
- <ZLmQdjDgIbbhyTMJ@gerhold.net>
- <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
+        with ESMTP id S229452AbjGWOcG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 10:32:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C6EE71;
+        Sun, 23 Jul 2023 07:32:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5B7060DCF;
+        Sun, 23 Jul 2023 14:32:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BBB7C433CA;
+        Sun, 23 Jul 2023 14:32:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690122724;
+        bh=ABCsOm9JvWZ+f5nM61rJ7xZNzE0gx8IHdAjQzRG359c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bXr/2FXi7zvvZxq8YappjJNcYGpYEdL+LSGDcNEg2Xu6OKq1mz+qrmtaXlwb/xIet
+         WwQqHTqliVs9MEuQCzDTyhJWf8dZGzTdWx9z2uhQIpb4hoLiqnu8pkQlDoTKErNtm+
+         P0Onv9DjGXNIKCrAhv173l5BMqpuMKfiqgRbj4cuafYxqAmTqxZYI2LOibS9Ru+jCg
+         l+t45Ul4EBQMLA7MrGlc1n+SC10mKbqBNS4KaooOr4yalsCxX/BCHj5dy4yXMT8AvK
+         ivDdZKn3EBZcqw8mw6G1Y5+QGabUUDPLMePohq/D/Nx5dWjE5V++lCsCnd4mudQVJJ
+         n780NLykLrEqw==
+Date:   Sun, 23 Jul 2023 15:32:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Hugh Dickins <hughd@google.com>, Will Deacon <will@kernel.org>,
+        Icenowy Zheng <uwu@icenowy.me>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] thermal/of: Fix double free of params during
+ unregistration
+Message-ID: <ZL054LHAZv8VmIk3@finisterre.sirena.org.uk>
+References: <20230723-thermal-fix-of-memory-corruption-v1-1-ed4fa16d199d@kernel.org>
+ <f559a614-93d5-121a-8ff3-0da77bc85f44@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VCVa1Mdcy0K7qUUI"
 Content-Disposition: inline
-In-Reply-To: <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f559a614-93d5-121a-8ff3-0da77bc85f44@linaro.org>
+X-Cookie: Give him an evasive answer.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 21, 2023 at 02:03:16PM +0200, Konrad Dybcio wrote:
-> On 20.07.2023 21:52, Stephan Gerhold wrote:
-> > On Thu, Jul 20, 2023 at 08:24:01PM +0200, Konrad Dybcio wrote:
-> >> Very surprisingly, qcm2290 does not seem to require any interface
-> >> clocks.
-> > 
-> > What does this mean exactly? The interconnect .sync_state() is
-> > responsible to drop the initial maximum bandwidth votes, with the
-> > assumption that all active devices have voted for the bandwidth they
-> > need. How does this relate to "requiring interface clocks"?
-> If it required such clocks to be present, sync_state could not
-> complete, as trying to access some nodes would crash the platform
-> due to unclocked access.
 
-You mean something like the IPA clock that must be active to do the QoS
-writes?
+--VCVa1Mdcy0K7qUUI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Wouldn't it already crash before .sync_state() then, when the initial
-max bandwidth votes are being made?
+On Sun, Jul 23, 2023 at 11:57:52AM +0200, Daniel Lezcano wrote:
+> On 23/07/2023 01:26, Mark Brown wrote:
 
-> 
-> > 
-> >> It's therefore safe to enable sync_state to park unused devices.
-> >> Do so.
-> > 
-> > Doesn't this make everything painfully slow? There are no interconnect
-> > consumers at all in qcm2290.dtsi. I would expect that all bandwidths
-> > end up at minimum.
-> There are no interconnect providers defined in qcm2290.dtsi.
+> I think this issue has been fixed by:
 
-Ack, so I guess you're going to add them together with the actual
-consumers?
+> https://lore.kernel.org/all/20230708112720.2897484-2-a.fatoum@pengutronix.de/
 
-I think the patch itself is fine. Only the commit message is a bit
-misleading. The actual change that is being done here is enabling the
-bandwidth scaling (dropping the max bandwidth votes after
-.sync_state()). Can you try to clarify the commit message a bit?
+Yes, that should fix the same issue.
 
-Thanks,
-Stephan
+> Rafael ? Did you pick it up ?
 
+There was a message on the thread saying the patches have been applied
+for v6.5 but I can't see them in either mainline or -next.
+
+--VCVa1Mdcy0K7qUUI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmS9Od8ACgkQJNaLcl1U
+h9C4+ggAgyC6LyMmC5zuLuGmpsEUMdCUr58Pk1Fkdi9gM5H24Q82x2RSh9U91FY3
+zAm7b4GvLAjY7a+VQ0kFpLvfO5/eZaxvEKt0obAJQOFbPa/w6g4JpF3CkN8yX/ad
+GYPMBi6Aeo5RzL1VcFRkzcJajKq1EBGXra8YaKWcRsEiEc5OYfXHI+jdk864ZWMe
+FdhA0ciburHOzbrkT4KulZV6Onm+5m3KoQQmMzePJnQgCzYAXZdX7SO5Ftnpb8T5
+DyTXYivBI57Y9tPEgUwftPHtZEG0XOw2MBeIp8zAGJCTykJ9MI8OW2D0zCeOYWaL
+W7Yy19cTg4LDmXRhJfm42x3Ew6bf5g==
+=iPai
+-----END PGP SIGNATURE-----
+
+--VCVa1Mdcy0K7qUUI--
