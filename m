@@ -2,135 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8054175E124
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 12:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD43C75E128
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Jul 2023 12:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjGWKNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 23 Jul 2023 06:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48096 "EHLO
+        id S229566AbjGWKRd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Jul 2023 06:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjGWKMz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 06:12:55 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36395100
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 03:12:52 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbd33a57ddso26190335e9.1
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 03:12:52 -0700 (PDT)
+        with ESMTP id S229553AbjGWKRc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Jul 2023 06:17:32 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2772185
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 03:17:30 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3fbca8935bfso26135205e9.3
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 03:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690107170; x=1690711970;
+        d=linaro.org; s=google; t=1690107449; x=1690712249;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=BEgvBTwL2MyevdtU3fvRfq/aq6oqUR4xFaMQ6+/3+Dw=;
-        b=MlxfssDoiZeCCc1hfQfLncVCxJNbaoto3CAfuLRXQ7TL4fsC1/4sHePjetyHdovpPF
-         GPvXA9b47AxJlRGBA40U/cLr6SyCZIhtn8EWWU+TT9aurr4gz2EfBYMXaBg7njvMcspi
-         67CLSfQz5x8kooisKa219yLA/WZkTAE0nOccu1Hd7lJtFGCeQqQWwwetO2LEXlg/zCMs
-         Ljjzlt38LZyK7JZCCnh8cRiT6laSOrFfWJe8v1ZK78grDOqQOIrXTeFwO36LK8+UHlCU
-         oXu/wrwMstyQrR1VHDd+c6BP5ic3hD/+NnRLYRHN1YKcHD4q3qrTvU8XavJm2WEf6cvI
-         YbDg==
+        bh=G9bizb2XUBHywNQ7OsFuDywmc/SZSAKRG7HN4IcLmxA=;
+        b=m24HZMH7N13lRaOv5+b9dQidpC9uy3119QSO4PCp2b/m6+hXwqvQ7jPMFHXOmkj9ts
+         TzMW1Yu46FjlE6yn1eOJqSqntfWnPUbNSIQX/7ZXWZ4mjjkbFBoFXJ21aSHAmpY4BFoo
+         EQl2X49dqkT4GA5yFDoPHXtJN8+L+6Ysd243ij7VDjcvI+r+gteX+q2+/vFSSpTiaoCS
+         JR6r7rdB0uxqIAC/MYsBicf80X3QG92XkdBLAMkfz7PaWKiuY68jVPZ4/uf5654ZgUDj
+         Q39juTJMrZkfFt9a/OGS+Y/JsEwcvAndxpncQQFfAxgHsyw2ejsNHDad6IeHiiKzlRyn
+         dCbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690107170; x=1690711970;
+        d=1e100.net; s=20221208; t=1690107449; x=1690712249;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BEgvBTwL2MyevdtU3fvRfq/aq6oqUR4xFaMQ6+/3+Dw=;
-        b=j3+vIQ/OcehXYYJvpIXwVpUWmrkLNKRFBWB/sRR9uSysUjIj7PFo9KSJas0/ycdijc
-         ViXfTIu+Nyqj8QcUIojSEZvbcsrV2lCeHNMhyhxhn0IZ7Yw4l3KiAkvj7k3GyRhpPHG5
-         o+qe6vKSXUSFRioZLDqW/p8kmIRKuBL4dNYjQhkQVPv/+gAFj1VH2ZaIGLlr+D04oxhd
-         gSLSrpAy/gQtMN13DJruPxFzYJ/rndbVNLIELwmQsvGWxZR8iUdr9JKQ5UPBvfiKugTK
-         7UgI0BjMhR6HN/ZkLRcAWwrSjN0USKE2A4rqbY1GuUtseUEd525kWhz10vumxq+E8WJ5
-         5f+g==
-X-Gm-Message-State: ABy/qLbhY+iHzXuwAXWbGyrhb7fvuxwFM3q1KxA5xvDd0gjCCkC/mwlO
-        wK8xdFQwuaf3GqJg5DGiwnQZrQ==
-X-Google-Smtp-Source: APBJJlFclljmtLvrx3OH6OGPme7VeGnFSSo5I5l4mYQuISKyF2Zv98JlqeoiTbq6AdakcgbUjTmNNA==
-X-Received: by 2002:a05:600c:2a54:b0:3fb:ff57:1750 with SMTP id x20-20020a05600c2a5400b003fbff571750mr4850793wme.32.1690107170636;
-        Sun, 23 Jul 2023 03:12:50 -0700 (PDT)
+        bh=G9bizb2XUBHywNQ7OsFuDywmc/SZSAKRG7HN4IcLmxA=;
+        b=Zx0F/2Li4h8vthK+vCR70UjBhg2JEkRIFv2wFRRkVxTC2O7h2jf4DteJ5yCsAeDrYr
+         7F+pNFlazMSAur4gjdopWxxjwu2hf2Keb9eND3CR15IwngUyq2V85FGBJ4YZwJhYJHd5
+         s7PgNA78nAvLI9bpF9vFXMH5lcgGR/R6colxO+9jvnlA9a0BKH1oype7KEVOcjZ+QFiU
+         wUfSmYunv2CMNqmu0n6PfsnvyNqtTnd05kHJ8yAzGLS+FV2VqhMeSRfHaNlbSXiXScgN
+         d5+0weYafWdIxfMEsjRtIomElhMAEBHihZXSNXkfuDIa7l02kY3tG4UFRY4K4oB4Tdnr
+         fKAQ==
+X-Gm-Message-State: ABy/qLZRgJL4n/i6h3j2BgVV6wMfjMQCYz9cotGPxtF/0tgLIoTFWKee
+        VbYLfT6i2YFa/3bbMjewo9ctJg==
+X-Google-Smtp-Source: APBJJlFljllVDRV4zSU98uny4rzyJPJfcQknRSy2KfrcGhNrDXhlnkPeB3obyiKeYnJqpyP75u5rDw==
+X-Received: by 2002:a05:600c:210d:b0:3fb:4055:1ddd with SMTP id u13-20020a05600c210d00b003fb40551dddmr4567872wml.28.1690107449150;
+        Sun, 23 Jul 2023 03:17:29 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 3-20020a05600c234300b003fbaa2903f4sm7366620wmq.19.2023.07.23.03.12.49
+        by smtp.googlemail.com with ESMTPSA id bh17-20020a05600c3d1100b003fbb1ce274fsm25898354wmb.0.2023.07.23.03.17.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 Jul 2023 03:12:50 -0700 (PDT)
-Message-ID: <6d1c0915-1485-d9d6-9fff-0413fb16bd3f@linaro.org>
-Date:   Sun, 23 Jul 2023 12:12:49 +0200
+        Sun, 23 Jul 2023 03:17:28 -0700 (PDT)
+Message-ID: <c0f1d7b9-5923-75d6-cb57-bb4bd4635cd7@linaro.org>
+Date:   Sun, 23 Jul 2023 12:17:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o trips
- subnode
+Subject: Re: [PATCH 0/2] thermal/drivers/mediatek: fix a regression affecting
+ other subsystems
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>,
-        Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Icenowy Zheng <uwu@icenowy.me>
-References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
- <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
+To:     Icenowy Zheng <uwu@icenowy.me>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kang Chen <void0red@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230529162056.3786301-1-uwu@icenowy.me>
+ <40546a57-27ac-8bf9-a2d8-77f7d4ab4aad@linaro.org>
+ <05e6d2d6dd8805c4cded28f85ac873b96bc1467e.camel@icenowy.me>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
+In-Reply-To: <05e6d2d6dd8805c4cded28f85ac873b96bc1467e.camel@icenowy.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Mark,
-
-On 22/07/2023 22:11, Mark Brown wrote:
-> On Sat, Jul 22, 2023 at 08:25:34PM +0800, Icenowy Zheng wrote:
->> From: Icenowy Zheng <uwu@icenowy.me>
+On 22/07/2023 14:13, Icenowy Zheng wrote:
+> 在 2023-06-13星期二的 10:44 +0200，Daniel Lezcano写道：
+>> On 29/05/2023 18:20, Icenowy Zheng wrote:
+>>> In the commit I reverted as the first commit of this patchset, the
+>>> of_iomap function call, which allows multiple mapping of the same
+>>> physical memory space, is replaced to calling devm_of_iomap, which
+>>> registers exclusivity, and on my system (mt8173-elm), preventing
+>>> display
+>>> from working.
+>>>
+>>> So I reverted it, and to really solve the problem that the original
+>>> commit wants to solve, I read the source of auxadc-thermal and
+>>> realized
+>>> that the address of these two memory blocks are not saved after
+>>> probe,
+>>> and they're only used when initializing the thermal sensors. This
+>>> leads
+>>> to my final fix, which is the second commit here, that adds
+>>> of_iounmap
+>>> just to the probe function.
+>>>
+>>> Icenowy Zheng (2):
+>>>     Revert "thermal/drivers/mediatek: Use devm_of_iomap to avoid
+>>> resource
+>>>       leak in mtk_thermal_probe"
+>>>     thermal/drivers/mediatek: unmap foreign MMIO after probing
+>>>
+>>>    drivers/thermal/mediatek/auxadc_thermal.c | 46 ++++++++++++------
+>>> -----
+>>>    1 file changed, 24 insertions(+), 22 deletions(-)
 >>
->> Although the current device tree binding of thermal zones require the
->> trips subnode, the binding in kernel v5.15 does not require it, and many
->> device trees shipped with the kernel, for example,
->> allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
->> comply to the old binding and contain no trips subnode.
->>
->> Allow the code to successfully register thermal zones w/o trips subnode
->> for DT binding compatibility now.
->>
->> Furtherly, the inconsistency between DTs and bindings should be resolved
->> by either adding empty trips subnode or dropping the trips subnode
->> requirement.
+>> I'll apply only the revert and let you revisit the patch 2 which
+>> could
+>> be improved.
 > 
-> This makes sense to me - it allows people to see the reported
-> temperature even if there's no trips defined which seems more
-> helpful than refusing to register.
+> Sorry, is the first patch applied? I didn't see it in any kernel
+> trees...
 
-The binding describes the trip points as required and that since the 
-beginning.
+Yes, sorry, I got another patch meanwhile which provided the same revert 
+with more tags
 
-What changed is now the code reflects the required property while before 
-it was permissive, that was an oversight.
-
-Just a reminder about the thermal framework goals:
-
-   1. It protects the silicon (thus critical and hot trip points)
-
-   2. It mitigates the temperature (thus cooling device bound to trip 
-points)
-
-   3. It notifies the userspace when a trip point is crossed
-
-So if the thermal zone is described but without any of this goal above, 
-it is pointless.
-
-If the goal is to report the temperature only, then hwmon should be used 
-instead.
-
-If the goal is to mitigate by userspace, then the trip point *must* be 
-used to prevent the userspace polling the temperature. With the trip 
-point the sensor will be set to fire an interrupt at the given trip 
-temperature.
-
-IOW, trip points are not optional
-
+https://lore.kernel.org/r/20230525121811.3360268-1-ricardo.canuelo@collabora.com
 
 
 -- 
