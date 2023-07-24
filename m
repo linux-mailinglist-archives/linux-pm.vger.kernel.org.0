@@ -2,222 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C136E75FB39
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 17:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E8CC75FB70
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 18:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjGXPxh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 11:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33556 "EHLO
+        id S229550AbjGXQGY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 12:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjGXPxd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 11:53:33 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5E2139
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 08:53:31 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31297125334so2853935f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 08:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1690214010; x=1690818810;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qvVqE0O3Yk2XtzPHMOoIFSa9njEhSRCYnLtdHAIhE6U=;
-        b=lpLmG6bu/RqaGoZqs6oX5PZsdNPUaxfYR1f0K67vW7MKIjnNVYEO383t5uPjCnPVp8
-         GWQHPKYdFmMEvbo7osTvSi7VTzIxDdhe2Ysfw4FKNL+ihDd/HWBR3pignMlhVKZAuKA6
-         ytirBxDYpzPOWmK+S5Be9lJwA61kmbYd6sZWwRbX+19KCikZt631hk4AZnBOHTorLriI
-         pJ+ByKpJZ0vzjYsDZGW4YOAMb/1jmjmMQYIRiYC3Ax2o9n4QKNxiVgNj3G8hLWebGSrV
-         YChoQ/f9eofIszqFydZk3/cDFuL89b3VmKHLaYPFQCmaTev+3qmH3f+LQ5EwIZhW6bZ2
-         F0Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690214010; x=1690818810;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvVqE0O3Yk2XtzPHMOoIFSa9njEhSRCYnLtdHAIhE6U=;
-        b=k73/U8XjOrnySYjynAXv0kEyizxM6LzxSvXCGxduVHaQyLkVZips/zeLwPjKIlBKX8
-         giLejQJrztdYQt52dgwF0sk54peZszHgUXYqreTGEptIcltc3rpExftq6G7cV1QOEjRT
-         ZU4AFHaX/lVytbISAfvn8vkmmPJJMB6c0S1IupVLG9SPd2G7NIwrg81kgejTHSGWTXK7
-         cJf7+8xScCDGvrvRlbbq9VpX5YlSltxLC51BCu1AMBo2UaUydev+gZsK96HHmfeLfqc6
-         elja+2iaDGppEQSvXmP5wU5Tch8eBzuJ1kXZ6zNImq7NGVIP31v5RJn+edaa62WR53hA
-         10Kw==
-X-Gm-Message-State: ABy/qLaFvzYvm16gSBnORS8m5K+mpFH6kGlTbQQlVTDs21zyQAUvHUxB
-        pTrWAjs51atSwNyPV23QLGufWA==
-X-Google-Smtp-Source: APBJJlGfoMrt7qECIp+RgNleYhlciipGcPewl2nbb95GXJujHw97/3gUt3Na5RMfYTx/hh9e3jKiWw==
-X-Received: by 2002:a5d:4564:0:b0:314:1096:6437 with SMTP id a4-20020a5d4564000000b0031410966437mr8279435wrc.19.1690214009930;
-        Mon, 24 Jul 2023 08:53:29 -0700 (PDT)
-Received: from airbuntu (host86-163-217-97.range86-163.btcentralplus.com. [86.163.217.97])
-        by smtp.gmail.com with ESMTPSA id k5-20020a5d6285000000b0031455482d1fsm13486858wru.47.2023.07.24.08.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 08:53:29 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 16:53:28 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, guohua.yan@unisoc.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: schedutil: next_freq need update when
- cpufreq_limits changed
-Message-ID: <20230724155328.7odez6dcoafksr3i@airbuntu>
-References: <20230719130527.8074-1-xuewen.yan@unisoc.com>
- <20230721221944.dthg3tf25j4qgc2z@airbuntu>
- <CAB8ipk8b8ZfwXN7KK-zFVPQ-8i37h64v-wz2ErB3AANaZ9w7aA@mail.gmail.com>
+        with ESMTP id S229495AbjGXQGX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 12:06:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C558E;
+        Mon, 24 Jul 2023 09:06:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CEAA6123C;
+        Mon, 24 Jul 2023 16:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33B71C433C7;
+        Mon, 24 Jul 2023 16:06:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690214781;
+        bh=wzILIiktygSkczKQwKNbT4xkne6f5Z3SbGziCkcoM/c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ShgOSX/YcapLsLBr4mgiNNeTxkDsZrey4+inAmYcBZY1Ugf7LaGLNUMNQK6Osc2IE
+         ayg++5bmISQm5M/fBfUWQJNKaT2WbpvTPxqvmy1iPbAdXzPAS3VPvvnZiRzJmZTuzC
+         WOzPcVcAWeqL49oUem4aPSij+F6HYuYo1EurjouatuePD8QkVp+62YAmJYO3MaXzUa
+         XhkjK0AqSpVSHopWja+iyCmUuVIDPZDTl5tGrE2Ya4v9bmOwMcuIc4wUF4zuRpatJk
+         xDFlbsxi54Mwq4vWYZruPNS+NKzYVoqbOEwaZAyCeEwOBG4pDb+e5vxRKuI+v6UAUm
+         Q8GTMAzk5DsWg==
+Received: (nullmailer pid 3630338 invoked by uid 1000);
+        Mon, 24 Jul 2023 16:06:19 -0000
+Date:   Mon, 24 Jul 2023 10:06:19 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: thermal: tegra: Convert to json-schema
+Message-ID: <169021477856.3630278.10231413984365263357.robh@kernel.org>
+References: <20230721130306.2990112-1-thierry.reding@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB8ipk8b8ZfwXN7KK-zFVPQ-8i37h64v-wz2ErB3AANaZ9w7aA@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230721130306.2990112-1-thierry.reding@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/24/23 11:36, Xuewen Yan wrote:
-> On Sat, Jul 22, 2023 at 7:02 AM Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 07/19/23 21:05, Xuewen Yan wrote:
-> > > When cpufreq's policy is single, there is a scenario that will
-> > > cause sg_policy's next_freq to be unable to update.
-> > >
-> > > When the cpu's util is always max, the cpufreq will be max,
-> > > and then if we change the policy's scaling_max_freq to be a
-> > > lower freq, indeed, the sg_policy's next_freq need change to
-> > > be the lower freq, however, because the cpu_is_busy, the next_freq
-> > > would keep the max_freq.
-> > >
-> > > For example:
-> > > The cpu7 is single cpu:
-> > >
-> > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # while true;do done&
-> > > [1] 4737
-> > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # taskset -p 80 4737
-> > > pid 4737's current affinity mask: ff
-> > > pid 4737's new affinity mask: 80
-> > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-> > > 2301000
-> > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_cur_freq
-> > > 2301000
-> > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # echo 2171000 > scaling_max_freq
-> > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-> > > 2171000
-> > >
-> > > At this time, the sg_policy's next_freq would keep 2301000.
-> > >
-> > > To prevent the case happen, add the judgment of the need_freq_update flag.
-> > >
-> > > Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> > > Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
-> > > Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
-> > > ---
-> > >  kernel/sched/cpufreq_schedutil.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > index 4492608b7d7f..458d359f5991 100644
-> > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > @@ -350,7 +350,8 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
-> > >        * Except when the rq is capped by uclamp_max.
-> > >        */
-> > >       if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
-> > > -         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
-> > > +         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq &&
-> > > +         !sg_policy->need_freq_update) {
-> >
-> > What about sugov_update_single_perf()? It seems to have the same problem, no?
-> 
-> There is no problem in sugov_update_single_perf, because the next_freq
-> is updated by drivers, maybe the next_freq is not used when using
-> sugov_update_single_perf..
 
-Ah I see; we just use prev_util but the request will go through and the driver
-should observe the new limit regardless of what util value we pass to it. Got
-ya.
-
+On Fri, 21 Jul 2023 15:03:06 +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> But  for the last_freq_update_time, I think there are some problems
-> when using sugov_update_single_perf:
-> Now, there is no judgment condition for the update of the
-> last_freq_update_time. That means the last_freq_update_time is always
-> updated in sugov_update_single_perf.
-> And in sugov_should_update_freq: it would judge the
-> freq_update_delay_ns. As a result, If we use the
-> sugov_update_single_perf, the cpu frequency would only be periodically
-> updated according to freq_update_delay_ns.
-> Maybe we should judge the cpufreq_driver_adjust_perf's return value,
-> if the freq is not updated, the last_freq_update_time also does not
-> have to update.
+> Convert the Tegra thermal bindings from the free-form text format to
+> json-schema.
 > 
-> Just like:
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 458d359f5991..10f18b054f01 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -381,6 +381,7 @@ static void sugov_update_single_perf(struct
-> update_util_data *hook, u64 time,
->         struct sugov_cpu *sg_cpu = container_of(hook, struct
-> sugov_cpu, update_util);
->         unsigned long prev_util = sg_cpu->util;
->         unsigned long max_cap;
-> +       bool freq_updated;
+> Changes in v2:
+> - add minimum and maximum values for cpu-throt-percent property
+> - add missing unevaluatedProperties for throttle event nodes
+> - drop unneeded minItems where it equals maxItems
+> - add missing items for uint32-matrix
+> - document OC1 throttle event
 > 
->         /*
->          * Fall back to the "frequency" path if frequency invariance is not
-> @@ -407,10 +408,11 @@ static void sugov_update_single_perf(struct
-> update_util_data *hook, u64 time,
->             sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
->                 sg_cpu->util = prev_util;
+>  .../thermal/nvidia,tegra124-soctherm.txt      | 238 -----------
+>  .../thermal/nvidia,tegra124-soctherm.yaml     | 380 ++++++++++++++++++
+>  2 files changed, 380 insertions(+), 238 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.txt
+>  create mode 100644 Documentation/devicetree/bindings/thermal/nvidia,tegra124-soctherm.yaml
 > 
-> -       cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> +       freq_updated = cpufreq_driver_adjust_perf(sg_cpu->cpu,
-> map_util_perf(sg_cpu->bw_dl),
->                                    map_util_perf(sg_cpu->util), max_cap);
-> 
-> -       sg_cpu->sg_policy->last_freq_update_time = time;
-> +       if (freq_updated)
-> +               sg_cpu->sg_policy->last_freq_update_time = time;
->  }
 
-Sound reasonable in principle, but it could lead to overhead; for example when
-the system is busy and maxed out, the last_freq_update_time will never be
-updated and will end up continuously calling to the driver to change frequency
-without any rate limit AFAICS. Which might not be an acceptable overhead,
-I don't know. Logically this is wasted cycles preventing the tasks from doing
-useful work. I think we need to look at such corner cases and treat them
-appropriately to not call the driver if we go with this approach.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-
-Cheers
-
---
-Qais Yousef
-
-> 
-> 
-> BR
-> Thanks!
-> 
-> ---
-> xuewen
-> >
-> > LGTM otherwise.
-> >
-> >
-> > Cheers
-> >
-> > --
-> > Qais Yousef
-> >
-> > >               next_f = sg_policy->next_freq;
-> > >
-> > >               /* Restore cached freq as next_freq has changed */
-> > > --
-> > > 2.25.1
-> > >
