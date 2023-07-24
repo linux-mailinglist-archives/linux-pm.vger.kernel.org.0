@@ -2,141 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FDE675EA7B
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 06:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F1E75EAFC
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 07:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbjGXEZJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 00:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S230041AbjGXFqk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 01:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjGXEZI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 00:25:08 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BA1131
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 21:25:06 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-666ed230c81so3776687b3a.0
-        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 21:25:06 -0700 (PDT)
+        with ESMTP id S230022AbjGXFqj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 01:46:39 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0BCE49
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 22:46:34 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id e9e14a558f8ab-348d1cf5639so2101595ab.3
+        for <linux-pm@vger.kernel.org>; Sun, 23 Jul 2023 22:46:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1690172706; x=1690777506;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPd/ArX54wqm/tpIEiEhXcXx1X1EWiF2KSiUxQCQJ7k=;
-        b=RvsdkRDPYfr6N/6c8aZGUc/31/ZJGWi5u6uyeM4gRwE6Uozbh5mcN6VfAItdfyjeK8
-         lECf7dOHIeA1juGAeWddfBG56wZ1O2BX6TAkwg/4yXUs+OdBGAfqKUpCmR5igdBYHFLy
-         i1Dt5V+/H9EaZzEAzzTCA/0ywgyJWmSnyMoBo=
+        d=linaro.org; s=google; t=1690177593; x=1690782393;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=TG6JOP2J900QufJGXL3SOGbK0BDioW/ee138PuYXujs=;
+        b=Ed7dQ67b9NC7GE6UJWlEnDJTcg4ufIpLfEwH6rG36MHsuuEdaXkcEC7onDl82a0u0X
+         PGTemZr1iZ+UAZ0+dNTyoPbLdmKBRJoWQcsM568mC++UxnTMyc69Qvi7VT/jWa+nQz9O
+         tJ8MhwtgbQYmjOf3UAkBcLCTbKwKg9zjmlaZGs6RnzYWMpdGE//zw6yPLBTIZ2BjppEu
+         1DG4zunBg91k1XhSPl+E+pF7Vi/1KHWVPFfbpcJJIOM8GtJd5SbHv27TVaVJNeBQ2B5I
+         sIYjPwSh4f2ThS3542kmbMGo8mxysrpPUJmbNb3nhscFpfAKpIrJ71T8Pj71egi/mmqs
+         rgEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690172706; x=1690777506;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UPd/ArX54wqm/tpIEiEhXcXx1X1EWiF2KSiUxQCQJ7k=;
-        b=ICu9YbfJR4g2oMWP5EU35Gah/JgbM//TtVN/rWDhTp6dYhnNwHL3TNYcGlM3RmtkBl
-         M4qLE6vCLBEamwcEm5TxFEY8afO4HkehFTClTdaS1xZqTdJf/UanrHAFQvO/Lad9X8MP
-         yX9uFRTF2cz1tYGTfTeO1frgzqeum9d1DxcaBr0fFpj2hqF1zZxgBmnWRlzYiYpcnntM
-         L2Xu9nXu9WAPHAlBQnFWmcZXza5vZUXx4Z8rJRaBS90flNVrOTL8goienUGUJ76YnUFR
-         B+vinF24ry+/+/u7oRA9jE0p35M4aOwSGwq5yxjadvJbe4zJ4i2+vHFfWTnKikmGGkGn
-         cYIg==
-X-Gm-Message-State: ABy/qLYBKIRcL/PT4AzJr8MPzkSLosaviMdd+ApNPKyN6DoyoEL5UBX0
-        wIG49bSO+tOhgCKRTow8fDwekQ==
-X-Google-Smtp-Source: APBJJlH2TXjXyCI+Wm3NdTdlzQ/Md1RTpmdFKaqCFO/is9/DjNxtCBDRl3BbDb8IaKxYTeFcBvfJkw==
-X-Received: by 2002:a05:6a00:2196:b0:668:82fe:16f1 with SMTP id h22-20020a056a00219600b0066882fe16f1mr9170529pfi.1.1690172706143;
-        Sun, 23 Jul 2023 21:25:06 -0700 (PDT)
-Received: from google.com ([2401:fa00:1:10:a3b4:a34b:d387:dea5])
-        by smtp.gmail.com with ESMTPSA id x48-20020a056a000bf000b00666b012baedsm6636251pfu.158.2023.07.23.21.25.04
+        d=1e100.net; s=20221208; t=1690177593; x=1690782393;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TG6JOP2J900QufJGXL3SOGbK0BDioW/ee138PuYXujs=;
+        b=CsnOkmtXpNhv/GvphQNZVjWVvtkHK2Idectw61FFSMNsmCm8G3uUF8cBLicV2FbOxT
+         X0Ile9g/W/mGtOy61N4sqSjSxxxpQBte+DLUmc0jHJbAK065XyedrEVM731eUkpXCdri
+         YOgpT4cAP+P/Np5htE1a/+/7SR6aIT4B1PmA2Sxz442Pep8SFxKQ27YJV5LaZ3Pg2FVG
+         t/f4QkaFKVO8uSiKQ0O7GUycJwMRPdGJKLAtFkg/zpu8pHkCWnWNkwLzL/kDTjqJEBUT
+         KkyksyG2l6s0aQKomJ51basJ0H3Y+L20WbaasDS1A2cG+f/K8Tb+VNQFj0Ammc2DWzba
+         CoHg==
+X-Gm-Message-State: ABy/qLYGRxD23a6aHMWbcsFEaeqtFsR07MZfxaAQOjMTrscI7V7SaTB/
+        Bh5GvlSEkqfxs39a8LWrHOQv
+X-Google-Smtp-Source: APBJJlGL8LQaESe7C4zGtaDDj+x2d1qp08DMCz6L9amQV7T/sz1yGscztMp9pp22xLnvWa4ZLJ0VYg==
+X-Received: by 2002:a05:6e02:1a8a:b0:345:6e49:30d2 with SMTP id k10-20020a056e021a8a00b003456e4930d2mr6548275ilv.10.1690177593359;
+        Sun, 23 Jul 2023 22:46:33 -0700 (PDT)
+Received: from thinkpad ([117.206.118.29])
+        by smtp.gmail.com with ESMTPSA id s9-20020a63af49000000b0055ff89c5453sm7459240pgo.6.2023.07.23.22.46.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Jul 2023 21:25:05 -0700 (PDT)
-Date:   Mon, 24 Jul 2023 12:25:02 +0800
-From:   Chen-Yu Tsai <wenst@chromium.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Icenowy Zheng <zhengxingda@iscas.ac.cn>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, Icenowy Zheng <uwu@icenowy.me>
-Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o
- trips subnode
-Message-ID: <20230724042502.GA2403526@google.com>
-References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
- <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
- <6d1c0915-1485-d9d6-9fff-0413fb16bd3f@linaro.org>
+        Sun, 23 Jul 2023 22:46:32 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 11:16:11 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Chanwoo Choi <chanwoo@kernel.org>
+Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/15] PM / devfreq: Switch to
+ dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
+Message-ID: <20230724054611.GA2370@thinkpad>
+References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
+ <20230720054100.9940-10-manivannan.sadhasivam@linaro.org>
+ <1703ab6e-8567-8574-f011-af19813f97e8@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6d1c0915-1485-d9d6-9fff-0413fb16bd3f@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1703ab6e-8567-8574-f011-af19813f97e8@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jul 23, 2023 at 12:12:49PM +0200, Daniel Lezcano wrote:
+On Mon, Jul 24, 2023 at 05:06:04AM +0900, Chanwoo Choi wrote:
+> Hi,
 > 
-> Hi Mark,
-> 
-> On 22/07/2023 22:11, Mark Brown wrote:
-> > On Sat, Jul 22, 2023 at 08:25:34PM +0800, Icenowy Zheng wrote:
-> > > From: Icenowy Zheng <uwu@icenowy.me>
-> > > 
-> > > Although the current device tree binding of thermal zones require the
-> > > trips subnode, the binding in kernel v5.15 does not require it, and many
-> > > device trees shipped with the kernel, for example,
-> > > allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
-> > > comply to the old binding and contain no trips subnode.
-> > > 
-> > > Allow the code to successfully register thermal zones w/o trips subnode
-> > > for DT binding compatibility now.
-> > > 
-> > > Furtherly, the inconsistency between DTs and bindings should be resolved
-> > > by either adding empty trips subnode or dropping the trips subnode
-> > > requirement.
+> On 23. 7. 20. 14:40, Manivannan Sadhasivam wrote:
+> > Some devfreq consumers like UFS driver need to work with multiple clocks
+> > through the OPP framework. For this reason, OPP framework exposes the
+> > _indexed() APIs for finding the floor/ceil of the supplied frequency of
+> > the indexed clock. So let's use them in the devfreq driver.
 > > 
-> > This makes sense to me - it allows people to see the reported
-> > temperature even if there's no trips defined which seems more
-> > helpful than refusing to register.
+> > Currently, the clock index of 0 is used which works fine for multiple as
+> > well as single clock.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/devfreq/devfreq.c | 14 +++++++-------
+> >  1 file changed, 7 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> > index e36cbb920ec8..7686993d639f 100644
+> > --- a/drivers/devfreq/devfreq.c
+> > +++ b/drivers/devfreq/devfreq.c
+> > @@ -88,7 +88,7 @@ static unsigned long find_available_min_freq(struct devfreq *devfreq)
+> >  	struct dev_pm_opp *opp;
+> >  	unsigned long min_freq = 0;
+> >  
+> > -	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
+> > +	opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &min_freq, 0);
 > 
-> The binding describes the trip points as required and that since the
-> beginning.
-
-Not really. It was made optional in the v5.15 kernel release by commit
-
-    22fc857538c3 dt-bindings: thermal: Make trips node optional
-
-> What changed is now the code reflects the required property while before it
-> was permissive, that was an oversight.
+> This patch changed the used function from dev_pm_opp_find_freq_ceil
+> to dev_pm_opp_find_freq_ceil_indexed even if there are no supporting of the multiple clocks
+> and then dev_pm_opp_find_freq_ceil is not removed from OPP.
 > 
-> Just a reminder about the thermal framework goals:
+> I think that it is better to use dev_pm_opp_find_freq_ceil_indexed
+> when need to support multiple clocks with real case.
 > 
->   1. It protects the silicon (thus critical and hot trip points)
-> 
->   2. It mitigates the temperature (thus cooling device bound to trip points)
-> 
->   3. It notifies the userspace when a trip point is crossed
-> 
-> So if the thermal zone is described but without any of this goal above, it
-> is pointless.
-> 
-> If the goal is to report the temperature only, then hwmon should be used
-> instead.
 
-What about thermal sensors with multiple channels? Some of the channels
-are indeed tied to important hardware blocks like the CPU cores and
-should be tied into the thermal tripping. However other channels might
-only be used for temperature read-out and have no such requirement.
+There is the user for dev_pm_opp_find_freq_ceil_indexed() which is the UFS
+driver and since UFS is using devfreq, we need this change. I've added this info
+in the commit message as well. What am I missing?
 
-Should we be mixing thermal and hwmon APIs in the driver?
+- Mani
 
-> If the goal is to mitigate by userspace, then the trip point *must* be used
-> to prevent the userspace polling the temperature. With the trip point the
-> sensor will be set to fire an interrupt at the given trip temperature.
+> >  	if (IS_ERR(opp))
+> >  		min_freq = 0;
+> >  	else
+> > @@ -102,7 +102,7 @@ static unsigned long find_available_max_freq(struct devfreq *devfreq)
+> >  	struct dev_pm_opp *opp;
+> >  	unsigned long max_freq = ULONG_MAX;
+> >  
+> > -	opp = dev_pm_opp_find_freq_floor(devfreq->dev.parent, &max_freq);
+> > +	opp = dev_pm_opp_find_freq_floor_indexed(devfreq->dev.parent, &max_freq, 0);
+> >  	if (IS_ERR(opp))
+> >  		max_freq = 0;
+> >  	else
+> > @@ -196,7 +196,7 @@ static int set_freq_table(struct devfreq *devfreq)
+> >  		return -ENOMEM;
+> >  
+> >  	for (i = 0, freq = 0; i < devfreq->max_state; i++, freq++) {
+> > -		opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &freq);
+> > +		opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &freq, 0);
+> >  		if (IS_ERR(opp)) {
+> >  			devm_kfree(devfreq->dev.parent, devfreq->freq_table);
+> >  			return PTR_ERR(opp);
+> > @@ -2034,18 +2034,18 @@ struct dev_pm_opp *devfreq_recommended_opp(struct device *dev,
+> >  
+> >  	if (flags & DEVFREQ_FLAG_LEAST_UPPER_BOUND) {
+> >  		/* The freq is an upper bound. opp should be lower */
+> > -		opp = dev_pm_opp_find_freq_floor(dev, freq);
+> > +		opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+> >  
+> >  		/* If not available, use the closest opp */
+> >  		if (opp == ERR_PTR(-ERANGE))
+> > -			opp = dev_pm_opp_find_freq_ceil(dev, freq);
+> > +			opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+> >  	} else {
+> >  		/* The freq is an lower bound. opp should be higher */
+> > -		opp = dev_pm_opp_find_freq_ceil(dev, freq);
+> > +		opp = dev_pm_opp_find_freq_ceil_indexed(dev, freq, 0);
+> >  
+> >  		/* If not available, use the closest opp */
+> >  		if (opp == ERR_PTR(-ERANGE))
+> > -			opp = dev_pm_opp_find_freq_floor(dev, freq);
+> > +			opp = dev_pm_opp_find_freq_floor_indexed(dev, freq, 0);
+> >  	}
+> >  
+> >  	return opp;
 > 
-> IOW, trip points are not optional
+> -- 
+> Best Regards,
+> Samsung Electronics
+> Chanwoo Choi
+> 
 
-for measurement points that are used for thermal throttling /
-mitigation.
-
-ChenYu
+-- 
+மணிவண்ணன் சதாசிவம்
