@@ -2,70 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6B775EF28
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 11:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FA1E75F355
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 12:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjGXJds (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 05:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
+        id S230496AbjGXKba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 06:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbjGXJdq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 05:33:46 -0400
-X-Greylist: delayed 1086 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 24 Jul 2023 02:33:46 PDT
-Received: from fluorez-com.cfd (fluorez-com.cfd [107.174.244.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DBA129
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 02:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=re1; d=fluorez-com.cfd;
- h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
- Content-Transfer-Encoding; i=info@fluorez-com.cfd;
- bh=LqAKS0rQcqRhfS2AomqosmxOtHjI8TSd2DPxtKmN8Fo=;
- b=SyUkRxrUqSWqlEnBLVhP0uB3GDsStg7ncTI6SGB3NLFZ91/PLLXq/hS8r4aTVent6nE75IiYtnKk
-   OLOKdBkuxkTkZHuzyeEsLF53oIuIFxjMlGT9c20KzK+HmcBkOWtTEvIqyk7zAYz/hiFNpyjvFOLe
-   eZi0fVkfRPAvPbH3SRTZZ883NbhUwbJ9J3m7a2XXjCewfFf3sQmESW1cMz6SDjGObwPtO2+5akp6
-   0DyxY/BfQyJBiyMDEVHL8yKxPPdpEjYlAUuBPiHmU7WsfVYfQXuVy461Iimy+2LONUsspNOnc1Nb
-   FEtkqdaHKNHcMehMa2Hay6dC8cDsKdxk6SUArA==
-Reply-To: info@coinloansupport.online
-From:   Coinloan Support Center <info@fluorez-com.cfd>
-To:     linux-pm@vger.kernel.org
-Subject: Don't miss out on our low Interest coinloan opportunity
-Date:   24 Jul 2023 10:47:13 +0200
-Message-ID: <20230724104713.B74258146102A945@fluorez-com.cfd>
+        with ESMTP id S229650AbjGXKbQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 06:31:16 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FE9109
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 03:31:10 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b741cf99f8so58496291fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 03:31:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690194669; x=1690799469;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RiHIilmtHLP/QavO+OGO0GXl45X3ep1zM9w6gfMfPkI=;
+        b=hb13hJgDOvjkCYKa88uF+9cle2s96UA6EUmELfaeULfNKkImo3jN7y6WVsFAZIhKGS
+         /wn7vUinRseTBqMz6b1uSvW6etMkD+xtfiONU6KDJU8ss7W+r/QNIx4Ga7h1DCbDqlKp
+         7BaJ7GpNlXoHJNNGNAiaqpPvy/TtkVOdgX01W0VNKMMbzIRy1u9toFWkUzY+aArm3egc
+         qNfhJ0Ulj2cBHN/ftuQnjzhFXLHZR5711P7pEzwC4/EmAKsCCM9bofj3s8eiXqUlvuWS
+         Y1zc8El9RX6ikctkQjzI5fkATFaq1lctpvdShJkhWYQOyB31ins7IZ2B8ObXu9wdPsG4
+         p8Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690194669; x=1690799469;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RiHIilmtHLP/QavO+OGO0GXl45X3ep1zM9w6gfMfPkI=;
+        b=KhxWqZHLhg8tKBfNNsfKeEVmCqmxAMKnRQEB6AkbxBXYfWxOuBmm6/6QNiDwZl55Lr
+         kRVB26SlOrMK5Lp9jUnZBLmBH3ZOCv0iAQ3HNlqqtPMVNrkAGJ+RgKSUMuDOLIFwcyw3
+         2eJEuhGEojFfTm6ZPCe5Hj2Efs9Z5QXIB4GWoXAQ1xM9Rkh40FcizdwLa06sM6vB5t4X
+         37TeBjpeHpkbGZTphGlFw20fPtcsIreheW5byCYrOH+AzgfiYxXubQQ/YPDnMYrXURo0
+         ugF6DrHWC+mAtKXWA75k8h5Ot1pFHh/4ZHRyig4d8ti1ofje53ptTImFBqwqj8aSJTKO
+         jTIA==
+X-Gm-Message-State: ABy/qLbjD7OQGJRE3xbZfbWyej3qUDgYGXBQ6AR53Tr/neO4C7Wo127C
+        q7N1GDRfRCErsuCJEefu/OgRLQ==
+X-Google-Smtp-Source: APBJJlHKAzgTcZxkzYS3fSGQXQBlZ9mX3fhV1WNe2d3EY3lX3vQxMHj32kTI+ExC1ULbKMplpm78QA==
+X-Received: by 2002:a2e:8097:0:b0:2b7:339c:f791 with SMTP id i23-20020a2e8097000000b002b7339cf791mr5860487ljg.25.1690194669057;
+        Mon, 24 Jul 2023 03:31:09 -0700 (PDT)
+Received: from [192.168.1.101] (abyl203.neoplus.adsl.tpnet.pl. [83.9.31.203])
+        by smtp.gmail.com with ESMTPSA id w12-20020a2e998c000000b002b724063010sm2774991lji.47.2023.07.24.03.31.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Jul 2023 03:31:08 -0700 (PDT)
+Message-ID: <96573f47-d38c-2886-e408-ce463550308e@linaro.org>
+Date:   Mon, 24 Jul 2023 12:31:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_60,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM28,
-        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_PSBL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  2.7 RCVD_IN_PSBL RBL: Received via a relay in PSBL
-        *      [107.174.244.118 listed in psbl.surriel.com]
-        *  1.3 RCVD_IN_BL_SPAMCOP_NET RBL: Received via a relay in
-        *      bl.spamcop.net
-        *      [Blocked - see <https://www.spamcop.net/bl.shtml?107.174.244.118>]
-        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
-        *      [score: 0.7904]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.8 FROM_FMBLA_NEWDOM28 From domain was registered in last 14-28
-        *      days
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: ******
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] interconnect: qcom: qcm2290: Enable sync state
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230720-topic-qcm2290_icc-v1-0-7f67f2e259c1@linaro.org>
+ <20230720-topic-qcm2290_icc-v1-2-7f67f2e259c1@linaro.org>
+ <ZLmQdjDgIbbhyTMJ@gerhold.net>
+ <3e1d650d-7c5b-381c-464f-3c464c056a1b@linaro.org>
+ <ZL0InL6slLRNcVkI@gerhold.net>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <ZL0InL6slLRNcVkI@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Are you looking for a loan to either increase your activity or to=20
-carry out a project.=20
-We offer Crypto Loans at 2-7% interest rate with or without a=20
-credit check.
-Please get back to us if you are interested in more details.
+On 23.07.2023 13:01, Stephan Gerhold wrote:
+> On Fri, Jul 21, 2023 at 02:03:16PM +0200, Konrad Dybcio wrote:
+>> On 20.07.2023 21:52, Stephan Gerhold wrote:
+>>> On Thu, Jul 20, 2023 at 08:24:01PM +0200, Konrad Dybcio wrote:
+>>>> Very surprisingly, qcm2290 does not seem to require any interface
+>>>> clocks.
+>>>
+>>> What does this mean exactly? The interconnect .sync_state() is
+>>> responsible to drop the initial maximum bandwidth votes, with the
+>>> assumption that all active devices have voted for the bandwidth they
+>>> need. How does this relate to "requiring interface clocks"?
+>> If it required such clocks to be present, sync_state could not
+>> complete, as trying to access some nodes would crash the platform
+>> due to unclocked access.
+> 
+> You mean something like the IPA clock that must be active to do the QoS
+> writes?
+> 
+> Wouldn't it already crash before .sync_state() then, when the initial
+> max bandwidth votes are being made?
+No, the bandwidth votes are fully handled by RPM with no external deps.
+
+Only accessing the QoS registers from the AP seems to trigger crashes
+on unclocked access. But surprisingly, not on this SoC.
+
+>>>> It's therefore safe to enable sync_state to park unused devices.
+>>>> Do so.
+>>>
+>>> Doesn't this make everything painfully slow? There are no interconnect
+>>> consumers at all in qcm2290.dtsi. I would expect that all bandwidths
+>>> end up at minimum.
+>> There are no interconnect providers defined in qcm2290.dtsi.
+> 
+> Ack, so I guess you're going to add them together with the actual
+> consumers?
+Correct.
+
+> 
+> I think the patch itself is fine. Only the commit message is a bit
+> misleading. The actual change that is being done here is enabling the
+> bandwidth scaling (dropping the max bandwidth votes after
+> .sync_state()). Can you try to clarify the commit message a bit?
+Yes, I'll resend.
+
+Konrad
