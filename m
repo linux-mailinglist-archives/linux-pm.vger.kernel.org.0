@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08CC75F95F
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 16:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7303A75F954
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 16:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjGXOHJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 10:07:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S231839AbjGXOHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 10:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjGXOGu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 10:06:50 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA8810C0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 07:06:40 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb41682472so6551084e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 07:06:40 -0700 (PDT)
+        with ESMTP id S231700AbjGXOGv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 10:06:51 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245610D5
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 07:06:41 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fb41682472so6551116e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 07:06:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690207598; x=1690812398;
+        d=linaro.org; s=google; t=1690207599; x=1690812399;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oIWP/QEBqIwvEO1ZvlsT+hGzgdJVbSKZwvToxKkmWfQ=;
-        b=Xs/i2A8+we1PMrkIxfbFFTl2dr3fH5l6IUInS5NV8V5odwhqA/Hf6W6gyE5WnsoYeD
-         nba8WJJpzbtZecFBkPyJWbscNTWQWG1TpB5Rc6ScPhzUn77o54kEbAt3+RwUAIlcG9y3
-         adPKbbuzjn/Fki1lBU6NUkThB7AeHhJZRupUhAX64NXHwzp5XqMDy9jimx4S/MxVPNmX
-         2YHxoZ32p7J0Oro1MEySZSL+M52KMegMqudf/OQ3OhSdRQOIAOMO1gZXGalYQMqQq6zF
-         fX0LaJ+Sdu3m6kyHOnUTQUUDH52VWgfQ0c1Xhc2mcxUSnJflhPn9icZp67lg+rZUeZaY
-         Cy7g==
+        bh=pTwhfHFtxuY71ncpgGj9Id7ZpqK6DYkS2np/Gvf2Uvw=;
+        b=A0pq+XRl7Vs/AGCoVXMISWJBKx7in+zTEZYb2qxZ6o9iC60GvCVhbmHL9iwUIvpSOL
+         6vXiYEW4U+fzg3iV11LORY5uyDn4P/OfOu0IhSDMapj15UDcj5oOWQN5sk1IW6vzFeIN
+         OZALJ3maWyt7O3/iBjL9TALDCqT22/yAFVsd/ADlIqRmFVAQYtbVc3Cx3PA3nsb+cc9D
+         I4Hl9kPjXYeTEsZfXZoYe7kwYbfkA0a/dcyDIOWBAaENtY9TN3x8dTREoTZr6IkYMA5g
+         DEmBtNtyt4cy1H3eMx97Y4NxvvSKmJ040QYY5tYI7IJQ1kLs5c3c2d8EYr+NApLssu0W
+         4EDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690207598; x=1690812398;
+        d=1e100.net; s=20221208; t=1690207599; x=1690812399;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oIWP/QEBqIwvEO1ZvlsT+hGzgdJVbSKZwvToxKkmWfQ=;
-        b=kEEn7BwqDFogWZWDKT0HewhKkx2p8CGuACY5dV2rPw4NtA3mZqN70SpBIUPYZk9PFb
-         92JZlEfC8qBZncxGfHVgm5y+crfFwuItg0FWxriD2XmAX3oeb77KucmVh+4HZGOn0OTc
-         mxmBKdtJIyfHzMBE/YglWqk1Ra8ojRvwEYS90MBdaA3hqMTI84FepvLbJodlg2y2QyjZ
-         vYyXJofdaSa4iZ/jrAZQ4R+GbqAQfSiVj/rhFqRO8Wqj1uF13gN7VkYhAUVcZEpWeZ7t
-         YDNwNR+jRSSE3tBtni026OWHUKr0v1A6i+5ywL//98r5UuzKQLjdOk3iYl2LTNOqIBGC
-         KoIg==
-X-Gm-Message-State: ABy/qLa+TLgh0u4FAk4Znh81lQEOjyoWkehup5rLi1n+uGC/YMSSy7Yh
-        E5fpOjAuPBuenkHxXP5FoIMtPg==
-X-Google-Smtp-Source: APBJJlHXgZEFOg+fhmLn3/EQ10XQLxKTRfz7x5KLZ7cAncTprx2jJ6nDH3lgd1FO7W4r0ApEw+eWWw==
-X-Received: by 2002:a05:6512:234a:b0:4fb:7da3:de4 with SMTP id p10-20020a056512234a00b004fb7da30de4mr6565353lfu.13.1690207598364;
-        Mon, 24 Jul 2023 07:06:38 -0700 (PDT)
+        bh=pTwhfHFtxuY71ncpgGj9Id7ZpqK6DYkS2np/Gvf2Uvw=;
+        b=KcL3qi5DVGWrl2LN4rtBnRcZA15c4WmzQp1AeGvN7+6hXWB7pO2wuLF1d9VINkrGFT
+         Vew8FIfWFbyfhjWPPsSgIinXY4FBzsa2FRvVrYG9vsZ7NESu5j41axVKub4eknABRFDI
+         5H3+Iq0b6n1t5HT3qPpC25Dv7sNY0PbR44+WrUZRv3Kv8r7pUQInMSJJ4kEnK1vpzyBl
+         bBwmyGbOKNMXDObT3E51uImZs4+WT4PN/3M/CbnSw6TaEfzq9onMgmiCR9RRsDX1ztQS
+         L3ECw3Iv+PoOAtkYG0C8ywR6vzUrhn/RImYdU83XwDpPnnN4WzzbN2rilusFgZT6qQ5k
+         iExA==
+X-Gm-Message-State: ABy/qLZ2j3KLBVx8IP2QKL+7uGR1fz+DggFl5XdN3NtBklRCpv4WZErG
+        wasqudER2b9KYu5eVoEG6F3L8Q==
+X-Google-Smtp-Source: APBJJlFhb2uVdhNU7M8tpAml4c41cOqR6zZLdj83pkIcbjk34KS9OwI4d3nE8L1UqLx3LGxOVQyokw==
+X-Received: by 2002:a05:6512:3154:b0:4fb:8fe3:9266 with SMTP id s20-20020a056512315400b004fb8fe39266mr4907781lfi.0.1690207599786;
+        Mon, 24 Jul 2023 07:06:39 -0700 (PDT)
 Received: from [192.168.1.101] (abxj221.neoplus.adsl.tpnet.pl. [83.9.3.221])
-        by smtp.gmail.com with ESMTPSA id er26-20020a05651248da00b004fbab1f023csm2223481lfb.138.2023.07.24.07.06.36
+        by smtp.gmail.com with ESMTPSA id er26-20020a05651248da00b004fbab1f023csm2223481lfb.138.2023.07.24.07.06.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 07:06:37 -0700 (PDT)
+        Mon, 24 Jul 2023 07:06:39 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 24 Jul 2023 16:06:32 +0200
-Subject: [PATCH v2 6/7] dt-bindings: interconnect: qcom: rpm: Clean up the
- file
+Date:   Mon, 24 Jul 2023 16:06:33 +0200
+Subject: [PATCH v2 7/7] dt-bindings: interconnect: qcom: rpm: Clean up the
+ example
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230721-topic-icc_bindings-v2-6-e33d5acbf3bd@linaro.org>
+Message-Id: <20230721-topic-icc_bindings-v2-7-e33d5acbf3bd@linaro.org>
 References: <20230721-topic-icc_bindings-v2-0-e33d5acbf3bd@linaro.org>
 In-Reply-To: <20230721-topic-icc_bindings-v2-0-e33d5acbf3bd@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -72,16 +72,16 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1690207588; l=3463;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690207588; l=1379;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=bGS+wZ4wxJ1M2DOl0T465GxrXnxbIet1hIWF+XoM3Dg=;
- b=O4FGsnB+Bb053iiFvieIbiWq8lRlj/T4OhYDK0G75aWvfDE+1A0TupIu3/YEsSdcvolFBC63h
- /AI/qUj42iACys4I1UJrZI8LirEtRd5Vne3cKn5yiTuGN8XRtOq38c9
+ bh=Kqh8DSFiK1/LG8Cj534DQ1W8nXAsEQlR7mJ6nhmX7jk=;
+ b=AwqFC6QC2zF7omAVVhdnpfFSNu4o1xGR1rLWUyj8pqzXAXOWjryD4CV9SIbiXPZTTdX+8uQnv
+ IfQyQgpWhaQDWTlsbHhU1iu1MB6zWbhlXcjXghqxcQImS87N5c5aQrn
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,121 +89,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Following the recent cleanups and untanglements, remove abusive
-direct references to RPM bus clocks, include the rpm-common YAML and
-update Georgi's email.
+One example is enough, remove the others and fix up the indentation
+while at it.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../devicetree/bindings/interconnect/qcom,rpm.yaml | 62 ++--------------------
- 1 file changed, 5 insertions(+), 57 deletions(-)
+ .../devicetree/bindings/interconnect/qcom,rpm.yaml     | 18 +++---------------
+ 1 file changed, 3 insertions(+), 15 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-index 72856b1c4210..157efd47904d 100644
+index 157efd47904d..08c1c6b9d7cf 100644
 --- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
 +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-@@ -7,13 +7,16 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
- title: Qualcomm RPM Network-On-Chip Interconnect
+@@ -41,19 +41,7 @@ examples:
+       #include <dt-bindings/clock/qcom,rpmcc.h>
  
- maintainers:
--  - Georgi Djakov <georgi.djakov@linaro.org>
-+  - Georgi Djakov <djakov@kernel.org>
- 
- description: |
-   RPM interconnect providers support system bandwidth requirements through
-   RPM processor. The provider is able to communicate with the RPM through
-   the RPM shared memory device.
- 
-+allOf:
-+  - $ref: qcom,rpm-common.yaml#
-+
- properties:
-   reg:
-     maxItems: 1
-@@ -27,57 +30,11 @@ properties:
-       - qcom,qcs404-pcnoc
-       - qcom,qcs404-snoc
- 
--  '#interconnect-cells':
--    description: |
--      Value: <1> is one cell in an interconnect specifier for the
--      interconnect node id, <2> requires the interconnect node id and an
--      extra path tag.
--    enum: [ 1, 2 ]
+       bimc: interconnect@400000 {
+-              compatible = "qcom,msm8916-bimc";
+-              reg = <0x00400000 0x62000>;
+-              #interconnect-cells = <1>;
+-      };
 -
--  clocks:
--    minItems: 2
--    maxItems: 7
+-      pcnoc: interconnect@500000 {
+-              compatible = "qcom,msm8916-pcnoc";
+-              reg = <0x00500000 0x11000>;
+-              #interconnect-cells = <1>;
+-      };
 -
--  clock-names:
--    minItems: 2
--    maxItems: 7
--
--  power-domains:
--    maxItems: 1
--
- required:
-   - compatible
-   - reg
--  - '#interconnect-cells'
--  - clock-names
--  - clocks
--
--additionalProperties: false
--
--allOf:
--  - if:
--      properties:
--        compatible:
--          contains:
--            enum:
--              - qcom,msm8916-bimc
--              - qcom,msm8916-pcnoc
--              - qcom,msm8916-snoc
--              - qcom,qcs404-bimc
--              - qcom,qcs404-pcnoc
--              - qcom,qcs404-snoc
--
--    then:
--      properties:
--        clock-names:
--          items:
--            - const: bus
--            - const: bus_a
- 
--        clocks:
--          items:
--            - description: Bus Clock
--            - description: Bus A Clock
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -87,25 +44,16 @@ examples:
-               compatible = "qcom,msm8916-bimc";
-               reg = <0x00400000 0x62000>;
-               #interconnect-cells = <1>;
--              clock-names = "bus", "bus_a";
--              clocks = <&rpmcc RPM_SMD_BIMC_CLK>,
--                       <&rpmcc RPM_SMD_BIMC_A_CLK>;
-       };
- 
-       pcnoc: interconnect@500000 {
-               compatible = "qcom,msm8916-pcnoc";
-               reg = <0x00500000 0x11000>;
-               #interconnect-cells = <1>;
--              clock-names = "bus", "bus_a";
--              clocks = <&rpmcc RPM_SMD_PCNOC_CLK>,
--                       <&rpmcc RPM_SMD_PCNOC_A_CLK>;
-       };
- 
-       snoc: interconnect@580000 {
-               compatible = "qcom,msm8916-snoc";
-               reg = <0x00580000 0x14000>;
-               #interconnect-cells = <1>;
--              clock-names = "bus", "bus_a";
--              clocks = <&rpmcc RPM_SMD_SNOC_CLK>,
--                       <&rpmcc RPM_SMD_SNOC_A_CLK>;
+-      snoc: interconnect@580000 {
+-              compatible = "qcom,msm8916-snoc";
+-              reg = <0x00580000 0x14000>;
+-              #interconnect-cells = <1>;
++          compatible = "qcom,msm8916-bimc";
++          reg = <0x00400000 0x62000>;
++          #interconnect-cells = <1>;
        };
 
 -- 
