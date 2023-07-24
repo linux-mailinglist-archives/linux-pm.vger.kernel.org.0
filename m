@@ -2,129 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7303A75F954
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 16:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D38A75FAD8
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 17:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231839AbjGXOHP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 10:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
+        id S230148AbjGXPdt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 11:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231700AbjGXOGv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 10:06:51 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6245610D5
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 07:06:41 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fb41682472so6551116e87.2
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 07:06:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690207599; x=1690812399;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pTwhfHFtxuY71ncpgGj9Id7ZpqK6DYkS2np/Gvf2Uvw=;
-        b=A0pq+XRl7Vs/AGCoVXMISWJBKx7in+zTEZYb2qxZ6o9iC60GvCVhbmHL9iwUIvpSOL
-         6vXiYEW4U+fzg3iV11LORY5uyDn4P/OfOu0IhSDMapj15UDcj5oOWQN5sk1IW6vzFeIN
-         OZALJ3maWyt7O3/iBjL9TALDCqT22/yAFVsd/ADlIqRmFVAQYtbVc3Cx3PA3nsb+cc9D
-         I4Hl9kPjXYeTEsZfXZoYe7kwYbfkA0a/dcyDIOWBAaENtY9TN3x8dTREoTZr6IkYMA5g
-         DEmBtNtyt4cy1H3eMx97Y4NxvvSKmJ040QYY5tYI7IJQ1kLs5c3c2d8EYr+NApLssu0W
-         4EDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690207599; x=1690812399;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pTwhfHFtxuY71ncpgGj9Id7ZpqK6DYkS2np/Gvf2Uvw=;
-        b=KcL3qi5DVGWrl2LN4rtBnRcZA15c4WmzQp1AeGvN7+6hXWB7pO2wuLF1d9VINkrGFT
-         Vew8FIfWFbyfhjWPPsSgIinXY4FBzsa2FRvVrYG9vsZ7NESu5j41axVKub4eknABRFDI
-         5H3+Iq0b6n1t5HT3qPpC25Dv7sNY0PbR44+WrUZRv3Kv8r7pUQInMSJJ4kEnK1vpzyBl
-         bBwmyGbOKNMXDObT3E51uImZs4+WT4PN/3M/CbnSw6TaEfzq9onMgmiCR9RRsDX1ztQS
-         L3ECw3Iv+PoOAtkYG0C8ywR6vzUrhn/RImYdU83XwDpPnnN4WzzbN2rilusFgZT6qQ5k
-         iExA==
-X-Gm-Message-State: ABy/qLZ2j3KLBVx8IP2QKL+7uGR1fz+DggFl5XdN3NtBklRCpv4WZErG
-        wasqudER2b9KYu5eVoEG6F3L8Q==
-X-Google-Smtp-Source: APBJJlFhb2uVdhNU7M8tpAml4c41cOqR6zZLdj83pkIcbjk34KS9OwI4d3nE8L1UqLx3LGxOVQyokw==
-X-Received: by 2002:a05:6512:3154:b0:4fb:8fe3:9266 with SMTP id s20-20020a056512315400b004fb8fe39266mr4907781lfi.0.1690207599786;
-        Mon, 24 Jul 2023 07:06:39 -0700 (PDT)
-Received: from [192.168.1.101] (abxj221.neoplus.adsl.tpnet.pl. [83.9.3.221])
-        by smtp.gmail.com with ESMTPSA id er26-20020a05651248da00b004fbab1f023csm2223481lfb.138.2023.07.24.07.06.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 07:06:39 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 24 Jul 2023 16:06:33 +0200
-Subject: [PATCH v2 7/7] dt-bindings: interconnect: qcom: rpm: Clean up the
- example
+        with ESMTP id S229544AbjGXPdt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 11:33:49 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A0170B1;
+        Mon, 24 Jul 2023 08:33:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A35DFEC;
+        Mon, 24 Jul 2023 08:34:30 -0700 (PDT)
+Received: from [10.34.100.101] (e126645.nice.arm.com [10.34.100.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04D383F67D;
+        Mon, 24 Jul 2023 08:33:44 -0700 (PDT)
+Message-ID: <18b0d54b-f8d2-ff38-f5c8-697dc838e3ce@arm.com>
+Date:   Mon, 24 Jul 2023 17:33:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230721-topic-icc_bindings-v2-7-e33d5acbf3bd@linaro.org>
-References: <20230721-topic-icc_bindings-v2-0-e33d5acbf3bd@linaro.org>
-In-Reply-To: <20230721-topic-icc_bindings-v2-0-e33d5acbf3bd@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1690207588; l=1379;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=Kqh8DSFiK1/LG8Cj534DQ1W8nXAsEQlR7mJ6nhmX7jk=;
- b=AwqFC6QC2zF7omAVVhdnpfFSNu4o1xGR1rLWUyj8pqzXAXOWjryD4CV9SIbiXPZTTdX+8uQnv
- IfQyQgpWhaQDWTlsbHhU1iu1MB6zWbhlXcjXghqxcQImS87N5c5aQrn
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] cpufreq: schedutil: next_freq need update when
+ cpufreq_limits changed
+Content-Language: en-US
+To:     Xuewen Yan <xuewen.yan94@gmail.com>,
+        Qais Yousef <qyousef@layalina.io>
+Cc:     Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, guohua.yan@unisoc.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230719130527.8074-1-xuewen.yan@unisoc.com>
+ <20230721221944.dthg3tf25j4qgc2z@airbuntu>
+ <CAB8ipk8b8ZfwXN7KK-zFVPQ-8i37h64v-wz2ErB3AANaZ9w7aA@mail.gmail.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <CAB8ipk8b8ZfwXN7KK-zFVPQ-8i37h64v-wz2ErB3AANaZ9w7aA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-One example is enough, remove the others and fix up the indentation
-while at it.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- .../devicetree/bindings/interconnect/qcom,rpm.yaml     | 18 +++---------------
- 1 file changed, 3 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-index 157efd47904d..08c1c6b9d7cf 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
-@@ -41,19 +41,7 @@ examples:
-       #include <dt-bindings/clock/qcom,rpmcc.h>
- 
-       bimc: interconnect@400000 {
--              compatible = "qcom,msm8916-bimc";
--              reg = <0x00400000 0x62000>;
--              #interconnect-cells = <1>;
--      };
--
--      pcnoc: interconnect@500000 {
--              compatible = "qcom,msm8916-pcnoc";
--              reg = <0x00500000 0x11000>;
--              #interconnect-cells = <1>;
--      };
--
--      snoc: interconnect@580000 {
--              compatible = "qcom,msm8916-snoc";
--              reg = <0x00580000 0x14000>;
--              #interconnect-cells = <1>;
-+          compatible = "qcom,msm8916-bimc";
-+          reg = <0x00400000 0x62000>;
-+          #interconnect-cells = <1>;
-       };
+On 7/24/23 05:36, Xuewen Yan wrote:
+> On Sat, Jul 22, 2023 at 7:02 AM Qais Yousef <qyousef@layalina.io> wrote:
+>>
+>> On 07/19/23 21:05, Xuewen Yan wrote:
+>>> When cpufreq's policy is single, there is a scenario that will
+>>> cause sg_policy's next_freq to be unable to update.
+>>>
+>>> When the cpu's util is always max, the cpufreq will be max,
+>>> and then if we change the policy's scaling_max_freq to be a
+>>> lower freq, indeed, the sg_policy's next_freq need change to
+>>> be the lower freq, however, because the cpu_is_busy, the next_freq
+>>> would keep the max_freq.
+>>>
+>>> For example:
+>>> The cpu7 is single cpu:
+>>>
+>>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # while true;do done&
+>>> [1] 4737
+>>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # taskset -p 80 4737
+>>> pid 4737's current affinity mask: ff
+>>> pid 4737's new affinity mask: 80
+>>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
+>>> 2301000
+>>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_cur_freq
+>>> 2301000
+>>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # echo 2171000 > scaling_max_freq
+>>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
+>>> 2171000
+>>>
+>>> At this time, the sg_policy's next_freq would keep 2301000.
+>>>
+>>> To prevent the case happen, add the judgment of the need_freq_update flag.
+>>>
+>>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+>>> Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
+>>> Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
+>>> ---
+>>>   kernel/sched/cpufreq_schedutil.c | 3 ++-
+>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+>>> index 4492608b7d7f..458d359f5991 100644
+>>> --- a/kernel/sched/cpufreq_schedutil.c
+>>> +++ b/kernel/sched/cpufreq_schedutil.c
+>>> @@ -350,7 +350,8 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+>>>         * Except when the rq is capped by uclamp_max.
+>>>         */
+>>>        if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
+>>> -         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
+>>> +         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq &&
+>>> +         !sg_policy->need_freq_update) {
+>>
+>> What about sugov_update_single_perf()? It seems to have the same problem, no?
+> 
+> There is no problem in sugov_update_single_perf, because the next_freq
+> is updated by drivers, maybe the next_freq is not used when using
+> sugov_update_single_perf..
+> 
+> But  for the last_freq_update_time, I think there are some problems
+> when using sugov_update_single_perf:
+> Now, there is no judgment condition for the update of the
+> last_freq_update_time. That means the last_freq_update_time is always
+> updated in sugov_update_single_perf.
+> And in sugov_should_update_freq: it would judge the
+> freq_update_delay_ns. As a result, If we use the
+> sugov_update_single_perf, the cpu frequency would only be periodically
+> updated according to freq_update_delay_ns.
+> Maybe we should judge the cpufreq_driver_adjust_perf's return value,
+> if the freq is not updated, the last_freq_update_time also does not
+> have to update.
+> 
+> Just like:
+> ---
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 458d359f5991..10f18b054f01 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -381,6 +381,7 @@ static void sugov_update_single_perf(struct
+> update_util_data *hook, u64 time,
+>          struct sugov_cpu *sg_cpu = container_of(hook, struct
+> sugov_cpu, update_util);
+>          unsigned long prev_util = sg_cpu->util;
+>          unsigned long max_cap;
+> +       bool freq_updated;
+> 
+>          /*
+>           * Fall back to the "frequency" path if frequency invariance is not
+> @@ -407,10 +408,11 @@ static void sugov_update_single_perf(struct
+> update_util_data *hook, u64 time,
+>              sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
+>                  sg_cpu->util = prev_util;
+> 
+> -       cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+> +       freq_updated = cpufreq_driver_adjust_perf(sg_cpu->cpu,
+> map_util_perf(sg_cpu->bw_dl),
+>                                     map_util_perf(sg_cpu->util), max_cap);
+> 
+> -       sg_cpu->sg_policy->last_freq_update_time = time;
+> +       if (freq_updated)
+> +               sg_cpu->sg_policy->last_freq_update_time = time;
+>   }
+> 
 
--- 
-2.41.0
+Hello Xuewen,
+FWIW, the patch and explanation for sugov_update_single_perf() seem sensible to
+me. Just a comment about cpufreq_driver_adjust_perf() and
+(struct cpufreq_driver)->adjust_perf(): wouldn't their prototype need to be
+updated (i.e. not return void) to do the change suggested above ?
 
+Regards,
+Pierre
+
+> 
+> BR
+> Thanks!
+> 
+> ---
+> xuewen
+>>
+>> LGTM otherwise.
+>>
+>>
+>> Cheers
+>>
+>> --
+>> Qais Yousef
+>>
+>>>                next_f = sg_policy->next_freq;
+>>>
+>>>                /* Restore cached freq as next_freq has changed */
+>>> --
+>>> 2.25.1
+>>>
+> 
