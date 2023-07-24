@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DC4760163
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 23:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FF7760165
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 23:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjGXVmt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 17:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
+        id S230091AbjGXVmw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 17:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230016AbjGXVms (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 17:42:48 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207C2E9;
-        Mon, 24 Jul 2023 14:42:48 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1bb73eb80e4so873451fac.3;
-        Mon, 24 Jul 2023 14:42:48 -0700 (PDT)
+        with ESMTP id S229541AbjGXVmv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 17:42:51 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D72DE9;
+        Mon, 24 Jul 2023 14:42:50 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-583b3939521so33485707b3.0;
+        Mon, 24 Jul 2023 14:42:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690234967; x=1690839767;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8YDEOCxfksj50BYekGWN5kBjZF6KNbRMO2noGv80eKw=;
-        b=Vdgxk0sOSXflrDk/Qqpjh8is/yXAKEX/Clwokrq1ge0hm/sW7cErreteVv11bN//nM
-         N7yWVZzfjyiA2M/pA9mBcnuciW4VAsXTVHgbAqahFPm3z9RcrjW17Q3d+a3y0NrBt9FM
-         We/LFI9MwTLJ7y5ICJMiN2/85Bex+2R99QpUGMbFO76nqaYVmgyxEB9mReTKbcNXZ7pX
-         dvoGM/H52VAhHr159gizBNZdREHUzQUxl6gPGbsbmYIYeUMolteBkdELHUhgqcnJE92v
-         psTCL7RbRa+ngOKMuNv7wzzmCE3XlwzTbPpW/7Et7HZrVFiNZEvvChd73jlgoMiAQped
-         2mXg==
+        d=gmail.com; s=20221208; t=1690234969; x=1690839769;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3/5RSV3Hpiy5sXwWx6A0fKzeyTBqVKJN6USvmb47CSg=;
+        b=Zm+zpYspmqeXwh/gjrvM09jtRt+3z9Y7oB9Bp4uystRgukAHbj0bNNs+R0vtV9AK2u
+         gMsoiXOipLp8v5WpRxih80AiVbu686b/8lQZMdg1nlk27COIRnLdcMxMpQzARKzBiTRI
+         R8vD26HKA7sXwPfnznwu9yJiIVLnMFZNtfh/HswJqZTMAH/OKBiC79Zn3UvQOoAqdQN6
+         suk1RerZebnGzZk/X+kgcPqbYbIqB2FiIDznYlR0mq7tcyINWujbbkWZvkVMoiW7Snin
+         ZxJwONs+EUvkPzwXtztElcwNNH9nLvQeWXtW8yxxK17cZLstPnQi7Ib3cFiwCyyUzSia
+         uz8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690234967; x=1690839767;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8YDEOCxfksj50BYekGWN5kBjZF6KNbRMO2noGv80eKw=;
-        b=WFVoephAsvQM0f/RUxQQLtSuErTgRrRWQX8nbe2pDGVpZVO+J5Fax0bJzV8KyE+DmK
-         yYg18FIY+62yBXV73xuERPV2qmbev58ULPvQYEy607uUnF4PU7VQWelsnxyQ9XYrprza
-         nu6KtYgID8G7nqqEdZRkS2YRKDpRuta0AQUpHYaARP+nWoyTEHqJNpP79aW/vKOkTopy
-         fUAHEy/76EUIaIJIttqW0hiI0qTct8PGPICXHW9mA2Ts+Uarf4Vu6BTTI+bGNtDozyXH
-         qvLRzYfNeHv8Gd7oNQ7Li4c6ABL6l69oxhP9MwtGe9q/3uvuChhcBqGOSDJmge1htd7G
-         zPtQ==
-X-Gm-Message-State: ABy/qLbG4owSPm7LhpRopSb/EgWv/nyCWenYpelTiwmZHF1eP1GjsGpr
-        2jIuu6DsbUtQ/rdQSCxj6eK+iEQW7NfX1Q==
-X-Google-Smtp-Source: APBJJlFwQ7j78w7vqBsy9bbBH+5qOlupSPLNR4dIm1JLXIJgl+mD5+pLZv50Z6dM+mWZl1nDY+NRdw==
-X-Received: by 2002:a05:6870:e310:b0:1bb:6e1d:970a with SMTP id z16-20020a056870e31000b001bb6e1d970amr4484882oad.53.1690234967331;
-        Mon, 24 Jul 2023 14:42:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690234969; x=1690839769;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3/5RSV3Hpiy5sXwWx6A0fKzeyTBqVKJN6USvmb47CSg=;
+        b=JI6XGSIxi5vA1rtGeHj+C2nEa/Y8Bi9y0DhjR3LOUpLWiKNcLNPyYY9ZTE5DMALSR3
+         S24/qvZHec2fhZRJBHBHIeXk0xR8+dRrBxhX4boYYoMz4Ne13bmAJ4ylMmBTZQ/tKpjR
+         RZCIdEJVbDTNeewMA0GDDPZ9SQEAIU30rUyhH7/syZJcQZylgCnk4k5KXB8yjWjzZUpg
+         a0jGj6esFJ3ASYkeKTN6IpUWxomIYqZ+G5LZdwKaYHixWTRpWOa8dJqyygvt8nVTby0P
+         +WnZ12VWFpZCtG+L+dMT7hCkbSbK0u/JB3n0SfzvyqgZuJHIhcL+wPRmDmOMzD45TDsV
+         PaFA==
+X-Gm-Message-State: ABy/qLaC2c9sT8jd3H56HQMbJUf1hH/dQxV2fHZq7KnJLubS49U/E3gn
+        0muYmBoA9OWEuIPLq927zOlSSK1KJmNd5w==
+X-Google-Smtp-Source: APBJJlE/44Xe2sC05Lzvpj2tRArBipfQPmzsmlgMMUojFub3azhEFYdXQ9VQmxwUDHk5DaUJyHZxNQ==
+X-Received: by 2002:a81:4e08:0:b0:583:3c7e:7749 with SMTP id c8-20020a814e08000000b005833c7e7749mr7913534ywb.41.1690234969425;
+        Mon, 24 Jul 2023 14:42:49 -0700 (PDT)
 Received: from localhost ([2607:fea8:529e:7800::3cbb])
-        by smtp.gmail.com with ESMTPSA id t199-20020a0dead0000000b0056f3779557esm3087185ywe.113.2023.07.24.14.42.46
+        by smtp.gmail.com with ESMTPSA id x206-20020a8163d7000000b0056dfbc37d9fsm3118624ywb.50.2023.07.24.14.42.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 14:42:46 -0700 (PDT)
+        Mon, 24 Jul 2023 14:42:48 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,10 +61,12 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH 0/4] SDM670 CPU Frequency Scaling
-Date:   Mon, 24 Jul 2023 17:42:10 -0400
-Message-ID: <20230724214209.208699-6-mailingradian@gmail.com>
+Subject: [PATCH 1/4] dt-bindings: interconnect: add SDM670 OSM L3 compatible
+Date:   Mon, 24 Jul 2023 17:42:11 -0400
+Message-ID: <20230724214209.208699-7-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230724214209.208699-6-mailingradian@gmail.com>
+References: <20230724214209.208699-6-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,19 +79,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds CPU frequency scaling and the OSM L3 cache controller to the
-SDM670 device tree.
+Add the compatible for the OSM L3 interconnect used in the Snapdragon
+670.
 
-Richard Acayan (4):
-  dt-bindings: interconnect: add SDM670 OSM L3 compatible
-  arm64: dts: qcom: sdm670: add osm l3
-  arm64: dts: qcom: sdm670: add cpu frequency scaling
-  arm64: dts: qcom: sdm670: add frequency profile
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+---
+ Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../bindings/interconnect/qcom,osm-l3.yaml    |   1 +
- arch/arm64/boot/dts/qcom/sdm670.dtsi          | 194 ++++++++++++++++++
- 2 files changed, 195 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+index 9d0a98d77ae9..21dae0b92819 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+@@ -21,6 +21,7 @@ properties:
+           - enum:
+               - qcom,sc7180-osm-l3
+               - qcom,sc8180x-osm-l3
++              - qcom,sdm670-osm-l3
+               - qcom,sdm845-osm-l3
+               - qcom,sm6350-osm-l3
+               - qcom,sm8150-osm-l3
 -- 
 2.41.0
 
