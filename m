@@ -2,130 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B526B7601A1
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Jul 2023 23:57:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E4276024E
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 00:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229577AbjGXV5V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 17:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S230253AbjGXWb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 18:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjGXV5U (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 17:57:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D2D194;
-        Mon, 24 Jul 2023 14:57:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0247961451;
-        Mon, 24 Jul 2023 21:57:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5430AC433C9;
-        Mon, 24 Jul 2023 21:57:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690235838;
-        bh=0h+dePu6rfFOElRcgVsU297/GZNJnUly0bCMrw5Ff18=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NAC8ciK8rb0/RL1BJPLjTRLBt6CasWW+075WiQWKFXy6eZ2E5q3ZUapb8BwtSOo3q
-         N/goKsGuxq4Rm09bmtYeV3g2v9OqYskyaX1al35QnIvYWziPH5CX/EmB3b3sSsARL2
-         jZC8hJ4G0LXNIGGO90UMBMvCMdpeE/2DKURXwdY6Sn7q3Wa+haJSMPfr1Vbzt1N46b
-         CqTrFR/79fT8N6Uxa4GG4QglPOWvZwaB2b3E5ndOQTgh+Yr8cjAOShvBHIsfk6fy32
-         3KGk0WCIXSNq8Z/S7HHUgn9KAogSruWSkCCFtxkYCclEaeewf540LgBDG2VWe7RgYu
-         JoO9robSErv9A==
-Message-ID: <f95c78d8-2baa-edde-39bb-8341cde2d63f@kernel.org>
-Date:   Tue, 25 Jul 2023 06:57:09 +0900
+        with ESMTP id S230251AbjGXWb2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 18:31:28 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 335BD10E3;
+        Mon, 24 Jul 2023 15:31:26 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36OMIQEw029962;
+        Mon, 24 Jul 2023 22:31:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=tgztBj0/mJz03MJdJCZ9JHhqYfeG+XgYMvyAdd3/QYQ=;
+ b=Jolm/4Pto6H89NYXkiAY7sBP8McF6X5D9RAED5RaPWKCwo+tYb5IKqLr+XFMNtMTImxU
+ v3qJM0Wh54TbYkdZE8XdI0IFNy7zGmbi2xxz0Fkih90YqWfSTBD66xncYYTU/9W88nWU
+ 3EjL7oCmuaX9XvuP2ie1MBnWiKm75Z38e+jerYhu4f9+1COlGo6bVR9x+HpZheZVX8yb
+ Pp9ERQ2abZHJ99Vg6l3lXEt2k/tcekPjt//TXmDv/t72w1TcXj2pRGlT6V7O3tCMqDVG
+ IhMecU7/iAWvixQcBzOgqDMjom+vBHQXPtE7JAnQuaj1IrU+ZnUsJnfWTuyYS0yzgCaq mQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1v6u8w4c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jul 2023 22:31:16 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36OMVE3b005283
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 24 Jul 2023 22:31:14 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 24 Jul 2023 15:31:14 -0700
+From:   Elliot Berman <quic_eberman@quicinc.com>
+To:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+CC:     Elliot Berman <quic_eberman@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        "Prasad Sodagudi" <quic_psodagud@quicinc.com>
+Subject: [RFC PATCH 0/4] Implement a PSCI SYSTEM_RESET2 reboot-mode driver
+Date:   Mon, 24 Jul 2023 15:30:50 -0700
+Message-ID: <20230724223057.1208122-1-quic_eberman@quicinc.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 09/15] PM / devfreq: Switch to
- dev_pm_opp_find_freq_{ceil/floor}_indexed() APIs
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-10-manivannan.sadhasivam@linaro.org>
- <1703ab6e-8567-8574-f011-af19813f97e8@kernel.org>
- <20230724054611.GA2370@thinkpad>
-From:   Chanwoo Choi <chanwoo@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20230724054611.GA2370@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AJZTyLSqDAycFmRx5BX6rUgsWlnPQb9X
+X-Proofpoint-GUID: AJZTyLSqDAycFmRx5BX6rUgsWlnPQb9X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-24_16,2023-07-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 mlxlogscore=844 lowpriorityscore=0 impostorscore=0
+ mlxscore=0 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307240196
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23. 7. 24. 14:46, Manivannan Sadhasivam wrote:
-> On Mon, Jul 24, 2023 at 05:06:04AM +0900, Chanwoo Choi wrote:
->> Hi,
->>
->> On 23. 7. 20. 14:40, Manivannan Sadhasivam wrote:
->>> Some devfreq consumers like UFS driver need to work with multiple clocks
->>> through the OPP framework. For this reason, OPP framework exposes the
->>> _indexed() APIs for finding the floor/ceil of the supplied frequency of
->>> the indexed clock. So let's use them in the devfreq driver.
->>>
->>> Currently, the clock index of 0 is used which works fine for multiple as
->>> well as single clock.
->>>
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> ---
->>>  drivers/devfreq/devfreq.c | 14 +++++++-------
->>>  1 file changed, 7 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->>> index e36cbb920ec8..7686993d639f 100644
->>> --- a/drivers/devfreq/devfreq.c
->>> +++ b/drivers/devfreq/devfreq.c
->>> @@ -88,7 +88,7 @@ static unsigned long find_available_min_freq(struct devfreq *devfreq)
->>>  	struct dev_pm_opp *opp;
->>>  	unsigned long min_freq = 0;
->>>  
->>> -	opp = dev_pm_opp_find_freq_ceil(devfreq->dev.parent, &min_freq);
->>> +	opp = dev_pm_opp_find_freq_ceil_indexed(devfreq->dev.parent, &min_freq, 0);
->>
->> This patch changed the used function from dev_pm_opp_find_freq_ceil
->> to dev_pm_opp_find_freq_ceil_indexed even if there are no supporting of the multiple clocks
->> and then dev_pm_opp_find_freq_ceil is not removed from OPP.
->>
->> I think that it is better to use dev_pm_opp_find_freq_ceil_indexed
->> when need to support multiple clocks with real case.
->>
-> 
-> There is the user for dev_pm_opp_find_freq_ceil_indexed() which is the UFS
-> driver and since UFS is using devfreq, we need this change. I've added this info
-> in the commit message as well. What am I missing?
+PSCI implements a restart notifier for architectural defined resets.
+The SYSTEM_RESET2 call allows vendor firmware to define additional reset
+types which could be mapped to the reboot reason.
+
+Implement a driver to wire the reboot-mode framework to make vendor
+SYSTEM_RESET2 calls on reboot.
+
+This is a continuation from https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
+
+Elliot Berman (4):
+  power: reset: reboot-mode: Allow magic to be 0
+  power: reset: reboot-mode: Wire reboot_mode enum to magic
+  dt-bindings: power: reset: Document arm,psci-vendor-reset
+  power: reset: Implement a PSCI SYSTEM_RESET2 reboot-mode driver
+
+ .../power/reset/arm,psci-vendor-reset.yaml    | 35 +++++++++++++
+ MAINTAINERS                                   |  2 +
+ drivers/firmware/psci/psci.c                  |  9 ++++
+ drivers/power/reset/Kconfig                   |  9 ++++
+ drivers/power/reset/Makefile                  |  1 +
+ drivers/power/reset/psci-vendor-reset.c       | 49 +++++++++++++++++++
+ drivers/power/reset/reboot-mode.c             | 44 ++++++++++++-----
+ include/linux/psci.h                          |  2 +
+ 8 files changed, 139 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+ create mode 100644 drivers/power/reset/psci-vendor-reset.c
 
 
-I found out the difference of them. 
-- dev_pm_opp_find_freq_ceil() used the 'assert_single_clk' which check the count of clock.
-                                                               
-
-(snip)
-
-Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
-
+base-commit: 6eaae198076080886b9e7d57f4ae06fa782f90ef
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.41.0
 
