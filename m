@@ -2,235 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D492476025F
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 00:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3F97602E1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 01:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjGXWcL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 18:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
+        id S230040AbjGXXAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 19:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjGXWcB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 18:32:01 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFDD19A0;
-        Mon, 24 Jul 2023 15:31:41 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36OLnIoq014121;
-        Mon, 24 Jul 2023 22:31:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=7zCDwDuNPEk6XuxGoTgy162uXdxAuBzpKTYh0NZ7KkE=;
- b=Wj5J1Nzxf62puMxfMeKOecG44yRQ1iq9552b1upl7TSY3rw1LXuq8MHmecYkMQZPTbfQ
- pTcdrfTsShMVqPOl21aX+/Z9/zjcOtPGVf92RnbjxXOOPuH3QhMm+aB54dut8lXbfn1s
- N5lLOELHWkkitrepblp5J2kxCm4Xz9ZieecqfhHwmTP4sPtgW3MmeqvuWIT3KLy+EIB0
- QfLjxef2fB8lBWSIDo/cR2x0PRSHJ26mv4aWZbLKrD3gA2tolXREX4ocHwfbmkheWODG
- HfMiMI8RbvveiB8MsiFdxcb8mK6G4OiJYabAvTh/CoDP7UdXfbXpQ4Sa1M7wLtrp/D4p iA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1pfh9nqb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jul 2023 22:31:31 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36OMVVYL000969
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jul 2023 22:31:31 GMT
-Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 24 Jul 2023 15:31:30 -0700
-From:   Elliot Berman <quic_eberman@quicinc.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-CC:     Elliot Berman <quic_eberman@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        "Prasad Sodagudi" <quic_psodagud@quicinc.com>
-Subject: [RFC PATCH 4/4] power: reset: Implement a PSCI SYSTEM_RESET2 reboot-mode driver
-Date:   Mon, 24 Jul 2023 15:30:54 -0700
-Message-ID: <20230724223057.1208122-5-quic_eberman@quicinc.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230724223057.1208122-1-quic_eberman@quicinc.com>
-References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OamcRKc4R8jr9pYGFvttDRzCQiyKt5mV
-X-Proofpoint-GUID: OamcRKc4R8jr9pYGFvttDRzCQiyKt5mV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-24_18,2023-07-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- bulkscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0 impostorscore=0
- mlxscore=0 priorityscore=1501 phishscore=0 suspectscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2307240198
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229596AbjGXXAb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 19:00:31 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA6D115
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 16:00:30 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-55c7bb27977so4348811a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 16:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690239630; x=1690844430;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Ef0FQIHH5u9yTQ5cgLQKVEsKFhG9dUm/hIqvrCIGtLA=;
+        b=NkYRhDO3JbZCCXMQo/dv6hXh21DJcS68yKATQtHLpbEZ5ldgp4KXn7mSG+YgvjX01F
+         ZLtFl9FNAHWu5frRzRoErJw3Xlew8vgAVPK8133S8wD775qzkMY4nzi5fc2kaoDmEzwm
+         0jp7n2JA6dl9FEI36lAjLny20jKDP5P3DNf1W9Fkk1sNKhD7QVDNz2Qus26hv3qvarqd
+         SprwcP8d+3JodojdnK6jzB2Wo+HiY5M6cCDM9kG1bXdmhlAL9dkN+eh7V7PDwND7ax0x
+         6+2muAjc6DVvA/LIwJ3oaKe7/CsgH+1Uil5xx8QofqIXmivrr89/85xZMaKVLsccSiXB
+         1GEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690239630; x=1690844430;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ef0FQIHH5u9yTQ5cgLQKVEsKFhG9dUm/hIqvrCIGtLA=;
+        b=HbQp3u71QfNko45nsszSXEV15ozSMhvVwCVovK4VeHjmxckUInePQ8AndzR6Z7kGWZ
+         ApzUnwddNcX0LfvftyAvnxaKEVhmftJt5N+tFJ63vzqWu8G/Izm0wiXxKCXsKLpRYVUI
+         /pFW6Aq3l2aUWgDc9bum5HCaC1Ffed2XS4NJabxKgTz+0nPc5GAK+7wtNG/Xnjyq1qtl
+         j/CQI+ATj/9ZUjGIs9sUe6lmpfm+E/HPBsh3lUnYUgPWvtU/C0Z7oTk0yoxRSp/cGoag
+         FtojA+4gYUz3XSPlcOejCDJn/B/p7gqRmJ4ZC6/FEcBT6/TxG2onJKpeKPRnV3gyj9nA
+         0mJA==
+X-Gm-Message-State: ABy/qLalxf5Q9rUkfczPXZof0yWcfG46fTC6PMXap/+UjA97zkrYO0qt
+        0GygY41tz6fFcPoz/DJOVLHpikxim7xoMGNXK5yEms2jQq21lmEDU/At/HjI/vs6sd5Erd4lmoP
+        yVZBxIvegBifNXwMpmmlWfpo2blKvBa0PgK5CgGsqkGAcjQivYvHEtxB4VNAOt52Kk/ngjLs7
+X-Google-Smtp-Source: APBJJlEtPhC3N+fK3b66oyZDPTJ4j29GuXYvWQJ1fldMJ6+MvFP6sHtZzWcISjNibekcipTniuHBMCdINYHZYCk=
+X-Received: from tessier.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5422])
+ (user=radusolea job=sendgmr) by 2002:a63:6f8c:0:b0:563:932d:8cd9 with SMTP id
+ k134-20020a636f8c000000b00563932d8cd9mr41838pgc.3.1690239629935; Mon, 24 Jul
+ 2023 16:00:29 -0700 (PDT)
+Date:   Mon, 24 Jul 2023 16:00:14 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.487.g6d72f3e995-goog
+Message-ID: <20230724230014.470081-1-radusolea@google.com>
+Subject: [RFC] thermal core: add option to run PM_POST_SUSPEND asynchronously
+From:   Radu Solea <radusolea@google.com>
+To:     linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
+        Radu Solea <radusolea@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PSCI implements a restart notifier for architectural defined resets.
-The SYSTEM_RESET2 allows vendor firmware to define additional reset
-types which could be mapped to the reboot reason.
+Some thermal zones are bus connected and slow to resume, thus
+delaying actions which depend on completion of PM_POST_SUSPEND.
+Add optional execution path to resume thermal zones on the system
+unbounded workqueue.
 
-Implement a driver to wire the reboot-mode framework to make vendor
-SYSTEM_RESET2 calls on reboot.
-
-Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+Signed-off-by: Radu Solea <radusolea@google.com>
 ---
- MAINTAINERS                             |  1 +
- drivers/firmware/psci/psci.c            |  9 +++++
- drivers/power/reset/Kconfig             |  9 +++++
- drivers/power/reset/Makefile            |  1 +
- drivers/power/reset/psci-vendor-reset.c | 49 +++++++++++++++++++++++++
- include/linux/psci.h                    |  2 +
- 6 files changed, 71 insertions(+)
- create mode 100644 drivers/power/reset/psci-vendor-reset.c
+ drivers/thermal/Kconfig        | 11 +++++++
+ drivers/thermal/thermal_core.c | 58 ++++++++++++++++++++++++++++++----
+ 2 files changed, 62 insertions(+), 7 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2da4c5f1917b..214b14c1da63 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16984,6 +16984,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- F:	Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
- F:	drivers/firmware/psci/
-+F:	drivers/power/reset/psci-vendor-reset.c
- F:	include/linux/psci.h
- F:	include/uapi/linux/psci.h
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 19a4b33cb564..8dbcc62ccf8a 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -91,6 +91,17 @@ config THERMAL_WRITABLE_TRIPS
+ 	  Say 'Y' here if you would like to allow userspace tools to
+ 	  change trip temperatures.
  
-diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
-index d9629ff87861..6db73f9d2304 100644
---- a/drivers/firmware/psci/psci.c
-+++ b/drivers/firmware/psci/psci.c
-@@ -328,6 +328,15 @@ static struct notifier_block psci_sys_reset_nb = {
- 	.priority = 129,
- };
- 
-+void psci_vendor_sys_reset2(u32 reset_type, u32 cookie)
-+{
-+	if (psci_system_reset2_supported)
-+		invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
-+			reset_type | BIT_ULL(31),
-+			cookie, 0);
-+}
-+EXPORT_SYMBOL_GPL(psci_vendor_sys_reset2);
-+
- static void psci_sys_poweroff(void)
- {
- 	invoke_psci_fn(PSCI_0_2_FN_SYSTEM_OFF, 0, 0, 0);
-diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-index fff07b2bd77b..1474b9d51089 100644
---- a/drivers/power/reset/Kconfig
-+++ b/drivers/power/reset/Kconfig
-@@ -311,4 +311,13 @@ config POWER_MLXBF
- 	help
- 	  This driver supports reset or low power mode handling for Mellanox BlueField.
- 
-+config POWER_RESET_PSCI_VENDOR_RESET
-+	tristate "PSCI Vendor SYSTEM_RESET2 driver"
-+	depends on ARM64 || ARM || COMPILE_TEST
-+	select ARM_PSCI_FW
-+	select REBOOT_MODE
++config THERMAL_ASYNC_RESUME
++	bool "Thermal async init zones on system resume"
++	default n
 +	help
-+	  Say y/m here to enable driver to use Vendor SYSTEM_RESET2 types on
-+	  chips which have firmware implementing custom SYSTEM_RESET2 types.
++	  Re-initialize thermal zones asynchronously on system resume.
++	  Thermal zone sensors may be attached on slow buses, impacting
++	  the duration of PM_POST_SUSPEND. If that is a concern enable
++	  this switch.
 +
- endif
-diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-index d763e6735ee3..d09243966b74 100644
---- a/drivers/power/reset/Makefile
-+++ b/drivers/power/reset/Makefile
-@@ -37,3 +37,4 @@ obj-$(CONFIG_SYSCON_REBOOT_MODE) += syscon-reboot-mode.o
- obj-$(CONFIG_POWER_RESET_SC27XX) += sc27xx-poweroff.o
- obj-$(CONFIG_NVMEM_REBOOT_MODE) += nvmem-reboot-mode.o
- obj-$(CONFIG_POWER_MLXBF) += pwr-mlxbf.o
-+obj-$(CONFIG_POWER_RESET_PSCI_VENDOR_RESET) += psci-vendor-reset.o
-diff --git a/drivers/power/reset/psci-vendor-reset.c b/drivers/power/reset/psci-vendor-reset.c
-new file mode 100644
-index 000000000000..95d027225185
---- /dev/null
-+++ b/drivers/power/reset/psci-vendor-reset.c
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/**
-+ * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
++	  If in doubt, say N.
 +
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/reboot-mode.h>
-+#include <linux/psci.h>
-+
-+static int psci_vendor_system_reset2(struct reboot_mode_driver *reboot, unsigned int magic)
-+{
-+	psci_vendor_sys_reset2(magic, 0);
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int psci_vendor_reset_probe(struct platform_device *pdev)
-+{
-+	struct reboot_mode_driver *reboot;
-+
-+	reboot = devm_kzalloc(&pdev->dev, sizeof(*reboot), GFP_KERNEL);
-+	if (!reboot)
-+		return -ENOMEM;
-+
-+	reboot->write = psci_vendor_system_reset2;
-+
-+	return devm_reboot_mode_register(&pdev->dev, reboot);
-+}
-+
-+static const struct of_device_id psci_vendor_reset_id_table[] = {
-+	{ .compatible = "arm,psci-vendor-reset" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, psci_vendor_reset_id_table);
-+
-+static struct platform_driver psci_vendor_reset_driver = {
-+	.probe = psci_vendor_reset_probe,
-+	.driver = {
-+		.name = "psci-vendor-reset",
-+		.of_match_table = of_match_ptr(psci_vendor_reset_id_table),
-+	},
-+};
-+module_platform_driver(psci_vendor_reset_driver);
-+
-+MODULE_DESCRIPTION("PSCI Vendor SYSTEM_RESET2 Driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/psci.h b/include/linux/psci.h
-index 4ca0060a3fc4..0c652c12e0a8 100644
---- a/include/linux/psci.h
-+++ b/include/linux/psci.h
-@@ -21,6 +21,8 @@ bool psci_power_state_is_valid(u32 state);
- int psci_set_osi_mode(bool enable);
- bool psci_has_osi_support(void);
+ choice
+ 	prompt "Default Thermal governor"
+ 	default THERMAL_DEFAULT_GOV_STEP_WISE
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 842f678c1c3e..5794832e4223 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -21,6 +21,10 @@
+ #include <linux/of.h>
+ #include <linux/suspend.h>
  
-+void psci_vendor_sys_reset2(u32 reset_type, u32 cookie);
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++#include <linux/workqueue.h>
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
 +
- struct psci_operations {
- 	u32 (*get_version)(void);
- 	int (*cpu_suspend)(u32 state, unsigned long entry_point);
+ #define CREATE_TRACE_POINTS
+ #include "thermal_trace.h"
+ 
+@@ -41,6 +45,10 @@ static atomic_t in_suspend;
+ 
+ static struct thermal_governor *def_governor;
+ 
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++struct work_struct *resume_thermal_zones_wk;
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
+ /*
+  * Governor section: set of functions to handle thermal governors
+  *
+@@ -1495,26 +1503,53 @@ struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name)
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_get_zone_by_name);
+ 
+-static int thermal_pm_notify(struct notifier_block *nb,
+-			     unsigned long mode, void *_unused)
++static inline void resume_thermal_zones(void)
+ {
+ 	struct thermal_zone_device *tz;
+ 
++	list_for_each_entry(tz, &thermal_tz_list, node) {
++		if (!thermal_zone_device_is_enabled(tz))
++			continue;
++
++		thermal_zone_device_init(tz);
++		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
++	}
++}
++
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++static void thermal_resume_work_fn(struct work_struct *work)
++{
++	resume_thermal_zones();
++}
++
++static inline void thermal_resume_enqueue(void)
++{
++	INIT_WORK(resume_thermal_zones_wk, thermal_resume_work_fn);
++	queue_work(system_unbound_wq, resume_thermal_zones_wk);
++}
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
++static int thermal_pm_notify(struct notifier_block *nb,
++			     unsigned long mode, void *_unused)
++{
+ 	switch (mode) {
+ 	case PM_HIBERNATION_PREPARE:
+ 	case PM_RESTORE_PREPARE:
+ 	case PM_SUSPEND_PREPARE:
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++		flush_work(resume_thermal_zones_wk);
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
+ 		atomic_set(&in_suspend, 1);
+ 		break;
+ 	case PM_POST_HIBERNATION:
+ 	case PM_POST_RESTORE:
+ 	case PM_POST_SUSPEND:
+ 		atomic_set(&in_suspend, 0);
+-		list_for_each_entry(tz, &thermal_tz_list, node) {
+-			thermal_zone_device_init(tz);
+-			thermal_zone_device_update(tz,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		}
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++		thermal_resume_enqueue();
++#else /* CONFIG_THERMAL_ASYNC_RESUME */
++		resume_thermal_zones();
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
+ 		break;
+ 	default:
+ 		break;
+@@ -1530,6 +1565,15 @@ static int __init thermal_init(void)
+ {
+ 	int result;
+ 
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++	resume_thermal_zones_wk = kmalloc(sizeof(*resume_thermal_zones_wk),
++					GFP_KERNEL);
++	if (!resume_thermal_zones_wk) {
++		result = -ENOMEM;
++		goto error;
++	}
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
+ 	result = thermal_netlink_init();
+ 	if (result)
+ 		goto error;
 -- 
-2.41.0
+2.41.0.487.g6d72f3e995-goog
 
