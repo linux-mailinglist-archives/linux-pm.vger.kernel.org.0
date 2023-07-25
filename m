@@ -2,127 +2,194 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D46C76234C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 22:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7411F7623DE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 22:46:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjGYU1h (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jul 2023 16:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S230423AbjGYUqw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jul 2023 16:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjGYU1g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 16:27:36 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CFD268D;
-        Tue, 25 Jul 2023 13:27:25 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PJIShn014114;
-        Tue, 25 Jul 2023 20:27:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=J5GVlSSAhoTLUBI0opme3fy6DfaiQXzK/JQ14KRTgTA=;
- b=VAUQPq/07BwSx3yufgPtX0+B4xfVOQcfTu1xWdxvpu0kh8gKJntGo+XY33a4pagDrt1t
- guxwtmO7r4HhObzuSV/W1kZCo6c+9wxw/iDJJW75Qb4m9B+OeCaqKxckyXB5LR5FXaME
- Vm/F4FuDzvD+XpQ3k3LeRB+1mWtzGzy9c8zv/5k2GYafla/J+FaXwDJ1EAHDTcnase8P
- PMTBHlS+sy+2EWMilbFunmSnGj7ceWpBwTTR5Xj9MXVoQ4qflH/Ueypn+JG+90AfFJyz
- blT/5nsvFUQS+BW/OMMdyX9rsWAYMMCOAQkRozE2GUhvZ1Zp2z5UjAW5/1khl+7rBkde Zg== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1v6ubdem-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 20:27:16 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36PKRFJq031949
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 20:27:15 GMT
-Received: from [10.71.109.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 25 Jul
- 2023 13:27:14 -0700
-Message-ID: <7b2f5af5-a704-ede7-1c6f-a2f0eb5b988f@quicinc.com>
-Date:   Tue, 25 Jul 2023 13:27:14 -0700
+        with ESMTP id S230233AbjGYUqs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 16:46:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5A471B0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Jul 2023 13:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690317957;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ePQHpPP/m2zFLGwnISEyrwq9ac4YxSfkwTurK23ce8w=;
+        b=CFfhw5Wu8m9KOCQmYDPyCQlg7G2YlLNaF++Y66cGCywVgb3YHfcrlkg0gnT5GDig3ezJZN
+        Wj9Z1tjKTRlFcqS2H+i+ssO4ssYbGizW9jRwsfsFpJVdQxKdukDbb8hTJTxY+ssFBfRfWK
+        e65tl5VYkeVycEk+gEQxMBDhW/qGPSs=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-4NkOkLwcPZGcOnX2_xcNmQ-1; Tue, 25 Jul 2023 16:45:51 -0400
+X-MC-Unique: 4NkOkLwcPZGcOnX2_xcNmQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8E3D528088A7;
+        Tue, 25 Jul 2023 20:45:50 +0000 (UTC)
+Received: from [10.22.18.12] (unknown [10.22.18.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4529BF7830;
+        Tue, 25 Jul 2023 20:45:49 +0000 (UTC)
+Message-ID: <f5f25279-bbb5-e040-aeaa-dd3d8686c670@redhat.com>
+Date:   Tue, 25 Jul 2023 16:45:49 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [RFC PATCH 0/4] Implement a PSCI SYSTEM_RESET2 reboot-mode driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5 4/4] intel_idle: Add ibrs_off module parameter to force
+ disable IBRS
 Content-Language: en-US
-To:     Florian Fainelli <florian.fainelli@broadcom.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Sebastian Reichel" <sre@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Prasad Sodagudi <quic_psodagud@quicinc.com>
-References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
- <65afff8f-fd02-1344-56b5-f9e3deda1d47@broadcom.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <65afff8f-fd02-1344-56b5-f9e3deda1d47@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20230710194857.2898284-1-longman@redhat.com>
+ <20230710194857.2898284-5-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230710194857.2898284-5-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: NwQAFfX2ImznLSH0lf6YCxdXCdTwQvZe
-X-Proofpoint-GUID: NwQAFfX2ImznLSH0lf6YCxdXCdTwQvZe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-25_11,2023-07-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- mlxscore=0 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307250173
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 7/10/23 15:48, Waiman Long wrote:
+> Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+> disables IBRS when the cstate is 6 or lower. However, there are
+> some use cases where a customer may want to use max_cstate=1 to
+> lower latency. Such use cases will suffer from the performance
+> degradation caused by the enabling of IBRS in the sibling idle thread.
+> Add a "ibrs_off" module parameter to force disable IBRS and the
+> CPUIDLE_FLAG_IRQ_ENABLE flag if set.
+>
+> In the case of a Skylake server with max_cstate=1, this new ibrs_off
+> option will likely increase the IRQ response latency as IRQ will now
+> be disabled.
+>
+> When running SPECjbb2015 with cstates set to C1 on a Skylake system.
+>
+> First test when the kernel is booted with: "intel_idle.ibrs_off"
+>    max-jOPS = 117828, critical-jOPS = 66047
+>
+> Then retest when the kernel is booted without the "intel_idle.ibrs_off"
+> added.
+>    max-jOPS = 116408, critical-jOPS = 58958
+>
+> That means booting with "intel_idle.ibrs_off" improves performance by:
+>    max-jOPS:   1.2%, which could be considered noise range.
+>    critical-jOPS: 12%, which is definitely a solid improvement.
+>
+> The admin-guide/pm/intel_idle.rst file is updated to add a description
+> about the new "ibrs_off" module parameter.
+>
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
+>   drivers/idle/intel_idle.c                   | 11 ++++++++++-
+>   2 files changed, 26 insertions(+), 2 deletions(-)
 
+Ping! Is there further suggested changes for this patch series or is it 
+good enough to be merged?
 
-On 7/25/2023 12:12 PM, Florian Fainelli wrote:
-> Hello,
-> 
-> On 7/24/23 15:30, Elliot Berman wrote:
->> PSCI implements a restart notifier for architectural defined resets.
->> The SYSTEM_RESET2 call allows vendor firmware to define additional reset
->> types which could be mapped to the reboot reason.
->>
->> Implement a driver to wire the reboot-mode framework to make vendor
->> SYSTEM_RESET2 calls on reboot.
->>
->> This is a continuation from 
->> https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
-> 
-> Would appreciate being CC'd on a the non-RFC postings of this patch. 
-> FWIW, my use case is better described with this earlier submission:
-> 
-> https://lore.kernel.org/lkml/20220122035421.4086618-1-f.fainelli@gmail.com/T/#m74e4243c1af3a8d896e19b573b58f562fa09961d
-> 
-> It would be neat if I could leverage your driver in order to implement 
-> this custom "reboot powercycle" implementation. Towards that goal, we 
-> would likely need to specify the desired reboot "sub" operation 
-> alongside its PSCI SYSTEM_RESET2 reboot type argument?
-> 
-> Thanks!
+Thanks,
+Longman
 
-I think you you want to describe the PSCI vendor reset under a warm 
-reboot with command "powercycle"? In other words, my series only lets DT 
-describe either reboot_mode (warm) or cmd (powercycle) but not both 
-simultaneously?
+>
+> diff --git a/Documentation/admin-guide/pm/intel_idle.rst b/Documentation/admin-guide/pm/intel_idle.rst
+> index b799a43da62e..39bd6ecce7de 100644
+> --- a/Documentation/admin-guide/pm/intel_idle.rst
+> +++ b/Documentation/admin-guide/pm/intel_idle.rst
+> @@ -170,7 +170,7 @@ and ``idle=nomwait``.  If any of them is present in the kernel command line, the
+>   ``MWAIT`` instruction is not allowed to be used, so the initialization of
+>   ``intel_idle`` will fail.
+>   
+> -Apart from that there are four module parameters recognized by ``intel_idle``
+> +Apart from that there are five module parameters recognized by ``intel_idle``
+>   itself that can be set via the kernel command line (they cannot be updated via
+>   sysfs, so that is the only way to change their values).
+>   
+> @@ -216,6 +216,21 @@ are ignored).
+>   The idle states disabled this way can be enabled (on a per-CPU basis) from user
+>   space via ``sysfs``.
+>   
+> +The ``ibrs_off`` module parameter is a boolean flag (defaults to
+> +false). If set, it is used to control if IBRS (Indirect Branch Restricted
+> +Speculation) should be turned off when the CPU enters an idle state.
+> +This flag does not affect CPUs that use Enhanced IBRS which can remain
+> +on with little performance impact.
+> +
+> +For some CPUs, IBRS will be selected as mitigation for Spectre v2 and Retbleed
+> +security vulnerabilities by default.  Leaving the IBRS mode on while idling may
+> +have a performance impact on its sibling CPU.  The IBRS mode will be turned off
+> +by default when the CPU enters into a deep idle state, but not in some
+> +shallower ones.  Setting the ``ibrs_off`` module parameter will force the IBRS
+> +mode to off when the CPU is in any one of the available idle states.  This may
+> +help performance of a sibling CPU at the expense of a slightly higher wakeup
+> +latency for the idle CPU.
+> +
+>   
+>   .. _intel-idle-core-and-package-idle-states:
+>   
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index c9479f089037..e1b826344682 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
+>   static unsigned int disabled_states_mask __read_mostly;
+>   static unsigned int preferred_states_mask __read_mostly;
+>   static bool force_irq_on __read_mostly;
+> +static bool ibrs_off __read_mostly;
+>   
+>   static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
+>   
+> @@ -1919,11 +1920,13 @@ static void state_update_enter_method(struct cpuidle_state *state, int cstate)
+>   	}
+>   
+>   	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+> -			   state->flags & CPUIDLE_FLAG_IBRS) {
+> +			((state->flags & CPUIDLE_FLAG_IBRS) || ibrs_off)) {
+>   		/*
+>   		 * IBRS mitigation requires that C-states are entered
+>   		 * with interrupts disabled.
+>   		 */
+> +		if (ibrs_off && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
+> +			state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
+>   		WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>   		state->enter = intel_idle_ibrs;
+>   		return;
+> @@ -2346,3 +2349,9 @@ MODULE_PARM_DESC(preferred_cstates, "Mask of preferred idle states");
+>    * 'CPUIDLE_FLAG_INIT_XSTATE' and 'CPUIDLE_FLAG_IBRS' flags.
+>    */
+>   module_param(force_irq_on, bool, 0444);
+> +/*
+> + * Force the disabling of IBRS when X86_FEATURE_KERNEL_IBRS is on and
+> + * CPUIDLE_FLAG_IRQ_ENABLE isn't set.
+> + */
+> +module_param(ibrs_off, bool, 0444);
+> +MODULE_PARM_DESC(ibrs_off, "Disable IBRS when idle");
 
-Please correct me if I got it wrong! Otherwise, I can incorporate way to 
-describe vendor reset type matching both reboot_mode and cmd in the DT.
-
-- Elliot
