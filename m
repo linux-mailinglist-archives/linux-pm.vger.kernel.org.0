@@ -2,97 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B89761E91
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 18:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEC917620DF
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 20:02:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjGYQcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jul 2023 12:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
+        id S232662AbjGYSCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jul 2023 14:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjGYQcP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 12:32:15 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5778E11A;
-        Tue, 25 Jul 2023 09:32:14 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9939fbb7191so7406466b.0;
-        Tue, 25 Jul 2023 09:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690302733; x=1690907533;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S7OUFpBRNjEL1Ji4284oRxOr5gfFNrwntTwz1EGLyJY=;
-        b=k5ei8QVHNxEYh8drof5azSl+0IzHBra1qV/vPSutC94DTw5Hj35DLS70qVB57S6/WN
-         UCiFi12G4+2/hX1oxQMGNy/OBsY8YV2RoZKqmDrh1Adg+oyZ5SKiL9po8K0yP2mmAjFQ
-         c7VCWSg1BtUt+7zCv1D0Yhq97nGbjsiT16cvBlGmVxcOrwUuFLnuFjBjEYk2VVAP6jAI
-         TbHExtxQQGUxKrXuNxeRpfNWst4K6Hlzs+JM+CUX6gmpYboKYtHRmaSQAYH49JfxTzfJ
-         6u9SU8lptXcndB+XmcTJb5jKV0AlSjhCEAuzQcAxsvbM12afObevAbrzqColJP1YjrtZ
-         zu2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690302733; x=1690907533;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S7OUFpBRNjEL1Ji4284oRxOr5gfFNrwntTwz1EGLyJY=;
-        b=Aykqq/31TR71pYvKXs5e09w9uMXaCADaNlrzs27hFEr8bRy+9OSGNFifwLvLQDIN4G
-         bT2aHe0ZAlbjI3FCPjuDrM/fJ3E8kb/y/LoZORX8BOXpG1oHFcbpbmgA2dF0cowy/VdF
-         qqdb7jej4aSOf1ZFQn+V6B4vWVvt3gXg3tCTY0GvRynhLb3HTlSq/87j8BUy5xJWQCRL
-         t5Xr19QKOCOI7kkqMYk/2KK0rekEJfQjF0copEkTxHN2WZYOTrU46JQp7q5NgsqdLNYd
-         F14ihW8ydmz8zCoLPILPzpoqO2rt7WAf+L2PdCAH9b0bU4eEtSJOPLJAh7OcVxkHewJy
-         8aUQ==
-X-Gm-Message-State: ABy/qLbwg2roDTHWYAcMi4j5l1zQBTs6HcFKCcMN9LdjXq0wGJjqJ6vR
-        stEmrLmf0k2pfXU6l77hteA=
-X-Google-Smtp-Source: APBJJlG0SGhaTfgRA98HEMfheHzjUOz73IXFmeqkEzdbX+efl11IKYpoKc7ti0H43rNibyzkyfGCUw==
-X-Received: by 2002:a17:906:309a:b0:993:da87:1c81 with SMTP id 26-20020a170906309a00b00993da871c81mr3060070ejv.20.1690302732715;
-        Tue, 25 Jul 2023 09:32:12 -0700 (PDT)
-Received: from localhost (p200300e41f1bd600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f1b:d600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id e13-20020a170906080d00b009944e955e19sm8333477ejd.30.2023.07.25.09.32.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Jul 2023 09:32:12 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: thermal: tegra: Convert to json-schema
-Date:   Tue, 25 Jul 2023 18:32:09 +0200
-Message-ID: <169030265767.1427964.573776431679622911.b4-ty@nvidia.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230721130306.2990112-1-thierry.reding@gmail.com>
-References: <20230721130306.2990112-1-thierry.reding@gmail.com>
+        with ESMTP id S232533AbjGYSB7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 14:01:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836482109;
+        Tue, 25 Jul 2023 11:01:50 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PGv6AZ019543;
+        Tue, 25 Jul 2023 18:01:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : from : subject : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=87ewkxmXGU9fTm3pk1VsONTeYZjew0gno6Af9/9sDdU=;
+ b=F81Eo92xhxRD8HaYCaS+Ui7JriaGz4V8ljLvXUFoiab3v13lmWgBXEPFkowCKh4vFqjJ
+ pXHuG/kGf5u+Mi2hB//gFIBTGLSMrKkzj3Ch8lRatfyVvyPCxAWhF2asEXGQFNCXRSr6
+ GqeEZvFz+xMacih3ut/S8K1KmSuJ5xPPQUvdfPVO/JoPmg7OaJgj+IIh2eAmri+aqw7T
+ aodJrvMw19KJ9O6q6Xjhr6jZc6klM45cO34v4ZH/TLpqpJ6vapym30lNuuqmuNrsDIMN
+ T4sdPOsoAqs8pank3X10Zis2VZyzCf4Ya5oSm9uaiRQuKkAoHMDQPfDCPhbDmoebSkwu kQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1y6m2pcv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 18:01:40 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36PI1d9m010756
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 18:01:39 GMT
+Received: from [10.71.109.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 25 Jul
+ 2023 11:01:38 -0700
+Message-ID: <0e72a1a0-611c-9667-866e-a4a1f67f10f6@quicinc.com>
+Date:   Tue, 25 Jul 2023 11:01:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Elliot Berman <quic_eberman@quicinc.com>
+Subject: Re: [RFC PATCH 3/4] dt-bindings: power: reset: Document
+ arm,psci-vendor-reset
+To:     Rob Herring <robh@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        "Prasad Sodagudi" <quic_psodagud@quicinc.com>
+References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
+ <20230724223057.1208122-4-quic_eberman@quicinc.com>
+ <20230724232328.GA1101352-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20230724232328.GA1101352-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: bq68nSqt_QqiZqlWsItJqqPUd-g87kMq
+X-Proofpoint-ORIG-GUID: bq68nSqt_QqiZqlWsItJqqPUd-g87kMq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_09,2023-07-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ mlxlogscore=999 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307250154
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
 
 
-On Fri, 21 Jul 2023 15:03:06 +0200, Thierry Reding wrote:
-> Convert the Tegra thermal bindings from the free-form text format to
-> json-schema.
+On 7/24/2023 4:23 PM, Rob Herring wrote:
+> On Mon, Jul 24, 2023 at 03:30:53PM -0700, Elliot Berman wrote:
+>> Add devicetree bindings for using PSCI SYSTEM_RESET2 with vendor reset  types.
+>>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   .../power/reset/arm,psci-vendor-reset.yaml    | 35 +++++++++++++++++++
+>>   MAINTAINERS                                   |  1 +
+>>   2 files changed, 36 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>> new file mode 100644
+>> index 000000000000..18b0b8c167a1
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>> @@ -0,0 +1,35 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +# Copyright 2023 Qualcomm Innovation Center, Inc. All Rights Reserved.
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/reset/arm,psci-vendor-reset.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: PSCI SYSTEM_RESET2 Vendor Resets
+>> +
+>> +maintainers:
+>> +  - Elliot Berman <quic_eberman@quicinc.com>
+>> +
+>> +description: |
+>> +  PSCI SYSTEM_RESET2 supports vendor-defined reset types. This describes
+>> +  the conversion of reboot modes to the reset types.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: arm,psci-vendor-reset
+>> +
+>> +allOf:
+>> +  - $ref: reboot-mode.yaml#
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    firmware {
+>> +      psci-vendor-resets {
+>> +        compatible = "arm,psci-vendor-reset";
 > 
+> We already have a node for PSCI, we don't need a second one. You can
+> have a separate driver without a separate node.
 > 
 
-Applied, thanks!
+I could also place the reboot-mode functionality straight into 
+drivers/firwmare/psci/? I thought that might be more controversial than 
+separate driver, but maybe not?
 
-[1/1] dt-bindings: thermal: tegra: Convert to json-schema
-      commit: 22af900bdb02d7e5d983832ea8067fc5f2f01686
+Mark/Loreno, do you have any concerns to add the reboot-mode driver 
+functionality directly in drivers/firmware/psci/psci.c?
 
-Best regards,
--- 
-Thierry Reding <treding@nvidia.com>
+Sebastian, do you have any concerns to have this reboot-mode driver 
+outside drivers/power/reset/?
+
+>> +        reboot-normal = <0x100>;
+> 
+> Wouldn't 'normal' be the normal PSCI reset?
+> 
+
+Ah, right. I had my head buried in the reboot-mode code when creating 
+the example. I can remove from the example.
+
+>> +        reboot-bootloader = <0x101>;
+>> +        reboot-fastboot = <0x102>;
+>> +      };
+>> +    };
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index d516295978a4..2da4c5f1917b 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -16982,6 +16982,7 @@ M:	Mark Rutland <mark.rutland@arm.com>
+>>   M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
+>>   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>>   S:	Maintained
+>> +F:	Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>>   F:	drivers/firmware/psci/
+>>   F:	include/linux/psci.h
+>>   F:	include/uapi/linux/psci.h
+>> -- 
+>> 2.41.0
+>>
