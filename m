@@ -2,122 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A0C760706
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 06:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC69576093C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 07:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjGYEL2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jul 2023 00:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
+        id S230339AbjGYFaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jul 2023 01:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjGYEL1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 00:11:27 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDE5E59
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 21:11:25 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666eb03457cso2843500b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 24 Jul 2023 21:11:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690258285; x=1690863085;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6yFVEsi6DemosywA0d4g+4gyo9sgA/NzmDnSSDwQNKs=;
-        b=lk4/cIBY23JoJcZYtO6BPJz+U6dOgzDrtI/AddYuE+I/IFHF+0VNmMiCxbdim0DI6t
-         IPJ1x4awpw4/uLI7cGwYUNC41jT+tdeCpZkWozX8Wxr0k/AFBbqb+Dnd4TsYPtKFMZ16
-         NCQCu5kfQNLXOUURvQbjffpqG1adcYt/5wo8yidETbOZphn8bOacxvQvGcVg29LSKBu7
-         D+VJ6tLOx+Vu6VoXj58jF1Qk9LDOc4BGQhbdqxdD6oW2MgqX3LcXBEMeupXYulnBkPw6
-         Fo8V35yCiev52gcpQu+MdeH+9L97/JqStRCZ9KHlmO9EYSxFLU4Je/40yoG8Su3n+wom
-         yZlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690258285; x=1690863085;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6yFVEsi6DemosywA0d4g+4gyo9sgA/NzmDnSSDwQNKs=;
-        b=Jos7/OFjsOVN+kkVEUAZbi4uYjv273RXB2GGgkGUEnh8ecPNrwQFYeYpgvVzF1xqcI
-         jXQTlo1bMeM3s0NrYL4OadsPjHnc3UYWMkgKTQVJ2tTlX4Ibo+l6eamVACzCbuMA6qqN
-         I5vY9SRhNWSta/ZEJhu4ds6NRTrHagYJ/3yqoq40MivzgKakEDFaOJjImu2BmBM+nNBo
-         QDcnAwyZ6F+g5rhWZzz7vQPF/4FHnfZobHaKzGLvz70Lh2x/Mcts0d3fj8elYbecc1/H
-         ymRbOW9wvjLpUPYKqitYunUP36X7NoG1rURpTRbMbLg8Nz6HZzLiKQrKP8MZYxwZPynb
-         edPg==
-X-Gm-Message-State: ABy/qLZTAuKZfljJJJiMnlm/PglMCajfTYaQA87ODd1HGUErUH2jOJ1V
-        BK0pOvhoRMuk0eHZCZMB32Ex8Q==
-X-Google-Smtp-Source: APBJJlGEfGQ7zai4fBJw5iC4TD450VqmzaOjEBbpI7dsjUc7F9ZBMXlE4WEWbv4UhPyjm6nAy6pOwQ==
-X-Received: by 2002:a05:6a20:734e:b0:127:796d:b70d with SMTP id v14-20020a056a20734e00b00127796db70dmr9905031pzc.61.1690258285037;
-        Mon, 24 Jul 2023 21:11:25 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id p7-20020a170902b08700b001b3d0aff88fsm9729885plr.109.2023.07.24.21.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Jul 2023 21:11:24 -0700 (PDT)
-Date:   Tue, 25 Jul 2023 09:41:22 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        conor+dt@kernel.org, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_nitirawa@quicinc.com,
-        linux-kernel@vger.kernel.org, quic_ziqichen@quicinc.com,
-        linux-pm@vger.kernel.org, nm@ti.com, quic_bhaskarv@quicinc.com,
-        martin.petersen@oracle.com, devicetree@vger.kernel.org,
-        robh+dt@kernel.org, quic_asutoshd@quicinc.com,
-        alim.akhtar@samsung.com, vireshk@kernel.org,
-        kyungmin.park@samsung.com, jejb@linux.ibm.com, bvanassche@acm.org,
-        konrad.dybcio@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        quic_cang@quicinc.com, linux-arm-msm@vger.kernel.org,
-        myungjoo.ham@samsung.com, andersson@kernel.org, sboyd@kernel.org,
-        linux-scsi@vger.kernel.org, cw00.choi@samsung.com,
-        krzysztof.kozlowski@linaro.org, avri.altman@wdc.com,
-        bmasney@redhat.com, quic_narepall@quicinc.com
-Subject: Re: [PATCH v2 02/15] dt-bindings: opp: Increase maxItems for opp-hz
- property
-Message-ID: <20230725041122.7yu4drwekoy6w24d@vireshk-i7>
-References: <20230720054100.9940-1-manivannan.sadhasivam@linaro.org>
- <20230720054100.9940-3-manivannan.sadhasivam@linaro.org>
- <169021390783.3607138.9583713600185509839.robh@kernel.org>
+        with ESMTP id S230313AbjGYFaT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 01:30:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C60E4D;
+        Mon, 24 Jul 2023 22:30:18 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36P56GCp012408;
+        Tue, 25 Jul 2023 05:30:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=UA4r+0O9LB/5Hv558gKOBlPsofWoMu9nI7KsSDEWnmw=;
+ b=IDU552A+DxoEYWKtb3BB2lXaAbdEbHBpQpr0uMl12BUsLNGbttrz3xmWQUsj4eoK9uPQ
+ 43UmvKQJ32CC47Vz6ArL+J7akePAb3UPp25Yb2IDieMUkAkIRbNYiT4xEe7WlzhPYKyy
+ gR460hxlzy5+H7MRgXc4y50uvc8vTfhSi5y+hkTWkXNPLiV8mRgmxd78FAANEKwPSOCv
+ ImQjmYyM/hYWB8jwhTKh5MiGxWHV2Gk0kpmZXGB6El/AhX3FSD+ZzTECKoDzcrsbADX1
+ iYwaG4ZQjS8m85DEuPiBuHFv8kCQmuEp4dhfD2xST68fOSg9myFRu4OZvGXAVmvJ3oek Gg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1u3t9kyc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 05:30:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36P5UEjT013032
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 05:30:14 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 24 Jul 2023 22:30:11 -0700
+Date:   Tue, 25 Jul 2023 11:00:07 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Mike Tipton <quic_mdtipton@quicinc.com>
+CC:     <djakov@kernel.org>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_okukatla@quicinc.com>,
+        <quic_viveka@quicinc.com>
+Subject: Re: [PATCH 0/3] Add interconnect debugfs client
+Message-ID: <b96376a1-4d53-4288-9380-caf9e83817cb@quicinc.com>
+References: <20230725012859.18474-1-quic_mdtipton@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <169021390783.3607138.9583713600185509839.robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230725012859.18474-1-quic_mdtipton@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: R9EHBo9OvUHAH_PEndTIOIKNbDyDS-av
+X-Proofpoint-ORIG-GUID: R9EHBo9OvUHAH_PEndTIOIKNbDyDS-av
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_02,2023-07-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ mlxlogscore=588 clxscore=1011 impostorscore=0 suspectscore=0 spamscore=0
+ phishscore=0 adultscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307250049
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24-07-23, 09:51, Rob Herring wrote:
+On Mon, Jul 24, 2023 at 06:28:56PM -0700, Mike Tipton wrote:
+> This series introduces interconnect debugfs files that support voting
+> for any path the framework supports.
 > 
-> On Thu, 20 Jul 2023 11:10:47 +0530, Manivannan Sadhasivam wrote:
-> > Current limit of 16 will be exhausted by platforms specifying the frequency
-> > for 9 clocks using opp-hz, like Qcom SDM845 SoC. For instance, specifying
-> > the frequency for 9 clocks with 64bit specifier as below would consume
-> > (9 * 2 = 18) items.
-> > 
-> > 	opp-50000000 {
-> > 		opp-hz = /bits/ 64 <50000000>,
-> > 			 /bits/ 64 <0>,
-> > 			 /bits/ 64 <0>,
-> > 			 /bits/ 64 <37500000>,
-> > 			 /bits/ 64 <0>,
-> > 			 /bits/ 64 <0>,
-> > 			 /bits/ 64 <0>,
-> > 			 /bits/ 64 <0>,
-> > 			 /bits/ 64 <75000000>;
-> > 	};
-> > 
-> > So let's increase the limit to 32 which should be enough for most platforms
-> > (hopefully).
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
+> We've historically relied on an out-of-tree module for this, which used
+> the old icc_get() that was recently removed in [0]. The old icc_get()
+> took integer endpoint IDs, which made identifying paths in our old
+> implementation non-intuitive. The logical node names typically don't
+> change much chip-to-chip, but the raw integer IDs do. Take this
+> opportunity to introduce an icc_get() that uses string names instead,
+> which allows for a more intuitive and generic debugfs interface.
 > 
-> Acked-by: Rob Herring <robh@kernel.org>
+> We rely on this support for debug, test, and verification. Hopefully
+> it'll be useful for other vendors as well.
 
-Applied. Thanks.
+Thanks Mike for working on this series. The downstream driver has been
+helpful in quickly pushing NOCs to max during throughput issues
+debugging. I have tested this series on v6.4 + revert mentioned here on
+SM8550 MTP and it works as advertised.
 
--- 
-viresh
+Thanks,
+Pavan
