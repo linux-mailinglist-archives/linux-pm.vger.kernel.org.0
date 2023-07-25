@@ -2,323 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF68D7604B1
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 03:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24CF7604FE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 04:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjGYBaE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Jul 2023 21:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47978 "EHLO
+        id S229499AbjGYCCD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Jul 2023 22:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjGYBaD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 21:30:03 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4940E1725;
-        Mon, 24 Jul 2023 18:30:01 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36P1Euif016206;
-        Tue, 25 Jul 2023 01:29:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=Xkozn2CWJhEy32yQtsQoejY27zxVajpqWvHl4aCy/+o=;
- b=DFQastABxnxaHEICLrzSRwH3aqX8UxKxb8ZsfkO4qXsEGWnDkZGUx9csdLXgVQJ1dC05
- 7TvHy6ckUvHj1KAvtMUXQKgCyOb/S2CcFvYCD+CUUiWTEqiamoNXFfXeZ9iwQ7rPVE9Q
- mvl1OG7NsaD4Bohk7Fc60iTkKyYyNuF2kpZKQiipdvba2ppeTeLY6gFQzXubMxr5Gttn
- lJWOqseWhmdcj3lYeDr1zdmnh3iy35V3HqL68gn3yTHbzT+hGZYEfJ95YgDnaxfcFzHs
- MWEZkJwfTQi6oADptDV4F2VrvYBkxecvmE8+nCyQUuWIDGmKpFLYOngXZr2HxBmksxX9 1Q== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1qa3srep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 01:29:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36P1Ttfc024726
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 01:29:55 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 24 Jul 2023 18:29:54 -0700
-From:   Mike Tipton <quic_mdtipton@quicinc.com>
-To:     <djakov@kernel.org>, <gregkh@linuxfoundation.org>,
-        <rafael@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_okukatla@quicinc.com>, <quic_viveka@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Subject: [PATCH 3/3] interconnect: Add debugfs test client
-Date:   Mon, 24 Jul 2023 18:28:59 -0700
-Message-ID: <20230725012859.18474-4-quic_mdtipton@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230725012859.18474-1-quic_mdtipton@quicinc.com>
-References: <20230725012859.18474-1-quic_mdtipton@quicinc.com>
+        with ESMTP id S229475AbjGYCCC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Jul 2023 22:02:02 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3AF10EF;
+        Mon, 24 Jul 2023 19:02:01 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1bb571ea965so1672702fac.0;
+        Mon, 24 Jul 2023 19:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690250520; x=1690855320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tTvSWbkjA+14tviFPtc6ENPHaYeKtI5EUeqn7dS9Ih4=;
+        b=R3h6tq4xVbAvAZ5BYduxZpo+1vk2oNZZrISipKxyf1bHn9EubFi9H8nV3EGv8X5HtK
+         O8LTQsceIQBS4Jy+/FbePFBYRt03Z+iK7rf00LTpvJvOxKyndwb4RBmKeaCOGp3ns2Wl
+         UhL4WHbyjjq6HbgtJX7aG/zMFm85tGdewUI/7O7au2+/viN7x7p2ieSajy0H/zr5aOo/
+         dbFNVs9/gEFOhmda+Of2ya4NtqlYNzopCk2NLXNL+e5ofc77147WAweQxcFPuClKM7o6
+         wsLJpIPytV/t+vvhqwRqo8iFjcT2jOstVtwhhDrzMuj8C3BcZxO3zecySnTgo8TRNX+Z
+         ZMnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690250520; x=1690855320;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tTvSWbkjA+14tviFPtc6ENPHaYeKtI5EUeqn7dS9Ih4=;
+        b=eGhSGKu2KHrF/qD3xAI3kHXWH8+8anBBPxv2JVRqr4OrsI9cFaS+p1CMIcc9j48+lv
+         nsoBR3ht06PBhgwmp8gaTp6Wk8A/DIeOYByD1vyv0CDZ0OGOjhoivETMMM8NI/Nm11Ts
+         zx09fEogxAw7bnozDTa/P7byXyqJnoX1m35QCZG2GUlmDCB0+e7CBUEZ1gYJn3Sk+j3H
+         IPtbeZLmzug5grKV7nOAPYFzDC99KHBXrBjt+waKxdXY98DMM0pyIvDxA0xPbzE8MC2X
+         NaD9WcpuguZcCFAcTaQf/XYey/ce2UivXwEu0UNxwSWl5a+SUrYjn60RvWMOP2/YDc0Y
+         Ezog==
+X-Gm-Message-State: ABy/qLaIFQMYlAYwL0HZzDYJtwqNA7V/2XT3ohtwMLFqCg8VA0H2Ml6L
+        DVGhvkFYotbg6QpF/Et4aW6OM9kLfL3v5PyddjE=
+X-Google-Smtp-Source: APBJJlEl8F38eCWK9GOfrLiFbHZsO5XCzSSIcxiAMm1LjLb9etzSDppTe2qUaoD1W+Jr/6HuiAkqMQXooXzcxaSLKCc=
+X-Received: by 2002:a05:6870:d7a8:b0:1bb:831b:79e6 with SMTP id
+ bd40-20020a056870d7a800b001bb831b79e6mr3509525oab.16.1690250520248; Mon, 24
+ Jul 2023 19:02:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0DZS3F8_j3lUwe7t1w8YSs-jFnZi_09C
-X-Proofpoint-GUID: 0DZS3F8_j3lUwe7t1w8YSs-jFnZi_09C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-24_18,2023-07-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- malwarescore=0 suspectscore=0 clxscore=1015 mlxlogscore=999
- priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307250010
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230719130527.8074-1-xuewen.yan@unisoc.com> <20230721221944.dthg3tf25j4qgc2z@airbuntu>
+ <CAB8ipk8b8ZfwXN7KK-zFVPQ-8i37h64v-wz2ErB3AANaZ9w7aA@mail.gmail.com> <18b0d54b-f8d2-ff38-f5c8-697dc838e3ce@arm.com>
+In-Reply-To: <18b0d54b-f8d2-ff38-f5c8-697dc838e3ce@arm.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Tue, 25 Jul 2023 10:01:49 +0800
+Message-ID: <CAB8ipk-DOAE8u5eYmfR9RaP57Y494z5CtUkCVTPQDzSxE7Rwwg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: schedutil: next_freq need update when
+ cpufreq_limits changed
+To:     Pierre Gondois <pierre.gondois@arm.com>
+Cc:     Qais Yousef <qyousef@layalina.io>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, guohua.yan@unisoc.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's often useful during test, debug, and development to issue path
-votes from shell. Add a debugfs client for this purpose.
+Hi Pierre,
 
-Example usage:
-	cd /sys/kernel/debug/interconnect/test-client/
+On Mon, Jul 24, 2023 at 11:33=E2=80=AFPM Pierre Gondois <pierre.gondois@arm=
+.com> wrote:
+>
+>
+>
+> On 7/24/23 05:36, Xuewen Yan wrote:
+> > On Sat, Jul 22, 2023 at 7:02=E2=80=AFAM Qais Yousef <qyousef@layalina.i=
+o> wrote:
+> >>
+> >> On 07/19/23 21:05, Xuewen Yan wrote:
+> >>> When cpufreq's policy is single, there is a scenario that will
+> >>> cause sg_policy's next_freq to be unable to update.
+> >>>
+> >>> When the cpu's util is always max, the cpufreq will be max,
+> >>> and then if we change the policy's scaling_max_freq to be a
+> >>> lower freq, indeed, the sg_policy's next_freq need change to
+> >>> be the lower freq, however, because the cpu_is_busy, the next_freq
+> >>> would keep the max_freq.
+> >>>
+> >>> For example:
+> >>> The cpu7 is single cpu:
+> >>>
+> >>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # while true;do done&
+> >>> [1] 4737
+> >>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # taskset -p 80 4737
+> >>> pid 4737's current affinity mask: ff
+> >>> pid 4737's new affinity mask: 80
+> >>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
+> >>> 2301000
+> >>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_cur_freq
+> >>> 2301000
+> >>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # echo 2171000 > scali=
+ng_max_freq
+> >>> unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
+> >>> 2171000
+> >>>
+> >>> At this time, the sg_policy's next_freq would keep 2301000.
+> >>>
+> >>> To prevent the case happen, add the judgment of the need_freq_update =
+flag.
+> >>>
+> >>> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> >>> Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
+> >>> Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
+> >>> ---
+> >>>   kernel/sched/cpufreq_schedutil.c | 3 ++-
+> >>>   1 file changed, 2 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_=
+schedutil.c
+> >>> index 4492608b7d7f..458d359f5991 100644
+> >>> --- a/kernel/sched/cpufreq_schedutil.c
+> >>> +++ b/kernel/sched/cpufreq_schedutil.c
+> >>> @@ -350,7 +350,8 @@ static void sugov_update_single_freq(struct updat=
+e_util_data *hook, u64 time,
+> >>>         * Except when the rq is capped by uclamp_max.
+> >>>         */
+> >>>        if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
+> >>> -         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq)=
+ {
+> >>> +         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq =
+&&
+> >>> +         !sg_policy->need_freq_update) {
+> >>
+> >> What about sugov_update_single_perf()? It seems to have the same probl=
+em, no?
+> >
+> > There is no problem in sugov_update_single_perf, because the next_freq
+> > is updated by drivers, maybe the next_freq is not used when using
+> > sugov_update_single_perf..
+> >
+> > But  for the last_freq_update_time, I think there are some problems
+> > when using sugov_update_single_perf:
+> > Now, there is no judgment condition for the update of the
+> > last_freq_update_time. That means the last_freq_update_time is always
+> > updated in sugov_update_single_perf.
+> > And in sugov_should_update_freq: it would judge the
+> > freq_update_delay_ns. As a result, If we use the
+> > sugov_update_single_perf, the cpu frequency would only be periodically
+> > updated according to freq_update_delay_ns.
+> > Maybe we should judge the cpufreq_driver_adjust_perf's return value,
+> > if the freq is not updated, the last_freq_update_time also does not
+> > have to update.
+> >
+> > Just like:
+> > ---
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_sc=
+hedutil.c
+> > index 458d359f5991..10f18b054f01 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -381,6 +381,7 @@ static void sugov_update_single_perf(struct
+> > update_util_data *hook, u64 time,
+> >          struct sugov_cpu *sg_cpu =3D container_of(hook, struct
+> > sugov_cpu, update_util);
+> >          unsigned long prev_util =3D sg_cpu->util;
+> >          unsigned long max_cap;
+> > +       bool freq_updated;
+> >
+> >          /*
+> >           * Fall back to the "frequency" path if frequency invariance i=
+s not
+> > @@ -407,10 +408,11 @@ static void sugov_update_single_perf(struct
+> > update_util_data *hook, u64 time,
+> >              sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
+> >                  sg_cpu->util =3D prev_util;
+> >
+> > -       cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->b=
+w_dl),
+> > +       freq_updated =3D cpufreq_driver_adjust_perf(sg_cpu->cpu,
+> > map_util_perf(sg_cpu->bw_dl),
+> >                                     map_util_perf(sg_cpu->util), max_ca=
+p);
+> >
+> > -       sg_cpu->sg_policy->last_freq_update_time =3D time;
+> > +       if (freq_updated)
+> > +               sg_cpu->sg_policy->last_freq_update_time =3D time;
+> >   }
+> >
+>
+> Hello Xuewen,
+> FWIW, the patch and explanation for sugov_update_single_perf() seem sensi=
+ble to
+> me. Just a comment about cpufreq_driver_adjust_perf() and
+> (struct cpufreq_driver)->adjust_perf(): wouldn't their prototype need to =
+be
+> updated (i.e. not return void) to do the change suggested above ?
 
-	# Configure node endpoints for the path from CPU to DDR on
-	# qcom/sm8550.
-	echo chm_apps > src_node
-	echo ebi > dst_node
+Yes, their function type should be changed from void to bool or init.
+For this patch, I just raise a question for everyone to discuss. If
+this is a problem, the official patch needs to be revised later.
 
-	# Get path between src_node and dst_node. This is only
-	# necessary after updating the node endpoints.
-	echo 1 > get
+BR
+xuewen
 
-	# Set desired BW to 1GBps avg and 2GBps peak.
-	echo 1000000 > avg_bw
-	echo 2000000 > peak_bw
-
-	# Vote for avg_bw and peak_bw on the latest path from "get".
-	# Voting for multiple paths is possible by repeating this
-	# process for different nodes endpoints.
-	echo 1 > commit
-
-Allowing userspace to directly enable and set bus rates can be dangerous
-So, following in the footsteps of the regmap [0] and clk [1] frameworks,
-keep these userspace controls compile-time disabled without Kconfig
-options to enable them. Enabling this will require code changes to
-define INTERCONNECT_ALLOW_WRITE_DEBUGFS.
-
-[0] commit 09c6ecd39410 ("regmap: Add support for writing to regmap registers via debugfs")
-[1] commit 37215da5553e ("clk: Add support for setting clk_rate via debugfs")
-
-Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
----
- drivers/interconnect/Makefile         |   2 +-
- drivers/interconnect/core.c           |   3 +
- drivers/interconnect/debugfs-client.c | 156 ++++++++++++++++++++++++++
- drivers/interconnect/internal.h       |   2 +
- 4 files changed, 162 insertions(+), 1 deletion(-)
- create mode 100644 drivers/interconnect/debugfs-client.c
-
-diff --git a/drivers/interconnect/Makefile b/drivers/interconnect/Makefile
-index 5604ce351a9f..d0888babb9a1 100644
---- a/drivers/interconnect/Makefile
-+++ b/drivers/interconnect/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CFLAGS_core.o				:= -I$(src)
--icc-core-objs				:= core.o bulk.o
-+icc-core-objs				:= core.o bulk.o debugfs-client.o
- 
- obj-$(CONFIG_INTERCONNECT)		+= icc-core.o
- obj-$(CONFIG_INTERCONNECT_IMX)		+= imx/
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 511152398790..bc82571ff2a8 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -1117,6 +1117,9 @@ static int __init icc_init(void)
- 			    icc_debugfs_dir, NULL, &icc_summary_fops);
- 	debugfs_create_file("interconnect_graph", 0444,
- 			    icc_debugfs_dir, NULL, &icc_graph_fops);
-+
-+	icc_debugfs_client_init(icc_debugfs_dir);
-+
- 	return 0;
- }
- 
-diff --git a/drivers/interconnect/debugfs-client.c b/drivers/interconnect/debugfs-client.c
-new file mode 100644
-index 000000000000..990dd2ff6df7
---- /dev/null
-+++ b/drivers/interconnect/debugfs-client.c
-@@ -0,0 +1,156 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+#include <linux/debugfs.h>
-+#include <linux/interconnect.h>
-+#include <linux/platform_device.h>
-+#include <linux/uaccess.h>
-+
-+/*
-+ * This can be dangerous, therefore don't provide any real compile time
-+ * configuration option for this feature.
-+ * People who want to use this will need to modify the source code directly.
-+ */
-+#undef INTERCONNECT_ALLOW_WRITE_DEBUGFS
-+
-+#if defined(INTERCONNECT_ALLOW_WRITE_DEBUGFS) && defined(CONFIG_DEBUG_FS)
-+
-+static LIST_HEAD(debugfs_paths);
-+static DEFINE_MUTEX(debugfs_lock);
-+
-+static struct platform_device *pdev;
-+static struct icc_path *cur_path;
-+
-+static char *src_node;
-+static char *dst_node;
-+static u32 avg_bw;
-+static u32 peak_bw;
-+static u32 tag;
-+
-+struct debugfs_path {
-+	const char *src;
-+	const char *dst;
-+	struct icc_path *path;
-+	struct list_head list;
-+};
-+
-+static struct icc_path *get_path(const char *src, const char *dst)
-+{
-+	struct debugfs_path *path;
-+
-+	list_for_each_entry(path, &debugfs_paths, list) {
-+		if (!strcmp(path->src, src) && !strcmp(path->dst, dst))
-+			return path->path;
-+	}
-+
-+	return NULL;
-+}
-+
-+static int icc_get_set(void *data, u64 val)
-+{
-+	struct debugfs_path *debugfs_path;
-+	int ret = 0;
-+
-+	mutex_lock(&debugfs_lock);
-+
-+	/*
-+	 * If we've already looked up a path, then use the existing one instead
-+	 * of calling icc_get() again. This allows for updating previous BW
-+	 * votes when "get" is written to multiple times for multiple paths.
-+	 */
-+	cur_path = get_path(src_node, dst_node);
-+	if (cur_path)
-+		goto out;
-+
-+	cur_path = icc_get(&pdev->dev, src_node, dst_node);
-+	if (IS_ERR(cur_path)) {
-+		ret = PTR_ERR(cur_path);
-+		goto out;
-+	}
-+
-+	debugfs_path = kzalloc(sizeof(*debugfs_path), GFP_KERNEL);
-+	if (!debugfs_path) {
-+		ret = -ENOMEM;
-+		goto err_put;
-+	}
-+
-+	debugfs_path->path = cur_path;
-+	debugfs_path->src = kstrdup(src_node, GFP_KERNEL);
-+	debugfs_path->dst = kstrdup(dst_node, GFP_KERNEL);
-+	if (!debugfs_path->src || !debugfs_path->dst) {
-+		ret = -ENOMEM;
-+		goto err_free;
-+	}
-+
-+	list_add_tail(&debugfs_path->list, &debugfs_paths);
-+	goto out;
-+
-+err_free:
-+	kfree(debugfs_path->src);
-+	kfree(debugfs_path->dst);
-+	kfree(debugfs_path);
-+err_put:
-+	icc_put(cur_path);
-+out:
-+	mutex_unlock(&debugfs_lock);
-+	return ret;
-+}
-+
-+DEFINE_DEBUGFS_ATTRIBUTE(icc_get_fops, NULL, icc_get_set, "%llu\n");
-+
-+static int icc_commit_set(void *data, u64 val)
-+{
-+	int ret;
-+
-+	mutex_lock(&debugfs_lock);
-+
-+	if (IS_ERR_OR_NULL(cur_path)) {
-+		ret = PTR_ERR(cur_path);
-+		goto out;
-+	}
-+
-+	icc_set_tag(cur_path, tag);
-+	ret = icc_set_bw(cur_path, avg_bw, peak_bw);
-+out:
-+	mutex_unlock(&debugfs_lock);
-+	return ret;
-+}
-+
-+DEFINE_DEBUGFS_ATTRIBUTE(icc_commit_fops, NULL, icc_commit_set, "%llu\n");
-+
-+int icc_debugfs_client_init(struct dentry *icc_dir)
-+{
-+	struct dentry *client_dir;
-+	int ret;
-+
-+	pdev = platform_device_alloc("icc-debugfs-client", PLATFORM_DEVID_AUTO);
-+
-+	ret = platform_device_add(pdev);
-+	if (ret) {
-+		pr_err("%s: failed to add platform device: %d\n", __func__, ret);
-+		platform_device_put(pdev);
-+		return ret;
-+	}
-+
-+	client_dir = debugfs_create_dir("test_client", icc_dir);
-+
-+	debugfs_create_str("src_node", 0600, client_dir, &src_node);
-+	debugfs_create_str("dst_node", 0600, client_dir, &dst_node);
-+	debugfs_create_file("get", 0200, client_dir, NULL, &icc_get_fops);
-+	debugfs_create_u32("avg_bw", 0600, client_dir, &avg_bw);
-+	debugfs_create_u32("peak_bw", 0600, client_dir, &peak_bw);
-+	debugfs_create_u32("tag", 0600, client_dir, &tag);
-+	debugfs_create_file("commit", 0200, client_dir, NULL, &icc_commit_fops);
-+
-+	return 0;
-+}
-+
-+#else
-+
-+int icc_debugfs_client_init(struct dentry *icc_dir)
-+{
-+	return 0;
-+}
-+
-+#endif
-diff --git a/drivers/interconnect/internal.h b/drivers/interconnect/internal.h
-index f5f82a5c939e..87152e70a99b 100644
---- a/drivers/interconnect/internal.h
-+++ b/drivers/interconnect/internal.h
-@@ -41,4 +41,6 @@ struct icc_path {
- 	struct icc_req reqs[];
- };
- 
-+int icc_debugfs_client_init(struct dentry *icc_dir);
-+
- #endif
--- 
-2.17.1
-
+>
+> Regards,
+> Pierre
+>
+> >
+> > BR
+> > Thanks!
+> >
+> > ---
+> > xuewen
+> >>
+> >> LGTM otherwise.
+> >>
+> >>
+> >> Cheers
+> >>
+> >> --
+> >> Qais Yousef
+> >>
+> >>>                next_f =3D sg_policy->next_freq;
+> >>>
+> >>>                /* Restore cached freq as next_freq has changed */
+> >>> --
+> >>> 2.25.1
+> >>>
+> >
