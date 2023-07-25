@@ -2,269 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630F6760D9B
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 10:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE34376102F
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 12:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjGYIxk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 25 Jul 2023 04:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37234 "EHLO
+        id S232592AbjGYKFL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jul 2023 06:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbjGYIwt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 04:52:49 -0400
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABA3199D;
-        Tue, 25 Jul 2023 01:51:10 -0700 (PDT)
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6b9e946c32fso1249450a34.0;
-        Tue, 25 Jul 2023 01:51:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690275069; x=1690879869;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x62kUfugmPfwl+2DSDS57/bK3Ed4vPVH0uvXDGgyaqA=;
-        b=TWh5DeOXurgB9nyIPqdYdq9YMhlfSUhn7HzqbithabrTZH6Qh+NUtTPbp2dz8Vn9g2
-         k8avIQl7fj4FRjRBV4+j7JF0Mu1xUhWuZ4YxHLMk/+sSpDR56jJwAJntkMiVcyk4ywnf
-         JaSDFK4GQgaShpY9y7bRDCPYskptzVvmHbPM8c3O4i8MRi5t8g0BQdw0vhkx89koHwZa
-         XJC0NU4/mTItPDT8NNvReiOSMr1USJjxjDJXKpA92FtDcsTqhlcDSsLIepFEMX1gWoEc
-         vfgx0WPtyNLo1IwNOFLl0D1qiIcSjOJVXq8QA2PTBnYOOHbrUlYkfQdG8BVNSprbUwkQ
-         c5dQ==
-X-Gm-Message-State: ABy/qLbKw6YZk4WZ8y343sSzqZHmk8YMNefYZXgSt60W80D0Ut5tzXf1
-        HxoAhYZRrbgvz5HyuShD1lOw+tgtPi7TmOrp67mr6j+B
-X-Google-Smtp-Source: APBJJlEToR2t8Y0zI2D8PbtRJiULGqLj5aeux4oWabzppYhrs15fAwx68VPw7o3/uCDMjxJngh90gAsWqTd1kn5IGF8=
-X-Received: by 2002:a05:6808:4495:b0:39e:86b3:d8ab with SMTP id
- eq21-20020a056808449500b0039e86b3d8abmr9500653oib.4.1690275069383; Tue, 25
- Jul 2023 01:51:09 -0700 (PDT)
+        with ESMTP id S232310AbjGYKEy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 06:04:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D158C3582;
+        Tue, 25 Jul 2023 03:04:19 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36P88XSC009383;
+        Tue, 25 Jul 2023 10:04:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4wxBb0aHeVVz4pmYcNzT5o3PmpfCFsXkoGMU7c6SCKg=;
+ b=MkoTlorwYQqYxrN+bH4gZri0I+pDbzHrvAg0jhxBeKFMVBVL/RdNdyoxWpURhBgoQdCB
+ UbZW5QJZhYcUYo0IuU6LNQQiau5PMvKOJpyJ3LLTZKj9veZ46xxMtkd2s2IacWOTDYCd
+ RIjcSMH1rByGqVCgefoD/3Jtcv/XmabFUps1tpJ08RmC4WdE/uKtQn8FwyB8oJJouYsR
+ ivtNY6WyUy3QwAXYMJkzWONdNu1WUkbqYtNaxMonTG23D+ye4f8ptxXKOcr+HYFQfM0e
+ p2BxSfX3D3Cvgq2Cxl/zRc62JexwJqjjulnh7MhV3o5rSfOAoIEnpusOPDXU4ZxRf9FB PQ== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s29xmgb36-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 10:04:08 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36PA47bD031178
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 10:04:07 GMT
+Received: from [10.216.12.191] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 25 Jul
+ 2023 03:04:01 -0700
+Message-ID: <27d9bd35-b69c-5596-8e1a-c42ec2b01f75@quicinc.com>
+Date:   Tue, 25 Jul 2023 15:33:57 +0530
 MIME-Version: 1.0
-References: <20230719130527.8074-1-xuewen.yan@unisoc.com> <20230721221944.dthg3tf25j4qgc2z@airbuntu>
- <CAB8ipk8b8ZfwXN7KK-zFVPQ-8i37h64v-wz2ErB3AANaZ9w7aA@mail.gmail.com>
- <20230724155328.7odez6dcoafksr3i@airbuntu> <CAB8ipk-VuD2oMDaV6B6i-eoKE+JZ0FpsUZAdT0R5S3to07JkFw@mail.gmail.com>
-In-Reply-To: <CAB8ipk-VuD2oMDaV6B6i-eoKE+JZ0FpsUZAdT0R5S3to07JkFw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Jul 2023 10:50:57 +0200
-Message-ID: <CAJZ5v0gGXyURiqcspDdLf99dKjoFKDRZ=nc55b9OHXRdat8T_w@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: next_freq need update when
- cpufreq_limits changed
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Xuewen Yan <xuewen.yan@unisoc.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, guohua.yan@unisoc.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [RFC PATCH 2/4] power: reset: reboot-mode: Wire reboot_mode enum
+ to magic
+Content-Language: en-US
+To:     Elliot Berman <quic_eberman@quicinc.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Sebastian Reichel" <sre@kernel.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
+        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Prasad Sodagudi <quic_psodagud@quicinc.com>
+References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
+ <20230724223057.1208122-3-quic_eberman@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230724223057.1208122-3-quic_eberman@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: V1EUNcEWf5x7A1jIFLgk8KKf7-TfcMfc
+X-Proofpoint-GUID: V1EUNcEWf5x7A1jIFLgk8KKf7-TfcMfc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_05,2023-07-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ mlxlogscore=999 impostorscore=0 adultscore=0 mlxscore=0 bulkscore=0
+ phishscore=0 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307250086
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 4:21 AM Xuewen Yan <xuewen.yan94@gmail.com> wrote:
->
-> On Mon, Jul 24, 2023 at 11:53 PM Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 07/24/23 11:36, Xuewen Yan wrote:
-> > > On Sat, Jul 22, 2023 at 7:02 AM Qais Yousef <qyousef@layalina.io> wrote:
-> > > >
-> > > > On 07/19/23 21:05, Xuewen Yan wrote:
-> > > > > When cpufreq's policy is single, there is a scenario that will
-> > > > > cause sg_policy's next_freq to be unable to update.
-> > > > >
-> > > > > When the cpu's util is always max, the cpufreq will be max,
-> > > > > and then if we change the policy's scaling_max_freq to be a
-> > > > > lower freq, indeed, the sg_policy's next_freq need change to
-> > > > > be the lower freq, however, because the cpu_is_busy, the next_freq
-> > > > > would keep the max_freq.
-> > > > >
-> > > > > For example:
-> > > > > The cpu7 is single cpu:
-> > > > >
-> > > > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # while true;do done&
-> > > > > [1] 4737
-> > > > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # taskset -p 80 4737
-> > > > > pid 4737's current affinity mask: ff
-> > > > > pid 4737's new affinity mask: 80
-> > > > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-> > > > > 2301000
-> > > > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_cur_freq
-> > > > > 2301000
-> > > > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # echo 2171000 > scaling_max_freq
-> > > > > unisoc:/sys/devices/system/cpu/cpufreq/policy7 # cat scaling_max_freq
-> > > > > 2171000
-> > > > >
-> > > > > At this time, the sg_policy's next_freq would keep 2301000.
-> > > > >
-> > > > > To prevent the case happen, add the judgment of the need_freq_update flag.
-> > > > >
-> > > > > Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> > > > > Co-developed-by: Guohua Yan <guohua.yan@unisoc.com>
-> > > > > Signed-off-by: Guohua Yan <guohua.yan@unisoc.com>
-> > > > > ---
-> > > > >  kernel/sched/cpufreq_schedutil.c | 3 ++-
-> > > > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > > > index 4492608b7d7f..458d359f5991 100644
-> > > > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > > > @@ -350,7 +350,8 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
-> > > > >        * Except when the rq is capped by uclamp_max.
-> > > > >        */
-> > > > >       if (!uclamp_rq_is_capped(cpu_rq(sg_cpu->cpu)) &&
-> > > > > -         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq) {
-> > > > > +         sugov_cpu_is_busy(sg_cpu) && next_f < sg_policy->next_freq &&
-> > > > > +         !sg_policy->need_freq_update) {
-> > > >
-> > > > What about sugov_update_single_perf()? It seems to have the same problem, no?
-> > >
-> > > There is no problem in sugov_update_single_perf, because the next_freq
-> > > is updated by drivers, maybe the next_freq is not used when using
-> > > sugov_update_single_perf..
-> >
-> > Ah I see; we just use prev_util but the request will go through and the driver
-> > should observe the new limit regardless of what util value we pass to it. Got
-> > ya.
-> >
-> > >
-> > > But  for the last_freq_update_time, I think there are some problems
-> > > when using sugov_update_single_perf:
-> > > Now, there is no judgment condition for the update of the
-> > > last_freq_update_time. That means the last_freq_update_time is always
-> > > updated in sugov_update_single_perf.
-> > > And in sugov_should_update_freq: it would judge the
-> > > freq_update_delay_ns. As a result, If we use the
-> > > sugov_update_single_perf, the cpu frequency would only be periodically
-> > > updated according to freq_update_delay_ns.
-> > > Maybe we should judge the cpufreq_driver_adjust_perf's return value,
-> > > if the freq is not updated, the last_freq_update_time also does not
-> > > have to update.
-> > >
-> > > Just like:
-> > > ---
-> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> > > index 458d359f5991..10f18b054f01 100644
-> > > --- a/kernel/sched/cpufreq_schedutil.c
-> > > +++ b/kernel/sched/cpufreq_schedutil.c
-> > > @@ -381,6 +381,7 @@ static void sugov_update_single_perf(struct
-> > > update_util_data *hook, u64 time,
-> > >         struct sugov_cpu *sg_cpu = container_of(hook, struct
-> > > sugov_cpu, update_util);
-> > >         unsigned long prev_util = sg_cpu->util;
-> > >         unsigned long max_cap;
-> > > +       bool freq_updated;
-> > >
-> > >         /*
-> > >          * Fall back to the "frequency" path if frequency invariance is not
-> > > @@ -407,10 +408,11 @@ static void sugov_update_single_perf(struct
-> > > update_util_data *hook, u64 time,
-> > >             sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
-> > >                 sg_cpu->util = prev_util;
-> > >
-> > > -       cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> > > +       freq_updated = cpufreq_driver_adjust_perf(sg_cpu->cpu,
-> > > map_util_perf(sg_cpu->bw_dl),
-> > >                                    map_util_perf(sg_cpu->util), max_cap);
-> > >
-> > > -       sg_cpu->sg_policy->last_freq_update_time = time;
-> > > +       if (freq_updated)
-> > > +               sg_cpu->sg_policy->last_freq_update_time = time;
-> > >  }
-> >
-> > Sound reasonable in principle, but it could lead to overhead; for example when
-> > the system is busy and maxed out, the last_freq_update_time will never be
-> > updated and will end up continuously calling to the driver to change frequency
-> > without any rate limit AFAICS. Which might not be an acceptable overhead,
-> > I don't know. Logically this is wasted cycles preventing the tasks from doing
-> > useful work. I think we need to look at such corner cases and treat them
-> > appropriately to not call the driver if we go with this approach.
->
-> Hi Qais,
->
-> I can understand what you mean, but I don't think this is a problem.
-> For the driver, the calculation of whether to update the frequency may
-> not be the main time-consuming, but the main time-consuming may be the
-> frequency conversion time of the hardware. If the hardware does not
-> need frequency conversion, the operation of calculating the frequency
-> takes a very short time.
-> If the operation of calling the driver frequently is unacceptable, can
-> prev_util be used?
 
-No, it's better to pass the data to the driver directly and let it
-sort that out in this particular case.
 
+On 7/25/2023 4:00 AM, Elliot Berman wrote:
+> Allow the reboot mode type to be wired to magic.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
 > ---
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 4492608b7d7f..3febfd032eee 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -379,7 +379,9 @@ static void sugov_update_single_perf(struct
-> update_util_data *hook, u64 time,
->  {
->         struct sugov_cpu *sg_cpu = container_of(hook, struct
-> sugov_cpu, update_util);
->         unsigned long prev_util = sg_cpu->util;
-> +       unsigned long prev_bw_dl = sg_cpu->bw_dl;
->         unsigned long max_cap;
-> +       bool freq_updated;
->
->         /*
->          * Fall back to the "frequency" path if frequency invariance is not
-> @@ -406,10 +408,14 @@ static void sugov_update_single_perf(struct
-> update_util_data *hook, u64 time,
->             sugov_cpu_is_busy(sg_cpu) && sg_cpu->util < prev_util)
->                 sg_cpu->util = prev_util;
->
-> -       cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
-> +       if (prev_util == sg_cpu->util && prev_bw_dl == sg_cpu->bw_dl)
-> +               return;
+>   drivers/power/reset/reboot-mode.c | 30 ++++++++++++++++++++++++++----
+>   1 file changed, 26 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
+> index a646aefa041b..4ea97ccbaf51 100644
+> --- a/drivers/power/reset/reboot-mode.c
+> +++ b/drivers/power/reset/reboot-mode.c
+> @@ -22,12 +22,8 @@ struct mode_info {
+>   static bool get_reboot_mode_magic(struct reboot_mode_driver *reboot,
+>   					  const char *cmd, unsigned int *magic)
+>   {
+> -	const char *normal = "normal";
+>   	struct mode_info *info;
+>   
+> -	if (!cmd)
+> -		cmd = normal;
+> -
+>   	list_for_each_entry(info, &reboot->head, list) {
+>   		if (!strcmp(info->mode, cmd)) {
+>   			*magic = info->magic;
+> @@ -45,6 +41,32 @@ static int reboot_mode_notify(struct notifier_block *this,
+>   	unsigned int magic;
+>   
+>   	reboot = container_of(this, struct reboot_mode_driver, reboot_notifier);
 > +
-> +       freq_updated = cpufreq_driver_adjust_perf(sg_cpu->cpu,
-> map_util_perf(sg_cpu->bw_dl),
->                                    map_util_perf(sg_cpu->util), max_cap);
->
-> -       sg_cpu->sg_policy->last_freq_update_time = time;
-> +       if (freq_updated)
-> +               sg_cpu->sg_policy->last_freq_update_time = time;
->  }
->
->  static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
->
->
-> BR
-> ---
-> xuewen
-> >
-> >
-> > Cheers
-> >
-> > --
-> > Qais Yousef
-> >
-> > >
-> > >
-> > > BR
-> > > Thanks!
-> > >
-> > > ---
-> > > xuewen
-> > > >
-> > > > LGTM otherwise.
-> > > >
-> > > >
-> > > > Cheers
-> > > >
-> > > > --
-> > > > Qais Yousef
-> > > >
-> > > > >               next_f = sg_policy->next_freq;
-> > > > >
-> > > > >               /* Restore cached freq as next_freq has changed */
-> > > > > --
-> > > > > 2.25.1
-> > > > >
+> +	if (!cmd) {
+> +		switch (mode) {
+
+IIUC, mode will be filled up with reboot_mode during restart
+notifier and not reboot notifiers ?
+
+> +		case REBOOT_COLD:
+> +			cmd = "cold";
+> +			break;
+> +		case REBOOT_WARM:
+> +			cmd = "warm";
+> +			break;
+> +		case REBOOT_HARD:
+> +			cmd = "hard";
+> +			break;
+> +		case REBOOT_SOFT:
+> +			cmd = "soft";
+> +			break;
+> +		case REBOOT_GPIO:
+> +			cmd = "gpio";
+
+These strings are already there kernel/reboot.c
+Can it be reused ?
+
+#define REBOOT_COLD_STR         "cold"
+#define REBOOT_WARM_STR         "warm"
+#define REBOOT_HARD_STR         "hard"
+#define REBOOT_SOFT_STR         "soft"
+#define REBOOT_GPIO_STR         "gpio"
+#define REBOOT_UNDEFINED_STR    "undefined"
+
+
+> +			break;
+> +		}
+> +		if (get_reboot_mode_magic(reboot, cmd, &magic)) {
+
+Is info->mode is going to filled up with mode-cold, mode-warm and so
+on from DT to compare against cmd?
+
+What if , cmd is not among the one above switch, NULL pointer during
+strcmp ?
+
+-Mukesh
+
+> +			reboot->write(reboot, magic);
+> +			return NOTIFY_DONE;
+> +		}
+> +		cmd = "normal";
+> +	}
+> +
+>   	if (get_reboot_mode_magic(reboot, cmd, &magic))
+>   		reboot->write(reboot, magic);
+>   
