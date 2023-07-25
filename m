@@ -2,87 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7F0760CFF
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 10:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA41760D99
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Jul 2023 10:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232297AbjGYIaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Jul 2023 04:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52510 "EHLO
+        id S229495AbjGYIxj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Jul 2023 04:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbjGYIaV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 04:30:21 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FA2E57;
-        Tue, 25 Jul 2023 01:30:20 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36P88bVt010810;
-        Tue, 25 Jul 2023 08:30:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+7rrkjJuBqZ+dK/U917Z4pPyFYVdFap3OBvQjDRjYo4=;
- b=ZneSAAV6OZV6cUvgo/JI1O70NxBDLz9pbaDFrslTEmxFWHOGjSTobY3lBivJymzV09KI
- Uu6LlopwjzyFWbyZ8H4rD/7zzvz0UQEMqli4CRu1IRzFRCgMgUCZGcn5khR0xGgDfTIV
- A8XaTPzjrtFRqEQ01xxd+2/o4K0C6mngKQCbzPBRbANojje/RssiXCFzso8PO/10zet5
- MKJWNYEqlqpVBN2aXBJid5ZdxejRFfFWEThyKXyM6BG3paPYbCSA727roohaZYgf/1Gl
- EcO//S0vj+MyGAaRlWUa4PF9vKj3sLhMKjxoP0p5ydNvf7Z+hAleG0otRSsskFxQtYy5 qg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1v6u9s79-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 08:30:06 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36P8U1ui000442
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 25 Jul 2023 08:30:01 GMT
-Received: from [10.216.12.191] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 25 Jul
- 2023 01:29:56 -0700
-Message-ID: <9c989e91-741c-72d7-413c-b727e7d107d7@quicinc.com>
-Date:   Tue, 25 Jul 2023 13:59:46 +0530
+        with ESMTP id S231815AbjGYIwq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Jul 2023 04:52:46 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4352E131;
+        Tue, 25 Jul 2023 01:50:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690275051; x=1721811051;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HE2TjNN/Y7d6kR/2PBUoTBaoZfVqmELRWlVsIEsmyM0=;
+  b=gHKqogG20HYe//0lQY7u5udKoJGvbV+T0m/Yjt5I74mrkZMZ+dwpuR1k
+   7ORg64BIOuQHzzDlDR1OTQkrHWDP4riJ5O3R7zWb6gWOjo6z8sMOmmKgJ
+   yRKYi31gPuORNxde6y6Psj6oRCBaJNkWR1PKmge0BlIC3vqGorHOm0Thb
+   xKPLcBdO8wahvXpffLlClOZoz2xLX90jJmdndg9tyKX3kXScXytALuozv
+   EmYq75mB5vuEAFb3PBNAT3P/YontdNlTEosgEGHfy1/Jrtd1Onb/c2nrv
+   SWUhd1tBu1yFShwcBMjBWHUUyEqB6Qi2Ui/uNgz6in8N5LMfCMB5sW0bT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="352559195"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="352559195"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 01:50:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="796074092"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="796074092"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 25 Jul 2023 01:50:48 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qODkl-000ATG-10;
+        Tue, 25 Jul 2023 08:50:47 +0000
+Date:   Tue, 25 Jul 2023 16:49:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mike Tipton <quic_mdtipton@quicinc.com>, djakov@kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_okukatla@quicinc.com,
+        quic_viveka@quicinc.com, Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: Re: [PATCH 2/3] interconnect: Reintroduce icc_get()
+Message-ID: <202307251608.svPOM4UC-lkp@intel.com>
+References: <20230725012859.18474-3-quic_mdtipton@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC PATCH 3/4] dt-bindings: power: reset: Document
- arm,psci-vendor-reset
-Content-Language: en-US
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
-        "Satya Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Prasad Sodagudi <quic_psodagud@quicinc.com>
-References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
- <20230724223057.1208122-4-quic_eberman@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230724223057.1208122-4-quic_eberman@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PybqWDFxuBdzp8HvWWPaM3Lt-rZxQzza
-X-Proofpoint-GUID: PybqWDFxuBdzp8HvWWPaM3Lt-rZxQzza
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-25_04,2023-07-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 impostorscore=0
- mlxscore=0 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307250074
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230725012859.18474-3-quic_mdtipton@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,72 +66,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Mike,
 
+kernel test robot noticed the following build errors:
 
-On 7/25/2023 4:00 AM, Elliot Berman wrote:
-> Add devicetree bindings for using PSCI SYSTEM_RESET2 with vendor reset  types.
-> 
-> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> ---
->   .../power/reset/arm,psci-vendor-reset.yaml    | 35 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 36 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
-> new file mode 100644
-> index 000000000000..18b0b8c167a1
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2023 Qualcomm Innovation Center, Inc. All Rights Reserved.
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/arm,psci-vendor-reset.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PSCI SYSTEM_RESET2 Vendor Resets
-> +
-> +maintainers:
-> +  - Elliot Berman <quic_eberman@quicinc.com>
-> +
-> +description: |
-> +  PSCI SYSTEM_RESET2 supports vendor-defined reset types. This describes
-> +  the conversion of reboot modes to the reset types.
-> +
-> +properties:
-> +  compatible:
-> +    const: arm,psci-vendor-reset
-> +
-> +allOf:
-> +  - $ref: reboot-mode.yaml#
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    firmware {
-> +      psci-vendor-resets {
-> +        compatible = "arm,psci-vendor-reset";
-> +        reboot-normal = <0x100>;
-> +        reboot-bootloader = <0x101>;
-> +        reboot-fastboot = <0x102>;
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.5-rc3 next-20230725]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Should it start with mode-* ?
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Tipton/debugfs-Add-write-support-to-debugfs_create_str/20230725-093242
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20230725012859.18474-3-quic_mdtipton%40quicinc.com
+patch subject: [PATCH 2/3] interconnect: Reintroduce icc_get()
+config: arm-integrator_defconfig (https://download.01.org/0day-ci/archive/20230725/202307251608.svPOM4UC-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230725/202307251608.svPOM4UC-lkp@intel.com/reproduce)
 
--Mukesh
-> +      };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index d516295978a4..2da4c5f1917b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16982,6 +16982,7 @@ M:	Mark Rutland <mark.rutland@arm.com>
->   M:	Lorenzo Pieralisi <lpieralisi@kernel.org>
->   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
->   F:	drivers/firmware/psci/
->   F:	include/linux/psci.h
->   F:	include/uapi/linux/psci.h
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307251608.svPOM4UC-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   In file included from drivers/opp/opp.h:15,
+                    from drivers/opp/core.c:23:
+>> include/linux/interconnect.h:63:18: warning: no previous prototype for 'icc_get' [-Wmissing-prototypes]
+      63 | struct icc_path *icc_get(struct device *dev, const char *src, const char *dst)
+         |                  ^~~~~~~
+--
+   arm-linux-gnueabi-ld: drivers/opp/cpu.o: in function `icc_get':
+>> cpu.c:(.text+0x2c8): multiple definition of `icc_get'; drivers/opp/core.o:core.c:(.text+0x2260): first defined here
+   arm-linux-gnueabi-ld: drivers/opp/of.o: in function `icc_get':
+   of.c:(.text+0x1b20): multiple definition of `icc_get'; drivers/opp/core.o:core.c:(.text+0x2260): first defined here
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
