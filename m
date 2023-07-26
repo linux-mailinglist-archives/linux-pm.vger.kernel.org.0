@@ -2,114 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C887876400A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 21:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC94A763EBC
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 20:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232358AbjGZTze (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 15:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
+        id S231784AbjGZSmw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Wed, 26 Jul 2023 14:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232421AbjGZTzX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 15:55:23 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F502691;
-        Wed, 26 Jul 2023 12:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XyTW0Ej/ctvX5mhAYSsUtLai+EJ8srqN7zialJMkLmE=; b=hM1wJiCXTM2z10qaH70Y3td19Q
-        RcNkzv2osxtg8g5vj9sDJvWhn20I2tyHdnfNRVCieOfO++Y9Q3cl6+xO7wjUeov18fOZuZlG+hbPi
-        HUDwSYX/Nlfs1QoXzUQehGHWijgiU7cp3U79zFxvgoVlpDsyGPAVt9iOYENQ8E8R5m7zRPHoMFiF4
-        2ZCQVJm86wwBgM+/ZGkpklArFaA1/clBOci/PfKeaZ+ldYZjK2AbJ+Nk0Xdxb+TDkrL1/+XoWsVXa
-        ujTRXxt/hpfEFtfai3OXujo2NVSNvmdOm/34N4u2U50WMJAYFE8mlQjPbUeqxEX36eEWrTdxEevL9
-        xAj7AhOg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qOkan-005ynS-0H;
-        Wed, 26 Jul 2023 19:54:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 465A730056F;
-        Wed, 26 Jul 2023 21:54:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0952E201BD673; Wed, 26 Jul 2023 12:25:12 +0200 (CEST)
-Date:   Wed, 26 Jul 2023 12:25:12 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH v5 4/4] intel_idle: Add ibrs_off module parameter to
- force disable IBRS
-Message-ID: <20230726102512.GD3802077@hirez.programming.kicks-ass.net>
-References: <20230710194857.2898284-1-longman@redhat.com>
- <20230710194857.2898284-5-longman@redhat.com>
- <f5f25279-bbb5-e040-aeaa-dd3d8686c670@redhat.com>
+        with ESMTP id S231500AbjGZSmw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 14:42:52 -0400
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB2F1710;
+        Wed, 26 Jul 2023 11:42:51 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5666a2b7f55so27139eaf.0;
+        Wed, 26 Jul 2023 11:42:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690396971; x=1691001771;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GHGJiTdlB+dQD70EMhHhI8xvC4trd7Ff2YAN4Uy5bO0=;
+        b=fWfhN9XMlCSXkOM5nl7TysGvcv3RYp+RJlGeMfND1nKIx97wFWHudBsTtOZBPrH4Qk
+         qLRhlvXhxsHDLs6wp1e/SU8d3a7C8IkshpCRQreXCqiS73bkie65l9SJlq8kPuNYo5vh
+         +YmLL5dZXmXwPpW9T5uK6TBIOLgb6URoOcU4CLRVD/kfJjKcznA7FCnxqO8V1HwgHDey
+         e4Ugo/Nou+tvq7IoDRp8F3vMpF3dndO050fEnU9HhkAL4UNeN5VGq6msgzjBYPmjTOkz
+         Ukci7oO2xDZdtE5ndZDipZllMU9+pDcThQgBUNsfcY0VjukkaYiEeU9Wfscr2KUV5Mi/
+         YfMg==
+X-Gm-Message-State: ABy/qLbdEzPMjwso0J7CZM3uFSKklB8C3GxogzcxFHuUhos7HmHplyro
+        0q5AH653DERuSXMeZzRwQxcEgM/An32mHg5cIjY=
+X-Google-Smtp-Source: APBJJlH2x90Q7lDJXp2zFV9JTsLkAsPOTtP2AQhhIx6ipnMvhPSFtKFj5OTgP4amlKMBVmsiWEo6/1u7nvN10N6++l4=
+X-Received: by 2002:a05:6870:3291:b0:1bb:8ff4:1830 with SMTP id
+ q17-20020a056870329100b001bb8ff41830mr2906100oac.3.1690396970780; Wed, 26 Jul
+ 2023 11:42:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5f25279-bbb5-e040-aeaa-dd3d8686c670@redhat.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230723-thermal-fix-of-memory-corruption-v1-1-ed4fa16d199d@kernel.org>
+ <f559a614-93d5-121a-8ff3-0da77bc85f44@linaro.org> <ZL054LHAZv8VmIk3@finisterre.sirena.org.uk>
+In-Reply-To: <ZL054LHAZv8VmIk3@finisterre.sirena.org.uk>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 26 Jul 2023 20:42:39 +0200
+Message-ID: <CAJZ5v0jJ+YM=7LUEKB_b5GUsGopLTT0eyPmomYV0OcGQp2gvig@mail.gmail.com>
+Subject: Re: [PATCH] thermal/of: Fix double free of params during unregistration
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Hugh Dickins <hughd@google.com>, Will Deacon <will@kernel.org>,
+        Icenowy Zheng <uwu@icenowy.me>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 04:45:49PM -0400, Waiman Long wrote:
-> On 7/10/23 15:48, Waiman Long wrote:
-> > Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
-> > disables IBRS when the cstate is 6 or lower. However, there are
-> > some use cases where a customer may want to use max_cstate=1 to
-> > lower latency. Such use cases will suffer from the performance
-> > degradation caused by the enabling of IBRS in the sibling idle thread.
-> > Add a "ibrs_off" module parameter to force disable IBRS and the
-> > CPUIDLE_FLAG_IRQ_ENABLE flag if set.
-> > 
-> > In the case of a Skylake server with max_cstate=1, this new ibrs_off
-> > option will likely increase the IRQ response latency as IRQ will now
-> > be disabled.
-> > 
-> > When running SPECjbb2015 with cstates set to C1 on a Skylake system.
-> > 
-> > First test when the kernel is booted with: "intel_idle.ibrs_off"
-> >    max-jOPS = 117828, critical-jOPS = 66047
-> > 
-> > Then retest when the kernel is booted without the "intel_idle.ibrs_off"
-> > added.
-> >    max-jOPS = 116408, critical-jOPS = 58958
-> > 
-> > That means booting with "intel_idle.ibrs_off" improves performance by:
-> >    max-jOPS:   1.2%, which could be considered noise range.
-> >    critical-jOPS: 12%, which is definitely a solid improvement.
-> > 
-> > The admin-guide/pm/intel_idle.rst file is updated to add a description
-> > about the new "ibrs_off" module parameter.
-> > 
-> > Signed-off-by: Waiman Long <longman@redhat.com>
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
-> >   drivers/idle/intel_idle.c                   | 11 ++++++++++-
-> >   2 files changed, 26 insertions(+), 2 deletions(-)
-> 
-> Ping! Is there further suggested changes for this patch series or is it good
-> enough to be merged?
+On Sun, Jul 23, 2023 at 4:32 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Sun, Jul 23, 2023 at 11:57:52AM +0200, Daniel Lezcano wrote:
+> > On 23/07/2023 01:26, Mark Brown wrote:
+>
+> > I think this issue has been fixed by:
+>
+> > https://lore.kernel.org/all/20230708112720.2897484-2-a.fatoum@pengutronix.de/
+>
+> Yes, that should fix the same issue.
+>
+> > Rafael ? Did you pick it up ?
+>
+> There was a message on the thread saying the patches have been applied
+> for v6.5 but I can't see them in either mainline or -next.
 
-I suppose I'll go stick it in x86/core unless someone objects.
+They should be there in linux-next (as of today).
+
+Surely, they are present in my linux-next branch.
