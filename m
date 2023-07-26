@@ -2,136 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DD4763C5F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 18:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A297A763D54
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbjGZQ0A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 12:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46828 "EHLO
+        id S230482AbjGZRLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 13:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233306AbjGZQZ7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 12:25:59 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4AF26AC
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 09:25:56 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fdd14c1fbfso10990328e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 09:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690388754; x=1690993554;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3kHqku5aNQeOxuldOBfASzBzbj6SzACN6ErkOb1f60g=;
-        b=F8wR/OPNTELiTI/jFK2rOQwmDvyvhHjc5hVtNFt079Ia2Ih6YDf5QS7Ebngx3hQl60
-         KUyDZzq9Qxn1ucRI5w4K9+V5FlxcsDAP7BT9QrUcMhVen9MUbyPguv7cuyZ3cjo6cAa8
-         IyuWv8CVjVyBQ+eRYnd7NQWWu6Slok5QYjnelLrIEhyYCgx/x/DpC0+Bchz8Vn5bK5s9
-         PLi42pGzq3Zz3PLimCJ7rj/72mcNllW687zNpxP8UAz0Y5KQUAKP37G+dihw00Csx0hy
-         0zr7zkA65rZ47n6OcFbuiXvywvk4PgLBPOyJ0LnKd+viJfBS7lcQx3McGi+SGz2zmQm3
-         86eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690388754; x=1690993554;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3kHqku5aNQeOxuldOBfASzBzbj6SzACN6ErkOb1f60g=;
-        b=l4EdbLHlvdFuv9jrbdlYb7/R8l7hBDImqFMt1UOM25Y+X/5imf+8ayqkC4blFPbUgW
-         Rr7v8bWmn3Iov0CZhr7oovKLaHMGDTCH1xT7Bb9OKNy7a8gt8k3Q0+IdslOwpSB5jKlY
-         2GdLN12KaAIkrchHcn5UDZEH4daFtaOwZmu+cHjHpkiqzJequ5f9MDrsA1rxKVHqSkmx
-         u5noIQCHNu5viJDjqru9GsQxsC12QMyMuRextqrth4i0O3wHdOcSMb75BuLOQ0AywJOB
-         p2xkL2G8xmSQUpcc0+EfCiMkRjSxd8ljnouzbpHrXOod98L+h+5w43C6YaaDhaej1dHP
-         CzcA==
-X-Gm-Message-State: ABy/qLa7alsFoLwBHGd3O4BS+7F+h/F4Y2PiuRGyINzqPisDqVuL8FNu
-        6TH49KulYho95sF7Bd7hev94jg==
-X-Google-Smtp-Source: APBJJlHuKggQDB2ovgqHgCPkyjHAAmZHbLpbQLy2mdBr4cT7QGRK/KXm70jTydFRJaOCkxHL/fj6GQ==
-X-Received: by 2002:a05:6512:b97:b0:4fb:7b2a:78de with SMTP id b23-20020a0565120b9700b004fb7b2a78demr2629017lfv.45.1690388754550;
-        Wed, 26 Jul 2023 09:25:54 -0700 (PDT)
-Received: from [192.168.1.101] (abxh240.neoplus.adsl.tpnet.pl. [83.9.1.240])
-        by smtp.gmail.com with ESMTPSA id a14-20020a056512374e00b004fba5c20ab1sm3336299lfs.167.2023.07.26.09.25.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Jul 2023 09:25:54 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 26 Jul 2023 18:25:46 +0200
-Subject: [PATCH 4/4] interconnect: qcom: msm8996: Set AB/IB coefficients
+        with ESMTP id S230149AbjGZRLA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:11:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5AC1BD6;
+        Wed, 26 Jul 2023 10:10:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1F86761BF5;
+        Wed, 26 Jul 2023 17:10:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FB60C433CA;
+        Wed, 26 Jul 2023 17:10:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690391458;
+        bh=nqd3LMNaH7Pa5TyNSfP1cxXXeNyUyq8BvWWp1a6eL5s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c3KVXa/BftZsgtsVOG6sVtMnW4yVaCAKx3x6ZNvAbDwv7VyRyoBd0vPkYnJPeIraJ
+         iYuRgx/dDWeqrOgml4dWVxgyMTBefa7Q8sIYxZ7XereBIdNxNHIa3S37AsSKX/9ZsX
+         xDkPunCSBxn1FEdHcGOQ5iMNHgHu8JHlLeNavgewVx5HbG9JpMhlgELd5tGarGhUXa
+         C+A59Xzx1Z8Gyet45HrU8xPZncpHOqCWDcjoCTrdMmop4A2KV1x9Mf2aQfaspLsdIO
+         lwXZTWJkU2I8Xd1sJ8D0/ZEcv4VEv6WHmtaZFLtWaLJrRXslQP/1Sp9m2xGM3r7DAH
+         6cWPRrVCwaxag==
+Received: (nullmailer pid 1608179 invoked by uid 1000);
+        Wed, 26 Jul 2023 17:10:56 -0000
+Date:   Wed, 26 Jul 2023 11:10:56 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nishanth Menon <nm@ti.com>
+Cc:     Tony Lindgren <tony@atomide.com>,
+        =?iso-8859-1?Q?Beno=EEt?= Cousson <bcousson@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 4/5] dt-bindings: opp: Convert ti-omap5-opp-supply.txt to
+ yaml binding
+Message-ID: <20230726171056.GA1593547-robh@kernel.org>
+References: <20230724153911.1376830-1-nm@ti.com>
+ <20230724153911.1376830-5-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230726-topic-icc_coeff-v1-4-31616960818c@linaro.org>
-References: <20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org>
-In-Reply-To: <20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1690388749; l=1692;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=I9w13v27Aktl2g4cGZ4p21IhyuK82Ydc8kkNnjHFsco=;
- b=WruiJaJP7hlv2UhaxaXdLLtdz+JP25qA4MCyDJxiNOx6zBdH09zVzQ6VBM2nr37TViPtC3vg3
- Q1OwksZty/gA+5z+Sb3szlLVKP17JoNNIxi8BVokl6gtwohvt/rZ245
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230724153911.1376830-5-nm@ti.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some buses and nodes need additional manual adjustments atop the usual
-calculations. Fill in the missing coefficients.
+On Mon, Jul 24, 2023 at 10:39:10AM -0500, Nishanth Menon wrote:
+> Rename ti-omap5-opp-supply to be bit more generic omap-opp-supply and
+> convert the binding to yaml.
+> 
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+>  .../bindings/opp/ti,omap-opp-supply.yaml      | 108 ++++++++++++++++++
+>  .../bindings/opp/ti-omap5-opp-supply.txt      |  63 ----------
+>  2 files changed, 108 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/opp/ti-omap5-opp-supply.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml b/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+> new file mode 100644
+> index 000000000000..ff1b3d8fea31
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+> @@ -0,0 +1,108 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/opp/ti,omap-opp-supply.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments OMAP compatible OPP supply description
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/msm8996.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Drop "description"
 
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index 88683dfa468f..dec38cd42df4 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -448,6 +448,7 @@ static struct qcom_icc_node mas_mdp_p0 = {
- 	.name = "mas_mdp_p0",
- 	.id = MSM8996_MASTER_MDP_PORT0,
- 	.buswidth = 32,
-+	.ib_percent = 400,
- 	.mas_rpm_id = 8,
- 	.slv_rpm_id = -1,
- 	.qos.ap_owned = true,
-@@ -463,6 +464,7 @@ static struct qcom_icc_node mas_mdp_p1 = {
- 	.name = "mas_mdp_p1",
- 	.id = MSM8996_MASTER_MDP_PORT1,
- 	.buswidth = 32,
-+	.ib_percent = 400,
- 	.mas_rpm_id = 61,
- 	.slv_rpm_id = -1,
- 	.qos.ap_owned = true,
-@@ -1889,7 +1891,8 @@ static const struct qcom_icc_desc msm8996_bimc = {
- 	.nodes = bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(bimc_nodes),
- 	.bus_clk_desc = &bimc_clk,
--	.regmap_cfg = &msm8996_bimc_regmap_config
-+	.regmap_cfg = &msm8996_bimc_regmap_config,
-+	.ab_percent = 154,
- };
- 
- static struct qcom_icc_node * const cnoc_nodes[] = {
-@@ -2004,7 +2007,8 @@ static const struct qcom_icc_desc msm8996_mnoc = {
- 	.bus_clk_desc = &mmaxi_0_clk,
- 	.intf_clocks = mm_intf_clocks,
- 	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
--	.regmap_cfg = &msm8996_mnoc_regmap_config
-+	.regmap_cfg = &msm8996_mnoc_regmap_config,
-+	.ab_percent = 154,
- };
- 
- static struct qcom_icc_node * const pnoc_nodes[] = {
+> +
+> +description: |
+> +  OMAP5, DRA7, and AM57 family of SoCs have Class0 AVS eFuse registers which
+> +  contain data that can be used to adjust voltages programmed for some of their
+> +  supplies for more efficient operation. This binding provides the information
+> +  needed to read these values and use them to program the main regulator during
+> +  an OPP transitions.
+> +
+> +  Also, some supplies may have an associated vbb-supply which is an Adaptive Body
+> +  Bias regulator which much be transitioned in a specific sequence with regards
+> +  to the vdd-supply and clk when making an OPP transition. By supplying two
+> +  regulators to the device that will undergo OPP transitions we can make use
+> +  of the multi regulator binding that is part of the OPP core described
+> +  to describe both regulators needed by the platform.
+> +
+> +maintainers:
+> +  - Nishanth Menon <nm@ti.com>
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: '^opp-supply(@[0-9a-f]+)?$'
+> +
+> +  compatible:
+> +    oneOf:
+> +      - description: Basic OPP supply controlling VDD and VBB
+> +        items:
+> +          - const: ti,omap-opp-supply
+> +      - description: OMAP5+ optimized voltages in efuse(Class 0) VDD along with
+> +          VBB.
+> +        items:
+> +          - const: ti,omap5-opp-supply
+> +      - description: OMAP5+ optimized voltages in efuse(class0) VDD but no VBB
+> +        items:
+> +          - const: ti,omap5-core-opp-supply
+> +
+> +  reg:
+> +    description: Address and length of the efuse register set for the device
 
--- 
-2.41.0
+Drop
 
+> +    maxItems: 1
+> +
+> +  ti,absolute-max-voltage-uv:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Absolute maximum voltage for the OPP supply
+> +
+> +  ti,efuse-settings:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> +    description: An array of u32 tuple items providing information about
+> +      optimized efuse configuration. Each item consists of the following
+> +      voltage_in_uV - reference voltage (OPP Voltage)
+> +      efuse_offset - efuse offset fromr eg where the optimized voltage is
+> +        stored.
+> +    items:
+> +      minItems: 2
+> +      maxItems: 2
+
+Constraints on the values?
+
+> +    minItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - ti,absolute-max-voltage-uv
+> +
+> +allOf:
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              const: ti,omap-opp-supply
+> +    then:
+> +      required:
+> +        - reg
+> +        - ti,efuse-settings
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    opp_supply_mpu_iva_hd: opp-supply {
+
+Drop unused labels.
+
+> +        compatible = "ti,omap-opp-supply";
+> +        ti,absolute-max-voltage-uv = <1375000>;
+> +    };
+> +  - |
+> +    opp_supply_mpu: opp-supply@4a003b20 {
+> +        compatible = "ti,omap5-opp-supply";
+> +        reg = <0x4a003b20 0x8>;
+> +        ti,efuse-settings =
+> +            /* uV   offset */
+> +            <1060000 0x0>,
+> +            <1160000 0x4>,
+> +            <1210000 0x8>;
+> +        ti,absolute-max-voltage-uv = <1500000>;
+> +    };
+> +  - |
+> +    opp_supply_mpu2: opp-supply@4a003b00 {
+> +        compatible = "ti,omap5-core-opp-supply";
+> +        reg = <0x4a003b00 0x8>;
+> +        ti,efuse-settings =
+> +            /* uV   offset */
+> +            <1060000 0x0>,
+> +            <1160000 0x4>,
+> +            <1210000 0x8>;
+> +        ti,absolute-max-voltage-uv = <1500000>;
+> +    };
+
+The 3rd example doesn't add anything. It's just different values.
+
+Rob
