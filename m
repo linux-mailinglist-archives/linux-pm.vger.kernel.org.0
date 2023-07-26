@@ -2,115 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DC9763DF0
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C887876400A
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 21:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjGZRw2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 13:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S232358AbjGZTze (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 15:55:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjGZRw1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:52:27 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7B4121
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:52:25 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4fb7373dd35so1636713e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:52:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690393944; x=1690998744;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YVO58FHteX4EULGG7zXipTSlDy4hu/mSuvZkpOily3k=;
-        b=PUJKuuwbKJfeKRKVxAwkioiHsnhQnMcjDgPXnxMNjttnEDE/+BglDX63I+M+Mx3tzS
-         gBwfZCr0zrRydMqQzWyxc6sZK8LPkkdMSFaZiCohklR02uIV67S1PvjqxdiAiUFzPdMk
-         nVmFQKDgzfEyYjVy6FeSPe3Yw1y1PEvQuRI7uMEv0y8x+5bSVvzaE/S3FZFE17t7oGdP
-         6O5OIBvujJ72/6ZTYdpm9kvln0Gbv9GvdZGYmBz91olHvOw10WrCBt3eDu5QO4qRFvDN
-         YaLtKEl6I1t8CUbky8a9DZz3Ez9SwnfJ1OFeNphOjwQtxBLJqMhq98iUBVPTXNKNf+am
-         UbIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690393944; x=1690998744;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YVO58FHteX4EULGG7zXipTSlDy4hu/mSuvZkpOily3k=;
-        b=b35iC9PHJrRtv3XTCx9w5FDLTHMePtJdP7HENJaJuLX4TUUoX78B/7AkGTm8fnq2xT
-         VLHE4f11howp4MlBWgqGOLFZQ2mXXx+P2hHQ17o7QFgUYF7/aGDerU56gXFTBrh3mo9b
-         a9qrYPmpZNUbdAYo23qvbyTMSJWxrrl2ad6SkFTuMHv7PqetGrMiIuJ1PXvZL0LwGwnA
-         FC9Kz0tyAI29+BjFr+JnQ5s3rMHMcMQQHZNcC6hL/77AgPWm94TSdswvYqVCxybUTJkz
-         HpJVcc/AsO/byQ6TP6Po5v0ZVCOYdGguHhBWCuH9Zkb0NeJ4YlCuKZtle8GeSHRgCvrV
-         eqJA==
-X-Gm-Message-State: ABy/qLbwjGXlE0mT0pZcF6HW8b61X9aiFyKtJr47sjysspw6f944ATuf
-        NZMrtgi5R+94YjYyrdMUbUn24g==
-X-Google-Smtp-Source: APBJJlF1UQJUHoAPg9+WkjejxrUhgoGYxVfQf96mmywhElB413YJ2401ozJWhPfN+wGMUT1phLJbRQ==
-X-Received: by 2002:a19:f704:0:b0:4fb:103f:7d56 with SMTP id z4-20020a19f704000000b004fb103f7d56mr74778lfe.14.1690393943803;
-        Wed, 26 Jul 2023 10:52:23 -0700 (PDT)
-Received: from [192.168.1.101] (abyl5.neoplus.adsl.tpnet.pl. [83.9.31.5])
-        by smtp.gmail.com with ESMTPSA id q2-20020a19a402000000b004fde41a2059sm2997365lfc.305.2023.07.26.10.52.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 10:52:23 -0700 (PDT)
-Message-ID: <88658e21-c8eb-47de-9c4d-76a3f645af0e@linaro.org>
-Date:   Wed, 26 Jul 2023 19:52:21 +0200
+        with ESMTP id S232421AbjGZTzX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 15:55:23 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F502691;
+        Wed, 26 Jul 2023 12:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=XyTW0Ej/ctvX5mhAYSsUtLai+EJ8srqN7zialJMkLmE=; b=hM1wJiCXTM2z10qaH70Y3td19Q
+        RcNkzv2osxtg8g5vj9sDJvWhn20I2tyHdnfNRVCieOfO++Y9Q3cl6+xO7wjUeov18fOZuZlG+hbPi
+        HUDwSYX/Nlfs1QoXzUQehGHWijgiU7cp3U79zFxvgoVlpDsyGPAVt9iOYENQ8E8R5m7zRPHoMFiF4
+        2ZCQVJm86wwBgM+/ZGkpklArFaA1/clBOci/PfKeaZ+ldYZjK2AbJ+Nk0Xdxb+TDkrL1/+XoWsVXa
+        ujTRXxt/hpfEFtfai3OXujo2NVSNvmdOm/34N4u2U50WMJAYFE8mlQjPbUeqxEX36eEWrTdxEevL9
+        xAj7AhOg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qOkan-005ynS-0H;
+        Wed, 26 Jul 2023 19:54:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 465A730056F;
+        Wed, 26 Jul 2023 21:54:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0952E201BD673; Wed, 26 Jul 2023 12:25:12 +0200 (CEST)
+Date:   Wed, 26 Jul 2023 12:25:12 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v5 4/4] intel_idle: Add ibrs_off module parameter to
+ force disable IBRS
+Message-ID: <20230726102512.GD3802077@hirez.programming.kicks-ass.net>
+References: <20230710194857.2898284-1-longman@redhat.com>
+ <20230710194857.2898284-5-longman@redhat.com>
+ <f5f25279-bbb5-e040-aeaa-dd3d8686c670@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] interconnect: qcom: qcm2290: Set AB coefficients
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org>
- <20230726-topic-icc_coeff-v1-2-31616960818c@linaro.org>
- <ZMFVZJa647SNwrJX@gerhold.net>
- <5667c93a-408f-3802-b168-f3a145dfcb43@linaro.org>
- <ZMFXNZbYdpnFVsoV@gerhold.net>
- <0e5e5343-1831-c922-8f79-93cb9073dee3@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <0e5e5343-1831-c922-8f79-93cb9073dee3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f5f25279-bbb5-e040-aeaa-dd3d8686c670@redhat.com>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,34 +72,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26.07.2023 19:46, Konrad Dybcio wrote:
-> On 26.07.2023 19:26, Stephan Gerhold wrote:
->> On Wed, Jul 26, 2023 at 07:20:27PM +0200, Konrad Dybcio wrote:
->>> On 26.07.2023 19:18, Stephan Gerhold wrote:
->>>> On Wed, Jul 26, 2023 at 06:25:44PM +0200, Konrad Dybcio wrote:
->>>>> Some buses need additional manual adjustments atop the usual
->>>>> calculations. Fill in the missing coefficients.
->>>>>
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>>
->>>> What about the funny util-fact/vrail-comp on the mas-apps-proc node
->>>> downstream?
->>> Can't see it neither on msm-5.4 (with the icc API) nor in the 4.19 (msmbus)
->>> device tree.
->>>
->>
->> Not sure where to get up-to-date device trees nowadays. The AOSP repo
->> I was looking at has this commit where it was added:
->> https://android.googlesource.com/kernel/msm-extra/devicetree/+/02f8c342b23c20a5cf967df649814be37a08227c%5E%21/#F0
-> Oh right, take a look at this one:
+On Tue, Jul 25, 2023 at 04:45:49PM -0400, Waiman Long wrote:
+> On 7/10/23 15:48, Waiman Long wrote:
+> > Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+> > disables IBRS when the cstate is 6 or lower. However, there are
+> > some use cases where a customer may want to use max_cstate=1 to
+> > lower latency. Such use cases will suffer from the performance
+> > degradation caused by the enabling of IBRS in the sibling idle thread.
+> > Add a "ibrs_off" module parameter to force disable IBRS and the
+> > CPUIDLE_FLAG_IRQ_ENABLE flag if set.
+> > 
+> > In the case of a Skylake server with max_cstate=1, this new ibrs_off
+> > option will likely increase the IRQ response latency as IRQ will now
+> > be disabled.
+> > 
+> > When running SPECjbb2015 with cstates set to C1 on a Skylake system.
+> > 
+> > First test when the kernel is booted with: "intel_idle.ibrs_off"
+> >    max-jOPS = 117828, critical-jOPS = 66047
+> > 
+> > Then retest when the kernel is booted without the "intel_idle.ibrs_off"
+> > added.
+> >    max-jOPS = 116408, critical-jOPS = 58958
+> > 
+> > That means booting with "intel_idle.ibrs_off" improves performance by:
+> >    max-jOPS:   1.2%, which could be considered noise range.
+> >    critical-jOPS: 12%, which is definitely a solid improvement.
+> > 
+> > The admin-guide/pm/intel_idle.rst file is updated to add a description
+> > about the new "ibrs_off" module parameter.
+> > 
+> > Signed-off-by: Waiman Long <longman@redhat.com>
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
+> >   drivers/idle/intel_idle.c                   | 11 ++++++++++-
+> >   2 files changed, 26 insertions(+), 2 deletions(-)
 > 
-> https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/commit/201df022706e100cef8d28983c6a7b883fcaec5a
-> 
-> I guess I'll need to update the icc driver then.
-Moreover, this having vrail-comp = 96, means I'll have to go with
-the wrecked downstream way of *(100/(percent)) instead of
-*(percent/100)...
+> Ping! Is there further suggested changes for this patch series or is it good
+> enough to be merged?
 
-I also noticed that sm6125 makes very heavy use of per-node clocks..
-
-Konrad
+I suppose I'll go stick it in x86/core unless someone objects.
