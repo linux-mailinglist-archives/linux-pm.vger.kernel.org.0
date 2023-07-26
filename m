@@ -2,213 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8878763DD0
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6591763DE4
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbjGZRiZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 13:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37412 "EHLO
+        id S231552AbjGZRq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 13:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbjGZRiY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:38:24 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747DF270D
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:38:18 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-486519e5da0so20153e0c.2
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:38:18 -0700 (PDT)
+        with ESMTP id S231802AbjGZRq0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:46:26 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE302728
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:46:21 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fba03becc6so1662682e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:46:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1690393097; x=1690997897;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jAoa5484CZY48lrZO0T4PcNaq9sK56tsV3+XyIPzJFw=;
-        b=dWRTzbnGoYA4rwgZyCQCoyOwfw1nyvpZQ6Ivlk0Oisw3nn6hVK9z8kFiZrDSlnUsBU
-         VKaZRqp0Lis24+x2iMUgKCE4iWgGqL4+w86RJT3PFK/pGAmFIbjI7l7CrD5rJc/eXJKS
-         b/AQEOLrVbVeWJbpyQ4J7mYvUawEznSoezySg=
+        d=linaro.org; s=google; t=1690393580; x=1690998380;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DAOp2wTsOv7dVIC8g3WfkG1LXpVqrRxAqcUivavPBHE=;
+        b=CflZLy88F37RksY7HxEtkp22EFvW+UOYRHPOS8S9TBXiK2KgVgLcAGpL1ze9iQnI0q
+         /DVhjfd84Rn82Qmos9s8LPCVQ6l5sf0WUVRd3rvPoidJWKxMnx2HfRCrPoxKozo4w78Z
+         F2M06WvX10BDDlKCFVaMguhiar+w+hObzh3i+hrgCSARGmldVViS8DB6atC7VPxfBi5G
+         C185Q+2BZrBVV5ccYDJhaFHBjAM0HVZm0+62xN72S00bvoCn3JTh7VjqNhZ4dt+1I2fC
+         yMAPXti+pwIDxb6CrJJrmydoLFNzMqTLcFCq1XM3e7U02cXzHXj6KXfWJzR1+6zi2KbD
+         rifg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690393097; x=1690997897;
-        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jAoa5484CZY48lrZO0T4PcNaq9sK56tsV3+XyIPzJFw=;
-        b=QxC2C+1hqxiNQzkRFHOiCh+yYcm8b+fl5A2ffxMDS6zaIaf6QEBmoGYRrHo/I2eyc3
-         DEvstLPc1rE0iWIoOYUj/R25VcyhvCbJooNSRY5eYwLJFdKWoKuEa2hgHBEGzavSL+hN
-         lvL6QmLWvF63zDNzIMereg5Vdwixkv3omE8bjqOHeBU9Vd16+llIrSMMzms2K1TAYF4O
-         1c/zNImb8YzWD941987CwQRPyi2HCoyF/+XzRvxdRHOPtSzdb09vGl6CmLjlLp+0zuWT
-         tprTSLZWJafyX4feW3lP862LkkJP8jwLpjHO9XUjvlY0ZLQvzmZnSKtm1E9H983oIfNQ
-         LzQA==
-X-Gm-Message-State: ABy/qLbCP7FtsRnnJlhXH4yuOzlDTRhhKF0bXpFAdDOqIu1JqoOlJySd
-        +sCYc8TFpfsu9X5IYuXhy/SDaQ==
-X-Google-Smtp-Source: APBJJlF3KKEZHtpJ7x2NqVlyg7QWBRnIwqGgVUVT1SS11DSs12JW8Z0dyEKh5KY053/kWoyaThGMYw==
-X-Received: by 2002:a1f:dac6:0:b0:471:348a:7b8d with SMTP id r189-20020a1fdac6000000b00471348a7b8dmr1233804vkg.8.1690393097463;
-        Wed, 26 Jul 2023 10:38:17 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i5-20020a0cf485000000b0063d03e59e07sm2322899qvm.130.2023.07.26.10.38.15
+        d=1e100.net; s=20221208; t=1690393580; x=1690998380;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DAOp2wTsOv7dVIC8g3WfkG1LXpVqrRxAqcUivavPBHE=;
+        b=DAatGw5IEQ/Bb9nUmQk+HDAJ9hTN7aALlGFSQ1SxaSC60gXCejcPHBUW8xG+nkSSCL
+         MzzLVLtaWAhvMdu+MePAGy1rXv8XCDOobzzWfQr85OYaPJF75y3czz34swjAr3zHlmxQ
+         eIIGT5fjHj2KpCVBe5XKXTkH+3sesrskAU/SODOkovprt7EsvAKv1IdNZZnCnAH7D16x
+         PdstBqG/2FP3+tAujH1SMgtn4X4+BsrernkjXQozaHnlr19xFuQhaHfxWaqBrdFc3KJ0
+         BHpt1a8kPyxb5a55o6Yx5VQ9hFgBQ/UGKAnQcpEjAQjpS7S6jpv6kf22knENF6dxI0iP
+         jd5Q==
+X-Gm-Message-State: ABy/qLZw7+bEHSeIMzwUio59jyzKZSffiQsJCbpR0Mi2Gv2y9mt6y2mp
+        ZVPDCWLpCNvBPtMpHqRag4AUEQ==
+X-Google-Smtp-Source: APBJJlEUnRX0sisPCFb4JA5/mRFwropHhnlJHPpvL7xIMYTEg1ASCWgRbzXDQaSDpXzKVqAYU/x5uw==
+X-Received: by 2002:a19:ca4e:0:b0:4f9:5693:3d2c with SMTP id h14-20020a19ca4e000000b004f956933d2cmr54554lfj.34.1690393580109;
+        Wed, 26 Jul 2023 10:46:20 -0700 (PDT)
+Received: from [192.168.1.101] (abyl5.neoplus.adsl.tpnet.pl. [83.9.31.5])
+        by smtp.gmail.com with ESMTPSA id a4-20020a19f804000000b004fdbb36a677sm3411912lff.288.2023.07.26.10.46.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 10:38:16 -0700 (PDT)
-Message-ID: <a11ed0d1-7e1a-a968-a844-fc89d60a6482@broadcom.com>
-Date:   Wed, 26 Jul 2023 10:38:13 -0700
+        Wed, 26 Jul 2023 10:46:19 -0700 (PDT)
+Message-ID: <0e5e5343-1831-c922-8f79-93cb9073dee3@linaro.org>
+Date:   Wed, 26 Jul 2023 19:46:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RFC PATCH 0/4] Implement a PSCI SYSTEM_RESET2 reboot-mode driver
-To:     Elliot Berman <quic_eberman@quicinc.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, kernel@quicinc.com,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>,
-        Prasad Sodagudi <quic_psodagud@quicinc.com>
-References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
- <65afff8f-fd02-1344-56b5-f9e3deda1d47@broadcom.com>
- <7b2f5af5-a704-ede7-1c6f-a2f0eb5b988f@quicinc.com>
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-In-Reply-To: <7b2f5af5-a704-ede7-1c6f-a2f0eb5b988f@quicinc.com>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002022e30601675043"
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] interconnect: qcom: qcm2290: Set AB coefficients
+Content-Language: en-US
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org>
+ <20230726-topic-icc_coeff-v1-2-31616960818c@linaro.org>
+ <ZMFVZJa647SNwrJX@gerhold.net>
+ <5667c93a-408f-3802-b168-f3a145dfcb43@linaro.org>
+ <ZMFXNZbYdpnFVsoV@gerhold.net>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <ZMFXNZbYdpnFVsoV@gerhold.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---0000000000002022e30601675043
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-On 7/25/23 13:27, Elliot Berman wrote:
-> 
-> 
-> On 7/25/2023 12:12 PM, Florian Fainelli wrote:
->> Hello,
->>
->> On 7/24/23 15:30, Elliot Berman wrote:
->>> PSCI implements a restart notifier for architectural defined resets.
->>> The SYSTEM_RESET2 call allows vendor firmware to define additional reset
->>> types which could be mapped to the reboot reason.
+On 26.07.2023 19:26, Stephan Gerhold wrote:
+> On Wed, Jul 26, 2023 at 07:20:27PM +0200, Konrad Dybcio wrote:
+>> On 26.07.2023 19:18, Stephan Gerhold wrote:
+>>> On Wed, Jul 26, 2023 at 06:25:44PM +0200, Konrad Dybcio wrote:
+>>>> Some buses need additional manual adjustments atop the usual
+>>>> calculations. Fill in the missing coefficients.
+>>>>
+>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 >>>
->>> Implement a driver to wire the reboot-mode framework to make vendor
->>> SYSTEM_RESET2 calls on reboot.
->>>
->>> This is a continuation from 
->>> https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
+>>> What about the funny util-fact/vrail-comp on the mas-apps-proc node
+>>> downstream?
+>> Can't see it neither on msm-5.4 (with the icc API) nor in the 4.19 (msmbus)
+>> device tree.
 >>
->> Would appreciate being CC'd on a the non-RFC postings of this patch. 
->> FWIW, my use case is better described with this earlier submission:
->>
->> https://lore.kernel.org/lkml/20220122035421.4086618-1-f.fainelli@gmail.com/T/#m74e4243c1af3a8d896e19b573b58f562fa09961d
->>
->> It would be neat if I could leverage your driver in order to implement 
->> this custom "reboot powercycle" implementation. Towards that goal, we 
->> would likely need to specify the desired reboot "sub" operation 
->> alongside its PSCI SYSTEM_RESET2 reboot type argument?
->>
->> Thanks!
 > 
-> I think you you want to describe the PSCI vendor reset under a warm 
-> reboot with command "powercycle"? In other words, my series only lets DT 
-> describe either reboot_mode (warm) or cmd (powercycle) but not both 
-> simultaneously?
+> Not sure where to get up-to-date device trees nowadays. The AOSP repo
+> I was looking at has this commit where it was added:
+> https://android.googlesource.com/kernel/msm-extra/devicetree/+/02f8c342b23c20a5cf967df649814be37a08227c%5E%21/#F0
+Oh right, take a look at this one:
 
-I did not give a lot of thoughts into the different types of reboot 
-(warm, soft, cold) and just went with an extension of whichever reboot 
-type we have to be supplemented by the "powercycle" command. It seems 
-like we should support both the reboot type and command, it would be 
-fine with me if I had to specify reboot_mode + cmd for each reboot_mode.
--- 
-Florian
+https://git.codelinaro.org/clo/la/kernel/msm-4.14/-/commit/201df022706e100cef8d28983c6a7b883fcaec5a
 
+I guess I'll need to update the icc driver then.
 
---0000000000002022e30601675043
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIO5laKgBSpKKS+tj
-9xFPAcrqEA3qFM4+bTxXnW58SsCzMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDcyNjE3MzgxN1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCmNG22aBbfUBTrVh1FBleCgaUCFxjKM0Qf
-zN6kQVupHwMCs8KKBV74W756dMnXFSSdb1PbNXP+Nwh+tdQb/J71MFyIIVUl4HSXNZorZP+zPztF
-W+1SI1csieSJjmkkhpMAHEOeu4OWmzG/cjeVXsKboDW3Puau8EYvLSytAxtUF1IhmXlYNHRoPpbK
-PS6T0tiMHCIxn9cha/6e9rwfn+76BRGveLpRvLv58g11Q5Nc6lUBb/7Atfg3BirF2YDIVdBCfEQG
-PYvdCieQfejdZZ97lUBxgKvN1L53XcMThjIH/ldFvQjpaGUOQy32IuWPluYAUAiAjrmWTr9pnQHc
-ZKtG
---0000000000002022e30601675043--
+Konrad
