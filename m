@@ -2,139 +2,167 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09CF763D79
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6423763D7E
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:19:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbjGZRSd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 13:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55424 "EHLO
+        id S232191AbjGZRTN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 13:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbjGZRSd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:18:33 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C6F1739;
-        Wed, 26 Jul 2023 10:18:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1690391909; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=LmoBsfkprok2JdskejKv8QNRAuiOGUxv4wVVG8V36mVIS9AqZIMiHEhLUZnAebj0+P
-    ikBDu3dGq03dcFE7lIlPLyrIMtQKatC+hGIuXxmn/AIjxbHTy0PR+3Us9owUfE+/YMgW
-    anywCoec386orfpFprDnt+cpkSBaRyMlleFasJob7G4zhO56rkKlfXWyGHmyEIeSs92f
-    sZO70yXi0Yje0m5n8Yst7QW4qOHxxe23aaCsI5vsFrq5UGQdANvXYGrE+yAOmmmxOqju
-    E+GI3lRRGfLeWvKg5Rq+jh/ZF20D/JLl/7Ao/9VJQuLnW8h44qO+Aw3RSgLJn/Qc55vg
-    9Nkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1690391909;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=r9XmkMSBZZnfjPZy2JUQN2IdCnIr83J3mJ8F/eSuAWA=;
-    b=PCrtK4fbSLoltux5qZhSncEERwEuNeuF0upof29rzs6WtdgurQAySWfAPpX03jFURD
-    1gpZ1C2yJmZFOl4hnhOyUTyGwYsYcUpSRLrNFR4/3MA81QBAe5jCYNWnMiRi/eIet0ph
-    3Pr95qQXRhvU8wpgdM+8NkqBhT8JtnFc8Vkt9pOXAv+yFgSy7oh0//+t4Lz1gtWua2gt
-    /M77PVoiMbCd7u00Ew3VmYCwyTb68D+pkTVBaqjSrvHogW86tNO1sdIxmgHF5LWV5NBp
-    e7exEpADvnMSiKskfUYuDE1Zk52eRydgbw0vDwn1BMx8UmJF+I9M65kHWOasya8lfeLJ
-    g7gw==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1690391909;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=r9XmkMSBZZnfjPZy2JUQN2IdCnIr83J3mJ8F/eSuAWA=;
-    b=B9xdC13OLl1hA8/L46POHzmKE/CBz7QReg3y6HQ6USUYX2E10z6tkVXIrudIxvYyQw
-    3TshDP3RxKfGduh118V7FCJuXMtA+eFmHriVp7U3KlJgwEYYWdzlx8K7pPIckpbcaZxU
-    9bxFKxHnFNIuoBNJ2dd7XRdvXm1uNWOpSIuv53SjS/HABOtbwPj8aX5dhTHYIF8nfYQ9
-    SrZV4VfibXdqBbTx6eesv13doNk1mX0viF6hcKdg0ONgzjeCcyfV543wd9VfaV1w6d4E
-    OXu8ZY5vUPm5O2mc97MQKNQyh1OKtYh6pMBOF7O7VlB4v+g5E620/YGSXQD0Y73LGraa
-    ++Gg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1690391909;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=r9XmkMSBZZnfjPZy2JUQN2IdCnIr83J3mJ8F/eSuAWA=;
-    b=9MSTBmmsVO5k3GG845I22dBGqIesjpzQmXM5U8Vc0dpxWlnS37uUqjZLR5srCaDnYA
-    eRRjrZ5g/EP18XR9lAAA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4peA95vh"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.6 DYNA|AUTH)
-    with ESMTPSA id k61817z6QHIT8Er
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 26 Jul 2023 19:18:29 +0200 (CEST)
-Date:   Wed, 26 Jul 2023 19:18:28 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] interconnect: qcom: qcm2290: Set AB coefficients
-Message-ID: <ZMFVZJa647SNwrJX@gerhold.net>
-References: <20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org>
- <20230726-topic-icc_coeff-v1-2-31616960818c@linaro.org>
+        with ESMTP id S232177AbjGZRTM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:19:12 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC061BEF;
+        Wed, 26 Jul 2023 10:19:09 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36QEvO8G020366;
+        Wed, 26 Jul 2023 17:18:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5KZiOW1XU4bwOICJyswhFDaw7amgTZ5yGRX8/IBveEY=;
+ b=i2ONY31ZLqtORvyOIx6zV+fmuvNW8uzRyzyNns/kx1bIMcUfYHb/xPVt5ZXwaHd+4+te
+ 13LrrqzVPrz6hJf2w3zctDB/D7XmMVwDoQW5d3mCm/vVy1yKpbQzjOgiWlBcJ3tY4/yi
+ HtW2THgc9/fdjT/noUMZGYtXRdIID6fhV87PVMskjyfOl+jE3FjHXw8/piTRZvgSDgCT
+ ORGQiLHPLcr598SfYQgkRrsWe57dlEDNbIQHitHSGx07ZMYMKi+mPOv7za17EUIH5aPJ
+ eydqAJOY6E2yk3s2DTfy+dcDDhpDQfVSFvnwuTZxDTqpBqZCnOBE5+ijvOsR73di3wVW xA== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s2v4thj3p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jul 2023 17:18:58 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36QHIvOD031013
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jul 2023 17:18:57 GMT
+Received: from [10.71.109.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 26 Jul
+ 2023 10:18:56 -0700
+Message-ID: <fc97d073-f8c8-1166-db99-3d7c0313a350@quicinc.com>
+Date:   Wed, 26 Jul 2023 10:18:56 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230726-topic-icc_coeff-v1-2-31616960818c@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC PATCH 3/4] dt-bindings: power: reset: Document
+ arm,psci-vendor-reset
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <kernel@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        "Prasad Sodagudi" <quic_psodagud@quicinc.com>
+References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
+ <20230724223057.1208122-4-quic_eberman@quicinc.com>
+ <20230724232328.GA1101352-robh@kernel.org>
+ <0e72a1a0-611c-9667-866e-a4a1f67f10f6@quicinc.com>
+ <CAL_Jsq+wJbp7-xoUqorkoieLcxRVnEKDeFNYtdZQdBTg3gWSew@mail.gmail.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <CAL_Jsq+wJbp7-xoUqorkoieLcxRVnEKDeFNYtdZQdBTg3gWSew@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QHOwOPLLr8KK9aUM57QeelC0PEWmH4jq
+X-Proofpoint-GUID: QHOwOPLLr8KK9aUM57QeelC0PEWmH4jq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-26_08,2023-07-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 bulkscore=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2306200000 definitions=main-2307260154
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 06:25:44PM +0200, Konrad Dybcio wrote:
-> Some buses need additional manual adjustments atop the usual
-> calculations. Fill in the missing coefficients.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-What about the funny util-fact/vrail-comp on the mas-apps-proc node
-downstream?
 
-Thanks,
-Stephan
+On 7/26/2023 6:45 AM, Rob Herring wrote:
+> On Tue, Jul 25, 2023 at 12:01 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 7/24/2023 4:23 PM, Rob Herring wrote:
+>>> On Mon, Jul 24, 2023 at 03:30:53PM -0700, Elliot Berman wrote:
+>>>> Add devicetree bindings for using PSCI SYSTEM_RESET2 with vendor reset  types.
+>>>>
+>>>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>>>> ---
+>>>>    .../power/reset/arm,psci-vendor-reset.yaml    | 35 +++++++++++++++++++
+>>>>    MAINTAINERS                                   |  1 +
+>>>>    2 files changed, 36 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..18b0b8c167a1
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-reset.yaml
+>>>> @@ -0,0 +1,35 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +# Copyright 2023 Qualcomm Innovation Center, Inc. All Rights Reserved.
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/power/reset/arm,psci-vendor-reset.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: PSCI SYSTEM_RESET2 Vendor Resets
+>>>> +
+>>>> +maintainers:
+>>>> +  - Elliot Berman <quic_eberman@quicinc.com>
+>>>> +
+>>>> +description: |
+>>>> +  PSCI SYSTEM_RESET2 supports vendor-defined reset types. This describes
+>>>> +  the conversion of reboot modes to the reset types.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: arm,psci-vendor-reset
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: reboot-mode.yaml#
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    firmware {
+>>>> +      psci-vendor-resets {
+>>>> +        compatible = "arm,psci-vendor-reset";
+>>>
+>>> We already have a node for PSCI, we don't need a second one. You can
+>>> have a separate driver without a separate node.
+>>>
+>>
+>> I could also place the reboot-mode functionality straight into
+>> drivers/firwmare/psci/? I thought that might be more controversial than
+>> separate driver, but maybe not?
+>>
+>> Mark/Loreno, do you have any concerns to add the reboot-mode driver
+>> functionality directly in drivers/firmware/psci/psci.c?
+> 
+> I'm talking about the binding. Why are you talking about driver
+> design? They are independent.
 
-> ---
->  drivers/interconnect/qcom/qcm2290.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/interconnect/qcom/qcm2290.c b/drivers/interconnect/qcom/qcm2290.c
-> index 3c3b24264a5b..457e5713ae43 100644
-> --- a/drivers/interconnect/qcom/qcm2290.c
-> +++ b/drivers/interconnect/qcom/qcm2290.c
-> @@ -1198,6 +1198,7 @@ static const struct qcom_icc_desc qcm2290_bimc = {
->  	.regmap_cfg = &qcm2290_bimc_regmap_config,
->  	/* M_REG_BASE() in vendor msm_bus_bimc_adhoc driver */
->  	.qos_offset = 0x8000,
-> +	.ab_percent = 153,
->  };
->  
->  static struct qcom_icc_node * const qcm2290_cnoc_nodes[] = {
-> @@ -1324,6 +1325,7 @@ static const struct qcom_icc_desc qcm2290_mmnrt_virt = {
->  	.bus_clk_desc = &mmaxi_0_clk,
->  	.regmap_cfg = &qcm2290_snoc_regmap_config,
->  	.qos_offset = 0x15000,
-> +	.ab_percent = 142,
->  };
->  
->  static struct qcom_icc_node * const qcm2290_mmrt_virt_nodes[] = {
-> @@ -1339,6 +1341,7 @@ static const struct qcom_icc_desc qcm2290_mmrt_virt = {
->  	.bus_clk_desc = &mmaxi_1_clk,
->  	.regmap_cfg = &qcm2290_snoc_regmap_config,
->  	.qos_offset = 0x15000,
-> +	.ab_percent = 139,
->  };
->  
->  static const struct of_device_id qcm2290_noc_of_match[] = {
-> 
-> -- 
-> 2.41.0
-> 
+Apologies, I agree to make it part of the same node. I believe it 
+requires some changes to PSCI driver to create/bind the vendor restart 
+device. I wanted to see how Mark and Lorenzo wanted to incorporate the 
+vendor resets into PSCI driver: maybe I don't even create a 
+device/driver and simply incorporate the changes into PSCI driver directly.
