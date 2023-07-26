@@ -2,109 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E2F763F3B
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 21:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D4F763F50
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 21:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjGZTIh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 15:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S229690AbjGZTPi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 15:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjGZTIg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 15:08:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4BC2118;
-        Wed, 26 Jul 2023 12:08:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99F2061CAD;
-        Wed, 26 Jul 2023 19:08:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15D2EC433C7;
-        Wed, 26 Jul 2023 19:08:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690398515;
-        bh=OurcV5HpRVLK1XUrzTmVNWsTbF3nZTOhXhHNtj2lVtE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O4dtxJnzTeEabAkzv9fCJBbjOxlhQov5Thq3LOh6aEaQsEZEEP5rH3b3WaIQSbDsl
-         TJnBWUP1sjH5gEeJOXf7UlfZ/4rSKSNkX6E9ymVHJktVf6bKb7mhKmX3hNXXrB4BVx
-         bcS2q3gSjD4Wo04uXZqpRanrO82BsmFwzmCPSyzcf8OMd0an9fJaCs3TrAM5zNrRXk
-         kyZ1xl/lXlhHbF7emUM0M1rXiGlBSm9Hy4M9XvsqIlFsfBSAnDFW8tIBcLnVOcsyUG
-         YYXDc9Zk1Us8EtNDA49za/VlZCtmj6ctETD1rXW5aU99tcDPBQojUZQIolP2ZlJ3gL
-         ypri348288mlw==
-Date:   Wed, 26 Jul 2023 20:08:28 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Hugh Dickins <hughd@google.com>, Will Deacon <will@kernel.org>,
-        Icenowy Zheng <uwu@icenowy.me>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-sunxi@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] thermal/of: Fix double free of params during
- unregistration
-Message-ID: <e02366cf-4142-45af-a385-5dedf5c7069a@sirena.org.uk>
-References: <20230723-thermal-fix-of-memory-corruption-v1-1-ed4fa16d199d@kernel.org>
- <f559a614-93d5-121a-8ff3-0da77bc85f44@linaro.org>
- <ZL054LHAZv8VmIk3@finisterre.sirena.org.uk>
- <CAJZ5v0jJ+YM=7LUEKB_b5GUsGopLTT0eyPmomYV0OcGQp2gvig@mail.gmail.com>
- <a72ca5e0-556a-4d16-9c5e-2b342bb074c1@sirena.org.uk>
- <CAJZ5v0jybAspzV2sWduERaMhBWPSYN_USiUcO_=eRUBB6vB6GQ@mail.gmail.com>
+        with ESMTP id S229461AbjGZTPi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 15:15:38 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C26131;
+        Wed, 26 Jul 2023 12:15:35 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36QJFIWk004269;
+        Wed, 26 Jul 2023 14:15:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1690398918;
+        bh=8viffkmdRSAqQiaZaiNfDsEAp9acwNHcv0i3edBkfKE=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=rH7yYTVYSJyfwEyZkA+5eolnhSvQtkWqyE2CDBTaQ4Ba9P0sjwymvDxPgb4s9y0IB
+         pMTABBAxV9xlWDtbHs5sqCLKtL3uhXB111kvr5/yNonU9l/3Q6+njwznJM8Wd97NR9
+         KzxIU0CHrNnAe8p26L/dJ8EZL+7pLpQMiV8QWX0E=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36QJFIao026530
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Jul 2023 14:15:18 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 26
+ Jul 2023 14:15:18 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 26 Jul 2023 14:15:18 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36QJFIrl009402;
+        Wed, 26 Jul 2023 14:15:18 -0500
+Date:   Wed, 26 Jul 2023 14:15:18 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Tony Lindgren <tony@atomide.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>,
+        <linux-omap@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 4/5] dt-bindings: opp: Convert ti-omap5-opp-supply.txt to
+ yaml binding
+Message-ID: <20230726191518.xmx72pwon6lgd2kh@stoning>
+References: <20230724153911.1376830-1-nm@ti.com>
+ <20230724153911.1376830-5-nm@ti.com>
+ <20230726171056.GA1593547-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mwtn8GdYlabT5FrF"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jybAspzV2sWduERaMhBWPSYN_USiUcO_=eRUBB6vB6GQ@mail.gmail.com>
-X-Cookie: Life is the urge to ecstasy.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230726171056.GA1593547-robh@kernel.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 11:10-20230726, Rob Herring wrote:
+> On Mon, Jul 24, 2023 at 10:39:10AM -0500, Nishanth Menon wrote:
+> > Rename ti-omap5-opp-supply to be bit more generic omap-opp-supply and
+> > convert the binding to yaml.
+> > 
+> > Signed-off-by: Nishanth Menon <nm@ti.com>
+> > ---
+> >  .../bindings/opp/ti,omap-opp-supply.yaml      | 108 ++++++++++++++++++
+> >  .../bindings/opp/ti-omap5-opp-supply.txt      |  63 ----------
+> >  2 files changed, 108 insertions(+), 63 deletions(-)
+> >  create mode 100644 Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/opp/ti-omap5-opp-supply.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml b/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+> > new file mode 100644
+> > index 000000000000..ff1b3d8fea31
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+> > @@ -0,0 +1,108 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/opp/ti,omap-opp-supply.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Texas Instruments OMAP compatible OPP supply description
+> 
+> Drop "description"
 
---mwtn8GdYlabT5FrF
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+OK.
 
-On Wed, Jul 26, 2023 at 08:51:20PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Jul 26, 2023 at 8:47=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
+> 
+> > +
+> > +description: |
+> > +  OMAP5, DRA7, and AM57 family of SoCs have Class0 AVS eFuse registers which
+> > +  contain data that can be used to adjust voltages programmed for some of their
+> > +  supplies for more efficient operation. This binding provides the information
+> > +  needed to read these values and use them to program the main regulator during
+> > +  an OPP transitions.
+> > +
+> > +  Also, some supplies may have an associated vbb-supply which is an Adaptive Body
+> > +  Bias regulator which much be transitioned in a specific sequence with regards
+> > +  to the vdd-supply and clk when making an OPP transition. By supplying two
+> > +  regulators to the device that will undergo OPP transitions we can make use
+> > +  of the multi regulator binding that is part of the OPP core described
+> > +  to describe both regulators needed by the platform.
+> > +
+> > +maintainers:
+> > +  - Nishanth Menon <nm@ti.com>
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    pattern: '^opp-supply(@[0-9a-f]+)?$'
+> > +
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: Basic OPP supply controlling VDD and VBB
+> > +        items:
+> > +          - const: ti,omap-opp-supply
+> > +      - description: OMAP5+ optimized voltages in efuse(Class 0) VDD along with
+> > +          VBB.
+> > +        items:
+> > +          - const: ti,omap5-opp-supply
+> > +      - description: OMAP5+ optimized voltages in efuse(class0) VDD but no VBB
+> > +        items:
+> > +          - const: ti,omap5-core-opp-supply
+> > +
+> > +  reg:
+> > +    description: Address and length of the efuse register set for the device
+> 
+> Drop
 
-> > > Surely, they are present in my linux-next branch.
+Ack.
 
-> > Are they queued as fixes?
+> 
+> > +    maxItems: 1
+> > +
+> > +  ti,absolute-max-voltage-uv:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: Absolute maximum voltage for the OPP supply
+> > +
+> > +  ti,efuse-settings:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+> > +    description: An array of u32 tuple items providing information about
+> > +      optimized efuse configuration. Each item consists of the following
+> > +      voltage_in_uV - reference voltage (OPP Voltage)
+> > +      efuse_offset - efuse offset fromr eg where the optimized voltage is
+> > +        stored.
+> > +    items:
+> > +      minItems: 2
+> > +      maxItems: 2
+> 
+> Constraints on the values?
 
-> They are.
+As I recollect (been a while), it was variant per device. Did you have
+something in mind or a reference for me to look at?
 
-> >  It'd be really good to get these into v6.5,
-> > they're rendering the Allwinner platforms I have unusable.
+> 
+> > +    minItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - ti,absolute-max-voltage-uv
+> > +
+> > +allOf:
+> > +  - if:
+> > +      not:
+> > +        properties:
+> > +          compatible:
+> > +            contains:
+> > +              const: ti,omap-opp-supply
+> > +    then:
+> > +      required:
+> > +        - reg
+> > +        - ti,efuse-settings
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    opp_supply_mpu_iva_hd: opp-supply {
+> 
+> Drop unused labels.
 
-> I'm going to send a pull request with them tomorrow or on Friday.
+Will do.
 
-Ah, excellent - thanks!
+> 
+> > +        compatible = "ti,omap-opp-supply";
+> > +        ti,absolute-max-voltage-uv = <1375000>;
+> > +    };
+> > +  - |
+> > +    opp_supply_mpu: opp-supply@4a003b20 {
+> > +        compatible = "ti,omap5-opp-supply";
+> > +        reg = <0x4a003b20 0x8>;
+> > +        ti,efuse-settings =
+> > +            /* uV   offset */
+> > +            <1060000 0x0>,
+> > +            <1160000 0x4>,
+> > +            <1210000 0x8>;
+> > +        ti,absolute-max-voltage-uv = <1500000>;
+> > +    };
+> > +  - |
+> > +    opp_supply_mpu2: opp-supply@4a003b00 {
+> > +        compatible = "ti,omap5-core-opp-supply";
+> > +        reg = <0x4a003b00 0x8>;
+> > +        ti,efuse-settings =
+> > +            /* uV   offset */
+> > +            <1060000 0x0>,
+> > +            <1160000 0x4>,
+> > +            <1210000 0x8>;
+> > +        ti,absolute-max-voltage-uv = <1500000>;
+> > +    };
+> 
+> The 3rd example doesn't add anything. It's just different values.
 
---mwtn8GdYlabT5FrF
-Content-Type: application/pgp-signature; name="signature.asc"
+True, Thanks for catching.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTBbywACgkQJNaLcl1U
-h9DJAwf+LOgzoi94SHdFx4hT/g5LVRVy5zrZzmgIKPxiylVL6g6GhbULfxlm5CGM
-cUhr0GaUPQAsQ+rmtBQl4vaIVs05TP/O49ONJkprvv65RtFMrlU1KVfSP9T6b+Ar
-LB+lg5vj9SARr/wd4r/0uds7p+BV/uBvilr+oBWZKb5iqdnfZ1yoVeL4HziBaDGv
-MwT3y4WqdEDsFrhWe1ZS1AHMrn9Yw+/SoDq0GUfFXBscFGHoQ0P1utnwiiswkJG0
-t3UFL+iRZkbQrZh2H0VytzaLYgzRobbx9YvOaH2JkpL1/VHRq7E0joS7EEnizceN
-axab6/YLMDTlfUrxTENhMl7ZKE0aOQ==
-=yTTh
------END PGP SIGNATURE-----
-
---mwtn8GdYlabT5FrF--
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
