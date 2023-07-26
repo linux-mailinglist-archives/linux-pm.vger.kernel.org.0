@@ -2,182 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E0E7635C4
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 14:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D809763619
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 14:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbjGZMCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 08:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S232067AbjGZMSH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 08:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjGZMB7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 08:01:59 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58224E7E
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 05:01:58 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6b9ede6195cso5599987a34.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 05:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690372917; x=1690977717;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=twuF7CNt9sItgP2G+wun0ymCcO+4ADFhcc3cTlAhSLU=;
-        b=L2pP1T66VUA97kTMIT7zDsbk+Sj1U4LKl+x+uma0vuTcHTwZhwha6pzsA2Uo21AkyM
-         DTYRtPvoGZPTiNUjDj58nzV/gO1YXk/7YoxTrOYa3VFGs1SQdSLJ5FrNm6oPsVS27858
-         1TaD1nsizPSLGY9xfJQATDGvg3g5QdzI1PLF9MMoB+hvq5UoVZ/5EOF72Sk0XXc4PzU5
-         F4murQgk+c9gIxdKiBxrfHMEmu1J5d+z4lBn452m9DbU1if2+YJSoK9ArWRrM1mZaBOM
-         P+4SdRKts30leJFnLldgzucZDJyVZtaH3qpw9LzWFXOEX+tYXai8yBb4q8pgE6Y7JhbJ
-         HWcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690372917; x=1690977717;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=twuF7CNt9sItgP2G+wun0ymCcO+4ADFhcc3cTlAhSLU=;
-        b=J65uNQr8Y3KcZlnIWb1srWna1qHS2F7BKglBbjvATXYWk+RI5Yswr35F85hU7OtwuV
-         jww1pz92of8jVhxi6Rt1Pc9UPgNwb8TsviAuGH+fKl7soknd3PSeP6Gdnhoh6fVYhC+N
-         FVsezeWEpspr9N5xUCekyYpMfg6YV2Lsftp2B0lx0PeijjsdKsINx29Ca0royvld/LzF
-         IHtYOqMDJgcIZLRHLa4hwrBFuqkXfOwrVsuUY7ZL1wbextd85hEcfKnjMvJkeeaZKmiN
-         J27BcZvcv1iHvO/Mjml5xRoE2zrxGkGSDhlOyOq+aOxHyaYHhP29Ic2L8TthEIcCFZpo
-         3aqQ==
-X-Gm-Message-State: ABy/qLbjzsnl0svMUv9X/HbLXNjERZCQfUzodoHY8BT8Sv/iaLpATd/R
-        Ktavm7n6odLRTQW7MBWSS/diImHH80upuApW8YoM8w==
-X-Google-Smtp-Source: APBJJlHrtiForKK6WMD54JzL/emKsiGI0pIQtfmHcUV1rpcoTneVDZAEEvNz6C+KKim/FAU7rhxBywt5iJ7uVhquiFo=
-X-Received: by 2002:a05:6358:6f1d:b0:134:61a5:7f05 with SMTP id
- r29-20020a0563586f1d00b0013461a57f05mr1664623rwn.10.1690372917492; Wed, 26
- Jul 2023 05:01:57 -0700 (PDT)
+        with ESMTP id S233655AbjGZMR7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 08:17:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D05D61BC6;
+        Wed, 26 Jul 2023 05:17:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3F261ACF;
+        Wed, 26 Jul 2023 12:17:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6ADC433C8;
+        Wed, 26 Jul 2023 12:17:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690373871;
+        bh=MJ3VIkhQnMh5rNijTgWqzXJXA8gGbxk68w2PW2c6Pkw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pzJ2nQcMu3Af2DEDqCGLRiELzCmojsPQvlIEvOS0YSr7vv5hCw/Z+BbxlK9Q4Qvrn
+         s/QzQ8fudtXr0fNIv0rw6CZcO1jpN6WtHBhbZHfxnh+t+H904/yIEZ2ftOjG9aSarE
+         zhc+1u/XbLYoeRVBDoEho9IBZCI53bSVNDUHTuNMAKI1+xRkhpskUNZ4Q3H+MTQTYI
+         yXGEHlHI6/uNMJ7037RircF1nF1XV9mmCo2ax/j0QDMHuUlXEtGV7QKBFHIVqmIGLd
+         fEPiN55RLGB/gJitKRgdm8VZC3bW1+FqFGv+VOL6HCzQ4mho7G1EhoIgvI/13msSiS
+         SwOpcbHXwVhBA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-actions@lists.infradead.org
+Subject: [PATCH 2/2] genpd: move owl-sps-helper.c from drivers/soc
+Date:   Wed, 26 Jul 2023 14:17:15 +0200
+Message-Id: <20230726121724.3701240-2-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230726121724.3701240-1-arnd@kernel.org>
+References: <20230726121724.3701240-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-11-ulf.hansson@linaro.org> <ZLf4c7ejFBJLH7iN@e120937-lin>
- <20230719155920.iuu2ue2co535dfkx@bogus>
-In-Reply-To: <20230719155920.iuu2ue2co535dfkx@bogus>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 26 Jul 2023 14:01:21 +0200
-Message-ID: <CAPDyKFqMXWshKRd-dcETa9SRWFF4w5MFrWBSVkMn80dHg0Cvjg@mail.gmail.com>
-Subject: Re: [PATCH v2 10/11] firmware: arm_scmi: Add the SCMI performance domain
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 19 Jul 2023 at 17:59, Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> On Wed, Jul 19, 2023 at 03:51:45PM +0100, Cristian Marussi wrote:
-> > On Thu, Jul 13, 2023 at 04:17:37PM +0200, Ulf Hansson wrote:
->
-> [...]
->
-> > > +   scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
-> > > +   if (!scmi_pd_data)
-> > > +           return -ENOMEM;
-> > > +
-> > > +   domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
-> > > +   if (!domains)
-> > > +           return -ENOMEM;
-> > > +
-> > > +   for (i = 0; i < num_domains; i++, scmi_pd++) {
-> > > +           scmi_pd->info = perf_ops->domain_info_get(ph, i);
-> >
-> > So here you are grabbing all the performance domains exposed by the
-> > platform via PERF protocol and then a few lines down below you are
-> > registering them with pm_genpd_init(), but the list of domains obtained
-> > from the platform will contain NOT only devices but also CPUs possibly,
-> > already managed by the SCMI CPUFreq driver.
-> >
->
-> Agreed, I pointed out briefly in the previous patch I think. I am not sure
-> how will that work if the performance and power domains are not 1-1 mapping
-> or if they are CPUs then this might confusing ? Not sure but looks like
-> we might be creating a spaghetti here :(.
+From: Arnd Bergmann <arnd@arndb.de>
 
-I assume the discussions around the DT bindings are making it more
-clear on how this should work. The scmi performance-domain and the
-scmi power-domain are two separate providers.
+Moving only one of the two files in drivers/soc/actions to drivers/genpd
+caused a link failure in allmodconfig, as drivers/genpd is entered
+for compile testing, but drivers/soc/actions accidentally got skipped:
 
->
-> > In fact the SCMI CPUFreq driver, on his side, takes care to pick only
-> > domains that are bound in the DT to a CPU (via scmi_cpu_domain_id DT
-> > parsing) but here you are registering all domains with GenPD upfront.
-> >
->
-> +1
->
-> > Is it not possible that, once registered, GenPD can decide, at some point
-> > in the future, to try act on some of these domains associated with a CPU ?
->
-> IIRC, all unused genpd are turned off right. It may not impact here but still
-> super confusing as we will be creating power domains for the set of domains
-> actually advertised as power domains by the firmware. This will add another
-> set.
->
-> > (like Clock framework does at the end of boot trying to disable unused
-> >  clocks...not familiar with internals of GenPD, though)
-> >
->
-> Ah, I am reading too much serialised. Just agreed and wrote the same above.
->
-> > > +           scmi_pd->domain_id = i;
-> > > +           scmi_pd->perf_ops = perf_ops;
-> > > +           scmi_pd->ph = ph;
-> > > +           scmi_pd->genpd.name = scmi_pd->info->name;
-> > > +           scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
-> > > +           scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
-> > > +
-> > > +           ret = perf_ops->level_get(ph, i, &perf_level, false);
-> > > +           if (ret) {
-> > > +                   dev_dbg(dev, "Failed to get perf level for %s",
-> > > +                            scmi_pd->genpd.name);
-> > > +                   perf_level = 0;
-> > > +           }
-> > > +
-> > > +           /* Let the perf level indicate the power-state too. */
-> > > +           ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
-> >
-> > In SCMI world PERF levels should have nothing to do with the Power
-> > state of a domain: you have the POWER protocol for that, so you should
-> > not assume that perf level 0 means OFF, but you can use the POWER protocol
-> > operation .state_get() to lookup the power state. (and you can grab both
-> > perf and power ops from the same driver)
-> >
-> > The tricky part would be to match the PERF domain at hand with the
-> > related POWER domain to query the state for, I suppose.
-> >
->
-> I wanted to ask the same. E.g. on juno, GPU has perf domain 2 and power domain
-> 9. It would be good if we can how it would work there ? What is expected
-> from the gpu driver in terms of managing perf and power ? Does it need
-> to specify 2 power domains now and specify which is perf and which power in
-> its bindings ?
+x86_64-linux-gnu-ld: vmlinux.o: in function `owl_sps_set_power':
+owl-sps.c:(.text+0x16e259d): undefined reference to `owl_sps_set_pg'
 
-Yes, correct.
+Move the other one as well to allow build testing to work correctly.
 
-Note that, we already have plenty of consumer devices/drivers that are
-managing multiple PM domains. They use
-dev_pm_domain_attach_by_id|name() to attach their devices to their
-corresponding domain(s). In addition, they often use device_link_add()
-to simplify runtime PM management.
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/genpd/actions/Makefile                  | 1 +
+ drivers/{soc => genpd}/actions/owl-sps-helper.c | 0
+ drivers/soc/Makefile                            | 1 -
+ drivers/soc/actions/Makefile                    | 3 ---
+ 4 files changed, 1 insertion(+), 4 deletions(-)
+ rename drivers/{soc => genpd}/actions/owl-sps-helper.c (100%)
+ delete mode 100644 drivers/soc/actions/Makefile
 
-That said, we should expect to see some boilerplate code in consumer
-drivers that deals with this attaching/detaching of multiple PM
-domains. That's a separate problem we may want to address later on. In
-fact, it's already been discussed earlier at LKML (I can't find the
-link right now).
+diff --git a/drivers/genpd/actions/Makefile b/drivers/genpd/actions/Makefile
+index e78c420a24540..7e8aa473d12d1 100644
+--- a/drivers/genpd/actions/Makefile
++++ b/drivers/genpd/actions/Makefile
+@@ -1,2 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0+
++obj-$(CONFIG_OWL_PM_DOMAINS_HELPER)	+= owl-sps-helper.o
+ obj-$(CONFIG_OWL_PM_DOMAINS)		+= owl-sps.o
+diff --git a/drivers/soc/actions/owl-sps-helper.c b/drivers/genpd/actions/owl-sps-helper.c
+similarity index 100%
+rename from drivers/soc/actions/owl-sps-helper.c
+rename to drivers/genpd/actions/owl-sps-helper.c
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index efdcd42f68cb3..708eaad8f590d 100644
+--- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -3,7 +3,6 @@
+ # Makefile for the Linux Kernel SOC specific device drivers.
+ #
+ 
+-obj-$(CONFIG_ARCH_ACTIONS)	+= actions/
+ obj-y				+= apple/
+ obj-y				+= aspeed/
+ obj-$(CONFIG_ARCH_AT91)		+= atmel/
+diff --git a/drivers/soc/actions/Makefile b/drivers/soc/actions/Makefile
+deleted file mode 100644
+index 4ac88fec2050a..0000000000000
+--- a/drivers/soc/actions/Makefile
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0+
+-
+-obj-$(CONFIG_OWL_PM_DOMAINS_HELPER) += owl-sps-helper.o
+-- 
+2.39.2
 
-[...]
-
-Kind regards
-Uffe
