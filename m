@@ -2,156 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6320076396E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 16:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA018763A9D
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 17:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbjGZOnj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 26 Jul 2023 10:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S234888AbjGZPPZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 11:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjGZOnj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 10:43:39 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B216CE;
-        Wed, 26 Jul 2023 07:43:38 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-569b5489e6cso626901eaf.0;
-        Wed, 26 Jul 2023 07:43:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690382617; x=1690987417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L0c1yWE0v+Gdqy5SNM2fbnebZ+8ijvAe6qjOROFkPo0=;
-        b=WR51e1q7aGfPAW9X1igdUgv3UhPfSXaljpqrwO0xoIUZDkMSZqKkcfdPDnwY9x8Uso
-         ridKmpgHeHUVXBVGRPsP3sLxEqLYEq6GubDqYZQknzzE1S690Dtk0/b/1/75ByGCz30m
-         +1xRMAzWNtNesaPxg32nCqRaVZiRpg6VS1Pxz+yFutVAvYy8A3m1+seyOzDtBmaBzSK5
-         jgKBetGZ+yZ7+tK8UA6HehNjEqbyduSisgz43hRuKUcp5DYFB+rJqoIlHCHjgML/R8Rq
-         RRDCcTBDUZ6G7HItg4Ig12BqOhY8EnoXnmrEEpIAUgI0qfxX4IqGL4MSW9RxDzmmWTBr
-         FbAg==
-X-Gm-Message-State: ABy/qLb0xwcsLkeeRnbVK8zgjORSOV1vwJH4K2VgihlbdbZicnQO5Ujg
-        eIZ7GIYX2dRqZvhZJeauidUMvvCzleWW5cQEPvMvA+IoDX4=
-X-Google-Smtp-Source: APBJJlEot1TWnEx9OLBHq2rxdXllWLriB2pHNXKA39iLz+HaQZ1tvB9FFWjGQdsV9y9nwDblo5UnNr/4Aqqp8e4O0qc=
-X-Received: by 2002:a4a:e5d6:0:b0:563:3b56:5dc1 with SMTP id
- r22-20020a4ae5d6000000b005633b565dc1mr1677694oov.0.1690382617381; Wed, 26 Jul
- 2023 07:43:37 -0700 (PDT)
+        with ESMTP id S234892AbjGZPPK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 11:15:10 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C179B26A1;
+        Wed, 26 Jul 2023 08:14:40 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C493168F;
+        Wed, 26 Jul 2023 08:14:48 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 98DD53F67D;
+        Wed, 26 Jul 2023 08:14:03 -0700 (PDT)
+Date:   Wed, 26 Jul 2023 16:13:53 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 10/11] firmware: arm_scmi: Add the SCMI performance
+ domain
+Message-ID: <ZME4MQpYd7kJmFzF@e120937-lin>
+References: <20230713141738.23970-1-ulf.hansson@linaro.org>
+ <20230713141738.23970-11-ulf.hansson@linaro.org>
+ <ZLf4c7ejFBJLH7iN@e120937-lin>
+ <CAPDyKFr3ann52GAtOLfnLSGgsdF+EZBNz_apNo_OHzrQ-Hg55Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <006901d9be8c$f4439930$dccacb90$@telus.net> <CAJZ5v0hqPb1+tzGiOCSKr=4QcjnRKT5Gd8FcNbD_Gz5CnAw8tw@mail.gmail.com>
- <CAAYoRsUu-5u73cSASua133EE3+zTRbTgq-kEn2L52e4=n6X46g@mail.gmail.com>
-In-Reply-To: <CAAYoRsUu-5u73cSASua133EE3+zTRbTgq-kEn2L52e4=n6X46g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Jul 2023 16:43:26 +0200
-Message-ID: <CAJZ5v0jiQ-JFsFAFQFTZVGe-NobaRp7oo95R=Dju9b54n6iKEw@mail.gmail.com>
-Subject: Re: [PATCH] x86/aperfmperf: Make stale CPU frequency response within limits.
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        yang.jie@linux.intel.com, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr3ann52GAtOLfnLSGgsdF+EZBNz_apNo_OHzrQ-Hg55Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
+On Fri, Jul 21, 2023 at 05:19:51PM +0200, Ulf Hansson wrote:
+> Hi Cristian,
+> 
 
-On Tue, Jul 25, 2023 at 9:12 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Rafael,
->
-> On Tue, Jul 25, 2023 at 11:31 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Tue, Jul 25, 2023 at 2:14 AM Doug Smythies <dsmythies@telus.net> wrote:
-> > >
-> > > Currently, when the CPU frequency is stale the nominal clock frequency
-> > > is returned by calls to arch_freq_get_on_cpu(). Some users are
-> > > confused by the high reported frequency when their system is idle
-> > > and/or it is above a reduced maximum they set.
-> > >
-> > > This patch will return the policy minimum as the stale frequency reply
-> > > from arch_freq_get_on_cpu().
-> > >
-> > > Reported-by: Yang Jie <yang.jie@linux.intel.com>
-> > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=217597
-> > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> > > ---
-> > >  arch/x86/kernel/cpu/aperfmperf.c | 13 +++++--------
-> > >  drivers/cpufreq/cpufreq.c        | 18 ++++++++++++++++++
-> > >  include/linux/cpufreq.h          |  5 +++++
-> > >  3 files changed, 28 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> > > index fdbb5f07448f..44cc96864d94 100644
-> > > --- a/arch/x86/kernel/cpu/aperfmperf.c
-> > > +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> > > @@ -418,9 +418,10 @@ unsigned int arch_freq_get_on_cpu(int cpu)
-> > >         unsigned long last;
-> > >         u64 acnt, mcnt;
-> > >
-> > > -       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
-> > > -               goto fallback;
-> > > -
-> > > +       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF)){
-> > > +               freq = cpufreq_quick_get(cpu);
-> > > +               return freq ? freq : cpufreq_quick_get_min(cpu);
-> > > +       }
-> > >         do {
-> > >                 seq = raw_read_seqcount_begin(&s->seq);
-> > >                 last = s->last_update;
-> > > @@ -433,13 +434,9 @@ unsigned int arch_freq_get_on_cpu(int cpu)
-> > >          * which covers idle and NOHZ full CPUs.
-> > >          */
-> > >         if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
-> > > -               goto fallback;
-> > > +               return cpufreq_quick_get_min(cpu);
-> > >
-> > >         return div64_u64((cpu_khz * acnt), mcnt);
-> > > -
-> > > -fallback:
-> > > -       freq = cpufreq_quick_get(cpu);
-> > > -       return freq ? freq : cpu_khz;
+Hi,
+
+> On Wed, 19 Jul 2023 at 16:51, Cristian Marussi <cristian.marussi@arm.com> wrote:
 > >
-> > It looks to me like modifying cpufreq_quick_get) to return policy->min
-> > if policy->cur is 0 would work in a similar way, wouldn't it?
->
-> For the configuration of intel_cpufreq driver (intel_pstate in
-> passive mode), schedutil governor, HWP enabled, for
-> a stale frequency  policy->cur is not 0 and will always
-> be whatever the min value was when the driver was initialized,
-> regardless of what has been set since.
+> > On Thu, Jul 13, 2023 at 04:17:37PM +0200, Ulf Hansson wrote:
+> > > To enable support for performance scaling (DVFS) for generic devices with
+> > > the SCMI performance protocol, let's add an SCMI performance domain. This
+> > > is being modelled as a genpd provider, with support for performance scaling
+> > > through genpd's ->set_performance_state() callback.
+> > >
+> > > Note that, this adds the initial support that allows consumer drivers for
+> > > attached devices, to vote for a new performance state via calling the
+> > > dev_pm_genpd_set_performance_state(). However, this should be avoided as
+> > > it's in most cases preferred to use the OPP library to vote for a new OPP
+> > > instead. The support using the OPP library isn't part of this change, but
+> > > needs to be implemented from subsequent changes.
+> > >
+> >
+> > Hi Ulf,
+> >
+> > a couple of remarks down below.
+> >
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >
+> > > Changes in v2:
+> > >       - Converted to use the new ->domain_info_get() callback.
+> > >
+> > > ---
+> > >  drivers/firmware/arm_scmi/Kconfig            |  12 ++
+> > >  drivers/firmware/arm_scmi/Makefile           |   1 +
+> > >  drivers/firmware/arm_scmi/scmi_perf_domain.c | 155 +++++++++++++++++++
+> > >  3 files changed, 168 insertions(+)
+> > >  create mode 100644 drivers/firmware/arm_scmi/scmi_perf_domain.c
+> >
+> > [snip]
+> >
+> > > +static int scmi_perf_domain_probe(struct scmi_device *sdev)
+> > > +{
+> > > +     struct device *dev = &sdev->dev;
+> > > +     const struct scmi_handle *handle = sdev->handle;
+> > > +     const struct scmi_perf_proto_ops *perf_ops;
+> > > +     struct scmi_protocol_handle *ph;
+> > > +     struct scmi_perf_domain *scmi_pd;
+> > > +     struct genpd_onecell_data *scmi_pd_data;
+> > > +     struct generic_pm_domain **domains;
+> > > +     int num_domains, i, ret = 0;
+> > > +     u32 perf_level;
+> > > +
+> > > +     if (!handle)
+> > > +             return -ENODEV;
+> > > +
+> > > +     /* The OF node must specify us as a power-domain provider. */
+> > > +     if (!of_find_property(dev->of_node, "#power-domain-cells", NULL))
+> > > +             return 0;
+> > > +
+> > > +     perf_ops = handle->devm_protocol_get(sdev, SCMI_PROTOCOL_PERF, &ph);
+> > > +     if (IS_ERR(perf_ops))
+> > > +             return PTR_ERR(perf_ops);
+> > > +
+> > > +     num_domains = perf_ops->num_domains_get(ph);
+> > > +     if (num_domains < 0) {
+> > > +             dev_warn(dev, "Failed with %d when getting num perf domains\n",
+> > > +                      num_domains);
+> > > +             return num_domains;
+> > > +     } else if (!num_domains) {
+> > > +             return 0;
+> > > +     }
+> > > +
+> > > +     scmi_pd = devm_kcalloc(dev, num_domains, sizeof(*scmi_pd), GFP_KERNEL);
+> > > +     if (!scmi_pd)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
+> > > +     if (!scmi_pd_data)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
+> > > +     if (!domains)
+> > > +             return -ENOMEM;
+> > > +
+> > > +     for (i = 0; i < num_domains; i++, scmi_pd++) {
+> > > +             scmi_pd->info = perf_ops->domain_info_get(ph, i);
+> >
+> > So here you are grabbing all the performance domains exposed by the
+> > platform via PERF protocol and then a few lines down below you are
+> > registering them with pm_genpd_init(), but the list of domains obtained
+> > from the platform will contain NOT only devices but also CPUs possibly,
+> > already managed by the SCMI CPUFreq driver.
+> 
+> Correct.
+> 
+> >
+> > In fact the SCMI CPUFreq driver, on his side, takes care to pick only
+> > domains that are bound in the DT to a CPU (via scmi_cpu_domain_id DT
+> > parsing) but here you are registering all domains with GenPD upfront.
+> 
+> Right, genpds are acting as providers, which need to be registered
+> upfront to allow consumer devices to be attached when they get probed.
+> 
+> This isn't specific to this case, but how the genpd infrastructure is
+> working per design.
+> 
+> >
+> > Is it not possible that, once registered, GenPD can decide, at some point
+> > in the future, to try act on some of these domains associated with a CPU ?
+> > (like Clock framework does at the end of boot trying to disable unused
+> >  clocks...not familiar with internals of GenPD, though)
+> 
+> The "magic" that exists in genpd is to save/restore the performance
+> state at genpd_runtime_suspend|resume().
+> 
+> That means the consumer device needs to be attached and runtime PM
+> enabled, otherwise genpd will just leave the performance level
+> unchanged. In other words, the control is entirely at the consumer
+> driver (scmi cpufreq driver).
+> 
 
-So I would prefer to address this in the intel_pstate driver than to
-work around it in the core.
+Ok, so if the DT is well formed and a CPU-related perf domain is not
+wrongly referred from a driver looking for a device perf-domain, the
+genPD subsystem wont act on the CPUs domains.
 
-> The patch I submitted deals with that situation also.
->
-> A complete list of driver/governor/HWP stale frequency
-> replies can be found on the bugzilla report at:
->
-> https://bugzilla.kernel.org/attachment.cgi?id=304694
->
-> There might be push back on some of the performance
-> governor stale frequency replies. I could not figure out
-> a performance governor dependant reply.
->
-> Also there are other callers to cpufreq_quick_get
-> and I was not sure I could mess with the function
-> response for them. For example
-> drivers/devfreq/tegra30-devfreq.c
-> and drivers/thermal/cpufreq_cooling.c
-> and drivers/powercap/dtpm_cpu.c
+> >
+> > > +             scmi_pd->domain_id = i;
+> > > +             scmi_pd->perf_ops = perf_ops;
+> > > +             scmi_pd->ph = ph;
+> > > +             scmi_pd->genpd.name = scmi_pd->info->name;
+> > > +             scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
+> > > +             scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
+> > > +
+> > > +             ret = perf_ops->level_get(ph, i, &perf_level, false);
+> > > +             if (ret) {
+> > > +                     dev_dbg(dev, "Failed to get perf level for %s",
+> > > +                              scmi_pd->genpd.name);
+> > > +                     perf_level = 0;
+> > > +             }
+> > > +
+> > > +             /* Let the perf level indicate the power-state too. */
+> > > +             ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
+> >
+> > In SCMI world PERF levels should have nothing to do with the Power
+> > state of a domain: you have the POWER protocol for that, so you should
+> > not assume that perf level 0 means OFF, but you can use the POWER protocol
+> > operation .state_get() to lookup the power state. (and you can grab both
+> > perf and power ops from the same driver)
+> 
+> Well, I think this may be SCMI FW implementation specific, but
+> honestly I don't know exactly what the spec says about this. In any
+> case, I don't think it's a good idea to mix this with the POWER
+> domain, as that's something that is entirely different. We have no
+> clue of those relationships (domain IDs).
+> 
+> My main idea behind this, is just to give the genpd internals a
+> reasonably defined value for its power state.
+> 
 
-IIUC, all of the above rely on policy->cur being nonzero.
+The thing is that in the SCMI world you cannot assume that perf_level 0
+means powered off, the current SCP/SCMI platform fw, as an example, wont
+advertise a 0-perf-level and wont act on such a request, because you are
+supposed to use POWER protocol to get/set the power-state of a device.
 
-There are other users doing questionable things when
-cpufreq_quick_get() returns 0 that I think would be better off if the
-min is returned instead.
+So it could be fine, as long as genPD wont try to set the level to 0
+expecting the domain to be as a consequence also powered off and as
+long as it is fine for these genpd domains to be always initialized
+as ON. (since perf_level could never be found as zero..)
+
+Thanks,
+Cristian
