@@ -2,110 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE94762E9C
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 09:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AB4762EAF
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 09:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjGZHs6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 03:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40768 "EHLO
+        id S232974AbjGZHuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 03:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbjGZHrX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 03:47:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35741FC4;
-        Wed, 26 Jul 2023 00:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1690357384; x=1721893384;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zbfnCY12tOIDGCHWJrhLFBreINIxAOjEBVeQh4krr5w=;
-  b=EA+ZjHES97Ry4qPBc9dOobgADciiLnN2WjZJjOTy9CNUHG+tKcnPfNZR
-   payzNRMAq/dZyEeH+0K8emrH7XdggrCZ1AOZ5WrmNBpia5g5Kr8MKS4+M
-   Nw1iWf2Y/YRkYxYJwSL+gNa2mwEBJ/r43ihswjeJiIQUVU8wB6scj4VE1
-   WhY1S3VwE04Zx5dxlH0f79yCtUh0SSb5i9UXcfnQmtIq7QVG/7FEdl0jQ
-   EVzL75fPrPz3DJaDZu0XvG4ModZ0jxnEl6rFOEGZ7uo/LTz+LdFxusBUz
-   8+PwAKNgjicTy1R1itniT8WRT9kB5F4lYrY24b1oXpjbmBYsqQ+FYwZsM
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.01,231,1684825200"; 
-   d="asc'?scan'208";a="237830243"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 26 Jul 2023 00:43:04 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 26 Jul 2023 00:43:03 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 26 Jul 2023 00:43:01 -0700
-Date:   Wed, 26 Jul 2023 08:42:27 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Peng Fan <peng.fan@nxp.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH] dt-bindings: power: fsl,scu-pd: separate out fsl,scu-pd
-Message-ID: <20230726-trolling-chair-41f8258ef8ef@wendy>
-References: <20230725102900.225262-1-peng.fan@oss.nxp.com>
- <20230725-excretory-speed-003064040657@spud>
- <DU0PR04MB94171BDFA6FF61A644138F688800A@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        with ESMTP id S233088AbjGZHs2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 03:48:28 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA65B5586
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 00:44:09 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9891c73e0fbso148831466b.1
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 00:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690357448; x=1690962248;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+595fqyQAtRGgWRPqauKidMABLj6m7NIPfITqXstJro=;
+        b=wjoE3XSL03eoZZffQ7rPfct487FsvJfaQvHALV+vKNU5oBLR16q7wsqJ9eeWTmxjmP
+         n1TQ5Z+1yfGu3Fj6amjW4ZnJ56t+6hr0exOgvpQ5lVVPOPMnFyYNSQ/HsWPolfNQhby7
+         MXIVDIH+/HRfYLG1xagrVHKpbNYbGrm51grgLwitznxalYMyXzGv6EcQtBbPbZPNmiRn
+         aAUVW1FgJ/lUag1rDjYbHFfjCCgNvCQx+68t1tdH/nW51vvlY+PhF3oq6MP46ACmVLKx
+         RxZkIHedul7BB9oCGYd5CICwkYCNBgIh3O2DlTl18zeAoHdW+HrRQ4V6Oaf47U98qN4j
+         7IHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690357448; x=1690962248;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+595fqyQAtRGgWRPqauKidMABLj6m7NIPfITqXstJro=;
+        b=gg/3XvJincooyur24WgR8bOlOXvsiUG5vFTXheEztizFRW1mKnk5e/FJBGE+K9ZP3T
+         cIvpw1io2KoTmXvUNViXJiVH3ymF73gbu54co2RFnd2VxtGBKlH6MXTSPmKUhEFntwSl
+         V9bA6VJ8vP69guglxfOGHwJcx1huLU02raju8uFxLUkann6F96qQPAuKh/MtYWw2k9tn
+         SWGvpYuS+LcdQJd8aT3vvOq79CiKBGvhahIS6sKZirEAkSgcnrhnmvzCIwIp/lxG1gpX
+         NpVistJNxG7eMZKBsv6WLK2v684BH2DMG6YeT6JyUTLWR4o2RxRD1u6SEZkaHBURopL1
+         whpg==
+X-Gm-Message-State: ABy/qLbEAgNrPyI8TTWjMFGDQM4V5YKGfSYUzBVlyEyJJhwYGyhpkhLz
+        CAWlMLjk6Yw/BggVwd0xHCL/cA==
+X-Google-Smtp-Source: APBJJlGgyHZAbdoBRwxptIi49+tg1Kmb9zJa/z48MBZTdGhcFMw901PUOm74U9JCdsDuawdcBg308A==
+X-Received: by 2002:a17:907:980c:b0:99b:4b6d:f2bf with SMTP id ji12-20020a170907980c00b0099b4b6df2bfmr4774442ejc.10.1690357447804;
+        Wed, 26 Jul 2023 00:44:07 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id kd8-20020a17090798c800b0099bccb03eadsm115198ejc.205.2023.07.26.00.44.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jul 2023 00:44:07 -0700 (PDT)
+Message-ID: <65ea6b51-a314-48bf-df4c-2508ba1eb91b@linaro.org>
+Date:   Wed, 26 Jul 2023 09:44:05 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VALnaJ/7H33Rsjw7"
-Content-Disposition: inline
-In-Reply-To: <DU0PR04MB94171BDFA6FF61A644138F688800A@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] dt-bindings: power: fsl,scu-pd: separate out fsl,scu-pd
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        ulf.hansson@linaro.org, shawnguo@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20230725102900.225262-1-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230725102900.225262-1-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---VALnaJ/7H33Rsjw7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 25/07/2023 12:29, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add an entry dedicated for fsl,scu-pd which could serve i.MX8DXL
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  .../devicetree/bindings/power/fsl,scu-pd.yaml         | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml b/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
+> index 407b7cfec783..3a92e4fef7ae 100644
+> --- a/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
+> +++ b/Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
+> @@ -18,11 +18,14 @@ allOf:
+>  
+>  properties:
+>    compatible:
+> -    items:
+> +    oneOf:
+>        - enum:
+> -          - fsl,imx8qm-scu-pd
+> -          - fsl,imx8qxp-scu-pd
+> -      - const: fsl,scu-pd
+> +          - fsl,scu-pd
 
-On Wed, Jul 26, 2023 at 12:21:10AM +0000, Peng Fan wrote:
-> > Subject: Re: [PATCH] dt-bindings: power: fsl,scu-pd: separate out fsl,s=
-cu-pd
-> >=20
-> > On Tue, Jul 25, 2023 at 06:29:00PM +0800, Peng Fan (OSS) wrote:
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > Add an entry dedicated for fsl,scu-pd which could serve i.MX8DXL
-> >=20
-> > Why not just add a soc-specific compatible for the i.MX8DXL?
-> > The current form of this does not look right to me.
->=20
-> I could add one dedicated for i.MX8DXL.
+No, sorry, you got in the past comments about style of compatibles.
 
-Also, where is the user for this? I'd expect to see a dts patch too?
 
---VALnaJ/7H33Rsjw7
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+Krzysztof
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMDOXwAKCRB4tDGHoIJi
-0qrHAP95TOltWFjbVY6ECdOwnXc2h9+ak7nsM8ik4kSVwN09SgEAsn0Abr5/Eoxl
-6oC4QjnYu+V3wFEnqRavq2VrfryEdQQ=
-=L4Jg
------END PGP SIGNATURE-----
-
---VALnaJ/7H33Rsjw7--
