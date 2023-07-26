@@ -2,59 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A0BD763D87
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:19:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A99F763D92
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 19:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232303AbjGZRTw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 13:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
+        id S232395AbjGZRU6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 13:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjGZRTv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:19:51 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53F02270F
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:19:38 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so23150e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:19:38 -0700 (PDT)
+        with ESMTP id S232433AbjGZRUr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 13:20:47 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 754652D6A
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:20:30 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fba86f069bso21343e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 10:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690391976; x=1690996776;
+        d=linaro.org; s=google; t=1690392029; x=1690996829;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bcY6ppKtrAlO+6g+Nzg+cqFbT2ZkT49HVufXW9jRMos=;
-        b=M7sBZNW35OruOCwUhTCHtB4mqwKXIuNZaeJKeYbR7qDSztacBhYvhjft0YG6dCq/Rf
-         FLltEXylv1x9LmUT8uD+He2OLlzhVzbizQHCd2n4QurMhpl0cK62dBtXSxSYL1SaEsJh
-         IISPlCMkdsvdwCfWHKkr7mz9zJ9tDjYZ5vTBpWCRLw9djZ+pfhzR+6VAjunryfrp4lRz
-         H1ueOx+TBXHKla1nWD8HVTob8jwx1+7CvMng/eG7ZLSv1DsLiF0qQcg7lvYvmUohmvYl
-         E7xyVYGILbADWmEik3W9XQZA/s9zhzUtPVsdAVSK8Xh/G8Q61WIVGlNVVm3Vb/MIdg/k
-         MmRQ==
+        bh=mQVjGeQBTwIGF74QpeE9j3WXo3RNKuiGdQLE3UJ3ZV4=;
+        b=t7Gtt61QfceQoiaJ6bMXB2K/QpFjaKH8QPC6SIiQYbc73jRKSROZ3Y+ZQFSEtVlRxd
+         s1JJ2GmCz5OpKTfWS+BxQimueWdDBwbmYb1xm9wiPJiWjxB8gnb5Ecd9vHrMGNEHfU0E
+         LaiINSPonUf88Fc9sC7TO2YvBbvZdtYbiCtiz2/ZY9PZ5uIK6lyHRZUoamUe5L7HDtPp
+         DH6F0piVB7LBUS5CoQ1kQamJR+3FJSFp9gReAnvVS4v+KJ4pQIR/y3KfWMa6NGY9RgWS
+         4hXHfMHxM2Z5dWxFtiXQm+imWN6Skrl37hPNXAJPB0CQmH+EUQYMfqRmi9EeCblOFyod
+         gWDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690391976; x=1690996776;
+        d=1e100.net; s=20221208; t=1690392029; x=1690996829;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bcY6ppKtrAlO+6g+Nzg+cqFbT2ZkT49HVufXW9jRMos=;
-        b=iiF6JT75Tocr/tjdgYceleF2sF1xT2UFT2p5yugHHiPvHJSKynNMSMU1vxPVhHeMPj
-         cpa2y42AgPWL3Flvs1zdLTJE5kdD0wY8yjL69S++GqiWZHXYQV2S35Wrh24p6kzEl/Lp
-         8HuKrbGjMPZtchWP3w5DSqSIMC0TFxhYOVjRcjrv2/ccxeVShmsD7OW+dbyVVd7JrDSV
-         7A+nrxn/8u1h6dFpAz8ab07UlB1qHr5FXiv17nfhHGbm3J255MkUwkzAR17ABk8kdOgH
-         B9Z8Y+vGqaJ5WKWfeWAJ5HfcDt/nJaNSzAFhUbHUMdhJXjzmOpuWYJM3rnFuVeUpGxJc
-         Xc4Q==
-X-Gm-Message-State: ABy/qLZV40YH7aeboE9/XvtiWLbshIyMWyUayFgyA6iCpLPHiUfm50bE
-        AE1vaLWq2PgQHvMXmLiCrg788A==
-X-Google-Smtp-Source: APBJJlGkpkzCWlW1YcfxlenPF/OLCi5w0GDJBAuua2RDhiRV3jjrKInCfhANQf1wiUkGHYNOmkv+KA==
-X-Received: by 2002:a05:6512:159b:b0:4fd:fad6:5495 with SMTP id bp27-20020a056512159b00b004fdfad65495mr2318027lfb.18.1690391976525;
-        Wed, 26 Jul 2023 10:19:36 -0700 (PDT)
+        bh=mQVjGeQBTwIGF74QpeE9j3WXo3RNKuiGdQLE3UJ3ZV4=;
+        b=UCMy16XDqzZ3YcGpRCOmC8A4zIKCQLq9DC22YkgpsjOL1hn+v5Ww1qMl8ufjFC6Tqo
+         KggOZoJolEA9hJcLRe3uCwnzXhZRZlWaIuGazGMSnTL8AneihLxyenq4FSJ774EphGej
+         PP1mRkmWMCBeufMk8FjHhpGclkdUqYa4L+trhPgFUsd78ZByit5TE0LmG2FTBieDwqp3
+         3SCGBrmqcvAutpP/6oewjHW01Ck2DIECG9zc2qatWGps+yiS5wRiQIAcWC0Cm0cX4vYB
+         um/OtKxyatwe5PrilnnK/Nw6nc7Rpx75bm6i81JxAbtdQmDy6ppaw31WB6pbLZgy/Qef
+         23ww==
+X-Gm-Message-State: ABy/qLbb8UdHfWXBekuBeV/0lZcwP9lh2Ve0qtzpHnHVm5sddkmzTQku
+        ij9Bmcw9JqQ6e76HsF1jIyawVA==
+X-Google-Smtp-Source: APBJJlFnCfEb0mDbLU3iC/Vxggmqeo9BGk+0xd2hOCcAhBjcLwlJ4LXeBDCrPGQNaCh5pOy5UIbl0w==
+X-Received: by 2002:a05:6512:3493:b0:4fb:8de9:ac0e with SMTP id v19-20020a056512349300b004fb8de9ac0emr1876209lfr.1.1690392028671;
+        Wed, 26 Jul 2023 10:20:28 -0700 (PDT)
 Received: from [192.168.1.101] (abxh240.neoplus.adsl.tpnet.pl. [83.9.1.240])
-        by smtp.gmail.com with ESMTPSA id m9-20020a056512014900b004fb8ff1f531sm3334272lfo.70.2023.07.26.10.19.35
+        by smtp.gmail.com with ESMTPSA id m9-20020a056512014900b004fb8ff1f531sm3334272lfo.70.2023.07.26.10.20.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 10:19:36 -0700 (PDT)
-Message-ID: <829c2da7-4f88-4669-a114-c80603ccd4e1@linaro.org>
-Date:   Wed, 26 Jul 2023 19:19:34 +0200
+        Wed, 26 Jul 2023 10:20:28 -0700 (PDT)
+Message-ID: <5667c93a-408f-3802-b168-f3a145dfcb43@linaro.org>
+Date:   Wed, 26 Jul 2023 19:20:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] interconnect: qcom: icc-rpm: Add AB/IB calculations
- coefficients
+Subject: Re: [PATCH 2/4] interconnect: qcom: qcm2290: Set AB coefficients
 Content-Language: en-US
 To:     Stephan Gerhold <stephan@gerhold.net>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -64,8 +63,8 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org>
- <20230726-topic-icc_coeff-v1-1-31616960818c@linaro.org>
- <ZMFU-hFSOHLr3hFP@gerhold.net>
+ <20230726-topic-icc_coeff-v1-2-31616960818c@linaro.org>
+ <ZMFVZJa647SNwrJX@gerhold.net>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -102,9 +101,9 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <ZMFU-hFSOHLr3hFP@gerhold.net>
+In-Reply-To: <ZMFVZJa647SNwrJX@gerhold.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -115,48 +114,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26.07.2023 19:16, Stephan Gerhold wrote:
-> On Wed, Jul 26, 2023 at 06:25:43PM +0200, Konrad Dybcio wrote:
->> Presumably due to the hardware being so complex, some nodes (or busses)
->> have different (usually higher) requirements for bandwidth than what
->> the usual calculations would suggest.
+On 26.07.2023 19:18, Stephan Gerhold wrote:
+> On Wed, Jul 26, 2023 at 06:25:44PM +0200, Konrad Dybcio wrote:
+>> Some buses need additional manual adjustments atop the usual
+>> calculations. Fill in the missing coefficients.
 >>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> Weird. I just hope this was never abused to workaround other broken
-> configuration. A nice round ib_percent = 200 has mostly the same effect as
-> 
->   - Doubling the requested peek bandwidth in the consumer driver (perhaps
->     they were too lazy to fix the driver in downstream at some point)
->   - Halving the node buswidth
-> 
-> It's probably hard to say for sure...
-As per usual..
-
-[...]
-
->>  
->>  	/*
->> @@ -315,6 +317,12 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_r
->>  			else
->>  				agg_avg_rate = qn->sum_avg[i];
->>  
->> +			percent = qp->ab_percent ? qp->ab_percent : 100;
->> +			agg_avg_rate = mult_frac(percent, agg_avg_rate, 100);
-> 
-> 			if (qp->ab_percent)
-> 				agg_avg_rate = mult_frac(qp->ab_percent, agg_avg_rate, 100);
-> 
-> Would be likely more efficient (no calculation if unspecified) and not
-> much harder to read.
-Oh right!
-
-> 
->> +
->> +			percent = qn->ib_percent ? qn->ib_percent : 100;
->> +			agg_peak_rate = mult_frac(percent, qn->max_peak[i], 100);
->> +
-> 
-> agg_peak_rate doesn't seem to be used anywhere else? 🤔
-Whoooooops....
+> What about the funny util-fact/vrail-comp on the mas-apps-proc node
+> downstream?
+Can't see it neither on msm-5.4 (with the icc API) nor in the 4.19 (msmbus)
+device tree.
 
 Konrad
