@@ -2,62 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D2A7634AF
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 13:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AEE7634FF
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 13:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjGZLVG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 07:21:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51570 "EHLO
+        id S233641AbjGZLb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 07:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbjGZLVE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 07:21:04 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2C6269A
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 04:20:48 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-c4cb4919bb9so7175501276.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 04:20:48 -0700 (PDT)
+        with ESMTP id S233573AbjGZLb4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 07:31:56 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1BDBF
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 04:31:55 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-d0fc1d97716so3620198276.1
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 04:31:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690370448; x=1690975248;
+        d=linaro.org; s=google; t=1690371115; x=1690975915;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XrZDdY5HjNhB0A5DSPeigCBlnEFyCrNBq0d87sVDWrE=;
-        b=TT1mQ0zEisFdk3DJhNQdJDwNpe0mJo8JtUdgHsBCD79NNKAAGWvUb9tiCAh/o7o+WG
-         c1MzFSA5woFqqEpeXisZnuwd25uQjR2B92Z04q0kL5iVdOEPcaJuCjQp3Xrh6rRD1ooK
-         kgSrGdBSL794/xP7rtfPoBK6KzuwLDaJVKAiPPw0ljNaX+At0vleqf0dfrPrRb03pRlW
-         TQ504X5BPhFchGCnScOrVM/8y40QlDh56+TQ4KyEvm5JIzbhIDcC5mAcCDlCqbRgpRPs
-         DaqW57IlQtm1S9P1BKhHYHQvG2G7gVM0iQuSqtdZWSGTN90wiCUdmdFlgCGM+iNjjCXR
-         fhyg==
+        bh=jLv11qpOMr7y6l1HWpJ5VrwcHkwmRcTE/5uBkJt0Km0=;
+        b=MkxNnvIpJkOmEk7n2jttHGuxqb5Oe+I9GZebdZVY8SsA8BUr2h2S3gwx0/jwtPeExC
+         eAExJkepuM6OhTmiLDNJdmep9oGFZpTA4E2M/9P/5OrFiFP1TKXmFdTYQKzdbCJXXR3u
+         JGXFyrLAksjRgzQRqbQi2oprebgFA6fiszIZyYkQY1HsVCk4asTJpJMRFMKGJQLvyMV8
+         QX7Pl/y3mDHq9WgeJJ+uZbPIpkK2S+YGTTQesbhDYXRRXCkgxJicREw3iubEJA2RbUyE
+         w8Pa0GsjAmHqgvc96Z/E2uoIdsTNVWZnaihpwvi5+qVGbTu2faTtcKPorTwIr3te3JOg
+         HqCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690370448; x=1690975248;
+        d=1e100.net; s=20221208; t=1690371115; x=1690975915;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XrZDdY5HjNhB0A5DSPeigCBlnEFyCrNBq0d87sVDWrE=;
-        b=NYOUE/7o5GnUJSAVFeOjgxUFAJI044PldZPpCRSXoFGPPH47ZTbtvwUdWbon/C/GFj
-         WHBCUh5n2Fylq7ue0mJHfs4ShdbrJg7/kobYEAB/bKp6GJPlagf5NrK7NhEe8zO5U2dZ
-         B73Pq/yETPwybYF/mUP9WKuje8AUoGojvwpNIgeclv2yFQ2u3Y7cfrAUb9Pi0NTPhwPm
-         SGonN2/qAaL6Z3JD9sxqQIxul04QOaVJwmzc1Zl/USZ9WjJAyXqurbV/FQAqXKfzBDNw
-         E4a0Oe8i+k5Ru4KaTgPGFYh8o3l/jvsZjTb2Y8ZKjXC1WSOJXNJ5l1oPGHF3BLvFLNXL
-         NDpA==
-X-Gm-Message-State: ABy/qLYeAYEra42XPA9AYr8ilrCX1+XTIVw9oR+U0/M4aLOJVtJ2Sy2z
-        9qOONFQiodepMjgn+7vn3GM+H1Oeeh7rMH73FPGMpA==
-X-Google-Smtp-Source: APBJJlGcsh2FTZu3XS/7LE1emqCZsTOs6YLB7V0tOBxgdbxn7ukKbkdSPAM2HdJkj6fX2HsWGVyjzXLvmrKapnbC6sM=
-X-Received: by 2002:a25:c58b:0:b0:d0d:2d82:7a27 with SMTP id
- v133-20020a25c58b000000b00d0d2d827a27mr1535893ybe.13.1690370447746; Wed, 26
- Jul 2023 04:20:47 -0700 (PDT)
+        bh=jLv11qpOMr7y6l1HWpJ5VrwcHkwmRcTE/5uBkJt0Km0=;
+        b=T8aQRC4Z8meMMxx7AqyeQFT5UmJAV+rb6pjjvaC0lTRcz3cc8SI0wWYlLC9+o1HTpx
+         Pz/9b/tsw1xbCeGqmGHMRYg3xDFqBbgcJHGTL4M9vzqfvpk8sR2sw0Idx3xh0Sw8OrMw
+         NAKwT/XNgkjZ4H/Gu2gjMHSxqD45QBcKYr3tmkHnxmq3gzEutC8uZLMhPPgJcr5EfttM
+         /DkFwBxFH7/CPvI7LJoYW4b0aFasjFBdgPBXMfZJqzp6nb5BmYGprrvTu5Bfdr3ooJip
+         MAf5QCe+PVdwlBure/snUO59OPNmDo6d0nJXEbPWhjCvxteezf9ezfmO9rigJNiPGh0N
+         XeVw==
+X-Gm-Message-State: ABy/qLZCykaoFDNs6GSdX+zuzooHM3NIb2ty+NOTFWp7AI9+VgTCzMAa
+        3T6gE3Kt8nJQxdhgX2AzpTKK51xc/8mfrcgxhvdNDA==
+X-Google-Smtp-Source: APBJJlGCRFajfKQn9z6tzkQD4evt9uCaBCCq73lhqACV/XJdk0Ot20nld0e0VPgml5GXvLyxxSULQHK6xXMJYBDR4/g=
+X-Received: by 2002:a81:66c4:0:b0:583:a418:c3fc with SMTP id
+ a187-20020a8166c4000000b00583a418c3fcmr1895070ywc.23.1690371114731; Wed, 26
+ Jul 2023 04:31:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230713141738.23970-1-ulf.hansson@linaro.org>
  <20230713141738.23970-10-ulf.hansson@linaro.org> <20230719152426.qwc5qqewrfjsarlz@bogus>
- <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com> <20230721143728.GB1092306-robh@kernel.org>
-In-Reply-To: <20230721143728.GB1092306-robh@kernel.org>
+ <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com> <20230721115917.lescikl75kmeqkw4@bogus>
+In-Reply-To: <20230721115917.lescikl75kmeqkw4@bogus>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 26 Jul 2023 13:20:12 +0200
-Message-ID: <CAPDyKFr9V6iPJhXXrv5RxgAE-YvXDboN5GP8E=q2VHnjs8cL5w@mail.gmail.com>
+Date:   Wed, 26 Jul 2023 13:31:19 +0200
+Message-ID: <CAPDyKFr6oduyihOd7u6UW3RJAJr=a3mT8Dw9GtryhK4+SRK_wg@mail.gmail.com>
 Subject: Re: [PATCH v2 09/11] cpufreq: scmi: Add support to parse domain-id
  using #power-domain-cells
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Nikunj Kela <nkela@quicinc.com>,
@@ -76,7 +75,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 21 Jul 2023 at 16:37, Rob Herring <robh@kernel.org> wrote:
+On Fri, 21 Jul 2023 at 13:59, Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
 > On Fri, Jul 21, 2023 at 01:52:17PM +0200, Ulf Hansson wrote:
 > > On Wed, 19 Jul 2023 at 17:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
@@ -100,19 +99,24 @@ On Fri, 21 Jul 2023 at 16:37, Rob Herring <robh@kernel.org> wrote:
 > >
 > > power-domains = <&CPU_PD0>, <&scmi_dvfs 4>;
 > > power-domain-names = "psci", "scmi";
+> >
+> > I will take care of this in the next version - and thanks a lot for
+> > pointing this out!
 >
-> That is completely backwards. Entries are named based on the consumer
-> side. The function of each clock or interrupt for example. Here your
-> entries are based on the provider which should be opaque to the
-> consumer.
+>
+> Yes something like this will work. Just curious will this impact the idle
+> paths ? By that I mean will the presence of additional domains add more
+> work or will they be skipped as early as possible with just one additional
+> check ?
 
-Okay, so you would rather prefer something along the lines of the below?
+Unless I misunderstand your concern, I don't think there is any impact
+on the idle path whatsoever. This should be entirely orthogonal.
 
-power-domain-names = "power", "perf";
+The scmi-cpufreq driver should only have to care about the
+scmi-performance domain, while the cpuidle-psci driver cares only
+about psci.
 
-The "psci" name is already part of the current cpus DT binding
-(Documentation/devicetree/bindings/arm/cpus.yaml), so then it looks
-like that deserves an update too. Right?
+Did that make sense?
 
 Kind regards
 Uffe
