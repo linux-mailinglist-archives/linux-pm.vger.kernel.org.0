@@ -2,75 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E8E76364F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 14:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF75C7637E7
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 15:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbjGZM1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 08:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S231972AbjGZNpm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 09:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233976AbjGZM13 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 08:27:29 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5938726BC
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 05:27:26 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-58419517920so27528057b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 05:27:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690374445; x=1690979245;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xytvwAV0BU3B8ZVId1NpX2j1ZIQGa+bfPlc5rTSIhmg=;
-        b=oTKgk6cvDOz/jzdgKjaJ/cQ92upctsVgYslejhg9gbqdnrHGZchEpRr2h6TZdVnSVL
-         2CIiK8d5BoudJuVraCxOMWGow345fmPGb11JwNyD6w3V7FlUA+5vPpMc8aYgxLwzt51q
-         94AxY7jxE7cmlWOf4vdp0sq1VSF8Gp2eYS9/8F541mgnEzCG/yxqJsxsMSR8QPZEABH6
-         DxBerXsO99pRhgQgIgDS34ZUe7735VWt8CEfXe0qBk86t6jvehPK8aJiP8GldQYl8XB3
-         388monTXyn5bGHuR5nsKd6YiyghDoxTrJcdx45OnwjAJyUcspIhbijXlkoPnZT33LilO
-         rnhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690374445; x=1690979245;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xytvwAV0BU3B8ZVId1NpX2j1ZIQGa+bfPlc5rTSIhmg=;
-        b=JEE4wKQk5HNcbcJ5OaBU80s/uswF++bgtIJhe6sXA7+Hte+gTjoFsp6fcgRvxIi4qU
-         WXCinY+aIo/d5KbtJijrcbSWxGl1MqqYsTvqTqQX+UyT6cPyB8f5wM1eu7qmdXwgnTh4
-         C63ZFBqaEsVAbK73sa4gS8DjQDMkaPluzR0F8n33cG3bBYCnoPfsnG3lezX71yIE44YL
-         ywGY8gOyUjuUf6EcaCD1zynaBv46zjamGY9CcQ2BEPmwNGtPLbpn5QQv+GFhJ4/QrW7y
-         dk9JxguMavb6F0sGnViqu9euasPn9vhsho2Gq9VPmlsYdDg1/FAGkMT9qEzMw3/IsYtZ
-         Jb1g==
-X-Gm-Message-State: ABy/qLYs7J9sCFwYT/+Os0LMfN1VFkY/go0EfUNyH1VFo9+G7yA1WmLg
-        Vxtj0lxxmBYHCzlXb2l+bhvz6KydKZq2IaOQ9jYdVw==
-X-Google-Smtp-Source: APBJJlFD6NN6UJlweoiYrZKDWs+FEhc/yYSNPE0vEJMiGVh/uOHAYCGmBapgIdDiMjb2gHQrywGtB5CGPsA9pSIi5hc=
-X-Received: by 2002:a25:804f:0:b0:cb4:469e:3308 with SMTP id
- a15-20020a25804f000000b00cb4469e3308mr1464176ybn.6.1690374445384; Wed, 26 Jul
- 2023 05:27:25 -0700 (PDT)
+        with ESMTP id S230310AbjGZNpl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 09:45:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC5FA2;
+        Wed, 26 Jul 2023 06:45:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 849F961AB8;
+        Wed, 26 Jul 2023 13:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05A5C433CD;
+        Wed, 26 Jul 2023 13:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690379138;
+        bh=FOQK4XupUueLaNuwpuP0faSyRRZ9Ava/fzIG0kPjV6s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VQ1uGrM8ufwEpC/UFWp8UzjNmqbvFqIsLch0zqvicmfaxseB037IDLW7WoNqO32cu
+         kg+Fhg8k4ilIfkc3JNyAWklI7ymMQjIXcURrst1dTdy6TIyqbwtPZcEaOrWk+/JY0/
+         6XxCF4rVeYnmq7ozKou5MEmI4fVZe42/Gb/CJ2HeJqGs//iuGL9CF8HT+SkQNH80uM
+         mlXwqFkXiDJKkvO6Z4jWQvX2LI3JUXrOAGI3Ji1nNGxUqXWxW9Xn6+hUaE4k6BvCUb
+         hHNNqlR4O5BvW6Q+WdZglqJxYzONVdwAwqXrxTDTGzmfBel5S2+R6SxXX8y0S/IjMe
+         cei8RgORE71QQ==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2b93fba1f62so99636431fa.1;
+        Wed, 26 Jul 2023 06:45:38 -0700 (PDT)
+X-Gm-Message-State: ABy/qLacKGHI7dsLoTjbyyN3vh70sW3F/E+HmM8vvaVECFvF3iX3ToE0
+        wpPuX8FbuCmOtRxz0Ste3cNcZxHuH43WzYLsbg==
+X-Google-Smtp-Source: APBJJlHtGl5j2c/e/mnOniJPq+lRHYhMLejBouuRyKWw85jTV/364HGUPhNajn5iaUQM6XiYkevkAJ/FVEAJkjl8aT4=
+X-Received: by 2002:a2e:3c09:0:b0:2b6:e625:ba55 with SMTP id
+ j9-20020a2e3c09000000b002b6e625ba55mr1536023lja.41.1690379136685; Wed, 26 Jul
+ 2023 06:45:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230726121724.3701240-1-arnd@kernel.org> <20230726121724.3701240-2-arnd@kernel.org>
-In-Reply-To: <20230726121724.3701240-2-arnd@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 26 Jul 2023 14:26:49 +0200
-Message-ID: <CAPDyKFph13af0+47=TtG--WZ+A+H7qpz7158cAZ8=xo39Tdzbg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] genpd: move owl-sps-helper.c from drivers/soc
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org
+References: <20230724223057.1208122-1-quic_eberman@quicinc.com>
+ <20230724223057.1208122-4-quic_eberman@quicinc.com> <20230724232328.GA1101352-robh@kernel.org>
+ <0e72a1a0-611c-9667-866e-a4a1f67f10f6@quicinc.com>
+In-Reply-To: <0e72a1a0-611c-9667-866e-a4a1f67f10f6@quicinc.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 26 Jul 2023 07:45:24 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+wJbp7-xoUqorkoieLcxRVnEKDeFNYtdZQdBTg3gWSew@mail.gmail.com>
+Message-ID: <CAL_Jsq+wJbp7-xoUqorkoieLcxRVnEKDeFNYtdZQdBTg3gWSew@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] dt-bindings: power: reset: Document arm,psci-vendor-reset
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, kernel@quicinc.com,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>,
+        Prasad Sodagudi <quic_psodagud@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,74 +74,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 26 Jul 2023 at 14:17, Arnd Bergmann <arnd@kernel.org> wrote:
+On Tue, Jul 25, 2023 at 12:01=E2=80=AFPM Elliot Berman <quic_eberman@quicin=
+c.com> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
 >
-> Moving only one of the two files in drivers/soc/actions to drivers/genpd
-> caused a link failure in allmodconfig, as drivers/genpd is entered
-> for compile testing, but drivers/soc/actions accidentally got skipped:
 >
-> x86_64-linux-gnu-ld: vmlinux.o: in function `owl_sps_set_power':
-> owl-sps.c:(.text+0x16e259d): undefined reference to `owl_sps_set_pg'
+> On 7/24/2023 4:23 PM, Rob Herring wrote:
+> > On Mon, Jul 24, 2023 at 03:30:53PM -0700, Elliot Berman wrote:
+> >> Add devicetree bindings for using PSCI SYSTEM_RESET2 with vendor reset=
+  types.
+> >>
+> >> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> >> ---
+> >>   .../power/reset/arm,psci-vendor-reset.yaml    | 35 +++++++++++++++++=
+++
+> >>   MAINTAINERS                                   |  1 +
+> >>   2 files changed, 36 insertions(+)
+> >>   create mode 100644 Documentation/devicetree/bindings/power/reset/arm=
+,psci-vendor-reset.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/power/reset/arm,psci-ve=
+ndor-reset.yaml b/Documentation/devicetree/bindings/power/reset/arm,psci-ve=
+ndor-reset.yaml
+> >> new file mode 100644
+> >> index 000000000000..18b0b8c167a1
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/power/reset/arm,psci-vendor-re=
+set.yaml
+> >> @@ -0,0 +1,35 @@
+> >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> >> +# Copyright 2023 Qualcomm Innovation Center, Inc. All Rights Reserved=
+.
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/power/reset/arm,psci-vendor-reset.=
+yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: PSCI SYSTEM_RESET2 Vendor Resets
+> >> +
+> >> +maintainers:
+> >> +  - Elliot Berman <quic_eberman@quicinc.com>
+> >> +
+> >> +description: |
+> >> +  PSCI SYSTEM_RESET2 supports vendor-defined reset types. This descri=
+bes
+> >> +  the conversion of reboot modes to the reset types.
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: arm,psci-vendor-reset
+> >> +
+> >> +allOf:
+> >> +  - $ref: reboot-mode.yaml#
+> >> +
+> >> +additionalProperties: false
+> >> +
+> >> +examples:
+> >> +  - |
+> >> +    firmware {
+> >> +      psci-vendor-resets {
+> >> +        compatible =3D "arm,psci-vendor-reset";
+> >
+> > We already have a node for PSCI, we don't need a second one. You can
+> > have a separate driver without a separate node.
+> >
 >
-> Move the other one as well to allow build testing to work correctly.
+> I could also place the reboot-mode functionality straight into
+> drivers/firwmare/psci/? I thought that might be more controversial than
+> separate driver, but maybe not?
 >
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Mark/Loreno, do you have any concerns to add the reboot-mode driver
+> functionality directly in drivers/firmware/psci/psci.c?
 
-Thanks Arnd!
+I'm talking about the binding. Why are you talking about driver
+design? They are independent.
 
-I have added this to my immutable genpd branch too:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git genpd_create_dir
-
-Kind regards
-Uffe
-
-
-> ---
->  drivers/genpd/actions/Makefile                  | 1 +
->  drivers/{soc => genpd}/actions/owl-sps-helper.c | 0
->  drivers/soc/Makefile                            | 1 -
->  drivers/soc/actions/Makefile                    | 3 ---
->  4 files changed, 1 insertion(+), 4 deletions(-)
->  rename drivers/{soc => genpd}/actions/owl-sps-helper.c (100%)
->  delete mode 100644 drivers/soc/actions/Makefile
->
-> diff --git a/drivers/genpd/actions/Makefile b/drivers/genpd/actions/Makefile
-> index e78c420a24540..7e8aa473d12d1 100644
-> --- a/drivers/genpd/actions/Makefile
-> +++ b/drivers/genpd/actions/Makefile
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0+
-> +obj-$(CONFIG_OWL_PM_DOMAINS_HELPER)    += owl-sps-helper.o
->  obj-$(CONFIG_OWL_PM_DOMAINS)           += owl-sps.o
-> diff --git a/drivers/soc/actions/owl-sps-helper.c b/drivers/genpd/actions/owl-sps-helper.c
-> similarity index 100%
-> rename from drivers/soc/actions/owl-sps-helper.c
-> rename to drivers/genpd/actions/owl-sps-helper.c
-> diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-> index efdcd42f68cb3..708eaad8f590d 100644
-> --- a/drivers/soc/Makefile
-> +++ b/drivers/soc/Makefile
-> @@ -3,7 +3,6 @@
->  # Makefile for the Linux Kernel SOC specific device drivers.
->  #
->
-> -obj-$(CONFIG_ARCH_ACTIONS)     += actions/
->  obj-y                          += apple/
->  obj-y                          += aspeed/
->  obj-$(CONFIG_ARCH_AT91)                += atmel/
-> diff --git a/drivers/soc/actions/Makefile b/drivers/soc/actions/Makefile
-> deleted file mode 100644
-> index 4ac88fec2050a..0000000000000
-> --- a/drivers/soc/actions/Makefile
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# SPDX-License-Identifier: GPL-2.0+
-> -
-> -obj-$(CONFIG_OWL_PM_DOMAINS_HELPER) += owl-sps-helper.o
-> --
-> 2.39.2
->
+Rob
