@@ -2,84 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF1D763523
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 13:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E0E7635C4
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Jul 2023 14:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234067AbjGZLiO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 07:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S232215AbjGZMCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 08:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234059AbjGZLiN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 07:38:13 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E91919BF
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 04:38:12 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5774335bb2aso75013117b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 04:38:12 -0700 (PDT)
+        with ESMTP id S230459AbjGZMB7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 08:01:59 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58224E7E
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 05:01:58 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6b9ede6195cso5599987a34.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Jul 2023 05:01:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690371491; x=1690976291;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=96J8ue6w3N5F5gQkGyEj5Vzg0FhfRUkwh2AMDzs/Bwk=;
-        b=pWCZqK6isJZEbeKRW05LbGEYVOd9qGVDaUHCDqNB8XV77k/4+ShcYXqow3sOvysiw6
-         E9m/tENg0qME2SxnuskjNxc0v5jF4eoSJbr6Huqd5a2eqtKuk5FjynIeQKz1jjJ5Bklb
-         w30k81PLreQXrnwIgUYB5w6v7lWNiGBfsk26D41ZK0o9ATHJeAXmIndF03fuywKOMXeg
-         kHbJSqdI0Uy2rKzchqHzrRco3lfZFWd+nbSK5hy+3EeIv9MvKq9gLS+JuYwxW3/4y/XR
-         eK5fothNSmn9t9xc/YwTlc2c9LUCoT3Q489q4/ACHEbByAtNk+KtyzlPHrEcvcpWzp/T
-         3sjA==
+        d=linaro.org; s=google; t=1690372917; x=1690977717;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=twuF7CNt9sItgP2G+wun0ymCcO+4ADFhcc3cTlAhSLU=;
+        b=L2pP1T66VUA97kTMIT7zDsbk+Sj1U4LKl+x+uma0vuTcHTwZhwha6pzsA2Uo21AkyM
+         DTYRtPvoGZPTiNUjDj58nzV/gO1YXk/7YoxTrOYa3VFGs1SQdSLJ5FrNm6oPsVS27858
+         1TaD1nsizPSLGY9xfJQATDGvg3g5QdzI1PLF9MMoB+hvq5UoVZ/5EOF72Sk0XXc4PzU5
+         F4murQgk+c9gIxdKiBxrfHMEmu1J5d+z4lBn452m9DbU1if2+YJSoK9ArWRrM1mZaBOM
+         P+4SdRKts30leJFnLldgzucZDJyVZtaH3qpw9LzWFXOEX+tYXai8yBb4q8pgE6Y7JhbJ
+         HWcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690371491; x=1690976291;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=96J8ue6w3N5F5gQkGyEj5Vzg0FhfRUkwh2AMDzs/Bwk=;
-        b=R+5XBVRzA5Qe0HS2RMC3zveylvcHT2haExvdEmdNIL5GhroEwt6LpPYVW8KJyjjXN/
-         ZujHcggB4bJlY9msku3tYnX5YUBLo4x31IRqE6+hDWIhy32Vfh6RVL6lejG6EG0MIW/P
-         zzMCGKStCz/QKIpnKxK9WFz1G0upx9LH5QqiSI4m5AHT/i8Wyp/4B4aF043e5E9uicN8
-         YMnLxvfFFgZ6MMnJtUiysbLDXvy8mz673Re8TDHvs+oiSmoikXfmoQGc5s6m1BjobvoK
-         o+ypcc8sgciZUxCblC4YxtmjBWhKNxlgcAidKeiRe/npnmvT9O+MdTC8wwTc7OiirZhE
-         xQpw==
-X-Gm-Message-State: ABy/qLYO214QFn/KnGGz9MHMpyAzR3A67L45nvIvaROw6YeuG6sM1ENi
-        2ZmqlqSIn7++bI7j+gS2EpYigN9z2co+dwjcvRLo9g==
-X-Google-Smtp-Source: APBJJlEaVidNukQVQWzs4brZpcRH3GwvYZOdBdI8uzkOCFcd3L60jNpiZxNFPCGshC/aBz73ce0gUPlgo18wOaDrA9o=
-X-Received: by 2002:a25:fc16:0:b0:d0a:1721:84e9 with SMTP id
- v22-20020a25fc16000000b00d0a172184e9mr1422512ybd.6.1690371491111; Wed, 26 Jul
- 2023 04:38:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690372917; x=1690977717;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=twuF7CNt9sItgP2G+wun0ymCcO+4ADFhcc3cTlAhSLU=;
+        b=J65uNQr8Y3KcZlnIWb1srWna1qHS2F7BKglBbjvATXYWk+RI5Yswr35F85hU7OtwuV
+         jww1pz92of8jVhxi6Rt1Pc9UPgNwb8TsviAuGH+fKl7soknd3PSeP6Gdnhoh6fVYhC+N
+         FVsezeWEpspr9N5xUCekyYpMfg6YV2Lsftp2B0lx0PeijjsdKsINx29Ca0royvld/LzF
+         IHtYOqMDJgcIZLRHLa4hwrBFuqkXfOwrVsuUY7ZL1wbextd85hEcfKnjMvJkeeaZKmiN
+         J27BcZvcv1iHvO/Mjml5xRoE2zrxGkGSDhlOyOq+aOxHyaYHhP29Ic2L8TthEIcCFZpo
+         3aqQ==
+X-Gm-Message-State: ABy/qLbjzsnl0svMUv9X/HbLXNjERZCQfUzodoHY8BT8Sv/iaLpATd/R
+        Ktavm7n6odLRTQW7MBWSS/diImHH80upuApW8YoM8w==
+X-Google-Smtp-Source: APBJJlHrtiForKK6WMD54JzL/emKsiGI0pIQtfmHcUV1rpcoTneVDZAEEvNz6C+KKim/FAU7rhxBywt5iJ7uVhquiFo=
+X-Received: by 2002:a05:6358:6f1d:b0:134:61a5:7f05 with SMTP id
+ r29-20020a0563586f1d00b0013461a57f05mr1664623rwn.10.1690372917492; Wed, 26
+ Jul 2023 05:01:57 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230713141738.23970-1-ulf.hansson@linaro.org>
+ <20230713141738.23970-11-ulf.hansson@linaro.org> <ZLf4c7ejFBJLH7iN@e120937-lin>
+ <20230719155920.iuu2ue2co535dfkx@bogus>
+In-Reply-To: <20230719155920.iuu2ue2co535dfkx@bogus>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 26 Jul 2023 13:37:34 +0200
-Message-ID: <CAPDyKFrHVhg_Jt+nd9H7MtF_ZU+SPF2gtuA1QA0DKRAuq6kexA@mail.gmail.com>
-Subject: linux-next: New tree for generic PM domain providers
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        Olof Johansson <olof@lixom.net>, Nishanth Menon <nm@ti.com>
+Date:   Wed, 26 Jul 2023 14:01:21 +0200
+Message-ID: <CAPDyKFqMXWshKRd-dcETa9SRWFF4w5MFrWBSVkMn80dHg0Cvjg@mail.gmail.com>
+Subject: Re: [PATCH v2 10/11] firmware: arm_scmi: Add the SCMI performance domain
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Stephen,
+On Wed, 19 Jul 2023 at 17:59, Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Wed, Jul 19, 2023 at 03:51:45PM +0100, Cristian Marussi wrote:
+> > On Thu, Jul 13, 2023 at 04:17:37PM +0200, Ulf Hansson wrote:
+>
+> [...]
+>
+> > > +   scmi_pd_data = devm_kzalloc(dev, sizeof(*scmi_pd_data), GFP_KERNEL);
+> > > +   if (!scmi_pd_data)
+> > > +           return -ENOMEM;
+> > > +
+> > > +   domains = devm_kcalloc(dev, num_domains, sizeof(*domains), GFP_KERNEL);
+> > > +   if (!domains)
+> > > +           return -ENOMEM;
+> > > +
+> > > +   for (i = 0; i < num_domains; i++, scmi_pd++) {
+> > > +           scmi_pd->info = perf_ops->domain_info_get(ph, i);
+> >
+> > So here you are grabbing all the performance domains exposed by the
+> > platform via PERF protocol and then a few lines down below you are
+> > registering them with pm_genpd_init(), but the list of domains obtained
+> > from the platform will contain NOT only devices but also CPUs possibly,
+> > already managed by the SCMI CPUFreq driver.
+> >
+>
+> Agreed, I pointed out briefly in the previous patch I think. I am not sure
+> how will that work if the performance and power domains are not 1-1 mapping
+> or if they are CPUs then this might confusing ? Not sure but looks like
+> we might be creating a spaghetti here :(.
 
-I would like to add a new tree to the linux-next integration tree. The
-new tree is intended to host drivers for the so-called generic PM
-domains providers (aka genpd providers). Most of the changes that I
-intend to collect will thus be within drivers/genpd/*, which is a new
-subsystem especially targeted for this.
+I assume the discussions around the DT bindings are making it more
+clear on how this should work. The scmi performance-domain and the
+scmi power-domain are two separate providers.
 
-These are the branches:
-git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git next
-git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git fixes
+>
+> > In fact the SCMI CPUFreq driver, on his side, takes care to pick only
+> > domains that are bound in the DT to a CPU (via scmi_cpu_domain_id DT
+> > parsing) but here you are registering all domains with GenPD upfront.
+> >
+>
+> +1
+>
+> > Is it not possible that, once registered, GenPD can decide, at some point
+> > in the future, to try act on some of these domains associated with a CPU ?
+>
+> IIRC, all unused genpd are turned off right. It may not impact here but still
+> super confusing as we will be creating power domains for the set of domains
+> actually advertised as power domains by the firmware. This will add another
+> set.
+>
+> > (like Clock framework does at the end of boot trying to disable unused
+> >  clocks...not familiar with internals of GenPD, though)
+> >
+>
+> Ah, I am reading too much serialised. Just agreed and wrote the same above.
+>
+> > > +           scmi_pd->domain_id = i;
+> > > +           scmi_pd->perf_ops = perf_ops;
+> > > +           scmi_pd->ph = ph;
+> > > +           scmi_pd->genpd.name = scmi_pd->info->name;
+> > > +           scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
+> > > +           scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
+> > > +
+> > > +           ret = perf_ops->level_get(ph, i, &perf_level, false);
+> > > +           if (ret) {
+> > > +                   dev_dbg(dev, "Failed to get perf level for %s",
+> > > +                            scmi_pd->genpd.name);
+> > > +                   perf_level = 0;
+> > > +           }
+> > > +
+> > > +           /* Let the perf level indicate the power-state too. */
+> > > +           ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
+> >
+> > In SCMI world PERF levels should have nothing to do with the Power
+> > state of a domain: you have the POWER protocol for that, so you should
+> > not assume that perf level 0 means OFF, but you can use the POWER protocol
+> > operation .state_get() to lookup the power state. (and you can grab both
+> > perf and power ops from the same driver)
+> >
+> > The tricky part would be to match the PERF domain at hand with the
+> > related POWER domain to query the state for, I suppose.
+> >
+>
+> I wanted to ask the same. E.g. on juno, GPU has perf domain 2 and power domain
+> 9. It would be good if we can how it would work there ? What is expected
+> from the gpu driver in terms of managing perf and power ? Does it need
+> to specify 2 power domains now and specify which is perf and which power in
+> its bindings ?
 
-The plan is to start collecting patches beyond v6.6-rc1, but that
-isn't really clear yet.
+Yes, correct.
+
+Note that, we already have plenty of consumer devices/drivers that are
+managing multiple PM domains. They use
+dev_pm_domain_attach_by_id|name() to attach their devices to their
+corresponding domain(s). In addition, they often use device_link_add()
+to simplify runtime PM management.
+
+That said, we should expect to see some boilerplate code in consumer
+drivers that deals with this attaching/detaching of multiple PM
+domains. That's a separate problem we may want to address later on. In
+fact, it's already been discussed earlier at LKML (I can't find the
+link right now).
+
+[...]
 
 Kind regards
 Uffe
