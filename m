@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9DA765B93
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 20:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF3D765B99
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 20:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjG0SrJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jul 2023 14:47:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S231129AbjG0Srw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jul 2023 14:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjG0SrH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 14:47:07 -0400
+        with ESMTP id S230497AbjG0Srv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 14:47:51 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE85430D4
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 11:46:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C329B3580
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 11:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1690483581;
+        s=mimecast20190719; t=1690483585;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a86H4y4z8KX0kr9JT7xslzvC5qr9VS6pS7JR1Mg/VpQ=;
-        b=OEKUCFLQk7Dh6GhDnZyDXMbLDpzaV0w7rEB8bU7we001WN7YwYjq4nAo2HLbMxR30OQ8WA
-        BwGoVxlAD2yV/acQY0Z8VZeM5tqSAXtbfD5IfG0Q/0Yr7xohcbak6IdLz7lOsqeeDf2Kbu
-        6cF47LVaCXKfPWeMJDtAn1/miFIxCjM=
+        bh=p0Bv8RV/6VKQUXDLbsWN97ne3VW3ZcB7lEFXae7aK9U=;
+        b=TJU8Ulem51+qY16NQR+MWbBenLFlNTouE518p4kktBbTdiVaBOreirSzzCQUaY1WNFgnIs
+        5aBpQlMmSvlUrx8ljJVIvh2YJ386C2E6Bat8xE1vuazwBtjglEah/Ga1v+u2Zyw1+PFi9/
+        eTuSuzhv+rywPnL8+ZqtVRxb3+xssd8=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-mjyQeE1zOLGs7AetcTKNHA-1; Thu, 27 Jul 2023 14:46:17 -0400
-X-MC-Unique: mjyQeE1zOLGs7AetcTKNHA-1
+ us-mta-501-8ItcYOwWMwCWW9Ry2Q2B5g-1; Thu, 27 Jul 2023 14:46:18 -0400
+X-MC-Unique: 8ItcYOwWMwCWW9Ry2Q2B5g-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 04B9888D518;
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DCEDA88D4E2;
         Thu, 27 Jul 2023 18:46:17 +0000 (UTC)
 Received: from llong.com (unknown [10.22.17.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 371AFC57964;
-        Thu, 27 Jul 2023 18:46:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 15228C57964;
+        Thu, 27 Jul 2023 18:46:17 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -53,9 +53,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
         Randy Dunlap <rdunlap@infradead.org>,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH v6 1/4] x86/speculation: Add __update_spec_ctrl() helper
-Date:   Thu, 27 Jul 2023 14:45:57 -0400
-Message-Id: <20230727184600.26768-2-longman@redhat.com>
+Subject: [PATCH v6 2/4] x86/idle: Disable IBRS when cpu is offline
+Date:   Thu, 27 Jul 2023 14:45:58 -0400
+Message-Id: <20230727184600.26768-3-longman@redhat.com>
 In-Reply-To: <20230727184600.26768-1-longman@redhat.com>
 References: <20230727184600.26768-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -64,52 +64,60 @@ X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a new __update_spec_ctrl() helper which is a variant of
-update_spec_ctrl() that can be used in a noinstr function.
+Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+disables IBRS when the CPU enters long idle. However, when a CPU
+becomes offline, the IBRS bit is still set when X86_FEATURE_KERNEL_IBRS
+is enabled. That will impact the performance of a sibling CPU. Mitigate
+this performance impact by clearing all the mitigation bits in SPEC_CTRL
+MSR when offline. When the CPU is online again, it will be re-initialized
+and so restoring the SPEC_CTRL value isn't needed.
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Add a comment to say that native_play_dead() is a __noreturn function,
+but it can't be marked as such to avoid confusion about the missing
+MSR restoration code.
+
 Signed-off-by: Waiman Long <longman@redhat.com>
 Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- arch/x86/include/asm/spec-ctrl.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ arch/x86/kernel/smpboot.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/include/asm/spec-ctrl.h b/arch/x86/include/asm/spec-ctrl.h
-index cb0386fc4dc3..d03408e0468a 100644
---- a/arch/x86/include/asm/spec-ctrl.h
-+++ b/arch/x86/include/asm/spec-ctrl.h
-@@ -4,6 +4,7 @@
+diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+index e1aa2cd7734b..16f420d49a13 100644
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -87,6 +87,7 @@
+ #include <asm/hw_irq.h>
+ #include <asm/stackprotector.h>
+ #include <asm/sev.h>
++#include <asm/spec-ctrl.h>
  
- #include <linux/thread_info.h>
- #include <asm/nospec-branch.h>
-+#include <asm/msr.h>
- 
- /*
-  * On VMENTER we must preserve whatever view of the SPEC_CTRL MSR
-@@ -76,6 +77,16 @@ static inline u64 ssbd_tif_to_amd_ls_cfg(u64 tifn)
- 	return (tifn & _TIF_SSBD) ? x86_amd_ls_cfg_ssbd_mask : 0ULL;
+ /* representing HT siblings of each logical CPU */
+ DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
+@@ -1743,8 +1744,15 @@ void __noreturn hlt_play_dead(void)
+ 		native_halt();
  }
  
 +/*
-+ * This can be used in noinstr function & should only be called in bare
-+ * metal context.
++ * native_play_dead() is essentially a __noreturn function, but it can't
++ * be marked as such as the compiler may complain about it.
 + */
-+static __always_inline void __update_spec_ctrl(u64 val)
-+{
-+	__this_cpu_write(x86_spec_ctrl_current, val);
-+	native_wrmsrl(MSR_IA32_SPEC_CTRL, val);
-+}
+ void native_play_dead(void)
+ {
++	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS))
++		__update_spec_ctrl(0);
 +
- #ifdef CONFIG_SMP
- extern void speculative_store_bypass_ht_init(void);
- #else
+ 	play_dead_common();
+ 	tboot_shutdown(TB_SHUTDOWN_WFS);
+ 
 -- 
 2.31.1
 
