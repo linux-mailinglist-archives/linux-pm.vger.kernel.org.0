@@ -2,46 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8F1765292
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 13:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CBC7652A0
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 13:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232856AbjG0Lgj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jul 2023 07:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
+        id S233291AbjG0Lix (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jul 2023 07:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232783AbjG0Lgh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 07:36:37 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F6226BB;
-        Thu, 27 Jul 2023 04:36:33 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RBTGc5RKzz1GDFM;
-        Thu, 27 Jul 2023 19:35:36 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 27 Jul
- 2023 19:36:30 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <sre@kernel.org>, <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-msm@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next v2] power: supply: Remove redundant dev_err_probe() for platform_get_irq_byname()
-Date:   Thu, 27 Jul 2023 19:35:50 +0800
-Message-ID: <20230727113550.2599335-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S232999AbjG0Lip (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 07:38:45 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43C330DA
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 04:38:31 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ca4a6e11f55so736277276.1
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 04:38:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690457911; x=1691062711;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5hwP5Yjltzhcjg0+28iB6NeIFoqy4kUssAl46J2XgM=;
+        b=ndyt1UJvTyr1g3MaHQB9IT4i/YnzIhZGnFtSNhOZKtHIzlcEl2z4HGwddtCz96O6/c
+         Bqu29SDrwzv+Ve71lNIR0gUoi4qs6eJhX5pzX5vWKx7XK2MclMk1mnoA7sdgnB+33RU4
+         oSTP/2eGYA520uRZilL7R3SqcpzuXFYWyNtg+mVgT8j735oPCRxsxC6BP6NF2YIyt8py
+         QTIXeEpI8zUHULmOXLsGmCr++L9ON7ZNZROsKpD8PoJWfNAta+vNfsgSfe624KdSlE1K
+         KoyC4ktqTT7JJxG4fAoTZ8TdDh2bBeBQv4QEl0uP+iupbY5+pupypUtkeOu8VpFN/W8M
+         oPAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690457911; x=1691062711;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q5hwP5Yjltzhcjg0+28iB6NeIFoqy4kUssAl46J2XgM=;
+        b=fIrwLTs8DqP+2X+f1PqaSM2QArbQMYxDhkZIOzQsbfDBDYtU8EuH6cADVehlW8G9t1
+         lwVbjrQ0IBx/sI6fAKD/+JwRq2TLGYEqrl0a+wWzU20CTj2m46RIIveamcwr/pKg2QQv
+         h59X1CFEij3VUH48ffPuyEay0vMpXJW9p2uPZdNFn2g6HR3GTRMjJ64N279t1txaA80S
+         P21tlV4EBOuBvEYImGWQ0NqLmZwUe9ZFGZRr+adPfCDtPtPzwqZrUj6YCpMdiGU4R/Oo
+         nzezLFTt+WsN4cAi91p9OtT7WODQqvGP/ITDJBNm64+GtlhW1HoYBKDhNHMMPjrmbFkH
+         8JxA==
+X-Gm-Message-State: ABy/qLbeI2ZFDhpQk4Hfbv7OZmy8HVpedpCoJivSu2XKxeEjzpQ5kBvc
+        09ZPb1aoM0j/K2wHWJkE8Dxb2mOE9PBWL50+ZX0iswJO2Czg0ndt
+X-Google-Smtp-Source: APBJJlG0mw/YXbnpbIAdV8u/ZB4HN9+QW+c/1g+oFO6AU4eaqLh/dtA7s3jf42Q/rRPL8k7inqYpXBoXFSLORTirKB0=
+X-Received: by 2002:a25:5087:0:b0:d0e:2e5c:2f80 with SMTP id
+ e129-20020a255087000000b00d0e2e5c2f80mr4218084ybb.64.1690457910929; Thu, 27
+ Jul 2023 04:38:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230713141738.23970-1-ulf.hansson@linaro.org>
+ <20230713141738.23970-11-ulf.hansson@linaro.org> <ZLf4c7ejFBJLH7iN@e120937-lin>
+ <CAPDyKFr3ann52GAtOLfnLSGgsdF+EZBNz_apNo_OHzrQ-Hg55Q@mail.gmail.com> <ZME4MQpYd7kJmFzF@e120937-lin>
+In-Reply-To: <ZME4MQpYd7kJmFzF@e120937-lin>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 27 Jul 2023 13:37:50 +0200
+Message-ID: <CAPDyKFou5Vq-7j5HpZ1AT7AF-+y4wgEqs9tLyNWV0uE2isS85w@mail.gmail.com>
+Subject: Re: [PATCH v2 10/11] firmware: arm_scmi: Add the SCMI performance domain
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,50 +74,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There is no need to call the dev_err_probe() function directly to print
-a custom message when handling an error from platform_get_irq_byname()
-function as it is going to display an appropriate error message
-in case of a failure.
+[...]
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
-v2:
-- clarify the commit title
----
- drivers/power/supply/mt6370-charger.c       | 4 +---
- drivers/power/supply/qcom_pmi8998_charger.c | 3 +--
- 2 files changed, 2 insertions(+), 5 deletions(-)
+> > >
+> > > Is it not possible that, once registered, GenPD can decide, at some point
+> > > in the future, to try act on some of these domains associated with a CPU ?
+> > > (like Clock framework does at the end of boot trying to disable unused
+> > >  clocks...not familiar with internals of GenPD, though)
+> >
+> > The "magic" that exists in genpd is to save/restore the performance
+> > state at genpd_runtime_suspend|resume().
+> >
+> > That means the consumer device needs to be attached and runtime PM
+> > enabled, otherwise genpd will just leave the performance level
+> > unchanged. In other words, the control is entirely at the consumer
+> > driver (scmi cpufreq driver).
+> >
+>
+> Ok, so if the DT is well formed and a CPU-related perf domain is not
+> wrongly referred from a driver looking for a device perf-domain, the
+> genPD subsystem wont act on the CPUs domains.
 
-diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-index f27dae5043f5..571cf00dde07 100644
---- a/drivers/power/supply/mt6370-charger.c
-+++ b/drivers/power/supply/mt6370-charger.c
-@@ -849,9 +849,7 @@ static int mt6370_chg_init_irq(struct mt6370_priv *priv)
- 		ret = platform_get_irq_byname(to_platform_device(priv->dev),
- 					      mt6370_chg_irqs[i].name);
- 		if (ret < 0)
--			return dev_err_probe(priv->dev, ret,
--					     "Failed to get irq %s\n",
--					     mt6370_chg_irqs[i].name);
-+			return ret;
- 
- 		priv->irq_nums[i] = ret;
- 		ret = devm_request_threaded_irq(priv->dev, ret, NULL,
-diff --git a/drivers/power/supply/qcom_pmi8998_charger.c b/drivers/power/supply/qcom_pmi8998_charger.c
-index d16c5ee17249..ce7392e7d8b8 100644
---- a/drivers/power/supply/qcom_pmi8998_charger.c
-+++ b/drivers/power/supply/qcom_pmi8998_charger.c
-@@ -922,8 +922,7 @@ static int smb2_init_irq(struct smb2_chip *chip, int *irq, const char *name,
- 
- 	irqnum = platform_get_irq_byname(to_platform_device(chip->dev), name);
- 	if (irqnum < 0)
--		return dev_err_probe(chip->dev, irqnum,
--				     "Couldn't get irq %s byname\n", name);
-+		return irqnum;
- 
- 	rc = devm_request_threaded_irq(chip->dev, irqnum, NULL, handler,
- 				       IRQF_ONESHOT, name, chip);
--- 
-2.34.1
+Yes, correct!
 
+>
+> > >
+> > > > +             scmi_pd->domain_id = i;
+> > > > +             scmi_pd->perf_ops = perf_ops;
+> > > > +             scmi_pd->ph = ph;
+> > > > +             scmi_pd->genpd.name = scmi_pd->info->name;
+> > > > +             scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
+> > > > +             scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
+> > > > +
+> > > > +             ret = perf_ops->level_get(ph, i, &perf_level, false);
+> > > > +             if (ret) {
+> > > > +                     dev_dbg(dev, "Failed to get perf level for %s",
+> > > > +                              scmi_pd->genpd.name);
+> > > > +                     perf_level = 0;
+> > > > +             }
+> > > > +
+> > > > +             /* Let the perf level indicate the power-state too. */
+> > > > +             ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
+> > >
+> > > In SCMI world PERF levels should have nothing to do with the Power
+> > > state of a domain: you have the POWER protocol for that, so you should
+> > > not assume that perf level 0 means OFF, but you can use the POWER protocol
+> > > operation .state_get() to lookup the power state. (and you can grab both
+> > > perf and power ops from the same driver)
+> >
+> > Well, I think this may be SCMI FW implementation specific, but
+> > honestly I don't know exactly what the spec says about this. In any
+> > case, I don't think it's a good idea to mix this with the POWER
+> > domain, as that's something that is entirely different. We have no
+> > clue of those relationships (domain IDs).
+> >
+> > My main idea behind this, is just to give the genpd internals a
+> > reasonably defined value for its power state.
+> >
+>
+> The thing is that in the SCMI world you cannot assume that perf_level 0
+> means powered off, the current SCP/SCMI platform fw, as an example, wont
+> advertise a 0-perf-level and wont act on such a request, because you are
+> supposed to use POWER protocol to get/set the power-state of a device.
+
+Right, thanks for clarifying this!
+
+>
+> So it could be fine, as long as genPD wont try to set the level to 0
+> expecting the domain to be as a consequence also powered off and as
+> long as it is fine for these genpd domains to be always initialized
+> as ON. (since perf_level could never be found as zero..)
+
+Okay, so to me, it sounds like that we should set GENPD_FLAG_ALWAYS_ON
+for the genpd. This makes it clear that the domain can't be powered
+off.
+
+Moreover, we should prevent genpd internals from setting the
+performance state to 0 for the scmi performance domain. Let me look
+into how to best deal with that.
+
+Kind regards
+Uffe
