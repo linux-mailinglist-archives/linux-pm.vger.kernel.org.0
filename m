@@ -2,75 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0770576509F
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 12:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8F1765292
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 13:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233171AbjG0KLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jul 2023 06:11:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S232856AbjG0Lgj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jul 2023 07:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjG0KLc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 06:11:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC36897;
-        Thu, 27 Jul 2023 03:11:31 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id EA056660702D;
-        Thu, 27 Jul 2023 11:11:29 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690452690;
-        bh=FyMX1Fm7JT1B1+S2v/xtvGbFc/F+jQacw+dZrBbBQzs=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=n/bwER6jg3CkEOmqAapF2bzO1Zp/7N05FVt6SLMUrAM4LmU6PUPX6iU/b8vROvX55
-         SXQqIMAXy3vvncho4zdJokepyG3ryPuOGgzZ+P52Tb5zzzVEN32WfM6EaT2cjmAM4Q
-         VTcK/qSh/dX1B383PnaVVAysKTok6zyOuuSx2bSVZQ1uHtXr2E0cBUh4hWYOBAuFmt
-         l/9JRP7ZWK+LNdT2QffWRvrT5uciVBuMxlF4ByCvXJ9NK5Uw7/cynv5/4QlvgGGHHa
-         EwMZujxilUqerbZ7YK8XGIXUj1NZmdmMePkEFLJXlHt5U9KpR0RbDuLhFI3vJ1JRom
-         eiYK7gnIUmurQ==
-Message-ID: <4ccda73e-760d-243c-d02d-7b79ce7d4890@collabora.com>
-Date:   Thu, 27 Jul 2023 12:11:27 +0200
+        with ESMTP id S232783AbjG0Lgh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 07:36:37 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F6226BB;
+        Thu, 27 Jul 2023 04:36:33 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RBTGc5RKzz1GDFM;
+        Thu, 27 Jul 2023 19:35:36 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 27 Jul
+ 2023 19:36:30 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <sre@kernel.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next v2] power: supply: Remove redundant dev_err_probe() for platform_get_irq_byname()
+Date:   Thu, 27 Jul 2023 19:35:50 +0800
+Message-ID: <20230727113550.2599335-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH -next] power: supply: Remove redundant dev_err_probe()
-Content-Language: en-US
-To:     Ruan Jinjie <ruanjinjie@huawei.com>, sre@kernel.org,
-        matthias.bgg@gmail.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org
-References: <20230727082301.741821-1-ruanjinjie@huawei.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230727082301.741821-1-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 27/07/23 10:23, Ruan Jinjie ha scritto:
-> There is no need to call the dev_err_probe() function directly to print
-> a custom message when handling an error from platform_get_irq_byname()
-> function as it is going to display an appropriate error message
-> in case of a failure.
-> 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+There is no need to call the dev_err_probe() function directly to print
+a custom message when handling an error from platform_get_irq_byname()
+function as it is going to display an appropriate error message
+in case of a failure.
 
-power: supply: Remove redundant dev_err_probe() for platform_get_irq_byname()
-
-After clarifying the commit title,
-
+Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+v2:
+- clarify the commit title
+---
+ drivers/power/supply/mt6370-charger.c       | 4 +---
+ drivers/power/supply/qcom_pmi8998_charger.c | 3 +--
+ 2 files changed, 2 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
+index f27dae5043f5..571cf00dde07 100644
+--- a/drivers/power/supply/mt6370-charger.c
++++ b/drivers/power/supply/mt6370-charger.c
+@@ -849,9 +849,7 @@ static int mt6370_chg_init_irq(struct mt6370_priv *priv)
+ 		ret = platform_get_irq_byname(to_platform_device(priv->dev),
+ 					      mt6370_chg_irqs[i].name);
+ 		if (ret < 0)
+-			return dev_err_probe(priv->dev, ret,
+-					     "Failed to get irq %s\n",
+-					     mt6370_chg_irqs[i].name);
++			return ret;
+ 
+ 		priv->irq_nums[i] = ret;
+ 		ret = devm_request_threaded_irq(priv->dev, ret, NULL,
+diff --git a/drivers/power/supply/qcom_pmi8998_charger.c b/drivers/power/supply/qcom_pmi8998_charger.c
+index d16c5ee17249..ce7392e7d8b8 100644
+--- a/drivers/power/supply/qcom_pmi8998_charger.c
++++ b/drivers/power/supply/qcom_pmi8998_charger.c
+@@ -922,8 +922,7 @@ static int smb2_init_irq(struct smb2_chip *chip, int *irq, const char *name,
+ 
+ 	irqnum = platform_get_irq_byname(to_platform_device(chip->dev), name);
+ 	if (irqnum < 0)
+-		return dev_err_probe(chip->dev, irqnum,
+-				     "Couldn't get irq %s byname\n", name);
++		return irqnum;
+ 
+ 	rc = devm_request_threaded_irq(chip->dev, irqnum, NULL, handler,
+ 				       IRQF_ONESHOT, name, chip);
+-- 
+2.34.1
 
