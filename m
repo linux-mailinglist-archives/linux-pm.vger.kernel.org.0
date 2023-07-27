@@ -2,47 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A377643EF
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 04:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56027764412
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 04:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjG0CrG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Jul 2023 22:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51230 "EHLO
+        id S231221AbjG0C7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Jul 2023 22:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbjG0CrF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 22:47:05 -0400
+        with ESMTP id S230129AbjG0C7B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Jul 2023 22:59:01 -0400
 Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A960B1724;
-        Wed, 26 Jul 2023 19:47:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB66B1BF2;
+        Wed, 26 Jul 2023 19:58:55 -0700 (PDT)
 Received: from loongson.cn (unknown [10.20.42.201])
-        by gateway (Coremail) with SMTP id _____8DxRvGk2sFkG38KAA--.26381S3;
-        Thu, 27 Jul 2023 10:47:00 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8BxJvFt3cFkyn8KAA--.26388S3;
+        Thu, 27 Jul 2023 10:58:54 +0800 (CST)
 Received: from [10.20.42.201] (unknown [10.20.42.201])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbSOj2sFkdW88AA--.47372S3;
-        Thu, 27 Jul 2023 10:46:59 +0800 (CST)
-Subject: Re: [PATCH v15 1/2] thermal: loongson-2: add thermal management
- support
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxbSNt3cFkWXM8AA--.47406S3;
+        Thu, 27 Jul 2023 10:58:53 +0800 (CST)
+Subject: Re: [PATCH v4 2/2] soc: loongson2_pm: add power management support
+To:     Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Liu Yun <liuyun@loongson.cn>
 Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
         Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>, zhuyinbo@loongson.cn
-References: <20230620012944.28877-1-zhuyinbo@loongson.cn>
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230620090811.721-1-zhuyinbo@loongson.cn>
+ <20230620090811.721-3-zhuyinbo@loongson.cn>
 From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <2ca4e5cc-425f-f84d-895d-36637ac21ddc@loongson.cn>
-Date:   Thu, 27 Jul 2023 10:46:59 +0800
+Message-ID: <476ea5c4-9813-1520-d490-a8a51a164560@loongson.cn>
+Date:   Thu, 27 Jul 2023 10:58:53 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20230620012944.28877-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20230620090811.721-3-zhuyinbo@loongson.cn>
 Content-Type: text/plain; charset=gbk; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxbSOj2sFkdW88AA--.47372S3
+X-CM-TRANSID: AQAAf8CxbSNt3cFkWXM8AA--.47406S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
 X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
         ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
@@ -59,319 +55,285 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Friendly ping ?
 
-在 2023/6/20 上午9:29, Yinbo Zhu 写道:
-> This patch adds the support for Loongson-2 thermal sensor controller,
-> which can support maximum four sensor selectors that corresponding to four
-> sets of thermal control registers and one set of sampling register. The
-> sensor selector can selector a speific thermal sensor as temperature input.
-> The sampling register is used to obtain the temperature in real time, the
-> control register GATE field is used to set the threshold of high or low
-> temperature, when the input temperature is higher than the high temperature
-> threshold or lower than the low temperature threshold, an interrupt will
-> occur.
+在 2023/6/20 下午5:08, Yinbo Zhu 写道:
+> The Loongson-2's power management controller was ACPI, supports ACPI
+> S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+> Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
+> (USB, GMAC, PWRBTN, etc.). This driver was to add power management
+> controller support that base on dts for Loongson-2 series SoCs.
 > 
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> Co-developed-by: Liu Yun <liuyun@loongson.cn>
+> Signed-off-by: Liu Yun <liuyun@loongson.cn>
+> Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
 > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
-> Change in v15:
-> 		1. Remove the unused head file.
-> 		2. Remove the invalid conditions that such as (low > high).
-> 		3. Use the clamp() to replace max() and min().
-> 		4. Use the macros to replace some constant.
-> 		5. Use the struct data point as data field of of_device_id.
-> 		6. Use the thermal_sensor_sel to replace the sensor id.
-> 		7. Use the thermal_zone_device_priv to replace tz->devdata.
-> 		8. Reword the commit log information.
-> Change in v14:
-> 		1. Add back depends on COMPILE_TEST.
-> 		2. The implementation of devm_thermal_add_hwmon_sysfs has changed in
-> 		   recent community code that cause compile fail issue and this verison
-> 		   add a dev args in devm_thermal_add_hwmon_sysfs to fix compile issue.
-> Change in v13:
-> 		1. Add a description about that how works the sensor.
-> 		2. Drop the COMPILE_TEST.
-> 		3. Rework the help prograph in LOONGSON2_THERMAL Kconfig.
-> 		4. Drop the 'tzd' 'irq' and 'pdev' element in loongson2_thermal_data.
-> 		5. Drop the reset of variable in loongson2_thermal_set.
-> 		6. Drop the function loongson2_thermal_get_sensor_id.
-> 		7. Drop the function loongson2_thermal_alarm_irq.
-> 		8. Rework the devm_thermal_of_zone_register.
-> 		9. Pass 'tzd' instead of 'data' in devm_request_threaded_irq.
-> 		10. Drop the "data->tzd->tzp->no_hwmon = false".
-> 		11. Drop the loongson2_thermal_remove.
-> 		12. Add the sensor id in the of_device_id data field.
-> 		13. Drop the save and restore function.
-> Change in v12:
-> 		1. Fixup it about min and max.
-> 		2. Use dev_err_probe replace dev_err in devm_request_threaded_irq context.
-> Change in v11:
-> 		1. Add min() and max() to replace related code in function
-> 		   loongson2_thermal_set.
-> 		2. Add dev_err_probe to to replace related code for function
-> 		   return value use devm_thermal_of_zone_register.
-> 		3. Replace thermal_add_hwmon_sysfs with devm_thermal_add_hwmon_sysfs
-> 		   and use dev_warn replace dev_err in this context.
-> Change in v10:
-> 		1. Add all history change log information.
-> Change in v9:
-> 		1. Switch new API that use devm_thermal_of_zone_register
-> 		   to replace previous interfaces.
-> 		2. Add depend on LOONGARCH || COMPILE_TEST.
-> Change in v8:
->                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
->                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
-> 		   files.
-> Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> 		2. Remove the unless code annotation to fix the compile warning
-> 		   when compile C code with W=1.
-> Change in v6:
-> 		1. NO change, but other patch in this series of patches set has
-> 		   changes.
-> Change in v5:
-> 		1. NO change, but other patch in this series of patches set has
-> 		   changes.
-> Change in v4:
-> 		1. Fixup the compatible.
-> Change in v3:
-> 		1. Add a function to gain sensor id an remove dts id.
-> Change in v2:
-> 		1. Remove error msg printing when addr ioremap has error.
-> 		2. Make loongson2 thermal driver was built-in by default.
-> 		3. Replace ls2k with loongson2.
-> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
-> 		   __maybe_unused.
-> 
->   MAINTAINERS                         |   7 ++
->   drivers/thermal/Kconfig             |  12 ++
->   drivers/thermal/Makefile            |   1 +
->   drivers/thermal/loongson2_thermal.c | 170 ++++++++++++++++++++++++++++
->   4 files changed, 190 insertions(+)
->   create mode 100644 drivers/thermal/loongson2_thermal.c
+>   MAINTAINERS                         |   1 +
+>   drivers/soc/loongson/Kconfig        |  10 ++
+>   drivers/soc/loongson/Makefile       |   1 +
+>   drivers/soc/loongson/loongson2_pm.c | 215 ++++++++++++++++++++++++++++
+>   4 files changed, 227 insertions(+)
+>   create mode 100644 drivers/soc/loongson/loongson2_pm.c
 > 
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7a91f14cad2e..f9277fa2a728 100644
+> index bcd05f1fa5c1..7c4ad0cbaeff 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -12198,6 +12198,13 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
->   F:	drivers/pinctrl/pinctrl-loongson2.c
+> @@ -12195,6 +12195,7 @@ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+>   L:	linux-pm@vger.kernel.org
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
+> +F:	drivers/soc/loongson/loongson2_pm.c
 >   
-> +LOONGSON-2 SOC SERIES THERMAL DRIVER
-> +M:	zhanghongchen <zhanghongchen@loongson.cn>
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/thermal/loongson2_thermal.c
+>   LOONGSON-2 SOC SERIES PINCTRL DRIVER
+>   M:	zhanghongchen <zhanghongchen@loongson.cn>
+> diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+> index 707f56358dc4..4f3ce9eb7520 100644
+> --- a/drivers/soc/loongson/Kconfig
+> +++ b/drivers/soc/loongson/Kconfig
+> @@ -16,3 +16,13 @@ config LOONGSON2_GUTS
+>   	 SoCs. Initially only reading SVR and registering soc device are
+>   	 supported. Other guts accesses, such as reading firmware configuration
+>   	 by default, should eventually be added into this driver as well.
 > +
->   LOONGSON GPIO DRIVER
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-gpio@vger.kernel.org
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index 4cd7ab707315..c4de94e972f4 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -502,4 +502,16 @@ config KHADAS_MCU_FAN_THERMAL
->   	  If you say yes here you get support for the FAN controlled
->   	  by the Microcontroller found on the Khadas VIM boards.
->   
-> +config LOONGSON2_THERMAL
-> +	tristate "Loongson-2 SoC series thermal driver"
-> +	depends on LOONGARCH || COMPILE_TEST
-> +	depends on OF
+> +config LOONGSON2_PM
+> +	bool "Loongson-2 SoC Power Management Controller Driver"
+> +	depends on LOONGARCH && OF
 > +	help
-> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
-> +	  The thermal driver realizes get_temp and set_trips function, which
-> +	  are used to obtain the temperature of the current node and set the
-> +	  temperature range to trigger the interrupt. When the input temperature
-> +	  is higher than the high temperature threshold or lower than the low
-> +	  temperature threshold, the interrupt will occur.
-> +
->   endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 058664bc3ec0..c934cab309ae 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -63,3 +63,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+> +	 The Loongson-2's power management controller was ACPI, supports ACPI
+> +	 S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+> +	 Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
+> +	 (USB, GMAC, PWRBTN, etc.). This driver was to add power management
+> +	 controller support that base on dts for Loongson-2 series SoCs.
+> diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
+> index 263c486df638..4118f50f55e2 100644
+> --- a/drivers/soc/loongson/Makefile
+> +++ b/drivers/soc/loongson/Makefile
+> @@ -4,3 +4,4 @@
+>   #
+>   
+>   obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
+> +obj-$(CONFIG_LOONGSON2_PM)		+= loongson2_pm.o
+> diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
 > new file mode 100644
-> index 000000000000..2be8e0f5fea3
+> index 000000000000..cd022a1d5b33
 > --- /dev/null
-> +++ b/drivers/thermal/loongson2_thermal.c
-> @@ -0,0 +1,170 @@
+> +++ b/drivers/soc/loongson/loongson2_pm.c
+> @@ -0,0 +1,215 @@
 > +// SPDX-License-Identifier: GPL-2.0+
 > +/*
-> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
-> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
-> + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
+> + * Loongson-2 PM Support
+> + *
+> + * Copyright (C) 2023 Loongson Technology Corporation Limited
 > + */
 > +
-> +#include <linux/interrupt.h>
 > +#include <linux/io.h>
-> +#include <linux/minmax.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
+> +#include <linux/of.h>
+> +#include <linux/init.h>
+> +#include <linux/input.h>
+> +#include <linux/suspend.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/pm_wakeirq.h>
 > +#include <linux/platform_device.h>
-> +#include <linux/thermal.h>
-> +#include <linux/units.h>
-> +#include "thermal_hwmon.h"
+> +#include <asm/bootinfo.h>
+> +#include <asm/suspend.h>
 > +
-> +#define LOONGSON2_MAX_SENSOR_SEL_NUM			3
+> +#define LOONGSON2_PM1_CNT_REG		0x14
+> +#define LOONGSON2_PM1_STS_REG		0x0c
+> +#define LOONGSON2_PM1_ENA_REG		0x10
+> +#define LOONGSON2_GPE0_STS_REG		0x28
+> +#define LOONGSON2_GPE0_ENA_REG		0x2c
 > +
-> +#define LOONGSON2_THSENS_CTRL_HI_REG			0x0
-> +#define LOONGSON2_THSENS_CTRL_LOW_REG			0x8
-> +#define LOONGSON2_THSENS_STATUS_REG			0x10
-> +#define LOONGSON2_THSENS_OUT_REG			0x14
+> +#define LOONGSON2_PM1_PWRBTN_STS	BIT(8)
+> +#define LOONGSON2_PM1_PCIEXP_WAKE_STS	BIT(14)
+> +#define LOONGSON2_PM1_WAKE_STS		BIT(15)
+> +#define LOONGSON2_PM1_CNT_INT_EN	BIT(0)
+> +#define LOONGSON2_PM1_PWRBTN_EN		LOONGSON2_PM1_PWRBTN_STS
 > +
-> +#define LOONGSON2_THSENS_INT_LO				BIT(0)
-> +#define LOONGSON2_THSENS_INT_HIGH			BIT(1)
-> +#define LOONGSON2_THSENS_OUT_MASK			0xFF
+> +static struct loongson2_pm {
+> +	void __iomem			*base;
+> +	struct input_dev		*dev;
+> +	bool				suspended;
+> +} loongson2_pm;
 > +
-> +struct loongson2_thermal_chip_data {
-> +	unsigned int	thermal_sensor_sel;
-> +};
+> +#define loongson2_pm_readw(reg)		readw(loongson2_pm.base + reg)
+> +#define loongson2_pm_readl(reg)		readl(loongson2_pm.base + reg)
+> +#define loongson2_pm_writew(val, reg)	writew(val, loongson2_pm.base + reg)
+> +#define loongson2_pm_writel(val, reg)	writel(val, loongson2_pm.base + reg)
 > +
-> +struct loongson2_thermal_data {
-> +	void __iomem	*regs;
-> +	const struct loongson2_thermal_chip_data *chip_data;
-> +};
-> +
-> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-> +					int low, int high, bool enable)
+> +static void loongson2_pm_status_clear(void)
 > +{
-> +	u64 reg_ctrl = 0;
-> +	int reg_off = data->chip_data->thermal_sensor_sel * 2;
+> +	u16 value;
 > +
-> +	low = clamp(-40, low, high);
-> +	high = clamp(125, low, high);
+> +	value = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
+> +	value |= (LOONGSON2_PM1_PWRBTN_STS | LOONGSON2_PM1_PCIEXP_WAKE_STS |
+> +		  LOONGSON2_PM1_WAKE_STS);
+> +	loongson2_pm_writew(value, LOONGSON2_PM1_STS_REG);
+> +	loongson2_pm_writel(loongson2_pm_readl(LOONGSON2_GPE0_STS_REG), LOONGSON2_GPE0_STS_REG);
+> +}
 > +
-> +	low += HECTO;
-> +	high += HECTO;
+> +static void loongson2_pm_irq_enable(void)
+> +{
+> +	u16 value;
 > +
-> +	reg_ctrl = low;
-> +	reg_ctrl |= enable ? 0x100 : 0;
-> +	writew(reg_ctrl, data->regs + LOONGSON2_THSENS_CTRL_LOW_REG + reg_off);
+> +	value = loongson2_pm_readw(LOONGSON2_PM1_CNT_REG);
+> +	value |= LOONGSON2_PM1_CNT_INT_EN;
+> +	loongson2_pm_writew(value, LOONGSON2_PM1_CNT_REG);
 > +
-> +	reg_ctrl = high;
-> +	reg_ctrl |= enable ? 0x100 : 0;
-> +	writew(reg_ctrl, data->regs + LOONGSON2_THSENS_CTRL_HI_REG + reg_off);
+> +	value = loongson2_pm_readw(LOONGSON2_PM1_ENA_REG);
+> +	value |= LOONGSON2_PM1_PWRBTN_EN;
+> +	loongson2_pm_writew(value, LOONGSON2_PM1_ENA_REG);
+> +}
+> +
+> +static int loongson2_suspend_enter(suspend_state_t state)
+> +{
+> +	loongson2_pm_status_clear();
+> +	loongarch_common_suspend();
+> +	loongarch_suspend_enter();
+> +	loongarch_common_resume();
+> +	loongson2_pm_irq_enable();
+> +	pm_set_resume_via_firmware();
 > +
 > +	return 0;
 > +}
 > +
-> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +static int loongson2_suspend_begin(suspend_state_t state)
 > +{
-> +	u32 reg_val;
-> +	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
-> +
-> +	reg_val = readl(data->regs + LOONGSON2_THSENS_OUT_REG);
-> +	*temp = ((reg_val & LOONGSON2_THSENS_OUT_MASK) - HECTO) * KILO;
+> +	pm_set_suspend_via_firmware();
 > +
 > +	return 0;
 > +}
 > +
-> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
+> +static int loongson2_suspend_valid_state(suspend_state_t state)
 > +{
-> +	struct thermal_zone_device *tzd = dev;
-> +	struct loongson2_thermal_data *data = thermal_zone_device_priv(tzd);
+> +	return (state == PM_SUSPEND_MEM);
+> +}
 > +
-> +	writeb(LOONGSON2_THSENS_INT_LO | LOONGSON2_THSENS_INT_HIGH, data->regs +
-> +		LOONGSON2_THSENS_STATUS_REG);
+> +static const struct platform_suspend_ops loongson2_suspend_ops = {
+> +	.valid	= loongson2_suspend_valid_state,
+> +	.begin	= loongson2_suspend_begin,
+> +	.enter	= loongson2_suspend_enter,
+> +};
 > +
-> +	thermal_zone_device_update(tzd, THERMAL_EVENT_UNSPECIFIED);
+> +static int loongson2_power_button_init(struct device *dev, int irq)
+> +{
+> +	int ret;
+> +	struct input_dev *button;
+> +
+> +	button = input_allocate_device();
+> +	if (!dev)
+> +		return -ENOMEM;
+> +
+> +	button->name = "Power Button";
+> +	button->phys = "pm/button/input0";
+> +	button->id.bustype = BUS_HOST;
+> +	button->dev.parent = NULL;
+> +	input_set_capability(button, EV_KEY, KEY_POWER);
+> +
+> +	ret = input_register_device(button);
+> +	if (ret)
+> +		goto free_dev;
+> +
+> +	dev_pm_set_wake_irq(&button->dev, irq);
+> +	device_set_wakeup_capable(&button->dev, true);
+> +	device_set_wakeup_enable(&button->dev, true);
+> +
+> +	loongson2_pm.dev = button;
+> +	dev_info(dev, "Power Button: Init successful!\n");
+> +
+> +	return 0;
+> +
+> +free_dev:
+> +	input_free_device(button);
+> +
+> +	return ret;
+> +}
+> +
+> +static irqreturn_t loongson2_pm_irq_handler(int irq, void *dev_id)
+> +{
+> +	u16 status = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
+> +
+> +	if (!loongson2_pm.suspended && (status & LOONGSON2_PM1_PWRBTN_STS)) {
+> +		pr_info("Power Button pressed...\n");
+> +		input_report_key(loongson2_pm.dev, KEY_POWER, 1);
+> +		input_sync(loongson2_pm.dev);
+> +		input_report_key(loongson2_pm.dev, KEY_POWER, 0);
+> +		input_sync(loongson2_pm.dev);
+> +	}
+> +
+> +	loongson2_pm_status_clear();
 > +
 > +	return IRQ_HANDLED;
 > +}
 > +
-> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+> +static int __maybe_unused loongson2_pm_suspend(struct device *dev)
 > +{
-> +	struct loongson2_thermal_data *data = thermal_zone_device_priv(tz);
+> +	loongson2_pm.suspended = true;
 > +
-> +	return loongson2_thermal_set(data, low/MILLI, high/MILLI, true);
+> +	return 0;
 > +}
 > +
-> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
-> +	.get_temp = loongson2_thermal_get_temp,
-> +	.set_trips = loongson2_thermal_set_trips,
-> +};
-> +
-> +static int loongson2_thermal_probe(struct platform_device *pdev)
+> +static int __maybe_unused loongson2_pm_resume(struct device *dev)
 > +{
+> +	loongson2_pm.suspended = false;
+> +
+> +	return 0;
+> +}
+> +static SIMPLE_DEV_PM_OPS(loongson2_pm_ops, loongson2_pm_suspend, loongson2_pm_resume);
+> +
+> +static int loongson2_pm_probe(struct platform_device *pdev)
+> +{
+> +	int irq, retval;
+> +	u64 suspend_addr;
 > +	struct device *dev = &pdev->dev;
-> +	struct loongson2_thermal_data *data;
-> +	struct thermal_zone_device *tzd;
-> +	int ret, irq, i;
 > +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->chip_data = device_get_match_data(dev);
-> +
-> +	data->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(data->regs))
-> +		return PTR_ERR(data->regs);
+> +	loongson2_pm.base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(loongson2_pm.base))
+> +		return PTR_ERR(loongson2_pm.base);
 > +
 > +	irq = platform_get_irq(pdev, 0);
 > +	if (irq < 0)
 > +		return irq;
 > +
-> +	writeb(LOONGSON2_THSENS_INT_LO | LOONGSON2_THSENS_INT_HIGH, data->regs +
-> +		LOONGSON2_THSENS_STATUS_REG);
+> +	if (!device_property_read_u64(dev, "loongson,suspend-address", &suspend_addr))
+> +		loongson_sysconf.suspend_addr = (u64)phys_to_virt(suspend_addr);
+> +	else
+> +		dev_err(dev, "No loongson,suspend-address, could not support S3!\n");
 > +
-> +	loongson2_thermal_set(data, 0, 0, false);
+> +	if (loongson2_power_button_init(dev, irq))
+> +		return -EINVAL;
 > +
-> +	for (i = 0; i <= LOONGSON2_MAX_SENSOR_SEL_NUM; i++) {
-> +		tzd = devm_thermal_of_zone_register(dev, i, data,
-> +			&loongson2_of_thermal_ops);
+> +	retval = devm_request_irq(&pdev->dev, irq, loongson2_pm_irq_handler,
+> +				  IRQF_SHARED, "pm_irq", &loongson2_pm);
+> +	if (retval)
+> +		return retval;
 > +
-> +		if (!IS_ERR(tzd))
-> +			break;
+> +	loongson2_pm_irq_enable();
+> +	loongson2_pm_status_clear();
 > +
-> +		if (PTR_ERR(tzd) != ENODEV)
-> +			continue;
-> +
-> +		return dev_err_probe(dev, PTR_ERR(tzd), "failed to register");
-> +	}
-> +
-> +	ret = devm_request_threaded_irq(dev, irq, NULL, loongson2_thermal_irq_thread,
-> +			IRQF_ONESHOT, "loongson2_thermal", tzd);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed to request alarm irq\n");
-> +
-> +	if (devm_thermal_add_hwmon_sysfs(dev, tzd))
-> +		dev_warn(dev, "Failed to add hwmon sysfs attributes\n");
+> +	if (loongson_sysconf.suspend_addr)
+> +		suspend_set_ops(&loongson2_suspend_ops);
 > +
 > +	return 0;
 > +}
 > +
-> +static const struct loongson2_thermal_chip_data loongson2_thermal_ls2k1000_data = {
-> +	.thermal_sensor_sel = 0,
+> +static const struct of_device_id loongson2_pm_match[] = {
+> +	{ .compatible = "loongson,ls2k1000-pmc", },
+> +	{ .compatible = "loongson,ls2k0500-pmc", },
+> +	{},
 > +};
 > +
-> +static const struct of_device_id of_loongson2_thermal_match[] = {
-> +	{
-> +		.compatible = "loongson,ls2k1000-thermal",
-> +		.data = &loongson2_thermal_ls2k1000_data,
-> +	},
-> +	{ /* end */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
-> +
-> +static struct platform_driver loongson2_thermal_driver = {
+> +static struct platform_driver loongson2_pm_driver = {
 > +	.driver = {
-> +		.name		= "loongson2_thermal",
-> +		.of_match_table = of_loongson2_thermal_match,
+> +		.name = "ls2k-pm",
+> +		.pm = &loongson2_pm_ops,
+> +		.of_match_table = loongson2_pm_match,
 > +	},
-> +	.probe	= loongson2_thermal_probe,
+> +	.probe = loongson2_pm_probe,
 > +};
-> +module_platform_driver(loongson2_thermal_driver);
+> +module_platform_driver(loongson2_pm_driver);
 > +
-> +MODULE_DESCRIPTION("Loongson2 thermal driver");
+> +MODULE_DESCRIPTION("Loongson-2 PM driver");
 > +MODULE_LICENSE("GPL");
 > 
 
