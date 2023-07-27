@@ -2,71 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CBC7652A0
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 13:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05437652BA
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 13:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbjG0Lix (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Jul 2023 07:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34636 "EHLO
+        id S233281AbjG0Lmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jul 2023 07:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbjG0Lip (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 07:38:45 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43C330DA
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 04:38:31 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ca4a6e11f55so736277276.1
-        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 04:38:31 -0700 (PDT)
+        with ESMTP id S232966AbjG0Lmp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 07:42:45 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A151198A
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 04:42:44 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5841be7d15eso8990217b3.2
+        for <linux-pm@vger.kernel.org>; Thu, 27 Jul 2023 04:42:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690457911; x=1691062711;
+        d=linaro.org; s=google; t=1690458163; x=1691062963;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q5hwP5Yjltzhcjg0+28iB6NeIFoqy4kUssAl46J2XgM=;
-        b=ndyt1UJvTyr1g3MaHQB9IT4i/YnzIhZGnFtSNhOZKtHIzlcEl2z4HGwddtCz96O6/c
-         Bqu29SDrwzv+Ve71lNIR0gUoi4qs6eJhX5pzX5vWKx7XK2MclMk1mnoA7sdgnB+33RU4
-         oSTP/2eGYA520uRZilL7R3SqcpzuXFYWyNtg+mVgT8j735oPCRxsxC6BP6NF2YIyt8py
-         QTIXeEpI8zUHULmOXLsGmCr++L9ON7ZNZROsKpD8PoJWfNAta+vNfsgSfe624KdSlE1K
-         KoyC4ktqTT7JJxG4fAoTZ8TdDh2bBeBQv4QEl0uP+iupbY5+pupypUtkeOu8VpFN/W8M
-         oPAw==
+        bh=IqCebh/KFlS0UIqXs9quxfYZXHFv+69FJab+9MuZfBk=;
+        b=qDHeyVwOM5HVTO8lzAAXKb7PLcX3XLyW/igC+kpEvHC/0aQd01LagzchWrGZY2btE6
+         Wu/9Q59BTiZOm6IX/mWuVS0g9KKddLH7Er7Q/LCzUxyjdn/usuofuwjoXmPEnfSgWE+A
+         pz0oezzgmgr3EeVMQaVCMTbFM+ZLrA0FYO/GInPDIZyAf7+0vgNg9mRkOn9lGCyeBt3a
+         0dHlbTlpq50jUNmuvWYBk/9hwxkN12GB5ryBwiAa3+ePSbuq527JPoBI8Gp1JrgR5ao2
+         BbTuhRGa4fc/DyJhYcchavk+9tEXWgfXU3Qkh7aIaHtUwSqVGskQpv2ZUesMt1EL5E25
+         GQ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690457911; x=1691062711;
+        d=1e100.net; s=20221208; t=1690458163; x=1691062963;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Q5hwP5Yjltzhcjg0+28iB6NeIFoqy4kUssAl46J2XgM=;
-        b=fIrwLTs8DqP+2X+f1PqaSM2QArbQMYxDhkZIOzQsbfDBDYtU8EuH6cADVehlW8G9t1
-         lwVbjrQ0IBx/sI6fAKD/+JwRq2TLGYEqrl0a+wWzU20CTj2m46RIIveamcwr/pKg2QQv
-         h59X1CFEij3VUH48ffPuyEay0vMpXJW9p2uPZdNFn2g6HR3GTRMjJ64N279t1txaA80S
-         P21tlV4EBOuBvEYImGWQ0NqLmZwUe9ZFGZRr+adPfCDtPtPzwqZrUj6YCpMdiGU4R/Oo
-         nzezLFTt+WsN4cAi91p9OtT7WODQqvGP/ITDJBNm64+GtlhW1HoYBKDhNHMMPjrmbFkH
-         8JxA==
-X-Gm-Message-State: ABy/qLbeI2ZFDhpQk4Hfbv7OZmy8HVpedpCoJivSu2XKxeEjzpQ5kBvc
-        09ZPb1aoM0j/K2wHWJkE8Dxb2mOE9PBWL50+ZX0iswJO2Czg0ndt
-X-Google-Smtp-Source: APBJJlG0mw/YXbnpbIAdV8u/ZB4HN9+QW+c/1g+oFO6AU4eaqLh/dtA7s3jf42Q/rRPL8k7inqYpXBoXFSLORTirKB0=
-X-Received: by 2002:a25:5087:0:b0:d0e:2e5c:2f80 with SMTP id
- e129-20020a255087000000b00d0e2e5c2f80mr4218084ybb.64.1690457910929; Thu, 27
- Jul 2023 04:38:30 -0700 (PDT)
+        bh=IqCebh/KFlS0UIqXs9quxfYZXHFv+69FJab+9MuZfBk=;
+        b=Y8GNYubFooEBddlkQd1/pQGnG1DBKP/ZQYh59QT8y1xBPUxLJCyFZYvOb6Gx7OII4F
+         JLTVMEoX68OvN7aEl8rIxtfvuUiRPHBhPh/Ho9uOZV/OZHwlL2NBFs8Xr6ix2+5HbEPl
+         KVjojqxIbk59svje4AcIoZFWQQNUzOYH1kN3Bo0XL2FyQY6mMs0rj6cqyHz3BVLNZo6J
+         UG7m179kqf/THHueUMRd2AfRCceA9Sh9TfKOXwHyn/FtDSyok8jJfgqPCpuHb274LdCj
+         ZPQBi4GssUmhGzEUcd0knnVfHE/5nViRIE4oWNpARc8Ug7e2XZmmNqZWL0/J1XyuOdYM
+         +buw==
+X-Gm-Message-State: ABy/qLaKMf0YdgDJ6UkXFZArWUnSQrNC9VW+bwBAuizfD9dLlCZ0rO6d
+        ZHsG4/yP15bYN1g5zUvWVs3mQ21qS2EMpULzQWh5gw==
+X-Google-Smtp-Source: APBJJlGx+GAxitWd80E9DMwXB823E1WceDKNLYAIk/BrVGXwdEQAPtxnRnnfZSWLnJIAwzumG3krOjZlgCawHMAfvuo=
+X-Received: by 2002:a25:c583:0:b0:d22:4547:39cf with SMTP id
+ v125-20020a25c583000000b00d22454739cfmr1835900ybe.59.1690458163261; Thu, 27
+ Jul 2023 04:42:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-11-ulf.hansson@linaro.org> <ZLf4c7ejFBJLH7iN@e120937-lin>
- <CAPDyKFr3ann52GAtOLfnLSGgsdF+EZBNz_apNo_OHzrQ-Hg55Q@mail.gmail.com> <ZME4MQpYd7kJmFzF@e120937-lin>
-In-Reply-To: <ZME4MQpYd7kJmFzF@e120937-lin>
+References: <20230720091701.517197-1-peng.fan@oss.nxp.com> <20230720091701.517197-5-peng.fan@oss.nxp.com>
+In-Reply-To: <20230720091701.517197-5-peng.fan@oss.nxp.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 27 Jul 2023 13:37:50 +0200
-Message-ID: <CAPDyKFou5Vq-7j5HpZ1AT7AF-+y4wgEqs9tLyNWV0uE2isS85w@mail.gmail.com>
-Subject: Re: [PATCH v2 10/11] firmware: arm_scmi: Add the SCMI performance domain
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+Date:   Thu, 27 Jul 2023 13:42:06 +0200
+Message-ID: <CAPDyKFqz2irmBdV0CsqgzqnYLXWVAS9_pKpkUZ3RG4z7kSVQFQ@mail.gmail.com>
+Subject: Re: [PATCH V2 4/8] genpd: imx: scu-pd: do not power off console if no_console_suspend
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Dong Aisheng <aisheng.dong@nxp.com>,
+        Peng Fan <peng.fan@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,84 +69,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[...]
-
-> > >
-> > > Is it not possible that, once registered, GenPD can decide, at some point
-> > > in the future, to try act on some of these domains associated with a CPU ?
-> > > (like Clock framework does at the end of boot trying to disable unused
-> > >  clocks...not familiar with internals of GenPD, though)
-> >
-> > The "magic" that exists in genpd is to save/restore the performance
-> > state at genpd_runtime_suspend|resume().
-> >
-> > That means the consumer device needs to be attached and runtime PM
-> > enabled, otherwise genpd will just leave the performance level
-> > unchanged. In other words, the control is entirely at the consumer
-> > driver (scmi cpufreq driver).
-> >
+On Thu, 20 Jul 2023 at 11:12, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
 >
-> Ok, so if the DT is well formed and a CPU-related perf domain is not
-> wrongly referred from a driver looking for a device perf-domain, the
-> genPD subsystem wont act on the CPUs domains.
-
-Yes, correct!
-
+> From: Dong Aisheng <aisheng.dong@nxp.com>
 >
-> > >
-> > > > +             scmi_pd->domain_id = i;
-> > > > +             scmi_pd->perf_ops = perf_ops;
-> > > > +             scmi_pd->ph = ph;
-> > > > +             scmi_pd->genpd.name = scmi_pd->info->name;
-> > > > +             scmi_pd->genpd.flags = GENPD_FLAG_OPP_TABLE_FW;
-> > > > +             scmi_pd->genpd.set_performance_state = scmi_pd_set_perf_state;
-> > > > +
-> > > > +             ret = perf_ops->level_get(ph, i, &perf_level, false);
-> > > > +             if (ret) {
-> > > > +                     dev_dbg(dev, "Failed to get perf level for %s",
-> > > > +                              scmi_pd->genpd.name);
-> > > > +                     perf_level = 0;
-> > > > +             }
-> > > > +
-> > > > +             /* Let the perf level indicate the power-state too. */
-> > > > +             ret = pm_genpd_init(&scmi_pd->genpd, NULL, perf_level == 0);
-> > >
-> > > In SCMI world PERF levels should have nothing to do with the Power
-> > > state of a domain: you have the POWER protocol for that, so you should
-> > > not assume that perf level 0 means OFF, but you can use the POWER protocol
-> > > operation .state_get() to lookup the power state. (and you can grab both
-> > > perf and power ops from the same driver)
-> >
-> > Well, I think this may be SCMI FW implementation specific, but
-> > honestly I don't know exactly what the spec says about this. In any
-> > case, I don't think it's a good idea to mix this with the POWER
-> > domain, as that's something that is entirely different. We have no
-> > clue of those relationships (domain IDs).
-> >
-> > My main idea behind this, is just to give the genpd internals a
-> > reasonably defined value for its power state.
-> >
+> Do not power off console if no_console_suspend
 >
-> The thing is that in the SCMI world you cannot assume that perf_level 0
-> means powered off, the current SCP/SCMI platform fw, as an example, wont
-> advertise a 0-perf-level and wont act on such a request, because you are
-> supposed to use POWER protocol to get/set the power-state of a device.
-
-Right, thanks for clarifying this!
-
+> Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/genpd/imx/scu-pd.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> So it could be fine, as long as genPD wont try to set the level to 0
-> expecting the domain to be as a consequence also powered off and as
-> long as it is fine for these genpd domains to be always initialized
-> as ON. (since perf_level could never be found as zero..)
+> diff --git a/drivers/genpd/imx/scu-pd.c b/drivers/genpd/imx/scu-pd.c
+> index 08583a10ac62..6770be51d234 100644
+> --- a/drivers/genpd/imx/scu-pd.c
+> +++ b/drivers/genpd/imx/scu-pd.c
+> @@ -52,6 +52,7 @@
+>   */
+>
+>  #include <dt-bindings/firmware/imx/rsrc.h>
+> +#include <linux/console.h>
+>  #include <linux/firmware/imx/sci.h>
+>  #include <linux/firmware/imx/svc/rm.h>
+>  #include <linux/io.h>
+> @@ -324,6 +325,10 @@ static int imx_sc_pd_power(struct generic_pm_domain *domain, bool power_on)
+>         msg.resource = pd->rsrc;
+>         msg.mode = power_on ? IMX_SC_PM_PW_MODE_ON : IMX_SC_PM_PW_MODE_LP;
+>
+> +       /* keep uart console power on for no_console_suspend */
+> +       if (imx_con_rsrc == pd->rsrc && !console_suspend_enabled && !power_on)
+> +               return 0;
 
-Okay, so to me, it sounds like that we should set GENPD_FLAG_ALWAYS_ON
-for the genpd. This makes it clear that the domain can't be powered
-off.
+By returning 0, genpd belives that the power off has successfully succeeded.
 
-Moreover, we should prevent genpd internals from setting the
-performance state to 0 for the scmi performance domain. Let me look
-into how to best deal with that.
+Should we return -EBUSY here instead?
+
+> +
+>         ret = imx_scu_call_rpc(pm_ipc_handle, &msg, true);
+>         if (ret)
+>                 dev_err(&domain->dev, "failed to power %s resource %d ret %d\n",
+> --
+> 2.37.1
+>
 
 Kind regards
 Uffe
