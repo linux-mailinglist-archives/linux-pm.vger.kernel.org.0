@@ -2,137 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D95D76693C
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 11:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF36C7669B0
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 12:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbjG1Jsr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jul 2023 05:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S235511AbjG1KCx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jul 2023 06:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231184AbjG1Jsq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 05:48:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560462727;
-        Fri, 28 Jul 2023 02:48:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S235380AbjG1KC3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 06:02:29 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F91423B;
+        Fri, 28 Jul 2023 03:01:59 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 5ad84d9e2afdf0c6; Fri, 28 Jul 2023 12:01:58 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E685E62062;
-        Fri, 28 Jul 2023 09:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A87BC433C8;
-        Fri, 28 Jul 2023 09:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690537724;
-        bh=1k7ueSeUNImvta8Fj6igOwb07qsyQNnCTRc4trStukY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IfNTSRXisiYfZ2MwOXHVMlLlpGmu7kPZwyWWL4A0JI/0kq30mMR7w9/FqMbVtLtsI
-         bkJZbB2+SEbkZegOx6wJbjJy3gHO6pBiMlyM2WJSk+dPgnzVlLm1u1IGuw4F3ns0V4
-         6/N1V4WphwazZrrlX0+gMLFuVrdCEOOD05MgXRC7yWKUmOsj1usXBSu8Hvr652pNs5
-         YQqmLhMFteBoQg5oGwMBrOoKJ7qOQGlE5M3+5SFacoqxtEivnah4g8+PkMY61Vcqna
-         0bOrw6+6ANImaS4CtYC0CDZdzmavBhD/L1DkF5SH3aoU38prp1zbTjBBH5WEOhDlp/
-         n3EyIJUGD3H5w==
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-52229f084beso2760488a12.2;
-        Fri, 28 Jul 2023 02:48:44 -0700 (PDT)
-X-Gm-Message-State: ABy/qLa1tRnNXNNUABGGPAGw1Q3Hki/sCAs68ETwU6hB4HPitlStJnay
-        eNViq0N37GOmiXDlmQRXRmBZI7Fq2zs9JXINyqw=
-X-Google-Smtp-Source: APBJJlFxRcUg1wds9NGy1VRafPxp3phq+HmyJYIPGMX7kCQ60jU036RKV4MX9qk4B1E76zLWKrXq9E4gCF6IRIsa4H0=
-X-Received: by 2002:aa7:d98a:0:b0:522:586d:6f3a with SMTP id
- u10-20020aa7d98a000000b00522586d6f3amr1665860eds.6.1690537722487; Fri, 28 Jul
- 2023 02:48:42 -0700 (PDT)
+        by v370.home.net.pl (Postfix) with ESMTPSA id C2326661E37;
+        Fri, 28 Jul 2023 12:01:57 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+Subject: [PATCH v2 1/3] cpuidle: teo: Update idle duration estimate when choosing shallower state
+Date:   Fri, 28 Jul 2023 11:58:45 +0200
+Message-ID: <13326870.uLZWGnKmhe@kreacher>
+In-Reply-To: <5707588.DvuYhMxLoT@kreacher>
+References: <5707588.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-References: <20230728074944.26746-1-zhuyinbo@loongson.cn> <20230728-cornball-preacher-a7e4644fcbef@wendy>
-In-Reply-To: <20230728-cornball-preacher-a7e4644fcbef@wendy>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 28 Jul 2023 17:48:29 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5cfGZLvThzu_mBOphGJeUSFAu_4nZvGNFJqF5++DN2OA@mail.gmail.com>
-Message-ID: <CAAhV-H5cfGZLvThzu_mBOphGJeUSFAu_4nZvGNFJqF5++DN2OA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] soc: loongson2_pm: add power management support
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Liu Yun <liuyun@loongson.cn>,
-        kernel@xen0n.name
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrieeigddvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprghnnhgrqdhmrghrihgrsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepfhhrvggu
+ vghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrghjvghtrghnrdhpuhgthhgrlhhskhhisegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Conor, Arnd,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Fri, Jul 28, 2023 at 4:44=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> Hey,
->
-> +CC Huacai & WANG.
->
-> On Fri, Jul 28, 2023 at 03:49:42PM +0800, Yinbo Zhu wrote:
-> > Loongson-2 platform support Power Management Controller (ACPI) and this
-> > series patch was to add PM driver that base on dts and PM binding suppo=
-rt.
-> >
-> > Change in v5:
-> >               1. The patch "[PATCH v3 1/3] loongarch: export some arch-=
-specific
-> >                  pm interfaces" had been merged into linux-next tree th=
-us this
-> >                  v4 series patch need drop it and need depend on it and=
- it's
-> >                  patch link was:
-> > https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn=
-/
->
-> Just to note, it might be in linux-next, but more importantly it is also
-> in v6.5-rc1, so there is no issue with dependencies.
->
-> >               2. Swap the positions of compatible for 2k1000 and 2k0500=
-.
->
-> I noticed you sent a mail pinging the v4 of this series yesterday as it
-> had not been picked up. Who do you actually expect to apply these
-> patches? There does not appear to be a maintainer listed for the
-> drivers/soc/loongson directory, just one for your GUTS driver.
->
-> As a result, patches like
-> <https://lore.kernel.org/all/a69170cb55cfc73e378b40ccf1d9c16f@208suo.com/=
->
-> have gone ignored. Granted, that patch is probably crap that does not
-> apply, due to 208suo.com people sending corrupted patches, but you the
-> point.
->
-> More interestingly there is also
-> <https://lore.kernel.org/all/40b324af-3483-4b3d-b65a-a97944aa4a70@app.fas=
-tmail.com/>
-> which seems to have also gone missing (I don't see it in linux-next),
-> despite some discussion about how the patch should be merged.
->
-> Looks to me like drivers/soc/loongson/ needs someone to take
-> responsibility for picking up patches for the directory & sending them
-> to the soc maintainers (with a new MAINTAINERS entry reflecting that) so
-> that patches don't fall through the cracks.
-As discussed when the guts driver gets merged, I think it is better to
-go via Arnd's soc tree for these patches under drivers/soc/loongson/.
+The TEO governor takes CPU utilization into account by refining idle state
+selection when the utilization is above a certain threshold.  This is done by
+choosing an idle state shallower than the previously selected one.
 
-To Krzysztof,
+However, when doing this, the idle duration estimate needs to be
+adjusted so as to prevent the scheduler tick from being stopped when the
+candidate idle state is shallow, which may lead to excessive energy
+usage if the CPU is not woken up quickly enough going forward.
+Moreover, if the scheduler tick has been stopped already and the new
+idle duration estimate is too small, the replacement candidate state
+cannot be used.
 
-I'm very sorry for the disclaimer, I will remove it, and please take it eas=
-y.
+Modify the relevant code to take the above observations into account.
 
-Huacai
+Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
->
-> Thanks,
-> Conor.
+v1 -> v2:
+   * Rework the code handling the special case when the CPU is utilized and
+     there are only 2 idle states (drop the loop, avoid using state 0 when
+     the tick has been stopped already and it is too shallow, check if
+     state 1 is not disabled when about to use it, set low idle duration
+     estimate).
+   * Changelog edits.
+
+---
+ drivers/cpuidle/governors/teo.c |   43 ++++++++++++++++++++++++++++++----------
+ 1 file changed, 33 insertions(+), 10 deletions(-)
+
+Index: linux-pm/drivers/cpuidle/governors/teo.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/governors/teo.c
++++ linux-pm/drivers/cpuidle/governors/teo.c
+@@ -397,13 +397,26 @@ static int teo_select(struct cpuidle_dri
+ 	 * the shallowest non-polling state and exit.
+ 	 */
+ 	if (drv->state_count < 3 && cpu_data->utilized) {
+-		for (i = 0; i < drv->state_count; ++i) {
+-			if (!dev->states_usage[i].disable &&
+-			    !(drv->states[i].flags & CPUIDLE_FLAG_POLLING)) {
+-				idx = i;
+-				goto end;
+-			}
+-		}
++		/* The CPU is utilized, so assume a short idle duration. */
++		duration_ns = teo_middle_of_bin(0, drv);
++		/*
++		 * If state 0 is enabled and it is not a polling one, select it
++		 * right away unless the scheduler tick has been stopped, in
++		 * which case care needs to be taken to leave the CPU in a
++		 * deep enough state in case it is not woken up any time soon
++		 * after all.
++		 */
++		if (!idx && !(drv->states[0].flags & CPUIDLE_FLAG_POLLING) &&
++		    teo_time_ok(duration_ns))
++			goto end;
++
++		/*
++		 * Assume that state 1 is not a polling one and select it
++		 * unless it is disabled, in which case state 0 must be used
++		 * no matter what.
++		 */
++		idx = dev->states_usage[1].disable ? 0 : 1;
++		goto end;
+ 	}
+ 
+ 	/*
+@@ -539,10 +552,20 @@ static int teo_select(struct cpuidle_dri
+ 
+ 	/*
+ 	 * If the CPU is being utilized over the threshold, choose a shallower
+-	 * non-polling state to improve latency
++	 * non-polling state to improve latency, unless the scheduler tick has
++	 * been stopped already and the shallower state's target residency is
++	 * not sufficiently large.
+ 	 */
+-	if (cpu_data->utilized)
+-		idx = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
++	if (cpu_data->utilized) {
++		s64 span_ns;
++
++		i = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
++		span_ns = teo_middle_of_bin(i, drv);
++		if (teo_time_ok(span_ns)) {
++			idx = i;
++			duration_ns = span_ns;
++		}
++	}
+ 
+ end:
+ 	/*
+
+
+
