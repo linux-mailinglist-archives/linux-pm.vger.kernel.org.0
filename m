@@ -2,184 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 826CF7670B3
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 17:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FD5767107
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 17:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236804AbjG1PhK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 28 Jul 2023 11:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        id S237532AbjG1Pu6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jul 2023 11:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235293AbjG1PhK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 11:37:10 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B24B5;
-        Fri, 28 Jul 2023 08:37:07 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6bb086bd510so181552a34.1;
-        Fri, 28 Jul 2023 08:37:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690558627; x=1691163427;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dZ0Z9ESIsyUW9gVEIrTvSkIVgy0wAqNp4Ppv7aOMRhQ=;
-        b=jB0+ZishA92/tK601hLFuXIxRGoRurL7p/kCPbyTHKs86w//RgXHdciI7gUhNCa0w6
-         Mmnrhr9FgCyBl7sp7UxhZ91H+tMdOC7y7/qZktceM3gnIzdskTPFlG8DfuSlyT1BjM/1
-         Pz3lo/EnVh16Gc0IUgM32ozE62N9ERn16wJjR4rZtANTxKDPkXlw6SF89zTqeAW6c1B2
-         65t+L9fKa0c4MespOhZGD1mRfDrgunLHwjb55cv5bW+9hcbxmlTpw3DmCd0K8od9HXmX
-         WKxMMO5xk/T3TM9d57QPKp+nqUkU3u/Wvhi52ujhDshRpKbAdL5GX+19gry+X+1kRlYm
-         h00g==
-X-Gm-Message-State: ABy/qLbo6ASC59jUs0ns655t2pDuKykUtte1U5Q5MLAMEEoRBKLuNofB
-        xQ39r8TFdQ+A/UgDJftqPSEPakpTYWCcSgoSILShC3tM
-X-Google-Smtp-Source: APBJJlFqjThyaz3tDJsCKI5rmy5O1v05lXluOQPh8HdSG0FSrGSUD9hwajfY7LFHI9Nbk+NavHB0ij0G7Rs38FV/4Xc=
-X-Received: by 2002:a05:6870:f682:b0:1b7:5e47:5b75 with SMTP id
- el2-20020a056870f68200b001b75e475b75mr3070027oab.4.1690558626842; Fri, 28 Jul
- 2023 08:37:06 -0700 (PDT)
+        with ESMTP id S234664AbjG1Put (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 11:50:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54C9D30E3;
+        Fri, 28 Jul 2023 08:50:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC5486217C;
+        Fri, 28 Jul 2023 15:50:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C90EC433C9;
+        Fri, 28 Jul 2023 15:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690559439;
+        bh=FnMFqj/s49TzaM6yfmyNpQSSy8bKQ5ugm5trajmOYB4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P35iWrPTULn82aCR/saWbIvbhgW9FBRWLcm7T6831r1mxA0XYv+wihRnJ+bpe/h3j
+         SQI3nQMltLvs9348RcuJx3yB58okKZtFAr67/yunNdLCTQ2ZAlpKy0CNnGvyQUq65x
+         UrAO5Epy3B3om7fYqnjZtzYBwh45VSZ631NEvGXKAPrDQSjTxJAjUh1rN7eW+yXxHJ
+         eLRbo5WOQNZFnIGkYWrKLd8HdNhtbK4c/sT60Vc/9pvTSwX0j9KuCzgDlonRK7extE
+         8tHwl7EsCsHE8lDYNbtsAppmrzbvldMf2em+uOSVDgypVZkFhhh5VSQPOOlCZKdviU
+         v1FgZjXrTMz3A==
+Date:   Fri, 28 Jul 2023 16:50:24 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
+        andi.shyti@kernel.org, tglx@linutronix.de, maz@kernel.org,
+        lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linus.walleij@linaro.org, sre@kernel.org, p.zabel@pengutronix.de,
+        olivia@selenic.com, a.zummo@towertech.it,
+        radu_nicolae.pirea@upb.ro, richard.genoud@gmail.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, wim@linux-watchdog.org, linux@roeck-us.net,
+        linux@armlinux.org.uk, durai.manickamkr@microchip.com,
+        andrew@lunn.ch, jerry.ray@microchip.com, andre.przywara@arm.com,
+        mani@kernel.org, alexandre.torgue@st.com,
+        gregory.clement@bootlin.com, arnd@arndb.de, rientjes@google.com,
+        deller@gmx.de, 42.hyeyoo@gmail.com, vbabka@suse.cz,
+        mripard@kernel.org, mihai.sain@microchip.com,
+        codrin.ciubotariu@microchip.com, eugen.hristev@collabora.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
+Message-ID: <20230728-floss-stark-889158f968ea@spud>
+References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
+ <c0792cfd-db4f-7153-0775-824912277908@linaro.org>
 MIME-Version: 1.0
-References: <20230728145515.990749537@infradead.org> <20230728145808.835742568@infradead.org>
-In-Reply-To: <20230728145808.835742568@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Jul 2023 17:36:55 +0200
-Message-ID: <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     anna-maria@linutronix.de, rafael@kernel.org, tglx@linutronix.de,
-        frederic@kernel.org, gautham.shenoy@amd.com,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="1Z+IvU8OCRbt7H1L"
+Content-Disposition: inline
+In-Reply-To: <c0792cfd-db4f-7153-0775-824912277908@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 5:01 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> In order to facilitate governors that track history in idle-state
-> buckets (TEO) making a useful decision about NOHZ, make sure we have a
-> bucket that counts tick-and-longer.
->
-> In order to be inclusive of the tick itself -- after all, if we do not
-> disable NOHZ we'll sleep for a full tick, the actual boundary should
-> be just short of a full tick.
->
-> IOW, when registering the idle-states, add one that is always
-> disabled, just to have a bucket.
 
-This extra bucket can be created in the governor itself, can't it?
+--1Z+IvU8OCRbt7H1L
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  drivers/cpuidle/cpuidle.h |    2 +
->  drivers/cpuidle/driver.c  |   48 +++++++++++++++++++++++++++++++++++++++++++++-
->  include/linux/cpuidle.h   |    2 -
->  3 files changed, 50 insertions(+), 2 deletions(-)
->
-> --- a/drivers/cpuidle/cpuidle.h
-> +++ b/drivers/cpuidle/cpuidle.h
-> @@ -72,4 +72,6 @@ static inline void cpuidle_coupled_unreg
->  }
->  #endif
->
-> +#define SHORT_TICK_NSEC (TICK_NSEC - TICK_NSEC/32)
-> +
->  #endif /* __DRIVER_CPUIDLE_H */
-> --- a/drivers/cpuidle/driver.c
-> +++ b/drivers/cpuidle/driver.c
-> @@ -147,13 +147,37 @@ static void cpuidle_setup_broadcast_time
->                 tick_broadcast_disable();
->  }
->
-> +static int tick_enter(struct cpuidle_device *dev,
-> +                     struct cpuidle_driver *drv,
-> +                     int index)
-> +{
-> +       return -ENODEV;
-> +}
-> +
-> +static void __cpuidle_state_init_tick(struct cpuidle_state *s)
-> +{
-> +       strcpy(s->name, "TICK");
-> +       strcpy(s->desc, "(no-op)");
-> +
-> +       s->target_residency_ns = SHORT_TICK_NSEC;
-> +       s->target_residency = div_u64(SHORT_TICK_NSEC, NSEC_PER_USEC);
-> +
-> +       s->exit_latency_ns = 0;
-> +       s->exit_latency = 0;
-> +
-> +       s->flags |= CPUIDLE_FLAG_UNUSABLE;
-> +
-> +       s->enter = tick_enter;
-> +       s->enter_s2idle = tick_enter;
-> +}
-> +
->  /**
->   * __cpuidle_driver_init - initialize the driver's internal data
->   * @drv: a valid pointer to a struct cpuidle_driver
->   */
->  static void __cpuidle_driver_init(struct cpuidle_driver *drv)
->  {
-> -       int i;
-> +       int tick = 0, i;
->
->         /*
->          * Use all possible CPUs as the default, because if the kernel boots
-> @@ -163,6 +187,9 @@ static void __cpuidle_driver_init(struct
->         if (!drv->cpumask)
->                 drv->cpumask = (struct cpumask *)cpu_possible_mask;
->
-> +       if (WARN_ON_ONCE(drv->state_count >= CPUIDLE_STATE_MAX-2))
-> +               tick = 1;
-> +
->         for (i = 0; i < drv->state_count; i++) {
->                 struct cpuidle_state *s = &drv->states[i];
->
-> @@ -192,6 +219,25 @@ static void __cpuidle_driver_init(struct
->                         s->exit_latency_ns =  0;
->                 else
->                         s->exit_latency = div_u64(s->exit_latency_ns, NSEC_PER_USEC);
-> +
-> +               if (!tick && s->target_residency_ns >= SHORT_TICK_NSEC) {
-> +                       tick = 1;
-> +
-> +                       if (s->target_residency_ns == SHORT_TICK_NSEC)
-> +                               continue;
-> +
-> +                       memmove(&drv->states[i+1], &drv->states[i],
-> +                               sizeof(struct cpuidle_state) * (CPUIDLE_STATE_MAX - i - 1));
-> +                       __cpuidle_state_init_tick(s);
-> +                       drv->state_count++;
-> +                       i++;
-> +               }
-> +       }
-> +
-> +       if (!tick) {
-> +               struct cpuidle_state *s = &drv->states[i];
-> +               __cpuidle_state_init_tick(s);
-> +               drv->state_count++;
->         }
->  }
->
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -16,7 +16,7 @@
->  #include <linux/hrtimer.h>
->  #include <linux/context_tracking.h>
->
-> -#define CPUIDLE_STATE_MAX      10
-> +#define CPUIDLE_STATE_MAX      16
->  #define CPUIDLE_NAME_LEN       16
->  #define CPUIDLE_DESC_LEN       32
->
->
->
+On Fri, Jul 28, 2023 at 01:32:12PM +0200, Krzysztof Kozlowski wrote:
+> On 28/07/2023 12:22, Varshini Rajendran wrote:
+> > This patch series adds support for the new SoC family - sam9x7.
+> >  - The device tree, configs and drivers are added
+> >  - Clock driver for sam9x7 is added
+> >  - Support for basic peripherals is added
+> >  - Target board SAM9X75 Curiosity is added
+> >=20
+>=20
+> Your threading is absolutely broken making it difficult to review and app=
+ly.
+
+I had a chat with Varshini today, they were trying to avoid sending the
+patches to a massive CC list, but didn't set any in-reply-to header.
+For the next submission whole series could be sent to the binding &
+platform maintainers and the individual patches additionally to their
+respective lists/maintainers. Does that sound okay to you, or do you
+think it should be broken up?
+
+Cheers,
+Conor.
+
+
+--1Z+IvU8OCRbt7H1L
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMPjwAAKCRB4tDGHoIJi
+0t3wAQDbx8dLxPQPnIoDByHTBcuDjvFBZTpWUg4bhE01/+BpfQEArGia1WutY/7n
+UhhVDqMheWjj/xZNVFl/ZTTiVbw1vwI=
+=NVNa
+-----END PGP SIGNATURE-----
+
+--1Z+IvU8OCRbt7H1L--
