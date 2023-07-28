@@ -2,156 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEBD3765D00
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Jul 2023 22:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC3476613D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 03:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjG0UNK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 27 Jul 2023 16:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S229719AbjG1Bb0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Jul 2023 21:31:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjG0UNK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 16:13:10 -0400
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADECBE47;
-        Thu, 27 Jul 2023 13:13:08 -0700 (PDT)
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-56475c1b930so176181eaf.0;
-        Thu, 27 Jul 2023 13:13:08 -0700 (PDT)
+        with ESMTP id S231925AbjG1BbZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Jul 2023 21:31:25 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C893592;
+        Thu, 27 Jul 2023 18:31:20 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1bb954414e8so1314053fac.0;
+        Thu, 27 Jul 2023 18:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690507879; x=1691112679;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CaeqowdeOpwWPJ2yfhz53Af/U8Nhz+fo4LgseG11w/A=;
+        b=P4K6qoMuMhq6C6yWBuCUCE00krcPYf8yqhCMOyug99B1Jtfp8gjt92BJKmxPxjuibL
+         1gAIULQLPIwEfX2hVRDX5cfa8r4eAukgh3zTf2kyd8Gxa97KA1PHodPyp6v1lqkx83VP
+         bdeJN2kTO0hWhwJ1s5Jeqh9OuGkwL5en7iTIFr4jfUaLv+FUEVGKTnlmpHHIIEj8TEFv
+         wYIhLNA9+KMLlDta0hT5WrjoYxIKeP2XXmosZXui77g9YalvKsnkQrfkOVZ9cfbYMu57
+         ePgO8daG45522zquxoBvzLuw67LN0JRKnjpBpxXspr4Hq6PQelsWEmxYTV9WuBL9aFgg
+         x+MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690488788; x=1691093588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L5Z31Dq5VWK2apYQ/bvG19BYq0hISSJX9VnwC0J6vTg=;
-        b=BQkYGyaX0c0jsh/oaidhkkGbXEVjca9dtOXnTqqV64piuemI2+z9X6SGLxi50vQ5nv
-         6cXqgUzr1if6W8dchD/aNQYCkYHbL0ODQoUGNlI9TPuw6PtfClYQRuWYrIbqtS6Q95Fw
-         TvsIwYg2lbpCe0/o28DXhfz5EhTFYXfcHChYh+3gxjUt+/qKN1w+a+OlGGsbL8IHtd2z
-         kXzh1WUfwiVx4xly91PVqpdKp/mRHSqygQyVdPP7mGQVMlnM4OpAIpAwIH9hhUPvOsTr
-         R+ijs6KK5Wmz7RqkZ9ZEdZrTKoj8//fRYjZYVu3C+0KER69QjpQiVA45Nl33rYjl+3Wo
-         GIVA==
-X-Gm-Message-State: ABy/qLbNXiLOpKZfAE/M52Z24J9tfl/7Oeu+0DN6TsVb7tOy/JNe1W6D
-        PfZW0dgZspKzyfamlXT2WUIUlkFWsFaVBos1E9d3XTkc
-X-Google-Smtp-Source: APBJJlE+5WCDAGDphOpgTpC96fI64euD/U8QM5jbQYMAU92UDLulFFTCuVFyQdLuchdl+KeAwtSLRP6nesgHW23upDM=
-X-Received: by 2002:a4a:db86:0:b0:560:b01a:653d with SMTP id
- s6-20020a4adb86000000b00560b01a653dmr565021oou.0.1690488787631; Thu, 27 Jul
- 2023 13:13:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1690507879; x=1691112679;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CaeqowdeOpwWPJ2yfhz53Af/U8Nhz+fo4LgseG11w/A=;
+        b=iRTAEQXVlGxuo3B3JAPMF9A4D9NqXPrzICH6hZ6smgz5dTffn9A6C1mR3IRfYyNsNc
+         yBBKClhfUzRR0R2mgCEW9F2XHf6KzRNY3Dvxgg0zp3aFcjMB8XWC8bzrCTd0yryoEP0p
+         VP5X98tfVrqLl5ovMREBnd/VfTr15R8/KkcHjDOYGRMpfI/K/3qqRNu8YdLCWoEkaaQm
+         8VymudEEfXGVdnryqp+8vjoxyDLXucIPpWvKB1tXCxhk9OYYBSI3msBb76qYPsBNuVLT
+         XROxnAoPXspDNbthiVNdYerxbOQgSKPqqqX5nDNqUFULMPq8VNr1zYoFu1ex8tOPu20x
+         jq4w==
+X-Gm-Message-State: ABy/qLZWmB7W1+Yx95IC0p59wtyB5Me62j1kN8YhcWrOXm4dgFxHtcKy
+        /jK9V7aDIyqh96NifUv0w23DpvUklwbAaQ==
+X-Google-Smtp-Source: APBJJlHNeu9e49iEMNIcqQ76ytZayikn4InUU2c9+/sqhYfU43fLY2rYJiyKvPHR2Cbt6/0J/sYyJw==
+X-Received: by 2002:a05:6870:ac0d:b0:1b0:2f63:4ff6 with SMTP id kw13-20020a056870ac0d00b001b02f634ff6mr1488579oab.1.1690507879500;
+        Thu, 27 Jul 2023 18:31:19 -0700 (PDT)
+Received: from debian.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id i3-20020a63bf43000000b0055fead55e81sm2021813pgo.57.2023.07.27.18.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Jul 2023 18:31:18 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 7275A8C50BB8; Fri, 28 Jul 2023 08:31:13 +0700 (WIB)
+Date:   Fri, 28 Jul 2023 08:31:12 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Goran <goran.brkuljan@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Power Management <linux-pm@vger.kernel.org>
+Subject: Re: Fwd: XPS 17 9730 runs significantly warmer on Kernel 6.5-rc3
+ compared to Kernel 6.4.3
+Message-ID: <ZMMaYLcc5G4KSVyf@debian.me>
+References: <4aaf1d3d-2ab7-2d3a-f597-a1741bf699d6@gmail.com>
 MIME-Version: 1.0
-References: <4506480.LvFx2qVVIh@kreacher>
-In-Reply-To: <4506480.LvFx2qVVIh@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 27 Jul 2023 22:12:56 +0200
-Message-ID: <CAJZ5v0hnRm7Nnup3HPWedEchzLD_9w8OPkhQ0vjpR3uAL3HUoQ@mail.gmail.com>
-Subject: Re: [PATCH v1] cpuidle: teo: Update idle duration estimate when
- choosing shallower state
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/DdscD0f0vtkCtCd"
+Content-Disposition: inline
+In-Reply-To: <4aaf1d3d-2ab7-2d3a-f597-a1741bf699d6@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 10:05 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The TEO governor takes CPU utilization into account by refining idle state
-> selection when the utilization is above a certain threshold.  The idle state
-> selection is then refined by choosing an idle state shallower than the
-> previously selected one.
->
-> However, when this is done, the idle duration estimate needs to be updated
-> so as to prevent the scheduler tick from being stopped while the candidate
-> idle state is shallow, which may lead to excessive energy usage if the CPU
-> is not interrupted quickly enough going forward.  Moreover, in case the
-> scheduler tick has been stopped already and the new idle duration estimate
-> is too small, the replacement candidate state cannot be used.
->
-> Modify the relevant code to take the above observations into account.
->
-> Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->
-> @Peter: This doesn't attempt to fix the tick stopping problem, it just makes
-> the current behavior consistent.
->
-> @Anna-Maria: This is likely to basically prevent the tick from being stopped
-> at all if the CPU utilization is above a certain threshold.  I'm wondering if
-> your results will be affected by it and in what way.
->
-> ---
->  drivers/cpuidle/governors/teo.c |   33 ++++++++++++++++++++++++++-------
->  1 file changed, 26 insertions(+), 7 deletions(-)
->
-> Index: linux-pm/drivers/cpuidle/governors/teo.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/governors/teo.c
-> +++ linux-pm/drivers/cpuidle/governors/teo.c
-> @@ -397,13 +397,22 @@ static int teo_select(struct cpuidle_dri
->          * the shallowest non-polling state and exit.
->          */
->         if (drv->state_count < 3 && cpu_data->utilized) {
-> -               for (i = 0; i < drv->state_count; ++i) {
-> -                       if (!dev->states_usage[i].disable &&
-> -                           !(drv->states[i].flags & CPUIDLE_FLAG_POLLING)) {
-> -                               idx = i;
-> +               /*
-> +                * If state 0 is enabled and it is not a polling one, select it
-> +                * right away and update the idle duration estimate accordingly,
-> +                * unless the scheduler tick has been stopped.
-> +                */
-> +               if (!idx && !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
-> +                       s64 span_ns = teo_middle_of_bin(0, drv);
-> +
-> +                       if (teo_time_ok(span_ns)) {
-> +                               duration_ns = span_ns;
->                                 goto end;
->                         }
->                 }
-> +               /* Assume that state 1 is not a polling one and select it. */
 
-Well, I should also check if it is not disabled.  Will send a v2 tomorrow.
+--/DdscD0f0vtkCtCd
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +               idx = 1;
-> +               goto end;
->         }
->
->         /*
-> @@ -539,10 +548,20 @@ static int teo_select(struct cpuidle_dri
->
->         /*
->          * If the CPU is being utilized over the threshold, choose a shallower
-> -        * non-polling state to improve latency
-> +        * non-polling state to improve latency, unless the scheduler tick has
-> +        * been stopped already and the shallower state's target residency is
-> +        * not sufficiently large.
->          */
-> -       if (cpu_data->utilized)
-> -               idx = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> +       if (cpu_data->utilized) {
-> +               s64 span_ns;
-> +
-> +               i = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> +               span_ns = teo_middle_of_bin(i, drv);
-> +               if (teo_time_ok(span_ns)) {
-> +                       idx = i;
-> +                       duration_ns = span_ns;
-> +               }
-> +       }
->
->  end:
->         /*
->
->
->
+On Thu, Jul 27, 2023 at 09:25:19PM +0700, Bagas Sanjaya wrote:
+> Hi,
+>=20
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+>=20
+> > On my new XPS 17 9730 laptop, I recently installed the Kernel 6.5-rc3. =
+I noticed, however, that during its operation, the laptop was getting signi=
+ficantly warmer than before. I did some analysis using the 'stress' tool to=
+ measure and compare the difference in CPU temperatures between Kernel 6.4.=
+3 and Kernel 6.5-rc3. Here are my results:
+> >=20
+> > OS: Ubuntu 23.10
+> > CPU: i7-13700H
+> >=20
+> > kernel 6.4.3:
+> >                                                                        =
+                                                                           =
+                                     =20
+> > Initial CPU temperature:
+> > coretemp-isa-0000
+> > Core 0:        +47.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 4:        +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 8:        +46.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 12:       +46.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 16:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 20:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 24:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 25:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 26:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 27:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 28:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 29:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 30:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 31:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Stressing CPU for 30 seconds...
+> > stress: info: [4858] dispatching hogs: 14 cpu, 0 io, 0 vm, 0 hdd
+> > stress: info: [4858] successful run completed in 30s
+> > CPU temperature immediately after stress test:
+> > coretemp-isa-0000
+> > Core 0:        +67.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 4:        +76.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 8:        +69.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 12:       +77.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 16:       +69.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 20:       +76.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 24:       +68.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 25:       +68.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 26:       +68.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 27:       +68.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 28:       +71.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 29:       +71.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 30:       +71.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 31:       +71.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Test ended at: Tue Jul 25 01:10:16 PM CEST 2023
+> >=20
+> >=20
+> > kernel 6.5-rc-3:
+> >=20
+> > Initial CPU temperature:
+> > coretemp-isa-0000
+> > Core 0:        +46.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 4:        +46.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 8:        +46.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 12:       +46.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 16:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 20:       +44.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 24:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 25:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 26:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 27:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 28:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 29:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 30:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 31:       +45.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Stressing CPU for 30 seconds...
+> > stress: info: [11146] dispatching hogs: 14 cpu, 0 io, 0 vm, 0 hdd
+> > stress: info: [11146] successful run completed in 30s
+> > CPU temperature immediately after stress test:
+> > coretemp-isa-0000
+> > Core 0:        +84.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 4:        +97.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 8:        +87.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 12:      +100.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 16:       +86.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 20:       +99.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 24:       +83.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 25:       +83.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 26:       +83.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 27:       +83.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 28:       +89.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 29:       +89.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 30:       +89.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Core 31:       +89.0=C2=B0C  (high =3D +100.0=C2=B0C, crit =3D +100.0=
+=C2=B0C)
+> > Test ended at: Tue Jul 25 01:05:42 PM CEST 2023
+> >=20
+> > I tested few times with different setup and CPU temp on 6.5-rc3 is alwa=
+ys higher especially when stressing with fewer cores.
+>=20
+> See Bugzilla for the full thread.
+>=20
+> Goran: On Tuesday, I asked you to perform bisection. Any update on it?
+>=20
+> Anyway, I'm adding this regression to regzbot:
+>=20
+> #regzbot introduced: v6.4..v6.5-rc3 https://bugzilla.kernel.org/show_bug.=
+cgi?id=3D217703
+> #regzbot title: significant temperature increase on XPS 17 9730
+>=20
+> Thanks.
+>=20
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217703
+>=20
+
+Oops, I accidentally duped this. My email client was stuck sending it
+(but got delivered anyway), thus:
+
+#regzbot dup-of: https://lore.kernel.org/regressions/107f05b8-0104-501c-130=
+c-4f89f3f8a628@gmail.com/
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--/DdscD0f0vtkCtCd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZMMaWAAKCRD2uYlJVVFO
+o8lkAQDq0eSlsqzoVPJxeOlMs2nUyvfWCbEBU6N3l/pwi+1EnwEAgrcp/MXnsG+s
+/ouqV6PjFLS9NzE/m7jeCkW/eyv8BQQ=
+=qz+4
+-----END PGP SIGNATURE-----
+
+--/DdscD0f0vtkCtCd--
