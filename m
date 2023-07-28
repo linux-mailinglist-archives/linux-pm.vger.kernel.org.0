@@ -2,180 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D95767370
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 19:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A4F76767F
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 21:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbjG1Rdy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jul 2023 13:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S229528AbjG1Tn1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jul 2023 15:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjG1Rdx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 13:33:53 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC9A35B8
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jul 2023 10:33:52 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-686b643df5dso1801859b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 28 Jul 2023 10:33:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1690565631; x=1691170431;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNByP8O4+7NyrxvowqMX8M1o5/OlzmXQ8Erynb3X9gA=;
-        b=bVdKy5DjvESA3geFjrP6SvgOwwdocPiCsfpUOIwERutLlh1N7+e3c/zJzjO7LS6FzM
-         JNxChz4Db6d8GtevEHs5VcR+6bnauyI4Rq4FV6FImJLNRmooamF63jDD+dcOn+rr3PTZ
-         2ywhrmFPdgBPT/+le/z78I7ddtE5z0dTcC60U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690565631; x=1691170431;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNByP8O4+7NyrxvowqMX8M1o5/OlzmXQ8Erynb3X9gA=;
-        b=F63P6OFQKpkG5erpmC12rgTUueNL6zaIOhHp+5iQfUCInWyqA4ZDTgoocj+jaz3LRJ
-         ujR2TFOmu4wpqe/cXhqKjJIpIpkuzLCuBELioZZJG3dhbqfg8IxlOzGvIvEiPGQC5yhQ
-         EmnpZJk1yoNXVvBE1ly8/re3aFv6z74OfiFOMGNCKALS1mm0WDVgQ5RXKapFNcjBseZh
-         K6vX36Hr6WTpVXMG15y8sf5LHzISQ5BSvOCaLIEo96dZ/YiGat8SMJEIoebyUpiOrDU5
-         ok/yZRAiEE6XyqwjCdnpTlwdE1H2Bo8qYAKiPCl94YZSKFT1iGqc7ibgdbkX/Ve3P3qL
-         DNjA==
-X-Gm-Message-State: ABy/qLZy4W0uShGH6BPtT9V0PbbWkMMaCJ3CHtSu8ttK50DlAsfbeUto
-        DA+dVWaMEv8Vs4yKu9SrTOZGeQ==
-X-Google-Smtp-Source: APBJJlHv1uNtdrVcOy+GGsKewLBacA99b4rXp5b+nbmLuB0HuPjUlJVcBb30OCKRfBS7IQobV0p1FA==
-X-Received: by 2002:a05:6a20:2447:b0:133:bc8:e362 with SMTP id t7-20020a056a20244700b001330bc8e362mr2233485pzc.24.1690565631563;
-        Fri, 28 Jul 2023 10:33:51 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id w28-20020a63af1c000000b0055b3af821d5sm3687673pge.25.2023.07.28.10.33.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Jul 2023 10:33:51 -0700 (PDT)
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Rob Herring <robh@kernel.org>,
-        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Philippe =?iso-8859-1?q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] soc: bcm: Explicitly include correct DT includes
-Date:   Fri, 28 Jul 2023 10:33:49 -0700
-Message-Id: <20230728173349.725306-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230726233130.3811017-1-robh@kernel.org>
-References: <20230726233130.3811017-1-robh@kernel.org>
+        with ESMTP id S229511AbjG1Tn1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 15:43:27 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF55D2688;
+        Fri, 28 Jul 2023 12:43:24 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qPTMx-0004vy-3H; Fri, 28 Jul 2023 21:43:23 +0200
+Message-ID: <da2bfc5b-8c98-17a4-1dbc-ef7989facc54@leemhuis.info>
+Date:   Fri, 28 Jul 2023 21:43:22 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f5e47506018f7b36"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: Fwd: XPS 17 9730 runs significantly warmer on Kernel 6.5-rc3
+ compared to Kernel 6.4.3
+Content-Language: en-US, de-DE
+To:     Goran Brkuljan <goran.brkuljan@gmail.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Power Management <linux-pm@vger.kernel.org>,
+        Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+References: <107f05b8-0104-501c-130c-4f89f3f8a628@gmail.com>
+ <2e512646-816f-ff98-d466-b82f3a7d05ef@leemhuis.info>
+ <CANhdOJEq-+KaMv=TX7E4ggf7rm456ibha2W_+Y5m1580ngCw_A@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CANhdOJEq-+KaMv=TX7E4ggf7rm456ibha2W_+Y5m1580ngCw_A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1690573404;a2ae5249;
+X-HE-SMSGID: 1qPTMx-0004vy-3H
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---000000000000f5e47506018f7b36
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+On 28.07.23 20:13, Goran Brkuljan wrote:
+> Hi Everyone,
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+Please don't sent HTML mail to Linux kernel lists, it often will be
+rejected.
 
-On Wed, 26 Jul 2023 17:31:29 -0600, Rob Herring <robh@kernel.org> wrote:
-> The DT of_device.h and of_platform.h date back to the separate
-> of_platform_bus_type before it was merged into the regular platform bus.
-> As part of that merge prepping Arm DT support 13 years ago, they
-> "temporarily" include each other. They also include platform_device.h
-> and of.h. As a result, there's a pretty much random mix of those include
-> files used throughout the tree. In order to detangle these headers and
-> replace the implicit includes with struct declarations, users need to
-> explicitly include the correct includes.
+>     Goran: On Tuesday, I asked you to perform bisection. Any update on it?
 > 
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+>  
+> Sorry for the delayed response. I wasn't able to do git bisection as I
+> was quite busy this week. 
+> 
+> However, I am no longer convinced that there is a kernel related issue.
+> I reinstalled both kernels and now I get consistent results between two,
+> and they both return higher values.
+> Now on both kernels, core20 spikes to +100.0°C and it stays there for
+> the duration of the test. Other cores are going from 80-95°C.
+>
+> Note that I used the mainline kernel installer for handling installation. 
 
-Applied to https://github.com/Broadcom/stblinux/commits/drivers/next, thanks!
---
-Florian
+FWIW, I (and likely many others that read this) have no idea what
+(distro specifc?) tool you are talking about. But I guess that doesn't
+matter. :-D
 
---000000000000f5e47506018f7b36
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> I would close the issue as tests and behaviour don't suggest significant
+> differences between kernel versions. 
 
-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
-riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
-QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
-UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
-M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
-Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
-14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
-a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
-XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
-RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
-UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
-MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
-BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
-9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
-AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
-UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
-KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
-nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
-Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
-VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
-ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
-CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
-MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
-d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
-hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
-bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
-BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
-KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
-kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
-2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
-3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
-NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
-AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
-LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIISFU/L7kMXpQTkc
-fDOa6BrQmQW32vAgnWq004ex+rPQMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDcyODE3MzM1MVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
-AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCHyQ1V7szShK6Qq35/8QscenvWI+WHjiK5
-LLhW2+/Px59Ad6XbeeJl6uCUnRVAcHHRkrrFErG6rNy9w73iGcVGUb0tq/6u/VkXTIHDgoul8Ktc
-i17VzG76tlf5clymHsW/ClAs+mTkBQZMa8PyDk2TOi2XyevUlB47TkTPBl89KLeNnmDMynkpC8ZM
-bt/vSlF62GpmVEt55/vXNG9jVjRPYJ+SkOspoldM1dGyCbanU07kAJXhwe401qceI8arKLj/G27o
-x4MjB84brfc2yXotk0/0NRRzywQmvcJbLEjhffDrf4RNF9B3eFxYK2H4rAefl9oHiq3KY/9acRP7
-zTEM
---000000000000f5e47506018f7b36--
+Okydo, thx for the update.
+
+#regzbot resolve: notabug: seems everything is working fine
+
+Ciao, Thorsten
+
+> On Fri, Jul 28, 2023 at 3:42 PM Thorsten Leemhuis
+> <regressions@leemhuis.info <mailto:regressions@leemhuis.info>> wrote:
+> 
+>     [CCing Thermal maintainer Rafael, maybe he can help guide us]
+> 
+>     Hi Bagas and everyone!
+> 
+>     On 27.07.23 16:24, Bagas Sanjaya wrote:
+>     >
+>     > I notice a regression report on Bugzilla [1].
+> 
+>     Bagas, it looks like you forwarded this to the maintainers of
+>     "THERMAL/CPU_COOLING"; I think "THERMAL" would have been the way better
+>     entry in MAINTAINERS, as many (all?) of the former are Linaro employees
+>     and thus primarily care about ARM based devices. That's why I CCed
+>     Rafael.
+> 
+>     > Quoting from it:
+>     >
+>     >> On my new XPS 17 9730 laptop, I recently installed the Kernel
+>     6.5-rc3. I noticed, however, that during its operation, the laptop
+>     was getting significantly warmer than before. I did some analysis
+>     using the 'stress' tool to measure and compare the difference in CPU
+>     temperatures between Kernel 6.4.3 and Kernel 6.5-rc3. Here are my
+>     results:
+> 
+>     One thought: I wonder if there something wrong now or was there
+>     something wrong earlier that was fixed to unleash the full performance
+>     potential of the device. That 100°C there sounds like it's the latter
+>     case, as that's the TJUNCTION temp for that processor. But would be good
+>     to confirm from someone that knows better how hot such processors are
+>     allowed to get these days.
+> 
+>     Ciao, Thorsten
+> 
+>     >> OS: Ubuntu 23.10
+>     >> CPU: i7-13700H
+>     >>
+>     >> kernel 6.4.3:
+>     >>                                                                 
+>                                                                        
+>                                                        
+>     >> Initial CPU temperature:
+>     >> coretemp-isa-0000
+>     >> Core 0:        +47.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 4:        +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 8:        +46.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 12:       +46.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 16:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 20:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 24:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 25:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 26:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 27:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 28:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 29:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 30:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 31:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Stressing CPU for 30 seconds...
+>     >> stress: info: [4858] dispatching hogs: 14 cpu, 0 io, 0 vm, 0 hdd
+>     >> stress: info: [4858] successful run completed in 30s
+>     >> CPU temperature immediately after stress test:
+>     >> coretemp-isa-0000
+>     >> Core 0:        +67.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 4:        +76.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 8:        +69.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 12:       +77.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 16:       +69.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 20:       +76.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 24:       +68.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 25:       +68.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 26:       +68.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 27:       +68.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 28:       +71.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 29:       +71.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 30:       +71.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 31:       +71.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Test ended at: Tue Jul 25 01:10:16 PM CEST 2023
+>     >>
+>     >>
+>     >> kernel 6.5-rc-3:
+>     >>
+>     >> Initial CPU temperature:
+>     >> coretemp-isa-0000
+>     >> Core 0:        +46.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 4:        +46.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 8:        +46.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 12:       +46.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 16:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 20:       +44.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 24:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 25:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 26:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 27:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 28:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 29:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 30:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 31:       +45.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Stressing CPU for 30 seconds...
+>     >> stress: info: [11146] dispatching hogs: 14 cpu, 0 io, 0 vm, 0 hdd
+>     >> stress: info: [11146] successful run completed in 30s
+>     >> CPU temperature immediately after stress test:
+>     >> coretemp-isa-0000
+>     >> Core 0:        +84.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 4:        +97.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 8:        +87.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 12:      +100.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 16:       +86.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 20:       +99.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 24:       +83.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 25:       +83.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 26:       +83.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 27:       +83.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 28:       +89.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 29:       +89.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 30:       +89.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Core 31:       +89.0°C  (high = +100.0°C, crit = +100.0°C)
+>     >> Test ended at: Tue Jul 25 01:05:42 PM CEST 2023
+>     >>
+>     >> I tested few times with different setup and CPU temp on 6.5-rc3
+>     is always higher especially when stressing with fewer cores.
+>     >
+>     > See Bugzilla for the full thread.
+>     >
+>     > Goran: On Tuesday, I asked you to perform bisection. Any update on it?
+>     >
+>     > Anyway, I'm adding this regression to regzbot:
+>     >
+>     > #regzbot introduced: v6.4..v6.5-rc3
+>     https://bugzilla.kernel.org/show_bug.cgi?id=217703
+>     <https://bugzilla.kernel.org/show_bug.cgi?id=217703>
+>     > #regzbot title: significant temperature increase on XPS 17 9730
+>     >
+>     > Thanks.
+>     >
+>     > [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217703
+>     <https://bugzilla.kernel.org/show_bug.cgi?id=217703>
+>     >
+> 
