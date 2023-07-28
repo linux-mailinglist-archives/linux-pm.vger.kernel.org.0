@@ -2,139 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920E97668C2
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 11:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC4E766934
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Jul 2023 11:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235513AbjG1JZf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Jul 2023 05:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
+        id S235444AbjG1Jp5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Jul 2023 05:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235336AbjG1JZO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 05:25:14 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C69165B0;
-        Fri, 28 Jul 2023 02:19:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1690535973; x=1722071973;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u5XPF3Vt1StqQYCIWI5YcWOIyc/PAuKXYiBw4jhm1/A=;
-  b=NpE9erayBSSaHi/SvPndUJUenBBfkNnVo5e3AJAd2CZ/XjhGx+YODB/l
-   VDzRHEbMSIyl0jg4a2rDRoYK7vS2nsin9g5yg2nwdNxgsswVFaGP09ice
-   u0n/qdFK5qHD58I5/+ueeYNtaLlnd2bua/y60sMpIBrZPW5BjOKOTDrL8
-   c8Y9TOCmbCxbcBnXKKC/qK2GVOb0aGvzDUg4BnQvMti5EG6uX8Mmvu3q2
-   NiGCN/a1DwlQZHhoLVoWm2fcJ8p3rTQEOHwr2/7NqzQHrc9moePXC9WJv
-   rH57A7OX/0lXkvRcI1U2iAnfOg+ExXZ511mtndm2FeIvFFZksTE28lXUZ
-   w==;
-X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="asc'?scan'208";a="226615085"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2023 02:19:31 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Jul 2023 02:19:30 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 28 Jul 2023 02:19:27 -0700
-Date:   Fri, 28 Jul 2023 10:18:52 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     =?utf-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>,
-        <loongson-kernel@lists.loongnix.cn>, Arnd Bergmann <arnd@arndb.de>,
+        with ESMTP id S235103AbjG1Jpz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Jul 2023 05:45:55 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0422703
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jul 2023 02:45:53 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b9c2dc636dso26479981fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 28 Jul 2023 02:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690537552; x=1691142352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FgMNDG4ongin98+9dkOLLQ9bJohCnPv4w5zxnG49dk4=;
+        b=Tim5gIJVQuPTDV1qsl6ufALej5ONI6uuREeU7Hvc5WbfNtmNiNIwZgLY28e6moZOiB
+         kKqYcbRsYtQKL95RG44vNT+LkA6a0qdoleTerLlZ2rjlXV/c2od4u0MrD6SdJ/ZGeLsk
+         h7vR4+kFIgLK1D5C1q+0tLNgqRHiI9P0IjJMFdfYDxg2Xf0eVNUlXjrpMyV4VI6+p9Wb
+         MXrwjxQUS6eFKkx7c+813w6SS/ShzwqlZqW+cfQHNMv6eFnOC+FiRyT5GaLROF0P78fB
+         ygcPIf8/6cokVlAJcXDW5f1WfQrRhwNDQRdVA/alEXSqP6DIhX0iePrgc1+ho0TOjBIR
+         AzOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690537552; x=1691142352;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FgMNDG4ongin98+9dkOLLQ9bJohCnPv4w5zxnG49dk4=;
+        b=ITav1wlqqbowVLVlwIbqQXlyYZnX2GGVmcX63Fb/7YIaVfjUGUg8p+L0iSFv08WdOS
+         DQ4HFDcXhpxCf/k4eRR6GXgGcl+QiadBjkeeiCa9DYG0xFuR3vjCGb71xEsFTPDOq5JB
+         fc11zeWkajazCruVvjeqZOJwxtKW79MIXLTQAW2iXMFv3wOTTMe7K4qTV8jGB95VuHlu
+         3lAmkjOMl/CtkJplI8UJm1zPcqh2FOoSpp8MfGtjUW7+0Qal+UBCntY3HyHECekLy6A6
+         q5T811F2uzQCxgkPDSBDfMlzLRBj7nP6E5kaTQwTe8Be7dsdJfL1+VV6x2eC70kkc0ur
+         xyJw==
+X-Gm-Message-State: ABy/qLay/S8veVIVwUtEPrYBx6WmrkQcDQiamrwVpfIvL/7iID9DDD8S
+        Q5Jslfdh20RUN0Gep1Uoasz2EQ==
+X-Google-Smtp-Source: APBJJlFooh1vUVlzLog4m8502Xt0bVDloiQgURR9dNrDuxY5+dTqA0S0UQ0HJtLhy0tZBzjlZGJiTg==
+X-Received: by 2002:a2e:7d15:0:b0:2b5:9e51:2912 with SMTP id y21-20020a2e7d15000000b002b59e512912mr1240030ljc.24.1690537551819;
+        Fri, 28 Jul 2023 02:45:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id a4-20020a2e8304000000b002b6ad323248sm863180ljh.10.2023.07.28.02.45.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Jul 2023 02:45:51 -0700 (PDT)
+Message-ID: <7986a634-63b2-28d6-5f17-7b982ae56bcf@linaro.org>
+Date:   Fri, 28 Jul 2023 11:45:48 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v5 0/2] soc: loongson2_pm: add power management support
+Content-Language: en-US
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     =?UTF-8?B?6ZmI5Y2O5omN?= <chenhuacai@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Arnd Bergmann <arnd@arndb.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
         Yinbo Zhu <zhuyinbo@loongson.cn>, Liu Yun <liuyun@loongson.cn>
-Subject: Re: [PATCH v5 0/2] soc: loongson2_pm: add power management support
-Message-ID: <20230728-pessimism-exclaim-de0dd7f4bb64@wendy>
 References: <20230728074944.26746-1-zhuyinbo@loongson.cn>
  <74a37e9d.9a24.1899b9bea85.Coremail.chenhuacai@loongson.cn>
  <1c8b12b4-79c3-5018-c7df-946fe690e8c8@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="523xuRZw0fU82LBP"
-Content-Disposition: inline
-In-Reply-To: <1c8b12b4-79c3-5018-c7df-946fe690e8c8@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+ <20230728-pessimism-exclaim-de0dd7f4bb64@wendy>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230728-pessimism-exclaim-de0dd7f4bb64@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
---523xuRZw0fU82LBP
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 28/07/2023 11:18, Conor Dooley wrote:
+> On Fri, Jul 28, 2023 at 10:36:42AM +0200, Krzysztof Kozlowski wrote:
+>> On 28/07/2023 10:27, 陈华才 wrote:
+>>> Reviewd-by: Huacai Chen <chenhuacai@loongson.cn>
+>>
+>> ...
+>>
+>>>
+>>>
+>>> 本邮件及其附件含有龙芯中科的商业秘密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制或散发）本邮件及其附件中的信息。如果您错收本邮件，请您立即电话或邮件通知发件人并删除本邮件。 
+>>> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it. 
+>>
+>>
+>> Ooops!
+>>
+>> Are we intended person/entities to receive your Reviewed-by tag?
+> 
+> It's okay, you only got a "Reviewd-by" tag ;)
 
-On Fri, Jul 28, 2023 at 10:36:42AM +0200, Krzysztof Kozlowski wrote:
-> On 28/07/2023 10:27, =E9=99=88=E5=8D=8E=E6=89=8D wrote:
-> > Reviewd-by: Huacai Chen <chenhuacai@loongson.cn>
->=20
-> ...
->=20
-> >=20
-> >=20
-> > =E6=9C=AC=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E5=90=
-=AB=E6=9C=89=E9=BE=99=E8=8A=AF=E4=B8=AD=E7=A7=91=E7=9A=84=E5=95=86=E4=B8=9A=
-=E7=A7=98=E5=AF=86=E4=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E9=99=90=E4=BA=8E=E5=
-=8F=91=E9=80=81=E7=BB=99=E4=B8=8A=E9=9D=A2=E5=9C=B0=E5=9D=80=E4=B8=AD=E5=88=
-=97=E5=87=BA=E7=9A=84=E4=B8=AA=E4=BA=BA=E6=88=96=E7=BE=A4=E7=BB=84=E3=80=82=
-=E7=A6=81=E6=AD=A2=E4=BB=BB=E4=BD=95=E5=85=B6=E4=BB=96=E4=BA=BA=E4=BB=A5=E4=
-=BB=BB=E4=BD=95=E5=BD=A2=E5=BC=8F=E4=BD=BF=E7=94=A8=EF=BC=88=E5=8C=85=E6=8B=
-=AC=E4=BD=86=E4=B8=8D=E9=99=90=E4=BA=8E=E5=85=A8=E9=83=A8=E6=88=96=E9=83=A8=
-=E5=88=86=E5=9C=B0=E6=B3=84=E9=9C=B2=E3=80=81=E5=A4=8D=E5=88=B6=E6=88=96=E6=
-=95=A3=E5=8F=91=EF=BC=89=E6=9C=AC=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=
-=84=E4=BB=B6=E4=B8=AD=E7=9A=84=E4=BF=A1=E6=81=AF=E3=80=82=E5=A6=82=E6=9E=9C=
-=E6=82=A8=E9=94=99=E6=94=B6=E6=9C=AC=E9=82=AE=E4=BB=B6=EF=BC=8C=E8=AF=B7=E6=
-=82=A8=E7=AB=8B=E5=8D=B3=E7=94=B5=E8=AF=9D=E6=88=96=E9=82=AE=E4=BB=B6=E9=80=
-=9A=E7=9F=A5=E5=8F=91=E4=BB=B6=E4=BA=BA=E5=B9=B6=E5=88=A0=E9=99=A4=E6=9C=AC=
-=E9=82=AE=E4=BB=B6=E3=80=82=20
-> > This email and its attachments contain confidential information from Lo=
-ongson Technology , which is intended only for the person or entity whose a=
-ddress is listed above. Any use of the information contained herein in any =
-way (including, but not limited to, total or partial disclosure, reproducti=
-on or dissemination) by persons other than the intended recipient(s) is pro=
-hibited. If you receive this email in error, please notify the sender by ph=
-one or email immediately and delete it.=20
->=20
->=20
-> Ooops!
->=20
-> Are we intended person/entities to receive your Reviewed-by tag?
+I guess so, especially that this disclaimer should be useless. But on
+the other hand, do I want to deal with it if once Loongson sends me
+Cease-and-desist letter for something? Why even thinking about this
+should be my problem? Why should I even consider this topic: is it
+harmless or is there any risk?
 
-It's okay, you only got a "Reviewd-by" tag ;)
+Best regards,
+Krzysztof
 
-> We will
-> be using it (total/partial disclosure, reproduction, dissemination).
-> People not on To/Cc will also do it and for sure they are not intended
-> recipients.
->=20
-> Please talk with your IT that such disclaimers in open-source are not
-> desired (if not harmful even).
-
-
---523xuRZw0fU82LBP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMOH/AAKCRB4tDGHoIJi
-0gMjAQCwuOOqioqhXBcVVNNlEUbzvUFOeQosva5CuZ1VI8i2PgD/eYqFU0jIHamT
-Ph+ow795RHsFOuI0i+//fT4i05v03Aw=
-=OrTB
------END PGP SIGNATURE-----
-
---523xuRZw0fU82LBP--
