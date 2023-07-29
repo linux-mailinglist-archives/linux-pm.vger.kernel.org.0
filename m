@@ -2,65 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C142767C57
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jul 2023 07:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022F6767D40
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jul 2023 10:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjG2F3P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Jul 2023 01:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
+        id S230404AbjG2Ioh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Jul 2023 04:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjG2F3O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jul 2023 01:29:14 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EC149CA;
-        Fri, 28 Jul 2023 22:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690608552; x=1722144552;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p5OlNuOBiNRpIEoTzzV9BfAcI6Rj48c+yaAUgRH2CiY=;
-  b=jSmjbp4SdBu5aW+UFPchpawfqgjO9SqfYQlNdQbXrD1xYrlwNscA+b0K
-   qSxYhI49UX5PNoL00POwRuGuM/KtkxfhYqsE+QfjxQbJGAe48B4r/HeJm
-   IQyQBU8KJU8RNiTlVYHPKqtJ9s7wviKdAqAMeH48mz4r3hh8MAq02cAFk
-   bZK/WmVaHBaSGLWW2FQjULs610or3Tyl/B/SGMjmQkxlQxo9cfuilmRI9
-   5yKo1QaqjjxPBUv+LhcWdxLIGJ7rykcCVekvkC4W5u1RyLv8uox5F8ZWp
-   TYmgaSHRJHWrq+EuAw9GB9jxMvnRkwH6JgEhCHhPGAFAWXy5XCzBKxD2u
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="348338525"
-X-IronPort-AV: E=Sophos;i="6.01,239,1684825200"; 
-   d="scan'208";a="348338525"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 22:29:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="793131840"
-X-IronPort-AV: E=Sophos;i="6.01,239,1684825200"; 
-   d="scan'208";a="793131840"
-Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 28 Jul 2023 22:29:09 -0700
-Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qPcVo-0003r5-1j;
-        Sat, 29 Jul 2023 05:29:08 +0000
-Date:   Sat, 29 Jul 2023 13:28:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikita Travkin <nikita@trvn.ru>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH 4/4] power: supply: Add driver for pm8916 lbc
-Message-ID: <202307291336.Zxmj8R1g-lkp@intel.com>
-References: <20230728-pm8916-bms-lbc-v1-4-56da32467487@trvn.ru>
+        with ESMTP id S229521AbjG2Iog (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jul 2023 04:44:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF10130;
+        Sat, 29 Jul 2023 01:44:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=/WBUqBKlZCcgIkihfK24/SSF4pz1v//Vy8IKpbv82rg=; b=YoH/UG4qEoY0Movq+F4o+2RRe1
+        prgXGOYaHb+43cM7KMOO/EjoCezsNGiLmRqxVqVDHmj6/Kn+qliqvpBx0eXKk2pkj4V9Uhf8lC6jQ
+        9LEW+BBchXHg8mo5Np65YPM93V9PG9SgWamRpyEj+5MX8NZ8L/FkSTc0YVzMkBJ6fGS1g/BeJLaGW
+        Uft7BTpqYEoNCkHAgsEDmMNDklRq92D/prpbSqlV+NFihwsTndLsG5C8BJCiLJcK2xdnRfxvMI1E1
+        SG+OEITFGpjUFks39TZS/MOf54lKfus7PL3HUIPoMw8DrfOSi5//cXOsP49Cc/VK/rpAdxbYSahNS
+        AfZhmxzg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qPfYg-0092NC-28;
+        Sat, 29 Jul 2023 08:44:18 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A571F3002CE;
+        Sat, 29 Jul 2023 10:44:17 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 808DB202C39FE; Sat, 29 Jul 2023 10:44:17 +0200 (CEST)
+Date:   Sat, 29 Jul 2023 10:44:17 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     anna-maria@linutronix.de, tglx@linutronix.de, frederic@kernel.org,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
+Message-ID: <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
+References: <20230728145515.990749537@infradead.org>
+ <20230728145808.835742568@infradead.org>
+ <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230728-pm8916-bms-lbc-v1-4-56da32467487@trvn.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,66 +66,21 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Nikita,
+On Fri, Jul 28, 2023 at 05:36:55PM +0200, Rafael J. Wysocki wrote:
+> On Fri, Jul 28, 2023 at 5:01 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > In order to facilitate governors that track history in idle-state
+> > buckets (TEO) making a useful decision about NOHZ, make sure we have a
+> > bucket that counts tick-and-longer.
+> >
+> > In order to be inclusive of the tick itself -- after all, if we do not
+> > disable NOHZ we'll sleep for a full tick, the actual boundary should
+> > be just short of a full tick.
+> >
+> > IOW, when registering the idle-states, add one that is always
+> > disabled, just to have a bucket.
+> 
+> This extra bucket can be created in the governor itself, can't it?
 
-kernel test robot noticed the following build warnings:
+I couldn't find a nice spot for the governor to add idle-states.
 
-[auto build test WARNING on d7b3af5a77e8d8da28f435f313e069aea5bcf172]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikita-Travkin/dt-bindings-power-supply-Add-pm8916-VM-BMS/20230729-013044
-base:   d7b3af5a77e8d8da28f435f313e069aea5bcf172
-patch link:    https://lore.kernel.org/r/20230728-pm8916-bms-lbc-v1-4-56da32467487%40trvn.ru
-patch subject: [PATCH 4/4] power: supply: Add driver for pm8916 lbc
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230729/202307291336.Zxmj8R1g-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230729/202307291336.Zxmj8R1g-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307291336.Zxmj8R1g-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/power/supply/pm8916_lbc.c: In function 'pm8916_lbc_charger_get_property':
->> drivers/power/supply/pm8916_lbc.c:130:22: warning: unused variable 'tmp' [-Wunused-variable]
-     130 |         unsigned int tmp;
-         |                      ^~~
->> drivers/power/supply/pm8916_lbc.c:129:13: warning: unused variable 'ret' [-Wunused-variable]
-     129 |         int ret = 0;
-         |             ^~~
-
-
-vim +/tmp +130 drivers/power/supply/pm8916_lbc.c
-
-   123	
-   124	static int pm8916_lbc_charger_get_property(struct power_supply *psy,
-   125						   enum power_supply_property psp,
-   126						   union power_supply_propval *val)
-   127	{
-   128		struct pm8916_lbc_charger *chg = power_supply_get_drvdata(psy);
- > 129		int ret = 0;
- > 130		unsigned int tmp;
-   131	
-   132		switch (psp) {
-   133		case POWER_SUPPLY_PROP_ONLINE:
-   134			val->intval = chg->online;
-   135			return 0;
-   136	
-   137		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-   138			val->intval = chg->charge_voltage_max;
-   139			return 0;
-   140	
-   141		case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-   142			val->intval = chg->charge_current_max;
-   143			return 0;
-   144	
-   145		default:
-   146			return -EINVAL;
-   147		};
-   148	}
-   149	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
