@@ -2,165 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4E6767D69
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jul 2023 11:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7336767DA2
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Jul 2023 11:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbjG2JDB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Jul 2023 05:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S230131AbjG2JZY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Jul 2023 05:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjG2JDA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jul 2023 05:03:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E013C33;
-        Sat, 29 Jul 2023 02:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=g6UojXCOkyCdhNj31kgSFEVj8BuEt/lnkxAfMMWCe9s=; b=pFuOcdSBnIPxpL8/P8SR0fNDxG
-        nl507WgPU+OmBiRrT7g+mhjrFyCPcijN0CMf4CpDKsWBW3yc7tVijPvu3AWJzb2547fJEMFUuEGpV
-        fmnCxjUqLrXOcR3aKzYgzs3GaRbJKk3xXN16tRs5u4BTeih4xd5jLPdaE1qNUzTEB/29AUCeVF6SM
-        wGD2nVRjhS6iIOo+DXwpYGYavUVKLxHlUAeNYSIL0WD4pdlx8xOur8szeHQBBYboXtRQdmiozBTeZ
-        DudGOTV7odYI3sFW6yawsLFTjgbEl4YC+O+vVcdQkbx4KtRDnAedZwFmaxA0PU+jodN5cT3gpk0rg
-        m7xYiZsQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qPfqh-009wW8-Om; Sat, 29 Jul 2023 09:02:56 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C04A63002CE;
-        Sat, 29 Jul 2023 11:02:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A87DF2027C618; Sat, 29 Jul 2023 11:02:55 +0200 (CEST)
-Date:   Sat, 29 Jul 2023 11:02:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v1] cpuidle: teo: Update idle duration estimate when
- choosing shallower state
-Message-ID: <20230729090255.GD3945851@hirez.programming.kicks-ass.net>
-References: <4506480.LvFx2qVVIh@kreacher>
- <CAJZ5v0hnRm7Nnup3HPWedEchzLD_9w8OPkhQ0vjpR3uAL3HUoQ@mail.gmail.com>
+        with ESMTP id S229667AbjG2JZX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jul 2023 05:25:23 -0400
+Received: from mgamail.intel.com (unknown [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E1535A3;
+        Sat, 29 Jul 2023 02:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690622721; x=1722158721;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S/3RlvQtNmTMQrZdArWv4udXKUyqBI6whsz5JfZbzp0=;
+  b=OhEwUTxF+Q1KzH+Cdt7f9Q0rXsFfgmGoJPndGUUU8OaZv0Fgyy9QmEGv
+   K7n7KIvMmW9b64xF8tGDuUA8KAM3lemmqkDiqKdaAmEheIltv+lCAw9VL
+   11OxLl2cZ/M0DehlCsbr/PO6rYgurB5H72tYzD38/1FYN3w9qs1n8LLSa
+   Z7yaDt+NdeGSKSz1BvInpq2EBy0QHYzgytqRALuwKXizjgK52fia0RI2x
+   w398GLW3t+xtxYd78XHB/LzbWr/h0ycg60YgWdz71PP2u1rVvmcDVg2Vz
+   QuVhhuCbPA5LQOeXMmNPluNqK9NmRD2o306rPh7v7Trm+xWnWBdg0zMDZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="435038120"
+X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
+   d="scan'208";a="435038120"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 02:25:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="762828232"
+X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
+   d="scan'208";a="762828232"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 29 Jul 2023 02:25:18 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qPgCL-0003wp-39;
+        Sat, 29 Jul 2023 09:25:17 +0000
+Date:   Sat, 29 Jul 2023 17:25:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: Re: [PATCH 1/4] interconnect: qcom: icc-rpm: Add AB/IB calculations
+ coefficients
+Message-ID: <202307291745.0JcdYvBz-lkp@intel.com>
+References: <20230726-topic-icc_coeff-v1-1-31616960818c@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hnRm7Nnup3HPWedEchzLD_9w8OPkhQ0vjpR3uAL3HUoQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230726-topic-icc_coeff-v1-1-31616960818c@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 10:12:56PM +0200, Rafael J. Wysocki wrote:
-> On Thu, Jul 27, 2023 at 10:05 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The TEO governor takes CPU utilization into account by refining idle state
-> > selection when the utilization is above a certain threshold.  The idle state
-> > selection is then refined by choosing an idle state shallower than the
-> > previously selected one.
-> >
-> > However, when this is done, the idle duration estimate needs to be updated
-> > so as to prevent the scheduler tick from being stopped while the candidate
-> > idle state is shallow, which may lead to excessive energy usage if the CPU
-> > is not interrupted quickly enough going forward.  Moreover, in case the
-> > scheduler tick has been stopped already and the new idle duration estimate
-> > is too small, the replacement candidate state cannot be used.
-> >
-> > Modify the relevant code to take the above observations into account.
-> >
-> > Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > @Peter: This doesn't attempt to fix the tick stopping problem, it just makes
-> > the current behavior consistent.
-> >
-> > @Anna-Maria: This is likely to basically prevent the tick from being stopped
-> > at all if the CPU utilization is above a certain threshold.  I'm wondering if
-> > your results will be affected by it and in what way.
-> >
-> > ---
-> >  drivers/cpuidle/governors/teo.c |   33 ++++++++++++++++++++++++++-------
-> >  1 file changed, 26 insertions(+), 7 deletions(-)
-> >
-> > Index: linux-pm/drivers/cpuidle/governors/teo.c
-> > ===================================================================
-> > --- linux-pm.orig/drivers/cpuidle/governors/teo.c
-> > +++ linux-pm/drivers/cpuidle/governors/teo.c
-> > @@ -397,13 +397,22 @@ static int teo_select(struct cpuidle_dri
-> >          * the shallowest non-polling state and exit.
-> >          */
-> >         if (drv->state_count < 3 && cpu_data->utilized) {
-> > -               for (i = 0; i < drv->state_count; ++i) {
-> > -                       if (!dev->states_usage[i].disable &&
-> > -                           !(drv->states[i].flags & CPUIDLE_FLAG_POLLING)) {
-> > -                               idx = i;
-> > +               /*
-> > +                * If state 0 is enabled and it is not a polling one, select it
-> > +                * right away and update the idle duration estimate accordingly,
-> > +                * unless the scheduler tick has been stopped.
-> > +                */
-> > +               if (!idx && !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
-> > +                       s64 span_ns = teo_middle_of_bin(0, drv);
-> > +
-> > +                       if (teo_time_ok(span_ns)) {
-> > +                               duration_ns = span_ns;
-> >                                 goto end;
-> >                         }
-> >                 }
-> > +               /* Assume that state 1 is not a polling one and select it. */
-> 
-> Well, I should also check if it is not disabled.  Will send a v2 tomorrow.
-> 
-> > +               idx = 1;
-> > +               goto end;
-> >         }
-> >
-> >         /*
-> > @@ -539,10 +548,20 @@ static int teo_select(struct cpuidle_dri
-> >
-> >         /*
-> >          * If the CPU is being utilized over the threshold, choose a shallower
-> > -        * non-polling state to improve latency
-> > +        * non-polling state to improve latency, unless the scheduler tick has
-> > +        * been stopped already and the shallower state's target residency is
-> > +        * not sufficiently large.
-> >          */
-> > -       if (cpu_data->utilized)
-> > -               idx = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> > +       if (cpu_data->utilized) {
-> > +               s64 span_ns;
-> > +
-> > +               i = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> > +               span_ns = teo_middle_of_bin(i, drv);
-> > +               if (teo_time_ok(span_ns)) {
-> > +                       idx = i;
-> > +                       duration_ns = span_ns;
-> > +               }
-> > +       }
+Hi Konrad,
 
-So I'm not a huge fan of that utilized thing to begin with.. that feels
-like a hack. I think my patch 3 would achieve much the same, because if
-busy, you'll have short idles, which will drive the hit+intercept to
-favour low states, and voila.
+kernel test robot noticed the following build warnings:
 
-I didn't take it out -- yet -- because I haven't had much time to
-evaluate it.
+[auto build test WARNING on 1e25dd7772483f477f79986d956028e9f47f990a]
 
-Simply lowering one state at a random busy threshold is duct-tape if
-ever I saw some.
+url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/interconnect-qcom-icc-rpm-Add-AB-IB-calculations-coefficients/20230727-002710
+base:   1e25dd7772483f477f79986d956028e9f47f990a
+patch link:    https://lore.kernel.org/r/20230726-topic-icc_coeff-v1-1-31616960818c%40linaro.org
+patch subject: [PATCH 1/4] interconnect: qcom: icc-rpm: Add AB/IB calculations coefficients
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230729/202307291745.0JcdYvBz-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307291745.0JcdYvBz-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307291745.0JcdYvBz-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/interconnect/qcom/icc-rpm.c: In function 'qcom_icc_bus_aggregate':
+>> drivers/interconnect/qcom/icc-rpm.c:302:27: warning: variable 'agg_peak_rate' set but not used [-Wunused-but-set-variable]
+     302 |         u64 agg_avg_rate, agg_peak_rate, agg_rate;
+         |                           ^~~~~~~~~~~~~
+
+
+vim +/agg_peak_rate +302 drivers/interconnect/qcom/icc-rpm.c
+
+   293	
+   294	/**
+   295	 * qcom_icc_bus_aggregate - calculate bus clock rates by traversing all nodes
+   296	 * @provider: generic interconnect provider
+   297	 * @agg_clk_rate: array containing the aggregated clock rates in kHz
+   298	 */
+   299	static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_rate)
+   300	{
+   301		struct qcom_icc_provider *qp = to_qcom_provider(provider);
+ > 302		u64 agg_avg_rate, agg_peak_rate, agg_rate;
+   303		struct qcom_icc_node *qn;
+   304		struct icc_node *node;
+   305		u16 percent;
+   306		int i;
+   307	
+   308		/*
+   309		 * Iterate nodes on the provider, aggregate bandwidth requests for
+   310		 * every bucket and convert them into bus clock rates.
+   311		 */
+   312		list_for_each_entry(node, &provider->nodes, node_list) {
+   313			qn = node->data;
+   314			for (i = 0; i < QCOM_SMD_RPM_STATE_NUM; i++) {
+   315				if (qn->channels)
+   316					agg_avg_rate = div_u64(qn->sum_avg[i], qn->channels);
+   317				else
+   318					agg_avg_rate = qn->sum_avg[i];
+   319	
+   320				percent = qp->ab_percent ? qp->ab_percent : 100;
+   321				agg_avg_rate = mult_frac(percent, agg_avg_rate, 100);
+   322	
+   323				percent = qn->ib_percent ? qn->ib_percent : 100;
+   324				agg_peak_rate = mult_frac(percent, qn->max_peak[i], 100);
+   325	
+   326				agg_rate = max_t(u64, agg_avg_rate, qn->max_peak[i]);
+   327				do_div(agg_rate, qn->buswidth);
+   328	
+   329				agg_clk_rate[i] = max_t(u64, agg_clk_rate[i], agg_rate);
+   330			}
+   331		}
+   332	}
+   333	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
