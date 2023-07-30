@@ -2,61 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65F67684BB
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 12:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34ADA76859F
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 15:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjG3KFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jul 2023 06:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
+        id S230187AbjG3Ndl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jul 2023 09:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjG3KFT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 06:05:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0477B1987;
-        Sun, 30 Jul 2023 03:05:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85713606A0;
-        Sun, 30 Jul 2023 10:05:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A7DC433C8;
-        Sun, 30 Jul 2023 10:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690711516;
-        bh=uOCk5v0cyP6RW8hFIA0Q6PFQ6s4G0QrkYFOB5/6POr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LT4eAcY5XhRvLvdH93Bkd5xsfSPDiJfQnzf9cooDdJS2UZrjbmdXzh8IM/nwLTwVf
-         Pth60zkM5VDPFPix/oU8BWI5VwSl/vygiOJQ8ErThM8XbW68EPCkIaPRaiA7HM2+cm
-         34MXibtCvfsIX8QkZ8MyR3G1v5TiDmIFFEMvTjLDx3rZdNC3QFyKeMfLR5SHR75rjQ
-         QU51C+uZNpZOfphoWMfTrsyzfjSmmW0XtgypvYQFqnURcG7u3UA5xHiOdGp45+EmfR
-         W0drXq5jQ1u773SJC1orh9Qcy10urhzPN4tMNe1RyrBOBlzoHJUrr5I4WKEtok/1Gz
-         wzwsQgU8m/aMA==
-Date:   Sun, 30 Jul 2023 11:05:12 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: power: supply: Add pm8916 VM-BMS
-Message-ID: <20230730-clustered-untidy-e943b4a65d71@spud>
-References: <20230728-pm8916-bms-lbc-v1-0-56da32467487@trvn.ru>
- <20230728-pm8916-bms-lbc-v1-1-56da32467487@trvn.ru>
- <20230729-facecloth-trembling-3311ca245505@spud>
- <25e933dc3f28fd73a9b76f172dacfdb2@trvn.ru>
- <20230729-splatter-garland-495a414c323e@spud>
- <0b41a93ee82674e65a3801f5a37edd5a@trvn.ru>
+        with ESMTP id S230180AbjG3Ndk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 09:33:40 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5F010FF
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jul 2023 06:33:39 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5861116fd74so1833967b3.0
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jul 2023 06:33:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690724018; x=1691328818;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OtNl12nbv4hnnmWMRlJdur9PhpP3nspNUoZ4quDWp7A=;
+        b=OhNKPLVYXDcMJuVuqMvYujB1oxv+v9rpcB9NXnKHOqzO6olODYAW63RsDPpaoiFfbn
+         fL8JviMaFNnrce66Pc5zaI2NIXa3oabpCpYg3nF6Q0asSBUKHNn2ajBuAg1Xd2zz5GA2
+         idq7viHLl2jGO8WbLuvPShi8Hcv/F7UgS93jjib41b6gTg/X/YPNpz82P/gR2IAHZxmr
+         wrDoRKYHBNnnESOkwxQufKFHMLXh0bTxlMtzw3cDXn779okDtbbdSJJwVyiqWvanfgoa
+         hhOVb3iOPFv9dNe8ACfCkTWUUcZ/tsswe2f+8AiQ5pPLKOPoqp0UdPkPn/CJ2jSmuoPT
+         ZpJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690724018; x=1691328818;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OtNl12nbv4hnnmWMRlJdur9PhpP3nspNUoZ4quDWp7A=;
+        b=hCrwgzbzmUButfr0aYnG82BVeTUcGiKAU4h/7z3emQQfqylhb5u/lRYQCM5FaSDgT4
+         m3Neb692uKumIPDMP00a32FvccCQxzy++Vzi0eZGDpr4eL/q1ZryeAeT3XhARhmd4B01
+         slNYx/GijiNohYYcu/6GODKDUqlfRCv7gIJ/zMBscKDuVibhoiEwuRNJQR83PyGWvTp1
+         5dNzVO9BJQZ8upEI3hUrT7jZGbBxcygtrpKRhKWRtQjmy+KE3bmMgWOISQWWtjIiYPEa
+         BPcR8wiOXF3X5yHqB92pue3Bv+htyugDxZdrYwGlxo2yQXw6MnHDQZqjUQSqmVItqaOy
+         xJaw==
+X-Gm-Message-State: ABy/qLYCANq1p4oy5bpENF33bv/4AG6jpV++rh74jG+p6d8WpWuUSuBN
+        GN4yPLr76K7yS6Romi60tWEL1tDhh/d9smCcYOrl4Q==
+X-Google-Smtp-Source: APBJJlGK2ghLVBLAX/CXOTseKd/smCssV1QKYSZWmN/L7EStKZyaXlIvK74ktdZzWflb1vC2uH1y9HggjCb2+udGz9o=
+X-Received: by 2002:a81:7c88:0:b0:561:a123:1041 with SMTP id
+ x130-20020a817c88000000b00561a1231041mr5867849ywc.29.1690724018385; Sun, 30
+ Jul 2023 06:33:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jEPzFvG+l0KcHHNb"
-Content-Disposition: inline
-In-Reply-To: <0b41a93ee82674e65a3801f5a37edd5a@trvn.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230720090443.503525-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230720090443.503525-1-peng.fan@oss.nxp.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Sun, 30 Jul 2023 15:32:50 +0200
+Message-ID: <CAPDyKFoAvrRTZ+kJmPr8sdRPxF=0Jg+CEMLQyKTnDaviSGO2fw@mail.gmail.com>
+Subject: Re: [PATCH V2] genpd: Makefile: build imx
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,67 +66,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, 20 Jul 2023 at 10:59, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> The imx genpd was missed to be built out, add it in Makefile
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
---jEPzFvG+l0KcHHNb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for fixing this!
 
-On Sat, Jul 29, 2023 at 05:15:06PM +0500, Nikita Travkin wrote:
-> Conor Dooley =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 29.07.2023 17:10:
-> > On Sat, Jul 29, 2023 at 05:06:14PM +0500, Nikita Travkin wrote:
-> >> Conor Dooley =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 29.07.2023 15:03:
-> >> > On Fri, Jul 28, 2023 at 10:19:30PM +0500, Nikita Travkin wrote:
-> >=20
-> >> >> +  interrupt-names:
-> >> >> +    items:
-> >> >> +      - const: fifo
-> >> >
-> >> > Same here, but do you really need a name, when you have only one
-> >> > interrupt?
-> >> >
-> >>
-> >> Hm, thinking of this more, the hardware actually has more than one
-> >> interrupt, even though this one seems to be the only really useful
-> >> one. Would a better way forward be to list all of them
-> >=20
-> > Yes.
-> >=20
-> >> (and fix
-> >> the driver to get the value by it's name)
-> >=20
-> > It's not a fix to do that, the order of the interrupts is not variable,
-> > so there's nothing wrong with using the indices. You can do it if you
-> > like.
-> >=20
-> >> or it would be
-> >> acceptable to leave the names here and extend the list at a later
-> >> date when (if ever) other interrupts are needed?
-> >=20
-> > If you know what they are, please describe them now, even if the driver
-> > does not use them (yet).
-> >=20
->=20
-> Thanks for the clarification! Will make sure both drivers have all
-> interrupts described in v2
+Applied for next, thanks!
 
-Note that bindings describe hardware, not the driver. The driver need
-not touch the other interrupts if it does not use them, but make the
-hardware description (IOW the dt-binding) accurate & as complete as you
-can.
+Kind regards
+Uffe
 
-Thanks,
-Conor.
-
---jEPzFvG+l0KcHHNb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMY10wAKCRB4tDGHoIJi
-0hbHAP0XUtnKtw/UNbikUvhnQxyenApvfmv5T5vsTNrJ2nJQBAD+N70WAQYlMFim
-l0UKWHTL0bMfQZOTyejhQCMs7tlq1AA=
-=T3/R
------END PGP SIGNATURE-----
-
---jEPzFvG+l0KcHHNb--
+> ---
+>
+> V2:
+>  Drop scu-pd change
+>
+>  drivers/genpd/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/genpd/Makefile b/drivers/genpd/Makefile
+> index c429485c13f6..666753676e5c 100644
+> --- a/drivers/genpd/Makefile
+> +++ b/drivers/genpd/Makefile
+> @@ -3,6 +3,7 @@ obj-y                                   += actions/
+>  obj-y                                  += amlogic/
+>  obj-y                                  += apple/
+>  obj-y                                  += bcm/
+> +obj-y                                  += imx/
+>  obj-y                                  += mediatek/
+>  obj-y                                  += qcom/
+>  obj-y                                  += renesas/
+> --
+> 2.37.1
+>
