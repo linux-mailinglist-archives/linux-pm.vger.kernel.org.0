@@ -2,216 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A37767F40
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Jul 2023 14:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B65F67684BB
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 12:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjG2Mvj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Jul 2023 08:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S229843AbjG3KFU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jul 2023 06:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231584AbjG2Mvh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Jul 2023 08:51:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 970BBE6A;
-        Sat, 29 Jul 2023 05:51:35 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 575E22F4;
-        Sat, 29 Jul 2023 05:52:18 -0700 (PDT)
-Received: from e126311.manchester.arm.com (unknown [10.57.77.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C9263F67D;
-        Sat, 29 Jul 2023 05:51:33 -0700 (PDT)
-Date:   Sat, 29 Jul 2023 13:51:25 +0100
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v1] cpuidle: teo: Update idle duration estimate when
- choosing shallower state
-Message-ID: <ZMULTVTo5RjclWFt@e126311.manchester.arm.com>
-References: <4506480.LvFx2qVVIh@kreacher>
- <CAJZ5v0hnRm7Nnup3HPWedEchzLD_9w8OPkhQ0vjpR3uAL3HUoQ@mail.gmail.com>
- <20230729090255.GD3945851@hirez.programming.kicks-ass.net>
+        with ESMTP id S229468AbjG3KFT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 06:05:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0477B1987;
+        Sun, 30 Jul 2023 03:05:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85713606A0;
+        Sun, 30 Jul 2023 10:05:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08A7DC433C8;
+        Sun, 30 Jul 2023 10:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690711516;
+        bh=uOCk5v0cyP6RW8hFIA0Q6PFQ6s4G0QrkYFOB5/6POr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LT4eAcY5XhRvLvdH93Bkd5xsfSPDiJfQnzf9cooDdJS2UZrjbmdXzh8IM/nwLTwVf
+         Pth60zkM5VDPFPix/oU8BWI5VwSl/vygiOJQ8ErThM8XbW68EPCkIaPRaiA7HM2+cm
+         34MXibtCvfsIX8QkZ8MyR3G1v5TiDmIFFEMvTjLDx3rZdNC3QFyKeMfLR5SHR75rjQ
+         QU51C+uZNpZOfphoWMfTrsyzfjSmmW0XtgypvYQFqnURcG7u3UA5xHiOdGp45+EmfR
+         W0drXq5jQ1u773SJC1orh9Qcy10urhzPN4tMNe1RyrBOBlzoHJUrr5I4WKEtok/1Gz
+         wzwsQgU8m/aMA==
+Date:   Sun, 30 Jul 2023 11:05:12 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Nikita Travkin <nikita@trvn.ru>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: power: supply: Add pm8916 VM-BMS
+Message-ID: <20230730-clustered-untidy-e943b4a65d71@spud>
+References: <20230728-pm8916-bms-lbc-v1-0-56da32467487@trvn.ru>
+ <20230728-pm8916-bms-lbc-v1-1-56da32467487@trvn.ru>
+ <20230729-facecloth-trembling-3311ca245505@spud>
+ <25e933dc3f28fd73a9b76f172dacfdb2@trvn.ru>
+ <20230729-splatter-garland-495a414c323e@spud>
+ <0b41a93ee82674e65a3801f5a37edd5a@trvn.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="jEPzFvG+l0KcHHNb"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230729090255.GD3945851@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0b41a93ee82674e65a3801f5a37edd5a@trvn.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jul 29, 2023 at 11:02:55AM +0200, Peter Zijlstra wrote:
-> On Thu, Jul 27, 2023 at 10:12:56PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, Jul 27, 2023 at 10:05 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > The TEO governor takes CPU utilization into account by refining idle state
-> > > selection when the utilization is above a certain threshold.  The idle state
-> > > selection is then refined by choosing an idle state shallower than the
-> > > previously selected one.
-> > >
-> > > However, when this is done, the idle duration estimate needs to be updated
-> > > so as to prevent the scheduler tick from being stopped while the candidate
-> > > idle state is shallow, which may lead to excessive energy usage if the CPU
-> > > is not interrupted quickly enough going forward.  Moreover, in case the
-> > > scheduler tick has been stopped already and the new idle duration estimate
-> > > is too small, the replacement candidate state cannot be used.
-> > >
-> > > Modify the relevant code to take the above observations into account.
-> > >
-> > > Fixes: 9ce0f7c4bc64 ("cpuidle: teo: Introduce util-awareness")
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > @Peter: This doesn't attempt to fix the tick stopping problem, it just makes
-> > > the current behavior consistent.
-> > >
-> > > @Anna-Maria: This is likely to basically prevent the tick from being stopped
-> > > at all if the CPU utilization is above a certain threshold.  I'm wondering if
-> > > your results will be affected by it and in what way.
-> > >
-> > > ---
-> > >  drivers/cpuidle/governors/teo.c |   33 ++++++++++++++++++++++++++-------
-> > >  1 file changed, 26 insertions(+), 7 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/cpuidle/governors/teo.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/cpuidle/governors/teo.c
-> > > +++ linux-pm/drivers/cpuidle/governors/teo.c
-> > > @@ -397,13 +397,22 @@ static int teo_select(struct cpuidle_dri
-> > >          * the shallowest non-polling state and exit.
-> > >          */
-> > >         if (drv->state_count < 3 && cpu_data->utilized) {
-> > > -               for (i = 0; i < drv->state_count; ++i) {
-> > > -                       if (!dev->states_usage[i].disable &&
-> > > -                           !(drv->states[i].flags & CPUIDLE_FLAG_POLLING)) {
-> > > -                               idx = i;
-> > > +               /*
-> > > +                * If state 0 is enabled and it is not a polling one, select it
-> > > +                * right away and update the idle duration estimate accordingly,
-> > > +                * unless the scheduler tick has been stopped.
-> > > +                */
-> > > +               if (!idx && !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
-> > > +                       s64 span_ns = teo_middle_of_bin(0, drv);
-> > > +
-> > > +                       if (teo_time_ok(span_ns)) {
-> > > +                               duration_ns = span_ns;
-> > >                                 goto end;
-> > >                         }
-> > >                 }
-> > > +               /* Assume that state 1 is not a polling one and select it. */
-> > 
-> > Well, I should also check if it is not disabled.  Will send a v2 tomorrow.
-> > 
-> > > +               idx = 1;
-> > > +               goto end;
-> > >         }
-> > >
-> > >         /*
-> > > @@ -539,10 +548,20 @@ static int teo_select(struct cpuidle_dri
-> > >
-> > >         /*
-> > >          * If the CPU is being utilized over the threshold, choose a shallower
-> > > -        * non-polling state to improve latency
-> > > +        * non-polling state to improve latency, unless the scheduler tick has
-> > > +        * been stopped already and the shallower state's target residency is
-> > > +        * not sufficiently large.
-> > >          */
-> > > -       if (cpu_data->utilized)
-> > > -               idx = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> > > +       if (cpu_data->utilized) {
-> > > +               s64 span_ns;
-> > > +
-> > > +               i = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> > > +               span_ns = teo_middle_of_bin(i, drv);
-> > > +               if (teo_time_ok(span_ns)) {
-> > > +                       idx = i;
-> > > +                       duration_ns = span_ns;
-> > > +               }
-> > > +       }
-> 
-> So I'm not a huge fan of that utilized thing to begin with.. that feels
-> like a hack. I think my patch 3 would achieve much the same, because if
-> busy, you'll have short idles, which will drive the hit+intercept to
-> favour low states, and voila.
 
-Not exactly, simply relying on the hit/intercept metrics while
-functional still just amounts to pretty much guessing as it does not
-take any information about what the cpu might be doing into account
-(beyond the timer events but that's the case for both approaches).
+--jEPzFvG+l0KcHHNb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Apart from the approach of "extrapolating future results from past
-mistakes" being slightly questionable to begin with it's in my view made
-even worse by the fact that the metrics are per cpu - meaning they get
-essentially invalidated when tasks get migrated between cores.
+On Sat, Jul 29, 2023 at 05:15:06PM +0500, Nikita Travkin wrote:
+> Conor Dooley =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 29.07.2023 17:10:
+> > On Sat, Jul 29, 2023 at 05:06:14PM +0500, Nikita Travkin wrote:
+> >> Conor Dooley =D0=BF=D0=B8=D1=81=D0=B0=D0=BB(=D0=B0) 29.07.2023 15:03:
+> >> > On Fri, Jul 28, 2023 at 10:19:30PM +0500, Nikita Travkin wrote:
+> >=20
+> >> >> +  interrupt-names:
+> >> >> +    items:
+> >> >> +      - const: fifo
+> >> >
+> >> > Same here, but do you really need a name, when you have only one
+> >> > interrupt?
+> >> >
+> >>
+> >> Hm, thinking of this more, the hardware actually has more than one
+> >> interrupt, even though this one seems to be the only really useful
+> >> one. Would a better way forward be to list all of them
+> >=20
+> > Yes.
+> >=20
+> >> (and fix
+> >> the driver to get the value by it's name)
+> >=20
+> > It's not a fix to do that, the order of the interrupts is not variable,
+> > so there's nothing wrong with using the indices. You can do it if you
+> > like.
+> >=20
+> >> or it would be
+> >> acceptable to leave the names here and extend the list at a later
+> >> date when (if ever) other interrupts are needed?
+> >=20
+> > If you know what they are, please describe them now, even if the driver
+> > does not use them (yet).
+> >=20
+>=20
+> Thanks for the clarification! Will make sure both drivers have all
+> interrupts described in v2
 
-Using just the hit/intercept metrics approach you end up bumping into
-the two scenarios below:
+Note that bindings describe hardware, not the driver. The driver need
+not touch the other interrupts if it does not use them, but make the
+hardware description (IOW the dt-binding) accurate & as complete as you
+can.
 
-1) workload with short idle times -> governor selects too deep states
-then adjusts to shallower idle -> -> workload changes to longer idle times
--> governor selects too shallow then adjusts to deeper -> workload changes to
-shorter idle -> governor keeps selecting too deep states before adjusting
+Thanks,
+Conor.
 
-From looking at many traces I had this happens pretty often and we end
-up with the governor selecting deep idle while the avg util on the cpu
-is still massive and by looking at the util we could clearly tell that
-deep idle here would be a mistake. The metrics cannot avoid making that
-mistake, they need to make several of them in order to adjust. You can
-just get stuck ping-ponging between being wrong both ways.
+--jEPzFvG+l0KcHHNb
+Content-Type: application/pgp-signature; name="signature.asc"
 
-2) A reasonably large task gets migrated onto a different CPU. The
-metrics on the target CPU still favour deeper idle as it wasn't doing
-anything up until the migration, the metrics on the previous CPU favour
-shallower states because of the workload having just run there. Now you
-have the target CPU selecing too deep states before it can adjust and
-the previous one selecting too shallow.
+-----BEGIN PGP SIGNATURE-----
 
-With the util approach on the other hand, the change in util will be
-reflected right away so we can avoid making said mistakes on both the
-cores.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMY10wAKCRB4tDGHoIJi
+0hbHAP0XUtnKtw/UNbikUvhnQxyenApvfmv5T5vsTNrJ2nJQBAD+N70WAQYlMFim
+l0UKWHTL0bMfQZOTyejhQCMs7tlq1AA=
+=T3/R
+-----END PGP SIGNATURE-----
 
-> I didn't take it out -- yet -- because I haven't had much time to
-> evaluate it.
-> 
-> Simply lowering one state at a random busy threshold is duct-tape if
-> ever I saw some.
-
-There might be a platform difference here, I do think it probably makes
-more sense on Arm and similar platforms where we only have 2 states to
-choose from so you use the threshold to distinguish between 'deep idle
-desirable' and 'deep idle not desirable'. It does feel slighly more
-hacky on Intel and other platforms with however many states those have
-as instead of "change scenario A to B" it ends up more like "lower
-scenario A". Doesn't make it a bad idea though, it can still be
-beneficial and bring improvements just like on Arm I think. My initial
-suggestion was to make this a separate governor for platforms and use
-cases where this makes sense.
-
-Besides, the threshold isn't random - just empirically the level that
-worked best for the approach. As I wrote in the other thread, it might
-benefit from being tweaked depending on the platform. That's not unique
-to this patchset in any case, the kernel is full of these arbitrary
-numbers that come from "worked on the developer's machine" and not much
-else after all.
-
-I put the numbers from testing this in the original thread for the
-patchset, the util approach was consistently getting much less too deep
-sleeps than the metrics approach in all the workloads I tested to the
-point of being noticeable on both the performance and power usage plots
-for our use cases (Android mobile phone). I never advocated for this to
-be made the default but it is useful for our side of the industry so at
-the very least we should have this as an option. In my view given that
-x86 and arm do cpuidle very differently we probably should have separate
-governors instead of trying to make a one size fits all approach but
-that's a different story.
+--jEPzFvG+l0KcHHNb--
