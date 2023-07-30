@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9526D76879C
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBF97687D0
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 22:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjG3ToX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jul 2023 15:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
+        id S229949AbjG3UPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jul 2023 16:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbjG3ToN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 15:44:13 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174E6170D;
-        Sun, 30 Jul 2023 12:43:52 -0700 (PDT)
+        with ESMTP id S229723AbjG3UPu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 16:15:50 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B55184;
+        Sun, 30 Jul 2023 13:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690746233; x=1722282233;
+  t=1690748148; x=1722284148;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OJcPVZGJsNDtlNBUMYQUs217ooQQcJO9vUAsDUDHiUw=;
-  b=KiHk8sd88gv1A2Uciko8K9SeIAU6NuP+Jb+dHUeCEyFOZSddn/Z9YiHI
-   RwslPZ9OgHE1EVDuVKsCy6ZTU/iI+ddeVx1GC16MMBeXzOsTuFTcNeBcx
-   YcvtRnCKOJBsxs1LY0Njt7VqcOaGxL7F2QiWnEaExJqGWjcCwWq2gVlEr
-   8umgV6hKcFFJh11vB0mQdYC8PHBaHf/yqi/XodCoxEVhWGeePkq8ANrnI
-   M2K7698wgrLrQ2D9124SIvU7FeMwCpuguPMtoeyYvYqO2y/wBbAnOdgc0
-   5wcpzSSDBw+mZkJMuQLjuE9CRdhY6GiltgKpykSqSUH7akmruw7zS7c92
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="366351076"
+  bh=Oqi/5hV9zFCtVGyV0q21JNckf57HO2PFnTjvDdxWCzA=;
+  b=bBJZaBcoOqUfI59oKEaKP/BP2MR/tNS5nHzrEkFi7gWxiA8N32sM4Fyq
+   OFP5/agQaF4aVwLTrW3vgAzRuwTzd8HKdFulBdwg9PURnE/2pEn8nI0B9
+   sCRNjmc7572iWaJt2b++EhFtea/yCSOcS7WLZuMsePg/SmWtHgNpsRxoW
+   W+VmCyKUQxuHsD7+surnMacPVev9iO08aZRSPJ3FUcFkdxemxLDhWqY7i
+   5iR8iXXCK4dED2/+Bd3EGSr29XtzJc2bcq8MkFJn2TCw5/UcmyLLLuW13
+   y9APVqx1J5TmHUMVTncB145JuzhATJ3IGWUSL7icvvFT4PDkqilS+JFZa
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="367764439"
 X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
-   d="scan'208";a="366351076"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 12:43:48 -0700
+   d="scan'208";a="367764439"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 13:15:48 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="841968895"
+X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="728072372"
 X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
-   d="scan'208";a="841968895"
+   d="scan'208";a="728072372"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Jul 2023 12:43:45 -0700
+  by orsmga002.jf.intel.com with ESMTP; 30 Jul 2023 13:15:45 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qQCKO-0004kv-0r;
-        Sun, 30 Jul 2023 19:43:44 +0000
-Date:   Mon, 31 Jul 2023 03:43:24 +0800
+        id 1qQCpM-0004lL-1h;
+        Sun, 30 Jul 2023 20:15:44 +0000
+Date:   Mon, 31 Jul 2023 04:14:52 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Svyatoslav Ryhel <clamor95@gmail.com>,
         Iskren Chernev <me@iskren.info>,
@@ -52,11 +52,12 @@ To:     Svyatoslav Ryhel <clamor95@gmail.com>,
         Sebastian Reichel <sre@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 3/3] power: max17040: get thermal data from adc if
  available
-Message-ID: <202307310308.FDG6br3Y-lkp@intel.com>
+Message-ID: <202307310455.Om3VuGqo-lkp@intel.com>
 References: <20230730172648.71578-4-clamor95@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -87,21 +88,24 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Svyatoslav-Ryhel/dt-bindi
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git for-next
 patch link:    https://lore.kernel.org/r/20230730172648.71578-4-clamor95%40gmail.com
 patch subject: [PATCH v2 3/3] power: max17040: get thermal data from adc if available
-config: x86_64-buildonly-randconfig-r001-20230731 (https://download.01.org/0day-ci/archive/20230731/202307310308.FDG6br3Y-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230731/202307310308.FDG6br3Y-lkp@intel.com/reproduce)
+config: i386-randconfig-i013-20230731 (https://download.01.org/0day-ci/archive/20230731/202307310455.Om3VuGqo-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230731/202307310455.Om3VuGqo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307310308.FDG6br3Y-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307310455.Om3VuGqo-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   ld: vmlinux.o: in function `max17040_get_property':
->> max17040_battery.c:(.text+0x1cb3dd0): undefined reference to `iio_read_channel_processed_scale'
-   ld: vmlinux.o: in function `max17040_probe':
->> max17040_battery.c:(.text+0x1cb40f5): undefined reference to `devm_iio_channel_get'
+>> ld.lld: error: undefined symbol: devm_iio_channel_get
+   >>> referenced by max17040_battery.c:483 (drivers/power/supply/max17040_battery.c:483)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_probe) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: iio_read_channel_processed_scale
+   >>> referenced by max17040_battery.c:413 (drivers/power/supply/max17040_battery.c:413)
+   >>>               drivers/power/supply/max17040_battery.o:(max17040_get_property) in archive vmlinux.a
 
 -- 
 0-DAY CI Kernel Test Service
