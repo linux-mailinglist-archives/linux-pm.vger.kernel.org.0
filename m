@@ -2,75 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621207686B8
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 19:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DFE7686ED
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Jul 2023 19:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjG3R1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Jul 2023 13:27:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S229584AbjG3R64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Jul 2023 13:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjG3R1S (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 13:27:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB606126;
-        Sun, 30 Jul 2023 10:27:16 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe3678010eso300339e87.3;
-        Sun, 30 Jul 2023 10:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690738035; x=1691342835;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LCibpJFPe7+Y3gfoirmVHXZU0UMpLMY1bCCkwz1GdIg=;
-        b=YgmwaCdDVaqwRxcXmX09BtBu0LLUNDGymwZpoaNhyj7UZwjxpun3w6hwdoNJ6GC3hh
-         WvAPKYtQ18hKzsPmLBthILLnaH/79BQby+MQGy+Rltjowbtc1ULuWvkc/vybzXBJ6Ub+
-         BALb2E38Fj1VOaZapw7REBlB4sOCFojR/lTUJVH4UurbU1Dl932pgv6yRO2ahT0IYmBB
-         s4K3foqxAE3eSITBiepmcpeGPi3LPTIf9/4UusROAhXPWWtjENErbBFSAyVZ6B4z1IcC
-         mTO6R07nhUqpDfHD3J9+mIWa3m367vJfVhifUy7nJMR1ebymxXrVQwXQhYcObGcPZOeb
-         yReQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690738035; x=1691342835;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LCibpJFPe7+Y3gfoirmVHXZU0UMpLMY1bCCkwz1GdIg=;
-        b=INtvGNuI/6WWYSS6qNlKT5ee0x/8k8PFxQ94p0rAzXjt44uMO3dlcFmL3I9+03ofLw
-         dbhdxYvRJM8iFFHisIPGrZevxmvCIUHodV2h4VrzqaQ0mUWNTnj1NRvcS4BJX9ODwtha
-         uXf+RVL+qVo//zCciIT0x/+7cACAdVFLMPkQGH4wV2N+l2z3/kecUKpUWvuTVyjQH9yj
-         /THSS8BkwjuchFeYrSAHLVHcsYBB54437rYOTIE/RF4XYQaJc0D7MxKMbhjhUqZP1xMN
-         eiSUlQpZ5yGycEhSBDwl1WFcbDCkLiZD6NngAPnvk+h2v7W5L+Yb78nXyyPtIvmvM7xu
-         LV9A==
-X-Gm-Message-State: ABy/qLY95bct0TaVfrXecbFGlpghD/5F1hm2H1PLw3QAeIYyFT+Bupbw
-        mNdocrAaWpV+YxzWkSZK4TvT7SWnePFn2A==
-X-Google-Smtp-Source: APBJJlECkXKLckvu579cPBZ3C2hsLC5HwsGyMsVTD57txFtaKrWvXqjkc7Y5pAvgvW8dwiAxV6yVoQ==
-X-Received: by 2002:a05:6512:1286:b0:4f8:5c90:f8a4 with SMTP id u6-20020a056512128600b004f85c90f8a4mr5626799lfs.33.1690738034935;
-        Sun, 30 Jul 2023 10:27:14 -0700 (PDT)
-Received: from xeon.. ([188.163.112.48])
-        by smtp.gmail.com with ESMTPSA id x6-20020ac24886000000b004f8555f7aa1sm1737117lfc.52.2023.07.30.10.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Jul 2023 10:27:14 -0700 (PDT)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Iskren Chernev <me@iskren.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] power: max17040: get thermal data from adc if available
-Date:   Sun, 30 Jul 2023 20:26:48 +0300
-Message-Id: <20230730172648.71578-4-clamor95@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230730172648.71578-1-clamor95@gmail.com>
-References: <20230730172648.71578-1-clamor95@gmail.com>
+        with ESMTP id S229505AbjG3R64 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Jul 2023 13:58:56 -0400
+Received: from sonic302-21.consmr.mail.ir2.yahoo.com (sonic302-21.consmr.mail.ir2.yahoo.com [87.248.110.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6250A133
+        for <linux-pm@vger.kernel.org>; Sun, 30 Jul 2023 10:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1690739932; bh=qdmZlgfteMifBTTRwS+MuuJoyBhIjTJdVNv+FQYKI6c=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=TPqRt/D4v5cIIUffCfrsXEJ2cj2/M0Gvr40n8Ikujk02jXv6A0Y7C7+QV0FtV/l4aSI2mOh26thkKlnI9LZ/778cwIddla0N7UetWmIm7kpMd5PChICUD2hh+C9nEVgvfuYw2SwwGb8g772fVGjSeOjWBfBed0nE484GNAmcgSlWZnt8E700FzyD5a62N4Udy0uBRRTGlUU65siEanimVfWnzqnKh3erYEfF9x7AiMqBdh8K2R/HD2D8HTbFUGL3Sbb93cDI0H7vchu+RLw+b1fnGPGKjHqim4A0C1Pk/YwqzeWIUO/jzmy3ecqayZzW2TKTGQv1anxpg50h61ShPQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1690739932; bh=SE1LGEcuKKt+RF+O1daF7g2no92d/TJtm6esaQd8jtI=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=m+a2NubljPbNjpS/I0fALoxN8x+AFA6ItwCLKVDYuWNWL8Rqco4VzPT4ycCFRBbMWfFJgXtOHUsB9dBltd39Nl2onu3IlE47vJW772zSabdWDrB0lISNKUNTmt1201tH1Uof2efwovXuPSU1DWo/MCnJsIbUCFapCn/Y5M1fP7X3zY/7irdwBwDOs1CXi1hgXpUUIfFntJo5lm9BI584yAQ3I9AlaZwHTJpL+U6wGt4WYTNn8Qjl11p//cwSwkqD2IaGii7ReyUBGVoFjaO4uOnNJuE6pKdi94m4E9HIBpvsY5zxXW1fFiMGIPfel5dTiemcn6hkKQoeII2tBl5XqQ==
+X-YMail-OSG: LXNV7YUVM1m4q6BXHuyV2ByO5wHVtjLRn0C7WNEpRGqNZCSpstQSBB4aA4hRUqG
+ yzIFgGcAysxWxcQdzcLD6x7pT19Y9aCVDlel4jCG.hi2jqJl9KuxnZNyqmmmfw25SJzy8h1yxjaf
+ Y76vXf2OEI2w5qmPAQg6whv6d_AU0y62MlktmXrY2bsfWaQmA1R_Mmh59liMSWNYXOcH4iIDmt.X
+ _CRDkk.XWfVAG5Mk5xgKc2op33ZnWVK3femIvHBBSHEQpgMZXQId_di7tKBPPrW._LLdp7hsoqGF
+ h1F4Q5hTKKmac7fxVUA7hTn6UCCfl1VAbwBwKvmKxlMcBI4F7YUTfQ_qYhihkBuwkMf_1WU5Rc_P
+ HqXu9FMQ5InVIVjQ3CZjDiehZ3jCS3Ld5a.d5pd6RSqPUVAVKWjCp4_tDEImBu26RBvCsniif70p
+ 2_6oeHxOCxsvodOtwvmfhLDf7JeTFHfIxVo9HALG5M0qgqo6Lj9vSyiSo95LQMRENYUa6xidXgoS
+ Qe35qaRUcFR_Jpj5VJaMgMIaJrL19Qm01PSTb0VeJu1zke3CBIbagfbk0ti12_4nMyk3h624tiwV
+ edVjth4NCsazkEUIQb1FLfKJiou9XJkC9e3a3g_7UtsTsNedzFuVszg2zdOLipifswkOAG..rUk3
+ pHk2qT1Ac1Uy6jsq52D_KYIHpBb7J1X90Ww_QSKRDTJQQHtHZP6Bj_8rWogfPRlCsPPjmX0d2wNn
+ 7HZImw2zoxpirJeyVlec7ARhHqEVKFPLZKSMX_yPcymEEGcRcby2qHgaavi2muBM0l6VZ34myqtV
+ VH4DvIEAuNUcxAAskqzRDqWlM9dCop90h7e7A5VQ7KMfdlpVINvGPYk7rcKs1PwM5nI2uMJarRjp
+ KDE3NkC6JWOryS_O_Z4VP7k4.ZaMfwPLp0MWIF1_i.aYjglJHUk8cKawBGmv2S6UMZsr38nf8S8u
+ lJ2gM2Y2hpvq5bOOA1gBWnS86AOL6eO169bEnFPPvtmz7jt0hRqaS9fE_E3K6NJhMiXJU7kFO68F
+ 3RpbyMouFqIkG4U5DEuFRKPT.Yv0gViuf9oHXJw16gdlOM9A0u3j_d4vLTI2DJ13n_Qq6pZTAmnn
+ fGnFem8nqlx0KpBVD096EhOVyyy5AaQajjrjzZiZ8DQgS8bdc5nhAEoQWCe9BEElqJ7K_nCjiDcb
+ mPfVc1x_D.nz4B6Q2SDRCVMPiAt2Sj4x2ib1mslDcINLfWOu4mKS00z2Q_rphIeWNxeNp2ux.tdR
+ mqkYciXEh5Z05ZltnaPDtoXfaxuGBGMNT5ai2Ra67tdHGXi5ZPPnO1ClgLfuTp5gHt_L02gXcXUk
+ ryx_.L9sF.YZq8PcsNP3HJdFkQAKHRgtucX1q3DXDDeawQAoGsbSFTQT67ZAhniWNbIRSryjjpQR
+ vhXRzl6RHn5ps_n3qnverRsN8_9w3jsU4YYaU3W2g8urUhFomVgybyiA1HfXskumynxtYv92Ovux
+ VqXs1GVUGGeEmCqfodsxeT.5xF56p9cT8LYVLn9oYXoTsshqFbv0Cv.oImkECycB6Sehwr7BHnNE
+ w3j76UKqqNnco50Hl4WtPDfY8OAUCNJYJwbRHjGZD1CtotrYSwH58qqdXG20kCeeOYMVjQ7V9GDP
+ YdzgqcBSM6okww3tFo7yoO0WwEcRB6FBH37..Gs._xigD4N.RnP6_eVa_1EA6xex0VFa3Vy3Pcos
+ QDsx0d4SAPEQCe8hBUfQVaqzivI23OWYdBcBweCjhlaRojyneD8sfSsfBk2Gq.o_rNjPT1c.PZWi
+ 1abYsdvl.6RLBzp_KsPkhKIjlYc.dyHbCU3nNX57I4MxTYNlwGhwDNr1lelNf6T7hgs_sa3NMrAS
+ KVOu5VEUoKpZ0u8YHYjRQfcsirerWtX6Ahh7Ku06BGPXs0WFSoebGJyU4I8rlgkRnKd1qXDWFDBa
+ yIFusshKRrITwoe.JW79U.JPWJ1gdb6E18dj6YjXsy4Wea.E6FYpdt1lEF4z_OrfaSGx_Et0yK7r
+ eKlWtIAG2YS6g8aorH2YMBuW.FJ8M1nH6UIfcKixziQMVUTvZ3LZ0FAvvjbL2hhWyRJ1s78X5XTS
+ D60rQvr6xC.K35XNg3lMcbExsStgdVpNz2jG3G1UYM8TZ6G71j.x83GZ6BmEZw43BOAM8hYjTZEL
+ hkb_lbDvmERtXzUaVZR1oIzFcnJn2OYfXPOZGGY9.XYgP09ke2zf8ox4asah1TwCYTjf3rY2TzvQ
+ 5UCslaL0N3veINW9XhOP6ZzSkr96nHp9OjwqQLqk5tcgCJVkRYkOy2a9w4KOBss0XbY0.VfR86Xa
+ 09M1hT.wF
+X-Sonic-MF: <jahau@rocketmail.com>
+X-Sonic-ID: 863f03c4-a2b9-49af-9003-742551aabaca
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ir2.yahoo.com with HTTP; Sun, 30 Jul 2023 17:58:52 +0000
+Received: by hermes--production-ir2-7b7ddb79d8-nb2vw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID b6bf6624ec9fc85e0e6c51824a35a031;
+          Sun, 30 Jul 2023 17:58:48 +0000 (UTC)
+Message-ID: <bac8be58-8cac-4bf3-5754-974c7d7ecdba@rocketmail.com>
+Date:   Sun, 30 Jul 2023 19:58:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [GIT PULL] Immutable branch between MFD and Power due for the
+ v6.5 merge window
+Content-Language: en-US
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <cover.1684182964.git.jahau.ref@rocketmail.com>
+ <cover.1684182964.git.jahau@rocketmail.com>
+ <20230609064753.GL3635807@google.com>
+ <faff027d-2a6a-22ca-2487-2ae05223fabd@rocketmail.com>
+ <20230619103524.GA1472962@google.com>
+From:   Jakob Hauser <jahau@rocketmail.com>
+In-Reply-To: <20230619103524.GA1472962@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.21647 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,77 +98,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since fuel gauge does not support thermal monitoring,
-some vendors may couple this fuel gauge with thermal/adc
-sensor to monitor battery cell exact temperature.
+Hi Sebastian,
 
-Add this feature by adding optional iio thermal channel.
+The patch 6 "power: supply: rt5033_charger: Add cable detection and USB 
+OTG supply" of the series v6 RESEND of rt5033-charger is still missing.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/power/supply/max17040_battery.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+On 19.06.23 12:35, Lee Jones wrote:
+> Sebastian,
+> 
+> On Fri, 16 Jun 2023, Jakob Hauser wrote:
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index 3301e8a4b16c..54db20637c87 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -18,6 +18,7 @@
- #include <linux/of_device.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
-+#include <linux/iio/consumer.h>
- 
- #define MAX17040_VCELL	0x02
- #define MAX17040_SOC	0x04
-@@ -142,6 +143,7 @@ struct max17040_chip {
- 	struct delayed_work		work;
- 	struct power_supply		*battery;
- 	struct chip_data		data;
-+	struct iio_channel		*channel_temp;
- 
- 	/* battery capacity */
- 	int soc;
-@@ -404,6 +406,13 @@ static int max17040_get_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_STATUS:
- 		power_supply_get_property_from_supplier(psy, psp, val);
- 		break;
-+	case POWER_SUPPLY_PROP_TEMP:
-+		if (!chip->channel_temp)
-+			return -ENODATA;
-+
-+		iio_read_channel_processed_scale(chip->channel_temp,
-+						 &val->intval, 10);
-+		break;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -424,6 +433,7 @@ static enum power_supply_property max17040_battery_props[] = {
- 	POWER_SUPPLY_PROP_CAPACITY,
- 	POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN,
- 	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_TEMP,
- };
- 
- static const struct power_supply_desc max17040_battery_desc = {
-@@ -469,6 +479,17 @@ static int max17040_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, chip);
- 	psy_cfg.drv_data = chip;
- 
-+	/* Switch to devm_iio_channel_get_optional when available  */
-+	chip->channel_temp = devm_iio_channel_get(&client->dev, "temp");
-+	if (IS_ERR(chip->channel_temp)) {
-+		ret = PTR_ERR(chip->channel_temp);
-+		if (ret != -ENODEV)
-+			return dev_err_probe(&client->dev, PTR_ERR(chip->channel_temp),
-+					     "failed to get temp\n");
-+		else
-+			chip->channel_temp = NULL;
-+	}
-+
- 	chip->battery = devm_power_supply_register(&client->dev,
- 				&max17040_battery_desc, &psy_cfg);
- 	if (IS_ERR(chip->battery)) {
--- 
-2.39.2
+...
 
+>> I just realized that there is one patch missing in the immutable branch
+>> "ib-mfd-power-v6.5" [1]. Unfortunately I haven't noticed earlier. The
+>> immutable branch holds 9 patches, the patchset has 10 patches [2]. The
+>> missing patch is No. 6 "power: supply: rt5033_charger: Add cable detection
+>> and USB OTG supply".
+> 
+> Did you take this pull-request?
+> 
+> If so, would you like to apply the missing patch or would you like me to
+> take it via MFD (without a subsequent PR)?
+> 
+>> As this patch No. 6 affects only the file
+>> drivers/power/supply/rt5033_charger.c and is the last patch on that file,
+>> it's no problem to add this patch on top of the other patches.
+>>
+>> Could you submit another pull request for the v6.5 merge window to add this
+>> patch?
+>>
+>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=ib-mfd-power-6.5
+>> [2] https://lore.kernel.org/linux-pm/cover.1684182964.git.jahau@rocketmail.com/T/#t
+...
+
+The lore link of the series v6 RESEND is above [2]. The patchwork link 
+to v6 RESEND is:
+https://patchwork.kernel.org/project/linux-pm/list/?series=747771&state=%2A&archive=both
+
+Additionally, there were two follow-up clean-up patches. There were no 
+review comments so far. Lore and patchwork links are:
+https://lore.kernel.org/linux-pm/cover.1686948074.git.jahau@rocketmail.com/T/#t
+https://patchwork.kernel.org/project/linux-pm/list/?series=758018&state=%2A&archive=both
+
+Could you apply those three patches? (1x patch 6 of v6 RESEND series + 
+2x clean-up patches.)
+
+I've just noticed that a new patch by Rob was added to rt5033-charger. 
+Can you rebase the other three patches by your own or do you want me to 
+rebase and resend them?
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/power/supply/rt5033_charger.c?id=2ce8284c31156c432df60d4497ec68cca04e128f
+
+Kind regards,
+Jakob
