@@ -2,62 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C75876932D
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 12:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E119769394
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 12:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbjGaKff convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 31 Jul 2023 06:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S232212AbjGaKwb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 06:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjGaKfe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 06:35:34 -0400
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50281116;
-        Mon, 31 Jul 2023 03:35:32 -0700 (PDT)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-56475c1b930so615376eaf.0;
-        Mon, 31 Jul 2023 03:35:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690799731; x=1691404531;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mkace5vPaNLPGRNvCritdfOa890Cb4sF1iDw++EQSEM=;
-        b=BqzfI04zsyDQeJQnbncLubLEFW3qV3vKHovhrM71o9JOE07girookPAN4aKC4gTf0l
-         2T57C5XIFJY/C8T1qc9wRjHXg+DUQ3yJXf7hTnXl6hVXHAxeWxgh8TsZI2i+mte+VGVi
-         Sl4gcbVEEn7lZz6LI8hhlbNR51wsuEHLxLx7wxmjrtb0MD0N+UitFtohuu6rkG7w2uTH
-         r6xP/REtnFjvPFMUViY6iaf9w8D/X16vtby6fdt+sNqAROc/DFb1/7rytDiKbUAQqXDv
-         /5HDEa+81SlSh/yD3NMFZvgXar6t55LexbBWhJlcElhpgr5r0WoFejFlD4VTqvRcBVoY
-         Gc5Q==
-X-Gm-Message-State: ABy/qLYvIb8SSq960/Eo+6qC9vW3i/1Zwb8x+3jQTWGW0hKPlQh0/qwa
-        Ki9cX2yzfCG6/SESql/R37ubDZbPqwIgdQQ+I6k=
-X-Google-Smtp-Source: APBJJlHU5PorP1/uCCcJkKD/TQTKl9JfBlPDW5d2rkerPY9IKjiOHKlLWiOxHx+2afRu9HDyDuNXdj55HoweWxl+HsE=
-X-Received: by 2002:a05:6820:2201:b0:560:b01a:653d with SMTP id
- cj1-20020a056820220100b00560b01a653dmr5692139oob.0.1690799731459; Mon, 31 Jul
- 2023 03:35:31 -0700 (PDT)
+        with ESMTP id S231432AbjGaKwL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 06:52:11 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBE41BFD;
+        Mon, 31 Jul 2023 03:51:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id ED50E22197;
+        Mon, 31 Jul 2023 10:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1690800635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJDu3H9G0xjlLFp1Wxvq9yQHkB2Q9jBIbPsGkP5jLhY=;
+        b=LfsIvVgX25rf01P6sVcmZRL3nPMT3sPJRPMrpOspwMqpMg9mmQx6AkDi/eF6WU32a2Vp6x
+        /7YLD1OJK0u+bqfGa4P87gaOpA6/QZlHA1eZkenSQs1V9CjuRPICqxTQ9KdHYFZ84hOqsV
+        4L46K3Rf4+bEtg2brIa/aboXrQrqviE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1690800635;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PJDu3H9G0xjlLFp1Wxvq9yQHkB2Q9jBIbPsGkP5jLhY=;
+        b=X5g/KyOpcE2CiMGegP9N6Ypxz5sWUyAuayNnMILk5q3XabEg0BuGZ7c8jHqKycooaqKD7s
+        Ajq9KEorZZBfWcDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D6932133F7;
+        Mon, 31 Jul 2023 10:50:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ovhUNPqRx2R2ZgAAMHmgww
+        (envelope-from <jack@suse.cz>); Mon, 31 Jul 2023 10:50:34 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 457F5A0767; Mon, 31 Jul 2023 12:50:34 +0200 (CEST)
+Date:   Mon, 31 Jul 2023 12:50:34 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Haris Iqbal <haris.iqbal@ionos.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Alasdair Kergon <agk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anna Schumaker <anna@kernel.org>, Chao Yu <chao@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Kleikamp <shaggy@kernel.org>,
+        David Sterba <dsterba@suse.com>, dm-devel@redhat.com,
+        drbd-dev@lists.linbit.com, Gao Xiang <xiang@kernel.org>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        jfs-discussion@lists.sourceforge.net,
+        Joern Engel <joern@lazybastard.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        linux-bcache@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-erofs@lists.ozlabs.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-xfs@vger.kernel.org, Mike Snitzer <snitzer@kernel.org>,
+        Minchan Kim <minchan@kernel.org>, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Song Liu <song@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        target-devel@vger.kernel.org, Ted Tso <tytso@mit.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        xen-devel@lists.xenproject.org
+Subject: Re: [PATCH 01/32] block: Provide blkdev_get_handle_* functions
+Message-ID: <20230731105034.43skhi5ubze563c3@quack3>
+References: <20230629165206.383-1-jack@suse.cz>
+ <20230704122224.16257-1-jack@suse.cz>
+ <ZKbgAG5OoHVyUKOG@infradead.org>
+ <CAJpMwyiUcw+mH0sZa8f8UJsaSZ7NSE65s2gZDEia+pASyP_gJQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230728145515.990749537@infradead.org> <20230728145808.835742568@infradead.org>
- <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
- <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
- <CAJZ5v0iVKRY5-YvQmMbZ3+eZNHJgXt=CoYedNueAJyT9+Ld5Dg@mail.gmail.com> <20230731090935.GB29590@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230731090935.GB29590@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 31 Jul 2023 12:35:20 +0200
-Message-ID: <CAJZ5v0jh5oozZm7OvN9j1iHtzYQzPMOJ=Nt0HaJKYyJ218Cezw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, anna-maria@linutronix.de,
-        tglx@linutronix.de, frederic@kernel.org, gautham.shenoy@amd.com,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJpMwyiUcw+mH0sZa8f8UJsaSZ7NSE65s2gZDEia+pASyP_gJQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,97 +106,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 11:11 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Jul 31, 2023 at 10:01:53AM +0200, Rafael J. Wysocki wrote:
-> > On Sat, Jul 29, 2023 at 10:44 AM Peter Zijlstra <peterz@infradead.org> wrote:
-> > >
-> > > On Fri, Jul 28, 2023 at 05:36:55PM +0200, Rafael J. Wysocki wrote:
-> > > > On Fri, Jul 28, 2023 at 5:01 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > >
-> > > > > In order to facilitate governors that track history in idle-state
-> > > > > buckets (TEO) making a useful decision about NOHZ, make sure we have a
-> > > > > bucket that counts tick-and-longer.
-> > > > >
-> > > > > In order to be inclusive of the tick itself -- after all, if we do not
-> > > > > disable NOHZ we'll sleep for a full tick, the actual boundary should
-> > > > > be just short of a full tick.
-> > > > >
-> > > > > IOW, when registering the idle-states, add one that is always
-> > > > > disabled, just to have a bucket.
-> > > >
-> > > > This extra bucket can be created in the governor itself, can't it?
-> > >
-> > > I couldn't find a nice spot for the governor to add idle-states.
+On Wed 12-07-23 18:06:35, Haris Iqbal wrote:
+> On Thu, Jul 6, 2023 at 5:38 PM Christoph Hellwig <hch@infradead.org> wrote:
 > >
-> > Well, I've thought this through and recalled a couple of things and my
-> > conclusion is that the decision whether or not to stop the tick really
-> > depends on the idle state choice.
+> > On Tue, Jul 04, 2023 at 02:21:28PM +0200, Jan Kara wrote:
+> > > Create struct bdev_handle that contains all parameters that need to be
+> > > passed to blkdev_put() and provide blkdev_get_handle_* functions that
+> > > return this structure instead of plain bdev pointer. This will
+> > > eventually allow us to pass one more argument to blkdev_put() without
+> > > too much hassle.
 > >
-> > There are three cases:
+> > Can we use the opportunity to come up with better names?  blkdev_get_*
+> > was always a rather horrible naming convention for something that
+> > ends up calling into ->open.
 > >
-> > 1. The selected idle state is shallow (that is, its target residency
-> > is below the tick period length), but it is not the deepest one.
-> > 2. The selected idle state is shallow, but it is the deepest one (or
-> > at least the deepest enabled one).
-> > 3. The selected idle state is deep (that is, its target residency is
-> > above the tick length period).
+> > What about:
 > >
-> > In case 1, the tick should not be stopped so as to prevent the CPU
-> > from spending too much time in a suboptimal idle state.
-> >
-> > In case 3, the tick needs to be stopped, because otherwise the target
-> > residency of the selected state would not be met.
-> >
-> > Case 2 is somewhat a mixed bag, but generally speaking stopping the
-> > tick doesn't hurt if the selected idle state is the deepest one,
-> > because in that case the governor kind of expects a significant exit
-> > latency anyway.  If it is not the deepest one (which is disabled),
-> > it's better to let the tick tick.
->
-> So I agree with 1.
->
-> I do not agree with 2. Disabling the tick is costly, doubly so with the
-> timer-pull thing, but even today. Simply disabling it because we picked
-> the deepest idle state, irrespective of the expected duration is wrong
-> as it will incur this significant cost.
->
-> With 3 there is the question of how we get the expected sleep duration;
-> this is especially important with timer-pull, where we have this
-> chicken-and-egg thing.
->
-> Notably: tick_nohz_get_sleep_length() wants to know if the tick gets
-> disabled
+> > struct bdev_handle *bdev_open_by_dev(dev_t dev, blk_mode_t mode, void *holder,
+> >                 const struct blk_holder_ops *hops);
+> > struct bdev_handle *bdev_open_by_path(dev_t dev, blk_mode_t mode,
+> >                 void *holder, const struct blk_holder_ops *hops);
+> > void bdev_release(struct bdev_handle *handle);
+> 
+> +1 to this.
+> Also, if we are removing "handle" from the function, should the name
+> of the structure it returns also change? Would something like bdev_ctx
+> be better?
 
-Well, it shouldn't.  Or at least it didn't before.
+I think the bdev_handle name is fine for the struct. After all it is
+equivalent of an open handle for the block device so IMHO bdev_handle
+captures that better than bdev_ctx.
 
-It is expected to produce two values, one with the tick stopped (this
-is the return value of the function) and the other with the tick
-ticking (this is the one written under the address passed as the arg).
-This cannot depend on whether or not the tick will be stopped.  Both
-are good to know.
-
-Now, I understand that getting these two values may be costly, so
-there is an incentive to avoid calling it, but then the governor needs
-to figure this out from its crystal ball and so care needs to be taken
-to limit the possible damage in case the crystal ball is not right.
-
-> and cpuilde wants to use tick_nohz_get_sleep_length() to
-> determine if to disable the tick. This cycle needs to be broken for
-> timer-pull.
->
-> Hence my proposal to introduce the extra tick state, that allows fixing
-> both 2 and 3.
-
-I'm not sure about 3 TBH.
-
-Say there are 2 idle states, one shallow (say its target residency is
-10 us) and one deep (say its target residency is T = 2 * TICK_NSEC).
-
-Currently, there are 3 bins in this case, 0 (0 - 10 us), 1 (10 us - T)
-and 2 (T - infinity) and the governor will need to check bins 1 and 2
-unless it somehow knows that it will use state 0.
-
-Note that all of the events falling into bin 1 will cause the governor
-to select state 0 more often, so I don't see how adding one more bin
-between 1 and 2 changes this.
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
