@@ -2,66 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A535769649
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 14:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9775B76964D
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 14:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231566AbjGaM1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 08:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
+        id S232095AbjGaM2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 08:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbjGaM1Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 08:27:25 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245611724;
-        Mon, 31 Jul 2023 05:26:47 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-522bc9556f5so2457044a12.0;
-        Mon, 31 Jul 2023 05:26:47 -0700 (PDT)
+        with ESMTP id S231135AbjGaM2q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 08:28:46 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD871702
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 05:28:25 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-4036bd4fff1so512401cf.0
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 05:28:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690806382; x=1691411182;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1690806504; x=1691411304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gwhaajtiWbAK0+aLK2xFSMs0ohtyw35IKQkHVzwXE8Q=;
-        b=AnYWCg8THtmqrYKDgEWhGEj4akQmYhihbNAeSRam1/TdCJuZIrOA33P7Jf2F6GrsGQ
-         RNhF3NbcUuAV+mw5z72qcIr9tMx3Msi9enDZV8ESejhjQj586qF2OSf7kqXZrICPgiL5
-         hqOcCW/2NFdJNEVjq5Md1ZSlD2lOwgWEpusqqK+JfSQ3PmVwvlJEBorqjIgsDXU/6+oV
-         b2r247/jzsbfUkJ9WOLDPrka179JjM+r/to86iaD5+QOHYFN8jEVPVyBEa5sZbijb01f
-         XaJ+7ECaj24RGDvssOn8xZoGYJtn4swg7ArddeIlj8dhjKhoX1vNM+TBfJTpNMErWGE9
-         w33A==
+        bh=f9a83S9oH1wWkZWlJljW3yz8wgS9T0t+wUYJiP5RdQk=;
+        b=a7M3gasbhuWnQTXbzIaxlEqYJuQpn3r0R7kER1uUS1A6Z7x7eylNWlFLCIGTqetw4c
+         z6NWWOnS/3ecbIthBTsXqCa4mvkWdI9HiTBfuf2ccTgvQw2biVcXteOFr/9pMa2nDCKM
+         nP9JWXOmDp5gIbpfM/s+uj1X+dro7eGVLlDulch4ejG3OjWUzqtT3ZdsX6lUqpkYOLTV
+         HqBhCT3I+IcPDzMGA/P0GSyEqv63rxu6N71/ag7aL4kJsTZdpxVdmSjyQ6VAhOQdHM9N
+         pytpIfbSrO0Xcty0bElVipiCCoXFz26tR0Wfl+enYUmPzSv0bIRaHQRYHTJH1udJP143
+         aKcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690806382; x=1691411182;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1690806504; x=1691411304;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gwhaajtiWbAK0+aLK2xFSMs0ohtyw35IKQkHVzwXE8Q=;
-        b=ZbBbhWBO56wHg4pr7Gu3+qZMZ2JUgz1LFJMN2hacoKc/BRUYTU9EmzlymbK4Ao28q8
-         GUiJz8UhpslS+Ooh1KkBSueYo6Fava9iMdRXfuk7dGKBFvmHWiUiKlHMDITPTZWa8jJA
-         UsbZm8/Fm7rIpkUL8DiSJjelOftereoJEUhj6HTqvLWAUkxIQHWZ5q7dOhCCZ/QPLqGa
-         4O3VmA7rf6lkO2xVaEYXUTmvZM5JQOI4EWBQeBA7P+8hS3lo0CAeMGuHy2sksNVczJCz
-         /7rRbhXwH2o0SlkbetTo56AJqoVHAwmbc3QCPRt3bCS9gy4VYyiboGSBF6brUi3LtgHo
-         dKXQ==
-X-Gm-Message-State: ABy/qLaSFcVrPv/mNh3+Pan9HVonE2mvD0ftEVYMAoBIpBxYwjS2ic6M
-        DBYV249d/ucUr9Axtmjo8Mg=
-X-Google-Smtp-Source: APBJJlFqh6O8ZhZZrVhxyzkGtfKV31CkB3xqadtfge9pqNyKNfX9Qj6+rE7GluS3HH43H8S7tBjmPA==
-X-Received: by 2002:aa7:dbd8:0:b0:522:3b6e:5f6a with SMTP id v24-20020aa7dbd8000000b005223b6e5f6amr8992130edt.29.1690806382404;
-        Mon, 31 Jul 2023 05:26:22 -0700 (PDT)
-Received: from felia.fritz.box ([2a02:810d:7e40:14b0:c9d4:a174:b52d:4c33])
-        by smtp.gmail.com with ESMTPSA id y19-20020aa7ccd3000000b0051d9ee1c9d3sm5359982edt.84.2023.07.31.05.26.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 05:26:22 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        Changhuang Liang <changhuang.liang@starfivetech.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: adjust file entry in STARFIVE JH71XX PMU CONTROLLER DRIVER
-Date:   Mon, 31 Jul 2023 14:26:11 +0200
-Message-Id: <20230731122611.4309-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        bh=f9a83S9oH1wWkZWlJljW3yz8wgS9T0t+wUYJiP5RdQk=;
+        b=Buz803YosiZ3lbvw6rtF1LGdZdU8ElrFGkTeQll4HJvGFWBDwMUHjK4lla+E4uf0+o
+         ioL2Frl7hOh50UTt6n3tg4qx5roVtsmGthFPeIvsDAeWdIRlh3qAZzffeBoLV/ZYwwrF
+         W/O7OtKET6aYRpQVSLUuwrtALq381MoQGwJZWbsEqhrNjyJEtak9/5++aXgChR9izLI0
+         Eh5EeOo+3FNl3GnbxdKMEnpMbxDczOB01GsXg19H5aG006w5Mwr8DNUGfkT5Lgjcxlqq
+         YczGGdS+9tVD5ccQ1/dkXb8nP12ase34hdYFRtJ7nsEW2FGO63OX7YMRWuiF98N8cTQN
+         BovQ==
+X-Gm-Message-State: ABy/qLYIwKLcmEx7FJ8zntZ9fLIHI4T2kYL9t33ZvMm0anKwEjykGzOg
+        bZpRh+SJydvS7+u/iLpdKh2eCdxP8rUpMNqRyHJgrw==
+X-Google-Smtp-Source: APBJJlF6O13cnUgrS/MfMzP3wGnw90WTHWu3I3rN8grauxbF6V5Mjn+3mDGh1ukWK0amQn6ULRXQWCxUhDjyGEegAiM=
+X-Received: by 2002:a05:622a:58f:b0:403:ff6b:69b9 with SMTP id
+ c15-20020a05622a058f00b00403ff6b69b9mr274351qtb.13.1690806504019; Mon, 31 Jul
+ 2023 05:28:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <ZKYvpgs6p3S7nglh@google.com> <CAPDyKFpWybtCWt9pVcFMKcV0zBrjCzhhmAzYN-JPw2ZS6mUpwQ@mail.gmail.com>
+ <20230707164149.GP6001@thinkpad> <ZKxHHvBKvJeWiioc@google.com> <CAPDyKFq6R8ar9nj+3OUX4HDNs0q+a+XcLdvNCX5GG_n0pW7cng@mail.gmail.com>
+In-Reply-To: <CAPDyKFq6R8ar9nj+3OUX4HDNs0q+a+XcLdvNCX5GG_n0pW7cng@mail.gmail.com>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Mon, 31 Jul 2023 20:27:48 +0800
+Message-ID: <CAKHBV254i3fdQ7UX0Pc+CDaKO_OROA276vmgDPx4aPtZTiS2Bw@mail.gmail.com>
+Subject: Re: Prevent PM suspend from powering off the domain for non-wakeup
+ in-use devices
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Ajay Agarwal <ajayagarwal@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        manugautam@google.com, quangh@google.com,
+        Koudai Iwahori <koudai@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,36 +76,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit f3fb16291f48 ("soc: starfive: Move the power-domain driver to the
-genpd dir") moves:
+On Thu, Jul 6, 2023 at 11:06=E2=80=AFAM Ajay Agarwal <ajayagarwal@google.co=
+m> wrote:
+>
+> Hello Linux PM experts
+> I have a question on PM domain. As per the current PM domain driver desig=
+n, the genpd_finish_suspend turns OFF a power domain if it is not already t=
+urned OFF by runtime suspend.
 
-  drivers/{soc/starfive/jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c}
+I don't really understand why genPD does this in the first place. Not
+only does it power off domains that might have RPM_ACTIVE devices
+during suspend, it also powers on domains that might not have any
+active devices in them during resume (except for wakeup devices,
+similar to power-off. See genpd_finish_resume).
 
-However, the update to the file entry in MAINTAINERS only addresses the
-move in directories, but misses the renaming from jh71xx_pmu.c to
-jh71xx-pmu.c. Hence, ./scripts/get_maintainer.pl --self-test=patterns
-complains about a broken reference.
+Why isn't genPD powering-off/on domains based on device's RPM status
+sufficient? Assuming those are correctly set by device drivers during
+system suspend/resume.
 
-Adjust the file entry in STARFIVE JH71XX PMU CONTROLLER DRIVER.
+Such that this:
+> But this flag is really intended to be used for devices which are capable=
+ of waking up the system from PM suspend. But my usecase does not involve a=
+ scenario of the device potentially waking up the system, it just needs to =
+stay powered for the co-processor to be able to use it.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 003b0461641a..7a20d6ab1d18 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20408,7 +20408,7 @@ M:	Walker Chen <walker.chen@starfivetech.com>
- M:	Changhuang Liang <changhuang.liang@starfivetech.com>
- S:	Supported
- F:	Documentation/devicetree/bindings/power/starfive*
--F:	drivers/genpd/starfive/jh71xx_pmu.c
-+F:	drivers/genpd/starfive/jh71xx-pmu.c
- F:	include/dt-bindings/power/starfive,jh7110-pmu.h
- 
- STARFIVE SOC DRIVERS
--- 
-2.17.1
-
+becomes just a matter of the device keeping its RPM status as active
+during system suspend.
