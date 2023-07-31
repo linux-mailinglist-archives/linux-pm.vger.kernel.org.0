@@ -2,107 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 508EB76A3DF
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 00:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4667F76A440
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 00:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjGaWDL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 18:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S229597AbjGaWnQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 18:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbjGaWDA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 18:03:00 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0E7139;
-        Mon, 31 Jul 2023 15:02:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=gHoaM7eGFNI0KBp/0qw5JaxvSgb4EPXM7prcdF6Gpvo=; b=YOow06njeJ2olbzkCBKb8IZ9Nj
-        jVqID3WRMSIwJ/moJkKieCB6dlOM6c18c0/E525uSPWKhKvDBfNhl9+sz1rfHT7CU0mSzimPsTbJD
-        SK2jmsLU3kM/+Y+W+yFl5k69zuubZRgknxIPJtf1rGYYqD6UM5g0DcZNixGYffLkNEyZaZHbpNAYz
-        mnxoMRdRuuxhHWWwK+QcuIELp00rYFGkNBppcswr9d0vcIkKFOXZRwth+afyxMBZQ4ZhStUOUIrfh
-        vJLv4jqUMgfChpAkgO1/UwuuaC8r5L/k4nORLEkD6rVlDJTDwp5/6ZNJg5U2A4yRLuJa/HKlsXMhI
-        3TkWjTVw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qQayW-00HSp6-1h;
-        Mon, 31 Jul 2023 22:02:48 +0000
-Message-ID: <afac2810-f93e-eda5-975e-041ac4b908b5@infradead.org>
-Date:   Mon, 31 Jul 2023 15:02:47 -0700
+        with ESMTP id S230219AbjGaWnP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 18:43:15 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4D719A8;
+        Mon, 31 Jul 2023 15:43:13 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36VMDULj011514;
+        Mon, 31 Jul 2023 22:43:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=mX0l+/kfcc46QeRLAxUTpA05imjKAVhsdjPgFznUjeU=;
+ b=SHyeTmeKcuyoGo3lD2Kq3nAzn1YVsaA87Nlul8DT4XFNZuHH5rHPfc6TCLhoC2Pn+bAi
+ lb2lt4IgEmdWKako+LDQujupU33D153dJMdB8n09OP0Ux/4dJjjYY6vYzq1E4qR0zk54
+ 0EwUTAXvxvUdxF8PxcjV9g3h0gyhBKl1NS1kzfQnwTku9loBOnBSXK6lQl/Q55rvJHY1
+ IUj2Ank7yk5P02xFpm/J+1aMm0J3/WQi1I8hQYId2YqFGyuk4rFADV/n6jYNG/ScpeJX
+ ED424f2Q+JUKiujjXG1Oy7UmPkOd4j43bUHNWmeaCygOT4hP3EEj31nS8+nb6YjsRUgQ pw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6a2va4w3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 22:43:02 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36VMh0Be025416
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Jul 2023 22:43:01 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 31 Jul 2023 15:43:00 -0700
+From:   Mike Tipton <quic_mdtipton@quicinc.com>
+To:     <djakov@kernel.org>, <gregkh@linuxfoundation.org>,
+        <rafael@kernel.org>, <corbet@lwn.net>
+CC:     <linux-pm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_okukatla@quicinc.com>,
+        <quic_viveka@quicinc.com>, <peterz@infradead.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+Subject: [PATCH v2 0/3] Add interconnect debugfs client
+Date:   Mon, 31 Jul 2023 15:42:44 -0700
+Message-ID: <20230731224247.10846-1-quic_mdtipton@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
-Content-Language: en-US
-To:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     Quentin Perret <qperret@google.com>,
-        Masami Hiramatsu <mhiramat@google.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Gupta Pankaj <pankaj.gupta@amd.com>,
-        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230731174613.4133167-1-davidai@google.com>
- <20230731174613.4133167-3-davidai@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230731174613.4133167-3-davidai@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xugIdbzTsZjm7jagzTPU86rJ_ubENZsJ
+X-Proofpoint-GUID: xugIdbzTsZjm7jagzTPU86rJ_ubENZsJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-31_15,2023-07-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 adultscore=0 bulkscore=0
+ spamscore=0 phishscore=0 mlxscore=0 mlxlogscore=769 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2307310206
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This series introduces interconnect debugfs files that support voting
+for any path the framework supports.
 
+We've historically relied on an out-of-tree module for this, which used
+the old icc_get() that was recently removed in [0]. The old icc_get()
+took integer endpoint IDs, which made identifying paths in our old
+implementation non-intuitive. The logical node names typically don't
+change much chip-to-chip, but the raw integer IDs do. Take this
+opportunity to introduce an icc_get() that uses string names instead,
+which allows for a more intuitive and generic debugfs interface.
 
-On 7/31/23 10:46, David Dai wrote:
-> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-> index f429b9b37b76..3977ca796747 100644
-> --- a/drivers/cpufreq/Kconfig
-> +++ b/drivers/cpufreq/Kconfig
-> @@ -217,6 +217,21 @@ config CPUFREQ_DT
->  
->  	  If in doubt, say N.
->  
-> +config CPUFREQ_VIRT
-> +        tristate "Virtual cpufreq driver"
-> +	depends on OF
-> +	select PM_OPP
-> +        help
+We rely on this support for debug, test, and verification. Hopefully
+it'll be useful for other vendors as well.
 
-The 4 lines above should be indented with one tab (not 8 spaces).
+[0] commit 7dcdad6f32c9 ("interconnect: drop unused icc_get() interface")
 
-> +	  This adds a virtualized cpufreq driver for guest kernels that
-> +	  read/writes to a MMIO region for a virtualized cpufreq device to
+Changes in v2:
+- Make icc_get() an internal interface.
+- RCU-protect src_node and dst_node.
+- Replace PLATFORM_DEVID_AUTO with PLATFORM_DEVID_NONE.
+- Remove unnecessary #include.
+- Add debugfs client documentation.
 
-	  reads/writes to an MMIO region
+Mike Tipton (3):
+  debugfs: Add write support to debugfs_create_str()
+  interconnect: Reintroduce icc_get()
+  interconnect: Add debugfs test client
 
-> +	  communicate with the host. It sends frequency updates to the host
-> +	  which gets used as a hint to schedule vCPU threads and select CPU
-> +	  frequency. If a VM does not support a virtualized FIE such as AMUs,
-> +	  it updates the frequency scaling factor by polling host CPU frequency
-> +	  to enable accurate Per-Entity Load Tracking for tasks running in the guest.
-> +
-> +	  If in doubt, say N.
+ Documentation/driver-api/interconnect.rst |  25 ++++
+ drivers/interconnect/Makefile             |   2 +-
+ drivers/interconnect/core.c               |  66 +++++++++
+ drivers/interconnect/debugfs-client.c     | 168 ++++++++++++++++++++++
+ drivers/interconnect/internal.h           |   3 +
+ fs/debugfs/file.c                         |  48 ++++++-
+ 6 files changed, 309 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/interconnect/debugfs-client.c
 
 -- 
-~Randy
+2.17.1
+
