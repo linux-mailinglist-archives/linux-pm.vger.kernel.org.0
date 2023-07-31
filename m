@@ -2,103 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9775B76964D
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 14:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945A476992C
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 16:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232095AbjGaM2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 08:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51242 "EHLO
+        id S229637AbjGaONz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 10:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjGaM2q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 08:28:46 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD871702
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 05:28:25 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-4036bd4fff1so512401cf.0
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 05:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690806504; x=1691411304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9a83S9oH1wWkZWlJljW3yz8wgS9T0t+wUYJiP5RdQk=;
-        b=a7M3gasbhuWnQTXbzIaxlEqYJuQpn3r0R7kER1uUS1A6Z7x7eylNWlFLCIGTqetw4c
-         z6NWWOnS/3ecbIthBTsXqCa4mvkWdI9HiTBfuf2ccTgvQw2biVcXteOFr/9pMa2nDCKM
-         nP9JWXOmDp5gIbpfM/s+uj1X+dro7eGVLlDulch4ejG3OjWUzqtT3ZdsX6lUqpkYOLTV
-         HqBhCT3I+IcPDzMGA/P0GSyEqv63rxu6N71/ag7aL4kJsTZdpxVdmSjyQ6VAhOQdHM9N
-         pytpIfbSrO0Xcty0bElVipiCCoXFz26tR0Wfl+enYUmPzSv0bIRaHQRYHTJH1udJP143
-         aKcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690806504; x=1691411304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f9a83S9oH1wWkZWlJljW3yz8wgS9T0t+wUYJiP5RdQk=;
-        b=Buz803YosiZ3lbvw6rtF1LGdZdU8ElrFGkTeQll4HJvGFWBDwMUHjK4lla+E4uf0+o
-         ioL2Frl7hOh50UTt6n3tg4qx5roVtsmGthFPeIvsDAeWdIRlh3qAZzffeBoLV/ZYwwrF
-         W/O7OtKET6aYRpQVSLUuwrtALq381MoQGwJZWbsEqhrNjyJEtak9/5++aXgChR9izLI0
-         Eh5EeOo+3FNl3GnbxdKMEnpMbxDczOB01GsXg19H5aG006w5Mwr8DNUGfkT5Lgjcxlqq
-         YczGGdS+9tVD5ccQ1/dkXb8nP12ase34hdYFRtJ7nsEW2FGO63OX7YMRWuiF98N8cTQN
-         BovQ==
-X-Gm-Message-State: ABy/qLYIwKLcmEx7FJ8zntZ9fLIHI4T2kYL9t33ZvMm0anKwEjykGzOg
-        bZpRh+SJydvS7+u/iLpdKh2eCdxP8rUpMNqRyHJgrw==
-X-Google-Smtp-Source: APBJJlF6O13cnUgrS/MfMzP3wGnw90WTHWu3I3rN8grauxbF6V5Mjn+3mDGh1ukWK0amQn6ULRXQWCxUhDjyGEegAiM=
-X-Received: by 2002:a05:622a:58f:b0:403:ff6b:69b9 with SMTP id
- c15-20020a05622a058f00b00403ff6b69b9mr274351qtb.13.1690806504019; Mon, 31 Jul
- 2023 05:28:24 -0700 (PDT)
+        with ESMTP id S232245AbjGaONf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 10:13:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3101B7;
+        Mon, 31 Jul 2023 07:13:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4104761172;
+        Mon, 31 Jul 2023 14:13:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA61AC433CC;
+        Mon, 31 Jul 2023 14:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690812808;
+        bh=Wo4CjExlbRCO9K5AAKZ4NSSIulizDzrcAHK9CM5ig/4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HN/orTerPxZtILAHUFAFD+nTlKRVfovJyNZ5nDtXeuJJWb1G3lo2JUWBImZ1LWH0j
+         u6dlyZjswN6SW5HyFN3V9dPCD2eg5BMsw2Z3rHT4Fbu/O5rJk6XfPra1sv1CW1OpaL
+         t4Qq48e52xRoPVSuXIOFFNjlUmwt6018qahEVq7n5QwPnB04c6lMbWwDWnb7hc2/AQ
+         zUMP2zo6jIujtEI1BtO22CBQpJtktMzgpggk0Ktp5nCKaXTDBjX6LDC2wtAml9SaGb
+         DEZidIxviJPHpt6qaMDR/6abDStExjwefPHjwwyhPvpjxktPC3dun85Y2K+ZeK6cKa
+         wDV/1CmhSIMVA==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fe1a35a135so6691713e87.1;
+        Mon, 31 Jul 2023 07:13:28 -0700 (PDT)
+X-Gm-Message-State: ABy/qLZGhu8imGQIZGdo2wKBusNCKrqwxaEsfbeXChYSt4KawwiJOXpt
+        E0ifbWQ6NqY8gMvx8CIZ7hlwgd173IqZwC1N/nY=
+X-Google-Smtp-Source: APBJJlEigP5KHBpGtJm22eSehD5FHHz9MoqyFW/ve8Kz0t7P2XvtMu7sRQAb9xNAYwk3pqpgl1EwZ4FpnRBUgh8+8BE=
+X-Received: by 2002:a19:e619:0:b0:4f8:5d0f:c779 with SMTP id
+ d25-20020a19e619000000b004f85d0fc779mr5982275lfh.40.1690812806591; Mon, 31
+ Jul 2023 07:13:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZKYvpgs6p3S7nglh@google.com> <CAPDyKFpWybtCWt9pVcFMKcV0zBrjCzhhmAzYN-JPw2ZS6mUpwQ@mail.gmail.com>
- <20230707164149.GP6001@thinkpad> <ZKxHHvBKvJeWiioc@google.com> <CAPDyKFq6R8ar9nj+3OUX4HDNs0q+a+XcLdvNCX5GG_n0pW7cng@mail.gmail.com>
-In-Reply-To: <CAPDyKFq6R8ar9nj+3OUX4HDNs0q+a+XcLdvNCX5GG_n0pW7cng@mail.gmail.com>
-From:   Michael Shavit <mshavit@google.com>
-Date:   Mon, 31 Jul 2023 20:27:48 +0800
-Message-ID: <CAKHBV254i3fdQ7UX0Pc+CDaKO_OROA276vmgDPx4aPtZTiS2Bw@mail.gmail.com>
-Subject: Re: Prevent PM suspend from powering off the domain for non-wakeup
- in-use devices
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Ajay Agarwal <ajayagarwal@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
-        manugautam@google.com, quangh@google.com,
-        Koudai Iwahori <koudai@google.com>
+References: <20230728074944.26746-1-zhuyinbo@loongson.cn> <20230728-cornball-preacher-a7e4644fcbef@wendy>
+ <CAAhV-H5cfGZLvThzu_mBOphGJeUSFAu_4nZvGNFJqF5++DN2OA@mail.gmail.com> <20230728-unedited-thank-366462ab471d@wendy>
+In-Reply-To: <20230728-unedited-thank-366462ab471d@wendy>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Mon, 31 Jul 2023 22:13:15 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7jVp2fX5Rosd8YSj_6oFdmsu5iHsBmYH_8iX2qan7r+w@mail.gmail.com>
+Message-ID: <CAAhV-H7jVp2fX5Rosd8YSj_6oFdmsu5iHsBmYH_8iX2qan7r+w@mail.gmail.com>
+Subject: Re: [PATCH v5 0/2] soc: loongson2_pm: add power management support
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Liu Yun <liuyun@loongson.cn>,
+        kernel@xen0n.name
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 6, 2023 at 11:06=E2=80=AFAM Ajay Agarwal <ajayagarwal@google.co=
-m> wrote:
+Hi, Conor and Arnd,
+
+On Fri, Jul 28, 2023 at 6:18=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
 >
-> Hello Linux PM experts
-> I have a question on PM domain. As per the current PM domain driver desig=
-n, the genpd_finish_suspend turns OFF a power domain if it is not already t=
-urned OFF by runtime suspend.
+> On Fri, Jul 28, 2023 at 05:48:29PM +0800, Huacai Chen wrote:
+> > On Fri, Jul 28, 2023 at 4:44=E2=80=AFPM Conor Dooley <conor.dooley@micr=
+ochip.com> wrote:
+> > > On Fri, Jul 28, 2023 at 03:49:42PM +0800, Yinbo Zhu wrote:
+> > > > Loongson-2 platform support Power Management Controller (ACPI) and =
+this
+> > > > series patch was to add PM driver that base on dts and PM binding s=
+upport.
+> > > >
+> > > > Change in v5:
+> > > >               1. The patch "[PATCH v3 1/3] loongarch: export some a=
+rch-specific
+> > > >                  pm interfaces" had been merged into linux-next tre=
+e thus this
+> > > >                  v4 series patch need drop it and need depend on it=
+ and it's
+> > > >                  patch link was:
+> > > > https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongso=
+n.cn/
+> > >
+> > > Just to note, it might be in linux-next, but more importantly it is a=
+lso
+> > > in v6.5-rc1, so there is no issue with dependencies.
+> > >
+> > > >               2. Swap the positions of compatible for 2k1000 and 2k=
+0500.
+> > >
+> > > I noticed you sent a mail pinging the v4 of this series yesterday as =
+it
+> > > had not been picked up. Who do you actually expect to apply these
+> > > patches? There does not appear to be a maintainer listed for the
+> > > drivers/soc/loongson directory, just one for your GUTS driver.
+> > >
+> > > As a result, patches like
+> > > <https://lore.kernel.org/all/a69170cb55cfc73e378b40ccf1d9c16f@208suo.=
+com/>
+> > > have gone ignored. Granted, that patch is probably crap that does not
+> > > apply, due to 208suo.com people sending corrupted patches, but you th=
+e
+> > > point.
+> > >
+> > > More interestingly there is also
+> > > <https://lore.kernel.org/all/40b324af-3483-4b3d-b65a-a97944aa4a70@app=
+.fastmail.com/>
+> > > which seems to have also gone missing (I don't see it in linux-next),
+> > > despite some discussion about how the patch should be merged.
+> > >
+> > > Looks to me like drivers/soc/loongson/ needs someone to take
+> > > responsibility for picking up patches for the directory & sending the=
+m
+> > > to the soc maintainers (with a new MAINTAINERS entry reflecting that)=
+ so
+> > > that patches don't fall through the cracks.
+>
+> > As discussed when the guts driver gets merged, I think it is better to
+> > go via Arnd's soc tree for these patches under drivers/soc/loongson/.
+>
+> Discussed perhaps, and that does seem to me like the correct thing to do,
+> but nobody actually did anything about it.
+> Somebody needs to set up a git tree, add a MAINTAINERS entry for the
+> directory, actually apply the patches and then send a PR to the soc
+> maintainers (as mentioned by Arnd in the second patch I linked there).
+>
+> Perhaps that someone is you, or maybe it is Yinbo, up to you guys to
+> decide :)
+I'm a "merge hater" and "rebase lover", so I think it is better that
+Arnd picks up these patches to the soc tree directly. But if
+necessary, I can also create a "soc-loongson-next" branch in my tree
+and then send PR to Arnd.
 
-I don't really understand why genPD does this in the first place. Not
-only does it power off domains that might have RPM_ACTIVE devices
-during suspend, it also powers on domains that might not have any
-active devices in them during resume (except for wakeup devices,
-similar to power-off. See genpd_finish_resume).
-
-Why isn't genPD powering-off/on domains based on device's RPM status
-sufficient? Assuming those are correctly set by device drivers during
-system suspend/resume.
-
-Such that this:
-> But this flag is really intended to be used for devices which are capable=
- of waking up the system from PM suspend. But my usecase does not involve a=
- scenario of the device potentially waking up the system, it just needs to =
-stay powered for the co-processor to be able to use it.
-
-becomes just a matter of the device keeping its RPM status as active
-during system suspend.
+Huacai
+>
+> Cheers,
+> Conor.
+>
