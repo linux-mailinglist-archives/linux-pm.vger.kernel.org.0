@@ -2,37 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2D776A23F
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 22:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63EF76A26B
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 23:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjGaUw6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 16:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S229962AbjGaVGS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 17:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230441AbjGaUwu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 16:52:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D23D198B;
-        Mon, 31 Jul 2023 13:52:41 -0700 (PDT)
+        with ESMTP id S229843AbjGaVGR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 17:06:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F4194;
+        Mon, 31 Jul 2023 14:06:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9521C612CC;
-        Mon, 31 Jul 2023 20:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1664C433C8;
-        Mon, 31 Jul 2023 20:52:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65687612DD;
+        Mon, 31 Jul 2023 21:06:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2DDC433C8;
+        Mon, 31 Jul 2023 21:06:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690836760;
-        bh=4bc7n+F7Mq8FK6H3ud6CK8gDj85KBAh5RyJs5hitlVE=;
+        s=k20201202; t=1690837575;
+        bh=uFmV+Z9IEZrlWvkA9y0SJYB4T9OHFEmD0Fdew8OiXcs=;
         h=Date:From:To:Cc:Subject:From;
-        b=eY+wxcw6USz4xRYOjCO77U7nKEkA27D/Zyuj2zPsNqNtlV7JBnJPKdelD6sJYj/Yu
-         HEmCgiW2eBi8t8hR2GBe6I7+rRu781RkvhmZ8wQkMr4sQpnVDDm3x9wi+3Ia+CIvOl
-         Yyz8uxIVBuVESYD9GlfwIt7QDp0KSFpgh0uonfpC9bhDwYrrkhNa1/V0/iA70+GDCc
-         2Unsh5RZjyRXK4AwSs90QRSp7SBCHqS56k0J5LUW18dbsNVknT9wqMkV4fseaNDzwv
-         PCl2uCrk7VkJJQCGffugV3PE3RWJXQ1lYtsAoXVgB2JiT8M673AMqIZgAAXGHCCGO5
-         8CNNqoweA9foQ==
-Date:   Mon, 31 Jul 2023 14:53:44 -0600
+        b=mrH744iQrz7H9/m2jMOkpp+sRDM/1X4YqksMXBA8LCgMQY5YbV4fybbNg3IaYLGKM
+         5+A1YzHtc3n4Kf6PbHETyDFT5o6x7m2JVuKlSqq0+272oHJ7Ir4Jp72rx8ElT2GWxd
+         Yo41hVxoS6xL+TGS1WDKtj+TYqWE/VYIrbRLLN6hmWbOEfxV8Uzn2/8fuTxx6vCXVN
+         Xg/8stS3DgMQ0rbmzutxZv4FCO5An08+w9GTNWiTWIbKaZapx8qD6rxBjG8eM7sQVm
+         YfKr9aVn2BIzRwMN6b9wNdUVPI7zF1tZpXABmwJKGTHQTOaZ8raJURDgTEL78B/pi/
+         xzGk2wffY3U5w==
+Date:   Mon, 31 Jul 2023 15:07:20 -0600
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
 To:     Markus Mayer <mmayer@broadcom.com>,
         Broadcom internal kernel review list 
@@ -44,13 +44,13 @@ Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         linux-hardening@vger.kernel.org
-Subject: [PATCH] cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
-Message-ID: <ZMgfWEA0GAN/Rog8@work>
+Subject: [PATCH v2] cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
+Message-ID: <ZMgiiEmBORZRaobc@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,7 +60,10 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 Update the iteration conditions in the for() loop to avoid writing in
-array `table` beyond its allocated size.
+array `table` beyond its allocated size at:
+
+drivers/cpufreq/brcmstb-avs-cpufreq.c:
+449         table[i].frequency = CPUFREQ_TABLE_END;
 
 This fixes the following -Warray-bounds warning seen after building
 ARM with multi_v7_defconfig (GCC 13):
@@ -89,6 +92,12 @@ Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broad
 Cc: stable@vger.kernel.org
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
+Changes in v2:
+ - Update changelog text. Add more details.
+
+v1:
+ - Link: https://lore.kernel.org/linux-hardening/ZMgfWEA0GAN%2FRog8@work/
+
  drivers/cpufreq/brcmstb-avs-cpufreq.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
