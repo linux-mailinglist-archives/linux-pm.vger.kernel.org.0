@@ -2,68 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D209376A0ED
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 21:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0760776A13B
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 21:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229379AbjGaTMq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 15:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
+        id S229965AbjGaT2l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 15:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjGaTMp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 15:12:45 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E35EE4B
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 12:12:44 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1bbdc05a93bso29597925ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 12:12:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1690830763; x=1691435563;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGuiholSGuAHPcr/XP4evNzrf2tznHAI9qDIxniDpss=;
-        b=Z4NTvXuKg/UP17Hwl6KvOpiJuDKE/gduezkxHAF1xIYRgNizZIyxPPwOKcePDoM0EF
-         5+pbMqa09AVTKkLOE1lLxemB2FaiQZG0KrUdoRj2Yy4fBzYDjInovDJ9nAJ8CRuo+O/X
-         Lq5Q9dd2OTHWfjV8a3U6ukLRnI9pJHZhio4J4r2fpBMirGn1G+qWRyV8S7X9FJWNJEU4
-         tGfdxh8SVGRqEjMcPdCbFEeQewMUkyAiZi3GzHcIx2mJefkkluQWtkFRalytcaU+M7iS
-         E3y4fzZJarsO21MHKCJK+xOhXwKZ2kC8S7M/DdK38OkDYTJEHAl9QI2CzNfRo0kBqmpm
-         LNAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690830763; x=1691435563;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jGuiholSGuAHPcr/XP4evNzrf2tznHAI9qDIxniDpss=;
-        b=BxR433bUqNPwDQbJUHCOSo+DCaRbHl4De8kLrySAnXumPIK69zVUnvikH4uwacUejl
-         woWoV0kr/wQfOfvsC3eO6I3vF2hQIQLrUicKWrgfOOuxMGCgcdj7qf+MbHF4Ey7BQAyM
-         MCPD8AuSIo2SZvn2ISYQKLqvOWVc0xt1beUtNJWROuAiNY/jcvifbtN/IlzVDow+icoY
-         YsYy78wp7/jGd18QZYl4rYlyU3PzMafWqjaJTHdl/Vo/tg6k8nSSVPFuTPgnWI+B2Kke
-         AHEH1v+g+MlayI2EFzm2WpjQci3knLeVeqcAuyA1+UWPAjkIgQbesX+XmZ3arXUBWBhP
-         svXQ==
-X-Gm-Message-State: ABy/qLblsaHeMnuMYQU5yjirvAlGTbDqddA4J7iKnFUnG1lp2jJ/XcEF
-        d8BveoR+j2eKbd6S3DVp4H0pcw==
-X-Google-Smtp-Source: APBJJlF8FqUjAOMt4t9C0Tk9fJu89+cD4QzRKJnwhilTzH5/ZAdK3562/FVEY46CATgvbt+8O3F3dQ==
-X-Received: by 2002:a17:902:c412:b0:1b6:8a99:4979 with SMTP id k18-20020a170902c41200b001b68a994979mr13023097plk.22.1690830763688;
-        Mon, 31 Jul 2023 12:12:43 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id p17-20020a170902ead100b001b8b07bc600sm8911306pld.186.2023.07.31.12.12.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 12:12:43 -0700 (PDT)
-Message-ID: <64c807ab.170a0220.c819c.15bc@mx.google.com>
-Date:   Mon, 31 Jul 2023 12:12:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        with ESMTP id S229905AbjGaT2l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 15:28:41 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300491982;
+        Mon, 31 Jul 2023 12:28:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B9E253200929;
+        Mon, 31 Jul 2023 15:28:34 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Mon, 31 Jul 2023 15:28:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1690831714; x=1690918114; bh=21+XkpRUbLZeIKu442d4wnN+PugW/pbxjsI
+        iw4nwl6s=; b=HSLUgxtRyDJ3TBxG7lOWEX74r9gkMIVidtdkMmbNtWe6pS++Wj8
+        2+uBak2i0yJcVxT2S3mwD/iRi2XsmoV3OgxVT4RFvIsBNoBHR8nFFnAwQ8gYaZeI
+        5kC3AkFxbCFf5gSOMAB/FOowr9fKr/8acteguNjxtwvTYO3kxH7jk5qYGf5IOoCy
+        qiKB5MDEIIMqPx/D0Lg9yZCofKzx/4iFGDf+wAOWlHk+Rh3Fq/TpvBsa3K1lJW8H
+        1dIChU/d7137/z1IEkVR7RIzSutLC/77j+REXhRQwiiKFQSa7rjik9RNPe9hGXxD
+        SA2gCRA4SUlP98/SDSVQuOj54SQ/FvOgFWQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1690831714; x=1690918114; bh=21+XkpRUbLZeIKu442d4wnN+PugW/pbxjsI
+        iw4nwl6s=; b=kE/jvzz99/pNxixJimgFSalnUt9k1Nl9+jEGgda8lPZcdDSGjmB
+        WkUKUn0NIlLO8ckItJFXQW7XZyZVKZU1Jw+uhsbSaaVn/5CC3Irk1Oj7yW0J0Fno
+        sce0bGtzgx6xu4L3e6gCqpSPZNNwHvcq5zkv3UWOk/Zp0BsYlBykwMewa3Npc9tM
+        B+tBlPqxAFZpx0wvgtN9Ffp81JgLfKq8WGKouzBlTn6GTfdRbNzFkt1ui1BPpmsR
+        xg3Yx8wUmX5X+eUUyMyGtVNRus0JgZaAU06bL9akJPWVYOHdWIQOGpa5JI5m74Ry
+        aKAVFOkiN9ZHSvVw5J+Fi4DcuVl1iYuZSNw==
+X-ME-Sender: <xms:YAvIZGZbAr3tIwZZdo3m5br1FpKey5bfxtoikAPFsCqKEfIG7PLlfg>
+    <xme:YAvIZJaqHJZ6iDEsg-1-zD1lESh9EMfKKQlRwL_Rb7bxwq6C-QUQX5I4vOy6aBtr-
+    skCy5Vf46cw2tjtHUs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrjeeggdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:YAvIZA--H_mj92HwTymatoWq4T4xIQAuozShgGXezVEDFE8DAm5cDw>
+    <xmx:YAvIZIrS_BMAmuajwOwrQeVSvT9fK6BVa6sxIXlyyb-zs5IVWXE_cQ>
+    <xmx:YAvIZBplSaciC4t2M9551OFsq9-Zw8PJhB2uUG38cfw1lzVzth2Kjw>
+    <xmx:YgvIZPiC-y-lEYLDHJdeKcNuOGyGiwG8OC0RxV_q0fxw7R_JcXusgw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id AACC3B60089; Mon, 31 Jul 2023 15:28:32 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-592-ga9d4a09b4b-fm-defalarms-20230725.001-ga9d4a09b
+Mime-Version: 1.0
+Message-Id: <58500dc7-af1b-4edb-bb2b-93be454ec151@app.fastmail.com>
+In-Reply-To: <CAAhV-H7jVp2fX5Rosd8YSj_6oFdmsu5iHsBmYH_8iX2qan7r+w@mail.gmail.com>
+References: <20230728074944.26746-1-zhuyinbo@loongson.cn>
+ <20230728-cornball-preacher-a7e4644fcbef@wendy>
+ <CAAhV-H5cfGZLvThzu_mBOphGJeUSFAu_4nZvGNFJqF5++DN2OA@mail.gmail.com>
+ <20230728-unedited-thank-366462ab471d@wendy>
+ <CAAhV-H7jVp2fX5Rosd8YSj_6oFdmsu5iHsBmYH_8iX2qan7r+w@mail.gmail.com>
+Date:   Mon, 31 Jul 2023 21:28:11 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Huacai Chen" <chenhuacai@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>
+Cc:     "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        "Liu Peibao" <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, "Liu Yun" <liuyun@loongson.cn>,
+        "WANG Xuerui" <kernel@xen0n.name>
+Subject: Re: [PATCH v5 0/2] soc: loongson2_pm: add power management support
+Content-Type: text/plain;charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.5-rc4-47-g015a64bab2b55
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.5-rc4-47-g015a64bab2b55)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,100 +97,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc4-47-g01=
-5a64bab2b55)
+On Mon, Jul 31, 2023, at 16:13, Huacai Chen wrote:
+> On Fri, Jul 28, 2023 at 6:18=E2=80=AFPM Conor Dooley <conor.dooley@mic=
+rochip.com> wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-5-rc4-47-g015a64bab2b55/
+>>
+>> Perhaps that someone is you, or maybe it is Yinbo, up to you guys to
+>> decide :)
+> I'm a "merge hater" and "rebase lover", so I think it is better that
+> Arnd picks up these patches to the soc tree directly. But if
+> necessary, I can also create a "soc-loongson-next" branch in my tree
+> and then send PR to Arnd.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.5-rc4-47-g015a64bab2b55
-Git Commit: 015a64bab2b55aca17cb15373d780fde0c869169
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Separate patches are fine for a short series, it doesn't have
+to be a pull request, but do make sure to send it to
+soc@kernel.org after review is complete so I'll be sure to
+take care of it in patchwork, I otherwise skip a lot of
+patches as I expect them to be picked up into a platform
+specific tree first.
 
-Warnings Detected:
+Also, if this ends up being a genpd driver, then patches
+after 6.6-rc1 need to go through Ulf's tree instead, not
+the soc tree.
 
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+      Arnd
