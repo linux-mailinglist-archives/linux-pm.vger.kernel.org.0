@@ -2,68 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945A476992C
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 16:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B120C7699ED
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 16:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjGaONz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 10:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60518 "EHLO
+        id S231411AbjGaOoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 10:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbjGaONf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 10:13:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3101B7;
-        Mon, 31 Jul 2023 07:13:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4104761172;
-        Mon, 31 Jul 2023 14:13:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA61AC433CC;
-        Mon, 31 Jul 2023 14:13:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690812808;
-        bh=Wo4CjExlbRCO9K5AAKZ4NSSIulizDzrcAHK9CM5ig/4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HN/orTerPxZtILAHUFAFD+nTlKRVfovJyNZ5nDtXeuJJWb1G3lo2JUWBImZ1LWH0j
-         u6dlyZjswN6SW5HyFN3V9dPCD2eg5BMsw2Z3rHT4Fbu/O5rJk6XfPra1sv1CW1OpaL
-         t4Qq48e52xRoPVSuXIOFFNjlUmwt6018qahEVq7n5QwPnB04c6lMbWwDWnb7hc2/AQ
-         zUMP2zo6jIujtEI1BtO22CBQpJtktMzgpggk0Ktp5nCKaXTDBjX6LDC2wtAml9SaGb
-         DEZidIxviJPHpt6qaMDR/6abDStExjwefPHjwwyhPvpjxktPC3dun85Y2K+ZeK6cKa
-         wDV/1CmhSIMVA==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4fe1a35a135so6691713e87.1;
-        Mon, 31 Jul 2023 07:13:28 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZGhu8imGQIZGdo2wKBusNCKrqwxaEsfbeXChYSt4KawwiJOXpt
-        E0ifbWQ6NqY8gMvx8CIZ7hlwgd173IqZwC1N/nY=
-X-Google-Smtp-Source: APBJJlEigP5KHBpGtJm22eSehD5FHHz9MoqyFW/ve8Kz0t7P2XvtMu7sRQAb9xNAYwk3pqpgl1EwZ4FpnRBUgh8+8BE=
-X-Received: by 2002:a19:e619:0:b0:4f8:5d0f:c779 with SMTP id
- d25-20020a19e619000000b004f85d0fc779mr5982275lfh.40.1690812806591; Mon, 31
- Jul 2023 07:13:26 -0700 (PDT)
+        with ESMTP id S232806AbjGaOo3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 10:44:29 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D119E65
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 07:44:23 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so51105755e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 07:44:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690814662; x=1691419462;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xdQccL+EnltTWLyIBGPhN4pDbwofNsX7g9UdgVhA7E4=;
+        b=jKjSXTBJQ4uc0FgRJxcJ3gg24ZtV8sMRUYOwuFi2gzYzVjfdFUjCdCvgjzmRZ9mZ3e
+         HkNEqVQwokz6u09Ib7wo6lz3HMhSZcg9aJMVMDZTlln/6qNXgiQG2B1RDZ3zSYB63x+E
+         mSgdWTZDDOVH1uaU5rC42HntOtn3fVXAloD4VlYEjBK9IQOxzUYAe9n/htTZEkdk+fou
+         gO81L53urEtHVQwWDMoDaBnwLbac0y/rjq5bXVRTkPuGnKplVxjgwkBQoBdileyGvZfT
+         zwz6f0BnU8SynXGAqWWL3W8cAfqYjV5Y3yrx1ylNM1quJZpZwM0H50UYyT6mr7eVI9x9
+         CvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690814662; x=1691419462;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xdQccL+EnltTWLyIBGPhN4pDbwofNsX7g9UdgVhA7E4=;
+        b=BDXmNgk+CH/WAmZJjN3ADB+/07vtZ6N1UrTJq7BFtD5uYm1s7tPVTDWwbntzHI8Ij2
+         VzCARor545CgKzkruCPTf7oTGdPTc5FIW7cX9KrtGNkI6lmhUGcf+O5agG2x+4ZBaA/2
+         UEZ3Pn6bdPLu8Io4GUnuRkLwT3s1k9mpJsZLnuT6eUr1HJCS+06XOdkNHuwo8FqHKuxF
+         7aynBOdH9Gimi9gyFiYGL5yAAnZsGoBXdND5SStzKlE/gfCP1zmhkZrDbOlLwkzvAPKD
+         tFhLcw80HJrbDwpRZLKJK88F7RR1pwxx+lYW9NlaOEA1tMS7inhDcPqJfJiwQiQknk5o
+         Zg/A==
+X-Gm-Message-State: ABy/qLYHqD+Q6qxFvzuv4ImJJmXM3ah1E5XkWRn9Wh5N/yntxiYB5d1c
+        1UCdOuPYRY0ASDfH5HEDpMMdqA==
+X-Google-Smtp-Source: APBJJlFg4JPQPIRmOB6Hi4fqXz3/h/QBl/zQnkJSgivpJXMlE5rTh4htchIZ0U7og1vFfw+8kJrNBw==
+X-Received: by 2002:a5d:591b:0:b0:317:71a6:f408 with SMTP id v27-20020a5d591b000000b0031771a6f408mr20111wrd.67.1690814661791;
+        Mon, 31 Jul 2023 07:44:21 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:f723:b60b:92cd:4df4? ([2a01:e0a:982:cbb0:f723:b60b:92cd:4df4])
+        by smtp.gmail.com with ESMTPSA id b18-20020adfe312000000b0031437ec7ec1sm13352255wrj.2.2023.07.31.07.44.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 07:44:21 -0700 (PDT)
+Message-ID: <a9074f2d-ffa2-477f-e3b5-2c7d213ec72c@linaro.org>
+Date:   Mon, 31 Jul 2023 16:44:19 +0200
 MIME-Version: 1.0
-References: <20230728074944.26746-1-zhuyinbo@loongson.cn> <20230728-cornball-preacher-a7e4644fcbef@wendy>
- <CAAhV-H5cfGZLvThzu_mBOphGJeUSFAu_4nZvGNFJqF5++DN2OA@mail.gmail.com> <20230728-unedited-thank-366462ab471d@wendy>
-In-Reply-To: <20230728-unedited-thank-366462ab471d@wendy>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Mon, 31 Jul 2023 22:13:15 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7jVp2fX5Rosd8YSj_6oFdmsu5iHsBmYH_8iX2qan7r+w@mail.gmail.com>
-Message-ID: <CAAhV-H7jVp2fX5Rosd8YSj_6oFdmsu5iHsBmYH_8iX2qan7r+w@mail.gmail.com>
-Subject: Re: [PATCH v5 0/2] soc: loongson2_pm: add power management support
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 09/15] pinctrl: pinctrl-oxnas: remove obsolete pinctrl
+ driver
+Content-Language: en-US
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Liu Yun <liuyun@loongson.cn>,
-        kernel@xen0n.name
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Golle <daniel@makrotopia.org>
+References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
+ <20230630-topic-oxnas-upstream-remove-v2-9-fb6ab3dea87c@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230630-topic-oxnas-upstream-remove-v2-9-fb6ab3dea87c@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,83 +106,1360 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Conor and Arnd,
+Hi Linus,
 
-On Fri, Jul 28, 2023 at 6:18=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
-p.com> wrote:
->
-> On Fri, Jul 28, 2023 at 05:48:29PM +0800, Huacai Chen wrote:
-> > On Fri, Jul 28, 2023 at 4:44=E2=80=AFPM Conor Dooley <conor.dooley@micr=
-ochip.com> wrote:
-> > > On Fri, Jul 28, 2023 at 03:49:42PM +0800, Yinbo Zhu wrote:
-> > > > Loongson-2 platform support Power Management Controller (ACPI) and =
-this
-> > > > series patch was to add PM driver that base on dts and PM binding s=
-upport.
-> > > >
-> > > > Change in v5:
-> > > >               1. The patch "[PATCH v3 1/3] loongarch: export some a=
-rch-specific
-> > > >                  pm interfaces" had been merged into linux-next tre=
-e thus this
-> > > >                  v4 series patch need drop it and need depend on it=
- and it's
-> > > >                  patch link was:
-> > > > https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongso=
-n.cn/
-> > >
-> > > Just to note, it might be in linux-next, but more importantly it is a=
-lso
-> > > in v6.5-rc1, so there is no issue with dependencies.
-> > >
-> > > >               2. Swap the positions of compatible for 2k1000 and 2k=
-0500.
-> > >
-> > > I noticed you sent a mail pinging the v4 of this series yesterday as =
-it
-> > > had not been picked up. Who do you actually expect to apply these
-> > > patches? There does not appear to be a maintainer listed for the
-> > > drivers/soc/loongson directory, just one for your GUTS driver.
-> > >
-> > > As a result, patches like
-> > > <https://lore.kernel.org/all/a69170cb55cfc73e378b40ccf1d9c16f@208suo.=
-com/>
-> > > have gone ignored. Granted, that patch is probably crap that does not
-> > > apply, due to 208suo.com people sending corrupted patches, but you th=
-e
-> > > point.
-> > >
-> > > More interestingly there is also
-> > > <https://lore.kernel.org/all/40b324af-3483-4b3d-b65a-a97944aa4a70@app=
-.fastmail.com/>
-> > > which seems to have also gone missing (I don't see it in linux-next),
-> > > despite some discussion about how the patch should be merged.
-> > >
-> > > Looks to me like drivers/soc/loongson/ needs someone to take
-> > > responsibility for picking up patches for the directory & sending the=
-m
-> > > to the soc maintainers (with a new MAINTAINERS entry reflecting that)=
- so
-> > > that patches don't fall through the cracks.
->
-> > As discussed when the guts driver gets merged, I think it is better to
-> > go via Arnd's soc tree for these patches under drivers/soc/loongson/.
->
-> Discussed perhaps, and that does seem to me like the correct thing to do,
-> but nobody actually did anything about it.
-> Somebody needs to set up a git tree, add a MAINTAINERS entry for the
-> directory, actually apply the patches and then send a PR to the soc
-> maintainers (as mentioned by Arnd in the second patch I linked there).
->
-> Perhaps that someone is you, or maybe it is Yinbo, up to you guys to
-> decide :)
-I'm a "merge hater" and "rebase lover", so I think it is better that
-Arnd picks up these patches to the soc tree directly. But if
-necessary, I can also create a "soc-loongson-next" branch in my tree
-and then send PR to Arnd.
+On 30/06/2023 18:58, Neil Armstrong wrote:
+> Due to lack of maintenance and stall of development for a few years now,
+> and since no new features will ever be added upstream, remove support
+> for OX810 and OX820 pinctrl & gpio.
 
-Huacai
->
-> Cheers,
-> Conor.
->
+Do you plan to take patches 9, 10 & 11 or should I funnel them via a final SoC PR ?
+
+Thanks,
+Neil
+
+> 
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
+> Acked-by: Daniel Golle <daniel@makrotopia.org>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>   drivers/pinctrl/Kconfig         |   11 -
+>   drivers/pinctrl/Makefile        |    1 -
+>   drivers/pinctrl/pinctrl-oxnas.c | 1292 ---------------------------------------
+>   3 files changed, 1304 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+> index 57d57af1f624..7dfb7190580e 100644
+> --- a/drivers/pinctrl/Kconfig
+> +++ b/drivers/pinctrl/Kconfig
+> @@ -355,17 +355,6 @@ config PINCTRL_OCELOT
+>   
+>   	  If conpiled as a module, the module name will be pinctrl-ocelot.
+>   
+> -config PINCTRL_OXNAS
+> -	bool
+> -	depends on OF
+> -	select PINMUX
+> -	select PINCONF
+> -	select GENERIC_PINCONF
+> -	select GPIOLIB
+> -	select OF_GPIO
+> -	select GPIOLIB_IRQCHIP
+> -	select MFD_SYSCON
+> -
+>   config PINCTRL_PALMAS
+>   	tristate "Pinctrl driver for the PALMAS Series MFD devices"
+>   	depends on OF && MFD_PALMAS
+> diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+> index 482b391b5deb..dd6cda270294 100644
+> --- a/drivers/pinctrl/Makefile
+> +++ b/drivers/pinctrl/Makefile
+> @@ -38,7 +38,6 @@ obj-$(CONFIG_PINCTRL_MCP23S08)	+= pinctrl-mcp23s08.o
+>   obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO)	+= pinctrl-microchip-sgpio.o
+>   obj-$(CONFIG_PINCTRL_MLXBF3)	+= pinctrl-mlxbf3.o
+>   obj-$(CONFIG_PINCTRL_OCELOT)	+= pinctrl-ocelot.o
+> -obj-$(CONFIG_PINCTRL_OXNAS)	+= pinctrl-oxnas.o
+>   obj-$(CONFIG_PINCTRL_PALMAS)	+= pinctrl-palmas.o
+>   obj-$(CONFIG_PINCTRL_PIC32)	+= pinctrl-pic32.o
+>   obj-$(CONFIG_PINCTRL_PISTACHIO)	+= pinctrl-pistachio.o
+> diff --git a/drivers/pinctrl/pinctrl-oxnas.c b/drivers/pinctrl/pinctrl-oxnas.c
+> deleted file mode 100644
+> index fb10a8473ebe..000000000000
+> --- a/drivers/pinctrl/pinctrl-oxnas.c
+> +++ /dev/null
+> @@ -1,1292 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-only
+> -/*
+> - * Oxford Semiconductor OXNAS SoC Family pinctrl driver
+> - *
+> - * Copyright (C) 2016 Neil Armstrong <narmstrong@baylibre.com>
+> - *
+> - * Based on pinctrl-pic32.c
+> - * Joshua Henderson, <joshua.henderson@microchip.com>
+> - * Copyright (C) 2015 Microchip Technology Inc.  All rights reserved.
+> - */
+> -#include <linux/gpio/driver.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/io.h>
+> -#include <linux/irq.h>
+> -#include <linux/of.h>
+> -#include <linux/of_device.h>
+> -#include <linux/pinctrl/pinconf.h>
+> -#include <linux/pinctrl/pinconf-generic.h>
+> -#include <linux/pinctrl/pinctrl.h>
+> -#include <linux/pinctrl/pinmux.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/slab.h>
+> -#include <linux/regmap.h>
+> -#include <linux/mfd/syscon.h>
+> -
+> -#include "pinctrl-utils.h"
+> -
+> -#define PINS_PER_BANK		32
+> -
+> -#define GPIO_BANK_START(bank)		((bank) * PINS_PER_BANK)
+> -
+> -/* OX810 Regmap Offsets */
+> -#define PINMUX_810_PRIMARY_SEL0		0x0c
+> -#define PINMUX_810_SECONDARY_SEL0	0x14
+> -#define PINMUX_810_TERTIARY_SEL0	0x8c
+> -#define PINMUX_810_PRIMARY_SEL1		0x10
+> -#define PINMUX_810_SECONDARY_SEL1	0x18
+> -#define PINMUX_810_TERTIARY_SEL1	0x90
+> -#define PINMUX_810_PULLUP_CTRL0		0xac
+> -#define PINMUX_810_PULLUP_CTRL1		0xb0
+> -
+> -/* OX820 Regmap Offsets */
+> -#define PINMUX_820_BANK_OFFSET		0x100000
+> -#define PINMUX_820_SECONDARY_SEL	0x14
+> -#define PINMUX_820_TERTIARY_SEL		0x8c
+> -#define PINMUX_820_QUATERNARY_SEL	0x94
+> -#define PINMUX_820_DEBUG_SEL		0x9c
+> -#define PINMUX_820_ALTERNATIVE_SEL	0xa4
+> -#define PINMUX_820_PULLUP_CTRL		0xac
+> -
+> -/* GPIO Registers */
+> -#define INPUT_VALUE	0x00
+> -#define OUTPUT_EN	0x04
+> -#define IRQ_PENDING	0x0c
+> -#define OUTPUT_SET	0x14
+> -#define OUTPUT_CLEAR	0x18
+> -#define OUTPUT_EN_SET	0x1c
+> -#define OUTPUT_EN_CLEAR	0x20
+> -#define RE_IRQ_ENABLE	0x28
+> -#define FE_IRQ_ENABLE	0x2c
+> -
+> -struct oxnas_function {
+> -	const char *name;
+> -	const char * const *groups;
+> -	unsigned int ngroups;
+> -};
+> -
+> -struct oxnas_pin_group {
+> -	const char *name;
+> -	unsigned int pin;
+> -	unsigned int bank;
+> -	struct oxnas_desc_function *functions;
+> -};
+> -
+> -struct oxnas_desc_function {
+> -	const char *name;
+> -	unsigned int fct;
+> -};
+> -
+> -struct oxnas_gpio_bank {
+> -	void __iomem *reg_base;
+> -	struct gpio_chip gpio_chip;
+> -	struct irq_chip irq_chip;
+> -	unsigned int id;
+> -};
+> -
+> -struct oxnas_pinctrl {
+> -	struct regmap *regmap;
+> -	struct device *dev;
+> -	struct pinctrl_dev *pctldev;
+> -	const struct oxnas_function *functions;
+> -	unsigned int nfunctions;
+> -	const struct oxnas_pin_group *groups;
+> -	unsigned int ngroups;
+> -	struct oxnas_gpio_bank *gpio_banks;
+> -	unsigned int nbanks;
+> -};
+> -
+> -struct oxnas_pinctrl_data {
+> -	struct pinctrl_desc *desc;
+> -	struct oxnas_pinctrl *pctl;
+> -};
+> -
+> -static const struct pinctrl_pin_desc oxnas_ox810se_pins[] = {
+> -	PINCTRL_PIN(0, "gpio0"),
+> -	PINCTRL_PIN(1, "gpio1"),
+> -	PINCTRL_PIN(2, "gpio2"),
+> -	PINCTRL_PIN(3, "gpio3"),
+> -	PINCTRL_PIN(4, "gpio4"),
+> -	PINCTRL_PIN(5, "gpio5"),
+> -	PINCTRL_PIN(6, "gpio6"),
+> -	PINCTRL_PIN(7, "gpio7"),
+> -	PINCTRL_PIN(8, "gpio8"),
+> -	PINCTRL_PIN(9, "gpio9"),
+> -	PINCTRL_PIN(10, "gpio10"),
+> -	PINCTRL_PIN(11, "gpio11"),
+> -	PINCTRL_PIN(12, "gpio12"),
+> -	PINCTRL_PIN(13, "gpio13"),
+> -	PINCTRL_PIN(14, "gpio14"),
+> -	PINCTRL_PIN(15, "gpio15"),
+> -	PINCTRL_PIN(16, "gpio16"),
+> -	PINCTRL_PIN(17, "gpio17"),
+> -	PINCTRL_PIN(18, "gpio18"),
+> -	PINCTRL_PIN(19, "gpio19"),
+> -	PINCTRL_PIN(20, "gpio20"),
+> -	PINCTRL_PIN(21, "gpio21"),
+> -	PINCTRL_PIN(22, "gpio22"),
+> -	PINCTRL_PIN(23, "gpio23"),
+> -	PINCTRL_PIN(24, "gpio24"),
+> -	PINCTRL_PIN(25, "gpio25"),
+> -	PINCTRL_PIN(26, "gpio26"),
+> -	PINCTRL_PIN(27, "gpio27"),
+> -	PINCTRL_PIN(28, "gpio28"),
+> -	PINCTRL_PIN(29, "gpio29"),
+> -	PINCTRL_PIN(30, "gpio30"),
+> -	PINCTRL_PIN(31, "gpio31"),
+> -	PINCTRL_PIN(32, "gpio32"),
+> -	PINCTRL_PIN(33, "gpio33"),
+> -	PINCTRL_PIN(34, "gpio34"),
+> -};
+> -
+> -static const struct pinctrl_pin_desc oxnas_ox820_pins[] = {
+> -	PINCTRL_PIN(0, "gpio0"),
+> -	PINCTRL_PIN(1, "gpio1"),
+> -	PINCTRL_PIN(2, "gpio2"),
+> -	PINCTRL_PIN(3, "gpio3"),
+> -	PINCTRL_PIN(4, "gpio4"),
+> -	PINCTRL_PIN(5, "gpio5"),
+> -	PINCTRL_PIN(6, "gpio6"),
+> -	PINCTRL_PIN(7, "gpio7"),
+> -	PINCTRL_PIN(8, "gpio8"),
+> -	PINCTRL_PIN(9, "gpio9"),
+> -	PINCTRL_PIN(10, "gpio10"),
+> -	PINCTRL_PIN(11, "gpio11"),
+> -	PINCTRL_PIN(12, "gpio12"),
+> -	PINCTRL_PIN(13, "gpio13"),
+> -	PINCTRL_PIN(14, "gpio14"),
+> -	PINCTRL_PIN(15, "gpio15"),
+> -	PINCTRL_PIN(16, "gpio16"),
+> -	PINCTRL_PIN(17, "gpio17"),
+> -	PINCTRL_PIN(18, "gpio18"),
+> -	PINCTRL_PIN(19, "gpio19"),
+> -	PINCTRL_PIN(20, "gpio20"),
+> -	PINCTRL_PIN(21, "gpio21"),
+> -	PINCTRL_PIN(22, "gpio22"),
+> -	PINCTRL_PIN(23, "gpio23"),
+> -	PINCTRL_PIN(24, "gpio24"),
+> -	PINCTRL_PIN(25, "gpio25"),
+> -	PINCTRL_PIN(26, "gpio26"),
+> -	PINCTRL_PIN(27, "gpio27"),
+> -	PINCTRL_PIN(28, "gpio28"),
+> -	PINCTRL_PIN(29, "gpio29"),
+> -	PINCTRL_PIN(30, "gpio30"),
+> -	PINCTRL_PIN(31, "gpio31"),
+> -	PINCTRL_PIN(32, "gpio32"),
+> -	PINCTRL_PIN(33, "gpio33"),
+> -	PINCTRL_PIN(34, "gpio34"),
+> -	PINCTRL_PIN(35, "gpio35"),
+> -	PINCTRL_PIN(36, "gpio36"),
+> -	PINCTRL_PIN(37, "gpio37"),
+> -	PINCTRL_PIN(38, "gpio38"),
+> -	PINCTRL_PIN(39, "gpio39"),
+> -	PINCTRL_PIN(40, "gpio40"),
+> -	PINCTRL_PIN(41, "gpio41"),
+> -	PINCTRL_PIN(42, "gpio42"),
+> -	PINCTRL_PIN(43, "gpio43"),
+> -	PINCTRL_PIN(44, "gpio44"),
+> -	PINCTRL_PIN(45, "gpio45"),
+> -	PINCTRL_PIN(46, "gpio46"),
+> -	PINCTRL_PIN(47, "gpio47"),
+> -	PINCTRL_PIN(48, "gpio48"),
+> -	PINCTRL_PIN(49, "gpio49"),
+> -};
+> -
+> -static const char * const oxnas_ox810se_fct0_group[] = {
+> -	"gpio0",  "gpio1",  "gpio2",  "gpio3",
+> -	"gpio4",  "gpio5",  "gpio6",  "gpio7",
+> -	"gpio8",  "gpio9",  "gpio10", "gpio11",
+> -	"gpio12", "gpio13", "gpio14", "gpio15",
+> -	"gpio16", "gpio17", "gpio18", "gpio19",
+> -	"gpio20", "gpio21", "gpio22", "gpio23",
+> -	"gpio24", "gpio25", "gpio26", "gpio27",
+> -	"gpio28", "gpio29", "gpio30", "gpio31",
+> -	"gpio32", "gpio33", "gpio34"
+> -};
+> -
+> -static const char * const oxnas_ox810se_fct3_group[] = {
+> -	"gpio0",  "gpio1",  "gpio2",  "gpio3",
+> -	"gpio4",  "gpio5",  "gpio6",  "gpio7",
+> -	"gpio8",  "gpio9",
+> -	"gpio20",
+> -	"gpio22", "gpio23", "gpio24", "gpio25",
+> -	"gpio26", "gpio27", "gpio28", "gpio29",
+> -	"gpio30", "gpio31", "gpio32", "gpio33",
+> -	"gpio34"
+> -};
+> -
+> -static const char * const oxnas_ox820_fct0_group[] = {
+> -	"gpio0",  "gpio1",  "gpio2",  "gpio3",
+> -	"gpio4",  "gpio5",  "gpio6",  "gpio7",
+> -	"gpio8",  "gpio9",  "gpio10", "gpio11",
+> -	"gpio12", "gpio13", "gpio14", "gpio15",
+> -	"gpio16", "gpio17", "gpio18", "gpio19",
+> -	"gpio20", "gpio21", "gpio22", "gpio23",
+> -	"gpio24", "gpio25", "gpio26", "gpio27",
+> -	"gpio28", "gpio29", "gpio30", "gpio31",
+> -	"gpio32", "gpio33", "gpio34", "gpio35",
+> -	"gpio36", "gpio37", "gpio38", "gpio39",
+> -	"gpio40", "gpio41", "gpio42", "gpio43",
+> -	"gpio44", "gpio45", "gpio46", "gpio47",
+> -	"gpio48", "gpio49"
+> -};
+> -
+> -static const char * const oxnas_ox820_fct1_group[] = {
+> -	"gpio3", "gpio4",
+> -	"gpio12", "gpio13", "gpio14", "gpio15",
+> -	"gpio16", "gpio17", "gpio18", "gpio19",
+> -	"gpio20", "gpio21", "gpio22", "gpio23",
+> -	"gpio24"
+> -};
+> -
+> -static const char * const oxnas_ox820_fct4_group[] = {
+> -	"gpio5", "gpio6", "gpio7", "gpio8",
+> -	"gpio24", "gpio25", "gpio26", "gpio27",
+> -	"gpio40", "gpio41", "gpio42", "gpio43"
+> -};
+> -
+> -static const char * const oxnas_ox820_fct5_group[] = {
+> -	"gpio28", "gpio29", "gpio30", "gpio31"
+> -};
+> -
+> -#define FUNCTION(_name, _gr)					\
+> -	{							\
+> -		.name = #_name,					\
+> -		.groups = oxnas_##_gr##_group,			\
+> -		.ngroups = ARRAY_SIZE(oxnas_##_gr##_group),	\
+> -	}
+> -
+> -static const struct oxnas_function oxnas_ox810se_functions[] = {
+> -	FUNCTION(gpio, ox810se_fct0),
+> -	FUNCTION(fct3, ox810se_fct3),
+> -};
+> -
+> -static const struct oxnas_function oxnas_ox820_functions[] = {
+> -	FUNCTION(gpio, ox820_fct0),
+> -	FUNCTION(fct1, ox820_fct1),
+> -	FUNCTION(fct4, ox820_fct4),
+> -	FUNCTION(fct5, ox820_fct5),
+> -};
+> -
+> -#define OXNAS_PINCTRL_GROUP(_pin, _name, ...)				\
+> -	{								\
+> -		.name = #_name,						\
+> -		.pin = _pin,						\
+> -		.bank = _pin / PINS_PER_BANK,				\
+> -		.functions = (struct oxnas_desc_function[]){		\
+> -			__VA_ARGS__, { } },				\
+> -	}
+> -
+> -#define OXNAS_PINCTRL_FUNCTION(_name, _fct)		\
+> -	{						\
+> -		.name = #_name,				\
+> -		.fct = _fct,				\
+> -	}
+> -
+> -static const struct oxnas_pin_group oxnas_ox810se_groups[] = {
+> -	OXNAS_PINCTRL_GROUP(0, gpio0,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(1, gpio1,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(2, gpio2,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(3, gpio3,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(4, gpio4,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(5, gpio5,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(6, gpio6,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(7, gpio7,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(8, gpio8,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(9, gpio9,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(10, gpio10,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(11, gpio11,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(12, gpio12,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(13, gpio13,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(14, gpio14,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(15, gpio15,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(16, gpio16,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(17, gpio17,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(18, gpio18,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(19, gpio19,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(20, gpio20,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(21, gpio21,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(22, gpio22,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(23, gpio23,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(24, gpio24,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(25, gpio25,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(26, gpio26,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(27, gpio27,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(28, gpio28,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(29, gpio29,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(30, gpio30,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(31, gpio31,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(32, gpio32,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(33, gpio33,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -	OXNAS_PINCTRL_GROUP(34, gpio34,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct3, 3)),
+> -};
+> -
+> -static const struct oxnas_pin_group oxnas_ox820_groups[] = {
+> -	OXNAS_PINCTRL_GROUP(0, gpio0,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(1, gpio1,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(2, gpio2,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(3, gpio3,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(4, gpio4,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(5, gpio5,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(6, gpio6,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(7, gpio7,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(8, gpio8,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(9, gpio9,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(10, gpio10,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(11, gpio11,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(12, gpio12,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(13, gpio13,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(14, gpio14,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(15, gpio15,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(16, gpio16,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(17, gpio17,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(18, gpio18,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(19, gpio19,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(20, gpio20,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(21, gpio21,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(22, gpio22,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(23, gpio23,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1)),
+> -	OXNAS_PINCTRL_GROUP(24, gpio24,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct1, 1),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 5)),
+> -	OXNAS_PINCTRL_GROUP(25, gpio25,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(26, gpio26,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(27, gpio27,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(28, gpio28,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct5, 5)),
+> -	OXNAS_PINCTRL_GROUP(29, gpio29,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct5, 5)),
+> -	OXNAS_PINCTRL_GROUP(30, gpio30,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct5, 5)),
+> -	OXNAS_PINCTRL_GROUP(31, gpio31,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct5, 5)),
+> -	OXNAS_PINCTRL_GROUP(32, gpio32,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(33, gpio33,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(34, gpio34,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(35, gpio35,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(36, gpio36,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(37, gpio37,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(38, gpio38,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(39, gpio39,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(40, gpio40,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(41, gpio41,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(42, gpio42,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(43, gpio43,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0),
+> -			OXNAS_PINCTRL_FUNCTION(fct4, 4)),
+> -	OXNAS_PINCTRL_GROUP(44, gpio44,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(45, gpio45,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(46, gpio46,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(47, gpio47,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(48, gpio48,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -	OXNAS_PINCTRL_GROUP(49, gpio49,
+> -			OXNAS_PINCTRL_FUNCTION(gpio, 0)),
+> -};
+> -
+> -static inline struct oxnas_gpio_bank *pctl_to_bank(struct oxnas_pinctrl *pctl,
+> -						   unsigned int pin)
+> -{
+> -	return &pctl->gpio_banks[pin / PINS_PER_BANK];
+> -}
+> -
+> -static int oxnas_pinctrl_get_groups_count(struct pinctrl_dev *pctldev)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -
+> -	return pctl->ngroups;
+> -}
+> -
+> -static const char *oxnas_pinctrl_get_group_name(struct pinctrl_dev *pctldev,
+> -						unsigned int group)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -
+> -	return pctl->groups[group].name;
+> -}
+> -
+> -static int oxnas_pinctrl_get_group_pins(struct pinctrl_dev *pctldev,
+> -					unsigned int group,
+> -					const unsigned int **pins,
+> -					unsigned int *num_pins)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -
+> -	*pins = &pctl->groups[group].pin;
+> -	*num_pins = 1;
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct pinctrl_ops oxnas_pinctrl_ops = {
+> -	.get_groups_count = oxnas_pinctrl_get_groups_count,
+> -	.get_group_name = oxnas_pinctrl_get_group_name,
+> -	.get_group_pins = oxnas_pinctrl_get_group_pins,
+> -	.dt_node_to_map = pinconf_generic_dt_node_to_map_pin,
+> -	.dt_free_map = pinctrl_utils_free_map,
+> -};
+> -
+> -static int oxnas_pinmux_get_functions_count(struct pinctrl_dev *pctldev)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -
+> -	return pctl->nfunctions;
+> -}
+> -
+> -static const char *
+> -oxnas_pinmux_get_function_name(struct pinctrl_dev *pctldev, unsigned int func)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -
+> -	return pctl->functions[func].name;
+> -}
+> -
+> -static int oxnas_pinmux_get_function_groups(struct pinctrl_dev *pctldev,
+> -					    unsigned int func,
+> -					    const char * const **groups,
+> -					    unsigned int * const num_groups)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -
+> -	*groups = pctl->functions[func].groups;
+> -	*num_groups = pctl->functions[func].ngroups;
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_ox810se_pinmux_enable(struct pinctrl_dev *pctldev,
+> -				       unsigned int func, unsigned int group)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	const struct oxnas_pin_group *pg = &pctl->groups[group];
+> -	const struct oxnas_function *pf = &pctl->functions[func];
+> -	const char *fname = pf->name;
+> -	struct oxnas_desc_function *functions = pg->functions;
+> -	u32 mask = BIT(pg->pin);
+> -
+> -	while (functions->name) {
+> -		if (!strcmp(functions->name, fname)) {
+> -			dev_dbg(pctl->dev,
+> -				"setting function %s bank %d pin %d fct %d mask %x\n",
+> -				fname, pg->bank, pg->pin,
+> -				functions->fct, mask);
+> -
+> -			regmap_write_bits(pctl->regmap,
+> -					  (pg->bank ?
+> -						PINMUX_810_PRIMARY_SEL1 :
+> -						PINMUX_810_PRIMARY_SEL0),
+> -					  mask,
+> -					  (functions->fct == 1 ?
+> -						mask : 0));
+> -			regmap_write_bits(pctl->regmap,
+> -					  (pg->bank ?
+> -						PINMUX_810_SECONDARY_SEL1 :
+> -						PINMUX_810_SECONDARY_SEL0),
+> -					  mask,
+> -					  (functions->fct == 2 ?
+> -						mask : 0));
+> -			regmap_write_bits(pctl->regmap,
+> -					  (pg->bank ?
+> -						PINMUX_810_TERTIARY_SEL1 :
+> -						PINMUX_810_TERTIARY_SEL0),
+> -					  mask,
+> -					  (functions->fct == 3 ?
+> -						mask : 0));
+> -
+> -			return 0;
+> -		}
+> -
+> -		functions++;
+> -	}
+> -
+> -	dev_err(pctl->dev, "cannot mux pin %u to function %u\n", group, func);
+> -
+> -	return -EINVAL;
+> -}
+> -
+> -static int oxnas_ox820_pinmux_enable(struct pinctrl_dev *pctldev,
+> -				     unsigned int func, unsigned int group)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	const struct oxnas_pin_group *pg = &pctl->groups[group];
+> -	const struct oxnas_function *pf = &pctl->functions[func];
+> -	const char *fname = pf->name;
+> -	struct oxnas_desc_function *functions = pg->functions;
+> -	unsigned int offset = (pg->bank ? PINMUX_820_BANK_OFFSET : 0);
+> -	u32 mask = BIT(pg->pin);
+> -
+> -	while (functions->name) {
+> -		if (!strcmp(functions->name, fname)) {
+> -			dev_dbg(pctl->dev,
+> -				"setting function %s bank %d pin %d fct %d mask %x\n",
+> -				fname, pg->bank, pg->pin,
+> -				functions->fct, mask);
+> -
+> -			regmap_write_bits(pctl->regmap,
+> -					  offset + PINMUX_820_SECONDARY_SEL,
+> -					  mask,
+> -					  (functions->fct == 1 ?
+> -						mask : 0));
+> -			regmap_write_bits(pctl->regmap,
+> -					  offset + PINMUX_820_TERTIARY_SEL,
+> -					  mask,
+> -					  (functions->fct == 2 ?
+> -						mask : 0));
+> -			regmap_write_bits(pctl->regmap,
+> -					  offset + PINMUX_820_QUATERNARY_SEL,
+> -					  mask,
+> -					  (functions->fct == 3 ?
+> -						mask : 0));
+> -			regmap_write_bits(pctl->regmap,
+> -					  offset + PINMUX_820_DEBUG_SEL,
+> -					  mask,
+> -					  (functions->fct == 4 ?
+> -						mask : 0));
+> -			regmap_write_bits(pctl->regmap,
+> -					  offset + PINMUX_820_ALTERNATIVE_SEL,
+> -					  mask,
+> -					  (functions->fct == 5 ?
+> -						mask : 0));
+> -
+> -			return 0;
+> -		}
+> -
+> -		functions++;
+> -	}
+> -
+> -	dev_err(pctl->dev, "cannot mux pin %u to function %u\n", group, func);
+> -
+> -	return -EINVAL;
+> -}
+> -
+> -static int oxnas_ox810se_gpio_request_enable(struct pinctrl_dev *pctldev,
+> -					     struct pinctrl_gpio_range *range,
+> -					     unsigned int offset)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(range->gc);
+> -	u32 mask = BIT(offset - bank->gpio_chip.base);
+> -
+> -	dev_dbg(pctl->dev, "requesting gpio %d in bank %d (id %d) with mask 0x%x\n",
+> -		offset, bank->gpio_chip.base, bank->id, mask);
+> -
+> -	regmap_write_bits(pctl->regmap,
+> -			  (bank->id ?
+> -				PINMUX_810_PRIMARY_SEL1 :
+> -				PINMUX_810_PRIMARY_SEL0),
+> -			  mask, 0);
+> -	regmap_write_bits(pctl->regmap,
+> -			  (bank->id ?
+> -				PINMUX_810_SECONDARY_SEL1 :
+> -				PINMUX_810_SECONDARY_SEL0),
+> -			  mask, 0);
+> -	regmap_write_bits(pctl->regmap,
+> -			  (bank->id ?
+> -				PINMUX_810_TERTIARY_SEL1 :
+> -				PINMUX_810_TERTIARY_SEL0),
+> -			  mask, 0);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_ox820_gpio_request_enable(struct pinctrl_dev *pctldev,
+> -					   struct pinctrl_gpio_range *range,
+> -					   unsigned int offset)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(range->gc);
+> -	unsigned int bank_offset = (bank->id ? PINMUX_820_BANK_OFFSET : 0);
+> -	u32 mask = BIT(offset - bank->gpio_chip.base);
+> -
+> -	dev_dbg(pctl->dev, "requesting gpio %d in bank %d (id %d) with mask 0x%x\n",
+> -		offset, bank->gpio_chip.base, bank->id, mask);
+> -
+> -	regmap_write_bits(pctl->regmap,
+> -			  bank_offset + PINMUX_820_SECONDARY_SEL,
+> -			  mask, 0);
+> -	regmap_write_bits(pctl->regmap,
+> -			  bank_offset + PINMUX_820_TERTIARY_SEL,
+> -			  mask, 0);
+> -	regmap_write_bits(pctl->regmap,
+> -			  bank_offset + PINMUX_820_QUATERNARY_SEL,
+> -			  mask, 0);
+> -	regmap_write_bits(pctl->regmap,
+> -			  bank_offset + PINMUX_820_DEBUG_SEL,
+> -			  mask, 0);
+> -	regmap_write_bits(pctl->regmap,
+> -			  bank_offset + PINMUX_820_ALTERNATIVE_SEL,
+> -			  mask, 0);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_gpio_get_direction(struct gpio_chip *chip,
+> -				      unsigned int offset)
+> -{
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	u32 mask = BIT(offset);
+> -
+> -	if (readl_relaxed(bank->reg_base + OUTPUT_EN) & mask)
+> -		return GPIO_LINE_DIRECTION_OUT;
+> -
+> -	return GPIO_LINE_DIRECTION_IN;
+> -}
+> -
+> -static int oxnas_gpio_direction_input(struct gpio_chip *chip,
+> -				      unsigned int offset)
+> -{
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	u32 mask = BIT(offset);
+> -
+> -	writel_relaxed(mask, bank->reg_base + OUTPUT_EN_CLEAR);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_gpio_get(struct gpio_chip *chip, unsigned int offset)
+> -{
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	u32 mask = BIT(offset);
+> -
+> -	return (readl_relaxed(bank->reg_base + INPUT_VALUE) & mask) != 0;
+> -}
+> -
+> -static void oxnas_gpio_set(struct gpio_chip *chip, unsigned int offset,
+> -			       int value)
+> -{
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	u32 mask = BIT(offset);
+> -
+> -	if (value)
+> -		writel_relaxed(mask, bank->reg_base + OUTPUT_SET);
+> -	else
+> -		writel_relaxed(mask, bank->reg_base + OUTPUT_CLEAR);
+> -}
+> -
+> -static int oxnas_gpio_direction_output(struct gpio_chip *chip,
+> -				       unsigned int offset, int value)
+> -{
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	u32 mask = BIT(offset);
+> -
+> -	oxnas_gpio_set(chip, offset, value);
+> -	writel_relaxed(mask, bank->reg_base + OUTPUT_EN_SET);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_gpio_set_direction(struct pinctrl_dev *pctldev,
+> -				    struct pinctrl_gpio_range *range,
+> -				    unsigned int offset, bool input)
+> -{
+> -	struct gpio_chip *chip = range->gc;
+> -
+> -	if (input)
+> -		oxnas_gpio_direction_input(chip, offset);
+> -	else
+> -		oxnas_gpio_direction_output(chip, offset, 0);
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct pinmux_ops oxnas_ox810se_pinmux_ops = {
+> -	.get_functions_count = oxnas_pinmux_get_functions_count,
+> -	.get_function_name = oxnas_pinmux_get_function_name,
+> -	.get_function_groups = oxnas_pinmux_get_function_groups,
+> -	.set_mux = oxnas_ox810se_pinmux_enable,
+> -	.gpio_request_enable = oxnas_ox810se_gpio_request_enable,
+> -	.gpio_set_direction = oxnas_gpio_set_direction,
+> -};
+> -
+> -static const struct pinmux_ops oxnas_ox820_pinmux_ops = {
+> -	.get_functions_count = oxnas_pinmux_get_functions_count,
+> -	.get_function_name = oxnas_pinmux_get_function_name,
+> -	.get_function_groups = oxnas_pinmux_get_function_groups,
+> -	.set_mux = oxnas_ox820_pinmux_enable,
+> -	.gpio_request_enable = oxnas_ox820_gpio_request_enable,
+> -	.gpio_set_direction = oxnas_gpio_set_direction,
+> -};
+> -
+> -static int oxnas_ox810se_pinconf_get(struct pinctrl_dev *pctldev,
+> -				     unsigned int pin, unsigned long *config)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	struct oxnas_gpio_bank *bank = pctl_to_bank(pctl, pin);
+> -	unsigned int param = pinconf_to_config_param(*config);
+> -	u32 mask = BIT(pin - bank->gpio_chip.base);
+> -	int ret;
+> -	u32 arg;
+> -
+> -	switch (param) {
+> -	case PIN_CONFIG_BIAS_PULL_UP:
+> -		ret = regmap_read(pctl->regmap,
+> -				  (bank->id ?
+> -					PINMUX_810_PULLUP_CTRL1 :
+> -					PINMUX_810_PULLUP_CTRL0),
+> -				  &arg);
+> -		if (ret)
+> -			return ret;
+> -
+> -		arg = !!(arg & mask);
+> -		break;
+> -	default:
+> -		return -ENOTSUPP;
+> -	}
+> -
+> -	*config = pinconf_to_config_packed(param, arg);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_ox820_pinconf_get(struct pinctrl_dev *pctldev,
+> -				   unsigned int pin, unsigned long *config)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	struct oxnas_gpio_bank *bank = pctl_to_bank(pctl, pin);
+> -	unsigned int param = pinconf_to_config_param(*config);
+> -	unsigned int bank_offset = (bank->id ? PINMUX_820_BANK_OFFSET : 0);
+> -	u32 mask = BIT(pin - bank->gpio_chip.base);
+> -	int ret;
+> -	u32 arg;
+> -
+> -	switch (param) {
+> -	case PIN_CONFIG_BIAS_PULL_UP:
+> -		ret = regmap_read(pctl->regmap,
+> -				  bank_offset + PINMUX_820_PULLUP_CTRL,
+> -				  &arg);
+> -		if (ret)
+> -			return ret;
+> -
+> -		arg = !!(arg & mask);
+> -		break;
+> -	default:
+> -		return -ENOTSUPP;
+> -	}
+> -
+> -	*config = pinconf_to_config_packed(param, arg);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_ox810se_pinconf_set(struct pinctrl_dev *pctldev,
+> -				     unsigned int pin, unsigned long *configs,
+> -				     unsigned int num_configs)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	struct oxnas_gpio_bank *bank = pctl_to_bank(pctl, pin);
+> -	unsigned int param;
+> -	unsigned int i;
+> -	u32 offset = pin - bank->gpio_chip.base;
+> -	u32 mask = BIT(offset);
+> -
+> -	dev_dbg(pctl->dev, "setting pin %d bank %d mask 0x%x\n",
+> -		pin, bank->gpio_chip.base, mask);
+> -
+> -	for (i = 0; i < num_configs; i++) {
+> -		param = pinconf_to_config_param(configs[i]);
+> -
+> -		switch (param) {
+> -		case PIN_CONFIG_BIAS_PULL_UP:
+> -			dev_dbg(pctl->dev, "   pullup\n");
+> -			regmap_write_bits(pctl->regmap,
+> -					  (bank->id ?
+> -						PINMUX_810_PULLUP_CTRL1 :
+> -						PINMUX_810_PULLUP_CTRL0),
+> -					  mask, mask);
+> -			break;
+> -		default:
+> -			dev_err(pctl->dev, "Property %u not supported\n",
+> -				param);
+> -			return -ENOTSUPP;
+> -		}
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_ox820_pinconf_set(struct pinctrl_dev *pctldev,
+> -				   unsigned int pin, unsigned long *configs,
+> -				   unsigned int num_configs)
+> -{
+> -	struct oxnas_pinctrl *pctl = pinctrl_dev_get_drvdata(pctldev);
+> -	struct oxnas_gpio_bank *bank = pctl_to_bank(pctl, pin);
+> -	unsigned int bank_offset = (bank->id ? PINMUX_820_BANK_OFFSET : 0);
+> -	unsigned int param;
+> -	unsigned int i;
+> -	u32 offset = pin - bank->gpio_chip.base;
+> -	u32 mask = BIT(offset);
+> -
+> -	dev_dbg(pctl->dev, "setting pin %d bank %d mask 0x%x\n",
+> -		pin, bank->gpio_chip.base, mask);
+> -
+> -	for (i = 0; i < num_configs; i++) {
+> -		param = pinconf_to_config_param(configs[i]);
+> -
+> -		switch (param) {
+> -		case PIN_CONFIG_BIAS_PULL_UP:
+> -			dev_dbg(pctl->dev, "   pullup\n");
+> -			regmap_write_bits(pctl->regmap,
+> -					  bank_offset + PINMUX_820_PULLUP_CTRL,
+> -					  mask, mask);
+> -			break;
+> -		default:
+> -			dev_err(pctl->dev, "Property %u not supported\n",
+> -				param);
+> -			return -ENOTSUPP;
+> -		}
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static const struct pinconf_ops oxnas_ox810se_pinconf_ops = {
+> -	.pin_config_get = oxnas_ox810se_pinconf_get,
+> -	.pin_config_set = oxnas_ox810se_pinconf_set,
+> -	.is_generic = true,
+> -};
+> -
+> -static const struct pinconf_ops oxnas_ox820_pinconf_ops = {
+> -	.pin_config_get = oxnas_ox820_pinconf_get,
+> -	.pin_config_set = oxnas_ox820_pinconf_set,
+> -	.is_generic = true,
+> -};
+> -
+> -static void oxnas_gpio_irq_ack(struct irq_data *data)
+> -{
+> -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	u32 mask = BIT(data->hwirq);
+> -
+> -	writel(mask, bank->reg_base + IRQ_PENDING);
+> -}
+> -
+> -static void oxnas_gpio_irq_mask(struct irq_data *data)
+> -{
+> -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	unsigned int type = irqd_get_trigger_type(data);
+> -	u32 mask = BIT(data->hwirq);
+> -
+> -	if (type & IRQ_TYPE_EDGE_RISING)
+> -		writel(readl(bank->reg_base + RE_IRQ_ENABLE) & ~mask,
+> -		       bank->reg_base + RE_IRQ_ENABLE);
+> -
+> -	if (type & IRQ_TYPE_EDGE_FALLING)
+> -		writel(readl(bank->reg_base + FE_IRQ_ENABLE) & ~mask,
+> -		       bank->reg_base + FE_IRQ_ENABLE);
+> -}
+> -
+> -static void oxnas_gpio_irq_unmask(struct irq_data *data)
+> -{
+> -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(chip);
+> -	unsigned int type = irqd_get_trigger_type(data);
+> -	u32 mask = BIT(data->hwirq);
+> -
+> -	if (type & IRQ_TYPE_EDGE_RISING)
+> -		writel(readl(bank->reg_base + RE_IRQ_ENABLE) | mask,
+> -		       bank->reg_base + RE_IRQ_ENABLE);
+> -
+> -	if (type & IRQ_TYPE_EDGE_FALLING)
+> -		writel(readl(bank->reg_base + FE_IRQ_ENABLE) | mask,
+> -		       bank->reg_base + FE_IRQ_ENABLE);
+> -}
+> -
+> -static unsigned int oxnas_gpio_irq_startup(struct irq_data *data)
+> -{
+> -	struct gpio_chip *chip = irq_data_get_irq_chip_data(data);
+> -
+> -	oxnas_gpio_direction_input(chip, data->hwirq);
+> -	oxnas_gpio_irq_unmask(data);
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_gpio_irq_set_type(struct irq_data *data, unsigned int type)
+> -{
+> -	if ((type & (IRQ_TYPE_EDGE_RISING|IRQ_TYPE_EDGE_FALLING)) == 0)
+> -		return -EINVAL;
+> -
+> -	irq_set_handler_locked(data, handle_edge_irq);
+> -
+> -	return 0;
+> -}
+> -
+> -static void oxnas_gpio_irq_handler(struct irq_desc *desc)
+> -{
+> -	struct gpio_chip *gc = irq_desc_get_handler_data(desc);
+> -	struct oxnas_gpio_bank *bank = gpiochip_get_data(gc);
+> -	struct irq_chip *chip = irq_desc_get_chip(desc);
+> -	unsigned long stat;
+> -	unsigned int pin;
+> -
+> -	chained_irq_enter(chip, desc);
+> -
+> -	stat = readl(bank->reg_base + IRQ_PENDING);
+> -
+> -	for_each_set_bit(pin, &stat, BITS_PER_LONG)
+> -		generic_handle_domain_irq(gc->irq.domain, pin);
+> -
+> -	chained_irq_exit(chip, desc);
+> -}
+> -
+> -#define GPIO_BANK(_bank)						\
+> -	{								\
+> -		.gpio_chip = {						\
+> -			.label = "GPIO" #_bank,				\
+> -			.request = gpiochip_generic_request,		\
+> -			.free = gpiochip_generic_free,			\
+> -			.get_direction = oxnas_gpio_get_direction,	\
+> -			.direction_input = oxnas_gpio_direction_input,	\
+> -			.direction_output = oxnas_gpio_direction_output, \
+> -			.get = oxnas_gpio_get,				\
+> -			.set = oxnas_gpio_set,				\
+> -			.ngpio = PINS_PER_BANK,				\
+> -			.base = GPIO_BANK_START(_bank),			\
+> -			.owner = THIS_MODULE,				\
+> -			.can_sleep = 0,					\
+> -		},							\
+> -		.irq_chip = {						\
+> -			.name = "GPIO" #_bank,				\
+> -			.irq_startup = oxnas_gpio_irq_startup,	\
+> -			.irq_ack = oxnas_gpio_irq_ack,		\
+> -			.irq_mask = oxnas_gpio_irq_mask,		\
+> -			.irq_unmask = oxnas_gpio_irq_unmask,		\
+> -			.irq_set_type = oxnas_gpio_irq_set_type,	\
+> -		},							\
+> -	}
+> -
+> -static struct oxnas_gpio_bank oxnas_gpio_banks[] = {
+> -	GPIO_BANK(0),
+> -	GPIO_BANK(1),
+> -};
+> -
+> -static struct oxnas_pinctrl ox810se_pinctrl = {
+> -	.functions = oxnas_ox810se_functions,
+> -	.nfunctions = ARRAY_SIZE(oxnas_ox810se_functions),
+> -	.groups = oxnas_ox810se_groups,
+> -	.ngroups = ARRAY_SIZE(oxnas_ox810se_groups),
+> -	.gpio_banks = oxnas_gpio_banks,
+> -	.nbanks = ARRAY_SIZE(oxnas_gpio_banks),
+> -};
+> -
+> -static struct pinctrl_desc oxnas_ox810se_pinctrl_desc = {
+> -	.name = "oxnas-pinctrl",
+> -	.pins = oxnas_ox810se_pins,
+> -	.npins = ARRAY_SIZE(oxnas_ox810se_pins),
+> -	.pctlops = &oxnas_pinctrl_ops,
+> -	.pmxops = &oxnas_ox810se_pinmux_ops,
+> -	.confops = &oxnas_ox810se_pinconf_ops,
+> -	.owner = THIS_MODULE,
+> -};
+> -
+> -static struct oxnas_pinctrl ox820_pinctrl = {
+> -	.functions = oxnas_ox820_functions,
+> -	.nfunctions = ARRAY_SIZE(oxnas_ox820_functions),
+> -	.groups = oxnas_ox820_groups,
+> -	.ngroups = ARRAY_SIZE(oxnas_ox820_groups),
+> -	.gpio_banks = oxnas_gpio_banks,
+> -	.nbanks = ARRAY_SIZE(oxnas_gpio_banks),
+> -};
+> -
+> -static struct pinctrl_desc oxnas_ox820_pinctrl_desc = {
+> -	.name = "oxnas-pinctrl",
+> -	.pins = oxnas_ox820_pins,
+> -	.npins = ARRAY_SIZE(oxnas_ox820_pins),
+> -	.pctlops = &oxnas_pinctrl_ops,
+> -	.pmxops = &oxnas_ox820_pinmux_ops,
+> -	.confops = &oxnas_ox820_pinconf_ops,
+> -	.owner = THIS_MODULE,
+> -};
+> -
+> -static struct oxnas_pinctrl_data oxnas_ox810se_pinctrl_data = {
+> -	.desc = &oxnas_ox810se_pinctrl_desc,
+> -	.pctl = &ox810se_pinctrl,
+> -};
+> -
+> -static struct oxnas_pinctrl_data oxnas_ox820_pinctrl_data = {
+> -	.desc = &oxnas_ox820_pinctrl_desc,
+> -	.pctl = &ox820_pinctrl,
+> -};
+> -
+> -static const struct of_device_id oxnas_pinctrl_of_match[] = {
+> -	{ .compatible = "oxsemi,ox810se-pinctrl",
+> -	  .data = &oxnas_ox810se_pinctrl_data
+> -	},
+> -	{ .compatible = "oxsemi,ox820-pinctrl",
+> -	  .data = &oxnas_ox820_pinctrl_data,
+> -	},
+> -	{ },
+> -};
+> -
+> -static int oxnas_pinctrl_probe(struct platform_device *pdev)
+> -{
+> -	const struct of_device_id *id;
+> -	const struct oxnas_pinctrl_data *data;
+> -	struct oxnas_pinctrl *pctl;
+> -
+> -	id = of_match_node(oxnas_pinctrl_of_match, pdev->dev.of_node);
+> -	if (!id)
+> -		return -ENODEV;
+> -
+> -	data = id->data;
+> -	if (!data || !data->pctl || !data->desc)
+> -		return -EINVAL;
+> -
+> -	pctl = devm_kzalloc(&pdev->dev, sizeof(*pctl), GFP_KERNEL);
+> -	if (!pctl)
+> -		return -ENOMEM;
+> -	pctl->dev = &pdev->dev;
+> -	dev_set_drvdata(&pdev->dev, pctl);
+> -
+> -	pctl->regmap = syscon_regmap_lookup_by_phandle(pdev->dev.of_node,
+> -						       "oxsemi,sys-ctrl");
+> -	if (IS_ERR(pctl->regmap)) {
+> -		dev_err(&pdev->dev, "failed to get sys ctrl regmap\n");
+> -		return -ENODEV;
+> -	}
+> -
+> -	pctl->functions = data->pctl->functions;
+> -	pctl->nfunctions = data->pctl->nfunctions;
+> -	pctl->groups = data->pctl->groups;
+> -	pctl->ngroups = data->pctl->ngroups;
+> -	pctl->gpio_banks = data->pctl->gpio_banks;
+> -	pctl->nbanks = data->pctl->nbanks;
+> -
+> -	pctl->pctldev = pinctrl_register(data->desc, &pdev->dev, pctl);
+> -	if (IS_ERR(pctl->pctldev)) {
+> -		dev_err(&pdev->dev, "Failed to register pinctrl device\n");
+> -		return PTR_ERR(pctl->pctldev);
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static int oxnas_gpio_probe(struct platform_device *pdev)
+> -{
+> -	struct device_node *np = pdev->dev.of_node;
+> -	struct of_phandle_args pinspec;
+> -	struct oxnas_gpio_bank *bank;
+> -	unsigned int id, ngpios;
+> -	int irq, ret;
+> -	struct gpio_irq_chip *girq;
+> -
+> -	if (of_parse_phandle_with_fixed_args(np, "gpio-ranges",
+> -					     3, 0, &pinspec)) {
+> -		dev_err(&pdev->dev, "gpio-ranges property not found\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	id = pinspec.args[1] / PINS_PER_BANK;
+> -	ngpios = pinspec.args[2];
+> -
+> -	if (id >= ARRAY_SIZE(oxnas_gpio_banks)) {
+> -		dev_err(&pdev->dev, "invalid gpio-ranges base arg\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	if (ngpios > PINS_PER_BANK) {
+> -		dev_err(&pdev->dev, "invalid gpio-ranges count arg\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	bank = &oxnas_gpio_banks[id];
+> -
+> -	bank->reg_base = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(bank->reg_base))
+> -		return PTR_ERR(bank->reg_base);
+> -
+> -	irq = platform_get_irq(pdev, 0);
+> -	if (irq < 0)
+> -		return irq;
+> -
+> -	bank->id = id;
+> -	bank->gpio_chip.parent = &pdev->dev;
+> -	bank->gpio_chip.ngpio = ngpios;
+> -	girq = &bank->gpio_chip.irq;
+> -	girq->chip = &bank->irq_chip;
+> -	girq->parent_handler = oxnas_gpio_irq_handler;
+> -	girq->num_parents = 1;
+> -	girq->parents = devm_kcalloc(&pdev->dev, 1, sizeof(*girq->parents),
+> -				     GFP_KERNEL);
+> -	if (!girq->parents)
+> -		return -ENOMEM;
+> -	girq->parents[0] = irq;
+> -	girq->default_type = IRQ_TYPE_NONE;
+> -	girq->handler = handle_level_irq;
+> -
+> -	ret = gpiochip_add_data(&bank->gpio_chip, bank);
+> -	if (ret < 0) {
+> -		dev_err(&pdev->dev, "Failed to add GPIO chip %u: %d\n",
+> -			id, ret);
+> -		return ret;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -static struct platform_driver oxnas_pinctrl_driver = {
+> -	.driver = {
+> -		.name = "oxnas-pinctrl",
+> -		.of_match_table = oxnas_pinctrl_of_match,
+> -		.suppress_bind_attrs = true,
+> -	},
+> -	.probe = oxnas_pinctrl_probe,
+> -};
+> -
+> -static const struct of_device_id oxnas_gpio_of_match[] = {
+> -	{ .compatible = "oxsemi,ox810se-gpio", },
+> -	{ .compatible = "oxsemi,ox820-gpio", },
+> -	{ },
+> -};
+> -
+> -static struct platform_driver oxnas_gpio_driver = {
+> -	.driver = {
+> -		.name = "oxnas-gpio",
+> -		.of_match_table = oxnas_gpio_of_match,
+> -		.suppress_bind_attrs = true,
+> -	},
+> -	.probe = oxnas_gpio_probe,
+> -};
+> -
+> -static int __init oxnas_gpio_register(void)
+> -{
+> -	return platform_driver_register(&oxnas_gpio_driver);
+> -}
+> -arch_initcall(oxnas_gpio_register);
+> -
+> -static int __init oxnas_pinctrl_register(void)
+> -{
+> -	return platform_driver_register(&oxnas_pinctrl_driver);
+> -}
+> -arch_initcall(oxnas_pinctrl_register);
+> 
+
