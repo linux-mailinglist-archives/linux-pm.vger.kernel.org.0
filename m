@@ -2,56 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2396C769B4C
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 17:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC0E769CA7
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 18:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbjGaPwb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 11:52:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S233158AbjGaQeo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 12:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjGaPwZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 11:52:25 -0400
-X-Greylist: delayed 95 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Jul 2023 08:52:17 PDT
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB791996
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 08:52:16 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; b=DMi77ear/iZF1UDc+VOzM2c7AtwCSig4GAd85tFsfDcAeXP2E0L34dIJokY4Em/Tlo4xLIKWjtIFLZoOXzUyAY4KB+otQ7aex7+sc0es9ElO0eBNjSgh6ijys1/cyl9yHBJUgD+9uS8qmdFXbgrZgJt71Dx0dejar9znxDwedoFvN+9HW2ShH2JTnvPdzY3LCWYp7s0Vi94ZsXYmTrVw6hJNhVxjBnyXmmksHS45viVscrcBhVLha29cTP/SnWjMwa4L2vKSOkUoevJd/7Y5l87pin2gXOSDxkdZXMFYOR9pO1b26OMgTQQJjwmyTeztSLIbViBuNUjaP3cBvvFqMQ==; s=purelymail1; d=iskren.info; v=1; bh=eNdJS1WJkEMJiLxhmli0JSlZQRMNa/96vjAbAJHmhoU=; h=Received:Subject:To:From;
-DKIM-Signature: a=rsa-sha256; b=Q9GpMGbQj8hvBCF5gmgA0xSnJmBsCgbcfv+1IQPKwvp9qCsq0hPLMt868WCQekcq0R9UBTK6uSdSc7YNMIR1v5eFDqUUQ6WPh6wQ92I93ZWOqKwoQ8ObAa6EyMFlXu9Hlt/lNbjAkKNmp3xapqPfrlVi11A9QaRismj96MVcLx4I474uJeI4/31wxLfdz7odwJKqeyXVzsm7aCRfhnImqByU3kXj1MEflm80Vp9F72IX/9X+LR8BvkKK5O9SbM9wgrj/wgItl1S0OS3znk/Ew6245N1jvitPwEN1jSnvF8z2Ed7Cn01SAN9ysQEIWL4RYTQyuB3PvuCyaZFnp8YhTA==; s=purelymail1; d=purelymail.com; v=1; bh=eNdJS1WJkEMJiLxhmli0JSlZQRMNa/96vjAbAJHmhoU=; h=Feedback-ID:Received:Subject:To:From;
-Feedback-ID: 10275:2339:null:purelymail
-X-Pm-Original-To: linux-pm@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1185265924;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Mon, 31 Jul 2023 15:49:41 +0000 (UTC)
-Message-ID: <95135e09-75d2-fea1-775b-1233a83349a1@iskren.info>
-Date:   Mon, 31 Jul 2023 18:49:37 +0300
+        with ESMTP id S233127AbjGaQen (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 12:34:43 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182D91732
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 09:34:42 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1b8b2886364so28570775ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 09:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690821281; x=1691426081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NF3cdDHtgDTlBXnay3QPfk41bl0qVAIfQAF8Qog11Xc=;
+        b=tQycVGjXj7OfmBsv0gQU0GvZzIeMw3uB8HpYG5JRHHnqS35VmZkW6x9j+vHLcdpoBy
+         ehQnhVe657UqqOsiMqUYI04wNLdK8ArvLslngurhhWL/BZyQh95eG68FWWaxeWjl8Gt8
+         Vbve44+kYnYdyB7wpzbPY5ff33gTZLoBClgaAE9Y8XmwK0Ua/SFqCpsKGe2wupu3R4wF
+         sl1ofmKRxTVKn1SHcSoXKvmNlHwYuHQgUTZIvHa/IWes9oW4SCRjJbuaI1bt3eqG+iau
+         SxaaV5N3Jwzw3G30+udC5blncNh7Q0fObZzb0PpvcIOzf7J2eNO7ZZllAzgfMRsxW7iT
+         9UPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690821281; x=1691426081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NF3cdDHtgDTlBXnay3QPfk41bl0qVAIfQAF8Qog11Xc=;
+        b=S0XtI1VY5bMFqJ/mZFf5uIcFD40G7EgcbhsMAgrOXK0cnFFEEIwXxzJicDhHsoiboy
+         97FsKOK0vY25e5ttzLV/7Mjx+ffeZdKRP/reddgTqCJ8aUQBh8iCBaSd4lbNVImPZ9kZ
+         qoDGumcxjUbMlGUR3YudQs4TEp1NfttXt1Qc+X5qOVcz7U+a1h3OJLb8SDdwbkzCT2Qk
+         ZA59lcxkBqurYoiD5MWssr3sPqz1YZI1cSEH/ky1t3s5DkmYPLVTevTHFlKpEmWCQdzI
+         kivSCrky9iwut1gzT8nGbudc7wQ6Um/HqajylOUCQeOlU2plSh8kd7Ax4XBny0VqjjQ5
+         plwQ==
+X-Gm-Message-State: ABy/qLYw/FeJIWSBaldn4ckUDDqmxmEMIzbx3i2VsiNPqtSwX3+RFT5P
+        NbtG9U2mAXbqHjyeNGC7WCMo
+X-Google-Smtp-Source: APBJJlGo9I3jYAVeZYXO30xOv/8AyqAUnxLLFlrO69X8v20rYrYqjKlnjOXvYZNJwOWNg4MQ1X3TMg==
+X-Received: by 2002:a17:902:d303:b0:1bb:de7f:a4d4 with SMTP id b3-20020a170902d30300b001bbde7fa4d4mr10001547plc.61.1690821281374;
+        Mon, 31 Jul 2023 09:34:41 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.209.129])
+        by smtp.gmail.com with ESMTPSA id w8-20020a170902e88800b001bb1f09189bsm8779541plg.221.2023.07.31.09.34.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 09:34:40 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, andersson@kernel.org,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
+        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
+        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
+        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 0/6] UFS: Add OPP support
+Date:   Mon, 31 Jul 2023 22:03:51 +0530
+Message-Id: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/4] Add optional properties to MAX17040
-To:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Stefan Hansson <newbie13xd@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20230731073613.10394-1-clamor95@gmail.com>
-Content-Language: en-US
-From:   Iskren Chernev <me@iskren.info>
-In-Reply-To: <20230731073613.10394-1-clamor95@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,54 +81,97 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi,
+
+This series adds OPP (Operating Points) support to UFSHCD driver.
+
+Motivation behind adding OPP support is to scale both clocks as well as
+regulators/performance state dynamically. Currently, UFSHCD just scales
+clock frequency during runtime with the help of "freq-table-hz" property
+defined in devicetree. With the addition of OPP tables in devicetree (as
+done for Qcom SDM845 and SM8250 SoCs in this series) UFSHCD can now scale
+both clocks and performance state of power domain which helps in power
+saving.
+
+For the addition of OPP support to UFSHCD, there are changes required to
+the OPP framework and devfreq drivers. The OPP framework changes are already
+merged and available in linux-next, the devfreq change is added in this series.
+
+Credits
+=======
+
+This series is a continuation of previous work by Krzysztof Kozlowski [1].
+
+Testing
+=======
+
+This series is tested on 96Boards RB3 (SDM845 SoC) and RB5 (SM8250 SoC)
+development boards.
+
+Merging Strategy
+================
+
+An immutable branch might be required between OPP and SCSI trees because of
+the API dependency (devfreq too). And I leave it up to the maintainers to
+decide.
+
+Dependency
+==========
+
+This series depends on the OPP framework changes that got merged into PM tree
+and available in linux-next.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/all/20220513061347.46480-1-krzysztof.kozlowski@linaro.org/
+
+Changes in v3:
+
+* Rebased on top of linux-next/master tag: next-20230731
+* Dropped the already applied patches (dts, opp binding and framework)
+* Moved the interconnect patches to a separate series:
+  https://lore.kernel.org/linux-scsi/20230731145020.41262-1-manivannan.sadhasivam@linaro.org/
+* Moved ufshcd_opp_config_clks() API to ufshcd.c to fix the build failure
+  reported by Kbuild bot: https://lore.kernel.org/all/202307210542.KoLHRbU6-lkp@intel.com/
+* Collected Acks
+* v2: https://lore.kernel.org/all/20230720054100.9940-1-manivannan.sadhasivam@linaro.org/
+
+Changes in v2:
+
+* Added more description to the bindings patch 2/15
+* Fixed dev_pm_opp_put() usage in patch 10/15
+* Added a new patch for adding enums for UFS lanes 14/15
+* Changed the icc variables to mem_bw and cfg_bw and used
+  the enums for gears and lanes in bw_table
+* Collected review tags
+* Added SCSI list and folks
+* Removed duplicate patches
+
+Krzysztof Kozlowski (2):
+  dt-bindings: ufs: common: add OPP table
+  arm64: dts: qcom: sdm845: Add OPP table support to UFSHC
+
+Manivannan Sadhasivam (4):
+  PM / devfreq: Switch to dev_pm_opp_find_freq_{ceil/floor}_indexed()
+    APIs
+  scsi: ufs: core: Add OPP support for scaling clocks and regulators
+  scsi: ufs: host: Add support for parsing OPP
+  arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
+
+ .../devicetree/bindings/ufs/ufs-common.yaml   |  34 +++-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  42 +++-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  39 +++-
+ drivers/devfreq/devfreq.c                     |  14 +-
+ drivers/ufs/core/ufshcd.c                     | 179 ++++++++++++++----
+ drivers/ufs/host/ufshcd-pltfrm.c              |  78 ++++++++
+ include/ufs/ufshcd.h                          |   7 +
+ 7 files changed, 331 insertions(+), 62 deletions(-)
 
 
-On 7/31/23 10:36, Svyatoslav Ryhel wrote:
-> Extend properties supported by max17040 fuel gauge if it is accompanied
-> by different devices.
-> 
-> If max17040 is coupled with a charger, pass charger status since it should
-> match and max17040 has no dedicated status detection ability.
-> 
-> max17040_get_online can be reused for PRESENT property since if it is
-> online it must be present.
-> 
-> Finally, max17040 may be coupled with a dedicated thermal sensor which
-> monitors battery temperature so lets add support for iio channel to match
-> hw setup. With that said, the driver got dependency on CONFIG_IIO which
-> was added to Kconfig. All defconfigs apart s5pv210_defconfig have IIO
-> already enabled so only s5pv210_defconfig needed adjustment.
+base-commit: ec89391563792edd11d138a853901bce76d11f44
+prerequisite-patch-id: 9e7233b8c34b4eeef63a90e851bc9429619627bc
+prerequisite-patch-id: a18af123ce0e9537a96676ae0b2d8c1f0fd19c4b
+-- 
+2.25.1
 
-[whole series]
-Reviewed-by: Iskren Chernev <me@iskren.info>
-
-> ---
-> Changes from v2:
-> - documentation: fixed typo i2c0 > i2c
-> - added dependency on CONFIG_IIO
-> - enabled CONFIG_IIO for s5pv210_defconfig to avoid regressions (all other
->   defconfigs which include max17040 already have IIO enabled)
-> 
-> Changes from v1:
-> - documentation: dropped monitored-battery and power-supplies (inherited
->   from inclusion)
-> - dropped passing charger health as battery health
-> - dropped patch for simple battery cell support
-> - switched iio_read_channel_raw to iio_read_channel_processed_scale
-> - switched iio_channel_get to devm_iio_channel_get
-> - re-organized implementation of temp channel (implemented in way 
->   *_get_optional functions usually act)
-> ---
-> 
-> Svyatoslav Ryhel (4):
->   dt-bindings: power: supply: maxim,max17040: update properties
->   power: max17040: pass status property from supplier
->   power: max17040: get thermal data from adc if available
->   ARM: configs: s5pv210_defconfig: enable IIO required by MAX17040
-> 
->  .../bindings/power/supply/maxim,max17040.yaml | 31 +++++++++++++++++++
->  arch/arm/configs/s5pv210_defconfig            |  1 +
->  drivers/power/supply/Kconfig                  |  2 +-
->  drivers/power/supply/max17040_battery.c       | 27 ++++++++++++++++
->  4 files changed, 60 insertions(+), 1 deletion(-)
-> 
