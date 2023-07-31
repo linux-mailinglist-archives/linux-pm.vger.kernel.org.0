@@ -2,138 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1FD7693CA
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 12:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D9F769401
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 13:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjGaKy7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 06:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40714 "EHLO
+        id S230265AbjGaLAa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 07:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231705AbjGaKyR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 06:54:17 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7131FC4
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 03:52:51 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fe389d6f19so978529e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 03:52:51 -0700 (PDT)
+        with ESMTP id S229915AbjGaLA2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 07:00:28 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57107E46
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 04:00:25 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1bbdc05a93bso25450985ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 04:00:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690800770; x=1691405570;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YTLUtM1uWZf53dgnQ6whEyYV6zi8TUCbRr9vAqETA1s=;
-        b=c2znP9PqoUorM4mVOlSUImCWst2Akz0RKqIQTFlxtfoGouf3V5vxm5hHMrSfnvDk6w
-         iDc4W5LnbB8iO+6WqVkf1RJdjQO32tqDY1dhkOWB0ANLE4YhrnKbBs4JF6r2KV8Pzivc
-         jQOgK+j45HGgFkpAAWtybbT4gQ7oOPSqXhJPicHnHQN0Z5weybYA6T/IU1VWScZvn7KX
-         tIjnWGS2ICUTkl2NEzOl2HgmS7eo4JzdvdDXbuC2myxbpHM0E0c5lFdeZ4CN8Fw+i0ay
-         TUmWIG/0NWdBV8kZPwnIDC4/kh0eEBkXCaRouwBUcsKg90sRppXNWGBzLN6b33UOEQ2c
-         gXpw==
+        d=edgeble-ai.20221208.gappssmtp.com; s=20221208; t=1690801225; x=1691406025;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aFu/JPo/heUh8tZtPktgVoKIudqTiKgcM8V0fJH/i9Y=;
+        b=1v2MnK+H1CiH/nknYPjsMWMv5uS25LE7m4TpV/2Ws5S7GEdQYHGIsEqWpPchb7KRvX
+         10+4CDyk0wy/3YqCGKWbnd2Maf5RaO+3UP9FEpVl+R6zfu9dRAHKHo9yOtrijUsIgRYU
+         9okmTNhyQY7bAb2zFXxStJFtbOjlKOmVqY2ocqYrIZ2XIyrqrVLbyFi/1HWM3PmOTgXp
+         ASP7TB5msegRAcV01tSNbfm150m14zycgybAWnX+TRTYCJ3ihXjFiafdbISgtom4gn7Z
+         e0bVXb6xOBTSNO3A5BF4oWq/h4eW0w4EfMwnPeeI8ZhXUBIjgbZpkw4mgReAMtu5r0/O
+         eegw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690800770; x=1691405570;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1690801225; x=1691406025;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YTLUtM1uWZf53dgnQ6whEyYV6zi8TUCbRr9vAqETA1s=;
-        b=GRFudvyM7Edil1wq6RsoWyD8VsFkDbyb3P1quk3sbLu2NC0wH/yKu1AH9m1/Hv3ck1
-         7/qNN+UPsvENbUcYKiJSbT8zbIbc3Ak20QR8Sl95KVZELdDZwUBj1FAQH+TqyeflOSXv
-         CeH5L+6lRfOub4ZJd4xqU6c5VPGkwtOR8mxoecgpxf9ByXyY2nlRU683o9y9b55YSvWa
-         hRP2PyWzToSl/F9kdHUeTdU6JWrFPtoBZh4/synEzhEEYY7igAW/VLl4DBOMElYOAxQ2
-         9tHkphNQFN0UJa2G3rcKDBMvMSwqIJFheoupb8NDbE8zBmLcW6p0GRgQc3wLN+oKEb6B
-         UcBQ==
-X-Gm-Message-State: ABy/qLaADLBDmPrBGXqagiXGSaXSd7Bgo3dFErEojUFcGu6kzOd0MhNF
-        ypkYcnKi8xBCLMoin0iHta2rIg==
-X-Google-Smtp-Source: APBJJlFUWxcYKuU4u5a9LhTmgvs672pkK9fpTe5+I1nUPTF3TwHcgrZ/chLYFhXXkWRkqkIq7c/ZRQ==
-X-Received: by 2002:ac2:5f43:0:b0:4fe:17d6:af2b with SMTP id 3-20020ac25f43000000b004fe17d6af2bmr4626221lfz.42.1690800770093;
-        Mon, 31 Jul 2023 03:52:50 -0700 (PDT)
-Received: from [192.168.1.101] (abyk53.neoplus.adsl.tpnet.pl. [83.9.30.53])
-        by smtp.gmail.com with ESMTPSA id p13-20020a05651238cd00b004fdc7ec5cbesm2016936lft.300.2023.07.31.03.52.46
+        bh=aFu/JPo/heUh8tZtPktgVoKIudqTiKgcM8V0fJH/i9Y=;
+        b=YIjcnNxKXfCjFgBmWIXJKCKaqzk4/4f0rnUPlX/hHDbWJZypFexRVmjBECYhzQ+NVz
+         K5VvJj1AUKTBEPYfaSIbaH9xzSKljiriFJ37Px3E0WgzkPVGd0wi7BytvClMvZZi97xh
+         gJhE3tsCNON9X1gjFWjvMBaYe4xT91b1E1wBx1eQrdx5ugijKn8SkOzs6YR3YiJJyjRJ
+         Eet4PJ5jFUy0mOrVbb2NZJsA43BJZyvogxN4nGkqtPicAcv85hu0eW3gX7LZP6Sg8u//
+         s1RqJEM6jmwXvsiZltWM7P4QxcGTjxi1RxgU5/vO9PGTI8+9+NSFqkR84qNJ0C/flaNi
+         VGQg==
+X-Gm-Message-State: ABy/qLZgl5mlpkpGHrYrHuk31AAPDE4pWBYTw9RtI98y8og/el+LDJIF
+        SAxW6IxixxBh9g125ahkJBukl6Y1OR1bOAlQCJ3gpg==
+X-Google-Smtp-Source: APBJJlENmczCMqYJUL3zBRJdO3rj0ca5qfst6RnY1rZPFxWTnpTOgab05okF6l0KlSJaqmu9Fuk+ew==
+X-Received: by 2002:a17:902:d4cb:b0:1b3:f5c7:4e75 with SMTP id o11-20020a170902d4cb00b001b3f5c74e75mr10119622plg.58.1690801224688;
+        Mon, 31 Jul 2023 04:00:24 -0700 (PDT)
+Received: from localhost.localdomain ([49.205.243.15])
+        by smtp.gmail.com with ESMTPSA id t14-20020a1709028c8e00b001b1a2c14a4asm8281096plo.38.2023.07.31.04.00.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 03:52:49 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 31 Jul 2023 12:52:26 +0200
-Subject: [PATCH v2 10/10] clk: qcom: smd-rpm: Move CPUSS_GNoC clock to
- interconnect
+        Mon, 31 Jul 2023 04:00:24 -0700 (PDT)
+From:   Jagan Teki <jagan@edgeble.ai>
+To:     Heiko Stuebner <heiko@sntech.de>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Cc:     Jagan Teki <jagan@edgeble.ai>, linux-pm@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH 01/14] genpd: rockchip: Add PD_VO entry for rv1126
+Date:   Mon, 31 Jul 2023 16:29:59 +0530
+Message-Id: <20230731110012.2913742-2-jagan@edgeble.ai>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230731110012.2913742-1-jagan@edgeble.ai>
+References: <20230731110012.2913742-1-jagan@edgeble.ai>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230726-topic-icc_coeff-v2-10-8c91c6c76076@linaro.org>
-References: <20230726-topic-icc_coeff-v2-0-8c91c6c76076@linaro.org>
-In-Reply-To: <20230726-topic-icc_coeff-v2-0-8c91c6c76076@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1690800744; l=1713;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=f1Gofilxti3i0Q7jqaHJvi76S1Nc3UXIB2Lux0RrHdA=;
- b=ZIUV/H1zLb4P75oFYqUV+xIVsQu0TlDVvSL9C1x+GsN0LHv5u4f9SllLH2OqfGr/3ZjJQuUnU
- BySvUlyDYmXDqr5yX2+veu8TCUSf9we2B7P1Hh2PHBTmHK/Cs2tC7mI
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-As it turns out, it's yet another interconnect bus clock. Move it
-there.
+PD_VO power-domain entry in RV1126 are connected to
+- BIU_VO
+- VOP
+- RGA
+- IEP
+- DSIHOST
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Add an entry for it.
+
+Signed-off-by: Jagan Teki <jagan@edgeble.ai>
 ---
- drivers/clk/qcom/clk-smd-rpm.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+Cc: linux-pm@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
 
-diff --git a/drivers/clk/qcom/clk-smd-rpm.c b/drivers/clk/qcom/clk-smd-rpm.c
-index 9b5411932594..4a23f6d3eddd 100644
---- a/drivers/clk/qcom/clk-smd-rpm.c
-+++ b/drivers/clk/qcom/clk-smd-rpm.c
-@@ -567,6 +567,16 @@ static const struct clk_smd_rpm *sm_qnoc_icc_clks[] = {
- 	&clk_smd_rpm_bus_2_snoc_clk,
- };
- 
-+static const struct clk_smd_rpm *qcm2290_icc_clks[] = {
-+	&clk_smd_rpm_bimc_clk,
-+	&clk_smd_rpm_bus_1_cnoc_clk,
-+	&clk_smd_rpm_mmnrt_clk,
-+	&clk_smd_rpm_mmrt_clk,
-+	&clk_smd_rpm_qup_clk,
-+	&clk_smd_rpm_bus_2_snoc_clk,
-+	&clk_smd_rpm_cpuss_gnoc_clk,
-+};
-+
- static struct clk_smd_rpm *msm8909_clks[] = {
- 	[RPM_SMD_QPIC_CLK]		= &clk_smd_rpm_qpic_clk,
- 	[RPM_SMD_QPIC_CLK_A]		= &clk_smd_rpm_qpic_a_clk,
-@@ -1182,15 +1192,13 @@ static struct clk_smd_rpm *qcm2290_clks[] = {
- 	[RPM_SMD_PKA_A_CLK] = &clk_smd_rpm_pka_a_clk,
- 	[RPM_SMD_BIMC_GPU_CLK] = &clk_smd_rpm_bimc_gpu_clk,
- 	[RPM_SMD_BIMC_GPU_A_CLK] = &clk_smd_rpm_bimc_gpu_a_clk,
--	[RPM_SMD_CPUSS_GNOC_CLK] = &clk_smd_rpm_cpuss_gnoc_clk,
--	[RPM_SMD_CPUSS_GNOC_A_CLK] = &clk_smd_rpm_cpuss_gnoc_a_clk,
- };
- 
- static const struct rpm_smd_clk_desc rpm_clk_qcm2290 = {
- 	.clks = qcm2290_clks,
- 	.num_clks = ARRAY_SIZE(qcm2290_clks),
--	.icc_clks = sm_qnoc_icc_clks,
--	.num_icc_clks = ARRAY_SIZE(sm_qnoc_icc_clks)
-+	.icc_clks = qcm2290_icc_clks,
-+	.num_icc_clks = ARRAY_SIZE(qcm2290_icc_clks)
- };
- 
- static const struct of_device_id rpm_smd_clk_match_table[] = {
+ drivers/genpd/rockchip/pm-domains.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/genpd/rockchip/pm-domains.c b/drivers/genpd/rockchip/pm-domains.c
+index e3de49e671dc..d5d3ecb38283 100644
+--- a/drivers/genpd/rockchip/pm-domains.c
++++ b/drivers/genpd/rockchip/pm-domains.c
+@@ -976,6 +976,7 @@ static const struct rockchip_domain_info px30_pm_domains[] = {
+ static const struct rockchip_domain_info rv1126_pm_domains[] = {
+ 	[RV1126_PD_VEPU]	= DOMAIN_RV1126("vepu", BIT(2),  BIT(9),  BIT(9), false),
+ 	[RV1126_PD_VI]		= DOMAIN_RV1126("vi", BIT(4),  BIT(6),  BIT(6),  false),
++	[RV1126_PD_VO]		= DOMAIN_RV1126("vo", BIT(5),  BIT(7),  BIT(7),  false),
+ 	[RV1126_PD_ISPP]	= DOMAIN_RV1126("ispp", BIT(1), BIT(8), BIT(8),  false),
+ 	[RV1126_PD_VDPU]	= DOMAIN_RV1126("vdpu", BIT(3), BIT(10), BIT(10), false),
+ 	[RV1126_PD_NVM]		= DOMAIN_RV1126("nvm", BIT(7), BIT(11), BIT(11),  false),
 -- 
-2.41.0
+2.25.1
 
