@@ -2,67 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C997769F32
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 19:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BD7769F58
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 19:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233848AbjGaRQa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 13:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S231815AbjGaRVU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 31 Jul 2023 13:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232173AbjGaRPe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 13:15:34 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C0F3C07;
-        Mon, 31 Jul 2023 10:13:17 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id D73254244A;
-        Mon, 31 Jul 2023 22:06:45 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1690823206; bh=XnE0sBmGyTeS42aQNFh0ggmPeJzYQmEk9QgohtuCRQY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=SovFyxs/p6Rl02tiHmcku3EajmXrDt2USXkn12ksatcXx7YKJUbO/wx0f4CIlmlPm
-         Bp8XbRe8mPETCdY/GDMlVwOnDN/CLPkNGmFpYwLcsM0uVlHp0jbumPiT3twFXs1rwv
-         j1esr/GRPWWCVC68sOgx7gFHo6H4Cs99MWz9argwhtRxXRXCyIaOyH94ZPCvvJFReU
-         v1a1f8D/WAC9yItYq6IViqzoL/JTWGvR7xqASCTChPqMa3dv8GPzs20w/tgkAqoeB2
-         jh+27p0I/ZLQFCyyNZW/yqILmSGUDxMFxcxlGUxaRpMqM/ezrd/ntF3ym2r/E/3+2y
-         0COd3iQu55/3g==
-From:   Nikita Travkin <nikita@trvn.ru>
-Date:   Mon, 31 Jul 2023 22:06:27 +0500
-Subject: [PATCH v2 4/4] power: supply: Add driver for pm8916 lbc
+        with ESMTP id S233172AbjGaRVB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 13:21:01 -0400
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A133173D;
+        Mon, 31 Jul 2023 10:20:57 -0700 (PDT)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-56c9237e0ffso332045eaf.0;
+        Mon, 31 Jul 2023 10:20:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690824057; x=1691428857;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Yp/WHB9NlxenQuZy7KyUcZW03h0kCKbBguoGc6IUG1I=;
+        b=kzDQsYFZKugKLa7hPSNnPfy3qPmf5fkylHLiM9X3DfZNV03+uzmMHo4j7Y4WIXMPEB
+         D4vosC42sPqDl9T6lJDNMkYqXmBdQ0mugr+jOEowCopowNrXNgdUcmxwZ8LEB6914q3N
+         T/e9+3U6c5eDuDATayHpm6I3kfUE/pw5yvLXk40uKc/FUVYLAursbYPG8GIiaVhghO/R
+         lVvfA5AXF19TDAjnOA8XTGrxztL5er93Db+KqWcAIYj93vxd/wi145AkTbUB0Sim1o4Q
+         +UxyMjYDfIscl+aVRYIOLBqLWlUsdL92VVaBwx9UfS2dQfq3eLT3TW5TSYKXGigf0nlY
+         KwmQ==
+X-Gm-Message-State: ABy/qLZFmUI02Q40mTGsAgsjz6/IYwbnaY13LrBDpPYiI9Yi2d474Hs1
+        7wXVNjLotbqZ20CUBMd08sooRNRuOz2kiEQ51Jc=
+X-Google-Smtp-Source: APBJJlGHg/RSPWHC0ZfSL1Bxu03CX8ZZZMh4G1nFHlCtr+YpOYxHlaRj+/cM3M7cZeI/9oh3o2TzRJ8Gf/+Emm0us9Y=
+X-Received: by 2002:a4a:d027:0:b0:563:3b56:5dc1 with SMTP id
+ w7-20020a4ad027000000b005633b565dc1mr5054481oor.0.1690824056783; Mon, 31 Jul
+ 2023 10:20:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230731-pm8916-bms-lbc-v2-4-82a4ebb39c16@trvn.ru>
-References: <20230731-pm8916-bms-lbc-v2-0-82a4ebb39c16@trvn.ru>
-In-Reply-To: <20230731-pm8916-bms-lbc-v2-0-82a4ebb39c16@trvn.ru>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Nikita Travkin <nikita@trvn.ru>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13843; i=nikita@trvn.ru;
- h=from:subject:message-id; bh=XnE0sBmGyTeS42aQNFh0ggmPeJzYQmEk9QgohtuCRQY=;
- b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBkx+ojQWxmgpl5jl/vvGlQU8L64kJgMCrRAiXsh
- 43C7KLFHrCJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZMfqIwAKCRBDHOzuKBm/
- dSo0D/4nNnEk4ZhGX9u2z5yUmhAEkNmqM+iI/sA8C7j3NUWGlqXM2HP6BAHj52DSdiuzpKyzuhp
- O+XNUKSUyQZAf1LaGw5yYvC2lKKhIEUqq+pmIxqcpGi/Gk4Vq5VWf3ppACDnDw6B7SLnCYcrjfK
- Frl12/u1vmLFz5a1FAwP2CiFhzKd3NqQFYjcNx6HvZOPLnhVAmyA/h6Kr0JrYwSVfFFaMUqhb9y
- rXk46xMuWhYBfcs7cxFqCama7EoVQQ3KxYRmhPGR4re5spOqODHTdCKiCWu8SRrPnN1jAxFmzFM
- RUUt37F+HrUzmBhAe7P4AvHQYhAG3cm42p3k+CTUf5TKGrK7pfEDQluiyxtisuoZFDRX+GQqjnZ
- n2LkXUJdIrLxX5zgTMWbgrR5KdJ1bCUtRRgmwDtj+Eu2K80/VagVDP8GSqo35OrLpzO8se0DoC7
- llOPiW0EMxdzgUDvSZPH1FVFV5juhAJyBb8T8JHv5KHaeyZQmdCnoc7ZkcgWjKLpf8d0e3kI8Fg
- QQ+98oSiHg4glL96/iS2KWgVWd2vt8m3anguEhOgXIyXHbPwKBMpVP5iDnkSqTRRDOOrfR3zFts
- qJE4NKwqIMVF0sg9L3nnkOl6+4Qp1as933DDGr9+Bk54i66uV6OcjA7koQcvIKacwOaqNNydF6P
- PCLe7ZrnN5nhXsg==
-X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
- fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230728145515.990749537@infradead.org> <20230728145808.902892871@infradead.org>
+ <CAJZ5v0hi25zZ_SRnSk0r=7q=UFh1dsrWEao6225KZVWp3-ivDQ@mail.gmail.com>
+ <20230728220109.GA3934165@hirez.programming.kicks-ass.net>
+ <CAJZ5v0ir_VsvBi4KKhpcjQnVsTK-EXZJjNsk=Jp84HLvaspChw@mail.gmail.com> <20230731120200.GF29590@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230731120200.GF29590@hirez.programming.kicks-ass.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 31 Jul 2023 19:20:45 +0200
+Message-ID: <CAJZ5v0hQh2Pg_uXxj8KBRw3oLS1WdsU+rUafBAAq7dRdbRwYSA@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/3] cpuidle,teo: Improve NOHZ management
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, anna-maria@linutronix.de,
+        tglx@linutronix.de, frederic@kernel.org, gautham.shenoy@amd.com,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,449 +65,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm8916 LBC is a Linear Battery Charger hardware block in pm8916 PMIC.
+On Mon, Jul 31, 2023 at 2:02 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Jul 31, 2023 at 12:17:27PM +0200, Rafael J. Wysocki wrote:
+>
+> > Something really simple like:
+> >
+> > 1. Check sched_cpu_util() (which is done by teo anyway).
+> > 2. If that is around 90% of the maximum CPU capacity, select the first
+> > non-polling idle state and be done (don't stop the tick as my other
+> > replay earlier today).
+>
+> So I really don't like using cpu_util() here, yes, 90% is a high number,
+> but it doesn't say *anything* about the idle duration. Remember, this is
+> a 32ms window, so 90% of that is 28.8ms.
 
-This block implements simple CC/CV charging for Li-Po batteries.
-The hardware has internal state machine to switch between modes and
-works mostly autonomously, only needing the limits and targets to be
-set to operate.
+It doesn't have to say anything about the idle duration as long as it
+says something about the governor's "accuracy".
 
-This driver allows setting limits and enabling the LBC block, monitoring
-it's state.
+If it is observed experimentally that the governor is generally likely
+to mispredict a deeper state if CPu utilization is about a certain
+threshold, then it makes sense to use this information to counter
+that.  That's how it is used today.
 
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
----
-v2: Fix missed warnings, get irq by name
----
- drivers/power/supply/Kconfig      |  11 ++
- drivers/power/supply/Makefile     |   1 +
- drivers/power/supply/pm8916_lbc.c | 383 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 395 insertions(+)
+And yes, you are right about the most immediate idle duration, but
+overall the rule that if the CPU utilization is high, then selecting
+deep idle states is not a good idea in general does seem to hold.
 
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index e93a5a4d03e2..a2ea249a57c6 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -640,6 +640,17 @@ config BATTERY_PM8916_BMS_VM
- 	  To compile this driver as module, choose M here: the
- 	  module will be called pm8916_bms_vm.
- 
-+config CHARGER_PM8916_LBC
-+	tristate "Qualcomm PM8916 Linear Battery Charger support"
-+	depends on MFD_SPMI_PMIC || COMPILE_TEST
-+	help
-+	  Say Y here to add support for Linear Battery Charger block
-+	  found in some Qualcomm PMICs such as PM8916. This hardware
-+	  blokc provides simple CC/CV battery charger.
-+
-+	  To compile this driver as module, choose M here: the
-+	  module will be called pm8916_lbc.
-+
- config CHARGER_BQ2415X
- 	tristate "TI BQ2415x battery charger driver"
- 	depends on I2C
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index fdf7916f80ed..e4bd9eb1261b 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -85,6 +85,7 @@ obj-$(CONFIG_CHARGER_MT6360)	+= mt6360_charger.o
- obj-$(CONFIG_CHARGER_MT6370)	+= mt6370-charger.o
- obj-$(CONFIG_CHARGER_QCOM_SMBB)	+= qcom_smbb.o
- obj-$(CONFIG_BATTERY_PM8916_BMS_VM)	+= pm8916_bms_vm.o
-+obj-$(CONFIG_CHARGER_PM8916_LBC)	+= pm8916_lbc.o
- obj-$(CONFIG_CHARGER_BQ2415X)	+= bq2415x_charger.o
- obj-$(CONFIG_CHARGER_BQ24190)	+= bq24190_charger.o
- obj-$(CONFIG_CHARGER_BQ24257)	+= bq24257_charger.o
-diff --git a/drivers/power/supply/pm8916_lbc.c b/drivers/power/supply/pm8916_lbc.c
-new file mode 100644
-index 000000000000..490cb7064dbf
---- /dev/null
-+++ b/drivers/power/supply/pm8916_lbc.c
-@@ -0,0 +1,383 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023, Nikita Travkin <nikita@trvn.ru>
-+ */
-+
-+#include <linux/errno.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/delay.h>
-+#include <linux/interrupt.h>
-+#include <linux/extcon-provider.h>
-+
-+/* Two bytes: type + subtype */
-+#define PM8916_PERPH_TYPE 0x04
-+#define PM8916_LBC_CHGR_TYPE 0x1502
-+#define PM8916_LBC_BAT_IF_TYPE 0x1602
-+#define PM8916_LBC_USB_TYPE 0x1702
-+#define PM8916_LBC_MISC_TYPE 0x1802
-+
-+#define PM8916_LBC_CHGR_CHG_OPTION 0x08
-+#define PM8916_LBC_CHGR_PMIC_CHARGER BIT(7)
-+
-+#define PM8916_LBC_CHGR_CHG_STATUS 0x09
-+
-+#define PM8916_INT_RT_STS 0x10
-+
-+#define PM8916_LBC_USB_USBIN_VALID BIT(1)
-+
-+#define PM8916_LBC_CHGR_VDD_MAX 0x40
-+#define PM8916_LBC_CHGR_VDD_SAFE 0x41
-+#define PM8916_LBC_CHGR_IBAT_MAX 0x44
-+#define PM8916_LBC_CHGR_IBAT_SAFE 0x45
-+
-+#define PM8916_LBC_CHGR_TCHG_MAX_EN 0x60
-+#define PM8916_LBC_CHGR_TCHG_MAX_ENABLED BIT(7)
-+#define PM8916_LBC_CHGR_TCHG_MAX 0x61
-+
-+#define PM8916_LBC_CHGR_CHG_CTRL 0x49
-+#define PM8916_LBC_CHGR_CHG_EN BIT(7)
-+#define PM8916_LBC_CHGR_PSTG_EN BIT(5)
-+
-+#define PM8916_LBC_CHGR_MIN_CURRENT 90000
-+#define PM8916_LBC_CHGR_MAX_CURRENT 1440000
-+
-+#define PM8916_LBC_CHGR_MIN_VOLTAGE 4000000
-+#define PM8916_LBC_CHGR_MAX_VOLTAGE 4775000
-+#define PM8916_LBC_CHGR_VOLTAGE_STEP 25000
-+
-+#define PM8916_LBC_CHGR_MIN_TIME 4
-+#define PM8916_LBC_CHGR_MAX_TIME 256
-+
-+struct pm8916_lbc_charger {
-+	struct device *dev;
-+	struct extcon_dev *edev;
-+	struct power_supply *charger;
-+	struct power_supply_battery_info *info;
-+	struct regmap *regmap;
-+	unsigned int reg[4];
-+	bool online;
-+	unsigned int charge_voltage_max;
-+	unsigned int charge_voltage_safe;
-+	unsigned int charge_current_max;
-+	unsigned int charge_current_safe;
-+};
-+
-+static const unsigned int pm8916_lbc_charger_cable[] = {
-+	EXTCON_USB,
-+	EXTCON_NONE,
-+};
-+
-+enum {
-+	LBC_CHGR = 0,
-+	LBC_BAT_IF,
-+	LBC_USB,
-+	LBC_MISC,
-+};
-+
-+static int pm8916_lbc_charger_configure(struct pm8916_lbc_charger *chg)
-+{
-+	int ret = 0;
-+	unsigned int tmp;
-+
-+	chg->charge_voltage_max = clamp_t(u32, chg->charge_voltage_max,
-+					  PM8916_LBC_CHGR_MIN_VOLTAGE, chg->charge_voltage_safe);
-+
-+	tmp = chg->charge_voltage_max - PM8916_LBC_CHGR_MIN_VOLTAGE;
-+	tmp /= PM8916_LBC_CHGR_VOLTAGE_STEP;
-+	chg->charge_voltage_max = PM8916_LBC_CHGR_MIN_VOLTAGE + tmp * PM8916_LBC_CHGR_VOLTAGE_STEP;
-+
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_VDD_MAX, tmp);
-+	if (ret)
-+		goto error;
-+
-+	chg->charge_current_max = min(chg->charge_current_max, chg->charge_current_safe);
-+
-+	tmp = clamp_t(u32, chg->charge_current_max,
-+		      PM8916_LBC_CHGR_MIN_CURRENT, PM8916_LBC_CHGR_MAX_CURRENT);
-+
-+	tmp = chg->charge_current_max / PM8916_LBC_CHGR_MIN_CURRENT - 1;
-+	chg->charge_current_max = (tmp + 1) * PM8916_LBC_CHGR_MIN_CURRENT;
-+
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_IBAT_MAX, tmp);
-+	if (ret)
-+		goto error;
-+
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_CHG_CTRL,
-+			   PM8916_LBC_CHGR_CHG_EN | PM8916_LBC_CHGR_PSTG_EN);
-+	if (ret)
-+		goto error;
-+
-+	return ret;
-+
-+error:
-+	dev_err(chg->dev, "Failed to configure charging: %pe\n", ERR_PTR(ret));
-+	return ret;
-+}
-+
-+static int pm8916_lbc_charger_get_property(struct power_supply *psy,
-+					   enum power_supply_property psp,
-+					   union power_supply_propval *val)
-+{
-+	struct pm8916_lbc_charger *chg = power_supply_get_drvdata(psy);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		val->intval = chg->online;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-+		val->intval = chg->charge_voltage_max;
-+		return 0;
-+
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		val->intval = chg->charge_current_max;
-+		return 0;
-+
-+	default:
-+		return -EINVAL;
-+	};
-+}
-+
-+static int pm8916_lbc_charger_set_property(struct power_supply *psy,
-+					   enum power_supply_property prop,
-+					   const union power_supply_propval *val)
-+{
-+	struct pm8916_lbc_charger *chg = power_supply_get_drvdata(psy);
-+
-+	switch (prop) {
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		chg->charge_current_max = val->intval;
-+		return pm8916_lbc_charger_configure(chg);
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static int pm8916_lbc_charger_property_is_writeable(struct power_supply *psy,
-+						    enum power_supply_property psp)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static enum power_supply_property pm8916_lbc_charger_properties[] = {
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+};
-+
-+static irqreturn_t pm8916_lbc_charger_state_changed_irq(int irq, void *data)
-+{
-+	struct pm8916_lbc_charger *chg = data;
-+	unsigned int tmp;
-+	int ret;
-+
-+	ret = regmap_read(chg->regmap, chg->reg[LBC_USB] + PM8916_INT_RT_STS, &tmp);
-+	if (ret)
-+		return IRQ_HANDLED;
-+
-+	chg->online = !!(tmp & PM8916_LBC_USB_USBIN_VALID);
-+	extcon_set_state_sync(chg->edev, EXTCON_USB, chg->online);
-+
-+	power_supply_changed(chg->charger);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int pm8916_lbc_charger_probe_dt(struct pm8916_lbc_charger *chg)
-+{
-+	struct device *dev = chg->dev;
-+	struct device_node *np = dev->of_node;
-+	int ret = 0;
-+	unsigned int tmp;
-+
-+	ret = of_property_read_u32(np, "qcom,fast-charge-safe-voltage", &chg->charge_voltage_safe);
-+	if (ret)
-+		return ret;
-+	if (chg->charge_voltage_safe < PM8916_LBC_CHGR_MIN_VOLTAGE)
-+		return -EINVAL;
-+
-+	chg->charge_voltage_safe = clamp_t(u32, chg->charge_voltage_safe,
-+					PM8916_LBC_CHGR_MIN_VOLTAGE, PM8916_LBC_CHGR_MAX_VOLTAGE);
-+
-+	tmp = chg->charge_voltage_safe - PM8916_LBC_CHGR_MIN_VOLTAGE;
-+	tmp /= PM8916_LBC_CHGR_VOLTAGE_STEP;
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_VDD_SAFE, tmp);
-+	if (ret)
-+		return ret;
-+
-+	ret = of_property_read_u32(np, "qcom,fast-charge-safe-current", &chg->charge_current_safe);
-+	if (ret)
-+		return ret;
-+	if (chg->charge_current_safe < PM8916_LBC_CHGR_MIN_CURRENT)
-+		return -EINVAL;
-+
-+	chg->charge_current_safe = clamp_t(u32, chg->charge_current_safe,
-+					PM8916_LBC_CHGR_MIN_CURRENT, PM8916_LBC_CHGR_MAX_CURRENT);
-+
-+	chg->charge_current_max = chg->charge_current_safe;
-+
-+	tmp = chg->charge_current_safe / PM8916_LBC_CHGR_MIN_CURRENT - 1;
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_IBAT_SAFE, tmp);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable charger timeout. */
-+	ret = regmap_write(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_TCHG_MAX_EN, 0x00);
-+	if (ret)
-+		return ret;
-+
-+	return ret;
-+}
-+
-+static const struct power_supply_desc pm8916_lbc_charger_psy_desc = {
-+	.name = "pm8916-lbc-chgr",
-+	.type = POWER_SUPPLY_TYPE_USB,
-+	.properties = pm8916_lbc_charger_properties,
-+	.num_properties = ARRAY_SIZE(pm8916_lbc_charger_properties),
-+	.get_property = pm8916_lbc_charger_get_property,
-+	.set_property = pm8916_lbc_charger_set_property,
-+	.property_is_writeable = pm8916_lbc_charger_property_is_writeable,
-+};
-+
-+static int pm8916_lbc_charger_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct pm8916_lbc_charger *chg;
-+	struct power_supply_config psy_cfg = {};
-+	int ret, len, irq;
-+	unsigned int tmp;
-+
-+	chg = devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
-+	if (!chg)
-+		return -ENOMEM;
-+
-+	chg->dev = dev;
-+
-+	chg->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!chg->regmap)
-+		return -ENODEV;
-+
-+	len = of_property_count_u32_elems(dev->of_node, "reg");
-+	if (len < 0)
-+		return len;
-+	if (len != 4)
-+		return dev_err_probe(dev, -EINVAL,
-+				     "Wrong amount of reg values: %d (4 expected)\n", len);
-+
-+	irq = platform_get_irq_byname(pdev, "usb_vbus");
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_threaded_irq(dev, irq, NULL, pm8916_lbc_charger_state_changed_irq,
-+					IRQF_ONESHOT, "pm8916_lbc", chg);
-+	if (ret)
-+		return ret;
-+
-+	ret = of_property_read_u32_array(dev->of_node, "reg", chg->reg, len);
-+	if (ret)
-+		return ret;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_CHGR] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_CHGR_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_BAT_IF] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_BAT_IF_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_USB] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_USB_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_bulk_read(chg->regmap, chg->reg[LBC_MISC] + PM8916_PERPH_TYPE, &tmp, 2);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_MISC_TYPE)
-+		goto type_error;
-+
-+	ret = regmap_read(chg->regmap, chg->reg[LBC_CHGR] + PM8916_LBC_CHGR_CHG_OPTION, &tmp);
-+	if (ret)
-+		goto comm_error;
-+	if (tmp != PM8916_LBC_CHGR_PMIC_CHARGER)
-+		dev_err_probe(dev, -ENODEV, "The system is using an external charger\n");
-+
-+	ret = pm8916_lbc_charger_probe_dt(chg);
-+	if (ret)
-+		dev_err_probe(dev, ret, "Error while parsing device tree\n");
-+
-+	psy_cfg.drv_data = chg;
-+	psy_cfg.of_node = dev->of_node;
-+
-+	chg->charger = devm_power_supply_register(dev, &pm8916_lbc_charger_psy_desc, &psy_cfg);
-+	if (IS_ERR(chg->charger))
-+		return dev_err_probe(dev, PTR_ERR(chg->charger), "Unable to register charger\n");
-+
-+	ret = power_supply_get_battery_info(chg->charger, &chg->info);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Unable to get battery info\n");
-+
-+	chg->edev = devm_extcon_dev_allocate(dev, pm8916_lbc_charger_cable);
-+	if (IS_ERR(chg->edev))
-+		return PTR_ERR(chg->edev);
-+
-+	ret = devm_extcon_dev_register(dev, chg->edev);
-+	if (ret < 0)
-+		return dev_err_probe(dev, ret, "failed to register extcon device\n");
-+
-+	ret = regmap_read(chg->regmap, chg->reg[LBC_USB] + PM8916_INT_RT_STS, &tmp);
-+	if (ret)
-+		goto comm_error;
-+
-+	chg->online = !!(tmp & PM8916_LBC_USB_USBIN_VALID);
-+	extcon_set_state_sync(chg->edev, EXTCON_USB, chg->online);
-+
-+	chg->charge_voltage_max = chg->info->voltage_max_design_uv;
-+	ret = pm8916_lbc_charger_configure(chg);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+
-+comm_error:
-+	return dev_err_probe(dev, ret, "Unable to communicate with device\n");
-+
-+type_error:
-+	return dev_err_probe(dev, -ENODEV, "Device reported wrong type: 0x%X\n", tmp);
-+}
-+
-+static const struct of_device_id pm8916_lbc_charger_of_match[] = {
-+	{ .compatible = "qcom,pm8916-lbc", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, pm8916_lbc_charger_of_match);
-+
-+static struct platform_driver pm8916_lbc_charger_driver = {
-+	.driver = {
-+		.name = "pm8916-lbc",
-+		.of_match_table = of_match_ptr(pm8916_lbc_charger_of_match),
-+	},
-+	.probe = pm8916_lbc_charger_probe,
-+};
-+module_platform_driver(pm8916_lbc_charger_driver);
-+
-+MODULE_DESCRIPTION("pm8916 LBC driver");
-+MODULE_AUTHOR("Nikita Travkin <nikita@trvn.ru>");
-+MODULE_LICENSE("GPL");
+> (not entirely accurate, since it's an exponential average, but that
+> doesn't change the overal argument, only some of the particulars)
+>
+> That is, 90% util, at best, says there is no idle longer than 3.2 ms.
+> But that is still vastly longer than pretty much all residencies. Heck,
+> that is still 3 ticks worth of HZ=1000 ticks. So 90% util should not
+> preclude disabling the tick (at HZ=1000).
+>
+> Now, typically this won't be the case, and at 90% you'll have lots of
+> small idles adding up to 3.2ms total idle. But the point is, you can't
+> tell the difference. And as such util is a horrible measure to use for
+> cpuidle.
 
--- 
-2.41.0
+No it is not IMO, because idle is all about the combined outcome of
+multiple cycles.
 
+> > > If we track the tick+ bucket -- as
+> > > we must in order to say anything useful about it, then we can decide the
+> > > tick state before (as I do here) calling sleep_length().
+> > >
+> > > The timer-pull rework from Anna-Maria unfortunately makes the
+> > > tick_nohz_get_sleep_length() thing excessively expensive and it really
+> > > doesn't make sense to call it when we retain the tick.
+> > >
+> > > It's all a bit of a chicken-egg situation, cpuidle wants to know when
+> > > the next timer is, but telling when that is, wants to know if the tick
+> > > stays. We need to break that somehow -- I propose by not calling it when
+> > > we know we'll keep the tick.
+> >
+> > By selecting a state whose target residency will not be met, we lose
+> > on both energy and performance, so doing this really should be
+> > avoided, unless the state is really shallow in which case there may be
+> > no time for making this consideration.
+>
+> I'm not sure how that relates to what I propose above. By adding the
+> tick+ bucket we have more historical information as related to the tick
+> boundary, how does that make us select states we won't match residency
+> for?
+
+As stated in my last reply, the only case in which it makes a
+difference is when the deepest idle state's target residency is below
+the tick and I'm not really sure if that difference is demonstrably
+significant.
+
+So I would do the following to start with:
+
+1. Rearrange the teo code so that it considers all of the bins every
+time without calling tick_nohz_get_sleep_length().
+
+2. The sched_cpu_util() check will still be applied to the resulting
+candidate state as it is now.
+
+3. If it finds that the candidate state is shallow enough (for
+instance, it is a polling state or the first non-polling one), it will
+return this state without calling tick_nohz_get_sleep_length() and
+stopping the tick.
+
+4. Otherwise it will call tick_nohz_get_sleep_length() to see what
+about timers and refine the selection (towards the shallower states)
+if need be.
+
+5. If the candidate state is not the deepest one and its target
+residency is below the tick, it will be returned and the tick will not
+be stopped.
+
+6. Otherwise, the candidate state will be returned and the tick will be stopped.
+
+If this still doesn't get us where we want to be, the extra bin can be
+added (as long as it makes a measurable difference).
