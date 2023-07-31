@@ -2,111 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50EE768F00
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 09:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEA57768F75
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 10:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjGaHg6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 03:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
+        id S231862AbjGaID0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 31 Jul 2023 04:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjGaHgt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 03:36:49 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A259EE;
-        Mon, 31 Jul 2023 00:36:48 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4fe0e34f498so6319506e87.2;
-        Mon, 31 Jul 2023 00:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690789006; x=1691393806;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6j0RW75STEI+5ZneQ+EaoJsYheY8+d1jwea7sk4EPgA=;
-        b=T/MFohopS/BeXcEOIKcI+cKbio9xHJw754uW1T4iafV4Cpc+VMjI32RZqanKyS0c3u
-         ClVlopqABlN0fqoAfTJQ1PEq2enBvzqMS1t65L3ynFlWX6m7Sq2zHmP0XKqYL/rEtfw8
-         DgZV22HlJaGMpLTaP9J+NixAUS71c+zIIQZ6o/8q/Cfdw1jPi1TAusj14G50cQHwGxcE
-         C8NgkGO3B1UUKEMSgrPrL4wLGz43APbpoLnUIKnSbs4Uz0eVw5CU91pz7c5JnFMscf6B
-         5ZUrxnGap4NaiA5LuXs+0koOCjymRdigu1CsB4Kg/AHFVaSpftWmMQ504YBe4WpnuuiU
-         sHOA==
+        with ESMTP id S231709AbjGaIC7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 04:02:59 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AD519AA;
+        Mon, 31 Jul 2023 01:02:10 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-563393b63dbso351109eaf.1;
+        Mon, 31 Jul 2023 01:02:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690789006; x=1691393806;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1690790529; x=1691395329;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6j0RW75STEI+5ZneQ+EaoJsYheY8+d1jwea7sk4EPgA=;
-        b=b5RX22qso+PF+kbtNK7KlW/f2wIj+2J978XV8Dx4+2rMgkNrl759oDU2PU8fi6LXWq
-         0J3Qx/Rgjrxl58hFeMuh0/BcYhEHh7zSYtqE/Zn9V/RfNsxKRtdgeTAd+Ob9zpW8B14J
-         KAG55c9uUuUjYXuTN2dYA4W7QlF/HbrcGuR+ROXpOoP2rtpgfmveBP3f3FxrwjTGP4mn
-         M+H09ri9zywRLyonz6yE0ogLUpLflkjTbRV+qgdtTS51JytJUsy0sTxeoiIYFPkePZQc
-         XmMGEfkahK1MURX5/Ur7gy+BQMGctJ/qCty3Xofze6C/dmM1la9yW6uUC+QcPl0MxHlx
-         ztmA==
-X-Gm-Message-State: ABy/qLYlF1wuJsX3yM6eXYJL+ADu6dL99Nr1sCpBVeiqIVA+y/ufK6Mn
-        OAzMP0PIOlhsYe6rQXtHtW1Pfs6rdvmI8A==
-X-Google-Smtp-Source: APBJJlEjVuG3rpNknzE+EPZVjnZ7ZAzAmvi4ufDOCu979EnSfo/KhZ/P7n7O1xJ0r5fu+kF5CV21Yw==
-X-Received: by 2002:ac2:5df3:0:b0:4fb:89b3:3373 with SMTP id z19-20020ac25df3000000b004fb89b33373mr4822337lfq.43.1690789006542;
-        Mon, 31 Jul 2023 00:36:46 -0700 (PDT)
-Received: from xeon.. ([188.163.112.48])
-        by smtp.gmail.com with ESMTPSA id m14-20020a056512014e00b004fe3229e584sm586898lfo.270.2023.07.31.00.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 00:36:46 -0700 (PDT)
-From:   Svyatoslav Ryhel <clamor95@gmail.com>
-To:     Iskren Chernev <me@iskren.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Svyatoslav Ryhel <clamor95@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Stefan Hansson <newbie13xd@gmail.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v3 4/4] ARM: configs: s5pv210_defconfig: enable IIO required by MAX17040
-Date:   Mon, 31 Jul 2023 10:36:13 +0300
-Message-Id: <20230731073613.10394-5-clamor95@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230731073613.10394-1-clamor95@gmail.com>
-References: <20230731073613.10394-1-clamor95@gmail.com>
+        bh=6ijbOYA9unDh372iyvw22tAArTIXT8/U4ztbnRWjXnA=;
+        b=Ygf1goRKuwnV/NaliCTWuqQZrUGuZ0YBOPyyFMb6bwaQiXGmHkRKQC6HGvSWYWaZ1n
+         BUYmZOtld1Fn+6/ySpLnR8nnWJnQ20Zv67g8kiOxhj8PX/7ueYWv/jcmkytISg0fGy1G
+         uxQudERHGLhXdjfSUkIS/VGpFZYir7tAzqYRtI6Z+ZZfIkNN8Ewf+YwqHdmq8ZJdVkXt
+         kbEWAw05IcHjnVElrEnguwR5ck6iLkDGmQa75bz3CoLOlGHuhnk6Dz10qytnW7s9gNnB
+         SHYKy13iJ/pmSMz/5/zWIkMDRLS6CZsFh3JuyD409HQMtliWZwVnG0PrxnGKeEWZFAXe
+         siZA==
+X-Gm-Message-State: ABy/qLYzN2btVjKwACCTLw3isZf/P2WevZmy2iZ3aQd3tKen7jmYt35R
+        +zLAlX9rqTRDRR3TzDNOzHjD8EXUm/9c+vvfIZn/pHcL
+X-Google-Smtp-Source: APBJJlG08Y08q8b9Lus5H0I1QRM2uR+ONK5q2Tr3OahnDyQZblTVplve571AQciGqfURZjIuNz5AjF6ECfGFtSIvx6M=
+X-Received: by 2002:a4a:a585:0:b0:56c:484a:923d with SMTP id
+ d5-20020a4aa585000000b0056c484a923dmr4497847oom.1.1690790529118; Mon, 31 Jul
+ 2023 01:02:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230728145515.990749537@infradead.org> <20230728145808.835742568@infradead.org>
+ <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com> <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 31 Jul 2023 10:01:53 +0200
+Message-ID: <CAJZ5v0iVKRY5-YvQmMbZ3+eZNHJgXt=CoYedNueAJyT9+Ld5Dg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, anna-maria@linutronix.de,
+        tglx@linutronix.de, frederic@kernel.org, gautham.shenoy@amd.com,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-After adding support for passing temperature data from thermal sensor
-to MAX17040 it got dependency on CONFIG_IIO. From all defconfigs
-using MAX17040 only s5pv210_defconfig did not have IIO already enabled
-so let's enable it to avoid regression.
+On Sat, Jul 29, 2023 at 10:44 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Fri, Jul 28, 2023 at 05:36:55PM +0200, Rafael J. Wysocki wrote:
+> > On Fri, Jul 28, 2023 at 5:01 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> > >
+> > > In order to facilitate governors that track history in idle-state
+> > > buckets (TEO) making a useful decision about NOHZ, make sure we have a
+> > > bucket that counts tick-and-longer.
+> > >
+> > > In order to be inclusive of the tick itself -- after all, if we do not
+> > > disable NOHZ we'll sleep for a full tick, the actual boundary should
+> > > be just short of a full tick.
+> > >
+> > > IOW, when registering the idle-states, add one that is always
+> > > disabled, just to have a bucket.
+> >
+> > This extra bucket can be created in the governor itself, can't it?
+>
+> I couldn't find a nice spot for the governor to add idle-states.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- arch/arm/configs/s5pv210_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Well, I've thought this through and recalled a couple of things and my
+conclusion is that the decision whether or not to stop the tick really
+depends on the idle state choice.
 
-diff --git a/arch/arm/configs/s5pv210_defconfig b/arch/arm/configs/s5pv210_defconfig
-index 4c1e480b5bbd..24070ee3d43e 100644
---- a/arch/arm/configs/s5pv210_defconfig
-+++ b/arch/arm/configs/s5pv210_defconfig
-@@ -97,6 +97,7 @@ CONFIG_MMC_SDHCI_S3C_DMA=y
- CONFIG_RTC_CLASS=y
- CONFIG_RTC_DRV_MAX8998=m
- CONFIG_DMADEVICES=y
-+CONFIG_IIO=y
- CONFIG_PWM=y
- CONFIG_PWM_SAMSUNG=y
- CONFIG_PHY_SAMSUNG_USB2=m
--- 
-2.39.2
+There are three cases:
 
+1. The selected idle state is shallow (that is, its target residency
+is below the tick period length), but it is not the deepest one.
+2. The selected idle state is shallow, but it is the deepest one (or
+at least the deepest enabled one).
+3. The selected idle state is deep (that is, its target residency is
+above the tick length period).
+
+In case 1, the tick should not be stopped so as to prevent the CPU
+from spending too much time in a suboptimal idle state.
+
+In case 3, the tick needs to be stopped, because otherwise the target
+residency of the selected state would not be met.
+
+Case 2 is somewhat a mixed bag, but generally speaking stopping the
+tick doesn't hurt if the selected idle state is the deepest one,
+because in that case the governor kind of expects a significant exit
+latency anyway.  If it is not the deepest one (which is disabled),
+it's better to let the tick tick.
