@@ -2,116 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9AF76956C
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 14:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A535769649
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 14:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjGaMCU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 08:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
+        id S231566AbjGaM1Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 08:27:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjGaMCT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 08:02:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8ECB5;
-        Mon, 31 Jul 2023 05:02:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=NtFOEPY77USWKXTfle1qi3nnxQlNUFkP6IPh0bUdyZY=; b=odO5I1ugzWHvFkRK1PF57mg0rI
-        P3cmTIC7c1kuhvIy56ar2u7ujCRmaboo+U/yV1LaMt9P5A49M1cA/wBHflBMsdnxJGfpfE3yYACJe
-        rAjCXOrSIQuBpN/RJHZaJRGg5rxSE8jMO1CWH83mugDImMTIXQtOcLrSlv/bgzLGH9/flcOGiSEMB
-        L/TXRt5vAi11qHQDxzuIdd0fQprbmyeHVpLX5hHeLEyoE5NAYcKHGHQZE8uMBpJuGowVbNHDiBuKn
-        9hvkmyX7tS9ReQTWYnEPPMzvhsMKBX/tHVEzkyyOCC82XruDQpBK1CmYvACxEJMCXou97J8/vlLJQ
-        HVEhm1BA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qQRb7-00Cfzv-2V;
-        Mon, 31 Jul 2023 12:02:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 221963002CE;
-        Mon, 31 Jul 2023 14:02:01 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 09295206A36EE; Mon, 31 Jul 2023 14:02:01 +0200 (CEST)
-Date:   Mon, 31 Jul 2023 14:02:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     anna-maria@linutronix.de, tglx@linutronix.de, frederic@kernel.org,
-        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Subject: Re: [RFC][PATCH 2/3] cpuidle,teo: Improve NOHZ management
-Message-ID: <20230731120200.GF29590@hirez.programming.kicks-ass.net>
-References: <20230728145515.990749537@infradead.org>
- <20230728145808.902892871@infradead.org>
- <CAJZ5v0hi25zZ_SRnSk0r=7q=UFh1dsrWEao6225KZVWp3-ivDQ@mail.gmail.com>
- <20230728220109.GA3934165@hirez.programming.kicks-ass.net>
- <CAJZ5v0ir_VsvBi4KKhpcjQnVsTK-EXZJjNsk=Jp84HLvaspChw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0ir_VsvBi4KKhpcjQnVsTK-EXZJjNsk=Jp84HLvaspChw@mail.gmail.com>
+        with ESMTP id S231532AbjGaM1Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 08:27:25 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 245611724;
+        Mon, 31 Jul 2023 05:26:47 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-522bc9556f5so2457044a12.0;
+        Mon, 31 Jul 2023 05:26:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690806382; x=1691411182;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gwhaajtiWbAK0+aLK2xFSMs0ohtyw35IKQkHVzwXE8Q=;
+        b=AnYWCg8THtmqrYKDgEWhGEj4akQmYhihbNAeSRam1/TdCJuZIrOA33P7Jf2F6GrsGQ
+         RNhF3NbcUuAV+mw5z72qcIr9tMx3Msi9enDZV8ESejhjQj586qF2OSf7kqXZrICPgiL5
+         hqOcCW/2NFdJNEVjq5Md1ZSlD2lOwgWEpusqqK+JfSQ3PmVwvlJEBorqjIgsDXU/6+oV
+         b2r247/jzsbfUkJ9WOLDPrka179JjM+r/to86iaD5+QOHYFN8jEVPVyBEa5sZbijb01f
+         XaJ+7ECaj24RGDvssOn8xZoGYJtn4swg7ArddeIlj8dhjKhoX1vNM+TBfJTpNMErWGE9
+         w33A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690806382; x=1691411182;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gwhaajtiWbAK0+aLK2xFSMs0ohtyw35IKQkHVzwXE8Q=;
+        b=ZbBbhWBO56wHg4pr7Gu3+qZMZ2JUgz1LFJMN2hacoKc/BRUYTU9EmzlymbK4Ao28q8
+         GUiJz8UhpslS+Ooh1KkBSueYo6Fava9iMdRXfuk7dGKBFvmHWiUiKlHMDITPTZWa8jJA
+         UsbZm8/Fm7rIpkUL8DiSJjelOftereoJEUhj6HTqvLWAUkxIQHWZ5q7dOhCCZ/QPLqGa
+         4O3VmA7rf6lkO2xVaEYXUTmvZM5JQOI4EWBQeBA7P+8hS3lo0CAeMGuHy2sksNVczJCz
+         /7rRbhXwH2o0SlkbetTo56AJqoVHAwmbc3QCPRt3bCS9gy4VYyiboGSBF6brUi3LtgHo
+         dKXQ==
+X-Gm-Message-State: ABy/qLaSFcVrPv/mNh3+Pan9HVonE2mvD0ftEVYMAoBIpBxYwjS2ic6M
+        DBYV249d/ucUr9Axtmjo8Mg=
+X-Google-Smtp-Source: APBJJlFqh6O8ZhZZrVhxyzkGtfKV31CkB3xqadtfge9pqNyKNfX9Qj6+rE7GluS3HH43H8S7tBjmPA==
+X-Received: by 2002:aa7:dbd8:0:b0:522:3b6e:5f6a with SMTP id v24-20020aa7dbd8000000b005223b6e5f6amr8992130edt.29.1690806382404;
+        Mon, 31 Jul 2023 05:26:22 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:c9d4:a174:b52d:4c33])
+        by smtp.gmail.com with ESMTPSA id y19-20020aa7ccd3000000b0051d9ee1c9d3sm5359982edt.84.2023.07.31.05.26.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 05:26:22 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Walker Chen <walker.chen@starfivetech.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust file entry in STARFIVE JH71XX PMU CONTROLLER DRIVER
+Date:   Mon, 31 Jul 2023 14:26:11 +0200
+Message-Id: <20230731122611.4309-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 12:17:27PM +0200, Rafael J. Wysocki wrote:
+Commit f3fb16291f48 ("soc: starfive: Move the power-domain driver to the
+genpd dir") moves:
 
-> Something really simple like:
-> 
-> 1. Check sched_cpu_util() (which is done by teo anyway).
-> 2. If that is around 90% of the maximum CPU capacity, select the first
-> non-polling idle state and be done (don't stop the tick as my other
-> replay earlier today).
+  drivers/{soc/starfive/jh71xx_pmu.c => genpd/starfive/jh71xx-pmu.c}
 
-So I really don't like using cpu_util() here, yes, 90% is a high number,
-but it doesn't say *anything* about the idle duration. Remember, this is
-a 32ms window, so 90% of that is 28.8ms.
+However, the update to the file entry in MAINTAINERS only addresses the
+move in directories, but misses the renaming from jh71xx_pmu.c to
+jh71xx-pmu.c. Hence, ./scripts/get_maintainer.pl --self-test=patterns
+complains about a broken reference.
 
-(not entirely accurate, since it's an exponential average, but that
-doesn't change the overal argument, only some of the particulars)
+Adjust the file entry in STARFIVE JH71XX PMU CONTROLLER DRIVER.
 
-That is, 90% util, at best, says there is no idle longer than 3.2 ms.
-But that is still vastly longer than pretty much all residencies. Heck,
-that is still 3 ticks worth of HZ=1000 ticks. So 90% util should not
-preclude disabling the tick (at HZ=1000).
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Now, typically this won't be the case, and at 90% you'll have lots of
-small idles adding up to 3.2ms total idle. But the point is, you can't
-tell the difference. And as such util is a horrible measure to use for
-cpuidle.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 003b0461641a..7a20d6ab1d18 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -20408,7 +20408,7 @@ M:	Walker Chen <walker.chen@starfivetech.com>
+ M:	Changhuang Liang <changhuang.liang@starfivetech.com>
+ S:	Supported
+ F:	Documentation/devicetree/bindings/power/starfive*
+-F:	drivers/genpd/starfive/jh71xx_pmu.c
++F:	drivers/genpd/starfive/jh71xx-pmu.c
+ F:	include/dt-bindings/power/starfive,jh7110-pmu.h
+ 
+ STARFIVE SOC DRIVERS
+-- 
+2.17.1
 
-> > If we track the tick+ bucket -- as
-> > we must in order to say anything useful about it, then we can decide the
-> > tick state before (as I do here) calling sleep_length().
-> >
-> > The timer-pull rework from Anna-Maria unfortunately makes the
-> > tick_nohz_get_sleep_length() thing excessively expensive and it really
-> > doesn't make sense to call it when we retain the tick.
-> >
-> > It's all a bit of a chicken-egg situation, cpuidle wants to know when
-> > the next timer is, but telling when that is, wants to know if the tick
-> > stays. We need to break that somehow -- I propose by not calling it when
-> > we know we'll keep the tick.
-> 
-> By selecting a state whose target residency will not be met, we lose
-> on both energy and performance, so doing this really should be
-> avoided, unless the state is really shallow in which case there may be
-> no time for making this consideration.
-
-I'm not sure how that relates to what I propose above. By adding the
-tick+ bucket we have more historical information as related to the tick
-boundary, how does that make us select states we won't match residency
-for?
