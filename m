@@ -2,155 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69803769CC8
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 18:36:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5E7769D45
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 18:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbjGaQgK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 12:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
+        id S229942AbjGaQzy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 31 Jul 2023 12:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbjGaQfs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 12:35:48 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6ADC1FE4
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 09:35:28 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bbff6b2679so11293565ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 09:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690821328; x=1691426128;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tI6Pcdke+ZCMScqm6RYMcPg5JywhhOVA13YJD5+toLE=;
-        b=zXrVsvwTJ3+pGGuqE/7flCHo6Xx+j/ZDqbYgpKGO/zuCp5ZGl/BtP4u5aRwmGNPa60
-         AuJKPAOYmWdAaTErP5a5T4S7GUmWymUKfnq9mxJbp0qJd+/zwZ2RFokJjONAL5n6t9fP
-         +ewuXXzPhvOGGekNjPWwGF0VdxjUEJdBZA3DlVN7zFZHU9AvELbLm7bFxTzeV5SlytcR
-         rssEMyA3BCxnXQAZSiHYs2V0PTcGNF8kryqf4Rt2Xe0JSJiJgq75cWT+UnNz/sL7+Sxd
-         tmHSx3pty+OHUcpSMvPWczqBQQjNgTpkmxrDbF+P/TmQAtuLAFTUx2N9hK4okOao9+61
-         +OFQ==
+        with ESMTP id S230503AbjGaQzs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 12:55:48 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70119AC;
+        Mon, 31 Jul 2023 09:55:47 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56cae50792fso136036eaf.1;
+        Mon, 31 Jul 2023 09:55:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690821328; x=1691426128;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1690822546; x=1691427346;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tI6Pcdke+ZCMScqm6RYMcPg5JywhhOVA13YJD5+toLE=;
-        b=MfPHd2cVFjj7hf1kJpLy0ZqvCSH04WGmnGuq9RirkwAzdb/Kpcpb3JZNg137/oKSiE
-         DPumpiO1rarLYzjBHGO8W8PqYFAizQvXdW9kfX6KN1InqEg9fadni6tPz7Mh2n1awEi8
-         n5Dal3ENT5h5wtgS/O+4pdSQkWsRtjIMAEbHXxyC+MiYvUOy9F/7U9dqG9fi5SNwLxVR
-         5Za9AKEDeJePJG3HMd/8hNZ04knCEBCcxU0Tqp57Cz8vBs0vlA1jn7sfdgPrwuV98fVj
-         ibRBdd/C/6mrj0ZKBLLL58/WnOggBmIassVuG27uOeiKJ7+i1zqG8Iyixz+1AlDmZ5KJ
-         pPcA==
-X-Gm-Message-State: ABy/qLbP0XtJ4YWFjmQk+VwR0u0rWXppQs7mkSMiT5COWay6gtO7fESi
-        qfgKxcypo2Ag5WoO4tX7XhSe
-X-Google-Smtp-Source: APBJJlECRRb7wZ72jiKm5hmPggPWblHU3ezrzbmnCp6oMkK1mFJfOgAMLQR+wr7EbC2qWSwOUOQhgw==
-X-Received: by 2002:a17:902:d489:b0:1b9:e9b2:124b with SMTP id c9-20020a170902d48900b001b9e9b2124bmr9457690plg.64.1690821328262;
-        Mon, 31 Jul 2023 09:35:28 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.209.129])
-        by smtp.gmail.com with ESMTPSA id w8-20020a170902e88800b001bb1f09189bsm8779541plg.221.2023.07.31.09.35.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 09:35:27 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
-        myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, andersson@kernel.org,
-        konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nitirawa@quicinc.com, quic_narepall@quicinc.com,
-        quic_bhaskarv@quicinc.com, quic_richardp@quicinc.com,
-        quic_nguyenb@quicinc.com, quic_ziqichen@quicinc.com,
-        bmasney@redhat.com, krzysztof.kozlowski@linaro.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 6/6] arm64: dts: qcom: sm8250: Add OPP table support to UFSHC
-Date:   Mon, 31 Jul 2023 22:03:57 +0530
-Message-Id: <20230731163357.49045-7-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
-References: <20230731163357.49045-1-manivannan.sadhasivam@linaro.org>
+        bh=vf/vHavd8WCAV3ynHx7GUS+EaCXK1BuHx/QKXm3Tmus=;
+        b=Wf+AIl6335kuP+FG0+vzJ5pWLYFarOJ7LYj3BhVNm/9GOSHQRiXPyiDuYDJt1ZQv8f
+         IyaOprJK+M1Fr6OFTHmHp7tnVzKBIS9KGLhjD6diKpL3JTKZJhtWZz+gurLTNKrM0/eJ
+         yK4Vf+AjvGsKynYUqyZrapREf649GIh3d0MxISOc1XYDmWkKMgojVH6GLAPkBfWOX882
+         orwFaTJNqG7zdWiEiO+cfcjzSqiYecXUWjfWG/2TrKXBKGiqGprHLXxHmaZBQSNv+J4L
+         Ph0GMJbRFtM4AGPggz7xmxc/msX1rVzzsskMet4D8FTOMszt/vG4aiFokAYUOfCVAAS9
+         exig==
+X-Gm-Message-State: ABy/qLZkwyN5Ce2iYQVGjdArNzEA2PB2jQlI31ZjIlAHSj1m1jjsExpN
+        hKbdbV9O3KVfqaQdrA3k14LHM6b32v3gzNwBHko=
+X-Google-Smtp-Source: APBJJlFPbJDXgXDJrWJIpqhgxzLM9ROIAn5ViN7gcFEt/UOjRZtA33fSg4eKKpL0l1X8qbXWjTL/nu8HF76dLoHlFY0=
+X-Received: by 2002:a05:6820:1686:b0:56c:5e21:c730 with SMTP id
+ bc6-20020a056820168600b0056c5e21c730mr6421174oob.1.1690822546674; Mon, 31 Jul
+ 2023 09:55:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230728145515.990749537@infradead.org> <20230728145808.835742568@infradead.org>
+ <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
+ <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
+ <CAJZ5v0iVKRY5-YvQmMbZ3+eZNHJgXt=CoYedNueAJyT9+Ld5Dg@mail.gmail.com>
+ <20230731090935.GB29590@hirez.programming.kicks-ass.net> <CAJZ5v0jh5oozZm7OvN9j1iHtzYQzPMOJ=Nt0HaJKYyJ218Cezw@mail.gmail.com>
+ <20230731113850.GE29590@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230731113850.GE29590@hirez.programming.kicks-ass.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 31 Jul 2023 18:55:35 +0200
+Message-ID: <CAJZ5v0h+KC+uMiOE4m4Dp4=iHMkekutk+B+cwb0de8Fvswv6jA@mail.gmail.com>
+Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, anna-maria@linutronix.de,
+        tglx@linutronix.de, frederic@kernel.org, gautham.shenoy@amd.com,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-UFS host controller, when scaling gears, should choose appropriate
-performance state of RPMh power domain controller along with clock
-frequency. So let's add the OPP table support to specify both clock
-frequency and RPMh performance states replacing the old "freq-table-hz"
-property.
+On Mon, Jul 31, 2023 at 1:39 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Jul 31, 2023 at 12:35:20PM +0200, Rafael J. Wysocki wrote:
+>
+> > > So I agree with 1.
+> > >
+> > > I do not agree with 2. Disabling the tick is costly, doubly so with the
+> > > timer-pull thing, but even today. Simply disabling it because we picked
+> > > the deepest idle state, irrespective of the expected duration is wrong
+> > > as it will incur this significant cost.
+> > >
+> > > With 3 there is the question of how we get the expected sleep duration;
+> > > this is especially important with timer-pull, where we have this
+> > > chicken-and-egg thing.
+> > >
+> > > Notably: tick_nohz_get_sleep_length() wants to know if the tick gets
+> > > disabled
+> >
+> > Well, it shouldn't.  Or at least it didn't before.
+>
+> Correct, this is new in the timer-pull thing.
+>
+> > It is expected to produce two values, one with the tick stopped (this
+> > is the return value of the function) and the other with the tick
+> > ticking (this is the one written under the address passed as the arg).
+> > This cannot depend on whether or not the tick will be stopped.  Both
+> > are good to know.
+> >
+> > Now, I understand that getting these two values may be costly, so
+> > there is an incentive to avoid calling it, but then the governor needs
+> > to figure this out from its crystal ball and so care needs to be taken
+> > to limit the possible damage in case the crystal ball is not right.
+>
+> If we can get the governor to decide the tick state up-front we can
+> avoid a lot of the expensive parts.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 39 +++++++++++++++++++++-------
- 1 file changed, 30 insertions(+), 9 deletions(-)
+I claim that in the vast majority of cases this is the same as
+deciding the state.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index a4e58ad731c3..33abd84aae53 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2198,21 +2198,42 @@ ufs_mem_hc: ufshc@1d84000 {
- 				<&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>,
- 				<&gcc GCC_UFS_PHY_RX_SYMBOL_1_CLK>;
--			freq-table-hz =
--				<37500000 300000000>,
--				<0 0>,
--				<0 0>,
--				<37500000 300000000>,
--				<0 0>,
--				<0 0>,
--				<0 0>,
--				<0 0>;
-+
-+			operating-points-v2 = <&ufs_opp_table>;
- 
- 			interconnects = <&aggre1_noc MASTER_UFS_MEM 0 &mc_virt SLAVE_EBI_CH0 0>,
- 					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_UFS_MEM_CFG 0>;
- 			interconnect-names = "ufs-ddr", "cpu-ufs";
- 
- 			status = "disabled";
-+
-+			ufs_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-37500000 {
-+					opp-hz = /bits/ 64 <37500000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <37500000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>;
-+					required-opps = <&rpmhpd_opp_low_svs>;
-+				};
-+
-+				opp-300000000 {
-+					opp-hz = /bits/ 64 <300000000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <300000000>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>,
-+						 /bits/ 64 <0>;
-+					required-opps = <&rpmhpd_opp_nom>;
-+				};
-+			};
- 		};
- 
- 		ufs_mem_phy: phy@1d87000 {
--- 
-2.25.1
+The case when it is not is when the target residency of the deepest
+idle state is below the tick period length and the governor is about
+to select that state.  According to the data I've seen so far this is
+a tiny fraction of all the cases.
 
+> > > and cpuilde wants to use tick_nohz_get_sleep_length() to
+> > > determine if to disable the tick. This cycle needs to be broken for
+> > > timer-pull.
+> > >
+> > > Hence my proposal to introduce the extra tick state, that allows fixing
+> > > both 2 and 3.
+> >
+> > I'm not sure about 3 TBH.
+> >
+> > Say there are 2 idle states, one shallow (say its target residency is
+> > 10 us) and one deep (say its target residency is T = 2 * TICK_NSEC).
+>
+> This is the easy case and that actually 'works' today.
+
+But this is my case 3 which you said you didn't agree with.  I don't
+see why it needs to be fixed.
+
+> The interesting case is where your deepest state has a target residency that
+> is below the tick (because for HZ=100, we have a 10ms tick and pretty
+> much all idle states are below that).
+
+What about HZ=1000, though?
+
+> In that case you cannot tell the difference between I'm good to use this
+> state and I'm good to disable the tick and still use this state.
+
+No, you don't, but is it really worth the fuss?
+
+The state is high-latency anyway and tick_nohz_get_sleep_length()
+needs to be called anyway in that case in order to determine if a
+shallower state wouldn't be better.  At this point the statistics have
+already told the governor otherwise and a misprediction would be a
+double loss.
+
+So yes, you can gain performance by avoiding to call
+tick_nohz_get_sleep_length(), but then you can also lose it by
+selecting a state that is too deep (and that can be determined exactly
+with respect to timers).
