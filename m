@@ -2,150 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5E7769D45
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 18:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1250C769EFE
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 19:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbjGaQzy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 31 Jul 2023 12:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53446 "EHLO
+        id S233431AbjGaRLg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 13:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjGaQzs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 12:55:48 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70119AC;
-        Mon, 31 Jul 2023 09:55:47 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56cae50792fso136036eaf.1;
-        Mon, 31 Jul 2023 09:55:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690822546; x=1691427346;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vf/vHavd8WCAV3ynHx7GUS+EaCXK1BuHx/QKXm3Tmus=;
-        b=Wf+AIl6335kuP+FG0+vzJ5pWLYFarOJ7LYj3BhVNm/9GOSHQRiXPyiDuYDJt1ZQv8f
-         IyaOprJK+M1Fr6OFTHmHp7tnVzKBIS9KGLhjD6diKpL3JTKZJhtWZz+gurLTNKrM0/eJ
-         yK4Vf+AjvGsKynYUqyZrapREf649GIh3d0MxISOc1XYDmWkKMgojVH6GLAPkBfWOX882
-         orwFaTJNqG7zdWiEiO+cfcjzSqiYecXUWjfWG/2TrKXBKGiqGprHLXxHmaZBQSNv+J4L
-         Ph0GMJbRFtM4AGPggz7xmxc/msX1rVzzsskMet4D8FTOMszt/vG4aiFokAYUOfCVAAS9
-         exig==
-X-Gm-Message-State: ABy/qLZkwyN5Ce2iYQVGjdArNzEA2PB2jQlI31ZjIlAHSj1m1jjsExpN
-        hKbdbV9O3KVfqaQdrA3k14LHM6b32v3gzNwBHko=
-X-Google-Smtp-Source: APBJJlFPbJDXgXDJrWJIpqhgxzLM9ROIAn5ViN7gcFEt/UOjRZtA33fSg4eKKpL0l1X8qbXWjTL/nu8HF76dLoHlFY0=
-X-Received: by 2002:a05:6820:1686:b0:56c:5e21:c730 with SMTP id
- bc6-20020a056820168600b0056c5e21c730mr6421174oob.1.1690822546674; Mon, 31 Jul
- 2023 09:55:46 -0700 (PDT)
+        with ESMTP id S233100AbjGaRLW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 13:11:22 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3213F5B9C;
+        Mon, 31 Jul 2023 10:07:48 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 9534D408FB;
+        Mon, 31 Jul 2023 22:06:43 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1690823204; bh=/Y8NyMX0ZcTudJzcfGX7rhtY7K7PI/lPFCPNvoSyTp0=;
+        h=From:Subject:Date:To:Cc:From;
+        b=3MOH7Qhdh4I8jxunIhBbxu45twtCJH81VP7G0L4dXuDTdiGcc8AItczzaKBhdvfxD
+         K4bnCHHbyUIlL31s88Gf1vGISVyPM6dWTO46Gzvh4wutPPdaBkgrzPzy1K/QC6CZcb
+         0feYm58z7XU8dirBCQgL++mie38wc8FNo7zBgeAb4CNfm0qYeQXQg2Euxc8wjxsaFX
+         +ns1I0B4uWWZjVGzs0VLcEYiR85jznrc9ln9Fr8DT6s4mk0HcXo6JC0Lg9eBvvyA23
+         1mHcSY/wlHBgeGVORDtKYJ/C8ZdNYJoPuTPLBlI55ephDVYilgdCtxWpv2UYydQXzT
+         JkNAI9jvbxXMA==
+From:   Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v2 0/4] Add pm8916 VM-BMS and LBC
+Date:   Mon, 31 Jul 2023 22:06:23 +0500
+Message-Id: <20230731-pm8916-bms-lbc-v2-0-82a4ebb39c16@trvn.ru>
 MIME-Version: 1.0
-References: <20230728145515.990749537@infradead.org> <20230728145808.835742568@infradead.org>
- <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
- <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
- <CAJZ5v0iVKRY5-YvQmMbZ3+eZNHJgXt=CoYedNueAJyT9+Ld5Dg@mail.gmail.com>
- <20230731090935.GB29590@hirez.programming.kicks-ass.net> <CAJZ5v0jh5oozZm7OvN9j1iHtzYQzPMOJ=Nt0HaJKYyJ218Cezw@mail.gmail.com>
- <20230731113850.GE29590@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230731113850.GE29590@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 31 Jul 2023 18:55:35 +0200
-Message-ID: <CAJZ5v0h+KC+uMiOE4m4Dp4=iHMkekutk+B+cwb0de8Fvswv6jA@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, anna-maria@linutronix.de,
-        tglx@linutronix.de, frederic@kernel.org, gautham.shenoy@amd.com,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA/qx2QC/13MSw7CIBSF4a00d+w1cGkBO3IfpgPaUktiH4FKN
+ A17F5s4cfif5Hw7BOudDVAXO3gbXXDLnINOBXSjme8WXZ8biJFgihSuk75wie0U8NF2KAbNBKs
+ ESUOQT6u3g3sd4K3JPbqwLf59+JF/1x+l/6nIkWEleyOolKrU6rr5OJ/9E5qU0gdS7weXqgAAA
+ A==
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Nikita Travkin <nikita@trvn.ru>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1501; i=nikita@trvn.ru;
+ h=from:subject:message-id; bh=/Y8NyMX0ZcTudJzcfGX7rhtY7K7PI/lPFCPNvoSyTp0=;
+ b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBkx+ocLZz7M2fE56E/uyDsW4E0LR5gEKHclKJKJ
+ DkomhVWRTKJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZMfqHAAKCRBDHOzuKBm/
+ dRTOEACQTZEert5CUPcjG8zrZMg07XRuFzsan5XwR+LpGHguQqAVvb2h8Z4g9zPW1ApBnufeIha
+ +7EyYuUvnD7WPhSO0yfw8srgl/krBKZlX1fOorC1toj6Ok0nfjdyUluiiyWj4rSyCXM2vcGV8SS
+ xW2g1kSWdr4DX+FvvVIR+eXu+5e/Zt5AIwIse8XESfhkFEfFiYaPoHLoSXZpzM8AQyWY0VczhMJ
+ zQj4nKxfc9LuXAWfHJKUndaZcy3rgBpgdhlo9DInvkEBWB50GsXfB9E2BEx1qcqyyZK1t3fFADq
+ nNYSB2WRh4x9UVDNB4/dKQSST9AaxvPD6bQvkUPdqNHf7NylvsQ7WbjgH7urL+bQe/1iP9QBqFS
+ wS662QZd7zyHZa9G3yUEZOH5sbP3tODZfEfDUGWCbmBgWUZegGau9dIqP2Fr+4yLTLYM+1TCMzW
+ R7CcZqHNWHrjg9b32oH+ijHCiVUEtAvZOZnD+/qoXz4QHNaRZXleFAzQ6E0w06mu7bGF1Ct8hpY
+ QVkvPHgjTWmMCiiyLjtg7bpAyhznXSoKeN6jlJKHtokpafV2uQvSN3iMHLDDJrWgpykO3KTvR9J
+ zgYmduRwazHtDjVyzsEMOHw4XM9/1z8nHUAQaUN/8VC/lyaheT2zjwkus3rR+Fn5gGEBqfA5YTs
+ cejVwi3DkJS4oNA==
+X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
+ fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 1:39 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Jul 31, 2023 at 12:35:20PM +0200, Rafael J. Wysocki wrote:
->
-> > > So I agree with 1.
-> > >
-> > > I do not agree with 2. Disabling the tick is costly, doubly so with the
-> > > timer-pull thing, but even today. Simply disabling it because we picked
-> > > the deepest idle state, irrespective of the expected duration is wrong
-> > > as it will incur this significant cost.
-> > >
-> > > With 3 there is the question of how we get the expected sleep duration;
-> > > this is especially important with timer-pull, where we have this
-> > > chicken-and-egg thing.
-> > >
-> > > Notably: tick_nohz_get_sleep_length() wants to know if the tick gets
-> > > disabled
-> >
-> > Well, it shouldn't.  Or at least it didn't before.
->
-> Correct, this is new in the timer-pull thing.
->
-> > It is expected to produce two values, one with the tick stopped (this
-> > is the return value of the function) and the other with the tick
-> > ticking (this is the one written under the address passed as the arg).
-> > This cannot depend on whether or not the tick will be stopped.  Both
-> > are good to know.
-> >
-> > Now, I understand that getting these two values may be costly, so
-> > there is an incentive to avoid calling it, but then the governor needs
-> > to figure this out from its crystal ball and so care needs to be taken
-> > to limit the possible damage in case the crystal ball is not right.
->
-> If we can get the governor to decide the tick state up-front we can
-> avoid a lot of the expensive parts.
+This series adds charger and "fuel-gauge" found in Qualcomm pm8916 PMIC.
 
-I claim that in the vast majority of cases this is the same as
-deciding the state.
+The LBC - Linear Battery Charger is a simple CC/CV charger, that works
+autonomously after the current and voltage limits are set.
 
-The case when it is not is when the target residency of the deepest
-idle state is below the tick period length and the governor is about
-to select that state.  According to the data I've seen so far this is
-a tiny fraction of all the cases.
+The VM-BMS - Voltage Mode BMS is a simple hardware block that provides
+average voltage on the battery terminals.
 
-> > > and cpuilde wants to use tick_nohz_get_sleep_length() to
-> > > determine if to disable the tick. This cycle needs to be broken for
-> > > timer-pull.
-> > >
-> > > Hence my proposal to introduce the extra tick state, that allows fixing
-> > > both 2 and 3.
-> >
-> > I'm not sure about 3 TBH.
-> >
-> > Say there are 2 idle states, one shallow (say its target residency is
-> > 10 us) and one deep (say its target residency is T = 2 * TICK_NSEC).
->
-> This is the easy case and that actually 'works' today.
+These two hardware blocks are used as the battery charging and
+management solution in some old Qualcomm devices.
 
-But this is my case 3 which you said you didn't agree with.  I don't
-see why it needs to be fixed.
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+---
+Changes in v2:
+- Add full interrupt list in the DT bindings. (Conor)
+- Link to v1: https://lore.kernel.org/r/20230728-pm8916-bms-lbc-v1-0-56da32467487@trvn.ru
 
-> The interesting case is where your deepest state has a target residency that
-> is below the tick (because for HZ=100, we have a 10ms tick and pretty
-> much all idle states are below that).
+---
+Nikita Travkin (4):
+      dt-bindings: power: supply: Add pm8916 VM-BMS
+      dt-bindings: power: supply: Add pm8916 LBC
+      power: supply: Add pm8916 VM-BMS support
+      power: supply: Add driver for pm8916 lbc
 
-What about HZ=1000, though?
+ .../bindings/power/supply/qcom,pm8916-bms-vm.yaml  |  83 +++++
+ .../bindings/power/supply/qcom,pm8916-lbc.yaml     | 128 +++++++
+ drivers/power/supply/Kconfig                       |  22 ++
+ drivers/power/supply/Makefile                      |   2 +
+ drivers/power/supply/pm8916_bms_vm.c               | 296 ++++++++++++++++
+ drivers/power/supply/pm8916_lbc.c                  | 383 +++++++++++++++++++++
+ 6 files changed, 914 insertions(+)
+---
+base-commit: ec89391563792edd11d138a853901bce76d11f44
+change-id: 20230727-pm8916-bms-lbc-3f80305326a2
 
-> In that case you cannot tell the difference between I'm good to use this
-> state and I'm good to disable the tick and still use this state.
+Best regards,
+-- 
+Nikita Travkin <nikita@trvn.ru>
 
-No, you don't, but is it really worth the fuss?
-
-The state is high-latency anyway and tick_nohz_get_sleep_length()
-needs to be called anyway in that case in order to determine if a
-shallower state wouldn't be better.  At this point the statistics have
-already told the governor otherwise and a misprediction would be a
-double loss.
-
-So yes, you can gain performance by avoiding to call
-tick_nohz_get_sleep_length(), but then you can also lose it by
-selecting a state that is too deep (and that can be determined exactly
-with respect to timers).
