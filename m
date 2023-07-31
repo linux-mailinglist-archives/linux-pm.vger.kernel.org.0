@@ -2,118 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63EF76A26B
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 23:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 508EB76A3DF
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 00:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjGaVGS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 17:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S231753AbjGaWDL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 18:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjGaVGR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 17:06:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB2F4194;
-        Mon, 31 Jul 2023 14:06:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65687612DD;
-        Mon, 31 Jul 2023 21:06:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE2DDC433C8;
-        Mon, 31 Jul 2023 21:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690837575;
-        bh=uFmV+Z9IEZrlWvkA9y0SJYB4T9OHFEmD0Fdew8OiXcs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mrH744iQrz7H9/m2jMOkpp+sRDM/1X4YqksMXBA8LCgMQY5YbV4fybbNg3IaYLGKM
-         5+A1YzHtc3n4Kf6PbHETyDFT5o6x7m2JVuKlSqq0+272oHJ7Ir4Jp72rx8ElT2GWxd
-         Yo41hVxoS6xL+TGS1WDKtj+TYqWE/VYIrbRLLN6hmWbOEfxV8Uzn2/8fuTxx6vCXVN
-         Xg/8stS3DgMQ0rbmzutxZv4FCO5An08+w9GTNWiTWIbKaZapx8qD6rxBjG8eM7sQVm
-         YfKr9aVn2BIzRwMN6b9wNdUVPI7zF1tZpXABmwJKGTHQTOaZ8raJURDgTEL78B/pi/
-         xzGk2wffY3U5w==
-Date:   Mon, 31 Jul 2023 15:07:20 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Markus Mayer <mmayer@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
+        with ESMTP id S231822AbjGaWDA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 18:03:00 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E0E7139;
+        Mon, 31 Jul 2023 15:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gHoaM7eGFNI0KBp/0qw5JaxvSgb4EPXM7prcdF6Gpvo=; b=YOow06njeJ2olbzkCBKb8IZ9Nj
+        jVqID3WRMSIwJ/moJkKieCB6dlOM6c18c0/E525uSPWKhKvDBfNhl9+sz1rfHT7CU0mSzimPsTbJD
+        SK2jmsLU3kM/+Y+W+yFl5k69zuubZRgknxIPJtf1rGYYqD6UM5g0DcZNixGYffLkNEyZaZHbpNAYz
+        mnxoMRdRuuxhHWWwK+QcuIELp00rYFGkNBppcswr9d0vcIkKFOXZRwth+afyxMBZQ4ZhStUOUIrfh
+        vJLv4jqUMgfChpAkgO1/UwuuaC8r5L/k4nORLEkD6rVlDJTDwp5/6ZNJg5U2A4yRLuJa/HKlsXMhI
+        3TkWjTVw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qQayW-00HSp6-1h;
+        Mon, 31 Jul 2023 22:02:48 +0000
+Message-ID: <afac2810-f93e-eda5-975e-041ac4b908b5@infradead.org>
+Date:   Mon, 31 Jul 2023 15:02:47 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
+Content-Language: en-US
+To:     David Dai <davidai@google.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH v2] cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
-Message-ID: <ZMgiiEmBORZRaobc@work>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     Quentin Perret <qperret@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230731174613.4133167-1-davidai@google.com>
+ <20230731174613.4133167-3-davidai@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230731174613.4133167-3-davidai@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Update the iteration conditions in the for() loop to avoid writing in
-array `table` beyond its allocated size at:
 
-drivers/cpufreq/brcmstb-avs-cpufreq.c:
-449         table[i].frequency = CPUFREQ_TABLE_END;
 
-This fixes the following -Warray-bounds warning seen after building
-ARM with multi_v7_defconfig (GCC 13):
-In function 'brcm_avs_get_freq_table',
-    inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
-drivers/cpufreq/brcmstb-avs-cpufreq.c:449:28: warning: array subscript 5 is outside array bounds of 'void[60]' [-Warray-bounds=]
-  449 |         table[i].frequency = CPUFREQ_TABLE_END;
-In file included from include/linux/node.h:18,
-                 from include/linux/cpu.h:17,
-                 from include/linux/cpufreq.h:12,
-                 from drivers/cpufreq/brcmstb-avs-cpufreq.c:44:
-In function 'devm_kmalloc_array',
-    inlined from 'devm_kcalloc' at include/linux/device.h:328:9,
-    inlined from 'brcm_avs_get_freq_table' at drivers/cpufreq/brcmstb-avs-cpufreq.c:437:10,
-    inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
-include/linux/device.h:323:16: note: at offset 60 into object of size 60 allocated by 'devm_kmalloc'
-  323 |         return devm_kmalloc(dev, bytes, flags);
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On 7/31/23 10:46, David Dai wrote:
+> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> index f429b9b37b76..3977ca796747 100644
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -217,6 +217,21 @@ config CPUFREQ_DT
+>  
+>  	  If in doubt, say N.
+>  
+> +config CPUFREQ_VIRT
+> +        tristate "Virtual cpufreq driver"
+> +	depends on OF
+> +	select PM_OPP
+> +        help
 
-This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-routines on memcpy() and help us make progress towards globally
-enabling -Warray-bounds.
+The 4 lines above should be indented with one tab (not 8 spaces).
 
-Link: https://github.com/KSPP/linux/issues/324
-Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
-Cc: stable@vger.kernel.org
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Update changelog text. Add more details.
+> +	  This adds a virtualized cpufreq driver for guest kernels that
+> +	  read/writes to a MMIO region for a virtualized cpufreq device to
 
-v1:
- - Link: https://lore.kernel.org/linux-hardening/ZMgfWEA0GAN%2FRog8@work/
+	  reads/writes to an MMIO region
 
- drivers/cpufreq/brcmstb-avs-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +	  communicate with the host. It sends frequency updates to the host
+> +	  which gets used as a hint to schedule vCPU threads and select CPU
+> +	  frequency. If a VM does not support a virtualized FIE such as AMUs,
+> +	  it updates the frequency scaling factor by polling host CPU frequency
+> +	  to enable accurate Per-Entity Load Tracking for tasks running in the guest.
+> +
+> +	  If in doubt, say N.
 
-diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-index 1bdd513bcd19..99ba2d707eff 100644
---- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-+++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-@@ -439,7 +439,7 @@ brcm_avs_get_freq_table(struct device *dev, struct private_data *priv)
- 	if (!table)
- 		return ERR_PTR(-ENOMEM);
- 
--	for (i = AVS_PSTATE_P0; i <= AVS_PSTATE_MAX; i++) {
-+	for (i = AVS_PSTATE_P0; i < AVS_PSTATE_MAX; i++) {
- 		ret = brcm_avs_set_pstate(priv, i);
- 		if (ret)
- 			return ERR_PTR(ret);
 -- 
-2.34.1
-
+~Randy
