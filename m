@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 279B976A0C7
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 21:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C453876A0C6
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Jul 2023 21:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230466AbjGaTE6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Jul 2023 15:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S230402AbjGaTE5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Jul 2023 15:04:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjGaTE4 (ORCPT
+        with ESMTP id S229618AbjGaTE4 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Jul 2023 15:04:56 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7A01707;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F882170A;
         Mon, 31 Jul 2023 12:04:55 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id e66c7d44df33c50a; Mon, 31 Jul 2023 21:04:53 +0200
+ id 32ce0183077fd9b9; Mon, 31 Jul 2023 21:04:52 +0200
 Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
    discourages use of this host) smtp.mailfrom=rjwysocki.net 
    (client-ip=195.136.19.94; helo=[195.136.19.94]; 
@@ -25,7 +25,7 @@ Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id EAC776620E2;
+        by v370.home.net.pl (Postfix) with ESMTPSA id 314E16620E2;
         Mon, 31 Jul 2023 21:04:52 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
@@ -34,9 +34,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>,
         Kajetan Puchalski <kajetan.puchalski@arm.com>
-Subject: [PATCH v3 2/3] cpuidle: teo: Avoid stopping the tick unnecessarily when bailing out
-Date:   Mon, 31 Jul 2023 21:03:09 +0200
-Message-ID: <10328871.nUPlyArG6x@kreacher>
+Subject: [PATCH v3 3/3] cpuidle: teo: Drop utilized from struct teo_cpu
+Date:   Mon, 31 Jul 2023 21:04:41 +0200
+Message-ID: <1953519.PYKUYFuaPT@kreacher>
 In-Reply-To: <4515817.LvFx2qVVIh@kreacher>
 References: <4515817.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
@@ -45,8 +45,8 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrjeeggddutdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprghnnhgrqdhmrghrihgrsehlihhnuhht
- rhhonhhigidruggvpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrghjvghtrghnrdhpuhgthhgrlhhskhhisegrrhhmrdgtohhm
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrjeeggddutdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrnhhnrgdqmhgrrhhirgeslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehfrhgv
+ uggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhgrjhgvthgrnhdrphhutghhrghlshhkihesrghrmhdrtghomh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -59,125 +59,75 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-When teo_select() is going to return early in some special cases, make
-it avoid stopping the tick if the idle state to be returned is shallow.
+Because the utilized field in struct teo_cpu is only used locally in
+teo_select(), replace it with a local variable in that function.
 
-In particular, never stop the tick if state 0 is to be returned.
+No intentional functional impact.
 
-Link: https://lore.kernel.org/linux-pm/CAJZ5v0jJxHj65r2HXBTd3wfbZtsg=_StzwO1kA5STDnaPe_dWA@mail.gmail.com
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-v2 -> v3:
-   * Cover all of the special cases when 0 is returned and never stop the tick
-     in those cases.
-   * Do not bail out when constraint_idx becomes the candidate state (it should
-     be subject to the usual checks below, because it isn't really special).
-   * Be more careful about stopping the tick when the first enabled idle state
-     is used.
+v2 -> v3: No changes
 
 v1 -> v2: New patch
 
 ---
- drivers/cpuidle/governors/teo.c |   56 +++++++++++++++++++++++-----------------
- 1 file changed, 33 insertions(+), 23 deletions(-)
+ drivers/cpuidle/governors/teo.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
 Index: linux-pm/drivers/cpuidle/governors/teo.c
 ===================================================================
 --- linux-pm.orig/drivers/cpuidle/governors/teo.c
 +++ linux-pm/drivers/cpuidle/governors/teo.c
-@@ -382,12 +382,13 @@ static int teo_select(struct cpuidle_dri
- 	/* Check if there is any choice in the first place. */
- 	if (drv->state_count < 2) {
- 		idx = 0;
--		goto end;
-+		goto out_tick;
- 	}
-+
- 	if (!dev->states_usage[0].disable) {
- 		idx = 0;
- 		if (drv->states[1].target_residency_ns > duration_ns)
--			goto end;
-+			goto out_tick;
- 	}
+@@ -187,7 +187,6 @@ struct teo_bin {
+  * @next_recent_idx: Index of the next @recent_idx entry to update.
+  * @recent_idx: Indices of bins corresponding to recent "intercepts".
+  * @util_threshold: Threshold above which the CPU is considered utilized
+- * @utilized: Whether the last sleep on the CPU happened while utilized
+  */
+ struct teo_cpu {
+ 	s64 time_span_ns;
+@@ -197,7 +196,6 @@ struct teo_cpu {
+ 	int next_recent_idx;
+ 	int recent_idx[NR_RECENT];
+ 	unsigned long util_threshold;
+-	bool utilized;
+ };
  
- 	cpu_data->utilized = teo_cpu_is_utilized(dev->cpu, cpu_data);
-@@ -408,11 +409,12 @@ static int teo_select(struct cpuidle_dri
- 		 * anyway.
- 		 */
- 		if ((!idx && !(drv->states[0].flags & CPUIDLE_FLAG_POLLING) &&
--		    teo_time_ok(duration_ns)) || dev->states_usage[1].disable)
-+		    teo_time_ok(duration_ns)) || dev->states_usage[1].disable) {
- 			idx = 0;
--		else /* Assume that state 1 is not a polling one and use it. */
--			idx = 1;
--
-+			goto out_tick;
-+		}
-+		/* Assume that state 1 is not a polling one and use it. */
-+		idx = 1;
- 		goto end;
+ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
+@@ -366,6 +364,7 @@ static int teo_select(struct cpuidle_dri
+ 	int idx0 = 0, idx = -1;
+ 	bool alt_intercepts, alt_recent;
+ 	ktime_t delta_tick;
++	bool cpu_utilized;
+ 	s64 duration_ns;
+ 	int i;
+ 
+@@ -391,13 +390,13 @@ static int teo_select(struct cpuidle_dri
+ 			goto out_tick;
  	}
  
-@@ -459,8 +461,15 @@ static int teo_select(struct cpuidle_dri
- 	/* Avoid unnecessary overhead. */
- 	if (idx < 0) {
- 		idx = 0; /* No states enabled, must use 0. */
--		goto end;
--	} else if (idx == idx0) {
-+		goto out_tick;
-+	}
-+
-+	if (idx == idx0) {
-+		/*
-+		 * This is the first enabled idle state, so use it, but do not
-+		 * allow the tick to be stopped it is shallow enough.
-+		 */
-+		duration_ns = drv->states[idx].target_residency_ns;
- 		goto end;
- 	}
- 
-@@ -566,24 +575,25 @@ static int teo_select(struct cpuidle_dri
- 
- end:
+-	cpu_data->utilized = teo_cpu_is_utilized(dev->cpu, cpu_data);
++	cpu_utilized = teo_cpu_is_utilized(dev->cpu, cpu_data);
  	/*
--	 * Don't stop the tick if the selected state is a polling one or if the
--	 * expected idle duration is shorter than the tick period length.
-+	 * Allow the tick to be stopped unless the selected state is a polling
-+	 * one or the expected idle duration is shorter than the tick period
-+	 * length.
+ 	 * If the CPU is being utilized over the threshold and there are only 2
+ 	 * states to choose from, the metrics need not be considered, so choose
+ 	 * the shallowest non-polling state and exit.
  	 */
--	if (((drv->states[idx].flags & CPUIDLE_FLAG_POLLING) ||
--	    duration_ns < TICK_NSEC) && !tick_nohz_tick_stopped()) {
--		*stop_tick = false;
-+	if ((!(drv->states[idx].flags & CPUIDLE_FLAG_POLLING) &&
-+	    duration_ns >= TICK_NSEC) || tick_nohz_tick_stopped())
-+		return idx;
+-	if (drv->state_count < 3 && cpu_data->utilized) {
++	if (drv->state_count < 3 && cpu_utilized) {
+ 		/* The CPU is utilized, so assume a short idle duration. */
+ 		duration_ns = teo_middle_of_bin(0, drv);
+ 		/*
+@@ -562,7 +561,7 @@ static int teo_select(struct cpuidle_dri
+ 	 * been stopped already and the shallower state's target residency is
+ 	 * not sufficiently large.
+ 	 */
+-	if (cpu_data->utilized) {
++	if (cpu_utilized) {
+ 		s64 span_ns;
  
--		/*
--		 * The tick is not going to be stopped, so if the target
--		 * residency of the state to be returned is not within the time
--		 * till the closest timer including the tick, try to correct
--		 * that.
--		 */
--		if (idx > idx0 &&
--		    drv->states[idx].target_residency_ns > delta_tick)
--			idx = teo_find_shallower_state(drv, dev, idx, delta_tick, false);
--	}
-+	/*
-+	 * The tick is not going to be stopped, so if the target residency of
-+	 * the state to be returned is not within the time till the closest
-+	 * timer including the tick, try to correct that.
-+	 */
-+	if (idx > idx0 &&
-+	    drv->states[idx].target_residency_ns > delta_tick)
-+		idx = teo_find_shallower_state(drv, dev, idx, delta_tick, false);
- 
-+out_tick:
-+	*stop_tick = false;
- 	return idx;
- }
- 
+ 		i = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
 
 
 
