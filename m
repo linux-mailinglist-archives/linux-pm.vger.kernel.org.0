@@ -2,141 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BB176BDD0
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 21:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6A576BDF4
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 21:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjHATb1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 15:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56988 "EHLO
+        id S232279AbjHATlR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 15:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjHATb0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 15:31:26 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B3010E
-        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 12:31:24 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-307d20548adso5401192f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Aug 2023 12:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690918283; x=1691523083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0k+A7StIulck13gMjusdP0c4WO4z/7CXgwSPJxPhFXI=;
-        b=iqH+UtYxa2Bx6csoyd8hX7eSZhs/7wmRJrH4rpMtDV8IZ77AW5ns5Tg1cQ+gCFJUvX
-         IddH1VHNrZSZ8B9Bibvyhtmz6yz69G1GT7pNfuBn0p0NqwWO+WjZR0OrjVqtHUyv2drF
-         +c3tDsTPL0KBukADyIK3aVWIdrdcb+E0qWOpwuaVCy6B/kR6x+lN/e0P8mHZpt+OHO6C
-         VcDfFRAfYC8Q1ZgnUHlKKCZp9ZCVulL/c2BbqH2++irfiJEOWVHMkwdrhHKgSndehv+Z
-         /SptB6NBE5cZNUbNfuP6NPQzuT0pvAWnXDdTRBsG2CIQPg+aRQlkGY1VcrG1jJz3Wr6e
-         19hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690918283; x=1691523083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0k+A7StIulck13gMjusdP0c4WO4z/7CXgwSPJxPhFXI=;
-        b=LwQelHvIqKi1XdpL81RVuxsnt20uKu7tD1lyP9r5nmwnQdSpsgZjbAn3XV5myLz3fE
-         ykPPqPaxaaHaX3s6pcdaPtXl1BgJvPAZd26tv8WLxTSAl4RSDU4RXBn/Vx4/Q5npCMWf
-         QjomG3NsuDaqhUmced/hIkhAmVA9kTsEx+bn8yrSej2tfMw2WJE1PV7AbIN6g3G9HVkA
-         mFZNvkrJN6I2pLd27/wttTDA9B8Du+FL6NsaXnDyh9t45L2G6IoxtQKTKkeeTypa9/T/
-         +XXUkix/AFY8LkG2WtRQ2aHrJhYxiQFzCVrQcQuq9PQcI7APGDXMBg078ibLyARew0yo
-         jkGQ==
-X-Gm-Message-State: ABy/qLaM71NqighrGV3M61AwokinLSY5lMnepX2rUWAdhFUeArDhhm2W
-        LJpLnS07aIS6PoVc8t2kSJXvEg==
-X-Google-Smtp-Source: APBJJlE9HZSC0EqXM+vfXMamPRaWnK8SkKJyHJM4eHV+Z4B93Eu9cUKbjxpQ2z2SI/JuIcmqgimLbA==
-X-Received: by 2002:a5d:698d:0:b0:317:5e55:f06f with SMTP id g13-20020a5d698d000000b003175e55f06fmr3061086wru.10.1690918283295;
-        Tue, 01 Aug 2023 12:31:23 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id w12-20020a5d404c000000b0031411b7087dsm16937425wrp.20.2023.08.01.12.31.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Aug 2023 12:31:22 -0700 (PDT)
-Message-ID: <7a204bfe-51b8-80eb-01f3-261a5dfece7d@linaro.org>
-Date:   Tue, 1 Aug 2023 21:31:22 +0200
+        with ESMTP id S229880AbjHATlQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 15:41:16 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4F61FF3;
+        Tue,  1 Aug 2023 12:41:14 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 9a48f1ec80921127; Tue, 1 Aug 2023 21:41:12 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 365E16621DD;
+        Tue,  1 Aug 2023 21:41:12 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+Subject: [RFC/RFT][PATCH v1 0/2] cpuidle: teo: Do not check timers unconditionally every time
+Date:   Tue, 01 Aug 2023 21:35:15 +0200
+Message-ID: <4511619.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/8] thermal: core: Do not handle trip points with
- invalid temperature
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
- <4822145.GXAFRqVoOG@kreacher>
- <8ea6d9b1-f8a5-a899-ea30-7ec5d40a0c26@linaro.org>
- <CAJZ5v0inZBtyVrAvgQ1LaVxZkKZHQJJ7A86ysaMmSKKQ2vmGTw@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0inZBtyVrAvgQ1LaVxZkKZHQJJ7A86ysaMmSKKQ2vmGTw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrjeeigddufeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprghnnhgrqdhmrghrihgrsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
+ vghlrdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrghjvghtrghnrdhpuhgthhgrlhhskhhisegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/08/2023 21:05, Rafael J. Wysocki wrote:
-> On Tue, Aug 1, 2023 at 8:29 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->> On 25/07/2023 14:06, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> Trip points with temperature set to THERMAL_TEMP_INVALID are as good as
->>> disabled, so make handle_thermal_trip() ignore them.
->>>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>> ---
->>>
->>> v2 -> v3: No changes.
->>>
->>> v1 -> v2: No changes.
->>>
->>> ---
->>>    drivers/thermal/thermal_core.c |    3 ++-
->>>    1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> Index: linux-pm/drivers/thermal/thermal_core.c
->>> ===================================================================
->>> --- linux-pm.orig/drivers/thermal/thermal_core.c
->>> +++ linux-pm/drivers/thermal/thermal_core.c
->>> @@ -348,7 +348,8 @@ static void handle_thermal_trip(struct t
->>>        struct thermal_trip trip;
->>>
->>>        /* Ignore disabled trip points */
->>> -     if (test_bit(trip_id, &tz->trips_disabled))
->>> +     if (test_bit(trip_id, &tz->trips_disabled) ||
->>> +         trip.temperature == THERMAL_TEMP_INVALID)
->>>                return;
->>
->> This will set the temperature to THERMAL_TEMP_INVALID at each thermal
->> zone update.
-> 
-> What do you mean?
-> 
-> It doesn't set anything.
+Hi Folks,
 
-Oh never mind, I read '=' not '=='
+This is on top of the fixes series posted previously:
 
->> It would make more sense to set it when setting the disabled bit at init
->> time, no?
->>
->> But is that something we really want to do ? The trip point will be
->> reordered due to the temperature change (-273°C)
-> 
-> Again, I'm not sure what you mean.
+https://lore.kernel.org/linux-pm/4515817.LvFx2qVVIh@kreacher/
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+(I'll put it all into one git branch tomorrow).
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I started to play with the idea described here
+
+https://lore.kernel.org/linux-pm/CAJZ5v0hQh2Pg_uXxj8KBRw3oLS1WdsU+rUafBAAq7dRdbRwYSA@mail.gmail.com/
+
+and this is the result.
+
+Note that this is completely experimental, even though it doesn't kill any of
+the test boxes I've run it on.
+
+Patch [1/2] moves the tick_nohz_get_sleep_length() call in teo_select() after
+a preliminary idle state selection based on statistics and patch [2/2] adds
+checks to avoid it completely if the idle state selected so far is shallow
+enough.
+
+I would appreciate checking if this actually makes any difference.
+
+Thanks!
+
+
 
