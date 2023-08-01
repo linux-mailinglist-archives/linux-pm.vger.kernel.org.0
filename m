@@ -2,67 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7870376B27A
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 13:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BB876B29F
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 13:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234215AbjHALAf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 07:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
+        id S232855AbjHALFR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 07:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234233AbjHALAH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 07:00:07 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675545B91;
-        Tue,  1 Aug 2023 03:54:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1690887236; cv=none;
+        with ESMTP id S233242AbjHALEv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 07:04:51 -0400
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9E63C0D;
+        Tue,  1 Aug 2023 03:58:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1690887528; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=aAT1gmpYcoMWWL66IjQC0kMJ2YgmRmX/z+QHnQPdM9usmzWv3BMdMKNqfffpdSMpe2
-    X5+uylcHSa/sWOPxMoDiIh7ctMyWvVA2NrMNqmVx4l9DAk63X93VFSN4n+Eke+5WCSPL
-    APILRndDrhKEZZ64eYAIikxB0bsmoSFiG59U+nFyhfsJKqwDZc4yVZRD6985h8WEVvo4
-    60itvMrvdiL1h+fuq9UKhk14eLaanxiOajO4gA4fQrCD6KbRYQY7B8eh9a6uZ7cldwcB
-    sasxH6Jis2llu4NuoospbHo1YBeA/MIhT34f4pU2eAEg9vcU07KSWzZxZHROMmZLCHcn
-    wemg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1690887236;
+    b=riU0iAR+POSddJyJ9VTQav1aJPUMIqjF/LwpFKhsXnkZFMjkTbSixJitrSll6mOVS6
+    4DnF51L/zvuOnJSfdh8bbeCbL0/4uAb+jlC8WrsJtV5n5KvZ55r1x5+KGAxqjemEkiwT
+    LjEX77OBAEYTRAKme6EkPFoeL121yagphgulZIwgK8uL9SlQz3q90rSXFl5kgZwEzAyR
+    PZ//TixDbYIF2yS1BPb8Y71VKzZOu6HsVpArr6t2V15ZHacMHlC7kWWRYdpEQi3IY+3y
+    jjzNB1P0+Wu1bsxHtK+XyrIQ4MB78xNCCoTwibrcxzVDgg2nlhcnQLYg0QhnjX2qH86H
+    uQww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1690887528;
     s=strato-dkim-0002; d=strato.com;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=qdtofX9rV/JabxOSUq7lzbOdfyHanm5MJ6uMGz3vtho=;
-    b=CAd/JrKD0OV4YhJSBstyLz7bM9tqLgPAG68VmuAtlFL2NmO2OlSQIel/WJLRVJFI0I
-    pSiVCRhxLCP9fd1Rv54lNAP0kwHClrJ/AD+xJhS1zGRgbMhol77dicVX1nomi+dBaLu0
-    dgIo4zcDn6hFSHs4GNcIfxlgARhzbbfWnz4gYhtn/1mW9E8KWIRnBXAEdfuVCtIo5SFN
-    2IXrqHb2KlloYBIfMRULFVvdny8FZjzVhIwqgjHwqe+CRiJPaS1Ie6DaYsY2WS/Q30f5
-    6YsziMfod9Tg+hj6m6P1+HMMP4rDG3jclwNPC9APmCRagMYAuLXPvuYi/FPLsqRczWRJ
-    z50g==
+    bh=DHbOBvCZgYYvNTOE8eCfcIFSVNt2pXB9oMJnvEr1yMQ=;
+    b=XrkLabBs7byytSRo7gsNP//omSSbGGic7O+WVTyxbJpX4+ykYdiSGB5oQSjxKlf5Bh
+    uaJDEDBpOT4NA4gMLvKWo8JIoz5TQNjYUtFYTZScqRgzBR91khpifLeGC0LZn9eJAa3K
+    0cBC3QAuJp/YVSXDFiuOshYUZiqMKAPfie+yPIMEJU9/ec0KOYBf3PsLV6gJi4uBtf2t
+    CPc7Fi3G3QDI9RVCw4p1KqRtd0r2pBfxLi8UHZxdtGwHKB/0LHjCSyAnj/5UWtxn6nGw
+    qf82zoQejHksBJGU3IvHqvuEbc7IOjqVyRTGfFUv2akqhd4dujhqDWY6OqdMjQmkzp1g
+    1wbA==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1690887236;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1690887528;
     s=strato-dkim-0002; d=gerhold.net;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=qdtofX9rV/JabxOSUq7lzbOdfyHanm5MJ6uMGz3vtho=;
-    b=fD9ZyExGq8EC+DerHWU60ByTVFgHkclD+ih/ph9KhGBQSx45CU/Z+vr6IyuFhvU2xg
-    Wrm8LWHIsj8CFk7Y0+YkWVpQ4TkSC7MQjNxSzVG8Y7LfMJCdW6yVUedJAoK6wt4w2DRS
-    2rD7aOR+E75r2VO80LFyidSg3tuFxRw2f886j7cl7xD3fJz4jiLSpQUg414Em7oTUfFE
-    ujF3aUgfscmxd8DJh009323bdixj28rYcHgVG4GHFyFUjQC84hOCuqEpZuhp53lHkjPJ
-    mTKZekUal0Ag/ofCM0s9u5IjQsn8wQA0SYzd3P9tJYKm2mDhTjYsO32S0oOuEtnGZ97D
-    2lMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1690887235;
+    bh=DHbOBvCZgYYvNTOE8eCfcIFSVNt2pXB9oMJnvEr1yMQ=;
+    b=dn1Ej/kf59bpcPHppSQZRMNxuxNvI19hG54oYMhot/dlzhhcBF2Y4x1PC+QCkb68Hi
+    3FxE6VSdJIpgNnJcHrQ+Y3LzxMV+e7+NS6WM424cs0v7ylX3u9I8CCfyZD49Hsm7yxRK
+    s6D9h0bra0G8+jig20BRns9gb5zxmFaldCoLeovy/SgRAtYc87epbN+XHtKeltZb92Ga
+    JhBtmzy3GzyKIuQZk9j3GhhqGdizDNOIhxht/OzuJ9clrZrDdZJ/g9GXid32QO5ZVzGg
+    z77CTx93s7ZZo1t4+bI7ZzJRb06cwGwiEDLGaWtezRwIjutY0OPvzV1RdJ7mtVK0Ym6q
+    Pflg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1690887528;
     s=strato-dkim-0003; d=gerhold.net;
     h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
     From:Subject:Sender;
-    bh=qdtofX9rV/JabxOSUq7lzbOdfyHanm5MJ6uMGz3vtho=;
-    b=oUr5y0ARyOTGFGaAUODubKciTgdGIK9FoaP6DMy3CLqVK2g/c09mVlIHQbEpaFmeV3
-    xaJIFH1Ag8Sxvm4zDfBw==
+    bh=DHbOBvCZgYYvNTOE8eCfcIFSVNt2pXB9oMJnvEr1yMQ=;
+    b=m38koJhuqGI76tLhYWjbcwJHCFjyjcjgsErBVIfGl9+Hh7CmCS15i7wiYeW+/kf4gR
+    /Ceun0nyDo9kQ1aX19CA==
 X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8p+L1A=="
 Received: from gerhold.net
     by smtp.strato.de (RZmta 49.6.6 DYNA|AUTH)
-    with ESMTPSA id k61817z71ArtNj7
+    with ESMTPSA id k61817z71AwmNkR
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Tue, 1 Aug 2023 12:53:55 +0200 (CEST)
-Date:   Tue, 1 Aug 2023 12:53:48 +0200
+    Tue, 1 Aug 2023 12:58:48 +0200 (CEST)
+Date:   Tue, 1 Aug 2023 12:58:47 +0200
 From:   Stephan Gerhold <stephan@gerhold.net>
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -73,19 +73,19 @@ Cc:     Andy Gross <agross@kernel.org>,
         Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] interconnect: qcom: icc-rpm: Add AB/IB
- calculations coefficients
-Message-ID: <ZMjkPLqBiWW8CpAU@gerhold.net>
+Subject: Re: [PATCH v2 03/10] interconnect: qcom: icc-rpm: Let nodes drive
+ their own bus clock
+Message-ID: <ZMjlZyFcB9IFEG60@gerhold.net>
 References: <20230726-topic-icc_coeff-v2-0-8c91c6c76076@linaro.org>
- <20230726-topic-icc_coeff-v2-1-8c91c6c76076@linaro.org>
+ <20230726-topic-icc_coeff-v2-3-8c91c6c76076@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230726-topic-icc_coeff-v2-1-8c91c6c76076@linaro.org>
+In-Reply-To: <20230726-topic-icc_coeff-v2-3-8c91c6c76076@linaro.org>
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,66 +94,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 12:52:17PM +0200, Konrad Dybcio wrote:
-> Presumably due to the hardware being so complex, some nodes (or busses)
-> have different (usually higher) requirements for bandwidth than what
-> the usual calculations would suggest.
+On Mon, Jul 31, 2023 at 12:52:19PM +0200, Konrad Dybcio wrote:
+> If this hardware couldn't get messier, some nodes are supposed to drive
+> their own bus clock.. Presumably to connect to some intermediate
+> interface between the node itself and the bus it's (supposed to be)
+> connected to.
 > 
-> Looking at the available downstream files, it seems like AB values are
-> adjusted per-bus and IB values are adjusted per-node.
-> With that in mind, introduce percentage-based coefficient struct members
-> and use them in the calculations.
+> Expand the node struct with the necessary data and hook up the
+> allocations & calculations.
 > 
-> One thing to note is that the IB coefficient is inverse (100/ib_percent)
-> which feels a bit backwards, but it's necessary for precision..
+> To save on memory (not very many nodes have their own clocks), allocate
+> a pointer to an array instead of allocating an array within
+> qcom_icc_node.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/interconnect/qcom/icc-rpm.c | 14 +++++++++++---
->  drivers/interconnect/qcom/icc-rpm.h |  6 ++++++
->  2 files changed, 17 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 2c16917ba1fd..a837d20af79e 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -298,7 +298,8 @@ static int qcom_icc_bw_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->   */
->  static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_rate)
->  {
-> -	u64 agg_avg_rate, agg_rate;
-> +	struct qcom_icc_provider *qp = to_qcom_provider(provider);
-> +	u64 agg_avg_rate, agg_peak_rate, agg_rate;
->  	struct qcom_icc_node *qn;
->  	struct icc_node *node;
->  	int i;
-> @@ -315,8 +316,15 @@ static void qcom_icc_bus_aggregate(struct icc_provider *provider, u64 *agg_clk_r
->  			else
->  				agg_avg_rate = qn->sum_avg[i];
->  
-> -			agg_rate = max_t(u64, agg_avg_rate, qn->max_peak[i]);
-> -			do_div(agg_rate, qn->buswidth);
-> +			if (qp->ab_coeff)
-> +				agg_avg_rate = mult_frac(qp->ab_coeff, agg_avg_rate, 100);
 
-agg_avg_rate * (qp->ab_coeff / 100) would feel more logical to me (even
-if it should be the same), i.e.
+Only on ARM32 though. On ARM64 you waste extra memory:
 
-	agg_avg_rate = mult_frac(agg_avg_rate, qp->ab_coeff, 100);
+u32 bus_clk_rate[QCOM_SMD_RPM_STATE_NUM];
+sizeof(bus_clk_rate) = QCOM_SMD_RPM_STATE_NUM * sizeof(bus_clk_rate[0])
+                     = 2 * 4
+                     = 8
 
-Not sure why you swapped them.
+u32 *bus_clk_rate;
+sizeof(bus_clk_rate) = sizeof(ptr)
+                     = 8 (for ARM64)
+                       + 2 * 4 + malloc overhead
+                         for each node with bus_clk_desc
 
-> +
-> +			if (qp->ib_coeff)
-> +				agg_peak_rate = mult_frac(100, qn->max_peak[i], qp->ib_coeff);
+which is > 8 from above.
 
-	agg_peak_rate = mult_frac(qn->max_peak[i], 100, qp->ib_coeff);
-
-Anyway, looks like you need to avoid mult_frac anyway for ARM32 compat :/
-
-arm-none-eabi-ld: drivers/interconnect/qcom/icc-rpm.o: in function `qcom_icc_calc_rate':
-drivers/interconnect/qcom/icc-rpm.c:310: undefined reference to `__aeabi_uldivmod'
-arm-none-eabi-ld: drivers/interconnect/qcom/icc-rpm.c:312: undefined reference to `__aeabi_uldivmod'
+I'm not quite convinced this optimization is worth it.
 
 Thanks,
 Stephan
