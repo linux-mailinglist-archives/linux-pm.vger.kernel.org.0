@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872AB76BC86
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 20:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04DF676BC9C
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 20:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjHASap (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 14:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S230323AbjHASjU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 14:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbjHASao (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 14:30:44 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC091FC6
-        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 11:30:42 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4fe3678010eso4026209e87.3
-        for <linux-pm@vger.kernel.org>; Tue, 01 Aug 2023 11:30:42 -0700 (PDT)
+        with ESMTP id S230376AbjHASjQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 14:39:16 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2011426A2
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 11:39:11 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31759e6a4a1so5354965f8f.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Aug 2023 11:39:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690914640; x=1691519440;
+        d=linaro.org; s=google; t=1690915149; x=1691519949;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qtcJ9ghphdBZwkfQ1OoT+M+9vhYvFrLEL4xzG7btVFo=;
-        b=sP/ptIqwzq320rciKX8vLog6wBk7RDLYTE+D2RCyPHxqlK+WP+Zr0gtrPLUsOPp/En
-         GAU2ZTWtxKHHeCaeAS5RBPwslOHggZ7261InGNiNAQwC3tyCM4OpIKYcK0IDCY3AW4e1
-         5c1+a5OnTt7s2N7Vx3CldBTDMJkLQ8eLJs67u6BImvvOPdLqEhJtDzZiRU3ASaLIPKFA
-         0TXRsFif89XW7wkt9qq+NG1mQwU1D7bPstys7ftjTaDBpKtLdlQOTUnDZw3r5J7ow6d0
-         NcHTrBkqDJ7gtlwxSkqf1Er+bURNcrmFg+uOso1zrQF4hDzcNQuR5WRv4c7+JrK3i53R
-         Bm5w==
+        bh=8EFUJZW17T5kR5LxeUj/wsPffO8rw8SB5CP4M13sEbA=;
+        b=nIDdrHwHHJSSZFT4EgZKRFPLGEaASm09NRdE8gzz78gej767WFTlvsJT7biZJvFRGP
+         QnDAX4oyUAmzjyOYGm92j/snTZM/0cSx3xEl2Ksw1Im2uP6sm8RgVarCZ97ButDC8bry
+         b08CRx/IKluU2ShZhUB3U7GZFkDYbl8OgArfBHn3Bm1dOtAbADZtQ4AEX4e7G66/7HqF
+         dcQ2RDGNuWcI6xmQ6CM6zpH2DODt/8xMi6IazZPpee4uAxNhWsTWfRoLn8zl9dntictx
+         MVdBZrlHIHOoyssnGA3naW48L+GCvPUsRPbFx7onUv05o1KWjQ8H6VlUmIcBu0jhJ61I
+         7afQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690914640; x=1691519440;
+        d=1e100.net; s=20221208; t=1690915149; x=1691519949;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qtcJ9ghphdBZwkfQ1OoT+M+9vhYvFrLEL4xzG7btVFo=;
-        b=THV8fpNcjHgDIOLpCGrDvVUi9mmIqutLPo3T8K1xQx4UrcsWymIgZBww3lJVzX9b8M
-         ihTX13MIu3HoxJkpG7MdYrSPGid2Cazalg13VEAJQpLxhIU60I1SRXwM94mcYTb7+XG7
-         LvLsosVduuozPkMCMQiqt0Wq0qW+pRkwlGpdCqAKxPy2YFAZXe/axPcxSKyv6NcKwoHb
-         i4qH/6muN2sUGS+0eBM+BdPfBHTAtewEWghklr4/yPuTcCvO82p1FVAtaY2LImxO1GAt
-         DSYJ5nmK+eFIKW5Y/YWa2m8oKEn+zdz9Ayz83A5cG05veqLbq0bhMTJ4N0+UmNmFo69t
-         Bm6Q==
-X-Gm-Message-State: ABy/qLZpdPiImGRNnuF1JnvqfBiGQX43VvV3vMFWvieo6eMQBjxtK7jh
-        rLbzMlbfSY9hvX6s776qcMSfgA==
-X-Google-Smtp-Source: APBJJlE2365H9e6lqf+5QGIJDxUQh6Xp3nD1293dtzbYsxhmqK3rrV1Plt88EzoY6SllBKcNm8NIsg==
-X-Received: by 2002:a19:644c:0:b0:4fc:3756:754e with SMTP id b12-20020a19644c000000b004fc3756754emr2513770lfj.56.1690914640049;
-        Tue, 01 Aug 2023 11:30:40 -0700 (PDT)
+        bh=8EFUJZW17T5kR5LxeUj/wsPffO8rw8SB5CP4M13sEbA=;
+        b=KpKQaUrVyur/VknDEZfhxjXqPEG/MT8xhjYPSn69fJSiXwSnhpuJPmD+BsvX1G+/kN
+         1X0uhowMK3ud31XEU1VrkuFazsA3T11YXFBcQopGckEimL/0BXaqLwy0zAfHQ+1rckzm
+         q9/JcxSHKNarWMK1drCLfF6bcqQtNS5BXRykJFKxgtHq1cdMRX2ZhFtjLnVvjzkI9aBf
+         Cf8VSrnJ+aFonEe0tG5R10Wm61V2j5oTc7fhR7tdH96vciuAetVGPuC0ox/Q9d45cEVQ
+         /V/4DL81Azmxr4QQynoZ0MXdDtXw1A/jjSAgdm/+9jfyVkagxDAaf/Aa2t6dauSJX9Xd
+         4qGA==
+X-Gm-Message-State: ABy/qLbKJp1uT88h7hCOqZM7zuCEJkxnl9ig3ld04nQJdzO0nb3SmXYJ
+        SMKeDaavAhKs/BzopZHI7/OY05UlfEPl3ltZVHA=
+X-Google-Smtp-Source: APBJJlGoXOK6T9ffOYXg6zcKFD+rEOM9ac7VCXjHLS2lYi4qWcVAesZsI5YXpRSR90jCU3rLLNxG1Q==
+X-Received: by 2002:a5d:5589:0:b0:317:70cb:4f58 with SMTP id i9-20020a5d5589000000b0031770cb4f58mr2858210wrv.63.1690915149541;
+        Tue, 01 Aug 2023 11:39:09 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id m7-20020a05600c280700b003fe1afb99a9sm8646959wmb.11.2023.08.01.11.30.39
+        by smtp.googlemail.com with ESMTPSA id l18-20020a1c7912000000b003fe2bea77ccsm1435499wme.5.2023.08.01.11.39.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Aug 2023 11:30:39 -0700 (PDT)
-Message-ID: <fee918ad-792c-f4e7-935d-1af9540b7274@linaro.org>
-Date:   Tue, 1 Aug 2023 20:30:39 +0200
+        Tue, 01 Aug 2023 11:39:08 -0700 (PDT)
+Message-ID: <cc972aec-dd21-e025-8984-e48b7c1df4bc@linaro.org>
+Date:   Tue, 1 Aug 2023 20:39:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/8] thermal: core: Add routines for locking and
- unlocking thermal zones
+Subject: Re: [PATCH v3 5/8] ACPI: thermal: Hold thermal zone lock around trip
+ updates
 Content-Language: en-US
 To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux ACPI <linux-acpi@vger.kernel.org>
@@ -65,9 +65,9 @@ Cc:     LKML <linux-kernel@vger.kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
- <2154273.irdbgypaU6@kreacher>
+ <7552439.EvYhyI6sBW@kreacher>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2154273.irdbgypaU6@kreacher>
+In-Reply-To: <7552439.EvYhyI6sBW@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,73 +83,100 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Rafael,
 
-
-On 25/07/2023 14:08, Rafael J. Wysocki wrote:
+On 25/07/2023 14:16, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Add thermal_zone_device_lock() and thermal_zone_device_unlock() for
-> acquiring and releasing the thermal zone lock, respectively.
+> There is a race condition between acpi_thermal_trips_update() and
+> acpi_thermal_check_fn(), because the trip points may get updated while
+> the latter is running which in theory may lead to inconsistent results.
+> For example, if two trips are updated together, using the temperature
+> value of one of them from before the update and the temperature value
+> of the other one from after the update may not lead to the expected
+> outcome.
 > 
-> They will be used by the ACPI thermal driver to protect trip point
-> temperature updates against races with accesses from elsewhere.
+> To address this, make acpi_thermal_trips_update() hold the thermal zone
+> lock across the entire update of trip points.
 
-This change goes to the opposite direction of the previous thermal zone 
-cleanup and encapsulation we have done recently.
+As commented in patch 3/8, having a driver locking a thermal core 
+structure is not right and goes to the opposite direction of the recent 
+cleanups.
 
-Here we give the possibility to a driver to act on the thermal core 
-internals.
+Don't we have 2 race conditions:
 
-Ideally, we should see tz->lock only in thermal_core.c
+acpi_thermal_trips_update() + thermal_zone_device_check()
+
+acpi_thermal_trips_update() + acpi_thermal_trips_update()
+
+For the former, we can disable the thermal zone, update and then enable
+
+For the latter use a driver lock ?
 
 
+> While at it, change the acpi_thermal_trips_update() return data type
+> to void as that function always returns 0 anyway.
+> 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
 > 
 > v2 -> v3: No changes.
 > 
-> v1 -> v2: New patch.
+> v1 -> v2:
+>     * Hold the thermal zone lock instead of thermal_check_lock around trip
+>       point updates (this also helps to protect thermal_get_trend() from using
+>       stale trip temperatures).
+>     * Add a comment documenting the purpose of the locking.
+>     * Make acpi_thermal_trips_update() void.
 > 
 > ---
->   drivers/thermal/thermal_core.c |   13 +++++++++++++
->   include/linux/thermal.h        |    2 ++
->   2 files changed, 15 insertions(+)
+>   drivers/acpi/thermal.c |   21 ++++++++++++++++-----
+>   1 file changed, 16 insertions(+), 5 deletions(-)
 > 
-> Index: linux-pm/drivers/thermal/thermal_core.c
+> Index: linux-pm/drivers/acpi/thermal.c
 > ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -497,6 +498,18 @@ void thermal_zone_device_update(struct t
+> --- linux-pm.orig/drivers/acpi/thermal.c
+> +++ linux-pm/drivers/acpi/thermal.c
+> @@ -190,7 +190,7 @@ static int acpi_thermal_get_polling_freq
+>   	return 0;
 >   }
->   EXPORT_SYMBOL_GPL(thermal_zone_device_update);
 >   
-> +void thermal_zone_device_lock(struct thermal_zone_device *tz)
-> +{
-> +	mutex_lock(&tz->lock);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_lock);
-> +
-> +void thermal_zone_device_unlock(struct thermal_zone_device *tz)
-> +{
-> +	mutex_unlock(&tz->lock);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_unlock);
-> +
->   static void thermal_zone_device_check(struct work_struct *work)
+> -static int acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
+> +static void __acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
 >   {
->   	struct thermal_zone_device *tz = container_of(work, struct
-> Index: linux-pm/include/linux/thermal.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/thermal.h
-> +++ linux-pm/include/linux/thermal.h
-> @@ -336,6 +336,8 @@ int thermal_zone_unbind_cooling_device(s
->   				       struct thermal_cooling_device *);
->   void thermal_zone_device_update(struct thermal_zone_device *,
->   				enum thermal_notify_event);
-> +void thermal_zone_device_lock(struct thermal_zone_device *tz);
-> +void thermal_zone_device_unlock(struct thermal_zone_device *tz);
+>   	acpi_status status;
+>   	unsigned long long tmp;
+> @@ -398,17 +398,28 @@ static int acpi_thermal_trips_update(str
+>   			ACPI_THERMAL_TRIPS_EXCEPTION(flag, tz, "device");
+>   		}
+>   	}
+> +}
 >   
->   struct thermal_cooling_device *thermal_cooling_device_register(const char *,
->   		void *, const struct thermal_cooling_device_ops *);
+> -	return 0;
+> +static void acpi_thermal_trips_update(struct acpi_thermal *tz, int flag)
+> +{
+> +	/*
+> +	 * The locking is needed here to protect thermal_get_trend() from using
+> +	 * a stale passive trip temperature and to synchronize with the trip
+> +	 * temperature updates in acpi_thermal_check_fn().
+> +	 */
+> +	thermal_zone_device_lock(tz->thermal_zone);
+> +
+> +	__acpi_thermal_trips_update(tz, flag);
+> +
+> +	thermal_zone_device_unlock(tz->thermal_zone);
+>   }
+>   
+>   static int acpi_thermal_get_trip_points(struct acpi_thermal *tz)
+>   {
+> -	int i, ret = acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
+>   	bool valid;
+> +	int i;
+>   
+> -	if (ret)
+> -		return ret;
+> +	__acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
+>   
+>   	valid = tz->trips.critical.valid |
+>   		tz->trips.hot.valid |
 > 
 > 
 > 
