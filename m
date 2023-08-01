@@ -2,90 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7081B76A89F
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 08:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48AB76A9C2
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 09:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjHAGDJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 02:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
+        id S229665AbjHAHIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 03:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230166AbjHAGDH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 02:03:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC868E7D
-        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 23:03:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 516AE61291
-        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 06:03:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B1659C433C8
-        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 06:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690869785;
-        bh=bVALq83PQZjjLUIGvXG2vDHmcJXdRcERAEwrvCFSLrc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=s8VF5kF3C1YiYcoCZVnRePx3UjqqHnBLWpQnrI21IWJ/EVeo2OuRJA2NP94njoFgN
-         BZXtlh1DuHBFaGomVcb7VBwHne9IICsO5OnoDJVupFzQH1BpcwdBWxYTW34p0btsBg
-         wTDNnuiNg5MUKVkQfQKePQH+O+c8wwQLaFfo9AwYvZK7oby0QDLzC9e0hAI/QGpPKA
-         vPSmEKUfEXa/nYp3LpSKXtMH+3ydxqFyu9Gx9w85rSDLDFvwuI/w45TVwXLBF5+otG
-         c9jPR0Xt/FnTXq7bYqxPHISTI2fzjgHQICrzgPtescVgo4k+VxuKywa8jMnWXpoeaK
-         6S9JQEziilrZw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 9640BC53BD1; Tue,  1 Aug 2023 06:03:05 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 217630] Kernel fails to load amd_pstate driver on 3970x while
- Windows works well on the same machine
-Date:   Tue, 01 Aug 2023 06:03:05 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: johnypean@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217630-137361-QZoxIewiUR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217630-137361@https.bugzilla.kernel.org/>
-References: <bug-217630-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230081AbjHAHIu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 03:08:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23ABB1716
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 00:08:48 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RFR4R2JSszVjqg;
+        Tue,  1 Aug 2023 15:07:03 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 1 Aug
+ 2023 15:08:45 +0800
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+To:     <lenb@kernel.org>, <linux-pm@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH -next] tools/power turbostat: replace FALLTHRU comment by fallthrough pseudo-keyword
+Date:   Tue, 1 Aug 2023 15:08:10 +0800
+Message-ID: <20230801070810.3700584-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217630
+Replace the existing /* FALLTHRU */ comments with the
+new pseudo-keyword macro fallthrough[1].
 
---- Comment #4 from Jan Kosterec (johnypean@gmail.com) ---
-Almost the same HW here.
-3970x CPU, Gigabyte Designare TRX40 rev 1.1, BIOS v. FD.
-linux kernel v. 6.4.7
-No combination of settings activates amd_pstate driver. Error in syslog:
+[1] https://www.kernel.org/doc/html/v5.7/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
 
-kernel: amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-In bios there are available setting CPPC and prefered cores, all enabled.
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index 8a36ba5df9f9..8a7483caeb76 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -3742,7 +3742,7 @@ int probe_nhm_msrs(unsigned int family, unsigned int model)
+ 		break;
+ 	case INTEL_FAM6_ATOM_SILVERMONT:	/* BYT */
+ 		no_MSR_MISC_PWR_MGMT = 1;
+-		/* FALLTHRU */
++		fallthrough;
+ 	case INTEL_FAM6_ATOM_SILVERMONT_D:	/* AVN */
+ 		pkg_cstate_limits = slv_pkg_cstate_limits;
+ 		break;
+@@ -4808,7 +4808,7 @@ void perf_limit_reasons_probe(unsigned int family, unsigned int model)
+ 	case INTEL_FAM6_HASWELL_L:	/* HSW */
+ 	case INTEL_FAM6_HASWELL_G:	/* HSW */
+ 		do_gfx_perf_limit_reasons = 1;
+-		/* FALLTHRU */
++		fallthrough;
+ 	case INTEL_FAM6_HASWELL_X:	/* HSX */
+ 		do_core_perf_limit_reasons = 1;
+ 		do_ring_perf_limit_reasons = 1;
+-- 
+2.34.1
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
