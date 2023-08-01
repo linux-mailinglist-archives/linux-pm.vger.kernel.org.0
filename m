@@ -2,47 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96AE876AB17
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 10:31:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0366076AB55
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 10:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjHAIb5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 04:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43362 "EHLO
+        id S230510AbjHAIwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 04:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjHAIb4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 04:31:56 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5100AE0;
-        Tue,  1 Aug 2023 01:31:54 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 3718VIAe032212;
-        Tue, 1 Aug 2023 16:31:18 +0800 (+08)
-        (envelope-from Di.Shen@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RFSvj5HVbz2K1r9S;
-        Tue,  1 Aug 2023 16:29:37 +0800 (CST)
-Received: from bj10906pcu1.spreadtrum.com (10.0.73.63) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Tue, 1 Aug 2023 16:31:16 +0800
-From:   Di Shen <di.shen@unisoc.com>
-To:     <lukasz.luba@arm.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>
-CC:     <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jeson.gao@unisoc.com>, <xuewen.yan@unisoc.com>,
-        <yongzhi.chen@unisoc.com>
-Subject: [PATCH] thermal/core/power_allocator: enable user to change the power budget
-Date:   Tue, 1 Aug 2023 16:30:25 +0800
-Message-ID: <20230801083025.13912-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S230209AbjHAIwd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 04:52:33 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B03170D
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 01:52:31 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1bba04b9df3so42907225ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 01 Aug 2023 01:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690879951; x=1691484751;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQb6hWeSHt5AzlUqNhh20pk6zYPdhyIHacjYa5WcAVw=;
+        b=fShC8m0sAxSzyfBCOQCftRJtjAugW5Q74CK11/6Z/7aJGRUOP1SjNs5C6yvXEnrd3F
+         mC4jmWHzDL3Ii05rpo+SZAYNLkZNazAf9vHoPd59ZBsz3xxQZG+kJD2/Tufvdv0Rj3H+
+         l4eCSo4x839DYlntSH5tJza/polLoi3/uKRyBTq16Xo2iadb5gSl+UVAaolJoyxHO+8n
+         5Al57INR4QTnBf/tVo0V8g1Ni8EImtliXIE5IFU/geNc4XqrStasiHUv/6zTHMn1+J0H
+         I2trapnK3BJ+/YZwAwcEznbSZqxOgQ1bdvOucnv8AroAR7bdUDxR1CieJe0S2a0L0AaT
+         EBCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690879951; x=1691484751;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sQb6hWeSHt5AzlUqNhh20pk6zYPdhyIHacjYa5WcAVw=;
+        b=kLjyNSAxuPpqogV2AHgvljA5NlDLbRrqolxEbp+ZFX8SIO1jPR0TMSVBZaCEf25z5d
+         pjlJjJnU+mq9/cRlvZnMOAyQlHGc3ETCEjhkHmLskymCjKlGYTGzxsl6XHTHsJBOwCOv
+         9eG9lvR6nqZTjUIoDWjuKbn/J0ilJvGUiPIlsb/noyk85EuJfvc1k8NPggXBdcBldxWV
+         IlcQNoTD1ms5OgB7UFpFw0BevQnLlsJ9PAYr8fK9Mchc+zK7E5p3CNjDf/DQZHygnQuJ
+         lGYR1HJAM7AdzuX2BlPLjR0kfF4MOx/tIFOc9u9eVIE6iqqryrJgcV+eqw3f2cVzAn0T
+         d+bw==
+X-Gm-Message-State: ABy/qLYdaC/cfwMNeKjUbk8SW7SXDn7BwTPeQb1nuzoVCdawKm08a2t9
+        fYB3wJdODX4PTir5fsrUV7nwlg==
+X-Google-Smtp-Source: APBJJlH7sFdfOCMX1cyHt9oMrKnAymfqE4PzBGrcLvsl3aP7Bhi9gwsVgnVM9S3nmr9v7kjQ0eNA/g==
+X-Received: by 2002:a17:902:7486:b0:1bc:5d0:e8db with SMTP id h6-20020a170902748600b001bc05d0e8dbmr7361705pll.62.1690879951085;
+        Tue, 01 Aug 2023 01:52:31 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170903228b00b001b8943b37a5sm9942580plh.24.2023.08.01.01.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Aug 2023 01:52:30 -0700 (PDT)
+Date:   Tue, 1 Aug 2023 14:22:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Modify the function to et the highest_perf value
+Message-ID: <20230801085228.6f5xley3aybryfjv@vireshk-i7>
+References: <20230801004719.1298415-1-li.meng@amd.com>
+ <5b92239a-4255-346d-1dfe-c7953535083d@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.73.63]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 3718VIAe032212
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b92239a-4255-346d-1dfe-c7953535083d@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,123 +81,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-For IPA, the total power budget of all cooling actors can be
-calculated with the input of thermal zone temperature in PID
-controller. However, in some scenarios, if user wants more
-restrictive temperature control, which means lower power allocated
-for all cooling devices, the power budget should be changed to be
-a lower one.
+On 31-07-23, 20:10, Mario Limonciello wrote:
+> On 7/31/23 19:47, Meng Li wrote:
+> > The previous function will be deprecated.
+> > 
+> > Signed-off-by: Meng Li <li.meng@amd.com>
+> > ---
+> 
+> This actually has functional impact; doesn't it?  Can you better describe
+> the reasoning and expected impact in the commit message?
 
-In order to allow users to change the power budget value, this
-patch adds a variable of power_budget. Users can write a power
-budget value through the sysfs node, and then the governor will
-choose the lower value (the more strict one) compared with the
-power budget calculated by PID controller to be allocated for
-cooling deivces.
+Also write the $Subject properly like:
 
-Signed-off-by: Di Shen <di.shen@unisoc.com>
----
- drivers/thermal/gov_power_allocator.c |  3 +++
- drivers/thermal/thermal_sysfs.c       | 33 +++++++++++++++++++++++++++
- include/linux/thermal.h               |  6 +++++
- 3 files changed, 42 insertions(+)
+cpufreq: amd-pstate-ut: ...
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 8642f1096b91..c839e8277eab 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -460,6 +460,8 @@ static int allocate_power(struct thermal_zone_device *tz,
- 	}
- 
- 	power_range = pid_controller(tz, control_temp, max_allocatable_power);
-+	if (tz->tzp->power_budget && tz->tzp->power_budget < power_range)
-+		power_range = tz->tzp->power_budget;
- 
- 	divvy_up_power(weighted_req_power, max_power, num_actors,
- 		       total_weighted_req_power, power_range, granted_power,
-@@ -665,6 +667,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 					       trip.temperature);
- 	}
- 
-+	tz->tzp->power_budget = 0;
- 	reset_pid_controller(params);
- 
- 	tz->governor_data = params;
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 6c20c9f90a05..85dd4194b5c7 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -326,6 +326,37 @@ sustainable_power_store(struct device *dev, struct device_attribute *devattr,
- 	return count;
- }
- 
-+static ssize_t
-+power_budget_show(struct device *dev, struct device_attribute *devattr, char *buf)
-+{
-+	struct thermal_zone_device *tz = to_thermal_zone(dev);
-+
-+	if (tz->tzp)
-+		return sprintf(buf, "%u\n", tz->tzp->power_budget);
-+	else
-+		return -EIO;
-+}
-+
-+static ssize_t
-+power_budget_store(struct device *dev, struct device_attribute *devattr,
-+		       const char *buf, size_t count)
-+{
-+	struct thermal_zone_device *tz = to_thermal_zone(dev);
-+	u32 power_budget;
-+
-+	if (!tz->tzp)
-+		return -EIO;
-+
-+	if (kstrtou32(buf, 10, &power_budget))
-+		return -EINVAL;
-+
-+	tz->tzp->power_budget = power_budget;
-+
-+	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+
-+	return count;
-+}
-+
- #define create_s32_tzp_attr(name)					\
- 	static ssize_t							\
- 	name##_show(struct device *dev, struct device_attribute *devattr, \
-@@ -377,6 +408,7 @@ static DEVICE_ATTR_RO(temp);
- static DEVICE_ATTR_RW(policy);
- static DEVICE_ATTR_RO(available_policies);
- static DEVICE_ATTR_RW(sustainable_power);
-+static DEVICE_ATTR_RW(power_budget);
- 
- /* These thermal zone device attributes are created based on conditions */
- static DEVICE_ATTR_RW(mode);
-@@ -391,6 +423,7 @@ static struct attribute *thermal_zone_dev_attrs[] = {
- 	&dev_attr_policy.attr,
- 	&dev_attr_available_policies.attr,
- 	&dev_attr_sustainable_power.attr,
-+	&dev_attr_power_budget.attr,
- 	&dev_attr_k_po.attr,
- 	&dev_attr_k_pu.attr,
- 	&dev_attr_k_i.attr,
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 87837094d549..580a1e786037 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -224,6 +224,12 @@ struct thermal_zone_params {
- 	 */
- 	u32 sustainable_power;
- 
-+	/*
-+	 * A power budget needed to compare with power_range of power allocator
-+	 * in mW
-+	 */
-+	u32 power_budget;
-+
- 	/*
- 	 * Proportional parameter of the PID controller when
- 	 * overshooting (i.e., when temperature is below the target)
 -- 
-2.17.1
-
+viresh
