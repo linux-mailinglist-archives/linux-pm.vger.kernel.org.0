@@ -2,106 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9394776B4D3
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 14:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760B676B561
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 15:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjHAMec (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 08:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S229480AbjHANEF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 09:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjHAMec (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 08:34:32 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C65721FC7;
-        Tue,  1 Aug 2023 05:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=S/u4vYJhKZmYxEtl4s2/42a0qgFgAhFLv7zKyESwQwc=; b=lQ6p7/T9cFvMeIg2EyU85XKRvo
-        rlNd+GuoLvcrJtSy1nKprTIR9lNmaBBEgKJ6TC60RIZh93gtupZYwrBvvqGsyXaXqM3kFbfdeo3za
-        PZwz5czl29B4EWZEbJOwjCSROXrGISrKQs2yH+3IAA61erVASsi3Opu23+QmTYW+Ko62xB9bZ6O46
-        90LRFevYeSULZoPCRz1Y7ba0M2YaD24qBMN1Us13RJH6aQXrfHY/nzH76am3TX7k+zz99f7ioxyzL
-        i3FRo70yR9oTL6XcjJ5nti2x7JApZ5OYxJ8mBXcTkmTQQXGqoL4SUpypLkXFWEX425gOQrRgRmhNc
-        o+Etj7aw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qQoZx-008m2n-Nt; Tue, 01 Aug 2023 12:34:21 +0000
-Date:   Tue, 1 Aug 2023 13:34:21 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Christian Brauner <christian@brauner.io>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Harry Pan <harry.pan@intel.com>, linux-pm@vger.kernel.org
-Subject: Re: ksys_sync_helper
-Message-ID: <ZMj7zTwPw/qi/bNw@casper.infradead.org>
-References: <ZMdgxYPPRYFipu1e@infradead.org>
- <e1aef4d4-b6fb-46ca-f11b-08b3e5eea27d@intel.com>
- <ZMjnZhbKbNMmcUPN@infradead.org>
+        with ESMTP id S231502AbjHANEE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 09:04:04 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3F5E6
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 06:04:03 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1bbff6b2679so17227855ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Aug 2023 06:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1690895043; x=1691499843;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hvhpTUk/JRtUY+N5qYQkgvwpooY/V54upUMhIP4I4bk=;
+        b=fPSOuIA2fVBPE0HhGWXTQnIFaBBjabnUuu6YejmZor2OWkfYjIqp8WArCOI94nUtfX
+         WHPOulSEuYojgghEUlxVXTLnkDx4vX+q+BQjBUR2WIUueegGPLRFZXsEDOE2pPWojnUm
+         hjNDE/zpoAtF9AG5e1M2JaYf7ss2TqHwYm+4xnIJTyoA3D7EDFR673Z4kcGJb/J2xzyH
+         3el0mnB3cnRaWii7p31L61dQvKbkSwDDdMoqBk3fiMVFA4SNxmZgV/8SK/xtbTN8AlQv
+         rZ2iOnSbP7VFEd6c9paGbShT85gcfYz40dJwQm+CgyHcSkHJtZuKR0lcvRuSTyz7/SVM
+         AXvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690895043; x=1691499843;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hvhpTUk/JRtUY+N5qYQkgvwpooY/V54upUMhIP4I4bk=;
+        b=XHdeiwORqzzMARg5CPUSQHG65qhzBtWSCfa7kcsza3vLFW4aRepvU7CM48A9T8oOJA
+         rFUnZkkZNujmLbYZ5Tp+BsJhV7MdtSUCCbMikwa+6Cevlw4KI2+VApIo4lN/J+dOfIwG
+         68wPc34gnqRhEC3u0R5YYN54vdiYMjOgxB/jjmSDcteOIUoWwoftSY951nD4b3RIlrvd
+         JsCYoHC/PEurzFG7IvDRJAGwBz9YpaZ9KMI1xsuWgmsBGd282uJskQUyOHf81PJ1wAFF
+         EMmQjGfPYxVnjIECiEfkqxfTHWXNqvkf5vL6KM739W0yoNSCOmve2PoSeb6OGJVSBpSM
+         ACRQ==
+X-Gm-Message-State: ABy/qLbDu2TMCQOCJqzS7f7u8F71xI9zbdQY7YuouQkHbiYQyTznXLcW
+        /lxuGfTdSq6ZmNb5TdbIgAqQkw==
+X-Google-Smtp-Source: APBJJlHyvqXllyc2C+YQBOMD7FF1Suv4ZP0g8UA6E5r6kcRFcqIKFN6nc9+oa1217inUHTQwwSCMQQ==
+X-Received: by 2002:a17:902:c94e:b0:1bb:32de:95c5 with SMTP id i14-20020a170902c94e00b001bb32de95c5mr11838900pla.65.1690895043212;
+        Tue, 01 Aug 2023 06:04:03 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id u16-20020a170902e81000b001bc05774004sm5050732plg.236.2023.08.01.06.03.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Aug 2023 06:03:59 -0700 (PDT)
+Message-ID: <64c902bf.170a0220.e7d90.9d90@mx.google.com>
+Date:   Tue, 01 Aug 2023 06:03:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZMjnZhbKbNMmcUPN@infradead.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.5-rc4-58-g7e5258db49000
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.5-rc4-58-g7e5258db49000)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 04:07:18AM -0700, Christoph Hellwig wrote:
-> On Mon, Jul 31, 2023 at 08:27:17PM +0200, Wysocki, Rafael J wrote:
-> > 
-> > OK, I'll remember about this.
-> > 
-> > 
-> > > With this
-> > > and commit d5ea093eebf022e now we end up with a random driver (amdgpu)
-> > > syncing all file systems for absolutely no good reason.
-> > 
-> > Sorry about that.
-> > 
-> > The problematic commit should still revert more or less cleanly, so please
-> > do that if that's what you need.
-> 
-> We'd still need to remove abuse in amdgpu first, though.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc4-58-g7e=
+5258db49000)
 
-This would effectively revert d5ea093eebf0
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+5-rc4-58-g7e5258db49000/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.5-rc4-58-g7e5258db49000
+Git Commit: 7e5258db49000c4ff5c1b3bc596c2d92e40d6edc
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index dc0e5227119b..af04fece37d5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -75,7 +75,6 @@
- #include "amdgpu_fru_eeprom.h"
- #include "amdgpu_reset.h"
- 
--#include <linux/suspend.h>
- #include <drm/task_barrier.h>
- #include <linux/pm_runtime.h>
- 
-@@ -5225,17 +5224,6 @@ int amdgpu_device_gpu_recover(struct amdgpu_device *adev,
- 	 */
- 	need_emergency_restart = amdgpu_ras_need_emergency_restart(adev);
- 
--	/*
--	 * Flush RAM to disk so that after reboot
--	 * the user can read log and see why the system rebooted.
--	 */
--	if (need_emergency_restart && amdgpu_ras_get_context(adev)->reboot) {
--		DRM_WARN("Emergency reboot.");
--
--		ksys_sync_helper();
--		emergency_restart();
--	}
--
- 	dev_info(adev->dev, "GPU %s begin!\n",
- 		need_emergency_restart ? "jobs stop":"reset");
- 
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
