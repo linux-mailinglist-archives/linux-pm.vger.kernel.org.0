@@ -2,74 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9714B76A87B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 07:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7081B76A89F
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 08:03:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjHAFsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 01:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
+        id S231245AbjHAGDJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 02:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjHAFst (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 01:48:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095AB1FCA;
-        Mon, 31 Jul 2023 22:48:44 -0700 (PDT)
+        with ESMTP id S230166AbjHAGDH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 02:03:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC868E7D
+        for <linux-pm@vger.kernel.org>; Mon, 31 Jul 2023 23:03:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A1661473;
-        Tue,  1 Aug 2023 05:48:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A2FC433C7;
-        Tue,  1 Aug 2023 05:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690868923;
-        bh=CSYR83m0hWJjYjIRujwvyFiMN2MH6lGieHS+KpcH5TI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F+v+oBPjg7WgK2jhl4qBub9O18tXXnx6yR9HpjbyTlMTq9j8VrdTh2kEtcaJVlg7o
-         sy4fvYWyyOeeGWhGez0j+4ln+DJHQxEQOJQALxK2wxNEOlvwQiTgJN1yCJJoVGWFqD
-         ypC6WdR6ijmYOJLItZ5htFUzFNLsgyH0cDPpWG4w=
-Date:   Tue, 1 Aug 2023 07:48:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH 0/3] PM / wakeirq: fix wake irq arming
-Message-ID: <2023080129-district-punk-3da3@gregkh>
-References: <20230713145741.30390-1-johan+linaro@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 516AE61291
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 06:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1659C433C8
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 06:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690869785;
+        bh=bVALq83PQZjjLUIGvXG2vDHmcJXdRcERAEwrvCFSLrc=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=s8VF5kF3C1YiYcoCZVnRePx3UjqqHnBLWpQnrI21IWJ/EVeo2OuRJA2NP94njoFgN
+         BZXtlh1DuHBFaGomVcb7VBwHne9IICsO5OnoDJVupFzQH1BpcwdBWxYTW34p0btsBg
+         wTDNnuiNg5MUKVkQfQKePQH+O+c8wwQLaFfo9AwYvZK7oby0QDLzC9e0hAI/QGpPKA
+         vPSmEKUfEXa/nYp3LpSKXtMH+3ydxqFyu9Gx9w85rSDLDFvwuI/w45TVwXLBF5+otG
+         c9jPR0Xt/FnTXq7bYqxPHISTI2fzjgHQICrzgPtescVgo4k+VxuKywa8jMnWXpoeaK
+         6S9JQEziilrZw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 9640BC53BD1; Tue,  1 Aug 2023 06:03:05 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217630] Kernel fails to load amd_pstate driver on 3970x while
+ Windows works well on the same machine
+Date:   Tue, 01 Aug 2023 06:03:05 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: johnypean@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217630-137361-QZoxIewiUR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217630-137361@https.bugzilla.kernel.org/>
+References: <bug-217630-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230713145741.30390-1-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 13, 2023 at 04:57:38PM +0200, Johan Hovold wrote:
-> When reviewing the Qualcomm serial-driver suspend implementation I
-> noticed the odd runtime PM state update which had snuck in. Turns out it
-> was added to work around a bug in PM core which prevented drivers not
-> implementing runtime PM from using dedicated wake irqs.
-> 
-> This series fixes the wake irq arming and drops the unused wake irq
-> enable helpers before dropping the bogus runtime PM state update in the
-> Qualcomm driver.
-> 
-> I suggest that Rafael takes all of these through his tree.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217630
 
-I agree:
+--- Comment #4 from Jan Kosterec (johnypean@gmail.com) ---
+Almost the same HW here.
+3970x CPU, Gigabyte Designare TRX40 rev 1.1, BIOS v. FD.
+linux kernel v. 6.4.7
+No combination of settings activates amd_pstate driver. Error in syslog:
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+kernel: amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled
+
+In bios there are available setting CPPC and prefered cores, all enabled.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
