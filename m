@@ -2,173 +2,204 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C886676B6DE
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 16:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BACB076BAC4
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Aug 2023 19:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232413AbjHAOLD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 10:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S234570AbjHARHM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 13:07:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjHAOLC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 10:11:02 -0400
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7146ADC;
-        Tue,  1 Aug 2023 07:11:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1690899045; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=h9gRF356ssKPjg2k5q6nQIoGd0VI8Mk8yi2aWuY7FLl9HZww+2x7VTSPBbCUPxTJw4p2sAGOQlfyCPM523roTmdQs0+UeCKkR1O3GyBbgHjsNi7drEkN2D8eSAe7yjZF4FiIjm54kF+cFM5Eca1Tj1KkN8tVtLjl09cG1KuRhp8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1690899045; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Umue7wpYHFkb33ql48Df3lqSCFV9LrXKhteAa0wF8rE=; 
-        b=gFKm5eN48vNDWsP4iCtrtHDAlqCxJV2mVnf0sLOdNysJqEe8WbPW6/wM8mX1YXjo3cKL7QnfS4hTuhDoUYSz/7jxRuCbjTu9BZLqH1VhRfz2YU+edaM4FRDWlwDflLYqAPr0VwrnDn1HD4UyzP/ayJGK6/A9joPDLCs3qob8QjA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1690899045;
-        s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=Umue7wpYHFkb33ql48Df3lqSCFV9LrXKhteAa0wF8rE=;
-        b=AFL1nAv1VOBQUuLEEdgDUUDaia9aJbLmyoEMlf89UMh1sC9JNVw0r0kzcGrgwCH2
-        gssWuISUCWtibEIPA3X9u97oApSjeYRh7VI94u+9kzcF/Ihie1PXtdjU/Ht1SgiHIom
-        ZvreTeIBTw2j5T6Cdr2kt009zsqMHRRBVAPrjvGLWUEaDO96QHVRTW3oYsBgTVMDsTw
-        PYs8zhufx2OcF4Fn+/HXZ9TW3QP2nZ7SkFX4E5rCfQrjhQcBZS9TLJccDth2I7BYk3C
-        9TPZFCPZ4OYN+2zMI7U0BdlmGwIitRm+NiNdIGBXow9jlqUMnwnE0cTMJaeA8Gp6Vdu
-        OSE0BhN4lg==
-Received: from edelgard.fodlan.icenowy.me (120.85.99.175 [120.85.99.175]) by mx.zohomail.com
-        with SMTPS id 1690899039071665.3001028089096; Tue, 1 Aug 2023 07:10:39 -0700 (PDT)
-Message-ID: <c0ccb3021324883fce5d87e27f5abdcccc96503a.camel@icenowy.me>
-Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o
- trips subnode
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev
-Date:   Tue, 01 Aug 2023 22:10:34 +0800
-In-Reply-To: <20230724042502.GA2403526@google.com>
-References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
-         <ZLw4CnzLI/QHPGWx@finisterre.sirena.org.uk>
-         <6d1c0915-1485-d9d6-9fff-0413fb16bd3f@linaro.org>
-         <20230724042502.GA2403526@google.com>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        with ESMTP id S234322AbjHARGz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 13:06:55 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B6230F2
+        for <linux-pm@vger.kernel.org>; Tue,  1 Aug 2023 10:06:10 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-76c93466f8eso266493885a.3
+        for <linux-pm@vger.kernel.org>; Tue, 01 Aug 2023 10:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1690909516; x=1691514316;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dsk9v6SDA+SoDCLz5E3+8HX4/6GEOnH2E0f84jFmVmU=;
+        b=LX/MAs7y329nGSoJxEMdkHfVJspi5HFKovph2IYNBDOyNZ0MDsNfC7tgCMDBWkWPxs
+         9ELH+gmFmDSrkCoXUR6+MjYHDMxQT43bRR/OTr1J7J5Ke+mqD4n925e4hPi3WCiLjoHF
+         UoYDYjF6Ic3exZZc86XjHjKIZEcQE4G4Tx4Xw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690909516; x=1691514316;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dsk9v6SDA+SoDCLz5E3+8HX4/6GEOnH2E0f84jFmVmU=;
+        b=T9LSKT+V4tZlDMVuLdJV9lIwU3XmUMT0Bp17PEcD/pOJ04qrLYEv+kFu4N1K0PKA8j
+         +kf53kI06hQaeDwZ8aLlSc+26q8Ng8OrypiVke1xMeDJu3pvecpSgcDzUCTRxmWanH6l
+         l9AdbTfFknYYIWq0O5biWdXfC4Wp/NV0tVb2mkIGbaLyRzAZ0HX4TPpEm20d0XpfO4lt
+         +FiRWABIH5BH5V9e7oRvZogbc6eQ52zY25czPL7Ms2XAikwek3KWneEVCTA9bcOW1Z2k
+         RJI62/q8b6Z86DSVjZ90itiKMq0bkz4pE68tWg2bGUR2MW1adcoDsMYjGtundVaFNhzc
+         RvDg==
+X-Gm-Message-State: ABy/qLZlzv3LP7TPcz3O50iVJr/jeJjtX6wrS/Qix3VXL+bkBf9il/wp
+        fF96p5UBDW+zDNugfxevCaZmrQ==
+X-Google-Smtp-Source: APBJJlE4ziY46RD3mKzpEtHqnKuP6HtsyVQ9RR3cavBiUZbXExs3chH8vDfVFtMY1jMvJXvzlhl66w==
+X-Received: by 2002:a05:620a:2802:b0:765:a496:8a63 with SMTP id f2-20020a05620a280200b00765a4968a63mr19144061qkp.4.1690909516510;
+        Tue, 01 Aug 2023 10:05:16 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id oo14-20020a05620a530e00b0075772c756e0sm4281213qkn.101.2023.08.01.10.05.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Aug 2023 10:05:15 -0700 (PDT)
+Message-ID: <66e19ae3-253d-5377-5cc2-566ec3cfed49@broadcom.com>
+Date:   Tue, 1 Aug 2023 10:05:11 -0700
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3] cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Kees Cook <keescook@chromium.org>
+References: <ZMh45KH2iPIpNktr@work>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <ZMh45KH2iPIpNktr@work>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000190c5c0601df8d41"
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-=E5=9C=A8 2023-07-24=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 12:25 +0800=EF=BC=
-=8CChen-Yu Tsai=E5=86=99=E9=81=93=EF=BC=9A
-> On Sun, Jul 23, 2023 at 12:12:49PM +0200, Daniel Lezcano wrote:
-> >=20
-> > Hi Mark,
-> >=20
-> > On 22/07/2023 22:11, Mark Brown wrote:
-> > > On Sat, Jul 22, 2023 at 08:25:34PM +0800, Icenowy Zheng wrote:
-> > > > From: Icenowy Zheng <uwu@icenowy.me>
-> > > >=20
-> > > > Although the current device tree binding of thermal zones
-> > > > require the
-> > > > trips subnode, the binding in kernel v5.15 does not require it,
-> > > > and many
-> > > > device trees shipped with the kernel, for example,
-> > > > allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in
-> > > > ARM64, still
-> > > > comply to the old binding and contain no trips subnode.
-> > > >=20
-> > > > Allow the code to successfully register thermal zones w/o trips
-> > > > subnode
-> > > > for DT binding compatibility now.
-> > > >=20
-> > > > Furtherly, the inconsistency between DTs and bindings should be
-> > > > resolved
-> > > > by either adding empty trips subnode or dropping the trips
-> > > > subnode
-> > > > requirement.
-> > >=20
-> > > This makes sense to me - it allows people to see the reported
-> > > temperature even if there's no trips defined which seems more
-> > > helpful than refusing to register.
-> >=20
-> > The binding describes the trip points as required and that since
-> > the
-> > beginning.
->=20
-> Not really. It was made optional in the v5.15 kernel release by
-> commit
->=20
-> =C2=A0=C2=A0=C2=A0 22fc857538c3 dt-bindings: thermal: Make trips node opt=
-ional
+--000000000000190c5c0601df8d41
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I agree, this is why I send this patch (and why I say 'for DT binding
-compatibility now' in the commit message). Further discussion could be
-performed, but this patch should be applied regardless of the result of
-further discussion.
+On 7/31/23 20:15, Gustavo A. R. Silva wrote:
+> Allocate extra space for terminating element at:
+> 
+> drivers/cpufreq/brcmstb-avs-cpufreq.c:
+> 449         table[i].frequency = CPUFREQ_TABLE_END;
+> 
+> and add code comment to make this clear.
+> 
+> This fixes the following -Warray-bounds warning seen after building
+> ARM with multi_v7_defconfig (GCC 13):
+> In function 'brcm_avs_get_freq_table',
+>      inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
+> drivers/cpufreq/brcmstb-avs-cpufreq.c:449:28: warning: array subscript 5 is outside array bounds of 'void[60]' [-Warray-bounds=]
+>    449 |         table[i].frequency = CPUFREQ_TABLE_END;
+> In file included from include/linux/node.h:18,
+>                   from include/linux/cpu.h:17,
+>                   from include/linux/cpufreq.h:12,
+>                   from drivers/cpufreq/brcmstb-avs-cpufreq.c:44:
+> In function 'devm_kmalloc_array',
+>      inlined from 'devm_kcalloc' at include/linux/device.h:328:9,
+>      inlined from 'brcm_avs_get_freq_table' at drivers/cpufreq/brcmstb-avs-cpufreq.c:437:10,
+>      inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
+> include/linux/device.h:323:16: note: at offset 60 into object of size 60 allocated by 'devm_kmalloc'
+>    323 |         return devm_kmalloc(dev, bytes, flags);
+>        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -Warray-bounds.
+> 
+> Link: https://github.com/KSPP/linux/issues/324
+> Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-DT binding compatibility is the unbreakable law.
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
->=20
-> > What changed is now the code reflects the required property while
-> > before it
-> > was permissive, that was an oversight.
-> >=20
-> > Just a reminder about the thermal framework goals:
-> >=20
-> > =C2=A0 1. It protects the silicon (thus critical and hot trip points)
-> >=20
-> > =C2=A0 2. It mitigates the temperature (thus cooling device bound to
-> > trip points)
-> >=20
-> > =C2=A0 3. It notifies the userspace when a trip point is crossed
-> >=20
-> > So if the thermal zone is described but without any of this goal
-> > above, it
-> > is pointless.
-> >=20
-> > If the goal is to report the temperature only, then hwmon should be
-> > used
-> > instead.
->=20
-> What about thermal sensors with multiple channels? Some of the
-> channels
-> are indeed tied to important hardware blocks like the CPU cores and
-> should be tied into the thermal tripping. However other channels
-> might
-> only be used for temperature read-out and have no such requirement.
->=20
-> Should we be mixing thermal and hwmon APIs in the driver?
 
-Well you have no right to decide which sensor should be used for
-throttling and which not. So the only way to make the semantic correct
-is just rip every sensor driver out of thermal API to hwmon API, and
-let thermal framework to use hwmon's.
+--000000000000190c5c0601df8d41
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
->=20
-> > If the goal is to mitigate by userspace, then the trip point *must*
-> > be used
-> > to prevent the userspace polling the temperature. With the trip
-> > point the
-> > sensor will be set to fire an interrupt at the given trip
-> > temperature.
-> >=20
-> > IOW, trip points are not optional
->=20
-> for measurement points that are used for thermal throttling /
-> mitigation.
->=20
-> ChenYu
->=20
-
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIL22l6Rge4QOmUVN
+QW9iTUPAq+0Gn5bVF8AEySkexba+MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDgwMTE3MDUxNlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAkzrd/g0fRawV5GF0SQKd3pNP/ITkAZ+Yq
+AjyjTPxTajjlZTMgNcnRlhOy3+pkt764whuZetwVZghx/bTHJ/SjjzmCdW3MESnFBJ6vk8guzLjg
+hpEwfwtxPDVSxhL+tpxV6cs9g5/JaEJD+xvXmuVH9P94m6/eiDOQ/MmrHbhMfWIC0MjiF7/UnkZj
+siLTHyxoDIclYMGSyie+ygs+klikUiRYWLkU8/OACYGF3EZ8B0cs6o5Tj5IA1NUl4in6j/7+kRWe
+d3ikGvzJ0TPAkgjpP1K50Yp35IHtQY/W79tR3zUaqbPsZeW/bFa1LPF+pjVc8S4qiE6rCjggLbXi
+upN+
+--000000000000190c5c0601df8d41--
