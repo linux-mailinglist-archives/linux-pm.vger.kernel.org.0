@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80E076CCE6
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9E976CCE7
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234539AbjHBMib (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Aug 2023 08:38:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S234551AbjHBMic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Aug 2023 08:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234516AbjHBMiW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:38:22 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B82D2708
-        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 05:38:20 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so95678421fa.2
-        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 05:38:20 -0700 (PDT)
+        with ESMTP id S234526AbjHBMia (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:38:30 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9570E271F
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 05:38:22 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b9e6cc93c6so55155251fa.2
+        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 05:38:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690979899; x=1691584699;
+        d=linaro.org; s=google; t=1690979900; x=1691584700;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=z/arHXwGDpg0PaLjq3SVx/1vOD3CQunADkBlXywyjWc=;
-        b=pzjM00rclJ3O6oMZD6Vt6W+n1moVRi5fOb2JrgpCj8wKpTq4/z6+RtGZEJvxRXBtZV
-         WndP5sU5ASyp3G7zpmVg160TH7sMgywghbM7AA0LejUZIJxH0ddd2J6md27Jjr+Z2whu
-         rK2ZKj46vxytOk853vjyuAEJRubLDfTTimGagp6St25tx9awbuMupq6n//43oG4a7Vaf
-         z75+e1M/CHOF3jNdO4bQ6PnrGeIE2OZBu9MGnLUHr58UGXwtPTLNQUYlRP99ps8KSEfg
-         C4Ao2mTaasEFK5MMVn//gdktkxTHXEXNzocbeJe4jJRNO9ep1WdFKjaduBY1Mwy3NqQM
-         GMtQ==
+        bh=p8ibCsCefa6ZAWVplZiGBVLhq2a/cqsLVlyXMZQI290=;
+        b=L/WAhGYg89vCGvKJ01xmKEj/kAYomwjtqchmRnAljmrzypWGf1ExVNCPvP2t84Fa+H
+         5nhcRtEoiypv+ORz4oZa7O//4OxFXX1xNzhCgTtBF3ndTp5N4VfY59H6yXfwNvmBF4L0
+         oMSEts9C/Ju6pwtv9v/tZXD9XCCBhS0Gv2KVlcdai7CllO6imkWoZA/Y4ooniHZkF4VX
+         HmkILrPsPmVPSoBpgDFNqEXzZwYKyGURbINqnijylTODT57GlOv8VinWfMeQuC8ixDnh
+         uRFr7ESBxePYuwdQN+k+RTwxiKDVZnXdlSKkvbft5LX1teVY5mkkdE2EuXo/i5I+vT6O
+         YkfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690979899; x=1691584699;
+        d=1e100.net; s=20221208; t=1690979900; x=1691584700;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=z/arHXwGDpg0PaLjq3SVx/1vOD3CQunADkBlXywyjWc=;
-        b=HGvlCsRSihsJ3vbCWUNj6IvYTSZt6leLawWG8Ze/9UMcq1u72B88IJXxmjzSCfhTr6
-         s8i+IG2wJYE9n2daQDQf9CHvzFipfn5n5xdH/0oCwGwA0OCEI3w+qEoQHuWX9YXqjU2g
-         3Gi7Dlr2hbWtmUKS3D80xjhtmBg0L2rliuh6M9k4vpSRP5bHRfv5aCBrETplBDgVsRGz
-         um2q9bSs99DwFpSygmFVb7Ee5DuUwqjgHvbNlhgQ+R1fXtqP7WDTIkmsJuteU+IngZ4c
-         6FaowWybIkuCo/jcCaCmsSlLrCinokafaEKPhBuFJvToAuDZG6i6DVrAn/5iMxEEUmyV
-         Oe0Q==
-X-Gm-Message-State: ABy/qLa9hDIx60eysVy3pP5YZ3oBKixI31sCusmjvzFkY+7sHy9+X7b6
-        F7t1eUbhn0vKUa5rTbr6HCZvLw==
-X-Google-Smtp-Source: APBJJlEIw9eIfqcPtLZzNmEUFCp9vj9/HnXINY+FrqvSgVQvrQnVQDh/HFfTYafJpEBnYcmADWIIvg==
-X-Received: by 2002:a2e:980c:0:b0:2b9:b41a:aa66 with SMTP id a12-20020a2e980c000000b002b9b41aaa66mr5429905ljj.20.1690979898810;
-        Wed, 02 Aug 2023 05:38:18 -0700 (PDT)
+        bh=p8ibCsCefa6ZAWVplZiGBVLhq2a/cqsLVlyXMZQI290=;
+        b=KGrHdQ3m9ZBEz91okKowGXZBlrQzNw1IvKi/vIxSV85oS4ayhyRVG8G6b0YRJnJSuL
+         +ah0ich/RBCqH6vEUqG+ugzZlJNUh9UfLth/eHPuI8eVUzBohlOSB2L1unkwf55yz4yL
+         CdxE9uHcHu+WF+PJ53a9WId/z0E1erV2NyXYF8v5YLQUWpwmvPQiuzzvSvrJnYzdapBP
+         TAehLBNoA3RjIJMSmxBVxAUqHsvFWoRKcJ9jXqwtdX1em44EFkJimeDsB7lqezdAYp+K
+         T+TH74Xc/hIur2FuKOgMGndT6a5uy2MPyzVRVjFssPFCDffZsjaP+JAWMFjl4AhXHzbs
+         1isQ==
+X-Gm-Message-State: ABy/qLa3gH/AG5nS+/moImLZS8SskvsgYlmr1kBVbrR8DXFwijvFvXgB
+        cX+OaWsrf4Ax+ZpXhfDQOnXtnw==
+X-Google-Smtp-Source: APBJJlE6ARDEmy21WU3r29vh2B5ymlpRBSIrn0DFyx0h3brX5raOWVzzM4WVWqe1ZERvyRqSv+SJuQ==
+X-Received: by 2002:a2e:3307:0:b0:2b6:ba54:cc8 with SMTP id d7-20020a2e3307000000b002b6ba540cc8mr4884185ljc.30.1690979900741;
+        Wed, 02 Aug 2023 05:38:20 -0700 (PDT)
 Received: from [192.168.1.101] (abyk53.neoplus.adsl.tpnet.pl. [83.9.30.53])
-        by smtp.gmail.com with ESMTPSA id h8-20020a2e9ec8000000b002b9e5fe86dasm1897050ljk.81.2023.08.02.05.38.16
+        by smtp.gmail.com with ESMTPSA id h8-20020a2e9ec8000000b002b9e5fe86dasm1897050ljk.81.2023.08.02.05.38.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 05:38:18 -0700 (PDT)
+        Wed, 02 Aug 2023 05:38:20 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 02 Aug 2023 14:37:42 +0200
-Subject: [PATCH v13 02/10] MAINTAINERS: Add entry for Qualcomm
- CPRv3/v4/Hardened driver
+Date:   Wed, 02 Aug 2023 14:37:43 +0200
+Subject: [PATCH v13 03/10] dt-bindings: opp: v2-qcom-level: Document CPR3
+ open/closed loop volt adjustment
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230217-topic-cpr3h-v13-2-d01cff1c54cf@linaro.org>
+Message-Id: <20230217-topic-cpr3h-v13-3-d01cff1c54cf@linaro.org>
 References: <20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org>
 In-Reply-To: <20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org>
 To:     AngeloGioacchino Del Regno 
@@ -78,15 +78,13 @@ Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
         Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1690979891; l=984;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1690979891; l=1556;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=2YiA3nGNcsVPCq1IwlTdMAqStD1lE3rx04PXJ5i83As=;
- b=/aE9/NxMNY3o+ds1NwBS03mBqZjAuS1DKfNpv8RGPTcD4ywBrlNoAWFXhqTRhVaZtzCiJY7vE
- My7YAfaWacCDkCONSmD6pJ4K1kNF+ar5KWeXMz0/H/aKp3zvAJxU7E8
+ bh=1PU66HaoulFU/Wo7HNKJEIXnou7x9T43KX25qUVEdMs=;
+ b=l6lqMVeLONCbszDhY3T5E0D1mbsBcY/OrtcjDOXJH7657zxZ58AWWw/XkxmTXe9bkCyinjJlt
+ BS3oS28U+1OAnL6wInr9zNUYwqUYsKemAIvGlsroPFO+qkgLuMT7VlN
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -99,35 +97,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+CPR3 and newer can be fed per-OPP voltage adjustment values for both
+open- and closed-loop paths to make better decisions about settling
+on the final voltage offset target. Document these properties.
 
-Add maintainers entry for the Qualcomm CPR3/CPR4/CPRh driver.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-[Konrad: rebase, update AGdR's email]
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../devicetree/bindings/opp/opp-v2-qcom-level.yaml         | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1089ef3319f2..a7514261b157 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17621,6 +17621,12 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/power/avs/qcom,cpr.yaml
- F:	drivers/genpd/qcom/cpr.c
+diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+index a30ef93213c0..b203ea01b17a 100644
+--- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
++++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
+@@ -34,6 +34,20 @@ patternProperties:
+         minItems: 1
+         maxItems: 2
  
-+QUALCOMM CORE POWER REDUCTION v3/v4/Hardened AVS DRIVER
-+M:	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-+F:	drivers/soc/qcom/cpr3.c
++      qcom,opp-cloop-vadj:
++        description: |
++          An array of per-thread values representing the closed-loop
++          voltage adjustment value associated with this OPP node.
++        $ref: /schemas/types.yaml#/definitions/int32-array
++        maxItems: 2
 +
- QUALCOMM CPUFREQ DRIVER MSM8996/APQ8096
- M:	Ilia Lin <ilia.lin@kernel.org>
- L:	linux-pm@vger.kernel.org
++      qcom,opp-oloop-vadj:
++        description: |
++          An array of per-thread values representing the open-loop
++          voltage adjustment value associated with this OPP node.
++        $ref: /schemas/types.yaml#/definitions/int32-array
++        maxItems: 2
++
+     required:
+       - opp-level
+       - qcom,opp-fuse-level
 
 -- 
 2.41.0
