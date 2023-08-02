@@ -2,186 +2,389 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDC176D40B
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 18:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE5E676DA77
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 00:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjHBQsv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 2 Aug 2023 12:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47390 "EHLO
+        id S231196AbjHBWQq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Aug 2023 18:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjHBQsa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 12:48:30 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9711AC;
-        Wed,  2 Aug 2023 09:48:29 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-56475c1b930so1027903eaf.0;
-        Wed, 02 Aug 2023 09:48:29 -0700 (PDT)
+        with ESMTP id S229606AbjHBWQo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 18:16:44 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB092703
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 15:16:43 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-407db3e9669so46301cf.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 15:16:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691014602; x=1691619402;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HvvvcR5k69/bRgEynReQCQDAoMBXA9xuLK4qPuNVocA=;
+        b=zglwa3PToYxIvtMzn3WnGFi8DejAw5vc0K+FdoBU1SgKVW6+BbKI8dgDEysTaBOdS3
+         wAG/g1EjswgSsvmQb6Kx1pLdKZtW1OZuE1p4ppE5eswvIpJ5r643GB7xC2Qb2yteAjTS
+         9S4oJ5/mEXwSi6Oo6C8R603FivtMh0vLq/XVFCbjeaq3I0yC3Uky/QK3fSk7Q9sXOp4k
+         JHplFs69sFkBfelS6L2JvEYefKHdM8N8ChHmYTNQ+zC95tlwpFR2MKd+eQ3CPKHyjhhR
+         f4+107CN68rYjdn+J1oH865r9e+0ghtzcUOWIXgh8iSmhOwxettiCgLLanuBusVDUpdx
+         sDkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690994908; x=1691599708;
+        d=1e100.net; s=20221208; t=1691014602; x=1691619402;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=x4DJQJkC9NXulAsskXsBVfJzo4vhzZPcLEYBWos2xhk=;
-        b=LGX99bfLc3V1UPzQU4NAqOpkEjEr3BF4Ac9BmD/k4HVaKQp3fmaiKwEaQYSquewhiN
-         bU9Dfo3CyOxCYkuHddprqFjGsMm/2rkAjloqV1IryYSB5Joxf+hQiOZJbg/ZYP4u3dOr
-         KWuTYepa2ZMJUfFTYVH4zmMHT53GqCQhXdHzJt4vKCz4QMRxz86CkUxUUde+uVgjdw47
-         U5pAInc4ui9CaKMf2RZky4eM/KFP4Jxg1yg8LEdTbaox6X1e5eZtmIiVXMwyUvUtfVLS
-         48oMYkbbBw7IIlKVDYIHeVXFNztSIzGmQSUt4MVVWLYHwgXZDPg22JS6eHhPZqY7YrIj
-         NVog==
-X-Gm-Message-State: ABy/qLZ22+Y5OfnSg+U0rYmUohKb18yf9+06OwNknRAWocMRbn0TlsFP
-        duSdnU1fTae251vFgON0azV4psbP06IREK9pkOk=
-X-Google-Smtp-Source: APBJJlHSECy5jKPCEQN5IlcgxAHfjF5aalctkrWz+1/ATuL6Ow+piNoQF2SC+imfMegE01xDjGTvGCOxhAYg0CG8zt4=
-X-Received: by 2002:a05:6820:2201:b0:560:b01a:653d with SMTP id
- cj1-20020a056820220100b00560b01a653dmr12607199oob.0.1690994908588; Wed, 02
- Aug 2023 09:48:28 -0700 (PDT)
+        bh=HvvvcR5k69/bRgEynReQCQDAoMBXA9xuLK4qPuNVocA=;
+        b=csIXLgwq/1vxtVDkCDpihM2zw0snZnmspMDEQ6TvCb5kXVEIlYU/LpppAEQpkH22fG
+         REDFafBarcp1m+PsWWeZn49pgN3YuvsW+hA7D2Kb4ff41+Wlg4oX6fGZHVYrfez5U//L
+         k29YJwuBfdcrUHRHTkmnDRyDWaszO67CToUv+cnhBoxvfTEwvf1XyDVauCEM9GlN96NN
+         OKeB18V4IyBJExqCB5efwxxsoWrjWCIzQ26KCV6rjwzwe9uDHRe6oVLJosBApndj4UL+
+         7OBwHDS1wrVcW+QjEz74xOQk3gHpeB6sXWgxx0iS41ymGGEffEwIX/jfUp7zH+cUvf53
+         cW4w==
+X-Gm-Message-State: ABy/qLb0TuZprEqfHov1F1wjX3ZIF/i7+GYMHBjMP99q9HUcQocKnmCM
+        zxuKlchTsaXRHX9bUf+68KWuQPxRaDHT7fujoZweyQ==
+X-Google-Smtp-Source: APBJJlGAe5hCh+FmJwj3DGeg9uj2C/ZaxhT8Cyzsewe74aeb6wGBeyrI37wS1LtkY2T0M0f39ogx0oD8MIBSq4/HM1k=
+X-Received: by 2002:a05:622a:1493:b0:403:b242:3e30 with SMTP id
+ t19-20020a05622a149300b00403b2423e30mr1502728qtx.1.1691014602087; Wed, 02 Aug
+ 2023 15:16:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
- <4501957.LvFx2qVVIh@kreacher> <2d0315d4-35b4-84db-4dcb-c9528abad825@linaro.org>
- <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
- <eb279cf1-0605-3b87-5cb6-241a91977455@linaro.org> <CAJZ5v0i48=oawDJHoaHhiZRaO_CJokKsOHyNvu2v4PUbS6CH_Q@mail.gmail.com>
- <f8029547-6851-7e0c-00e6-4963ccbc2702@linaro.org>
-In-Reply-To: <f8029547-6851-7e0c-00e6-4963ccbc2702@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 2 Aug 2023 18:48:17 +0200
-Message-ID: <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] thermal: core: Add mechanism for connecting trips
- with driver data
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <20230731174613.4133167-1-davidai@google.com> <20230731174613.4133167-3-davidai@google.com>
+ <20230801093620.ggz25g3faxycp44q@vireshk-i7>
+In-Reply-To: <20230801093620.ggz25g3faxycp44q@vireshk-i7>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Wed, 2 Aug 2023 15:16:06 -0700
+Message-ID: <CAGETcx-Y2MONWPEWYHXsWtBxuFQP51wTCS30wJt+NYKD969BuA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Quentin Perret <qperret@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 2, 2023 at 5:50 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Tue, Aug 1, 2023 at 2:36=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
+g> wrote:
 >
-> On 02/08/2023 15:03, Rafael J. Wysocki wrote:
+> On 31-07-23, 10:46, David Dai wrote:
+> > diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtua=
+l-cpufreq.c
+> > new file mode 100644
+> > index 000000000000..66b0fd9b821c
+> > --- /dev/null
+> > +++ b/drivers/cpufreq/virtual-cpufreq.c
+> > @@ -0,0 +1,237 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (C) 2023 Google LLC
+> > + */
+> > +
+> > +#include <linux/arch_topology.h>
+> > +#include <linux/cpufreq.h>
+> > +#include <linux/init.h>
+> > +#include <linux/sched.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_address.h>
+> > +#include <linux/of_platform.h>
+> > +#include <linux/pm_opp.h>
+> > +#include <linux/slab.h>
+> > +
+> > +#define REG_CUR_FREQ_OFFSET 0x0
+> > +#define REG_SET_FREQ_OFFSET 0x4
+> > +#define PER_CPU_OFFSET 0x8
+> > +
+> > +struct virt_cpufreq_ops {
+> > +     void (*set_freq)(struct cpufreq_policy *policy, u32 freq);
+> > +     u32 (*get_freq)(struct cpufreq_policy *policy);
+> > +};
 >
-> [ ... ]
+> Since you only have one implementation currently, this isn't really
+> required. Keep the data as NULL in `virt_cpufreq_match` and use
+> writel/readl directly.
 >
-> >>>>> +struct thermal_trip_ref {
-> >>>>> +     struct thermal_trip *trip;
-> >>>>> +};
-> >>>>
-> >>>> That introduces a circular dependency. That should be avoided.
-> >>>
-> >>> Sorry, but this is an empty statement without any substance.
-> >>
-> >> I'm just pointing that we have a struct A pointing to struct B and
-> >> struct B pointing to struct A.
-> >
-> > Why is this a problem in general?
+> This can be updated if we need more implementations later.
 >
-> Cyclic dependencies are often a sign of a design problem.
+> > +struct virt_cpufreq_drv_data {
+> > +     void __iomem *base;
+> > +     const struct virt_cpufreq_ops *ops;
+> > +};
+> > +
+> > +static void virt_cpufreq_set_freq(struct cpufreq_policy *policy, u32 f=
+req)
+> > +{
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +
+> > +     writel_relaxed(freq, data->base + policy->cpu * PER_CPU_OFFSET
+> > +                     + REG_SET_FREQ_OFFSET);
+> > +}
+> > +
+> > +static u32 virt_cpufreq_get_freq(struct cpufreq_policy *policy)
+> > +{
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +
+> > +     return readl_relaxed(data->base + policy->cpu * PER_CPU_OFFSET
+> > +                     + REG_CUR_FREQ_OFFSET);
 >
-> > There are cases in which struct A needs to be found given struct B
-> > (like in the ACPI thermal case, when the driver needs to get to
-> > trips[i] from its local data) and there are cases in which struct B
-> > needs to be found given struct A (like when a driver's callback is
-> > invoked and passed a trip pointer, so the driver needs to get to its
-> > local data from it - arguably this is not the case right now, but I
-> > suppose it will be the case in the future).
-> >
-> >> [ ... ]
-> >>
-> >>>>>     struct thermal_cooling_device_ops {
-> >>>>> Index: linux-pm/drivers/thermal/thermal_core.c
-> >>>>> ===================================================================
-> >>>>> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> >>>>> +++ linux-pm/drivers/thermal/thermal_core.c
-> >>>>> @@ -1306,14 +1306,28 @@ thermal_zone_device_register_with_trips(
-> >>>>>         if (result)
-> >>>>>                 goto release_device;
-> >>>>>
-> >>>>> +     mutex_lock(&tz->lock);
-> >>>>> +
-> >>>>>         for (count = 0; count < num_trips; count++) {
-> >>>>> -             struct thermal_trip trip;
-> >>>>> +             int temperature = 0;
-> >>>>> +
-> >>>>> +             if (trips) {
-> >>>>> +                     temperature = trips[count].temperature;
-> >>>>> +                     if (trips[count].driver_ref)
-> >>>>> +                             trips[count].driver_ref->trip = &trips[count];
-> >>>>> +             } else {
-> >>>>> +                     struct thermal_trip trip;
-> >>>>
-> >>>> As mentioned above, that should not appear in the thermal core code.
-> >>>
-> >>> Well, this is a matter of opinion to me.  Clearly, I disagree with it.
-> >>
-> >> Why? It is not an opinion.
-> >
-> > So what's wrong with it, technically?  What's broken by it?  Why does
-> > it make the code more difficult to maintain?
+> This doesn't look properly aligned. Please run checkpatch (--strict
+> (optional)).
 >
+> > +}
+> > +
+> > +static const struct virt_cpufreq_ops virt_freq_ops =3D {
+> > +     .set_freq =3D virt_cpufreq_set_freq,
+> > +     .get_freq =3D virt_cpufreq_get_freq,
+> > +};
+> > +
+> > +static void virt_scale_freq_tick(void)
+> > +{
+> > +     struct cpufreq_policy *policy =3D cpufreq_cpu_get(smp_processor_i=
+d());
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +     u32 max_freq =3D (u32)policy->cpuinfo.max_freq;
+> > +     u64 cur_freq;
+> > +     u64 scale;
+> > +
+> > +     cpufreq_cpu_put(policy);
+> > +
+> > +     cur_freq =3D (u64)data->ops->get_freq(policy);
+> > +     cur_freq <<=3D SCHED_CAPACITY_SHIFT;
+> > +     scale =3D div_u64(cur_freq, max_freq);
+> > +
+> > +     this_cpu_write(arch_freq_scale, (unsigned long)scale);
+> > +}
+> > +
+> > +static struct scale_freq_data virt_sfd =3D {
+> > +     .source =3D SCALE_FREQ_SOURCE_VIRT,
+> > +     .set_freq_scale =3D virt_scale_freq_tick,
+> > +};
+> > +
+> > +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *polic=
+y)
+> > +{
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +     /*
+> > +      * Use cached frequency to avoid rounding to freq table entries
+> > +      * and undo 25% frequency boost applied by schedutil.
+> > +      */
+> > +     u32 freq =3D mult_frac(policy->cached_target_freq, 80, 100);
+> > +
+> > +     data->ops->set_freq(policy, freq);
+> > +     return 0;
+> > +}
+> > +
+> > +static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *po=
+licy,
+> > +             unsigned int target_freq)
+> > +{
+> > +     virt_cpufreq_set_perf(policy);
+> > +     return target_freq;
+> > +}
+> > +
+> > +static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
+> > +             unsigned int index)
+> > +{
+> > +     return virt_cpufreq_set_perf(policy);
+> > +}
+> > +
+> > +static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> > +{
+> > +     struct virt_cpufreq_drv_data *drv_data =3D cpufreq_get_driver_dat=
+a();
+> > +     struct cpufreq_frequency_table *table;
+> > +     struct device *cpu_dev;
+> > +     int ret;
+> > +
+> > +     cpu_dev =3D get_cpu_device(policy->cpu);
+> > +     if (!cpu_dev)
+> > +             return -ENODEV;
+> > +
+> > +     ret =3D dev_pm_opp_of_add_table(cpu_dev);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     ret =3D dev_pm_opp_get_opp_count(cpu_dev);
+> > +     if (ret <=3D 0) {
+> > +             dev_err(cpu_dev, "OPP table can't be empty\n");
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     ret =3D dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
+> > +     if (ret) {
+> > +             dev_err(cpu_dev, "failed to init cpufreq table: %d\n", re=
+t);
+> > +             return ret;
+> > +     }
+> > +
+> > +     policy->freq_table =3D table;
+> > +     policy->dvfs_possible_from_any_cpu =3D false;
 >
->
-> >> The thermal core code has been very very tied
-> >> with the ACPI implementation (which is logical given the history of the
-> >> changes). All the efforts have been made to cut these frictions and make
-> >> the thermal core code driver agnostic.
-> >>
-> >> The changes put in place a mechanism for the ACPI driver.
-> >
-> > Not really, for all drivers that have local trip data and need to get
-> > to trips[i] from there and/or the other way around.
-> >
-> >> The thermal zone lock wrapper is put in place for the ACPI driver.
-> >
-> > Yes, it is, because that's the most straightforward way to address the
-> > use case at hand IMV.
-> >
-> >>> Anyway, I want to be productive, so here's the thing: either something
-> >>> like this is done, or drivers need to be allowed to walk the trips
-> >>> table.
-> >>>
-> >>> Which one is better?
-> >>
-> >> None of them. I think we can find a third solution where the changes are
-> >> self contained in the ACPI driver. What do you think?
-> >
-> > The ACPI thermal driver needs to update trip point temperatures at
-> > times.  For this purpose, it needs to get from its local trip data to
-> > trip[i] somehow.
-> >
-> > Creating a new trips[] array and handing it over to the core is not an
-> > option, because it potentially breaks the thermal device binding to
-> > the zone (in which trip indices are used, mind you).
-> >
-> > So how exactly do you want the driver to do the above?
-> >
-> > It could save a pointer to each trips[i] in its local data structures
-> > before registering the zone, but then if the core reordered the trips,
-> > those pointers would become stale.
-> >
-> > So how?
->
-> Let me check if I can do something on top of your series to move it in
-> the ACPI driver.
+> Why can't we call virt_cpufreq_target_index() from any CPU ?
 
-It doesn't need to be on top of my series, so if you have an idea,
-please just let me know what it is.
+This is mainly an optimization to reduce the latency of the "frequency
+change" which has a huge impact on the performance (as can be seen
+from the numbers in the cover letter).
 
-It can't be entirely in the ACPI driver AFAICS, though, because
-trips[i] need to be modified on updates and they belong to the core.
-Hence, the driver needs some help from the core to get to them.  It
-can be something like "this is my trip tag and please give me the
-address of the trip matching it" or similar, but it is needed, because
-the driver has to assume that the trip indices used by it initially
-may change.
+Setting this flag means that the vCPU thread triggering the MMIO
+handling (on the host side) is the thread on which the host needs to
+apply any uclamp settings. So this avoids the VMM having to look up
+the right vCPU thread that corresponds to this CPU, and any
+permissions issues wrt setting another threads uclamp, etc. This
+becomes even more important if/when BPF support is added for handling
+simple MMIO read/writes. Will Deacon has been working on the eBPF
+part[1] and IIUC, not setting this flag adds a lot of extra overhead
+on the BPF side.
+
+So, yeah, this flag is very helpful wrt reducing latency/simplifying
+host side implementation and that's why we want it here.
+
+[1] - https://kvm-forum.qemu.org/2023/talk/AZKC77/
+
+Thanks,
+Saravana
+
+>
+> > +     policy->fast_switch_possible =3D true;
+> > +     policy->driver_data =3D drv_data;
+> > +
+> > +     /*
+> > +      * Only takes effect if another FIE source such as AMUs
+> > +      * have not been registered.
+> > +      */
+> > +     topology_set_scale_freq_source(&virt_sfd, policy->cpus);
+> > +
+> > +     return 0;
+> > +
+> > +}
+> > +
+> > +static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+> > +{
+> > +     topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, policy->=
+related_cpus);
+> > +     kfree(policy->freq_table);
+> > +     policy->freq_table =3D NULL;
+> > +     return 0;
+> > +}
+> > +
+> > +static int virt_cpufreq_online(struct cpufreq_policy *policy)
+> > +{
+> > +     /* Nothing to restore. */
+> > +     return 0;
+> > +}
+> > +
+> > +static int virt_cpufreq_offline(struct cpufreq_policy *policy)
+> > +{
+> > +     /* Dummy offline() to avoid exit() being called and freeing resou=
+rces. */
+> > +     return 0;
+> > +}
+> > +
+> > +static struct cpufreq_driver cpufreq_virt_driver =3D {
+> > +     .name           =3D "virt-cpufreq",
+> > +     .init           =3D virt_cpufreq_cpu_init,
+> > +     .exit           =3D virt_cpufreq_cpu_exit,
+> > +     .online         =3D virt_cpufreq_online,
+> > +     .offline        =3D virt_cpufreq_offline,
+> > +     .verify         =3D cpufreq_generic_frequency_table_verify,
+> > +     .target_index   =3D virt_cpufreq_target_index,
+> > +     .fast_switch    =3D virt_cpufreq_fast_switch,
+> > +     .attr           =3D cpufreq_generic_attr,
+> > +};
+> > +
+> > +static int virt_cpufreq_driver_probe(struct platform_device *pdev)
+> > +{
+> > +     int ret;
+> > +     struct virt_cpufreq_drv_data *drv_data;
+> > +
+> > +     drv_data =3D devm_kzalloc(&pdev->dev, sizeof(*drv_data), GFP_KERN=
+EL);
+> > +     if (!drv_data)
+> > +             return -ENOMEM;
+> > +
+> > +     drv_data->ops =3D of_device_get_match_data(&pdev->dev);
+> > +     if (!drv_data->ops)
+> > +             return -EINVAL;
+> > +
+> > +     drv_data->base =3D devm_platform_ioremap_resource(pdev, 0);
+> > +     if (IS_ERR(drv_data->base))
+> > +             return PTR_ERR(drv_data->base);
+> > +
+> > +     cpufreq_virt_driver.driver_data =3D drv_data;
+> > +
+> > +     ret =3D cpufreq_register_driver(&cpufreq_virt_driver);
+> > +     if (ret) {
+> > +             dev_err(&pdev->dev, "Virtual CPUFreq driver failed to reg=
+ister: %d\n", ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     dev_dbg(&pdev->dev, "Virtual CPUFreq driver initialized\n");
+> > +     return 0;
+> > +}
+> > +
+> > +static int virt_cpufreq_driver_remove(struct platform_device *pdev)
+> > +{
+> > +     cpufreq_unregister_driver(&cpufreq_virt_driver);
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct of_device_id virt_cpufreq_match[] =3D {
+> > +     { .compatible =3D "virtual,cpufreq", .data =3D &virt_freq_ops},
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(of, virt_cpufreq_match);
+> > +
+> > +static struct platform_driver virt_cpufreq_driver =3D {
+> > +     .probe =3D virt_cpufreq_driver_probe,
+> > +     .remove =3D virt_cpufreq_driver_remove,
+> > +     .driver =3D {
+> > +             .name =3D "virt-cpufreq",
+> > +             .of_match_table =3D virt_cpufreq_match,
+> > +     },
+> > +};
+> > +
+> > +static int __init virt_cpufreq_init(void)
+> > +{
+> > +     return platform_driver_register(&virt_cpufreq_driver);
+> > +}
+> > +postcore_initcall(virt_cpufreq_init);
+>
+> Why do you want to use this and not module_init() ? Then you can
+> simply use `module_platform_driver()`.
+>
+> > +
+> > +static void __exit virt_cpufreq_exit(void)
+> > +{
+> > +     platform_driver_unregister(&virt_cpufreq_driver);
+> > +}
+> > +module_exit(virt_cpufreq_exit);
+> > +
+> > +MODULE_DESCRIPTION("Virtual cpufreq driver");
+> > +MODULE_LICENSE("GPL");
+>
+> --
+> viresh
