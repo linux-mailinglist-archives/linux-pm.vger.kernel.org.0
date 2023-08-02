@@ -2,109 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DECE376CD59
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E7F76CDAF
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbjHBMpz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 2 Aug 2023 08:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
+        id S230353AbjHBM6x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Aug 2023 08:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbjHBMpx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:45:53 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0BE2D4C;
-        Wed,  2 Aug 2023 05:45:30 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-1bb6334fec5so797391fac.1;
-        Wed, 02 Aug 2023 05:45:30 -0700 (PDT)
+        with ESMTP id S234036AbjHBM6w (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:58:52 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF294268D
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 05:58:49 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fe2ba3e260so15392515e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 05:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690981128; x=1691585928;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nM35gsA6CPAmgURYYCINSeaOq/vcjiHdkzvB/+S9OSc=;
+        b=JzlKw9nzxvBVDvJQ1kq7HJaL2HxnAlqaVIS5QNT1elfHqLddv3k2oeObRsUnLH9s/q
+         jVoeUaVCNGOuUW63sT1U8iJTqP6cbnUhn8Nuo5gs4AjO2n9Wmoepan66ybgDyA+nsS/V
+         3qVyg0E79VqozUedZZvyrFan399GHBy9Cit0k056nFy71JvSxtyFJ4ho8OG5rAyychQS
+         AEhaHfcsD19ml626osi42A8qdJbYDt77Y6QrASHfgx/sH723re8tOMJxrjDJ3HUu1s4w
+         JOOItDl6IM8PGtK0RsyhNE3U6uMsIIfapitxDl63Gjbk9m6O3p3EOI9RmAtGRA4bbP/2
+         rTyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690980285; x=1691585085;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=at867tJckf1nQORNLj4OAwSlXms8YsyeqcRBXqkAs8A=;
-        b=Yvk/lIRGkmSm2qtgbWipMTFeQKe0S5WXsxVjmi7UrfG0AtpWJV//WOa2m1Ss2CuEs1
-         iife9vHWcSDeZLdhfBuorf12gmJAKrMZkYE+apn+7p83ZYwc3h52e8YSn2LQyA63eXca
-         d4YJaLWSjK0+x1o8LXoXpiTgE2tXP4RfaelKNST5qDGN8HlsoPcMIDQBjeF6fzif6mWF
-         xUeMtvfJZuwMgnJSVuLnSatW4TY87XeZ33I32p9J7vL/dXq6ZUBbb7uMZdLU7aLa8OQz
-         1YAMMoCG6bNyK+S3qJNi8GlSuVAQ8VCOlyLVaDB43JY/kUhwc1HFFcLFj4JhyCLuyMiD
-         RFYg==
-X-Gm-Message-State: ABy/qLZOMnp/XnwnQnF5yvxiW8mEMLqxSdti6DVVCB2aQ613wE6zPoAI
-        AGncyv7iIwZ5Wm+L1N9SreQ/BLPNeGvzOtF5uPU=
-X-Google-Smtp-Source: APBJJlHrX8CZBRaQSwN8AGSMWlTg21y9BjLbat0wsMulksa1y+4QVEwR8wkHsQPwwckRN/BKrCMGaC0wh63srUFWIwQ=
-X-Received: by 2002:a05:6870:231d:b0:1a7:f79c:2fbc with SMTP id
- w29-20020a056870231d00b001a7f79c2fbcmr11997663oao.0.1690980285231; Wed, 02
- Aug 2023 05:44:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230728145515.990749537@infradead.org> <20230728145808.835742568@infradead.org>
- <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
- <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
- <CAJZ5v0iVKRY5-YvQmMbZ3+eZNHJgXt=CoYedNueAJyT9+Ld5Dg@mail.gmail.com>
- <20230731090935.GB29590@hirez.programming.kicks-ass.net> <CAJZ5v0jh5oozZm7OvN9j1iHtzYQzPMOJ=Nt0HaJKYyJ218Cezw@mail.gmail.com>
- <20230731113850.GE29590@hirez.programming.kicks-ass.net> <CAJZ5v0h+KC+uMiOE4m4Dp4=iHMkekutk+B+cwb0de8Fvswv6jA@mail.gmail.com>
- <20230802103426.GB210177@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230802103426.GB210177@hirez.programming.kicks-ass.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 2 Aug 2023 14:44:33 +0200
-Message-ID: <CAJZ5v0gMrUBqtWfuN4DJwXYY5kM+kikWHiep=p-8Jz3yEO0hfQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, anna-maria@linutronix.de,
-        tglx@linutronix.de, frederic@kernel.org, gautham.shenoy@amd.com,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1690981128; x=1691585928;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nM35gsA6CPAmgURYYCINSeaOq/vcjiHdkzvB/+S9OSc=;
+        b=bAdGmAT6h6nkyc7lQr9hf/wX2DqzSpjdXKyUBElmf/R4mvs4PQirn9b/5yPvVTVUwT
+         4hjWSVbB5hTcAUcR7yIZwFSQ+FockPVaMa3qImzPzcSYyTjfPlTURzKFRyY6bWBRxQZe
+         PyoRzDr6JvVEP5tiwp6jbYAwgNNq9+fBYyIjndM7sZHNysQaXI0Zorgct6U8+hZbAfAa
+         2NjCsXS5Ub56JBblAxx3PSret4XmAPU1rBcW2Vt+lN05BKPewQ/3bamGy6x5qRwvlg59
+         EaOB3ulM1EgkVaraL3GlU1XcglL2s8gr/o/pJLn3trsI+N6IIbiIFHH9VVwXnttPmECh
+         n4zQ==
+X-Gm-Message-State: ABy/qLZfKwYOA+sr3cPSDIAuG5oEVSgf94r/JG/t638T3DB4cMguv4VW
+        8mMfXML0xn5Gzg83G1L3eYS7Vw==
+X-Google-Smtp-Source: APBJJlGdkSWe0FjsI0iKpzPoDTFo2gPe55Tldu84LoI9shoruw5nj+UrqQP2lEdQydwZtX8AfvfZhQ==
+X-Received: by 2002:adf:fd4f:0:b0:314:3b78:da77 with SMTP id h15-20020adffd4f000000b003143b78da77mr4389666wrs.29.1690981128249;
+        Wed, 02 Aug 2023 05:58:48 -0700 (PDT)
+Received: from localhost (host-92-17-103-66.as13285.net. [92.17.103.66])
+        by smtp.gmail.com with ESMTPSA id k1-20020adff5c1000000b00314417f5272sm19042667wrp.64.2023.08.02.05.58.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 05:58:47 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 02 Aug 2023 13:58:46 +0100
+Message-Id: <CUI2S5IGZEHC.P7MUFZVOHCYR@lion.caleb.rex.connolly.tech>
+Cc:     "Robert Marko" <robimarko@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Jeffrey Hugo" <quic_jhugo@quicinc.com>,
+        "Marijn Suijten" <marijn.suijten@somainline.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v13 01/10] cpufreq: blocklist MSM8998 in
+ cpufreq-dt-platdev
+From:   "Caleb Connolly" <caleb.connolly@linaro.org>
+To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Viresh Kumar" <vireshk@kernel.org>, "Nishanth Menon" <nm@ti.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Niklas Cassel" <nks@flawful.org>,
+        "Liam Girdwood" <lgirdwood@gmail.com>,
+        "Mark Brown" <broonie@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        "Ulf Hansson" <ulf.hansson@linaro.org>
+X-Mailer: aerc 0.15.2
+References: <20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org>
+ <20230217-topic-cpr3h-v13-1-d01cff1c54cf@linaro.org>
+In-Reply-To: <20230217-topic-cpr3h-v13-1-d01cff1c54cf@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 2, 2023 at 12:34 PM Peter Zijlstra <peterz@infradead.org> wrote:
+On Wed Aug 2, 2023 at 1:37 PM BST, Konrad Dybcio wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.or=
+g>
 >
-> On Mon, Jul 31, 2023 at 06:55:35PM +0200, Rafael J. Wysocki wrote:
+> Add the MSM8998 to the blocklist since the CPU scaling on this platform
+> is handled by a separate driver.
 >
-> > > In that case you cannot tell the difference between I'm good to use this
-> > > state and I'm good to disable the tick and still use this state.
-> >
-> > No, you don't, but is it really worth the fuss?
->
-> My somewhat aged IVB-EP sits around 25 us for restarting the tick.
->
-> Depending on the C state, that is a significant chunk of exit latency,
-> and depending on how often you do the whole NOHZ dance, this can add up
-> to significant lost runtime too.
->
-> And these are all machines that have a usable TSC, these numbers all go
-> up significantly when you somehow end up on the HPET or similar wreckage.
->
-> Stopping the tick is slightly more expensive, but in the same order, I
-> get around 30 us on the IVB, vs 25 for restarting it. Reprogramming the
-> timer (LAPIC/TSC-DEADLINE) is the main chunk of it I suspect.
->
-> So over-all that's 55 us extra latency for the full idle path, which can
-> definitely hurt.
->
-> So yeah, I would say this is all worth it.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@soma=
+inline.org>
+> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-I agree that, in general, it is good to avoid stopping the tick when
-it is not necessary to stop it.
+Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
 
-> My ADL is somewhat better, but also much higher clocked, and gets around
-> 10 us for a big core and 16 us for a little core for restarting the
-> tick.
+// Caleb (they/them)
 
-But my overall point is different.
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufr=
+eq-dt-platdev.c
+> index e2b20080de3a..adb3579a1fee 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -143,6 +143,7 @@ static const struct of_device_id blocklist[] __initco=
+nst =3D {
+> =20
+>  	{ .compatible =3D "qcom,apq8096", },
+>  	{ .compatible =3D "qcom,msm8996", },
+> +	{ .compatible =3D "qcom,msm8998", },
+>  	{ .compatible =3D "qcom,qcs404", },
+>  	{ .compatible =3D "qcom,sa8155p" },
+>  	{ .compatible =3D "qcom,sa8540p" },
 
-An additional bin would possibly help if the deepest state has been
-selected and its target residency is below the tick, and the closest
-timer (other than the tick) is beyond the tick.  So how much of a
-difference would be made by making this particular case more accurate?
