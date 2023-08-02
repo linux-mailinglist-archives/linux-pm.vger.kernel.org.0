@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8959C76C1FD
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 03:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B893D76C200
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 03:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjHBBQF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Aug 2023 21:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
+        id S229758AbjHBBQH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Aug 2023 21:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231301AbjHBBQE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 21:16:04 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603FF2708;
-        Tue,  1 Aug 2023 18:16:02 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-58419517920so71466777b3.0;
-        Tue, 01 Aug 2023 18:16:02 -0700 (PDT)
+        with ESMTP id S231163AbjHBBQG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Aug 2023 21:16:06 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7031A2722;
+        Tue,  1 Aug 2023 18:16:04 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-78caeb69125so2241037241.3;
+        Tue, 01 Aug 2023 18:16:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690938961; x=1691543761;
+        d=gmail.com; s=20221208; t=1690938963; x=1691543763;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vUttVkYPVUVU3N89+Zx8zJHpQPnjY7KVRIbxNy+rJtI=;
-        b=re6KF/msUSgy1SZJn5mnslj89vAbvAunZ9CDmOPyyY7irQHYMW0VWKRod+nYn3ji4S
-         8gTPTUks9ti/A/5CySdoCKwtngVdMSTDS98t0fRUkJZTaPO6UgJ9SHJGtRx3JOtPHjI0
-         N9LXTx32l+vP8IiolCfqeLmVwH9rxu06M3isgHHll9ME5zI0f5K9Wnn631uN94MBknHA
-         hO0m4xv4iRW0ueBnqk4b3tjB+GE+/HOVEov4GVTEqk/Rh8sXZlPWIYqGnlebaG2DYKck
-         Crj8I6ZjtovbTmjaaa246UuMcUwnwLb1tbufY/N8mHuc6wuNE8OVP8zcq+f98lLUit5c
-         W5Fg==
+        bh=DAeGF4mL0U2q2+/1xZ74W46SMa201+Ip//omt4RdE74=;
+        b=dsqK1GMWXIBC6UJMbsw/JMvswH6+QiFa3PpuJqQaIyOPvglTmOjMbbuv0EHd/ckxW+
+         /wM6b9Is6S55FAA/Bjx4mlsrYiZhpGpg2XQon6fAAyxULi15eqSSWZ8SlTwrnpS17X3k
+         8HdpV57hIUKeRYWRG4VB83LRjIcTqtTBD6sgsG2F9CjAiMWHR4X6/kYPvoLksJfXpDlq
+         ALABKg6eQfXu5DT8AhpmxvJF7AbBeeCxTTK2dncIRS3+yIhGel2quTPRRjpoF0dGIO+U
+         rxLbjxsfglb+k7+UV464EGDAtjCubcPvPLCiPwPIEd4ws92Kx/BxOjeEXsfvQG9YR6Hm
+         ulbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690938961; x=1691543761;
+        d=1e100.net; s=20221208; t=1690938963; x=1691543763;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vUttVkYPVUVU3N89+Zx8zJHpQPnjY7KVRIbxNy+rJtI=;
-        b=KLQB6NFpOl2Xq0QpeiBZFsynmAcr22R13jJhLowplpuhMJNEZt9mTn+hiGm24GNSkd
-         udLzdePhaH81zHpsS+naZlb/WBITsJqQqrCKz0WYP1XMipvzJ5pznAsXu63ILZG+2ePu
-         eRSiK/P6Xaf3jgJQYco6aJSmvbE3aZfACTAKKnAzvS89I7ZHC5K4oabr/q23d9I5CJGI
-         EHbTfe7HZk2LMZ7dr72xqLdrKAXcPtUfnG1BUQca2kWFItTg6bxWQTvJty+ngBIANWNl
-         TrweqIRPNP9lhK1znusdL80rVnkk2XjYYP331fVUeID1YIGiGuxBnhok1/HeiwEu6PeR
-         bsqw==
-X-Gm-Message-State: ABy/qLbzXZFbD9A+H6MDgCgC0qaI/dQCQiU+EX2t/O97vqSbNsYyWcD3
-        3bts+M0/NLyMPNmOGpo/4hc=
-X-Google-Smtp-Source: APBJJlG+T+48cDWQgSBCXMYe60+rbAbSTSNBpFGPnI5bXY+fR2FnjJ53siN5dBNvVTf6HoWFk+JPTg==
-X-Received: by 2002:a81:6c56:0:b0:56c:f916:a8a9 with SMTP id h83-20020a816c56000000b0056cf916a8a9mr16851289ywc.22.1690938961516;
-        Tue, 01 Aug 2023 18:16:01 -0700 (PDT)
+        bh=DAeGF4mL0U2q2+/1xZ74W46SMa201+Ip//omt4RdE74=;
+        b=bS85s985w8nP7GFREa1cNf2mhEdLWkWSDuDM8QLmd2lQmyRU+sy+VrQVa+a2OVfOY/
+         o+W7aDe3w16MRN2ObHzlAu8fgMRP5OlLFQzU03vrhlpcP09oc8Zi8rhWmyyKzbLMaw4I
+         wfBJFPxjS7UqS4uUW0EcXuQ9R8eO0NjzzLpeFLERXUOIYjFI/J7Fwl8lPmjZzQLZuOMY
+         UGx1Pf8kzjbQu+3rbh0SdH4HG+ICgmAj2wIau52oeyFNnuOI+v8rreXouu/3r6ExxVE7
+         4q7xalre7K5uPW8FISuiV96SeJzs4ep1MdwJdkhd/hy4JcZ5ueTcNpun3uoLUOpKTM7Q
+         sCgA==
+X-Gm-Message-State: ABy/qLY+LMle4uSJDpSONVXKJMieFjIGuekvOOwp05gwJpKpD95vPDb6
+        57uNIy7CrksK2xEwhCkHmR8=
+X-Google-Smtp-Source: APBJJlGYLG50Q1jCaV27Tp++ymoceFb3c1tE7JKNuRkHZf2E3HDdCfT4s/jybaUxig94ym8TgYnMdg==
+X-Received: by 2002:a05:6102:106:b0:443:8034:be54 with SMTP id z6-20020a056102010600b004438034be54mr3696749vsq.32.1690938963485;
+        Tue, 01 Aug 2023 18:16:03 -0700 (PDT)
 Received: from localhost ([2607:fea8:529e:7800::7cda])
-        by smtp.gmail.com with ESMTPSA id x3-20020a814a03000000b0057d24f8278bsm4141383ywa.104.2023.08.01.18.16.00
+        by smtp.gmail.com with ESMTPSA id m128-20020a252686000000b00d1dd5c6c035sm3435494ybm.62.2023.08.01.18.16.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Aug 2023 18:16:00 -0700 (PDT)
+        Tue, 01 Aug 2023 18:16:03 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v2 3/4] arm64: dts: qcom: sdm670: add cpu frequency scaling
-Date:   Tue,  1 Aug 2023 21:15:51 -0400
-Message-ID: <20230802011548.387519-9-mailingradian@gmail.com>
+Subject: [PATCH v2 4/4] arm64: dts: qcom: sdm670: add frequency profile
+Date:   Tue,  1 Aug 2023 21:15:52 -0400
+Message-ID: <20230802011548.387519-10-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230802011548.387519-6-mailingradian@gmail.com>
 References: <20230802011548.387519-6-mailingradian@gmail.com>
@@ -79,243 +79,129 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add CPU frequency scaling, and also add the corresponding memory and
-cache bandwidths for each frequency.
+Add the coefficients for the CPU frequencies to aid in frequency
+scaling.
+
+Profiling setup:
+ - freqbench (https://github.com/kdrag0n/freqbench)
+ - LineageOS kernel, android_kernel_google_msm-4.9
+ - recommended configuration options by freqbench
+ - disabled options that require clang or 32-bit compilers
+ - mmc governor switched from simple_ondemand to powersave
+
+    Frequency domains: cpu1 cpu6
+    Offline CPUs: cpu1 cpu2 cpu3 cpu4 cpu5 cpu6 cpu7
+    Sampling power every 1000 ms
+    Baseline power usage: 445 mW
+
+    ===== CPU 1 =====
+    Frequencies: 300 576 748 998 1209 1324 1516 1612 1708
+
+     300:  1114     3.7 C/MHz     43 mW   11.6 J   25.8 I/mJ   269.4 s
+     576:  2138     3.7 C/MHz     51 mW    7.1 J   42.2 I/mJ   140.3 s
+     748:  2780     3.7 C/MHz     67 mW    7.3 J   41.3 I/mJ   107.9 s
+     998:  3706     3.7 C/MHz     73 mW    5.9 J   51.1 I/mJ    80.9 s
+    1209:  4490     3.7 C/MHz     86 mW    5.7 J   52.2 I/mJ    66.8 s
+    1324:  4918     3.7 C/MHz     90 mW    5.5 J   54.6 I/mJ    61.0 s
+    1516:  5631     3.7 C/MHz    103 mW    5.5 J   54.9 I/mJ    53.3 s
+    1612:  5987     3.7 C/MHz    109 mW    5.5 J   55.0 I/mJ    50.1 s
+    1708:  6344     3.7 C/MHz    126 mW    5.9 J   50.5 I/mJ    47.3 s
+
+    ===== CPU 6 =====
+    Frequencies: 300 652 825 979 1132 1363 1536 1747 1843 1996
+
+     300:  1868     6.2 C/MHz     53 mW    8.5 J   35.2 I/mJ   160.6 s
+     652:  4073     6.2 C/MHz     96 mW    7.1 J   42.4 I/mJ    73.7 s
+     825:  5132     6.2 C/MHz    117 mW    6.9 J   43.7 I/mJ    58.5 s
+     979:  6099     6.2 C/MHz    151 mW    7.4 J   40.4 I/mJ    49.2 s
+    1132:  7071     6.2 C/MHz    207 mW    8.8 J   34.1 I/mJ    42.4 s
+    1363:  8482     6.2 C/MHz    235 mW    8.3 J   36.1 I/mJ    35.4 s
+    1536:  9578     6.2 C/MHz    287 mW    9.0 J   33.3 I/mJ    31.3 s
+    1747: 10892     6.2 C/MHz    340 mW    9.4 J   32.0 I/mJ    27.6 s
+    1843: 11471     6.2 C/MHz    368 mW    9.6 J   31.1 I/mJ    26.2 s
+    1996: 12425     6.2 C/MHz    438 mW   10.6 J   28.3 I/mJ    24.2 s
 
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sdm670.dtsi | 149 +++++++++++++++++++++++++++
- 1 file changed, 149 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm670.dtsi | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm670.dtsi b/arch/arm64/boot/dts/qcom/sdm670.dtsi
-index 45f9633d2d2c..e1ef3fc2ace0 100644
+index e1ef3fc2ace0..0ac39d3d68ca 100644
 --- a/arch/arm64/boot/dts/qcom/sdm670.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm670.dtsi
-@@ -10,6 +10,7 @@
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/dma/qcom-gpi.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interconnect/qcom,sdm670-rpmh.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/phy/phy-qcom-qusb2.h>
-@@ -35,6 +36,10 @@ CPU0: cpu@0 {
+@@ -36,6 +36,8 @@ CPU0: cpu@0 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x0>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD0>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_0>;
-@@ -56,6 +61,10 @@ CPU1: cpu@100 {
++			capacity-dmips-mhz = <610>;
++			dynamic-power-coefficient = <203>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -61,6 +63,8 @@ CPU1: cpu@100 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x100>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD1>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_100>;
-@@ -72,6 +81,10 @@ CPU2: cpu@200 {
++			capacity-dmips-mhz = <610>;
++			dynamic-power-coefficient = <203>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -81,6 +85,8 @@ CPU2: cpu@200 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x200>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD2>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_200>;
-@@ -88,6 +101,10 @@ CPU3: cpu@300 {
++			capacity-dmips-mhz = <610>;
++			dynamic-power-coefficient = <203>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -101,6 +107,8 @@ CPU3: cpu@300 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x300>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD3>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_300>;
-@@ -104,6 +121,10 @@ CPU4: cpu@400 {
++			capacity-dmips-mhz = <610>;
++			dynamic-power-coefficient = <203>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -121,6 +129,8 @@ CPU4: cpu@400 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x400>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD4>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_400>;
-@@ -120,6 +141,10 @@ CPU5: cpu@500 {
++			capacity-dmips-mhz = <610>;
++			dynamic-power-coefficient = <203>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -141,6 +151,8 @@ CPU5: cpu@500 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x500>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 0>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD5>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_500>;
-@@ -136,6 +161,10 @@ CPU6: cpu@600 {
++			capacity-dmips-mhz = <610>;
++			dynamic-power-coefficient = <203>;
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			operating-points-v2 = <&cpu0_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -161,6 +173,8 @@ CPU6: cpu@600 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x600>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 1>;
-+			operating-points-v2 = <&cpu6_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD6>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_600>;
-@@ -152,6 +181,10 @@ CPU7: cpu@700 {
++			capacity-dmips-mhz = <1024>;
++			dynamic-power-coefficient = <393>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu6_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
+@@ -181,6 +195,8 @@ CPU7: cpu@700 {
  			compatible = "qcom,kryo360";
  			reg = <0x0 0x700>;
  			enable-method = "psci";
-+			qcom,freq-domain = <&cpufreq_hw 1>;
-+			operating-points-v2 = <&cpu6_opp_table>;
-+			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
-+					<&osm_l3 MASTER_OSM_L3_APPS &osm_l3 SLAVE_OSM_L3>;
- 			power-domains = <&CPU_PD7>;
- 			power-domain-names = "psci";
- 			next-level-cache = <&L2_700>;
-@@ -246,6 +279,111 @@ memory@80000000 {
- 		reg = <0x0 0x80000000 0x0 0x0>;
- 	};
- 
-+	cpu0_opp_table: opp-table-cpu0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cpu0_opp1: opp-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-peak-kBps = <400000 4800000>;
-+		};
-+
-+		cpu0_opp2: opp-576000000 {
-+			opp-hz = /bits/ 64 <576000000>;
-+			opp-peak-kBps = <400000 4800000>;
-+		};
-+
-+		cpu0_opp3: opp-748800000 {
-+			opp-hz = /bits/ 64 <748800000>;
-+			opp-peak-kBps = <1200000 4800000>;
-+		};
-+
-+		cpu0_opp4: opp-998400000 {
-+			opp-hz = /bits/ 64 <998400000>;
-+			opp-peak-kBps = <1804000 8908800>;
-+		};
-+
-+		cpu0_opp5: opp-1209600000 {
-+			opp-hz = /bits/ 64 <1209600000>;
-+			opp-peak-kBps = <2188000 8908800>;
-+		};
-+
-+		cpu0_opp6: opp-1324800000 {
-+			opp-hz = /bits/ 64 <1324800000>;
-+			opp-peak-kBps = <2188000 13516800>;
-+		};
-+
-+		cpu0_opp7: opp-1516800000 {
-+			opp-hz = /bits/ 64 <1516800000>;
-+			opp-peak-kBps = <3072000 15052800>;
-+		};
-+
-+		cpu0_opp8: opp-1612800000 {
-+			opp-hz = /bits/ 64 <1612800000>;
-+			opp-peak-kBps = <3072000 22118400>;
-+		};
-+
-+		cpu0_opp9: opp-1708800000 {
-+			opp-hz = /bits/ 64 <1708800000>;
-+			opp-peak-kBps = <4068000 23040000>;
-+		};
-+	};
-+
-+	cpu6_opp_table: opp-table-cpu6 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cpu6_opp1: opp-300000000 {
-+			opp-hz = /bits/ 64 <300000000>;
-+			opp-peak-kBps = <400000 4800000>;
-+		};
-+
-+		cpu6_opp2: opp-652800000 {
-+			opp-hz = /bits/ 64 <652800000>;
-+			opp-peak-kBps = <400000 4800000>;
-+		};
-+
-+		cpu6_opp3: opp-825600000 {
-+			opp-hz = /bits/ 64 <825600000>;
-+			opp-peak-kBps = <1200000 4800000>;
-+		};
-+
-+		cpu6_opp4: opp-979200000 {
-+			opp-hz = /bits/ 64 <979200000>;
-+			opp-peak-kBps = <1200000 4800000>;
-+		};
-+
-+		cpu6_opp5: opp-1132800000 {
-+			opp-hz = /bits/ 64 <1132800000>;
-+			opp-peak-kBps = <2188000 8908800>;
-+		};
-+
-+		cpu6_opp6: opp-1363200000 {
-+			opp-hz = /bits/ 64 <1363200000>;
-+			opp-peak-kBps = <4068000 12902400>;
-+		};
-+
-+		cpu6_opp7: opp-1536000000 {
-+			opp-hz = /bits/ 64 <1536000000>;
-+			opp-peak-kBps = <4068000 12902400>;
-+		};
-+
-+		cpu6_opp8: opp-1747200000 {
-+			opp-hz = /bits/ 64 <1747200000>;
-+			opp-peak-kBps = <4068000 15052800>;
-+		};
-+
-+		cpu6_opp9: opp-1843200000 {
-+			opp-hz = /bits/ 64 <1843200000>;
-+			opp-peak-kBps = <4068000 15052800>;
-+		};
-+
-+		cpu6_opp10: opp-1996800000 {
-+			opp-hz = /bits/ 64 <1996800000>;
-+			opp-peak-kBps = <6220000 19046400>;
-+		};
-+	};
-+
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-@@ -1364,5 +1502,16 @@ osm_l3: interconnect@17d41000 {
- 
- 			#interconnect-cells = <1>;
- 		};
-+
-+		cpufreq_hw: cpufreq@17d43000 {
-+			compatible = "qcom,cpufreq-hw";
-+			reg = <0 0x17d43000 0 0x1400>, <0 0x17d45800 0 0x1400>;
-+			reg-names = "freq-domain0", "freq-domain1";
-+
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
-+			clock-names = "xo", "alternate";
-+
-+			#freq-domain-cells = <1>;
-+		};
- 	};
- };
++			capacity-dmips-mhz = <1024>;
++			dynamic-power-coefficient = <393>;
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			operating-points-v2 = <&cpu6_opp_table>;
+ 			interconnects = <&gladiator_noc MASTER_AMPSS_M0 3 &mem_noc SLAVE_EBI_CH0 3>,
 -- 
 2.41.0
 
