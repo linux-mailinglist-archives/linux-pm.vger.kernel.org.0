@@ -2,75 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1677076CA4D
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 12:04:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A97C76CB0D
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 12:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbjHBKET (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Aug 2023 06:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60394 "EHLO
+        id S233589AbjHBKi5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Aug 2023 06:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234291AbjHBKED (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 06:04:03 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEC34698
-        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 03:03:03 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+        with ESMTP id S233701AbjHBKi0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 06:38:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDD21995;
+        Wed,  2 Aug 2023 03:34:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MCmsxQqALuz6Ywdo1dTk+WNBTl8HlNFhVPItDng2+ho=; b=DGrvXazK8uXe3OoPO2V8KXqx3E
+        zz4Woh2zPnCcUX2CksudgwDtGmH5jz6NvUICTcCQPZGAW3+3Mjhq/vfpQXU3/AK4p4bFXExCPXpKt
+        32EmBgNYNic5JAgKhTiQHRl4UOcvkWivDDlMkH8Ti/4fzPNecY5WVP9TRrzX1EgJS1w7dnWQ64/rO
+        2CGyGTONOmx+IESCtqh27lpebRbmTlnxEjftHHLTjANticGs1nbcJjFmC0irYoK1rRV5LkFMEh5vx
+        Mhacn+kgEUmh3BzqIIr0gKPvAp3r/tX45yBxSSYMtXBfH1WuLe8REf0c3FJUl+23k6DX9Moza1/d+
+        IKNQlbmA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qR9BT-00Fs5w-28;
+        Wed, 02 Aug 2023 10:34:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F30F6607185;
-        Wed,  2 Aug 2023 11:03:00 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1690970581;
-        bh=QNUoS1nkaqDteBmKu4yeaJCyte/W4BgCT/xXj6oe8+o=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=TgGj95aKjuqRnIkJVqPQSWhr/2CpazGKqCOROs2+oVooR+e0TBfKwBsKarzLtiwbZ
-         r/OQSVMbUT05fa4vzoNhxAZL5ayuCM1aB0yyAAg7OE7czHHeCxGllAPzkhZ1IPWVUS
-         yRQn9z8zbYryoKWHN5k+tgONyR2bOSgrJQgVGsRwNtefJ5X05La2JajAzt7nWR/z/C
-         aIZpKYdfj3CKjTHjCNlhQH/GGJ+YAGbMVIfb6UQ9uJ2Ws5BN0YIUCvBBClmQaazmOi
-         9Vc5cMFqMqFcy9tmsxsd1dbmBd9W0lsYid0D8Lxk8LBhJe6HEbjZElZy7gEjugRqet
-         GoHttZIOV4CHg==
-Message-ID: <8c0db188-bc71-a5b6-956b-02d451dfa854@collabora.com>
-Date:   Wed, 2 Aug 2023 12:02:58 +0200
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C9A083001DD;
+        Wed,  2 Aug 2023 12:34:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B7D3E2102E8CE; Wed,  2 Aug 2023 12:34:26 +0200 (CEST)
+Date:   Wed, 2 Aug 2023 12:34:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     anna-maria@linutronix.de, tglx@linutronix.de, frederic@kernel.org,
+        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Subject: Re: [RFC][PATCH 1/3] cpuidle: Inject tick boundary state
+Message-ID: <20230802103426.GB210177@hirez.programming.kicks-ass.net>
+References: <20230728145515.990749537@infradead.org>
+ <20230728145808.835742568@infradead.org>
+ <CAJZ5v0gNqEuqvV0RtrXiDDGtvKB2hronLwAU8jnmuGppKmyDxA@mail.gmail.com>
+ <20230729084417.GB3945851@hirez.programming.kicks-ass.net>
+ <CAJZ5v0iVKRY5-YvQmMbZ3+eZNHJgXt=CoYedNueAJyT9+Ld5Dg@mail.gmail.com>
+ <20230731090935.GB29590@hirez.programming.kicks-ass.net>
+ <CAJZ5v0jh5oozZm7OvN9j1iHtzYQzPMOJ=Nt0HaJKYyJ218Cezw@mail.gmail.com>
+ <20230731113850.GE29590@hirez.programming.kicks-ass.net>
+ <CAJZ5v0h+KC+uMiOE4m4Dp4=iHMkekutk+B+cwb0de8Fvswv6jA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH -next] thermal: Clean up redundant dev_err_probe()
-Content-Language: en-US
-To:     Chen Jiahao <chenjiahao16@huawei.com>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, bchihi@baylibre.com, wenst@chromium.org,
-        robh@kernel.org, frank.li@vivo.com, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230802094527.988842-1-chenjiahao16@huawei.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230802094527.988842-1-chenjiahao16@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0h+KC+uMiOE4m4Dp4=iHMkekutk+B+cwb0de8Fvswv6jA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 02/08/23 11:45, Chen Jiahao ha scritto:
-> Referring to platform_get_irq()'s definition, the return value has
-> already been checked if ret < 0, and printed via dev_err_probe().
-> Calling dev_err_probe() one more time outside platform_get_irq()
-> is obviously redundant.
+On Mon, Jul 31, 2023 at 06:55:35PM +0200, Rafael J. Wysocki wrote:
+
+> > In that case you cannot tell the difference between I'm good to use this
+> > state and I'm good to disable the tick and still use this state.
 > 
-> Removing dev_err_probe() outside platform_get_irq() to clean up
-> above problem.
-> 
-> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
+> No, you don't, but is it really worth the fuss?
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+My somewhat aged IVB-EP sits around 25 us for restarting the tick.
 
+Depending on the C state, that is a significant chunk of exit latency,
+and depending on how often you do the whole NOHZ dance, this can add up
+to significant lost runtime too.
 
+And these are all machines that have a usable TSC, these numbers all go
+up significantly when you somehow end up on the HPET or similar wreckage.
+
+Stopping the tick is slightly more expensive, but in the same order, I
+get around 30 us on the IVB, vs 25 for restarting it. Reprogramming the
+timer (LAPIC/TSC-DEADLINE) is the main chunk of it I suspect.
+
+So over-all that's 55 us extra latency for the full idle path, which can
+definitely hurt.
+
+So yeah, I would say this is all worth it.
+
+My ADL is somewhat better, but also much higher clocked, and gets around
+10 us for a big core and 16 us for a little core for restarting the
+tick.
