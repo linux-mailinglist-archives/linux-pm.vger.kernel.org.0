@@ -2,194 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0B876CC7C
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C455976CCA0
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbjHBMUm convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 2 Aug 2023 08:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+        id S233551AbjHBM1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Aug 2023 08:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjHBMUl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:20:41 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C28326AF;
-        Wed,  2 Aug 2023 05:20:40 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1bb3df62b34so881086fac.0;
-        Wed, 02 Aug 2023 05:20:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690978839; x=1691583639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VORnzW/QpwQXhPl9SE+Jx3veoxk4wpWoU9SWAgDYUEU=;
-        b=j1ROu5LZycWtabVbFHtue6htCqQB5Y80wqn/LwGuOYkf/xR5TCyEOrmvO2EGllQaol
-         29JUr1+tEQASDCwR1zQgAZS6/qacSxGWCracLk4ZdUQd9q9eu/yY+a3tBS3G16ii+Plm
-         CrRxt5ebFoGRv5O+U5DWcjNNochsIIa6wwyPz5i5qJFo9dDh41Be5P/MZULYaSH5KosM
-         9DeNJ/k3bSi4lNeG5U7tlq7MDXXK1443l0lE+zVM71/OfS249bGZLdESG2V4mQ9hfTpQ
-         IVPizB0FVs9Gu0OyTg2poRQIEanH4tPiirVRzqVNeQ+ER/B5Sxd37My78l+BjtBPo0In
-         ryFg==
-X-Gm-Message-State: ABy/qLZhqzAhe7yXAMbJlnA2PcMt0H3da98QCuinpDkVzOlHBWvz0g9b
-        QtAIN/vvQVNIzmdDuvRWYLiGjMSMeOx0MsO05+AdpYfo
-X-Google-Smtp-Source: APBJJlGIcF4+HcMFuhetkl9UJwu6PjHO5Gs8MUcoQCh/U2SusCOe1NGS0JTdoXb3NI8DtessbXrRcKRYK2LvnKFu7jY=
-X-Received: by 2002:a05:6870:d793:b0:1b3:afdc:6c08 with SMTP id
- bd19-20020a056870d79300b001b3afdc6c08mr11960946oab.0.1690978839408; Wed, 02
- Aug 2023 05:20:39 -0700 (PDT)
+        with ESMTP id S232732AbjHBM1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:27:17 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5BE269E
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 05:27:16 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 46DBD68AA6; Wed,  2 Aug 2023 14:27:12 +0200 (CEST)
+Date:   Wed, 2 Aug 2023 14:27:11 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Chaitanya Kulkarni <kch@nvidia.com>
+Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, kbusch@kernel.org, hch@lst.de,
+        sagi@grimberg.me
+Subject: Re: [PATCH 0/3] nvme-core: restructure nvme_init_ctrl()
+Message-ID: <20230802122711.GA30792@lst.de>
+References: <20230802032629.24309-1-kch@nvidia.com>
 MIME-Version: 1.0
-References: <4515817.LvFx2qVVIh@kreacher> <ZMl+yH42Ir0AZzoX@e126311.manchester.arm.com>
-In-Reply-To: <ZMl+yH42Ir0AZzoX@e126311.manchester.arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 2 Aug 2023 14:20:27 +0200
-Message-ID: <CAJZ5v0grLBbRNJHq=_OvC3HqE3BEy=BOwgde_gPk2qyUOWKuZQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] cpuidle: teo: Avoid stopping scheduler tick too often
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230802032629.24309-1-kch@nvidia.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 1, 2023 at 11:53 PM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
->
-> Hi Rafael,
->
-> > Hi Folks,
-> >
-> > Patch [1/3] in this series is a v3 of this patch posted last week:
-> >
-> > https://lore.kernel.org/linux-pm/4506480.LvFx2qVVIh@kreacher/
-> >
-> > Patch [2/3] (this is the second version of it) addresses some bail out paths
-> > in teo_select() in which the scheduler tick may be stopped unnecessarily too.
-> >
-> > Patch [3/3] replaces a structure field with a local variable (while at it)
-> > and it is the same as its previous version.
-> >
-> > According to this message:
-> >
-> > https://lore.kernel.org/linux-pm/CAJZ5v0jJxHj65r2HXBTd3wfbZtsg=_StzwO1kA5STDnaPe_dWA@mail.gmail.com/
-> >
-> > this series significantly reduces the number of cases in which the governor
-> > requests stopping the tick when the selected idle state is shallow, which is
-> > incorrect.
-> >
-> > Thanks!
-> >
-> >
->
-> I did some initial testing with this on Android (Pixel 6, Android 13).
->
-> 1. Geekbench 6
->
-> +---------------------------+---------------+-----------------+
-> |          metric           |      teo      |     teo_tick    |
-> +---------------------------+---------------+-----------------+
-> |      multicore_score      | 3320.9 (0.0%) | 3303.3 (-0.53%) |
-> |           score           | 1415.7 (0.0%) | 1417.7 (0.14%)  |
-> |      CPU_total_power      | 2421.3 (0.0%) | 2429.3 (0.33%)  |
-> |  latency (AsyncTask #1)   | 49.41μ (0.0%) | 51.07μ (3.36%)  |
-> | latency (labs.geekbench6) | 65.63μ (0.0%) | 77.47μ (18.03%) |
-> | latency (surfaceflinger)  | 39.46μ (0.0%) | 36.94μ (-6.39%) |
-> +---------------------------+---------------+-----------------+
->
-> So the big picture for this workload looks roughly the same, the
-> differences are too small for me to be confident in saying that the
-> score/power difference is the result of the patches and not something
-> random in the system.
-> Same with the latency, the difference for labs.gb6 stands out but that's
-> a pretty irrelevant task that sets up the benchmark, not the benchmark
-> itself so not the biggest deal I think.
->
-> +---------------+---------+------------+--------+
-> |     kernel    | cluster | idle_state |  time  |
-> +---------------+---------+------------+--------+
-> |      teo      | little  |    0.0     | 146.75 |
-> |      teo      | little  |    1.0     | 53.75  |
-> |    teo_tick   | little  |    0.0     |  63.5  |
-> |    teo_tick   | little  |    1.0     | 146.78 |
-> +---------------+---------+------------+--------+
->
-> +---------------+-------------+------------+
-> |     kernel    |    type     | count_perc |
-> +---------------+-------------+------------+
-> |   teo         |  too deep   |   2.034    |
-> |   teo         | too shallow |   15.791   |
-> |   teo_tick    |  too deep   |    2.16    |
-> |   teo_tick    | too shallow |   20.881   |
-> +---------------+-------------+------------+
->
-> The difference shows up in the idle numbers themselves, looks like we
-> get a big shift towards deeper idle on our efficiency cores (little
-> cluster) and more missed wakeups overall, both too deep & too shallow.
->
-> Notably, the percentage of too shallow sleeps on the performance cores has
-> more or less doubled (2% + 0.8% -> 4.3% + 1.8%). This doesn't
-> necessarily have to be an issue but I'll do more testing just in case.
->
-> 2. JetNews (Light UI workload)
->
-> +------------------+---------------+----------------+
-> |      metric      |      teo      |    teo_tick    |
-> +------------------+---------------+----------------+
-> |       fps        |  86.2 (0.0%)  |  86.4 (0.16%)  |
-> |     janks_pc     |  0.8 (0.0%)   |  0.8 (-0.00%)  |
-> | CPU_total_power  | 185.2 (0.0%)  | 178.2 (-3.76%) |
-> +------------------+---------------+----------------+
->
-> For the UI side, the frame data comes out the same on both variants but
-> alongside better power usage which is nice to have.
->
-> +---------------+---------+------------+-------+
-> |    kernel     | cluster | idle_state | time  |
-> +---------------+---------+------------+-------+
-> |      teo      | little  |    0.0     | 25.06 |
-> |      teo      | little  |    1.0     | 12.21 |
-> |      teo      |   mid   |    0.0     | 38.32 |
-> |      teo      |   mid   |    1.0     | 17.82 |
-> |      teo      |   big   |    0.0     | 30.45 |
-> |      teo      |   big   |    1.0     | 38.5  |
-> |    teo_tick   | little  |    0.0     | 23.18 |
-> |    teo_tick   | little  |    1.0     | 14.21 |
-> |    teo_tick   |   mid   |    0.0     | 36.31 |
-> |    teo_tick   |   mid   |    1.0     | 19.88 |
-> |    teo_tick   |   big   |    0.0     | 27.13 |
-> |    teo_tick   |   big   |    1.0     | 42.09 |
-> +---------------+---------+------------+-------+
->
-> +---------------+-------------+------------+
-> |    kernel     |    type     | count_perc |
-> +---------------+-------------+------------+
-> |      teo      |  too deep   |   0.992    |
-> |      teo      | too shallow |   17.085   |
-> |   teo_tick    |  too deep   |   0.945    |
-> |   teo_tick    | too shallow |   15.236   |
-> +---------------+-------------+------------+
->
-> For the idle stuff here all 3 clusters shift a bit towards deeper idle
-> but the overall miss rate is lower across the board which is perfectly
-> fine.
->
-> TLDR:
-> Mostly no change for a busy workload, no change + better power for a UI
-> one. The patches make sense to me & the results look all right so no big
-> problems at this stage. I'll do more testing (including the RFC you sent
-> out a moment ago) over the next few days and send those out as well.
->
-> Short of bumping into any other problems along the way, feel free to
-> grab this if you'd like:
-> Reviewed-and-tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+On Tue, Aug 01, 2023 at 08:26:26PM -0700, Chaitanya Kulkarni wrote:
+> Hi,
+> 
+> Restructure nvme_init_ctrl() for better initialization flow.
+> 
+> Currenlty nvme_init_ctrl() initialized nvme authentication, fault
+> injection, and device PM QoS after adding the controller device with
+> a call to cdev_device_add(). This has led to additional code complexity,
+> as it required handling the unwinding of these initializations if any
+> of them failed.
 
-Thank you!
+The current code is in fact also broken, as after device_add
+(which cdev_device_add does underneath) fails we can't just cleaup, but
+most call put_device.  I think this single patch is what we should be
+doing, but I don't fell fully confindent in it without some extra
+error injection:
+
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 47d7ba2827ff29..5da55a271a5ab0 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -4405,14 +4405,12 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
+ 	BUILD_BUG_ON(NVME_DSM_MAX_RANGES * sizeof(struct nvme_dsm_range) >
+ 			PAGE_SIZE);
+ 	ctrl->discard_page = alloc_page(GFP_KERNEL);
+-	if (!ctrl->discard_page) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
++	if (!ctrl->discard_page)
++		return -ENOMEM;
+ 
+ 	ret = ida_alloc(&nvme_instance_ida, GFP_KERNEL);
+ 	if (ret < 0)
+-		goto out;
++		goto out_free_discard_page;
+ 	ctrl->instance = ret;
+ 
+ 	device_initialize(&ctrl->ctrl_device);
+@@ -4431,13 +4429,6 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
+ 	if (ret)
+ 		goto out_release_instance;
+ 
+-	nvme_get_ctrl(ctrl);
+-	cdev_init(&ctrl->cdev, &nvme_dev_fops);
+-	ctrl->cdev.owner = ops->module;
+-	ret = cdev_device_add(&ctrl->cdev, ctrl->device);
+-	if (ret)
+-		goto out_free_name;
+-
+ 	/*
+ 	 * Initialize latency tolerance controls.  The sysfs files won't
+ 	 * be visible to userspace unless the device actually supports APST.
+@@ -4448,23 +4439,27 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
+ 
+ 	nvme_fault_inject_init(&ctrl->fault_inject, dev_name(ctrl->device));
+ 	nvme_mpath_init_ctrl(ctrl);
++
+ 	ret = nvme_auth_init_ctrl(ctrl);
+ 	if (ret)
+-		goto out_free_cdev;
++		goto out_fault_inject_fini;
+ 
+-	return 0;
+-out_free_cdev:
++	nvme_get_ctrl(ctrl);
++	cdev_init(&ctrl->cdev, &nvme_dev_fops);
++	ctrl->cdev.owner = ops->module;
++	ret = cdev_device_add(&ctrl->cdev, ctrl->device);
++	if (ret)
++		put_device(ctrl->device);
++	return ret;
++
++out_fault_inject_fini:
+ 	nvme_fault_inject_fini(&ctrl->fault_inject);
+ 	dev_pm_qos_hide_latency_tolerance(ctrl->device);
+-	cdev_device_del(&ctrl->cdev, ctrl->device);
+-out_free_name:
+-	nvme_put_ctrl(ctrl);
+ 	kfree_const(ctrl->device->kobj.name);
+ out_release_instance:
+ 	ida_free(&nvme_instance_ida, ctrl->instance);
+-out:
+-	if (ctrl->discard_page)
+-		__free_page(ctrl->discard_page);
++out_free_discard_page:
++	__free_page(ctrl->discard_page);
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(nvme_init_ctrl);
