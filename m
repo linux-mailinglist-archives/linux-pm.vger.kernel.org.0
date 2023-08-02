@@ -2,131 +2,195 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C455976CCA0
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D071676CCB9
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Aug 2023 14:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbjHBM1R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Aug 2023 08:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S234306AbjHBMeJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Aug 2023 08:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232732AbjHBM1R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:27:17 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F5BE269E
-        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 05:27:16 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 46DBD68AA6; Wed,  2 Aug 2023 14:27:12 +0200 (CEST)
-Date:   Wed, 2 Aug 2023 14:27:11 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Chaitanya Kulkarni <kch@nvidia.com>
-Cc:     linux-nvme@lists.infradead.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, kbusch@kernel.org, hch@lst.de,
-        sagi@grimberg.me
-Subject: Re: [PATCH 0/3] nvme-core: restructure nvme_init_ctrl()
-Message-ID: <20230802122711.GA30792@lst.de>
-References: <20230802032629.24309-1-kch@nvidia.com>
+        with ESMTP id S234286AbjHBMeI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 08:34:08 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E436126B0
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 05:34:06 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31792ac0fefso3706426f8f.2
+        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 05:34:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690979645; x=1691584445;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7WFFSn3jymzrJofl23kw/JQQOzxObljhxr6Q0oYB/RQ=;
+        b=xx5BRTcxYKZ/Iu1R16AD/iXFgV28VQUghKB1YFHqBlSaX3SroAJ9X0Rthy9CeAqpmD
+         i0MyLBuZDWsdaxDYBcMC6pzYkp4lffK6VtpjPJn1z+QYF1T6ctV144gB4fbaj6K9X4t9
+         FxrF0I4FVoLoBSL66GlFIIPeZ4kXTKCPQ9wTMKRORORYSiIl4Eibkpj8bmD+rHaesX6m
+         7RQp+qU8AQlfjUe+V0jkQK7OEU+prGz38sC7JADaEmNZp23g9dIQ962pDa54AXqvwaK7
+         pcYlTFOtTzHEZ3ED3wmHtf4xaEkboPQM7ek47PmkR/xGzMicGA+LeXkr7Nz/+IBooUWH
+         pLtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690979645; x=1691584445;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7WFFSn3jymzrJofl23kw/JQQOzxObljhxr6Q0oYB/RQ=;
+        b=ezWFEcxiE+D8nzE+vy8bGFOcM4BzMd9gZOWRtsY7k5iFocATE5HKXCiunXiaOz/cMN
+         qliwmoyiRY6OcpZ4QXTHiv+/URQLg4MS2UhJhfKdj0Ut2RltTatRX5ALth8TN/K0JprL
+         JE8GiRhAkZbmoVIs6rTeS9NdKzYU3SJBjlVEZFrMoEi8QkNaZyYzw5RUNe1SN3azAWFT
+         xtPepgIkDFiUnYb37o0WVaq6J2dQ04XeGcLsC42duPp7cWOEEGYak6iLUl4EwmQNaSj1
+         6zjaWyxznbl/Ebf4RiY2RqBImyvnK+1jEFEYqq9pmiS73RtQTDgKQ5CIkC8Pq+Q6942g
+         pfxA==
+X-Gm-Message-State: ABy/qLabQr/hXs94b4gb8NtBBMQ8GMmVS02H/QqHEOA8qWdhESSXfxXu
+        sXwLJPnxIH+GrqErR5AVemzCiA==
+X-Google-Smtp-Source: APBJJlG0paexJ7/NKsSD0pFtwMtHj6ducITmLEcN/b1nGlAZfXeHsarFYbC9Jd0rlk1G1CcFXoEmsA==
+X-Received: by 2002:a5d:4b4d:0:b0:317:54de:7315 with SMTP id w13-20020a5d4b4d000000b0031754de7315mr4430222wrs.61.1690979645208;
+        Wed, 02 Aug 2023 05:34:05 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id y7-20020adfdf07000000b00317ab75748bsm5916057wrl.49.2023.08.02.05.34.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 05:34:04 -0700 (PDT)
+Message-ID: <eb279cf1-0605-3b87-5cb6-241a91977455@linaro.org>
+Date:   Wed, 2 Aug 2023 14:34:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230802032629.24309-1-kch@nvidia.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/8] thermal: core: Add mechanism for connecting trips
+ with driver data
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
+ <4501957.LvFx2qVVIh@kreacher>
+ <2d0315d4-35b4-84db-4dcb-c9528abad825@linaro.org>
+ <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 08:26:26PM -0700, Chaitanya Kulkarni wrote:
-> Hi,
-> 
-> Restructure nvme_init_ctrl() for better initialization flow.
-> 
-> Currenlty nvme_init_ctrl() initialized nvme authentication, fault
-> injection, and device PM QoS after adding the controller device with
-> a call to cdev_device_add(). This has led to additional code complexity,
-> as it required handling the unwinding of these initializations if any
-> of them failed.
 
-The current code is in fact also broken, as after device_add
-(which cdev_device_add does underneath) fails we can't just cleaup, but
-most call put_device.  I think this single patch is what we should be
-doing, but I don't fell fully confindent in it without some extra
-error injection:
+Hi Rafael,
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index 47d7ba2827ff29..5da55a271a5ab0 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -4405,14 +4405,12 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
- 	BUILD_BUG_ON(NVME_DSM_MAX_RANGES * sizeof(struct nvme_dsm_range) >
- 			PAGE_SIZE);
- 	ctrl->discard_page = alloc_page(GFP_KERNEL);
--	if (!ctrl->discard_page) {
--		ret = -ENOMEM;
--		goto out;
--	}
-+	if (!ctrl->discard_page)
-+		return -ENOMEM;
- 
- 	ret = ida_alloc(&nvme_instance_ida, GFP_KERNEL);
- 	if (ret < 0)
--		goto out;
-+		goto out_free_discard_page;
- 	ctrl->instance = ret;
- 
- 	device_initialize(&ctrl->ctrl_device);
-@@ -4431,13 +4429,6 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
- 	if (ret)
- 		goto out_release_instance;
- 
--	nvme_get_ctrl(ctrl);
--	cdev_init(&ctrl->cdev, &nvme_dev_fops);
--	ctrl->cdev.owner = ops->module;
--	ret = cdev_device_add(&ctrl->cdev, ctrl->device);
--	if (ret)
--		goto out_free_name;
--
- 	/*
- 	 * Initialize latency tolerance controls.  The sysfs files won't
- 	 * be visible to userspace unless the device actually supports APST.
-@@ -4448,23 +4439,27 @@ int nvme_init_ctrl(struct nvme_ctrl *ctrl, struct device *dev,
- 
- 	nvme_fault_inject_init(&ctrl->fault_inject, dev_name(ctrl->device));
- 	nvme_mpath_init_ctrl(ctrl);
-+
- 	ret = nvme_auth_init_ctrl(ctrl);
- 	if (ret)
--		goto out_free_cdev;
-+		goto out_fault_inject_fini;
- 
--	return 0;
--out_free_cdev:
-+	nvme_get_ctrl(ctrl);
-+	cdev_init(&ctrl->cdev, &nvme_dev_fops);
-+	ctrl->cdev.owner = ops->module;
-+	ret = cdev_device_add(&ctrl->cdev, ctrl->device);
-+	if (ret)
-+		put_device(ctrl->device);
-+	return ret;
-+
-+out_fault_inject_fini:
- 	nvme_fault_inject_fini(&ctrl->fault_inject);
- 	dev_pm_qos_hide_latency_tolerance(ctrl->device);
--	cdev_device_del(&ctrl->cdev, ctrl->device);
--out_free_name:
--	nvme_put_ctrl(ctrl);
- 	kfree_const(ctrl->device->kobj.name);
- out_release_instance:
- 	ida_free(&nvme_instance_ida, ctrl->instance);
--out:
--	if (ctrl->discard_page)
--		__free_page(ctrl->discard_page);
-+out_free_discard_page:
-+	__free_page(ctrl->discard_page);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(nvme_init_ctrl);
+On 01/08/2023 21:02, Rafael J. Wysocki wrote:
+> On Tue, Aug 1, 2023 at 8:29 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 25/07/2023 14:04, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Some drivers need to update trip point data (temperature and/or
+>>> hysteresis) upon notifications from the platform firmware or they
+>>> may need to reprogram hardware when trip point parameters are changed
+>>> via sysfs.  For those purposes, they need to connect struct thermal_trip
+>>> to a private data set associated with the trip or the other way around
+>>> and using a trip point index for that may not always work, because the
+>>> core may need to reorder the trips during thermal zone registration (in
+>>> particular, they may need to be sorted).
+>>>
+>>> To allow that to be done without using a trip point index, introduce
+>>> a new field in struct thermal_trip that can be pointed by the driver
+>>> to its own data structure containing a trip pointer to be initialized
+>>> by the core during thermal zone registration.  That pointer will then
+>>> have to be updated by the core every time the location of the given
+>>> trip point object in memory changes.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>
+>>> v2 -> v3: No changes.
+>>>
+>>> v1 -> v2: No changes.
+>>>
+>>> ---
+>>>    drivers/thermal/thermal_core.c |   20 +++++++++++++++++---
+>>>    include/linux/thermal.h        |   13 +++++++++++++
+>>>    2 files changed, 30 insertions(+), 3 deletions(-)
+>>>
+>>> Index: linux-pm/include/linux/thermal.h
+>>> ===================================================================
+>>> --- linux-pm.orig/include/linux/thermal.h
+>>> +++ linux-pm/include/linux/thermal.h
+>>> @@ -76,16 +76,29 @@ struct thermal_zone_device_ops {
+>>>        void (*critical)(struct thermal_zone_device *);
+>>>    };
+>>>
+>>> +struct thermal_trip_ref {
+>>> +     struct thermal_trip *trip;
+>>> +};
+>>
+>> That introduces a circular dependency. That should be avoided.
+> 
+> Sorry, but this is an empty statement without any substance.
+
+I'm just pointing that we have a struct A pointing to struct B and 
+struct B pointing to struct A.
+
+[ ... ]
+
+>>>    struct thermal_cooling_device_ops {
+>>> Index: linux-pm/drivers/thermal/thermal_core.c
+>>> ===================================================================
+>>> --- linux-pm.orig/drivers/thermal/thermal_core.c
+>>> +++ linux-pm/drivers/thermal/thermal_core.c
+>>> @@ -1306,14 +1306,28 @@ thermal_zone_device_register_with_trips(
+>>>        if (result)
+>>>                goto release_device;
+>>>
+>>> +     mutex_lock(&tz->lock);
+>>> +
+>>>        for (count = 0; count < num_trips; count++) {
+>>> -             struct thermal_trip trip;
+>>> +             int temperature = 0;
+>>> +
+>>> +             if (trips) {
+>>> +                     temperature = trips[count].temperature;
+>>> +                     if (trips[count].driver_ref)
+>>> +                             trips[count].driver_ref->trip = &trips[count];
+>>> +             } else {
+>>> +                     struct thermal_trip trip;
+>>
+>> As mentioned above, that should not appear in the thermal core code.
+> 
+> Well, this is a matter of opinion to me.  Clearly, I disagree with it.
+
+Why? It is not an opinion. The thermal core code has been very very tied 
+with the ACPI implementation (which is logical given the history of the 
+changes). All the efforts have been made to cut these frictions and make 
+the thermal core code driver agnostic.
+
+The changes put in place a mechanism for the ACPI driver.
+
+The thermal zone lock wrapper is put in place for the ACPI driver.
+
+> Anyway, I want to be productive, so here's the thing: either something
+> like this is done, or drivers need to be allowed to walk the trips
+> table.
+> 
+> Which one is better?
+
+None of them. I think we can find a third solution where the changes are 
+self contained in the ACPI driver. What do you think?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
