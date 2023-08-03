@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F1C76EEBD
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 17:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FAA76EECA
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 17:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236922AbjHCPzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 11:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S235850AbjHCP5U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 11:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234972AbjHCPzx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 11:55:53 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521813A97;
-        Thu,  3 Aug 2023 08:55:52 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 373FthPW025615;
-        Thu, 3 Aug 2023 10:55:43 -0500
+        with ESMTP id S234972AbjHCP5U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 11:57:20 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC4A3A93;
+        Thu,  3 Aug 2023 08:57:18 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 373FvBxe079735;
+        Thu, 3 Aug 2023 10:57:11 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691078143;
-        bh=a+EqIwvTgsfqSuxrk8rjov+v37wQp94SbQ4RI/MeEvs=;
+        s=ti-com-17Q1; t=1691078231;
+        bh=zbceunG6HLkq7CegqrVypMKkS+qXgl2Bk5f+wlEXjo0=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=tikkqHgEAhrCdIZuKA2YlhEwb0YyFxtVYji068u08J1vvDo+YoOrQmD9s1P09HjVe
-         peqX7gVUfvZLMjTBYsncPDHdPA9teFGdntlZkrLdv3ys2F+26vM5wWrWX45L/SbpUA
-         NwN9UhRNIDUqyFmyaXG8wBEDb4FFSCh3VnCXo4Aw=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 373FthDV092109
+        b=ZeGlA5Mgo8Byyq1cbaJXcdV3u5p1qbjlvnt33CF2OttRsnjvRkHk3NFNYAzlmRA6g
+         psZx3tUMbjDhprs8jWoigM5eFXVRwUVLKP1jGb9n9iphv4xlN/+7WyryCjldFMDF1q
+         gi5Y6xNxqWzyCtjSMeETGD1T9S8ru9oRKjna/4J0=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 373FvBi5111377
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Aug 2023 10:55:43 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Thu, 3 Aug 2023 10:57:11 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 3
- Aug 2023 10:55:42 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ Aug 2023 10:57:11 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 3 Aug 2023 10:55:42 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 373FtgL6010324;
-        Thu, 3 Aug 2023 10:55:42 -0500
-Date:   Thu, 3 Aug 2023 21:25:41 +0530
+ Frontend Transport; Thu, 3 Aug 2023 10:57:11 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 373FvATh008664;
+        Thu, 3 Aug 2023 10:57:11 -0500
+Date:   Thu, 3 Aug 2023 21:27:10 +0530
 From:   Dhruva Gole <d-gole@ti.com>
 To:     Andrew Davis <afd@ti.com>
 CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
@@ -50,107 +50,88 @@ CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
         Praneeth Bajjuri <praneeth@ti.com>,
         Tony Lindgren <tony@atomide.com>,
         Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend resume
- support
-Message-ID: <20230803155541.nwsfwobfkbpefoyw@dhruva>
+        Vibhore Vardhan <vibhore@ti.com>,
+        Georgi Vlaev <g-vlaev@ti.com>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: Re: [PATCH V6 3/4] firmware: ti_sci: Allocate memory for Low Power
+ Modes
+Message-ID: <20230803155710.fivxx7hufuravcdr@dhruva>
 References: <20230803064247.503036-1-d-gole@ti.com>
- <20230803064247.503036-5-d-gole@ti.com>
- <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
+ <20230803064247.503036-4-d-gole@ti.com>
+ <7c12b109-d6b9-f0d4-cada-28140a33da21@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
+In-Reply-To: <7c12b109-d6b9-f0d4-cada-28140a33da21@ti.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
+On Aug 03, 2023 at 10:23:47 -0500, Andrew Davis wrote:
 > On 8/3/23 1:42 AM, Dhruva Gole wrote:
-> > Introduce system suspend resume calls that will allow the ti_sci
-> > driver to support deep sleep low power mode when the user space issues a
-> > suspend to mem.
+> > From: Dave Gerlach <d-gerlach@ti.com>
 > > 
-> > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
-> > suspend handler to allow the system to identify the low power mode being
-> > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
-> > about the mode is being entered and the address for allocated memory for
-> > storing the context during Deep Sleep.
+> > A region of memory in DDR must be used during Deep Sleep for saving
+> > of some system context when using the ti_sci firmware. From DM's point
+> > of view, this can be any contiguous region in the DDR, so can allocate
+> > 512KB of DMA reserved memory in probe(), instead of another carveout.
 > > 
-> > We're using "pm_suspend_target_state" to map the kernel's target suspend
-> > state to SysFW low power mode. Make sure this is available only when
-> > CONFIG_SUSPEND is enabled.
+> > Also send a TISCI_MSG_QUERY_FW_CAPS message to the firmware during
+> > probe to determine if any low power modes are supported and if
+> > ti_sci_init_suspend should be called based on the response received.
 > > 
-> > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
 > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
 > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
 > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
+> > Tested-by: Roger Quadros <rogerq@kernel.org>
+> > [d-gole@ti.com: Use dma_alloc_attrs instead of dma_alloc_coherent]
 > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
 > > ---
-> >   drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
-> >   1 file changed, 63 insertions(+)
+> >   drivers/firmware/ti_sci.c | 42 +++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 42 insertions(+)
 > > 
 [..snip..]
-> > +static int ti_sci_suspend(struct device *dev)
-> > +{
-> > +	struct ti_sci_info *info = dev_get_drvdata(dev);
-> > +	int ret;
+> >   static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
+> >   	.default_host_id = 2,
+> > @@ -3661,6 +3690,15 @@ static int ti_sci_probe(struct platform_device *pdev)
+> >   		}
+> >   	}
+> > +	/*
+> > +	 * Check if the firmware supports any optional low power modes
+> > +	 * and initialize them if present. Old revisions of TIFS (< 08.04)
+> > +	 * will NACK the request.
+> > +	 */
+> > +	ret = ti_sci_msg_cmd_query_fw_caps(&info->handle, &info->fw_caps);
+> > +	if (!ret && (info->fw_caps & MSG_MASK_CAPS_LPM))
+> > +		ti_sci_init_suspend(pdev, info);
 > > +
-> > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
+> >   	dev_info(dev, "ABI: %d.%d (firmware rev 0x%04x '%s')\n",
+> >   		 info->handle.version.abi_major, info->handle.version.abi_minor,
+> >   		 info->handle.version.firmware_revision,
+> > @@ -3708,6 +3746,10 @@ static int ti_sci_remove(struct platform_device *pdev)
+> >   		mbox_free_channel(info->chan_rx);
+> >   	}
+> > +	if (info->ctx_mem_buf)
+> > +		dma_free_coherent(info->dev, LPM_CTX_MEM_SIZE,
 > 
-> After this the will the IOs be in isolation? Or does the firmware wait
-> until power down begins later?
+> You allocated with dma_alloc_attrs() you should free with dma_free_attrs().
 
-From what I understand,
-IOs will be in isolation immediately
+Good catch, will fix this in next revision
 
 > 
 > Andrew
 > 
-> > +	if (ret)
-> > +		return ret;
-> > +	dev_dbg(dev, "%s: set I/O isolation: %d\n", __func__, ret);
-> > +
-> > +	ret = ti_sci_prepare_system_suspend(info);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ti_sci_resume(struct device *dev)
-> > +{
-> > +	struct ti_sci_info *info = dev_get_drvdata(dev);
-> > +	int ret;
-> > +
-> > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_DISABLE);
-> > +	if (ret)
-> > +		return ret;
-> > +	dev_dbg(dev, "%s: disable I/O isolation: %d\n", __func__, ret);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
-> > +
-> >   static int ti_sci_init_suspend(struct platform_device *pdev,
-> >   			       struct ti_sci_info *info)
-> >   {
-> > @@ -3759,6 +3821,7 @@ static struct platform_driver ti_sci_driver = {
-> >   	.driver = {
-> >   		   .name = "ti-sci",
-> >   		   .of_match_table = of_match_ptr(ti_sci_of_match),
-> > +		   .pm = &ti_sci_pm_ops,
-> >   	},
-> >   };
-> >   module_platform_driver(ti_sci_driver);
+> > +				  info->ctx_mem_buf,
+> > +				  info->ctx_mem_addr);
+> >   	return ret;
+> >   }
 
 -- 
 Best regards,
