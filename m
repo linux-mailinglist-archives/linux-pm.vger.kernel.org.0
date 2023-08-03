@@ -2,118 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7FC76EA7D
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 15:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B75476E9EB
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 15:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232544AbjHCNda (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 09:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
+        id S235183AbjHCNTg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 09:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232613AbjHCNcO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 09:32:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441693C1F;
-        Thu,  3 Aug 2023 06:31:11 -0700 (PDT)
-Received: from dggpemm100020.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RGpz03117zrS8N;
-        Thu,  3 Aug 2023 21:07:08 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100020.china.huawei.com (7.185.36.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 21:08:12 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 3 Aug
- 2023 21:08:12 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next] interconnect: fix error handling in qnoc_probe()
-Date:   Thu, 3 Aug 2023 21:05:21 +0800
-Message-ID: <20230803130521.959487-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S235233AbjHCNTW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 09:19:22 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29561BFA
+        for <linux-pm@vger.kernel.org>; Thu,  3 Aug 2023 06:19:11 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so9921835e9.2
+        for <linux-pm@vger.kernel.org>; Thu, 03 Aug 2023 06:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691068750; x=1691673550;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9mOCS+sHZ9OYDGZ+r3hB6DlHjCqnsHVrb+8LC3PIeLA=;
+        b=B9KVtoTdkm4iLoGepeSWfuUFWRa/XcZRb+QMTwQ6Fh4TlGcz3G0K7ca5UOn7wk1G3U
+         4i8ZtlnjX3DAgKF4k2meo8tNjSVpPG5hkj5m/p1tM+d/Hr29X1igc1YKsTwV9ajwA2N/
+         UMkqwd4iNqpi1bkEQADGZxb3xm58kF3bXRcNI0ULCGpUJrlG/GoeHlpPP9iPtwTgLqeN
+         n2M6GpvGP3ERtY/xNc18a6CrdldFRi41PFtkAa4+Y2YR2AeqZvr1NVEE6exZn2JY32c7
+         kc+yB5/BP8N7XlLYBaRnMnbSSIZIoX68xupHuwucTLUG7wBMQeyAD/d1TZuX3NGwVJWp
+         cTlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691068750; x=1691673550;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9mOCS+sHZ9OYDGZ+r3hB6DlHjCqnsHVrb+8LC3PIeLA=;
+        b=C3AbqW+gHVeOOr1Iz64av8CM7JjFpJeaWpNPjhXxeNj8As4ulCUjBQDfCwIE6I7KXp
+         WYzodYxVFqqS7V5EeMavQYbZUzmMUxXh4STTmKLoCa8ZWEspvEIJmRGigT5xna8VTeBY
+         DF74YxtCkZtwXkuuim8R3o7w5EUtKpkpkCnNYQE1KQGRji1anbCtTXyvqD3TL3rohk+g
+         04OK2XzJ6fmP2CmVFl6o7INBY0zOjth1qJvfoRE6CUtCbeb0uN4FOzaI3iAPjdu20B8I
+         FgzOEYVYVK29/JBAmRQt4CZVocpx/+lkvf2y5CyRyN3+QYgbqI04qKBjUUUsMOv0OLMv
+         vsdQ==
+X-Gm-Message-State: ABy/qLbK6Es2NBabJ3LaoOsh/bEcycS+rl2vUGtXRyY2tZqaet9TAxkB
+        NXlQ3c9ZqhPge08Dxh2d9RtLo3M/AwQv8p8UmbY=
+X-Google-Smtp-Source: APBJJlG80gudR9LU0/3zq7coND676L3IK21c5s2iw2yBqdiqauL+wz/tpF8p/JXxwsJxejMflM9+qg==
+X-Received: by 2002:a05:600c:2048:b0:3fe:2bb1:11ba with SMTP id p8-20020a05600c204800b003fe2bb111bamr6423174wmg.27.1691067974611;
+        Thu, 03 Aug 2023 06:06:14 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id w11-20020a05600c014b00b003fc16ee2864sm4221824wmm.48.2023.08.03.06.06.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Aug 2023 06:06:14 -0700 (PDT)
+Message-ID: <5c93d78d-835e-c740-280b-9d76456aaeda@linaro.org>
+Date:   Thu, 3 Aug 2023 15:06:13 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/8] thermal: core: Add mechanism for connecting trips
+ with driver data
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
+ <4501957.LvFx2qVVIh@kreacher>
+ <2d0315d4-35b4-84db-4dcb-c9528abad825@linaro.org>
+ <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
+ <eb279cf1-0605-3b87-5cb6-241a91977455@linaro.org>
+ <CAJZ5v0i48=oawDJHoaHhiZRaO_CJokKsOHyNvu2v4PUbS6CH_Q@mail.gmail.com>
+ <f8029547-6851-7e0c-00e6-4963ccbc2702@linaro.org>
+ <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add missing clk_disable_unprepare() and clk_bulk_disable_unprepare()
-in the error path in qnoc_probe(). And when qcom_icc_qos_set() fails,
-it needs remove nodes and disable clks.
+On 02/08/2023 18:48, Rafael J. Wysocki wrote:
 
-Fixes: 2e2113c8a64f ("interconnect: qcom: rpm: Handle interface clocks")
-Fixes: 32882f657e78 ("interconnect: qcom: rpm: Set QoS registers only once")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/interconnect/qcom/icc-rpm.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+[ ... ]
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 2c16917ba1fd..51f12b70cb4f 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -497,7 +497,7 @@ int qnoc_probe(struct platform_device *pdev)
- 
- 	ret = devm_clk_bulk_get(dev, qp->num_intf_clks, qp->intf_clks);
- 	if (ret)
--		return ret;
-+		goto err_disable_unprepare_clk;;
- 
- 	provider = &qp->provider;
- 	provider->dev = dev;
-@@ -512,13 +512,15 @@ int qnoc_probe(struct platform_device *pdev)
- 	/* If this fails, bus accesses will crash the platform! */
- 	ret = clk_bulk_prepare_enable(qp->num_intf_clks, qp->intf_clks);
- 	if (ret)
--		return ret;
-+		goto err_disable_unprepare_clk;
- 
- 	for (i = 0; i < num_nodes; i++) {
- 		size_t j;
- 
- 		node = icc_node_create(qnodes[i]->id);
- 		if (IS_ERR(node)) {
-+			clk_bulk_disable_unprepare(qp->num_intf_clks,
-+						   qp->intf_clks);
- 			ret = PTR_ERR(node);
- 			goto err_remove_nodes;
- 		}
-@@ -534,8 +536,11 @@ int qnoc_probe(struct platform_device *pdev)
- 		if (qnodes[i]->qos.ap_owned &&
- 		    qnodes[i]->qos.qos_mode != NOC_QOS_MODE_INVALID) {
- 			ret = qcom_icc_qos_set(node);
--			if (ret)
--				return ret;
-+			if (ret) {
-+				clk_bulk_disable_unprepare(qp->num_intf_clks,
-+							   qp->intf_clks);
-+				goto err_remove_nodes;
-+			}
- 		}
- 
- 		data->nodes[i] = node;
-@@ -563,6 +568,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	icc_provider_deregister(provider);
- err_remove_nodes:
- 	icc_nodes_remove(provider);
-+err_disable_unprepare_clk:
- 	clk_disable_unprepare(qp->bus_clk);
- 
- 	return ret;
+>> Let me check if I can do something on top of your series to move it in
+>> the ACPI driver.
+> 
+> It doesn't need to be on top of my series, so if you have an idea,
+> please just let me know what it is.
+> 
+> It can't be entirely in the ACPI driver AFAICS, though, because
+> trips[i] need to be modified on updates and they belong to the core.
+> Hence, the driver needs some help from the core to get to them.  It
+> can be something like "this is my trip tag and please give me the
+> address of the trip matching it" or similar, but it is needed, because
+> the driver has to assume that the trip indices used by it initially
+> may change.
+
+May be I'm missing something but driver_ref does not seems to be used 
+except when assigning it, no?
+
 -- 
-2.25.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
