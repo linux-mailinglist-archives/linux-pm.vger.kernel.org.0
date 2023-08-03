@@ -2,225 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9A876E3E9
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 11:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F91276E416
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 11:16:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234928AbjHCJEr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 05:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S234102AbjHCJQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 05:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233403AbjHCJEq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 05:04:46 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B52E46;
-        Thu,  3 Aug 2023 02:04:44 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37377ECN007909;
-        Thu, 3 Aug 2023 09:04:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=VrQ4mfqjql4ZB4HPg+PnuPiU8+5Jf6FFhsvjXmsUTc0=;
- b=i5ur2xSaD4IpdInPZ6BDQvOCbJx+4ysK2X0GIgViT1gcOIF+lJx2MXFdkwzV+KEdaNfZ
- QB/Yfo9Y/0+cyB10s0n8sqpf1WYap/ledWaDwe89EaDESBXmZR6fGgRpKe3xKqIV2Sm0
- AAcXrKauhtqHArfjNOxPphMmYWBqiE3hMx/vxfV6cfRWrIKz4j5TcPVG4Wr6F/4qNDdq
- lcOIQ4G6W/KBLsZu4Qrjb+ZzPLGLPbJItAkugXMmRFl4ut0S0j98i4vRCUfqvz6ROdqn
- PKMx3BQDPiVopeNPwvw8KgXfZwdh8+F3KHKRKHewllZ+myF0En6x2rMghErQMPHRRRJU Ig== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s87jhg7d3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 09:04:20 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37394JYm012583
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 3 Aug 2023 09:04:19 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 3 Aug 2023 02:04:14 -0700
-Date:   Thu, 3 Aug 2023 14:34:11 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Guru Das Srinagesh <quic_gurus@quicinc.com>
-CC:     Masahiro Yamada <masahiroy@kernel.org>,
+        with ESMTP id S231817AbjHCJQj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 05:16:39 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072EDE58
+        for <linux-pm@vger.kernel.org>; Thu,  3 Aug 2023 02:16:38 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-307d58b3efbso606746f8f.0
+        for <linux-pm@vger.kernel.org>; Thu, 03 Aug 2023 02:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691054196; x=1691658996;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3qjTxnd4KtTTOKG14S4/4BnF9x1FwZI+P+SQK+cy1Q0=;
+        b=CNJ2m5qzGE5gwyNdXs1sH6KOgQxlKSIHDjGkj6guZkjEyYkkO/XOqo/bP+FrP1ErPd
+         ezB2MKpzBPnZLymibjrG6yL/pPAXWBRaf1kHrkKZIELELGLRvs0aWl4OEL2NALEGZm6l
+         aAXtdq42NEv4YLPCJ4SKdR1cvpwrQBFAfeNdo93rpxPt3zg64ugXOaGAolNanT8v50w/
+         Wd+kV0GlBFcvgDfQ22Bqnho/zumP59kxYuxJxJaFQpCn8tXOmVUgfjQOJOCcFOwddr9u
+         iq0vcJtAAJ/oLYWvAbZU2qgu8h7/HoL5DBd4NZg7qfXFmT8gYIz1wI4gqiUn2E8yNjCX
+         3m/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691054196; x=1691658996;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3qjTxnd4KtTTOKG14S4/4BnF9x1FwZI+P+SQK+cy1Q0=;
+        b=iuU3A917ZFr6osSkw/ZjporrhBWS9JTuyYRv7pjAsEI+r0C4Da2ri9TBxAZxWwzJMA
+         8aLgo6FGFolsfE8uiJQKHFg+R+AyPyAACPfcbvRtSQfquuXw6bYPbF7krVd7rw8a7f0L
+         eZn3MPpL07K24FkY+KaWfbk6lBqye+Vz01Gt/COKZkUFltBezPqk36OFAGFei2jBQjFq
+         uoVp3Vk+1UtT5swBIUi2L0f5iJ13mOdv7qsCVMy5Y87YycMOXOmlyqvQjVpkI/VqkaEt
+         SK379g6VJFsXBlKUt4+uz+jLBPU8JBgTUbZqFIx30YPBUp/IsG3+cNLKTDdxGGnAknd1
+         7H3w==
+X-Gm-Message-State: ABy/qLavZ3ETbR4PGb61uP0ENsXXkpoWteWZK/pOPN6xtqj7LVevAYY9
+        /7jTjhuIwMelaC19YBa9V2yHOA==
+X-Google-Smtp-Source: APBJJlEbMgvuYyt6jh+e+n6VqroGKijmgJQ7xQY+spS0oF/gn/I2gqCbv1hokho+dYSXUMUWKBIkAw==
+X-Received: by 2002:a5d:69d1:0:b0:316:ff0e:8213 with SMTP id s17-20020a5d69d1000000b00316ff0e8213mr6661940wrw.15.1691054196274;
+        Thu, 03 Aug 2023 02:16:36 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:8656:583:d034:d966? ([2a01:e0a:982:cbb0:8656:583:d034:d966])
+        by smtp.gmail.com with ESMTPSA id y18-20020a5d6212000000b003143c6e09ccsm21481602wru.16.2023.08.03.02.16.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Aug 2023 02:16:35 -0700 (PDT)
+Message-ID: <27b8f21c-f705-ba65-5b2e-912fb97a85a9@linaro.org>
+Date:   Thu, 3 Aug 2023 11:16:34 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 0/1] Add add-maintainer.py script
+Content-Language: en-US
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
+        Nicolas Schier <nicolas@fjasle.eu>,
         Kees Cook <keescook@chromium.org>,
-        "Bjorn Andersson" <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <quic_pkondeti@quicinc.com>, <u.kleine-koenig@pengutronix.de>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 1/1] scripts: Add add-maintainer.py
-Message-ID: <44afa9e4-9aaa-4a80-b2a9-57d0bf14b6e0@quicinc.com>
+        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, u.kleine-koenig@pengutronix.de
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
 References: <cover.1691049436.git.quic_gurus@quicinc.com>
- <829b08342568735095bbd3f8c44f435f44688018.1691049436.git.quic_gurus@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <829b08342568735095bbd3f8c44f435f44688018.1691049436.git.quic_gurus@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: X-7ur7DVOVUjh8_MPdBa-YLNBnuwCpqZ
-X-Proofpoint-ORIG-GUID: X-7ur7DVOVUjh8_MPdBa-YLNBnuwCpqZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-03_07,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- lowpriorityscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 malwarescore=0 phishscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
- definitions=main-2308030080
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <cover.1691049436.git.quic_gurus@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 03, 2023 at 01:23:16AM -0700, Guru Das Srinagesh wrote:
-> This script runs get_maintainer.py on a given patch file and adds its
-> output to the patch file in place with the appropriate email headers
-> "To: " or "Cc: " as the case may be. These new headers are added after
-> the "From: " line in the patch.
+Hi,
+
+On 03/08/2023 10:23, Guru Das Srinagesh wrote:
+> When pushing patches to upstream, the `get_maintainer.pl` script is used to
+> determine whom to send the patches to. Instead of having to manually process
+> the output of the script, add a wrapper script to do that for you.
 > 
-> Currently, for a single patch, maintainers are added as "To: ", mailing
-> lists and all other roles are addded as "Cc: ".
-> 
-> For a series of patches, however, a set-union scheme is employed in
-> order to solve the all-too-common problem of sending subsets of a patch
-> series to some lists, which results in important pieces of context such
-> as the cover letter being dropped. This scheme is as follows:
-> - Create set-union of all mailing lists corresponding to all patches and
->   add this to all patches as "Cc: "
-> - Create set-union of all other roles corresponding to all patches and
->   add this to all patches as "Cc: "
-> - Create set-union of all maintainers from all patches and use this to
->   do the following per patch:
->   - add only that specific patch's maintainers as "To: ", and
->   - the other maintainers from the other patches as "Cc: "
-> 
+> The add-maintainer.py script adds maintainers (and mailing lists) to a patch,
+> editing it in-place.
 
-Thanks. I have tested this logic by running this script on two patches
-from different subsystems. It does what it says.
+FYI the b4 prep command does this:
+https://github.com/mricon/b4/blob/e8045d1353165cc065b2f1b180bf1b0846af510e/b4/ez.py#L2055
 
-> Please note that patch files that don't have any "Maintainer"s
-> explicitly listed in their `get_maintainer.pl` output will not have any
-> "To: " entries added to them; developers are expected to manually make
-> edits to the added entries in such cases to convert some "Cc: " entries
-> to "To: " as desired.
-> 
-> The script is quiet by default (only prints errors) and its verbosity
-> can be adjusted via an optional parameter.
-> 
-> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
-> ---
->  scripts/add-maintainer.py | 113 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 113 insertions(+)
->  create mode 100755 scripts/add-maintainer.py
-> 
+Perhaps it could be useful to make sure the output is similar ?
 
-Do you need to update MAINTAINERS file?
-
-> diff --git a/scripts/add-maintainer.py b/scripts/add-maintainer.py
-> new file mode 100755
-> index 000000000000..b1682c2945f9
-> --- /dev/null
-> +++ b/scripts/add-maintainer.py
-> @@ -0,0 +1,113 @@
-> +#! /usr/bin/env python3
-> +
-> +import argparse
-> +import logging
-> +import os
-> +import sys
-> +import subprocess
-> +import re
-> +
-> +def gather_maintainers_of_file(patch_file):
-> +    all_entities_of_patch = dict()
-> +
-> +    # Run get_maintainer.pl on patch file
-> +    logging.info("GET: Patch: {}".format(os.path.basename(patch_file)))
-> +    cmd = ['scripts/get_maintainer.pl']
-> +    cmd.extend([patch_file])
-> +    p = subprocess.run(cmd, stdout=subprocess.PIPE, check=True)
-> +    logging.debug("\n{}".format(p.stdout.decode()))
-> +
-> +    entries = p.stdout.decode().splitlines()
-> +
-> +    maintainers = []
-> +    lists = []
-> +    others = []
-> +
-> +    for entry in entries:
-> +        entity = entry.split('(')[0].strip()
-> +        if "maintainer" in entry:
-> +            maintainers.append(entity)
-> +        elif "list" in entry:
-> +            lists.append(entity)
-> +        else:
-> +            others.append(entity)
-> +
-> +    all_entities_of_patch["maintainers"] = set(maintainers)
-> +    all_entities_of_patch["lists"] = set(lists)
-> +    all_entities_of_patch["others"] = set(others)
-> +
-> +    return all_entities_of_patch
-> +
-> +def add_maintainers_to_file(patch_file, entities_per_file, all_entities_union):
-> +    logging.info("ADD: Patch: {}".format(os.path.basename(patch_file)))
-> +
-> +    # For each patch:
-> +    # - Add all lists from all patches in series as Cc:
-> +    # - Add all others from all patches in series as Cc:
-> +    # - Add only maintainers of that patch as To:
-> +    # - Add maintainers of other patches in series as Cc:
-> +
-> +    lists = list(all_entities_union["all_lists"])
-> +    others = list(all_entities_union["all_others"])
-> +    file_maintainers = all_entities_union["all_maintainers"].intersection(entities_per_file[os.path.basename(patch_file)].get("maintainers"))
-> +    other_maintainers = all_entities_union["all_maintainers"].difference(entities_per_file[os.path.basename(patch_file)].get("maintainers"))
-> +
-> +    # Specify email headers appropriately
-> +    cc_lists        = ["Cc: " + l for l in lists]
-> +    cc_others       = ["Cc: " + o for o in others]
-> +    to_maintainers  = ["To: " + m for m in file_maintainers]
-> +    cc_maintainers  = ["Cc: " + om for om in other_maintainers]
-> +    logging.debug("Cc Lists:\n{}".format('\n'.join(cc_lists)))
-> +    logging.debug("Cc Others:\n{}".format('\n'.join(cc_others)))
-> +    logging.debug("Cc Maintainers:\n{}".format('\n'.join(cc_maintainers) or None))
-> +    logging.debug("To Maintainers:\n{}\n".format('\n'.join(to_maintainers) or None))
-> +
-> +    # Edit patch file in place to add maintainers
-> +    with open(patch_file, "r") as pf:
-> +        lines = pf.readlines()
-> +
-> +    from_line = [i for i, line in enumerate(lines) if re.search("From: ", line)]
-> +    if len(from_line) > 1:
-> +        logging.error("Only one From: line is allowed in a patch file")
-> +        sys.exit(1)
-> +
-
-Few minor issues from my limited testing:
-
-- It is very unlikely, but for whatever reason if "From:" is present in
-the patch (commit description), this script bails out. Pls try running
-this script on the current patch. May be you should also look for a
-proper email address on this line.
-
-- When this script is run on a file (get_maintainer.pl allows this), it
-  throws a runtime warning. may be good to bail out much earlier.
-
-- When this script runs on a non-existent file, it does not bail out
-  early.
+So far I've been very satisfied by the output of b4 auto_to_cc.
 
 Thanks,
-Pavan
+Neil
+
+> 
+> Thanks to Bjorn for being a sounding board to this idea and for his valuable
+> suggestions.
+> 
+> Please try out this script with `--verbosity debug` for verifying that it's
+> doing "the right thing". I've tested this with a patch series from various
+> subsystems to ensure variety of maintainers and lists output and found it to be
+> doing what it is supposed to do.
+> 
+> I referred to the following links during development of this script:
+> - https://stackoverflow.com/questions/4427542/how-to-do-sed-like-text-replace-with-python
+> - https://stackoverflow.com/questions/4146009/python-get-list-indexes-using-regular-expression
+> - https://stackoverflow.com/questions/10507230/insert-line-at-middle-of-file-with-python
+> 
+> v1 -> v2:
+> - Added set-union logic based on Pavan's comments [1] and Bjorn's early suggestion
+> - Expanded audience and added more mailing lists to get more review comments and feedback
+> 
+> [1] https://lore.kernel.org/lkml/63764b84-3ebd-4081-836f-4863af196228@quicinc.com/
+> 
+> Guru Das Srinagesh (1):
+>    scripts: Add add-maintainer.py
+> 
+>   scripts/add-maintainer.py | 113 ++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 113 insertions(+)
+>   create mode 100755 scripts/add-maintainer.py
+> 
+
