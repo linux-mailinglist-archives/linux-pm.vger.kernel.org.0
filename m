@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDA6576E0C4
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 09:04:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4AF76E23D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 09:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232491AbjHCHEU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 03:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
+        id S234199AbjHCH64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 03:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjHCHDx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 03:03:53 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC212D65;
-        Thu,  3 Aug 2023 00:03:14 -0700 (PDT)
+        with ESMTP id S233244AbjHCH6a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 03:58:30 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5706D5594;
+        Thu,  3 Aug 2023 00:45:26 -0700 (PDT)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 55D1C320099A;
-        Thu,  3 Aug 2023 03:03:10 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id 357E53200985;
+        Thu,  3 Aug 2023 03:45:14 -0400 (EDT)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 03 Aug 2023 03:03:12 -0400
+  by compute6.internal (MEProxy); Thu, 03 Aug 2023 03:45:16 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
         :cc:content-type:content-type:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1691046189; x=1691132589; bh=5S
-        kTpiwI76j0iv1Bz8lF8A+JaMZXfVN77EuT9JyTy+A=; b=jU6TSIhH7ZrRg1PEA0
-        qzNVnEaJWGbrFhZmrmv5OR71Sm79X1rE5hNEfGohLjsolv+gLVAef8nmzMvRKYUd
-        0R1YLra8Mpe4jaYd6QdFO8WC0NDkbNe+vkxtXr11EvrfmM1UQ38zqH0dCBGLqfhX
-        Cbs7ZM+Jxrf61cKvw+kBp1SXL0ujiFUCELGAwxqDU9xlk4Mcru3cgZSgF0LAk2R7
-        WCsPJ0a5Ub3PqGAag3QmngLFwfEZn67K4t5jSylXzeJbuOVeGT6+UsR+Nw92m2B9
-        TEiRW6uH8Talm4MDK6jW8MMFSijvExJKJ/GbuhVRfYphnN3r1IjQoFqdGm21+BY3
-        IBKA==
+        :subject:subject:to:to; s=fm2; t=1691048713; x=1691135113; bh=oC
+        7D+18iBZjjvCY62LFO9NAYOEDXUELI72sm1PfCWkI=; b=UYyl48QdjUaFOz2tJq
+        imJnoNfXEW2jLvZGePuK9g36mnmzh0iPMibe8LZQtFLYuioYhjvxqFP38nO4hjsQ
+        3f5OeSii24KWWW5MG14hKNADUPLd1MGflAmjj+D30F+US4y8LMb41spY4v5JDSfw
+        +xPN8YS9M/VpomkO8clbR5LBoT/e300g/esZJ+VGmNxkQTsKL8Vn07nfaLAx3D5I
+        AW8X6pqmubrmyNz0FFlOKwm5uKcEBRIY8hRs+w0HJffvLq5KKYoi9SnApasRk0i6
+        jy/pj5M+snFX3uSUGR98vseYJ8k3QqxutZ+1YC8PNSg68Z0eZiAZHYKYOGcxOxBJ
+        0/gQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-type:content-type:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691046189; x=1691132589; bh=5SkTpiwI76j0i
-        v1Bz8lF8A+JaMZXfVN77EuT9JyTy+A=; b=kjDsUJGzVeWOqS09TcFWWuLXwGgGl
-        llB92w3a7K9vbrG+pLOTqu5eaVkACxGVUcFU5N6N9KiIrkzLQtEdrlt7skPw/FRT
-        0E7MwI+MRmEfkNxU8tv3ETa/9h4eRNWaICvV9dMHILnl4/YsPXDzSLApygmEZloy
-        3Gig6ZUplmHR/O5MMRxL5qZIVSVAZOfTZpp9hBnaKDO+LDfTj8bHMl5lQP6L00S5
-        eyzjXtQHv9y8LE0M/0PVnrtk2cQdnLR1Cg359SP3r+fjZ/z3cXtk9lU0u27RRMTI
-        qCo3DN7Jn6dNAJxH+Ab7uopkknZNs/L8vKsm5T5g2lDC6sZs3vg0cZKYQ==
-X-ME-Sender: <xms:LFHLZJGtQm9EYLlFp8H6fbRp1nNmnG-reMyDxsav0NnrK1E5l6FKnw>
-    <xme:LFHLZOVI9k7Z2gyoR3Qhb_c9x7Tbg7EsyxPeR-DxLFkgiIGjIr_HLbUERJYkYd65e
-    NDiHiyopNeaIl-ZVCM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedugdduudefucetufdoteggodetrfdotf
+        :x-sasl-enc; s=fm3; t=1691048713; x=1691135113; bh=oC7D+18iBZjjv
+        CY62LFO9NAYOEDXUELI72sm1PfCWkI=; b=bNJo8R0DJDfGmIf/rkjYEjz82apwj
+        gpTE9MAMKSJaYmpdyEtnTsY4k7B1ow0D2HHbMPOx2FsKHiPdFjv7eZvyAGtXSfU8
+        ZGlEH8SkyGpLXyD+mkaf2I9agmIkw7xZ+nQqljV0LIR3OMFHpT1GDqvi9caoWb3C
+        M9aymR2awNZhpf2b0397uMQLc1EMfqEPIwK5xbU7wLWB4JJKBAvaZiKJDx3bJLo6
+        bXH/dX+gyaUCSW2dqHpCqWmowt2z4zFiKDCIRyaAwcmocn68HyaYZiHOE9hIcCmb
+        h8xdZ2THXQkgKX3UZ/4ypF1n7/hrdfS7ykkmSEvMlUj5vPraTN1I2+ODg==
+X-ME-Sender: <xms:CFvLZDRTq-ikE1JvxFS4rjPovecGPfURswu-gep2zqf1xjrjQbWKYA>
+    <xme:CFvLZExBmRGF57c0cfPINKqvgeA4m-yZ2GTuJe1y4c7rJQtlCu-AE-v8_yfHGxjTk
+    syOS8ImcYb9r1gAH7g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedugdduvdduucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
@@ -53,21 +53,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedugdduudefucetufdoteggod
     htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
     teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
     hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:LFHLZLIf16Rgi6v0w8j3MNlzrCwjPRNy9NDtczmH5M76-thA7r4zNw>
-    <xmx:LFHLZPHWDU-rbReG3H666yKM391Qbd5NZtNvaINcv99zUhrQ2IETHQ>
-    <xmx:LFHLZPXOcHjAnQScHt4zWRhf5XGL5Eeni2NYOB0CDmXQ5YGM0Fng-w>
-    <xmx:LVHLZItWNEY2hx1vkfcMKjiluOjOFRGuyb4CupRgRs1HOKV3ftTaNQ>
+X-ME-Proxy: <xmx:CFvLZI1tW0Al3UxBK07DgjYdCcn59IaxQVgbuSiX3SUrr4bIY2bttA>
+    <xmx:CFvLZDC_ORQhNbucjfWsc0FxRlHzgJ-ASv_0ip1AehGgPaK-vY4zoQ>
+    <xmx:CFvLZMhL35qDy1rqMwe5PqLw4L3GNnV6yxNFo-j2qxDMyRlTMHlURw>
+    <xmx:CVvLZLSt1m2ZkQNW_uj_Qq-3VqqGa-DldvzMzqXq15NZsNgWHexjbg>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B3955B60089; Thu,  3 Aug 2023 03:03:08 -0400 (EDT)
+        id AD37DB6008D; Thu,  3 Aug 2023 03:45:12 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
 Mime-Version: 1.0
-Message-Id: <4fef9725-7aea-43fb-b8ef-d20a4c6d9a68@app.fastmail.com>
-In-Reply-To: <20230803063703.5659-3-zhuyinbo@loongson.cn>
+Message-Id: <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
+In-Reply-To: <20230803063703.5659-2-zhuyinbo@loongson.cn>
 References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-3-zhuyinbo@loongson.cn>
-Date:   Thu, 03 Aug 2023 09:02:47 +0200
+ <20230803063703.5659-2-zhuyinbo@loongson.cn>
+Date:   Thu, 03 Aug 2023 09:44:52 +0200
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Yinbo Zhu" <zhuyinbo@loongson.cn>,
         "Rob Herring" <robh+dt@kernel.org>,
@@ -78,8 +78,9 @@ To:     "Yinbo Zhu" <zhuyinbo@loongson.cn>,
 Cc:     "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
         "Liu Peibao" <liupeibao@loongson.cn>,
         loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
-        "Liu Yun" <liuyun@loongson.cn>
-Subject: Re: [PATCH v6 2/2] soc: loongson2_pm: add power management support
+        "Liu Yun" <liuyun@loongson.cn>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -92,88 +93,30 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
-> The Loongson-2's power management controller was ACPI, supports ACPI
-> S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
-> Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
-> (USB, GMAC, PWRBTN, etc.). This driver was to add power management
-> controller support that base on dts for Loongson-2 series SoCs.
->
-> Co-developed-by: Liu Yun <liuyun@loongson.cn>
-> Signed-off-by: Liu Yun <liuyun@loongson.cn>
-> Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> Cc: soc@kernel.org
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-I'm still waiting for Ulf to take a look here to see whether
-this should be in drivers/genpd instead, but he might still
-be on vacation.
-
-A few minor comments from me in the meantime:
-
-> +#define loongson2_pm_readw(reg)		readw(loongson2_pm.base + reg)
-> +#define loongson2_pm_readl(reg)		readl(loongson2_pm.base + reg)
-> +#define loongson2_pm_writew(val, reg)	writew(val, loongson2_pm.base + 
-> reg)
-> +#define loongson2_pm_writel(val, reg)	writel(val, loongson2_pm.base + 
-> reg)
-
-I would prefer these to be 'static inline' functions rather than
-macros, or you can just open-code them, as each macro is only
-used once at the moment.
-
-> +static irqreturn_t loongson2_pm_irq_handler(int irq, void *dev_id)
-> +{
-> +	u16 status = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
+> +  loongson,suspend-address:
+> +    $ref: /schemas/types.yaml#/definitions/uint64
+> +    description:
+> +      The "loongson,suspend-address" is a deep sleep state (Suspend To
+> +      RAM) firmware entry address which was jumped from kernel and it's
+> +      value was dependent on specific platform firmware code. In
+> +      addition, the PM need according to it to indicate that current
+> +      SoC whether support Suspend To RAM.
 > +
-> +	if (!loongson2_pm.suspended && (status & LOONGSON2_PM1_PWRBTN_STS)) {
-> +		pr_info("Power Button pressed...\n");
 
-The message is probably more appropriate as a pr_debug() than
-pr_info().
+I just commented on this in the driver patch, assuming this
+was an MMIO address, but I'm even more confused now, since
+we try hard to not rely on being able to just interface with
+firmware like this.
 
-> +static int __maybe_unused loongson2_pm_suspend(struct device *dev)
-> +{
-> +	loongson2_pm.suspended = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused loongson2_pm_resume(struct device *dev)
-> +{
-> +	loongson2_pm.suspended = false;
-> +
-> +	return 0;
-> +}
-> +static SIMPLE_DEV_PM_OPS(loongson2_pm_ops, loongson2_pm_suspend, 
-> loongson2_pm_resume);
+If this is executable code, where does this actually reside?
+Is this some SRAM that needs to execute the suspend logic
+in order to shut down memory and cache controllers? Or is
+this a runtime firmware interface similar to how UEFI handles
+its runtime services to keep the implementation out of
+the kernel?
 
-Please change this to DEFINE_SIMPLE_DEV_PM_OPS() and remove the
-__maybe_unused, this is what all drivers should have these days.
+Does the code work with both traditional suspend-to-ram and
+modern suspend-to-idle logic?
 
-> +
-> +static int loongson2_pm_probe(struct platform_device *pdev)
-> +{
-> +	int irq, retval;
-> +	u64 suspend_addr;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	loongson2_pm.base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(loongson2_pm.base))
-> +		return PTR_ERR(loongson2_pm.base);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +	if (irq < 0)
-> +		return irq;
-> +
-> +	if (!device_property_read_u64(dev, "loongson,suspend-address", 
-> &suspend_addr))
-> +		loongson_sysconf.suspend_addr = (u64)phys_to_virt(suspend_addr);
-> +	else
-
-Having a custom "loongson,suspend-address" property here feels wrong
-to me. Can't this be moved into the "regs" property that holds
-the other mmio registers?
-
-    Arnd
+      Arnd
