@@ -2,119 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C1D76DFE9
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 07:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C91B76DFFC
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 08:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjHCF4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 01:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S232341AbjHCGBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 02:01:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjHCF4L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 01:56:11 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0BC2D49
-        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 22:56:10 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-563df158ecaso372460a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 22:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691042170; x=1691646970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C7WsYV/x7lyB/wTNGCIcHVMNipm/cU1Q7w5THwIRrSU=;
-        b=zAgoVRmjKopQptfjt67R46qrgqXC6e7F8RrNLBq0gotYSQZOeWgnOMgIva55l3NKHe
-         271ABzS+rcGJOZQdiqE85sxQfOFOoRat3iYCzFrPjqU1z47X6J+NV0980nOYhWUh+R/O
-         jGs+KODx1PnSoxZjaQ022rqvHyqLvBGrs+ADB02lZCe7MizoIkD14Zoaj5x3ofhG5uNC
-         R0IX+JtSNH7XAyq6Uc7xOHafeRMb6/s9jQr8UmKTBVR7AzN8Mms7u4xn3/TBrLglW8/A
-         oa/lwW0/JfNKx318653BCbr2BptGYdVt9mK9Xh31imoa0JeyRvCsQGN7Zwl6a8I4AqPi
-         EsAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691042170; x=1691646970;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C7WsYV/x7lyB/wTNGCIcHVMNipm/cU1Q7w5THwIRrSU=;
-        b=hxbLQeHDkxI21uSGs31rNeRdHPFpuyVnFmsEBDK4L7W84WOkse2op87dldO8Yzr59H
-         X7pWQL5WibdT7rMxTWJRSlqzHi8vpjJe3yVlu04ihb3P90S40CkHiPh70fITnN3M+RSA
-         FmP4gQKC1kbGpem/ODEr1mlq+2by16j5ThJyhf3ygfD/eC4px07geqik9Yz+SPACObg4
-         RKqNV//5VA3Tn3TkD5LO/VLl0OsjpMoMro1xyDyzFMawVfcijOTOaOLATy+y5eUshoWf
-         AIv7JwAS+f0c3FwKqVEEib/K7t+NNsQPgqW/vaTh65PvWQCSWqeQJhUDdmsa87i36age
-         Zl+w==
-X-Gm-Message-State: ABy/qLaKibiESHX+wgmmvuyY3k0bB5AdVtH/9yGBS4L5Fo6SqlD2LEHP
-        CPYb1qnymXv8m69hZc9RnofCBQ==
-X-Google-Smtp-Source: APBJJlEs/F725rHcqtyueFIg9TFFt0P4AKB76xQ2koQUxZ42Kq2Mdg6ZzKKjgx8nvTjdp3EwutDy6Q==
-X-Received: by 2002:a17:902:ea95:b0:1b0:6038:2982 with SMTP id x21-20020a170902ea9500b001b060382982mr17234494plb.41.1691042169672;
-        Wed, 02 Aug 2023 22:56:09 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id a12-20020a170902eccc00b001b03b7f8adfsm13451200plh.246.2023.08.02.22.56.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 22:56:09 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 11:26:07 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Florian Fainelli <florian.fainelli@broadcom.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v3] cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
-Message-ID: <20230803055607.ueliy6eofvhoy4gw@vireshk-i7>
-References: <ZMh45KH2iPIpNktr@work>
- <66e19ae3-253d-5377-5cc2-566ec3cfed49@broadcom.com>
+        with ESMTP id S232288AbjHCGBw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 02:01:52 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DDDE6F;
+        Wed,  2 Aug 2023 23:01:51 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37361bNw091891;
+        Thu, 3 Aug 2023 01:01:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691042497;
+        bh=Eq3fAhTV5YV3oUQ6BBvL8m3xQDKMmG4eYt87dBmZskM=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=BWBOQzbfwI/tP0jfhhO+BFyd+4h3QYnjnlbRx082FdlcvxnfNJnTNvhj1TwcqXeiQ
+         r0YHV+DLzADY5MvQm0iOGl294vyO/AFnoXdB0tuTgkz5JQUM+7B9VO/wYQSfy0CB6T
+         nIV6YIWuRVQos+ubIn83Xt8/x4N45YSSEe6FAv70=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37361bsj002604
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Aug 2023 01:01:37 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 3
+ Aug 2023 01:01:37 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 3 Aug 2023 01:01:37 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37361a3o015863;
+        Thu, 3 Aug 2023 01:01:36 -0500
+Date:   Thu, 3 Aug 2023 11:31:35 +0530
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     Rob Herring <robh+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Vibhore Vardhan <vibhore@ti.com>, <linux-omap@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH V2 2/2] dt-bindings: cpufreq: Convert ti-cpufreq to json
+ schema
+Message-ID: <20230803060135.cichqctmjhajt2hq@dhruva>
+References: <20230801233341.1416552-1-nm@ti.com>
+ <20230801233341.1416552-3-nm@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <66e19ae3-253d-5377-5cc2-566ec3cfed49@broadcom.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230801233341.1416552-3-nm@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-08-23, 10:05, Florian Fainelli wrote:
-> On 7/31/23 20:15, Gustavo A. R. Silva wrote:
-> > Allocate extra space for terminating element at:
-> > 
-> > drivers/cpufreq/brcmstb-avs-cpufreq.c:
-> > 449         table[i].frequency = CPUFREQ_TABLE_END;
-> > 
-> > and add code comment to make this clear.
-> > 
-> > This fixes the following -Warray-bounds warning seen after building
-> > ARM with multi_v7_defconfig (GCC 13):
-> > In function 'brcm_avs_get_freq_table',
-> >      inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
-> > drivers/cpufreq/brcmstb-avs-cpufreq.c:449:28: warning: array subscript 5 is outside array bounds of 'void[60]' [-Warray-bounds=]
-> >    449 |         table[i].frequency = CPUFREQ_TABLE_END;
-> > In file included from include/linux/node.h:18,
-> >                   from include/linux/cpu.h:17,
-> >                   from include/linux/cpufreq.h:12,
-> >                   from drivers/cpufreq/brcmstb-avs-cpufreq.c:44:
-> > In function 'devm_kmalloc_array',
-> >      inlined from 'devm_kcalloc' at include/linux/device.h:328:9,
-> >      inlined from 'brcm_avs_get_freq_table' at drivers/cpufreq/brcmstb-avs-cpufreq.c:437:10,
-> >      inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
-> > include/linux/device.h:323:16: note: at offset 60 into object of size 60 allocated by 'devm_kmalloc'
-> >    323 |         return devm_kmalloc(dev, bytes, flags);
-> >        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> > routines on memcpy() and help us make progress towards globally
-> > enabling -Warray-bounds.
-> > 
-> > Link: https://github.com/KSPP/linux/issues/324
-> > Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> 
-> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+On Aug 01, 2023 at 18:33:41 -0500, Nishanth Menon wrote:
+> Move the ti-cpufreq binding over to opp and convert convert the free
 
-Applied. Thanks.
+Minor nitpik, maybe can be fixed while applying the patch. Checkpatch caught this,
+Possible repeated word: 'convert'
+
+> text binding to json-schema.
+> 
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+
+Otherwise, LGTM
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
+> Changes since V1:
+> - Fixup $subject of the patch to indicate json schema rather than yaml.
+> - Change filename to matchup with binding compatible
+> - Dropped un-used labels
+> - Dropped "|" in "description"
+> 
+> V1: https://lore.kernel.org/all/20230724153911.1376830-6-nm@ti.com/
+> 
+> Side note: cleanups in dt is picked up on Tony's tree:
+> https://lore.kernel.org/all/20230731062551.GH5194@atomide.com/
+> 
+>  .../bindings/cpufreq/ti-cpufreq.txt           | 132 ------------------
+>  .../opp/operating-points-v2-ti-cpu.yaml       |  88 ++++++++++++
+>  2 files changed, 88 insertions(+), 132 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
+>  create mode 100644 Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
+> deleted file mode 100644
+[..snip..]
 
 -- 
-viresh
+Best regards,
+Dhruva Gole <d-gole@ti.com>
