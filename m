@@ -2,152 +2,224 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40BA76DD6D
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 03:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE68276DF5C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 06:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbjHCBo0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Aug 2023 21:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S229727AbjHCETS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 00:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjHCBoX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Aug 2023 21:44:23 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2048.outbound.protection.outlook.com [40.107.100.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAB41FD6;
-        Wed,  2 Aug 2023 18:44:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iO3uS0ZBtx9Kd1Qls9ZjSJeSudpMblQM8qYmvSTQPMyMKXjG9Cho5Eu842YPru4EIZUktak4DRTKglYsRjHSp0sFag5y8Vd/Cv7NHYOz/VrVrrbplJQlNGrCnl9u3yGTLS0XiCiO5hTS12KOVRzj2XPKaIObhgSsdHjq5K4FXNfZ/SKmR3yVUrSu0shmIro4cG07v4D2WDlJpYdmEdubdkYTx/oLBHlzwDvP+Iu7zjEg0Duj3xRxowHw8Le/dUPDIlU5lkJ1SKqQcHu8KNNe7HeQ334GKWqt6DL1es8vK9auoVoHu+Qh9OR+0b5QHMgXSlMfNMo4lPITQDHtLFpoqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iLz33v7muQVXBnLTuFnusy+MRgsK/6izW/fvDl9ntsc=;
- b=nvmCskvl/c9eJ6u4eIdw+hEQZp9NjCZzkeXzK3e1mlftWhdM5oZ2tE8fuipHNIj2h4to55j98EJWvM0HGYzu7qN1xCkPZRjDFq7+HJWGwVfSgvOTMGJTnm997+QTX+klGs9tPWox3I4SP+tdJ/o0lC4VgHm57Ob3eQ9jlrqwi/mSyCrVXQwo7SWzecD399/+gpCGrFv/KBGEsIUt+qsEB92AoxgJeq399wtjpoPapmVKHS7LOX+bAHXw93UuaK5V6HtGa8k3KgqZrQdY2Q9zw01URiEqEAVxGixwY7gd3nu4nYAeCyc1kSziYUBGSK3piXwfnnVLAT4YgH0aFkhpyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iLz33v7muQVXBnLTuFnusy+MRgsK/6izW/fvDl9ntsc=;
- b=2O049jbnadShkjOgrXJ++5/b0eVhUJ2YFzQ4eJHqhBu/tf0RBhe2Gy/Bpc/A1tE9PKv5dTQxi4IG3G7shKp2A6lElzX3yoW/CSPb47CyG9xuMqBizDseZrXKN4uqHPE9EAX6YUZ9oIjQ24dgkJgpq71CNoiWnoOWQpMaBghkoEc=
-Received: from MW4PR04CA0252.namprd04.prod.outlook.com (2603:10b6:303:88::17)
- by PH7PR12MB8427.namprd12.prod.outlook.com (2603:10b6:510:242::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.32; Thu, 3 Aug
- 2023 01:44:17 +0000
-Received: from CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::27) by MW4PR04CA0252.outlook.office365.com
- (2603:10b6:303:88::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.20 via Frontend
- Transport; Thu, 3 Aug 2023 01:44:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT014.mail.protection.outlook.com (10.13.175.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6631.47 via Frontend Transport; Thu, 3 Aug 2023 01:44:16 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 2 Aug
- 2023 20:44:11 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
+        with ESMTP id S229463AbjHCETR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 00:19:17 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141D5106;
+        Wed,  2 Aug 2023 21:19:16 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3733fUsG008805;
+        Thu, 3 Aug 2023 04:18:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=JPtysfcS0AIfNUZpM9ssd0qH1kDBkP2CB3k8ROMb0H4=;
+ b=IbpFA0NSIYV2M4rubBeo3FwYMMGeSIXDtV1C2vYq2v9236a7GOC/SDq4qgHsSj8MRuoK
+ AdZoYK8/3xn7xHGeclinuwpDhgIqez3ZzpVa1rfmEh5/Vd8iFnWkvEy0r8ldoXEzOefG
+ qiOwuyKwUkKx+LgngUnsv9pcU31CwMxZsslbSTaAnFrBVlEEpLI2nzdGPkb+ymI2jjcZ
+ ZCEhRFDP06la07bM29GfSRAmf/NC3DrgT2p2X46dyfH1B25tb3F5CjTeFLRBqjNlILbB
+ PehSVGZv//xqtQLUhOm5OuN3gAvSXtxE1Tx2CMW9RkQU/57pEExEqG6jsvkZKPJy0Ngd kQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s7sgnh8u4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Aug 2023 04:18:47 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3734Ik2O026084
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 3 Aug 2023 04:18:46 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 2 Aug 2023 21:18:40 -0700
+Date:   Thu, 3 Aug 2023 09:48:37 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     David Dai <davidai@google.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: [PATCH V2] cpufreq: amd-pstate-ut: Modify the function to get the highest_perf value
-Date:   Thu, 3 Aug 2023 09:43:54 +0800
-Message-ID: <20230803014354.3304825-1-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Marc Zyngier" <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, <kernel-team@android.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
+Message-ID: <80f47262-9354-472f-8122-5ae262c0a46d@quicinc.com>
+References: <20230731174613.4133167-1-davidai@google.com>
+ <20230731174613.4133167-3-davidai@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT014:EE_|PH7PR12MB8427:EE_
-X-MS-Office365-Filtering-Correlation-Id: 26bf6bf6-e9c7-49bf-1889-08db93c32618
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zAKEi+o3zGF4dwxv7phs8cLjMFQ0ZHsVs9XFP4ikO09babc5tX61XzoEK3g2rvpUE4T4Zzfx6O4J0DTMlDK1pvbk4CIzjzMKTlTg/ZaOiPsKkJ9Y2rFfXUIR6WLahQqU7+7WAke963cjF+UwV5uS60K0+KBK02Q184xvnZJ6z4Omq67PZS/NLaY2dCyRs44lqHM5ExbvyC7XBV/c798rswmTJ7KfoYYLXqYKcaTaJ1pjuhtLffvjcjQwi5/YAVcbtsspqFNZl9VNZVDkxQ4pU0uv/yg/1Xn01Uwkonx4C/0E7iR1frjwT023IgEscj1FPYJoxMJM6BUfWB4w8LOHiNNqDjulYyphLHR9GFR6e8Ofi3bhE/sfIw4Z3tRKpi+ICCQCYst1/kOq0sJ4xeLwGBgayj+UmPkxkWESpDO1ABlnMXhOb6xmpQwgsrYQ2z1+VQ96p6AiPMHdpRaD8HLU0wckQplCxx8TtkYLUgxHEf/w4o+wwKdZpdK7i5p5tpQ0EOOdDpRFbzVtyG8Y7E2V83OG+m72q9IEI2UCdkk802H4WbYuJIO66pQQW+T3VcfCapO0hgyGuJnlEjhK29WOb+ZSfvrUphItlzlsJoaOrO/B/blHkx+N1hLlPwXA8X1lCFevEPhGx8InAoo6QRfOlO2XlIDDiW0GRRQdlK1douKBp4byl2SAe9BixBEmc5Ce+CHH9ph6jjqLq7JkB1dz9sGaRIxIacrue3NvCOsVb/wKLKMkxZMQm3UNgr1A1gHZB4OEapuu4itJ5Yn+66Y7ZxVm9plU9xJ8e4FueYP+kCw=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199021)(82310400008)(40470700004)(46966006)(36840700001)(86362001)(316002)(8936002)(8676002)(6636002)(5660300002)(4326008)(54906003)(356005)(110136005)(41300700001)(70586007)(70206006)(81166007)(82740400003)(478600001)(2906002)(6666004)(36756003)(36860700001)(47076005)(7696005)(1076003)(26005)(83380400001)(426003)(186003)(336012)(16526019)(40480700001)(2616005)(40460700003)(15583001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2023 01:44:16.8513
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26bf6bf6-e9c7-49bf-1889-08db93c32618
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8427
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230731174613.4133167-3-davidai@google.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: g3g7Xtp3J-PsThVbTzWOpXLknSgYYInr
+X-Proofpoint-GUID: g3g7Xtp3J-PsThVbTzWOpXLknSgYYInr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-03_01,2023-08-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0 phishscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308030038
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The previous function amd_get_highest_perf() will be deprecated.
-It can only return 166 or 255 by cpuinfo. For platforms that
-support preferred core, the value of highest perf can be between
-166 and 255. Therefore, it will cause amd-pstate-ut to fail when
-run amd_pstate_ut_check_perf().
+On Mon, Jul 31, 2023 at 10:46:09AM -0700, David Dai wrote:
+> Introduce a virtualized cpufreq driver for guest kernels to improve
+> performance and power of workloads within VMs.
+> 
+> This driver does two main things:
+> 
+> 1. Sends the frequency of vCPUs as a hint to the host. The host uses the
+> hint to schedule the vCPU threads and decide physical CPU frequency.
+> 
+> 2. If a VM does not support a virtualized FIE(like AMUs), it queries the
+> host CPU frequency by reading a MMIO region of a virtual cpufreq device
+> to update the guest's frequency scaling factor periodically. This enables
+> accurate Per-Entity Load Tracking for tasks running in the guest.
+> 
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- drivers/cpufreq/amd-pstate-ut.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[...]
 
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index 7f3fe2048981..9c889a4a0177 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -145,8 +145,6 @@ static void amd_pstate_ut_check_perf(u32 index)
- 	struct cpufreq_policy *policy = NULL;
- 	struct amd_cpudata *cpudata = NULL;
- 
--	highest_perf = amd_get_highest_perf();
--
- 	for_each_possible_cpu(cpu) {
- 		policy = cpufreq_cpu_get(cpu);
- 		if (!policy)
-@@ -161,6 +159,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 				return;
- 			}
- 
-+			highest_perf = cppc_perf.highest_perf;
- 			nominal_perf = cppc_perf.nominal_perf;
- 			lowest_nonlinear_perf = cppc_perf.lowest_nonlinear_perf;
- 			lowest_perf = cppc_perf.lowest_perf;
-@@ -172,6 +171,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 				return;
- 			}
- 
-+			highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
- 			nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
- 			lowest_nonlinear_perf = AMD_CPPC_LOWNONLIN_PERF(cap1);
- 			lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
--- 
-2.34.1
+> +static void virt_scale_freq_tick(void)
+> +{
+> +	struct cpufreq_policy *policy = cpufreq_cpu_get(smp_processor_id());
+> +	struct virt_cpufreq_drv_data *data = policy->driver_data;
+> +	u32 max_freq = (u32)policy->cpuinfo.max_freq;
+> +	u64 cur_freq;
+> +	u64 scale;
+> +
+> +	cpufreq_cpu_put(policy);
+> +
+> +	cur_freq = (u64)data->ops->get_freq(policy);
+> +	cur_freq <<= SCHED_CAPACITY_SHIFT;
+> +	scale = div_u64(cur_freq, max_freq);
+> +
+> +	this_cpu_write(arch_freq_scale, (unsigned long)scale);
+> +}
+> +
 
+We expect the host to provide the frequency in kHz, can you please add a
+comment about it. It is not very obvious when you look at the
+REG_CUR_FREQ_OFFSET register name.
+
+> +static struct scale_freq_data virt_sfd = {
+> +	.source = SCALE_FREQ_SOURCE_VIRT,
+> +	.set_freq_scale = virt_scale_freq_tick,
+> +};
+> +
+> +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *policy)
+> +{
+> +	struct virt_cpufreq_drv_data *data = policy->driver_data;
+> +	/*
+> +	 * Use cached frequency to avoid rounding to freq table entries
+> +	 * and undo 25% frequency boost applied by schedutil.
+> +	 */
+> +	u32 freq = mult_frac(policy->cached_target_freq, 80, 100);
+> +
+> +	data->ops->set_freq(policy, freq);
+> +	return 0;
+> +}
+
+Why do we undo the frequency boost? A governor may apply other boosts
+like RT (uclamp), iowait. It is not clear why we need to worry about
+governor policies here.
+
+> +
+> +static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *policy,
+> +		unsigned int target_freq)
+> +{
+> +	virt_cpufreq_set_perf(policy);
+> +	return target_freq;
+> +}
+> +
+> +static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
+> +		unsigned int index)
+> +{
+> +	return virt_cpufreq_set_perf(policy);
+> +}
+> +
+> +static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> +{
+> +	struct virt_cpufreq_drv_data *drv_data = cpufreq_get_driver_data();
+> +	struct cpufreq_frequency_table *table;
+> +	struct device *cpu_dev;
+> +	int ret;
+> +
+> +	cpu_dev = get_cpu_device(policy->cpu);
+> +	if (!cpu_dev)
+> +		return -ENODEV;
+> +
+> +	ret = dev_pm_opp_of_add_table(cpu_dev);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = dev_pm_opp_get_opp_count(cpu_dev);
+> +	if (ret <= 0) {
+> +		dev_err(cpu_dev, "OPP table can't be empty\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
+> +	if (ret) {
+> +		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	policy->freq_table = table;
+> +	policy->dvfs_possible_from_any_cpu = false;
+> +	policy->fast_switch_possible = true;
+> +	policy->driver_data = drv_data;
+> +
+> +	/*
+> +	 * Only takes effect if another FIE source such as AMUs
+> +	 * have not been registered.
+> +	 */
+> +	topology_set_scale_freq_source(&virt_sfd, policy->cpus);
+> +
+> +	return 0;
+> +
+> +}
+> +
+
+Do we need to register as FIE source even with the below commit? By
+registering as a source, we are not supplying any accurate metric. We
+still fallback on the same source that cpufreq implements it.
+
+874f63531064 ("cpufreq: report whether cpufreq supports Frequency
+Invariance (FI)")
+
+Thanks,
+Pavan
