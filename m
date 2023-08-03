@@ -2,116 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B75476E9EB
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 15:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1578B76E9E5
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 15:18:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235183AbjHCNTg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 09:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S235842AbjHCNSb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 09:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235233AbjHCNTW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 09:19:22 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E29561BFA
-        for <linux-pm@vger.kernel.org>; Thu,  3 Aug 2023 06:19:11 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbd33a57b6so9921835e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 03 Aug 2023 06:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691068750; x=1691673550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9mOCS+sHZ9OYDGZ+r3hB6DlHjCqnsHVrb+8LC3PIeLA=;
-        b=B9KVtoTdkm4iLoGepeSWfuUFWRa/XcZRb+QMTwQ6Fh4TlGcz3G0K7ca5UOn7wk1G3U
-         4i8ZtlnjX3DAgKF4k2meo8tNjSVpPG5hkj5m/p1tM+d/Hr29X1igc1YKsTwV9ajwA2N/
-         UMkqwd4iNqpi1bkEQADGZxb3xm58kF3bXRcNI0ULCGpUJrlG/GoeHlpPP9iPtwTgLqeN
-         n2M6GpvGP3ERtY/xNc18a6CrdldFRi41PFtkAa4+Y2YR2AeqZvr1NVEE6exZn2JY32c7
-         kc+yB5/BP8N7XlLYBaRnMnbSSIZIoX68xupHuwucTLUG7wBMQeyAD/d1TZuX3NGwVJWp
-         cTlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691068750; x=1691673550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9mOCS+sHZ9OYDGZ+r3hB6DlHjCqnsHVrb+8LC3PIeLA=;
-        b=C3AbqW+gHVeOOr1Iz64av8CM7JjFpJeaWpNPjhXxeNj8As4ulCUjBQDfCwIE6I7KXp
-         WYzodYxVFqqS7V5EeMavQYbZUzmMUxXh4STTmKLoCa8ZWEspvEIJmRGigT5xna8VTeBY
-         DF74YxtCkZtwXkuuim8R3o7w5EUtKpkpkCnNYQE1KQGRji1anbCtTXyvqD3TL3rohk+g
-         04OK2XzJ6fmP2CmVFl6o7INBY0zOjth1qJvfoRE6CUtCbeb0uN4FOzaI3iAPjdu20B8I
-         FgzOEYVYVK29/JBAmRQt4CZVocpx/+lkvf2y5CyRyN3+QYgbqI04qKBjUUUsMOv0OLMv
-         vsdQ==
-X-Gm-Message-State: ABy/qLbK6Es2NBabJ3LaoOsh/bEcycS+rl2vUGtXRyY2tZqaet9TAxkB
-        NXlQ3c9ZqhPge08Dxh2d9RtLo3M/AwQv8p8UmbY=
-X-Google-Smtp-Source: APBJJlG80gudR9LU0/3zq7coND676L3IK21c5s2iw2yBqdiqauL+wz/tpF8p/JXxwsJxejMflM9+qg==
-X-Received: by 2002:a05:600c:2048:b0:3fe:2bb1:11ba with SMTP id p8-20020a05600c204800b003fe2bb111bamr6423174wmg.27.1691067974611;
-        Thu, 03 Aug 2023 06:06:14 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id w11-20020a05600c014b00b003fc16ee2864sm4221824wmm.48.2023.08.03.06.06.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Aug 2023 06:06:14 -0700 (PDT)
-Message-ID: <5c93d78d-835e-c740-280b-9d76456aaeda@linaro.org>
-Date:   Thu, 3 Aug 2023 15:06:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/8] thermal: core: Add mechanism for connecting trips
- with driver data
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
+        with ESMTP id S234032AbjHCNSR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 09:18:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C79CF272E;
+        Thu,  3 Aug 2023 06:18:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8262D113E;
+        Thu,  3 Aug 2023 06:18:59 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.78.67])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43BBD3F6C4;
+        Thu,  3 Aug 2023 06:18:15 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 14:18:02 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
- <4501957.LvFx2qVVIh@kreacher>
- <2d0315d4-35b4-84db-4dcb-c9528abad825@linaro.org>
- <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
- <eb279cf1-0605-3b87-5cb6-241a91977455@linaro.org>
- <CAJZ5v0i48=oawDJHoaHhiZRaO_CJokKsOHyNvu2v4PUbS6CH_Q@mail.gmail.com>
- <f8029547-6851-7e0c-00e6-4963ccbc2702@linaro.org>
- <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Frederic Weisbecker <frederic@kernel.org>,
+        kajetan.puchalski@arm.com
+Subject: Re: [RFC/RFT][PATCH v1 0/2] cpuidle: teo: Do not check timers
+ unconditionally every time
+Message-ID: <ZMupCqOA+v6QGdWN@e126311.manchester.arm.com>
+References: <4511619.LvFx2qVVIh@kreacher>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <4511619.LvFx2qVVIh@kreacher>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/08/2023 18:48, Rafael J. Wysocki wrote:
+Hi Rafael,
 
-[ ... ]
-
->> Let me check if I can do something on top of your series to move it in
->> the ACPI driver.
+On Tue, Aug 01, 2023 at 09:35:15PM +0200, Rafael J. Wysocki wrote:
+> Hi Folks,
 > 
-> It doesn't need to be on top of my series, so if you have an idea,
-> please just let me know what it is.
+> This is on top of the fixes series posted previously:
 > 
-> It can't be entirely in the ACPI driver AFAICS, though, because
-> trips[i] need to be modified on updates and they belong to the core.
-> Hence, the driver needs some help from the core to get to them.  It
-> can be something like "this is my trip tag and please give me the
-> address of the trip matching it" or similar, but it is needed, because
-> the driver has to assume that the trip indices used by it initially
-> may change.
+> https://lore.kernel.org/linux-pm/4515817.LvFx2qVVIh@kreacher/
+> 
+> (I'll put it all into one git branch tomorrow).
+> 
+> I started to play with the idea described here
+> 
+> https://lore.kernel.org/linux-pm/CAJZ5v0hQh2Pg_uXxj8KBRw3oLS1WdsU+rUafBAAq7dRdbRwYSA@mail.gmail.com/
+> 
+> and this is the result.
+> 
+> Note that this is completely experimental, even though it doesn't kill any of
+> the test boxes I've run it on.
+> 
+> Patch [1/2] moves the tick_nohz_get_sleep_length() call in teo_select() after
+> a preliminary idle state selection based on statistics and patch [2/2] adds
+> checks to avoid it completely if the idle state selected so far is shallow
+> enough.
+> 
+> I would appreciate checking if this actually makes any difference.
+> 
+> Thanks!
 
-May be I'm missing something but driver_ref does not seems to be used 
-except when assigning it, no?
+As mentioned in the other thread I did some testing with these two
+patches on top as well, here are the results:
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+1. Geekbench 6
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
++---------------------------+---------------+-----------------+-------------------+
+|          metric           |      teo      |     teo_tick    |    teo_tick_rfc   |
++---------------------------+---------------+-----------------+-------------------+
+|      multicore_score      | 3320.9 (0.0%) | 3303.3 (-0.53%) |  3293.6 (-0.82%)  |
+|           score           | 1415.7 (0.0%) | 1417.7 (0.14%)  |  1423.4 (0.54%)   |
+|      CPU_total_power      | 2421.3 (0.0%) | 2429.3 (0.33%)  |  2442.2 (0.86%)   |
+|  latency (AsyncTask #1)   | 49.41μ (0.0%) | 51.07μ (3.36%)  |   50.1μ (1.4%)    |
+| latency (labs.geekbench6) | 65.63μ (0.0%) | 77.47μ (18.03%) | 55.82μ (-14.95%)  |
+| latency (surfaceflinger)  | 39.46μ (0.0%) | 36.94μ (-6.39%) |  35.79μ (-9.28%)  |
++---------------------------+---------------+-----------------+-------------------+
 
+Ie the big picture is all right, the latency either improves with these
+patches or the spike in the previous patchset was an anomaly, either way
+seems fine. Not sure where the change in the score is coming from but
+for the record the line plots of the 3 iterations for both the tick
+variants look the same while they're slightly distinct from the pure 'teo'
+variant. It's still a below 1% gap so not the end of the world if
+there's benefits elsewhere.
+
++-------------------+---------+------------+--------+
+|      kernel       | cluster | idle_state |  time  |
++-------------------+---------+------------+--------+
+|        teo        | little  |    0.0     | 146.75 |
+|      teo_tick     | little  |    0.0     |  63.5  |
+|     teo_tick_rfc  | little  |    0.0     | 62.48  |
+|        teo        | little  |    1.0     | 53.75  |
+|      teo_tick     | little  |    1.0     | 146.78 |
+|     teo_tick_rfc  | little  |    1.0     | 147.14 |
++-------------------+---------+------------+--------+
+
+The idle numbers look pretty much the same as the previous variant which
+confirms that the change for the little cluster residency is caused by
+the previous changes but also that these two patches don't affect it.
+
+2. JetNews
+
++-----------------+---------------+----------------+-------------------+
+|     metric      |      teo      |    teo_tick    |    teo_tick_rfc   |
++-----------------+---------------+----------------+-------------------+
+|       fps       |  86.2 (0.0%)  |  86.4 (0.16%)  |   86.0 (-0.28%)   |
+|    janks_pc     |  0.8 (0.0%)   |  0.8 (-0.66%)  |   0.8 (-1.37%)    |
+| CPU_total_power | 185.2 (0.0%)  | 178.2 (-3.76%) |   182.2 (-1.6%)   |
++-----------------+---------------+----------------+-------------------+
+
+Pretty much no change here, the power is still better than in base teo.
+
++-------------------+---------+------------+-------+
+|      kernel       | cluster | idle_state | time  |
++-------------------+---------+------------+-------+
+|        teo        |   mid   |    -1.0    | 21.63 |
+|     teo_tick      |   mid   |    -1.0    | 21.57 |
+|    teo_tick_rfc   |   mid   |    -1.0    | 17.66 |
+|        teo        |   big   |    -1.0    | 8.81  |
+|     teo_tick      |   big   |    -1.0    | 8.55  |
+|    teo_tick_rfc   |   big   |    -1.0    | 12.04 |
++-------------------+---------+------------+-------+
+
+This part slightly stands out so could be worth noting. For some reason
+the trace registers a few seconds less running time (-1 means 'not
+idle') on the mid cores but a few seconds more on the big cores. This
+wasn't the case for the 'teo_tick' variant before so looks like it's
+caused by these two patches. Doesn't seem to be an issue though, just
+interesting.
+
+TLDR:
+Does not blow up, looks okay :)
