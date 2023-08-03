@@ -2,87 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BFE76DFE5
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 07:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C1D76DFE9
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 07:56:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232051AbjHCFwG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 01:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S231492AbjHCF4M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 01:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231520AbjHCFwE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 01:52:04 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA902D4A
-        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 22:52:03 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b8b4748fe4so4318975ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 22:52:03 -0700 (PDT)
+        with ESMTP id S229731AbjHCF4L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 01:56:11 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0BC2D49
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 22:56:10 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-563df158ecaso372460a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 22:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691041923; x=1691646723;
+        d=linaro.org; s=google; t=1691042170; x=1691646970;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h7Xjxw5oP4NVrDYaL/2U9f67DZbadaUYZn2oVTJWP4Y=;
-        b=c9c3oFd5ZfGep7Y6Qt5e6nDkPbJRtR9CxU7dV/wdz5TM0eBVml0MCoWf3Unmm6codE
-         cD2jDrO7kYLddk5ESrvpHQK4we0/lkaL7K719YCTkWk7uCK9NVu6RyhL6RJG3vsAcT3e
-         JsFqzczjOZTEOAKx+fkIR56RL/kRoLOaZOrMGT8/iwX2X+ZXdgt5mHXRfzlAaCynXQYg
-         U3VBfd+tGpqCING6LjH/HvNIxmfDGHjSRXFsGC1M6jMArcVmKpHj0Q7TqDWMqCo8Dptg
-         VcAZoKk6UAURY6xm1bBHbLLAX0iZ1gq6qdoaA0dbJvjHvJG6hJKjWNlm1jZGQE7lbQP/
-         4xlQ==
+        bh=C7WsYV/x7lyB/wTNGCIcHVMNipm/cU1Q7w5THwIRrSU=;
+        b=zAgoVRmjKopQptfjt67R46qrgqXC6e7F8RrNLBq0gotYSQZOeWgnOMgIva55l3NKHe
+         271ABzS+rcGJOZQdiqE85sxQfOFOoRat3iYCzFrPjqU1z47X6J+NV0980nOYhWUh+R/O
+         jGs+KODx1PnSoxZjaQ022rqvHyqLvBGrs+ADB02lZCe7MizoIkD14Zoaj5x3ofhG5uNC
+         R0IX+JtSNH7XAyq6Uc7xOHafeRMb6/s9jQr8UmKTBVR7AzN8Mms7u4xn3/TBrLglW8/A
+         oa/lwW0/JfNKx318653BCbr2BptGYdVt9mK9Xh31imoa0JeyRvCsQGN7Zwl6a8I4AqPi
+         EsAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691041923; x=1691646723;
+        d=1e100.net; s=20221208; t=1691042170; x=1691646970;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h7Xjxw5oP4NVrDYaL/2U9f67DZbadaUYZn2oVTJWP4Y=;
-        b=Zl5BUMOiblVl16yDgjyG5fHV7DsFRY21zmdyz7zIvh7TrMUlLfDmu6k+k+7N+CPKZw
-         Ia3e9Ay3im4ZDlY4K7VNJf6C2PHK8357s8nJYNtClV/kb6xqim5CYHMKCUpZiTypZFzV
-         eRJxhUB1x6OpmVKj8ijaH8epmEIdpFjJpcRqjevCbhuXi5iPiM3oVtel6Y9soLw0gZV3
-         115TZtMcv6QyUWXTB5PzwiZF5bhkt3winqGnwGoET2JaHtBQAcxKvLUbPm950zjURf2G
-         cfPSkSNszx1O4KzsZpROp7zpim7tc+Q+WvLfHyC5/+SDQgBSPO2oMAIZHGdHzNFz9pKO
-         mWvg==
-X-Gm-Message-State: ABy/qLbiHBG9xZsJxsFoNJpM6O64v9sdQH6KSrAgRPARPPBIncEyTbiB
-        HeUeL4NWezIyEwUvULHKyYXtHA==
-X-Google-Smtp-Source: APBJJlFbeznejLOl5fuDUqmAF9iajzKw8sPutb+mj1oH4M1L7QAjZN+0V0ejGcBti4J4DuXx8P9j3A==
-X-Received: by 2002:a17:902:ce86:b0:1bb:c64f:9a5e with SMTP id f6-20020a170902ce8600b001bbc64f9a5emr16747225plg.5.1691041920317;
-        Wed, 02 Aug 2023 22:52:00 -0700 (PDT)
+        bh=C7WsYV/x7lyB/wTNGCIcHVMNipm/cU1Q7w5THwIRrSU=;
+        b=hxbLQeHDkxI21uSGs31rNeRdHPFpuyVnFmsEBDK4L7W84WOkse2op87dldO8Yzr59H
+         X7pWQL5WibdT7rMxTWJRSlqzHi8vpjJe3yVlu04ihb3P90S40CkHiPh70fITnN3M+RSA
+         FmP4gQKC1kbGpem/ODEr1mlq+2by16j5ThJyhf3ygfD/eC4px07geqik9Yz+SPACObg4
+         RKqNV//5VA3Tn3TkD5LO/VLl0OsjpMoMro1xyDyzFMawVfcijOTOaOLATy+y5eUshoWf
+         AIv7JwAS+f0c3FwKqVEEib/K7t+NNsQPgqW/vaTh65PvWQCSWqeQJhUDdmsa87i36age
+         Zl+w==
+X-Gm-Message-State: ABy/qLaKibiESHX+wgmmvuyY3k0bB5AdVtH/9yGBS4L5Fo6SqlD2LEHP
+        CPYb1qnymXv8m69hZc9RnofCBQ==
+X-Google-Smtp-Source: APBJJlEs/F725rHcqtyueFIg9TFFt0P4AKB76xQ2koQUxZ42Kq2Mdg6ZzKKjgx8nvTjdp3EwutDy6Q==
+X-Received: by 2002:a17:902:ea95:b0:1b0:6038:2982 with SMTP id x21-20020a170902ea9500b001b060382982mr17234494plb.41.1691042169672;
+        Wed, 02 Aug 2023 22:56:09 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id iy15-20020a170903130f00b001bbb1eec92esm13383748plb.281.2023.08.02.22.51.59
+        by smtp.gmail.com with ESMTPSA id a12-20020a170902eccc00b001b03b7f8adfsm13451200plh.246.2023.08.02.22.56.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Aug 2023 22:51:59 -0700 (PDT)
-Date:   Thu, 3 Aug 2023 11:21:57 +0530
+        Wed, 02 Aug 2023 22:56:09 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 11:26:07 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        Masami Hiramatsu <mhiramat@google.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Gupta Pankaj <pankaj.gupta@amd.com>,
-        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
-Message-ID: <20230803055157.6buxd5lcxjo4wrbk@vireshk-i7>
-References: <20230731174613.4133167-1-davidai@google.com>
- <20230731174613.4133167-3-davidai@google.com>
- <20230801093620.ggz25g3faxycp44q@vireshk-i7>
- <CAGETcx-Y2MONWPEWYHXsWtBxuFQP51wTCS30wJt+NYKD969BuA@mail.gmail.com>
+To:     Florian Fainelli <florian.fainelli@broadcom.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v3] cpufreq: brcmstb-avs-cpufreq: Fix -Warray-bounds bug
+Message-ID: <20230803055607.ueliy6eofvhoy4gw@vireshk-i7>
+References: <ZMh45KH2iPIpNktr@work>
+ <66e19ae3-253d-5377-5cc2-566ec3cfed49@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx-Y2MONWPEWYHXsWtBxuFQP51wTCS30wJt+NYKD969BuA@mail.gmail.com>
+In-Reply-To: <66e19ae3-253d-5377-5cc2-566ec3cfed49@broadcom.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,28 +76,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-08-23, 15:16, Saravana Kannan wrote:
-> This is mainly an optimization to reduce the latency of the "frequency
-> change" which has a huge impact on the performance (as can be seen
-> from the numbers in the cover letter).
+On 01-08-23, 10:05, Florian Fainelli wrote:
+> On 7/31/23 20:15, Gustavo A. R. Silva wrote:
+> > Allocate extra space for terminating element at:
+> > 
+> > drivers/cpufreq/brcmstb-avs-cpufreq.c:
+> > 449         table[i].frequency = CPUFREQ_TABLE_END;
+> > 
+> > and add code comment to make this clear.
+> > 
+> > This fixes the following -Warray-bounds warning seen after building
+> > ARM with multi_v7_defconfig (GCC 13):
+> > In function 'brcm_avs_get_freq_table',
+> >      inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
+> > drivers/cpufreq/brcmstb-avs-cpufreq.c:449:28: warning: array subscript 5 is outside array bounds of 'void[60]' [-Warray-bounds=]
+> >    449 |         table[i].frequency = CPUFREQ_TABLE_END;
+> > In file included from include/linux/node.h:18,
+> >                   from include/linux/cpu.h:17,
+> >                   from include/linux/cpufreq.h:12,
+> >                   from drivers/cpufreq/brcmstb-avs-cpufreq.c:44:
+> > In function 'devm_kmalloc_array',
+> >      inlined from 'devm_kcalloc' at include/linux/device.h:328:9,
+> >      inlined from 'brcm_avs_get_freq_table' at drivers/cpufreq/brcmstb-avs-cpufreq.c:437:10,
+> >      inlined from 'brcm_avs_cpufreq_init' at drivers/cpufreq/brcmstb-avs-cpufreq.c:623:15:
+> > include/linux/device.h:323:16: note: at offset 60 into object of size 60 allocated by 'devm_kmalloc'
+> >    323 |         return devm_kmalloc(dev, bytes, flags);
+> >        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -Warray-bounds.
+> > 
+> > Link: https://github.com/KSPP/linux/issues/324
+> > Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver for Broadcom STB SoCs")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 > 
-> Setting this flag means that the vCPU thread triggering the MMIO
-> handling (on the host side) is the thread on which the host needs to
-> apply any uclamp settings. So this avoids the VMM having to look up
-> the right vCPU thread that corresponds to this CPU, and any
-> permissions issues wrt setting another threads uclamp, etc. This
-> becomes even more important if/when BPF support is added for handling
-> simple MMIO read/writes. Will Deacon has been working on the eBPF
-> part[1] and IIUC, not setting this flag adds a lot of extra overhead
-> on the BPF side.
-> 
-> So, yeah, this flag is very helpful wrt reducing latency/simplifying
-> host side implementation and that's why we want it here.
-> 
-> [1] - https://kvm-forum.qemu.org/2023/talk/AZKC77/
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-Would be good to have a (big) comment in the code explaining that as
-it isn't obvious. Thanks.
+Applied. Thanks.
 
 -- 
 viresh
