@@ -2,90 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE68276DF5C
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 06:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A4E76DFE3
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 07:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjHCETS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 00:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
+        id S231444AbjHCFtn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 01:49:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjHCETR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 00:19:17 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141D5106;
-        Wed,  2 Aug 2023 21:19:16 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3733fUsG008805;
-        Thu, 3 Aug 2023 04:18:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=JPtysfcS0AIfNUZpM9ssd0qH1kDBkP2CB3k8ROMb0H4=;
- b=IbpFA0NSIYV2M4rubBeo3FwYMMGeSIXDtV1C2vYq2v9236a7GOC/SDq4qgHsSj8MRuoK
- AdZoYK8/3xn7xHGeclinuwpDhgIqez3ZzpVa1rfmEh5/Vd8iFnWkvEy0r8ldoXEzOefG
- qiOwuyKwUkKx+LgngUnsv9pcU31CwMxZsslbSTaAnFrBVlEEpLI2nzdGPkb+ymI2jjcZ
- ZCEhRFDP06la07bM29GfSRAmf/NC3DrgT2p2X46dyfH1B25tb3F5CjTeFLRBqjNlILbB
- PehSVGZv//xqtQLUhOm5OuN3gAvSXtxE1Tx2CMW9RkQU/57pEExEqG6jsvkZKPJy0Ngd kQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s7sgnh8u4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 04:18:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3734Ik2O026084
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 3 Aug 2023 04:18:46 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 2 Aug 2023 21:18:40 -0700
-Date:   Thu, 3 Aug 2023 09:48:37 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     David Dai <davidai@google.com>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        with ESMTP id S232051AbjHCFtm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 01:49:42 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB7A2D43
+        for <linux-pm@vger.kernel.org>; Wed,  2 Aug 2023 22:49:40 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-583f036d50bso5592797b3.3
+        for <linux-pm@vger.kernel.org>; Wed, 02 Aug 2023 22:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691041779; x=1691646579;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=kfTUi7xflA+MwfHSQqcAtzP6pql4voH5e7kvmJj7QUs=;
+        b=FnQp7K+goL5kX5YrNjoKe7RMe9oWsPBKNrqPHgFNhF3SoHfOH9xNzAX6lBHYZVXETK
+         ZLbwfN6PBwwbZgZ/VFljDwBmSqtTjVZchhSdiB+sYRwl1E+8NZ0yrUxkexmdtzCSLjeB
+         eQepK/Co4MpNaNGvZ9NG6Dhp2aJY8f1RJgNhk2x3PbIS4fhEpgPbRvW1hDMtbzh4dG2M
+         1a/DKUBjQo+rtiMCqciXA4IKmNzLvbcB2EOmhVq1S7gFZjtjb4H2lxhouJAoSVeC3uFC
+         F38QQCZjxfeksLovgnDZV7iDEJmi9J6HndbV48/lDnzFYJZZfwOPSRgGZF8YMfWKSau6
+         k3mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691041779; x=1691646579;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kfTUi7xflA+MwfHSQqcAtzP6pql4voH5e7kvmJj7QUs=;
+        b=cT662eCdUQ1ArwPM3AsmBJtQozjmxqSrlHEFoLuV9ydVVNk1ZVOflDSq41D4LLaoov
+         muEZIH8TugJxnP+nXXHmwpYGknDKkTmB9KxtWfinYUJRXmKpiBAAlxQcM1v6EjVZfulK
+         QKNJVlE/37LJtu1tR77cqoI2/mcqy/4rJGCabI6GRbSWAHj5cS/Q7iKkqo7a/unG9EI/
+         YBuGftEfHTwbhxf7LxL1C5woR2C2IHetNRmD2dEGhhX7GSHzuQP/tQEgxm166Vhdpu1P
+         zsVi620a7qHbeUDG0qPMnbC9Fg9l6pAxPUaIotwRSBCcw7GxgipALSJrbP/Dum4cc2CE
+         2KOw==
+X-Gm-Message-State: ABy/qLZqsc4X3fz1bUFXAFumI1F37cAofxVlOVv3WuvGhhKNZh30HaWk
+        ShYT8IL2/CfD/Zk51S8CO8RUOg==
+X-Google-Smtp-Source: APBJJlFcSTIQ6AYzinujNeqC/VSvrhCiCIXIw1zsLOZIFkGtr7963td1ne5jUS+/eqdVRHBhyxIGXw==
+X-Received: by 2002:a81:5cc1:0:b0:56f:ff55:2b7d with SMTP id q184-20020a815cc1000000b0056fff552b7dmr20769766ywb.17.1691041779473;
+        Wed, 02 Aug 2023 22:49:39 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id hx11-20020a17090b440b00b00267a487f01bsm1881080pjb.48.2023.08.02.22.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Aug 2023 22:49:38 -0700 (PDT)
+Date:   Thu, 3 Aug 2023 11:19:35 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Niklas Cassel <nks@flawful.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Masami Hiramatsu <mhiramat@google.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Marc Zyngier" <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Gupta Pankaj <pankaj.gupta@amd.com>,
-        Mel Gorman <mgorman@suse.de>, <kernel-team@android.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
-Message-ID: <80f47262-9354-472f-8122-5ae262c0a46d@quicinc.com>
-References: <20230731174613.4133167-1-davidai@google.com>
- <20230731174613.4133167-3-davidai@google.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Subject: Re: [PATCH v13 01/10] cpufreq: blocklist MSM8998 in
+ cpufreq-dt-platdev
+Message-ID: <20230803054935.y36bjdxed4yvitev@vireshk-i7>
+References: <20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org>
+ <20230217-topic-cpr3h-v13-1-d01cff1c54cf@linaro.org>
+ <CUI2S5IGZEHC.P7MUFZVOHCYR@lion.caleb.rex.connolly.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230731174613.4133167-3-davidai@google.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: g3g7Xtp3J-PsThVbTzWOpXLknSgYYInr
-X-Proofpoint-GUID: g3g7Xtp3J-PsThVbTzWOpXLknSgYYInr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-03_01,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 adultscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308030038
+In-Reply-To: <CUI2S5IGZEHC.P7MUFZVOHCYR@lion.caleb.rex.connolly.tech>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,133 +93,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 10:46:09AM -0700, David Dai wrote:
-> Introduce a virtualized cpufreq driver for guest kernels to improve
-> performance and power of workloads within VMs.
+On 02-08-23, 13:58, Caleb Connolly wrote:
+> On Wed Aug 2, 2023 at 1:37 PM BST, Konrad Dybcio wrote:
+> > From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> >
+> > Add the MSM8998 to the blocklist since the CPU scaling on this platform
+> > is handled by a separate driver.
+> >
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+> > Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> This driver does two main things:
+> Reviewed-by: Caleb Connolly <caleb.connolly@linaro.org>
 > 
-> 1. Sends the frequency of vCPUs as a hint to the host. The host uses the
-> hint to schedule the vCPU threads and decide physical CPU frequency.
+> // Caleb (they/them)
 > 
-> 2. If a VM does not support a virtualized FIE(like AMUs), it queries the
-> host CPU frequency by reading a MMIO region of a virtual cpufreq device
-> to update the guest's frequency scaling factor periodically. This enables
-> accurate Per-Entity Load Tracking for tasks running in the guest.
-> 
-> Co-developed-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: David Dai <davidai@google.com>
+> > ---
+> >  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > index e2b20080de3a..adb3579a1fee 100644
+> > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > @@ -143,6 +143,7 @@ static const struct of_device_id blocklist[] __initconst = {
+> >  
+> >  	{ .compatible = "qcom,apq8096", },
+> >  	{ .compatible = "qcom,msm8996", },
+> > +	{ .compatible = "qcom,msm8998", },
+> >  	{ .compatible = "qcom,qcs404", },
+> >  	{ .compatible = "qcom,sa8155p" },
+> >  	{ .compatible = "qcom,sa8540p" },
 
-[...]
+Applied patch 1/10.
 
-> +static void virt_scale_freq_tick(void)
-> +{
-> +	struct cpufreq_policy *policy = cpufreq_cpu_get(smp_processor_id());
-> +	struct virt_cpufreq_drv_data *data = policy->driver_data;
-> +	u32 max_freq = (u32)policy->cpuinfo.max_freq;
-> +	u64 cur_freq;
-> +	u64 scale;
-> +
-> +	cpufreq_cpu_put(policy);
-> +
-> +	cur_freq = (u64)data->ops->get_freq(policy);
-> +	cur_freq <<= SCHED_CAPACITY_SHIFT;
-> +	scale = div_u64(cur_freq, max_freq);
-> +
-> +	this_cpu_write(arch_freq_scale, (unsigned long)scale);
-> +}
-> +
-
-We expect the host to provide the frequency in kHz, can you please add a
-comment about it. It is not very obvious when you look at the
-REG_CUR_FREQ_OFFSET register name.
-
-> +static struct scale_freq_data virt_sfd = {
-> +	.source = SCALE_FREQ_SOURCE_VIRT,
-> +	.set_freq_scale = virt_scale_freq_tick,
-> +};
-> +
-> +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *policy)
-> +{
-> +	struct virt_cpufreq_drv_data *data = policy->driver_data;
-> +	/*
-> +	 * Use cached frequency to avoid rounding to freq table entries
-> +	 * and undo 25% frequency boost applied by schedutil.
-> +	 */
-> +	u32 freq = mult_frac(policy->cached_target_freq, 80, 100);
-> +
-> +	data->ops->set_freq(policy, freq);
-> +	return 0;
-> +}
-
-Why do we undo the frequency boost? A governor may apply other boosts
-like RT (uclamp), iowait. It is not clear why we need to worry about
-governor policies here.
-
-> +
-> +static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *policy,
-> +		unsigned int target_freq)
-> +{
-> +	virt_cpufreq_set_perf(policy);
-> +	return target_freq;
-> +}
-> +
-> +static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
-> +		unsigned int index)
-> +{
-> +	return virt_cpufreq_set_perf(policy);
-> +}
-> +
-> +static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> +{
-> +	struct virt_cpufreq_drv_data *drv_data = cpufreq_get_driver_data();
-> +	struct cpufreq_frequency_table *table;
-> +	struct device *cpu_dev;
-> +	int ret;
-> +
-> +	cpu_dev = get_cpu_device(policy->cpu);
-> +	if (!cpu_dev)
-> +		return -ENODEV;
-> +
-> +	ret = dev_pm_opp_of_add_table(cpu_dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = dev_pm_opp_get_opp_count(cpu_dev);
-> +	if (ret <= 0) {
-> +		dev_err(cpu_dev, "OPP table can't be empty\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
-> +	if (ret) {
-> +		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	policy->freq_table = table;
-> +	policy->dvfs_possible_from_any_cpu = false;
-> +	policy->fast_switch_possible = true;
-> +	policy->driver_data = drv_data;
-> +
-> +	/*
-> +	 * Only takes effect if another FIE source such as AMUs
-> +	 * have not been registered.
-> +	 */
-> +	topology_set_scale_freq_source(&virt_sfd, policy->cpus);
-> +
-> +	return 0;
-> +
-> +}
-> +
-
-Do we need to register as FIE source even with the below commit? By
-registering as a source, we are not supplying any accurate metric. We
-still fallback on the same source that cpufreq implements it.
-
-874f63531064 ("cpufreq: report whether cpufreq supports Frequency
-Invariance (FI)")
-
-Thanks,
-Pavan
+-- 
+viresh
