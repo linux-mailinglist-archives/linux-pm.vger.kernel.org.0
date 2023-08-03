@@ -2,82 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF276E328
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 10:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C9A876E3E9
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 11:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234662AbjHCIbw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 04:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        id S234928AbjHCJEr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 05:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbjHCIbK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 04:31:10 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368C35597;
-        Thu,  3 Aug 2023 01:27:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8718521990;
-        Thu,  3 Aug 2023 08:27:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1691051262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0JKh0YoT5EtMkmw+6bQ4IAlmA0cKqBisDvoowqXZlsY=;
-        b=QTwbY7tdSYtBbOr6bU3TIjPc48JFY0p1VEQ5UnC2EHaxwrykAGZGvKzQRdVgJSsKL/m+yM
-        fJuEpmMtc+P5sgSlDFeiqXxqxaeXH3fz3fl5asZhjGqs41c7L3FfI7JED49+jtjEXd++iP
-        tdAxoHZWGrv1GShKFMJxGJ048j17dSc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1691051262;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0JKh0YoT5EtMkmw+6bQ4IAlmA0cKqBisDvoowqXZlsY=;
-        b=SceAnaI/ZBi3nu/BhzdVcO/Exau4SNI7QBc/3iF9kI37OtrKOf3KYrOX0bS4DyIdl5GlUj
-        1GPytqRNhMzqXLDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 45FCC134B0;
-        Thu,  3 Aug 2023 08:27:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id oHFOEP5ky2SfUgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 03 Aug 2023 08:27:42 +0000
-Message-ID: <2cfa5f55-1d68-8a4f-d049-13f42e0d1484@suse.cz>
-Date:   Thu, 3 Aug 2023 10:27:41 +0200
+        with ESMTP id S233403AbjHCJEq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 05:04:46 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B52E46;
+        Thu,  3 Aug 2023 02:04:44 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37377ECN007909;
+        Thu, 3 Aug 2023 09:04:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=VrQ4mfqjql4ZB4HPg+PnuPiU8+5Jf6FFhsvjXmsUTc0=;
+ b=i5ur2xSaD4IpdInPZ6BDQvOCbJx+4ysK2X0GIgViT1gcOIF+lJx2MXFdkwzV+KEdaNfZ
+ QB/Yfo9Y/0+cyB10s0n8sqpf1WYap/ledWaDwe89EaDESBXmZR6fGgRpKe3xKqIV2Sm0
+ AAcXrKauhtqHArfjNOxPphMmYWBqiE3hMx/vxfV6cfRWrIKz4j5TcPVG4Wr6F/4qNDdq
+ lcOIQ4G6W/KBLsZu4Qrjb+ZzPLGLPbJItAkugXMmRFl4ut0S0j98i4vRCUfqvz6ROdqn
+ PKMx3BQDPiVopeNPwvw8KgXfZwdh8+F3KHKRKHewllZ+myF0En6x2rMghErQMPHRRRJU Ig== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s87jhg7d3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Aug 2023 09:04:20 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37394JYm012583
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 3 Aug 2023 09:04:19 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Thu, 3 Aug 2023 02:04:14 -0700
+Date:   Thu, 3 Aug 2023 14:34:11 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>
+CC:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        Kees Cook <keescook@chromium.org>,
+        "Bjorn Andersson" <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <quic_pkondeti@quicinc.com>, <u.kleine-koenig@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] scripts: Add add-maintainer.py
+Message-ID: <44afa9e4-9aaa-4a80-b2a9-57d0bf14b6e0@quicinc.com>
+References: <cover.1691049436.git.quic_gurus@quicinc.com>
+ <829b08342568735095bbd3f8c44f435f44688018.1691049436.git.quic_gurus@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Subject: Re: [PATCH 04/24] PM: hibernate: move finding the resume device out
- of software_resume
-To:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Loic Poulain <loic.poulain@linaro.org>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-References: <20230531125535.676098-1-hch@lst.de>
- <20230531125535.676098-5-hch@lst.de>
-Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230531125535.676098-5-hch@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <829b08342568735095bbd3f8c44f435f44688018.1691049436.git.quic_gurus@quicinc.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: X-7ur7DVOVUjh8_MPdBa-YLNBnuwCpqZ
+X-Proofpoint-ORIG-GUID: X-7ur7DVOVUjh8_MPdBa-YLNBnuwCpqZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-03_07,2023-08-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 phishscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308030080
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,68 +85,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 5/31/23 14:55, Christoph Hellwig wrote:
-> software_resume can be called either from an init call in the boot code,
-> or from sysfs once the system has finished booting, and the two
-> invocation methods this can't race with each other.
+On Thu, Aug 03, 2023 at 01:23:16AM -0700, Guru Das Srinagesh wrote:
+> This script runs get_maintainer.py on a given patch file and adds its
+> output to the patch file in place with the appropriate email headers
+> "To: " or "Cc: " as the case may be. These new headers are added after
+> the "From: " line in the patch.
 > 
-> For the latter case we did just parse the suspend device manually, while
-> the former might not have one.  Split software_resume so that the search
-> only happens for the boot case, which also means the special lockdep
-> nesting annotation can go away as the system transition mutex can be
-> taken a little later and doesn't have the sysfs locking nest inside it.
+> Currently, for a single patch, maintainers are added as "To: ", mailing
+> lists and all other roles are addded as "Cc: ".
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> For a series of patches, however, a set-union scheme is employed in
+> order to solve the all-too-common problem of sending subsets of a patch
+> series to some lists, which results in important pieces of context such
+> as the cover letter being dropped. This scheme is as follows:
+> - Create set-union of all mailing lists corresponding to all patches and
+>   add this to all patches as "Cc: "
+> - Create set-union of all other roles corresponding to all patches and
+>   add this to all patches as "Cc: "
+> - Create set-union of all maintainers from all patches and use this to
+>   do the following per patch:
+>   - add only that specific patch's maintainers as "To: ", and
+>   - the other maintainers from the other patches as "Cc: "
+> 
 
-This caused a regression for me in 6.5-rc1+, fix below.
+Thanks. I have tested this logic by running this script on two patches
+from different subsystems. It does what it says.
 
-----8<----
-From 95a310ae6cfae9b3cab61e54a1bce488c3ab93a1 Mon Sep 17 00:00:00 2001
-From: Vlastimil Babka <vbabka@suse.cz>
-Date: Wed, 2 Aug 2023 15:46:18 +0200
-Subject: [PATCH] PM: hibernate: fix resume_store() return value when
- hibernation not available
+> Please note that patch files that don't have any "Maintainer"s
+> explicitly listed in their `get_maintainer.pl` output will not have any
+> "To: " entries added to them; developers are expected to manually make
+> edits to the added entries in such cases to convert some "Cc: " entries
+> to "To: " as desired.
+> 
+> The script is quiet by default (only prints errors) and its verbosity
+> can be adjusted via an optional parameter.
+> 
+> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> ---
+>  scripts/add-maintainer.py | 113 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 113 insertions(+)
+>  create mode 100755 scripts/add-maintainer.py
+> 
 
-On a laptop with hibernation set up but not actively used, and with
-secure boot and lockdown enabled kernel, 6.5-rc1 gets stuck on boot with
-the following repeated messages:
+Do you need to update MAINTAINERS file?
 
-  A start job is running for Resume from hibernation using device /dev/system/swap (24s / no limit)
-  lockdown_is_locked_down: 25311154 callbacks suppressed
-  Lockdown: systemd-hiberna: hibernation is restricted; see man kernel_lockdown.7
-  ...
+> diff --git a/scripts/add-maintainer.py b/scripts/add-maintainer.py
+> new file mode 100755
+> index 000000000000..b1682c2945f9
+> --- /dev/null
+> +++ b/scripts/add-maintainer.py
+> @@ -0,0 +1,113 @@
+> +#! /usr/bin/env python3
+> +
+> +import argparse
+> +import logging
+> +import os
+> +import sys
+> +import subprocess
+> +import re
+> +
+> +def gather_maintainers_of_file(patch_file):
+> +    all_entities_of_patch = dict()
+> +
+> +    # Run get_maintainer.pl on patch file
+> +    logging.info("GET: Patch: {}".format(os.path.basename(patch_file)))
+> +    cmd = ['scripts/get_maintainer.pl']
+> +    cmd.extend([patch_file])
+> +    p = subprocess.run(cmd, stdout=subprocess.PIPE, check=True)
+> +    logging.debug("\n{}".format(p.stdout.decode()))
+> +
+> +    entries = p.stdout.decode().splitlines()
+> +
+> +    maintainers = []
+> +    lists = []
+> +    others = []
+> +
+> +    for entry in entries:
+> +        entity = entry.split('(')[0].strip()
+> +        if "maintainer" in entry:
+> +            maintainers.append(entity)
+> +        elif "list" in entry:
+> +            lists.append(entity)
+> +        else:
+> +            others.append(entity)
+> +
+> +    all_entities_of_patch["maintainers"] = set(maintainers)
+> +    all_entities_of_patch["lists"] = set(lists)
+> +    all_entities_of_patch["others"] = set(others)
+> +
+> +    return all_entities_of_patch
+> +
+> +def add_maintainers_to_file(patch_file, entities_per_file, all_entities_union):
+> +    logging.info("ADD: Patch: {}".format(os.path.basename(patch_file)))
+> +
+> +    # For each patch:
+> +    # - Add all lists from all patches in series as Cc:
+> +    # - Add all others from all patches in series as Cc:
+> +    # - Add only maintainers of that patch as To:
+> +    # - Add maintainers of other patches in series as Cc:
+> +
+> +    lists = list(all_entities_union["all_lists"])
+> +    others = list(all_entities_union["all_others"])
+> +    file_maintainers = all_entities_union["all_maintainers"].intersection(entities_per_file[os.path.basename(patch_file)].get("maintainers"))
+> +    other_maintainers = all_entities_union["all_maintainers"].difference(entities_per_file[os.path.basename(patch_file)].get("maintainers"))
+> +
+> +    # Specify email headers appropriately
+> +    cc_lists        = ["Cc: " + l for l in lists]
+> +    cc_others       = ["Cc: " + o for o in others]
+> +    to_maintainers  = ["To: " + m for m in file_maintainers]
+> +    cc_maintainers  = ["Cc: " + om for om in other_maintainers]
+> +    logging.debug("Cc Lists:\n{}".format('\n'.join(cc_lists)))
+> +    logging.debug("Cc Others:\n{}".format('\n'.join(cc_others)))
+> +    logging.debug("Cc Maintainers:\n{}".format('\n'.join(cc_maintainers) or None))
+> +    logging.debug("To Maintainers:\n{}\n".format('\n'.join(to_maintainers) or None))
+> +
+> +    # Edit patch file in place to add maintainers
+> +    with open(patch_file, "r") as pf:
+> +        lines = pf.readlines()
+> +
+> +    from_line = [i for i, line in enumerate(lines) if re.search("From: ", line)]
+> +    if len(from_line) > 1:
+> +        logging.error("Only one From: line is allowed in a patch file")
+> +        sys.exit(1)
+> +
 
-Checking the resume code leads to commit cc89c63e2fe3 ("PM: hibernate:
-move finding the resume device out of software_resume") which
-inadvertently changed the return value from resume_store() to 0 when
-!hibernation_available(). This apparently translates to userspace
-write() returning 0 as in number of bytes written, and userspace looping
-indefinitely in the attempt to write the intended value.
+Few minor issues from my limited testing:
 
-Fix this by returning the full number of bytes that were to be written,
-as that's what was done before the commit.
+- It is very unlikely, but for whatever reason if "From:" is present in
+the patch (commit description), this script bails out. Pls try running
+this script on the current patch. May be you should also look for a
+proper email address on this line.
 
-Fixes: cc89c63e2fe3 ("PM: hibernate: move finding the resume device out of software_resume")
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- kernel/power/hibernate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- When this script is run on a file (get_maintainer.pl allows this), it
+  throws a runtime warning. may be good to bail out much earlier.
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index e1b4bfa938dd..2b4a946a6ff5 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -1166,7 +1166,7 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
- 	int error;
- 
- 	if (!hibernation_available())
--		return 0;
-+		return n;
- 
- 	if (len && buf[len-1] == '\n')
- 		len--;
--- 
-2.41.0
+- When this script runs on a non-existent file, it does not bail out
+  early.
 
-
+Thanks,
+Pavan
