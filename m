@@ -2,112 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C91B76DFFC
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 08:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861D876E058
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 08:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjHCGBx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 02:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S233329AbjHCGha (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 02:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjHCGBw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 02:01:52 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DDDE6F;
-        Wed,  2 Aug 2023 23:01:51 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37361bNw091891;
-        Thu, 3 Aug 2023 01:01:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691042497;
-        bh=Eq3fAhTV5YV3oUQ6BBvL8m3xQDKMmG4eYt87dBmZskM=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=BWBOQzbfwI/tP0jfhhO+BFyd+4h3QYnjnlbRx082FdlcvxnfNJnTNvhj1TwcqXeiQ
-         r0YHV+DLzADY5MvQm0iOGl294vyO/AFnoXdB0tuTgkz5JQUM+7B9VO/wYQSfy0CB6T
-         nIV6YIWuRVQos+ubIn83Xt8/x4N45YSSEe6FAv70=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37361bsj002604
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Aug 2023 01:01:37 -0500
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 3
- Aug 2023 01:01:37 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 3 Aug 2023 01:01:37 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37361a3o015863;
-        Thu, 3 Aug 2023 01:01:36 -0500
-Date:   Thu, 3 Aug 2023 11:31:35 +0530
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Nishanth Menon <nm@ti.com>
-CC:     Rob Herring <robh+dt@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
+        with ESMTP id S233352AbjHCGh1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 02:37:27 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04D7130ED;
+        Wed,  2 Aug 2023 23:37:22 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.201])
+        by gateway (Coremail) with SMTP id _____8AxCPIgS8tkD4YPAA--.35983S3;
+        Thu, 03 Aug 2023 14:37:20 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.20.42.201])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF80aS8tkMsZGAA--.49295S2;
+        Thu, 03 Aug 2023 14:37:17 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Tony Lindgren <tony@atomide.com>,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Vibhore Vardhan <vibhore@ti.com>, <linux-omap@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH V2 2/2] dt-bindings: cpufreq: Convert ti-cpufreq to json
- schema
-Message-ID: <20230803060135.cichqctmjhajt2hq@dhruva>
-References: <20230801233341.1416552-1-nm@ti.com>
- <20230801233341.1416552-3-nm@ti.com>
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn,
+        Yinbo Zhu <zhuyinbo@loongson.cn>, loongarch@lists.linux.dev,
+        Liu Yun <liuyun@loongson.cn>
+Subject: [PATCH v6 0/2] soc: loongson2_pm: add power management support
+Date:   Thu,  3 Aug 2023 14:37:01 +0800
+Message-Id: <20230803063703.5659-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230801233341.1416552-3-nm@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxF80aS8tkMsZGAA--.49295S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Aug 01, 2023 at 18:33:41 -0500, Nishanth Menon wrote:
-> Move the ti-cpufreq binding over to opp and convert convert the free
+Loongson-2 platform support Power Management Controller (ACPI) and this
+series patch was to add PM driver that base on dts and PM binding support.
 
-Minor nitpik, maybe can be fixed while applying the patch. Checkpatch caught this,
-Possible repeated word: 'convert'
+Change in v6:
+		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
+		   pm interfaces" had been merged into mainline tree in v6.5-rc1
+		   thus this v6 series patch need drop it and need depend on it
+		   and it's patch link was:
+https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
+		2. Adding Ulf Hansson to Cc.
+		3. Adding soc@kernel.org to Cc.
+		4. Keep indented with one tab +2 spaces in Kconfig help text.
+Change in v5:
+		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
+		   pm interfaces" had been merged into linux-next tree thus this
+		   v4 series patch need drop it and need depend on it and it's
+		   patch link was:
+https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
+		2. Swap the positions of compatible for 2k1000 and 2k0500.
+Change in v4:
+		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
+		   pm interfaces" had been merged into linux-next tree thus this
+		   v4 series patch need drop it and need depend on it and it's
+		   patch link was:
+https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
+		2. Remove the pmc label in dt-binding patch.
+		3. Add the Co-developed-by for driver patch.
+		4. Simplify the loongson2_suspend_valid_state that "return
+		   (state == PM_SUSPEND_MEM)".
+		5. Use Using loongson2_pm_irq_enable() to replace.
+		   loongson2_power_button_irq_enable().
+		6. Remove the "oneOf" in dt-bindings patch.
+		7. Replace "suspend-address" that use "loongson,suspend-address".
+		8. Use u64 type that for "loongson,suspend-address".
+		9. Rename "pm" to "power-mangement" in dt-bindings patch.
+		10. Add the reivewed-by for dt-bindings patch.
+Change in v3:
+		1. Reword the [1/3] patch commit log and title.
+		2. Use the old naming for suspend interface for the [1/3] and
+		   [3/3] patch.
+		3. Combine some small function in the driver patch.
+		4. Rename 'pwrbt' to 'button' in the driver patch.
+		5. Use the specific compatible in yaml file.
+Change in v2:
+		1. Fixup the "suspend-address" description.
+		2. Remove the "return -EINVAL" in PM driver probe when firmware
+		   no configure "suspend-address" property in dts in oder to
+		   other PM state to work.
 
-> text binding to json-schema.
-> 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> ---
+Yinbo Zhu (2):
+  soc: dt-bindings: add loongson-2 pm
+  soc: loongson2_pm: add power management support
 
-Otherwise, LGTM
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
-> Changes since V1:
-> - Fixup $subject of the patch to indicate json schema rather than yaml.
-> - Change filename to matchup with binding compatible
-> - Dropped un-used labels
-> - Dropped "|" in "description"
-> 
-> V1: https://lore.kernel.org/all/20230724153911.1376830-6-nm@ti.com/
-> 
-> Side note: cleanups in dt is picked up on Tony's tree:
-> https://lore.kernel.org/all/20230731062551.GH5194@atomide.com/
-> 
->  .../bindings/cpufreq/ti-cpufreq.txt           | 132 ------------------
->  .../opp/operating-points-v2-ti-cpu.yaml       |  88 ++++++++++++
->  2 files changed, 88 insertions(+), 132 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
->  create mode 100644 Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt b/Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
-> deleted file mode 100644
-[..snip..]
+ .../soc/loongson/loongson,ls2k-pmc.yaml       |  52 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/soc/loongson/Kconfig                  |  10 +
+ drivers/soc/loongson/Makefile                 |   1 +
+ drivers/soc/loongson/loongson2_pm.c           | 215 ++++++++++++++++++
+ 5 files changed, 285 insertions(+)
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+2.20.1
+
