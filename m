@@ -2,66 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D92BD76E076
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 08:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA6576E0C4
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 09:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233243AbjHCGnv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 02:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
+        id S232491AbjHCHEU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 03:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233594AbjHCGno (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 02:43:44 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA9D3594;
-        Wed,  2 Aug 2023 23:43:32 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3736hQQL092032;
-        Thu, 3 Aug 2023 01:43:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691045006;
-        bh=aMJt1BSQ70+nAqZv3DfY2aWRMBDxpF2RibSYxbtwTKA=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=qOqh6TAkfM6gYmvB99+yKIcp2eQdY3Na/uJ3F3InUuq+z3xExALC1sFefdq7xQCG4
-         wu07RWI34uY5EaFn8+FWSs72jr4JdoEn8zHw4b+mytcB7Fwb/wnbDoJh4ev74dJZC2
-         a5rlKD6mz2sYgeDWQUWJ3Io+yoC30l+7xJadrzdY=
-Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3736hQcP024916
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Aug 2023 01:43:26 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 3
- Aug 2023 01:43:26 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 3 Aug 2023 01:43:25 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3736hPf8018756;
-        Thu, 3 Aug 2023 01:43:25 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        "Santosh Shilimkar" <ssantosh@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Praneeth Bajjuri" <praneeth@ti.com>,
-        Tony Lindgren <tony@atomide.com>, Dhruva Gole <d-gole@ti.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend resume support
-Date:   Thu, 3 Aug 2023 12:12:47 +0530
-Message-ID: <20230803064247.503036-5-d-gole@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230803064247.503036-1-d-gole@ti.com>
-References: <20230803064247.503036-1-d-gole@ti.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S230149AbjHCHDx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 03:03:53 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC212D65;
+        Thu,  3 Aug 2023 00:03:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 55D1C320099A;
+        Thu,  3 Aug 2023 03:03:10 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 03 Aug 2023 03:03:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1691046189; x=1691132589; bh=5S
+        kTpiwI76j0iv1Bz8lF8A+JaMZXfVN77EuT9JyTy+A=; b=jU6TSIhH7ZrRg1PEA0
+        qzNVnEaJWGbrFhZmrmv5OR71Sm79X1rE5hNEfGohLjsolv+gLVAef8nmzMvRKYUd
+        0R1YLra8Mpe4jaYd6QdFO8WC0NDkbNe+vkxtXr11EvrfmM1UQ38zqH0dCBGLqfhX
+        Cbs7ZM+Jxrf61cKvw+kBp1SXL0ujiFUCELGAwxqDU9xlk4Mcru3cgZSgF0LAk2R7
+        WCsPJ0a5Ub3PqGAag3QmngLFwfEZn67K4t5jSylXzeJbuOVeGT6+UsR+Nw92m2B9
+        TEiRW6uH8Talm4MDK6jW8MMFSijvExJKJ/GbuhVRfYphnN3r1IjQoFqdGm21+BY3
+        IBKA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1691046189; x=1691132589; bh=5SkTpiwI76j0i
+        v1Bz8lF8A+JaMZXfVN77EuT9JyTy+A=; b=kjDsUJGzVeWOqS09TcFWWuLXwGgGl
+        llB92w3a7K9vbrG+pLOTqu5eaVkACxGVUcFU5N6N9KiIrkzLQtEdrlt7skPw/FRT
+        0E7MwI+MRmEfkNxU8tv3ETa/9h4eRNWaICvV9dMHILnl4/YsPXDzSLApygmEZloy
+        3Gig6ZUplmHR/O5MMRxL5qZIVSVAZOfTZpp9hBnaKDO+LDfTj8bHMl5lQP6L00S5
+        eyzjXtQHv9y8LE0M/0PVnrtk2cQdnLR1Cg359SP3r+fjZ/z3cXtk9lU0u27RRMTI
+        qCo3DN7Jn6dNAJxH+Ab7uopkknZNs/L8vKsm5T5g2lDC6sZs3vg0cZKYQ==
+X-ME-Sender: <xms:LFHLZJGtQm9EYLlFp8H6fbRp1nNmnG-reMyDxsav0NnrK1E5l6FKnw>
+    <xme:LFHLZOVI9k7Z2gyoR3Qhb_c9x7Tbg7EsyxPeR-DxLFkgiIGjIr_HLbUERJYkYd65e
+    NDiHiyopNeaIl-ZVCM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkedugdduudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:LFHLZLIf16Rgi6v0w8j3MNlzrCwjPRNy9NDtczmH5M76-thA7r4zNw>
+    <xmx:LFHLZPHWDU-rbReG3H666yKM391Qbd5NZtNvaINcv99zUhrQ2IETHQ>
+    <xmx:LFHLZPXOcHjAnQScHt4zWRhf5XGL5Eeni2NYOB0CDmXQ5YGM0Fng-w>
+    <xmx:LVHLZItWNEY2hx1vkfcMKjiluOjOFRGuyb4CupRgRs1HOKV3ftTaNQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B3955B60089; Thu,  3 Aug 2023 03:03:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
+Mime-Version: 1.0
+Message-Id: <4fef9725-7aea-43fb-b8ef-d20a4c6d9a68@app.fastmail.com>
+In-Reply-To: <20230803063703.5659-3-zhuyinbo@loongson.cn>
+References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
+ <20230803063703.5659-3-zhuyinbo@loongson.cn>
+Date:   Thu, 03 Aug 2023 09:02:47 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Yinbo Zhu" <zhuyinbo@loongson.cn>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, "Ulf Hansson" <ulf.hansson@linaro.org>
+Cc:     "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        "Liu Peibao" <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
+        "Liu Yun" <liuyun@loongson.cn>
+Subject: Re: [PATCH v6 2/2] soc: loongson2_pm: add power management support
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,117 +91,89 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce system suspend resume calls that will allow the ti_sci
-driver to support deep sleep low power mode when the user space issues a
-suspend to mem.
+On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
+> The Loongson-2's power management controller was ACPI, supports ACPI
+> S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+> Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
+> (USB, GMAC, PWRBTN, etc.). This driver was to add power management
+> controller support that base on dts for Loongson-2 series SoCs.
+>
+> Co-developed-by: Liu Yun <liuyun@loongson.cn>
+> Signed-off-by: Liu Yun <liuyun@loongson.cn>
+> Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
+> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+> Cc: soc@kernel.org
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 
-Also, write a ti_sci_prepare_system_suspend call to be used in the driver
-suspend handler to allow the system to identify the low power mode being
-entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
-about the mode is being entered and the address for allocated memory for
-storing the context during Deep Sleep.
+I'm still waiting for Ulf to take a look here to see whether
+this should be in drivers/genpd instead, but he might still
+be on vacation.
 
-We're using "pm_suspend_target_state" to map the kernel's target suspend
-state to SysFW low power mode. Make sure this is available only when
-CONFIG_SUSPEND is enabled.
+A few minor comments from me in the meantime:
 
-Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
- drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+> +#define loongson2_pm_readw(reg)		readw(loongson2_pm.base + reg)
+> +#define loongson2_pm_readl(reg)		readl(loongson2_pm.base + reg)
+> +#define loongson2_pm_writew(val, reg)	writew(val, loongson2_pm.base + 
+> reg)
+> +#define loongson2_pm_writel(val, reg)	writel(val, loongson2_pm.base + 
+> reg)
 
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 0334ade19868..172b726e00a6 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -22,6 +22,7 @@
- #include <linux/slab.h>
- #include <linux/soc/ti/ti-msgmgr.h>
- #include <linux/soc/ti/ti_sci_protocol.h>
-+#include <linux/suspend.h>
- #include <linux/reboot.h>
- 
- #include "ti_sci.h"
-@@ -3521,6 +3522,67 @@ static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
- 	return NOTIFY_BAD;
- }
- 
-+static int ti_sci_prepare_system_suspend(struct ti_sci_info *info)
-+{
-+#if IS_ENABLED(CONFIG_SUSPEND)
-+	u8 mode;
-+
-+	/* Map and validate the target Linux suspend state to TISCI LPM. */
-+	switch (pm_suspend_target_state) {
-+	case PM_SUSPEND_MEM:
-+		/* S2MEM is not supported by the firmware. */
-+		if (!(info->fw_caps & MSG_FLAG_CAPS_LPM_DEEP_SLEEP))
-+			return 0;
-+		mode = TISCI_MSG_VALUE_SLEEP_MODE_DEEP_SLEEP;
-+		break;
-+	default:
-+		/*
-+		 * Do not fail if we don't have action to take for a
-+		 * specific suspend mode.
-+		 */
-+		return 0;
-+	}
-+
-+	return ti_sci_cmd_prepare_sleep(&info->handle, mode,
-+					(u32)(info->ctx_mem_addr & 0xffffffff),
-+					(u32)((u64)info->ctx_mem_addr >> 32), 0);
-+#else
-+	return 0;
-+#endif
-+}
-+
-+static int ti_sci_suspend(struct device *dev)
-+{
-+	struct ti_sci_info *info = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
-+	if (ret)
-+		return ret;
-+	dev_dbg(dev, "%s: set I/O isolation: %d\n", __func__, ret);
-+
-+	ret = ti_sci_prepare_system_suspend(info);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int ti_sci_resume(struct device *dev)
-+{
-+	struct ti_sci_info *info = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_DISABLE);
-+	if (ret)
-+		return ret;
-+	dev_dbg(dev, "%s: disable I/O isolation: %d\n", __func__, ret);
-+
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
-+
- static int ti_sci_init_suspend(struct platform_device *pdev,
- 			       struct ti_sci_info *info)
- {
-@@ -3759,6 +3821,7 @@ static struct platform_driver ti_sci_driver = {
- 	.driver = {
- 		   .name = "ti-sci",
- 		   .of_match_table = of_match_ptr(ti_sci_of_match),
-+		   .pm = &ti_sci_pm_ops,
- 	},
- };
- module_platform_driver(ti_sci_driver);
--- 
-2.34.1
+I would prefer these to be 'static inline' functions rather than
+macros, or you can just open-code them, as each macro is only
+used once at the moment.
 
+> +static irqreturn_t loongson2_pm_irq_handler(int irq, void *dev_id)
+> +{
+> +	u16 status = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
+> +
+> +	if (!loongson2_pm.suspended && (status & LOONGSON2_PM1_PWRBTN_STS)) {
+> +		pr_info("Power Button pressed...\n");
+
+The message is probably more appropriate as a pr_debug() than
+pr_info().
+
+> +static int __maybe_unused loongson2_pm_suspend(struct device *dev)
+> +{
+> +	loongson2_pm.suspended = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused loongson2_pm_resume(struct device *dev)
+> +{
+> +	loongson2_pm.suspended = false;
+> +
+> +	return 0;
+> +}
+> +static SIMPLE_DEV_PM_OPS(loongson2_pm_ops, loongson2_pm_suspend, 
+> loongson2_pm_resume);
+
+Please change this to DEFINE_SIMPLE_DEV_PM_OPS() and remove the
+__maybe_unused, this is what all drivers should have these days.
+
+> +
+> +static int loongson2_pm_probe(struct platform_device *pdev)
+> +{
+> +	int irq, retval;
+> +	u64 suspend_addr;
+> +	struct device *dev = &pdev->dev;
+> +
+> +	loongson2_pm.base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(loongson2_pm.base))
+> +		return PTR_ERR(loongson2_pm.base);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	if (!device_property_read_u64(dev, "loongson,suspend-address", 
+> &suspend_addr))
+> +		loongson_sysconf.suspend_addr = (u64)phys_to_virt(suspend_addr);
+> +	else
+
+Having a custom "loongson,suspend-address" property here feels wrong
+to me. Can't this be moved into the "regs" property that holds
+the other mmio registers?
+
+    Arnd
