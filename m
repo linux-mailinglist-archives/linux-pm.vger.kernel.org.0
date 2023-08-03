@@ -2,136 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBD7E76EF03
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 18:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2C176EF45
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Aug 2023 18:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbjHCQI3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Aug 2023 12:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
+        id S231343AbjHCQUO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Aug 2023 12:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234286AbjHCQI2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 12:08:28 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914612D7E;
-        Thu,  3 Aug 2023 09:08:27 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 373G8GaD077018;
-        Thu, 3 Aug 2023 11:08:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691078896;
-        bh=4xHql+cKbKBSwfFNBD8YC0edLIB4k/JLl55YhDFuI7k=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=kBn0KPV/cplBhWM/D/nKVBV3mv7879fb47G74rd4Qcjtx323Z08efeeMiQj7O7LNL
-         mMGbTvootDZpOfxlBAVWU5mf7WuOsdBX2ROdJXxdIbVoiAxQs8O0cUhgYlfviGwNqF
-         84t4mlp4rv800SxwKGJhJTYxh/NzABMgl0YRCi9s=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 373G8GG0078594
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Aug 2023 11:08:16 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 3
- Aug 2023 11:08:16 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 3 Aug 2023 11:08:15 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 373G8F1E036790;
-        Thu, 3 Aug 2023 11:08:15 -0500
-Date:   Thu, 3 Aug 2023 21:38:15 +0530
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Andrew Davis <afd@ti.com>
-CC:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        "Santosh Shilimkar" <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend resume
- support
-Message-ID: <20230803160815.yfpkdfssv75d4inf@dhruva>
-References: <20230803064247.503036-1-d-gole@ti.com>
- <20230803064247.503036-5-d-gole@ti.com>
- <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
- <20230803155541.nwsfwobfkbpefoyw@dhruva>
- <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
+        with ESMTP id S233628AbjHCQUN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Aug 2023 12:20:13 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EFB173F
+        for <linux-pm@vger.kernel.org>; Thu,  3 Aug 2023 09:20:08 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fe2bc27029so11830145e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 03 Aug 2023 09:20:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691079607; x=1691684407;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CRKQYTjj0CFOrgdAwpq3qfe246RqaR7qimHx7YtH0AI=;
+        b=rfU25oyJ5QoiyIrcdinKTQcvapOerJX5BqnFjnQpVQHbkp3MM4MocxKjaFxAxHzI2N
+         qZZ/RixXllNlks7AaOLxXBdezK0/7du/QVkuaOsWnh0FtMl1tip5G912x8oPSt3kpxSk
+         HKypbYZDeVjvCX8RAAsQzuBG/LdLK62Kkil+PhiL9DiZBdHhXbYGlIb+d2eZBjKUsmSJ
+         Z6WeeTGLI+Ggd3E/EL/fDv7tcBz7bS/ELiZOS+XrAAQK8IRUFV6/finvC69IKtZME/2n
+         QHB82cSDsv9ywMtOZddwOJU/5NNn32bB1wIk45FyjeNKRjPu4VSsnaohe9bL3Q51pzHZ
+         m6jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691079607; x=1691684407;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CRKQYTjj0CFOrgdAwpq3qfe246RqaR7qimHx7YtH0AI=;
+        b=AE9nLTmnC8rElXN4a/5HEIg+U8vp029HCBjuNEgUfqfDVQmuv32bGKYJSc+x9Ows0l
+         uCjuXF2iWMw/XHnrFXLc4KLru7CnAJhZRVOPVeZ9RmlkNJwJawQz1mGn2kVZbU/pPTNC
+         ogDQHpJyRsduMPIz+DciU6Uv/XXkApa98BadAbfGPXBVX471qPMW/WYV5jriZsEHxNIA
+         iqCPGqtwIdXxYjKnz+4b8rZBjRhMOXe2RR4uIDmiRazLPYgGDtivtOLCtoPq9RzVzC94
+         WFtR+SniKUoKzxSC6atclaVgVP+GvilQvLyrAoDFWQ5Tnyxix6x3CeoF9esLFjzkQr6a
+         ekDA==
+X-Gm-Message-State: ABy/qLY6aVYY/wZp0B0nWAYQrkDfVR5rITW/6sZF7q7irvwyORzvziFb
+        7pUk8L1svKyaxAw4KODcKRbb3Q==
+X-Google-Smtp-Source: APBJJlFuSIMsUxPfUpP2Xh3pzAoQZtkbLuQoXlzV0OaC7q2hZAp49HqZGKoHQA2B8Jnvwc6gANb07w==
+X-Received: by 2002:a5d:457c:0:b0:314:385d:6099 with SMTP id a28-20020a5d457c000000b00314385d6099mr8174596wrc.35.1691079607325;
+        Thu, 03 Aug 2023 09:20:07 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id w14-20020adfec4e000000b003141e629cb6sm214343wrn.101.2023.08.03.09.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Aug 2023 09:20:06 -0700 (PDT)
+Message-ID: <b4e474f9-79e8-534b-509e-12eb5995fa0c@linaro.org>
+Date:   Thu, 3 Aug 2023 18:20:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/8] thermal: core: Add mechanism for connecting trips
+ with driver data
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
+ <4501957.LvFx2qVVIh@kreacher>
+ <2d0315d4-35b4-84db-4dcb-c9528abad825@linaro.org>
+ <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
+ <eb279cf1-0605-3b87-5cb6-241a91977455@linaro.org>
+ <CAJZ5v0i48=oawDJHoaHhiZRaO_CJokKsOHyNvu2v4PUbS6CH_Q@mail.gmail.com>
+ <f8029547-6851-7e0c-00e6-4963ccbc2702@linaro.org>
+ <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
+ <5c93d78d-835e-c740-280b-9d76456aaeda@linaro.org>
+ <CAJZ5v0gtkZTwt-qP0uwvTJNx8cpO1o1esmW9BfVxB67X3Yt++w@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gtkZTwt-qP0uwvTJNx8cpO1o1esmW9BfVxB67X3Yt++w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Aug 03, 2023 at 11:00:11 -0500, Andrew Davis wrote:
-> On 8/3/23 10:55 AM, Dhruva Gole wrote:
-> > On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
-> > > On 8/3/23 1:42 AM, Dhruva Gole wrote:
-> > > > Introduce system suspend resume calls that will allow the ti_sci
-> > > > driver to support deep sleep low power mode when the user space issues a
-> > > > suspend to mem.
-> > > > 
-> > > > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
-> > > > suspend handler to allow the system to identify the low power mode being
-> > > > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
-> > > > about the mode is being entered and the address for allocated memory for
-> > > > storing the context during Deep Sleep.
-> > > > 
-> > > > We're using "pm_suspend_target_state" to map the kernel's target suspend
-> > > > state to SysFW low power mode. Make sure this is available only when
-> > > > CONFIG_SUSPEND is enabled.
-> > > > 
-> > > > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
-> > > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-> > > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-> > > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-> > > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> > > > ---
-> > > >    drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
-> > > >    1 file changed, 63 insertions(+)
-> > > > 
-> > [..snip..]
-> > > > +static int ti_sci_suspend(struct device *dev)
-> > > > +{
-> > > > +	struct ti_sci_info *info = dev_get_drvdata(dev);
-> > > > +	int ret;
-> > > > +
-> > > > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
-> > > 
-> > > After this the will the IOs be in isolation? Or does the firmware wait
-> > > until power down begins later?
-> > 
-> >  From what I understand,
-> > IOs will be in isolation immediately
-> > 
+On 03/08/2023 16:15, Rafael J. Wysocki wrote:
+> On Thu, Aug 3, 2023 at 3:06 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 02/08/2023 18:48, Rafael J. Wysocki wrote:
+>>
+>> [ ... ]
+>>
+>>>> Let me check if I can do something on top of your series to move it in
+>>>> the ACPI driver.
+>>>
+>>> It doesn't need to be on top of my series, so if you have an idea,
+>>> please just let me know what it is.
+>>>
+>>> It can't be entirely in the ACPI driver AFAICS, though, because
+>>> trips[i] need to be modified on updates and they belong to the core.
+>>> Hence, the driver needs some help from the core to get to them.  It
+>>> can be something like "this is my trip tag and please give me the
+>>> address of the trip matching it" or similar, but it is needed, because
+>>> the driver has to assume that the trip indices used by it initially
+>>> may change.
+>>
+>> May be I'm missing something but driver_ref does not seems to be used
+>> except when assigning it, no?
 > 
-> That is what I understand too, so then any device that may need to do some
-> external communication for its suspend will not function, this must be the
-> last driver _suspend() the system calls, how do you enforce that?
+> It is used on the other side.  That is, the value assigned to the trip
+> field in it is accessed via trip_ref in the driver.
+> 
+> The idea is that the driver puts a pointer to its local struct
+> thermal_trip_ref into a struct thermal_trip and the core stores the
+> address of that struct thermal_trip in there, which allows the driver
+> to access the struct thermal_trip via its local struct
+> thermal_trip_ref going forward.
+> 
+> Admittedly, this is somewhat convoluted.
+> 
+> I have an alternative approach in the works, just for illustration
+> purposes if nothing else, but I have encountered a problem that I
+> would like to ask you about.
+> 
+> Namely, zone disabling is not particularly useful for preventing the
+> zone from being used while the trips are updated, because it has side
+> effects.  First, it triggers __thermal_zone_device_update() and a
+> netlink message every time the mode changes, which can be kind of
+> overcome. 
 
-I will make use of .suspend_noirq callbacks in that case. Does that
-sound better, or is there anything else I may not be aware of?
+Right
 
-> 
-> Andrew
-> 
-> > > 
-> > > Andrew
-> > > 
-[..snip..]
-> > 
+> But second, if the mode is "disabled", it does not actually
+> prevent things like __thermal_zone_get_trip() from running and the
+> zone lock is the only thing that can be used for that AFAICS.
+ >
+> So by "disabling" a thermal zone, did you mean changing its mode to
+> "disabled" or something else?
+
+Yes, that is what I meant.
+
+May be the initial proposal by updating the thermal trips pointer can 
+solve that [1]
+
+IMO we can assume the trip point changes are very rare (if any), so 
+rebuilding a new trip array and update the thermal zone with the pointer 
+may solve the situation.
+
+The routine does a copy of the trips array, so it can reorder it without 
+impacting the array passed as a parameter. And it can take the lock.
+
+We just have to constraint the update function to invalidate arrays with 
+a number of trip points different from the one initially passed when 
+creating the thermal zone.
+
+Alternatively, we can be smarter in the ACPI driver and update the 
+corresponding temperature+hysteresis trip point by using the 
+thermal_zone_set_trip() function.
+
+[1] 
+https://lore.kernel.org/all/20230525140135.3589917-5-daniel.lezcano@linaro.org/
+
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
