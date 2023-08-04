@@ -2,227 +2,251 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E310770024
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 14:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E068277015A
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 15:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjHDMXi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Aug 2023 08:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S231191AbjHDNVw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 09:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230034AbjHDMXh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 08:23:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C3149CB;
-        Fri,  4 Aug 2023 05:23:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4537961FC5;
-        Fri,  4 Aug 2023 12:23:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A3FC433C7;
-        Fri,  4 Aug 2023 12:23:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691151812;
-        bh=QppzQhsRlg4qPDIGbiHxaRS4WDCRfQmv3ibRAOj0YdU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cSvgSbgBUMcktZ54wPo/skPThBHzsKTN0GaE0ctMtuybUqP1A85EUCZYhi6JPqKpT
-         93FzryH5cLPf88Kvxu8RZRfvp+FPgbbZd20HTAywQ6xQU+L8Mn9ZqwiShkJnSFBr6R
-         pTPcNjpVH8wN1rN34MF4EG5uizJkMwBOMn+9yK9QAYWG6L11A0sV4Sj2ZzEtQY9btY
-         mr5UZYIk7YbWhtsV/E6N0qA+FEMYrcH9U/wlmmlZr6zseaW3lIHxRBzk7bG2GDDMb8
-         +RascKFz6fBXMpmBewbeuKzdkuthZoHi1JK67FjWKe54kXxiB6Ov0ghl8/6z9ZgmIG
-         UY3U50xHvbkKg==
-Received: by mercury (Postfix, from userid 1000)
-        id B92A71061B1F; Fri,  4 Aug 2023 14:23:29 +0200 (CEST)
-Date:   Fri, 4 Aug 2023 14:23:29 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc:     nicolas.ferre@microchip.com, conor.dooley@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, alsa-devel@alsa-project.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: update Claudiu Beznea's email address
-Message-ID: <20230804122329.l6wytey6tlt4zjub@mercury.elektranox.org>
-References: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ayavysskzyo2pjbe"
-Content-Disposition: inline
-In-Reply-To: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
+        with ESMTP id S229951AbjHDNVg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 09:21:36 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FAF61A7;
+        Fri,  4 Aug 2023 06:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691155180; x=1722691180;
+  h=date:from:to:cc:subject:message-id;
+  bh=wU1Q6gXCsJtOA6HKky8pz4KIFO/dlUQnZqUJXMI5yU0=;
+  b=JOeqljILsl3A5cR9TNPQH0lsV+it+K9QT/Gu+YwbHaCiPjuoOlcQADzO
+   2k63J3zQ6zVKoqT1JcY1LFjmBYrImjUWkUgC0N/jLwSGJe+dWW9yMvEv3
+   lI6zHoS/h19cdT9xczpyk2ZmQZ4sXc9HW+F5chY0Y1dMYvtJkQhHhKSnz
+   FYt4beEpSOjmhClXRRcuPNPUbNlx2XaQdbMbRsSu82XY98amxNBDokyw6
+   49V/nqrqZ2ghXUgBjNB2VYDpu54tcQDuNG3egUnrIF5k5qdzPaDXqsKSm
+   SJa3Srs18Jm4i14uzcrCbE0bap3r5cBoyPIQqfkkq4f04ikHugBdBVb9b
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="372897292"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="372897292"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2023 06:18:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10792"; a="820128155"
+X-IronPort-AV: E=Sophos;i="6.01,255,1684825200"; 
+   d="scan'208";a="820128155"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Aug 2023 06:18:26 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qRuhF-0002rx-2t;
+        Fri, 04 Aug 2023 13:18:25 +0000
+Date:   Fri, 04 Aug 2023 21:17:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ f20cf9380d2943d4ccb835e329168badc713fccf
+Message-ID: <202308042147.94du9tOE-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: f20cf9380d2943d4ccb835e329168badc713fccf  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
---ayavysskzyo2pjbe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Warning reports:
 
-Hi,
+https://lore.kernel.org/oe-kbuild-all/202308020253.WHEHp60K-lkp@intel.com
 
-On Fri, Aug 04, 2023 at 08:00:07AM +0300, Claudiu Beznea wrote:
-> Update MAINTAINERS entries with a valid email address as the Microchip
-> one is no longer valid.
->=20
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-> ---
+Warning: (recently discovered and may have been fixed)
 
-Acked-by: Sebastian Reichel <sre@kernel.org>
+drivers/acpi/thermal.c:1042:32: warning: variable 'result' set but not used [-Wunused-but-set-variable]
 
--- Sebastian
+Warning ids grouped by kconfigs:
 
-> Changes in v2:
-> - collected tags
-> - extended the recipients list to include individual subsystem
->   maintainers and lists instead using only linux-kernel@vger.kernel.org
->   as suggested initially by get_maintainers.pl
->=20
->  MAINTAINERS | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 128fd295f86f..d48d8e857f57 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2351,7 +2351,7 @@ F:	drivers/phy/mediatek/
->  ARM/MICROCHIP (ARM64) SoC support
->  M:	Conor Dooley <conor@kernel.org>
->  M:	Nicolas Ferre <nicolas.ferre@microchip.com>
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
-> @@ -2360,7 +2360,7 @@ F:	arch/arm64/boot/dts/microchip/
->  ARM/Microchip (AT91) SoC support
->  M:	Nicolas Ferre <nicolas.ferre@microchip.com>
->  M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  W:	http://www.linux4sam.org
-> @@ -3265,7 +3265,7 @@ F:	include/uapi/linux/atm*
-> =20
->  ATMEL MACB ETHERNET DRIVER
->  M:	Nicolas Ferre <nicolas.ferre@microchip.com>
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  S:	Supported
->  F:	drivers/net/ethernet/cadence/
-> =20
-> @@ -13880,7 +13880,7 @@ F:	Documentation/devicetree/bindings/serial/atmel=
-,at91-usart.yaml
->  F:	drivers/spi/spi-at91-usart.c
-> =20
->  MICROCHIP AUDIO ASOC DRIVERS
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/sound/atmel*
-> @@ -13903,7 +13903,7 @@ S:	Maintained
->  F:	drivers/crypto/atmel-ecc.*
-> =20
->  MICROCHIP EIC DRIVER
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/interrupt-controller/microchip,sama=
-7g5-eic.yaml
-> @@ -13976,7 +13976,7 @@ F:	drivers/video/fbdev/atmel_lcdfb.c
->  F:	include/video/atmel_lcdc.h
-> =20
->  MICROCHIP MCP16502 PMIC DRIVER
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/regulator/mcp16502-regulator.txt
-> @@ -14003,7 +14003,7 @@ F:	Documentation/devicetree/bindings/mtd/atmel-na=
-nd.txt
->  F:	drivers/mtd/nand/raw/atmel/*
-> =20
->  MICROCHIP OTPC DRIVER
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
-> @@ -14042,7 +14042,7 @@ F:	Documentation/devicetree/bindings/fpga/microch=
-ip,mpf-spi-fpga-mgr.yaml
->  F:	drivers/fpga/microchip-spi.c
-> =20
->  MICROCHIP PWM DRIVER
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  L:	linux-pwm@vger.kernel.org
->  S:	Supported
-> @@ -14058,7 +14058,7 @@ F:	drivers/iio/adc/at91-sama5d2_adc.c
->  F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
-> =20
->  MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  S:	Supported
->  F:	Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
->  F:	drivers/power/reset/at91-sama5d2_shdwc.c
-> @@ -14075,7 +14075,7 @@ S:	Supported
->  F:	drivers/spi/spi-atmel.*
-> =20
->  MICROCHIP SSC DRIVER
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->  S:	Supported
->  F:	Documentation/devicetree/bindings/misc/atmel-ssc.txt
-> @@ -14104,7 +14104,7 @@ F:	drivers/usb/gadget/udc/atmel_usba_udc.*
-> =20
->  MICROCHIP WILC1000 WIFI DRIVER
->  M:	Ajay Singh <ajay.kathat@microchip.com>
-> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
->  L:	linux-wireless@vger.kernel.org
->  S:	Supported
->  F:	drivers/net/wireless/microchip/wilc1000/
-> --=20
-> 2.39.2
->=20
+gcc_recent_errors
+|-- arm64-allyesconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- arm64-defconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-allyesconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-debian-10.3
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-defconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-i001-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-i002-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-i004-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-i006-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- i386-randconfig-m021-20230730
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- loongarch-allmodconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- loongarch-allyesconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- loongarch-defconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-allyesconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-buildonly-randconfig-r002-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-defconfig
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-kexec
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-randconfig-x011-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-randconfig-x013-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-randconfig-x014-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-randconfig-x015-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+|-- x86_64-randconfig-x016-20230731
+|   `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
+`-- x86_64-rhel-8.3
+    `-- drivers-acpi-thermal.c:warning:variable-result-set-but-not-used
 
---ayavysskzyo2pjbe
-Content-Type: application/pgp-signature; name="signature.asc"
+elapsed time: 951m
 
------BEGIN PGP SIGNATURE-----
+configs tested: 118
+configs skipped: 3
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmTM7akACgkQ2O7X88g7
-+prINg//RcuW5D688+v0Q2OnYj7jCRdH2H+xmYorC7m7Z6DH3pjUQWl4b2PS2aQz
-iQWEtRsBEMiGgiYIhmwYMqUAClPdGRFyJFilrupoQQezDwvwdgmKMDX652VjH+F8
-InoIfuPaXfJPxscO2FXX6A0HM+8Qy14zH/Sf8Tyjc5TYFTdwWqsJMdYXYX2S/Gk9
-Uu1KL5ZUWvSooN127dgAC3EijnxV7T8y12gXd2gSrWu1moOYGEc3CJG61rTSa31u
-WzD00rEvPVUq9KX5r+uQWP4tub9hGSoy6E/u6K7NKjXWqn6rOjHaz2aw0FEU1/tp
-AtGDCOslPmvqFEmJs0bbHo51VlvHEpvDNU7EdKFsOXRIfij72l6SF8pD3Wj5ramA
-LrbV+A3kPZRlAudfxBc7ufzdP6wgyR6jgD394Ovhe5XDB+fANTMwCf38Gx62lsUD
-x4HnCksQoEZfkLsLtavbHqEpBmwgEHEX8TuZ68HxSDZIAgts8K86zNOnPZvpstak
-hLU0Bz0LVJiIz2DWIqE5gxNAaPSAUpT9KflPUiQISAHC7NB+yuNP8UbkOU4DoDQW
-K19om2Id4TjnyR7MDk1xb56uIPh9pj9I1sYmvsUkHmhxqh74gq7acYCntwapIyqb
-ebwZctmSOe18RQBGJzWciIJsgqDQRpm+9rY+sqRaSALim4llvbM=
-=ciPO
------END PGP SIGNATURE-----
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r005-20230731   gcc  
+alpha                randconfig-r026-20230731   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r003-20230731   gcc  
+arc                  randconfig-r043-20230731   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                     davinci_all_defconfig   clang
+arm                                 defconfig   gcc  
+arm                       imx_v6_v7_defconfig   gcc  
+arm                  randconfig-r004-20230731   clang
+arm                  randconfig-r011-20230801   gcc  
+arm                  randconfig-r032-20230801   clang
+arm                  randconfig-r046-20230731   gcc  
+arm                        shmobile_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r021-20230731   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r034-20230801   gcc  
+hexagon              randconfig-r022-20230731   clang
+hexagon              randconfig-r041-20230731   clang
+hexagon              randconfig-r045-20230731   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230731   gcc  
+i386         buildonly-randconfig-r005-20230731   gcc  
+i386         buildonly-randconfig-r006-20230731   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230731   gcc  
+i386                 randconfig-i002-20230731   gcc  
+i386                 randconfig-i003-20230731   gcc  
+i386                 randconfig-i004-20230731   gcc  
+i386                 randconfig-i005-20230731   gcc  
+i386                 randconfig-i006-20230731   gcc  
+i386                 randconfig-i011-20230731   clang
+i386                 randconfig-i012-20230731   clang
+i386                 randconfig-i013-20230731   clang
+i386                 randconfig-i014-20230731   clang
+i386                 randconfig-i015-20230731   clang
+i386                 randconfig-i016-20230731   clang
+i386                 randconfig-r033-20230801   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r016-20230801   gcc  
+m68k                 randconfig-r025-20230731   gcc  
+microblaze           randconfig-r023-20230731   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ip22_defconfig   clang
+mips                 randconfig-r002-20230731   clang
+mips                       rbtx49xx_defconfig   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r024-20230731   gcc  
+openrisc             randconfig-r015-20230801   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                       ebony_defconfig   clang
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                      katmai_defconfig   clang
+powerpc              randconfig-r001-20230731   gcc  
+powerpc              randconfig-r036-20230801   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r012-20230801   clang
+riscv                randconfig-r042-20230731   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r035-20230801   gcc  
+s390                 randconfig-r044-20230731   clang
+sh                               allmodconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                   randconfig-r031-20230801   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r006-20230731   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r014-20230801   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230731   gcc  
+x86_64       buildonly-randconfig-r002-20230731   gcc  
+x86_64       buildonly-randconfig-r003-20230731   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230731   clang
+x86_64               randconfig-x002-20230731   clang
+x86_64               randconfig-x003-20230731   clang
+x86_64               randconfig-x004-20230731   clang
+x86_64               randconfig-x005-20230731   clang
+x86_64               randconfig-x006-20230731   clang
+x86_64               randconfig-x011-20230731   gcc  
+x86_64               randconfig-x012-20230731   gcc  
+x86_64               randconfig-x013-20230731   gcc  
+x86_64               randconfig-x014-20230731   gcc  
+x86_64               randconfig-x015-20230731   gcc  
+x86_64               randconfig-x016-20230731   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                              defconfig   gcc  
 
---ayavysskzyo2pjbe--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
