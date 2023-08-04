@@ -2,153 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D91A770B23
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 23:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E9C770BE1
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Aug 2023 00:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229581AbjHDVk7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Aug 2023 17:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
+        id S229551AbjHDWXo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 18:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjHDVk6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 17:40:58 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD388E2;
-        Fri,  4 Aug 2023 14:40:57 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-686b643df5dso1973195b3a.1;
-        Fri, 04 Aug 2023 14:40:57 -0700 (PDT)
+        with ESMTP id S229452AbjHDWXn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 18:23:43 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31F61706
+        for <linux-pm@vger.kernel.org>; Fri,  4 Aug 2023 15:23:41 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4036bd4fff1so43841cf.0
+        for <linux-pm@vger.kernel.org>; Fri, 04 Aug 2023 15:23:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691185257; x=1691790057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=omRwdoLI/pe73xmt4uOi5eZK6XRdWhCrwxfJwoygChk=;
-        b=CfB4IQydwlw8qfkGeo3+kBLf6k/IfL5xcXe1txkcOjb0UYeHDRNNRUJMd3w6Yp2lzK
-         SKz0sK2u/DuAe+baiudh3Eg5JQdtZlsc95J2JZAOvx6gqpYNWZDFz4xxVmgEc/aC5Fxt
-         UcrjVXVtg6gXEf/ZW99y4hlOsYglCSxiLRRP0t/WFx4PyAospbSDZph1YXSTUJ/R65e8
-         8BMMdU4P6tmUpn+Gsc3QP169BTpqzaKlbsiDIxbj9vD+4LaHykGrv867lNaJjSXb4xvM
-         CI1PZLs+rq0I4vljklw9Agb5imMJn6XWN6W9BnnjEWS1QiO+OMLeLNa1/VrVxqPNSwQ/
-         M35A==
+        d=google.com; s=20221208; t=1691187821; x=1691792621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JDVToZuCub2aXoluBLOzh7ZI5LhuxsWLO5G4MUK/7/I=;
+        b=Fj/rCa+d9CUjvApIAZNeYd11Oo2n1X+mxvFlbtkqGh9r56dMwVHL9NznWX8TjEfSyz
+         s6ODwzRUXHhZwkBdQCFPDetRNq+U5JTh5qTJc1nxc4s4k9UCMZkM5nPEKnRhcej+dJrl
+         TrHBoLsHMQ3r5ZWdiJy9HEudHieVC4LQMVeIwL4xtAb6hRwDxaJYL+UIqSFFCyhzQevY
+         u5PsHqGQpCrLyYnJ0SslbdBnX4I0No4ju6GwrIAGwJXUAqHKOQ4+8Uql5z1Ew/68v9KR
+         /cXCVDMqEdLtMtkfZElT4DURhWm5B75NqI4JbGFnk7rezjHiTecKl+l2ynSPZxTC1TXX
+         wPeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691185257; x=1691790057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=omRwdoLI/pe73xmt4uOi5eZK6XRdWhCrwxfJwoygChk=;
-        b=FlumkaPRxzE5sqTOZDWNz3JRfbHCoZk0sfCmbg38wGUvoVuyP1wmzHuPU1NijDD6zn
-         LRtRvEou5noH7u7sLbHP695rkpmB3ZizwFrfGbztnzuIK2iDPoAdVpXf3W9Q5DbbP8Gz
-         EIuHPRB+bRoLfL+BlIW0k76sSOPfZnMmCRPFPxf4RWTGUscrwGnSgY9o3cQNRXT52w3n
-         EU/IOh/DWvQjN0XzZ69XeKARhydN1FJYf/0of7q0h8i5D8g+RMZZs0nW9g9u5riom5Oe
-         ZBPnZlTLjS4o5HCqI4frVU+ZbMj66Jy4n/1RuGzWqZtpjYuzDEHgF337PokrmC4vtE+R
-         w8Kw==
-X-Gm-Message-State: AOJu0Yz76TYPeXU17OyfH/znWuG6NUyfubCy9ibaPJn/Z7qFGVEiuBmq
-        Pz6jbNM6XPMuUohazSq0N/E=
-X-Google-Smtp-Source: AGHT+IHIPywqproRva9PBjR/uyaZ0ol8pgyRadE6dVe697kIxczOrJd0UdrNH/ZS2a0OUbaJ5mhtPQ==
-X-Received: by 2002:a05:6a20:3243:b0:13b:a016:465b with SMTP id hm3-20020a056a20324300b0013ba016465bmr2682720pzc.19.1691185257191;
-        Fri, 04 Aug 2023 14:40:57 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:6c80:7c10:75a0:44f4])
-        by smtp.gmail.com with ESMTPSA id u22-20020aa78396000000b0063f1a1e3003sm1972928pfm.166.2023.08.04.14.40.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 14:40:56 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org (open list:SUSPEND TO RAM),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [RFC] PM / QoS: Decouple request alloc from dev_pm_qos_mtx (alternative solution)
-Date:   Fri,  4 Aug 2023 14:40:51 -0700
-Message-ID: <20230804214051.136268-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        d=1e100.net; s=20221208; t=1691187821; x=1691792621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JDVToZuCub2aXoluBLOzh7ZI5LhuxsWLO5G4MUK/7/I=;
+        b=QhLcPzkYjwyQxlEzIV8Rdo7iPu/hkpnD+ycuj9JyZQaKFR4Q6KgC7a1sUxj3QdPBgN
+         s0Wk0k4TZpu3nnRwkUM0gCMVj8kn89RIsJemkszsMwzwucGaNChZ7f0szGEbLyNk09oD
+         tdc2HPPaQZRr1tqoSOLKa6Cud6MkZ9uliYxUrYcZBFJI5RDVR1lWczvD7tMz40aKWcNy
+         m32bsN7KvnOKHRe90abZC87+9Vd0Ahtl6GsXZwr3YF5u9EWrnbO2Yop/I2Q5pKdQ8j/G
+         1n2RLzyLlJrueRuD2W1DgkEvBXYd8TWCcz0XfYyuISrKfv1EF3kqB0br5Tfsve89eRRp
+         acVA==
+X-Gm-Message-State: AOJu0YxbmRQ9+0DEgclWDdQV3O14JbYZ2UEdStWfx2wqIwz1PG++jlSq
+        BQaFHnDHlREQMoFS18icbOL5QuyqM1wICr/bn2rJgQ==
+X-Google-Smtp-Source: AGHT+IFw4EQHEWVqrAp3XPGt0A26DjwPM1ed1SPOxFy3mcLkzyP66+hTodU/JodM+dKQHjN3/JD3+3VOdrZpzd7an6Q=
+X-Received: by 2002:ac8:4e81:0:b0:3f2:2c89:f1ef with SMTP id
+ 1-20020ac84e81000000b003f22c89f1efmr56187qtp.5.1691187820859; Fri, 04 Aug
+ 2023 15:23:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230731174613.4133167-1-davidai@google.com> <20230731174613.4133167-3-davidai@google.com>
+ <ZMjUMk5xXzahXjno@google.com>
+In-Reply-To: <ZMjUMk5xXzahXjno@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 4 Aug 2023 15:23:04 -0700
+Message-ID: <CAGETcx-urKn2dUwKN_e0HYpzJ++LtZc3pGUoHi7fGTr5DMkhfA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
+To:     Quentin Perret <qperret@google.com>
+Cc:     David Dai <davidai@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On Tue, Aug 1, 2023 at 2:45=E2=80=AFAM Quentin Perret <qperret@google.com> =
+wrote:
+>
+> Hi David,
+>
+> On Monday 31 Jul 2023 at 10:46:09 (-0700), David Dai wrote:
+> > +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *polic=
+y)
+> > +{
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +     /*
+> > +      * Use cached frequency to avoid rounding to freq table entries
+> > +      * and undo 25% frequency boost applied by schedutil.
+> > +      */
+>
+> The VMM would be a better place for this scaling I think, the driver
+> can't/shouldn't make assumptions about the governor it is running with
+> given that this is a guest userspace decision essentially.
+>
+> IIRC the fast_switch() path is only used by schedutil, so one could
+> probably make a case to scale things there, but it'd be inconsistent
+> with the "slow" switch case, and would create a fragile dependency, so
+> it's probably not worth pursuing.
 
-Similar to the previous patch, move the allocation out from under
-dev_pm_qos_mtx, by speculatively doing the allocation and handle
-any race after acquiring dev_pm_qos_mtx by freeing the redundant
-allocation.
+Thanks for the input Quentin!
 
-Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
-This is an alternative to https://patchwork.freedesktop.org/patch/551417/?series=115028&rev=4
+David and I spend several hours over several days discussing this. We
+were trying to think through and decide if we were really removing the
+25% margin applied by the guest side schedutil or the host side
+schedutil. We ran through different thought experiments on what would
+happen if the guest used ondemand/conservative/performance/powersave
+governors and what if in the future we had a configurable schedutil
+margin.
 
-So, this does _slightly_ change error paths, for ex
-dev_pm_qos_update_user_latency_tolerance() will now allocate
-dev->power.qos in some error cases.  But this seems harmless?
-A slightly more complicated version of this could conserve the
-previous error path behavior, but I figured I'd try the simpler
-thing first.
+We changed our opinions multiple times until we finally remembered
+this goal from my original presentation[1]:
 
- drivers/base/power/qos.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+"On an idle host, running the use case in the host vs VM, should
+result in close to identical DVFS behavior of the physical CPUs and
+CPU selection for the threads."
 
-diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-index 1b73a704aac1..c7ba85e89c42 100644
---- a/drivers/base/power/qos.c
-+++ b/drivers/base/power/qos.c
-@@ -920,8 +920,12 @@ s32 dev_pm_qos_get_user_latency_tolerance(struct device *dev)
- int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- {
- 	struct dev_pm_qos *qos = dev_pm_qos_constraints_allocate();
-+	struct dev_pm_qos_request *req = NULL;
- 	int ret = 0;
- 
-+	if (!dev->power.qos->latency_tolerance_req)
-+		req = kzalloc(sizeof(*req), GFP_KERNEL);
-+
- 	mutex_lock(&dev_pm_qos_mtx);
- 
- 	dev_pm_qos_constraints_set(dev, qos);
-@@ -935,8 +939,6 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- 		goto out;
- 
- 	if (!dev->power.qos->latency_tolerance_req) {
--		struct dev_pm_qos_request *req;
--
- 		if (val < 0) {
- 			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
- 				ret = 0;
-@@ -944,17 +946,15 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- 				ret = -EINVAL;
- 			goto out;
- 		}
--		req = kzalloc(sizeof(*req), GFP_KERNEL);
- 		if (!req) {
- 			ret = -ENOMEM;
- 			goto out;
- 		}
- 		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
--		if (ret < 0) {
--			kfree(req);
-+		if (ret < 0)
- 			goto out;
--		}
- 		dev->power.qos->latency_tolerance_req = req;
-+		req = NULL;
- 	} else {
- 		if (val < 0) {
- 			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
-@@ -966,6 +966,7 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- 
-  out:
- 	mutex_unlock(&dev_pm_qos_mtx);
-+	kfree(req);
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
--- 
-2.41.0
+For that statement to be true when the guest uses
+ondemand/conservative governor, we have to remove the 25% margin
+applied by the host side schedutil governor. Otherwise, running the
+workload on the VM will result in frequencies 25% higher than running
+the same load on the host with ondemand/conservative governor.
 
+So, we finally concluded that we are really undoing the host side
+schedutil margin. And in that case, it makes sense to undo this in the
+VMM side. So, we'll go with your suggestion in this email instead of
+making the schedutil margin to be 0 for the guest.
+
+[1] - https://lpc.events/event/16/contributions/1195/attachments/970/1893/L=
+PC%202022%20-%20VM%20DVFS.pdf
+
+Thanks,
+Saravana
+
+>
+> > +     u32 freq =3D mult_frac(policy->cached_target_freq, 80, 100);
+> > +
+> > +     data->ops->set_freq(policy, freq);
+> > +     return 0;
+> > +}
+>
+> Thanks,
+> Quentin
