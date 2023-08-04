@@ -2,170 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDF976FFC4
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 13:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E310770024
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 14:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjHDLwq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Aug 2023 07:52:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
+        id S230010AbjHDMXi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 08:23:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjHDLwm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 07:52:42 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB52128;
-        Fri,  4 Aug 2023 04:52:40 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 374BqZFa071741;
-        Fri, 4 Aug 2023 06:52:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691149955;
-        bh=ryoxWjJtb+Uw+NimGpPuRuUrWlV6tOVEwnFSxurjAJQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=tIPAhEBeclDbtqOe5IUBd3tkdsA4mNLEdPwIjfPjP0OCqlPDj+cZvjaTYzlABz4tK
-         MPep5UdklpmRUPlQ7yMtMJtA/mtAjsMwJ5cxu2hTZ5CvCZY68TPldr9HGdZ7qclSb3
-         RsoiZqp0xouIZq3V0ctYDsXKeri2XiupqIuEh9nI=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 374BqZZw009933
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 4 Aug 2023 06:52:35 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 4
- Aug 2023 06:52:35 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 4 Aug 2023 06:52:35 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 374BqY1q130233;
-        Fri, 4 Aug 2023 06:52:35 -0500
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        "Santosh Shilimkar" <ssantosh@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-omap@vger.kernel.org>,
-        "Kevin Hilman" <khilman@baylibre.com>, Vignesh R <vigneshr@ti.com>,
-        Dhruva Gole <d-gole@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: [PATCH V7 4/4] firmware: ti_sci: Add system suspend call
-Date:   Fri, 4 Aug 2023 17:20:37 +0530
-Message-ID: <20230804115037.754994-5-d-gole@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230804115037.754994-1-d-gole@ti.com>
-References: <20230804115037.754994-1-d-gole@ti.com>
+        with ESMTP id S230034AbjHDMXh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 08:23:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C3149CB;
+        Fri,  4 Aug 2023 05:23:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4537961FC5;
+        Fri,  4 Aug 2023 12:23:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A3FC433C7;
+        Fri,  4 Aug 2023 12:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691151812;
+        bh=QppzQhsRlg4qPDIGbiHxaRS4WDCRfQmv3ibRAOj0YdU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cSvgSbgBUMcktZ54wPo/skPThBHzsKTN0GaE0ctMtuybUqP1A85EUCZYhi6JPqKpT
+         93FzryH5cLPf88Kvxu8RZRfvp+FPgbbZd20HTAywQ6xQU+L8Mn9ZqwiShkJnSFBr6R
+         pTPcNjpVH8wN1rN34MF4EG5uizJkMwBOMn+9yK9QAYWG6L11A0sV4Sj2ZzEtQY9btY
+         mr5UZYIk7YbWhtsV/E6N0qA+FEMYrcH9U/wlmmlZr6zseaW3lIHxRBzk7bG2GDDMb8
+         +RascKFz6fBXMpmBewbeuKzdkuthZoHi1JK67FjWKe54kXxiB6Ov0ghl8/6z9ZgmIG
+         UY3U50xHvbkKg==
+Received: by mercury (Postfix, from userid 1000)
+        id B92A71061B1F; Fri,  4 Aug 2023 14:23:29 +0200 (CEST)
+Date:   Fri, 4 Aug 2023 14:23:29 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc:     nicolas.ferre@microchip.com, conor.dooley@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, maz@kernel.org,
+        srinivas.kandagatla@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, alsa-devel@alsa-project.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: update Claudiu Beznea's email address
+Message-ID: <20230804122329.l6wytey6tlt4zjub@mercury.elektranox.org>
+References: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ayavysskzyo2pjbe"
+Content-Disposition: inline
+In-Reply-To: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce system suspend call that enables the ti_sci driver to support
-deep sleep low power mode when the user space issues a suspend to mem.
 
-Also, write a ti_sci_prepare_system_suspend call to be used in the driver
-suspend handler to allow the system to identify the low power mode being
-entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
-about the mode is being entered and the address for allocated memory for
-storing the context during Deep Sleep.
+--ayavysskzyo2pjbe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We're using "pm_suspend_target_state" to map the kernel's target suspend
-state to SysFW low power mode. Make sure this is available only when
-CONFIG_SUSPEND is enabled.
+Hi,
 
-Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-Signed-off-by: Dhruva Gole <d-gole@ti.com>
----
+On Fri, Aug 04, 2023 at 08:00:07AM +0300, Claudiu Beznea wrote:
+> Update MAINTAINERS entries with a valid email address as the Microchip
+> one is no longer valid.
+>=20
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+> ---
 
-changelog:
+Acked-by: Sebastian Reichel <sre@kernel.org>
 
-We no longer need to do anything special during resume, hence remove the
-resume call
+-- Sebastian
 
- drivers/firmware/ti_sci.c | 45 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+> Changes in v2:
+> - collected tags
+> - extended the recipients list to include individual subsystem
+>   maintainers and lists instead using only linux-kernel@vger.kernel.org
+>   as suggested initially by get_maintainers.pl
+>=20
+>  MAINTAINERS | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 128fd295f86f..d48d8e857f57 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -2351,7 +2351,7 @@ F:	drivers/phy/mediatek/
+>  ARM/MICROCHIP (ARM64) SoC support
+>  M:	Conor Dooley <conor@kernel.org>
+>  M:	Nicolas Ferre <nicolas.ferre@microchip.com>
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  T:	git https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
+> @@ -2360,7 +2360,7 @@ F:	arch/arm64/boot/dts/microchip/
+>  ARM/Microchip (AT91) SoC support
+>  M:	Nicolas Ferre <nicolas.ferre@microchip.com>
+>  M:	Alexandre Belloni <alexandre.belloni@bootlin.com>
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  W:	http://www.linux4sam.org
+> @@ -3265,7 +3265,7 @@ F:	include/uapi/linux/atm*
+> =20
+>  ATMEL MACB ETHERNET DRIVER
+>  M:	Nicolas Ferre <nicolas.ferre@microchip.com>
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  S:	Supported
+>  F:	drivers/net/ethernet/cadence/
+> =20
+> @@ -13880,7 +13880,7 @@ F:	Documentation/devicetree/bindings/serial/atmel=
+,at91-usart.yaml
+>  F:	drivers/spi/spi-at91-usart.c
+> =20
+>  MICROCHIP AUDIO ASOC DRIVERS
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/sound/atmel*
+> @@ -13903,7 +13903,7 @@ S:	Maintained
+>  F:	drivers/crypto/atmel-ecc.*
+> =20
+>  MICROCHIP EIC DRIVER
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/interrupt-controller/microchip,sama=
+7g5-eic.yaml
+> @@ -13976,7 +13976,7 @@ F:	drivers/video/fbdev/atmel_lcdfb.c
+>  F:	include/video/atmel_lcdc.h
+> =20
+>  MICROCHIP MCP16502 PMIC DRIVER
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/regulator/mcp16502-regulator.txt
+> @@ -14003,7 +14003,7 @@ F:	Documentation/devicetree/bindings/mtd/atmel-na=
+nd.txt
+>  F:	drivers/mtd/nand/raw/atmel/*
+> =20
+>  MICROCHIP OTPC DRIVER
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
+> @@ -14042,7 +14042,7 @@ F:	Documentation/devicetree/bindings/fpga/microch=
+ip,mpf-spi-fpga-mgr.yaml
+>  F:	drivers/fpga/microchip-spi.c
+> =20
+>  MICROCHIP PWM DRIVER
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  L:	linux-pwm@vger.kernel.org
+>  S:	Supported
+> @@ -14058,7 +14058,7 @@ F:	drivers/iio/adc/at91-sama5d2_adc.c
+>  F:	include/dt-bindings/iio/adc/at91-sama5d2_adc.h
+> =20
+>  MICROCHIP SAMA5D2-COMPATIBLE SHUTDOWN CONTROLLER
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/power/reset/atmel,sama5d2-shdwc.yaml
+>  F:	drivers/power/reset/at91-sama5d2_shdwc.c
+> @@ -14075,7 +14075,7 @@ S:	Supported
+>  F:	drivers/spi/spi-atmel.*
+> =20
+>  MICROCHIP SSC DRIVER
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>  S:	Supported
+>  F:	Documentation/devicetree/bindings/misc/atmel-ssc.txt
+> @@ -14104,7 +14104,7 @@ F:	drivers/usb/gadget/udc/atmel_usba_udc.*
+> =20
+>  MICROCHIP WILC1000 WIFI DRIVER
+>  M:	Ajay Singh <ajay.kathat@microchip.com>
+> -M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> +M:	Claudiu Beznea <claudiu.beznea@tuxon.dev>
+>  L:	linux-wireless@vger.kernel.org
+>  S:	Supported
+>  F:	drivers/net/wireless/microchip/wilc1000/
+> --=20
+> 2.39.2
+>=20
 
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 512338699153..9584015f2b19 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -22,6 +22,7 @@
- #include <linux/slab.h>
- #include <linux/soc/ti/ti-msgmgr.h>
- #include <linux/soc/ti/ti_sci_protocol.h>
-+#include <linux/suspend.h>
- #include <linux/sys_soc.h>
- #include <linux/reboot.h>
- 
-@@ -3433,6 +3434,49 @@ static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
- 	return NOTIFY_BAD;
- }
- 
-+static int ti_sci_prepare_system_suspend(struct ti_sci_info *info)
-+{
-+#if IS_ENABLED(CONFIG_SUSPEND)
-+	u8 mode;
-+
-+	/* Map and validate the target Linux suspend state to TISCI LPM. */
-+	switch (pm_suspend_target_state) {
-+	case PM_SUSPEND_MEM:
-+		/* S2MEM is not supported by the firmware. */
-+		if (!(info->fw_caps & MSG_FLAG_CAPS_LPM_DEEP_SLEEP))
-+			return 0;
-+		mode = TISCI_MSG_VALUE_SLEEP_MODE_DEEP_SLEEP;
-+		break;
-+	default:
-+		/*
-+		 * Do not fail if we don't have action to take for a
-+		 * specific suspend mode.
-+		 */
-+		return 0;
-+	}
-+
-+	return ti_sci_cmd_prepare_sleep(&info->handle, mode,
-+					(u32)(info->ctx_mem_addr & 0xffffffff),
-+					(u32)((u64)info->ctx_mem_addr >> 32), 0);
-+#else
-+	return 0;
-+#endif
-+}
-+
-+static int ti_sci_suspend(struct device *dev)
-+{
-+	struct ti_sci_info *info = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = ti_sci_prepare_system_suspend(info);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, NULL);
-+
- static int ti_sci_init_suspend(struct platform_device *pdev,
- 			       struct ti_sci_info *info)
- {
-@@ -3673,6 +3717,7 @@ static struct platform_driver ti_sci_driver = {
- 	.driver = {
- 		   .name = "ti-sci",
- 		   .of_match_table = of_match_ptr(ti_sci_of_match),
-+		   .pm = &ti_sci_pm_ops,
- 	},
- };
- module_platform_driver(ti_sci_driver);
--- 
-2.34.1
+--ayavysskzyo2pjbe
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmTM7akACgkQ2O7X88g7
++prINg//RcuW5D688+v0Q2OnYj7jCRdH2H+xmYorC7m7Z6DH3pjUQWl4b2PS2aQz
+iQWEtRsBEMiGgiYIhmwYMqUAClPdGRFyJFilrupoQQezDwvwdgmKMDX652VjH+F8
+InoIfuPaXfJPxscO2FXX6A0HM+8Qy14zH/Sf8Tyjc5TYFTdwWqsJMdYXYX2S/Gk9
+Uu1KL5ZUWvSooN127dgAC3EijnxV7T8y12gXd2gSrWu1moOYGEc3CJG61rTSa31u
+WzD00rEvPVUq9KX5r+uQWP4tub9hGSoy6E/u6K7NKjXWqn6rOjHaz2aw0FEU1/tp
+AtGDCOslPmvqFEmJs0bbHo51VlvHEpvDNU7EdKFsOXRIfij72l6SF8pD3Wj5ramA
+LrbV+A3kPZRlAudfxBc7ufzdP6wgyR6jgD394Ovhe5XDB+fANTMwCf38Gx62lsUD
+x4HnCksQoEZfkLsLtavbHqEpBmwgEHEX8TuZ68HxSDZIAgts8K86zNOnPZvpstak
+hLU0Bz0LVJiIz2DWIqE5gxNAaPSAUpT9KflPUiQISAHC7NB+yuNP8UbkOU4DoDQW
+K19om2Id4TjnyR7MDk1xb56uIPh9pj9I1sYmvsUkHmhxqh74gq7acYCntwapIyqb
+ebwZctmSOe18RQBGJzWciIJsgqDQRpm+9rY+sqRaSALim4llvbM=
+=ciPO
+-----END PGP SIGNATURE-----
+
+--ayavysskzyo2pjbe--
