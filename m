@@ -2,76 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A885976FD45
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 11:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3707576FDD3
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 11:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjHDJ32 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Aug 2023 05:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40422 "EHLO
+        id S231206AbjHDJwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 05:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjHDJ3X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 05:29:23 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BE949E0
-        for <linux-pm@vger.kernel.org>; Fri,  4 Aug 2023 02:29:20 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b9cdbf682eso29262901fa.2
-        for <linux-pm@vger.kernel.org>; Fri, 04 Aug 2023 02:29:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691141359; x=1691746159;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dnn3YjqK0gYS2d3cBmIF54I2GW/nHeks1WnBWbPsCqA=;
-        b=LSoxPSq6PqUSUyUwQor3UO7ej1NFQ1w4NXKg0U9UgkTQuNs7Wc5AVke2/McAMrWT+4
-         /DtkaJ4zVQshHs/utXvU0hppM4B988NMvyyIH3sk1n0Vq4mrLnt8dQ4oa8goPba7vExa
-         vx2slalXu7r2P1NFZ2LlJ1BDujQihTqO19ZhgRyF1Vb6ZVovAFIEI6Ujb6w+vQBiKb2Z
-         urt5JNTo3bq83k1jYouWXynVOT80QpAKIYfO4qigVB7bRH8siqUZLzd3wXljoqbGC3R7
-         aL43JH45KlCDdUmPkbCb2oNJ4Ea3wLh1ubtIOAj/QGX/sNXtlNGZd5JADjXRL/Thgpe9
-         23CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691141359; x=1691746159;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dnn3YjqK0gYS2d3cBmIF54I2GW/nHeks1WnBWbPsCqA=;
-        b=SMO+twlpfjwLoFyX0eGd0cjLQhk1Ipn/PD9H8zkZW4kFmNnYl0fR0W14ZY8L+Dfx+n
-         M1DZUwZOR6IUaPwygpYjXi4xmZKYVOB/PNmbek3IzS+QY99A6Bm3OK5QQFUiEVUMIbVw
-         /KaIDuLBGZ14ud/AOvKQqMNKWBKVH2u62rVqbnj286qXGzpSskcRisZOdh0WcgDLf6Oi
-         nKM/NemfreMakg67DV801Esm0bi2xVpjhLhTCwOMNVnvgJfVMQnAudSEneJlR5TXIwwn
-         3oKw12Q7PG33tVD+jlNLbW811X6Jjw0s5TrtLFx/E84WPTD1xfSbEgQLuUCCmfnjXD0k
-         I2LQ==
-X-Gm-Message-State: AOJu0YyK93eOBS6M931rTGJXAiIHTyDcl1aaJfcuqvuqKE80akUYcCK0
-        XuoJVq4WsShNuNkdV7M93UVhvQ==
-X-Google-Smtp-Source: AGHT+IEHiVe4K3MqLOjm+DVCGQ3jTlV9XKFXZSedQKFKvv1j9d815up6QRwY2QCphNtBD8WAdX0iUw==
-X-Received: by 2002:a05:651c:102a:b0:2b6:fc60:776f with SMTP id w10-20020a05651c102a00b002b6fc60776fmr972258ljm.30.1691141359043;
-        Fri, 04 Aug 2023 02:29:19 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id b13-20020a05600c11cd00b003fba6709c68sm1877070wmi.47.2023.08.04.02.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 02:29:18 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 12:29:15 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Rob Clark <robdclark@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Rob Clark <robdclark@chromium.org>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v3 4/9] PM / QoS: Decouple request alloc from
- dev_pm_qos_mtx
-Message-ID: <1085ed08-ac8f-4847-b232-0dcea6a61d77@kadam.mountain>
+        with ESMTP id S230505AbjHDJwR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 05:52:17 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A074EA9;
+        Fri,  4 Aug 2023 02:52:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E0F0113E;
+        Fri,  4 Aug 2023 02:52:58 -0700 (PDT)
+Received: from bogus (unknown [10.57.96.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 756D23F6C4;
+        Fri,  4 Aug 2023 02:52:03 -0700 (PDT)
+Date:   Fri, 4 Aug 2023 10:51:27 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     soc@kernel.org, Patrice Chotard <patrice.chotard@foss.st.com>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sh iraz Has him <shiraz.linux.kernel@gmail.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jay Fang <f.fangjian@huawei.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-rockchip@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-pm@vger.kernel.org,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH v2 17/23] firmware: Explicitly include correct DT includes
+Message-ID: <20230804095127.w74m6aphiwkaqlim@bogus>
+References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org>
+ <20230803-dt-header-cleanups-for-soc-v2-17-d8de2cc88bff@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230803220202.78036-5-robdclark@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-17-d8de2cc88bff@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,88 +92,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rob,
+On Thu, Aug 03, 2023 at 04:42:57PM -0600, Rob Herring wrote:
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+> 
+> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/firmware/arm_scmi/driver.c | 4 ++--
+>  drivers/firmware/scpi_pm_domain.c  | 3 ++-
 
-kernel test robot noticed the following build warnings:
+(For SCMI changes)
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Clark/PM-devfreq-Drop-unneed-locking-to-appease-lockdep/20230804-060505
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230803220202.78036-5-robdclark%40gmail.com
-patch subject: [PATCH v3 4/9] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
-config: i386-randconfig-m021-20230730 (https://download.01.org/0day-ci/archive/20230804/202308041725.Npwswh0L-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230804/202308041725.Npwswh0L-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202308041725.Npwswh0L-lkp@intel.com/
-
-smatch warnings:
-drivers/base/power/qos.c:973 dev_pm_qos_update_user_latency_tolerance() warn: possible memory leak of 'req'
-
-vim +/req +973 drivers/base/power/qos.c
-
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  923  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  924  {
-b5ac35ff4296f7 Rob Clark         2023-08-03  925  	struct dev_pm_qos_request *req = NULL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  926  	int ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  927  
-211fb32e3a0547 Rob Clark         2023-08-03  928  	ret = dev_pm_qos_constraints_ensure_allocated(dev);
-211fb32e3a0547 Rob Clark         2023-08-03  929  	if (ret)
-211fb32e3a0547 Rob Clark         2023-08-03  930  		return ret;
-211fb32e3a0547 Rob Clark         2023-08-03  931  
-b5ac35ff4296f7 Rob Clark         2023-08-03  932  	if (!dev->power.qos->latency_tolerance_req)
-b5ac35ff4296f7 Rob Clark         2023-08-03  933  		req = kzalloc(sizeof(*req), GFP_KERNEL);
-b5ac35ff4296f7 Rob Clark         2023-08-03  934  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  935  	mutex_lock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  936  
-211fb32e3a0547 Rob Clark         2023-08-03  937  	if (!dev->power.qos->latency_tolerance_req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  938  		if (val < 0) {
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  939  			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  940  				ret = 0;
-80a6f7c79b7822 Andrew Lutomirski 2016-11-29  941  			else
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  942  				ret = -EINVAL;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  943  			goto out;
-
-kfree(req);?
-
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  944  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  945  		if (!req) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  946  			ret = -ENOMEM;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  947  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  948  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  949  		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  950  		if (ret < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  951  			kfree(req);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  952  			goto out;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  953  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  954  		dev->power.qos->latency_tolerance_req = req;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  955  	} else {
-b5ac35ff4296f7 Rob Clark         2023-08-03  956  		/*
-b5ac35ff4296f7 Rob Clark         2023-08-03  957  		 * If we raced with another thread to allocate the request,
-b5ac35ff4296f7 Rob Clark         2023-08-03  958  		 * simply free the redundant allocation and move on.
-b5ac35ff4296f7 Rob Clark         2023-08-03  959  		 */
-b5ac35ff4296f7 Rob Clark         2023-08-03  960  		if (req)
-b5ac35ff4296f7 Rob Clark         2023-08-03  961  			kfree(req);
-b5ac35ff4296f7 Rob Clark         2023-08-03  962  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  963  		if (val < 0) {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  964  			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  965  			ret = 0;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  966  		} else {
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  967  			ret = __dev_pm_qos_update_request(dev->power.qos->latency_tolerance_req, val);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  968  		}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  969  	}
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  970  
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  971   out:
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  972  	mutex_unlock(&dev_pm_qos_mtx);
-2d984ad132a87c Rafael J. Wysocki 2014-02-11 @973  	return ret;
-2d984ad132a87c Rafael J. Wysocki 2014-02-11  974  }
+Acked-by:  Sudeep Holla <sudeep.holla@arm.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+Regards,
+Sudeep
