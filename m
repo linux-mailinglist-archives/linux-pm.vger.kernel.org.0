@@ -2,66 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7C1770BEB
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Aug 2023 00:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 222C3770C7F
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Aug 2023 01:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbjHDWZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Aug 2023 18:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
+        id S229799AbjHDXq1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 19:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjHDWZG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 18:25:06 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10E1171B
-        for <linux-pm@vger.kernel.org>; Fri,  4 Aug 2023 15:24:57 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-4036bd4fff1so44141cf.0
-        for <linux-pm@vger.kernel.org>; Fri, 04 Aug 2023 15:24:57 -0700 (PDT)
+        with ESMTP id S229770AbjHDXq0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 19:46:26 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8DE3AAF
+        for <linux-pm@vger.kernel.org>; Fri,  4 Aug 2023 16:46:25 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b703a0453fso41747321fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 04 Aug 2023 16:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691187896; x=1691792696;
+        d=google.com; s=20221208; t=1691192783; x=1691797583;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JEVUnug0XTdb4dPdMLjEF/ofGP5YYyWfdy3u/O8Wzf8=;
-        b=OMMHUVLRbKYAV066vqx5jT8L+xC5Q4BnwXT0BnT58qcpn1vDTjWKF7OPozJ+9IH+Uj
-         GOltXB0xwpyEq0VpObguEutLDdep7KaPWC5EU2822yq2sfivcMxtycv4UtbxOQ7UdvfD
-         XePU+sP2VboURrUU+ZV5hH4eoBvQ3rHLPtLKFVeQZ2ZNUxbLifds+ejWWd7fJhYWCHWB
-         pBkSCk0Jch5aTb0YfEKVmxo21i/8rVP13KgEe/p9s5Op8i0LI0WizzqaceCjxd2WOqrI
-         OgFGPZhTrkeSwCqsGFjo8Qf5spClfVaRNJuYaQjRtCX4xNlPNivxQ/5m0poCXrElXfAO
-         dnag==
+        bh=Sb+4pCllmJJ7rjBv2mlDr8tgkSUYIc/QTdbIJT7j/YQ=;
+        b=PzCd8T7aoqQy5P9TsCJNsqS5TmAI12zcYzAltIgqkJ1wk6Rv2n29yBWb7SKQzTEOMg
+         klv4p+o+1Uus8kYzKq7zpJ2U+2ZinK/a7BkZhA2stFroz2FAT6ZODN41FKNIVAaS6xGL
+         FppB/dRYHRCw+j7igA6DnbO1WwSprtAs04KtJV0j1UCis4Wf3A+65l56iwBI4J37MUcf
+         +MH83HnxPusi8yR9PBvZZ78W+wmHceMd2R31GdwfGGMH8cWQ0Y21Hx53NUCfuJ/U8pQb
+         4bAaUKF/ZKcZwR8D1M4q72z/kQbEkhdeYx4m6RFEzKPZf1DzK9nP7OiGpsajImLtLY8F
+         UurQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691187896; x=1691792696;
+        d=1e100.net; s=20221208; t=1691192783; x=1691797583;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JEVUnug0XTdb4dPdMLjEF/ofGP5YYyWfdy3u/O8Wzf8=;
-        b=EKj5frOcPMJrSkniVduwmd9PSx3GtQ6ETWqsUhOkTIao/gBKwg5eLk+w6fIOtzfkhA
-         1SFaE6u04Mg6Lu507s4mK9vBQQo1qBy/5OupZ3uD39640qzzciJ4wxmbG2nWU/4WGvIV
-         j3crxvouBHItIWoqRipmEFYx/ruIHQJr3drxzWvpTH6PLYK+1OxSHa4XHVm3TjSKhEBo
-         NLUWNUJNbjOFZDeSs3VFkdQswc3F88uf/3nnYpgmbLhJ1NN52zm22Gdhp9wUqg16ulEc
-         8U/ClYd9g62TyU0owT3wgo29DnbXro6B5ypLDKahEq3XC0A41q1mnndB+bgbfhHu/8OP
-         W38g==
-X-Gm-Message-State: AOJu0YxP8Lxu1f7Fwk+dYdEH+IQntqInw0WX21g8I7tuGUVvNjryaR/M
-        yn4jVVCMBgH9NfE3rrEw3sFzrnyhbhmn1dEtMl0aDw==
-X-Google-Smtp-Source: AGHT+IGDwaOMDbEU32t+nK8Xx4mPpJHQEU1H18a76GaH12UIHXJE9DQYzvuV2ACNipagM4y0ilAvZqOG+1tmYX2LuSQ=
-X-Received: by 2002:a05:622a:1983:b0:3f6:97b4:1a4d with SMTP id
- u3-20020a05622a198300b003f697b41a4dmr38444qtc.23.1691187896436; Fri, 04 Aug
- 2023 15:24:56 -0700 (PDT)
+        bh=Sb+4pCllmJJ7rjBv2mlDr8tgkSUYIc/QTdbIJT7j/YQ=;
+        b=QJkPT+zhvaV0cgDfqf+PkGXqwlzd68bWjS1B80nHokKND1i2iyyi4yQy7lDeUz30Q/
+         y5ECF4ZXv4jLnVkEn1Iv6M2w7bDd1wzY3WsdkDk7EOu3I2SlcCXw/77Px30mULtOulIe
+         AXxtAqSdUr+9eE8lkKmLdYnvg42qXWHnYeBiuf3HeTNB8KNn81h/UgsL9ubfhjexSbz1
+         9sh276sGRrsojoY8POJWo4/T4PLT8G6fUPtJSXQNEjScH+yHt/UjvOQ+erADekMkaf2w
+         Gn1Gk3YaX/9E+/VGchEqYDORISgJBdG2WZHrlVN3GrzgxAMGTXTglB+AvURE8W5kUXFx
+         gfJw==
+X-Gm-Message-State: AOJu0YyODOjXyOhAqnDWKlvvJwXxhpIZigaFDPpMSW2TdM4C1hm80yTD
+        USMe4igp/n+0IQiXPAjkPTO1g6JiOo8ewzmlv+H85w==
+X-Google-Smtp-Source: AGHT+IF7Xj9hVx7e2cSxvhdM67SjQGRQCW8amISJQSkk0Sab0lW07zShtf4Zr8t2PohrDE+oAfoosrldACSQCmzw4aQ=
+X-Received: by 2002:a2e:8e93:0:b0:2b9:412a:111d with SMTP id
+ z19-20020a2e8e93000000b002b9412a111dmr2610679ljk.42.1691192783428; Fri, 04
+ Aug 2023 16:46:23 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230731174613.4133167-1-davidai@google.com> <20230731174613.4133167-3-davidai@google.com>
- <20230801093620.ggz25g3faxycp44q@vireshk-i7> <CAGETcx-Y2MONWPEWYHXsWtBxuFQP51wTCS30wJt+NYKD969BuA@mail.gmail.com>
- <20230803055157.6buxd5lcxjo4wrbk@vireshk-i7>
-In-Reply-To: <20230803055157.6buxd5lcxjo4wrbk@vireshk-i7>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 4 Aug 2023 15:24:20 -0700
-Message-ID: <CAGETcx9BNQmV6eJDKBMxpU7VZeDh7SYHrRNH5g1TCFrY9cPBUA@mail.gmail.com>
+ <80f47262-9354-472f-8122-5ae262c0a46d@quicinc.com>
+In-Reply-To: <80f47262-9354-472f-8122-5ae262c0a46d@quicinc.com>
+From:   David Dai <davidai@google.com>
+Date:   Fri, 4 Aug 2023 16:46:11 -0700
+Message-ID: <CABN1KCKUt3GN=LqF9AK3Dc+4x98Asj-wpW4UNYsfjRz4Di8N5Q@mail.gmail.com>
 Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
         Quentin Perret <qperret@google.com>,
         Masami Hiramatsu <mhiramat@google.com>,
         Will Deacon <will@kernel.org>,
@@ -70,7 +70,6 @@ Cc:     David Dai <davidai@google.com>,
         Marc Zyngier <maz@kernel.org>,
         Oliver Upton <oliver.upton@linux.dev>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
         Gupta Pankaj <pankaj.gupta@amd.com>,
         Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
@@ -80,41 +79,182 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 2, 2023 at 10:52=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> On 02-08-23, 15:16, Saravana Kannan wrote:
-> > This is mainly an optimization to reduce the latency of the "frequency
-> > change" which has a huge impact on the performance (as can be seen
-> > from the numbers in the cover letter).
-> >
-> > Setting this flag means that the vCPU thread triggering the MMIO
-> > handling (on the host side) is the thread on which the host needs to
-> > apply any uclamp settings. So this avoids the VMM having to look up
-> > the right vCPU thread that corresponds to this CPU, and any
-> > permissions issues wrt setting another threads uclamp, etc. This
-> > becomes even more important if/when BPF support is added for handling
-> > simple MMIO read/writes. Will Deacon has been working on the eBPF
-> > part[1] and IIUC, not setting this flag adds a lot of extra overhead
-> > on the BPF side.
-> >
-> > So, yeah, this flag is very helpful wrt reducing latency/simplifying
-> > host side implementation and that's why we want it here.
-> >
-> > [1] - https://kvm-forum.qemu.org/2023/talk/AZKC77/
->
-> Would be good to have a (big) comment in the code explaining that as
-> it isn't obvious. Thanks.
+Hi Pavan,
 
-Will do.
+Thanks for reviewing!
+
+On Wed, Aug 2, 2023 at 9:18=E2=80=AFPM Pavan Kondeti <quic_pkondeti@quicinc=
+.com> wrote:
+>
+> On Mon, Jul 31, 2023 at 10:46:09AM -0700, David Dai wrote:
+> > Introduce a virtualized cpufreq driver for guest kernels to improve
+> > performance and power of workloads within VMs.
+> >
+> > This driver does two main things:
+> >
+> > 1. Sends the frequency of vCPUs as a hint to the host. The host uses th=
+e
+> > hint to schedule the vCPU threads and decide physical CPU frequency.
+> >
+> > 2. If a VM does not support a virtualized FIE(like AMUs), it queries th=
+e
+> > host CPU frequency by reading a MMIO region of a virtual cpufreq device
+> > to update the guest's frequency scaling factor periodically. This enabl=
+es
+> > accurate Per-Entity Load Tracking for tasks running in the guest.
+> >
+> > Co-developed-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: David Dai <davidai@google.com>
+>
+> [...]
+>
+> > +static void virt_scale_freq_tick(void)
+> > +{
+> > +     struct cpufreq_policy *policy =3D cpufreq_cpu_get(smp_processor_i=
+d());
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +     u32 max_freq =3D (u32)policy->cpuinfo.max_freq;
+> > +     u64 cur_freq;
+> > +     u64 scale;
+> > +
+> > +     cpufreq_cpu_put(policy);
+> > +
+> > +     cur_freq =3D (u64)data->ops->get_freq(policy);
+> > +     cur_freq <<=3D SCHED_CAPACITY_SHIFT;
+> > +     scale =3D div_u64(cur_freq, max_freq);
+> > +
+> > +     this_cpu_write(arch_freq_scale, (unsigned long)scale);
+> > +}
+> > +
+>
+> We expect the host to provide the frequency in kHz, can you please add a
+> comment about it. It is not very obvious when you look at the
+> REG_CUR_FREQ_OFFSET register name.
+
+I=E2=80=99ll include a KHZ in the offset names.
+
+>
+> > +static struct scale_freq_data virt_sfd =3D {
+> > +     .source =3D SCALE_FREQ_SOURCE_VIRT,
+> > +     .set_freq_scale =3D virt_scale_freq_tick,
+> > +};
+> > +
+> > +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *polic=
+y)
+> > +{
+> > +     struct virt_cpufreq_drv_data *data =3D policy->driver_data;
+> > +     /*
+> > +      * Use cached frequency to avoid rounding to freq table entries
+> > +      * and undo 25% frequency boost applied by schedutil.
+> > +      */
+> > +     u32 freq =3D mult_frac(policy->cached_target_freq, 80, 100);
+> > +
+> > +     data->ops->set_freq(policy, freq);
+> > +     return 0;
+> > +}
+>
+> Why do we undo the frequency boost? A governor may apply other boosts
+> like RT (uclamp), iowait. It is not clear why we need to worry about
+> governor policies here.
+
+See Saravana=E2=80=99s response to Quentin for more details, but in short,
+we=E2=80=99ll remove this particular snippet in the driver.
+
+>
+> > +
+> > +static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *po=
+licy,
+> > +             unsigned int target_freq)
+> > +{
+> > +     virt_cpufreq_set_perf(policy);
+> > +     return target_freq;
+> > +}
+> > +
+> > +static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
+> > +             unsigned int index)
+> > +{
+> > +     return virt_cpufreq_set_perf(policy);
+> > +}
+> > +
+> > +static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> > +{
+> > +     struct virt_cpufreq_drv_data *drv_data =3D cpufreq_get_driver_dat=
+a();
+> > +     struct cpufreq_frequency_table *table;
+> > +     struct device *cpu_dev;
+> > +     int ret;
+> > +
+> > +     cpu_dev =3D get_cpu_device(policy->cpu);
+> > +     if (!cpu_dev)
+> > +             return -ENODEV;
+> > +
+> > +     ret =3D dev_pm_opp_of_add_table(cpu_dev);
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     ret =3D dev_pm_opp_get_opp_count(cpu_dev);
+> > +     if (ret <=3D 0) {
+> > +             dev_err(cpu_dev, "OPP table can't be empty\n");
+> > +             return -ENODEV;
+> > +     }
+> > +
+> > +     ret =3D dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
+> > +     if (ret) {
+> > +             dev_err(cpu_dev, "failed to init cpufreq table: %d\n", re=
+t);
+> > +             return ret;
+> > +     }
+> > +
+> > +     policy->freq_table =3D table;
+> > +     policy->dvfs_possible_from_any_cpu =3D false;
+> > +     policy->fast_switch_possible =3D true;
+> > +     policy->driver_data =3D drv_data;
+> > +
+> > +     /*
+> > +      * Only takes effect if another FIE source such as AMUs
+> > +      * have not been registered.
+> > +      */
+> > +     topology_set_scale_freq_source(&virt_sfd, policy->cpus);
+> > +
+> > +     return 0;
+> > +
+> > +}
+> > +
+>
+> Do we need to register as FIE source even with the below commit? By
+> registering as a source, we are not supplying any accurate metric. We
+> still fallback on the same source that cpufreq implements it.
+
+The arch_set_freq_scale() done at cpufreq driver=E2=80=99s frequency update=
+s
+at cpufreq_freq_transition_end() and cpufreq_driver_fast_switch() only
+represent the guest=E2=80=99s frequency request. However, this does not
+accurately represent the physical CPU=E2=80=99s frequency that the vCPU is
+running on. E.g. There may be other processes sharing the same
+physical CPU that results in a much higher CPU frequency than what=E2=80=99=
+s
+requested by the vCPU.
 
 Thanks,
-Saravana
+David
+
+>
+> 874f63531064 ("cpufreq: report whether cpufreq supports Frequency
+> Invariance (FI)")
+>
+> Thanks,
+> Pavan
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
