@@ -2,73 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E31770227
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 15:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EDA77033F
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 16:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbjHDNrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Aug 2023 09:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        id S230132AbjHDOiS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 10:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjHDNrq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 09:47:46 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E191BF0
-        for <linux-pm@vger.kernel.org>; Fri,  4 Aug 2023 06:47:42 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 5b1f17b1804b1-3fe4ad22eb0so4209855e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 04 Aug 2023 06:47:42 -0700 (PDT)
+        with ESMTP id S229448AbjHDOiR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 10:38:17 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8903D46B2;
+        Fri,  4 Aug 2023 07:38:16 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fbea147034so20705885e9.0;
+        Fri, 04 Aug 2023 07:38:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1691156861; x=1691761661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WvbyZl7o3izzZQLp7Y0b9RIMj8QAxcAwWaunav84SDw=;
-        b=FbpksK0asFziyiy+hK5v4TcQeeIaIR1NUXNvp0T8YwIEs6vbTIzOOo5KfzF6tSkBgO
-         +OdFIboek/+rGTvwJN79ftPr13X8lXu6aHUbX1g+9fbgNpR9v7UIn2dpeeOfg+CW28K6
-         IXUq18aclWGyg78WIg5kIQmrgzHvo//yDiiOnUyM5YsU0X/AYIQ6lbBi+7LZ0qtVEZZ/
-         dpCzQLrCgHa7TCAU5XGJIgQQf/npJHeGH/CIU1W/Np8jwk5rYm8oNkXIQLm81oc/WcY9
-         KTwJHeXxbI4QdnwLIUNXypwa12L+YonKHEMlefiMtlgb9HuxhmpKQzLV5h27Mk+Qarn3
-         tY5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691156861; x=1691761661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1691159895; x=1691764695;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WvbyZl7o3izzZQLp7Y0b9RIMj8QAxcAwWaunav84SDw=;
-        b=JQuNs9JosJ1N09WlUINfINWEoWiDUBDj2gLo33MCYuqmj5S2d7aSHHsMwShBn6j8Li
-         neGNXeaj2yNqzyPxQVH4dTiBA93Rri5tmNMkmOG9IIdHtB4jZx8a14LUhzlQxCdu2TpD
-         PQ2B86C4X/iPa3xvaiXET+FvCW+BdVMKw3n7lUWpS+YZzcRwB5MgJdgS/k2wF1wGmwNc
-         fo1TKDGfkc3pGzW+HFMowxVZeB80oF1RmZYe9G0ezCSDZWK+gZcarqmYOIDP6LQQW5YO
-         +lSeeoMJnPD5KMmG3oDtCsX0IbV+cxb1a2bjrs/I4I0xjzDhewsqaVr6rx+ri4f1FSKo
-         87XA==
-X-Gm-Message-State: AOJu0Yzs9tf2BTzC3UbW5MSi72hg/feJumKbkNnY0dx3WdNkkzTEHlI1
-        NT6QnS7omAMGfVh4boztiMZkbA==
-X-Google-Smtp-Source: AGHT+IGtmkXCcqnZuQaRYwvop1xV5GK+cjBPXEH1CvswNseUlrG58a4yXauQA15UyMe4/lX00LOAFQ==
-X-Received: by 2002:a5d:4a4a:0:b0:317:6175:95fd with SMTP id v10-20020a5d4a4a000000b00317617595fdmr1319065wrs.43.1691156861110;
-        Fri, 04 Aug 2023 06:47:41 -0700 (PDT)
-Received: from localhost ([212.23.236.67])
-        by smtp.gmail.com with ESMTPSA id q14-20020adfcd8e000000b00314329f7d8asm2594246wrj.29.2023.08.04.06.47.40
+        bh=BM5R+rkSeL9WIp21l2emysOOucIRf/CjafaqigjE3ns=;
+        b=P52o47d9dHG1aUMZwk0pd23gUMU1gSEcAaorjtm0PUBSc4CTskirX886xdzRJezLg6
+         M4MtQIA6juxB9+sFPFH3EPWi9hMPTVDd1wwyWh3PmXuu1po0m+repmiBQFo72mEPoUaF
+         CKzmuVyB06487jxO3URnO0OYZ2cjQP/ZYPY+Ly4YmQO1h8Ul1MwxJiS6CzfTEpBkUg4D
+         GvHC2AtRasiPCNfOkLFtYCr2iYrhUrXdaNuwr9xpfY5akGkjLPDtWAHv3doGspA8ZqzA
+         BVho52Djxf/ClpbDDROl0ciKQJHwoe5ELFkv+xQsoTFDKnytt8GlFd+Ntd6Geakv25p/
+         LA8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691159895; x=1691764695;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BM5R+rkSeL9WIp21l2emysOOucIRf/CjafaqigjE3ns=;
+        b=RzuENfrf4WDdQiNx2JfdKQd4j0iAj6GskMAll5mFiqF2hbDgW+8Jgh+tvXEZPF4dq3
+         agFe/M4H1nG+elZoO2ZEI/2vXTaKY9YmuG5STIU2XxscYTKOveUkDbpn3kl6xuutg/s/
+         30zmgm7LWV5AiZ1zvfKZCXC5rApMaiSokthK2179175DZMG9gInvvPPQ1jyTBRzYJ/We
+         1CVyRyXUq1i8C2yyc+0zUq4Vk7RFY53zuQv0XP7OGiAWCDKefzTwK8YZoKQpLby1tMOf
+         pvRQWabiuVDvdX1I9cj9vHlL1wqWgfrp+4GIeH1qaOCeyB6cweBuo8dBnZgVxPKPo36N
+         WeIg==
+X-Gm-Message-State: AOJu0YyKk+vedSQRcxOEDUOWb0772KeJ6HvdG9HbfG6ifgdoj0XGfkOs
+        g8iueHMP0px2V1qj3WrVQwk=
+X-Google-Smtp-Source: AGHT+IFR8gDqjRYqyXRMOxF0JJDJ3mrxElW64dDSszEM8SNr/lPevhKIntH0L12mO9e2OcoWVt3KOw==
+X-Received: by 2002:a1c:7c05:0:b0:3fb:e4ce:cc65 with SMTP id x5-20020a1c7c05000000b003fbe4cecc65mr1591896wmc.25.1691159894687;
+        Fri, 04 Aug 2023 07:38:14 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003fba92fad35sm6833727wml.26.2023.08.04.07.38.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 06:47:40 -0700 (PDT)
-Date:   Fri, 4 Aug 2023 15:47:39 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc:     nicolas.ferre@microchip.com, conor.dooley@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, sre@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, alsa-devel@alsa-project.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: update Claudiu Beznea's email address
-Message-ID: <ZM0Be8S8zII8wV4l@nanopsycho>
-References: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
+        Fri, 04 Aug 2023 07:38:14 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     soc@kernel.org, Patrice Chotard <patrice.chotard@foss.st.com>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Has him <shiraz.linux.kernel@gmail.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jay Fang <f.fangjian@huawei.com>, Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-rockchip@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 21/23] soc: sunxi: Explicitly include correct DT includes
+Date:   Fri, 04 Aug 2023 16:38:11 +0200
+Message-ID: <2690872.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-21-d8de2cc88bff@kernel.org>
+References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org>
+ <20230803-dt-header-cleanups-for-soc-v2-21-d8de2cc88bff@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,19 +121,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fri, Aug 04, 2023 at 07:00:07AM CEST, claudiu.beznea@tuxon.dev wrote:
->Update MAINTAINERS entries with a valid email address as the Microchip
->one is no longer valid.
->
->Acked-by: Conor Dooley <conor.dooley@microchip.com>
->Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
->---
->
->Changes in v2:
->- collected tags
->- extended the recipients list to include individual subsystem
->  maintainers and lists instead using only linux-kernel@vger.kernel.org
->  as suggested initially by get_maintainers.pl
+Dne petek, 04. avgust 2023 ob 00:43:01 CEST je Rob Herring napisal(a):
+> The DT of_device.h and of_platform.h date back to the separate
+> of_platform_bus_type before it as merged into the regular platform bus.
+> As part of that merge prepping Arm DT support 13 years ago, they
+> "temporarily" include each other. They also include platform_device.h
+> and of.h. As a result, there's a pretty much random mix of those include
+> files used throughout the tree. In order to detangle these headers and
+> replace the implicit includes with struct declarations, users need to
+> explicitly include the correct includes.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Consider adding entry in .mailmap as well please.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Should I take this through sunxi tree?
+
+Best regards,
+Jernej
+
+> ---
+> v2:
+>  - Drop sun20i-ppu.c which moved
+> ---
+>  drivers/soc/sunxi/sunxi_sram.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
+> index 4c4864cd2342..4458b2e0562b 100644
+> --- a/drivers/soc/sunxi/sunxi_sram.c
+> +++ b/drivers/soc/sunxi/sunxi_sram.c
+> @@ -15,7 +15,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/of_address.h>
+> -#include <linux/of_device.h>
+> +#include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+
+
+
+
