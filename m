@@ -2,172 +2,231 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1E4F76FF48
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 13:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7DAE76FFB3
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Aug 2023 13:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjHDLOc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 4 Aug 2023 07:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S229665AbjHDLu7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Aug 2023 07:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjHDLOa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 07:14:30 -0400
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3291128;
-        Fri,  4 Aug 2023 04:14:27 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-56c9237e0ffso328094eaf.0;
-        Fri, 04 Aug 2023 04:14:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691147666; x=1691752466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2FtZw5JD0Id14VDUR651hXWOBYEpEEnj1729H5cCCn8=;
-        b=Nu8+eB+FFHJ2TCwF4llePROgNYd9gNlzZczzmPpYxt0bwJZH8BIg65JBsyaRl+WYh5
-         jIYnYClLppIcjTiLTHABFi+cWSwrgTuAraS5BfSB66LTcBp8KFfWNp1lO0+rFYFJDH5e
-         I2kkBT8yFlVAxclYmjFJmjDFSTygeajepMKNksniGA7dENF3oSOW8oFxh/zNvxxmZrcm
-         8UJ2z+oHuwybLmZSRYaiz4Pxk25tQTw9iPjF9PqJnZ3kkF+7kS34LBnWSpRsZhDvDQmj
-         +g+0rKBmEh+wT3vpE644hQpVPVC36juZYMZtH9tXdDr2BhXZOdmvRSetpoMrgRn/JXTV
-         63Zg==
-X-Gm-Message-State: ABy/qLaZhOrzR6J4Nzzpb5mzCgAh0oUO5X6AZP3rVXQNDl/SDnBZMJ3D
-        8qr5B6oh242NSCtsMNPt0Vd0soXfgt/YxJpPfRE=
-X-Google-Smtp-Source: APBJJlEARgqCNvSy/FCvSyr6voUjpqqIE393Ojf6di9EGjFZFmV36adcfRjip4L4fyZ9t2OS7a3IlHsiL6x07n07ZsY=
-X-Received: by 2002:a05:6820:2108:b0:56c:5e21:c72d with SMTP id
- cd8-20020a056820210800b0056c5e21c72dmr16406902oob.1.1691147665667; Fri, 04
- Aug 2023 04:14:25 -0700 (PDT)
+        with ESMTP id S229538AbjHDLu6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Aug 2023 07:50:58 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091B0126;
+        Fri,  4 Aug 2023 04:50:56 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 374BoiNI071530;
+        Fri, 4 Aug 2023 06:50:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691149844;
+        bh=odtYzHDq0zirS7zeE2CRp3Jz/F3OYtBxsdZ8qAzg440=;
+        h=From:To:CC:Subject:Date;
+        b=Ue7e/GoTb3kAbOvLmNuyYZhqtzkrfrF2EtDJG5qtezqiNvEH9vVHgFW+oAk4FHa18
+         tupQdYRdSbfMWa5w0XLzuF+f3awCdhjsEhajI5+V3s00/p9GtVpN0UcSkPp2pQ8P5g
+         mu5NloHEkpiqZEBVfClk/Wb9sbElmcUHAduMIUCA=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 374BoiWP122800
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 4 Aug 2023 06:50:44 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 4
+ Aug 2023 06:50:44 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 4 Aug 2023 06:50:44 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 374BohSW004640;
+        Fri, 4 Aug 2023 06:50:44 -0500
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-omap@vger.kernel.org>, Kevin Hilman <khilman@baylibre.com>,
+        Vignesh R <vigneshr@ti.com>, Dhruva Gole <d-gole@ti.com>,
+        Andrew Davis <afd@ti.com>, Vibhore Vardhan <vibhore@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: [PATCH V7 0/4] firmware: ti_sci: Introduce system suspend support
+Date:   Fri, 4 Aug 2023 17:20:33 +0530
+Message-ID: <20230804115037.754994-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <13318886.uLZWGnKmhe@kreacher> <12254967.O9o76ZdvQC@kreacher>
- <4501957.LvFx2qVVIh@kreacher> <2d0315d4-35b4-84db-4dcb-c9528abad825@linaro.org>
- <CAJZ5v0iQDOsTOqWFvbf5nom-b3-pbHPRzJQC-1DM9eoh=0AKjg@mail.gmail.com>
- <eb279cf1-0605-3b87-5cb6-241a91977455@linaro.org> <CAJZ5v0i48=oawDJHoaHhiZRaO_CJokKsOHyNvu2v4PUbS6CH_Q@mail.gmail.com>
- <f8029547-6851-7e0c-00e6-4963ccbc2702@linaro.org> <CAJZ5v0gDQMNSeEU1J7ooJk4Ec=Hw_JuZAtL5k215v7Lf67iTgg@mail.gmail.com>
- <5c93d78d-835e-c740-280b-9d76456aaeda@linaro.org> <CAJZ5v0gtkZTwt-qP0uwvTJNx8cpO1o1esmW9BfVxB67X3Yt++w@mail.gmail.com>
- <b4e474f9-79e8-534b-509e-12eb5995fa0c@linaro.org> <CAJZ5v0iH+qf6eBuZASPKyA6rT8O6FiA7516MiYYUx6Uc+wR4Ow@mail.gmail.com>
- <03643466-2f5c-2d68-424d-19836dcceb78@linaro.org>
-In-Reply-To: <03643466-2f5c-2d68-424d-19836dcceb78@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 4 Aug 2023 13:14:14 +0200
-Message-ID: <CAJZ5v0iaUxL7W6Dj1HCz=vU5t4CAUOx0LJ6zGJ0S+Lw07nS62A@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] thermal: core: Add mechanism for connecting trips
- with driver data
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 4, 2023 at 10:17 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 03/08/2023 21:58, Rafael J. Wysocki wrote:
-> > On Thu, Aug 3, 2023 at 6:20 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 03/08/2023 16:15, Rafael J. Wysocki wrote:
-> >>> On Thu, Aug 3, 2023 at 3:06 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 02/08/2023 18:48, Rafael J. Wysocki wrote:
-> >>>>
-> >>>> [ ... ]
-> >>>>
-> >>>>>> Let me check if I can do something on top of your series to move it in
-> >>>>>> the ACPI driver.
-> >>>>>
-> >>>>> It doesn't need to be on top of my series, so if you have an idea,
-> >>>>> please just let me know what it is.
-> >>>>>
-> >>>>> It can't be entirely in the ACPI driver AFAICS, though, because
-> >>>>> trips[i] need to be modified on updates and they belong to the core.
-> >>>>> Hence, the driver needs some help from the core to get to them.  It
-> >>>>> can be something like "this is my trip tag and please give me the
-> >>>>> address of the trip matching it" or similar, but it is needed, because
-> >>>>> the driver has to assume that the trip indices used by it initially
-> >>>>> may change.
-> >>>>
-> >>>> May be I'm missing something but driver_ref does not seems to be used
-> >>>> except when assigning it, no?
-> >>>
-> >>> It is used on the other side.  That is, the value assigned to the trip
-> >>> field in it is accessed via trip_ref in the driver.
-> >>>
-> >>> The idea is that the driver puts a pointer to its local struct
-> >>> thermal_trip_ref into a struct thermal_trip and the core stores the
-> >>> address of that struct thermal_trip in there, which allows the driver
-> >>> to access the struct thermal_trip via its local struct
-> >>> thermal_trip_ref going forward.
-> >>>
-> >>> Admittedly, this is somewhat convoluted.
-> >>>
-> >>> I have an alternative approach in the works, just for illustration
-> >>> purposes if nothing else, but I have encountered a problem that I
-> >>> would like to ask you about.
-> >>>
-> >>> Namely, zone disabling is not particularly useful for preventing the
-> >>> zone from being used while the trips are updated, because it has side
-> >>> effects.  First, it triggers __thermal_zone_device_update() and a
-> >>> netlink message every time the mode changes, which can be kind of
-> >>> overcome.
-> >>
-> >> Right
-> >>
-> >>> But second, if the mode is "disabled", it does not actually
-> >>> prevent things like __thermal_zone_get_trip() from running and the
-> >>> zone lock is the only thing that can be used for that AFAICS.
-> >>   >
-> >>> So by "disabling" a thermal zone, did you mean changing its mode to
-> >>> "disabled" or something else?
-> >>
-> >> Yes, that is what I meant.
-> >>
-> >> May be the initial proposal by updating the thermal trips pointer can
-> >> solve that [1]
-> >
-> > No, it can't.  An existing trips[] table cannot be replaced with a new
-> > one with different trip indices, because those indices are already in
-> > use.  And if the indices are the same, there's no reason to replace
-> > trips.
-> >
-> >> IMO we can assume the trip point changes are very rare (if any), so
-> >> rebuilding a new trip array and update the thermal zone with the pointer
-> >> may solve the situation.
-> >>
-> >> The routine does a copy of the trips array, so it can reorder it without
-> >> impacting the array passed as a parameter. And it can take the lock.
-> >
-> > The driver can take a lock as well.  Forbidding drivers to use the
-> > zone lock is an artificial limitation without technical merit IMV.
->
-> Yes, it is technically possible to take a lock from a driver. However,
-> from a higher perspective, we have a core framework which is
-> self-contained and we have a back-end which forces us to export this lock.
->
-> Even if it is possible, it is not desirable because we break the
-> self-containment and thus that will make future changes in the core
-> framework complicated because of the interactions with back-end drivers.
+Abstract
+********
 
-So the counter argument here is that using the zone lock directly in
-the driver is the most straightforward way of addressing the use case
-at hand, which is the need to update trip points in a non-racy way.
-Everything else is more complex and the reasons for adding the extra
-complexity can be questioned.
+This series introduces necessary ti_sci driver functionality to support
+DeepSleep mode (suspend to mem) on TI K3 AM62x. DeepSleep mode is
+described in section "6.2.4.4 DeepSleep" of the AM62x Technical Reference
+Manual [0].
 
-Self-containment is nice, but in some cases it is just not worth
-enforcing it all the way through at the cost of increased code
-complexity.
+Summary
+*******
 
-Anyway, I'm going to post a new version of this patch series later
-today which uses a somewhat different approach. It is a bit more
-complex, but maybe this is fine.
+This series is a fixup and rebase of the patch series by
+Dave Gerlach [1]. It applies on top of next-20230731.
+
+The kernel triggers entry to DeepSleep mode through the mem suspend
+transition with the following:
+
+* At the bootloader stage, one is expected to package the TIFS stub
+  which then gets pulled into the Tightly coupled memory of the Device Mgr
+  R5 when it starts up. If using U-Boot, then it requires tispl.bin to
+  contain the TIFS stub. Refer to ti-u-boot patch [3] for further
+  details. The supported firmware version is from TI Processor SDK
+  >= 09.00 ie. tag 09.00.00.006 from ti-linux-firmware [4].
+
+* Use a TF-A binary that supports PSCI_SYSTEM_SUSPEND call. This causes
+  system to use PSCI system suspend as last step of mem sleep.
+
+* The firmware requires that the OS sends a TISCI_MSG_PREPARE_SLEEP
+  message in order to provide details about suspend, so we must add the
+  ability to send this message. We also add TISCI_MSG_LPM_WAKE_REASON
+  and TISCI_MSG_SET_IO_ISOLATION messages as part of a new PM ops. These
+  messages are part of the TISCI PM Low Power Mode API [2]. (Patch 2)
+
+* A memory address must be provided to the firmware using the above
+  message, which is allocated and managed by dma_alloc_attrs()
+  and friends. This memory address can be used by the firmware to
+  save necessary context at that physical location in the DDR RAM. (Patch 3)
+
+* Finally, the ti_sci driver must actually send TISCI_MSG_PREPARE_SLEEP
+  message to firmware with the above information included, which it
+  does during the driver suspend handler when PM_MEM_SUSPEND is the
+  determined state being entered. (Patch 4)
+
+It currently enables only DeepSleep mode, but even if any additional
+modes are needed to be supported in future, they would not require any
+changes to the TISCI LPM APIs [2]. The enabling of additional modes
+would be done via GenPD changes that is currently in the works.
+
+Testing:
+*******
+
+In can be tested with the following branch:
+https://github.com/DhruvaG2000/v-linux/commits/lpm-upstream-6.5
+
+Tested on SK-AM62B [6] here:
+https://gist.github.com/DhruvaG2000/8410fac048c677c40cd94f5169b5b0b4
+
+Limitations:
+************
+
+* It is critical for deepsleep to work that the bootloader has
+loaded the TIFS stub at the desired location and that the DM has copied
+it correctly into it's TCM. Linux has no way of knowing whether a valid
+FS Stub exists and has been loaded or not. The Device Manager also
+doesn't send any NACK if a proper TIFS Stub is not present to prevent
+the deepsleep somehow. This problem is somewhat addressed in this patch
+series where we check which SOCs support LPM and based on that set the
+fw_caps.
+
+* Currently, DeepSleep is only supported on SK-AM62B with DDR4.
+Boards with LPDDR part like Beagle Play and AM62x LP have a known FW issue.
+
+Base commit:
+************
+
+commit ec8939156379 (tag: next-20230731) ("Add linux-next specific files for 20230731")
+
+origin:
+linux-next      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+Changelog:
+**********
+
+v7:
+- Address Andrew's concerns on SYSFW fw_caps API
+- Remove all the unused functions and variables including
+  set_io_isolation and wake_reason calls
+- use dma_free_attrs
+- remove IO isolation related code from linux side,
+TODO: Add it in ATF enter_sleep perhaps?
+
+v6:
+- link to v6 [5]
+- Loading of FS Stub from linux no longer needed, hence drop that patch,
+- Drop 1/6 and 5/6 from the previous series [4].
+- Add system suspend resume callbacks which were removed in
+commit 9225bcdedf16297a346082e7d23b0e8434aa98ed ("firmware: ti_sci: Use
+system_state to determine polling")
+- Use IO isolation while putting the system in suspend to RAM
+
+v5:
+- Add support (patch 3) for detecting the low power modes (LPM) of the
+  FW/SoC with a recently introduced core TISCI_MSG_QUERY_FW_CAPS message.
+- Use TISCI_MSG_QUERY_FW_CAPS instead of misusing the TISCI_MSG_PREPARE_SLEEP
+  to detect the FW/SoC low power caps (patch 4).
+- Take into account the supported LPMs in ti_sci_prepare_system_suspend()
+  and handle the case when CONFIG_SUSPEND is not enabled (patch 6) that
+  was reported by Roger Quadros and LKP.
+- Pick up Rob Herring's "Reviewed-by" tag for the binding patch.
+
+v4:
+- Fix checkpacth warnings in patches 2 and 3.
+- Drop the links with anchors in patch 2.
+
+v3:
+- Fix the compile warnings on 32-bit platforms reported by the kernel
+  test robot in patches (3,5).
+- Pick up Roger's "Tested-by" tags.
+
+v2:
+- Addressed comments received for v1 series [1].
+- Updated v1 patch 5 to use pm notifier to avoid firmware loading
+  issues.
+- Dropped the reserved region requirement and allocate DMA memory
+  instead. The reserved region binding patch is also removed.
+- Introduce two more TISCI LPM messages that are supported in SysFW.
+- Fixes in error handling.
+
+References:
+***********
+
+[0] https://www.ti.com/lit/pdf/spruiv7
+[1] https://lore.kernel.org/lkml/20220421203659.27853-1-d-gerlach@ti.com
+[2] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/pm/lpm.html
+[3] https://git.ti.com/cgit/ti-u-boot/ti-u-boot/commit/?h=ti-u-boot-2023.04&id=91886b68025c7ad121e62d1fc1fa4601eeb736cd
+[4] https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/commit/?h=ti-linux-firmware-next&id=905eb58564581d951d148f45828e8c8a142a5938
+[5] https://lore.kernel.org/all/20230803064247.503036-1-d-gole@ti.com/
+[6] https://www.ti.com/tool/SK-AM62B
+
+
+Cc: Andrew Davis <afd@ti.com>
+Cc: Vibhore Vardhan <vibhore@ti.com>
+Cc: Kevin Hilman <khilman@baylibre.com>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Tony Lindgren <tony@atomide.com>
+
+Dave Gerlach (2):
+  firmware: ti_sci: Introduce Power Management Ops
+  firmware: ti_sci: Allocate memory for Low Power Modes
+
+Dhruva Gole (1):
+  firmware: ti_sci: Add system suspend call
+
+Georgi Vlaev (1):
+  firmware: ti_sci: Add support for querying the firmware caps
+
+ drivers/firmware/ti_sci.c              | 234 ++++++++++++++++++++++++-
+ drivers/firmware/ti_sci.h              |  56 +++++-
+ include/linux/soc/ti/ti_sci_protocol.h |  15 ++
+ 3 files changed, 303 insertions(+), 2 deletions(-)
+
+-- 
+2.34.1
+
