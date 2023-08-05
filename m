@@ -2,228 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350427711D0
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Aug 2023 21:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F217771253
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Aug 2023 23:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjHETim (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Aug 2023 15:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
+        id S229530AbjHEVVa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Aug 2023 17:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbjHETil (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Aug 2023 15:38:41 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C826119B5
-        for <linux-pm@vger.kernel.org>; Sat,  5 Aug 2023 12:38:38 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fbc63c2e84so32646375e9.3
-        for <linux-pm@vger.kernel.org>; Sat, 05 Aug 2023 12:38:38 -0700 (PDT)
+        with ESMTP id S229449AbjHEVV3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Aug 2023 17:21:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 313BE1732
+        for <linux-pm@vger.kernel.org>; Sat,  5 Aug 2023 14:21:26 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31751d7d96eso2553357f8f.1
+        for <linux-pm@vger.kernel.org>; Sat, 05 Aug 2023 14:21:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691264317; x=1691869117;
+        d=linaro.org; s=google; t=1691270484; x=1691875284;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=udk/H8ZgKjfvJwnE+xho4EfEOftvGT0VCYsBYpwRNHo=;
-        b=yD2hT0N3zrlPlop4QxmCW16DXc/kWC/8YNFcGOeKehecVojM3ba0Zd39mtHn989C3X
-         R7oqj1lpmK9PjbFsklJF8XvKM9o8RwvldDEqrpxtJrh3IquXPVxUqYEGuiDzMB7BhQHr
-         up6Glj+7T9fB3Pt3eOshXohaxyb02FtrVfrHOLLU5gIXEGoEjg4cC53wOPQaez0p8EDf
-         2L/1awLEnbUYyc2mft6VCHoN7EkruHhgoiWAUX9d0eVHEKjE77AIX/0pbvPjiK1JFvEj
-         365QLUclpMw2AZrOh5OHpPnyul9NRliEfYwFpGcgw/OK9XH7zq9pzgZrGfIEg0bsiRG1
-         Wjqw==
+        bh=n5OV4A0TE5pSUE8JdsBkgIy9vd1kBceO43pYJb+lKBY=;
+        b=FosvnB/7ZkxfYGRk/vYdq7jFTkOkfQOYzREjAtfRniifOq/ULeByTcWPcNwkN0Mbmw
+         jVp9jYq0PaU3u8gG/mfEuSGaoFH8uLgiXUCDqmBVjjRt+Vi9hM1QE5kZ074Bqup2FZZk
+         OrOnFkSNoQThHepiL8sOLryNFQ7qF1yYgrkHeRXF0yXKesfAyL83AfzWc4n+TNcWY33C
+         WeOVXsAgMlwwXz3y9fstzlcJNfIyZlm71NCqBSQT1h0F/xQhriN77/qRtKRKI2J2XeNR
+         hFHj3mA9y4EUE+fShijdg8Ntxi5K4wWrjK2zex5O9xVvMlS5nI2QnhxU4U+2eOCuMmLA
+         DrGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691264317; x=1691869117;
+        d=1e100.net; s=20221208; t=1691270484; x=1691875284;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=udk/H8ZgKjfvJwnE+xho4EfEOftvGT0VCYsBYpwRNHo=;
-        b=lSiYcQ2dOmlKBrKVOzc4iYOvIGN2eU3Plu0uTEkSlGLfWPFH57talZ9TYIruz+mFBF
-         M2k5LdsdQZlbqaRDiw53KfSnCKWrrmMH67/jRhzTmMSt/CkoOshwYFMTcaDGPNwbtdyR
-         HIl1bORiOCXhBqr5Fxq6JNCff1WSEDPvzRUDkWyk1nV4Pfxj5urJgvIltOsrgL9kMGXK
-         8njFvEqoR9/GqlzZLPv9G/yItuu9wzVZBRaP5WIPTWI93qxV8WVcgYFBr7higrga5LEf
-         dPPuZamARtDtkGqDfYELj+1DTarNspgM4BVX1uNn23tjt5IKvmuQu9c+KmfjPthPFqh2
-         lolg==
-X-Gm-Message-State: AOJu0Yy18CfmNDcSb7r7rtZNu17P/7loRExIxzzx5isPrxIck/9t7kGV
-        ZImnSmJ5Qdba+TTX8CEr6zUHmw==
-X-Google-Smtp-Source: AGHT+IGvrlUd0YfuF3G0qhIxdGb5wiPGOR1jc4ZfaV/DTwfKyUOEYr8f52aMWDJdfJaCv83Yo1cWYQ==
-X-Received: by 2002:a1c:4b0e:0:b0:3fb:b530:a4e4 with SMTP id y14-20020a1c4b0e000000b003fbb530a4e4mr4361705wma.8.1691264317315;
-        Sat, 05 Aug 2023 12:38:37 -0700 (PDT)
+        bh=n5OV4A0TE5pSUE8JdsBkgIy9vd1kBceO43pYJb+lKBY=;
+        b=QQjfrr4mkuh7MQ+M2CQmQSDHzXLV4iKf8zfOZPP+dESDhzbeBUNZ04ObJeW3ue24JU
+         kZVVU5AL3e4mgLnx20WhF7Y2tWlnHhJMafTMjoqfV21PDEozrNwuDjKgLVHT5LBcDQ2H
+         AgUugGONjjXWFId2zdp8LtUAcwEil0HsbFnjkmNQX/5k8jlkESXUAfB4AM3/Kthg9q4s
+         P0T2ul25Nr0Tt27czEp11E7ggxWBdaTjNZitRjCu7M+6tNIV38pvvEvBM3ajZ/zl8hDJ
+         dbqcW6RQ8MmhmdjDyF//Udbi/XvWyNlTZu7iSfNSARYkp5iJpVKm8QPjyIwzuxJgNeGl
+         iyNA==
+X-Gm-Message-State: AOJu0Yy+5rvZRpR2v4lyoYTqMIAtTm7Q0Kn3TSKusSYuAXS7BHAsFBYS
+        vy+kNyi2mkrEFYQRG9/Vxd5lkw==
+X-Google-Smtp-Source: AGHT+IGEX+lWU7YpFJLDiDTlbjFw7Vuah6n3IfZzSqIWBu3WRt6vlyJaUmhCzE06T2xfFRERL9QCiQ==
+X-Received: by 2002:adf:ff87:0:b0:30f:cf93:4bb8 with SMTP id j7-20020adfff87000000b0030fcf934bb8mr3039582wrr.57.1691270484066;
+        Sat, 05 Aug 2023 14:21:24 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.222.245])
-        by smtp.gmail.com with ESMTPSA id z12-20020a05600c220c00b003fe1ca92151sm5752252wml.26.2023.08.05.12.38.34
+        by smtp.gmail.com with ESMTPSA id k18-20020a5d66d2000000b0031417fd473csm6009607wrw.78.2023.08.05.14.21.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Aug 2023 12:38:36 -0700 (PDT)
-Message-ID: <ceddbbfb-a178-2b7e-ea17-0a37f33224ab@linaro.org>
-Date:   Sat, 5 Aug 2023 21:38:34 +0200
+        Sat, 05 Aug 2023 14:21:23 -0700 (PDT)
+Message-ID: <f393324f-c9ec-1572-fb15-1856cef9d846@linaro.org>
+Date:   Sat, 5 Aug 2023 23:21:21 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: cpufreq: add bindings for virtual
- cpufreq
+Subject: Re: [PATCH 02/53] dt-bindings: interconnect: qcom,bcm-voter: Add
+ qcom,bcm-voter-idx
 Content-Language: en-US
-To:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Saravana Kannan <saravanak@google.com>
-Cc:     Quentin Perret <qperret@google.com>,
-        Masami Hiramatsu <mhiramat@google.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Gupta Pankaj <pankaj.gupta@amd.com>,
-        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230731174613.4133167-1-davidai@google.com>
- <20230731174613.4133167-2-davidai@google.com>
+        cros-qcom-dts-watchers@chromium.org
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <20230708-topic-rpmh_icc_rsc-v1-2-b223bd2ac8dd@linaro.org>
+ <68fb8e22-dd23-d4bf-eda0-444039fd8e26@linaro.org>
+ <9201cb8d-845a-b5dc-02a5-9633572b5877@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230731174613.4133167-2-davidai@google.com>
+In-Reply-To: <9201cb8d-845a-b5dc-02a5-9633572b5877@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 31/07/2023 19:46, David Dai wrote:
-> Adding bindings to represent a virtual cpufreq device.
+On 15/07/2023 17:09, Konrad Dybcio wrote:
+> On 12.07.2023 22:43, Krzysztof Kozlowski wrote:
+>> On 11/07/2023 14:18, Konrad Dybcio wrote:
+>>> In order to (at least partially) untangle the global BCM voter lookup
+>>> (as again, they are shared throughout the entire system and not bound to
+>>> individual buses/providers), introduce a new required property to assign
+>>> a unique identifier to each BCM voter.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>  .../devicetree/bindings/interconnect/qcom,bcm-voter.yaml       | 10 ++++++++++
+>>>  1 file changed, 10 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>>> index eec987640b37..09321c1918bf 100644
+>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,bcm-voter.yaml
+>>> @@ -38,8 +38,14 @@ properties:
+>>>  
+>>>      $ref: /schemas/types.yaml#/definitions/uint32
+>>>  
+>>> +  qcom,bcm-voter-idx:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +    description:
+>>> +      A globally unique predefined discrimnator, identifying each BCM voter.
+>>
+>> s/each/this/ ?
+> Right, this makes more sense
 > 
-> Virtual machines may expose MMIO regions for a virtual cpufreq device for
-> guests to read frequency information or to request frequency selection. The
-> virtual cpufreq device has an individual controller for each CPU.
+>> If I understand correctly, there might be more than one instance. The
+>> problem is that I cannot find such case in upstream sources.
+> I don't think there can be more than one per RSC.
+> 
+> SM8550 splits some RSCs into "channels" and these channels have their
+> individual voters, however they would still be attached to these
+> channel subnodes/subdevices and no, we don't support that yet.
 
-A nit, subject: drop second/last, redundant "bindings for". The
-"dt-bindings" prefix is already stating that these are bindings.
+Then shouldn't this be one number, not an array?
 
 > 
-> Co-developed-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: David Dai <davidai@google.com>
-> ---
->  .../bindings/cpufreq/cpufreq-virtual.yaml     | 89 +++++++++++++++++++
->  1 file changed, 89 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.yaml
-> new file mode 100644
-> index 000000000000..f377cfc972ca
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.yaml
-> @@ -0,0 +1,89 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yamll#
-> +
-> +title: Virtual CPUFreq
-> +
-> +maintainers:
-> +  - David Dai <davidai@google.com>
-> +  - Saravana Kannan <saravanak@google.com>
-> +
-> +description:
-> +  Virtual CPUFreq is a virtualized driver in guest kernels that sends frequency
-> +  selection of its vCPUs as a hint to the host through MMIO regions. The host
-> +  uses the hint to schedule vCPU threads and select physical CPU frequency. It
-> +  enables accurate Per-Entity Load Tracking for tasks running in the guest by
-> +  querying host CPU frequency unless a virtualized FIE (ex. AMU) exists.
+>>
+>>
+>>> +
+>>>  required:
+>>>    - compatible
+>>> +  - qcom,bcm-voter-idx
+>>
+>> This should not be really required, because it affects the ABI.
+> Hm.. can I deprecate lack of it somehow?
 
-Why do you need DT for this? You control hypervisor, thus control the
-interface to the guest. I think Rob made it pretty clear that
-discoverable usecases (which is yours) are not for DT.
-
-Incomplete style-review follows:
-
-> +
-> +properties:
-> +  compatible:
-> +    const: virtual,cpufreq
-
-Missing blank line.
-
-> +  reg:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    cpus {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      cpu@0 {
-> +        compatible = "arm,arm-v8";
-> +        device_type = "cpu";
-> +        reg = <0x0>;
-> +        operating-points-v2 = <&opp_table0>;
-> +      };
-> +
-> +      cpu@1 {
-> +        compatible = "arm,arm-v8";
-> +        device_type = "cpu";
-> +        reg = <0x0>;
-> +        operating-points-v2 = <&opp_table1>;
-> +      };
-> +    };
-> +
-> +    opp_table0: opp-table-0 {
-> +      compatible = "operating-points-v2";
-> +
-> +      opp1098000000 {
-> +        opp-hz = /bits/ 64 <1098000000>;
-> +        opp-level = <1>;
-> +      };
-> +
-> +      opp1197000000 {
-> +        opp-hz = /bits/ 64 <1197000000>;
-> +        opp-level = <2>;
-> +      };
-> +    };
-> +
-> +    opp_table1: opp-table-1 {
-> +      compatible = "operating-points-v2";
-> +
-> +      opp1106000000 {
-> +        opp-hz = /bits/ 64 <1106000000>;
-> +        opp-level = <1>;
-> +      };
-> +
-> +      opp1277000000 {
-> +        opp-hz = /bits/ 64 <1277000000>;
-> +        opp-level = <2>;
-> +      };
-> +    };
-> +
-> +    soc {
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +
-> +      cpufreq {
-
-Missing unit address
-
-> +        reg = <0x1040000 0x10>;
-> +        compatible = "virtual,cpufreq";
-
-compatible is always the first property.
-
-Also, you did not test it...
-
+In general: no. Anyway, it depends how much you need it. Breaking ABI
+might be justified, but I just did not get such need from the commit
+msg. Your commit msg looks to me closer to a cleanup.
 
 Best regards,
 Krzysztof
