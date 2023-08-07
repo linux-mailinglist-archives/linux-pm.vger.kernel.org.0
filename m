@@ -2,122 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8F67728AF
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 17:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA5F27726F8
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 16:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjHGPIn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 11:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S231508AbjHGOEv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 10:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjHGPIm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 11:08:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547B11FC9;
-        Mon,  7 Aug 2023 08:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=FsGLstpvkSVmBkgu77rL1Iiy2ks7bnKLLUqwpkys3+c=; b=ccMB1SjDD/dV/XdmrvdlHzl7vb
-        864L3C27FVT1g+tUqxfFZj0idVnGgVhyYy5i8cEr75czsjVJGaGjuGWFIrFcX2ZbcMrMg3ZdoABq3
-        K8tbhG06vFtbvYiUKths0+iXbFw269a4chcUKDqJE8o9YUDEoyEXiwS7raprI7nEh8rejmqXWYuzt
-        VweDhbU+5WSUkYKueWaANZhTIE8wVDXVKBWAA4BecfgbOEUdHOg/nvj8Xu/RIcBJXpAO9+zwZlIWq
-        C62kXusZ3AZyvQd10T+G/sB2YEQ6cI7ZyErLzmILMRQLJL2YnlSly/Ku7zz2Uw0dwNcXTQKA1f/A/
-        nJBNMx2w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qT1pQ-00BlpE-1v; Mon, 07 Aug 2023 15:07:28 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A4A9B3006F1;
-        Mon,  7 Aug 2023 17:07:27 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 84F30201F3C6C; Mon,  7 Aug 2023 17:07:27 +0200 (CEST)
-Message-ID: <20230807150405.828551866@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 07 Aug 2023 14:38:09 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     x86@kernel.org
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        Tony Luck <tony.luck@intel.com>, luto@kernel.org,
-        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
-        jacob.jun.pan@linux.intel.com, lenb@kernel.org,
-        irenic.rajneesh@gmail.com, david.e.box@intel.com,
-        hdegoede@redhat.com, markgross@kernel.org,
-        srinivas.pandruvada@linux.intel.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH 3/3] x86/cpu: Update Hybrids
-References: <20230807123806.700370534@infradead.org>
+        with ESMTP id S233205AbjHGOC4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 10:02:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABF6844B2;
+        Mon,  7 Aug 2023 07:01:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 65EA1D75;
+        Mon,  7 Aug 2023 07:01:57 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E58743F64C;
+        Mon,  7 Aug 2023 07:01:12 -0700 (PDT)
+Date:   Mon, 7 Aug 2023 15:00:59 +0100
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
+ unconditionally every time
+Message-ID: <ZND5CL6Kl9RnDdhL@e126311.manchester.arm.com>
+References: <5712331.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5712331.DvuYhMxLoT@kreacher>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Give the hybrid thingies their own section, appropriately between Core
-and Atom.
+Hi Rafael,
 
-Add the Raptor Lake uarch names.
+On Thu, Aug 03, 2023 at 10:57:04PM +0200, Rafael J. Wysocki wrote:
+> Hi Folks,
+> 
+> This is the second iteration of:
+> 
+> https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
+> 
+> with an additional patch.
+> 
+> There are some small modifications of patch [1/3] and the new
+> patch causes governor statistics to play a role in deciding whether
+> or not to stop the scheduler tick.
+> 
+> Testing would be much appreciated!
+> 
+> Thanks!
+> 
 
-Put Lunar Lake after Arrow Lake per interweb guidance.
+My test results including the v2 are below.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/include/asm/intel-family.h |   12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+1. Geekbench 6
 
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -98,8 +98,6 @@
- #define INTEL_FAM6_ICELAKE_L		0x7E	/* Sunny Cove */
- #define INTEL_FAM6_ICELAKE_NNPI		0x9D	/* Sunny Cove */
- 
--#define INTEL_FAM6_LAKEFIELD		0x8A	/* Sunny Cove / Tremont */
--
- #define INTEL_FAM6_ROCKETLAKE		0xA7	/* Cypress Cove */
- 
- #define INTEL_FAM6_TIGERLAKE_L		0x8C	/* Willow Cove */
-@@ -112,20 +110,24 @@
- #define INTEL_FAM6_GRANITERAPIDS_X	0xAD
- #define INTEL_FAM6_GRANITERAPIDS_D	0xAE
- 
-+/* "Hybrid" Processors (P-Core/E-Core) */
-+
-+#define INTEL_FAM6_LAKEFIELD		0x8A	/* Sunny Cove / Tremont */
-+
- #define INTEL_FAM6_ALDERLAKE		0x97	/* Golden Cove / Gracemont */
- #define INTEL_FAM6_ALDERLAKE_L		0x9A	/* Golden Cove / Gracemont */
- 
--#define INTEL_FAM6_RAPTORLAKE		0xB7
-+#define INTEL_FAM6_RAPTORLAKE		0xB7	/* Raptor Cove / Enhanced Gracemont */
- #define INTEL_FAM6_RAPTORLAKE_P		0xBA
- #define INTEL_FAM6_RAPTORLAKE_S		0xBF
- 
- #define INTEL_FAM6_METEORLAKE		0xAC
- #define INTEL_FAM6_METEORLAKE_L		0xAA
- 
--#define INTEL_FAM6_LUNARLAKE_M		0xBD
--
- #define INTEL_FAM6_ARROWLAKE		0xC6
- 
-+#define INTEL_FAM6_LUNARLAKE_M		0xBD
-+
- /* "Small Core" Processors (Atom/E-Core) */
- 
- #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
++---------------------------+---------------+-----------------+-------------------+----------------------+
+|          metric           |      teo      |     teo_tick    |    teo_tick_rfc   |    teo_tick_rfc_v2   |
++---------------------------+---------------+-----------------+-------------------+----------------------+
+|      multicore_score      | 3320.9 (0.0%) | 3303.3 (-0.53%) |  3293.6 (-0.82%)  |   3302.3 (-0.56%)    |
+|           score           | 1415.7 (0.0%) | 1417.7 (0.14%)  |  1423.4 (0.54%)   |    1425.8 (0.71%)    |
+|      CPU_total_power      | 2421.3 (0.0%) | 2429.3 (0.33%)  |  2442.2 (0.86%)   |    2461.9 (1.67%)    |
+|  latency (AsyncTask #1)   | 49.41μ (0.0%) | 51.07μ (3.36%)  |   50.1μ (1.4%)    |    50.76μ (2.73%)    |
+| latency (labs.geekbench6) | 65.63μ (0.0%) | 77.47μ (18.03%) | 55.82μ (-14.95%)  |    66.12μ (0.75%)    |
+| latency (surfaceflinger)  | 39.46μ (0.0%) | 36.94μ (-6.39%) |  35.79μ (-9.28%)  |    40.36μ (2.3%)     |
++---------------------------+---------------+-----------------+-------------------+----------------------+
+
++----------------------+-------------+------------+
+|         tag          |    type     | count_perc |
++----------------------+-------------+------------+
+|         teo          |  too deep   |   2.034    |
+|       teo_tick       |  too deep   |    2.16    |
+|     teo_tick_rfc     |  too deep   |   2.071    |
+|    teo_tick_rfc_v2   |  too deep   |   2.548    |
+|         teo          | too shallow |   15.791   |
+|       teo_tick       | too shallow |   20.881   |
+|     teo_tick_rfc     | too shallow |   20.337   |
+|    teo_tick_rfc_v2   | too shallow |   19.886   |
++----------------------+-------------+------------+
 
 
+2. JetNews
+
++-----------------+---------------+----------------+-----------------+-----------------+
+|     metric      |      teo      |    teo_tick    |  teo_tick_rfc   | teo_tick_rfc_v2 |
++-----------------+---------------+----------------+-----------------+-----------------+
+|       fps       |  86.2 (0.0%)  |  86.4 (0.16%)  |  86.0 (-0.28%)  |  86.6 (0.41%)   |
+|    janks_pc     |  0.8 (0.0%)   |  0.8 (-0.66%)  |  0.8 (-1.37%)   |  0.7 (-11.37%)  |
+| CPU_total_power | 185.2 (0.0%)  | 178.2 (-3.76%) |  182.2 (-1.6%)  | 169.4 (-8.53%)  | <- very interesting
++-----------------+---------------+----------------+-----------------+-----------------+
+
++----------------------+-------------+--------------------+
+|         tag          |    type     |     count_perc     |
++----------------------+-------------+--------------------+
+|         teo          |  too deep   |       0.992        |
+|       teo_tick       |  too deep   |       0.945        |
+|     teo_tick_rfc     |  too deep   |       1.035        |
+|    teo_tick_rfc_v2   |  too deep   |       1.127        |
+|         teo          | too shallow |       17.085       |
+|       teo_tick       | too shallow |       15.236       |
+|     teo_tick_rfc     | too shallow |       15.379       |
+|    teo_tick_rfc_v2   | too shallow |       15.34        |
++----------------------+-------------+--------------------+
+
+All in all looks pretty good. Unfortunately there's a slightly larger
+percentage of too deep sleeps with the v2 (which is probably where the
+increase in GB6 power usage comes from) but the lower jank percentage +
+substantially lower power usage for the UI workload are very promising.
+
+Since we don't care about GB6 power usage as much as UI power usage, I'd
+say that the patchset looks good :)
+
+Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
