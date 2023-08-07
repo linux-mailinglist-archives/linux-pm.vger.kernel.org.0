@@ -2,198 +2,239 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B96D771766
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 01:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E787718C6
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 05:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjHFX4B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Aug 2023 19:56:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S229989AbjHGDXD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 6 Aug 2023 23:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjHFX4A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Aug 2023 19:56:00 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF63E6A;
-        Sun,  6 Aug 2023 16:55:58 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1bfca0ec8b9so567504fac.2;
-        Sun, 06 Aug 2023 16:55:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691366157; x=1691970957;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zxycwpVWghs+ISNhruYavL3gu63UsPevoTZd0CwoV6k=;
-        b=eEpO3VDBrgBHicUQXvNxfBMwrYrXeAKrXXenulILeLBKDIUVq828gHF+Ijww5E0okb
-         qehPuEwJPCkOGfNBZXKdV2AGSgJoGE6vncz9wZ+5ojHU4wRN0HU3FUdlVh1X9/YQ7omF
-         J1laOK528uoOal02a+w6pJMocScRsFcLJD2IDg9JJd0Wr/WJ5hCZhE1xgQKw3TjP8Nsz
-         zJj9VWVefAXAY1r5mj4n+KWUgnB5iOzK+B+ZEYETpYf9JwRs/QR+5rFyBGVnZgnT3Yrl
-         qdqJpN3NXrWNizz9NJwOb/hswRXhqEjpjJNsOn1sxj5AeiOtb6EBGHP2Sd9AITKkJnV4
-         Tb5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691366157; x=1691970957;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zxycwpVWghs+ISNhruYavL3gu63UsPevoTZd0CwoV6k=;
-        b=ZIN/X5qXEn5JEXG2J6EjeFM8gsrGJo+SGcclAwMwT1Rag5WXhGjEWsJ9+gAjWRRAb+
-         or3WXP0SSgt3aFornWRj0faQieEJ0KV2q0rnngxBid3LBZoRaMMQ8xQcMZWlhsWnNlvy
-         peJ/ttAYg5kuR0e9svpBLskUjwUVRV05e6uTkO3XM8UR7xZkmHcjctT2aGpk59qE9DAq
-         OIbX6JHdX+udppehwgMPQCgmf5CXR/Pn3e675kw/4jOMPHOSuS+QCKZmxgsoI1MzNuhg
-         ZPzV5spvKxAwHhHm7A5hGSqUHbuc87oGXiS9bUgW6H6mMC6mdW1nlqvizq8eLA1hfLwV
-         7KGA==
-X-Gm-Message-State: AOJu0YxPhk8ATzggymWCyw200iQnTMJ0GrphTNEXE9bjCnF4qlhwBup4
-        5cTD55lT9frhr+MXxgq/teSJJIoUHpo=
-X-Google-Smtp-Source: AGHT+IEoGtOBwj9+s0tgOSJKuExQqv9LOmV8/UAzEEg3GKzU4pE7Vl40ENewyEQNHp3R/UGLbo9FLg==
-X-Received: by 2002:a05:6870:9686:b0:1aa:f3:5b3b with SMTP id o6-20020a056870968600b001aa00f35b3bmr8260073oaq.17.1691366156731;
-        Sun, 06 Aug 2023 16:55:56 -0700 (PDT)
-Received: from [192.168.0.105] ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id ey14-20020a056a0038ce00b006870ed427b2sm4999467pfb.94.2023.08.06.16.55.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Aug 2023 16:55:56 -0700 (PDT)
-Message-ID: <c7f1bf9b-b183-bf6e-1cbb-d43f72494083@gmail.com>
-Date:   Mon, 7 Aug 2023 06:55:49 +0700
+        with ESMTP id S229805AbjHGDXA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Aug 2023 23:23:00 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B01BA6;
+        Sun,  6 Aug 2023 20:22:50 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3771YsHu009663;
+        Mon, 7 Aug 2023 03:22:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=qcppdkim1;
+ bh=WkbyyRf5bgNL3icM/FNlLcOLU/1AZiUj/Yh9Je0Hr5s=;
+ b=PVGnVG1QIJHGQLkEzkQcg5s/NAp6+ZCLZ+nW3si97c/by2yFmioFZvUf3/wkgGB8O3s1
+ 2ecv/gGHzKY8VELfuMfBVntSUTil2YANao9YBQzPB8JRRywR+OoKZjgG/VB0vZvWr9Eq
+ g9yCP8amd4b/JB21ycXwq8+9Iheg/GzRI+AsXTX4ZbAvS1xUBxU+K4jx0j/CU7ApMqpV
+ fGNZmAQgehMPAhEUhTNp3M8Xhhmwn6SIVjTMPGLCPfLxlqj5UunRQTUQcqkCQ1U7/fyU
+ PZnWMKTxZvCCnQW5CyU3NJd+v6wZfsPA63KL9NRKI8AWYHLO3oNTAJcXio+KsRMk5fRG Iw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s9drrjg4a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Aug 2023 03:22:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3773MLKb004476
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 7 Aug 2023 03:22:21 GMT
+Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Sun, 6 Aug 2023 20:22:14 -0700
+Date:   Mon, 7 Aug 2023 08:52:11 +0530
+From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
+To:     David Dai <davidai@google.com>
+CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Masami Hiramatsu <mhiramat@google.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Vincent Guittot" <vincent.guittot@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        "Oliver Upton" <oliver.upton@linux.dev>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gupta Pankaj <pankaj.gupta@amd.com>,
+        Mel Gorman <mgorman@suse.de>, <kernel-team@android.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] cpufreq: add virtual-cpufreq driver
+Message-ID: <29bae535-6292-400e-813d-063498adbfce@quicinc.com>
+References: <20230731174613.4133167-1-davidai@google.com>
+ <20230731174613.4133167-3-davidai@google.com>
+ <80f47262-9354-472f-8122-5ae262c0a46d@quicinc.com>
+ <CABN1KCKUt3GN=LqF9AK3Dc+4x98Asj-wpW4UNYsfjRz4Di8N5Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Content-Language: en-US
-To:     Huang Rui <ray.huang@amd.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        =?UTF-8?Q?Jannik_Gl=c3=bcckert?= <jannik.glueckert@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux LLVM Build Support <llvm@lists.linux.dev>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: CFI violation when reading amd_pstate/status
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABN1KCKUt3GN=LqF9AK3Dc+4x98Asj-wpW4UNYsfjRz4Di8N5Q@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: hNzdvwkD-05os6gB5mznBPDZEGyqdzx2
+X-Proofpoint-GUID: hNzdvwkD-05os6gB5mznBPDZEGyqdzx2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-06_24,2023-08-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=999 adultscore=0 spamscore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 priorityscore=1501 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308070030
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Fri, Aug 04, 2023 at 04:46:11PM -0700, David Dai wrote:
+> Hi Pavan,
+> 
+> Thanks for reviewing!
+> 
+> On Wed, Aug 2, 2023 at 9:18 PM Pavan Kondeti <quic_pkondeti@quicinc.com> wrote:
+> >
+> > On Mon, Jul 31, 2023 at 10:46:09AM -0700, David Dai wrote:
+> > > Introduce a virtualized cpufreq driver for guest kernels to improve
+> > > performance and power of workloads within VMs.
+> > >
+> > > This driver does two main things:
+> > >
+> > > 1. Sends the frequency of vCPUs as a hint to the host. The host uses the
+> > > hint to schedule the vCPU threads and decide physical CPU frequency.
+> > >
+> > > 2. If a VM does not support a virtualized FIE(like AMUs), it queries the
+> > > host CPU frequency by reading a MMIO region of a virtual cpufreq device
+> > > to update the guest's frequency scaling factor periodically. This enables
+> > > accurate Per-Entity Load Tracking for tasks running in the guest.
+> > >
+> > > Co-developed-by: Saravana Kannan <saravanak@google.com>
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > Signed-off-by: David Dai <davidai@google.com>
+> >
+> > [...]
+> >
+> > > +static void virt_scale_freq_tick(void)
+> > > +{
+> > > +     struct cpufreq_policy *policy = cpufreq_cpu_get(smp_processor_id());
+> > > +     struct virt_cpufreq_drv_data *data = policy->driver_data;
+> > > +     u32 max_freq = (u32)policy->cpuinfo.max_freq;
+> > > +     u64 cur_freq;
+> > > +     u64 scale;
+> > > +
+> > > +     cpufreq_cpu_put(policy);
+> > > +
+> > > +     cur_freq = (u64)data->ops->get_freq(policy);
+> > > +     cur_freq <<= SCHED_CAPACITY_SHIFT;
+> > > +     scale = div_u64(cur_freq, max_freq);
+> > > +
+> > > +     this_cpu_write(arch_freq_scale, (unsigned long)scale);
+> > > +}
+> > > +
+> >
+> > We expect the host to provide the frequency in kHz, can you please add a
+> > comment about it. It is not very obvious when you look at the
+> > REG_CUR_FREQ_OFFSET register name.
+> 
+> I’ll include a KHZ in the offset names.
+> 
 
-I notice a bug report on Bugzilla [1]. Quoting from it:
+Sure, that would help. Also, can you limit the scale to
+SCHED_CAPACITY_SCALE? It may be possible that host may be running at a
+higher frequency than max_freq advertised on this guest.
 
-> On kernel 6.4.7, with amd_pstate=3Dactive, with a Ryzen 7700X
-> I get a Clang CFI violation when reading /sys/devices/system/cpu/amd_ps=
-tate/status
->=20
-> This is reproduceable with every read, I have only tried with amd_pstat=
-e=3Dactive
->=20
-> With the following CFI and Clang configs, Clang 16.0.6
-> CONFIG_CFI_CLANG=3Dy
-> CONFIG_CFI_PERMISSIVE=3Dy
-> CONFIG_LTO_CLANG=3Dy
-> CONFIG_LTO_CLANG_THIN=3Dy
->=20
-> Below is the full call trace, let me know if you need a trace with debu=
-g info.
->=20
-> [ 4947.849350] CFI failure at dev_attr_show+0x24/0x60 (target: show_sta=
-tus+0x0/0x70; expected type: 0x8651b1de)
-> [ 4947.849358] WARNING: CPU: 2 PID: 16519 at dev_attr_show+0x24/0x60
-> [ 4947.849360] Modules linked in: binfmt_misc nf_conntrack_netbios_ns n=
-f_conntrack_broadcast wireguard curve25519_x86_64 libcurve25519_generic i=
-p6_udp_tunnel udp_tunnel snd_seq_dummy snd_hrtimer snd_seq rfcomm joydev =
-uhid xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp nf_con=
-ntrack_tftp nft_fib_inet nft_fib_ipv6 nft_fib_ipv4 nft_fib nft_reject_ine=
-t nf_reject_ipv6 nf_reject_ipv4 nft_reject nft_ct nft_chain_nat bridge 80=
-21q mrp garp stp llc nf_tables ebtable_nat ebtable_broute ip6table_nat ip=
-6table_mangle ip6table_raw ip6table_security iptable_nat nf_nat nf_conntr=
-ack nf_defrag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_raw iptable_secu=
-rity ip_set nfnetlink ebtable_filter ebtables ip6table_filter ip6_tables =
-iptable_filter ip_tables bnep vfat fat amdgpu snd_hda_codec_realtek snd_h=
-da_codec_generic snd_hda_codec_hdmi snd_hda_intel mt7921e vfio_pci intel_=
-rapl_msr mt7921_common intel_rapl_common mt76_connac_lib edac_mce_amd vfi=
-o_pci_core mt76 vfio_iommu_type1 vfio kvm_amd iommufd iommu_v2 snd_usb_au=
-dio
-> [ 4947.849379]  snd_intel_dspcfg gpu_sched snd_intel_sdw_acpi mac80211 =
-drm_suballoc_helper snd_usbmidi_lib i2c_algo_bit drm_ttm_helper snd_hda_c=
-odec btusb ttm btrtl libarc4 btmtk snd_hda_core snd_rawmidi kvm snd_seq_d=
-evice drm_display_helper btintel snd_hwdep mc btbcm irqbypass cfg80211 ce=
-c snd_pcm asus_nb_wmi bluetooth eeepc_wmi snd_timer asus_wmi drm_kms_help=
-er ledtrig_audio sparse_keymap snd gpio_amdpt platform_profile gpio_gener=
-ic drm_buddy rfkill soundcore rapl i2c_piix4 wmi_bmof pcspkr k10temp lm92=
- nct6775_core hwmon_vid fuse loop dm_crypt crct10dif_pclmul polyval_clmul=
-ni polyval_generic ghash_clmulni_intel nvme sp5100_tco ccp r8169 nvme_cor=
-e nvme_common video wmi sunrpc
-> [ 4947.849398] CPU: 2 PID: 16519 Comm: cat Tainted: P                  =
- 6.4.7-gentoo-dist-hardened #1
-> [ 4947.849399] Hardware name: ASUS System Product Name/TUF GAMING B650M=
--PLUS WIFI, BIOS 1616 05/16/2023
-> [ 4947.849400] RIP: 0010:dev_attr_show+0x24/0x60
-> [ 4947.849401] Code: 90 90 90 90 90 90 f3 0f 1e fa 0f 1f 44 00 00 41 56=
- 53 4c 8b 5e 10 4d 85 db 74 34 49 89 f6 41 ba 22 4e ae 79 45 03 53 f1 74 =
-02 <0f> 0b 41 ff d3 0f 1f 00 48 89 c3 48 3d 00 10 00 00 7c 19 49 8b 76
-> [ 4947.849403] RSP: 0018:ffffb33a03d9fd10 EFLAGS: 00010203
-> [ 4947.849404] RAX: ffff922f11509980 RBX: ffff9230e86f43c0 RCX: 0000000=
-000000000
-> [ 4947.849404] RDX: ffff922f1746b000 RSI: ffffffffaee25f10 RDI: ffff922=
-f0005f800
-> [ 4947.849405] RBP: ffff9230e86f43e8 R08: 0000000000001000 R09: ffff922=
-f1746b000
-> [ 4947.849405] R10: 0000000015e419ad R11: ffffffffadda9330 R12: fffffff=
-fae8aa188
-> [ 4947.849406] R13: ffff9233bbcb6fc0 R14: ffffffffaee25f10 R15: ffff922=
-f1746b000
-> [ 4947.849407] FS:  00007eff007b4740(0000) GS:ffff923657e80000(0000) kn=
-lGS:0000000000000000
-> [ 4947.849407] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 4947.849408] CR2: 00007eff0099f000 CR3: 000000010a0a2000 CR4: 0000000=
-000750ee0
-> [ 4947.849409] PKRU: 55555554
-> [ 4947.849409] Call Trace:
-> [ 4947.849410]  <TASK>
-> [ 4947.849411]  ? __warn+0xcf/0x1c0
-> [ 4947.849414]  ? dev_attr_show+0x24/0x60
-> [ 4947.849415]  ? report_cfi_failure+0x4e/0x60
-> [ 4947.849417]  ? handle_cfi_failure+0x14c/0x1d0
-> [ 4947.849419]  ? __cfi_show_status+0x10/0x10
-> [ 4947.849420]  ? handle_bug+0x4f/0x90
-> [ 4947.849421]  ? exc_invalid_op+0x1a/0x60
-> [ 4947.849422]  ? asm_exc_invalid_op+0x1a/0x20
-> [ 4947.849424]  ? __cfi_show_status+0x10/0x10
-> [ 4947.849425]  ? dev_attr_show+0x24/0x60
-> [ 4947.849426]  sysfs_kf_seq_show+0xa6/0x110
-> [ 4947.849433]  seq_read_iter+0x16c/0x4b0
-> [ 4947.849436]  vfs_read+0x272/0x2d0
-> [ 4947.849438]  ksys_read+0x72/0xe0
-> [ 4947.849439]  do_syscall_64+0x76/0xb0
-> [ 4947.849440]  ? do_user_addr_fault+0x252/0x650
-> [ 4947.849442]  ? exc_page_fault+0x7a/0x1b0
-> [ 4947.849443]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [ 4947.849444] RIP: 0033:0x7eff008b2651
-> [ 4947.849445] Code: b5 fe ff ff 48 8d 3d 66 42 0a 00 50 e8 68 1b 02 00=
- 0f 1f 84 00 00 00 00 00 f3 0f 1e fa 80 3d ad 0d 0e 00 00 74 13 31 c0 0f =
-05 <48> 3d 00 f0 ff ff 77 57 c3 66 0f 1f 44 00 00 53 48 83 ec 20 48 89
-> [ 4947.849446] RSP: 002b:00007ffecca23268 EFLAGS: 00000246 ORIG_RAX: 00=
-00000000000000
-> [ 4947.849447] RAX: ffffffffffffffda RBX: 0000000000008000 RCX: 00007ef=
-f008b2651
-> [ 4947.849447] RDX: 0000000000020000 RSI: 00007eff009a0000 RDI: 0000000=
-000000003
-> [ 4947.849448] RBP: 0000000000000003 R08: 00000000ffffffff R09: 0000000=
-000000000
-> [ 4947.849448] R10: 0000000000000022 R11: 0000000000000246 R12: 0000000=
-000020000
-> [ 4947.849449] R13: 0000000000000000 R14: 00007eff009a0000 R15: 0000000=
-000020000
-> [ 4947.849450]  </TASK>
-> [ 4947.849450] ---[ end trace 0000000000000000 ]---
+> >
+> > > +
+> > > +static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *policy,
+> > > +             unsigned int target_freq)
+> > > +{
+> > > +     virt_cpufreq_set_perf(policy);
+> > > +     return target_freq;
+> > > +}
+> > > +
+> > > +static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
+> > > +             unsigned int index)
+> > > +{
+> > > +     return virt_cpufreq_set_perf(policy);
+> > > +}
+> > > +
+> > > +static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> > > +{
+> > > +     struct virt_cpufreq_drv_data *drv_data = cpufreq_get_driver_data();
+> > > +     struct cpufreq_frequency_table *table;
+> > > +     struct device *cpu_dev;
+> > > +     int ret;
+> > > +
+> > > +     cpu_dev = get_cpu_device(policy->cpu);
+> > > +     if (!cpu_dev)
+> > > +             return -ENODEV;
+> > > +
+> > > +     ret = dev_pm_opp_of_add_table(cpu_dev);
+> > > +     if (ret)
+> > > +             return ret;
+> > > +
+> > > +     ret = dev_pm_opp_get_opp_count(cpu_dev);
+> > > +     if (ret <= 0) {
+> > > +             dev_err(cpu_dev, "OPP table can't be empty\n");
+> > > +             return -ENODEV;
+> > > +     }
+> > > +
+> > > +     ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
+> > > +     if (ret) {
+> > > +             dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
+> > > +             return ret;
+> > > +     }
+> > > +
+> > > +     policy->freq_table = table;
+> > > +     policy->dvfs_possible_from_any_cpu = false;
+> > > +     policy->fast_switch_possible = true;
+> > > +     policy->driver_data = drv_data;
+> > > +
+> > > +     /*
+> > > +      * Only takes effect if another FIE source such as AMUs
+> > > +      * have not been registered.
+> > > +      */
+> > > +     topology_set_scale_freq_source(&virt_sfd, policy->cpus);
+> > > +
+> > > +     return 0;
+> > > +
+> > > +}
+> > > +
+> >
+> > Do we need to register as FIE source even with the below commit? By
+> > registering as a source, we are not supplying any accurate metric. We
+> > still fallback on the same source that cpufreq implements it.
+> 
+> The arch_set_freq_scale() done at cpufreq driver’s frequency updates
+> at cpufreq_freq_transition_end() and cpufreq_driver_fast_switch() only
+> represent the guest’s frequency request. However, this does not
+> accurately represent the physical CPU’s frequency that the vCPU is
+> running on. E.g. There may be other processes sharing the same
+> physical CPU that results in a much higher CPU frequency than what’s
+> requested by the vCPU.
+> 
 
-See Bugzilla for the full thread.
+understood that policy->cur may not reflect the actual frequency. Is this
+something needs to be advertised to cpufreq core so that it query the
+underlying cpufreq driver and use it for frequency scale updates. This
+also gives userspace to read the actual frequency when read from sysfs.
 
-Thanks.
+In fact, cpufreq_driver_fast_switch() comment says that
+cpufreq_driver::fast_switch() should return the *actual* frequency and
+the same is used to update frequency scale updates. I understand that it
+depends on other things like if host defer the frequency switch, the
+value read from REG_CUR_FREQ_OFFSET may reflect the old value..
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217765
+May be a comment in code would help.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Thanks,
+Pavan
