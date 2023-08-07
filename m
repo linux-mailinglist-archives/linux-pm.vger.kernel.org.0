@@ -2,108 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61162771AA6
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 08:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06FE771C15
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 10:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjHGGrL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 02:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S229469AbjHGIM7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 04:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbjHGGrK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 02:47:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66FD1A4;
-        Sun,  6 Aug 2023 23:47:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4463761563;
-        Mon,  7 Aug 2023 06:47:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F3A9C433C7;
-        Mon,  7 Aug 2023 06:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691390828;
-        bh=1jCsoWdlJTQsQF5IZ+gzdQAhBlUO6GA0wb8Hp3Tpm2M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pdNQrp4B3s23/8MXLecBvUwKr11RDoNkw+A8dWesq8YLdLe2VN7yXzb+3UgkJqak1
-         VzzZHLXonZ5s9m3OATYR/eKxHSeULfMwkOcJ6sHXu/bhV0zAdbtbtDD4tYN0Q+jaJL
-         M3WOIbagKcjn/NDg2t1jRWutVtrMRgIC/feHCJ7E=
-Date:   Mon, 7 Aug 2023 08:47:05 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Huang Rui <ray.huang@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jannik Glueckert <jannik.glueckert@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux LLVM Build Support <llvm@lists.linux.dev>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: amd-pstate: fix global sysfs attribute type
-Message-ID: <2023080748-apprehend-carnation-e71c@gregkh>
-References: <20230807-amd-pstate-cfi-v1-1-0263daa13bc3@weissschuh.net>
+        with ESMTP id S229515AbjHGIM7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 04:12:59 -0400
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81661BB
+        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 01:12:53 -0700 (PDT)
+X-ASG-Debug-ID: 1691395968-086e23186c103a0001-MQbzy6
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id iucwwu9ktQWASxuh (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 07 Aug 2023 16:12:48 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 7 Aug
+ 2023 16:12:47 +0800
+Received: from tony-HX002EA.zhaoxin.com (10.32.65.162) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 7 Aug
+ 2023 16:12:46 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+        <LeoLiu-oc@zhaoxin.com>, <LindaChai@zhaoxin.com>
+Subject: [PATCH] cpufreq: ACPI: add ITMT support when CPPC enabled
+Date:   Mon, 7 Aug 2023 16:12:48 +0800
+X-ASG-Orig-Subj: [PATCH] cpufreq: ACPI: add ITMT support when CPPC enabled
+Message-ID: <20230807081248.4745-1-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230807-amd-pstate-cfi-v1-1-0263daa13bc3@weissschuh.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.32.65.162]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1691395968
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 3567
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.112427
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 08:37:45AM +0200, Thomas Weißschuh wrote:
-> In commit 3666062b87ec ("cpufreq: amd-pstate: move to use bus_get_dev_root()")
-> the "amd_pstate" attributes where moved from a dedicated kobject to the
-> cpu root kobject.
-> While the dedicated kobject expects to contain kobj_attributes the root
-> kobject needs device_attributes.
-> 
-> As the changed arguments are not used by the callbacks it works most of
-> the time.
-> However CFI will detect this issue:
-> 
-> [ 4947.849350] CFI failure at dev_attr_show+0x24/0x60 (target: show_status+0x0/0x70; expected type: 0x8651b1de)
-> ...
-> [ 4947.849409] Call Trace:
-> [ 4947.849410]  <TASK>
-> [ 4947.849411]  ? __warn+0xcf/0x1c0
-> [ 4947.849414]  ? dev_attr_show+0x24/0x60
-> [ 4947.849415]  ? report_cfi_failure+0x4e/0x60
-> [ 4947.849417]  ? handle_cfi_failure+0x14c/0x1d0
-> [ 4947.849419]  ? __cfi_show_status+0x10/0x10
-> [ 4947.849420]  ? handle_bug+0x4f/0x90
-> [ 4947.849421]  ? exc_invalid_op+0x1a/0x60
-> [ 4947.849422]  ? asm_exc_invalid_op+0x1a/0x20
-> [ 4947.849424]  ? __cfi_show_status+0x10/0x10
-> [ 4947.849425]  ? dev_attr_show+0x24/0x60
-> [ 4947.849426]  sysfs_kf_seq_show+0xa6/0x110
-> [ 4947.849433]  seq_read_iter+0x16c/0x4b0
-> [ 4947.849436]  vfs_read+0x272/0x2d0
-> [ 4947.849438]  ksys_read+0x72/0xe0
-> [ 4947.849439]  do_syscall_64+0x76/0xb0
-> [ 4947.849440]  ? do_user_addr_fault+0x252/0x650
-> [ 4947.849442]  ? exc_page_fault+0x7a/0x1b0
-> [ 4947.849443]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> 
-> Reported-by: Jannik Glückert <jannik.glueckert@gmail.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217765
-> Link: https://lore.kernel.org/lkml/c7f1bf9b-b183-bf6e-1cbb-d43f72494083@gmail.com/
-> Fixes: 3666062b87ec ("cpufreq: amd-pstate: move to use bus_get_dev_root()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
-> Note:
-> 
-> This was not tested with CFI as I don't have the toolchain available.
-> Jannik, could you give it a spin?
+The _CPC method can get per-core highest frequency.
+The highest frequency may varies between cores which mean cores can
+running at different max frequency, so can use it as a core priority
+and give a hint to scheduler in order to put critical task to the
+higher priority core.
 
-Ah, that was fast, nice!
+Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+---
+ drivers/cpufreq/acpi-cpufreq.c | 59 ++++++++++++++++++++++++++++++----
+ 1 file changed, 52 insertions(+), 7 deletions(-)
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index b2f05d27167e..5733323e04ac 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -628,28 +628,35 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
+ #endif
+ 
+ #ifdef CONFIG_ACPI_CPPC_LIB
+-static u64 get_max_boost_ratio(unsigned int cpu)
++static void cpufreq_get_core_perf(int cpu, u64 *highest_perf, u64 *nominal_perf)
+ {
+ 	struct cppc_perf_caps perf_caps;
+-	u64 highest_perf, nominal_perf;
+ 	int ret;
+ 
+ 	if (acpi_pstate_strict)
+-		return 0;
++		return;
+ 
+ 	ret = cppc_get_perf_caps(cpu, &perf_caps);
+ 	if (ret) {
+ 		pr_debug("CPU%d: Unable to get performance capabilities (%d)\n",
+ 			 cpu, ret);
+-		return 0;
++		return;
+ 	}
+ 
+ 	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
+-		highest_perf = amd_get_highest_perf();
++		*highest_perf = amd_get_highest_perf();
+ 	else
+-		highest_perf = perf_caps.highest_perf;
++		*highest_perf = perf_caps.highest_perf;
++
++	*nominal_perf = perf_caps.nominal_perf;
++	return;
++}
+ 
+-	nominal_perf = perf_caps.nominal_perf;
++static u64 get_max_boost_ratio(unsigned int cpu)
++{
++	u64 highest_perf, nominal_perf;
++
++	cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
+ 
+ 	if (!highest_perf || !nominal_perf) {
+ 		pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
+@@ -663,8 +670,44 @@ static u64 get_max_boost_ratio(unsigned int cpu)
+ 
+ 	return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
+ }
++
++static void cpufreq_sched_itmt_work_fn(struct work_struct *work)
++{
++	sched_set_itmt_support();
++}
++
++static DECLARE_WORK(sched_itmt_work, cpufreq_sched_itmt_work_fn);
++
++static void cpufreq_set_itmt_prio(int cpu)
++{
++	u64 highest_perf, nominal_perf;
++	static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
++
++	cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
++
++	sched_set_itmt_core_prio(highest_perf, cpu);
++
++	if (max_highest_perf <= min_highest_perf) {
++		if (highest_perf > max_highest_perf)
++			max_highest_perf = highest_perf;
++
++		if (highest_perf < min_highest_perf)
++			min_highest_perf = highest_perf;
++
++		if (max_highest_perf > min_highest_perf) {
++			/*
++			 * This code can be run during CPU online under the
++			 * CPU hotplug locks, so sched_set_itmt_support()
++			 * cannot be called from here.  Queue up a work item
++			 * to invoke it.
++			 */
++			schedule_work(&sched_itmt_work);
++		}
++	}
++}
+ #else
+ static inline u64 get_max_boost_ratio(unsigned int cpu) { return 0; }
++static void cpufreq_set_itmt_prio(int cpu) { return; }
+ #endif
+ 
+ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+@@ -870,6 +913,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	/* notify BIOS that we exist */
+ 	acpi_processor_notify_smm(THIS_MODULE);
+ 
++	cpufreq_set_itmt_prio(cpu);
++
+ 	pr_debug("CPU%u - ACPI performance management activated.\n", cpu);
+ 	for (i = 0; i < perf->state_count; i++)
+ 		pr_debug("     %cP%d: %d MHz, %d mW, %d uS\n",
+-- 
+2.17.1
+
