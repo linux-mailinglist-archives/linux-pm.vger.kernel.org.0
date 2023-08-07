@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DE6772C5D
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1C4772C5B
 	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 19:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjHGRMd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 13:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43616 "EHLO
+        id S231682AbjHGRMe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 13:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjHGRMR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 13:12:17 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E745B1BD3;
-        Mon,  7 Aug 2023 10:12:06 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1bc411e9d17so29224915ad.0;
-        Mon, 07 Aug 2023 10:12:06 -0700 (PDT)
+        with ESMTP id S232017AbjHGRMX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 13:12:23 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDDB31BF1;
+        Mon,  7 Aug 2023 10:12:08 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bc1c1c68e2so29730565ad.3;
+        Mon, 07 Aug 2023 10:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691428326; x=1692033126;
+        d=gmail.com; s=20221208; t=1691428328; x=1692033128;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8BWwQKRJpzoHOTxVfrEWi7WrUwdArtmVUIFmQG2FfZk=;
-        b=nUcZ6zaKb9oJP6CEIYRcJkVn2doIh/RF8s3VrpAVFmfsq1IIqx19G69U84jz9jzQgY
-         cHr+lYbYhmNdbIukaqOqGsPKk2sw7KWC72wtrTjbwCp2nPjSAYHSsMBH7eotQ46I/B5g
-         nrRXrNOtuNQ5D77wN3uGg1Kyl8uwOqC3fyBEvWvZPLsblIAAkDYjhjLFN0cHZTIlyy1p
-         xqJ+DIubWTGtHZgXWaPwzzkZRHyyhuHowAEJC2+dZuPLFCgSw5RkybhX20f8D894mI3n
-         uzwcIeGy9iHqQ7RK7Rgox4rrkdOrpBNCJihzyD4UB+d9OGt8+t7Z2G+lZDzn8OPSEH/w
-         aoqA==
+        bh=o/ZrwT0NJoa3SvrfuTbm+aI37YIFG6qkhwqRx+xCrA0=;
+        b=UqwBSzb7bDmSyec+1PJCPQEzpyJ0+EdMmkMvCke7Wnea0hLj+c9hkMVwbEw5OIZlt7
+         2jFHWIlB3pNRnbenayfQHGZvj+rIIEnIdoYp6wuzuzdJuPV95bZa1c33CO6m1zvKYZN8
+         SDRrnOVcXFN2xJuq9TuOmPsyc5HHQEycjoC00VXy6zC+vja0xBQwcwhdO3dug+bY9yUz
+         uItD6eYHilJWK3UpSAisNS3wT9CHEhIlEAsWVjwWDL64eFa4pFKQuuEhhneseSz94DT3
+         WhYkjovQZccQGJdgPZPdN4dhwG3euTQvC1g9vo6NR/WCZUDwvMeMpkkItLbFOxUoDpyG
+         dObQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691428326; x=1692033126;
+        d=1e100.net; s=20221208; t=1691428328; x=1692033128;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8BWwQKRJpzoHOTxVfrEWi7WrUwdArtmVUIFmQG2FfZk=;
-        b=SLHFXzeKvy6TDiqkOJq/wNXcnBhe4djslkO4WhAbA5X/Gea8wz+d/uExuHuzw9WrB9
-         fM8TK4g3xoF9D/I7SwaMScgYwriDGWx4eVx43cKXga03/GxrZ2f8Lx7+hVVYYQ0y3z9g
-         UundRB6qk4gWAqXWUe+dVfiLde2Z01x4joruk5Dmn8r8W9yjxrxkoebHsaw63uf2H8yC
-         0RwDpXF+7nx3dwXKNU1si4XkTZprA1xz80ei8NJxeNDt7G2ulaL/rhKvOmlKuNrAe3r2
-         29ZXlp4dk+GzRT587NkXnmGhiTqg+ofaWFBLjGE+PYP6EjQl3XC/DqUPSwh4/kEkITAY
-         sVlA==
-X-Gm-Message-State: AOJu0YyyT2QDV/e7PDHU4mxFlZ5hq/kHZFr5hWASzUzLtj8Q7TLyf5ZE
-        Xmv47tKuodvqCnh6aNyEqkDAnRKmRvg=
-X-Google-Smtp-Source: AGHT+IHiIsybfpW8I/4HRIF/dVyngB0zec9md5KKieStD7fN6pUtE5S6xEynqQO6g3nIMhlAahP9yQ==
-X-Received: by 2002:a17:902:ecc3:b0:1bc:382b:6897 with SMTP id a3-20020a170902ecc300b001bc382b6897mr10420079plh.13.1691428325704;
-        Mon, 07 Aug 2023 10:12:05 -0700 (PDT)
+        bh=o/ZrwT0NJoa3SvrfuTbm+aI37YIFG6qkhwqRx+xCrA0=;
+        b=acSsuaFsGj2csX7w+se2Ca7ioNUFD4HfSQglPAck/l7j9ZaunprmsguDKBRQ82mpCw
+         Aj7OasZP6dA+CHvLk2mE95IH3Gi+Nets8F/VBQhSHOVBMTOJYN/I8ayOKLqmfjzQfL22
+         nvAKtL99W6G0zMDzZGXc14D3jWoImCMHpZlY9heEi4IJmwzSQgnCNvcIBrvfTwa4xTaK
+         497RRtDbvB9zeUAxCmVseUinIoAb9znoEQDJXg4sQs8iV3VhYdF1d860ryJ2tJ4sUBIg
+         Vyjl4qlqSA5GBVbcT8y1esYoQ8SPqmYr5AeHJ1NAcWl2i4wvhcKSXpLL7+CL3bLu1HFq
+         v2hQ==
+X-Gm-Message-State: AOJu0YzJom4AHvmx/C1FeRHpDvx7w90QDgsTOCh2Kxk3x9GAF3N7jP6J
+        np6otGQhiqGajDtsDMXLVmE4nmorW5U=
+X-Google-Smtp-Source: AGHT+IHcE8fCOj51H5o9epINqTnpHnYF2YANR0R6RsiK0gsnRbxxmF0NZPQBL0kOhW0Cbcs0EmkDFA==
+X-Received: by 2002:a17:902:ab0c:b0:1bb:b855:db3c with SMTP id ik12-20020a170902ab0c00b001bbb855db3cmr7406106plb.41.1691428327863;
+        Mon, 07 Aug 2023 10:12:07 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:6c80:7c10:75a0:44f4])
-        by smtp.gmail.com with ESMTPSA id s21-20020a170902b19500b001a1b66af22fsm7155258plr.62.2023.08.07.10.12.04
+        by smtp.gmail.com with ESMTPSA id v12-20020a170902b7cc00b001ac741dfd29sm7133303plz.295.2023.08.07.10.12.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 10:12:05 -0700 (PDT)
+        Mon, 07 Aug 2023 10:12:07 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
@@ -56,11 +56,11 @@ Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org (open list:POWER MANAGEMENT CORE),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 4/9] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
-Date:   Mon,  7 Aug 2023 10:11:38 -0700
-Message-ID: <20230807171148.210181-5-robdclark@gmail.com>
+        linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend,
+        aka swsusp)), linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 5/9] PM / QoS: Teach lockdep about dev_pm_qos_mtx locking order
+Date:   Mon,  7 Aug 2023 10:11:39 -0700
+Message-ID: <20230807171148.210181-6-robdclark@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230807171148.210181-1-robdclark@gmail.com>
 References: <20230807171148.210181-1-robdclark@gmail.com>
@@ -78,70 +78,33 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-Similar to the previous patch, move the allocation out from under
-dev_pm_qos_mtx, by speculatively doing the allocation and handle
-any race after acquiring dev_pm_qos_mtx by freeing the redundant
-allocation.
+Annotate dev_pm_qos_mtx to teach lockdep to scream about allocations
+that could trigger reclaim under dev_pm_qos_mtx.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/base/power/qos.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ drivers/base/power/qos.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-index 7e95760d16dc..5ec06585b6d1 100644
+index 5ec06585b6d1..63cb1086f195 100644
 --- a/drivers/base/power/qos.c
 +++ b/drivers/base/power/qos.c
-@@ -930,8 +930,12 @@ s32 dev_pm_qos_get_user_latency_tolerance(struct device *dev)
- int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- {
- 	struct dev_pm_qos *qos = dev_pm_qos_constraints_allocate(dev);
-+	struct dev_pm_qos_request *req = NULL;
- 	int ret = 0;
- 
-+	if (!dev->power.qos->latency_tolerance_req)
-+		req = kzalloc(sizeof(*req), GFP_KERNEL);
-+
- 	mutex_lock(&dev_pm_qos_mtx);
- 
- 	dev_pm_qos_constraints_set(dev, qos);
-@@ -945,8 +949,6 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- 		goto out;
- 
- 	if (!dev->power.qos->latency_tolerance_req) {
--		struct dev_pm_qos_request *req;
--
- 		if (val < 0) {
- 			if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
- 				ret = 0;
-@@ -954,17 +956,15 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- 				ret = -EINVAL;
- 			goto out;
- 		}
--		req = kzalloc(sizeof(*req), GFP_KERNEL);
- 		if (!req) {
- 			ret = -ENOMEM;
- 			goto out;
- 		}
- 		ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
--		if (ret < 0) {
--			kfree(req);
-+		if (ret < 0)
- 			goto out;
--		}
- 		dev->power.qos->latency_tolerance_req = req;
-+		req = NULL;
- 	} else {
- 		if (val < 0) {
- 			__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
-@@ -976,6 +976,7 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
- 
-  out:
- 	mutex_unlock(&dev_pm_qos_mtx);
-+	kfree(req);
- 	return ret;
+@@ -1017,3 +1017,14 @@ void dev_pm_qos_hide_latency_tolerance(struct device *dev)
+ 	pm_runtime_put(dev);
  }
- EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
+ EXPORT_SYMBOL_GPL(dev_pm_qos_hide_latency_tolerance);
++
++static int __init dev_pm_qos_init(void)
++{
++	/* Teach lockdep about lock ordering wrt. shrinker: */
++	fs_reclaim_acquire(GFP_KERNEL);
++	might_lock(&dev_pm_qos_mtx);
++	fs_reclaim_release(GFP_KERNEL);
++
++	return 0;
++}
++early_initcall(dev_pm_qos_init);
 -- 
 2.41.0
 
