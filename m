@@ -2,60 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93836773036
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 22:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EC777303C
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 22:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjHGURX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 16:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55848 "EHLO
+        id S229839AbjHGUVQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 16:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjHGURW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 16:17:22 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78B010CF;
-        Mon,  7 Aug 2023 13:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691439440; x=1722975440;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=v77pNGE+feeDfb5yXyNk7i3bSHrdcpf1hNLzQC6GlE8=;
-  b=kAzyr1j97/xqh63oW5LgK6T3XRJwWQJZ3BIYbS7CwZjtFdT40v/Pio4P
-   bRDL6gt3NfpYTXmBe0PhMh2Ab1Kc5snjdeY7ocPBDHiuUXkcTRqqBA48K
-   G/gGrep4KvppfCzTWig6D1X4cTFZCFL7o3itkmw/Zfs2RX14X0pfOXxzN
-   8qaMHWXU8jg6ERieqBDR8SGaWUt0Yo3Qt+m6dUkHQnZzyb555/3zRC0ol
-   u1JxfRmd6UOHW6oPnbCMTK+/iwsxWdzFAlaNQ0Jz+x+3cBOyf/t+Gee0o
-   JoYm9aLRAQ25M4/fnVfPeDNbl5hrjW4F9tBQ3toOR8GxSf0/f9qA8JdmD
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="368093406"
-X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
-   d="scan'208";a="368093406"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 13:17:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="766115780"
-X-IronPort-AV: E=Sophos;i="6.01,262,1684825200"; 
-   d="scan'208";a="766115780"
-Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 07 Aug 2023 13:17:14 -0700
-Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qT6fB-0004rZ-1L;
-        Mon, 07 Aug 2023 20:17:13 +0000
-Date:   Tue, 8 Aug 2023 04:17:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 12/13] drivers/acpi/thermal.c:817:22:
- error: redefinition of 'device'
-Message-ID: <202308080433.zTgDF79n-lkp@intel.com>
+        with ESMTP id S231327AbjHGUVO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 16:21:14 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E911717
+        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 13:21:12 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-686e29b058cso3464994b3a.1
+        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 13:21:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691439672; x=1692044472;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=HslrqtCVSRUzHJnRyZOwajp12vxAm0J2EKQTblzYkSE=;
+        b=eTm8ixww3V4X3jZ5lX/xXNfCbKdyPYIaD8lWv2b6sMYWUot2rXzqD6hKxuQKswuzTA
+         zD8eqWuYPRdY40n02YreV2FwKcyNWjj5XHVJMxhi1l4VL8qWsdUozpjX8CXLy7kkUHEm
+         OB98L5QmmBNtc5fAy1iXM8foOQOX4V6Eu990w2Oryk6SOulMPBdTk5oLiiQ4lt700VXR
+         913IVT32LsEHl595Jr05RvLr6/ztkynb/laZp1zcEb+ER7+WmifzVONp4X/J5eYBjU8+
+         929A1/RXvo9NsBZNrS5iEsfukgO3/a5pzgi8rmB3EO0DWKtBxrX+HWhDZlpt25yc5jKo
+         fFIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691439672; x=1692044472;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HslrqtCVSRUzHJnRyZOwajp12vxAm0J2EKQTblzYkSE=;
+        b=CC0p+ZaVF/s+kWMKoiMXFOKW8v/lPS8OkGq+Or3gqyiF2nr25vvTw4QVIngOdWp7IR
+         cGwicZv5ZnpaztSamYK4eBah9z5eESB4JHCW1k+AgJd+t3Zb2cv0IEdLWEjOMlgIGCQf
+         qkxtkxBbljoEfg30pIA3x+vQg/IK/9gwQxyI/SSGleB412umG04A4CcyKbTWN2ChE0eV
+         FOtLyoly7iSFo1OeVDU+e9L+CDEBiTVjdkWPUKuVvJ4EoBPHfiAzfUNlxe7kCiMLCNIX
+         cehNWR1/RxpKQleQ2aJDN+UWGiLU+2xq3OrwvC1L7kU+4AtiHMytJaA1/wyrWyluNn+u
+         Avww==
+X-Gm-Message-State: AOJu0YwTduYFZXC6bTJc+KEHkfTLFn1i3ipznB/ZWdBfNPm442ldsC+P
+        xBcsm6+/C9zb5n9/hasoJ3QuMg==
+X-Google-Smtp-Source: AGHT+IG5Wjqm4BLKn2j086AV5Bl1I6SRKri+B9YOK8A4N0wIx3Www9atjfPz0t1MCofUkGzQa39TsA==
+X-Received: by 2002:a05:6a20:6a22:b0:138:2fb8:6c48 with SMTP id p34-20020a056a206a2200b001382fb86c48mr10521283pzk.8.1691439671913;
+        Mon, 07 Aug 2023 13:21:11 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id w18-20020a637b12000000b00564d939c887sm3788757pgc.10.2023.08.07.13.21.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 13:21:11 -0700 (PDT)
+Message-ID: <64d15237.630a0220.1e810.623e@mx.google.com>
+Date:   Mon, 07 Aug 2023 13:21:11 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.5-rc5-70-g1ce1d2ec8fc3
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 50 runs,
+ 4 regressions (v6.5-rc5-70-g1ce1d2ec8fc3)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,244 +71,250 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   cb7868f075558114df880ebd25d7a0ac7d23f94a
-commit: 34af5a3fdf4c63403109630759454e285d26397c [12/13] Merge branch 'acpi-thermal-next' into bleeding-edge
-config: i386-randconfig-i011-20230807 (https://download.01.org/0day-ci/archive/20230808/202308080433.zTgDF79n-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230808/202308080433.zTgDF79n-lkp@intel.com/reproduce)
+pm/testing baseline: 50 runs, 4 regressions (v6.5-rc5-70-g1ce1d2ec8fc3)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308080433.zTgDF79n-lkp@intel.com/
+Regressions Summary
+-------------------
 
-All errors (new ones prefixed by >>):
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+fsl-ls2088a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
 
->> drivers/acpi/thermal.c:817:22: error: redefinition of 'device'
-           struct acpi_device *device = data;
-                               ^
-   drivers/acpi/thermal.c:815:53: note: previous definition is here
-   static void acpi_thermal_notify(struct acpi_device *device, u32 event)
-                                                       ^
->> drivers/acpi/thermal.c:817:31: error: use of undeclared identifier 'data'
-           struct acpi_device *device = data;
-                                        ^
->> drivers/acpi/thermal.c:982:8: error: incompatible function pointer types passing 'void (struct acpi_device *, u32)' (aka 'void (struct acpi_device *, unsigned int)') to parameter of type 'acpi_notify_handler' (aka 'void (*)(void *, unsigned int, void *)') [-Wincompatible-function-pointer-types]
-                                                    acpi_thermal_notify);
-                                                    ^~~~~~~~~~~~~~~~~~~
-   include/acpi/acpi_bus.h:520:29: note: passing argument to parameter 'handler' here
-                                       acpi_notify_handler handler);
-                                                           ^
-   drivers/acpi/thermal.c:1007:12: error: incompatible function pointer types passing 'void (struct acpi_device *, u32)' (aka 'void (struct acpi_device *, unsigned int)') to parameter of type 'acpi_notify_handler' (aka 'void (*)(void *, unsigned int, void *)') [-Wincompatible-function-pointer-types]
-                                          acpi_thermal_notify);
-                                          ^~~~~~~~~~~~~~~~~~~
-   include/acpi/acpi_bus.h:523:29: note: passing argument to parameter 'handler' here
-                                       acpi_notify_handler handler);
-                                                           ^
-   drivers/acpi/thermal.c:1026:25: warning: variable 'result' set but not used [-Wunused-but-set-variable]
-           int i, j, power_state, result;
-                                  ^
-   1 warning and 4 errors generated.
+fsl-lx2160a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
+
+r8a77960-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+r8a779m1-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
 
 
-vim +/device +817 drivers/acpi/thermal.c
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.5-rc5=
+-70-g1ce1d2ec8fc3/plan/baseline/
 
-3f655ef8c439e0 Zhang Rui         2008-01-17  809  
-3f655ef8c439e0 Zhang Rui         2008-01-17  810  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  811  /* --------------------------------------------------------------------------
-^1da177e4c3f41 Linus Torvalds    2005-04-16  812                                   Driver Interface
-^1da177e4c3f41 Linus Torvalds    2005-04-16  813     -------------------------------------------------------------------------- */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  814  
-342d550db1bc0b Bjorn Helgaas     2009-04-07  815  static void acpi_thermal_notify(struct acpi_device *device, u32 event)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  816  {
-9d67b6acf1358b Michal Wilczynski 2023-07-03 @817  	struct acpi_device *device = data;
-342d550db1bc0b Bjorn Helgaas     2009-04-07  818  	struct acpi_thermal *tz = acpi_driver_data(device);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  819  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  820  	if (!tz)
-d550d98d331737 Patrick Mochel    2006-06-27  821  		return;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  822  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  823  	switch (event) {
-^1da177e4c3f41 Linus Torvalds    2005-04-16  824  	case ACPI_THERMAL_NOTIFY_TEMPERATURE:
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  825  		acpi_queue_thermal_check(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  826  		break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  827  	case ACPI_THERMAL_NOTIFY_THRESHOLDS:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  828  	case ACPI_THERMAL_NOTIFY_DEVICES:
-95d37fab16ec7a Rafael J. Wysocki 2023-08-04  829  		acpi_thermal_trips_update(tz, event);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  830  		break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  831  	default:
-f86b15a1e65414 Rafael J. Wysocki 2021-02-03  832  		acpi_handle_debug(device->handle, "Unsupported event [0x%x]\n",
-f86b15a1e65414 Rafael J. Wysocki 2021-02-03  833  				  event);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  834  		break;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  835  	}
-^1da177e4c3f41 Linus Torvalds    2005-04-16  836  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  837  
-261cba2deb7d3b Zhang Rui         2012-11-27  838  /*
-261cba2deb7d3b Zhang Rui         2012-11-27  839   * On some platforms, the AML code has dependency about
-261cba2deb7d3b Zhang Rui         2012-11-27  840   * the evaluating order of _TMP and _CRT/_HOT/_PSV/_ACx.
-261cba2deb7d3b Zhang Rui         2012-11-27  841   * 1. On HP Pavilion G4-1016tx, _TMP must be invoked after
-261cba2deb7d3b Zhang Rui         2012-11-27  842   *    /_CRT/_HOT/_PSV/_ACx, or else system will be power off.
-261cba2deb7d3b Zhang Rui         2012-11-27  843   * 2. On HP Compaq 6715b/6715s, the return value of _PSV is 0
-261cba2deb7d3b Zhang Rui         2012-11-27  844   *    if _TMP has never been evaluated.
-261cba2deb7d3b Zhang Rui         2012-11-27  845   *
-261cba2deb7d3b Zhang Rui         2012-11-27  846   * As this dependency is totally transparent to OS, evaluate
-261cba2deb7d3b Zhang Rui         2012-11-27  847   * all of them once, in the order of _CRT/_HOT/_PSV/_ACx,
-261cba2deb7d3b Zhang Rui         2012-11-27  848   * _TMP, before they are actually used.
-261cba2deb7d3b Zhang Rui         2012-11-27  849   */
-261cba2deb7d3b Zhang Rui         2012-11-27  850  static void acpi_thermal_aml_dependency_fix(struct acpi_thermal *tz)
-261cba2deb7d3b Zhang Rui         2012-11-27  851  {
-261cba2deb7d3b Zhang Rui         2012-11-27  852  	acpi_handle handle = tz->device->handle;
-261cba2deb7d3b Zhang Rui         2012-11-27  853  	unsigned long long value;
-261cba2deb7d3b Zhang Rui         2012-11-27  854  	int i;
-261cba2deb7d3b Zhang Rui         2012-11-27  855  
-261cba2deb7d3b Zhang Rui         2012-11-27  856  	acpi_evaluate_integer(handle, "_CRT", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  857  	acpi_evaluate_integer(handle, "_HOT", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  858  	acpi_evaluate_integer(handle, "_PSV", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  859  	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
-261cba2deb7d3b Zhang Rui         2012-11-27  860  		char name[5] = { '_', 'A', 'C', ('0' + i), '\0' };
-261cba2deb7d3b Zhang Rui         2012-11-27  861  		acpi_status status;
-261cba2deb7d3b Zhang Rui         2012-11-27  862  
-261cba2deb7d3b Zhang Rui         2012-11-27  863  		status = acpi_evaluate_integer(handle, name, NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  864  		if (status == AE_NOT_FOUND)
-261cba2deb7d3b Zhang Rui         2012-11-27  865  			break;
-261cba2deb7d3b Zhang Rui         2012-11-27  866  	}
-261cba2deb7d3b Zhang Rui         2012-11-27  867  	acpi_evaluate_integer(handle, "_TMP", NULL, &value);
-261cba2deb7d3b Zhang Rui         2012-11-27  868  }
-261cba2deb7d3b Zhang Rui         2012-11-27  869  
-4be44fcd3bf648 Len Brown         2005-08-05  870  static int acpi_thermal_get_info(struct acpi_thermal *tz)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  871  {
-36f554046bd6da Rafael J. Wysocki 2022-10-04  872  	int result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  873  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  874  	if (!tz)
-d550d98d331737 Patrick Mochel    2006-06-27  875  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  876  
-261cba2deb7d3b Zhang Rui         2012-11-27  877  	acpi_thermal_aml_dependency_fix(tz);
-261cba2deb7d3b Zhang Rui         2012-11-27  878  
-9bcb8118965ab4 Matthew Garrett   2012-02-01  879  	/* Get trip points [_CRT, _PSV, etc.] (required) */
-9bcb8118965ab4 Matthew Garrett   2012-02-01  880  	result = acpi_thermal_get_trip_points(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  881  	if (result)
-d550d98d331737 Patrick Mochel    2006-06-27  882  		return result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  883  
-9bcb8118965ab4 Matthew Garrett   2012-02-01  884  	/* Get temperature [_TMP] (required) */
-9bcb8118965ab4 Matthew Garrett   2012-02-01  885  	result = acpi_thermal_get_temperature(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  886  	if (result)
-d550d98d331737 Patrick Mochel    2006-06-27  887  		return result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  888  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  889  	/* Set the cooling mode [_SCP] to active cooling (default) */
-c31b3a1b004c10 Rafael J. Wysocki 2023-06-04  890  	acpi_execute_simple_method(tz->device->handle, "_SCP",
-c31b3a1b004c10 Rafael J. Wysocki 2023-06-04  891  				   ACPI_THERMAL_MODE_ACTIVE);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  892  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  893  	/* Get default polling frequency [_TZP] (optional) */
-^1da177e4c3f41 Linus Torvalds    2005-04-16  894  	if (tzp)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  895  		tz->polling_frequency = tzp;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  896  	else
-^1da177e4c3f41 Linus Torvalds    2005-04-16  897  		acpi_thermal_get_polling_frequency(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  898  
-d550d98d331737 Patrick Mochel    2006-06-27  899  	return 0;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  900  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  901  
-13614e37e94da4 Jean Delvare      2009-04-06  902  /*
-13614e37e94da4 Jean Delvare      2009-04-06  903   * The exact offset between Kelvin and degree Celsius is 273.15. However ACPI
-13614e37e94da4 Jean Delvare      2009-04-06  904   * handles temperature values with a single decimal place. As a consequence,
-13614e37e94da4 Jean Delvare      2009-04-06  905   * some implementations use an offset of 273.1 and others use an offset of
-13614e37e94da4 Jean Delvare      2009-04-06  906   * 273.2. Try to find out which one is being used, to present the most
-13614e37e94da4 Jean Delvare      2009-04-06  907   * accurate and visually appealing number.
-13614e37e94da4 Jean Delvare      2009-04-06  908   *
-13614e37e94da4 Jean Delvare      2009-04-06  909   * The heuristic below should work for all ACPI thermal zones which have a
-13614e37e94da4 Jean Delvare      2009-04-06  910   * critical trip point with a value being a multiple of 0.5 degree Celsius.
-13614e37e94da4 Jean Delvare      2009-04-06  911   */
-13614e37e94da4 Jean Delvare      2009-04-06  912  static void acpi_thermal_guess_offset(struct acpi_thermal *tz)
-13614e37e94da4 Jean Delvare      2009-04-06  913  {
-7266c88cbaa3de Rafael J. Wysocki 2023-06-04  914  	if (tz->trips.critical.valid &&
-13614e37e94da4 Jean Delvare      2009-04-06  915  	    (tz->trips.critical.temperature % 5) == 1)
-7f49a5cb94e68a Akinobu Mita      2020-01-30  916  		tz->kelvin_offset = 273100;
-13614e37e94da4 Jean Delvare      2009-04-06  917  	else
-7f49a5cb94e68a Akinobu Mita      2020-01-30  918  		tz->kelvin_offset = 273200;
-13614e37e94da4 Jean Delvare      2009-04-06  919  }
-13614e37e94da4 Jean Delvare      2009-04-06  920  
-a59ffb2062df3a Aaron Lu          2014-03-04  921  static void acpi_thermal_check_fn(struct work_struct *work)
-a59ffb2062df3a Aaron Lu          2014-03-04  922  {
-a59ffb2062df3a Aaron Lu          2014-03-04  923  	struct acpi_thermal *tz = container_of(work, struct acpi_thermal,
-a59ffb2062df3a Aaron Lu          2014-03-04  924  					       thermal_check_work);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  925  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  926  	/*
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  927  	 * In general, it is not sufficient to check the pending bit, because
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  928  	 * subsequent instances of this function may be queued after one of them
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  929  	 * has started running (e.g. if _TMP sleeps).  Avoid bailing out if just
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  930  	 * one of them is running, though, because it may have done the actual
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  931  	 * check some time ago, so allow at least one of them to block on the
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  932  	 * mutex while another one is running the update.
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  933  	 */
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  934  	if (!refcount_dec_not_one(&tz->thermal_check_count))
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  935  		return;
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  936  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  937  	mutex_lock(&tz->thermal_check_lock);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  938  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  939  	thermal_zone_device_update(tz->thermal_zone, THERMAL_EVENT_UNSPECIFIED);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  940  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  941  	refcount_inc(&tz->thermal_check_count);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  942  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  943  	mutex_unlock(&tz->thermal_check_lock);
-a59ffb2062df3a Aaron Lu          2014-03-04  944  }
-a59ffb2062df3a Aaron Lu          2014-03-04  945  
-4be44fcd3bf648 Len Brown         2005-08-05  946  static int acpi_thermal_add(struct acpi_device *device)
-^1da177e4c3f41 Linus Torvalds    2005-04-16  947  {
-36f554046bd6da Rafael J. Wysocki 2022-10-04  948  	struct acpi_thermal *tz;
-36f554046bd6da Rafael J. Wysocki 2022-10-04  949  	int result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  950  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  951  	if (!device)
-d550d98d331737 Patrick Mochel    2006-06-27  952  		return -EINVAL;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  953  
-36bcbec7ce21e2 Burman Yan        2006-12-19  954  	tz = kzalloc(sizeof(struct acpi_thermal), GFP_KERNEL);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  955  	if (!tz)
-d550d98d331737 Patrick Mochel    2006-06-27  956  		return -ENOMEM;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  957  
-8348e1b19a06b1 Patrick Mochel    2006-05-19  958  	tz->device = device;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  959  	strcpy(tz->name, device->pnp.bus_id);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  960  	strcpy(acpi_device_name(device), ACPI_THERMAL_DEVICE_NAME);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  961  	strcpy(acpi_device_class(device), ACPI_THERMAL_CLASS);
-db89b4f0dbab83 Pavel Machek      2008-09-22  962  	device->driver_data = tz;
-3f655ef8c439e0 Zhang Rui         2008-01-17  963  
-^1da177e4c3f41 Linus Torvalds    2005-04-16  964  	result = acpi_thermal_get_info(tz);
-^1da177e4c3f41 Linus Torvalds    2005-04-16  965  	if (result)
-3f655ef8c439e0 Zhang Rui         2008-01-17  966  		goto free_memory;
-3f655ef8c439e0 Zhang Rui         2008-01-17  967  
-13614e37e94da4 Jean Delvare      2009-04-06  968  	acpi_thermal_guess_offset(tz);
-13614e37e94da4 Jean Delvare      2009-04-06  969  
-3f655ef8c439e0 Zhang Rui         2008-01-17  970  	result = acpi_thermal_register_thermal_zone(tz);
-3f655ef8c439e0 Zhang Rui         2008-01-17  971  	if (result)
-3f655ef8c439e0 Zhang Rui         2008-01-17  972  		goto free_memory;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  973  
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  974  	refcount_set(&tz->thermal_check_count, 3);
-81b704d3e4674e Rafael J. Wysocki 2021-01-14  975  	mutex_init(&tz->thermal_check_lock);
-a59ffb2062df3a Aaron Lu          2014-03-04  976  	INIT_WORK(&tz->thermal_check_work, acpi_thermal_check_fn);
-a59ffb2062df3a Aaron Lu          2014-03-04  977  
-f86b15a1e65414 Rafael J. Wysocki 2021-02-03  978  	pr_info("%s [%s] (%ld C)\n", acpi_device_name(device),
-7f49a5cb94e68a Akinobu Mita      2020-01-30  979  		acpi_device_bid(device), deci_kelvin_to_celsius(tz->temperature));
-^1da177e4c3f41 Linus Torvalds    2005-04-16  980  
-9d67b6acf1358b Michal Wilczynski 2023-07-03  981  	result = acpi_dev_install_notify_handler(device, ACPI_DEVICE_NOTIFY,
-9d67b6acf1358b Michal Wilczynski 2023-07-03 @982  						 acpi_thermal_notify);
-9d67b6acf1358b Michal Wilczynski 2023-07-03  983  	if (result)
-9d67b6acf1358b Michal Wilczynski 2023-07-03  984  		goto flush_wq;
-9d67b6acf1358b Michal Wilczynski 2023-07-03  985  
-9d67b6acf1358b Michal Wilczynski 2023-07-03  986  	return 0;
-9d67b6acf1358b Michal Wilczynski 2023-07-03  987  
-9d67b6acf1358b Michal Wilczynski 2023-07-03  988  flush_wq:
-9d67b6acf1358b Michal Wilczynski 2023-07-03  989  	flush_workqueue(acpi_thermal_pm_queue);
-9d67b6acf1358b Michal Wilczynski 2023-07-03  990  	acpi_thermal_unregister_thermal_zone(tz);
-3f655ef8c439e0 Zhang Rui         2008-01-17  991  free_memory:
-^1da177e4c3f41 Linus Torvalds    2005-04-16  992  	kfree(tz);
-9d67b6acf1358b Michal Wilczynski 2023-07-03  993  
-d550d98d331737 Patrick Mochel    2006-06-27  994  	return result;
-^1da177e4c3f41 Linus Torvalds    2005-04-16  995  }
-^1da177e4c3f41 Linus Torvalds    2005-04-16  996  
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.5-rc5-70-g1ce1d2ec8fc3
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      1ce1d2ec8fc34809aa5b55619bbb6dc9577165e9 =
 
-:::::: The code at line 817 was first introduced by commit
-:::::: 9d67b6acf1358b67a6de3302dc9c344a7cab4807 ACPI: thermal: Install Notify() handler directly
 
-:::::: TO: Michal Wilczynski <michal.wilczynski@intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+fsl-ls2088a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d14874a917569c6035b241
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d14874a917569c6035b244
+        failing since 24 days (last pass: v6.0-rc3-85-gf6f4c123bfbc, first =
+fail: v6.5-rc1-21-g3c61a03588dd8)
+
+    2023-08-07T19:39:23.729524  [   12.333553] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1241419_1.5.2.4.1>
+    2023-08-07T19:39:23.834687  =
+
+    2023-08-07T19:39:23.935858  / # #export SHELL=3D/bin/sh
+    2023-08-07T19:39:23.936250  =
+
+    2023-08-07T19:39:24.037199  / # export SHELL=3D/bin/sh. /lava-1241419/e=
+nvironment
+    2023-08-07T19:39:24.037595  =
+
+    2023-08-07T19:39:24.138556  / # . /lava-1241419/environment/lava-124141=
+9/bin/lava-test-runner /lava-1241419/1
+    2023-08-07T19:39:24.139246  =
+
+    2023-08-07T19:39:24.143572  / # /lava-1241419/bin/lava-test-runner /lav=
+a-1241419/1
+    2023-08-07T19:39:24.167874  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+fsl-lx2160a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d14889a917569c6035b27c
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d14889a917569c6035b27f
+        failing since 144 days (last pass: v6.1-rc5-55-g60453df62d30, first=
+ fail: v6.3-rc2-33-g1240ce78c05e)
+
+    2023-08-07T19:39:28.130084  [   12.569071] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1241422_1.5.2.4.1>
+    2023-08-07T19:39:28.235435  =
+
+    2023-08-07T19:39:28.336731  / # #export SHELL=3D/bin/sh
+    2023-08-07T19:39:28.337140  =
+
+    2023-08-07T19:39:28.438130  / # export SHELL=3D/bin/sh. /lava-1241422/e=
+nvironment
+    2023-08-07T19:39:28.438534  =
+
+    2023-08-07T19:39:28.539565  / # . /lava-1241422/environment/lava-124142=
+2/bin/lava-test-runner /lava-1241422/1
+    2023-08-07T19:39:28.540345  =
+
+    2023-08-07T19:39:28.544274  / # /lava-1241422/bin/lava-test-runner /lav=
+a-1241422/1
+    2023-08-07T19:39:28.567008  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+r8a77960-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d14823fb8a09b6fc35b207
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d14823fb8a09b6fc35b20c
+        failing since 18 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-07T19:39:43.313901  / # #
+
+    2023-08-07T19:39:43.416083  export SHELL=3D/bin/sh
+
+    2023-08-07T19:39:43.416824  #
+
+    2023-08-07T19:39:43.518266  / # export SHELL=3D/bin/sh. /lava-11226581/=
+environment
+
+    2023-08-07T19:39:43.518894  =
+
+
+    2023-08-07T19:39:43.620247  / # . /lava-11226581/environment/lava-11226=
+581/bin/lava-test-runner /lava-11226581/1
+
+    2023-08-07T19:39:43.621529  =
+
+
+    2023-08-07T19:39:43.638114  / # /lava-11226581/bin/lava-test-runner /la=
+va-11226581/1
+
+    2023-08-07T19:39:43.688164  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-07T19:39:43.688697  + cd /lav<8>[   19.279586] <LAVA_SIGNAL_STA=
+RTRUN 1_bootrr 11226581_1.5.2.4.5>
+ =
+
+    ... (28 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+r8a779m1-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d1484c17b731971335b1e4
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-70-g1ce1d2=
+ec8fc3/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d1484c17b731971335b1e9
+        failing since 18 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-07T19:38:41.402733  / # #
+
+    2023-08-07T19:38:42.482252  export SHELL=3D/bin/sh
+
+    2023-08-07T19:38:42.484213  #
+
+    2023-08-07T19:38:43.974011  / # export SHELL=3D/bin/sh. /lava-11226588/=
+environment
+
+    2023-08-07T19:38:43.975805  =
+
+
+    2023-08-07T19:38:46.693931  / # . /lava-11226588/environment/lava-11226=
+588/bin/lava-test-runner /lava-11226588/1
+
+    2023-08-07T19:38:46.696388  =
+
+
+    2023-08-07T19:38:46.709745  / # /lava-11226588/bin/lava-test-runner /la=
+va-11226588/1
+
+    2023-08-07T19:38:46.768683  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-07T19:38:46.769183  + cd /lava-112265<8>[   28.477236] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11226588_1.5.2.4.5>
+ =
+
+    ... (38 line(s) more)  =
+
+ =20
