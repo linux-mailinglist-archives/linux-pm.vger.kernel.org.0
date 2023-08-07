@@ -2,117 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 075AB771C51
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 10:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931C3771CA9
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 10:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbjHGIeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 04:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S229876AbjHGIzy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 04:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjHGIeO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 04:34:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E64710EF;
-        Mon,  7 Aug 2023 01:34:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        with ESMTP id S231322AbjHGIzt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 04:55:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1689C10FD;
+        Mon,  7 Aug 2023 01:55:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 44AAB218A9;
-        Mon,  7 Aug 2023 08:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1691397251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=CkiLjiLMxObzy3Sb9w3oxtxHFV8IOAxBlCK+K5bcwaE=;
-        b=r+DUjLGFEllhgYp/YiieuZF0DOCjFDWeLyJoWFD0+nxlhS2s+B4eZvPMd4W3P12+txsJ5K
-        G431i69aOhsJSqtUZcspvZ0xB1KGBCaF8Sc0PPEF5QWSdWdODP1kf6Odvb05n1/K6EP4OM
-        2N5m5JFtHu58v9ZyWEHYpAtkTXoamI0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1691397251;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=CkiLjiLMxObzy3Sb9w3oxtxHFV8IOAxBlCK+K5bcwaE=;
-        b=PmOcswpF0o6Csfk6kbt4+f54rrFElHQs3ovyF4w1bqSUJ5n6roG5qyOxTHY7f0PI1TMtU0
-        9q+79oecr2eV8RBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F71013487;
-        Mon,  7 Aug 2023 08:34:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 9RkuA4Os0GTCBwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 07 Aug 2023 08:34:11 +0000
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>
-Cc:     dm-devel@redhat.com, gregkh@linuxfoundation.org, hch@lst.de,
-        joern@lazybastard.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, loic.poulain@linaro.org,
-        miquel.raynal@bootlin.com, regressions@lists.linux.dev,
-        richard@nod.at, snitzer@kernel.org, vigneshr@ti.com,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH for 6.5 regression] PM: hibernate: fix resume_store() return value when hibernation not available
-Date:   Mon,  7 Aug 2023 10:33:57 +0200
-Message-ID: <20230807083356.19222-2-vbabka@suse.cz>
-X-Mailer: git-send-email 2.41.0
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F4D9616AF;
+        Mon,  7 Aug 2023 08:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F572C433C9;
+        Mon,  7 Aug 2023 08:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691398547;
+        bh=aNHge0yiOY/VAZNLBKBPp6ymBzs24Uuzx4hIU+sZ4Bw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dv+bBEYxfrdjDt9exFHQnOm6yz2T0hfWEHmoB1ikclVu9UGCPJYDihDTBaJahEkWI
+         TeBoB5SYhh0IftBkmwAeos3ClYRh6utWZq47Ff6uM8Jp94/MB/DRtdhrbCaEyrpuvr
+         q491IdUyRkqrYES0o/eP6ms+oz260Ji9EUZMx6ylmXyneOCwE8vUCMdFfn8grI8XKV
+         DBkuE9pFnMNoq9aBgwSffrej09PrYPtF+EPKP+xloM2uHCdGRdxtQgUmIGoBqQbts3
+         J+ZgzHNmdYDVpRah/Fc9Z0YyRlKRcZUpHmDkXsjUkg3iGlyBFk6yJKZf+shx4eZHQR
+         +BQmY7Jqi1elA==
+Date:   Mon, 7 Aug 2023 10:55:43 +0200
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
+        Iskren Chernev <me@iskren.info>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Matheus Castello <matheus@castello.eng.br>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Stefan Hansson <newbie13xd@gmail.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] ARM: configs: s5pv210_defconfig: enable IIO
+ required by MAX17040
+Message-ID: <20230807085543.3tfzpsa2joolay3r@intel.intel>
+References: <20230731073613.10394-1-clamor95@gmail.com>
+ <20230731073613.10394-5-clamor95@gmail.com>
+ <20230805224211.qquexvseq24hxcju@intel.intel>
+ <16047849-1001-4d6f-4995-0fdfc065cded@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <16047849-1001-4d6f-4995-0fdfc065cded@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On a laptop with hibernation set up but not actively used, and with
-secure boot and lockdown enabled kernel, 6.5-rc1 gets stuck on boot with
-the following repeated messages:
+Hi,
 
-  A start job is running for Resume from hibernation using device /dev/system/swap (24s / no limit)
-  lockdown_is_locked_down: 25311154 callbacks suppressed
-  Lockdown: systemd-hiberna: hibernation is restricted; see man kernel_lockdown.7
-  ...
+On Sun, Aug 06, 2023 at 10:29:04AM +0200, Krzysztof Kozlowski wrote:
+> On 06/08/2023 00:42, Andi Shyti wrote:
+> > Hi Svyatoslav,
+> > 
+> > On Mon, Jul 31, 2023 at 10:36:13AM +0300, Svyatoslav Ryhel wrote:
+> >> After adding support for passing temperature data from thermal sensor
+> >> to MAX17040 it got dependency on CONFIG_IIO. From all defconfigs
+> >> using MAX17040 only s5pv210_defconfig did not have IIO already enabled
+> >> so let's enable it to avoid regression.
+> >>
+> >> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> >> ---
+> >>  arch/arm/configs/s5pv210_defconfig | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/arch/arm/configs/s5pv210_defconfig b/arch/arm/configs/s5pv210_defconfig
+> >> index 4c1e480b5bbd..24070ee3d43e 100644
+> >> --- a/arch/arm/configs/s5pv210_defconfig
+> >> +++ b/arch/arm/configs/s5pv210_defconfig
+> >> @@ -97,6 +97,7 @@ CONFIG_MMC_SDHCI_S3C_DMA=y
+> >>  CONFIG_RTC_CLASS=y
+> >>  CONFIG_RTC_DRV_MAX8998=m
+> >>  CONFIG_DMADEVICES=y
+> >> +CONFIG_IIO=y
+> >>  CONFIG_PWM=y
+> >>  CONFIG_PWM_SAMSUNG=y
+> >>  CONFIG_PHY_SAMSUNG_USB2=m
+> > 
+> > Should this patch be squashed to the previous patch? I think you
+> > break bisectability for this board if you enable iio only here.
+> 
+> The defconfig change matters less - distros don't use them - so this
+> points to the fact that patchset affected the users. All existing users
+> of max17040 drivers, who do not enable IIO, will have their setups broken.
 
-Checking the resume code leads to commit cc89c63e2fe3 ("PM: hibernate:
-move finding the resume device out of software_resume") which
-inadvertently changed the return value from resume_store() to 0 when
-!hibernation_available(). This apparently translates to userspace
-write() returning 0 as in number of bytes written, and userspace looping
-indefinitely in the attempt to write the intended value.
+That's why I'm suggesting to squash this patch with the previous.
 
-Fix this by returning the full number of bytes that were to be written,
-as that's what was done before the commit.
+Anyway, up to you... except of this note everything looks fine in
+the series.
 
-Fixes: cc89c63e2fe3 ("PM: hibernate: move finding the resume device out of software_resume")
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Resend with review/ack tags added and not buried in the thread.
-Link: https://lore.kernel.org/all/2cfa5f55-1d68-8a4f-d049-13f42e0d1484@suse.cz/
-
- kernel/power/hibernate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index e1b4bfa938dd..2b4a946a6ff5 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -1166,7 +1166,7 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
- 	int error;
- 
- 	if (!hibernation_available())
--		return 0;
-+		return n;
- 
- 	if (len && buf[len-1] == '\n')
- 		len--;
--- 
-2.41.0
-
+Andi
