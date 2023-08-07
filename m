@@ -2,150 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57889772B62
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 18:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDBF772B6C
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 18:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjHGQqu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Aug 2023 12:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S229797AbjHGQrt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Aug 2023 12:47:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjHGQqt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 12:46:49 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76AF10DE;
-        Mon,  7 Aug 2023 09:46:48 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1bc05bece1dso560009fac.1;
-        Mon, 07 Aug 2023 09:46:48 -0700 (PDT)
+        with ESMTP id S229696AbjHGQrt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 12:47:49 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA751721;
+        Mon,  7 Aug 2023 09:47:48 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56d0deeca09so732070eaf.0;
+        Mon, 07 Aug 2023 09:47:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691426808; x=1692031608;
+        d=1e100.net; s=20221208; t=1691426867; x=1692031667;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+cTkah9A+y0zHAsGnDn+WndtVM4Rfo0pn8/RM09YGig=;
-        b=h86AVbFyP4Oz/bojwqqWvlsrTGwrhAa/20iXOW/pYIwe7rxHBGMSL6kxbClj4UA4ef
-         F/pyTcKO2nfCMQ8Zs9HZhA1WFz41xwv2pvBfjQYLifOOSZTTJxfVPuVfl/1Fa1HqKL7f
-         I8zLkc8g3zrDOh5KHZQF3ZrGlYA/tIfNklU+wdBugZuMKviqgPvJr8bOjevNCv7GOPW4
-         o4ie+UUba571Z0Wj9CzeKzYNqK56Q6zs9fV5a3S1DQedZyim0Iwv+jgCYsF24jtsJFhE
-         tkKfxVKuk4G4vo45+sVyP4o27E2gvkTQFrONEDq72a6xpsq63nPlSaKi5kI8rzMaclG4
-         NkFA==
-X-Gm-Message-State: ABy/qLZWmY4ER1qRWSorUUOMPQvJeArFR8LJVuovoW/TIHffHF+6sMrk
-        6zMhAklOVcyeTCg4UewdLGZpjv7Zb7uHPSAqwv4=
-X-Google-Smtp-Source: APBJJlHQJeYGLJWAa+24trXn3icoqVc7zTAQgWg2FFLoc77mae6UbDnZCN8ksd/IRnv93s4pmE3TqI89mAa2MmTFQAU=
-X-Received: by 2002:a05:6870:d208:b0:192:6fce:d3be with SMTP id
- g8-20020a056870d20800b001926fced3bemr27399356oac.1.1691426808091; Mon, 07 Aug
- 2023 09:46:48 -0700 (PDT)
+        bh=XoAePLIfboXCizIZO3iLMpP4Wv3M5byMYzrnW11izx0=;
+        b=jABXFhv8mwZ5J2YgbwNAyg470B1dEuDse5Dim1KNj2Bgz2J7EuzrUNCvnVcFBi4+Zz
+         gu8wZidLqbVziB6wzXYZTZ1N73o1TUCYcJsVqY12NJ/ql3Gvf9rGK907iI+c+scXfdrD
+         hT2a4xHx12c755v5RUyfoJERqrU7rthxnRw9alsBiZeAu1VCyziHLjZClXO0xG2NxjfA
+         X7TsboDw7K4quWHubb0ulJ136T6oyH9bZAmK8AEHNfzTvdZpeaYDiGppeVEpqVmemd9I
+         aO5EuqR17JyZR1BWMb130P76DOHRPAlwAHF+WZWpqvWb1glIepssHETaGAheC+T5r7Km
+         CY7Q==
+X-Gm-Message-State: ABy/qLYo375bQ3jskscD+yVKYms8S7+Xd7KldFLDW+P2iYGIU3uyCdBD
+        3ujP3fl8cVmROvbw9VqAC2ZbZtvYMMoDJOZaDuA=
+X-Google-Smtp-Source: APBJJlHeESdiwSjHbGHne2Z791YC9l9SiiKkVWT+mAOKl06WXmu42KW5Z1OqbYdZGc6M4LO2hInNf022AlXpb6xBv+Q=
+X-Received: by 2002:a4a:cf14:0:b0:569:a08a:d9c5 with SMTP id
+ l20-20020a4acf14000000b00569a08ad9c5mr20658543oos.0.1691426867329; Mon, 07
+ Aug 2023 09:47:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <5712331.DvuYhMxLoT@kreacher> <ZND5CL6Kl9RnDdhL@e126311.manchester.arm.com>
-In-Reply-To: <ZND5CL6Kl9RnDdhL@e126311.manchester.arm.com>
+References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com>
+ <e3dc9417-626d-bae2-c016-36e14914c9b8@linutronix.de>
+In-Reply-To: <e3dc9417-626d-bae2-c016-36e14914c9b8@linutronix.de>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Aug 2023 18:46:37 +0200
-Message-ID: <CAJZ5v0hPHBEtkSVuB4GfTpFf9+Fs=_0=2HOeuf49bqM4NR3qeg@mail.gmail.com>
+Date:   Mon, 7 Aug 2023 18:47:36 +0200
+Message-ID: <CAJZ5v0jX1_yTG6CxnPNVEMf8mMEKc33jpoWoHkreMDZLPK8UcA@mail.gmail.com>
 Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
  unconditionally every time
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
         LKML <linux-kernel@vger.kernel.org>,
         Frederic Weisbecker <frederic@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Kajetan,
+On Mon, Aug 7, 2023 at 5:38 PM Anna-Maria Behnsen
+<anna-maria@linutronix.de> wrote:
+>
+> On Thu, 3 Aug 2023, Rafael J. Wysocki wrote:
+>
+> > On Thu, Aug 3, 2023 at 11:12 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > >
+> > > Hi Folks,
+> > >
+> > > This is the second iteration of:
+> > >
+> > > https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
+> > >
+> > > with an additional patch.
+> > >
+> > > There are some small modifications of patch [1/3] and the new
+> > > patch causes governor statistics to play a role in deciding whether
+> > > or not to stop the scheduler tick.
+> > >
+> > > Testing would be much appreciated!
+> >
+> > For convenience, this series is now available in the following git branch:
+> >
+> > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+> >  pm-cpuidle-teo
+> >
+>
+> Gauthams tests and the distribution of idle time durations looks pretty
+> good. Also the prevention of calling tick_nohz_get_sleep_length() is very
+> nice (21477 calls of tick_nohz_next_event() and the tick was stopped 2670
+> times).
+>
+> Here is the deviation of idle time durations (based on your branch):
+>
+> Idle Total              2670    100.00%
+> x >= 4ms                2537    95.02%
+> 4ms> x >= 2ms           19      0.71%
+> 2ms > x >= 1ms          10      0.37%
+> 1ms > x >= 500us        7       0.26%
+> 500us > x >= 250us      6       0.22%
+> 250us > x >=100us       13      0.49%
+> 100us > x >= 50us       17      0.64%
+> 50us > x >= 25us        25      0.94%
+> 25us > x >= 10us        22      0.82%
+> 10us > x > 5us          9       0.34%
+> 5us > x                 5       0.19%
 
-On Mon, Aug 7, 2023 at 4:04 PM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
->
-> Hi Rafael,
->
-> On Thu, Aug 03, 2023 at 10:57:04PM +0200, Rafael J. Wysocki wrote:
-> > Hi Folks,
-> >
-> > This is the second iteration of:
-> >
-> > https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
-> >
-> > with an additional patch.
-> >
-> > There are some small modifications of patch [1/3] and the new
-> > patch causes governor statistics to play a role in deciding whether
-> > or not to stop the scheduler tick.
-> >
-> > Testing would be much appreciated!
-> >
-> > Thanks!
-> >
->
-> My test results including the v2 are below.
->
-> 1. Geekbench 6
->
-> +---------------------------+---------------+-----------------+-------------------+----------------------+
-> |          metric           |      teo      |     teo_tick    |    teo_tick_rfc   |    teo_tick_rfc_v2   |
-> +---------------------------+---------------+-----------------+-------------------+----------------------+
-> |      multicore_score      | 3320.9 (0.0%) | 3303.3 (-0.53%) |  3293.6 (-0.82%)  |   3302.3 (-0.56%)    |
-> |           score           | 1415.7 (0.0%) | 1417.7 (0.14%)  |  1423.4 (0.54%)   |    1425.8 (0.71%)    |
-> |      CPU_total_power      | 2421.3 (0.0%) | 2429.3 (0.33%)  |  2442.2 (0.86%)   |    2461.9 (1.67%)    |
-> |  latency (AsyncTask #1)   | 49.41μ (0.0%) | 51.07μ (3.36%)  |   50.1μ (1.4%)    |    50.76μ (2.73%)    |
-> | latency (labs.geekbench6) | 65.63μ (0.0%) | 77.47μ (18.03%) | 55.82μ (-14.95%)  |    66.12μ (0.75%)    |
-> | latency (surfaceflinger)  | 39.46μ (0.0%) | 36.94μ (-6.39%) |  35.79μ (-9.28%)  |    40.36μ (2.3%)     |
-> +---------------------------+---------------+-----------------+-------------------+----------------------+
->
-> +----------------------+-------------+------------+
-> |         tag          |    type     | count_perc |
-> +----------------------+-------------+------------+
-> |         teo          |  too deep   |   2.034    |
-> |       teo_tick       |  too deep   |    2.16    |
-> |     teo_tick_rfc     |  too deep   |   2.071    |
-> |    teo_tick_rfc_v2   |  too deep   |   2.548    |
-> |         teo          | too shallow |   15.791   |
-> |       teo_tick       | too shallow |   20.881   |
-> |     teo_tick_rfc     | too shallow |   20.337   |
-> |    teo_tick_rfc_v2   | too shallow |   19.886   |
-> +----------------------+-------------+------------+
->
->
-> 2. JetNews
->
-> +-----------------+---------------+----------------+-----------------+-----------------+
-> |     metric      |      teo      |    teo_tick    |  teo_tick_rfc   | teo_tick_rfc_v2 |
-> +-----------------+---------------+----------------+-----------------+-----------------+
-> |       fps       |  86.2 (0.0%)  |  86.4 (0.16%)  |  86.0 (-0.28%)  |  86.6 (0.41%)   |
-> |    janks_pc     |  0.8 (0.0%)   |  0.8 (-0.66%)  |  0.8 (-1.37%)   |  0.7 (-11.37%)  |
-> | CPU_total_power | 185.2 (0.0%)  | 178.2 (-3.76%) |  182.2 (-1.6%)  | 169.4 (-8.53%)  | <- very interesting
-> +-----------------+---------------+----------------+-----------------+-----------------+
->
-> +----------------------+-------------+--------------------+
-> |         tag          |    type     |     count_perc     |
-> +----------------------+-------------+--------------------+
-> |         teo          |  too deep   |       0.992        |
-> |       teo_tick       |  too deep   |       0.945        |
-> |     teo_tick_rfc     |  too deep   |       1.035        |
-> |    teo_tick_rfc_v2   |  too deep   |       1.127        |
-> |         teo          | too shallow |       17.085       |
-> |       teo_tick       | too shallow |       15.236       |
-> |     teo_tick_rfc     | too shallow |       15.379       |
-> |    teo_tick_rfc_v2   | too shallow |       15.34        |
-> +----------------------+-------------+--------------------+
->
-> All in all looks pretty good. Unfortunately there's a slightly larger
-> percentage of too deep sleeps with the v2 (which is probably where the
-> increase in GB6 power usage comes from) but the lower jank percentage +
-> substantially lower power usage for the UI workload are very promising.
->
-> Since we don't care about GB6 power usage as much as UI power usage, I'd
-> say that the patchset looks good :)
->
-> Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+Thanks a lot for the data!
 
-Thanks a lot, much appreciated!
+Can I add a Tested-by: tag from you to this series?
