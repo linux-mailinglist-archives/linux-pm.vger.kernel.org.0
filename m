@@ -2,182 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06FE771C15
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 10:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 075AB771C51
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 10:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229469AbjHGIM7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 04:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S230044AbjHGIeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 04:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjHGIM7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 04:12:59 -0400
-Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81661BB
-        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 01:12:53 -0700 (PDT)
-X-ASG-Debug-ID: 1691395968-086e23186c103a0001-MQbzy6
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id iucwwu9ktQWASxuh (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 07 Aug 2023 16:12:48 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 7 Aug
- 2023 16:12:47 +0800
-Received: from tony-HX002EA.zhaoxin.com (10.32.65.162) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Mon, 7 Aug
- 2023 16:12:46 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-        <LeoLiu-oc@zhaoxin.com>, <LindaChai@zhaoxin.com>
-Subject: [PATCH] cpufreq: ACPI: add ITMT support when CPPC enabled
-Date:   Mon, 7 Aug 2023 16:12:48 +0800
-X-ASG-Orig-Subj: [PATCH] cpufreq: ACPI: add ITMT support when CPPC enabled
-Message-ID: <20230807081248.4745-1-TonyWWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229469AbjHGIeO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 04:34:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E64710EF;
+        Mon,  7 Aug 2023 01:34:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 44AAB218A9;
+        Mon,  7 Aug 2023 08:34:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1691397251; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=CkiLjiLMxObzy3Sb9w3oxtxHFV8IOAxBlCK+K5bcwaE=;
+        b=r+DUjLGFEllhgYp/YiieuZF0DOCjFDWeLyJoWFD0+nxlhS2s+B4eZvPMd4W3P12+txsJ5K
+        G431i69aOhsJSqtUZcspvZ0xB1KGBCaF8Sc0PPEF5QWSdWdODP1kf6Odvb05n1/K6EP4OM
+        2N5m5JFtHu58v9ZyWEHYpAtkTXoamI0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1691397251;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=CkiLjiLMxObzy3Sb9w3oxtxHFV8IOAxBlCK+K5bcwaE=;
+        b=PmOcswpF0o6Csfk6kbt4+f54rrFElHQs3ovyF4w1bqSUJ5n6roG5qyOxTHY7f0PI1TMtU0
+        9q+79oecr2eV8RBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0F71013487;
+        Mon,  7 Aug 2023 08:34:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 9RkuA4Os0GTCBwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 07 Aug 2023 08:34:11 +0000
+From:   Vlastimil Babka <vbabka@suse.cz>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>
+Cc:     dm-devel@redhat.com, gregkh@linuxfoundation.org, hch@lst.de,
+        joern@lazybastard.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-pm@vger.kernel.org, loic.poulain@linaro.org,
+        miquel.raynal@bootlin.com, regressions@lists.linux.dev,
+        richard@nod.at, snitzer@kernel.org, vigneshr@ti.com,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: [PATCH for 6.5 regression] PM: hibernate: fix resume_store() return value when hibernation not available
+Date:   Mon,  7 Aug 2023 10:33:57 +0200
+Message-ID: <20230807083356.19222-2-vbabka@suse.cz>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.32.65.162]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1691395968
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 3567
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.112427
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The _CPC method can get per-core highest frequency.
-The highest frequency may varies between cores which mean cores can
-running at different max frequency, so can use it as a core priority
-and give a hint to scheduler in order to put critical task to the
-higher priority core.
+On a laptop with hibernation set up but not actively used, and with
+secure boot and lockdown enabled kernel, 6.5-rc1 gets stuck on boot with
+the following repeated messages:
 
-Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+  A start job is running for Resume from hibernation using device /dev/system/swap (24s / no limit)
+  lockdown_is_locked_down: 25311154 callbacks suppressed
+  Lockdown: systemd-hiberna: hibernation is restricted; see man kernel_lockdown.7
+  ...
+
+Checking the resume code leads to commit cc89c63e2fe3 ("PM: hibernate:
+move finding the resume device out of software_resume") which
+inadvertently changed the return value from resume_store() to 0 when
+!hibernation_available(). This apparently translates to userspace
+write() returning 0 as in number of bytes written, and userspace looping
+indefinitely in the attempt to write the intended value.
+
+Fix this by returning the full number of bytes that were to be written,
+as that's what was done before the commit.
+
+Fixes: cc89c63e2fe3 ("PM: hibernate: move finding the resume device out of software_resume")
+Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/cpufreq/acpi-cpufreq.c | 59 ++++++++++++++++++++++++++++++----
- 1 file changed, 52 insertions(+), 7 deletions(-)
+Resend with review/ack tags added and not buried in the thread.
+Link: https://lore.kernel.org/all/2cfa5f55-1d68-8a4f-d049-13f42e0d1484@suse.cz/
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index b2f05d27167e..5733323e04ac 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -628,28 +628,35 @@ static int acpi_cpufreq_blacklist(struct cpuinfo_x86 *c)
- #endif
+ kernel/power/hibernate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index e1b4bfa938dd..2b4a946a6ff5 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -1166,7 +1166,7 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
+ 	int error;
  
- #ifdef CONFIG_ACPI_CPPC_LIB
--static u64 get_max_boost_ratio(unsigned int cpu)
-+static void cpufreq_get_core_perf(int cpu, u64 *highest_perf, u64 *nominal_perf)
- {
- 	struct cppc_perf_caps perf_caps;
--	u64 highest_perf, nominal_perf;
- 	int ret;
- 
- 	if (acpi_pstate_strict)
+ 	if (!hibernation_available())
 -		return 0;
-+		return;
++		return n;
  
- 	ret = cppc_get_perf_caps(cpu, &perf_caps);
- 	if (ret) {
- 		pr_debug("CPU%d: Unable to get performance capabilities (%d)\n",
- 			 cpu, ret);
--		return 0;
-+		return;
- 	}
- 
- 	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD)
--		highest_perf = amd_get_highest_perf();
-+		*highest_perf = amd_get_highest_perf();
- 	else
--		highest_perf = perf_caps.highest_perf;
-+		*highest_perf = perf_caps.highest_perf;
-+
-+	*nominal_perf = perf_caps.nominal_perf;
-+	return;
-+}
- 
--	nominal_perf = perf_caps.nominal_perf;
-+static u64 get_max_boost_ratio(unsigned int cpu)
-+{
-+	u64 highest_perf, nominal_perf;
-+
-+	cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
- 
- 	if (!highest_perf || !nominal_perf) {
- 		pr_debug("CPU%d: highest or nominal performance missing\n", cpu);
-@@ -663,8 +670,44 @@ static u64 get_max_boost_ratio(unsigned int cpu)
- 
- 	return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
- }
-+
-+static void cpufreq_sched_itmt_work_fn(struct work_struct *work)
-+{
-+	sched_set_itmt_support();
-+}
-+
-+static DECLARE_WORK(sched_itmt_work, cpufreq_sched_itmt_work_fn);
-+
-+static void cpufreq_set_itmt_prio(int cpu)
-+{
-+	u64 highest_perf, nominal_perf;
-+	static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
-+
-+	cpufreq_get_core_perf(cpu, &highest_perf, &nominal_perf);
-+
-+	sched_set_itmt_core_prio(highest_perf, cpu);
-+
-+	if (max_highest_perf <= min_highest_perf) {
-+		if (highest_perf > max_highest_perf)
-+			max_highest_perf = highest_perf;
-+
-+		if (highest_perf < min_highest_perf)
-+			min_highest_perf = highest_perf;
-+
-+		if (max_highest_perf > min_highest_perf) {
-+			/*
-+			 * This code can be run during CPU online under the
-+			 * CPU hotplug locks, so sched_set_itmt_support()
-+			 * cannot be called from here.  Queue up a work item
-+			 * to invoke it.
-+			 */
-+			schedule_work(&sched_itmt_work);
-+		}
-+	}
-+}
- #else
- static inline u64 get_max_boost_ratio(unsigned int cpu) { return 0; }
-+static void cpufreq_set_itmt_prio(int cpu) { return; }
- #endif
- 
- static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
-@@ -870,6 +913,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	/* notify BIOS that we exist */
- 	acpi_processor_notify_smm(THIS_MODULE);
- 
-+	cpufreq_set_itmt_prio(cpu);
-+
- 	pr_debug("CPU%u - ACPI performance management activated.\n", cpu);
- 	for (i = 0; i < perf->state_count; i++)
- 		pr_debug("     %cP%d: %d MHz, %d mW, %d uS\n",
+ 	if (len && buf[len-1] == '\n')
+ 		len--;
 -- 
-2.17.1
+2.41.0
 
