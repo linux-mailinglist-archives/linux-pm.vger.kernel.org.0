@@ -2,136 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D666D7731AF
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 23:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41BD07731BC
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 23:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjHGV5J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 17:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39234 "EHLO
+        id S230131AbjHGV6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 17:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbjHGV5I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 17:57:08 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97740A8
-        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 14:57:07 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-56334abe325so2913172a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 14:57:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691445427; x=1692050227;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WvIEaTGboMwJuS/k2b6YBv94pmgX2U83ceP6WGTpdkM=;
-        b=I5bmxg/hHY61GPNbDXbVujQz+aWG3H81dAQBVNYFpQ/zqvZZLMhYBskBpcGq7CHd/n
-         bKzSmg2HKu1xhBCMDUCLZ4H/loat+B4KL9U8xQRtOiddBoz7hxp3+kzIKuYyGXrmCiNe
-         K3eWvA6GGzW/YPwhB2tIzERcPpQYP9nMxOwuCvTcL2/YvmsVyTFywnJeKiOtmT97Cr8w
-         2bb1l/+3573pJGHDxIwLiMShDz8cnFwzrT5Aw3HXxCkS6sKeqSjlMLPvLZ4eJ5zbY+oT
-         L2wS5quX1vOIgni6FgnTjpj7J20WR3IkhZNcyqpu3pEJIbVUB4CH1JPdC1CrG4slNYud
-         LrQw==
-X-Gm-Message-State: AOJu0Yx6YhW/wIOk1HO0cpEIErTKFMGrCZSi+bNdk2qCJdLfjSX5L87B
-        YEcHd/T51MpJafUYR8cSh8UwGQ==
-X-Google-Smtp-Source: AGHT+IEdiUMcXmPMcKTJnHdeH59gwbfl+t+l+pkmpPSb1V346uMtAeM99tfVQPHhldq22o7KUFssAw==
-X-Received: by 2002:a17:90b:38c3:b0:262:f09c:e73d with SMTP id nn3-20020a17090b38c300b00262f09ce73dmr8289917pjb.34.1691445426934;
-        Mon, 07 Aug 2023 14:57:06 -0700 (PDT)
-Received: from localhost ([75.172.135.98])
-        by smtp.gmail.com with ESMTPSA id u19-20020a17090a891300b00267fbd521dbsm9237293pjn.5.2023.08.07.14.57.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 14:57:06 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>, Andrew Davis <afd@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend
- resume support
-In-Reply-To: <20230803160815.yfpkdfssv75d4inf@dhruva>
-References: <20230803064247.503036-1-d-gole@ti.com>
- <20230803064247.503036-5-d-gole@ti.com>
- <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
- <20230803155541.nwsfwobfkbpefoyw@dhruva>
- <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
- <20230803160815.yfpkdfssv75d4inf@dhruva>
-Date:   Mon, 07 Aug 2023 14:57:05 -0700
-Message-ID: <7ho7jifrda.fsf@baylibre.com>
+        with ESMTP id S229481AbjHGV6H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 17:58:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB53FDB;
+        Mon,  7 Aug 2023 14:57:53 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 377LgpjA008701;
+        Mon, 7 Aug 2023 21:57:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=QPCAV9pyNoC0h6RfGBJgwpUbQEL+UJj8rm3tn0R9vW4=;
+ b=irmgA6P67oB7glk8LWMvE96ZiST3DuE2xRYvn4JdPRSHkI0p4IQmIN6517uaX4/K6uJr
+ JXAuI1UWiQ2Gw3WrtrCkD9eYLY7+ZiBrVVVmdSnbc4OnaW2UiHXf6hFUAP9QDvQinv00
+ k4dL/9mG5WeifKJIG73pHEjnKoR+FSW7XZcCGkgTAKEFJmOp02GKes+/8V54GIo4cYp+
+ UCM8OiPui/uJYPJ9GYPn6M+6XUlioIamm6mAEGjAD2EVm5xtaHBLCI/26NLnRKie4XkM
+ pzWlEd+dfGe0ylZ3hLP60LgnKqMNjIyTRQ9X8s+RL5KTdEbitOWGirchlOdC9clmhawk dw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3saxbbsbmy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Aug 2023 21:57:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 377Lvf6G012050
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 7 Aug 2023 21:57:41 GMT
+Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 7 Aug 2023 14:57:40 -0700
+Date:   Mon, 7 Aug 2023 14:57:39 -0700
+From:   Mike Tipton <quic_mdtipton@quicinc.com>
+To:     Georgi Djakov <djakov@kernel.org>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 00/53] icc-rpmh multi-RSC voting groundwork
+Message-ID: <20230807215739.GA9621@hu-mdtipton-lv.qualcomm.com>
+References: <20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org>
+ <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c067a45f-9629-d516-9e56-36538e4ff6db@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: KEfak8hgRYBt2UyjLGg6DaQalcjhtdha
+X-Proofpoint-GUID: KEfak8hgRYBt2UyjLGg6DaQalcjhtdha
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-07_24,2023-08-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 clxscore=1011 impostorscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308070199
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dhruva Gole <d-gole@ti.com> writes:
+On Thu, Aug 03, 2023 at 07:48:08PM +0300, Georgi Djakov wrote:
+> Hi Konrad,
+> 
+> On 11.07.23 15:17, Konrad Dybcio wrote:
+> > Many parts of Qualcomm SoCs are entirely independent of each other and can
+> > run when the other parts are off. The RPMh system architecture embraces
+> > this by giving each (loosely defined) subsystem its own connection (as in,
+> > physical wires) to the AOSS, terminated by per-subsystem RSCs (Resource
+> > State Coordinators) that barter for power, bandwidth etc.
+> > 
+> > This series introduces the groundwork necessary for voting for resources
+> > through non-APPS RSCs. It should allow for lower-latency vote adjustments
+> > (e.g. for very high bandwidth / multiple displays) and could potentially
+> > allow for full APSS collapse while keeping e.g. MDSS operating (say
+> > refreshing an image from a RAM buffer).
+> 
+> This is good stuff. Thanks for working on it! Actually the path tagging,
+> that have been introduced some time ago could be used for supporting the
+> multiple RSCs. Today we can get the tags from DT, and tag the path with
+> some DISP_RSC flag (for example) and avoid the qcom,bcm-voter-idx property.
+> 
+> Mike has been also looking into this, so maybe he can share his thoughts.
+> 
 
-> On Aug 03, 2023 at 11:00:11 -0500, Andrew Davis wrote:
->> On 8/3/23 10:55 AM, Dhruva Gole wrote:
->> > On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
->> > > On 8/3/23 1:42 AM, Dhruva Gole wrote:
->> > > > Introduce system suspend resume calls that will allow the ti_sci
->> > > > driver to support deep sleep low power mode when the user space issues a
->> > > > suspend to mem.
->> > > > 
->> > > > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
->> > > > suspend handler to allow the system to identify the low power mode being
->> > > > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
->> > > > about the mode is being entered and the address for allocated memory for
->> > > > storing the context during Deep Sleep.
->> > > > 
->> > > > We're using "pm_suspend_target_state" to map the kernel's target suspend
->> > > > state to SysFW low power mode. Make sure this is available only when
->> > > > CONFIG_SUSPEND is enabled.
->> > > > 
->> > > > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
->> > > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
->> > > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
->> > > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
->> > > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
->> > > > ---
->> > > >    drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
->> > > >    1 file changed, 63 insertions(+)
->> > > > 
->> > [..snip..]
->> > > > +static int ti_sci_suspend(struct device *dev)
->> > > > +{
->> > > > +	struct ti_sci_info *info = dev_get_drvdata(dev);
->> > > > +	int ret;
->> > > > +
->> > > > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
->> > > 
->> > > After this the will the IOs be in isolation? Or does the firmware wait
->> > > until power down begins later?
->> > 
->> >  From what I understand,
->> > IOs will be in isolation immediately
->> > 
->> 
->> That is what I understand too, so then any device that may need to do some
->> external communication for its suspend will not function, this must be the
->> last driver _suspend() the system calls, how do you enforce that?
->
-> I will make use of .suspend_noirq callbacks in that case. Does that
-> sound better, or is there anything else I may not be aware of?
+Yeah, the current way we've been supporting multiple voters (e.g. RSCs)
+doesn't scale. We currently duplicate the topology for any path that
+requires a secondary, non-APSS voter. Which means we have duplicates
+nodes and bindings for each hop in those paths, even though there's only
+a single logical path.
 
-Using _noirq just moves the problem.  What if other drivers are also
-using _noirq callbacks and run after the SCI driver?  You still cannot
-guarantee ordering.
+For example, in qcom/sm8550.c, each node and BCM ending with _disp,
+_ife_0, _ife_1, or _ife_2 is a duplicate. The only reason they exist is
+to allow clients to target their votes to the non-APPS voters. And to
+provide separate, voter-specific buckets of aggregation. But everything
+else about them is 100% identical to their default APPS counterparts.
+For sm8550, this amounts to roughly 643 extra lines of code.
 
-It seems to me that the IO isolation stuff is a system-wide operation,
-and should probably be handled at the platform suspend_ops level
-(e.g. suspend_ops->prepare_late()).   This would ensure that it runs
-*after* all the driver hooks (even driver _noirq hooks.) and right
-before the full suspend (or s2idle.)
+Initially there was only the one secondary display voter, so the scaling
+problem wasn't a huge issue. But sm8550 has four voters. And future SOCs
+will have even more.
 
-Now, all that being said, I noticed that in v7, you didn't move this to
-_noirq, but instead suggested that this be handled by TF-A.  I suppose
-that's an option also, but my suggestion above should work also.
+We should only define the logical topology once. The ratio of NOC ports
+to interconnect nodes should be 1:1, rather than 1:N where N is the
+number of voters that care about them.
 
-Kevin
+The general idea is that we could use tags for this. So, instead of...
+
+  path = icc_get(dev, MASTER_MDP_DISP, SLAVE_EBI1_DISP);
+
+it would be...
+
+  path = icc_get(dev, MASTER_MDP, SLAVE_EBI1);
+  icc_set_tag(path, QCOM_ICC_TAG_VOTER_DISP);
+
+I have an early prototype with basic testing already. I can hopefully
+clean it up and post for review in the next couple of weeks.
