@@ -2,169 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3DB27721F6
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 13:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B509772279
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 13:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232638AbjHGL1e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 07:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S232990AbjHGLe1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 07:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232580AbjHGL1J (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 07:27:09 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674924C15
-        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 04:24:17 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-1a1fa977667so3324569fac.1
-        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 04:24:17 -0700 (PDT)
+        with ESMTP id S233348AbjHGLdh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 07:33:37 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5864D525D
+        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 04:31:17 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-31783d02093so3876728f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 04:31:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691407412; x=1692012212;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLgELn4ZqhG/EdL0sIeMzz+czSgs8BVrHZ3DTKNB1+M=;
-        b=1YkHCOTpQrOB+siAi/CgilOKtf+SAzU0NizHrbNEEDrpxg+jnTeYuk/zSfG03WL4Qi
-         5q0LKyOHR1b0hq7KD+tCsJGnhBN8OioK+nkHcAnWbZuqjVvBFiFhoAhPXg6kSDRUL0zF
-         zDMRSU4oJtjW2nZ2llZQoX3ZNkzUZZAlGrhrYGajojlzUL2s3dZVh8TGjcNk6Bi7L4aS
-         HdCtcqeU3BzgvnhqK5T0vTRxpR4k+jpZRiBp9hBEsjeiqWzW/PcaIA/z+S0eOWcC3C4n
-         Pfmh4OFUElmTH8GzpMOMV4xhbtAgBRxM043Y6gw+HJTmhF2dRf5ADVDpjGq5T2ACKba8
-         e+0A==
+        d=linaro.org; s=google; t=1691407509; x=1692012309;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JmKgbF75SppH/Nt4NtFgEsnrqh7a9v81WiBucQ7ae8E=;
+        b=nIevyibAozWaGB4C9czRN/LjurbUuQPVCZe6w4q4oGjfzg+0qceylElM66uk+ewfIB
+         NPxS8LlhxWDrxNYBnJBIqkVO5VT+RWvCCDxyHEu++QJon5tY7rlIsOTY2XbZ1MC9EP1u
+         TN6ct1rkB0BNLgsLDAU9vAJsSqWu4oe61BFkg8L5vcKujARIC0/9mof0CS3nxdH6hZHF
+         snnjikSPd6+PLmnYlxAgCSetXxCVm3aNiUNgdI45wB457QbbZ9Y4Y2b15IUIMmcuap1L
+         Wr0ZNEtGL5k4OoAGbbJkEQjs3dMTvHwQq1fRa02Ss1tPzpwEW08CypdOz+92lbw+QLOF
+         C/tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691407412; x=1692012212;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aLgELn4ZqhG/EdL0sIeMzz+czSgs8BVrHZ3DTKNB1+M=;
-        b=lrVCp9nZXdJBL9KRKVAu3f1OGtvwSHkHLhipV55KwTX4IPtRcXBULWvVIgaCl76s1t
-         TzL8CJEOgYuRQ/2brAfi82e1ndWz3CqggVAFpAu8bm24k1DGA1yMaXPmcmMm4L2AgcaK
-         htSKVsBuHq+7MJ0nAt5IuQdL2OZj/tAlT7hINIi/ySuqSZd+TxN47YZzp/duwdBofuNY
-         MIszvxc6phnJ7U3QCYqBAHIcWaWZrP/b4iC83aK6qt7beJeJFN74CqUg51P8/gYko5Jk
-         kktnIAARU79wzFbguAkH8JdtyqNVAFSk3rujoLamKz60gZzyYRr6LXyVeKMIExeeKUrz
-         HrFw==
-X-Gm-Message-State: AOJu0Yxmv12eMsteREZfWh02+KtoI0+Iy6O07OcPIvmTXedc3muYf+x0
-        sbjkYj5e/uQT4euUbQ4pd1RlZw==
-X-Google-Smtp-Source: AGHT+IF1cxxYdIJaS1HuYUtxsSahQYIfBlDYuVYI2IzCq/1lydH/Mn8iU5cuEB1aOxgW4bCvNSGWSQ==
-X-Received: by 2002:a05:6870:8089:b0:1be:fdae:601b with SMTP id q9-20020a056870808900b001befdae601bmr10629059oab.52.1691407411268;
-        Mon, 07 Aug 2023 04:23:31 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id gx19-20020a17090b125300b002684b837d88sm5895195pjb.14.2023.08.07.04.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 04:23:30 -0700 (PDT)
-Message-ID: <64d0d432.170a0220.a0b49.9bc0@mx.google.com>
-Date:   Mon, 07 Aug 2023 04:23:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1691407509; x=1692012309;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JmKgbF75SppH/Nt4NtFgEsnrqh7a9v81WiBucQ7ae8E=;
+        b=eL4BwB9BkzvSAiALtq+YhrBbyCIs2KQaosbq9bohKBvGg/eLVZKg8XYBx0SqMKUFC2
+         niZf1UpGlI9jc3aXCJej6qTVvjYgXoS1Wo0U68lReRC25ur8Y8rhOodbZ7TX2w62Aw1A
+         Lgw0mZmKDK8P5ZAIZpent/7p2n4N0/ogdTovProtvlQBa+vKcxM7WvwjOgKXMhNxreNE
+         +X9/gHfFmmQQblr0VQa1zvKgfICJSddTZoXigQvheZXL5sVZl5eOAXy27iAWHZFP4bTF
+         pSuSe4h5CeAiGXcr1yjH27GAsisbtGDTwNSvbhafGrl7V0x5S3pkthnHVsN6iZqbSDOV
+         Axkw==
+X-Gm-Message-State: AOJu0Yyx/vNV7CkbKtSWpzxbSjZllHivI3XYVjHg/MUnubxgLFc4S2eN
+        Un5RCEAOlHmVV6cT0iLlS1/iUw==
+X-Google-Smtp-Source: AGHT+IEPpzkc/DAbzHkYSpjysVSVkw7nXi/fDtwrWGbOxDvNtoJbO2SLShFhqkvMhuro04eef8dq9A==
+X-Received: by 2002:a5d:4e0f:0:b0:317:6513:da7e with SMTP id p15-20020a5d4e0f000000b003176513da7emr6712284wrt.36.1691407509399;
+        Mon, 07 Aug 2023 04:25:09 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id g11-20020adff3cb000000b00317731a6e07sm8695427wrp.62.2023.08.07.04.25.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Aug 2023 04:25:08 -0700 (PDT)
+Message-ID: <570761cf-960b-0905-ad06-ec18bd75936d@linaro.org>
+Date:   Mon, 7 Aug 2023 13:25:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.5-rc5-68-g5fed5528c8fd
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.5-rc5-68-g5fed5528c8fd)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 01/10] thermal: core: Do not handle trip points with
+ invalid temperature
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher> <4878513.31r3eYUQgx@kreacher>
+ <4850902.GXAFRqVoOG@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <4850902.GXAFRqVoOG@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc5-68-g5f=
-ed5528c8fd)
+On 04/08/2023 23:00, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Trip points with temperature set to THERMAL_TEMP_INVALID are as good as
+> disabled, so make handle_thermal_trip() ignore them.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-5-rc5-68-g5fed5528c8fd/
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Tree: pm
-Branch: testing
-Git Describe: v6.5-rc5-68-g5fed5528c8fd
-Git Commit: 5fed5528c8fd31ae431594b5da0b3dfa7642d23d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+> ---
+> 
+> v3 -> v4: No changes.
+> 
+> v2 -> v3: No changes.
+> 
+> v1 -> v2: No changes.
+> 
+> ---
+>   drivers/thermal/thermal_core.c |    3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.c
+> +++ linux-pm/drivers/thermal/thermal_core.c
+> @@ -348,7 +348,8 @@ static void handle_thermal_trip(struct t
+>   	struct thermal_trip trip;
+>   
+>   	/* Ignore disabled trip points */
+> -	if (test_bit(trip_id, &tz->trips_disabled))
+> +	if (test_bit(trip_id, &tz->trips_disabled) ||
+> +	    trip.temperature == THERMAL_TEMP_INVALID)
+>   		return;
+>   
+>   	__thermal_zone_get_trip(tz, trip_id, &trip);
+> 
+> 
+> 
 
-Warnings Detected:
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-arc:
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
