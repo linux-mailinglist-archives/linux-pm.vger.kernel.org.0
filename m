@@ -2,71 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABC1772A4A
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 18:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15E8772A5C
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 18:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbjHGQP1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 12:15:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51198 "EHLO
+        id S229792AbjHGQSF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 12:18:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjHGQP0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 12:15:26 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF75410C0
-        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 09:15:24 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-63c70dc7ed2so33279746d6.0
-        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 09:15:24 -0700 (PDT)
+        with ESMTP id S231437AbjHGQR7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 12:17:59 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3EFE172A
+        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 09:17:55 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3fe5eb84d8bso6792755e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 09:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691424924; x=1692029724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gBYooyeWK7k6BJIomcF3V8ANL7Caa0RySBNuNDEDGk4=;
-        b=11qzlmUGwi0zoRhNVQFSGqPgVXSOIJlZMoVTzN/0j2NyBTwaXma4OX4foNKLkGHP7g
-         3B4DH3ZF6ElSFg1Lhf87haPAfS47HG8RcaFqw1hyyjvEDbALyQWCk1rBUJXMy9MQsIWo
-         ii5L5aHrwJZzI9Os1QENa5TaKl8xbv2aMuwYs+yZZvYAO+attk7a/hvYeGbFlbbLtmLi
-         rGqWeIvJRND85m+PZR0ZfeKPDGb/MSfH804crSTP/Uh7BnaqW13tNQY6r0HOmz0HvDY1
-         QHA8nsojx80q7pDbPgWtjVSAm8L1KkBt+r5WtjjKY2y03dR66rfOAHR7fl+51/xRIpYi
-         p2Uw==
+        d=linaro.org; s=google; t=1691425074; x=1692029874;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RIlIjbKDgaIkXBvvVymBj3ZKl60d9D23Kc9LmoR65Aw=;
+        b=xVVmmsRGOYQ+2FYP9Btd0rH4ipKU9RFh4BoJQ2pnAMwfnmVsKYQYhYLHZ0HgBXTYVc
+         OFTjAvJwbYuSzepjhO+zUEkqcTkQ7PiVGEozx3immf8pASdOmoLe07HBWyuHBCiRwPXM
+         sRHnD2FLy1hb7GZZsoMkZtYCdXcFjVwz8ZvBoTBXxY8n+WZJAvEZ6PVNxIbhwVmRaa01
+         X1XUO0QeG8JwzVbil2uscnaiC6saJeaSjOeFfivZ4SJeE8c6mNMth0N1djcilQSkKd1k
+         jzG7DYmltb7Eiggv+kzXq88caUQtTFn1MdM2Ba/vDt17DI5BnLuW/iLWyrz5vDp2NmLg
+         t+kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691424924; x=1692029724;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gBYooyeWK7k6BJIomcF3V8ANL7Caa0RySBNuNDEDGk4=;
-        b=MEWgEAGBQoEJnDC2QHIjVte8nkI/7tbWGlNj++TqZ5+M9sqfGCC/USTrEjXPrEaHRL
-         nHk/eEnqN1HlfSfCo/507rxLbsCGqYkyDkOB7d009HSGC2NK6T/qbQdm+U+z21DkmCUf
-         mGNndt3DzIocYbrUVi5Uv++7z1f2Wbi1G8sYrMG48X9XT/sBTedN3EXvp42g5at0OKel
-         lUbB5srb7ilCynJYzQCdfGcOOuUwFJJmbHazozD8qKFYr29eOn1NEzuq+4JL5RBaMOQY
-         isML4gbSIp6aHsIbBEiBLLmJs4nrQhG0iukeEH7d6Z/KUwgGztkqMP01SMP9uXeIKEGD
-         fE8g==
-X-Gm-Message-State: AOJu0YyyLSSbz7vatdfb0CQ2DgBjuDgwiOnEL3logAprk+/+l+o6n8Wx
-        ROv4tSgdyEmMUBXFM2vGS1Yx00bXbmzcdon8FrPbIQ==
-X-Google-Smtp-Source: AGHT+IGJsPnES8PM+XJgKXF3Z501OznIjg6TcJH0IghWcT/mqUa+UKk+1ETVfctEFGNE2xojsO29Lyk8Zq0nbmlOhFA=
-X-Received: by 2002:a05:6214:3018:b0:63d:1aed:72ee with SMTP id
- ke24-20020a056214301800b0063d1aed72eemr10531003qvb.64.1691424923690; Mon, 07
- Aug 2023 09:15:23 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691425074; x=1692029874;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIlIjbKDgaIkXBvvVymBj3ZKl60d9D23Kc9LmoR65Aw=;
+        b=Dzm0PBDrx0phO+KONzjGqMa+hHTW29zDKunXpNpJ1QBEz5DUrWUDBQaWoVT8tsr0YE
+         gjPw67g/osfQOY/9shYlQ3i0o8272l0kw/tOwKB4LlVp0IHOM9dABhCvlWJnUz0eg/xR
+         gXmvqU7/10SAcArsEghJmML8Z8v9NVb/fxX4xoRSmOhXvFftJ00hcGGVv8JaDxpZBt7z
+         TYENKuueGYOB9JCtS5jlIQUaeoHUU79+mdgWl028a3pUi/ksR4kpYbs4JuicvgTpyIUa
+         0YBLP0+3hMsqs44iVHFCjUQp6IMRnufEtV8NDqG6rUb/+WERI9H2KPJ6JWXp/Vkxp27u
+         bwvg==
+X-Gm-Message-State: AOJu0YwenqKztTd7e1TcfI8I49b8CIDt1mf5qCIg8oyCcaYRj3mUCO7m
+        4ISA4pDGeD5/F5cMtWzWDUesJQ==
+X-Google-Smtp-Source: AGHT+IEqnS0WrTpKPU3i8gGLFEeRUSszxMtBlM4KNrLLBcc1OUyDQq5/H21/hkuDhAR/d+6KCzYfBg==
+X-Received: by 2002:adf:f608:0:b0:316:ff0e:81b6 with SMTP id t8-20020adff608000000b00316ff0e81b6mr6056372wrp.32.1691425074215;
+        Mon, 07 Aug 2023 09:17:54 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id j6-20020adfff86000000b003175f00e555sm10952018wrr.97.2023.08.07.09.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Aug 2023 09:17:53 -0700 (PDT)
+Message-ID: <4bfabfce-574b-ed52-2956-d0d2b9502e60@linaro.org>
+Date:   Mon, 7 Aug 2023 18:17:53 +0200
 MIME-Version: 1.0
-References: <c7f1bf9b-b183-bf6e-1cbb-d43f72494083@gmail.com>
- <2023080743-amendable-moonlit-15b7@gregkh> <CAFqe=zJ9uRTVG=jny2PzUrrFGW2E_mZrGKF-3YMRkjzMUdu_7A@mail.gmail.com>
-In-Reply-To: <CAFqe=zJ9uRTVG=jny2PzUrrFGW2E_mZrGKF-3YMRkjzMUdu_7A@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 7 Aug 2023 09:15:12 -0700
-Message-ID: <CAKwvOd=gJO93_eqUcR6VD8n+eqxL7-aG5D7AnAgG1ki1N1ms0g@mail.gmail.com>
-Subject: Re: Fwd: CFI violation when reading amd_pstate/status
-To:     =?UTF-8?Q?Jannik_Gl=C3=BCckert?= <jannik.glueckert@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Huang Rui <ray.huang@amd.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LLVM Build Support <llvm@lists.linux.dev>,
-        Sami Tolvanen <samitolvanen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 04/10] thermal: core: Add
+ thermal_zone_update_trip_temp() helper routine
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher> <4878513.31r3eYUQgx@kreacher>
+ <1967710.PYKUYFuaPT@kreacher>
+ <f47b7e17-7ec6-4c19-9db1-c1a2e1ad66b6@linaro.org>
+ <CAJZ5v0iNOD9FW0deZYvfjmB8Us+7KjTNnB8Fkm=nnVJ6a82EZQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0iNOD9FW0deZYvfjmB8Us+7KjTNnB8Fkm=nnVJ6a82EZQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,94 +83,113 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 6, 2023 at 11:21=E2=80=AFPM Jannik Gl=C3=BCckert
-<jannik.glueckert@gmail.com> wrote:
->
-> Hi Greg,
->
-> our kernel uses the Fedora config and has a homeopathic patchset on
-> top of upstream - see
-> https://gitweb.gentoo.org/proj/linux-patches.git/tree/?h=3D6.4 except
-> the 50** patches.
-> Namely we don't touch cpufreq or pm.
->
-> > Comm: cat Tainted: P
->
-> I am not using any out of tree modules, the kernel switches to
-> Tainted: P on the first CFI violation.
+On 07/08/2023 17:40, Rafael J. Wysocki wrote:
+> On Mon, Aug 7, 2023 at 1:34 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> On 04/08/2023 23:05, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Introduce a helper routine called thermal_zone_update_trip_temp() that
+>>> can be used to update a trip point's temperature with the help of a
+>>> pointer to local data associated with that trip point provided by
+>>> the thermal driver that created it.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>
+>>> New patch in v4.
+>>>
+>>> ---
+>>>    drivers/thermal/thermal_trip.c |   37 +++++++++++++++++++++++++++++++++++++
+>>>    include/linux/thermal.h        |    4 ++++
+>>>    2 files changed, 41 insertions(+)
+>>>
+>>> Index: linux-pm/drivers/thermal/thermal_trip.c
+>>> ===================================================================
+>>> --- linux-pm.orig/drivers/thermal/thermal_trip.c
+>>> +++ linux-pm/drivers/thermal/thermal_trip.c
+>>> @@ -180,3 +180,40 @@ int thermal_zone_set_trip(struct thermal
+>>>
+>>>        return 0;
+>>>    }
+>>> +
+>>> +/**
+>>> + * thermal_zone_update_trip_temp - Update the trip point temperature.
+>>> + * @tz: Thermal zone.
+>>> + * @trip_priv: Trip tag.
+>>> + * @temp: New trip temperature.
+>>> + *
+>>> + * This only works for thermal zones using trip tables and its caller must
+>>> + * ensure that the zone lock is held before using it.
+>>> + *
+>>> + * @trip_priv is expected to be the value that has been stored by the driver
+>>> + * in the struct thermal_trip representing the trip point in question, so it
+>>> + * can be matched against the value of the priv field in that structure.
+>>> + *
+>>> + * If @trip_priv does not match any trip point in the trip table of @tz,
+>>> + * nothing happens.
+>>> + */
+>>> +void thermal_zone_update_trip_temp(struct thermal_zone_device *tz,
+>>> +                                void *trip_priv, int temperature)
+>>> +{
+>>> +     int i;
+>>> +
+>>> +     lockdep_assert_held(&tz->lock);
+>>> +
+>>> +     if (!tz->trips || !trip_priv)
+>>> +             return;
+>>> +
+>>> +     for (i = 0; i < tz->num_trips; i++) {
+>>> +             struct thermal_trip *trip = &tz->trips[i];
+>>> +
+>>> +             if (trip->priv == trip_priv) {
+>>> +                     trip->temperature = temperature;
+>>> +                     return;
+>>> +             }
+>>> +     }
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(thermal_zone_update_trip_temp);
+>>
+>> This function would imply the comparator is always trip->priv but if we
+>> want another comparison eg. trip->priv->id, that won't be possible.
+>>
+>> Actually, I think you can reuse an existing function with a simple
+>> change, for_each_thermal_trip() located in thermal_core.h.
+> 
+> for_each_thermal_trip() is only defined in tools/lib/thermal/thermal.c
+> AFAICS, but this one could actually work, so I can copy that
+> definition to somewhere else.
+> 
+> But I suppose that you mean __for_each_thermal_trip() which won't
+> work, because it makes a copy of the trip and passes that to the
+> callback, but the callback would need to update the temperature of the
+> original trip.
+> 
+> It would work if it passed the original trip to the caller, so I can
+> add something like that.
 
-Thanks for the report.
-Let's track this in
-https://github.com/ClangBuiltLinux/linux/issues/1901
-(You can use the MAINTAINERS file to see issue trackers via the `B:`
-symbol used by various parts of the tree).
+As there is no user of this function yet, I think you can change that to 
+use the trip array instead of the __thermal_zone_get_trip(). This one 
+was used to have a compatibility with thermal zones using get_trip_* ops 
+but that is not really needed and with your series only one driver will 
+remain before dropping these ops.
 
->
-> Regards
-> Jannik
->
-> Am Mo., 7. Aug. 2023 um 08:03 Uhr schrieb Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org>:
-> >
-> > On Mon, Aug 07, 2023 at 06:55:49AM +0700, Bagas Sanjaya wrote:
-> > > Hi,
-> > >
-> > > I notice a bug report on Bugzilla [1]. Quoting from it:
-> > >
-> > > > On kernel 6.4.7, with amd_pstate=3Dactive, with a Ryzen 7700X
-> > > > I get a Clang CFI violation when reading /sys/devices/system/cpu/am=
-d_pstate/status
-> > > >
-> > > > This is reproduceable with every read, I have only tried with amd_p=
-state=3Dactive
-> > > >
-> > > > With the following CFI and Clang configs, Clang 16.0.6
-> > > > CONFIG_CFI_CLANG=3Dy
-> > > > CONFIG_CFI_PERMISSIVE=3Dy
-> > > > CONFIG_LTO_CLANG=3Dy
-> > > > CONFIG_LTO_CLANG_THIN=3Dy
-> > > >
-> > > > Below is the full call trace, let me know if you need a trace with =
-debug info.
-> > > >
-> > > > [ 4947.849350] CFI failure at dev_attr_show+0x24/0x60 (target: show=
-_status+0x0/0x70; expected type: 0x8651b1de)
-> > > > [ 4947.849358] WARNING: CPU: 2 PID: 16519 at dev_attr_show+0x24/0x6=
-0
-> > > > [ 4947.849360] Modules linked in: binfmt_misc nf_conntrack_netbios_=
-ns nf_conntrack_broadcast wireguard curve25519_x86_64 libcurve25519_generic=
- ip6_udp_tunnel udp_tunnel snd_seq_dummy snd_hrtimer snd_seq rfcomm joydev =
-uhid xt_CHECKSUM xt_MASQUERADE xt_conntrack ipt_REJECT nf_nat_tftp nf_connt=
-rack_tftp nft_fib_inet nft_fib_ipv6 nft_fib_ipv4 nft_fib nft_reject_inet nf=
-_reject_ipv6 nf_reject_ipv4 nft_reject nft_ct nft_chain_nat bridge 8021q mr=
-p garp stp llc nf_tables ebtable_nat ebtable_broute ip6table_nat ip6table_m=
-angle ip6table_raw ip6table_security iptable_nat nf_nat nf_conntrack nf_def=
-rag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_raw iptable_security ip_set =
-nfnetlink ebtable_filter ebtables ip6table_filter ip6_tables iptable_filter=
- ip_tables bnep vfat fat amdgpu snd_hda_codec_realtek snd_hda_codec_generic=
- snd_hda_codec_hdmi snd_hda_intel mt7921e vfio_pci intel_rapl_msr mt7921_co=
-mmon intel_rapl_common mt76_connac_lib edac_mce_amd vfio_pci_core mt76 vfio=
-_iommu_type1 vfio kvm_amd iommufd iommu_v2 snd_usb_audio
-> > > > [ 4947.849379]  snd_intel_dspcfg gpu_sched snd_intel_sdw_acpi mac80=
-211 drm_suballoc_helper snd_usbmidi_lib i2c_algo_bit drm_ttm_helper snd_hda=
-_codec btusb ttm btrtl libarc4 btmtk snd_hda_core snd_rawmidi kvm snd_seq_d=
-evice drm_display_helper btintel snd_hwdep mc btbcm irqbypass cfg80211 cec =
-snd_pcm asus_nb_wmi bluetooth eeepc_wmi snd_timer asus_wmi drm_kms_helper l=
-edtrig_audio sparse_keymap snd gpio_amdpt platform_profile gpio_generic drm=
-_buddy rfkill soundcore rapl i2c_piix4 wmi_bmof pcspkr k10temp lm92 nct6775=
-_core hwmon_vid fuse loop dm_crypt crct10dif_pclmul polyval_clmulni polyval=
-_generic ghash_clmulni_intel nvme sp5100_tco ccp r8169 nvme_core nvme_commo=
-n video wmi sunrpc
-> > > > [ 4947.849398] CPU: 2 PID: 16519 Comm: cat Tainted: P              =
-     6.4.7-gentoo-dist-hardened #1
-> >
-> > Can't do much about this kernel, we don't know what's really in it,
-> > sorry.
-> >
-> > greg k-h
+>> The changes would be renaming it without the '__' prefix and moving it
+>> in include/linux/thermal.h.
+>>
+>> Then the comparison function and the temperature change can be an ACPI
+>> driver specific callback passed as parameter to for_each_thermal_zone
+> 
+> I guess you mean for_each_thermal_trip().
 
+Yes, __for_each_thermal_trip()
 
+> As per the above, not really, but I can do something along these lines.
 
---=20
-Thanks,
-~Nick Desaulniers
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
