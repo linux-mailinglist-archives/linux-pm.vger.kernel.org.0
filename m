@@ -2,146 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E6E772691
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 15:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9373D7728B8
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 17:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234463AbjHGNvt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 09:51:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S229940AbjHGPIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 11:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjHGNvs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 09:51:48 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FFC10DC
-        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 06:51:47 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so11809052a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 06:51:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691416305; x=1692021105;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5U7uXQPqJdJRTybbD7UWkq4hcpTzTPPBe48JRQK60d8=;
-        b=siUwPP6TAI6SSnVRXaqAXAkU8Y+9KQFZNj8SGOBskXBIh5sKvzKy5gY3yyHBWgiERn
-         bhmarSHyd6YFmvOXWtq7r29XxO6ht/vgMpJSHrL8LpRBWtOblDd1S2qDnQBiMvbYE0ig
-         1m0no4m00eF9Cs8ietNs0mpAFHuFT8/OUqmSZgq10I0uJMOqax04L67CiRZK5pHAk+gT
-         pDLWYzbvzWdq/b5se479A9NNUxiZxS2MM3+bApIBYpjn/K3kF0smFqXVoJLP5ta97b/Y
-         z4//rrJqg3X35F14zrNDD7PWe3JNaHiEp3ezuFaSKEP7UQoLbUVonTYJmzsRLbPxKLfp
-         ojPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691416305; x=1692021105;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5U7uXQPqJdJRTybbD7UWkq4hcpTzTPPBe48JRQK60d8=;
-        b=HY3P02ch+Uk1yDZyFcRP4fHYEvRUZlr9pmHa6O1uyP6yneeqzZfcqyLFJ53l123N8Y
-         InK58VL9MHzaEHf8y8jYSI3sttv51QoNTZPggr48dY51KYTqg6XWr+mmLRSlysLCNJN2
-         mqrL8q7sdJMJsy2XRwojaNAzzqEDIYib0EoQF4+NaOw9ZgZkV7yFsoHjBZ12TYiCHXeA
-         FMpdeJ4jpGHQnprvTtgTDu/E/3uGrDc/Uux6px8jOa5Ae5mwOKwEsvkwvReNDf5gfq7F
-         BvgDx8wX9ki4Rj7qLvQweBbudrRq3dnuiCeDyRX9ASd7YwFSRBgwVFGzlptazqpJ3oe+
-         LndQ==
-X-Gm-Message-State: AOJu0Yyj+p1nmxvBpYm0+TiUhUiDYdpMFmG6obj5LZW+SlJzhLwmV9LL
-        t5W61L4PTiQJOcaisZwHS+d3Ag==
-X-Google-Smtp-Source: AGHT+IFHT60GM0SzX9TXq5wlvNhwlntdej2m89q9MKu3133qU0DChWx1leGNQ8gUg3hl1tGkiS5DKQ==
-X-Received: by 2002:a05:6402:51d2:b0:521:ef0f:8ef9 with SMTP id r18-20020a05640251d200b00521ef0f8ef9mr8152852edd.19.1691416305604;
-        Mon, 07 Aug 2023 06:51:45 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id e26-20020a50ec9a000000b0051873c201a0sm5195571edr.26.2023.08.07.06.51.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Aug 2023 06:51:45 -0700 (PDT)
-Message-ID: <af8893b8-0556-e355-abe9-aba99c7a839a@linaro.org>
-Date:   Mon, 7 Aug 2023 15:51:43 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 4/4] ARM: configs: s5pv210_defconfig: enable IIO
- required by MAX17040
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Svyatoslav Ryhel <clamor95@gmail.com>,
-        Iskren Chernev <me@iskren.info>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Stefan Hansson <newbie13xd@gmail.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-References: <20230731073613.10394-1-clamor95@gmail.com>
- <20230731073613.10394-5-clamor95@gmail.com>
- <20230805224211.qquexvseq24hxcju@intel.intel>
- <16047849-1001-4d6f-4995-0fdfc065cded@linaro.org>
- <20230807085543.3tfzpsa2joolay3r@intel.intel>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230807085543.3tfzpsa2joolay3r@intel.intel>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229592AbjHGPIn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 11:08:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2422C1FCE;
+        Mon,  7 Aug 2023 08:08:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=Cc7Qso+rtqYL4z41yt/S7GCvRApv9pu8SfGh30r2Ct4=; b=MKv0W1lCMX7Ig/GFUcBTKF23rP
+        kfBI64q+FB4WSJjX6NLuD/+/rI1HuEZYBeNX4bB27POHliDxcoNHoNoWlsu9NHNEwKx6wwKUH/LBO
+        fqV+CBH06QCDe0I9F8TZ0t4NMynLzlsPSklN7kaf3+B0oxuZhz1PqzcCXYjfy8Z6Z2XAjLtwJXjBB
+        jf/rRReJO/M2ohlj0sKH7G/H4XsMbNe/2MTZh0mqu74JeloE+UbHZR7veW953WyUdAVKlhl6YMdyz
+        pPiZMhetJCBDFbwW/n6JlAULYU0CFK0YTLWocYBY27vtMfOvclELTaZho3UbToYjWu3l2gMyc0zbA
+        ECZ/gBzQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qT1pP-00BlpC-Vn; Mon, 07 Aug 2023 15:07:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8AB0C30014A;
+        Mon,  7 Aug 2023 17:07:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 6D7CA2028F056; Mon,  7 Aug 2023 17:07:27 +0200 (CEST)
+Message-ID: <20230807123806.700370534@infradead.org>
+User-Agent: quilt/0.66
+Date:   Mon, 07 Aug 2023 14:38:06 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        Tony Luck <tony.luck@intel.com>, luto@kernel.org,
+        james.morse@arm.com, mchehab@kernel.org, rric@kernel.org,
+        jacob.jun.pan@linux.intel.com, lenb@kernel.org,
+        irenic.rajneesh@gmail.com, david.e.box@intel.com,
+        hdegoede@redhat.com, markgross@kernel.org,
+        srinivas.pandruvada@linux.intel.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH 0/3] x86/cpu: Cleanup of INTEL_FAM6_foo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 07/08/2023 10:55, Andi Shyti wrote:
-> Hi,
-> 
-> On Sun, Aug 06, 2023 at 10:29:04AM +0200, Krzysztof Kozlowski wrote:
->> On 06/08/2023 00:42, Andi Shyti wrote:
->>> Hi Svyatoslav,
->>>
->>> On Mon, Jul 31, 2023 at 10:36:13AM +0300, Svyatoslav Ryhel wrote:
->>>> After adding support for passing temperature data from thermal sensor
->>>> to MAX17040 it got dependency on CONFIG_IIO. From all defconfigs
->>>> using MAX17040 only s5pv210_defconfig did not have IIO already enabled
->>>> so let's enable it to avoid regression.
->>>>
->>>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
->>>> ---
->>>>  arch/arm/configs/s5pv210_defconfig | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/arch/arm/configs/s5pv210_defconfig b/arch/arm/configs/s5pv210_defconfig
->>>> index 4c1e480b5bbd..24070ee3d43e 100644
->>>> --- a/arch/arm/configs/s5pv210_defconfig
->>>> +++ b/arch/arm/configs/s5pv210_defconfig
->>>> @@ -97,6 +97,7 @@ CONFIG_MMC_SDHCI_S3C_DMA=y
->>>>  CONFIG_RTC_CLASS=y
->>>>  CONFIG_RTC_DRV_MAX8998=m
->>>>  CONFIG_DMADEVICES=y
->>>> +CONFIG_IIO=y
->>>>  CONFIG_PWM=y
->>>>  CONFIG_PWM_SAMSUNG=y
->>>>  CONFIG_PHY_SAMSUNG_USB2=m
->>>
->>> Should this patch be squashed to the previous patch? I think you
->>> break bisectability for this board if you enable iio only here.
->>
->> The defconfig change matters less - distros don't use them - so this
->> points to the fact that patchset affected the users. All existing users
->> of max17040 drivers, who do not enable IIO, will have their setups broken.
-> 
-> That's why I'm suggesting to squash this patch with the previous.
+Hi,
 
-It would not solve much. All existing users will be still broken.
-
-> 
-> Anyway, up to you... except of this note everything looks fine in
-> the series.
-
-I would actually prefer not to depend on IIO, but this would require
-stubs for missing IIO functions.
-
-Best regards,
-Krzysztof
+I seem to have missed 'spring' but here goes...
 
