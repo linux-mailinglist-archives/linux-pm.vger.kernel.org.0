@@ -2,77 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B199772274
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 13:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFF7772367
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 14:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjHGLeP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 07:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S230206AbjHGMGv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Aug 2023 08:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233316AbjHGLde (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 07:33:34 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5905B4C3B
-        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 04:31:12 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fe5c0e587eso8281445e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 04:31:12 -0700 (PDT)
+        with ESMTP id S230324AbjHGMGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 08:06:50 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A3A106
+        for <linux-pm@vger.kernel.org>; Mon,  7 Aug 2023 05:06:48 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-26854159c05so2358615a91.2
+        for <linux-pm@vger.kernel.org>; Mon, 07 Aug 2023 05:06:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691407787; x=1692012587;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2yG847+ykANyrrRuOFOgUHlifio1mpwNPWStZ5ZsUlY=;
-        b=BaO7SpJKv1jDCZvrxi47UrPgRjKOD1RmEA5ftd1m1zmHe0gV4C+bk7yIUsI98W6BzS
-         55WzdvGGCvOtueyb9YwFEOr5ZL8MdRkIDGMM2QZb8wIGpKKDXwRaUPSslFUkVAKoD9We
-         +r5MmONLSVZOuvZu9hJy5BlT4zY4xTi5F1DYHrrkP/YeTofw4ZvHL47imnoH1u8v2dJa
-         YNETI0ySclIuryJ9WmY3b+vQr1II88Wt5+4zejrcpJ3OMfft1nATxN0y6K8d2JkekXw2
-         hc6vPMiGzrilbNrVkx7hjvPHX63Ajomg62r+WpB6amQI9Z7lZOTdXdIQq1KbM0kBOMVL
-         g82w==
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691410008; x=1692014808;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2UNQ06Vltf6ZtuX0hw1wGpv5O2gRCxNY7XUMy+7d+pU=;
+        b=zaWHbYPpJK/+IdBLKVffJ2okhRvBLKDeo67pwdZObgkETDuyZf4wXipRn4YUOFEDMQ
+         NuyXNQtaysxHP7Zzh/w15WGCK2hGC/qK0u3k0ZhcBYHJc28pjVjZctuNhQWEhoYCedqZ
+         jFNTWRRZZobm9RGNC3uPtFkxBtbowGuYNohwRnjlc4Nz3TlwnGdKa2K0bvqlrLDSpj81
+         aZjPZkcgHNu5Wo3DhJFnYtuQtl6aVs1O/+BEchsv5X3AbUFpt6VoL2MbYBFrkNxNQVbq
+         eOQoil6i0nACpnFxcRE8eA8WccVMCwu9ZbVU+DsUwbDx3VR47c0iMiLZgtC1jljygvJo
+         KR5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691407787; x=1692012587;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2yG847+ykANyrrRuOFOgUHlifio1mpwNPWStZ5ZsUlY=;
-        b=dnsGQL2m/Ll3NDnIefeMnpjLLvFfufMh1A4lqEx1n0cMPrJOj7ggjnWnfs4QRxxTF/
-         JJBM4gFg/fO0qy6ocZ9mJhQ5zPPbCILlmOwcM+Ok6Qcbcz0wuMc076Uy7NxQe2eDzlWX
-         P+A4N15D8a3MtHM988T2CMvUEHEy7D8qEwNlVtHQ/6jTUVmhxA+78wpbOlsszDetO9Ws
-         eA8U8vbNVtm4Tk0/SntKwuM/NtSeOyC+TPIqq7TscVNNn7xgtu3wYUuf5mm+CnZ5XzgR
-         veccmlLbwAop56oCST1s+bj4wWtEQztsIKk6QtSbxqZl4Lfo+K2TZO5k0GCYmUnXY9XW
-         FZZg==
-X-Gm-Message-State: AOJu0YwnX2GvKd4tctE4w7pzRU9PiVj3Wz5D1HD3OIzXCY0eI1RzGuC5
-        sKhvb+Ipz4coLsRhHkCkUEFgjvujPTg9RNarGmY=
-X-Google-Smtp-Source: AGHT+IE931aONdpzSikETzjGEE2Uo9weVSJZlo9N1M9Pmrb143I2wh0bzp6eN+8C49HMcUZmE6ni2Q==
-X-Received: by 2002:a05:600c:208:b0:3fe:ad3:b066 with SMTP id 8-20020a05600c020800b003fe0ad3b066mr7051996wmi.41.1691407787574;
-        Mon, 07 Aug 2023 04:29:47 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id p17-20020a7bcc91000000b003fe2696ccfcsm10402137wma.23.2023.08.07.04.29.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Aug 2023 04:29:47 -0700 (PDT)
-Message-ID: <f47b7e17-7ec6-4c19-9db1-c1a2e1ad66b6@linaro.org>
-Date:   Mon, 7 Aug 2023 13:29:46 +0200
+        d=1e100.net; s=20221208; t=1691410008; x=1692014808;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2UNQ06Vltf6ZtuX0hw1wGpv5O2gRCxNY7XUMy+7d+pU=;
+        b=NLtc+dFpDsal3L9Ov9fM0H2QAwB1o///Qvd/U1FGa2nN2ee/Ceosd/oZb4A04/BPwr
+         wMJdENr19dT2NDfZZy/gUxAjg0ikjqfh5MSHtSxOTv7oNjDeDzJGNOqlx/5+RwSvDc/J
+         8e3Ggje44OR+rKQr5PE77WIx6EjhDQDr6sXfO0bDquIo/jhcbqL0Wfd0rLxtF5M12AtA
+         sAVoubMgR/zaDlTyqz5gu9BOM/NrY3A3KcncuYfpYCx47WtuP0vkPBM/wI793e1kk5mU
+         rINrXlxySq6hR4J/Fckl7u80mUZ3rSWdY40ebdxIgO4GnmrUncO+VCsmMJ4Hh34jJEeE
+         roAg==
+X-Gm-Message-State: AOJu0YxaT+6mJWP8C3LFAqLjS5z0ra9WV7MM57v53ha6hvoV97G8p3E6
+        HMVusbGiWQLHB0lXC0pKXf7tQA==
+X-Google-Smtp-Source: AGHT+IFDxMlhVj98kGk1Fxf7gAhwJP9me/NIYaE8P6F9gPeHXSAxKs50wBMBCAWGD/315nmA26hjmg==
+X-Received: by 2002:a17:90b:33c6:b0:263:1f1c:ef4d with SMTP id lk6-20020a17090b33c600b002631f1cef4dmr6873587pjb.10.1691410007858;
+        Mon, 07 Aug 2023 05:06:47 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id h16-20020a17090adb9000b00267eead2f16sm5901596pjv.36.2023.08.07.05.06.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 05:06:47 -0700 (PDT)
+Message-ID: <64d0de57.170a0220.55002.9da9@mx.google.com>
+Date:   Mon, 07 Aug 2023 05:06:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 04/10] thermal: core: Add
- thermal_zone_update_trip_temp() helper routine
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-References: <13318886.uLZWGnKmhe@kreacher> <4878513.31r3eYUQgx@kreacher>
- <1967710.PYKUYFuaPT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1967710.PYKUYFuaPT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.5-rc5-68-g5fed5528c8fd
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 51 runs,
+ 5 regressions (v6.5-rc5-68-g5fed5528c8fd)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,110 +71,302 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/08/2023 23:05, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Introduce a helper routine called thermal_zone_update_trip_temp() that
-> can be used to update a trip point's temperature with the help of a
-> pointer to local data associated with that trip point provided by
-> the thermal driver that created it.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> New patch in v4.
-> 
-> ---
->   drivers/thermal/thermal_trip.c |   37 +++++++++++++++++++++++++++++++++++++
->   include/linux/thermal.h        |    4 ++++
->   2 files changed, 41 insertions(+)
-> 
-> Index: linux-pm/drivers/thermal/thermal_trip.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> +++ linux-pm/drivers/thermal/thermal_trip.c
-> @@ -180,3 +180,40 @@ int thermal_zone_set_trip(struct thermal
->   
->   	return 0;
->   }
-> +
-> +/**
-> + * thermal_zone_update_trip_temp - Update the trip point temperature.
-> + * @tz: Thermal zone.
-> + * @trip_priv: Trip tag.
-> + * @temp: New trip temperature.
-> + *
-> + * This only works for thermal zones using trip tables and its caller must
-> + * ensure that the zone lock is held before using it.
-> + *
-> + * @trip_priv is expected to be the value that has been stored by the driver
-> + * in the struct thermal_trip representing the trip point in question, so it
-> + * can be matched against the value of the priv field in that structure.
-> + *
-> + * If @trip_priv does not match any trip point in the trip table of @tz,
-> + * nothing happens.
-> + */
-> +void thermal_zone_update_trip_temp(struct thermal_zone_device *tz,
-> +				   void *trip_priv, int temperature)
-> +{
-> +	int i;
-> +
-> +	lockdep_assert_held(&tz->lock);
-> +
-> +	if (!tz->trips || !trip_priv)
-> +		return;
-> +
-> +	for (i = 0; i < tz->num_trips; i++) {
-> +		struct thermal_trip *trip = &tz->trips[i];
-> +
-> +		if (trip->priv == trip_priv) {
-> +			trip->temperature = temperature;
-> +			return;
-> +		}
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_update_trip_temp);
+pm/testing baseline: 51 runs, 5 regressions (v6.5-rc5-68-g5fed5528c8fd)
 
-This function would imply the comparator is always trip->priv but if we 
-want another comparison eg. trip->priv->id, that won't be possible.
+Regressions Summary
+-------------------
 
-Actually, I think you can reuse an existing function with a simple 
-change, for_each_thermal_trip() located in thermal_core.h.
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+fsl-ls2088a-rdb    | arm64 | lab-nxp       | gcc-10   | defconfig | 1      =
+    =
 
-The changes would be renaming it without the '__' prefix and moving it 
-in include/linux/thermal.h.
+fsl-lx2160a-rdb    | arm64 | lab-nxp       | gcc-10   | defconfig | 1      =
+    =
 
-Then the comparison function and the temperature change can be an ACPI 
-driver specific callback passed as parameter to for_each_thermal_zone
+r8a77960-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+r8a779m1-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+sun50i-h6-pine-h64 | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.5-rc5=
+-68-g5fed5528c8fd/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.5-rc5-68-g5fed5528c8fd
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      5fed5528c8fd31ae431594b5da0b3dfa7642d23d =
 
 
 
-> Index: linux-pm/include/linux/thermal.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/thermal.h
-> +++ linux-pm/include/linux/thermal.h
-> @@ -286,9 +286,13 @@ int __thermal_zone_get_trip(struct therm
->   			    struct thermal_trip *trip);
->   int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
->   			  struct thermal_trip *trip);
-> +void thermal_zone_update_trip_temp(struct thermal_zone_device *tz,
-> +				   void *trip_priv, int temperature);
->   
->   int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
->   			  const struct thermal_trip *trip);
-> +void thermal_zone_update_trip_temp(struct thermal_zone_device *tz,
-> +				   void *trip_priv, int temperature);
->   
->   int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
->   
-> 
-> 
-> 
+Test Regressions
+---------------- =
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+fsl-ls2088a-rdb    | arm64 | lab-nxp       | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d0d4988a0d91e65635b1ed
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d0d4988a0d91e65635b1f0
+        failing since 24 days (last pass: v6.0-rc3-85-gf6f4c123bfbc, first =
+fail: v6.5-rc1-21-g3c61a03588dd8)
+
+    2023-08-07T11:24:50.430027  [   12.578110] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1241367_1.5.2.4.1>
+    2023-08-07T11:24:50.535309  =
+
+    2023-08-07T11:24:50.636588  / # #export SHELL=3D/bin/sh
+    2023-08-07T11:24:50.636989  =
+
+    2023-08-07T11:24:50.737968  / # export SHELL=3D/bin/sh. /lava-1241367/e=
+nvironment
+    2023-08-07T11:24:50.738371  =
+
+    2023-08-07T11:24:50.839392  / # . /lava-1241367/environment/lava-124136=
+7/bin/lava-test-runner /lava-1241367/1
+    2023-08-07T11:24:50.840101  =
+
+    2023-08-07T11:24:50.844103  / # /lava-1241367/bin/lava-test-runner /lav=
+a-1241367/1
+    2023-08-07T11:24:50.867843  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+fsl-lx2160a-rdb    | arm64 | lab-nxp       | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d0d4827f95c9e7bb35b244
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d0d4827f95c9e7bb35b247
+        failing since 144 days (last pass: v6.1-rc5-55-g60453df62d30, first=
+ fail: v6.3-rc2-33-g1240ce78c05e)
+
+    2023-08-07T11:24:37.983076  [   18.564058] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1241365_1.5.2.4.1>
+    2023-08-07T11:24:38.088893  =
+
+    2023-08-07T11:24:38.190138  / # #export SHELL=3D/bin/sh
+    2023-08-07T11:24:38.190554  =
+
+    2023-08-07T11:24:38.291566  / # export SHELL=3D/bin/sh. /lava-1241365/e=
+nvironment
+    2023-08-07T11:24:38.291973  =
+
+    2023-08-07T11:24:38.392980  / # . /lava-1241365/environment/lava-124136=
+5/bin/lava-test-runner /lava-1241365/1
+    2023-08-07T11:24:38.393683  =
+
+    2023-08-07T11:24:38.396400  / # /lava-1241365/bin/lava-test-runner /lav=
+a-1241365/1
+    2023-08-07T11:24:38.418933  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+r8a77960-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d0d41f792fc1892c35b282
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d0d41f792fc1892c35b287
+        failing since 18 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-07T11:24:41.630198  / # #
+
+    2023-08-07T11:24:41.732307  export SHELL=3D/bin/sh
+
+    2023-08-07T11:24:41.733051  #
+
+    2023-08-07T11:24:41.834509  / # export SHELL=3D/bin/sh. /lava-11221843/=
+environment
+
+    2023-08-07T11:24:41.835210  =
+
+
+    2023-08-07T11:24:41.936659  / # . /lava-11221843/environment/lava-11221=
+843/bin/lava-test-runner /lava-11221843/1
+
+    2023-08-07T11:24:41.937840  =
+
+
+    2023-08-07T11:24:41.954209  / # /lava-11221843/bin/lava-test-runner /la=
+va-11221843/1
+
+    2023-08-07T11:24:42.004809  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-07T11:24:42.005365  + cd /lava-112218<8>[   19.307844] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11221843_1.5.2.4.5>
+ =
+
+    ... (28 line(s) more)  =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+r8a779m1-ulcb      | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d0d45e7f95c9e7bb35b1da
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d0d45e7f95c9e7bb35b1df
+        failing since 18 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-07T11:24:20.205133  / # #
+
+    2023-08-07T11:24:21.283895  export SHELL=3D/bin/sh
+
+    2023-08-07T11:24:21.285812  #
+
+    2023-08-07T11:24:22.776665  / # export SHELL=3D/bin/sh. /lava-11221850/=
+environment
+
+    2023-08-07T11:24:22.778548  =
+
+
+    2023-08-07T11:24:25.497740  / # . /lava-11221850/environment/lava-11221=
+850/bin/lava-test-runner /lava-11221850/1
+
+    2023-08-07T11:24:25.499785  =
+
+
+    2023-08-07T11:24:25.500089  / # /lava-11221850/bin/lava-test-runner /la=
+va-11221850/1
+
+    2023-08-07T11:24:25.569663  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-07T11:24:25.570153  + cd /lava-112218<8>[   28.497072] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11221850_1.5.2.4.5>
+ =
+
+    ... (44 line(s) more)  =
+
+ =
+
+
+
+platform           | arch  | lab           | compiler | defconfig | regress=
+ions
+-------------------+-------+---------------+----------+-----------+--------=
+----
+sun50i-h6-pine-h64 | arm64 | lab-collabora | gcc-10   | defconfig | 1      =
+    =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d0d52317ba91502335b1d9
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc5-68-g5fed55=
+28c8fd/arm64/defconfig/gcc-10/lab-collabora/baseline-sun50i-h6-pine-h64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64d0d52317ba91502335b=
+1da
+        new failure (last pass: v6.5-rc4-68-g8a3c19975d99) =
+
+ =20
