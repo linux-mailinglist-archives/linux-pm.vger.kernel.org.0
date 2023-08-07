@@ -2,112 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37BD771D4B
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 11:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524D5771D97
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 11:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjHGJmS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Aug 2023 05:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
+        id S231389AbjHGJ4A convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Aug 2023 05:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjHGJmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 05:42:18 -0400
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C910F8;
-        Mon,  7 Aug 2023 02:42:14 -0700 (PDT)
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-563393b63dbso657006eaf.1;
-        Mon, 07 Aug 2023 02:42:14 -0700 (PDT)
+        with ESMTP id S229876AbjHGJ4A (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 05:56:00 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43BE2F4;
+        Mon,  7 Aug 2023 02:55:59 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1bc05bece1dso489537fac.1;
+        Mon, 07 Aug 2023 02:55:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691401333; x=1692006133;
+        d=1e100.net; s=20221208; t=1691402158; x=1692006958;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IK5JqTcazrnzFQkUb1pgAiTMlQXrShoQJmEX5JHWXhU=;
-        b=XnL/SLnMWBUN5v2QyGqXqhwRRxj6MV1hXN507LD3uoBl7EG8ntdwP7HBfZTtACdipp
-         bAhIYHEDZ3t4Re5D1G8bh2afJX2yGnNEvtlQIhA2yYlk8AeLKoQMjPORnZj8zlOTOYaj
-         mrgGfRpQepxkNNYGkqYdCfgcoMAl/qK/i+8t8++aWFLv5SpTNiYzkXRSpxl/wkXBGXjr
-         FzpEeRVlOTASCPMRMY6UeVk0CEqb36Fz0+hFEDN6hPoJgn5ae7bvzXHwm0kol/GHU0tN
-         ZKbG2l41kSx0mmxdA8KR2Jds4MWLyGYTuElasS2a9h6MYt+ky/nyyxT1VdA+CppTisjp
-         AadQ==
-X-Gm-Message-State: ABy/qLZg+S/QRZv5TNQLXONPvnRitOrat8ozaJlGqyCly1AWTUvu6q32
-        bCqraUg2ZvQ+XYMGn766ug9ahXB3fRaNyu5joS0=
-X-Google-Smtp-Source: APBJJlEb7O2dGAF/f7fTBx/HAisyhbmiTj3PawRftJoMI15JdDVqSBYI20CfGwr14y35bjypNJI9KK+xc439zbfSIBc=
-X-Received: by 2002:a4a:cf14:0:b0:569:a08a:d9c5 with SMTP id
- l20-20020a4acf14000000b00569a08ad9c5mr19679264oos.0.1691401333651; Mon, 07
- Aug 2023 02:42:13 -0700 (PDT)
+        bh=HM29zdZVBVOCSCNWC+N4/pn42HvEOpSp0FjiUfhyV+c=;
+        b=WG0LPz2O6tJSd7aohQHE15fGr1TEfsj9aE+Sucy4Ibz4YC4K3Eoonla84sn9S9R8I5
+         zEC5DO9u3I0KsA8YpDKr4c0IwQgZ42W8NBtkN+yIqxRZqcoSsdtYS+K3NBHkrj/OVCXd
+         r8uHgwKdUOIdPU65xHyHoz4BnSDCspLnfaClzZ6tnw+38jTr1LK9TU9sjgCpkojQGP8B
+         iYgNCFbRv1+zr/MgqY27vo/8HrfT7kdStroxzTc5pXxMGoG5qWE3g6zp3ruhxCpgootc
+         C8XYpN7q6tclBLAb/ITBjWT+PngBsIY2R+MqkhCFFOXJMykYfhU8E3lrtUYs0ZDji4tb
+         tuDg==
+X-Gm-Message-State: AOJu0YzRPckUNUTtgTa+hVafUv/FAYSqjVl4hZCaUIFqoCs+DQyxtM5j
+        VcKEbEyWNtfPPt9cWtoJuxZJDuHBRZIsjUYHbwQ=
+X-Google-Smtp-Source: AGHT+IFHIvYl74pw4UZh36FUG3o40lXvym9lMWxwRL/SxHlVB7wTSMG9tn/tEdRQ5gFzwoxUxtwe3BVZMSdpSLITRrE=
+X-Received: by 2002:a05:6870:c091:b0:1bf:9170:89ef with SMTP id
+ c17-20020a056870c09100b001bf917089efmr9642566oad.4.1691402158480; Mon, 07 Aug
+ 2023 02:55:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230807083356.19222-2-vbabka@suse.cz>
-In-Reply-To: <20230807083356.19222-2-vbabka@suse.cz>
+References: <20230804214051.136268-1-robdclark@gmail.com>
+In-Reply-To: <20230804214051.136268-1-robdclark@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Aug 2023 11:41:58 +0200
-Message-ID: <CAJZ5v0g_OjHSdM_oi515KQUrFZvZH4hNgCy4xknosQC+81GYhw@mail.gmail.com>
-Subject: Re: [PATCH for 6.5 regression] PM: hibernate: fix resume_store()
- return value when hibernation not available
-To:     Vlastimil Babka <vbabka@suse.cz>
+Date:   Mon, 7 Aug 2023 11:55:43 +0200
+Message-ID: <CAJZ5v0iy+qD7J+UvFkG+ErLmYGk7ZvG2HY2vvWFiwA95jQ-yPA@mail.gmail.com>
+Subject: Re: [RFC] PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+ (alternative solution)
+To:     Rob Clark <robdclark@gmail.com>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Jens Axboe <axboe@kernel.dk>,
-        dm-devel@redhat.com, gregkh@linuxfoundation.org, hch@lst.de,
-        joern@lazybastard.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-pm@vger.kernel.org, loic.poulain@linaro.org,
-        miquel.raynal@bootlin.com, regressions@lists.linux.dev,
-        richard@nod.at, snitzer@kernel.org, vigneshr@ti.com
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 10:34 AM Vlastimil Babka <vbabka@suse.cz> wrote:
+On Fri, Aug 4, 2023 at 11:41 PM Rob Clark <robdclark@gmail.com> wrote:
 >
-> On a laptop with hibernation set up but not actively used, and with
-> secure boot and lockdown enabled kernel, 6.5-rc1 gets stuck on boot with
-> the following repeated messages:
+> From: Rob Clark <robdclark@chromium.org>
 >
->   A start job is running for Resume from hibernation using device /dev/system/swap (24s / no limit)
->   lockdown_is_locked_down: 25311154 callbacks suppressed
->   Lockdown: systemd-hiberna: hibernation is restricted; see man kernel_lockdown.7
->   ...
+> Similar to the previous patch, move the allocation out from under
+> dev_pm_qos_mtx, by speculatively doing the allocation and handle
+> any race after acquiring dev_pm_qos_mtx by freeing the redundant
+> allocation.
 >
-> Checking the resume code leads to commit cc89c63e2fe3 ("PM: hibernate:
-> move finding the resume device out of software_resume") which
-> inadvertently changed the return value from resume_store() to 0 when
-> !hibernation_available(). This apparently translates to userspace
-> write() returning 0 as in number of bytes written, and userspace looping
-> indefinitely in the attempt to write the intended value.
->
-> Fix this by returning the full number of bytes that were to be written,
-> as that's what was done before the commit.
->
-> Fixes: cc89c63e2fe3 ("PM: hibernate: move finding the resume device out of software_resume")
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
 > ---
-> Resend with review/ack tags added and not buried in the thread.
-> Link: https://lore.kernel.org/all/2cfa5f55-1d68-8a4f-d049-13f42e0d1484@suse.cz/
+> This is an alternative to https://patchwork.freedesktop.org/patch/551417/?series=115028&rev=4
 >
->  kernel/power/hibernate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> So, this does _slightly_ change error paths, for ex
+> dev_pm_qos_update_user_latency_tolerance() will now allocate
+> dev->power.qos in some error cases.  But this seems harmless?
+
+It is harmless AFAICS.
+
+> A slightly more complicated version of this could conserve the
+> previous error path behavior, but I figured I'd try the simpler
+> thing first.
+
+Good choice!
+
+>  drivers/base/power/qos.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
 >
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index e1b4bfa938dd..2b4a946a6ff5 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -1166,7 +1166,7 @@ static ssize_t resume_store(struct kobject *kobj, struct kobj_attribute *attr,
->         int error;
+> diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+> index 1b73a704aac1..c7ba85e89c42 100644
+> --- a/drivers/base/power/qos.c
+> +++ b/drivers/base/power/qos.c
+> @@ -920,8 +920,12 @@ s32 dev_pm_qos_get_user_latency_tolerance(struct device *dev)
+>  int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+>  {
+>         struct dev_pm_qos *qos = dev_pm_qos_constraints_allocate();
+> +       struct dev_pm_qos_request *req = NULL;
+>         int ret = 0;
 >
->         if (!hibernation_available())
-> -               return 0;
-> +               return n;
+> +       if (!dev->power.qos->latency_tolerance_req)
+> +               req = kzalloc(sizeof(*req), GFP_KERNEL);
+> +
+>         mutex_lock(&dev_pm_qos_mtx);
 >
->         if (len && buf[len-1] == '\n')
->                 len--;
+>         dev_pm_qos_constraints_set(dev, qos);
+> @@ -935,8 +939,6 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+>                 goto out;
+>
+>         if (!dev->power.qos->latency_tolerance_req) {
+> -               struct dev_pm_qos_request *req;
+> -
+>                 if (val < 0) {
+>                         if (val == PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT)
+>                                 ret = 0;
+> @@ -944,17 +946,15 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+>                                 ret = -EINVAL;
+>                         goto out;
+>                 }
+> -               req = kzalloc(sizeof(*req), GFP_KERNEL);
+>                 if (!req) {
+>                         ret = -ENOMEM;
+>                         goto out;
+>                 }
+>                 ret = __dev_pm_qos_add_request(dev, req, DEV_PM_QOS_LATENCY_TOLERANCE, val);
+> -               if (ret < 0) {
+> -                       kfree(req);
+> +               if (ret < 0)
+>                         goto out;
+> -               }
+>                 dev->power.qos->latency_tolerance_req = req;
+> +               req = NULL;
+>         } else {
+>                 if (val < 0) {
+>                         __dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_LATENCY_TOLERANCE);
+> @@ -966,6 +966,7 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+>
+>   out:
+>         mutex_unlock(&dev_pm_qos_mtx);
+> +       kfree(req);
+>         return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_qos_update_user_latency_tolerance);
 > --
 
-Applied as 6.5-rc material, thanks!
+Yes, something like this, please!
