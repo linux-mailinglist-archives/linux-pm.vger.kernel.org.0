@@ -2,172 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4FF772A89
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 18:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57889772B62
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Aug 2023 18:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229445AbjHGQXu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Aug 2023 12:23:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S229812AbjHGQqu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 7 Aug 2023 12:46:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbjHGQXt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 12:23:49 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B421998;
-        Mon,  7 Aug 2023 09:23:18 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56d279a4d5cso930601eaf.1;
-        Mon, 07 Aug 2023 09:23:18 -0700 (PDT)
+        with ESMTP id S229797AbjHGQqt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 12:46:49 -0400
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76AF10DE;
+        Mon,  7 Aug 2023 09:46:48 -0700 (PDT)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1bc05bece1dso560009fac.1;
+        Mon, 07 Aug 2023 09:46:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691425395; x=1692030195;
+        d=1e100.net; s=20221208; t=1691426808; x=1692031608;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pixDtAKy9Cw9KBr/6zRS3zidTud25upCpNKC+6ucwwo=;
-        b=bockYbKMgM2lI8LWSQ9MjvWY6pAvnM9ckGwbWSKW3tdLjHo5jSVdtisww40hiYYZlb
-         07LpJMV/hPVJ/ah/ZdiptXEWjr1FDHnxMmRu8HBCbtyNOORuWC5AYOmNofWjxmFdKp3T
-         PtdIBwHR9YgoeCtxkRBSAKrb1dwAxvOzEB21FJ3iUf8qoTi8B5eNWJyYRm/OIbzEDf5h
-         CmUx54CkC+owIqi6v2NJke7IYHVgPxZ+ZM0oSo+taeeBF3A99kA8mn7zDPRj8LFI6MaI
-         Dz+5MaOTc9k97E1VRfLTxkD2A+UhYBu1f0cqwQTOLva46q8Lx+qv86wDqVS7itOB13ku
-         FWsw==
-X-Gm-Message-State: ABy/qLZ7G2Y9WNbFjOJ8IAiVhrTXnsxQLESDvNkv8Oo5tz8LHqIa3yso
-        0WSy1cYcY5+fnV8KG1RkSWHRWeZm1kNuW3kJ3pI=
-X-Google-Smtp-Source: APBJJlHbvF3yWA3mA4oVBthg1hng2+YLoXoVfXq1/srfY6aj3fsDtqPAHqkk6+gqSzJomc20Qu/dZQnMP2G23BFFvJ8=
-X-Received: by 2002:a4a:e251:0:b0:566:951e:140c with SMTP id
- c17-20020a4ae251000000b00566951e140cmr17567127oot.1.1691425395557; Mon, 07
- Aug 2023 09:23:15 -0700 (PDT)
+        bh=+cTkah9A+y0zHAsGnDn+WndtVM4Rfo0pn8/RM09YGig=;
+        b=h86AVbFyP4Oz/bojwqqWvlsrTGwrhAa/20iXOW/pYIwe7rxHBGMSL6kxbClj4UA4ef
+         F/pyTcKO2nfCMQ8Zs9HZhA1WFz41xwv2pvBfjQYLifOOSZTTJxfVPuVfl/1Fa1HqKL7f
+         I8zLkc8g3zrDOh5KHZQF3ZrGlYA/tIfNklU+wdBugZuMKviqgPvJr8bOjevNCv7GOPW4
+         o4ie+UUba571Z0Wj9CzeKzYNqK56Q6zs9fV5a3S1DQedZyim0Iwv+jgCYsF24jtsJFhE
+         tkKfxVKuk4G4vo45+sVyP4o27E2gvkTQFrONEDq72a6xpsq63nPlSaKi5kI8rzMaclG4
+         NkFA==
+X-Gm-Message-State: ABy/qLZWmY4ER1qRWSorUUOMPQvJeArFR8LJVuovoW/TIHffHF+6sMrk
+        6zMhAklOVcyeTCg4UewdLGZpjv7Zb7uHPSAqwv4=
+X-Google-Smtp-Source: APBJJlHQJeYGLJWAa+24trXn3icoqVc7zTAQgWg2FFLoc77mae6UbDnZCN8ksd/IRnv93s4pmE3TqI89mAa2MmTFQAU=
+X-Received: by 2002:a05:6870:d208:b0:192:6fce:d3be with SMTP id
+ g8-20020a056870d20800b001926fced3bemr27399356oac.1.1691426808091; Mon, 07 Aug
+ 2023 09:46:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <13318886.uLZWGnKmhe@kreacher> <4878513.31r3eYUQgx@kreacher>
- <1967710.PYKUYFuaPT@kreacher> <f47b7e17-7ec6-4c19-9db1-c1a2e1ad66b6@linaro.org>
- <CAJZ5v0iNOD9FW0deZYvfjmB8Us+7KjTNnB8Fkm=nnVJ6a82EZQ@mail.gmail.com> <4bfabfce-574b-ed52-2956-d0d2b9502e60@linaro.org>
-In-Reply-To: <4bfabfce-574b-ed52-2956-d0d2b9502e60@linaro.org>
+References: <5712331.DvuYhMxLoT@kreacher> <ZND5CL6Kl9RnDdhL@e126311.manchester.arm.com>
+In-Reply-To: <ZND5CL6Kl9RnDdhL@e126311.manchester.arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Aug 2023 18:23:04 +0200
-Message-ID: <CAJZ5v0hzSLS1wu6QF1SakrzL3242e_Xy7HjZiA-N8w-g8H=81A@mail.gmail.com>
-Subject: Re: [PATCH v4 04/10] thermal: core: Add thermal_zone_update_trip_temp()
- helper routine
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+Date:   Mon, 7 Aug 2023 18:46:37 +0200
+Message-ID: <CAJZ5v0hPHBEtkSVuB4GfTpFf9+Fs=_0=2HOeuf49bqM4NR3qeg@mail.gmail.com>
+Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
+ unconditionally every time
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 7, 2023 at 6:17 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->
-> On 07/08/2023 17:40, Rafael J. Wysocki wrote:
-> > On Mon, Aug 7, 2023 at 1:34 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 04/08/2023 23:05, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> Introduce a helper routine called thermal_zone_update_trip_temp() that
-> >>> can be used to update a trip point's temperature with the help of a
-> >>> pointer to local data associated with that trip point provided by
-> >>> the thermal driver that created it.
-> >>>
-> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>> ---
-> >>>
-> >>> New patch in v4.
-> >>>
-> >>> ---
-> >>>    drivers/thermal/thermal_trip.c |   37 +++++++++++++++++++++++++++++++++++++
-> >>>    include/linux/thermal.h        |    4 ++++
-> >>>    2 files changed, 41 insertions(+)
-> >>>
-> >>> Index: linux-pm/drivers/thermal/thermal_trip.c
-> >>> ===================================================================
-> >>> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> >>> +++ linux-pm/drivers/thermal/thermal_trip.c
-> >>> @@ -180,3 +180,40 @@ int thermal_zone_set_trip(struct thermal
-> >>>
-> >>>        return 0;
-> >>>    }
-> >>> +
-> >>> +/**
-> >>> + * thermal_zone_update_trip_temp - Update the trip point temperature.
-> >>> + * @tz: Thermal zone.
-> >>> + * @trip_priv: Trip tag.
-> >>> + * @temp: New trip temperature.
-> >>> + *
-> >>> + * This only works for thermal zones using trip tables and its caller must
-> >>> + * ensure that the zone lock is held before using it.
-> >>> + *
-> >>> + * @trip_priv is expected to be the value that has been stored by the driver
-> >>> + * in the struct thermal_trip representing the trip point in question, so it
-> >>> + * can be matched against the value of the priv field in that structure.
-> >>> + *
-> >>> + * If @trip_priv does not match any trip point in the trip table of @tz,
-> >>> + * nothing happens.
-> >>> + */
-> >>> +void thermal_zone_update_trip_temp(struct thermal_zone_device *tz,
-> >>> +                                void *trip_priv, int temperature)
-> >>> +{
-> >>> +     int i;
-> >>> +
-> >>> +     lockdep_assert_held(&tz->lock);
-> >>> +
-> >>> +     if (!tz->trips || !trip_priv)
-> >>> +             return;
-> >>> +
-> >>> +     for (i = 0; i < tz->num_trips; i++) {
-> >>> +             struct thermal_trip *trip = &tz->trips[i];
-> >>> +
-> >>> +             if (trip->priv == trip_priv) {
-> >>> +                     trip->temperature = temperature;
-> >>> +                     return;
-> >>> +             }
-> >>> +     }
-> >>> +}
-> >>> +EXPORT_SYMBOL_GPL(thermal_zone_update_trip_temp);
-> >>
-> >> This function would imply the comparator is always trip->priv but if we
-> >> want another comparison eg. trip->priv->id, that won't be possible.
-> >>
-> >> Actually, I think you can reuse an existing function with a simple
-> >> change, for_each_thermal_trip() located in thermal_core.h.
-> >
-> > for_each_thermal_trip() is only defined in tools/lib/thermal/thermal.c
-> > AFAICS, but this one could actually work, so I can copy that
-> > definition to somewhere else.
-> >
-> > But I suppose that you mean __for_each_thermal_trip() which won't
-> > work, because it makes a copy of the trip and passes that to the
-> > callback, but the callback would need to update the temperature of the
-> > original trip.
-> >
-> > It would work if it passed the original trip to the caller, so I can
-> > add something like that.
->
-> As there is no user of this function yet, I think you can change that to
-> use the trip array instead of the __thermal_zone_get_trip(). This one
-> was used to have a compatibility with thermal zones using get_trip_* ops
-> but that is not really needed and with your series only one driver will
-> remain before dropping these ops.
+Hi Kajetan,
 
-Sounds good.
-
-> >> The changes would be renaming it without the '__' prefix and moving it
-> >> in include/linux/thermal.h.
-> >>
-> >> Then the comparison function and the temperature change can be an ACPI
-> >> driver specific callback passed as parameter to for_each_thermal_zone
-> >
-> > I guess you mean for_each_thermal_trip().
+On Mon, Aug 7, 2023 at 4:04 PM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
 >
-> Yes, __for_each_thermal_trip()
+> Hi Rafael,
+>
+> On Thu, Aug 03, 2023 at 10:57:04PM +0200, Rafael J. Wysocki wrote:
+> > Hi Folks,
+> >
+> > This is the second iteration of:
+> >
+> > https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
+> >
+> > with an additional patch.
+> >
+> > There are some small modifications of patch [1/3] and the new
+> > patch causes governor statistics to play a role in deciding whether
+> > or not to stop the scheduler tick.
+> >
+> > Testing would be much appreciated!
+> >
+> > Thanks!
+> >
+>
+> My test results including the v2 are below.
+>
+> 1. Geekbench 6
+>
+> +---------------------------+---------------+-----------------+-------------------+----------------------+
+> |          metric           |      teo      |     teo_tick    |    teo_tick_rfc   |    teo_tick_rfc_v2   |
+> +---------------------------+---------------+-----------------+-------------------+----------------------+
+> |      multicore_score      | 3320.9 (0.0%) | 3303.3 (-0.53%) |  3293.6 (-0.82%)  |   3302.3 (-0.56%)    |
+> |           score           | 1415.7 (0.0%) | 1417.7 (0.14%)  |  1423.4 (0.54%)   |    1425.8 (0.71%)    |
+> |      CPU_total_power      | 2421.3 (0.0%) | 2429.3 (0.33%)  |  2442.2 (0.86%)   |    2461.9 (1.67%)    |
+> |  latency (AsyncTask #1)   | 49.41μ (0.0%) | 51.07μ (3.36%)  |   50.1μ (1.4%)    |    50.76μ (2.73%)    |
+> | latency (labs.geekbench6) | 65.63μ (0.0%) | 77.47μ (18.03%) | 55.82μ (-14.95%)  |    66.12μ (0.75%)    |
+> | latency (surfaceflinger)  | 39.46μ (0.0%) | 36.94μ (-6.39%) |  35.79μ (-9.28%)  |    40.36μ (2.3%)     |
+> +---------------------------+---------------+-----------------+-------------------+----------------------+
+>
+> +----------------------+-------------+------------+
+> |         tag          |    type     | count_perc |
+> +----------------------+-------------+------------+
+> |         teo          |  too deep   |   2.034    |
+> |       teo_tick       |  too deep   |    2.16    |
+> |     teo_tick_rfc     |  too deep   |   2.071    |
+> |    teo_tick_rfc_v2   |  too deep   |   2.548    |
+> |         teo          | too shallow |   15.791   |
+> |       teo_tick       | too shallow |   20.881   |
+> |     teo_tick_rfc     | too shallow |   20.337   |
+> |    teo_tick_rfc_v2   | too shallow |   19.886   |
+> +----------------------+-------------+------------+
+>
+>
+> 2. JetNews
+>
+> +-----------------+---------------+----------------+-----------------+-----------------+
+> |     metric      |      teo      |    teo_tick    |  teo_tick_rfc   | teo_tick_rfc_v2 |
+> +-----------------+---------------+----------------+-----------------+-----------------+
+> |       fps       |  86.2 (0.0%)  |  86.4 (0.16%)  |  86.0 (-0.28%)  |  86.6 (0.41%)   |
+> |    janks_pc     |  0.8 (0.0%)   |  0.8 (-0.66%)  |  0.8 (-1.37%)   |  0.7 (-11.37%)  |
+> | CPU_total_power | 185.2 (0.0%)  | 178.2 (-3.76%) |  182.2 (-1.6%)  | 169.4 (-8.53%)  | <- very interesting
+> +-----------------+---------------+----------------+-----------------+-----------------+
+>
+> +----------------------+-------------+--------------------+
+> |         tag          |    type     |     count_perc     |
+> +----------------------+-------------+--------------------+
+> |         teo          |  too deep   |       0.992        |
+> |       teo_tick       |  too deep   |       0.945        |
+> |     teo_tick_rfc     |  too deep   |       1.035        |
+> |    teo_tick_rfc_v2   |  too deep   |       1.127        |
+> |         teo          | too shallow |       17.085       |
+> |       teo_tick       | too shallow |       15.236       |
+> |     teo_tick_rfc     | too shallow |       15.379       |
+> |    teo_tick_rfc_v2   | too shallow |       15.34        |
+> +----------------------+-------------+--------------------+
+>
+> All in all looks pretty good. Unfortunately there's a slightly larger
+> percentage of too deep sleeps with the v2 (which is probably where the
+> increase in GB6 power usage comes from) but the lower jank percentage +
+> substantially lower power usage for the UI workload are very promising.
+>
+> Since we don't care about GB6 power usage as much as UI power usage, I'd
+> say that the patchset looks good :)
+>
+> Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
 
-OK
+Thanks a lot, much appreciated!
