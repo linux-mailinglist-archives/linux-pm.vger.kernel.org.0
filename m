@@ -2,139 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F78777438A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 20:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43920774917
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 21:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233928AbjHHSH0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 14:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S236632AbjHHTsl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 15:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbjHHSHC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 14:07:02 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662F961B1D
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 10:07:29 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fe2d218eedso50714305e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 10:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691514448; x=1692119248;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZQ93ryTVkLJ674HaEi8fy9NL3vC9KyVwveDa7EddrM=;
-        b=QEfPy3Qvqw5guHS5CqWLd3Wxox/4Cxdxip787ZZBj5Cik9AEBZ6DJ684lzWIpiJcga
-         D1ui0ledffFpfW47aFkin2wijEG7k2KJtbRqyVVOqh2QV/L7X1UVa5BNGBo7hK6gW+6u
-         yHMwmnbLNm2E/Px4AhhfouljCLoP3oaUZBtwoSCvgveDQI97jb5tks8YN8ksFHYLiIA1
-         R1x+1PVWCp/JTyxeun80O8+GVPDu7EH4rm/CphGNK3boIXSARMmj6LQegBh42feulASD
-         b7ddZBKbP08+1WCkw4WZPG7tAvbaBmjY3vYkze0mpWnEEa3HKGrfURincsFDETvy5jCk
-         I+Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691514448; x=1692119248;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qZQ93ryTVkLJ674HaEi8fy9NL3vC9KyVwveDa7EddrM=;
-        b=Q8bnaxy1T0xWFZE2HA1n9tUN7xeikonL4c+EbYfl1ysCGSgt4GDBsEzFukM5BUBEJz
-         EHJ2radzxmYzAybW9h7vgABTPX8XbzVTrvfiBqMs6zBHqKI0l2fKnRQZSHddhIpqs6p6
-         Din7S1MI3tewhlYF+IxlEuXhCQOfuNOKflosT2XbC9KKO6l2hw5IY6QjYNFtzRVHrIAa
-         GlRpzaLJGjbBVGTPu4prUAx+99Kbb1rigK1Hdin7tq8b+u0SBl3vRQPvBUgYzK2Kzksp
-         xUOyuMCbhcjgHtfBIhPbIYFYHNwORL8FySfLfd2M4vkwpavPQxAlhhCHA5xAlSwUj16B
-         CneA==
-X-Gm-Message-State: AOJu0YwHk8HNSRYOcqFjxX+4k2W+yZ3JtSJyfGN3A9SVqGZ49mFdQR/h
-        HMMoPWVDHhis/IJeXKrmcc0IwJ0BgHLK2WnM7qo=
-X-Google-Smtp-Source: AGHT+IG9eggqMlJftuNT+UYhqts3d5BpOBl7EQ49aL1HZWMDX+s3HZ44tnUlcpa8asB0W6Zw6ZbjPw==
-X-Received: by 2002:a05:6512:10d2:b0:4fd:d538:b97b with SMTP id k18-20020a05651210d200b004fdd538b97bmr9355921lfg.29.1691495026441;
-        Tue, 08 Aug 2023 04:43:46 -0700 (PDT)
-Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm1861679lfh.57.2023.08.08.04.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 04:43:46 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 08 Aug 2023 13:43:40 +0200
-Subject: [PATCH v3 09/10] interconnect: qcom: msm8996: Set AB/IB
- coefficients
+        with ESMTP id S231232AbjHHTsc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 15:48:32 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C094DEA7;
+        Tue,  8 Aug 2023 09:52:59 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 378Bs6Yf059357;
+        Tue, 8 Aug 2023 06:54:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691495646;
+        bh=85O1LHmFg/AJ8yaKognKgKFx1SZjvS1koBhd4R/gD6w=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=bkSh49bjXjvQxiVC9sI24Tb/WFdJvqVLySYHPdnrPSqsVT/ddYZMMdHpUWtrnQmVj
+         NpLqEufiYT2xQA5YvU0PFkaYSuYeAQKcXDIupDqlRZQUom+GZ8l9ou76UQ55ki0kvL
+         mnIhd3XDxHpFxS7KniEQNYRPjmhCU6/T8LDYxeq8=
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 378Bs6IT025553
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 8 Aug 2023 06:54:06 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 8
+ Aug 2023 06:54:04 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 8 Aug 2023 06:54:04 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 378Bs4SH098556;
+        Tue, 8 Aug 2023 06:54:04 -0500
+Date:   Tue, 8 Aug 2023 17:24:03 +0530
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Kevin Hilman <khilman@kernel.org>
+CC:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Praneeth Bajjuri" <praneeth@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
+Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend resume
+ support
+Message-ID: <20230808115403.dkz6ev5vc6bhcmzh@dhruva>
+References: <20230803064247.503036-1-d-gole@ti.com>
+ <20230803064247.503036-5-d-gole@ti.com>
+ <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
+ <20230803155541.nwsfwobfkbpefoyw@dhruva>
+ <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
+ <20230803160815.yfpkdfssv75d4inf@dhruva>
+ <7ho7jifrda.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230726-topic-icc_coeff-v3-9-dee684d6cdd2@linaro.org>
-References: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
-In-Reply-To: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691495013; l=1682;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=6Ylk54qLtCUKuTX9FA4QTRZGSUqgBkVW+4oTAnkFbFA=;
- b=G6C3tehG5i+wpYLksQeibNa9TcRRryQx2c1C+PbgLjLNinmWth7Kgiq6h+P+yrqSg+hvkS8hs
- P/WvsN11oQzB97MrKtKeOynWWxsSz6KKpBWsjH96NjyOnz66wttLu7H
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <7ho7jifrda.fsf@baylibre.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some buses and nodes need additional manual adjustments atop the usual
-calculations. Fill in the missing coefficients.
+Kevin,
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/interconnect/qcom/msm8996.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Thanks for the suggestion. I have a rough proposal inline, please can
+you take a look? I will test those changes and respin this series
+accordingly
 
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index 88683dfa468f..b73566c9b21f 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -448,6 +448,7 @@ static struct qcom_icc_node mas_mdp_p0 = {
- 	.name = "mas_mdp_p0",
- 	.id = MSM8996_MASTER_MDP_PORT0,
- 	.buswidth = 32,
-+	.ib_coeff = 25,
- 	.mas_rpm_id = 8,
- 	.slv_rpm_id = -1,
- 	.qos.ap_owned = true,
-@@ -463,6 +464,7 @@ static struct qcom_icc_node mas_mdp_p1 = {
- 	.name = "mas_mdp_p1",
- 	.id = MSM8996_MASTER_MDP_PORT1,
- 	.buswidth = 32,
-+	.ib_coeff = 25,
- 	.mas_rpm_id = 61,
- 	.slv_rpm_id = -1,
- 	.qos.ap_owned = true,
-@@ -1889,7 +1891,8 @@ static const struct qcom_icc_desc msm8996_bimc = {
- 	.nodes = bimc_nodes,
- 	.num_nodes = ARRAY_SIZE(bimc_nodes),
- 	.bus_clk_desc = &bimc_clk,
--	.regmap_cfg = &msm8996_bimc_regmap_config
-+	.regmap_cfg = &msm8996_bimc_regmap_config,
-+	.ab_coeff = 154,
- };
- 
- static struct qcom_icc_node * const cnoc_nodes[] = {
-@@ -2004,7 +2007,8 @@ static const struct qcom_icc_desc msm8996_mnoc = {
- 	.bus_clk_desc = &mmaxi_0_clk,
- 	.intf_clocks = mm_intf_clocks,
- 	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
--	.regmap_cfg = &msm8996_mnoc_regmap_config
-+	.regmap_cfg = &msm8996_mnoc_regmap_config,
-+	.ab_coeff = 154,
- };
- 
- static struct qcom_icc_node * const pnoc_nodes[] = {
+On Aug 07, 2023 at 14:57:05 -0700, Kevin Hilman wrote:
+> Dhruva Gole <d-gole@ti.com> writes:
+> 
+> > On Aug 03, 2023 at 11:00:11 -0500, Andrew Davis wrote:
+> >> On 8/3/23 10:55 AM, Dhruva Gole wrote:
+> >> > On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
+> >> > > On 8/3/23 1:42 AM, Dhruva Gole wrote:
+> >> > > > Introduce system suspend resume calls that will allow the ti_sci
+> >> > > > driver to support deep sleep low power mode when the user space issues a
+> >> > > > suspend to mem.
+> >> > > > 
+> >> > > > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
+> >> > > > suspend handler to allow the system to identify the low power mode being
+> >> > > > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
+> >> > > > about the mode is being entered and the address for allocated memory for
+> >> > > > storing the context during Deep Sleep.
+> >> > > > 
+> >> > > > We're using "pm_suspend_target_state" to map the kernel's target suspend
+> >> > > > state to SysFW low power mode. Make sure this is available only when
+> >> > > > CONFIG_SUSPEND is enabled.
+> >> > > > 
+> >> > > > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
+> >> > > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> >> > > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
+> >> > > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
+> >> > > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> >> > > > ---
+> >> > > >    drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
+> >> > > >    1 file changed, 63 insertions(+)
+> >> > > > 
+> >> > [..snip..]
+> >> > > > +static int ti_sci_suspend(struct device *dev)
+> >> > > > +{
+> >> > > > +	struct ti_sci_info *info = dev_get_drvdata(dev);
+> >> > > > +	int ret;
+> >> > > > +
+> >> > > > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
+> >> > > 
+> >> > > After this the will the IOs be in isolation? Or does the firmware wait
+> >> > > until power down begins later?
+> >> > 
+> >> >  From what I understand,
+> >> > IOs will be in isolation immediately
+> >> > 
+> >> 
+> >> That is what I understand too, so then any device that may need to do some
+> >> external communication for its suspend will not function, this must be the
+> >> last driver _suspend() the system calls, how do you enforce that?
+> >
+> > I will make use of .suspend_noirq callbacks in that case. Does that
+> > sound better, or is there anything else I may not be aware of?
+> 
+> Using _noirq just moves the problem.  What if other drivers are also
+> using _noirq callbacks and run after the SCI driver?  You still cannot
+
+True, this thought occurred to me as well which is why I was thinking
+that moving it to ATF might be a better choice.
+
+> guarantee ordering.
+> 
+> It seems to me that the IO isolation stuff is a system-wide operation,
+> and should probably be handled at the platform suspend_ops level
+> (e.g. suspend_ops->prepare_late()).   This would ensure that it runs
+
+I must have missed this approach! Are you suggesting something like what
+was done for am335?
+
+static const struct platform_suspend_ops am33xx_pm_ops
+
+have a similar code for tisci..?
+
+static const struct platform_suspend_ops tisci_pm_ops = {
+	.prepare_late = tisci_set_io_isolation
+	};
+
+And then while resuming we may want the pinctrl driver to scan for the
+wk_evt bit[0] before the isolation is disabled, so we want the
+tisci_resume/ remove isolation to be called later than that.
+
+So I a wondering if the code below makes sense?
+
+static const struct platform_suspend_ops tisci_pm_ops = {
+	.prepare_late = tisci_suspend // also includes set isolation
+	.end = tisci_resume 	// Disables isolation
+	};
+
+However a minor drawback here maybe that the serial logs on the resume
+path may not appear when using a serial console for example. However
+they should be able to easily access using dmesg.
+
+> *after* all the driver hooks (even driver _noirq hooks.) and right
+> before the full suspend (or s2idle.)
+> 
+> Now, all that being said, I noticed that in v7, you didn't move this to
+> _noirq, but instead suggested that this be handled by TF-A.  I suppose
+> that's an option also, but my suggestion above should work also.
+
+Thanks for the pointer! I do believe it will make more sense to do it
+from linux itself unless we have no way to do it in linux.
+
+> 
+> Kevin
+
+
+[0] Table 5-517. Description Of The Pad Configuration Register Bits
+https://www.ti.com/lit/pdf/spruid7
+
+NOTE: The hardware works in such a way that as soon as the IO isolation
+is disabled the wake_evt information is lost so the pinctrl-single
+driver won't be able to know what pin woke it up if we disable io
+isolation before it has the chance to look at the padconf registers
 
 -- 
-2.41.0
-
+Best regards,
+Dhruva Gole <d-gole@ti.com>
