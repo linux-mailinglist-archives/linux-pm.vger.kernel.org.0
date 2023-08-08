@@ -2,64 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5436773B46
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 17:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 038A2773BD3
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 17:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbjHHPsE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 11:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S231162AbjHHP4J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 11:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjHHPqr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 11:46:47 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32123590
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 08:41:14 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-52256241c66so12270580a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 08:41:14 -0700 (PDT)
+        with ESMTP id S229761AbjHHPyV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 11:54:21 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F3559D8
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 08:43:32 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-99bdf08860dso1465579366b.0
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 08:43:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691509254; x=1692114054;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/O5Y0Ab6iaBrA/9OXoJTEQWxJ6aDOXFu3sTBHt6SbVg=;
-        b=owj9zOiS+WpLwSuYIV2v/oDhHnbHVLlR/PjVPxGOD+SoCspViyS4RadNvwujC5mk7g
-         vYJyCjZoLI68OyN5KJsfrLT9mm2oWF9b5Ag2VxqtJjuIzj0JaJ7Yt1jwEKZJ0HOxweBo
-         sr3oYmAay/73MShIhTrqCm2Xwt9n7B0CFGmI3X6cwc3YcYqkSnvlM0ULIFvIPJZVhGOP
-         /LtVk/khmlHksNKj2xdyTNCuU3lUyz8rvipoDcI286Z0QJua3SQqHC24y1i0w9m1F3DV
-         ZCG7LXdgkNrL9P5Lz5XZXhRRTJ3W03Ba2z7Q63MlLeaubt2e4Go4sieiSnDdKHEoHqA/
-         +cSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509254; x=1692114054;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1691509395; x=1692114195;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/O5Y0Ab6iaBrA/9OXoJTEQWxJ6aDOXFu3sTBHt6SbVg=;
-        b=TdJ+8C75ikkc4jpPS1mIO5RH+smyk3D+NgbOKdl2MY1aXjhrIfHE8qk0Ge6/dsf8xH
-         TUOKj04jhBLprrhIZMEprBTorPY+hbKMVa5qHk2z7p/g5hHaB9F4rR21oYcoOmMC+sSM
-         hTEtkZhqMJyrwTf8HngsYet4uzyFYhMJZhFjMSGUIxNrJzd4Cf/eI6tzxG7uHAhRDjbU
-         V/Xc5enlL49fuKvTidE3/jNjvODY7qTOWhDpKGkWHyXIlxgYr3+5RpKaX4GEjY+hWWKz
-         byB1hW2EJfo8a2sLHYb5W0ausexYtEsMisyXyEonc96z63+D/pzK1ElOpoEbLIzhZ8H0
-         eqMg==
-X-Gm-Message-State: AOJu0YxcBFQhnkGo46Tj3jLsPIjkqm8KQDB6NS5M6BA+MOasHco6p4Fi
-        8ozGlYjcLweVIWWCCvIKEJkXVvWFzKN6DNfYX8Q=
-X-Google-Smtp-Source: AGHT+IEKsgqAUkiOiaAlo6saAvwqonIwJGWfF8xIR9IDr27vL2re2F5DITPtclAWx6uO1jWvHZY5mA==
-X-Received: by 2002:a05:6512:360d:b0:4fe:b97:e361 with SMTP id f13-20020a056512360d00b004fe0b97e361mr2685997lfs.18.1691495015550;
-        Tue, 08 Aug 2023 04:43:35 -0700 (PDT)
+        bh=m5cHR9R1zj6+fWN0kfJbhPUfhYqf7kqDHOcaH9ExP6c=;
+        b=Hy0GYz5Nz9tVNlxsfQDSl/CahmKmkrGm9ms2lH31ct9C1L26cjHechXdslJ3slaTVF
+         j8YsQStn9lIdPwj8Dbi2pF/2kaW0qGNytZYV5/O+ESConZnfRycS52BI5CnqZZOuTkVb
+         iAWorAA+uKmoNyQvu5lyESrfdvxc/OrZzykc9/23X6XvroXMA46uv+2wp9n/4EgI8bqc
+         myhUsv5V6GiyluyXXq4exXzNhLsvs5AXSQezUQNzBS071t57jXVFR2zQU93EC3VI1orO
+         fKY2tzysDHwUIPNjRGQfB5R1PPFzvs+pMDMNJdTE++syvq63LHqfAP7Arx9bR9OTC4oZ
+         kbFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691509395; x=1692114195;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m5cHR9R1zj6+fWN0kfJbhPUfhYqf7kqDHOcaH9ExP6c=;
+        b=YVnIFStj4P+nEtA9wPDUZnDZ89aHMF56coFLMMHQLvwQBIZ7uJtNatu13oN2eYHv0q
+         FryYm/oBrBM77axh2PIDSNAxh1/bP58jXMP+ubeNOkCijOmTvzwxho7ThGKnSKRGu4Rn
+         zM5GEvWy0JTG9pqqbUddfbHJFci+xt9nTu+uxCa8+z+2G5OAqOsOvjwqaX3xiNcmIOLv
+         LZ5FK/PdyTFeeT/yd9oHeqSuOK9U6uMGaDiHnkk/FlpOikpoSC8yEtTvdDiimiE9ERQ2
+         Z6ANRAwnISQLn8LCpZQyBsvSAwL9b2/257GIaUvVBkwxB9zfPER0GbID8K61aoLSX/AD
+         +OhA==
+X-Gm-Message-State: AOJu0YxlGoFgzgwsVxNiIi0HyAFL3veXcOGR5sSUoILdVZVskXWBPywE
+        +IQbNgT5PQQ4hOoF7dpRt7GTSPYhYdRrgVgfOhE=
+X-Google-Smtp-Source: AGHT+IFa8hs7gdLp6TteRabPqqDMtp2xucJzNgO9gR2weT3XgRWhGg1PX/JaOpY6/dejTFD0ACc/DA==
+X-Received: by 2002:a05:6512:32a4:b0:4fb:fdf1:8b25 with SMTP id q4-20020a05651232a400b004fbfdf18b25mr3031231lfe.24.1691495025312;
+        Tue, 08 Aug 2023 04:43:45 -0700 (PDT)
 Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm1861679lfh.57.2023.08.08.04.43.33
+        by smtp.gmail.com with ESMTPSA id j20-20020ac253b4000000b004fbdba4b075sm1861679lfh.57.2023.08.08.04.43.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 04:43:34 -0700 (PDT)
+        Tue, 08 Aug 2023 04:43:44 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v3 00/10] Fix up icc clock rate calculation on some
- platforms
-Date:   Tue, 08 Aug 2023 13:43:31 +0200
-Message-Id: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
+Date:   Tue, 08 Aug 2023 13:43:39 +0200
+Subject: [PATCH v3 08/10] interconnect: qcom: sdm660: Set AB/IB
+ coefficients
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGMq0mQC/4WNywrCMBQFf6VkbSQPm7au/A8RSW4Te6EkJalBK
- f130+5ciMs5cGYWkmxEm8i5Wki0GRMGX0AeKgKD9g9LsS9MBBOSNULROUwIFAHuEKxz1LBa9vW
- JdaZzpLyMTpaaqD0M5eef41jGKVqHrz1zvRUeMM0hvvdq5tv6O5A5ZVRyxVWnWMtbuIzodQzHE
- B9kk2XxRyCKoIWOg4JGsUZ9CdZ1/QC5gVttBQEAAA==
+Message-Id: <20230726-topic-icc_coeff-v3-8-dee684d6cdd2@linaro.org>
+References: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
+In-Reply-To: <20230726-topic-icc_coeff-v3-0-dee684d6cdd2@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Georgi Djakov <djakov@kernel.org>,
@@ -70,15 +69,15 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691495013; l=2722;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691495013; l=1519;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=XAhr1GRTTz11VXNGM0HJcweTRyuP6Ic8MAO173kSZZo=;
- b=uU3qPRoERGY/xei0GUD/LmqbFzELs1Kt4lOdOOMFgQzXC/ob46KMRct1oyF2A/us51ZC0pd+d
- 4CWXccEf7nzCol5TgXFeAIurv4W1u961WTfupsjOxliRUIydPuFqn7E
+ bh=EjLG3n/q4YI8bbEqplfHVOwV0syrmI4lAF1qcHGTJvw=;
+ b=EnNVF/Cr9uzLzEU4BBg3kNfteX8HGav2OxqYe3b702ezBcqQnBiKJXPeKjEEqpkCP0IXg0ZPZ
+ 0Il6GgQVQ25CyjPK0/MyGHqxPxzBT36JDWPV8X6rvNGRMAfLmNFuhLu
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,61 +86,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Certain platforms require that some buses (or individual nodes) make
-some additional changes to the clock rate formula, throwing in some
-magic, Qualcomm-defined coefficients, to account for "inefficiencies".
-
-Add the framework for it and utilize it on a couple SoCs.
+Some buses and nodes need additional manual adjustments atop the usual
+calculations. Fill in the missing coefficients.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Changes in v3:
-- Allocate the node bus clock on the stack, as dynamically allocating
-  it actually wastes memory on systems with 64-bit pointers..
-- Add the node bus clock struct member in the correct patch
-- Simplify using coefficients by only checking the node-level ones, and
-  setting them equal to the bus-specific ones at probe if absent
-- Fix building on arm32
-- Mention some references to the related downstream code
-- Link to v2: https://lore.kernel.org/r/20230726-topic-icc_coeff-v2-0-8c91c6c76076@linaro.org
+ drivers/interconnect/qcom/sdm660.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Changes in v2:
-- Use the (arguably less favourable but necessary for precission) 100/x
-  instead of x/100 for ib coefficient, update values in consequent
-  patches to reflect that
-- Rename "_percent" to "_coeff" because of /\
-- Add the necessary code to support per-node clocks
-- Add the necessary code to support per-node coefficients
-- Hook up the CPUSS<->GNoC clock on QCM2290
-- Update EBI node on QCM2290
-- Link to v1: https://lore.kernel.org/r/20230726-topic-icc_coeff-v1-0-31616960818c@linaro.org
+diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
+index 36962f7bd7bb..7392bebba334 100644
+--- a/drivers/interconnect/qcom/sdm660.c
++++ b/drivers/interconnect/qcom/sdm660.c
+@@ -602,6 +602,7 @@ static struct qcom_icc_node mas_mdp_p0 = {
+ 	.name = "mas_mdp_p0",
+ 	.id = SDM660_MASTER_MDP_P0,
+ 	.buswidth = 16,
++	.ib_coeff = 50,
+ 	.mas_rpm_id = 8,
+ 	.slv_rpm_id = -1,
+ 	.qos.ap_owned = true,
+@@ -621,6 +622,7 @@ static struct qcom_icc_node mas_mdp_p1 = {
+ 	.name = "mas_mdp_p1",
+ 	.id = SDM660_MASTER_MDP_P1,
+ 	.buswidth = 16,
++	.ib_coeff = 50,
+ 	.mas_rpm_id = 61,
+ 	.slv_rpm_id = -1,
+ 	.qos.ap_owned = true,
+@@ -1540,6 +1542,7 @@ static const struct qcom_icc_desc sdm660_bimc = {
+ 	.num_nodes = ARRAY_SIZE(sdm660_bimc_nodes),
+ 	.bus_clk_desc = &bimc_clk,
+ 	.regmap_cfg = &sdm660_bimc_regmap_config,
++	.ab_coeff = 153,
+ };
+ 
+ static struct qcom_icc_node * const sdm660_cnoc_nodes[] = {
+@@ -1659,6 +1662,7 @@ static const struct qcom_icc_desc sdm660_mnoc = {
+ 	.intf_clocks = mm_intf_clocks,
+ 	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
+ 	.regmap_cfg = &sdm660_mnoc_regmap_config,
++	.ab_coeff = 153,
+ };
+ 
+ static struct qcom_icc_node * const sdm660_snoc_nodes[] = {
 
----
-Konrad Dybcio (10):
-      interconnect: qcom: icc-rpm: Add AB/IB calculations coefficients
-      interconnect: qcom: icc-rpm: Separate out clock rate calulcations
-      interconnect: qcom: icc-rpm: Let nodes drive their own bus clock
-      interconnect: qcom: icc-rpm: Check for node-specific rate coefficients
-      interconnect: qcom: qcm2290: Hook up MAS_APPS_PROC's bus clock
-      interconnect: qcom: qcm2290: Set AB coefficients
-      interconnect: qcom: qcm2290: Update EBI channel configuration
-      interconnect: qcom: sdm660: Set AB/IB coefficients
-      interconnect: qcom: msm8996: Set AB/IB coefficients
-      clk: qcom: smd-rpm: Move CPUSS_GNoC clock to interconnect
-
- drivers/clk/qcom/clk-smd-rpm.c             | 16 +++++--
- drivers/interconnect/qcom/icc-rpm-clocks.c |  6 +++
- drivers/interconnect/qcom/icc-rpm.c        | 76 +++++++++++++++++++++++++-----
- drivers/interconnect/qcom/icc-rpm.h        | 15 ++++++
- drivers/interconnect/qcom/msm8996.c        |  8 +++-
- drivers/interconnect/qcom/qcm2290.c        |  9 +++-
- drivers/interconnect/qcom/sdm660.c         |  4 ++
- 7 files changed, 115 insertions(+), 19 deletions(-)
----
-base-commit: 71cd4fc492ec41e4acd85e98bbf7a13753fc1e03
-change-id: 20230726-topic-icc_coeff-b053d5409b9f
-
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.41.0
 
