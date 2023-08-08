@@ -2,100 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E12A7741D7
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 19:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6A4773CA8
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 18:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234564AbjHHR3Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 13:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
+        id S231814AbjHHQIe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 12:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234537AbjHHR2i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 13:28:38 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B5121271;
-        Tue,  8 Aug 2023 09:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=sVOpQeHQbYuQD4XI26KPaEpE0Ea50S0OE5ZKW/Qlwrk=; b=vBY1RJPhnM/HaHosbTPNbA0y+k
-        roLU7f2LM1KWTAdAPeqZkAlhJ5Ab8Re7s0iwaZwqSZprpCBxXCMEWquufSVGSbn0jTaeOOJi9GALc
-        aL58KPV029NgS2NJcA1srEgzDTITQm2Y0zStY4InWwRK1L3x55bSR2UMgRfp6tYP4egf9saBEs105
-        pgsZlVmaxnJCiU0TqSY1IV+Gv0P9TcJ380PGW+kbQFiKsGqnUJjn8VhsDpDx9o6NUCbWY8ka4ka7l
-        dvyV3Hz16nCucR6dJTvjYIrQ3jzL2LkFW1eNkWspLGQdY93oj+Rf118Vry0KT8dX668jIw93Wa2ii
-        vW0mj53Q==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qTIlN-00Gbn4-GF; Tue, 08 Aug 2023 09:12:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1FF0A30003A;
-        Tue,  8 Aug 2023 11:12:25 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0748227E4826F; Tue,  8 Aug 2023 11:12:25 +0200 (CEST)
-Date:   Tue, 8 Aug 2023 11:12:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Meng Li <li.meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V1 3/6] cpufreq: Add a notification message that the
- highest perf has changed
-Message-ID: <20230808091224.GW212435@hirez.programming.kicks-ass.net>
-References: <20230808081001.2215240-1-li.meng@amd.com>
- <20230808081001.2215240-4-li.meng@amd.com>
+        with ESMTP id S229491AbjHHQGu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 12:06:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA8172AB;
+        Tue,  8 Aug 2023 08:45:55 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 378AFccE010043;
+        Tue, 8 Aug 2023 11:25:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=qcppdkim1; bh=u3HXPtQ5KaYyQ0asw28vxjJ1QX+J/JkvsuRQkSzfVxg=;
+ b=GY3IFXFGsSQV7hkJfZiGOmuKi+HuYQuTJh1aJBSoKgjho3il9aVJkwYEe4IUu28m8zvT
+ 5QZ9qv+KtAsdBKrwJur/x9SqGjnNLAzuuWYO6FsBdHCi69DgjUE1r6ihoUJ5Buf+WHk2
+ EtzETFN88woM6v1CZSIIgnrb9eQiH6IToT8HqGBPCuZF2HhOu6586BK5ED9BwlNLP/s+
+ R0vijk/UVOMKm0BR2cnJPG1c2Qdqevi7v/hljOgCvtVK7mwq8219ujbFESiULkUfSTpv
+ qzaVWHhYiCOz3IMTXUc9FyEdARy3Clh4OzOSwUMciY7s14obCKA92xkt4eXpHj95JG8F Zg== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3saxbbtm7d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 11:25:31 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 378BPRgu023077;
+        Tue, 8 Aug 2023 11:25:27 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3s9fgkb0tr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 11:25:27 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 378BPRgl023071;
+        Tue, 8 Aug 2023 11:25:27 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-atulpant-hyd.qualcomm.com [10.213.109.143])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 378BPQDJ023070
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 11:25:27 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 3869597)
+        id 5958220F76; Tue,  8 Aug 2023 16:55:26 +0530 (+0530)
+From:   Atul Pant <quic_atulpant@quicinc.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     Atul Pant <quic_atulpant@quicinc.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_ashayj@quicinc.com,
+        quic_rgottimu@quicinc.com, quic_shashim@quicinc.com
+Subject: Prevent RT-throttling for idle-injection threads
+Date:   Tue,  8 Aug 2023 16:55:23 +0530
+Message-Id: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230808081001.2215240-4-li.meng@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aUYgilCuChag0pinbOGjaSfk7kdsi_NH
+X-Proofpoint-GUID: aUYgilCuChag0pinbOGjaSfk7kdsi_NH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-08_09,2023-08-08_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=913 bulkscore=0
+ spamscore=0 clxscore=1011 impostorscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308080101
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 04:09:58PM +0800, Meng Li wrote:
-> Please refer to the ACPI_Spec for details on the highest
-> performance and notify events of CPPC.
+Hi all,
+We are trying to implement a solution for thermal mitigation by using idle injection on CPUs. However we face some limitations with the current idle-inject framework.
+As per our need, we want to start injecting idle cycles on a CPU for indefinite time (until the temperature/power of the CPU falls below a threshold). This will help
+to keep the hot CPUs in the sleep state until we see improvement in temperature/power. If we set the idle duration to a large value or have an idle-injection ratio of 100%,
+then the idle-inject RT thread suffers from RT throttling. This results in the CPU exiting from the sleep state and consuming some power.
 
-Please summarise so that we don't get to click random links on the
-interweb just to try and make sense of things.
+The above situation can be avoided, if we can prevent RT throttling on the injected CPU. With the currently available sysctl parameters, sched_rt_runtime_us and sched_rt_period_us,
+we can prevent RT throttling by either setting sched_rt_runtime_us equal to sched_rt_period_us or, setting sched_rt_runtime_us to -1. Since these parameters are system wide,
+so it will affect the RT tasks on non idle-injected CPUs as well. To overcome this, will it be feasible to have these two parameters on a per CPU basis? This will allow to selectively
+disable RT throttling on idle-injected CPUs.
 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Link: https://uefi.org/htmlspecs/AddCPI_Spec_6_4_html/08_Processor_Configuration_and_Control/declaring-processors.html?highlight=0x85#highest-performance
-> ---
->  drivers/acpi/processor_driver.c |  6 ++++++
->  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
->  include/linux/cpufreq.h         |  4 ++++
->  3 files changed, 23 insertions(+)
-> 
-> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-> index 4bd16b3f0781..29b2fb68a35d 100644
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-> @@ -27,6 +27,7 @@
->  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
->  #define ACPI_PROCESSOR_NOTIFY_POWER	0x81
->  #define ACPI_PROCESSOR_NOTIFY_THROTTLING	0x82
-> +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED	0x85
 
-Isn't that spelled: 'highest' ?
-                        ^
-
+Thanks & Regards
+Atul
