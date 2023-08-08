@@ -2,124 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96C4773E8C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 18:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68F0C774123
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 19:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjHHQcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 12:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S234189AbjHHRPK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 13:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232917AbjHHQbA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 12:31:00 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB231394F;
-        Tue,  8 Aug 2023 08:51:39 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 92B0432007F1;
-        Tue,  8 Aug 2023 10:55:22 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 08 Aug 2023 10:55:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1691506522; x=1691592922; bh=qM
-        9p1VvgDQ68BCFOyyrSFNt07dndXA3zR/iN+rXNXdE=; b=EGvnh+3YW6raxmHExk
-        l+oplb/Rkv4u8bnBVVIcjFu0rID8pDt3FBe2kyXloio02v/T9zaVNJxY2sBnlsK8
-        GFxVzE08v6CIZ9RZ0MUZ8vP/vAztFKNM8pGkWBPTZGQeLuEkvolxOfuVQZGlqy9b
-        WTBQfgJqeofF2qeCRrcXdCmPiuAcc3jcQJbssNnsx8ifl3hlXSLqpkoXiF/PE/Wp
-        /LiSQXnH4YSxWIRLN5HhfgJJijd19hloeFviZklGXKvo4/nxaPUz3rV5d5NFlaTI
-        3i91aP7VkQdDAwDRORO0bBpNCwrV2OZZFiUL/Ph+/QswHuVbXcWEh6Q2Uu863IlJ
-        HNgQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691506522; x=1691592922; bh=qM9p1VvgDQ68B
-        CFOyyrSFNt07dndXA3zR/iN+rXNXdE=; b=iiAxVSVeGknxHB2f4jAZeQExin81r
-        4FSRXd4RztPI9LtZbwVufhsvY8z34Hw5Cgq9LQEiaU+B9NGk+6u6Z8UVQGjIO+cp
-        YIMpPs6nfMl+NLnIiTnDnwZRihb40DmaA47cg0HJZBBunIlhh0v1tk7cI4ktMhfB
-        zeotgq0FTeTfgnZeT/wwWi7JMKVv62ozjPpftlpmE1aizCi0DXK7V3ZNqi8xXHel
-        WRNbaHePp4CmPNIWkWT7TVCtq+PsSWArSISk/Nwz8d/8tDXyAq/yeUzgKYr2j/Jk
-        RKKwMflAoXoX5/qaxulswaz2c/pXyXKGjz2/l0qQtRrjwM53xed4VPYrg==
-X-ME-Sender: <xms:WFfSZFn8QXJQBZxWujkpLrCDAvk8i7qOs4jyV1N-xjOY16_67vtKFg>
-    <xme:WFfSZA2E0gb7XUYmwJuW4BGgfSzZMpyd3OoA967QQBGTRN4iajSjU_h7NYlxZhryO
-    dtbRANsvnI0bY-76kM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrledvgdekudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:WFfSZLo_ogOFHX6UVKrYjJM2u8mal53AaC42v-l3zX-woAB6nYHNaA>
-    <xmx:WFfSZFmqsaEYE3OM4ZAiuW-lYv4KcxeEgU2YkrdEZibHMa-25xC2Gw>
-    <xmx:WFfSZD1CAeyZjgxeehOdtm1TwIDclaDKbNgPzZdnVWSFucjQnqg6pQ>
-    <xmx:WlfSZBOhyzm43yCApWoWXfPZxu-tKzrSHCK0a3Tgrn40b4obY5epqw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9C683B60089; Tue,  8 Aug 2023 10:55:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <8e6dce33-980a-4e63-9a8b-b681e3f9bf83@app.fastmail.com>
-In-Reply-To: <CAPDyKFo7p=aEWWrW2OGbhN1tFjHanpqjLApzCMipdPSzE+NknQ@mail.gmail.com>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-3-zhuyinbo@loongson.cn>
- <4fef9725-7aea-43fb-b8ef-d20a4c6d9a68@app.fastmail.com>
- <CAPDyKFo7p=aEWWrW2OGbhN1tFjHanpqjLApzCMipdPSzE+NknQ@mail.gmail.com>
-Date:   Tue, 08 Aug 2023 16:55:00 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Ulf Hansson" <ulf.hansson@linaro.org>
-Cc:     "Yinbo Zhu" <zhuyinbo@loongson.cn>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org, "Jianmin Lv" <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, "Liu Peibao" <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
-        "Liu Yun" <liuyun@loongson.cn>
-Subject: Re: [PATCH v6 2/2] soc: loongson2_pm: add power management support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S234201AbjHHROa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 13:14:30 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B125EB282
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 09:06:01 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-56c685b7e91so3848646eaf.2
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 09:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691510761; x=1692115561;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=W8Rz6JdKJggB+vk185UWqplO5cbUsTa+J+i5abU5jbw=;
+        b=ALtfXmG51nWGbfUNslTGGR6rzuczL4oRMoWo8bZmP6AHBsyqY6E8syxf5BFvLsv+j8
+         gJYN/rDAxURiAGARqT3zsbDIo252gQuMOJGXjq+rQTvwNCjZm8pS48+PK/Pf7EP+TFle
+         myPpbKElIX+gX4lWA9fCiCXWg4ABrsSxLwFym6Z0QNQejez78rM4qEHXTFJAOSpzvZUu
+         jKdCEFJR7B5QVavIPSS/EF0Ef7B00/CGYTZS52NzMznRJ54tKhAdr+kbItgbvgS++pi3
+         hsCZsIGvfnSUrZcXTfNmprYPtBK0OjZCxruZOi7K0mZdhheyH4WGK9vDVgDC1KVwtFhn
+         wZfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691510761; x=1692115561;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W8Rz6JdKJggB+vk185UWqplO5cbUsTa+J+i5abU5jbw=;
+        b=NVPwsSwFconF3g+LIGw1qeMYO1Z8TkB7mMXo/PE+IoJRXUCeGF2SVmOIB6lK8z4tLv
+         oHysIo7PHDOdot63iqEpi586oaxHm6QBoCxyJ6CswcBFjocVndCF7g6b6YEiRqlUoCqb
+         qtyxqu+7N695Z1cXioJzr/h3GA53QyoLYdNfq+GtpCqKgRV8KHNh8lsD14n4kvEHNk7+
+         GHHrzoRcArCBwhNjhlLFc/ufVErVoGzgIZn1YnNtPsqW2fzZ7I7SvlrW1QsPw4S8ivou
+         l9JF0HFKwiZfcf1/a/JPg+pBrzufokpTqfqG7A3Rn6e9+93O6fzvyxVu1c2gNTo+EBxN
+         hW8A==
+X-Gm-Message-State: AOJu0Ywu1xQM+gz6TkcEZl+fwNVK8EFeUexXfV+JaBEv+IzlwG+Cy80s
+        nZsikmtvUdpdGpJp2i4YZ6ugzLIapvqN4Kk7TKaOGv9q+05MHBSOFWHvZQ==
+X-Google-Smtp-Source: AGHT+IHd0ipN+K4djTCXtDOyfu+VTZpMjc2BHQ17nfPiSRQDUouO0mBCgRT9q8s21lVndeT3Y2wJvRIbhS8rd5n7No0=
+X-Received: by 2002:a25:8d8e:0:b0:d3c:58ef:ef7b with SMTP id
+ o14-20020a258d8e000000b00d3c58efef7bmr11095979ybl.6.1691506710111; Tue, 08
+ Aug 2023 07:58:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230731064746.2717684-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230731064746.2717684-1-peng.fan@oss.nxp.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 8 Aug 2023 16:57:54 +0200
+Message-ID: <CAPDyKFqvP71ZDcamFo5AijhTXEJKHUPNE=-dOvXYw3pr4XxK6A@mail.gmail.com>
+Subject: Re: [PATCH V3 0/8] genpd: imx: relocate scu-pd and misc update
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 8, 2023, at 16:42, Ulf Hansson wrote:
-> On Thu, 3 Aug 2023 at 09:03, Arnd Bergmann <arnd@arndb.de> wrote:
->>
->> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
->> > The Loongson-2's power management controller was ACPI, supports ACPI
->> > S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
->> > Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
->> > (USB, GMAC, PWRBTN, etc.). This driver was to add power management
->> > controller support that base on dts for Loongson-2 series SoCs.
->> >
->> > Co-developed-by: Liu Yun <liuyun@loongson.cn>
->> > Signed-off-by: Liu Yun <liuyun@loongson.cn>
->> > Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
->> > Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->> > Cc: soc@kernel.org
->> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
->> > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>
->> I'm still waiting for Ulf to take a look here to see whether
->> this should be in drivers/genpd instead, but he might still
->> be on vacation.
+On Mon, 31 Jul 2023 at 08:43, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
 >
-> I don't think this belongs in drivers/genpd/ as it's not a genpd
-> provider. Besides that, no further comments from me at this point.
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> V3:
+>  return -EBUSY instead of return 0 in patch 4
+>
+> V2:
+> Move drivers/firmware/imx/scu-pd.c to drivers/genpd/imx
+>
+> This patchset is to upstream NXP downstream scu-pd driver patches.
+> patch is to relocate scu-pd to genpd
+> patch 2,3 is to support more PDs
+> patch 4 is to not power off console when no console suspend
+> patch 5 is to suppress bind
+> patch 6 is to make genpd align with HW state
+> patch 7 is to support LP mode in runtime suspend, OFF mode in system suspend.
+> patch 8 is to change init level to avoid uneccessary defer probe
+>
+> V1:
+> This patchset is to upstream NXP downstream scu-pd driver patches.
+> patch 1,2 is to support more PDs
+> patch 3 is to not power off console when no console suspend
+> patch 4 is to suppress bind
+> patch 5 is to make genpd align with HW state
+> patch 6 is to support LP mode in runtime suspend, OFF mode in system suspend.
+> patch 7 is to change init level to avoid uneccessary defer probe
+>
+> Dong Aisheng (1):
+>   genpd: imx: scu-pd: change init level to subsys_initcall
+>
+> Peng Fan (7):
+>   genpd: imx: relocate scu-pd under genpd
+>   genpd: imx: scu-pd: enlarge PD range
+>   genpd: imx: scu-pd: add more PDs
+>   genpd: imx: scu-pd: do not power off console if no_console_suspend
+>   genpd: imx: scu-pd: Suppress bind attrs
+>   genpd: imx: scu-pd: initialize is_off according to HW state
+>   genpd: imx: scu-pd: add multi states support
+>
+>  drivers/firmware/imx/Makefile            |   1 -
+>  drivers/genpd/imx/Makefile               |   1 +
+>  drivers/{firmware => genpd}/imx/scu-pd.c | 193 +++++++++++++++++++++--
+>  3 files changed, 183 insertions(+), 12 deletions(-)
+>  rename drivers/{firmware => genpd}/imx/scu-pd.c (70%)
+>
 
-Ok, thanks!
+Moving this to the new genpd subsystem makes sense to me.
 
-Let's try to finish discussing the suspend-address question
-and merge it through the soc tree once that is resolved then.
+Even if we can't get the whole series ready for v6.6, we can certainly
+pick patch1. Either we can funnel this via my new genpd tree [1] or if
+Shawn picks it up. If the latter, Shawn needs to merge my immutable
+branch [2] before applying. I am fine either way.
 
-     Arnd
+Kind regards
+Uffe
+
+[1]
+git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git next
+
+[2]
+git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git genpd_create_dir
