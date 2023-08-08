@@ -2,122 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D133D77332C
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 01:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B1D773B83
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 17:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjHGXBb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Aug 2023 19:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S230287AbjHHPwB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 11:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjHGXBa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Aug 2023 19:01:30 -0400
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2045.outbound.protection.outlook.com [40.107.101.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33F810F0;
-        Mon,  7 Aug 2023 16:01:28 -0700 (PDT)
+        with ESMTP id S229720AbjHHPu0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 11:50:26 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20600.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::600])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B294C2E;
+        Tue,  8 Aug 2023 08:42:24 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U73Tcyfbb2gyurNSag4bgajgzTsYBUGmWlB/lKM1NjBSO9pPds9sE3LBPrI7Y/0K/B7n72PoULiGyleqiWoEo2W1lEE3FiLn9VAwJYpZM3nLhsQumrhDCGv3n9fqUOqshxt6vhyA2oGus7QBXTS6Lw+lkKYNAOhP+Fn2yJ0u0IRI1VyYzfqXIr+FmvueWWEtDrL8zlEBFBYgj+D0P9GMLz6Dph4DYhL0i58cB/tDkKpCzmdR9uEyCNn53XeTaDRQIP/CUY36hF6M38RJJEJvUywjDgkR8DKHSWIVJei3gMz/ac+ah4dCFE/E8ZKSPKm6EMNgldWmLY7MalPeoLlFuQ==
+ b=cwY//AhIw3VaYNP45S3krCGMe/2s+nbc9xy4D2jjcUZHhvEQl3OT4GO+PXleD66W9jBgz5tz8OpFfZFwygHUo4NWGIUoxQrmWmOfarr0NxwphojV8pzUOcl/LdgaWBMlqx8B/FW3ziBmjzLqznqN8OM28YlFmfo2b4VTAjNaCDjr5FYui6+d1Rjtl2OVjexVTdhgZvWNIDyavWUMzWY2YwBiuKXcukgeDCdXwbanHoMGODXtg3+ROD/snj7GLxF4maFx078YcnQpcI15DL3O2yBo2SVa1+ITmzL+Kxii+oiYjCQphbF9c4oCQN/4GYt3IP5SNJlHsSlwdFOzQbJX9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xLy79+XZzmn72G/Xf34Csuf9oxbRxlXMpXnm0uCCGD4=;
- b=Y9VGWz8SIn6g7cXaKJcHeduq//edCmZB9poieF0LJ90WJsTnRyFu0AAHshzTkk4Wu0TFWyssPlK4pMFdknoS68L2mH8k0HxQRIGh4+oDE/V54ul9FFDKLI69Sfn43Wf49+ON+VOMsn96iuPZe0mfbXRtZXKQ67U/Paq8zvKDMAcB2WYKU6UJDN6WCahjZq6s2BsjINm1N8+qnptnw5lOArsOPKy0L4MLMyLPzLmQ/1DyhsGfVNyTF+xV/nSeFnhZOBad+q+aqgL4fHt0b9mM7ylkem+AT7ECjKs1fYj55CXIpI1isdv2X0xChxpN2r5le9wS3HohwdvIRa0LnNxZ+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=UwWlvPvZP8nSXJC7vRCtZ+7JJWekIXzmKLV2dFsiH+Y=;
+ b=PfI0c6p6DmTbPONjeUaz8ay3lKqJ/oXCeHoyuewk200LFe5fU93Q24k/x+8JMI1hyaw7aKHw8ZKou686+MLppSLkw7+7w7AdaH1YFA0vh+16UQhwqViy8MFboGWqdYdLSx2R4fF4ZgmJMI5ndp3WuCStYfI7r9EgQTsRfKVcMxiBymdjzCCKlMsUNXOZ+Ufhpfwu/mwbfkmVCWRFFsIXih9GB4gieoNThvWiFx5Dh1sjpWem+hkXaQamVwAaOcbsrF0YbLsKXKT3ROLGzVOEPUrzmXLxffS9z77UK7BXUC5FAIr3qux74DshJ//NkyPCWF1KK3TnXhOjThmo6x5asw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xLy79+XZzmn72G/Xf34Csuf9oxbRxlXMpXnm0uCCGD4=;
- b=TWnfktaEFzIzq+tH5hVIzd+EsFkJSTXIpTGTJb736Q92Aut492bQ54c/8GTIhsMU48SJwzu0dk6Wd+K9ARkgFI6SV5E6z5qm/3POPTcENiSEDZwHNmdYOsNR8grUW90r1/l/YehIrmgx2kZni+Uvf/E1hYLcm5t/QtCKK2eMC4g=
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com (2603:10b6:208:316::6)
- by MN0PR12MB5954.namprd12.prod.outlook.com (2603:10b6:208:37d::15) with
+ bh=UwWlvPvZP8nSXJC7vRCtZ+7JJWekIXzmKLV2dFsiH+Y=;
+ b=y/J11qhOhjrA47gZ0fnYwAt0XUev7u4ZoGBHKU0UX4xHMNW5JopVhuOd9V806JGzw4KCysJBdB/yf3tjug29JgMdr2m0MBoL0MPPpbr4KzQ2dhp1GJXGV0JSIUjyJ50vLYWE00lxFpbisuuP4leeiXkJ6UkoelbeajFlXkRxBhU=
+Received: from SJ0PR05CA0101.namprd05.prod.outlook.com (2603:10b6:a03:334::16)
+ by SA0PR12MB7089.namprd12.prod.outlook.com (2603:10b6:806:2d5::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.47; Mon, 7 Aug
- 2023 23:01:22 +0000
-Received: from BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::bcfa:7757:68bd:f905]) by BL1PR12MB5144.namprd12.prod.outlook.com
- ([fe80::bcfa:7757:68bd:f905%5]) with mapi id 15.20.6652.026; Mon, 7 Aug 2023
- 23:01:26 +0000
-From:   "Deucher, Alexander" <Alexander.Deucher@amd.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Christoph Hellwig <hch@infradead.org>
-CC:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Christian Brauner <christian@brauner.io>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
-        Harry Pan <harry.pan@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: ksys_sync_helper
-Thread-Topic: ksys_sync_helper
-Thread-Index: AQHZw3+H8Y9jcJgF9UOuhI7iy4bjF6/UMkWAgAEXZwCAABhSgIAKF+3g
-Date:   Mon, 7 Aug 2023 23:01:25 +0000
-Message-ID: <BL1PR12MB514488C022435B4090B72D3BF70CA@BL1PR12MB5144.namprd12.prod.outlook.com>
-References: <ZMdgxYPPRYFipu1e@infradead.org>
- <e1aef4d4-b6fb-46ca-f11b-08b3e5eea27d@intel.com>
- <ZMjnZhbKbNMmcUPN@infradead.org> <ZMj7zTwPw/qi/bNw@casper.infradead.org>
-In-Reply-To: <ZMj7zTwPw/qi/bNw@casper.infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=1a418b82-b739-4131-9694-0c9f74dbb058;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP
- 2.0;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2023-08-07T22:42:44Z;MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR12MB5144:EE_|MN0PR12MB5954:EE_
-x-ms-office365-filtering-correlation-id: eb00c3d5-fae0-4f45-438c-08db979a3a35
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Jq9fMA3iYivrlUL4ZrUDY5cEL2SPX9PvkgL/BnisRbrNGbkdL7V2lq6QBpvAU/E5nmTohRriCTM/JCyOgd9uTeTpN6kLDSw0/etWlCEVfyNulNY2zIpZDP+f1KVNsz2SUImg4Utz559f9hxKwRpy7HUoVN0F35Cd7WcpJxs2FM9VQ3m3H7+ab5LMl//9BVyPqFqsnjMzDl8ylucV70tp3wnAGY0Bxbj+7dVMk6+jIn628k0ArkaxXuclq+m8buIga4JwNdXsPfxXHrFnet6zBV84bjb50wHTgZMknOrR3HnT4N2hg1Qvzx5xx8X7YaL9X/DsfQlS3xHJwI8lwTnmxvtAlqCzVcHbEwdIjnNo0yrft62m6FuV7ocEnvNS39impHJ7i0c0DAZlHGpFCtTDm0bMOhPyz/0Y1ICZQs0Gphe3v8G7UNgOB6XgxExokALcVdJpMfcPBJFF2NP4glHx9GdT1HF2yqNQPs9Z7MTbtAwTbXvR+FSF24zqrRmNIljWr0VvTJM02h6HwEUH/eaP1ScWOmitYHRj0gJ/zulwX3pLN17mLoj/PvTJ2btFIeVdxC1+ubClqoNm8koZ1FvaIM6nQpoX6gJ3teQgAg9nXGCuztR6CVKTvEe5aXNgA2f/vZeGsvbWeejYOcVJY4H5iw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5144.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(39860400002)(376002)(396003)(346002)(1800799003)(186006)(90011799006)(451199021)(83380400001)(55016003)(110136005)(54906003)(2906002)(4326008)(316002)(5660300002)(8936002)(7116003)(38070700005)(52536014)(8676002)(66946007)(76116006)(66446008)(64756008)(66556008)(66476007)(38100700002)(86362001)(478600001)(33656002)(7696005)(122000001)(9686003)(71200400001)(41300700001)(6506007)(26005)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tbZkbm1gF3v57qHHuh62drecohJ94npfT8eag6GU+piuWNjhh38axBRb5AU8?=
- =?us-ascii?Q?IizrF6d91W7C82dSuG3WDHIkjaKGII1Q/49zodNjA+4Vh/WNZ0K4ztNibeCW?=
- =?us-ascii?Q?ljGiMV0hYhzzvGDvlghvVmg4vOcz3UnUjuuKx2b5LdiElPJHDMV2qjwBsCcv?=
- =?us-ascii?Q?r/+nr9Cx70vx4+7L3oaG6NQc5EK81U7Z+yrL3L1oa01jSOJBIwD7FLIx9wr6?=
- =?us-ascii?Q?b/FH/CPZ8bYOAJTsvijhbECP5Qjj5oMB62h8F5UFrZ8NE5j0IaDz/HakCAIX?=
- =?us-ascii?Q?UJ0eaVmckx/xlx0p5q1Dnf8jdVO4HhQd34V8YMuGiju0QpdAM6WED900E2vV?=
- =?us-ascii?Q?qwZ83Gq43xp+PVUTCg0RMgg0EiY2Q3xqnVJBi66AnFAK3alCBu0ueqOEQ00J?=
- =?us-ascii?Q?ZjHt8GczLBzcv3bsaj0WB9oSfDPvLNyYuALaF2veDX1DNR6q3S//+ScXmNZc?=
- =?us-ascii?Q?CWD7VS4id+8k8AM5VsjX8aYcxqGXfR9TuBXuNLJ1lcPorvlH1eXay42ZjA8l?=
- =?us-ascii?Q?YoT9bF9Q9aZ+uFdSfPXTUvoOeAvzXp2y5Cbz4n7719HexB7JCOS5ZmwEtVeu?=
- =?us-ascii?Q?P+QrJI6PFCEVzib1XFIHYLgZ0eq1RrS6br0I9ngIVcsOltA73zzhkWrKtiwv?=
- =?us-ascii?Q?UGisXjlUfmjrvzHwt0K8vN+pk5LpStxD66LfrP79EF1WsscdWBdsypejwUf9?=
- =?us-ascii?Q?FDvJKT2mjES4Qhrqh6b3Sf3R22WYd1AVmvgEMvzNIruVCJBsa2AOX+MHFZ3K?=
- =?us-ascii?Q?i6+vmzyUvoOwkJKKjaC9pHbXGd17h9cwI+kZ3wuVmTPYq1YiPp3xU49naoKU?=
- =?us-ascii?Q?v4V01ku1PDHqCoIiGsbyjAVi+5BDKE/NrNigZwlQLn6e5V3ZoPpGf7EjMISc?=
- =?us-ascii?Q?Fa5iLvepz2c2i2ZOlH1W30Yo8NGnLjm/NVm/bAHeK8wXOzn82ZCtgBp6bvsG?=
- =?us-ascii?Q?4okJOkbhbubAjl8QqGAya1AO3WO08jksrlkwhrrT7X9XEGqoy86QZy03svsH?=
- =?us-ascii?Q?MQjYAZcdTsUJUEvqfIgVaScicdUqqZWsmZPr+jxhfMep1ttLMbjwC86SK2ag?=
- =?us-ascii?Q?8OCdjZUE5w/RYfXrJWcyWo9qaKFtPMYOtyr3sRlX6HpQijiR58vJiK3Mmfzm?=
- =?us-ascii?Q?WLT82pxqEjpNDZHLfZ4nhSHGca8tnOxLh+FIdeguQLiYb7BQPs/MFythYPXf?=
- =?us-ascii?Q?aqq80Vyz0nqOQpdmCZcxg5+c8SR6Fih0/b2IwzTUEE+EXxhSP0rLXZDJB+PG?=
- =?us-ascii?Q?VriPD0Ha6HhWs4m6R+i2cJJ5qG3ROMbPgpbD/OjJnN2j8olTjXF5HuZey1uN?=
- =?us-ascii?Q?xY/TrBompdAi/U00MQwHCWWzGFBiJO7QcNMaUL4+pP6wVX1WBohu/YZAL8qX?=
- =?us-ascii?Q?IwJwNoNNc5iadrCsVLu5MqJaQQ/c8vZeaZP8xgnZ39h94lBAql0Wi3uJnmfR?=
- =?us-ascii?Q?K9PEt4hxkbSk8vh+xkR34iR+pzr4Z8NH7dfX1dlpxW0vK7MGIMuPue3tJ92N?=
- =?us-ascii?Q?DkAuW3y+sYo3pUsIpotx+LwwWReMBQ9Cf95S6pAiS73mrKtR8fkv/aBiKEPC?=
- =?us-ascii?Q?1BW8kxMlUU3APj/gjiQ=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27; Tue, 8 Aug
+ 2023 08:11:00 +0000
+Received: from MWH0EPF000971E9.namprd02.prod.outlook.com
+ (2603:10b6:a03:334:cafe::9e) by SJ0PR05CA0101.outlook.office365.com
+ (2603:10b6:a03:334::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.16 via Frontend
+ Transport; Tue, 8 Aug 2023 08:11:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000971E9.mail.protection.outlook.com (10.167.243.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6652.19 via Frontend Transport; Tue, 8 Aug 2023 08:11:04 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 8 Aug
+ 2023 03:10:54 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Nathan Fontenot" <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        "Perry Yuan" <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: [PATCH V1 1/6] ACPI: CPPC: Add get the highest performance cppc control
+Date:   Tue, 8 Aug 2023 16:09:56 +0800
+Message-ID: <20230808081001.2215240-2-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230808081001.2215240-1-li.meng@amd.com>
+References: <20230808081001.2215240-1-li.meng@amd.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E9:EE_|SA0PR12MB7089:EE_
+X-MS-Office365-Filtering-Correlation-Id: b0970465-1843-47ad-0c82-08db97e702e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 78HoVerrP/U/kIRrQ2gfxx238Oy6x0CWZbE/Q7St3oixRkBgrUQPvhwHXN9096Cu2lE76xalC1YPK47DQLrwMa3tS10sf9K64VzzM87TflzGcIFM5QQEKqqH191grv9i5TxIsZC67OBz1pDGY07SMUt/pRAA8THd3FIpJbYkyJ7zBa2bCxm/7X3hsq0dN8pbn6vceCXog2SPyjSXrSZ54xP6hgrUKd/E0LGa+yOlBjVS9Qo3z5sfH1hPvXuSTMp5mutSu4bK/fb4U5B73glgzOGUB4fYQ5auuEEHjIbChwvqfOKBB9quJMH3uVFJmKwYib8xlJOpfwb+VkRTpKuGZQ3S15QU2DAq4b4zPHYgE5sXF9sZ+BsbeLtKiWG4MPpE2c0ZNORPJum9uXIJ1Gis8dxaOKnY4q2Vf8yjhO3SMUvqQVIvi2bHZn3Sjj43IZHjtObh9aIqaLvSemEOKmen8Tql9sCt6TQwqRPuODR7qW02eb0SE2sDNlmqLKAVDQxX4mgA3WvkfTFaImQ+4UEp1Yn7LEjOSalaOB6EMJ16DTcYmZcxv1QvMDOel1GqG3BY+QRgDKiY8mJo+1Lii2TiKh+AYGnnK8hBEHCFbrxZ18x5hTniSrbznY6Dx6cbvCfKzK7HH3S/QKWC3U42+nu1EkmlkwE9s4ZKntpj1QJ6WDbtUuComJpwvbZ94xWrsMG6EIcjxEPlcX2csL5WCGjSSB61J9bcDex1kLEba1RwcvOFpmpY4wFx3hJ7m2Zt9dvLNYd+4Nfkx6Ggt9aYS1HQ2N7Htb9aGrlvajE30sDYIf6WxweNlrzebI+10T40PBTuo6b2j3Joky0UNDUn4fL8UWQ/ajtbs/obhUqMUjfhayI=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(39860400002)(451199021)(1800799003)(186006)(90011799007)(90021799007)(82310400008)(40470700004)(36840700001)(46966006)(40480700001)(316002)(36860700001)(47076005)(426003)(40460700003)(2616005)(2906002)(82740400003)(356005)(81166007)(36756003)(16526019)(336012)(8936002)(8676002)(26005)(1076003)(5660300002)(7696005)(41300700001)(70586007)(4326008)(70206006)(6636002)(478600001)(54906003)(110136005)(86362001)(15583001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5144.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: eb00c3d5-fae0-4f45-438c-08db979a3a35
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2023 23:01:25.9817
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Aug 2023 08:11:04.3718
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YlaP+jWmz8q8lXbeUIU4hoCZ1WYQuZKslmGG2+JvPAbmOrdaVv/u8hWvvwU/Oo473aKzpJ+KySWL911/DrmCfw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5954
+X-MS-Exchange-CrossTenant-Network-Message-Id: b0970465-1843-47ad-0c82-08db97e702e9
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E9.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7089
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -125,77 +110,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Public]
+Add support for getting the highest performance to the
+generic CPPC driver. This enables downstream drivers
+such as amd-pstate to discover and use these values.
 
-> -----Original Message-----
-> From: Matthew Wilcox <willy@infradead.org>
-> Sent: Tuesday, August 1, 2023 8:34 AM
-> To: Christoph Hellwig <hch@infradead.org>
-> Cc: Wysocki, Rafael J <rafael.j.wysocki@intel.com>; Christian Brauner
-> <christian@brauner.io>; Andrey Grodzovsky <andrey.grodzovsky@amd.com>;
-> linux-kernel@vger.kernel.org; linux-fsdevel@vger.kernel.org; Deucher,
-> Alexander <Alexander.Deucher@amd.com>; Zhang, Hawking
-> <Hawking.Zhang@amd.com>; Harry Pan <harry.pan@intel.com>; linux-
-> pm@vger.kernel.org
-> Subject: Re: ksys_sync_helper
->
-> On Tue, Aug 01, 2023 at 04:07:18AM -0700, Christoph Hellwig wrote:
-> > On Mon, Jul 31, 2023 at 08:27:17PM +0200, Wysocki, Rafael J wrote:
-> > >
-> > > OK, I'll remember about this.
-> > >
-> > >
-> > > > With this
-> > > > and commit d5ea093eebf022e now we end up with a random driver
-> > > > (amdgpu) syncing all file systems for absolutely no good reason.
-> > >
-> > > Sorry about that.
-> > >
-> > > The problematic commit should still revert more or less cleanly, so
-> > > please do that if that's what you need.
-> >
-> > We'd still need to remove abuse in amdgpu first, though.
->
-> This would effectively revert d5ea093eebf0
->
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> index dc0e5227119b..af04fece37d5 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-> @@ -75,7 +75,6 @@
->  #include "amdgpu_fru_eeprom.h"
->  #include "amdgpu_reset.h"
->
-> -#include <linux/suspend.h>
->  #include <drm/task_barrier.h>
->  #include <linux/pm_runtime.h>
->
-> @@ -5225,17 +5224,6 @@ int amdgpu_device_gpu_recover(struct
-> amdgpu_device *adev,
->        */
->       need_emergency_restart =3D
-> amdgpu_ras_need_emergency_restart(adev);
->
-> -     /*
-> -      * Flush RAM to disk so that after reboot
-> -      * the user can read log and see why the system rebooted.
-> -      */
-> -     if (need_emergency_restart && amdgpu_ras_get_context(adev)-
-> >reboot) {
-> -             DRM_WARN("Emergency reboot.");
-> -
-> -             ksys_sync_helper();
-> -             emergency_restart();
-> -     }
-> -
+Signed-off-by: Meng Li <li.meng@amd.com>
+---
+ drivers/acpi/cppc_acpi.c | 13 +++++++++++++
+ include/acpi/cppc_acpi.h |  5 +++++
+ 2 files changed, 18 insertions(+)
 
-Was on PTO last week.  I think we can drop this.  Will try and send out a p=
-atch this week to clean this up.
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 7ff269a78c20..ad388a0e8484 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1154,6 +1154,19 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+ 	return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
+ }
+ 
++/**
++ * cppc_get_highest_perf - Get the highest performance register value.
++ * @cpunum: CPU from which to get highest performance.
++ * @highest_perf: Return address.
++ *
++ * Return: 0 for success, -EIO otherwise.
++ */
++int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
++{
++	return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
++}
++EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
++
+ /**
+  * cppc_get_epp_perf - Get the epp register value.
+  * @cpunum: CPU from which to get epp preference value.
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 6126c977ece0..c0b69ffe7bdb 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -139,6 +139,7 @@ struct cppc_cpudata {
+ #ifdef CONFIG_ACPI_CPPC_LIB
+ extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+ extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
++extern int cppc_get_highest_perf(int cpunum, u64 *highest_perf);
+ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+ extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+ extern int cppc_set_enable(int cpu, bool enable);
+@@ -165,6 +166,10 @@ static inline int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+ {
+ 	return -ENOTSUPP;
+ }
++static inline int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
++{
++	return -ENOTSUPP;
++}
+ static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ {
+ 	return -ENOTSUPP;
+-- 
+2.34.1
 
-Alex
-
->       dev_info(adev->dev, "GPU %s begin!\n",
->               need_emergency_restart ? "jobs stop":"reset");
->
