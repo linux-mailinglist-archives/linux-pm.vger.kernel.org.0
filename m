@@ -2,89 +2,161 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1AA2774DDA
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 00:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C779774E6F
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 00:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjHHWAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 18:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S230115AbjHHWkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 18:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjHHWAX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 18:00:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3DF12D;
-        Tue,  8 Aug 2023 15:00:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8359362D8C;
-        Tue,  8 Aug 2023 22:00:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D9F24C433C9;
-        Tue,  8 Aug 2023 22:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691532021;
-        bh=0CjdeW56CS2059Vkt0DNasnDqdrqZiTUPNvFROKH9Ko=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZFemw6DCXpLlNx2M8biWQnKG3G228tzyxO2dijgeS5BR8kYOhiNBGzBKha5+8d+b2
-         H+k1cuGzP7aOdznQujTvJWUvn2gbn5el8wfXv0ckwsOco5A349k4qSpCkdR2l2rDPJ
-         /VjtO3ISJJnBU0HNKQG//Cco7C9TWwu0woPCTD18X8jWuxJSRRV+RzWBejgo/u9tTd
-         jbq3m4HVzjWmd4F3Pa9xDXTAf89j+F2oyLPA4YKE2BKJwajq/nn22fqOOwpOLhVdS4
-         2UaIpasp0qBxfi2P/3Ciw85m047r/IcMGcuaKbF08+sZx2IlAYJIflQoRUIWKIs9l1
-         iIzTLi4REA3dA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9192C395C5;
-        Tue,  8 Aug 2023 22:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230106AbjHHWka (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 18:40:30 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7354FE
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 15:40:26 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe5695b180so26271345e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 15:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1691534425; x=1692139225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TJo8nt11OCBKuqTlTpu5VTObD5ZsUjmsy92WhmmdOec=;
+        b=cCjA9EG6m70q0VGl/RD20/OW2nTebL71nTqk6ZiylT/c37qMPgWEqxn5ysCo6bRjBn
+         K5WewJhFxjwPbLPAh6mOBdFKnkYaiGoLWnvAihHW5Jy8eNE9+WtL2jzW/K07w4zbek3w
+         HSzHJ1amP81CyEcvLjCmNmgpS52OIarcn92HyveP9KqJm5mdl8ob5SSlz9QWO8+LLT04
+         M+TbuDIF6xueBOcMSVSXD6ofUUebKvp1IK86tASXkXfAidwG1c14o7e+nO5c190lIQ8A
+         QMPSYlx5iQ+gjZEmzM1PmHya3s3Jbs7BHV99Eh4fc188WiswJciEoBRDmcvX5igsKbfa
+         0Zow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691534425; x=1692139225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TJo8nt11OCBKuqTlTpu5VTObD5ZsUjmsy92WhmmdOec=;
+        b=gJcDa/+yGe725TlA+/YfUSVORv0r/5xI8AiUwe64BFuH06XbCxczMzu54XhWVkk3Y7
+         W/nQg5yZUSVlCM0U8Op28fNzcIbWr7NslBDBE+VWhDxtfSknhMnAkrCZuL9xDf9NnFeF
+         1/bXte2Blw+ZxcMXZ/LkhnPsX/lznPOo7s/5gm/XX4XOsXN4BtWpfIY2Y1JX4mqvwFlY
+         BeYMh2pWym/IPMM6DkQLek31k4sHAeBzoEqyjg5STTD3iW0dfzxnNyl5N/yLsRjXgu0k
+         7LmC9c19Op/Pjj9R3fcYQh/k/iE3i68ObzjgwKcH5nGKSzFRiKUoclWAGeAMVtXxbmbe
+         gUTg==
+X-Gm-Message-State: AOJu0YworMFI5WpbcYx/19awleUffN343Mht72WbjJR3bH5pvIh3e/m9
+        ItDyX+F3oO3VuHH+7YayqHIibZVHcpXn0p+fnKBCCQ==
+X-Google-Smtp-Source: AGHT+IEjlWawgFkdf0Xhkq6GGvL3nukyc461amc9Vjo5LV3iCG24uOLo7jKaNpiQ1uxBTt3vOQ+2uIm3wQELyQgMvFY=
+X-Received: by 2002:a05:600c:2210:b0:3f7:e3dd:8a47 with SMTP id
+ z16-20020a05600c221000b003f7e3dd8a47mr824634wml.11.1691534424801; Tue, 08 Aug
+ 2023 15:40:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] MAINTAINERS: update Claudiu Beznea's email address
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169153202174.6931.11202742037860925480.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Aug 2023 22:00:21 +0000
-References: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
-In-Reply-To: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
-To:     claudiu beznea <claudiu.beznea@tuxon.dev>
-Cc:     nicolas.ferre@microchip.com, conor.dooley@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, sre@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, alsa-devel@alsa-project.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com>
+ <002201d9ca0c$27606f70$76214e50$@telus.net> <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 8 Aug 2023 15:40:17 -0700
+Message-ID: <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
+Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
+ unconditionally every time
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello:
+On Tue, Aug 8, 2023 at 9:43=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+> On Tue, Aug 8, 2023 at 5:22=E2=80=AFPM Doug Smythies <dsmythies@telus.net=
+> wrote:
+> > On 2023.08.03 14:33 Rafael wrote:
+> > > On Thu, Aug 3, 2023 at 11:12=E2=80=AFPM Rafael J. Wysocki <rjw@rjwyso=
+cki.net> wrote:
+> > >>
+> > >> Hi Folks,
+> > >>
+> > >> This is the second iteration of:
+> > >>
+> > >> https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
+> > >>
+> > >> with an additional patch.
+> > >>
+> > >> There are some small modifications of patch [1/3] and the new
+> > >> patch causes governor statistics to play a role in deciding whether
+> > >> or not to stop the scheduler tick.
+> > >>
+> > >> Testing would be much appreciated!
+> > >
+> > > For convenience, this series is now available in the following git br=
+anch:
+> > >
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+> > > pm-cpuidle-teo
+> >
+> > Hi Rafael,
+> >
+> > Thank you for the git branch link.
+> >
+> > I did some testing:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri,  4 Aug 2023 08:00:07 +0300 you wrote:
-> Update MAINTAINERS entries with a valid email address as the Microchip
-> one is no longer valid.
-> 
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-> 
-> [...]
+... deleted ...
 
-Here is the summary with links:
-  - MAINTAINERS: update Claudiu Beznea's email address
-    https://git.kernel.org/netdev/net/c/fa40ea27ede3
+> > Test 2: 6 core ping pong sweep:
+> >
+> > Pass a token between 6 CPUs on 6 different cores.
+> > Do a variable amount of work at each stop.
+> >
+> > Purpose: To utilize the midrange idle states
+> > and observe the transitions from between use of
+> > idle states.
+> >
+> > Results: There is some instability in the results
+> > in the early stages.
+> > For unknown reasons, the rjw governor sometimes works
+> > slower and at lower power. The condition is not 100%
+> > repeatable.
+> >
+> > Overall teo completed the test fastest (54.9 minutes)
+> > Followed by menu (56.2 minutes), then rjw (56.7 minutes),
+> > then ladder (58.4 minutes). teo is faster throughout the
+> > latter stages of the test, but at the cost of more power.
+> > The differences seem to be in the transition from idle
+> > state 1 to idle state 2 usage.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+the magnitude of the later stages differences are significant.
 
+... deleted ...
 
+> Thanks a lot for doing this work, much appreciated!
+>
+> > Conclusions: Overall, I am not seeing a compelling reason to
+> > proceed with this patch set.
+>
+> On the other hand, if there is a separate compelling reason to do
+> that, it doesn't appear to lead to a major regression.
+
+Agreed.
+
+Just for additional information, a 6 core dwell test was run.
+The test conditions were cherry picked for dramatic effect:
+
+teo: average: 1162.13 uSec/loop ; Std dev: 0.38
+ryw: average: 1266.45 uSec/loop ; Std dev: 6.53 ; +9%
+
+teo: average: 29.98 watts
+rjw: average: 30.30 watts
+(the same within thermal experimental error)
+
+Details (power and idle stats over the 45 minute test period):
+http://smythies.com/~doug/linux/idle/teo-util2/6-13568-147097/perf/
