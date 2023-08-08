@@ -2,199 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43920774917
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 21:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDE807747D1
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 21:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236632AbjHHTsl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 15:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S231384AbjHHTUa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 8 Aug 2023 15:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjHHTsc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 15:48:32 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C094DEA7;
-        Tue,  8 Aug 2023 09:52:59 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 378Bs6Yf059357;
-        Tue, 8 Aug 2023 06:54:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691495646;
-        bh=85O1LHmFg/AJ8yaKognKgKFx1SZjvS1koBhd4R/gD6w=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=bkSh49bjXjvQxiVC9sI24Tb/WFdJvqVLySYHPdnrPSqsVT/ddYZMMdHpUWtrnQmVj
-         NpLqEufiYT2xQA5YvU0PFkaYSuYeAQKcXDIupDqlRZQUom+GZ8l9ou76UQ55ki0kvL
-         mnIhd3XDxHpFxS7KniEQNYRPjmhCU6/T8LDYxeq8=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 378Bs6IT025553
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 8 Aug 2023 06:54:06 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 8
- Aug 2023 06:54:04 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 8 Aug 2023 06:54:04 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 378Bs4SH098556;
-        Tue, 8 Aug 2023 06:54:04 -0500
-Date:   Tue, 8 Aug 2023 17:24:03 +0530
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Kevin Hilman <khilman@kernel.org>
-CC:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Praneeth Bajjuri" <praneeth@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend resume
- support
-Message-ID: <20230808115403.dkz6ev5vc6bhcmzh@dhruva>
-References: <20230803064247.503036-1-d-gole@ti.com>
- <20230803064247.503036-5-d-gole@ti.com>
- <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
- <20230803155541.nwsfwobfkbpefoyw@dhruva>
- <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
- <20230803160815.yfpkdfssv75d4inf@dhruva>
- <7ho7jifrda.fsf@baylibre.com>
+        with ESMTP id S232478AbjHHTUI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 15:20:08 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D1445F41;
+        Tue,  8 Aug 2023 09:44:16 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3a751bd3372so678596b6e.0;
+        Tue, 08 Aug 2023 09:44:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691513038; x=1692117838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c7fJlZqm7SkL8DNK44l2eawprG/x5eTjs6OofI30rbg=;
+        b=Sn2q+VtCrP+bW3KNjMoMmt4G2r6bBaDP4NWL40tZNZxjNVt7Sy4WkGtwpp6fnE3ErH
+         RYdOSJdTjlDJe5FbBGjx0/SQIVYxXdDRczcK6BW2LQ1qP4drey/saQ9If/4G5Q1McXL7
+         mB2E5y/8j7O7BwEzJC7CLFhZ73oHjbgb2RIC1eMBHUfil+rNVxSLensVTcqIBGRYxT94
+         FnonEgRSPN34BlpVO2PQyhpHpAYb0UlTVoU96jjDAx++dbITSnd7c+eVpu1sloPlhtWa
+         KRBSJSR8IgXHBCvoa2zyt0lF1aNZQsRWStzc7SzZ5I8iVN92oMOuRBKB5Z9h5vkLe9qf
+         2/tg==
+X-Gm-Message-State: AOJu0YyGTzvkYJz/ET1R6+3uL0JQMiPC2dKQWozn08r38Ej0EH9+W3ta
+        SU5SyzBw1jXDgNcoXOsBvpve9yLzV/bpI0XtYsNkV0jF
+X-Google-Smtp-Source: AGHT+IFP2RLwXNB86i9yjvF4iWGgJA1+zfLkLjE3JrAyQhuMst/saVIe9OyEzX/Ag/dc4w4ADX/Vo+2RYmxh/hifuMc=
+X-Received: by 2002:a05:6808:150a:b0:394:25b9:db19 with SMTP id
+ u10-20020a056808150a00b0039425b9db19mr296085oiw.2.1691513038157; Tue, 08 Aug
+ 2023 09:43:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <7ho7jifrda.fsf@baylibre.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com>
+ <002201d9ca0c$27606f70$76214e50$@telus.net>
+In-Reply-To: <002201d9ca0c$27606f70$76214e50$@telus.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Aug 2023 18:43:45 +0200
+Message-ID: <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
+Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
+ unconditionally every time
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Kevin,
-
-Thanks for the suggestion. I have a rough proposal inline, please can
-you take a look? I will test those changes and respin this series
-accordingly
-
-On Aug 07, 2023 at 14:57:05 -0700, Kevin Hilman wrote:
-> Dhruva Gole <d-gole@ti.com> writes:
-> 
-> > On Aug 03, 2023 at 11:00:11 -0500, Andrew Davis wrote:
-> >> On 8/3/23 10:55 AM, Dhruva Gole wrote:
-> >> > On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
-> >> > > On 8/3/23 1:42 AM, Dhruva Gole wrote:
-> >> > > > Introduce system suspend resume calls that will allow the ti_sci
-> >> > > > driver to support deep sleep low power mode when the user space issues a
-> >> > > > suspend to mem.
-> >> > > > 
-> >> > > > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
-> >> > > > suspend handler to allow the system to identify the low power mode being
-> >> > > > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
-> >> > > > about the mode is being entered and the address for allocated memory for
-> >> > > > storing the context during Deep Sleep.
-> >> > > > 
-> >> > > > We're using "pm_suspend_target_state" to map the kernel's target suspend
-> >> > > > state to SysFW low power mode. Make sure this is available only when
-> >> > > > CONFIG_SUSPEND is enabled.
-> >> > > > 
-> >> > > > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
-> >> > > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
-> >> > > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
-> >> > > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
-> >> > > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> >> > > > ---
-> >> > > >    drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
-> >> > > >    1 file changed, 63 insertions(+)
-> >> > > > 
-> >> > [..snip..]
-> >> > > > +static int ti_sci_suspend(struct device *dev)
-> >> > > > +{
-> >> > > > +	struct ti_sci_info *info = dev_get_drvdata(dev);
-> >> > > > +	int ret;
-> >> > > > +
-> >> > > > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
-> >> > > 
-> >> > > After this the will the IOs be in isolation? Or does the firmware wait
-> >> > > until power down begins later?
-> >> > 
-> >> >  From what I understand,
-> >> > IOs will be in isolation immediately
-> >> > 
-> >> 
-> >> That is what I understand too, so then any device that may need to do some
-> >> external communication for its suspend will not function, this must be the
-> >> last driver _suspend() the system calls, how do you enforce that?
+On Tue, Aug 8, 2023 at 5:22 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> On 2023.08.03 14:33 Rafael wrote:
+> > On Thu, Aug 3, 2023 at 11:12 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >>
+> >> Hi Folks,
+> >>
+> >> This is the second iteration of:
+> >>
+> >> https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
+> >>
+> >> with an additional patch.
+> >>
+> >> There are some small modifications of patch [1/3] and the new
+> >> patch causes governor statistics to play a role in deciding whether
+> >> or not to stop the scheduler tick.
+> >>
+> >> Testing would be much appreciated!
 > >
-> > I will make use of .suspend_noirq callbacks in that case. Does that
-> > sound better, or is there anything else I may not be aware of?
-> 
-> Using _noirq just moves the problem.  What if other drivers are also
-> using _noirq callbacks and run after the SCI driver?  You still cannot
+> > For convenience, this series is now available in the following git branch:
+> >
+> > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+> > pm-cpuidle-teo
+>
+> Hi Rafael,
+>
+> Thank you for the git branch link.
+>
+> I did some testing:
+>
+> Disclaimer: I used areas of focus derived
+> from the original teo-util work last fall,
+> and did not check if they were still the best
+> places to look for issues.
+>
+> CPU: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> HWP: enabled
+> CPU frequency scaling driver: intel_pstate
+> CPU frequency scaling governor: performance
+> Kernel 1: 6.5-rc4 (1000 Hz tick rate)
+> Kernel 2: kernel 1 + this patch series (called "rjw")
+> System is extremely idle, other than the test work.
+>
+> All tests were done with all idle governors:
+> menu, teo, ladder, rjw.
+>
+> Test 1: 2 core ping pong sweep:
+>
+> Pass a token between 2 CPUs on 2 different cores.
+> Do a variable amount of work at each stop.
+>
+> Purpose: To utilize the shallowest idle states
+> and observe the transition from using more of 1
+> idle state to another.
+>
+> Results:
+>
+> teo and rjw track fairly well, with
+> rjw reducing its use of idle state 0 before
+> teo as the work packet increases. The menu governor
+> does best overall, but performs worse over a greater
+> range of token loop times.
+>
+> Details (power and idle stats; times):
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/2-1/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/2-1/2-core-ping-pong-sweep.png
+>
+> Test 2: 6 core ping pong sweep:
+>
+> Pass a token between 6 CPUs on 6 different cores.
+> Do a variable amount of work at each stop.
+>
+> Purpose: To utilize the midrange idle states
+> and observe the transitions from between use of
+> idle states.
+>
+> Results: There is some instability in the results
+> in the early stages.
+> For unknown reasons, the rjw governor sometimes works
+> slower and at lower power. The condition is not 100%
+> repeatable.
+>
+> Overall teo completed the test fastest (54.9 minutes)
+> Followed by menu (56.2 minutes), then rjw (56.7 minutes),
+> then ladder (58.4 minutes). teo is faster throughout the
+> latter stages of the test, but at the cost of more power.
+> The differences seem to be in the transition from idle
+> state 1 to idle state 2 usage.
+>
+> Details (power and idle stats; times):
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/6-2/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/6-2/6-core-ping-pong-sweep.png
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/6-2/6-core-ping-pong-sweep-detail-a.png
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/6-2/6-core-ping-pong-sweep-detail-b.png
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/6-2/6-core-ping-pong-sweep-diffs.png
+>
+> a re-run power and idle stats, showing inconsistent behaviour.
+> teo and rjw only, and no timing data:
+> http://smythies.com/~doug/linux/idle/teo-util2/ping-sweep/6-1/perf/
+>
+> Test 3: sleeping ebizzy - 128 threads.
+>
+> Purpose: This test has given interesting results in the past.
+> The test varies the sleep interval between record lookups.
+> The result is varying usage of idle states.
+>
+> Results: It can be difficult to see any differences in
+> the overall timing graph, but a graph of differences
+> is revealing. teo outperforms rjw in the longer intervals
+> region of the test, at the cost of more power.
+>
+> Details: (power and idle stats; times):
+> http://smythies.com/~doug/linux/idle/teo-util2/ebizzy/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/ebizzy/ebizzy-128-perf.png
+> http://smythies.com/~doug/linux/idle/teo-util2/ebizzy/ebizzy-128-perf-diffs.png
+>
+> Test 4: 2 X 2 pair token passing. Dwell test. Fast:
+>
+> Purpose: Dwell under one set of conditions. Observe
+> noise and/or any bi-stability.
+>
+> Results (reference time is menu):
+> rjw: 3.0723 usecs/loop average. +3.15%
+> teo: 2.9917 usecs/loop average. +0.44%
+> menu: 2.97845 usecs/loop average. Reference
+> ladder: 4.077375 usecs/loop average. +36.9%
+>
+> Powers are all similar, with ladder a bit lower.
+>
+> Details: (power and idle stats; times):
+> http://smythies.com/~doug/linux/idle/teo-util2/many-0-400000000-2/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/many-0-400000000-2/times.txt
+>
+> Test 5: 2 X 2 pair token passing. Dwell test. Medium:
+>
+> Purpose: Dwell under one set of conditions. Observe
+> noise and/or any bi-stability.
+>
+> Results (reference time is menu):
+> rjw: 11.3406 usecs/loop average. -0.69%
+> teo: 11.36765 usecs/loop average. -0.45%
+> menu: 11.41905 usecs/loop average. reference
+> ladder: 11.9535 usecs/loop average. +4.68%
+>
+> Powers are all similar.
+>
+> Details:
+> http://smythies.com/~doug/linux/idle/teo-util2/many-3000-100000000-2/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/many-3000-100000000-2/times.txt
+>
+> Test 6: 2 X 2 pair token passing. Dwell test. Slow:
+>
+> Purpose: Dwell under one set of conditions. Observe
+> noise and/or any bi-stability.
+>
+> Results (reference time is menu):
+> rjw: 2591.70 usecs/loop average. +0.26%
+> teo: 2566.34 usecs/loop average. -0.72%
+> menu: 2585.00 usecs/loop average. reference
+> ladder: 2635.36 usecs/loop average. +1.95%
+>
+> Powers are all similar, with ladder a bit lower.
+> Due to the strong temperature to power use curve,
+> a much longer dwell test would need to be run to
+> be sure to get to steady state power usage.
+>
+> Details:
+> http://smythies.com/~doug/linux/idle/teo-util2/many-1000000-342000-2/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/many-1000000-342000-2/times.txt
+>
+> Test 7: 500 low load threads.
+>
+> Purpose: This test has given interesting results
+> in the past.
+>
+> 500 threads at approximately 10 hertz work/sleep frequency
+> and about 0.0163 load per thread, 8.15 total.
+> CPUs about 32% idle.
+>
+> Results:
+> rjw executed 0.01% faster than teo.
+> rjw used 5% less energy than teo.
+>
+> Details:
+> http://smythies.com/~doug/linux/idle/teo-util2/waiter/perf/
+> http://smythies.com/~doug/linux/idle/teo-util2/waiter/times.txt
 
-True, this thought occurred to me as well which is why I was thinking
-that moving it to ATF might be a better choice.
+Thanks a lot for doing this work, much appreciated!
 
-> guarantee ordering.
-> 
-> It seems to me that the IO isolation stuff is a system-wide operation,
-> and should probably be handled at the platform suspend_ops level
-> (e.g. suspend_ops->prepare_late()).   This would ensure that it runs
+> Conclusions: Overall, I am not seeing a compelling reason to
+> proceed with this patch set.
 
-I must have missed this approach! Are you suggesting something like what
-was done for am335?
-
-static const struct platform_suspend_ops am33xx_pm_ops
-
-have a similar code for tisci..?
-
-static const struct platform_suspend_ops tisci_pm_ops = {
-	.prepare_late = tisci_set_io_isolation
-	};
-
-And then while resuming we may want the pinctrl driver to scan for the
-wk_evt bit[0] before the isolation is disabled, so we want the
-tisci_resume/ remove isolation to be called later than that.
-
-So I a wondering if the code below makes sense?
-
-static const struct platform_suspend_ops tisci_pm_ops = {
-	.prepare_late = tisci_suspend // also includes set isolation
-	.end = tisci_resume 	// Disables isolation
-	};
-
-However a minor drawback here maybe that the serial logs on the resume
-path may not appear when using a serial console for example. However
-they should be able to easily access using dmesg.
-
-> *after* all the driver hooks (even driver _noirq hooks.) and right
-> before the full suspend (or s2idle.)
-> 
-> Now, all that being said, I noticed that in v7, you didn't move this to
-> _noirq, but instead suggested that this be handled by TF-A.  I suppose
-> that's an option also, but my suggestion above should work also.
-
-Thanks for the pointer! I do believe it will make more sense to do it
-from linux itself unless we have no way to do it in linux.
-
-> 
-> Kevin
-
-
-[0] Table 5-517. Description Of The Pad Configuration Register Bits
-https://www.ti.com/lit/pdf/spruid7
-
-NOTE: The hardware works in such a way that as soon as the IO isolation
-is disabled the wake_evt information is lost so the pinctrl-single
-driver won't be able to know what pin woke it up if we disable io
-isolation before it has the chance to look at the padconf registers
-
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+On the other hand, if there is a separate compelling reason to do
+that, it doesn't appear to lead to a major regression.
