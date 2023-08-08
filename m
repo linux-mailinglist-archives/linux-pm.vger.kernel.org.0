@@ -2,122 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A287774BDB
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 22:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AA2774DDA
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 00:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbjHHU6z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 16:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37210 "EHLO
+        id S230100AbjHHWAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 18:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235709AbjHHUmd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 16:42:33 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D312711F7C;
-        Tue,  8 Aug 2023 13:15:17 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 07c178e901b4681b; Tue, 8 Aug 2023 22:15:15 +0200
-Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
-   discourages use of this host) smtp.mailfrom=rjwysocki.net 
-   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
-   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
-Received: from kreacher.localnet (unknown [195.136.19.94])
+        with ESMTP id S229702AbjHHWAX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 18:00:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3DF12D;
+        Tue,  8 Aug 2023 15:00:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 0057166137E;
-        Tue,  8 Aug 2023 22:15:14 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH v1] ACPI: thermal: Do not attach private data to ACPI handles
-Date:   Tue, 08 Aug 2023 22:15:15 +0200
-Message-ID: <5703187.DvuYhMxLoT@kreacher>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8359362D8C;
+        Tue,  8 Aug 2023 22:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9F24C433C9;
+        Tue,  8 Aug 2023 22:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691532021;
+        bh=0CjdeW56CS2059Vkt0DNasnDqdrqZiTUPNvFROKH9Ko=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZFemw6DCXpLlNx2M8biWQnKG3G228tzyxO2dijgeS5BR8kYOhiNBGzBKha5+8d+b2
+         H+k1cuGzP7aOdznQujTvJWUvn2gbn5el8wfXv0ckwsOco5A349k4qSpCkdR2l2rDPJ
+         /VjtO3ISJJnBU0HNKQG//Cco7C9TWwu0woPCTD18X8jWuxJSRRV+RzWBejgo/u9tTd
+         jbq3m4HVzjWmd4F3Pa9xDXTAf89j+F2oyLPA4YKE2BKJwajq/nn22fqOOwpOLhVdS4
+         2UaIpasp0qBxfi2P/3Ciw85m047r/IcMGcuaKbF08+sZx2IlAYJIflQoRUIWKIs9l1
+         iIzTLi4REA3dA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B9192C395C5;
+        Tue,  8 Aug 2023 22:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrledvgddugeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdp
- rhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] MAINTAINERS: update Claudiu Beznea's email address
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169153202174.6931.11202742037860925480.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Aug 2023 22:00:21 +0000
+References: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
+In-Reply-To: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
+To:     claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc:     nicolas.ferre@microchip.com, conor.dooley@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, maz@kernel.org,
+        srinivas.kandagatla@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, sre@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-pwm@vger.kernel.org, alsa-devel@alsa-project.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hello:
 
-The ACPI thermal driver uses acpi_bus_attach_private_data() to attach
-the thermal zone object to the ACPI handle of the thermal zone and
-acpi_bus_detach_private_data() to clean that up, but it never uses
-acpi_bus_get_private_data() to retrieve that object.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Drop the unneded acpi_bus_attach_private_data() and
-acpi_bus_detach_private_data() calls from the ACPI thermal driver and
-clean up the related code.
+On Fri,  4 Aug 2023 08:00:07 +0300 you wrote:
+> Update MAINTAINERS entries with a valid email address as the Microchip
+> one is no longer valid.
+> 
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+> Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+> 
+> [...]
 
-No intentional functional impact.
+Here is the summary with links:
+  - MAINTAINERS: update Claudiu Beznea's email address
+    https://git.kernel.org/netdev/net/c/fa40ea27ede3
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/thermal.c |   13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
-
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -742,7 +742,6 @@ static int acpi_thermal_register_thermal
- {
- 	int trips = 0;
- 	int result;
--	acpi_status status;
- 	int i;
- 
- 	if (tz->trips.critical.valid)
-@@ -775,24 +774,15 @@ static int acpi_thermal_register_thermal
- 	if (result)
- 		goto unregister_tzd;
- 
--	status =  acpi_bus_attach_private_data(tz->device->handle,
--					       tz->thermal_zone);
--	if (ACPI_FAILURE(status)) {
--		result = -ENODEV;
--		goto remove_links;
--	}
--
- 	result = thermal_zone_device_enable(tz->thermal_zone);
- 	if (result)
--		goto acpi_bus_detach;
-+		goto remove_links;
- 
- 	dev_info(&tz->device->dev, "registered as thermal_zone%d\n",
- 		 thermal_zone_device_id(tz->thermal_zone));
- 
- 	return 0;
- 
--acpi_bus_detach:
--	acpi_bus_detach_private_data(tz->device->handle);
- remove_links:
- 	acpi_thermal_zone_sysfs_remove(tz);
- unregister_tzd:
-@@ -806,7 +796,6 @@ static void acpi_thermal_unregister_ther
- 	acpi_thermal_zone_sysfs_remove(tz);
- 	thermal_zone_device_unregister(tz->thermal_zone);
- 	tz->thermal_zone = NULL;
--	acpi_bus_detach_private_data(tz->device->handle);
- }
- 
- 
-
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
