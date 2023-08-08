@@ -2,160 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3B97742A1
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 19:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5EC47742EC
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 19:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjHHRrO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 13:47:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S231304AbjHHRwY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 13:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbjHHRpx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 13:45:53 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B26CAD14A
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 09:20:51 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fe4cdb727cso39163225e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 09:20:51 -0700 (PDT)
+        with ESMTP id S235124AbjHHRv6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 13:51:58 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582572894F
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 09:23:13 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3fe1a17f983so49861165e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 09:23:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691511621; x=1692116421;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nuIvq2h/BPP3D5cIRCobslq+P4j3Ukg7i7rEMjlM13A=;
-        b=VK+97OZsOlMh0gtAleSSv2OK+2/K/V+DlFAn/Yx0ld69fT4vzXMxWZxDvPgiYdO3/H
-         EYKIV8bhAStmQFNUrnKvWCFrIhkUyD5fG4tg93rpR5eZX0uUdekdlbacngUm1HgkOvee
-         j3xGX7TGEu0Ox+5ABsqHbYHW9VJj+B+tZI4YagADW9za223aZWbfC5E8/rzcE1BaReKx
-         GwKRPJ0cfKZLaRU5YkaltQpQQOlgE9CrrOBphU0Nbk6ZvnKYK8TbbQscoGaWvFohQTIe
-         z5Kdqtu78jFYphosDhqCLF7HLsZ/ADIjFEr94dXSROjKm/3SyelmMuE0GYrZCAlkpoD8
-         EtMg==
+        d=telus.net; s=google; t=1691511784; x=1692116584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cPxy7oN760iWQrMghsO3cIyhshW0R7BPSaYAZcv5ihU=;
+        b=cD7Sfhdeqp7iabvg8vBQgTMRvhuB6i8gkTtjwBIqen5YMu7LUKeUtO1GxRxSTSuOB1
+         DCEqb0vfrJER2gxsO9O1sotZBMaHj20iaMdmBVNXFBheMGWHF0XlLMQoOGolh91EVq85
+         H1F1D2ZSN4Bu3CCr/nbW1f5bHcbBElgglsxXCZvb/+tldWFiuMxYPojmlzayLXa7kwXB
+         v5aEabLvHrfk1HIOjG0dyB6XEZoOads6PIPKMk2Tz0UgAu7lwHY25RoezQ2L4yXpycCB
+         ZEBd0h2rczf3giToKhudJBr16a5rrxRiyRbayoMnZ7ziuse+1A5zs/7VGFugbRrWHrfA
+         nVZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691511621; x=1692116421;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nuIvq2h/BPP3D5cIRCobslq+P4j3Ukg7i7rEMjlM13A=;
-        b=KY9lilZG0WhYAM9EJa51sGkKVIY71wrq3+1zrCl2N5ZemqkRLg7U9VkYT7Hagkeswx
-         vYPjR5V4BoaICjyy+yX3wlgEV9QaOTnBaPXhqCctBw2azy1RtJO34GyRGRPmFIPf18ka
-         FvV5iQIuBEA9cURqnWMKpvD7HNCVDdCnTf0Kn1vp0+KPMZ5+ihLepQwjMrLn8ln1gAxr
-         KU3BDcsbJhdmkmedzoLz+0MXAxQQ3Qle59rHiOcI7qCYwIzLtaLyqLkD3ZpdmSS8pNRz
-         QSDTchSrWV/Wgq2yHekybD/DL8R5zAIk9bG1gRbyjoK53tcHXk9OIUwEIBMZngufk9Mk
-         Psew==
-X-Gm-Message-State: AOJu0YyWWZ6LoP7sQorDdGHZIeyJerHTRpgktIe/G8Dk7PFUOMBOu7Ar
-        D1V4fPXfGy7i4CuIICGur7rUfQ==
-X-Google-Smtp-Source: AGHT+IGG6cx4NxloHY9qu9bkpwF/v/G7D1G7UI779iSRivcmdLz5bmQnplAjeu12YJonXRuef1UCvA==
-X-Received: by 2002:a5d:4574:0:b0:317:ef17:2351 with SMTP id a20-20020a5d4574000000b00317ef172351mr3658176wrc.65.1691511621014;
-        Tue, 08 Aug 2023 09:20:21 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.113])
-        by smtp.gmail.com with ESMTPSA id a5-20020a5d4565000000b0030647449730sm14050046wrc.74.2023.08.08.09.20.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 09:20:20 -0700 (PDT)
-Message-ID: <41d46805-c5a1-6c0d-6b5f-caf499d10d4a@linaro.org>
-Date:   Tue, 8 Aug 2023 18:20:18 +0200
+        d=1e100.net; s=20221208; t=1691511784; x=1692116584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cPxy7oN760iWQrMghsO3cIyhshW0R7BPSaYAZcv5ihU=;
+        b=bXZjeQKkF2dOOgswLnSpSxF5cS1qEDjsb8YgeVpA3f+akoVIBV6XbXO4nPoS+OgBMo
+         I/NMauBP8Vdf+BjV5Y11yRwMDkmYvQuvilSJiJjOhWqWUw+10TiaAllEE/aaBALC6Ue3
+         i2gam7NsZhGYUUVgUcW4v+Vynkey5ilIZh8HqIliMvXDqRUKWp7cSj5OngTe43uNhS08
+         wZMOFJsuJq7jb/wd+EKJILQbHUpWBsG5BCzzk5bEO41fZrCgkPrk+Oi9xJv6NfS1hHtd
+         UnoIszywG6Q87I6npyq85MfkPrOL95922dL2nnBWPAg/a95a3mEiEXbaQTJyxvyXVZvo
+         NdLQ==
+X-Gm-Message-State: AOJu0Yx6E3GDcthfqAhOy9myxk4tr8mtQAhnSzSh1d4wcie7YIXYFqyD
+        MMa8DPCq+qnIVD1o5YyDF/fc/0NmuDM1p5Yy/HoznQ==
+X-Google-Smtp-Source: AGHT+IH/ScqC4gzyiVhBdZBVc/AlLCb1vByVv9V9UrCnUDm3VOT+ghvWJ0CtcewDmuDqMzpF2MsX0ZvPa84RBoBWRiQ=
+X-Received: by 2002:a05:600c:211:b0:3fe:18d8:a61b with SMTP id
+ 17-20020a05600c021100b003fe18d8a61bmr262881wmi.29.1691511783788; Tue, 08 Aug
+ 2023 09:23:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v13 04/10] dt-bindings: soc: qcom: cpr3: Add bindings for
- CPR3 driver
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Niklas Cassel <nks@flawful.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+References: <006901d9be8c$f4439930$dccacb90$@telus.net> <CAJZ5v0hqPb1+tzGiOCSKr=4QcjnRKT5Gd8FcNbD_Gz5CnAw8tw@mail.gmail.com>
+ <CAAYoRsUu-5u73cSASua133EE3+zTRbTgq-kEn2L52e4=n6X46g@mail.gmail.com> <CAJZ5v0jiQ-JFsFAFQFTZVGe-NobaRp7oo95R=Dju9b54n6iKEw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jiQ-JFsFAFQFTZVGe-NobaRp7oo95R=Dju9b54n6iKEw@mail.gmail.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Tue, 8 Aug 2023 09:22:54 -0700
+Message-ID: <CAAYoRsU2=qOUhBKSRskcoRXSgBudWgDNVvKtJA+c22cPa8EZ1Q@mail.gmail.com>
+Subject: Re: [PATCH] x86/aperfmperf: Make stale CPU frequency response within limits.
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        yang.jie@linux.intel.com, linux-kernel@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Robert Marko <robimarko@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-References: <20230217-topic-cpr3h-v13-0-d01cff1c54cf@linaro.org>
- <20230217-topic-cpr3h-v13-4-d01cff1c54cf@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230217-topic-cpr3h-v13-4-d01cff1c54cf@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/08/2023 14:37, Konrad Dybcio wrote:
-> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> 
-> Add the bindings for the CPR3 driver to the documentation.
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-> [Konrad: Make binding check pass; update AGdR's email]
-> Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,cpr3.yaml    | 291 +++++++++++++++++++++
->  1 file changed, 291 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> new file mode 100644
-> index 000000000000..d797abc5d5fe
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,cpr3.yaml
-> @@ -0,0 +1,291 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/soc/qcom/qcom,cpr3.yaml#"
+Hi Rafael,
 
-Drop quotes.
+On Wed, Jul 26, 2023 at 7:43=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+> On Tue, Jul 25, 2023 at 9:12=E2=80=AFPM Doug Smythies <dsmythies@telus.ne=
+t> wrote:
+> > On Tue, Jul 25, 2023 at 11:31=E2=80=AFAM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> > > On Tue, Jul 25, 2023 at 2:14=E2=80=AFAM Doug Smythies <dsmythies@telu=
+s.net> wrote:
+> > > >
+> > > > Currently, when the CPU frequency is stale the nominal clock freque=
+ncy
+> > > > is returned by calls to arch_freq_get_on_cpu(). Some users are
+> > > > confused by the high reported frequency when their system is idle
+> > > > and/or it is above a reduced maximum they set.
+> > > >
+> > > > This patch will return the policy minimum as the stale frequency re=
+ply
+> > > > from arch_freq_get_on_cpu().
+> > > >
+> > > > Reported-by: Yang Jie <yang.jie@linux.intel.com>
+> > > > Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=3D217597
+> > > > Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> > > > ---
+> > > >  arch/x86/kernel/cpu/aperfmperf.c | 13 +++++--------
+> > > >  drivers/cpufreq/cpufreq.c        | 18 ++++++++++++++++++
+> > > >  include/linux/cpufreq.h          |  5 +++++
+> > > >  3 files changed, 28 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu=
+/aperfmperf.c
+> > > > index fdbb5f07448f..44cc96864d94 100644
+> > > > --- a/arch/x86/kernel/cpu/aperfmperf.c
+> > > > +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> > > > @@ -418,9 +418,10 @@ unsigned int arch_freq_get_on_cpu(int cpu)
+> > > >         unsigned long last;
+> > > >         u64 acnt, mcnt;
+> > > >
+> > > > -       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+> > > > -               goto fallback;
+> > > > -
+> > > > +       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF)){
+> > > > +               freq =3D cpufreq_quick_get(cpu);
+> > > > +               return freq ? freq : cpufreq_quick_get_min(cpu);
+> > > > +       }
+> > > >         do {
+> > > >                 seq =3D raw_read_seqcount_begin(&s->seq);
+> > > >                 last =3D s->last_update;
+> > > > @@ -433,13 +434,9 @@ unsigned int arch_freq_get_on_cpu(int cpu)
+> > > >          * which covers idle and NOHZ full CPUs.
+> > > >          */
+> > > >         if (!mcnt || (jiffies - last) > MAX_SAMPLE_AGE)
+> > > > -               goto fallback;
+> > > > +               return cpufreq_quick_get_min(cpu);
+> > > >
+> > > >         return div64_u64((cpu_khz * acnt), mcnt);
+> > > > -
+> > > > -fallback:
+> > > > -       freq =3D cpufreq_quick_get(cpu);
+> > > > -       return freq ? freq : cpu_khz;
+> > >
+> > > It looks to me like modifying cpufreq_quick_get) to return policy->mi=
+n
+> > > if policy->cur is 0 would work in a similar way, wouldn't it?
+> >
+> > For the configuration of intel_cpufreq driver (intel_pstate in
+> > passive mode), schedutil governor, HWP enabled, for
+> > a stale frequency  policy->cur is not 0 and will always
+> > be whatever the min value was when the driver was initialized,
+> > regardless of what has been set since.
+>
+> So I would prefer to address this in the intel_pstate driver than to
+> work around it in the core.
 
-It does not look like you tested the bindings, at least after quick
-look. Please run `make dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-Maybe you need to update your dtschema and yamllint.
+Okay, but I would need some help with it. I already tried to
+figure out a fix before starting this thread, and have tried
+again since your comment. I haven't been able to figure
+it out.
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm Core Power Reduction v3/v4/Hardened (CPR3, CPR4, CPRh)
-> +
-> +description:
-> +  CPR (Core Power Reduction) is a technology to reduce core power of a CPU
-> +  (or another device). Each OPP of a device corresponds to a "corner" that
-> +  has a range of valid voltages for a particular frequency.
-> +  The CPR monitors dynamic factors such as temperature, etc. and suggests
-> +  or (in the CPR-hardened case) applies voltage adjustments to save power
-> +  and meet silicon characteristic requirements for a given chip unit.
-> +
-> +maintainers:
-> +  - AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - description: CPRv3 controller
+An example of the issue:
+Use the ondemand governor and set some
+minimum and also put a load on CPU 5 such that the
+governor asks for a non-min and non-max pstate.
+Then switch to the schedutil governor, and terminate
+the load on CPU 5, and look at CPU frequencies:
 
-Nit, since you are going to resend, then: Drop description, it's the
-same as compatible.
+$ grep . /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq
+/sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy10/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy11/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy1/scaling_cur_freq:4799871
+/sys/devices/system/cpu/cpufreq/policy2/scaling_cur_freq:4800027
+/sys/devices/system/cpu/cpufreq/policy3/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy5/scaling_cur_freq:1300000
+/sys/devices/system/cpu/cpufreq/policy6/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy7/scaling_cur_freq:4800736
+/sys/devices/system/cpu/cpufreq/policy8/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy9/scaling_cur_freq:1000000
 
-> +        items:
-> +          - const: qcom,cpr3
-> +      - description: CPRv4 controller
+non stale frequencies are identified by non round numbers.
+observe that CPU 5 still indicates pstate 13.
+observe the other stale frequencies are the pstate 10 min
+that I set when the governor was ondemand.
+Now change the minimum to 1.1 GHz and check it:
 
-Ditto
+$ grep . /sys/devices/system/cpu/cpufreq/policy*/scaling_min_freq
+/sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy10/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy11/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy1/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy2/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy3/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy5/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy6/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy8/scaling_min_freq:1100000
+/sys/devices/system/cpu/cpufreq/policy9/scaling_min_freq:1100000
 
+and look at current again:
 
-Best regards,
-Krzysztof
+$ grep . /sys/devices/system/cpu/cpufreq/policy*/scaling_cur_freq
+/sys/devices/system/cpu/cpufreq/policy0/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy10/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy11/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy1/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy2/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy3/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy4/scaling_cur_freq:1000000
+/sys/devices/system/cpu/cpufreq/policy5/scaling_cur_freq:1300000
+/sys/devices/system/cpu/cpufreq/policy6/scaling_cur_freq:4800585
+/sys/devices/system/cpu/cpufreq/policy7/scaling_cur_freq:4800177
+/sys/devices/system/cpu/cpufreq/policy8/scaling_cur_freq:4799992
+/sys/devices/system/cpu/cpufreq/policy9/scaling_cur_freq:4800015
 
+Observe the stale frequencies are unchanged and outside of the
+range limits.
+
+> > The patch I submitted deals with that situation also.
+> >
+> > A complete list of driver/governor/HWP stale frequency
+> > replies can be found on the bugzilla report at:
+> >
+> > https://bugzilla.kernel.org/attachment.cgi?id=3D304694
+> >
+> > There might be push back on some of the performance
+> > governor stale frequency replies. I could not figure out
+> > a performance governor dependant reply.
+> >
+> > Also there are other callers to cpufreq_quick_get
+> > and I was not sure I could mess with the function
+> > response for them. For example
+> > drivers/devfreq/tegra30-devfreq.c
+> > and drivers/thermal/cpufreq_cooling.c
+> > and drivers/powercap/dtpm_cpu.c
+>
+> IIUC, all of the above rely on policy->cur being nonzero.
+>
+> There are other users doing questionable things when
+> cpufreq_quick_get() returns 0 that I think would be better off if the
+> min is returned instead.
+
+Okay, I'll submit a new patch shortly, with this:
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 50bbc969ffe5..4e91169a83f5 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1768,7 +1768,7 @@ unsigned int cpufreq_quick_get(unsigned int cpu)
+
+        policy =3D cpufreq_cpu_get(cpu);
+        if (policy) {
+-               ret_freq =3D policy->cur;
++               ret_freq =3D policy->cur ? policy->cur : policy->min;
+                cpufreq_cpu_put(policy);
+        }
+
+The testing results are in the bugzilla report here:
+https://bugzilla.kernel.org/attachment.cgi?id=3D304734
+
+... Doug
