@@ -2,150 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7942773F08
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 18:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D84773D3C
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Aug 2023 18:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233244AbjHHQlc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 12:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41132 "EHLO
+        id S232202AbjHHQO5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 12:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbjHHQkl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 12:40:41 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25B63A4EE
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 08:54:43 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id 46e09a7af769-6bcac140aaaso4523053a34.2
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 08:54:43 -0700 (PDT)
+        with ESMTP id S232176AbjHHQNZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 12:13:25 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBDC212C
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 08:47:33 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bc73a2b0easo13116675ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 08:47:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691510070; x=1692114870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kVUMGFTGmIMs9gxfcxcS/lMOKLXcrXhxKdcNy5Sb/7k=;
-        b=WQ4pE5FnmzVQjye3xLE3JL+yOo6Ug6M4LCOtu2zdp6OaIYA8agsznYIgKSC2lJs4IE
-         3cTw2aMB6mL6So1uYmtyvGovPugiVmRaNVJGdGF8ihRcmt9zyA7TIm3zFICAYG5i3hEB
-         yh/ERHnvJKb2hXfYSyY3f63ic40kAvE7CGpW/AK7e/49Bp2TZgkkNYPiXHjDPrUhdwF9
-         63Z/hhEY+hmcZkhAepFlTTyHX1/Auxb4b+XLDw+MK3lYZDDp5Mlr05r/CWFsNwgE/0/S
-         zzo4F1dONQ3/+jQN0iRy+zmw/ELXeA2ufyGHh+ar+uO/7ghyC25n3NECxK2MBKm14r0Q
-         2ZGw==
+        d=linaro.org; s=google; t=1691509653; x=1692114453;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hpGMNxDDvo9T1v6v+RkICvblRXd4nkGe288y9gyoNGg=;
+        b=OMoT8gYdXBR3P4DHHf7l6UARjohyP+3i/vkEzNYanul6tF0OZaGlNGS9BdAY/cAbzn
+         4xvtrYw0LV2JAP6ZCJkx0zuRV30d36+WYSqU8SltQ/dSfonAX4/ia7Y6dE+G5cfZZra/
+         TMMxycTPwpTtNCTaIF0XqF15MYB3RH5KWO0ere+cQg7qJ67BybLnWDUyQKIsFoo7gvly
+         y+XdSNXfCZe06dHIGF/DpMrkP9XGig+7IRxzDfWyv6UCXyZfeyBnBS5Nh8hP01ToMF5K
+         2l6NUX4h1LUr4AnOjiqphHr0oIev9CW5o3EsfKKhhFaPt4nxNVkAbc0a4hS6dvtP9FQ1
+         uHIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691510070; x=1692114870;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kVUMGFTGmIMs9gxfcxcS/lMOKLXcrXhxKdcNy5Sb/7k=;
-        b=hEQum+R0z/M3O0v2B3fUwa+R7OK1qAnSYDX/QujVNFqqY5yyxbvIr7Cfa61Lcj/2pj
-         yfi2Rb6dJAIZyJKqiQghg8jOY40euTGCNjj+yrqm4B7rqJFU2QUiP+X5ntEdzbAybD47
-         xRBiAjfvEb6IahJhRxZ3YsViCTIIjA7lcRzuHreg12DpEQ9Kx2P4Tg9CXkGWu5UGeuK3
-         uPvSkCYgXMwIyTDgZ8K9cZobsSQapCoVfSpLg73D3zKyPJaDn5pPdcW5QSBr1gLMWZJV
-         j8vpx+pdmWRYsjM2d5bnJj8/i04xUhAq5WXCdALn58MHJcmJrCzgpTtrp3fcxPNbE1xB
-         BmSA==
-X-Gm-Message-State: AOJu0YwQxlqe6/OkXqLQIc0/llFtCH8XYV5Mr7/JSF6RriZp8IiUSbc+
-        mc5UsNgosUcL1/3lM3uk2ikcOHc9hvT0BFVcevAqf0fwMGBarSH0wI0=
-X-Google-Smtp-Source: AGHT+IFi15UXHlOjBafsncghPZ+CygvrFkHgT7nBLzL88m86kzLUpO8Z8UvMrvXkkHrJrBoiNDOqbizpom1bnSTUbwg=
-X-Received: by 2002:a05:6902:30d:b0:d43:9eae:52b8 with SMTP id
- b13-20020a056902030d00b00d439eae52b8mr9684261ybs.10.1691504305098; Tue, 08
- Aug 2023 07:18:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691509653; x=1692114453;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hpGMNxDDvo9T1v6v+RkICvblRXd4nkGe288y9gyoNGg=;
+        b=At9MhtUF1SNUNjZ+elP63nNJVr86hlrfwusxIfx1S7OZ0WsgGkKwnGcNTV3vauYkRo
+         BPV1Fv2cxwCJn2BxS2Kw/5ogDYlmYtu0feibL7v8Qq+G3DhkbNTIWtztc2E/zZtTSXCq
+         jbI2s4np5aMFmBk366Z2OAUm8Yu1+bBX5yMzyXQIQBOgSW90S86GX6dTf8+k7JumWaFQ
+         shwFzNkzePq2uJFzjCprHYF5vkwFyzrGu7sl2qR4dJmy1Boe7uM/nlgwnOnoXTymkNrj
+         u6JDuUjhzwv/rjZsDqU1YHW6jeWD5BCCLhzh6jkQoS8JmtUPJBCsXdSqobX5xne/p6n7
+         f0hA==
+X-Gm-Message-State: AOJu0YwxYdqM7fufrcmoOOCHlSaxsG+eLJhXve39xrhjoh/UgTDNEM3d
+        UPkFqXFwlq1r5MEVY4/MZYqvUEgUKZUlPInhsUMZBL155cHfagR2
+X-Google-Smtp-Source: AGHT+IEQ0B+zFHwu6lwq9ShhqNgqoAUPtqEjQdph6xX3V3JEjoRX0Qpcb7z9XgUddzrDP+CIGW7eIVIsmdM1+EjIYR4=
+X-Received: by 2002:a25:df82:0:b0:d47:4ed4:43eb with SMTP id
+ w124-20020a25df82000000b00d474ed443ebmr10840010ybg.63.1691505778468; Tue, 08
+ Aug 2023 07:42:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230703085555.30285-1-quic_mkshah@quicinc.com>
-In-Reply-To: <20230703085555.30285-1-quic_mkshah@quicinc.com>
+References: <20230803063703.5659-1-zhuyinbo@loongson.cn> <20230803063703.5659-3-zhuyinbo@loongson.cn>
+ <4fef9725-7aea-43fb-b8ef-d20a4c6d9a68@app.fastmail.com>
+In-Reply-To: <4fef9725-7aea-43fb-b8ef-d20a4c6d9a68@app.fastmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 8 Aug 2023 16:17:48 +0200
-Message-ID: <CAPDyKFrp6WQYW7uKwPLrWROEiXHCjHd6Y1O9yitZ6fJE7EO7bg@mail.gmail.com>
-Subject: Re: [RESEND v4 0/3] Use PSCI OS initiated mode for sc7280
-To:     andersson@kernel.org, rafael@kernel.org
-Cc:     Maulik Shah <quic_mkshah@quicinc.com>, dianders@chromium.org,
-        swboyd@chromium.org, wingers@google.com, daniel.lezcano@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, sudeep.holla@arm.com,
-        jwerner@chromium.org, quic_lsrao@quicinc.com,
-        quic_rjendra@quicinc.com
+Date:   Tue, 8 Aug 2023 16:42:22 +0200
+Message-ID: <CAPDyKFo7p=aEWWrW2OGbhN1tFjHanpqjLApzCMipdPSzE+NknQ@mail.gmail.com>
+Subject: Re: [PATCH v6 2/2] soc: loongson2_pm: add power management support
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
+        Liu Yun <liuyun@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Bjorn, Rafael,
-
-On Mon, 3 Jul 2023 at 10:56, Maulik Shah <quic_mkshah@quicinc.com> wrote:
+On Thu, 3 Aug 2023 at 09:03, Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> This is resend of v4 with patch1 and patch2 Cced to stable kernel.
+> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
+> > The Loongson-2's power management controller was ACPI, supports ACPI
+> > S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+> > Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
+> > (USB, GMAC, PWRBTN, etc.). This driver was to add power management
+> > controller support that base on dts for Loongson-2 series SoCs.
+> >
+> > Co-developed-by: Liu Yun <liuyun@loongson.cn>
+> > Signed-off-by: Liu Yun <liuyun@loongson.cn>
+> > Co-developed-by: Liu Peibao <liupeibao@loongson.cn>
+> > Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+> > Cc: soc@kernel.org
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 >
-> Changes in v4:
-> - Add missing s-o-b line and reviewed by in patch 1
-> - Address ulf's comments for error handling in patch 2
+> I'm still waiting for Ulf to take a look here to see whether
+> this should be in drivers/genpd instead, but he might still
+> be on vacation.
 
-This has been ready to be queued for quite a while and I have been
-nagging you about it too. Sorry about that. :-)
-
-To help out, I have queued up patch 1 and patch 2 for fixes, through
-my new genpd tree [1].
-
-Bj=C3=B6rn, please pick patch3 for v6.6.
+I don't think this belongs in drivers/genpd/ as it's not a genpd
+provider. Besides that, no further comments from me at this point.
 
 Kind regards
 Uffe
 
-[1]
-git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git fixes
-
 >
-> Changes in v3:
-> - Add new change to provide helper function dt_idle_pd_remove_topology()
-> - Address ulf's comments for error handling
-> - Add reviewed by ulf for devicetree change
+> A few minor comments from me in the meantime:
 >
-> Changes in v2:
-> - Add new change to Move enabling OSI mode after power domains creation
-> - Fix compatible string to domains-idle-states for cluster idle state.
-> - Update cover letter with some more details on OSI and PC mode
->   comparision
+> > +#define loongson2_pm_readw(reg)              readw(loongson2_pm.base + reg)
+> > +#define loongson2_pm_readl(reg)              readl(loongson2_pm.base + reg)
+> > +#define loongson2_pm_writew(val, reg)        writew(val, loongson2_pm.base +
+> > reg)
+> > +#define loongson2_pm_writel(val, reg)        writel(val, loongson2_pm.base +
+> > reg)
 >
-> The dependency [2] is now merged in trustedfirmware project.
+> I would prefer these to be 'static inline' functions rather than
+> macros, or you can just open-code them, as each macro is only
+> used once at the moment.
 >
-> Stats comparision between OSI and PC mode are captured at [3] with
-> usecase
-> details, where during multiple CPUs online the residency in cluster idle
-> state is better with OSI and also inline with single CPU mode. In PC
-> mode
-> with multiple CPUs cluster idle state residency is dropping compare to
-> single CPU mode.
+> > +static irqreturn_t loongson2_pm_irq_handler(int irq, void *dev_id)
+> > +{
+> > +     u16 status = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
+> > +
+> > +     if (!loongson2_pm.suspended && (status & LOONGSON2_PM1_PWRBTN_STS)) {
+> > +             pr_info("Power Button pressed...\n");
 >
-> Recording of this meeting is also available at [4].
+> The message is probably more appropriate as a pr_debug() than
+> pr_info().
 >
-> This change adds power-domains for cpuidle states to use PSCI OS
-> initiated mode for sc7280.
+> > +static int __maybe_unused loongson2_pm_suspend(struct device *dev)
+> > +{
+> > +     loongson2_pm.suspended = true;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int __maybe_unused loongson2_pm_resume(struct device *dev)
+> > +{
+> > +     loongson2_pm.suspended = false;
+> > +
+> > +     return 0;
+> > +}
+> > +static SIMPLE_DEV_PM_OPS(loongson2_pm_ops, loongson2_pm_suspend,
+> > loongson2_pm_resume);
 >
-> This change depends on external project changes [1] & [2] which are
-> under review/discussion to add PSCI os-initiated support in Arm Trusted
-> Firmware.
+> Please change this to DEFINE_SIMPLE_DEV_PM_OPS() and remove the
+> __maybe_unused, this is what all drivers should have these days.
 >
-> I can update here once the dependency are in and change is ready to
-> merge.
+> > +
+> > +static int loongson2_pm_probe(struct platform_device *pdev)
+> > +{
+> > +     int irq, retval;
+> > +     u64 suspend_addr;
+> > +     struct device *dev = &pdev->dev;
+> > +
+> > +     loongson2_pm.base = devm_platform_ioremap_resource(pdev, 0);
+> > +     if (IS_ERR(loongson2_pm.base))
+> > +             return PTR_ERR(loongson2_pm.base);
+> > +
+> > +     irq = platform_get_irq(pdev, 0);
+> > +     if (irq < 0)
+> > +             return irq;
+> > +
+> > +     if (!device_property_read_u64(dev, "loongson,suspend-address",
+> > &suspend_addr))
+> > +             loongson_sysconf.suspend_addr = (u64)phys_to_virt(suspend_addr);
+> > +     else
 >
-> [1] https://review.trustedfirmware.org/q/topic:psci-osi
-> [2] https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/19487
-> [3] https://www.trustedfirmware.org/docs/PSCI-OS-initiated.pdf
-> [4] https://www.trustedfirmware.org/meetings/tf-a-technical-forum
+> Having a custom "loongson,suspend-address" property here feels wrong
+> to me. Can't this be moved into the "regs" property that holds
+> the other mmio registers?
 >
-> Maulik Shah (3):
->   cpuidle: dt_idle_genpd: Add helper function to remove genpd topology
->   cpuidle: psci: Move enabling OSI mode after power domains creation
->   arm64: dts: qcom: sc7280: Add power-domains for cpuidle states
->
->  arch/arm64/boot/dts/qcom/sc7280.dtsi  | 98 ++++++++++++++++++++-------
->  drivers/cpuidle/cpuidle-psci-domain.c | 39 ++++-------
->  drivers/cpuidle/dt_idle_genpd.c       | 24 +++++++
->  drivers/cpuidle/dt_idle_genpd.h       |  7 ++
->  4 files changed, 117 insertions(+), 51 deletions(-)
->
-> --
-> 2.17.1
->
+>     Arnd
