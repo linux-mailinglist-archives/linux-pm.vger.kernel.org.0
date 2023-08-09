@@ -2,151 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6CA7767F7
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 21:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EACE7768A0
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 21:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjHITKS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Aug 2023 15:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S233984AbjHITY5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Aug 2023 15:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjHITKS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 15:10:18 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BAC010E7;
-        Wed,  9 Aug 2023 12:10:17 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 379J9iRF077946;
-        Wed, 9 Aug 2023 14:09:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691608184;
-        bh=n8EqHLLIiKuqByJvrEsdeUk/ia1nskmW4zniSdjK4XQ=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=UTuthB7x0YwcqbWsiBaq6hudntjgCtJOseB2+NBPxY9wNqx2Hb5Zp22SExyU8ikqU
-         P9JNQf9UPT48sRyBJZn5iGDCjWyPLB0HsNNUysfAC/PiGmjDg9ufT8c4VMqvZNC5rv
-         pflX3B/+csIHIm6jWdUqv8vOtGsNT/zYxu5E6u+c=
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 379J9iud003769
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 9 Aug 2023 14:09:44 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 9
- Aug 2023 14:09:44 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 9 Aug 2023 14:09:44 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 379J9hkM018665;
-        Wed, 9 Aug 2023 14:09:43 -0500
-Date:   Wed, 9 Aug 2023 14:09:43 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Apurva Nandan <a-nandan@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, Udit Kumar <u-kumar1@ti.com>,
-        Keerthy J <j-keerthy@ti.com>
-Subject: Re: [PATCH 2/3] arm64: dts: ti: k3-j7200: Add the supported
- frequencies for A72
-Message-ID: <20230809190943.unpcbrinyn5ppei7@hydrated>
-References: <20230809173905.1844132-1-a-nandan@ti.com>
- <20230809173905.1844132-3-a-nandan@ti.com>
+        with ESMTP id S233890AbjHITYn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 15:24:43 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F6E735A3
+        for <linux-pm@vger.kernel.org>; Wed,  9 Aug 2023 12:23:34 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b9b904bb04so2865511fa.1
+        for <linux-pm@vger.kernel.org>; Wed, 09 Aug 2023 12:23:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691609010; x=1692213810;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=21HEsmbiedjTaQYN+YmBvmbLDGnvjM6qjUPmRAgPnt8=;
+        b=DrZfXM4lIxtoyH3O9jh9t+9OzDkrZCpeTWD/LZcVCWX1c/E9ML9zSxILQaCeQ3vVsm
+         1Pk0MY/Dz1HN5XCPG5YRJUse/89eWMnLFU0bI4BLNjXFFmgiRB7pphjVfafB1QUvtwmv
+         uNZxHYGV7Ni1tbOpmf8eDNqe0RhTgP2zq8q0cxWYi2Z/O4tq8f3iHFLLrvAW3+Miz6P0
+         fXe6jX42FU6n/w+ppnmrD7NrfPv9AHXJa+0lryicx6nDpyQiWauf/e+COWN/JIzrOjZj
+         eu1om/mmPXUBYBrGH92PDzZKgtqllXGJ7yoF+9aZXj05nKbI4+I3N3H7qzv/O4kF80Nl
+         beJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691609010; x=1692213810;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=21HEsmbiedjTaQYN+YmBvmbLDGnvjM6qjUPmRAgPnt8=;
+        b=ZAIGtP814jmMzwdhTNeXHhoZaoQjBUriMyslrYQ9irS4hfuIbVbBzmawlKEPERWOL8
+         /PIsj18LdnX/aKrMeQoO17hQ2gmeEwjNxXnyiytWYXGQXBu4L1DDLqj9dN+hAGJP5Zs1
+         VU0SYTWK43RIkOQQdxlABG0kFQXvsUYTDC2z8RhCN6K7b3eYD46EKtM5senwhCK/fP8n
+         DQgGzJujHTQ6Cyo7a3PAev9hrnSdp9ePF1lFR/VjwcvDswy+3wWHjJPt+Y/mxBRribzT
+         Pf4OMRUpE8E9WDX6dr56d7Fk6AsMF8TQDXQOMTNoCsE8LGpDnyQBHREwCCtDqIhjU5so
+         uwGA==
+X-Gm-Message-State: AOJu0Yz5KLm8zuGbO0ip8LflV+cwCh1wbRxy1rg/8FazOXztHVqjrL3F
+        dcDoJn7B8UyolaLSRmOs1L0yhg==
+X-Google-Smtp-Source: AGHT+IHtW8va2eXBRSQopk22akFmA3p08PkSCvVi0Nm3nO/RU7pswQt6sFvTtg43WWcY1uuYnspmkg==
+X-Received: by 2002:a2e:88c2:0:b0:2b8:67ce:4ad7 with SMTP id a2-20020a2e88c2000000b002b867ce4ad7mr117243ljk.6.1691609010038;
+        Wed, 09 Aug 2023 12:23:30 -0700 (PDT)
+Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
+        by smtp.gmail.com with ESMTPSA id y16-20020a05651c021000b002b936cf7530sm2870405ljn.126.2023.08.09.12.23.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Aug 2023 12:23:29 -0700 (PDT)
+Message-ID: <085b3f9f-9e70-4f62-9dbd-4a1ddf1a0c19@linaro.org>
+Date:   Wed, 9 Aug 2023 21:23:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230809173905.1844132-3-a-nandan@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] interconnect: qcom: rpmh: sm8550: mask to send as
+ vote
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mike Tipton <mdtipton@codeaurora.org>
+References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v2-0-709474b151cc@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23:09-20230809, Apurva Nandan wrote:
-> From: Keerthy <j-keerthy@ti.com>
+On 23.06.2023 14:50, neil.armstrong@linaro.org wrote:
+> On the SM8550 SoC, some nodes requires a specific bit mark
+> instead of a bandwidth when voting.
 > 
-> Add 750M, 1G, 1.5G & 2G as the supported frequencies for A72.
-> This enables support for Dynamic Frequency Scaling(DFS)
+> Add an enable_mask variable to be used instead of bandwidth.
 > 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  arch/arm64/boot/dts/ti/k3-j7200.dtsi | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-> index ef73e6d7e858..7222c453096f 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-> @@ -48,6 +48,10 @@ cpu0: cpu@0 {
->  			d-cache-line-size = <64>;
->  			d-cache-sets = <256>;
->  			next-level-cache = <&L2_0>;
-> +			clocks = <&k3_clks 202 2>;
-> +			clock-names = "cpu";
-> +			operating-points-v2 = <&cpu0_opp_table>;
-> +			#cooling-cells = <2>; /* min followed by max */
->  		};
->  
->  		cpu1: cpu@1 {
-> @@ -62,6 +66,30 @@ cpu1: cpu@1 {
->  			d-cache-line-size = <64>;
->  			d-cache-sets = <256>;
->  			next-level-cache = <&L2_0>;
-> +			clocks = <&k3_clks 203 0>;
-> +			clock-names = "cpu";
-> +			operating-points-v2 = <&cpu0_opp_table>;
-> +			#cooling-cells = <2>; /* min followed by max */
-> +		};
-> +	};
-> +
-> +	cpu0_opp_table: opp-table {
-> +		compatible = "operating-points-v2";
-> +
-> +		opp4-2000000000 {
-> +			opp-hz = /bits/ 64 <2000000000>;
-> +		};
-> +
-> +		opp3-1500000000 {
-> +			opp-hz = /bits/ 64 <1500000000>;
-> +		};
-> +
-> +		opp2-1000000000 {
-> +			opp-hz = /bits/ 64 <1000000000>;
-> +		};
-> +
-> +		opp1-750000000 {
-> +			opp-hz = /bits/ 64 <750000000>;
->  		};
->  	};
->  
-> -- 
-> 2.34.1
-> 
+Georgi,
 
-Are you sure this is correct to enable all OPPs without efuse bit checks?
+please pick this up and I'll fix up the ACV situation mentioned
+by Bjorn as an incremental change.
 
-https://www.ti.com/lit/ds/symlink/dra821u-q1.pdf
-7.5 Operating Performance Points
-DRA821xC operates only upto 750MHz
-DRA821xE at 1GHz
-DRA821xL upto 1.5GHz and
-DRA821xT upto 2GHz
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Konrad
