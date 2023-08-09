@@ -2,235 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746B4774F55
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 01:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948D7774FB1
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 02:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjHHXcK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 19:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45932 "EHLO
+        id S230418AbjHIAIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 20:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjHHXcJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 19:32:09 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126961FC0
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 16:31:56 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-40a47e8e38dso65241cf.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 16:31:56 -0700 (PDT)
+        with ESMTP id S230048AbjHIAIK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 20:08:10 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC62173F
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 17:08:09 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so100251661fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 17:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1691537515; x=1692142315;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybrZnDbgYV2MwIPZtu+U0IzC9LJv7CzD1PxMpELINSU=;
-        b=aMwJXFbrvKiYplgT0ZoUattM4tCbFAQNM7l8wXmr5y/wPARKhQyMWR4mSHh6e/eFZJ
-         qY9HGaUw1Lix/yNrm/HZozusP33qwdsvaPQvUJviG6hJW/CAwF5GsVBHkLd8VwKeDn0e
-         a3zKyx4ajzDUSk4TQbTMev2hmQn8KPbs+AepcU6BXdMPImJG7naUoGFgkyrQYf6+8qSY
-         g2jPHEhWGXB0g1TMj39NMngTxNgj41jWymb48XnIgnTA8gLOvXbqW4cRKn/6N6BhjReG
-         OmGqHeXL6IoJJFfAJDXluOr8jGNcuIsQH8M4wVl6S2muVNRyQ7mBesn5MM7K6KtK/1in
-         JDHQ==
+        d=linaro.org; s=google; t=1691539687; x=1692144487;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=whUPxLA5sv9BT7SZ99FkH9H53omaSas9KjQfVA2RxFo=;
+        b=H1YGXKDkX56XBS9H1+KUnGOHGXQ5LEG4Jn1ndw13KjHYThgtkv3o7GdNdesOWaI4Ea
+         wJgB/MIGIEfFxzN5p1D3gLx3KLZj1RkJz4Svtg1oqgvJqWR58DEdILgBqirefuEyxPAH
+         s91RD/RhJkslbCRudlEE+CX1CQAP+JFtj3kW2Jppq2QWLkYfDwOz64T7akGXqy2k5XA9
+         mS6C9tXmlfG1kGMNQnR0lZWd4ql+F/mzQDtlj8H/68+I34a4gHd3aLxIaqNbVHdOoyBt
+         zwRTcD2VkrKTV4PuGrFE+f5XysfVNYAkdgBtbXJWbeVgqe3TPCvNTO3Kz8XLFNQjy36t
+         /EPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691537515; x=1692142315;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ybrZnDbgYV2MwIPZtu+U0IzC9LJv7CzD1PxMpELINSU=;
-        b=bFnnSOW4MNO3IznL66UA/31ZrQFXJrA/zUnaqj+d8JS9cLacwSnUSJU6tlue+lwpMt
-         S+bJQSQwzrHJ7Nh1Awzwi8Iestxqadh0xhKu3+4Z7b87KbC0ugECB2pE5xzk+LgPrBTp
-         YCVA37LHii8dHESIxe+SUXtmR5vnPvkFdpWM/B2ipytJG5u20wV+KVHIAP5AioRuiW74
-         qap4fkyunvTcMzol9iikWvcVAI8gmXpLKtJr+7IsaXOvivIJ6lk1Z0vxh+RMDdU7s0Ja
-         jQ9uaLD/gjpklB8Y8q+x/b+6OBGwN1MfSN7Jkvo6+S/kLyz3gREhLEPP+1kBpgLHg9cE
-         5/tA==
-X-Gm-Message-State: AOJu0Yw9q64gB4iN07PPZCfaAmEvpcmdBdQa+Ll0qGbw79HuR6oVBjrA
-        ZpcfOfmOVPqvv16s0AEUAUrRgY169XSpW2PVWd0d7Q==
-X-Google-Smtp-Source: AGHT+IE3HFEO5vKi/0lwOHdK9wAp8WPSQYfPR4qt7ldmyBDY+4f0MgynMuUSvoXIw3ezFbZhIvyVjS2MxmHNXC/JxPs=
-X-Received: by 2002:ac8:5c09:0:b0:3f8:5b2:aef0 with SMTP id
- i9-20020ac85c09000000b003f805b2aef0mr116002qti.24.1691537515078; Tue, 08 Aug
- 2023 16:31:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691539687; x=1692144487;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=whUPxLA5sv9BT7SZ99FkH9H53omaSas9KjQfVA2RxFo=;
+        b=hBSKa811dWEqiR+/Bp/TGg+CZDDyyWd6XSMvd0zDmSV1rLDaws205v+J/+NEq4xIyz
+         Y9GQ7Fxixg8WlUXuw9vbD3lT4z56w/bTmX+FeOyTRNfxD4adKzswSpLTlf23wmh4kIhF
+         7dujoKu0GkqXz73o4KGDCnF3j+wcY5h20II5vdAqrJ/GXt+Z8yuxcV93IVvEXCOV1BiG
+         jJfqCpL5oVevk9cGLsPDfGalmxH4O8r/W69GF8WpjAm0T8B7fBCJfQ9TGWtvZ0mC7mPE
+         PT2qmqlKaQ4VTFk1GIeLXFxx/KeBI9z8ptfm1zQGijU8wJPmkzFoIiDrsMl1j1NFJfrh
+         Tr6Q==
+X-Gm-Message-State: AOJu0YwGDB1Kt+VKAjxAUqiozK3vDiB/HwH45vobMKc+UY7olJPQniZw
+        jaWUNkqQidp6LDQwWMxDw8kWuw==
+X-Google-Smtp-Source: AGHT+IF6wOBbVR/5X3/2aZWTpIb8sAiSLWI6c3djMlk5ShI9auLR7FWOHleDKZdQmTFKl/Jf5ZPJoQ==
+X-Received: by 2002:a2e:8603:0:b0:2b8:4079:fd9d with SMTP id a3-20020a2e8603000000b002b84079fd9dmr716607lji.29.1691539687455;
+        Tue, 08 Aug 2023 17:08:07 -0700 (PDT)
+Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
+        by smtp.gmail.com with ESMTPSA id p3-20020a2ea403000000b002b9db7df0dasm2486737ljn.8.2023.08.08.17.08.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 17:08:06 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Wed, 09 Aug 2023 02:07:59 +0200
+Subject: [PATCH] cpufreq: blocklist more Qualcomm platforms in
+ cpufreq-dt-platdev
 MIME-Version: 1.0
-References: <20230731174613.4133167-1-davidai@google.com> <20230731174613.4133167-2-davidai@google.com>
- <ceddbbfb-a178-2b7e-ea17-0a37f33224ab@linaro.org>
-In-Reply-To: <ceddbbfb-a178-2b7e-ea17-0a37f33224ab@linaro.org>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 8 Aug 2023 16:31:19 -0700
-Message-ID: <CAGETcx-uKF_9Gw2UUXeSrY0C9sH-9dX_Waggp7tjCfBB_+dfKA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: cpufreq: add bindings for virtual cpufreq
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     David Dai <davidai@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230809-topic-cpufreq_qcom_block-v1-1-624acbcefa5c@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAN7Y0mQC/x2NUQrCMBAFr1L228C2FWm9ikhJthu7GJN0Y0Uov
+ bvBz3kwb3YorMIFrs0Oyh8pkmKF9tQALTY+2MhcGTrsehxwNO+UhQzlzSuv00rpNbmQ6GlGHuz
+ 5gm2Ps4eqO1vYOLWRlnoQtxDqmJW9fP+92/04fnpZHgp/AAAA
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Quentin Perret <qperret@google.com>,
-        Masami Hiramatsu <mhiramat@google.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        Gupta Pankaj <pankaj.gupta@amd.com>,
-        Mel Gorman <mgorman@suse.de>, kernel-team@android.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691539686; l=1782;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=B4WkHxvkE88pk6XjVqrE6l91KsV3HxOgV2ktEzPupnY=;
+ b=EnEzaQo30ZHYJcTKwJJLZyGse4i6KIv2hTXlIc5V7ulesvFn4SqfEABFj5cdPVxrKzpHtzS3C
+ u+uhgKbGB0BDG7BGd8TMlOyUV2IZIlTxIMtx7ZwHBRGSKNE/zcaki5x
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Aug 5, 2023 at 12:38=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 31/07/2023 19:46, David Dai wrote:
-> > Adding bindings to represent a virtual cpufreq device.
-> >
-> > Virtual machines may expose MMIO regions for a virtual cpufreq device f=
-or
-> > guests to read frequency information or to request frequency selection.=
- The
-> > virtual cpufreq device has an individual controller for each CPU.
->
-> A nit, subject: drop second/last, redundant "bindings for". The
-> "dt-bindings" prefix is already stating that these are bindings.
->
-> >
-> > Co-developed-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: David Dai <davidai@google.com>
-> > ---
-> >  .../bindings/cpufreq/cpufreq-virtual.yaml     | 89 +++++++++++++++++++
-> >  1 file changed, 89 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/cpufreq/cpufreq-v=
-irtual.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.=
-yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.yaml
-> > new file mode 100644
-> > index 000000000000..f377cfc972ca
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-virtual.yaml
-> > @@ -0,0 +1,89 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/cpufreq/cpufreq-virtual.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yamll#
-> > +
-> > +title: Virtual CPUFreq
-> > +
-> > +maintainers:
-> > +  - David Dai <davidai@google.com>
-> > +  - Saravana Kannan <saravanak@google.com>
-> > +
-> > +description:
-> > +  Virtual CPUFreq is a virtualized driver in guest kernels that sends =
-frequency
-> > +  selection of its vCPUs as a hint to the host through MMIO regions. T=
-he host
-> > +  uses the hint to schedule vCPU threads and select physical CPU frequ=
-ency. It
-> > +  enables accurate Per-Entity Load Tracking for tasks running in the g=
-uest by
-> > +  querying host CPU frequency unless a virtualized FIE (ex. AMU) exist=
-s.
->
-> Why do you need DT for this? You control hypervisor, thus control the
-> interface to the guest. I think Rob made it pretty clear that
-> discoverable usecases (which is yours) are not for DT.
->
-> Incomplete style-review follows:
->
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: virtual,cpufreq
->
-> Missing blank line.
->
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    cpus {
-> > +      #address-cells =3D <1>;
-> > +      #size-cells =3D <0>;
-> > +
-> > +      cpu@0 {
-> > +        compatible =3D "arm,arm-v8";
-> > +        device_type =3D "cpu";
-> > +        reg =3D <0x0>;
-> > +        operating-points-v2 =3D <&opp_table0>;
-> > +      };
-> > +
-> > +      cpu@1 {
-> > +        compatible =3D "arm,arm-v8";
-> > +        device_type =3D "cpu";
-> > +        reg =3D <0x0>;
-> > +        operating-points-v2 =3D <&opp_table1>;
-> > +      };
-> > +    };
-> > +
-> > +    opp_table0: opp-table-0 {
-> > +      compatible =3D "operating-points-v2";
-> > +
-> > +      opp1098000000 {
-> > +        opp-hz =3D /bits/ 64 <1098000000>;
-> > +        opp-level =3D <1>;
-> > +      };
-> > +
-> > +      opp1197000000 {
-> > +        opp-hz =3D /bits/ 64 <1197000000>;
-> > +        opp-level =3D <2>;
-> > +      };
-> > +    };
-> > +
-> > +    opp_table1: opp-table-1 {
-> > +      compatible =3D "operating-points-v2";
-> > +
-> > +      opp1106000000 {
-> > +        opp-hz =3D /bits/ 64 <1106000000>;
-> > +        opp-level =3D <1>;
-> > +      };
-> > +
-> > +      opp1277000000 {
-> > +        opp-hz =3D /bits/ 64 <1277000000>;
-> > +        opp-level =3D <2>;
-> > +      };
-> > +    };
-> > +
-> > +    soc {
-> > +      #address-cells =3D <1>;
-> > +      #size-cells =3D <1>;
-> > +
-> > +      cpufreq {
->
-> Missing unit address
->
-> > +        reg =3D <0x1040000 0x10>;
-> > +        compatible =3D "virtual,cpufreq";
->
-> compatible is always the first property.
->
-> Also, you did not test it...
+All Qualcomm platforms utilizing the qcom-cpufreq-hw driver have no
+business in using cpufreq-dt. Prevent that from happening.
 
-Why do you say this? This patch series was obviously tested very well
-with all the data we collected.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/cpufreq/cpufreq-dt-platdev.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
--Saravana
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index adb3579a1fee..fb2875ce1fdd 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -144,14 +144,18 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "qcom,apq8096", },
+ 	{ .compatible = "qcom,msm8996", },
+ 	{ .compatible = "qcom,msm8998", },
++	{ .compatible = "qcom,qcm2290", },
+ 	{ .compatible = "qcom,qcs404", },
++	{ .compatible = "qcom,qdu1000", },
+ 	{ .compatible = "qcom,sa8155p" },
+ 	{ .compatible = "qcom,sa8540p" },
++	{ .compatible = "qcom,sa8775p" },
+ 	{ .compatible = "qcom,sc7180", },
+ 	{ .compatible = "qcom,sc7280", },
+ 	{ .compatible = "qcom,sc8180x", },
+ 	{ .compatible = "qcom,sc8280xp", },
+ 	{ .compatible = "qcom,sdm845", },
++	{ .compatible = "qcom,sdx75", },
+ 	{ .compatible = "qcom,sm6115", },
+ 	{ .compatible = "qcom,sm6350", },
+ 	{ .compatible = "qcom,sm6375", },
+@@ -159,6 +163,8 @@ static const struct of_device_id blocklist[] __initconst = {
+ 	{ .compatible = "qcom,sm8150", },
+ 	{ .compatible = "qcom,sm8250", },
+ 	{ .compatible = "qcom,sm8350", },
++	{ .compatible = "qcom,sm8450", },
++	{ .compatible = "qcom,sm8550", },
+ 
+ 	{ .compatible = "st,stih407", },
+ 	{ .compatible = "st,stih410", },
+
+---
+base-commit: 71cd4fc492ec41e4acd85e98bbf7a13753fc1e03
+change-id: 20230809-topic-cpufreq_qcom_block-9e8a460130df
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
