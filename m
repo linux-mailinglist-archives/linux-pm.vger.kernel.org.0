@@ -2,97 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4C977645C
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 17:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16697764F0
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 18:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbjHIPsh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Aug 2023 11:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S229933AbjHIQYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Aug 2023 12:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbjHIPsf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 11:48:35 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66CC1FEF;
-        Wed,  9 Aug 2023 08:48:34 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe4cdb727cso49059855e9.0;
-        Wed, 09 Aug 2023 08:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691596113; x=1692200913;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FNAUmWM3JtAR5Xew43AJylljCyPA085c+UJjgn20Ff0=;
-        b=gJc1PuCJ9nZ3KJbXveQg/jHhaY4wMbzpez59erprqt6jsCW8e09eL94FmjSLwcjpg+
-         5Ev+MWraTPfz5JUXbm2bx/R+m4F9Uh8EZnRm5+mGMkb9ynxBb/7DiKPoa1u5SXeY+vyR
-         i4D0sB3KdRSDJ1774jN4bzh92GTpem+n3VEVBcmACOssC+I/WPXUFKbsjSHr0464nSJx
-         KyJXlvArXI4ziCAA1djMX+ZT1G63uxvu1uIvP6UN8dABiP+mjDktH9KvD6BrDidutZKC
-         kd2+E+Yk1lHg38QwW+30MpGhhT8unVJAIQMsR+jyH1CvYXlqateStkpDfnNqSa5xOuVS
-         MUvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691596113; x=1692200913;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FNAUmWM3JtAR5Xew43AJylljCyPA085c+UJjgn20Ff0=;
-        b=YDyxpO/Qd2ZLjEF60pFTvO/jCzQOvOnufdGGrjQtsFdrRJy5XkyUg7Yd3u2s3rXaAR
-         bZm966H0PuvmyMA7ikaC/+FCLTJ9z8Sb0oFsdQ5HXS/XFv6WBiDJyaS7m6p9bMWg2o+o
-         /SasMencU5DvYYsUh9RTBcBVwili3zrX5kNkQafOdl3vcLVCmfRET/s2/PizC0r4sh15
-         l1uz0/v+S+4ijS9P5y80GEm6JsO+P42vGN/QLd0IERjtRoBCd1QGa8dUHNu8GwjiMFu4
-         VfHadMBGCmOhRnRSdbLtXpc58/ujyivhR/J9cq830psI6hSIttSjSiADgI/7ZQ4DSgo/
-         97kw==
-X-Gm-Message-State: AOJu0Yy+rgBaF1ThOiUo8dtm4eG8SeVPzVCuKukZUcQy30NwJ16ei9U8
-        sCZTrTSmdbfELX62iYUWUYbTmVHyUVm2Vw==
-X-Google-Smtp-Source: AGHT+IGkxOkZaTOhnw8brA33PBkFL5ObnWyNyyI7poJwX7Ye2KMDU+ApM9qS2/XT8Dwzw6RAah+HsA==
-X-Received: by 2002:a05:600c:2197:b0:3fe:63ca:ccf6 with SMTP id e23-20020a05600c219700b003fe63caccf6mr2435578wme.16.1691596112921;
-        Wed, 09 Aug 2023 08:48:32 -0700 (PDT)
-Received: from localhost.localdomain ([92.85.190.61])
-        by smtp.gmail.com with ESMTPSA id y9-20020a1c4b09000000b003fe215e4492sm2312396wma.4.2023.08.09.08.48.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 08:48:32 -0700 (PDT)
-From:   Andrei Coardos <aboutphysycs@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     florian.fainelli@broadcom.com, rui.zhang@intel.com,
-        amitk@kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, mmayer@broadcom.com,
-        alex@shruggie.ro, Andrei Coardos <aboutphysycs@gmail.com>
-Subject: [PATCH] thermal: broadcom: brcstb_thermal: removed unneeded platform_set_drvdata()
-Date:   Wed,  9 Aug 2023 18:48:13 +0300
-Message-Id: <20230809154813.16033-1-aboutphysycs@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229901AbjHIQYt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 12:24:49 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA3C10F3;
+        Wed,  9 Aug 2023 09:24:48 -0700 (PDT)
+Date:   Wed, 9 Aug 2023 18:24:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1691598286;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JK89Mbjr0pt8D3aWna/X6ZHv5XeeBZsaLs0qOYl8Vhg=;
+        b=uk42bsDspVqagb9e7Yb4qq7Eq/hobN98qDM5u0mlepqEWExSMktDUIfYJwhU6qz3AJgYLS
+        UuFS6nrK7SPqxlKSnnkmgUpK+zgwQJ4HnyCxuII+1wUXKQmTnyLjvsa1gTBl6H70TXTsRS
+        bYeH6q/Z2n4w5sHvWPQgmB5I76fU90hurfd1X5O7lHs10lTHBSdw+kuWZ2g7o+yBgtLVB9
+        PuqxqMY6PymiWKfiVdpuwqVwyDaJBkTVWsr1axaRoPOZALlMkHj/F6wVdeWpmfhOkj8vc+
+        B5Ps5LUL2NionKq+bWyb6Yykx9hV/EdJmGXYl0RMjUea5db1Hv3xBlb8pF22XQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1691598286;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JK89Mbjr0pt8D3aWna/X6ZHv5XeeBZsaLs0qOYl8Vhg=;
+        b=gFM5RAFADaCjfttF+Xusb0j8Jyb+h6hZ8w5PEJyDVvFPmXHkq5KgfsqFqO570qovV3Wq0O
+        FrJmUXTtZR/W3uDg==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Doug Smythies <dsmythies@telus.net>
+cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers unconditionally
+ every time
+In-Reply-To: <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
+Message-ID: <4872c41b-c8fd-1f84-7940-d4944c667e6f@linutronix.de>
+References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com> <002201d9ca0c$27606f70$76214e50$@telus.net> <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
+ <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323329-532690441-1691597088=:19513"
+Content-ID: <3492f271-133b-e3d8-56ac-d575304eb54@linutronix.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This function call was found to be unnecessary as there is no equivalent
-platform_get_drvdata() call to access the private data of the driver. Also,
-the private data is defined in this driver, so there is no risk of it being
-accessed outside of this driver file.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
----
- drivers/thermal/broadcom/brcmstb_thermal.c | 1 -
- 1 file changed, 1 deletion(-)
+--8323329-532690441-1691597088=:19513
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <e216b60-716f-b295-78d2-5640e1d41316@linutronix.de>
 
-diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
-index 72d1dbe60b8f..2997c589ac7d 100644
---- a/drivers/thermal/broadcom/brcmstb_thermal.c
-+++ b/drivers/thermal/broadcom/brcmstb_thermal.c
-@@ -334,7 +334,6 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
- 		return PTR_ERR(priv->tmon_base);
- 
- 	priv->dev = &pdev->dev;
--	platform_set_drvdata(pdev, priv);
- 	of_ops = priv->temp_params->of_ops;
- 
- 	thermal = devm_thermal_of_zone_register(&pdev->dev, 0, priv,
--- 
-2.34.1
+Hi,
 
+On Tue, 8 Aug 2023, Doug Smythies wrote:
+> On Tue, Aug 8, 2023 at 9:43 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Tue, Aug 8, 2023 at 5:22 PM Doug Smythies <dsmythies@telus.net> wrote:
+
+[...]
+
+> > > Conclusions: Overall, I am not seeing a compelling reason to
+> > > proceed with this patch set.
+> >
+> > On the other hand, if there is a separate compelling reason to do
+> > that, it doesn't appear to lead to a major regression.
+> 
+> Agreed.
+> 
+
+Regarding the compelling reason:
+
+On a fully loaded machine with 256 CPUs tick_nohz_next_event() is executed
+~48000 times per second. With this patchset it is reduced to ~120 times per
+second. The factor for the difference is 400. This is already an
+improvement.
+
+tick_nohz_next_event() marks timer bases idle, whenever possible - even if
+the tick is not stopped afterwards. When a timer is enqueued remote into an
+idle timer base an IPI is sent. Calling tick_nohz_next_event() only when
+the system is not that busy, prevents those unnecessary IPIs.
+
+Beside of those facts, I'm working on the timer pull model [0]. With this,
+non pinned timers can also be expired by other CPUs and do not prevent CPUs
+from going idle. Those timers will be enqueued on the local CPU without any
+heuristics. This helps to improve behavior when a system is idle (regarding
+power). But the call of tick_nohz_next_event() will be more expensive which
+led to a regression during testing. This regression is gone with the new
+teo implementation - it seems that there is also an improvement under
+load. I do not have finalized numbers, as it is still WIP (I came across
+some other possible optimizations during analyzing the regression, which
+I'm evaluating at the moment).
+
+Thanks,
+
+        Anna-Maria
+
+
+[0] https://lore.kernel.org/lkml/20230524070629.6377-1-anna-maria@linutronix.de/
+
+--8323329-532690441-1691597088=:19513--
