@@ -2,218 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93070774FC1
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 02:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F45775052
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 03:27:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjHIAUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 20:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
+        id S229926AbjHIB1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 21:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjHIAUJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 20:20:09 -0400
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEB010C8
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 17:20:08 -0700 (PDT)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1bb9e6c2a90so54601935ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 17:20:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691540407; x=1692145207;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4zOSYuHnym2FwqD1we2DD5H7k4wgLaijhaz/3VHmzXc=;
-        b=afhafCSnzLxJn48fWtkAy6a44+U7AMAdcxVNyva1LOGhc8ProavyldYweekhDgwBWy
-         FjOshayvRF+1Oh5Ph19eF+DRUA0LwD+FSxmHXDmTLxsABqJ8WuokTqv+J1CZXZvse3bY
-         6iMcT3oazQ8abrVnMsEA6E8pN0YY0c6IuAGnH/StY660eo8FOuMLcYfVY4lyAvg3mZmh
-         BJIYd77WjnTpkScGXyB3PDTvoafTN3Wdj5WAZGM5/nK4OKqiDpZE9TVuVaWQltqcwaGL
-         GOJXDM4l6jrQ9ustr2xzWCBfyPYZ0aSObfg7CNiTfpkYUXsAewLdwG7MDxlvvfRZPdem
-         5lfw==
-X-Gm-Message-State: AOJu0YwNL9zN8El2NOOF4F7wpmsHoiccsvxCdvCwtq7lRyU/7d6ZaYI1
-        EWOi4sdUetExAXMt7TtC8HYUEg==
-X-Google-Smtp-Source: AGHT+IE0L2cGA3Z91KiPpHf69xBPly0QCy8a7bmvASy2Wr9dCqLmRNKXCZLq1MOiXFVsZKwoILfE7g==
-X-Received: by 2002:a17:902:ce90:b0:1b9:e23a:f761 with SMTP id f16-20020a170902ce9000b001b9e23af761mr1184280plg.63.1691540407463;
-        Tue, 08 Aug 2023 17:20:07 -0700 (PDT)
-Received: from localhost ([75.172.135.98])
-        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001b8a2edab6asm9600441pld.244.2023.08.08.17.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 17:20:06 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Dhruva Gole <d-gole@ti.com>
-Cc:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend
- resume support
-In-Reply-To: <20230808115403.dkz6ev5vc6bhcmzh@dhruva>
-References: <20230803064247.503036-1-d-gole@ti.com>
- <20230803064247.503036-5-d-gole@ti.com>
- <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
- <20230803155541.nwsfwobfkbpefoyw@dhruva>
- <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
- <20230803160815.yfpkdfssv75d4inf@dhruva> <7ho7jifrda.fsf@baylibre.com>
- <20230808115403.dkz6ev5vc6bhcmzh@dhruva>
-Date:   Tue, 08 Aug 2023 17:20:06 -0700
-Message-ID: <7httt9dq2x.fsf@baylibre.com>
+        with ESMTP id S229527AbjHIB1p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 21:27:45 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2072.outbound.protection.outlook.com [40.107.6.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD09119A8;
+        Tue,  8 Aug 2023 18:27:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MxoM/F1LWaJMLGPh/3qrqmt7U8phfTXDRP/eh/L7lGTDW1q8lFwiPZeiEVJP1c5noraVExIvfrLxtiYSJiiVBso4npAZdTDaPCh9FDj+5koByVv3PEipNNiN7ZoPdj4GG3PPtBaKn5m4To5QvzVlEij3yQBLxGOKSD+Mz0sMz/N8tOro0elFknfDF3jKwNQbcG95JrCYn0R0UuntG3ikd6DtctPPMxvqvxa9Yfm3SZ0pXxngHQroWm+p41GuXSrYptwcRx2xmmx7EW2hVUT5EnAa6453V3DO5O49J9PLxnLpK7QpAuu/+SKl7tuteeNTeO3fnbSE2/KB+u/mIfTC8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jA0C54Bi5GahVfCLmdguJPVdbQGUBFxHn9x41fZnGq4=;
+ b=T+LB/H1eSv5eFq47SrfI7+k+xiNd2A3jYsHFa6fMU+8W/TMOjbZ3ZE8OSajRcfFhLJw3WbmTrPQ9IWsK5pxIeUny9zt9fz56OMIB0MfFohxhNaGMIYuQHwSLzMqN1X1uh0UGKlzrM0LU/tTUjvTE8EcmQzgDNFNmLZ7Opin0F4Tpzhy9Xr6BogdLMziilDWTIZV/sLvjtfgVJDvBpMJ6nsOrUwdiY0ZVVi1H2AgWlj1CggWo1hyQ2/gIGADf4ya2SkgNZsdRUiBEv6NUpH/jgLJ9ebUVZveozioQX4c9RZZRYVC8/NFVt31lq8dENPSjC/qRUgwD/uWtJexyXwFd+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jA0C54Bi5GahVfCLmdguJPVdbQGUBFxHn9x41fZnGq4=;
+ b=spjkdkwpjXVqJOTyfrzSm6aW0AA/0rOz4e1IHKe21JUaEGSYiRfgtS3atnr+DqgX3nDDsSAo4VLHxzgXTQ7my6kcKFZxKHXMc9O5VNxhxm1sLj9uQ0+qkkMDgaAFmLIF1+2C7LuqvFRaHyPDkPajMIJQy1vFshKVyczto5E8r88=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB8296.eurprd04.prod.outlook.com (2603:10a6:20b:3f2::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.28; Wed, 9 Aug
+ 2023 01:27:42 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::5d6a:ec53:f2a8:5b97]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::5d6a:ec53:f2a8:5b97%6]) with mapi id 15.20.6652.025; Wed, 9 Aug 2023
+ 01:27:41 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+CC:     "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH V2 0/2] thermal: fix two coverity reported issues
+Thread-Topic: [PATCH V2 0/2] thermal: fix two coverity reported issues
+Thread-Index: AQHZvf4jbwqPDJU9yUGPQivCwIGMgK/hRT1Q
+Date:   Wed, 9 Aug 2023 01:27:41 +0000
+Message-ID: <DU0PR04MB9417E1F81E036117D733D61D8812A@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20230724071646.2744900-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230724071646.2744900-1-peng.fan@oss.nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AS8PR04MB8296:EE_
+x-ms-office365-filtering-correlation-id: 9af6106b-9243-471a-de64-08db9877d334
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nakA142/CnF+I3taIEVWerO3NQTaZvfo1NIvHOo6frY0dgZgGERBN6dn1jiTHPZGhJagYUhl9jBXjCmKiukauz4oUNn7NGVK0ASDdqI6v1VNfF++sA68AlyKwYdTlYGZAIzPMjWWxk5IzLHwuBYYcdqi+suSdaVPksP1abzCTyvsYWoLtJZTCAcI/Kpohn/YwZQ4QVdJoSE/Zxt+zrPm/j176aQwTXOPxREST/GUvEIbe1OKOJ88Mmxeexf4q3PWSVtGAD8OkswCPyetUiIgKVjMPxw7XxTyUq7HWFGSjcR6/B1LifmVFkO2ud0tCl4FvKbWptfrhyil6ERE2SkgYHJ8cTviN0gelwb72D3hCkqTgx+v1q/0JyYNDoqWhO/5VoOzIolWMo1A0sW1Ez42R3Opi4qCSQze2hbijoum0GJFyC8SPJ6tMQs5nUVUFNc9isgkYX2k4gsXx9Yc7hSLTk6yfoCS8z5vnAg5bdT1egqe02fcceaKsas/mHXVugPCTnC05tPHb1LrslID+6T24s19Zc9aN5+HiI41JpTcu3cjiKy4WaZbg8URjoa7wigYVpsY4f7Q1a4wQi7S2+tYMFkH7VVM+Ep652el9AWvVNVMn1Pa+c7ASKV3zMn/YRxx
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199021)(1800799006)(186006)(7696005)(9686003)(41300700001)(83380400001)(8936002)(8676002)(86362001)(38070700005)(52536014)(38100700002)(5660300002)(64756008)(4326008)(66946007)(316002)(66556008)(66476007)(76116006)(66446008)(122000001)(44832011)(71200400001)(26005)(6506007)(55016003)(2906002)(33656002)(4744005)(110136005)(54906003)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fEe8t7+ZLeBSGYkR2DQ2+f5OhJ/KATYT6pQFeePUEyVrki195zKIYWqL62BJ?=
+ =?us-ascii?Q?uuwjPuh+jj+El8vvhmquZUkKe5wkc/Mk8x1P46laB+9pnGFtLl38/5vlOyok?=
+ =?us-ascii?Q?gk8U5hMHidkkam3o711yOwD24snXcan3l1XRzVsuZW9x3I7kTz2vtd3NfU7R?=
+ =?us-ascii?Q?m1SjD2zAlToxQeMbGIaAvMEQMo7isjtaO5Y0rV7rRkkXlU20UJWpf3CmKehP?=
+ =?us-ascii?Q?vC0uy3tYPg2RrDI8dwKH3L9MePawxtTFk3QzIeGGcDWOKOaQsf6eh5JLX+Sp?=
+ =?us-ascii?Q?oWwvL5QjaDAvNroBsO2MtA6hmDxg4KJ80LMfaZ2BYGm2clltP8bItEZ7I15q?=
+ =?us-ascii?Q?ao80/0mPyqrKcjcyRq07hgCQRWn9ZJnT4WNmN9eYGgO6bLJY4oIa32ufeReC?=
+ =?us-ascii?Q?V+MtbfLHbu4doB474/1piWFwj23OWlUe1MQrmGNIsdx1wqZ892oPtinynL8B?=
+ =?us-ascii?Q?b9ztWuTeZWq5nILiK6L8tzdRx+jbw8WTNaUN8k8saJHavrzoGGGbhyfI83i/?=
+ =?us-ascii?Q?yNlpYrrEbWcp40/O4wsl6/ebGWQBqj55rcbr4hgNFEJNjckPnH1zFpBNtw1N?=
+ =?us-ascii?Q?Ck7SViF3Yl26v3F7JajqsIEAdXN51HscKtU8fi9hzFVd93bIQlOAoLd3vZ3y?=
+ =?us-ascii?Q?q05m6q7Op+W58fM7NDYxtJAoGGO8dnxfXnyjR2c8Bhm02TGfujx1lsGXbWtc?=
+ =?us-ascii?Q?NeekS7wBt3CBKooJO5O308QjHDQ+YMoojCPMwXThmqQAXf5tUzw9Zb1JH8bx?=
+ =?us-ascii?Q?if12PRbO6ewzm+AIfi0lH/8X7eMg4ZpubHF7jnM198aj8QLoPQuhgy14KDtC?=
+ =?us-ascii?Q?fkd3ELWKE+wvhkpDyEfoM+pWZgF+Xx/yEBM48uj9vDF7/TIDgjhDKOQCo4VP?=
+ =?us-ascii?Q?bUYmsJDc225fqLZnvoH/44RKj86Z/l/fXdj/aD1rTQ9tjftjY4NKY4frFotA?=
+ =?us-ascii?Q?hfeWkOjNBlO526LTtaPKa6ktm+EF4IhG5LNkck/rHhRZcsKlZzfNYNMNLn/z?=
+ =?us-ascii?Q?O4wIx8s9QpnLD6SKuRSVm6RCz1qJEHvujOi46WNF/6ftUoNYl7fJIqMjlpRk?=
+ =?us-ascii?Q?RDhVmpnRWonAo7vZeTroGvwk7SE5mnTdZ83KYAmjf5OUzWv5lf38mtXvWUC3?=
+ =?us-ascii?Q?ylzA/XNUDwtOpYF0c6nlIKOjwL0BgHnP0o+32qn0Vg235MPowJjKrCQpLqrx?=
+ =?us-ascii?Q?3h/NOgeFjNnaPVIqH0K26CSijRNTWvCQrKgcB/aj/KDVxR13wbfKUyrlgLVW?=
+ =?us-ascii?Q?KsIkMV9TsPSRfGyPVKN0xxu8253RFvMyhkKfExTxXHK8qvShFySqRyJQxiRp?=
+ =?us-ascii?Q?AMj25+Cp/+AfgZGLRp6TftL5qFHqArD2ibV2sLPSfgH41aePXSosE8M7SvEe?=
+ =?us-ascii?Q?Dypv0CLk6lOvwVOPBYP0rfmh61zCS8eiVATBBwuJzLPyM29xqzhAYeE3lBwa?=
+ =?us-ascii?Q?vyW1Cl/UiB4lO1LNEPHavPMw/IVLrm+z0ah/quTUmxmuHAWvaJGRMgB37HNj?=
+ =?us-ascii?Q?TFBe2JkkDRUwf30nx2E1r/mjaqRnAVZfKEwSk2ow6Zrgdeqvhod5RN6oUJSG?=
+ =?us-ascii?Q?dRiiszWTwsYJfQgt/NA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9af6106b-9243-471a-de64-08db9877d334
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Aug 2023 01:27:41.4817
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mjIQA1gQ72vD5FG/JMpRGIOGgCum1HAPlCnZxCVRJ32wUeDmBTKkOVtpPvrZQ7PwE1SY8WuLJZ+4PAVUi7/Qww==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8296
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Dhruva,
+Any comments?
 
-Dhruva Gole <d-gole@ti.com> writes:
-
-> Kevin,
->
-> Thanks for the suggestion. I have a rough proposal inline, please can
-> you take a look? I will test those changes and respin this series
-> accordingly
->
-> On Aug 07, 2023 at 14:57:05 -0700, Kevin Hilman wrote:
->> Dhruva Gole <d-gole@ti.com> writes:
->> 
->> > On Aug 03, 2023 at 11:00:11 -0500, Andrew Davis wrote:
->> >> On 8/3/23 10:55 AM, Dhruva Gole wrote:
->> >> > On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
->> >> > > On 8/3/23 1:42 AM, Dhruva Gole wrote:
->> >> > > > Introduce system suspend resume calls that will allow the ti_sci
->> >> > > > driver to support deep sleep low power mode when the user space issues a
->> >> > > > suspend to mem.
->> >> > > > 
->> >> > > > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
->> >> > > > suspend handler to allow the system to identify the low power mode being
->> >> > > > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
->> >> > > > about the mode is being entered and the address for allocated memory for
->> >> > > > storing the context during Deep Sleep.
->> >> > > > 
->> >> > > > We're using "pm_suspend_target_state" to map the kernel's target suspend
->> >> > > > state to SysFW low power mode. Make sure this is available only when
->> >> > > > CONFIG_SUSPEND is enabled.
->> >> > > > 
->> >> > > > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
->> >> > > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
->> >> > > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
->> >> > > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
->> >> > > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
->> >> > > > ---
->> >> > > >    drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
->> >> > > >    1 file changed, 63 insertions(+)
->> >> > > > 
->> >> > [..snip..]
->> >> > > > +static int ti_sci_suspend(struct device *dev)
->> >> > > > +{
->> >> > > > +	struct ti_sci_info *info = dev_get_drvdata(dev);
->> >> > > > +	int ret;
->> >> > > > +
->> >> > > > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
->> >> > > 
->> >> > > After this the will the IOs be in isolation? Or does the firmware wait
->> >> > > until power down begins later?
->> >> > 
->> >> >  From what I understand,
->> >> > IOs will be in isolation immediately
->> >> > 
->> >> 
->> >> That is what I understand too, so then any device that may need to do some
->> >> external communication for its suspend will not function, this must be the
->> >> last driver _suspend() the system calls, how do you enforce that?
->> >
->> > I will make use of .suspend_noirq callbacks in that case. Does that
->> > sound better, or is there anything else I may not be aware of?
->> 
->> Using _noirq just moves the problem.  What if other drivers are also
->> using _noirq callbacks and run after the SCI driver?  You still cannot
->
-> True, this thought occurred to me as well which is why I was thinking
-> that moving it to ATF might be a better choice.
->
->> guarantee ordering.
->> 
->> It seems to me that the IO isolation stuff is a system-wide operation,
->> and should probably be handled at the platform suspend_ops level
->> (e.g. suspend_ops->prepare_late()).   This would ensure that it runs
->
-> I must have missed this approach! Are you suggesting something like what
-> was done for am335?
->
-> static const struct platform_suspend_ops am33xx_pm_ops
->
-> have a similar code for tisci..?
->
-> static const struct platform_suspend_ops tisci_pm_ops = {
-> 	.prepare_late = tisci_set_io_isolation
-> 	};
-
-Yes, with the minor nit that I would make a tisci_prepare_late()
-function, which then calls _set_io_isolation(), since there may be some
-other things we want to do in the "late" prepare for other LPM modes.
-
-Also, for the additional LPM modes (more than DeepSleep), we're looking
-at using suspend-to-idle (s2idle) to manage those.  So in addition to
-platform_suspend_ops->prepare_late(), you should add this function to
-s2idle_ops->prepare_late() also.
-
-> And then while resuming we may want the pinctrl driver to scan for the
-> wk_evt bit[0] before the isolation is disabled, so we want the
-> tisci_resume/ remove isolation to be called later than that.
->
-> So I a wondering if the code below makes sense?
->
-> static const struct platform_suspend_ops tisci_pm_ops = {
-> 	.prepare_late = tisci_suspend // also includes set isolation
-> 	.end = tisci_resume 	// Disables isolation
-> 	};
->
-> However a minor drawback here maybe that the serial logs on the resume
-> path may not appear when using a serial console for example. However
-> they should be able to easily access using dmesg.
-
-I'm not sure I fully understand this usecase, but using ->end() seems
-drastic.  If IO isolation is disabled that long, won't that cause
-problems for driver's ->resume callbacks that want to touch hardware?
-
-To me, it sounds like you might want to use ->resume_early() or maybe
-->resume_noirq() in the pinctrl driver for this so that IO isolation can
-be disabled sooner?
-
->> *after* all the driver hooks (even driver _noirq hooks.) and right
->> before the full suspend (or s2idle.)
->> 
->> Now, all that being said, I noticed that in v7, you didn't move this to
->> _noirq, but instead suggested that this be handled by TF-A.  I suppose
->> that's an option also, but my suggestion above should work also.
->
-> Thanks for the pointer! I do believe it will make more sense to do it
-> from linux itself unless we have no way to do it in linux.
->
->> 
->> Kevin
->
->
-> [0] Table 5-517. Description Of The Pad Configuration Register Bits
-> https://www.ti.com/lit/pdf/spruid7
->
-> NOTE: The hardware works in such a way that as soon as the IO isolation
-> is disabled the wake_evt information is lost so the pinctrl-single
-> driver won't be able to know what pin woke it up if we disable io
-> isolation before it has the chance to look at the padconf registers
-
-Ah, OK.  So yeah, as I hinted at above, what about using
-->resume_noirq() in the pinctrl driver to get the wake_evt information,
-and then use the s2idle_ops->restore_early() to disable IO isolation,
-since this happens after all the driver's noirq hooks have run.
-
-Kevin
+> Subject: [PATCH V2 0/2] thermal: fix two coverity reported issues
+>=20
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+>  Fix two thermal issues reported by coverity.
+>=20
+> V2:
+>  Add cover letter
+>  Add Fixes Tag
+>=20
+> Peng Fan (2):
+>   thermal/core: fix potential memory leak
+>   thermal/of: accessing potential uninitialized value
+>=20
+>  drivers/thermal/thermal_core.c | 3 +++
+>  drivers/thermal/thermal_of.c   | 8 ++++----
+>  2 files changed, 7 insertions(+), 4 deletions(-)
+>=20
+> --
+> 2.37.1
+Thanks,
+Peng.
 
