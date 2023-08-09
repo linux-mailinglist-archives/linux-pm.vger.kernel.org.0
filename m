@@ -2,108 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9407761A5
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 15:50:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509367761DE
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 15:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbjHINui (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Aug 2023 09:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S232852AbjHIN61 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Aug 2023 09:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232228AbjHINug (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 09:50:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3669C1BF2;
-        Wed,  9 Aug 2023 06:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Yst4B8hD/79MvOiF+5jRhmcwmW6MZ3WcmPh0i3Qo7GI=; b=eEvJyL8PbwGPUTKsMVl0u6B/Y6
-        +4+5cPPONCvyflJvBQ+VaTti1/aTTC5G7U+ozCA9csJzELMe6OL4WlAqRGEVnkfego00LlkCIqqTA
-        UQuODJmsDl/TcSiyo8n9z5FWWAkIzRefYv4nnqN8C2996h4bPvuHBYdXgq5NR4PEoZ3zi7jQY0c3e
-        iLdY3UY3GroItDuiZ8RLxGENTD2EZnyRLmjsSczT7J2HuPPLdRwqBT8/Xh8iSIF1BjXBhi7p2eVO0
-        WNn1Pd91X6VW8usw7Pdxnt9vfmIOXKSLpcOVmeCNsl4fgqWQs4ItOOg0MJUl35BbQoNk0hiIVCYHo
-        JjecXlpg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qTjZG-006Vfb-Dx; Wed, 09 Aug 2023 13:49:42 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1438C30003A;
-        Wed,  9 Aug 2023 15:49:42 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F340D20208EAB; Wed,  9 Aug 2023 15:49:41 +0200 (CEST)
-Date:   Wed, 9 Aug 2023 15:49:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mihai Carabas <mihai.carabas@oracle.com>
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Juerg Haefliger <juerg.haefliger@canonical.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Ankur Arora <ankur.a.arora@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 5/7] arm64: Select ARCH_HAS_CPU_RELAX
-Message-ID: <20230809134941.GN212435@hirez.programming.kicks-ass.net>
-References: <1691581193-8416-1-git-send-email-mihai.carabas@oracle.com>
- <1691581193-8416-6-git-send-email-mihai.carabas@oracle.com>
+        with ESMTP id S230226AbjHIN61 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 09:58:27 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93AA98;
+        Wed,  9 Aug 2023 06:58:24 -0700 (PDT)
+Received: from [194.95.143.137] (helo=phil.dip.tu-dresden.de)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qTjgu-0007Qm-Nw; Wed, 09 Aug 2023 15:57:36 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Daniel Mack <daniel@zonque.org>, Jay Fang <f.fangjian@huawei.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>, soc@kernel.org,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Patrick Venture <venture@google.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Shiraz Has him <shiraz.linux.kernel@gmail.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Thierry Reding <treding@nvidia.com>,
+        linux-rpi-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-tegra@vger.kernel.org,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-sunxi@lists.linux.dev, openbmc@lists.ozlabs.org,
+        linux-aspeed@lists.ozlabs.org
+Subject: Re: (subset) [PATCH v2 00/23] ARM: DT include cleanups
+Date:   Wed,  9 Aug 2023 15:57:33 +0200
+Message-Id: <169158939237.3288791.15504684466280859190.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org>
+References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1691581193-8416-6-git-send-email-mihai.carabas@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 09, 2023 at 02:39:39PM +0300, Mihai Carabas wrote:
-> From: Joao Martins <joao.m.martins@oracle.com>
+On Thu, 03 Aug 2023 16:42:40 -0600, Rob Herring wrote:
+> Arnd, This is all the remaining ARM and SoC related patches of DT
+> include cleanups which have not be applied by sub-arch maintainers.
 > 
-> cpu_relax() is necessary to allow cpuidle poll-state to be used,
-> so select it from ARM64 kconfig.
+> A few of these are v2, but most are just resends of v1.
 > 
-> Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
-> Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
-> ---
->  arch/arm64/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 87ade6549790..7c47617b5722 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -105,6 +105,7 @@ config ARM64
->  	select ARCH_WANT_LD_ORPHAN_WARN
->  	select ARCH_WANTS_NO_INSTR
->  	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
-> +	select ARCH_HAS_CPU_RELAX
->  	select ARCH_HAS_UBSAN_SANITIZE_ALL
->  	select ARM_AMBA
->  	select ARM_ARCH_TIMER
 
-Uh what ?! cpu_relax() is assumed present on all archs, no?
+Applied, thanks!
+
+I didn't find a reply to the thread in terms of it going
+in alltogether, so went forward and picked the Rockchip things
+I missed before.
 
 
+[12/23] ARM: rockchip: Drop unused includes
+        commit: 8cbdf5d2880923070198c240534f4cca3e04dfb1
+[20/23] soc: rockchip: Explicitly include correct DT includes
+        commit: fc7696e2ae81404c6ca176e7ebbddd4b19c40953
+
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
