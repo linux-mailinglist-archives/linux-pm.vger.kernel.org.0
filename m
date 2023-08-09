@@ -2,96 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1200F776681
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 19:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF8B77668C
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 19:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjHIRhU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Aug 2023 13:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60986 "EHLO
+        id S232524AbjHIRjc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Aug 2023 13:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231971AbjHIRhT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 13:37:19 -0400
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B1CE71
-        for <linux-pm@vger.kernel.org>; Wed,  9 Aug 2023 10:37:18 -0700 (PDT)
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-686fc0d3c92so21487b3a.0
-        for <linux-pm@vger.kernel.org>; Wed, 09 Aug 2023 10:37:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691602638; x=1692207438;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9yArT/awXRkYrPki92Zws/80hTWdY4r8NmlN6iV95PI=;
-        b=XNXjfIsXLMPjgKRDaQ0xEgk5QpgFW6+fKyzEjDmW1FsDA8+99NxHlE0jfdTcyiA0ze
-         uBqW6FbpKLKa9DkvoK/0dkFuyhYDIgaY+0c46vOPvbDt3xH0sBSOM7+HpNXEDaNnMLHJ
-         KvrdjcQzOB0VFGvUyuTkauOlQk9wtkdfylQTnjelnjfgNefPy0bOevZkliR+8q6hqugE
-         Dzjb9qJuublADI6x5G7hDF+NDHu0/3JBuuFYx/JPuqPbcCUAMaMpvrUBm3hQHDGb3vVj
-         MK8iP1rCPICz0dvt3jXMv/Wq2jQpAuUN3hoh1nE06ZjfAFkOtJaNfofqic52oUJe5Yiz
-         aBiA==
-X-Gm-Message-State: AOJu0YxVHV4x/5NQgtLsoZTpJOim42tdJuEeGOyMKAZhGwuRBYo9CkB/
-        wujJE/TNq8HnP/orrbeGM3SNyg==
-X-Google-Smtp-Source: AGHT+IEOe/X404gAnI9Qj8z0UDy2WHWR3jxWz9myYIGG/dCeUzQac/1bjO6kMws5dZZ6Ia4S1Lp7Bw==
-X-Received: by 2002:a05:6a20:428a:b0:140:a25:1c1d with SMTP id o10-20020a056a20428a00b001400a251c1dmr3891567pzj.51.1691602638385;
-        Wed, 09 Aug 2023 10:37:18 -0700 (PDT)
-Received: from localhost ([75.172.135.98])
-        by smtp.gmail.com with ESMTPSA id j21-20020a62b615000000b00687375d9135sm10158999pff.4.2023.08.09.10.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Aug 2023 10:37:17 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Dhruva Gole <d-gole@ti.com>, Andrew Davis <afd@ti.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Dave Gerlach <d-gerlach@ti.com>,
-        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
-Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend
- resume support
-In-Reply-To: <20230809072330.GB11676@atomide.com>
-References: <20230803064247.503036-1-d-gole@ti.com>
- <20230803064247.503036-5-d-gole@ti.com>
- <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
- <20230803155541.nwsfwobfkbpefoyw@dhruva>
- <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
- <20230803160815.yfpkdfssv75d4inf@dhruva> <7ho7jifrda.fsf@baylibre.com>
- <20230808115403.dkz6ev5vc6bhcmzh@dhruva> <7httt9dq2x.fsf@baylibre.com>
- <20230809072330.GB11676@atomide.com>
-Date:   Wed, 09 Aug 2023 10:37:17 -0700
-Message-ID: <7ho7jgdsmq.fsf@baylibre.com>
+        with ESMTP id S229829AbjHIRjb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 13:39:31 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F48E71;
+        Wed,  9 Aug 2023 10:39:31 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 379HdCZw058014;
+        Wed, 9 Aug 2023 12:39:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691602752;
+        bh=DW02Hdws2cTgi1idHFvVaz8VmWVCgengNghKzecN+S8=;
+        h=From:To:Subject:Date;
+        b=RaA5ZPuttkZ2kC8EEl8F6MlIGEEMvA1BPGRR6RB/IC5y+kC5lu2IWgn8psRWTb+hE
+         rdjMi/AMKD9WO5/L2JqA+Iv0g5LITo5enI/xFAmGk/M8/XyWzxw1Fja0F3MbYrEJQK
+         bySdT/g6mqrA7QApovmKBn0d/EW1cFir5M15fIpQ=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 379HdCFM097117
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Aug 2023 12:39:12 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 9
+ Aug 2023 12:39:10 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 9 Aug 2023 12:39:10 -0500
+Received: from TI.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 379Hd6ga077353;
+        Wed, 9 Aug 2023 12:39:06 -0500
+From:   Apurva Nandan <a-nandan@ti.com>
+To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Udit Kumar <u-kumar1@ti.com>,
+        Keerthy J <j-keerthy@ti.com>
+Subject: [PATCH 0/3] Add support for thermal mitigation for K3 J7200 SoC
+Date:   Wed, 9 Aug 2023 23:09:02 +0530
+Message-ID: <20230809173905.1844132-1-a-nandan@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tony Lindgren <tony@atomide.com> writes:
+Add support for thermal mitigation using the CPUFREQ for K3 J7200 SoC.
+K3 J7200 SoC supports Dynamic Frequency Scaling(DFS) for A72 & this can
+be used to drop the cpu frequency using cpufreq to produce a cooling
+effect in the SoC.
 
-> * Kevin Hilman <khilman@kernel.org> [230809 00:20]:
->> To me, it sounds like you might want to use ->resume_early() or maybe
->> ->resume_noirq() in the pinctrl driver for this so that IO isolation can
->> be disabled sooner?
->
-> For calls that need to happen just before the SoC is disabled or first
-> thing on resume path, cpu_cluster_pm_enter() and cpu_cluster_pm_exit()
-> notifiers work nice and allow distributing the code across the related
-> SoC specific code and device drivers. See for example the usage in
-> drivers/irqchip/irq-gic.c for CPU_CLUSTER_PM_ENTER.
+Keerthy (3):
+  thermal: k3_j72xx_bandgap: Add cooling device support
+  arm64: dts: ti: k3-j7200: Add the supported frequencies for A72
+  arm64: dts: ti: k3-j7200-thermal: Add cooling maps and cpu_alert trip
+    at 75C
 
-Indeed, this is an option too, but for things that already have "full"
-drivers (e.g. not an irqchip), they already have a full range of PM
-callbacks, and adding another set of callbacks/notifiers for cpu_pm_* is
-a bit clunky IMO.
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi |  14 +++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi         |  28 +++++
+ drivers/thermal/k3_j72xx_bandgap.c           | 121 +++++++++++++++++++
+ 3 files changed, 163 insertions(+)
 
-That being said, for things like this IO isolation stuff that is
-system-wide, and needs to happen very late in suspend (and/or very early
-in suspend), cpu_pm_ is worth considering if the same cannot be done
-with the normal PM callbacks.
-
-Kevin
+-- 
+2.34.1
 
