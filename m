@@ -2,80 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948D7774FB1
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 02:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93070774FC1
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Aug 2023 02:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjHIAIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Aug 2023 20:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
+        id S229621AbjHIAUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Aug 2023 20:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbjHIAIK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 20:08:10 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC62173F
-        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 17:08:09 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9e6cc93d8so100251661fa.0
-        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 17:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691539687; x=1692144487;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=whUPxLA5sv9BT7SZ99FkH9H53omaSas9KjQfVA2RxFo=;
-        b=H1YGXKDkX56XBS9H1+KUnGOHGXQ5LEG4Jn1ndw13KjHYThgtkv3o7GdNdesOWaI4Ea
-         wJgB/MIGIEfFxzN5p1D3gLx3KLZj1RkJz4Svtg1oqgvJqWR58DEdILgBqirefuEyxPAH
-         s91RD/RhJkslbCRudlEE+CX1CQAP+JFtj3kW2Jppq2QWLkYfDwOz64T7akGXqy2k5XA9
-         mS6C9tXmlfG1kGMNQnR0lZWd4ql+F/mzQDtlj8H/68+I34a4gHd3aLxIaqNbVHdOoyBt
-         zwRTcD2VkrKTV4PuGrFE+f5XysfVNYAkdgBtbXJWbeVgqe3TPCvNTO3Kz8XLFNQjy36t
-         /EPw==
+        with ESMTP id S229574AbjHIAUJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Aug 2023 20:20:09 -0400
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEB010C8
+        for <linux-pm@vger.kernel.org>; Tue,  8 Aug 2023 17:20:08 -0700 (PDT)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1bb9e6c2a90so54601935ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 08 Aug 2023 17:20:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691539687; x=1692144487;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=whUPxLA5sv9BT7SZ99FkH9H53omaSas9KjQfVA2RxFo=;
-        b=hBSKa811dWEqiR+/Bp/TGg+CZDDyyWd6XSMvd0zDmSV1rLDaws205v+J/+NEq4xIyz
-         Y9GQ7Fxixg8WlUXuw9vbD3lT4z56w/bTmX+FeOyTRNfxD4adKzswSpLTlf23wmh4kIhF
-         7dujoKu0GkqXz73o4KGDCnF3j+wcY5h20II5vdAqrJ/GXt+Z8yuxcV93IVvEXCOV1BiG
-         jJfqCpL5oVevk9cGLsPDfGalmxH4O8r/W69GF8WpjAm0T8B7fBCJfQ9TGWtvZ0mC7mPE
-         PT2qmqlKaQ4VTFk1GIeLXFxx/KeBI9z8ptfm1zQGijU8wJPmkzFoIiDrsMl1j1NFJfrh
-         Tr6Q==
-X-Gm-Message-State: AOJu0YwGDB1Kt+VKAjxAUqiozK3vDiB/HwH45vobMKc+UY7olJPQniZw
-        jaWUNkqQidp6LDQwWMxDw8kWuw==
-X-Google-Smtp-Source: AGHT+IF6wOBbVR/5X3/2aZWTpIb8sAiSLWI6c3djMlk5ShI9auLR7FWOHleDKZdQmTFKl/Jf5ZPJoQ==
-X-Received: by 2002:a2e:8603:0:b0:2b8:4079:fd9d with SMTP id a3-20020a2e8603000000b002b84079fd9dmr716607lji.29.1691539687455;
-        Tue, 08 Aug 2023 17:08:07 -0700 (PDT)
-Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id p3-20020a2ea403000000b002b9db7df0dasm2486737ljn.8.2023.08.08.17.08.06
+        d=1e100.net; s=20221208; t=1691540407; x=1692145207;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4zOSYuHnym2FwqD1we2DD5H7k4wgLaijhaz/3VHmzXc=;
+        b=afhafCSnzLxJn48fWtkAy6a44+U7AMAdcxVNyva1LOGhc8ProavyldYweekhDgwBWy
+         FjOshayvRF+1Oh5Ph19eF+DRUA0LwD+FSxmHXDmTLxsABqJ8WuokTqv+J1CZXZvse3bY
+         6iMcT3oazQ8abrVnMsEA6E8pN0YY0c6IuAGnH/StY660eo8FOuMLcYfVY4lyAvg3mZmh
+         BJIYd77WjnTpkScGXyB3PDTvoafTN3Wdj5WAZGM5/nK4OKqiDpZE9TVuVaWQltqcwaGL
+         GOJXDM4l6jrQ9ustr2xzWCBfyPYZ0aSObfg7CNiTfpkYUXsAewLdwG7MDxlvvfRZPdem
+         5lfw==
+X-Gm-Message-State: AOJu0YwNL9zN8El2NOOF4F7wpmsHoiccsvxCdvCwtq7lRyU/7d6ZaYI1
+        EWOi4sdUetExAXMt7TtC8HYUEg==
+X-Google-Smtp-Source: AGHT+IE0L2cGA3Z91KiPpHf69xBPly0QCy8a7bmvASy2Wr9dCqLmRNKXCZLq1MOiXFVsZKwoILfE7g==
+X-Received: by 2002:a17:902:ce90:b0:1b9:e23a:f761 with SMTP id f16-20020a170902ce9000b001b9e23af761mr1184280plg.63.1691540407463;
+        Tue, 08 Aug 2023 17:20:07 -0700 (PDT)
+Received: from localhost ([75.172.135.98])
+        by smtp.gmail.com with ESMTPSA id a9-20020a170902ee8900b001b8a2edab6asm9600441pld.244.2023.08.08.17.20.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 17:08:06 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 09 Aug 2023 02:07:59 +0200
-Subject: [PATCH] cpufreq: blocklist more Qualcomm platforms in
- cpufreq-dt-platdev
+        Tue, 08 Aug 2023 17:20:06 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     Dhruva Gole <d-gole@ti.com>
+Cc:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Vibhore Vardhan <vibhore@ti.com>, Georgi Vlaev <g-vlaev@ti.com>
+Subject: Re: [PATCH V6 4/4] firmware: ti_sci: Introduce system suspend
+ resume support
+In-Reply-To: <20230808115403.dkz6ev5vc6bhcmzh@dhruva>
+References: <20230803064247.503036-1-d-gole@ti.com>
+ <20230803064247.503036-5-d-gole@ti.com>
+ <3882f0ac-b74c-6eb2-197c-34ca233cd7a3@ti.com>
+ <20230803155541.nwsfwobfkbpefoyw@dhruva>
+ <8c330bd9-5f4e-8cd0-ed02-c3a696d7473a@ti.com>
+ <20230803160815.yfpkdfssv75d4inf@dhruva> <7ho7jifrda.fsf@baylibre.com>
+ <20230808115403.dkz6ev5vc6bhcmzh@dhruva>
+Date:   Tue, 08 Aug 2023 17:20:06 -0700
+Message-ID: <7httt9dq2x.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230809-topic-cpufreq_qcom_block-v1-1-624acbcefa5c@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAN7Y0mQC/x2NUQrCMBAFr1L228C2FWm9ikhJthu7GJN0Y0Uov
- bvBz3kwb3YorMIFrs0Oyh8pkmKF9tQALTY+2MhcGTrsehxwNO+UhQzlzSuv00rpNbmQ6GlGHuz
- 5gm2Ps4eqO1vYOLWRlnoQtxDqmJW9fP+92/04fnpZHgp/AAAA
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691539686; l=1782;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=B4WkHxvkE88pk6XjVqrE6l91KsV3HxOgV2ktEzPupnY=;
- b=EnEzaQo30ZHYJcTKwJJLZyGse4i6KIv2hTXlIc5V7ulesvFn4SqfEABFj5cdPVxrKzpHtzS3C
- u+uhgKbGB0BDG7BGd8TMlOyUV2IZIlTxIMtx7ZwHBRGSKNE/zcaki5x
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,52 +71,149 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-All Qualcomm platforms utilizing the qcom-cpufreq-hw driver have no
-business in using cpufreq-dt. Prevent that from happening.
+Hi Dhruva,
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/cpufreq/cpufreq-dt-platdev.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Dhruva Gole <d-gole@ti.com> writes:
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index adb3579a1fee..fb2875ce1fdd 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -144,14 +144,18 @@ static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "qcom,apq8096", },
- 	{ .compatible = "qcom,msm8996", },
- 	{ .compatible = "qcom,msm8998", },
-+	{ .compatible = "qcom,qcm2290", },
- 	{ .compatible = "qcom,qcs404", },
-+	{ .compatible = "qcom,qdu1000", },
- 	{ .compatible = "qcom,sa8155p" },
- 	{ .compatible = "qcom,sa8540p" },
-+	{ .compatible = "qcom,sa8775p" },
- 	{ .compatible = "qcom,sc7180", },
- 	{ .compatible = "qcom,sc7280", },
- 	{ .compatible = "qcom,sc8180x", },
- 	{ .compatible = "qcom,sc8280xp", },
- 	{ .compatible = "qcom,sdm845", },
-+	{ .compatible = "qcom,sdx75", },
- 	{ .compatible = "qcom,sm6115", },
- 	{ .compatible = "qcom,sm6350", },
- 	{ .compatible = "qcom,sm6375", },
-@@ -159,6 +163,8 @@ static const struct of_device_id blocklist[] __initconst = {
- 	{ .compatible = "qcom,sm8150", },
- 	{ .compatible = "qcom,sm8250", },
- 	{ .compatible = "qcom,sm8350", },
-+	{ .compatible = "qcom,sm8450", },
-+	{ .compatible = "qcom,sm8550", },
- 
- 	{ .compatible = "st,stih407", },
- 	{ .compatible = "st,stih410", },
+> Kevin,
+>
+> Thanks for the suggestion. I have a rough proposal inline, please can
+> you take a look? I will test those changes and respin this series
+> accordingly
+>
+> On Aug 07, 2023 at 14:57:05 -0700, Kevin Hilman wrote:
+>> Dhruva Gole <d-gole@ti.com> writes:
+>> 
+>> > On Aug 03, 2023 at 11:00:11 -0500, Andrew Davis wrote:
+>> >> On 8/3/23 10:55 AM, Dhruva Gole wrote:
+>> >> > On Aug 03, 2023 at 10:26:32 -0500, Andrew Davis wrote:
+>> >> > > On 8/3/23 1:42 AM, Dhruva Gole wrote:
+>> >> > > > Introduce system suspend resume calls that will allow the ti_sci
+>> >> > > > driver to support deep sleep low power mode when the user space issues a
+>> >> > > > suspend to mem.
+>> >> > > > 
+>> >> > > > Also, write a ti_sci_prepare_system_suspend call to be used in the driver
+>> >> > > > suspend handler to allow the system to identify the low power mode being
+>> >> > > > entered and if necessary, send TISCI_MSG_PREPARE_SLEEP with information
+>> >> > > > about the mode is being entered and the address for allocated memory for
+>> >> > > > storing the context during Deep Sleep.
+>> >> > > > 
+>> >> > > > We're using "pm_suspend_target_state" to map the kernel's target suspend
+>> >> > > > state to SysFW low power mode. Make sure this is available only when
+>> >> > > > CONFIG_SUSPEND is enabled.
+>> >> > > > 
+>> >> > > > Co-developed-by: Dave Gerlach <d-gerlach@ti.com>
+>> >> > > > Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+>> >> > > > Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
+>> >> > > > Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
+>> >> > > > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+>> >> > > > ---
+>> >> > > >    drivers/firmware/ti_sci.c | 63 +++++++++++++++++++++++++++++++++++++++
+>> >> > > >    1 file changed, 63 insertions(+)
+>> >> > > > 
+>> >> > [..snip..]
+>> >> > > > +static int ti_sci_suspend(struct device *dev)
+>> >> > > > +{
+>> >> > > > +	struct ti_sci_info *info = dev_get_drvdata(dev);
+>> >> > > > +	int ret;
+>> >> > > > +
+>> >> > > > +	ret = ti_sci_cmd_set_io_isolation(&info->handle, TISCI_MSG_VALUE_IO_ENABLE);
+>> >> > > 
+>> >> > > After this the will the IOs be in isolation? Or does the firmware wait
+>> >> > > until power down begins later?
+>> >> > 
+>> >> >  From what I understand,
+>> >> > IOs will be in isolation immediately
+>> >> > 
+>> >> 
+>> >> That is what I understand too, so then any device that may need to do some
+>> >> external communication for its suspend will not function, this must be the
+>> >> last driver _suspend() the system calls, how do you enforce that?
+>> >
+>> > I will make use of .suspend_noirq callbacks in that case. Does that
+>> > sound better, or is there anything else I may not be aware of?
+>> 
+>> Using _noirq just moves the problem.  What if other drivers are also
+>> using _noirq callbacks and run after the SCI driver?  You still cannot
+>
+> True, this thought occurred to me as well which is why I was thinking
+> that moving it to ATF might be a better choice.
+>
+>> guarantee ordering.
+>> 
+>> It seems to me that the IO isolation stuff is a system-wide operation,
+>> and should probably be handled at the platform suspend_ops level
+>> (e.g. suspend_ops->prepare_late()).   This would ensure that it runs
+>
+> I must have missed this approach! Are you suggesting something like what
+> was done for am335?
+>
+> static const struct platform_suspend_ops am33xx_pm_ops
+>
+> have a similar code for tisci..?
+>
+> static const struct platform_suspend_ops tisci_pm_ops = {
+> 	.prepare_late = tisci_set_io_isolation
+> 	};
 
----
-base-commit: 71cd4fc492ec41e4acd85e98bbf7a13753fc1e03
-change-id: 20230809-topic-cpufreq_qcom_block-9e8a460130df
+Yes, with the minor nit that I would make a tisci_prepare_late()
+function, which then calls _set_io_isolation(), since there may be some
+other things we want to do in the "late" prepare for other LPM modes.
 
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+Also, for the additional LPM modes (more than DeepSleep), we're looking
+at using suspend-to-idle (s2idle) to manage those.  So in addition to
+platform_suspend_ops->prepare_late(), you should add this function to
+s2idle_ops->prepare_late() also.
+
+> And then while resuming we may want the pinctrl driver to scan for the
+> wk_evt bit[0] before the isolation is disabled, so we want the
+> tisci_resume/ remove isolation to be called later than that.
+>
+> So I a wondering if the code below makes sense?
+>
+> static const struct platform_suspend_ops tisci_pm_ops = {
+> 	.prepare_late = tisci_suspend // also includes set isolation
+> 	.end = tisci_resume 	// Disables isolation
+> 	};
+>
+> However a minor drawback here maybe that the serial logs on the resume
+> path may not appear when using a serial console for example. However
+> they should be able to easily access using dmesg.
+
+I'm not sure I fully understand this usecase, but using ->end() seems
+drastic.  If IO isolation is disabled that long, won't that cause
+problems for driver's ->resume callbacks that want to touch hardware?
+
+To me, it sounds like you might want to use ->resume_early() or maybe
+->resume_noirq() in the pinctrl driver for this so that IO isolation can
+be disabled sooner?
+
+>> *after* all the driver hooks (even driver _noirq hooks.) and right
+>> before the full suspend (or s2idle.)
+>> 
+>> Now, all that being said, I noticed that in v7, you didn't move this to
+>> _noirq, but instead suggested that this be handled by TF-A.  I suppose
+>> that's an option also, but my suggestion above should work also.
+>
+> Thanks for the pointer! I do believe it will make more sense to do it
+> from linux itself unless we have no way to do it in linux.
+>
+>> 
+>> Kevin
+>
+>
+> [0] Table 5-517. Description Of The Pad Configuration Register Bits
+> https://www.ti.com/lit/pdf/spruid7
+>
+> NOTE: The hardware works in such a way that as soon as the IO isolation
+> is disabled the wake_evt information is lost so the pinctrl-single
+> driver won't be able to know what pin woke it up if we disable io
+> isolation before it has the chance to look at the padconf registers
+
+Ah, OK.  So yeah, as I hinted at above, what about using
+->resume_noirq() in the pinctrl driver to get the wake_evt information,
+and then use the s2idle_ops->restore_early() to disable IO isolation,
+since this happens after all the driver's noirq hooks have run.
+
+Kevin
 
