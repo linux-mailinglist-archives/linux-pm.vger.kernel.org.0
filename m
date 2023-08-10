@@ -2,115 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F160777F01
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 19:20:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B6F777FD3
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 20:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbjHJRUq convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 10 Aug 2023 13:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
+        id S235695AbjHJSBU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 14:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235056AbjHJRUp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 13:20:45 -0400
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7B9270D;
-        Thu, 10 Aug 2023 10:20:44 -0700 (PDT)
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-56d0deeca09so192225eaf.0;
-        Thu, 10 Aug 2023 10:20:44 -0700 (PDT)
+        with ESMTP id S235701AbjHJSBP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 14:01:15 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FBB2D63
+        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 11:00:57 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-4036bd4fff1so44031cf.0
+        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 11:00:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691690456; x=1692295256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r+XQb0ok4JfbeFoXtLOamlNV1oWwR+eOvtUWHulJjBU=;
+        b=xSBVP+LflA+s1JQlxgRH+fXY/1OKhHfF1l9ZxeHNOdal9xIRA3Pcfa4b4TaiMvhZht
+         bqlDVFMsOYhKgzuLIGRoh7OUR440wdBr9nGJkNEo+sF4NtqqcXPgXHPOYSNdRfLBp8HX
+         H9Yl3Wa9rPvuaYHBkhBA/RDG+335HyTZOdwHNcSLdujXNixtVDe3dwrvcwDE/cQ7Qzr9
+         3MR6HlhIvkluYObHnE7GBdjqNGAg9VrRbx/CNBNrzC/jCR0w/z9Zimce6kvfXh976Xjv
+         YnpfF3rNfzLd7roaArWu1Jw4+GYz+0rMsC34xKzx7QkuJJOJuoMXt0MPQ98hgrKS7+BL
+         zDmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691688043; x=1692292843;
+        d=1e100.net; s=20221208; t=1691690456; x=1692295256;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EN9CM2qX1siO8TjAIXptEtELwVlMdfBhvADZW0USjiQ=;
-        b=XJFtTVHImkVNd43//LCfurB2MOZCQwuXBx6/qlkcvBzQufxvSUEuVhuubFq7latYOm
-         uCFvzvN9KN9zMxbBpED4A5qJVcCitbG26hVwPRJll1VClUQFn05LSL32COnSTVknBQm+
-         1uqdPDjRECC26pnsksygSsaYAtUOMawIPCKYGWJx1wqkpsXOTJ5uPm09IRUfSsSWsoiQ
-         CNwnfJeAKtJ6gLb5rAM8eYyHL4r0XpLKpNaeOexhniByIk0NJDpgKd4VOSOh2p2HXSpk
-         s1lYnTADw9or5IBhwoPa0o8YIqdN8zb/7q0O6P0WpHL4M8ebJljW71n4UcwAoTFoGjDp
-         u2WQ==
-X-Gm-Message-State: AOJu0YwC0owmI4CYuPl5VN+Mejuthv8StdRKh/ZAxRn5BjyeuRoDGc+I
-        7Tl/ekWvedFE1Zv7j2RU3aVWVQsul7RCME/T9HU=
-X-Google-Smtp-Source: AGHT+IH90WY2EO+TOpQKXPs3Rn1gvvHhZ9UpilovXxKReuAulONNLA1zvQaGilvH6Edwh8lX2BdrA//IeimnAWYoHUA=
-X-Received: by 2002:a4a:d689:0:b0:56c:484a:923d with SMTP id
- i9-20020a4ad689000000b0056c484a923dmr2534551oot.1.1691688043155; Thu, 10 Aug
- 2023 10:20:43 -0700 (PDT)
+        bh=r+XQb0ok4JfbeFoXtLOamlNV1oWwR+eOvtUWHulJjBU=;
+        b=ly70FML7qgLDL/5CCPJeGouHyHV0vDbCt5pZA1bPSU7aKhH0qslHNfgd29pLHE4Chq
+         1phK513YC+A2XfmF0HOqgS+gJBw7G/xWOh0DZNls8m1ucYNL70bqOB8qEnRTFP8cbIDp
+         6txDNO0EUwtJAM++F+34FyGDjfvHkxC/pV5+RMcFcIIQuXg/LMjXxc8l9VG63bIUw5vO
+         5RdHRzRrzMxBtXL1jAtiwz13ogMBGysq0b6rwWpG1SUDJZbcXIt5XVHtFLwEQPbnmRnM
+         5tpuSEsM3fhydTRoVS6WCxxKyuTkZ++toCB3UlVCJHmQG0FCclO56l4Z2Bjxq4c23xns
+         NH7A==
+X-Gm-Message-State: AOJu0YwGc1HrkjOl/K8roZ/SMT48Eemts3BIhgJ/ukutglDqhGdcGlqe
+        41oELA7CuOcWbJuZAW9yCVlxoX3Xb0d3qGZ3iQtuXQ==
+X-Google-Smtp-Source: AGHT+IEMSpRNIrpW6m93Airbi3mNdWQVlDZtzRC47gplAPeYjm4Ll636x/jqdNjho4jQnAcKGmV470/ijKpQA+AB7II=
+X-Received: by 2002:a05:622a:14c9:b0:3de:1aaa:42f5 with SMTP id
+ u9-20020a05622a14c900b003de1aaa42f5mr22411qtx.15.1691690455981; Thu, 10 Aug
+ 2023 11:00:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <5708364.DvuYhMxLoT@kreacher> <CAJZ5v0hNZLvt+bJLvvibmk3dw_u5XnYNS020r7QLWLiiWLZSgQ@mail.gmail.com>
- <CAAYoRsVHFLpQ91DqUZygZETsYC31rhmgFru=19C-veXSH+dy5w@mail.gmail.com>
-In-Reply-To: <CAAYoRsVHFLpQ91DqUZygZETsYC31rhmgFru=19C-veXSH+dy5w@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Aug 2023 19:20:32 +0200
-Message-ID: <CAJZ5v0iYCwAaMgpD=_M+Ynwx50UpQDV5GU4Lj1tkTKKAEt5xoA@mail.gmail.com>
-Subject: Re: [RFT] [PATCH v1] cpuidle: menu: Skip tick_nohz_get_sleep_length()
- call in some cases
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+References: <ZKYvpgs6p3S7nglh@google.com> <CAPDyKFpWybtCWt9pVcFMKcV0zBrjCzhhmAzYN-JPw2ZS6mUpwQ@mail.gmail.com>
+ <20230707164149.GP6001@thinkpad> <ZKxHHvBKvJeWiioc@google.com>
+ <CAPDyKFq6R8ar9nj+3OUX4HDNs0q+a+XcLdvNCX5GG_n0pW7cng@mail.gmail.com>
+ <CAKHBV254i3fdQ7UX0Pc+CDaKO_OROA276vmgDPx4aPtZTiS2Bw@mail.gmail.com> <CAPDyKFq6gVbQ7cGggmqgPGwNd9=5jdm=zN6zfT5VPeSrqkYR4w@mail.gmail.com>
+In-Reply-To: <CAPDyKFq6gVbQ7cGggmqgPGwNd9=5jdm=zN6zfT5VPeSrqkYR4w@mail.gmail.com>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Fri, 11 Aug 2023 02:00:19 +0800
+Message-ID: <CAKHBV24Exdi38rLH3_LQcFOV1kR39gw3X7DwKOC3tdtp2EzXtA@mail.gmail.com>
+Subject: Re: Prevent PM suspend from powering off the domain for non-wakeup
+ in-use devices
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Ajay Agarwal <ajayagarwal@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+        manugautam@google.com, quangh@google.com,
+        Koudai Iwahori <koudai@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
+On Thu, Aug 10, 2023 at 11:57=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
+> I think you kind of already answered this by yourself. We can't rely
+> on all drivers to update the runtime PM status of their devices during
+> system wide suspend - simply because there are no requirements (legacy
+> wise) that they need to.
+[...]
+> Moreover, as runtime PM gets disabled/enabled for all devices by the
+> PM core in the suspend_late/resume_early phase (for good reasons) - we
+> have a window when runtime PM can't be used to power-on/off devices.
+> In other words, if a driver needs to power on its device (and the
+> corresponding PM domain) during this window, how will that be done?
 
-On Thu, Aug 10, 2023 at 6:28 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> On Wed, Aug 9, 2023 at 11:16 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Wed, Aug 9, 2023 at 4:53 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Because the cost of calling tick_nohz_get_sleep_length() may increase
-> > > in the future, reorder the code in menu_select() so it first uses the
-> > > statistics to determine the expected idle duration.  If that value is
-> > > higher than RESIDENCY_THRESHOLD_NS, tick_nohz_get_sleep_length() will
-> > > be called to obtain the time till the closest timer and refine the
-> > > idle duration prediction if necessary.
-> > >
-> > > This causes the governor to always take the full overhead of
-> > > get_typical_interval() with the assumption that the cost will be
-> > > amortized by skipping the tick_nohz_get_sleep_length() call in the
-> > > cases when the predicted idle duration is relatively very small.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> ... deleted...
-> >
-> > This patch is now present in the git branch at
-> >
-> > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
-> >  pm-cpuidle-gov
-> >
-> > along with the previous teo governor changes.
->
-> Hi Rafael,
->
-> Thanks for the branch and adding it to the previous 6.5-rc4 code,
-> as now I can re-use the menu baseline tests already done.
->
-> My test computer boots by default to use the teo idle governor.
-> When I change to the menu governor, my system becomes
-> unresponsive and I have to re-boot.
->
-> Is anyone else having this difficulty?
+Ok makes sense. If we're to rename dev->power.wakeup_path, could we
+then think of it as a way for device drivers to declare that their RPM
+state is in fact managed during system suspend/resume?
 
-There is a missing check it get_typical_interval(), my bad.
-
-I'll send a v2 of the menu governor patch shortly and I'll update the
-pm-cpuidle-gov branch accordingly.
-
-Thanks!
+Another question that I haven't been able to figure out by tracing
+through the code history, is why the genpd domain *also* needs to
+declare the GENPD_FLAG_ACTIVE_WAKEUP flag. Shouldn't device drivers
+setting device_set_wakeup_path() be sufficient for the core to decide
+not to force power it off during suspend? In what scenarios would a
+genpd provider want to leave that flag unset?
