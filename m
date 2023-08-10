@@ -2,71 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6B2776D33
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 02:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1D1776D5D
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 03:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjHJAoC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Aug 2023 20:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S230463AbjHJBIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Aug 2023 21:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjHJAoB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 20:44:01 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF1A19A1
-        for <linux-pm@vger.kernel.org>; Wed,  9 Aug 2023 17:44:00 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fe2d218eedso3305465e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 09 Aug 2023 17:44:00 -0700 (PDT)
+        with ESMTP id S230336AbjHJBIg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 21:08:36 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBD51982
+        for <linux-pm@vger.kernel.org>; Wed,  9 Aug 2023 18:08:34 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe12baec61so2951205e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 09 Aug 2023 18:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1691628239; x=1692233039;
+        d=telus.net; s=google; t=1691629713; x=1692234513;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CDWx3DcxoKpJRctWjtj4pBlDkFLDSOylce44ZfHBSN8=;
-        b=CIUlemqWEkXov35qJg0ru08Cw/3GWl41Olp0k7jGVUTpWa82P7dY0F+456s0sEdJkD
-         wSO0+TQeQsOVmcD++1SsdKQQlSH9FWhLQIXUCIlOuQeK9kPeTKP0PSWy3hBbvlNdytS1
-         WHD7TXI8AjOUNO7VzSEHjao6xhh3oEpSEITNUjT5n0Wzb/aSNgf63+aMXgDaB8nRRBS0
-         3cLZYg8mf7+fCLcSlsf80XXwcFLMsB0bHKEU8vpckLLXeMIMxSB1Gj34G1eb/gZzuvFs
-         elsWGI3WEQH4C121c5NA2vTLkXWf8x3VSE7xwQVFl/Mp+fDbANMLAqleKxUvA1DNlN+1
-         g6Og==
+        bh=5dwdA3Zr+R2bGdEWxZwzwGAY2lYGpyk/qFXJGcC6N0A=;
+        b=fWasfAcv1m8PS1DG7hUIQt8RYpMmd/mXjPbH0GpdWsrcD/dge+rY8/yHbL21NJdWhJ
+         9bJhqhQt2igSccSPghjCbkO+OmQM91oyejRxa5Yw3cPJBzXPEuMS4TC97kMJB0kgox4X
+         x1GMTKtx6PG+Mvni0sSuW0GwK/MwjGMSek+X5WpGH697y/WNNTEHrVmgF643WjI8Iw3s
+         PT7eXZjncDrIRcttmg8ITsqBKJSlz+TCMS9l5bhnVKjAOhdlkeDO3YU3OBlkK4Iv6ZDL
+         rgDJDK+ycd1N8kKApF1ArGrctb4Tracf7J5+hGiSbVqWGIdNwLKaHxd/TVs5RBjWubWf
+         DVZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691628239; x=1692233039;
+        d=1e100.net; s=20221208; t=1691629713; x=1692234513;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CDWx3DcxoKpJRctWjtj4pBlDkFLDSOylce44ZfHBSN8=;
-        b=cDgO2z2zuCBmZdpGcFbFW/qasQj0jIYU4cnSYc4sfg8gXqSkKg8p5eu91fGiPGImqR
-         Z5DeARYw4uxaG7fcq77WYvvFAWBoj+YL0rW2vIbsJsus3sr1u2pYQDxjitLyasBAlk06
-         rK2q6wef23JmeWiLnEk2pqekfGMdxraX+2PGqMqda0jWTUDInfAu+sJpvs+cV8ZEH+N1
-         SfFF6sS9nHv7p7M60pBkymXGtBZPqEj1xTnMYyx5RK5Rjl2tdOls5Q4No5E5rCJrdz0K
-         voGZEe/GG2UTBZEgOmiChrjFsApfKDzEZkFZUJT+ImOGVrTQcZ4+FwTDL+2BUX16jgvP
-         2jDw==
-X-Gm-Message-State: AOJu0YyGGcoEJ0GaFjObgXyYU8LMbv57Ehh2oAQ8VSYx9q84k3Ks8B+s
-        +fRfMhUAYCRYnVHQGKFK3JfOyJuACMRNQA3R9nyuVg==
-X-Google-Smtp-Source: AGHT+IGJzTPh4hKoh8q8sQMHEqYWOdntx3C6LEjObQGr4JoMpJL1QMoosxgOtqm8h3ZBXyuvoKpo7G4X590kGIAcyBs=
-X-Received: by 2002:a7b:cc88:0:b0:3fc:9b:9e85 with SMTP id p8-20020a7bcc88000000b003fc009b9e85mr585060wma.18.1691628238843;
- Wed, 09 Aug 2023 17:43:58 -0700 (PDT)
+        bh=5dwdA3Zr+R2bGdEWxZwzwGAY2lYGpyk/qFXJGcC6N0A=;
+        b=N2RO1sj1MyuireOy4NV+h46cg4yjasX5KIQ+JN/M/azTs+YoSeWgmAkZVyv1x67q2B
+         EeATq/fPOx9L7WhUBxMqMhfJozGTsdLaBuzdDwXs6m/4mFanvNyQg1cYENXA49KG1Qui
+         Z+eA5Q+RGDZ+vrphRhjezpE4fpU4yrpmY/N4nXwPwznASBpD0+6mx/DX58vmchqlHA+Q
+         hbeXb7mLCHA+BvLk556PPZAUDBQIeQI5zqUpK0wtHpsPTq+qjZ3BOPsxPSG763SzQZt/
+         A0RRlJLEahvKf5k5NL0QtqfxQUPc847etA1Xow9vQcuxK+uVVvN6o0gLHK6JcKhZAYhl
+         SENg==
+X-Gm-Message-State: AOJu0YyCCo/6q5POneBHE/4guYpt0NFHgNtXIg8971sJlvRzw4ukwflb
+        uQI1/Ou95Nr9hmbipdcWnJHBVTKEQBCM9DhBXKW34w==
+X-Google-Smtp-Source: AGHT+IEj1nZhEq/mioKX7QscS6c6OHPusSrGINounBpgZhrzj5fuWXJ0XzaB3w1O4BUghN8VXxKh9+bL8HURRRReqz8=
+X-Received: by 2002:a1c:7904:0:b0:3fe:2c52:2b78 with SMTP id
+ l4-20020a1c7904000000b003fe2c522b78mr541203wme.36.1691629713216; Wed, 09 Aug
+ 2023 18:08:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com>
  <002201d9ca0c$27606f70$76214e50$@telus.net> <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
- <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com> <4872c41b-c8fd-1f84-7940-d4944c667e6f@linutronix.de>
-In-Reply-To: <4872c41b-c8fd-1f84-7940-d4944c667e6f@linutronix.de>
+ <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
+In-Reply-To: <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
 From:   Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 9 Aug 2023 17:43:51 -0700
-Message-ID: <CAAYoRsXZsbh0o5fTDjjvTN7bS2EQOY9XWwnM8_MGTiwkAS8pYQ@mail.gmail.com>
+Date:   Wed, 9 Aug 2023 18:08:25 -0700
+Message-ID: <CAAYoRsUSu-1-maYVTDh1oLWtaGa2cBTjKbEZvm08DSMhK+Nc8Q@mail.gmail.com>
 Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
  unconditionally every time
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         Frederic Weisbecker <frederic@kernel.org>,
         Linux PM <linux-pm@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
         Kajetan Puchalski <kajetan.puchalski@arm.com>,
         Doug Smythies <dsmythies@telus.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,65 +75,119 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 9, 2023 at 9:24=E2=80=AFAM Anna-Maria Behnsen
-<anna-maria@linutronix.de> wrote:
-> On Tue, 8 Aug 2023, Doug Smythies wrote:
-> > On Tue, Aug 8, 2023 at 9:43=E2=80=AFAM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > > On Tue, Aug 8, 2023 at 5:22=E2=80=AFPM Doug Smythies <dsmythies@telus=
-.net> wrote:
->
-> [...]
->
-> > > > Conclusions: Overall, I am not seeing a compelling reason to
-> > > > proceed with this patch set.
+Hi Rafael,
+
+Please bear with me. As you know I have many tests
+that search over a wide range of operating conditions
+looking for areas to focus on in more detail.
+
+On Tue, Aug 8, 2023 at 3:40=E2=80=AFPM Doug Smythies <dsmythies@telus.net> =
+wrote:
+> On Tue, Aug 8, 2023 at 9:43=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
+> > On Tue, Aug 8, 2023 at 5:22=E2=80=AFPM Doug Smythies <dsmythies@telus.n=
+et> wrote:
+> > > On 2023.08.03 14:33 Rafael wrote:
+> > > > On Thu, Aug 3, 2023 at 11:12=E2=80=AFPM Rafael J. Wysocki <rjw@rjwy=
+socki.net> wrote:
+> > > >>
+> > > >> Hi Folks,
+> > > >>
+> > > >> This is the second iteration of:
+> > > >>
+> > > >> https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
+> > > >>
+> > > >> with an additional patch.
+> > > >>
+> > > >> There are some small modifications of patch [1/3] and the new
+> > > >> patch causes governor statistics to play a role in deciding whethe=
+r
+> > > >> or not to stop the scheduler tick.
+> > > >>
+> > > >> Testing would be much appreciated!
+> > > >
+> > > > For convenience, this series is now available in the following git =
+branch:
+> > > >
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+> > > > pm-cpuidle-teo
 > > >
-> > > On the other hand, if there is a separate compelling reason to do
-> > > that, it doesn't appear to lead to a major regression.
+> > > Hi Rafael,
+> > >
+> > > Thank you for the git branch link.
+> > >
+> > > I did some testing:
+>
+>
+> ... deleted ...
+>
+> > > Test 2: 6 core ping pong sweep:
+> > >
+> > > Pass a token between 6 CPUs on 6 different cores.
+> > > Do a variable amount of work at each stop.
+> > >
+> > > Purpose: To utilize the midrange idle states
+> > > and observe the transitions from between use of
+> > > idle states.
+> > >
+> > > Results: There is some instability in the results
+> > > in the early stages.
+> > > For unknown reasons, the rjw governor sometimes works
+> > > slower and at lower power. The condition is not 100%
+> > > repeatable.
+> > >
+> > > Overall teo completed the test fastest (54.9 minutes)
+> > > Followed by menu (56.2 minutes), then rjw (56.7 minutes),
+> > > then ladder (58.4 minutes). teo is faster throughout the
+> > > latter stages of the test, but at the cost of more power.
+> > > The differences seem to be in the transition from idle
+> > > state 1 to idle state 2 usage.
+>
+> the magnitude of the later stages differences are significant.
+>
+> ... deleted ...
+>
+> > Thanks a lot for doing this work, much appreciated!
 > >
-> > Agreed.
+> > > Conclusions: Overall, I am not seeing a compelling reason to
+> > > proceed with this patch set.
 > >
+> > On the other hand, if there is a separate compelling reason to do
+> > that, it doesn't appear to lead to a major regression.
 >
-> Regarding the compelling reason:
+> Agreed.
 >
-> On a fully loaded machine with 256 CPUs tick_nohz_next_event() is execute=
-d
-> ~48000 times per second. With this patchset it is reduced to ~120 times p=
-er
-> second. The factor for the difference is 400. This is already an
-> improvement.
+> Just for additional information, a 6 core dwell test was run.
+> The test conditions were cherry picked for dramatic effect:
 >
-> tick_nohz_next_event() marks timer bases idle, whenever possible - even i=
-f
-> the tick is not stopped afterwards. When a timer is enqueued remote into =
-an
-> idle timer base an IPI is sent. Calling tick_nohz_next_event() only when
-> the system is not that busy, prevents those unnecessary IPIs.
+> teo: average: 1162.13 uSec/loop ; Std dev: 0.38
+> ryw: average: 1266.45 uSec/loop ; Std dev: 6.53 ; +9%
 >
-> Beside of those facts, I'm working on the timer pull model [0]. With this=
-,
-> non pinned timers can also be expired by other CPUs and do not prevent CP=
-Us
-> from going idle. Those timers will be enqueued on the local CPU without a=
-ny
-> heuristics. This helps to improve behavior when a system is idle (regardi=
-ng
-> power). But the call of tick_nohz_next_event() will be more expensive whi=
-ch
-> led to a regression during testing. This regression is gone with the new
-> teo implementation - it seems that there is also an improvement under
-> load. I do not have finalized numbers, as it is still WIP (I came across
-> some other possible optimizations during analyzing the regression, which
-> I'm evaluating at the moment).
+> teo: average: 29.98 watts
+> rjw: average: 30.30 watts
+> (the same within thermal experimental error)
 >
-> Thanks,
->
->         Anna-Maria
->
->
-> [0] https://lore.kernel.org/lkml/20230524070629.6377-1-anna-maria@linutro=
-nix.de/
+> Details (power and idle stats over the 45 minute test period):
+> http://smythies.com/~doug/linux/idle/teo-util2/6-13568-147097/perf/
 
-Thank you for the context and the link.
+Okay, so while differences in the sometimes selection of a deeper
+idle state might be detrimental to latency sensitive workflow such as
+above, it is an overwhelming benefit to periodic workflows:
 
-... Doug
+Test 8: low load periodic workflow.
+
+There is an enormous range of work/sleep frequencies and loads
+to pick from. There was no cherry picking for this test.
+
+The only criteria is that the periodic fixed packet of work is
+completed before the start of the next period.
+
+Test 8 A: 1 load at about 3% and 347 Hz work/sleep frequency:
+teo average processor package power: 16.38 watts
+rjw average processor package power: 4.29 watts
+or 73.8% improvement!!!!!
+
+Test 8 B: 2 loads at about 3% and 347 Hz work/sleep frequency:
+teo average processor package power: 18.35 watts
+rjw average processor package power: 6.67 watts
+or 63.7% improvement!!!!!
