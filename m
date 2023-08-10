@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 359FD7776A8
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 13:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CC77776C4
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 13:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233816AbjHJLOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 07:14:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
+        id S234978AbjHJLUt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 07:20:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234658AbjHJLOd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 07:14:33 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A46B26BD;
-        Thu, 10 Aug 2023 04:14:17 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe4a89e7efso6387525e9.3;
-        Thu, 10 Aug 2023 04:14:16 -0700 (PDT)
+        with ESMTP id S235274AbjHJLUi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 07:20:38 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDB826A6;
+        Thu, 10 Aug 2023 04:20:30 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fe45481edfso7445875e9.1;
+        Thu, 10 Aug 2023 04:20:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691666036; x=1692270836;
+        d=gmail.com; s=20221208; t=1691666429; x=1692271229;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+qKWAh96nsPTii+Vr0MXkg/ZLKKDB5ORHCNmQRS3YPg=;
-        b=ZpbOUNrE6Af4c3ZCNq8UylkS3e0wwclXXJN2OIHiUi0F6HlgtsNFQBLuSSnvfIVzvn
-         wPsE8kZYvRpozi+wnN1H8UYDkHM9cbE9vTdbM5wPl08UmbWUzDQvn1FIXkxZmOrW/1I1
-         WfKm3oTZk9+KvSZs/jHwanXy2G93yB0oX9ZKWIzvk8HQ9nNkew2On8CyxSbGKjGDlxJK
-         arC2dcIcgkXqC6sHukcPqVDZZ3Hh4VTY5pPoWEp4fqRzFlkeGSPMIosrt/tK7RbZkAHT
-         Ud6pDwr72znVZ+cs9vuklJml4QX+0esfmZ1nvg2Q2TWSuzqdfUgKPju7mi5Ed1Ii5w0B
-         Qj1w==
+        bh=aDxxSL5D6Sg3pDQaCyyvxAHt6fubmFUtWux90siqRTQ=;
+        b=Xsdv6p1JFUc3C4H+0bKCf2jHxp5Y3znRMVnOofMY2s6Ptj4aj/X4TQdTeTfArxefJx
+         QRjNmoBZpwk7WM3WGAplTmi1YCDjVqNnI2tiCgDfVUp2pa49/hPdOQONhbt5LFMlt/Nm
+         BHmWJMyyG1CxrfC5/UkCJV2fXZaY6l3heDMvaLNmbPGOodPK3Ak+y2Mg+qM7VOPYlvgG
+         1a//ykXhw1leGEpavV4/SLjbc/B/f1MWuNR9Kmi+azi9Z8x/C+VmEuyU5gd324DIqmXj
+         8HjizvyE48QWTfMvLSJMb0uI1j5a1zspqXFc6PpJEEXitdSFSoi4g9UNfOd8xpDOOs5H
+         SOAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691666036; x=1692270836;
+        d=1e100.net; s=20221208; t=1691666429; x=1692271229;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+qKWAh96nsPTii+Vr0MXkg/ZLKKDB5ORHCNmQRS3YPg=;
-        b=hmigIGPV2jTVRwiQX8F1dttX/e6sijCpyUgg4uw/LoYi1WOX3l5cEqnBZsiCHAM6Lj
-         /lAi7CJoRqIVjzM86y2EfUSFOuos0Tiuv0PHfrBf1u9dqpPoRq3f3Z+ga0qKCHw66Syv
-         zIRS7fKY4PJ1QP7Xws5OT15YlDe2BficNRMA9AiG0QYTaLDdCUthGAkXy71eKQmwPkPJ
-         V+wYZE9OamQ8Qg8f4zBGpcMPGhzMXLPieKmwA76bsjJ+z02tc+bE08w7z8SC6E2Vrl3e
-         ZM4wTtv9sBViNxwY0lXNUc/tk8shtLs6Hhoy3K4TZ0NGsNcq5NBhTLolH4FzZartCKP0
-         RfSA==
-X-Gm-Message-State: AOJu0YwVohlMqxSV4GrkX6j3Um805DEzpeRePVqpP8tgnpyeNU/jrEtc
-        7h75P//lsolovxGOuCuHn+pKNf/s5QqZ/Q==
-X-Google-Smtp-Source: AGHT+IFpoDHmW6lXvcnh62To8vf5ZBO5ilXWs3O71KZBCcfTHkjwGfYZszjgWA1urkBKDmQW9rLcrA==
-X-Received: by 2002:a7b:c451:0:b0:3fe:266f:fe28 with SMTP id l17-20020a7bc451000000b003fe266ffe28mr1684325wmi.14.1691666036229;
-        Thu, 10 Aug 2023 04:13:56 -0700 (PDT)
+        bh=aDxxSL5D6Sg3pDQaCyyvxAHt6fubmFUtWux90siqRTQ=;
+        b=ICkWJ+WvRG03QHerrjJ2JrY1ri+tWehEDqCwXpSR0LCoc1RzogCjhz9XNLnZbLuRDz
+         GzSOCf3hP1OKYsMg2W3vgTfZbjJFCpJivFL7zuor0IphLx9uPFEdWiLyVivY5Npnpt6s
+         SC/xELdwAxer0NGqxbalBIOYKTVCGiixoCDVKrnNGGT2iOo60uyt8DAxgKntfp+hxHF2
+         O+hkFMRTzYO5nOgbyIPQLvwI7B/dIfWnNKjZIqaj2KKizfbC1gwtO7GUSZk9B2dLWTXA
+         PIYLjfCuKXZSyk/EFe0R7HYcztVYDByGqYPO11o3Z+QqKruxWbWqsLLUqHxmJr+R8gbq
+         PtIQ==
+X-Gm-Message-State: AOJu0YySlmmxEReXH/7PQca36EIiAqYpIX+NR+fpNxKgfSsXY6u52G2S
+        rc2ES5DVYVdA4W0UfcqxQnK86fJ3RSYjzg==
+X-Google-Smtp-Source: AGHT+IHeUcCVJQa8xo+iWniLi8iqv80aYSxC07IlpGqKy81o0FO9dXhQnWzPwcycW8D8G0xBRHH84w==
+X-Received: by 2002:a5d:4683:0:b0:314:1a09:6e71 with SMTP id u3-20020a5d4683000000b003141a096e71mr2024174wrq.53.1691666428950;
+        Thu, 10 Aug 2023 04:20:28 -0700 (PDT)
 Received: from localhost.localdomain ([92.85.190.61])
-        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003fbb346279dsm1790283wmr.38.2023.08.10.04.13.55
+        by smtp.gmail.com with ESMTPSA id b2-20020adfde02000000b0031416362e23sm1856872wrm.3.2023.08.10.04.20.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 04:13:55 -0700 (PDT)
+        Thu, 10 Aug 2023 04:20:28 -0700 (PDT)
 From:   Andrei Coardos <aboutphysycs@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     hayashi.kunihiko@socionext.com, bchihi@baylibre.com,
-        rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
+Cc:     rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
         rafael@kernel.org, alex@shruggie.ro,
         Andrei Coardos <aboutphysycs@gmail.com>
-Subject: [PATCH] thermal: broadcom: sr-thermal: removed call to platform_set_drvdata()
-Date:   Thu, 10 Aug 2023 14:13:30 +0300
-Message-Id: <20230810111330.3248-1-aboutphysycs@gmail.com>
+Subject: [PATCH] thermal: k3_j72xx_bandgap: removed unneeded call to platform_set_drvdata()
+Date:   Thu, 10 Aug 2023 14:20:15 +0300
+Message-Id: <20230810112015.3578-1-aboutphysycs@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -77,21 +76,22 @@ accessed outside of this driver file.
 
 Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
 ---
- drivers/thermal/broadcom/sr-thermal.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/thermal/k3_j72xx_bandgap.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/thermal/broadcom/sr-thermal.c b/drivers/thermal/broadcom/sr-thermal.c
-index 747915890022..9a29dfd4c7fe 100644
---- a/drivers/thermal/broadcom/sr-thermal.c
-+++ b/drivers/thermal/broadcom/sr-thermal.c
-@@ -91,7 +91,6 @@ static int sr_thermal_probe(struct platform_device *pdev)
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 5be1f09eeb2c..b91743dbd95a 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -502,8 +502,6 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 	writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, data[0].bgp->cfg2_base +
+ 	       K3_VTM_MISC_CTRL_OFFSET);
  
- 		dev_dbg(dev, "thermal sensor %d registered\n", i);
- 	}
--	platform_set_drvdata(pdev, sr_thermal);
- 
- 	return 0;
- }
+-	platform_set_drvdata(pdev, bgp);
+-
+ 	print_look_up_table(dev, ref_table);
+ 	/*
+ 	 * Now that the derived_table has the appropriate look up values
 -- 
 2.34.1
 
