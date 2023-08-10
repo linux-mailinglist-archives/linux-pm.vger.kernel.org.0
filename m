@@ -2,192 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1D1776D5D
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 03:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F40776F7B
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 07:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjHJBIg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Aug 2023 21:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S232927AbjHJFVS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 01:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230336AbjHJBIg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Aug 2023 21:08:36 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBD51982
-        for <linux-pm@vger.kernel.org>; Wed,  9 Aug 2023 18:08:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3fe12baec61so2951205e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 09 Aug 2023 18:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1691629713; x=1692234513;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5dwdA3Zr+R2bGdEWxZwzwGAY2lYGpyk/qFXJGcC6N0A=;
-        b=fWasfAcv1m8PS1DG7hUIQt8RYpMmd/mXjPbH0GpdWsrcD/dge+rY8/yHbL21NJdWhJ
-         9bJhqhQt2igSccSPghjCbkO+OmQM91oyejRxa5Yw3cPJBzXPEuMS4TC97kMJB0kgox4X
-         x1GMTKtx6PG+Mvni0sSuW0GwK/MwjGMSek+X5WpGH697y/WNNTEHrVmgF643WjI8Iw3s
-         PT7eXZjncDrIRcttmg8ITsqBKJSlz+TCMS9l5bhnVKjAOhdlkeDO3YU3OBlkK4Iv6ZDL
-         rgDJDK+ycd1N8kKApF1ArGrctb4Tracf7J5+hGiSbVqWGIdNwLKaHxd/TVs5RBjWubWf
-         DVZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691629713; x=1692234513;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5dwdA3Zr+R2bGdEWxZwzwGAY2lYGpyk/qFXJGcC6N0A=;
-        b=N2RO1sj1MyuireOy4NV+h46cg4yjasX5KIQ+JN/M/azTs+YoSeWgmAkZVyv1x67q2B
-         EeATq/fPOx9L7WhUBxMqMhfJozGTsdLaBuzdDwXs6m/4mFanvNyQg1cYENXA49KG1Qui
-         Z+eA5Q+RGDZ+vrphRhjezpE4fpU4yrpmY/N4nXwPwznASBpD0+6mx/DX58vmchqlHA+Q
-         hbeXb7mLCHA+BvLk556PPZAUDBQIeQI5zqUpK0wtHpsPTq+qjZ3BOPsxPSG763SzQZt/
-         A0RRlJLEahvKf5k5NL0QtqfxQUPc847etA1Xow9vQcuxK+uVVvN6o0gLHK6JcKhZAYhl
-         SENg==
-X-Gm-Message-State: AOJu0YyCCo/6q5POneBHE/4guYpt0NFHgNtXIg8971sJlvRzw4ukwflb
-        uQI1/Ou95Nr9hmbipdcWnJHBVTKEQBCM9DhBXKW34w==
-X-Google-Smtp-Source: AGHT+IEj1nZhEq/mioKX7QscS6c6OHPusSrGINounBpgZhrzj5fuWXJ0XzaB3w1O4BUghN8VXxKh9+bL8HURRRReqz8=
-X-Received: by 2002:a1c:7904:0:b0:3fe:2c52:2b78 with SMTP id
- l4-20020a1c7904000000b003fe2c522b78mr541203wme.36.1691629713216; Wed, 09 Aug
- 2023 18:08:33 -0700 (PDT)
+        with ESMTP id S232929AbjHJFVR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 01:21:17 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9DFE75;
+        Wed,  9 Aug 2023 22:21:16 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37A5LBQ9078041;
+        Thu, 10 Aug 2023 00:21:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691644871;
+        bh=4h4AVaKEL3ZLFsVo7R1xjKzLpJrtQjd+LPp9S5HFqsw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Sv6HBZCugCXqFZS2vFu9CMU57hK7q8pM5pxm58sy55MqhYoTlfLY3DdS+ajWeH02+
+         zA7tmwG7DEpBg++UY+y5kV4EkhT4/4vSay9ph8C1HepELT7gDbqaWOMht7NuV6YdPS
+         lTS+TuyuPK5AqWFOHsUdlCO383wU+5B1yGrvKgpc=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37A5LBLR121210
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Aug 2023 00:21:11 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 10
+ Aug 2023 00:21:10 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 10 Aug 2023 00:21:10 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37A5L92w012897;
+        Thu, 10 Aug 2023 00:21:10 -0500
+Date:   Thu, 10 Aug 2023 10:51:09 +0530
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+CC:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        <linux-pm@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH] PM / devfreq: Fix leak in devfreq_dev_release()
+Message-ID: <20230810052109.q2urzfcwu2vly7b5@dhruva>
+References: <20230809113108.2306272-1-boris.brezillon@collabora.com>
 MIME-Version: 1.0
-References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com>
- <002201d9ca0c$27606f70$76214e50$@telus.net> <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
- <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
-In-Reply-To: <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Wed, 9 Aug 2023 18:08:25 -0700
-Message-ID: <CAAYoRsUSu-1-maYVTDh1oLWtaGa2cBTjKbEZvm08DSMhK+Nc8Q@mail.gmail.com>
-Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
- unconditionally every time
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230809113108.2306272-1-boris.brezillon@collabora.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Aug 09, 2023 at 13:31:08 +0200, Boris Brezillon wrote:
+> srcu_init_notifier_head() allocates resources that need to be released
+> with a srcu_cleanup_notifier_head() call.
+> 
+> Reported by kmemleak.
 
-Please bear with me. As you know I have many tests
-that search over a wide range of operating conditions
-looking for areas to focus on in more detail.
+Probably want to give a proper mention like:
+	Reported-by: Name <email-id>
+?
 
-On Tue, Aug 8, 2023 at 3:40=E2=80=AFPM Doug Smythies <dsmythies@telus.net> =
-wrote:
-> On Tue, Aug 8, 2023 at 9:43=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
-> > On Tue, Aug 8, 2023 at 5:22=E2=80=AFPM Doug Smythies <dsmythies@telus.n=
-et> wrote:
-> > > On 2023.08.03 14:33 Rafael wrote:
-> > > > On Thu, Aug 3, 2023 at 11:12=E2=80=AFPM Rafael J. Wysocki <rjw@rjwy=
-socki.net> wrote:
-> > > >>
-> > > >> Hi Folks,
-> > > >>
-> > > >> This is the second iteration of:
-> > > >>
-> > > >> https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
-> > > >>
-> > > >> with an additional patch.
-> > > >>
-> > > >> There are some small modifications of patch [1/3] and the new
-> > > >> patch causes governor statistics to play a role in deciding whethe=
-r
-> > > >> or not to stop the scheduler tick.
-> > > >>
-> > > >> Testing would be much appreciated!
-> > > >
-> > > > For convenience, this series is now available in the following git =
-branch:
-> > > >
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
-> > > > pm-cpuidle-teo
-> > >
-> > > Hi Rafael,
-> > >
-> > > Thank you for the git branch link.
-> > >
-> > > I did some testing:
->
->
-> ... deleted ...
->
-> > > Test 2: 6 core ping pong sweep:
-> > >
-> > > Pass a token between 6 CPUs on 6 different cores.
-> > > Do a variable amount of work at each stop.
-> > >
-> > > Purpose: To utilize the midrange idle states
-> > > and observe the transitions from between use of
-> > > idle states.
-> > >
-> > > Results: There is some instability in the results
-> > > in the early stages.
-> > > For unknown reasons, the rjw governor sometimes works
-> > > slower and at lower power. The condition is not 100%
-> > > repeatable.
-> > >
-> > > Overall teo completed the test fastest (54.9 minutes)
-> > > Followed by menu (56.2 minutes), then rjw (56.7 minutes),
-> > > then ladder (58.4 minutes). teo is faster throughout the
-> > > latter stages of the test, but at the cost of more power.
-> > > The differences seem to be in the transition from idle
-> > > state 1 to idle state 2 usage.
->
-> the magnitude of the later stages differences are significant.
->
-> ... deleted ...
->
-> > Thanks a lot for doing this work, much appreciated!
-> >
-> > > Conclusions: Overall, I am not seeing a compelling reason to
-> > > proceed with this patch set.
-> >
-> > On the other hand, if there is a separate compelling reason to do
-> > that, it doesn't appear to lead to a major regression.
->
-> Agreed.
->
-> Just for additional information, a 6 core dwell test was run.
-> The test conditions were cherry picked for dramatic effect:
->
-> teo: average: 1162.13 uSec/loop ; Std dev: 0.38
-> ryw: average: 1266.45 uSec/loop ; Std dev: 6.53 ; +9%
->
-> teo: average: 29.98 watts
-> rjw: average: 30.30 watts
-> (the same within thermal experimental error)
->
-> Details (power and idle stats over the 45 minute test period):
-> http://smythies.com/~doug/linux/idle/teo-util2/6-13568-147097/perf/
+> 
+> Fixes: 0fe3a66410a3 ("PM / devfreq: Add new DEVFREQ_TRANSITION_NOTIFIER notifier")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+> ---
+>  drivers/devfreq/devfreq.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index e36cbb920ec8..9464f8d3cb5b 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -763,6 +763,7 @@ static void devfreq_dev_release(struct device *dev)
+>  		dev_pm_opp_put_opp_table(devfreq->opp_table);
+>  
+>  	mutex_destroy(&devfreq->lock);
+> +	srcu_cleanup_notifier_head(&devfreq->transition_notifier_list);
 
-Okay, so while differences in the sometimes selection of a deeper
-idle state might be detrimental to latency sensitive workflow such as
-above, it is an overwhelming benefit to periodic workflows:
+Good catch!
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-Test 8: low load periodic workflow.
+>  	kfree(devfreq);
+>  }
+>  
+> -- 
+> 2.41.0
+> 
 
-There is an enormous range of work/sleep frequencies and loads
-to pick from. There was no cherry picking for this test.
-
-The only criteria is that the periodic fixed packet of work is
-completed before the start of the next period.
-
-Test 8 A: 1 load at about 3% and 347 Hz work/sleep frequency:
-teo average processor package power: 16.38 watts
-rjw average processor package power: 4.29 watts
-or 73.8% improvement!!!!!
-
-Test 8 B: 2 loads at about 3% and 347 Hz work/sleep frequency:
-teo average processor package power: 18.35 watts
-rjw average processor package power: 6.67 watts
-or 63.7% improvement!!!!!
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
