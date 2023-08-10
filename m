@@ -2,79 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE1F7775D7
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 12:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 359FD7776A8
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 13:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235020AbjHJKau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 06:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S233816AbjHJLOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 07:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234932AbjHJKaj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 06:30:39 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EBE213F
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 03:30:37 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6bcbb0c40b1so699695a34.3
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 03:30:37 -0700 (PDT)
+        with ESMTP id S234658AbjHJLOd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 07:14:33 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A46B26BD;
+        Thu, 10 Aug 2023 04:14:17 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fe4a89e7efso6387525e9.3;
+        Thu, 10 Aug 2023 04:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1691663436; x=1692268236;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pfX2UO9uPMLGCJf+csL6XyU3QIcd01mEsKwWrpSRNS4=;
-        b=SGnJ72WXikaU5xqUInA5M3UvYftl90Px6nU01CEkJphO/WsF5Q2X5gSU4xT6tchamL
-         5oH6WUuttHrXL1mWEVgtVnnZcbyWQK/LF7pjeAbo0lqCgKuhyI2LHTGFBGyJVqpZP3jd
-         7Ro7a7lBZSw2Q3l6rd0D5Ir21mM9lV0jqpqfROsleVpiV+VBfaaCQvlwJK9l7emWyXps
-         8/kD9xmUX1yvQDY9601GcrdcL9zSua5LZ24RsKY6wRIfgaOFtkIWbGDREjHCZnusU9XY
-         GCp9qb1WTiBL0TwB8aR0iGDjuhuYll95r5DPSw7mP4UBQ4VqxgXIvmewPTXRP901tW6V
-         ezsA==
+        d=gmail.com; s=20221208; t=1691666036; x=1692270836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+qKWAh96nsPTii+Vr0MXkg/ZLKKDB5ORHCNmQRS3YPg=;
+        b=ZpbOUNrE6Af4c3ZCNq8UylkS3e0wwclXXJN2OIHiUi0F6HlgtsNFQBLuSSnvfIVzvn
+         wPsE8kZYvRpozi+wnN1H8UYDkHM9cbE9vTdbM5wPl08UmbWUzDQvn1FIXkxZmOrW/1I1
+         WfKm3oTZk9+KvSZs/jHwanXy2G93yB0oX9ZKWIzvk8HQ9nNkew2On8CyxSbGKjGDlxJK
+         arC2dcIcgkXqC6sHukcPqVDZZ3Hh4VTY5pPoWEp4fqRzFlkeGSPMIosrt/tK7RbZkAHT
+         Ud6pDwr72znVZ+cs9vuklJml4QX+0esfmZ1nvg2Q2TWSuzqdfUgKPju7mi5Ed1Ii5w0B
+         Qj1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691663436; x=1692268236;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pfX2UO9uPMLGCJf+csL6XyU3QIcd01mEsKwWrpSRNS4=;
-        b=COqSwBmgxVRW0IJJb8tfCX4WKU0fRXzGV93W4/3CI5SQz43SndsRJaaSE7s1l/cNqx
-         WOP1C4zDt9L92G5d7B8IEVDTYI1Wsm9G2mEXtig5DBz3Z9G2yVdouC+mMNcw29hdIDiC
-         c5AdszY5QOTB7E4DPN28poSVM9PMi/E7+HUW/wczo63RcLdlw/HxKoSU7GWIOz+slsBj
-         CclVWWzKdXbS+2Pm5Whnq9efeE89Jj/EvzU8ZRNvSIKgDY/OmtCPjWLm5UjcuCBZDwD1
-         2qoY2z/PPlqdOOxCja541Ac9udXB9pEcfswVYcDNiVqCwhcpsVMDBLE/ouzOzY2qWkok
-         s4pw==
-X-Gm-Message-State: AOJu0YxDU1hBv+YQk4fa7Wm4oMpschzMsSol2xGve3ipWISe72Xptlcx
-        fwxssRYac+Fy1vsU6C1I16VQGg==
-X-Google-Smtp-Source: AGHT+IF0r6GZclcogo6XbgwR5E95APycZzfccRq3VLl0HNlzfmMExbMjn9dfSBYwvsABTggoervb8w==
-X-Received: by 2002:a05:6358:7e8f:b0:134:c279:c82a with SMTP id o15-20020a0563587e8f00b00134c279c82amr2360798rwn.29.1691663435963;
-        Thu, 10 Aug 2023 03:30:35 -0700 (PDT)
-Received: from [10.0.2.15] ([82.78.167.79])
-        by smtp.gmail.com with ESMTPSA id y11-20020a63ad4b000000b00564250660f3sm1214409pgo.78.2023.08.10.03.30.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Aug 2023 03:30:35 -0700 (PDT)
-Message-ID: <0bdbd852-d21d-3149-a34f-8d25ec3544e8@tuxon.dev>
-Date:   Thu, 10 Aug 2023 13:30:16 +0300
+        d=1e100.net; s=20221208; t=1691666036; x=1692270836;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+qKWAh96nsPTii+Vr0MXkg/ZLKKDB5ORHCNmQRS3YPg=;
+        b=hmigIGPV2jTVRwiQX8F1dttX/e6sijCpyUgg4uw/LoYi1WOX3l5cEqnBZsiCHAM6Lj
+         /lAi7CJoRqIVjzM86y2EfUSFOuos0Tiuv0PHfrBf1u9dqpPoRq3f3Z+ga0qKCHw66Syv
+         zIRS7fKY4PJ1QP7Xws5OT15YlDe2BficNRMA9AiG0QYTaLDdCUthGAkXy71eKQmwPkPJ
+         V+wYZE9OamQ8Qg8f4zBGpcMPGhzMXLPieKmwA76bsjJ+z02tc+bE08w7z8SC6E2Vrl3e
+         ZM4wTtv9sBViNxwY0lXNUc/tk8shtLs6Hhoy3K4TZ0NGsNcq5NBhTLolH4FzZartCKP0
+         RfSA==
+X-Gm-Message-State: AOJu0YwVohlMqxSV4GrkX6j3Um805DEzpeRePVqpP8tgnpyeNU/jrEtc
+        7h75P//lsolovxGOuCuHn+pKNf/s5QqZ/Q==
+X-Google-Smtp-Source: AGHT+IFpoDHmW6lXvcnh62To8vf5ZBO5ilXWs3O71KZBCcfTHkjwGfYZszjgWA1urkBKDmQW9rLcrA==
+X-Received: by 2002:a7b:c451:0:b0:3fe:266f:fe28 with SMTP id l17-20020a7bc451000000b003fe266ffe28mr1684325wmi.14.1691666036229;
+        Thu, 10 Aug 2023 04:13:56 -0700 (PDT)
+Received: from localhost.localdomain ([92.85.190.61])
+        by smtp.gmail.com with ESMTPSA id c21-20020a05600c0ad500b003fbb346279dsm1790283wmr.38.2023.08.10.04.13.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 04:13:55 -0700 (PDT)
+From:   Andrei Coardos <aboutphysycs@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     hayashi.kunihiko@socionext.com, bchihi@baylibre.com,
+        rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, alex@shruggie.ro,
+        Andrei Coardos <aboutphysycs@gmail.com>
+Subject: [PATCH] thermal: broadcom: sr-thermal: removed call to platform_set_drvdata()
+Date:   Thu, 10 Aug 2023 14:13:30 +0300
+Message-Id: <20230810111330.3248-1-aboutphysycs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] MAINTAINERS: update Claudiu Beznea's email address
-To:     Simon Horman <horms@kernel.org>, Jiri Pirko <jiri@resnulli.us>
-Cc:     nicolas.ferre@microchip.com, conor.dooley@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lgirdwood@gmail.com, broonie@kernel.org,
-        perex@perex.cz, tiwai@suse.com, maz@kernel.org,
-        srinivas.kandagatla@linaro.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, sre@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-pwm@vger.kernel.org, alsa-devel@alsa-project.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230804050007.235799-1-claudiu.beznea@tuxon.dev>
- <ZM0Be8S8zII8wV4l@nanopsycho> <ZNS0708cDAt7H7ul@vergenet.net>
-Content-Language: en-US
-From:   claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <ZNS0708cDAt7H7ul@vergenet.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,30 +70,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This function call was found to be unnecessary as there is no equivalent
+platform_get_drvdata() call to access the private data of the driver. Also,
+the private data is defined in this driver, so there is no risk of it being
+accessed outside of this driver file.
 
+Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
+---
+ drivers/thermal/broadcom/sr-thermal.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On 10.08.2023 12:59, Simon Horman wrote:
-> On Fri, Aug 04, 2023 at 03:47:39PM +0200, Jiri Pirko wrote:
->> Fri, Aug 04, 2023 at 07:00:07AM CEST, claudiu.beznea@tuxon.dev wrote:
->>> Update MAINTAINERS entries with a valid email address as the Microchip
->>> one is no longer valid.
->>>
->>> Acked-by: Conor Dooley <conor.dooley@microchip.com>
->>> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
->>> Signed-off-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
->>> ---
->>>
->>> Changes in v2:
->>> - collected tags
->>> - extended the recipients list to include individual subsystem
->>>  maintainers and lists instead using only linux-kernel@vger.kernel.org
->>>  as suggested initially by get_maintainers.pl
->>
->> Consider adding entry in .mailmap as well please.
-> 
-> Hi Claudiu,
-> 
-> I'd like to echo Jiri's suggestion of adding .mailmap entry
-> to reflect this change.
+diff --git a/drivers/thermal/broadcom/sr-thermal.c b/drivers/thermal/broadcom/sr-thermal.c
+index 747915890022..9a29dfd4c7fe 100644
+--- a/drivers/thermal/broadcom/sr-thermal.c
++++ b/drivers/thermal/broadcom/sr-thermal.c
+@@ -91,7 +91,6 @@ static int sr_thermal_probe(struct platform_device *pdev)
+ 
+ 		dev_dbg(dev, "thermal sensor %d registered\n", i);
+ 	}
+-	platform_set_drvdata(pdev, sr_thermal);
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
 
-Hi, Simon, Jiri! It's on my list. I'll handled it asap.
