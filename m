@@ -2,181 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D83F3777159
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 09:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD887772B9
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 10:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233891AbjHJH1n convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 10 Aug 2023 03:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S234169AbjHJISr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 04:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbjHJH1i (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 03:27:38 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDDE211C;
-        Thu, 10 Aug 2023 00:27:38 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1a2dd615ddcso151710fac.0;
-        Thu, 10 Aug 2023 00:27:38 -0700 (PDT)
+        with ESMTP id S230478AbjHJISq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 04:18:46 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A060FE
+        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 01:18:45 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-58451f0fefeso8388647b3.3
+        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 01:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691655524; x=1692260324;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N1S3yE96sxZWitB4oiJ30vpkB3MWLEMpL6UDMSJWZXU=;
+        b=sKRwat/bRypjQs0GDj+E5aX6U0l+rdH2Ppp7jgbUiwQQsqjEaK0abvIScLRA0wD+XB
+         V+k33vveoWCeS1c6XgCqjjXWr//cl1HyFtdD8ttwfDC6tU5h0yWEtUhgAWWlSrBAqi9t
+         tXTEm4YMv0WM1uBDtQtenVY2VwUD4UxTzpZEwHsGCFe7Z/2lAj6TisZ1wfKRqkKtHkMv
+         q4kQ3tqQ3kjjJBlQFVfvfmjVGvTI9ZG6qPa9xIgWc3cwJulHzC1kKt6V4uv2UEb2aMy8
+         OAS7Hff9YtpzqDV058P27LVyQvRktH36oLc1Ux2VOWBYO61uLfbyzTdGhTV/qpGrAtF8
+         glUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691652457; x=1692257257;
+        d=1e100.net; s=20221208; t=1691655524; x=1692260324;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UF3+Rv4v3m/glAdW5N2ipCZFkStwyAxw0qUvah2jehU=;
-        b=a1b3HwZVb+9k9c20zOBYWnDkuM6TpWfdzteN+VVxKEz3pnO4OmMDDtNORWD0gQckDO
-         ZUQBh1YtAtLMQhnxDajSrtVSS9QPx5sknHcWigOdjM++KmRUQlHn0PrLRHyXwpBCzQMJ
-         BubKnDpsMmfF6TVv/uFwN29p//WRc3DL5fS6EWNt1kkF5p96Mh8hYWB68yQsQ3yU5xLe
-         VtQmLtNp1tjhfZGkpA0EV1b7L+1+SuR3r6JgSlP5gU7/zpUA8a5pMvy3lFfWE1mXPRxL
-         wd5/nxTjezcFGEADT2Qm8Bmphb4sj5oO3VUSV2cY12bmkoqiu/vWb0jjyhS62neYO3cs
-         c2HQ==
-X-Gm-Message-State: AOJu0Ywkl8L1mDLwATSO3xuIOpSintkI5Op4oWYKzr33/VZiV3w4t4YA
-        AmCb3DmicfXdcwewOJ+i8qVvq+4+D3OGgwUue5hJLW2t
-X-Google-Smtp-Source: AGHT+IEoEfRUBPO0nmLbMedEszSQXyCldieWh4a5dDIgPsgxyj79E1w2/6cFPzdpYMIObRou9MynWMVz1Os2GwvqXlU=
-X-Received: by 2002:a4a:d999:0:b0:563:3b56:5dc1 with SMTP id
- k25-20020a4ad999000000b005633b565dc1mr1348378oou.0.1691652457313; Thu, 10 Aug
- 2023 00:27:37 -0700 (PDT)
+        bh=N1S3yE96sxZWitB4oiJ30vpkB3MWLEMpL6UDMSJWZXU=;
+        b=caInKEuqCAXx9Svaewyo8dcL3/Au8cBROymUf/18vKhfLILZkAB3wfC4aF+yZKkQTF
+         EUcloaaEqkAyK2TONvZ2DCpXHqvcyKcJnI1g5YDx2YgMCkSogb5CFOUZmRRA/xm7GIxa
+         5CY+LdXGTpWwOwvEhmV5VoS3fRRnqGeqYhiZ1wrtc1r29rRP+NdAGV1TA0j47CN9FIH+
+         ES0KUF0/oXK+ohSRIAFDj5Qxxx4spFoKAWTofTjaTAe7ccVXjILfTeB6v3hkiZ88M3OQ
+         Y0Oxk3V0p3Z6WNjMiu/ahy8LzQ7N3CTxjhCtIbxdOQoxvrmt9j5YCX4VL+iTlavFsVMj
+         pP1w==
+X-Gm-Message-State: AOJu0Yzt1PR0b4WeC1bbtb5Un3mNOogqAbJ/r31QfXPQUpMQCs/ghz3l
+        FbojEHAQ/rGudZvlpAoIRDxZ2WvWYmEuO6Rrref3XA==
+X-Google-Smtp-Source: AGHT+IE+UnSxHykLJJfIQch1e5QQ0u1bPECfUCUFUDCntbpI1NXH0v2rJAWr/evYDXltegUQu7z4Swu4ag0Zr1/V/sw=
+X-Received: by 2002:a25:3611:0:b0:d4c:aa71:8294 with SMTP id
+ d17-20020a253611000000b00d4caa718294mr1849966yba.33.1691655524705; Thu, 10
+ Aug 2023 01:18:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <5712331.DvuYhMxLoT@kreacher> <CAJZ5v0jTG-oqV+misnP-=W5aq0S9X631kW9EhKNEn1VJQqwL2g@mail.gmail.com>
- <002201d9ca0c$27606f70$76214e50$@telus.net> <CAJZ5v0gYsH9EKgCO_LESuvd0dcOJLgPrWeN=6V-bY4gq-w1oyA@mail.gmail.com>
- <CAAYoRsWfMTX_ifNG5w9LS50OcPx87yJHg_PSvROoQJJ605eJEA@mail.gmail.com> <CAAYoRsUSu-1-maYVTDh1oLWtaGa2cBTjKbEZvm08DSMhK+Nc8Q@mail.gmail.com>
-In-Reply-To: <CAAYoRsUSu-1-maYVTDh1oLWtaGa2cBTjKbEZvm08DSMhK+Nc8Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 10 Aug 2023 09:27:25 +0200
-Message-ID: <CAJZ5v0jTqX3K10XtquzEfS8TxV4y0tLEnhbUF4Ti3Y7fQ6tW2w@mail.gmail.com>
-Subject: Re: [RFT][PATCH v2 0/3] cpuidle: teo: Do not check timers
- unconditionally every time
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
+References: <20230803-dt-header-cleanups-for-soc-v2-0-d8de2cc88bff@kernel.org> <20230803-dt-header-cleanups-for-soc-v2-8-d8de2cc88bff@kernel.org>
+In-Reply-To: <20230803-dt-header-cleanups-for-soc-v2-8-d8de2cc88bff@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 10 Aug 2023 10:18:33 +0200
+Message-ID: <CACRpkdaX=nABoxGMAK+3uEHOt1imucK6LXXRrNuAYFiH3-jt7g@mail.gmail.com>
+Subject: Re: [PATCH v2 08/23] ARM: nomadik: Drop unused includes
+To:     Rob Herring <robh@kernel.org>
+Cc:     soc@kernel.org, Patrice Chotard <patrice.chotard@foss.st.com>,
+        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Jean-Marie Verdun <verdun@hpe.com>,
+        Nick Hawkins <nick.hawkins@hpe.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Has him <shiraz.linux.kernel@gmail.com>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Jay Fang <f.fangjian@huawei.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Li Yang <leoyang.li@nxp.com>, Qiang Zhao <qiang.zhao@nxp.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-rockchip@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug,
+On Fri, Aug 4, 2023 at 12:44=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
 
-On Thu, Aug 10, 2023 at 3:08 AM Doug Smythies <dsmythies@telus.net> wrote:
+> Several includes are not needed, so drop them.
 >
-> Hi Rafael,
->
-> Please bear with me. As you know I have many tests
-> that search over a wide range of operating conditions
-> looking for areas to focus on in more detail.
->
-> On Tue, Aug 8, 2023 at 3:40 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > On Tue, Aug 8, 2023 at 9:43 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > On Tue, Aug 8, 2023 at 5:22 PM Doug Smythies <dsmythies@telus.net> wrote:
-> > > > On 2023.08.03 14:33 Rafael wrote:
-> > > > > On Thu, Aug 3, 2023 at 11:12 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > > > >>
-> > > > >> Hi Folks,
-> > > > >>
-> > > > >> This is the second iteration of:
-> > > > >>
-> > > > >> https://lore.kernel.org/linux-pm/4511619.LvFx2qVVIh@kreacher/
-> > > > >>
-> > > > >> with an additional patch.
-> > > > >>
-> > > > >> There are some small modifications of patch [1/3] and the new
-> > > > >> patch causes governor statistics to play a role in deciding whether
-> > > > >> or not to stop the scheduler tick.
-> > > > >>
-> > > > >> Testing would be much appreciated!
-> > > > >
-> > > > > For convenience, this series is now available in the following git branch:
-> > > > >
-> > > > > git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
-> > > > > pm-cpuidle-teo
-> > > >
-> > > > Hi Rafael,
-> > > >
-> > > > Thank you for the git branch link.
-> > > >
-> > > > I did some testing:
-> >
-> >
-> > ... deleted ...
-> >
-> > > > Test 2: 6 core ping pong sweep:
-> > > >
-> > > > Pass a token between 6 CPUs on 6 different cores.
-> > > > Do a variable amount of work at each stop.
-> > > >
-> > > > Purpose: To utilize the midrange idle states
-> > > > and observe the transitions from between use of
-> > > > idle states.
-> > > >
-> > > > Results: There is some instability in the results
-> > > > in the early stages.
-> > > > For unknown reasons, the rjw governor sometimes works
-> > > > slower and at lower power. The condition is not 100%
-> > > > repeatable.
-> > > >
-> > > > Overall teo completed the test fastest (54.9 minutes)
-> > > > Followed by menu (56.2 minutes), then rjw (56.7 minutes),
-> > > > then ladder (58.4 minutes). teo is faster throughout the
-> > > > latter stages of the test, but at the cost of more power.
-> > > > The differences seem to be in the transition from idle
-> > > > state 1 to idle state 2 usage.
-> >
-> > the magnitude of the later stages differences are significant.
-> >
-> > ... deleted ...
-> >
-> > > Thanks a lot for doing this work, much appreciated!
-> > >
-> > > > Conclusions: Overall, I am not seeing a compelling reason to
-> > > > proceed with this patch set.
-> > >
-> > > On the other hand, if there is a separate compelling reason to do
-> > > that, it doesn't appear to lead to a major regression.
-> >
-> > Agreed.
-> >
-> > Just for additional information, a 6 core dwell test was run.
-> > The test conditions were cherry picked for dramatic effect:
-> >
-> > teo: average: 1162.13 uSec/loop ; Std dev: 0.38
-> > ryw: average: 1266.45 uSec/loop ; Std dev: 6.53 ; +9%
-> >
-> > teo: average: 29.98 watts
-> > rjw: average: 30.30 watts
-> > (the same within thermal experimental error)
-> >
-> > Details (power and idle stats over the 45 minute test period):
-> > http://smythies.com/~doug/linux/idle/teo-util2/6-13568-147097/perf/
->
-> Okay, so while differences in the sometimes selection of a deeper
-> idle state might be detrimental to latency sensitive workflow such as
-> above, it is an overwhelming benefit to periodic workflows:
->
-> Test 8: low load periodic workflow.
->
-> There is an enormous range of work/sleep frequencies and loads
-> to pick from. There was no cherry picking for this test.
->
-> The only criteria is that the periodic fixed packet of work is
-> completed before the start of the next period.
->
-> Test 8 A: 1 load at about 3% and 347 Hz work/sleep frequency:
-> teo average processor package power: 16.38 watts
-> rjw average processor package power: 4.29 watts
-> or 73.8% improvement!!!!!
->
-> Test 8 B: 2 loads at about 3% and 347 Hz work/sleep frequency:
-> teo average processor package power: 18.35 watts
-> rjw average processor package power: 6.67 watts
-> or 63.7% improvement!!!!!
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-This is very interesting, thank you!
+Thanks for cleaning out this.
+
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
+
+Will you funnel this to ARM SoC with the rest?
+
+Yours,
+Linus Walleij
