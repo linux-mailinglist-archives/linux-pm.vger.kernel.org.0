@@ -2,286 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5531377813B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4FC77812B
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236304AbjHJTRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 15:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53822 "EHLO
+        id S233488AbjHJTQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 15:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236300AbjHJTRr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:17:47 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8842717;
-        Thu, 10 Aug 2023 12:17:46 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 1a9d5b36f8f22aa9; Thu, 10 Aug 2023 21:17:45 +0200
-Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
-   discourages use of this host) smtp.mailfrom=rjwysocki.net 
-   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
-   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
-Received: from kreacher.localnet (unknown [195.136.19.94])
+        with ESMTP id S233190AbjHJTQr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:16:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A452702;
+        Thu, 10 Aug 2023 12:16:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id C4FAB662742;
-        Thu, 10 Aug 2023 21:17:44 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 02FB165EF0;
+        Thu, 10 Aug 2023 19:16:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E284C433C8;
+        Thu, 10 Aug 2023 19:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691695006;
+        bh=ABbCZnqaHOMEf90aqEG/uJbFjwHMDbi8Eiuwkh1cz7w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cSBhGzffw5L18ttbTOWjs5Obei0i0OCfy+Try87B2jrFtGrHR8rPlJSOrhj+0fJfR
+         5hVTwHukXwBPl9wIVDDvlbcJjqsiv26D0/6npFwTzi7bO904VaNzc6oKdWXTvRosVB
+         7azKIo7cge//Rd6wSWjLdHPoW3+3HLLV3RDHXEvNx3Zdc0brPavwuDG2CznN/f76d1
+         X1B06c/xV6n5iTohjtepYLyfRV3rsPBTQbeVn/CT2JPUgD26DAZ4qnFYoAeZgvCz6M
+         MYtMia5SfjzyPiA0YppYjxjja39vEMW++2eetEPL26n3WLmQO02UyTfaTN5GI25G07
+         JLxOh76uGgQ/A==
+Date:   Thu, 10 Aug 2023 20:16:38 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 6/7] thermal: intel: intel_soc_dts_iosf: Rework critical trip setup
-Date:   Thu, 10 Aug 2023 21:16:14 +0200
-Message-ID: <8269586.T7Z3S40VBb@kreacher>
-In-Reply-To: <5713357.DvuYhMxLoT@kreacher>
-References: <5713357.DvuYhMxLoT@kreacher>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] imx6q related DT binding fixes
+Message-ID: <20230810-endearing-regime-55ef11e2eb10@spud>
+References: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrleeigddufeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdp
- rhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="URlnTqj3lemnJ3lq"
+Content-Disposition: inline
+In-Reply-To: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Critical trip points appear in the DTS thermal zones only after those
-thermal zones have been registered via intel_soc_dts_iosf_init().
-Moreover, they are "created" by changing the type of an existing trip
-point from THERMAL_TRIP_PASSIVE to THERMAL_TRIP_CRITICAL via
-intel_soc_dts_iosf_add_read_only_critical_trip(), the caller of which
-has to be careful enough to pass at least 1 as the number of read-only
-trip points to intel_soc_dts_iosf_init() beforehand.
+--URlnTqj3lemnJ3lq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is questionable, because user space may have started to use the
-trips at the time when intel_soc_dts_iosf_add_read_only_critical_trip()
-runs and there is no synchronization between it and sys_set_trip_temp().
+On Thu, Aug 10, 2023 at 04:44:45PM +0200, Alexander Stein wrote:
+> Hi everyone,
+>=20
+> while working on i.MX6Q based board (arch/arm/boot/dts/nxp/imx/imx6q-mba6=
+a.dts)
+> I noticed several warnings on dtbs_check. The first 5 patches should be p=
+retty
+> much straight forward.
+> I'm not 100% sure on the sixth patch, as it might be affected by incorrect
+> compatible lists. Please refer to the note in that patch.
+> I'm also no sure whether thse patches warrent a Fixes tag, so I only adde=
+d that
+> for patch 3. All of these patches are independent and can be picked up
+> individually.
 
-To address it, use the observation that nonzero number of read-only
-trip points is only passed to intel_soc_dts_iosf_init() when critical
-trip points are going to be used, so in fact that function may get all
-of the information regarding the critical trip points upfront and it
-can configure them before registering the corresponding thermal zones.
+These all seem fine to me, with the last one being really a question for
+those with knowledge of the hardware.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Accordingly, replace the read_only_trip_count argument of
-intel_soc_dts_iosf_init() with a pair of new arguments related to
-critical trip points: a bool one indicating whether or not critical
-trip points are to be used at all and an int one representing the
-critical trip point temperature offset relative to Tj_max.  Use these
-arguments to configure the critical trip points before the registration
-of the thermal zones and to compute the number of writeable trip points
-in add_dts_thermal_zone().
+--URlnTqj3lemnJ3lq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Modify both callers of intel_soc_dts_iosf_init() to take these changes
-into account and drop the intel_soc_dts_iosf_add_read_only_critical_trip()
-call, that is not necessary any more, from intel_soc_thermal_init(),
-which also allows it to return success right after requesting the IRQ.
+-----BEGIN PGP SIGNATURE-----
 
-Finally, drop intel_soc_dts_iosf_add_read_only_critical_trip()
-altogether, because it does not have any more users.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNU3lgAKCRB4tDGHoIJi
+0iDzAP9btbv433WunzUjWgavbWN4XYM2BmISvgmqPvWHzHBEGQD+O9uZXAvmB0sQ
+bp9J69XKdJ8+MnisYcWMrLxgYZ6PSAk=
+=bwwc
+-----END PGP SIGNATURE-----
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c |    2 
- drivers/thermal/intel/intel_soc_dts_iosf.c                                  |   51 +++-------
- drivers/thermal/intel/intel_soc_dts_iosf.h                                  |    8 -
- drivers/thermal/intel/intel_soc_dts_thermal.c                               |   17 ---
- 4 files changed, 27 insertions(+), 51 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -257,11 +257,11 @@ static void remove_dts_thermal_zone(stru
- }
- 
- static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
--				int read_only_trip_cnt)
-+				bool critical_trip)
- {
-+	int writable_trip_cnt = SOC_MAX_DTS_TRIPS;
- 	char name[10];
- 	unsigned long trip;
--	int writable_trip_cnt;
- 	int trip_mask;
- 	unsigned long ptps;
- 	u32 store_ptps;
-@@ -276,7 +276,9 @@ static int add_dts_thermal_zone(int id,
- 
- 	dts->id = id;
- 
--	writable_trip_cnt = SOC_MAX_DTS_TRIPS - read_only_trip_cnt;
-+	if (critical_trip)
-+		writable_trip_cnt--;
-+
- 	trip_mask = GENMASK(writable_trip_cnt - 1, 0);
- 
- 	/* Check if the writable trip we provide is not used by BIOS */
-@@ -315,25 +317,6 @@ err_ret:
- 	return ret;
- }
- 
--int intel_soc_dts_iosf_add_read_only_critical_trip(
--	struct intel_soc_dts_sensors *sensors, int critical_offset)
--{
--	int i, j;
--
--	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
--		struct intel_soc_dts_sensor_entry *entry = &sensors->soc_dts[i];
--		int temp = sensors->tj_max - critical_offset;
--		unsigned long mask = entry->trip_mask;
--
--		j = find_first_zero_bit(&mask, SOC_MAX_DTS_TRIPS);
--		if (j < SOC_MAX_DTS_TRIPS)
--			return configure_trip(entry, j, THERMAL_TRIP_CRITICAL, temp);
--	}
--
--	return -EINVAL;
--}
--EXPORT_SYMBOL_GPL(intel_soc_dts_iosf_add_read_only_critical_trip);
--
- void intel_soc_dts_iosf_interrupt_handler(struct intel_soc_dts_sensors *sensors)
- {
- 	u32 sticky_out;
-@@ -375,8 +358,9 @@ static void dts_trips_reset(struct intel
- 	configure_trip(&sensors->soc_dts[dts_index], 1, 0, 0);
- }
- 
--struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
--	enum intel_soc_dts_interrupt_type intr_type, int read_only_trip_count)
-+struct intel_soc_dts_sensors *
-+intel_soc_dts_iosf_init(enum intel_soc_dts_interrupt_type intr_type,
-+			bool critical_trip, int crit_offset)
- {
- 	struct intel_soc_dts_sensors *sensors;
- 	int tj_max;
-@@ -386,9 +370,6 @@ struct intel_soc_dts_sensors *intel_soc_
- 	if (!iosf_mbi_available())
- 		return ERR_PTR(-ENODEV);
- 
--	if (read_only_trip_count > SOC_MAX_DTS_TRIPS)
--		return ERR_PTR(-EINVAL);
--
- 	tj_max = intel_tcc_get_tjmax(-1);
- 	if (tj_max < 0)
- 		return ERR_PTR(tj_max);
-@@ -403,6 +384,9 @@ struct intel_soc_dts_sensors *intel_soc_
- 	sensors->tj_max = tj_max * 1000;
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-+		enum thermal_trip_type trip_type;
-+		int temp;
-+
- 		sensors->soc_dts[i].sensors = sensors;
- 
- 		ret = configure_trip(&sensors->soc_dts[i], 0,
-@@ -410,15 +394,20 @@ struct intel_soc_dts_sensors *intel_soc_
- 		if (ret)
- 			goto err_reset_trips;
- 
--		ret = configure_trip(&sensors->soc_dts[i], 1,
--				     THERMAL_TRIP_PASSIVE, 0);
-+		if (critical_trip) {
-+			trip_type = THERMAL_TRIP_CRITICAL;
-+			temp = sensors->tj_max - crit_offset;
-+		} else {
-+			trip_type = THERMAL_TRIP_PASSIVE;
-+			temp = 0;
-+		}
-+		ret = configure_trip(&sensors->soc_dts[i], 1, trip_type, temp);
- 		if (ret)
- 			goto err_reset_trips;
- 	}
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
--		ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
--					   read_only_trip_count);
-+		ret = add_dts_thermal_zone(i, &sensors->soc_dts[i], critical_trip);
- 		if (ret)
- 			goto err_remove_zone;
- 	}
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.h
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.h
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.h
-@@ -42,11 +42,11 @@ struct intel_soc_dts_sensors {
- 	struct intel_soc_dts_sensor_entry soc_dts[SOC_MAX_DTS_SENSORS];
- };
- 
--struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
--	enum intel_soc_dts_interrupt_type intr_type, int read_only_trip_count);
-+
-+struct intel_soc_dts_sensors *
-+intel_soc_dts_iosf_init(enum intel_soc_dts_interrupt_type intr_type,
-+			bool critical_trip, int crit_offset);
- void intel_soc_dts_iosf_exit(struct intel_soc_dts_sensors *sensors);
- void intel_soc_dts_iosf_interrupt_handler(
- 				struct intel_soc_dts_sensors *sensors);
--int intel_soc_dts_iosf_add_read_only_critical_trip(
--	struct intel_soc_dts_sensors *sensors, int critical_offset);
- #endif
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci_legacy.c
-@@ -59,7 +59,7 @@ static int proc_thermal_pci_probe(struct
- 		 * ACPI/MSR. So we don't want to fail for auxiliary DTSs.
- 		 */
- 		proc_priv->soc_dts = intel_soc_dts_iosf_init(
--					INTEL_SOC_DTS_INTERRUPT_MSI, 0);
-+					INTEL_SOC_DTS_INTERRUPT_MSI, false, 0);
- 
- 		if (!IS_ERR(proc_priv->soc_dts) && pdev->irq) {
- 			ret = pci_enable_msi(pdev);
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_thermal.c
-@@ -51,7 +51,8 @@ static int __init intel_soc_thermal_init
- 		return -ENODEV;
- 
- 	/* Create a zone with 2 trips with marked as read only */
--	soc_dts = intel_soc_dts_iosf_init(INTEL_SOC_DTS_INTERRUPT_APIC, 1);
-+	soc_dts = intel_soc_dts_iosf_init(INTEL_SOC_DTS_INTERRUPT_APIC, true,
-+					  crit_offset);
- 	if (IS_ERR(soc_dts)) {
- 		err = PTR_ERR(soc_dts);
- 		return err;
-@@ -88,21 +89,7 @@ static int __init intel_soc_thermal_init
- 		}
- 	}
- 
--	err = intel_soc_dts_iosf_add_read_only_critical_trip(soc_dts,
--							     crit_offset);
--	if (err)
--		goto error_trips;
--
- 	return 0;
--
--error_trips:
--	if (soc_dts_thres_irq) {
--		free_irq(soc_dts_thres_irq, soc_dts);
--		acpi_unregister_gsi(soc_dts_thres_gsi);
--	}
--	intel_soc_dts_iosf_exit(soc_dts);
--
--	return err;
- }
- 
- static void __exit intel_soc_thermal_exit(void)
-
-
-
+--URlnTqj3lemnJ3lq--
