@@ -2,106 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F40776F7B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 07:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E47776F95
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 07:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232927AbjHJFVS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 01:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
+        id S229489AbjHJFbc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 01:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232929AbjHJFVR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 01:21:17 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9DFE75;
-        Wed,  9 Aug 2023 22:21:16 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37A5LBQ9078041;
-        Thu, 10 Aug 2023 00:21:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691644871;
-        bh=4h4AVaKEL3ZLFsVo7R1xjKzLpJrtQjd+LPp9S5HFqsw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Sv6HBZCugCXqFZS2vFu9CMU57hK7q8pM5pxm58sy55MqhYoTlfLY3DdS+ajWeH02+
-         zA7tmwG7DEpBg++UY+y5kV4EkhT4/4vSay9ph8C1HepELT7gDbqaWOMht7NuV6YdPS
-         lTS+TuyuPK5AqWFOHsUdlCO383wU+5B1yGrvKgpc=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37A5LBLR121210
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 10 Aug 2023 00:21:11 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 10
- Aug 2023 00:21:10 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 10 Aug 2023 00:21:10 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37A5L92w012897;
-        Thu, 10 Aug 2023 00:21:10 -0500
-Date:   Thu, 10 Aug 2023 10:51:09 +0530
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-CC:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        <linux-pm@vger.kernel.org>, <stable@vger.kernel.org>
-Subject: Re: [PATCH] PM / devfreq: Fix leak in devfreq_dev_release()
-Message-ID: <20230810052109.q2urzfcwu2vly7b5@dhruva>
-References: <20230809113108.2306272-1-boris.brezillon@collabora.com>
+        with ESMTP id S231807AbjHJFbc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 01:31:32 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0739510C4
+        for <linux-pm@vger.kernel.org>; Wed,  9 Aug 2023 22:31:31 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-686ea67195dso375977b3a.2
+        for <linux-pm@vger.kernel.org>; Wed, 09 Aug 2023 22:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691645490; x=1692250290;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X5ljNanWHdg+wPtc/Kk05lnhsdHx9EY+uf3rbi8Jyl0=;
+        b=I27rOOPr2QKMxXmLmFoN3O2gZmbSvC3MTJNLfcaN3hBLpGcR7pFrfX9LOdQYB0v9UX
+         FS8XX3MUSQ5L0gIICKO8NssntbaRGqlbEqzwuKa+pLKtWuk06X2yhmtS7VTVlYfAnI+v
+         WKxiNAcp+vPFU60KAunF3U/BZyA32W/Ac8SeviyR9THNiFH71X16XZrWx6cievakG9Z7
+         qeKr3mJrkHEkcCc8UCFXIxrAuloRn3IsRd7EGOfEwAuiwEwnkCtEqAUiTDdX1epyJN4u
+         NsVG9PR6QKeaAkBlE7WjbLaffCm+7NAoUI1/55O8nPeAMcM2OgaDml3Ca2EP+OQEWLYi
+         iecg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691645490; x=1692250290;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X5ljNanWHdg+wPtc/Kk05lnhsdHx9EY+uf3rbi8Jyl0=;
+        b=ULDj0f5cIQJV66c364bnNpfW/Nfbu168eG2EdNBidUGx2ZK/iyml1s1NvdQA/OtFqg
+         +QVeoQHrB3TWDak5/zg9zy0U60Wq6UrUQbECbzjVZUZXX9re/wrMGzk5A2+eYF7nfRLm
+         FyykguLwuzQzrHpxwBNNMlO3ArYUYJLqzArJKc2s/GNZUmNjISdFPakiYwKCGbuW8ueL
+         bixloLFulv6IWAXC25+cSFylfEvp+YZUdH3h+vW05Zn9cAkNabsnbS+X9WvwRTxO+NCE
+         BtHl/+Va5arOOSxIGRHw2mc14eyTI1XYwtXQbun0UfmUD/bzIRvRldntDfNkmGYmv1IN
+         W6GA==
+X-Gm-Message-State: AOJu0YwQLYKr8C4KXHtCofNI3kFo9McWwxOCjao8UteMsO/eED942dto
+        GEzcH89zSDso8IPeyShT2tPKlQ==
+X-Google-Smtp-Source: AGHT+IF8M6ULj5qBpYswknmIk/UC9uqMvQ52qHszDjMGFcxfrplMUEDi6y9znOX9SLT1wRvxKfXt4Q==
+X-Received: by 2002:a05:6a00:884:b0:687:5415:7282 with SMTP id q4-20020a056a00088400b0068754157282mr1456448pfj.23.1691645490418;
+        Wed, 09 Aug 2023 22:31:30 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id p11-20020a637f4b000000b005501b24b1c9sm581374pgn.62.2023.08.09.22.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Aug 2023 22:31:29 -0700 (PDT)
+Date:   Thu, 10 Aug 2023 11:01:27 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Sumit Gupta <sumitg@nvidia.com>
+Cc:     rafael@kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bbasu@nvidia.com
+Subject: Re: [Patch] cpufreq: tegra194: remove opp table in exit hook
+Message-ID: <20230810053127.y4wmumlggkro7r66@vireshk-i7>
+References: <20230809153455.29056-1-sumitg@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230809113108.2306272-1-boris.brezillon@collabora.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230809153455.29056-1-sumitg@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Aug 09, 2023 at 13:31:08 +0200, Boris Brezillon wrote:
-> srcu_init_notifier_head() allocates resources that need to be released
-> with a srcu_cleanup_notifier_head() call.
+On 09-08-23, 21:04, Sumit Gupta wrote:
+> Add exit hook and remove OPP table when all the CPU's in a policy
+> are offlined. It will fix the below error messages when onlining
+> first CPU from a policy whose all CPU's were previously offlined.
 > 
-> Reported by kmemleak.
-
-Probably want to give a proper mention like:
-	Reported-by: Name <email-id>
-?
-
+>  debugfs: File 'cpu5' in directory 'opp' already present!
+>  debugfs: File 'cpu6' in directory 'opp' already present!
+>  debugfs: File 'cpu7' in directory 'opp' already present!
 > 
-> Fixes: 0fe3a66410a3 ("PM / devfreq: Add new DEVFREQ_TRANSITION_NOTIFIER notifier")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+> Fixes: f41e1442ac5b ("cpufreq: tegra194: add OPP support and set bandwidth")
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 > ---
->  drivers/devfreq/devfreq.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/cpufreq/tegra194-cpufreq.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index e36cbb920ec8..9464f8d3cb5b 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -763,6 +763,7 @@ static void devfreq_dev_release(struct device *dev)
->  		dev_pm_opp_put_opp_table(devfreq->opp_table);
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> index c90b30469165..66a9c23544db 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -454,6 +454,8 @@ static int tegra_cpufreq_init_cpufreq_table(struct cpufreq_policy *policy,
+>  		if (ret < 0)
+>  			return ret;
 >  
->  	mutex_destroy(&devfreq->lock);
-> +	srcu_cleanup_notifier_head(&devfreq->transition_notifier_list);
-
-Good catch!
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
->  	kfree(devfreq);
+> +		dev_pm_opp_put(opp);
+> +
+>  		freq_table[j].driver_data = pos->driver_data;
+>  		freq_table[j].frequency = pos->frequency;
+>  		j++;
+> @@ -508,6 +510,16 @@ static int tegra194_cpufreq_init(struct cpufreq_policy *policy)
+>  	return 0;
 >  }
 >  
-> -- 
-> 2.41.0
-> 
+> +static int tegra194_cpufreq_exit(struct cpufreq_policy *policy)
+> +{
+> +	struct device *cpu_dev = get_cpu_device(policy->cpu);
+> +
+> +	dev_pm_opp_remove_all_dynamic(cpu_dev);
+> +	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
+> +
+> +	return 0;
+> +}
+> +
+>  static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
+>  				       unsigned int index)
+>  {
+> @@ -535,6 +547,7 @@ static struct cpufreq_driver tegra194_cpufreq_driver = {
+>  	.target_index = tegra194_cpufreq_set_target,
+>  	.get = tegra194_get_speed,
+>  	.init = tegra194_cpufreq_init,
+> +	.exit = tegra194_cpufreq_exit,
+>  	.attr = cpufreq_generic_attr,
+>  };
+
+If it is only about hotplugging of the CPUs, then you can also do this I guess.
+
+commit 263abfe74b5f ("cpufreq: dt: Implement online/offline() callbacks")
+
+But since your driver is capable of being built as a module, I suggest you try
+to build it as one and insert remove it multiple times. It must cause you some
+trouble as you don't implement an .exit() before this patch.
+
+Eventually, I think you need to do both, what this patch and 263abfe74b5f do.
+Just that the reasons need to be correct for both the changes.
 
 -- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+viresh
