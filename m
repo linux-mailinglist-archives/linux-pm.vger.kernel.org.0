@@ -2,52 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F409277813E
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C015B778118
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236311AbjHJTRt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 15:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
+        id S235499AbjHJTOO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 15:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236312AbjHJTRs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:17:48 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9DE271E;
-        Thu, 10 Aug 2023 12:17:48 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 956638716e953904; Thu, 10 Aug 2023 21:17:46 +0200
-Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
-   discourages use of this host) smtp.mailfrom=rjwysocki.net 
-   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
-   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
-Received: from kreacher.localnet (unknown [195.136.19.94])
+        with ESMTP id S235835AbjHJTON (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:14:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1538270F;
+        Thu, 10 Aug 2023 12:14:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 37BD2662742;
-        Thu, 10 Aug 2023 21:17:46 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7829766716;
+        Thu, 10 Aug 2023 19:14:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D7ABC433C7;
+        Thu, 10 Aug 2023 19:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691694851;
+        bh=kqCd67KWHHOLReJvm60zqqKL8Zb5KIbe0uvLTrSIOZs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EKiS+ULIakQrrpijPFaaf0WBEim2QoRzv+C220roUF0VfjlU17zCdMn2SzsEhU6FP
+         SRtpPfGcARWlvKncZkOLSN2YI/UMmKBldJtxyKl4PMIwfYhSUbNw0Ka2/iv0UdoJV3
+         6nuYDDlVc1aMF7JMomgxsXiGeENAXSM5Qy45kkgmWIoEJjYbcd7KlLacAdqRD4aa6d
+         w3cgON9vVn+sS3nuEAK7s4vFIHDt82UaFvXB0Sai71E3bzB172dULGdRIA1CbNyWm6
+         0nLYTOgQKs4HZFo9KLXNcRXw13T/htD5/445A8BuoSNxvtP+OOilpXdP4LXEH/ZfFK
+         t7xoqjuIrGKXw==
+Date:   Thu, 10 Aug 2023 20:14:04 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 4/7] thermal: intel: intel_soc_dts_iosf: Change initialization ordering
-Date:   Thu, 10 Aug 2023 21:13:25 +0200
-Message-ID: <13337847.uLZWGnKmhe@kreacher>
-In-Reply-To: <5713357.DvuYhMxLoT@kreacher>
-References: <5713357.DvuYhMxLoT@kreacher>
+        Thomas Gleixner <tglx@linutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: trivial-devices: Remove national,lm75
+Message-ID: <20230810-prissy-nibble-9f7747bdb64e@spud>
+References: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
+ <20230810144451.1459985-2-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrleeigddufeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdp
- rhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="kIdsuo58jt+pjDVs"
+Content-Disposition: inline
+In-Reply-To: <20230810144451.1459985-2-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,86 +77,61 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The initial configuration of trip points in intel_soc_dts_iosf_init()
-takes place after registering the sensor thermal zones which is
-potentially problematic, because it may race with the setting of trip
-point temperatures via sysfs, as there is no synchronization between it
-and sys_set_trip_temp().
+--kIdsuo58jt+pjDVs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-To address this, change the initialization ordering so that the trip
-points are configured prior to the registration of thermal zones.
+On Thu, Aug 10, 2023 at 04:44:46PM +0200, Alexander Stein wrote:
+> Starting with commit 3e37c9d48f7a ("dt-bindings: hwmon: Convert lm75
+> bindings to yaml") 'national,lm75' has it's own dedicated (YAML) binding.
+> If kept in this file device specific properties as 'vs-supply' are
+> considered excessive. Remove compatible here so it can be checked with
+> more specific binding.
+> arch/arm/boot/dts/nxp/imx/imx6q-mba6a.dtb: sensor@48: 'vs-supply' does not
+> match any of the regexes: 'pinctrl-[0-9]+'
+>   From schema: Documentation/devicetree/bindings/trivial-devices.yaml
+>=20
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-Accordingly, change the cleanup ordering in intel_soc_dts_iosf_exit()
-to remove the thermal zones before resetting the trip points.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Thanks,
+Conor.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_soc_dts_iosf.c |   25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+> ---
+>  Documentation/devicetree/bindings/trivial-devices.yaml | 2 --
+>  1 file changed, 2 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/trivial-devices.yaml b/Doc=
+umentation/devicetree/bindings/trivial-devices.yaml
+> index 40bc475ee7e1..e30335d4e504 100644
+> --- a/Documentation/devicetree/bindings/trivial-devices.yaml
+> +++ b/Documentation/devicetree/bindings/trivial-devices.yaml
+> @@ -295,8 +295,6 @@ properties:
+>            - miramems,da311
+>              # Temperature sensor with integrated fan control
+>            - national,lm63
+> -            # I2C TEMP SENSOR
+> -          - national,lm75
+>              # Serial Interface ACPI-Compatible Microprocessor System Har=
+dware Monitor
+>            - national,lm80
+>              # Serial Interface ACPI-Compatible Microprocessor System Har=
+dware Monitor
+> --=20
+> 2.34.1
+>=20
 
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -398,30 +398,37 @@ struct intel_soc_dts_sensors *intel_soc_
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
- 		sensors->soc_dts[i].sensors = sensors;
--		ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
--					   read_only_trip_count);
--		if (ret)
--			goto err_free;
--	}
- 
--	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
- 		ret = configure_trip(&sensors->soc_dts[i], 0,
- 				     THERMAL_TRIP_PASSIVE, 0);
- 		if (ret)
--			goto err_remove_zone;
-+			goto err_reset_trips;
- 
- 		ret = configure_trip(&sensors->soc_dts[i], 1,
- 				     THERMAL_TRIP_PASSIVE, 0);
- 		if (ret)
-+			goto err_reset_trips;
-+	}
-+
-+	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-+		ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
-+					   read_only_trip_count);
-+		if (ret)
- 			goto err_remove_zone;
- 	}
- 
- 	return sensors;
-+
- err_remove_zone:
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i)
- 		remove_dts_thermal_zone(&sensors->soc_dts[i]);
- 
--err_free:
-+err_reset_trips:
-+	for (i = 0; i < SOC_MAX_DTS_SENSORS; i++) {
-+		configure_trip(&sensors->soc_dts[i], 0, 0, 0);
-+		configure_trip(&sensors->soc_dts[i], 1, 0, 0);
-+	}
-+
- 	kfree(sensors);
- 	return ERR_PTR(ret);
- }
-@@ -432,9 +439,9 @@ void intel_soc_dts_iosf_exit(struct inte
- 	int i;
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-+		remove_dts_thermal_zone(&sensors->soc_dts[i]);
- 		configure_trip(&sensors->soc_dts[i], 0, 0, 0);
- 		configure_trip(&sensors->soc_dts[i], 1, 0, 0);
--		remove_dts_thermal_zone(&sensors->soc_dts[i]);
- 	}
- 	kfree(sensors);
- }
+--kIdsuo58jt+pjDVs
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNU2/AAKCRB4tDGHoIJi
+0lwWAQDrilXexeGOevcNPNlmm6AD15crdC32Z29BDRztUy33MQD/V1hjWuJ7t9ek
+NCcwFrHAYB6J63OH6XLI1MraklBLBAw=
+=4Iva
+-----END PGP SIGNATURE-----
 
+--kIdsuo58jt+pjDVs--
