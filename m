@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D02778143
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2CD0778142
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236363AbjHJTR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 15:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
+        id S236356AbjHJTR4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 15:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235315AbjHJTRu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:17:50 -0400
+        with ESMTP id S236323AbjHJTRt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:17:49 -0400
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966712717;
-        Thu, 10 Aug 2023 12:17:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D085D2702;
+        Thu, 10 Aug 2023 12:17:48 -0700 (PDT)
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 00465989895b177a; Thu, 10 Aug 2023 21:17:48 +0200
+ id 29b733ff90bc66d8; Thu, 10 Aug 2023 21:17:47 +0200
 Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
    discourages use of this host) smtp.mailfrom=rjwysocki.net 
    (client-ip=195.136.19.94; helo=[195.136.19.94]; 
@@ -25,17 +25,17 @@ Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id A98FB662742;
-        Thu, 10 Aug 2023 21:17:47 +0200 (CEST)
+        by v370.home.net.pl (Postfix) with ESMTPSA id E1D4F662742;
+        Thu, 10 Aug 2023 21:17:46 +0200 (CEST)
 From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To:     Linux PM <linux-pm@vger.kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 2/7] thermal: intel: intel_soc_dts_iosf: Untangle update_trip_temp()
-Date:   Thu, 10 Aug 2023 21:11:26 +0200
-Message-ID: <2306583.ElGaqSPkdT@kreacher>
+Subject: [PATCH v1 3/7] thermal: intel: intel_soc_dts_iosf: Pass sensors to update_trip_temp()
+Date:   Thu, 10 Aug 2023 21:12:32 +0200
+Message-ID: <1874380.tdWV9SEqCh@kreacher>
 In-Reply-To: <5713357.DvuYhMxLoT@kreacher>
 References: <5713357.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
@@ -58,120 +58,57 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Function update_trip_temp() is currently used for the initialization
-of trip points as well as for changing trip point temperatures in
-sys_set_trip_temp().
+After previous changes, update_trip_temp() only uses its dts argument to
+get to the sensors field in the struct intel_soc_dts_sensor_entry object
+pointed to by that argument, so pass the value of that field directly to
+it instead.
 
-This is quite confusing and passing the value of dts->trip_types[trip]
-to it so that it can store that value in the same memory location is
-not particularly useful, because it only is necessary to set the
-trip point type once, at the initialization time.
-
-For this reason, drop the last argument from update_trip_temp() and
-introduce configure_trip() calling the former internally for the
-initial configuration of trip points.
-
-Modify the majority of update_trip_temp() callers to use
-configure_trip() instead of it.
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/intel/intel_soc_dts_iosf.c |   37 ++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 13 deletions(-)
+ drivers/thermal/intel/intel_soc_dts_iosf.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
 ===================================================================
 --- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
 +++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -67,8 +67,7 @@ static int sys_get_trip_temp(struct ther
+@@ -66,7 +66,7 @@ static int sys_get_trip_temp(struct ther
+ 	return 0;
  }
  
- static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
--			    int thres_index, int temp,
--			    enum thermal_trip_type trip_type)
-+			    int thres_index, int temp)
+-static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
++static int update_trip_temp(struct intel_soc_dts_sensors *sensors,
+ 			    int thres_index, int temp)
  {
  	int status;
- 	u32 temp_out;
-@@ -142,8 +141,6 @@ static int update_trip_temp(struct intel
- 	if (status)
- 		goto err_restore_te_out;
+@@ -78,7 +78,6 @@ static int update_trip_temp(struct intel
+ 	u32 store_te_out;
+ 	u32 te_out;
+ 	u32 int_enable_bit = SOC_DTS_TE_APICA_ENABLE;
+-	struct intel_soc_dts_sensors *sensors = dts->sensors;
  
--	dts->trip_types[thres_index] = trip_type;
--
- 	return 0;
- err_restore_te_out:
- 	iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
-@@ -159,6 +156,21 @@ err_restore_ptps:
- 	return status;
- }
- 
-+static int configure_trip(struct intel_soc_dts_sensor_entry *dts,
-+			  int thres_index, enum thermal_trip_type trip_type,
-+			  int temp)
-+{
-+	int ret;
-+
-+	ret = update_trip_temp(dts, thres_index, temp);
-+	if (ret)
-+		return ret;
-+
-+	dts->trip_types[thres_index] = trip_type;
-+
-+	return 0;
-+}
-+
- static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
- 			     int temp)
+ 	if (sensors->intr_type == INTEL_SOC_DTS_INTERRUPT_MSI)
+ 		int_enable_bit |= SOC_DTS_TE_MSI_ENABLE;
+@@ -162,7 +161,7 @@ static int configure_trip(struct intel_s
  {
-@@ -170,8 +182,7 @@ static int sys_set_trip_temp(struct ther
+ 	int ret;
+ 
+-	ret = update_trip_temp(dts, thres_index, temp);
++	ret = update_trip_temp(dts->sensors, thres_index, temp);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -182,7 +181,7 @@ static int sys_set_trip_temp(struct ther
  		return -EINVAL;
  
  	mutex_lock(&sensors->dts_update_lock);
--	status = update_trip_temp(dts, trip, temp,
--				  dts->trip_types[trip]);
-+	status = update_trip_temp(dts, trip, temp);
+-	status = update_trip_temp(dts, trip, temp);
++	status = update_trip_temp(sensors, trip, temp);
  	mutex_unlock(&sensors->dts_update_lock);
  
  	return status;
-@@ -317,7 +328,7 @@ int intel_soc_dts_iosf_add_read_only_cri
- 
- 		j = find_first_zero_bit(&mask, SOC_MAX_DTS_TRIPS);
- 		if (j < SOC_MAX_DTS_TRIPS)
--			return update_trip_temp(entry, j, temp, THERMAL_TRIP_CRITICAL);
-+			return configure_trip(entry, j, THERMAL_TRIP_CRITICAL, temp);
- 	}
- 
- 	return -EINVAL;
-@@ -395,13 +406,13 @@ struct intel_soc_dts_sensors *intel_soc_
- 	}
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
--		ret = update_trip_temp(&sensors->soc_dts[i], 0, 0,
--				       THERMAL_TRIP_PASSIVE);
-+		ret = configure_trip(&sensors->soc_dts[i], 0,
-+				     THERMAL_TRIP_PASSIVE, 0);
- 		if (ret)
- 			goto err_remove_zone;
- 
--		ret = update_trip_temp(&sensors->soc_dts[i], 1, 0,
--				       THERMAL_TRIP_PASSIVE);
-+		ret = configure_trip(&sensors->soc_dts[i], 1,
-+				     THERMAL_TRIP_PASSIVE, 0);
- 		if (ret)
- 			goto err_remove_zone;
- 	}
-@@ -422,8 +433,8 @@ void intel_soc_dts_iosf_exit(struct inte
- 	int i;
- 
- 	for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
--		update_trip_temp(&sensors->soc_dts[i], 0, 0, 0);
--		update_trip_temp(&sensors->soc_dts[i], 1, 0, 0);
-+		configure_trip(&sensors->soc_dts[i], 0, 0, 0);
-+		configure_trip(&sensors->soc_dts[i], 1, 0, 0);
- 		remove_dts_thermal_zone(&sensors->soc_dts[i]);
- 	}
- 	kfree(sensors);
 
 
 
