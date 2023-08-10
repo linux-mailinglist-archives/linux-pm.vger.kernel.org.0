@@ -2,115 +2,252 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6ADD778005
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 20:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B878778078
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 20:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235311AbjHJSML (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 14:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50662 "EHLO
+        id S235880AbjHJSkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 14:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbjHJSML (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 14:12:11 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2556210F6
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 11:12:10 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9c0391749so19703851fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 11:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691691128; x=1692295928;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hbko1ie21EmrHam9zE7OmrbWipe6Zn4PD2Jb8HdIlvI=;
-        b=ZXrkVJwXoMvaalWcrMIqQqkVyieuWdVsqozNAsI3wa4cGtWajQiwWuMikaxEImsXA8
-         ra7Gba3+QHfB96/Yq+nAhmELTf4d9xeCfE+Lv7BA4oy3aNSD/IJl79pmE4ulzdV98QT+
-         6wfP3fLdijjTV7Ftjvf4v0fqUvADIYqZiIvm0SPRdGdRZRynuoP7OmlTma5nfHDzm47K
-         5ulRlMjPwtDp2mX5iviVudPwUk1KNLkL6ZIF76x5togadcVSIj5G0TjrfUPeFnhrYgdY
-         OrRNiD/lO8vX9ZMQPD3i3cm03Ik6JPgCexNd63LuPBtv1gHWIw886kn9gs7yAbtS+P1U
-         EFfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691691128; x=1692295928;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hbko1ie21EmrHam9zE7OmrbWipe6Zn4PD2Jb8HdIlvI=;
-        b=DnjNxzW7byWt7teubzxvWL5hj779uMNoRNYpV/NSv/R6idstf2RV0Ax/2BOdQdrkrZ
-         KV1y26cNiK3FlsK4Pq+22Pg7IHCcxxs0Xy9LLHB7dmW3/4RQLZoISpTCd2aIYCzOuC39
-         tnmRl/2TsyIx1xvrD/xR0+aocMjmvyYBX/c8h4wzljmGSvayYmWl/ToJC7Xs2wPW54ep
-         J0O6uYHxO6+xefDtWgkYDR/AYBnyRFGqwsUZ3zxj13DHl6kq1ocF8aIdb3gWrtkmLuOc
-         2B2B1FXDRsvgav3Zo2bVB3eD4fL3zWQS8q5r1iMmk/tH8SnKJTjRaxcD3enu65/fU9ww
-         Lujg==
-X-Gm-Message-State: AOJu0Ywx/SATEv2/dPEnlvRmoQPt9LdYOHMAyZcdKeIG4ObkRIiYUBZ5
-        xNUPD3fInZ3PHQq+k7CNJaw4rA==
-X-Google-Smtp-Source: AGHT+IEwP7fzvIS0NEzTzMO1heFpeKEKZ7p3yiRnTAYgiv0QUz/QETCEH9UHAyRhmI+7NIFrAq2X8Q==
-X-Received: by 2002:a05:651c:238:b0:2b9:5eae:814f with SMTP id z24-20020a05651c023800b002b95eae814fmr2404041ljn.50.1691691128330;
-        Thu, 10 Aug 2023 11:12:08 -0700 (PDT)
-Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id n19-20020a2e7213000000b002b9f239df62sm457621ljc.74.2023.08.10.11.12.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 11:12:07 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Thu, 10 Aug 2023 20:12:03 +0200
-Subject: [PATCH] cpufreq: mediatek-hw: Remove unused define
+        with ESMTP id S236086AbjHJSjn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 14:39:43 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEFF30E9;
+        Thu, 10 Aug 2023 11:39:03 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 6a932c9c04ad06ea; Thu, 10 Aug 2023 20:38:24 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 5787066275F;
+        Thu, 10 Aug 2023 20:38:23 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Doug Smythies <dsmythies@telus.net>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [RFT] [PATCH v2] cpuidle: menu: Skip tick_nohz_get_sleep_length() call in some cases
+Date:   Thu, 10 Aug 2023 20:34:45 +0200
+Message-ID: <12275372.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230810-topic-mtk_fixup-v1-1-88022eaea0ac@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAHIo1WQC/x2NUQqEMAwFryL5NtAqhV2vIiJtjWtYraVVEcS7G
- /yc4Q3vgkyJKUNTXJDo4MxrENBlAX6y4UfIgzBUqqrVRyvc1sgel+3fj3zuEUkPzn+NMbUZQSp
- nM6FLNvhJurDPs8iYSNbvTdvd9wPmgW6fdgAAAA==
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691691127; l=878;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ifZhDFap5bks4IWvBGc5lYMz3WsqWbWti71CuknCvOE=;
- b=L/I2QS1YREUvkMZGYEnL9kfATn0rRfKSXj0r+utNJGyDY2HdOOKua0fKaNfRDyEP96V1DtNrQ
- rwSt/HYJlYTAmNA3YTbUjlTGse9mcnLmkWpthz7Y03g/RioQSXLEWVK
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrleeigdduvdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhhnrgdqmhgrrhhirgeslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopegushhmhihthhhivghssehtvghluhhsrdhnvghtpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehv
+ ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfhhrvgguvghrihgtsehkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-DYNAMIC_POWER does not seem to be used anywhere in the tree, remove it.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] cpuidle: menu: Skip tick_nohz_get_sleep_length() call in some cases
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Because the cost of calling tick_nohz_get_sleep_length() may increase
+in the future, reorder the code in menu_select() so it first uses the
+statistics to determine the expected idle duration.  If that value is
+higher than RESIDENCY_THRESHOLD_NS, tick_nohz_get_sleep_length() will
+be called to obtain the time till the closest timer and refine the
+idle duration prediction if necessary.
+
+This causes the governor to always take the full overhead of
+get_typical_interval() with the assumption that the cost will be
+amortized by skipping the tick_nohz_get_sleep_length() call in the
+cases when the predicted idle duration is relatively very small.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpufreq/mediatek-cpufreq.c | 2 --
- 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index fef68cb2b38f..a0a61919bc4c 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -313,8 +313,6 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
- 	return ret;
- }
+v1 -> v2: Add missing max check to get_typical_interval().
+
+---
+ drivers/cpuidle/governors/gov.h  |   14 ++++++++
+ drivers/cpuidle/governors/menu.c |   65 ++++++++++++++++++++++-----------------
+ drivers/cpuidle/governors/teo.c  |    9 +----
+ 3 files changed, 54 insertions(+), 34 deletions(-)
+
+Index: linux-pm/drivers/cpuidle/governors/menu.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/governors/menu.c
++++ linux-pm/drivers/cpuidle/governors/menu.c
+@@ -19,6 +19,8 @@
+ #include <linux/sched/stat.h>
+ #include <linux/math64.h>
  
--#define DYNAMIC_POWER "dynamic-power-coefficient"
--
- static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
- 				    unsigned long event, void *data)
++#include "gov.h"
++
+ #define BUCKETS 12
+ #define INTERVAL_SHIFT 3
+ #define INTERVALS (1UL << INTERVAL_SHIFT)
+@@ -166,8 +168,7 @@ static void menu_update(struct cpuidle_d
+  * of points is below a threshold. If it is... then use the
+  * average of these 8 points as the estimated value.
+  */
+-static unsigned int get_typical_interval(struct menu_device *data,
+-					 unsigned int predicted_us)
++static unsigned int get_typical_interval(struct menu_device *data)
  {
+ 	int i, divisor;
+ 	unsigned int min, max, thresh, avg;
+@@ -195,11 +196,7 @@ again:
+ 		}
+ 	}
+ 
+-	/*
+-	 * If the result of the computation is going to be discarded anyway,
+-	 * avoid the computation altogether.
+-	 */
+-	if (min >= predicted_us)
++	if (!max)
+ 		return UINT_MAX;
+ 
+ 	if (divisor == INTERVALS)
+@@ -267,7 +264,6 @@ static int menu_select(struct cpuidle_dr
+ {
+ 	struct menu_device *data = this_cpu_ptr(&menu_devices);
+ 	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
+-	unsigned int predicted_us;
+ 	u64 predicted_ns;
+ 	u64 interactivity_req;
+ 	unsigned int nr_iowaiters;
+@@ -279,16 +275,41 @@ static int menu_select(struct cpuidle_dr
+ 		data->needs_update = 0;
+ 	}
+ 
+-	/* determine the expected residency time, round up */
+-	delta = tick_nohz_get_sleep_length(&delta_tick);
+-	if (unlikely(delta < 0)) {
+-		delta = 0;
+-		delta_tick = 0;
+-	}
+-	data->next_timer_ns = delta;
+-
+ 	nr_iowaiters = nr_iowait_cpu(dev->cpu);
+-	data->bucket = which_bucket(data->next_timer_ns, nr_iowaiters);
++
++	/* Find the shortest expected idle interval. */
++	predicted_ns = get_typical_interval(data) * NSEC_PER_USEC;
++	if (predicted_ns > RESIDENCY_THRESHOLD_NS) {
++		unsigned int timer_us;
++
++		/* Determine the time till the closest timer. */
++		delta = tick_nohz_get_sleep_length(&delta_tick);
++		if (unlikely(delta < 0)) {
++			delta = 0;
++			delta_tick = 0;
++		}
++
++		data->next_timer_ns = delta;
++		data->bucket = which_bucket(data->next_timer_ns, nr_iowaiters);
++
++		/* Round up the result for half microseconds. */
++		timer_us = div_u64((RESOLUTION * DECAY * NSEC_PER_USEC) / 2 +
++					data->next_timer_ns *
++						data->correction_factor[data->bucket],
++				   RESOLUTION * DECAY * NSEC_PER_USEC);
++		/* Use the lowest expected idle interval to pick the idle state. */
++		predicted_ns = min((u64)timer_us * NSEC_PER_USEC, predicted_ns);
++	} else {
++		/*
++		 * Because the next timer event is not going to be determined
++		 * in this case, assume that without the tick the closest timer
++		 * will be in distant future and that the closest tick will occur
++		 * after 1/2 of the tick period.
++		 */
++		data->next_timer_ns = KTIME_MAX;
++		delta_tick = TICK_NSEC / 2;
++		data->bucket = which_bucket(KTIME_MAX, nr_iowaiters);
++	}
+ 
+ 	if (unlikely(drv->state_count <= 1 || latency_req == 0) ||
+ 	    ((data->next_timer_ns < drv->states[1].target_residency_ns ||
+@@ -303,16 +324,6 @@ static int menu_select(struct cpuidle_dr
+ 		return 0;
+ 	}
+ 
+-	/* Round up the result for half microseconds. */
+-	predicted_us = div_u64(data->next_timer_ns *
+-			       data->correction_factor[data->bucket] +
+-			       (RESOLUTION * DECAY * NSEC_PER_USEC) / 2,
+-			       RESOLUTION * DECAY * NSEC_PER_USEC);
+-	/* Use the lowest expected idle interval to pick the idle state. */
+-	predicted_ns = (u64)min(predicted_us,
+-				get_typical_interval(data, predicted_us)) *
+-				NSEC_PER_USEC;
+-
+ 	if (tick_nohz_tick_stopped()) {
+ 		/*
+ 		 * If the tick is already stopped, the cost of possible short
+Index: linux-pm/drivers/cpuidle/governors/gov.h
+===================================================================
+--- /dev/null
++++ linux-pm/drivers/cpuidle/governors/gov.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/* Common definitions for cpuidle governors. */
++
++#ifndef __CPUIDLE_GOVERNOR_H
++#define __CPUIDLE_GOVERNOR_H
++
++/*
++ * Idle state target residency threshold used for deciding whether or not to
++ * check the time till the closest expected timer event.
++ */
++#define RESIDENCY_THRESHOLD_NS	(15 * NSEC_PER_USEC)
++
++#endif /* __CPUIDLE_GOVERNOR_H */
+Index: linux-pm/drivers/cpuidle/governors/teo.c
+===================================================================
+--- linux-pm.orig/drivers/cpuidle/governors/teo.c
++++ linux-pm/drivers/cpuidle/governors/teo.c
+@@ -140,6 +140,8 @@
+ #include <linux/sched/topology.h>
+ #include <linux/tick.h>
+ 
++#include "gov.h"
++
+ /*
+  * The number of bits to shift the CPU's capacity by in order to determine
+  * the utilized threshold.
+@@ -152,7 +154,6 @@
+  */
+ #define UTIL_THRESHOLD_SHIFT 6
+ 
+-
+ /*
+  * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
+  * is used for decreasing metrics on a regular basis.
+@@ -166,12 +167,6 @@
+  */
+ #define NR_RECENT	9
+ 
+-/*
+- * Idle state target residency threshold used for deciding whether or not to
+- * check the time till the closest expected timer event.
+- */
+-#define RESIDENCY_THRESHOLD_NS	(15 * NSEC_PER_USEC)
+-
+ /**
+  * struct teo_bin - Metrics used by the TEO cpuidle governor.
+  * @intercepts: The "intercepts" metric.
 
----
-base-commit: 21ef7b1e17d039053edaeaf41142423810572741
-change-id: 20230810-topic-mtk_fixup-e1dbc955535f
 
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
 
