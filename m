@@ -2,113 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4FC77812B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53897778139
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233488AbjHJTQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 15:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        id S230327AbjHJTRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 15:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233190AbjHJTQr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:16:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A452702;
-        Thu, 10 Aug 2023 12:16:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S235884AbjHJTRq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:17:46 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D7A2702;
+        Thu, 10 Aug 2023 12:17:45 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id ff766902256c742a; Thu, 10 Aug 2023 21:17:44 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02FB165EF0;
-        Thu, 10 Aug 2023 19:16:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E284C433C8;
-        Thu, 10 Aug 2023 19:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691695006;
-        bh=ABbCZnqaHOMEf90aqEG/uJbFjwHMDbi8Eiuwkh1cz7w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cSBhGzffw5L18ttbTOWjs5Obei0i0OCfy+Try87B2jrFtGrHR8rPlJSOrhj+0fJfR
-         5hVTwHukXwBPl9wIVDDvlbcJjqsiv26D0/6npFwTzi7bO904VaNzc6oKdWXTvRosVB
-         7azKIo7cge//Rd6wSWjLdHPoW3+3HLLV3RDHXEvNx3Zdc0brPavwuDG2CznN/f76d1
-         X1B06c/xV6n5iTohjtepYLyfRV3rsPBTQbeVn/CT2JPUgD26DAZ4qnFYoAeZgvCz6M
-         MYtMia5SfjzyPiA0YppYjxjja39vEMW++2eetEPL26n3WLmQO02UyTfaTN5GI25G07
-         JLxOh76uGgQ/A==
-Date:   Thu, 10 Aug 2023 20:16:38 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
+        by v370.home.net.pl (Postfix) with ESMTPSA id 0FBD1662742;
+        Thu, 10 Aug 2023 21:17:44 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         Zhang Rui <rui.zhang@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/6] imx6q related DT binding fixes
-Message-ID: <20230810-endearing-regime-55ef11e2eb10@spud>
-References: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v1 7/7] thermal: intel: intel_soc_dts_iosf: Use struct thermal_trip
+Date:   Thu, 10 Aug 2023 21:17:36 +0200
+Message-ID: <2249203.iZASKD2KPV@kreacher>
+In-Reply-To: <5713357.DvuYhMxLoT@kreacher>
+References: <5713357.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="URlnTqj3lemnJ3lq"
-Content-Disposition: inline
-In-Reply-To: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrleeigddufeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdp
+ rhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---URlnTqj3lemnJ3lq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Because the number of trip points in each thermal zone and their
+types are known to intel_soc_dts_iosf_init() prior to the registration
+of the thermal zones, make it create an array of struct thermal_trip
+entries in each struct intel_soc_dts_sensor_entry object and make
+add_dts_thermal_zone() use thermal_zone_device_register_with_trips()
+for thermal zone registration and pass that array as its second
+argument.
 
-On Thu, Aug 10, 2023 at 04:44:45PM +0200, Alexander Stein wrote:
-> Hi everyone,
->=20
-> while working on i.MX6Q based board (arch/arm/boot/dts/nxp/imx/imx6q-mba6=
-a.dts)
-> I noticed several warnings on dtbs_check. The first 5 patches should be p=
-retty
-> much straight forward.
-> I'm not 100% sure on the sixth patch, as it might be affected by incorrect
-> compatible lists. Please refer to the note in that patch.
-> I'm also no sure whether thse patches warrent a Fixes tag, so I only adde=
-d that
-> for patch 3. All of these patches are independent and can be picked up
-> individually.
+Drop the sys_get_trip_temp() and sys_get_trip_type() callback
+functions along with the respective callback pointers in
+tzone_ops, because they are not necessary any more.
 
-These all seem fine to me, with the last one being really a question for
-those with knowledge of the hardware.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/intel/intel_soc_dts_iosf.c |   51 +++--------------------------
+ drivers/thermal/intel/intel_soc_dts_iosf.h |    2 -
+ 2 files changed, 8 insertions(+), 45 deletions(-)
 
---URlnTqj3lemnJ3lq
-Content-Type: application/pgp-signature; name="signature.asc"
+Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.h
++++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.h
+@@ -29,7 +29,7 @@ struct intel_soc_dts_sensor_entry {
+ 	int id;
+ 	u32 store_status;
+ 	u32 trip_mask;
+-	enum thermal_trip_type trip_types[SOC_MAX_DTS_TRIPS];
++	struct thermal_trip trips[SOC_MAX_DTS_TRIPS];
+ 	struct thermal_zone_device *tzone;
+ 	struct intel_soc_dts_sensors *sensors;
+ };
+Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
++++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
+@@ -40,32 +40,6 @@
+ /* Mask for two trips in status bits */
+ #define SOC_DTS_TRIP_MASK		0x03
+ 
+-static int sys_get_trip_temp(struct thermal_zone_device *tzd, int trip,
+-			     int *temp)
+-{
+-	int status;
+-	u32 out;
+-	struct intel_soc_dts_sensor_entry *dts;
+-	struct intel_soc_dts_sensors *sensors;
+-
+-	dts = thermal_zone_device_priv(tzd);
+-	sensors = dts->sensors;
+-	mutex_lock(&sensors->dts_update_lock);
+-	status = iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_REG_READ,
+-			       SOC_DTS_OFFSET_PTPS, &out);
+-	mutex_unlock(&sensors->dts_update_lock);
+-	if (status)
+-		return status;
+-
+-	out = (out >> (trip * 8)) & SOC_DTS_TJMAX_ENCODING;
+-	if (!out)
+-		*temp = 0;
+-	else
+-		*temp = sensors->tj_max - out * 1000;
+-
+-	return 0;
+-}
+-
+ static int update_trip_temp(struct intel_soc_dts_sensors *sensors,
+ 			    int thres_index, int temp)
+ {
+@@ -165,7 +139,8 @@ static int configure_trip(struct intel_s
+ 	if (ret)
+ 		return ret;
+ 
+-	dts->trip_types[thres_index] = trip_type;
++	dts->trips[thres_index].temperature = temp;
++	dts->trips[thres_index].type = trip_type;
+ 
+ 	return 0;
+ }
+@@ -187,16 +162,6 @@ static int sys_set_trip_temp(struct ther
+ 	return status;
+ }
+ 
+-static int sys_get_trip_type(struct thermal_zone_device *tzd,
+-			     int trip, enum thermal_trip_type *type)
+-{
+-	struct intel_soc_dts_sensor_entry *dts = thermal_zone_device_priv(tzd);
+-
+-	*type = dts->trip_types[trip];
+-
+-	return 0;
+-}
+-
+ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+ 			     int *temp)
+ {
+@@ -221,8 +186,6 @@ static int sys_get_curr_temp(struct ther
+ 
+ static struct thermal_zone_device_ops tzone_ops = {
+ 	.get_temp = sys_get_curr_temp,
+-	.get_trip_temp = sys_get_trip_temp,
+-	.get_trip_type = sys_get_trip_type,
+ 	.set_trip_temp = sys_set_trip_temp,
+ };
+ 
+@@ -293,11 +256,11 @@ static int add_dts_thermal_zone(int id,
+ 	}
+ 	dts->trip_mask = trip_mask;
+ 	snprintf(name, sizeof(name), "soc_dts%d", id);
+-	dts->tzone = thermal_zone_device_register(name,
+-						  SOC_MAX_DTS_TRIPS,
+-						  trip_mask,
+-						  dts, &tzone_ops,
+-						  NULL, 0, 0);
++	dts->tzone = thermal_zone_device_register_with_trips(name, dts->trips,
++							     SOC_MAX_DTS_TRIPS,
++							     trip_mask,
++							     dts, &tzone_ops,
++							     NULL, 0, 0);
+ 	if (IS_ERR(dts->tzone)) {
+ 		ret = PTR_ERR(dts->tzone);
+ 		goto err_ret;
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZNU3lgAKCRB4tDGHoIJi
-0iDzAP9btbv433WunzUjWgavbWN4XYM2BmISvgmqPvWHzHBEGQD+O9uZXAvmB0sQ
-bp9J69XKdJ8+MnisYcWMrLxgYZ6PSAk=
-=bwwc
------END PGP SIGNATURE-----
 
---URlnTqj3lemnJ3lq--
