@@ -2,183 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53897778139
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D45177815B
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Aug 2023 21:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjHJTRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 15:17:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S235161AbjHJTWn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 10 Aug 2023 15:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235884AbjHJTRq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:17:46 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D7A2702;
-        Thu, 10 Aug 2023 12:17:45 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id ff766902256c742a; Thu, 10 Aug 2023 21:17:44 +0200
-Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
-   discourages use of this host) smtp.mailfrom=rjwysocki.net 
-   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
-   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 0FBD1662742;
-        Thu, 10 Aug 2023 21:17:44 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1 7/7] thermal: intel: intel_soc_dts_iosf: Use struct thermal_trip
-Date:   Thu, 10 Aug 2023 21:17:36 +0200
-Message-ID: <2249203.iZASKD2KPV@kreacher>
-In-Reply-To: <5713357.DvuYhMxLoT@kreacher>
-References: <5713357.DvuYhMxLoT@kreacher>
+        with ESMTP id S234417AbjHJTWn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 15:22:43 -0400
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8CC10D;
+        Thu, 10 Aug 2023 12:22:42 -0700 (PDT)
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-563393b63dbso208803eaf.1;
+        Thu, 10 Aug 2023 12:22:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691695362; x=1692300162;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V3f/l0R5xil5slGV+XOGNMmiW0lc9Xb/pv7UJWmkgUk=;
+        b=jABmPlD+vi2hrLdlLukMK9zt4ZcEgEJY0CI9gLfeIigscq4x7RoroCvb26aawcinSK
+         AdILQCQWgtVJ9nlX+uhad+U5rsF1nc38Ou/HSnmtO8tXR5Uz/A8PktXr/Jku9ZYeDDxy
+         cqZ9TKKzvP58uox65U328btDMy6mQlSDQO+6iLgBtXjd4R4u1xVF0a46HFfeqyMpZXri
+         gDOCDSe8GP5mMyHQ01oBH/+nq92ALUepyj6DNaynkSmAms5/PgIWxJ1jC9Hh7Te4HFWf
+         suwXjM/K0tkNQ2pA6EFtLzUnNrIImb1/+EOoD3+aAQFaaNObq1Y/DYD6Dxtgrh1RqWqF
+         fsEQ==
+X-Gm-Message-State: AOJu0YwnMBmRVaQFmMyXRs6NyhwBydgyXhSc9qAxPAZIAIKpqPxct+2Y
+        ZpfzV0aZ7TAMshnUsfelGQG5AqFImg+FEvXJo3A=
+X-Google-Smtp-Source: AGHT+IEvqJu69Bm43e9mId2dDkkqRV44o/TlZVy0V8pb/AjZqGTu5tVmVcnXmUBNuRkccMD9B0lc+UIjjAiLGvDZZ/U=
+X-Received: by 2002:a4a:d689:0:b0:56c:484a:923d with SMTP id
+ i9-20020a4ad689000000b0056c484a923dmr2814522oot.1.1691695362058; Thu, 10 Aug
+ 2023 12:22:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <1691581193-8416-1-git-send-email-mihai.carabas@oracle.com> <1691581193-8416-2-git-send-email-mihai.carabas@oracle.com>
+In-Reply-To: <1691581193-8416-2-git-send-email-mihai.carabas@oracle.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Aug 2023 21:22:30 +0200
+Message-ID: <CAJZ5v0gK2dGPYEMKaKayUGuXpGns-w3V7RBpJwYc3=h-JLDdNg@mail.gmail.com>
+Subject: Re: [PATCH 1/7] cpuidle-haltpoll: Make boot_option_idle_override
+ check X86 specific
+To:     Mihai Carabas <mihai.carabas@oracle.com>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrleeigddufeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdp
- rhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Aug 9, 2023 at 2:52 PM Mihai Carabas <mihai.carabas@oracle.com> wrote:
+>
+> From: Joao Martins <joao.m.martins@oracle.com>
+>
+> In the pursuit of letting it build on ARM let's not include what is x86
+> specific.
+>
+> Signed-off-by: Joao Martins <joao.m.martins@oracle.com>
+> Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
+> ---
+>  drivers/cpuidle/cpuidle-haltpoll.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+> index e66df22f9695..0ca3c8422eb6 100644
+> --- a/drivers/cpuidle/cpuidle-haltpoll.c
+> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+> @@ -104,9 +104,11 @@ static int __init haltpoll_init(void)
+>         int ret;
+>         struct cpuidle_driver *drv = &haltpoll_driver;
+>
+> +#ifdef CONFIG_X86
+>         /* Do not load haltpoll if idle= is passed */
+>         if (boot_option_idle_override != IDLE_NO_OVERRIDE)
+>                 return -ENODEV;
+> +#endif
 
-Because the number of trip points in each thermal zone and their
-types are known to intel_soc_dts_iosf_init() prior to the registration
-of the thermal zones, make it create an array of struct thermal_trip
-entries in each struct intel_soc_dts_sensor_entry object and make
-add_dts_thermal_zone() use thermal_zone_device_register_with_trips()
-for thermal zone registration and pass that array as its second
-argument.
+I'm sure that adding this #ifdef to the function body is avoidable.
 
-Drop the sys_get_trip_temp() and sys_get_trip_type() callback
-functions along with the respective callback pointers in
-tzone_ops, because they are not necessary any more.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_soc_dts_iosf.c |   51 +++--------------------------
- drivers/thermal/intel/intel_soc_dts_iosf.h |    2 -
- 2 files changed, 8 insertions(+), 45 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.h
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.h
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.h
-@@ -29,7 +29,7 @@ struct intel_soc_dts_sensor_entry {
- 	int id;
- 	u32 store_status;
- 	u32 trip_mask;
--	enum thermal_trip_type trip_types[SOC_MAX_DTS_TRIPS];
-+	struct thermal_trip trips[SOC_MAX_DTS_TRIPS];
- 	struct thermal_zone_device *tzone;
- 	struct intel_soc_dts_sensors *sensors;
- };
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -40,32 +40,6 @@
- /* Mask for two trips in status bits */
- #define SOC_DTS_TRIP_MASK		0x03
- 
--static int sys_get_trip_temp(struct thermal_zone_device *tzd, int trip,
--			     int *temp)
--{
--	int status;
--	u32 out;
--	struct intel_soc_dts_sensor_entry *dts;
--	struct intel_soc_dts_sensors *sensors;
--
--	dts = thermal_zone_device_priv(tzd);
--	sensors = dts->sensors;
--	mutex_lock(&sensors->dts_update_lock);
--	status = iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_REG_READ,
--			       SOC_DTS_OFFSET_PTPS, &out);
--	mutex_unlock(&sensors->dts_update_lock);
--	if (status)
--		return status;
--
--	out = (out >> (trip * 8)) & SOC_DTS_TJMAX_ENCODING;
--	if (!out)
--		*temp = 0;
--	else
--		*temp = sensors->tj_max - out * 1000;
--
--	return 0;
--}
--
- static int update_trip_temp(struct intel_soc_dts_sensors *sensors,
- 			    int thres_index, int temp)
- {
-@@ -165,7 +139,8 @@ static int configure_trip(struct intel_s
- 	if (ret)
- 		return ret;
- 
--	dts->trip_types[thres_index] = trip_type;
-+	dts->trips[thres_index].temperature = temp;
-+	dts->trips[thres_index].type = trip_type;
- 
- 	return 0;
- }
-@@ -187,16 +162,6 @@ static int sys_set_trip_temp(struct ther
- 	return status;
- }
- 
--static int sys_get_trip_type(struct thermal_zone_device *tzd,
--			     int trip, enum thermal_trip_type *type)
--{
--	struct intel_soc_dts_sensor_entry *dts = thermal_zone_device_priv(tzd);
--
--	*type = dts->trip_types[trip];
--
--	return 0;
--}
--
- static int sys_get_curr_temp(struct thermal_zone_device *tzd,
- 			     int *temp)
- {
-@@ -221,8 +186,6 @@ static int sys_get_curr_temp(struct ther
- 
- static struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
--	.get_trip_temp = sys_get_trip_temp,
--	.get_trip_type = sys_get_trip_type,
- 	.set_trip_temp = sys_set_trip_temp,
- };
- 
-@@ -293,11 +256,11 @@ static int add_dts_thermal_zone(int id,
- 	}
- 	dts->trip_mask = trip_mask;
- 	snprintf(name, sizeof(name), "soc_dts%d", id);
--	dts->tzone = thermal_zone_device_register(name,
--						  SOC_MAX_DTS_TRIPS,
--						  trip_mask,
--						  dts, &tzone_ops,
--						  NULL, 0, 0);
-+	dts->tzone = thermal_zone_device_register_with_trips(name, dts->trips,
-+							     SOC_MAX_DTS_TRIPS,
-+							     trip_mask,
-+							     dts, &tzone_ops,
-+							     NULL, 0, 0);
- 	if (IS_ERR(dts->tzone)) {
- 		ret = PTR_ERR(dts->tzone);
- 		goto err_ret;
-
-
-
+>         if (!kvm_para_available() || !haltpoll_want())
+>                 return -ENODEV;
+> --
