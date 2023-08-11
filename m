@@ -2,103 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C021D778733
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 07:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C9A778756
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 08:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjHKF7n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 01:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S233517AbjHKGRi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 02:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjHKF7m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 01:59:42 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5513D2723
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 22:59:41 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fe44955decso1889859e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 22:59:41 -0700 (PDT)
+        with ESMTP id S230335AbjHKGRh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 02:17:37 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96B92D48
+        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 23:17:36 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1bbc06f830aso12129775ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 23:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1691733579; x=1692338379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TwIEg6s/orCxGs+9VesvS+BV/VFnW9UqmoxlIM3Njec=;
-        b=xg97r8zV1yri0k0ZIHpqldCLdk9AvK7kDVaPrDtBBWqv0UujeDFPr9D/vKLWwBUIDW
-         b8jnUVBMwCxzCADrlKYs2lsEXa8x3vV1TRby0at564y7wuuGYZH0ZiaoG7eID61nxySD
-         jIXNpK9axEgZr2e3KLQ45v1r/s3mD76FX8jQTtinElh5RGbJP8sTIhJjTwM4wJ4Xozr4
-         6ncASVjTc83WI3zWxQooJPyMy/GaA2IWb1Kzx62K4q7vH5ZV7YWRlHS0/+LO/DjtAsaH
-         cR/6ukpEkgj7fE7NVcNjG60ys+rs1/i8yQEAkSn0HMySo8/WOSPSRJ4d94Klw73TFEno
-         BIRw==
+        d=linaro.org; s=google; t=1691734656; x=1692339456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zT3po1gHIt6nPnvjsqOOvRKd1niJj75SVykGMENxpsE=;
+        b=CspI2QH/oPGq3QjFLjbOhAgBHsclK/zfrD/U/vxI0yWfOjtL8ftBGpzRjqU4PUaAL6
+         ofDVscUYH3PeuOn5xSkr2RnTzeXHOQgecckMFMV62bGm9qJfBSiu0OUcyHn1Rt9PjNM9
+         ANLlgpOPQo9d1nSHqZUCNLHI3I4MZSu2SONMN71BbVzpSUYxbXofbXfpYRhrwLNXTEwp
+         WRHkt3lnAzcaHu3t54x+2uHQxZIglWW5YPluFfUVmXAC6m2ZFTpjKttVxmEc6uMnLFut
+         y+Doyr4BOUIW3rLUeO7McH8cW40GoCNWQOiLbTOeMQkJIocmg8t3/zrr0DZKLR8DhyG3
+         XMqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691733579; x=1692338379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TwIEg6s/orCxGs+9VesvS+BV/VFnW9UqmoxlIM3Njec=;
-        b=dtftKxE5wHxV1h/qFhbGakCjMn9lpJntBqe9hwfcX9KO8caVbwGZDQ9YCLxKKz4uPg
-         HWNYx1fs2MsOre0h3DGAkeDmuXJsXZGbfQdYU5n+KZFuHeaqAsWPfyqc8eBY+7htYsKA
-         FWZbmlMGPGJXv6XfNfiIqleyMVR2t0zU7J2GfYK+El1uW/Xw2ZbVzLVWkzt8tuK8ngZU
-         o4c7cGRCrox+fYU460dUCOG8Y5K4p/w6dGLWiuSSqwODiUCPSjdUl9g3ILYPjdOxNKmL
-         xxd6/nckzfq/b6fojnYcAMLMpjkAjCAa49ci316RqnY117XRlKTybCKPFZV782XIbKVy
-         g9oA==
-X-Gm-Message-State: AOJu0YwjElg1EX4OU3X+/xL4sTtaOdc+z+myKA9mYq7cy4PXg96CHX01
-        1oh3umttUPhFX/Pe15Cnwh04JanQs/f7VtmzrJ0/cA==
-X-Google-Smtp-Source: AGHT+IGVqjloDcyp79PYJ4Qbn7CoKvcAcik2kuJgWXt9PRPiIb5obernd9RSwDNaSkP1vmsWhdNdrIFy4GgP3H64j2w=
-X-Received: by 2002:a05:6512:2829:b0:4fe:e8c:6f31 with SMTP id
- cf41-20020a056512282900b004fe0e8c6f31mr376555lfb.2.1691733579386; Thu, 10 Aug
- 2023 22:59:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691734656; x=1692339456;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zT3po1gHIt6nPnvjsqOOvRKd1niJj75SVykGMENxpsE=;
+        b=lMsJHoqnA871TgiPpjCcXrXqnnxkdba01fsrLlwsZNATxdPnuGXtvunT+XgfUNVWWc
+         vziTo0t/EZ2wZnTA7GxoZyAsnYVuOWAlsK+b5JFMnfLWJRILaIPgHEVeFOI5WyCDqDdN
+         byEtcZxkliS58nEiK1goWMZm0wAianIkktHTnVwcd2gcIV6SdI/q2i7V7RBH7kn16H8e
+         nylBm8ulpMim+JUsIuHo0C4Fx4MP8dCUjqjlACB9tXcEv4NFP6O5i+fY4Obq+aI7jTSZ
+         F4iTLZQndQ82dvbTRzb4TujNd5Hy1u0o1pokL7DPAqXCHkHoOkQ11dBLHj44/wcpcnp9
+         zuAQ==
+X-Gm-Message-State: AOJu0YwHmnAcSXEG/VMxaVUtdXD8gmkcYKV/zIjAx0EFrq+1IJuY7AQo
+        67Vvr+AYsO1q5+aPQ7rr2kDeSQ==
+X-Google-Smtp-Source: AGHT+IFKziwPEu+qyJ63lojKtvSeYDeu+04YrQlRjRIh2+V5Kvfbjv07QAHfSLIpUnieYaUVrXz30w==
+X-Received: by 2002:a17:902:e84f:b0:1bc:e37:aa76 with SMTP id t15-20020a170902e84f00b001bc0e37aa76mr5729526plg.6.1691734656165;
+        Thu, 10 Aug 2023 23:17:36 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id l5-20020a170903120500b001bbc8d65de0sm2913338plh.67.2023.08.10.23.17.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Aug 2023 23:17:35 -0700 (PDT)
+Date:   Fri, 11 Aug 2023 11:47:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Meng Li <li.meng@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH V2] cpufreq: amd-pstate-ut: Modify the function to get
+ the highest_perf value
+Message-ID: <20230811061733.mvqlir3nbnzdp6tx@vireshk-i7>
+References: <20230803014354.3304825-1-li.meng@amd.com>
 MIME-Version: 1.0
-References: <20230810112344.3806-1-aboutphysycs@gmail.com>
-In-Reply-To: <20230810112344.3806-1-aboutphysycs@gmail.com>
-From:   Alexandru Ardelean <alex@shruggie.ro>
-Date:   Fri, 11 Aug 2023 08:59:28 +0300
-Message-ID: <CAH3L5QpyQejK6H_FDW1akzd8Tn3T0WbKHsKEbmHcA2R9y+W2cA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: k3_bandgap: remove unneeded call to platform_set_drvdata()
-To:     Andrei Coardos <aboutphysycs@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230803014354.3304825-1-li.meng@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 2:23=E2=80=AFPM Andrei Coardos <aboutphysycs@gmail.=
-com> wrote:
->
-> This function call was found to be unnecessary as there is no equivalent
-> platform_get_drvdata() call to access the private data of the driver. Als=
-o,
-> the private data is defined in this driver, so there is no risk of it bei=
-ng
-> accessed outside of this driver file.
->
-
-Reviewed-by: Alexandru Ardelean <alex@shruggie.ro>
-
-> Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
+On 03-08-23, 09:43, Meng Li wrote:
+> The previous function amd_get_highest_perf() will be deprecated.
+> It can only return 166 or 255 by cpuinfo. For platforms that
+> support preferred core, the value of highest perf can be between
+> 166 and 255. Therefore, it will cause amd-pstate-ut to fail when
+> run amd_pstate_ut_check_perf().
+> 
+> Signed-off-by: Meng Li <li.meng@amd.com>
 > ---
->  drivers/thermal/k3_bandgap.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/thermal/k3_bandgap.c b/drivers/thermal/k3_bandgap.c
-> index 1c3e590157ec..f985f36f2123 100644
-> --- a/drivers/thermal/k3_bandgap.c
-> +++ b/drivers/thermal/k3_bandgap.c
-> @@ -225,7 +225,6 @@ static int k3_bandgap_probe(struct platform_device *p=
-dev)
->                 devm_thermal_add_hwmon_sysfs(dev, data[id].tzd);
->         }
->
-> -       platform_set_drvdata(pdev, bgp);
->
->         return 0;
->
-> --
-> 2.34.1
->
+>  drivers/cpufreq/amd-pstate-ut.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Applied. Thanks.
+
+-- 
+viresh
