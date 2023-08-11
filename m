@@ -2,101 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E73977974F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 20:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0524377979C
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231928AbjHKSuy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 11 Aug 2023 14:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
+        id S233314AbjHKTQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 15:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbjHKSuy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 14:50:54 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0066E30E7;
-        Fri, 11 Aug 2023 11:50:53 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-56d0deeca09so416391eaf.0;
-        Fri, 11 Aug 2023 11:50:53 -0700 (PDT)
+        with ESMTP id S232453AbjHKTQj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:16:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFBB2709;
+        Fri, 11 Aug 2023 12:16:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31783d02093so2050284f8f.0;
+        Fri, 11 Aug 2023 12:16:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691781396; x=1692386196;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CKEqk+rQUgsDa0MyxwSGJG/hgltrCH/MdLQiHM1K+qI=;
+        b=EQdKQ8kuv0BJmnKR6Bzp22lkL/B/gDBln4n2d+ZVCjA3jEPSfSCRz6uvlrtYhndRKZ
+         I+xYR311HKybC2Ws9BkzpTB2rITLZEUsE/PBoNVhG4gCOimR92HBTKkv1Ao8ZDNM/KEr
+         JdXf1DS4ogSTJtO4lJ11WX779N4utEVHdGkcWksD+3o+PiTP7deXJBzZFqgzuLkfuhCK
+         IxBpHraauyiGh3TDpumJHDqP9nd4HLgGHg8zk1euL5zOm2C2kZhWUqDFPCHVmB0EU66s
+         xHjl4+Yx4rA8p4F9gGNx25zZf6ROmH2SQ1cEz9MOmZG7zyjOa2giPuMLyAd6ZwpTS/Dc
+         8CFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691779853; x=1692384653;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1691781396; x=1692386196;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oubcwLdsx0/fnNdV78/C9MK8J3iL+g9Bj5rYT38DsAA=;
-        b=l+1l/ke3QDbyuuq6UtlHUTnNxv1+LDTyPOX/JTSLmf3STcwn2ADMWvAF20y+6oD4eA
-         JA/qhm8ov3IPrOhAsXfjAQBaHQcZuGsGCxab6HnIpj0OHbSYzRuoxL6YD105Lgexky4P
-         hBtXm0eRfublqFFe9nDBjbXrYUyxM3+Pwm+0TLbhbxDeBjSWOazzC60+ufk5sbpPCCP+
-         vitOiE3L/FC5V2M2eb+C4EXR2oKGIEyacS/TudLGGcgQUbtOKzgmHTWWfaM2LgTqdETN
-         CS9iU3stf0er//JXQwU2SH0aLMCf0L95sukF8oKoDTVMOwLSg0+u2FhHNsxXvDwkM7jA
-         uKbg==
-X-Gm-Message-State: AOJu0YzU6WujHMU0UM5JG2PUjNiHqqmWR2GFGjY+aOhE8Q99zHeW/jej
-        ORJ/UD55E/RmWXkyv95h1YdiY0f6X5IDk4q87aIAjwn3SK4=
-X-Google-Smtp-Source: AGHT+IF8EzaBNGHBDiovrCMAMfG1dr7TSb78qimtM95NkvEKZVJhCmTZcQ8j9V/l69YzRILHr6R/wTht+b+wk3ny068=
-X-Received: by 2002:a4a:e04e:0:b0:569:a08a:d9c5 with SMTP id
- v14-20020a4ae04e000000b00569a08ad9c5mr2274451oos.0.1691779853073; Fri, 11 Aug
- 2023 11:50:53 -0700 (PDT)
+        bh=CKEqk+rQUgsDa0MyxwSGJG/hgltrCH/MdLQiHM1K+qI=;
+        b=djKe9WRizWxdrY7Ta7WyzzHNWmvYCoEbR5koDh4rQq6VB5PFvPVErg1sdkUwvYlHAh
+         AFyY+S+t03GAaKfYKxuMsLAkhB4JWRYxWt9nq2GN9g4dAZsrYZ7/DB57T97Xkqczq4NP
+         L8ampNXkGcSXvR5l8c9uMFa590nuD8/OgZ5JkE5OPP4r00xUe9ywN7SqdfpK1mawvDWI
+         p9JUZLE+kiruCI9MyoCg7vM8s0hNobd/HNMF6gQDYbYx+FqnCpa+JzpvVIYrZ0pVFIUp
+         8fqjKnu2Oxwg9RbvJ1ye/FwMm/qPk6yjnbEs9I0jgd9p7vvH8soDW0Y6ZGeuc1VkDSz8
+         Xjew==
+X-Gm-Message-State: AOJu0YyVuOGG7iVSsSsKMeCTlbmwhv02aQBIlTbjRQlzKJRKn4JCGgq7
+        IDB1EN/e4g4LNtVkI98ZPkMA4y11JZYMLg==
+X-Google-Smtp-Source: AGHT+IHy1BP64VVNr5s/sBjbEt2+yIEuIbk9q9z67s8+uMUbcS+3O0vip6aAZflo5/Zqwk8v4fgCbw==
+X-Received: by 2002:adf:f6cf:0:b0:317:ca89:f6db with SMTP id y15-20020adff6cf000000b00317ca89f6dbmr2054296wrp.44.1691781396018;
+        Fri, 11 Aug 2023 12:16:36 -0700 (PDT)
+Received: from localhost.localdomain ([92.85.190.61])
+        by smtp.gmail.com with ESMTPSA id s10-20020a05600c044a00b003fbc9d178a8sm8944750wmb.4.2023.08.11.12.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 12:16:35 -0700 (PDT)
+From:   Andrei Coardos <aboutphysycs@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     alex@shruggie.ro, rui.zhang@intel.com, amitk@kernel.org,
+        daniel.lezcano@linaro.org, rafael@kernel.org,
+        Andrei Coardos <aboutphysycs@gmail.com>
+Subject: [PATCH] thermal: max77620_thermal: removed unneeded call to platform_set_drvdata()
+Date:   Fri, 11 Aug 2023 22:15:48 +0300
+Message-Id: <20230811191548.3340-1-aboutphysycs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 11 Aug 2023 20:50:42 +0200
-Message-ID: <CAJZ5v0jsb8ezbg9P_HqgY2Q8UqEwRuMUMs=COyiAF-carAYQJw@mail.gmail.com>
-Subject: [GIT PULL] Power management fixes for v6.5-rc6
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+This function call was found to be unnecessary as there is no equivalent
+platform_get_drvdata() call to access the private data of the driver. Also,
+the private data is defined in this driver, so there is no risk of it being
+accessed outside of this driver file.
 
-Please pull from the tag
+Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
+---
+ drivers/thermal/max77620_thermal.c | 2 --
+ 1 file changed, 2 deletions(-)
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.5-rc6
+diff --git a/drivers/thermal/max77620_thermal.c b/drivers/thermal/max77620_thermal.c
+index 61c7622d9945..919b6ee208d8 100644
+--- a/drivers/thermal/max77620_thermal.c
++++ b/drivers/thermal/max77620_thermal.c
+@@ -139,8 +139,6 @@ static int max77620_thermal_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	platform_set_drvdata(pdev, mtherm);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.34.1
 
-with top-most commit 4778e1288447d9f90d87df07d195dc89e290d973
-
- Merge branch 'pm-cpufreq'
-
-on top of commit 52a93d39b17dc7eb98b6aa3edb93943248e03b2f
-
- Linux 6.5-rc5
-
-to receive power management fixes for 6.5-rc6.
-
-These fix an amd-pstate cpufreq driver issues and recently introduced
-hibernation-related breakage.
-
-Specifics:
-
- - Make amd-pstate use device_attributes as expected by the CPU root
-   kobject (Thomas Weißschuh).
-
- - Restore the previous behavior of resume_store() when hibernation is
-   not available which is to return the full number of bytes that were
-   to be written by user space (Vlastimil Babka).
-
-Thanks!
-
-
----------------
-
-Thomas Weißschuh (1):
-      cpufreq: amd-pstate: fix global sysfs attribute type
-
-Vlastimil Babka (1):
-      PM: hibernate: fix resume_store() return value when hibernation
-not available
-
----------------
-
- drivers/cpufreq/amd-pstate.c | 10 +++++-----
- kernel/power/hibernate.c     |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
