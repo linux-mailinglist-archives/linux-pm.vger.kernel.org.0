@@ -2,103 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECFD7784A6
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 02:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3884B7785D6
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 05:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjHKApy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Aug 2023 20:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50656 "EHLO
+        id S231801AbjHKDPT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Aug 2023 23:15:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231556AbjHKApu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 20:45:50 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 868C02D62
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 17:45:48 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-268030e1be7so924061a91.3
-        for <linux-pm@vger.kernel.org>; Thu, 10 Aug 2023 17:45:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691714748; x=1692319548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hN0C8RZhlNl5Im8CUD21G9MoVGTEckrSYOi51AO54JI=;
-        b=z0G502ieEKLfw4NxCmJW/ByenMdnGZnj1JtLTkLaSZP/xtH18aU4hVwBi0JRbrJa6s
-         ovscaFg5OYsBK35wNFL2EoFKZxaigQOZC3MFDHCOxo/ZfLYsomTFVlbHzsBNTUIjtBq4
-         ZRP15uVE9Z3sv4bR7Sog45Wxk3KxMhKBVNYJOf/9ZWrAhkZ5+eCKRQVrF+WQQ0aZinXm
-         fMwelxnMoW/uYiK08O5LwZ6UyzX61YWxHGcGF/h9b9t4Us9L2R3b4c0AJk1NOlkSgm3M
-         apWOENr8WrdgwsOpA156J20+0PmTp623uSuo8zP2+tKuuf47nWJ0s7BNj+EMJfuCelLw
-         mSTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691714748; x=1692319548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hN0C8RZhlNl5Im8CUD21G9MoVGTEckrSYOi51AO54JI=;
-        b=fSUt+vEZPt+bA75qLKOBRY7zfOs2SjBcX16b2EtMZe7tOEz2ffAN0hwgyuUEVQPmkf
-         hc8mlykUgLpIYoWW+R5bsb7egNG8au+vV1tbKVBI2SNWIlo4lVKGgOl42NQ3fs5AFF1n
-         W+J6MPlnrO38jx39MtNLjGzm7xoxjjW5VxlO3T6IHR1kSX6SeDtHNXsKkZ+kCGrPY8sb
-         6+3NornmgilGnZLddeVYxGIrDkRA1BdQLEyDFhh7EYdD5jpPapw43RL0BW1Jy+d3+EzW
-         57DcDbgHq5JZ6zRlybbP8PSChUTG1UUuu3IBjraa+lgC+DrJNyQ5/lgA087dGKYICma9
-         0iEA==
-X-Gm-Message-State: AOJu0YyAY/3kgZlA3ZG1EVNlCv/jErV83xPedL/U5jea3F/M32KDt8Lb
-        D3cMw2aEHBTvfDeQwtg1xsSkoQ==
-X-Google-Smtp-Source: AGHT+IFyCGjHHsJUOnPRbxJsciSKygnHwkBnNMD52LoSvwsX/eTKtMEnIehB5fZgiiy5jZYXOmht7A==
-X-Received: by 2002:a17:90b:70a:b0:268:ce03:e17e with SMTP id s10-20020a17090b070a00b00268ce03e17emr160210pjz.47.1691714747966;
-        Thu, 10 Aug 2023 17:45:47 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id hx11-20020a17090b440b00b00263dee538b1sm2119638pjb.25.2023.08.10.17.45.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Aug 2023 17:45:47 -0700 (PDT)
-Date:   Fri, 11 Aug 2023 06:15:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] cpufreq: mediatek-hw: Remove unused define
-Message-ID: <20230811004543.dzc2ebhjurrsjz57@vireshk-i7>
-References: <20230810-topic-mtk_fixup-v1-1-88022eaea0ac@linaro.org>
+        with ESMTP id S232276AbjHKDPK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Aug 2023 23:15:10 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A99C230C4;
+        Thu, 10 Aug 2023 20:15:08 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37B3Exwa113829;
+        Thu, 10 Aug 2023 22:14:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691723699;
+        bh=BYsvprL9NBRWCpMN14ugYnJGEVY7QhZTrwoytZCKlxk=;
+        h=From:To:CC:Subject:Date;
+        b=GZOjajaksmZ+qspasZ0ngXmnUR1P1i21Jim1VMANpzbHhx0pMFIdrLOz12MXkutHU
+         iPoZfRn0rXcdo+pWfA5WoKnecJaS8Ynj6FLFAIOniAA0VRINzjAe3mpXRc5h/nl6Na
+         n29mnfxMMHYpPPRJHMuYMnUrTXOArGfgYwCTd4gs=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37B3ExfK001844
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 10 Aug 2023 22:14:59 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 10
+ Aug 2023 22:14:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 10 Aug 2023 22:14:58 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37B3Ewui015625;
+        Thu, 10 Aug 2023 22:14:58 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>
+Subject: [PATCH V4 0/2] dt-bindings: opp/cpufreq: Convert ti-cpufreq to json schema
+Date:   Thu, 10 Aug 2023 22:14:56 -0500
+Message-ID: <20230811031458.957624-1-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230810-topic-mtk_fixup-v1-1-88022eaea0ac@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-08-23, 20:12, Konrad Dybcio wrote:
-> DYNAMIC_POWER does not seem to be used anywhere in the tree, remove it.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/cpufreq/mediatek-cpufreq.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index fef68cb2b38f..a0a61919bc4c 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -313,8 +313,6 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->  	return ret;
->  }
->  
-> -#define DYNAMIC_POWER "dynamic-power-coefficient"
-> -
->  static int mtk_cpufreq_opp_notifier(struct notifier_block *nb,
->  				    unsigned long event, void *data)
->  {
+Hi,
 
-Applied. Thanks.
+Convert the long pending free-form text bindings of ti-cpufreq and
+omap5-opp-supply bindings to json-schema.
+
+Hopefully, this version is better..
+Changes from V3:
+* Changed the description of the bindings documents to be more aligned
+  with current standards (Dhruva's comments)
+
+V3: https://lore.kernel.org/all/20230809023045.1870410-1-nm@ti.com/
+V2: https://lore.kernel.org/all/20230801233341.1416552-1-nm@ti.com/
+V1: https://lore.kernel.org/all/20230724153911.1376830-1-nm@ti.com/
+
+Nishanth Menon (2):
+  dt-bindings: opp: Convert ti-omap5-opp-supply to json schema
+  dt-bindings: cpufreq: Convert ti-cpufreq to json schema
+
+ .../bindings/cpufreq/ti-cpufreq.txt           | 132 ------------------
+ .../opp/operating-points-v2-ti-cpu.yaml       |  92 ++++++++++++
+ .../bindings/opp/ti,omap-opp-supply.yaml      | 106 ++++++++++++++
+ .../bindings/opp/ti-omap5-opp-supply.txt      |  63 ---------
+ 4 files changed, 198 insertions(+), 195 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
+ create mode 100644 Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+ create mode 100644 Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
+ delete mode 100644 Documentation/devicetree/bindings/opp/ti-omap5-opp-supply.txt
 
 -- 
-viresh
+2.40.0
+
