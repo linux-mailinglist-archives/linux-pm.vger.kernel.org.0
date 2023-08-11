@@ -2,78 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 517437792AF
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 17:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D894779309
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 17:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236009AbjHKPR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 11:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S231285AbjHKP1V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 11:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236030AbjHKPR1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 11:17:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48D530DD;
-        Fri, 11 Aug 2023 08:17:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 72BB46747F;
-        Fri, 11 Aug 2023 15:17:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9247C433C9;
-        Fri, 11 Aug 2023 15:17:20 +0000 (UTC)
-Date:   Fri, 11 Aug 2023 11:17:19 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Atul Pant <quic_atulpant@quicinc.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_ashayj@quicinc.com,
-        quic_rgottimu@quicinc.com, quic_shashim@quicinc.com
-Subject: Re: Prevent RT-throttling for idle-injection threads
-Message-ID: <20230811111719.17f9965a@gandalf.local.home>
-In-Reply-To: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
-References: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S229535AbjHKP1U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 11:27:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F788F5;
+        Fri, 11 Aug 2023 08:27:20 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37BE5L7M023199;
+        Fri, 11 Aug 2023 15:26:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Mzquj8eTvhvEyz0nSaD8F2VvGcyfO5NM+CW4hTL1NQw=;
+ b=EDHbNOObH+THUyxh3BkK+qoHQ/le0emdST4x+V978qX/EqJFMb1Kooa889paOnZTKMJf
+ gBxDuulNW7bp6EMafClvMWgMg2FPwIxa4kgAp9SR+7to/atrGGWj3Meh88Qq71oTJd+S
+ pUvvuBfux0B659QjYHyb7+Mvbc5TarDS6I8w1ArtQH0G1IONj1lSut8TV6HRrhaDt6ez
+ jFk49kewju3gyZHciAAnhI+xMnIfdcuSDxIZCkKn0N+k789Rua5PRWELngrtgMEosomm
+ dzBmObml8obsg+YfGNSQRjuDet2lPM5C2ATCanwkoHEjz5DTnl5GgTPZNqitFZ1V8tur nw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sd8yda2cj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Aug 2023 15:26:44 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37BFQhja009600
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Aug 2023 15:26:43 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Fri, 11 Aug 2023 08:26:43 -0700
+Date:   Fri, 11 Aug 2023 08:26:41 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Mike Tipton <mdtipton@codeaurora.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] interconnect: qcom: bcm-voter: Improve enable_mask
+ handling
+Message-ID: <20230811152641.GR1428172@hu-bjorande-lv.qualcomm.com>
+References: <20230811-topic-icc_fix_1he-v1-0-5c96ccef3399@linaro.org>
+ <20230811-topic-icc_fix_1he-v1-1-5c96ccef3399@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230811-topic-icc_fix_1he-v1-1-5c96ccef3399@linaro.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MFFk38_6czTssm7vmajHSBtUZ9HPpD75
+X-Proofpoint-ORIG-GUID: MFFk38_6czTssm7vmajHSBtUZ9HPpD75
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-11_06,2023-08-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=801 bulkscore=0 clxscore=1011
+ spamscore=0 priorityscore=1501 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2306200000 definitions=main-2308110141
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue,  8 Aug 2023 16:55:23 +0530
-Atul Pant <quic_atulpant@quicinc.com> wrote:
-
-> Hi all,
-> We are trying to implement a solution for thermal mitigation by using
-> idle injection on CPUs. However we face some limitations with the current
-> idle-inject framework. As per our need, we want to start injecting idle
-> cycles on a CPU for indefinite time (until the temperature/power of the
-> CPU falls below a threshold). This will help to keep the hot CPUs in the
-> sleep state until we see improvement in temperature/power. If we set the
-> idle duration to a large value or have an idle-injection ratio of 100%,
-> then the idle-inject RT thread suffers from RT throttling. This results
-> in the CPU exiting from the sleep state and consuming some power.
+On Fri, Aug 11, 2023 at 01:55:07PM +0200, Konrad Dybcio wrote:
+> We don't need all the complex arithmetic for BCMs utilizing enable_mask,
+> as all we need to do is to determine whether there's any user (or
+> keepalive) asking for it to be on.
 > 
-> The above situation can be avoided, if we can prevent RT throttling on
-> the injected CPU. With the currently available sysctl parameters,
-> sched_rt_runtime_us and sched_rt_period_us, we can prevent RT throttling
-> by either setting sched_rt_runtime_us equal to sched_rt_period_us or,
-> setting sched_rt_runtime_us to -1. Since these parameters are system
-> wide, so it will affect the RT tasks on non idle-injected CPUs as well.
-> To overcome this, will it be feasible to have these two parameters on a
-> per CPU basis? This will allow to selectively disable RT throttling on
-> idle-injected CPUs.
+> Separate the logic for such BCMs for a small speed boost.
+> 
 
-I wonder if the deadline scheduler that Daniel is working on would help in this case?
+Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
--- Steve
-
+Regards,
+Bjorn
