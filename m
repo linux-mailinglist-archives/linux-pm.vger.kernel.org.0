@@ -2,129 +2,319 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E3277998B
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 23:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AB71779A04
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 23:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbjHKVgG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 17:36:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
+        id S235706AbjHKV5e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 17:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236570AbjHKVgF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 17:36:05 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F59213B;
-        Fri, 11 Aug 2023 14:36:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fmCLk+VfaGGs4k3F++kl4pltcRTcAQTVuj5DOojwKt1cGeS2W7rfx3b28YMN6Er4mGFkexXo6FD8KjCoDhLnKsM0mA87hpO6pFKJ/SHgqPs14dWJja2vZ9UXwFDle6WXE0GQc02gJ1UkQJEUoP2LJB5sMeLr8mSSqIZLLQZc99DXDg5B1v4vpJQuhr9v1QR3px7fPfmh4eAKFZ2a43K/hvuT2eoLycpcxUJB6g3ZzaAuHTQHZ9j9m35u4FfgW8GXLdRc12RTgezH2MCeplxD2qBBO5TiNLJHB1sCi6+pdV1arb+QSUI9VUjnVUcjJzIg9Fb4MuTh3k1hLxUm0JT4zA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4VSgHk6CJDLKBBNNDMrHxpUJGPu4QG94tc/2AE1YDwo=;
- b=ZM6duFD4DzYrIXI9iM/MglYuvssBH7f1zQ/564C83MjqyLQAAqEl1jgWprBAcLiag3+3v9kuJ43VzeUUzupHngLlXEW+cB8vHxJOr7aIdS5oAjEBM/q4VMKgi5W8ugj0f8R1MHeGc4qwBh5ynnBnm3N1vLaMmtFunVGTnS0N04u76Iy+XO74zz8q2WRG5nwlglLAny77zaLdNJAaynEYZMDjFacXyjMd5fO77Avkw0zswfBHMlcJZGYDE73ZAvxMTFAE84rIgoSy/9H6iUAMpnnhniOhDmZ5gYn9kg6DfOv/D37R5xWAW9hUoMK2PrDmCS1Ac77HoVGxZ1hjxzU5lQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4VSgHk6CJDLKBBNNDMrHxpUJGPu4QG94tc/2AE1YDwo=;
- b=yXg6EcuxgEu8McL/8+8SNMkZNS/Pnkjmkwgt6nMKCB/K4nlur9jfdt50gf30z0trCoGZ0rJHzteIJYP8UjKBvUFLLkVMjft8/8zqxRmBJOJl/DI+ICrMWt6cK2daXb0ghko6pJPASmtTEi0KGmVbtdUg+6apZIz4CwCttvV8eUY=
-Received: from SA0PR11CA0015.namprd11.prod.outlook.com (2603:10b6:806:d3::20)
- by PH0PR12MB7096.namprd12.prod.outlook.com (2603:10b6:510:21d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.30; Fri, 11 Aug
- 2023 21:36:02 +0000
-Received: from SA2PEPF0000150B.namprd04.prod.outlook.com
- (2603:10b6:806:d3:cafe::70) by SA0PR11CA0015.outlook.office365.com
- (2603:10b6:806:d3::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.31 via Frontend
- Transport; Fri, 11 Aug 2023 21:36:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SA2PEPF0000150B.mail.protection.outlook.com (10.167.242.43) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6652.20 via Frontend Transport; Fri, 11 Aug 2023 21:36:02 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 11 Aug
- 2023 16:36:00 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <Perry.Yuan@amd.com>, <ray.huang@amd.com>, <wyes.karny@amd.com>,
-        <trenn@suse.com>, <shuah@kernel.org>
-CC:     <rafael.j.wysocki@intel.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        <chenhq2005@gmail.com>
-Subject: [PATCH] cpupower: Fix querying boost support for amd-pstate-epp mode
-Date:   Fri, 11 Aug 2023 16:35:01 -0500
-Message-ID: <20230811213501.17293-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S237207AbjHKV5P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 17:57:15 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA9B3580
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 14:57:14 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-267ffa7e441so1648662a91.1
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 14:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691791034; x=1692395834;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ya7YlFK/hZAPdXzrc2wsK46NfqzB7JlOp2RoQE2MLEk=;
+        b=Je8PTPcrzHIVGl8Br/r3yHCe94uP5R5ge1JTKi/g9gh6O+9lufNZb26eieiGOB2Daz
+         sgewEDWK6D+l8AvJ6cTqdLoJiXMg08qr3pOajDmUyyBp9FU86L1ybfKcFfHA3TUhG3ed
+         vvAF5hweNTTyy+QuJM3tNmMkGKDCV7Ix+Pg82ZMOPU6fl9PvmqnLF2NnRUMHGeCCM1Bs
+         t/9HdbCLzX1apoMLAOxYO8yVf3m49UkuOKV02fA12blgpYpSjzvEYcxgXgAtZknBysUx
+         pU7t1iQ6K18Rc9NtvFgPtX8lpe9+U47MmZk0NEAXAAvYkIQe5rDlpdQFbk2n/bTMTNg0
+         Z8AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691791034; x=1692395834;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ya7YlFK/hZAPdXzrc2wsK46NfqzB7JlOp2RoQE2MLEk=;
+        b=fo8ten3glzeXSONRgaHbseeLMiEvawtmUNbweu+fFXXg0at6h75hON29aE+8i7kgXe
+         FLJRCDRgiLRkVKZzS2Lzw1g7RBuElA+q9Kex9z//OR0jtiP0inlfjoy7E9wMIhCpSzdS
+         p5m/voGbo2yT2Y0Xl2AeQS6D16b42wiaqZLNFbD7//kjBVoN5FuAi6jWYdOn94MqGIO9
+         pWUQRnlJajxaYU2Km8A5zfdd7aGjiNMa9qwJ4RiIkBPw0R8wHSSB9sjJLf4+LKY060J7
+         seu+v4mwpPDjaJayYACrg5UA3ddpPw9MXEOk0PEymfpGvZzcyzH0O1sOOWydi03ySbCk
+         cLeg==
+X-Gm-Message-State: AOJu0YyXiszgnJgzVuV9v2tGe6X4MGaZxgseiptj7iR8slyzuAd9ShDI
+        5f1muPj9Z1OMG4xqNhOJtFxReQ==
+X-Google-Smtp-Source: AGHT+IENu5W0ahvB8cumYBKhI9MvQS7GdfRLvz5U9OW7vbv3AbEllk+EPlcaCvotk6aMuDjhegRz7g==
+X-Received: by 2002:a17:90a:d515:b0:261:1141:b716 with SMTP id t21-20020a17090ad51500b002611141b716mr2530877pju.33.1691791033768;
+        Fri, 11 Aug 2023 14:57:13 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id gd10-20020a17090b0fca00b002635db431a0sm3794757pjb.45.2023.08.11.14.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 14:57:13 -0700 (PDT)
+Message-ID: <64d6aeb9.170a0220.e4744.7704@mx.google.com>
+Date:   Fri, 11 Aug 2023 14:57:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF0000150B:EE_|PH0PR12MB7096:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92cd1315-cd50-421e-57d6-08db9ab2f5f1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R+FXwi43BGylHYqaud7YlOo8hVKaMWn4h3ioEO1jxzrwa2sPhm5jcj3g9bnEQCCoPTs98HJebu/7AquGraKoJoer9uwievhoLdbwaLW6MzF31XGbZPcciXZklLgu8BES72TCstmsDRmA5nUfg1NfYAl6Lba73XHLnMu2Mce8YpY9OPh/osvtpYMQ6nXUZGfODA8SfD45DkUE2Ju1PD5wZFhXrI7ggyNZJwDTiNWSZ1lG7HhtywoWPcuBFaxH2ODoxQCn501orwUTpZhUp2RKAgJWRn8F8MKfWJuvlIGZ3U0BYjYyOtQ2JieiUvte9ccv329lh/P21Wrfltz0qYu2Lh1eX72F/KfZxPek5XCA3zgDfaTLdgZVgw4yQtGeGOOwpcmWjCxTxGaGRl4ZP5kOWESnLedh09UMfzmEjm0CbIMoKG95OSyJcLoujirBtL8gtlM9sfm/h6Q8ak25msyfpC5/Tgrl77AP4DgU0yrpba8H1rz81ucHGf0Dt/0ArNYtxzbkD6WvhxhBuqmHmyZ4vTK4FM7MnQk3yh2Zbfw+gnX7L+mPJi48UTuxiaWLRLAhOB9cxpO7shPoIrkkUxFWepopYLTR/z02OuhTt1vK+ZGo6PnKOWUc2M4ZgNzwK3F1MOhOWFZAkrTrVnDYkqebvLjTNx95DYFEVl5XffdS3s2XK6jo7pK+w6+nb5m9caVTtK2KcGsgwcL/4aeCoM36mKkGeKY6nnjHLum01U/pmyz2zoToWv84FfRtA8N3HC5kdiCvVU3hcs6OYK7NOCBsMg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(136003)(376002)(186006)(451199021)(82310400008)(1800799006)(40470700004)(36840700001)(46966006)(82740400003)(7696005)(966005)(356005)(110136005)(47076005)(83380400001)(1076003)(26005)(16526019)(54906003)(70206006)(81166007)(478600001)(336012)(36860700001)(426003)(2616005)(70586007)(8676002)(8936002)(316002)(40460700003)(41300700001)(5660300002)(44832011)(4326008)(2906002)(4744005)(40480700001)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2023 21:36:02.3522
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92cd1315-cd50-421e-57d6-08db9ab2f5f1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF0000150B.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7096
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: acpi-6.5-rc6-79-g9a4efd57c80c
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+Subject: pm/testing baseline: 50 runs,
+ 4 regressions (acpi-6.5-rc6-79-g9a4efd57c80c)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When running in active mode the driver for amd-pstate has -epp appended.
-This throws off amd-pstate detection.
+pm/testing baseline: 50 runs, 4 regressions (acpi-6.5-rc6-79-g9a4efd57c80c)
 
-To detect amd-pstate look for the prefix instead.
+Regressions Summary
+-------------------
 
-Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
-Reported-by: chenhq2005@gmail.com
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217755
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- tools/power/cpupower/utils/helpers/misc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+fsl-ls2088a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
 
-diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
-index 9547b29254a7f..01c0440efe850 100644
---- a/tools/power/cpupower/utils/helpers/misc.c
-+++ b/tools/power/cpupower/utils/helpers/misc.c
-@@ -95,7 +95,7 @@ bool cpupower_amd_pstate_enabled(void)
- 	if (!driver)
- 		return ret;
- 
--	if (!strcmp(driver, "amd-pstate"))
-+	if (!strncmp(driver, "amd-pstate", 10))
- 		ret = true;
- 
- 	cpufreq_put_driver(driver);
--- 
-2.34.1
+fsl-lx2160a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
 
+r8a77960-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+r8a779m1-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-6.5=
+-rc6-79-g9a4efd57c80c/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: acpi-6.5-rc6-79-g9a4efd57c80c
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      9a4efd57c80c7873d53315cf3d4509ff5dcebb62 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+fsl-ls2088a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d6a50c3d73a6730f35b1e0
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d6a50c3d73a6730f35b1e3
+        failing since 28 days (last pass: v6.0-rc3-85-gf6f4c123bfbc, first =
+fail: v6.5-rc1-21-g3c61a03588dd8)
+
+    2023-08-11T21:15:36.474763  [   15.715306] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1243059_1.5.2.4.1>
+    2023-08-11T21:15:36.580207  =
+
+    2023-08-11T21:15:36.681403  / # #export SHELL=3D/bin/sh
+    2023-08-11T21:15:36.681933  =
+
+    2023-08-11T21:15:36.782933  / # export SHELL=3D/bin/sh. /lava-1243059/e=
+nvironment
+    2023-08-11T21:15:36.783418  =
+
+    2023-08-11T21:15:36.884421  / # . /lava-1243059/environment/lava-124305=
+9/bin/lava-test-runner /lava-1243059/1
+    2023-08-11T21:15:36.885132  =
+
+    2023-08-11T21:15:36.889519  / # /lava-1243059/bin/lava-test-runner /lav=
+a-1243059/1
+    2023-08-11T21:15:36.911791  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+fsl-lx2160a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d6a50fed7be8398835b1d9
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d6a50fed7be8398835b1dc
+        failing since 148 days (last pass: v6.1-rc5-55-g60453df62d30, first=
+ fail: v6.3-rc2-33-g1240ce78c05e)
+
+    2023-08-11T21:15:38.648074  [   13.048398] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1243061_1.5.2.4.1>
+    2023-08-11T21:15:38.753326  =
+
+    2023-08-11T21:15:38.854646  / # #export SHELL=3D/bin/sh
+    2023-08-11T21:15:38.855052  =
+
+    2023-08-11T21:15:38.956030  / # export SHELL=3D/bin/sh. /lava-1243061/e=
+nvironment
+    2023-08-11T21:15:38.956433  =
+
+    2023-08-11T21:15:39.057405  / # . /lava-1243061/environment/lava-124306=
+1/bin/lava-test-runner /lava-1243061/1
+    2023-08-11T21:15:39.058067  =
+
+    2023-08-11T21:15:39.061972  / # /lava-1243061/bin/lava-test-runner /lav=
+a-1243061/1
+    2023-08-11T21:15:39.085505  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+r8a77960-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d6a48725094fa7f235b1f4
+
+  Results:     4 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d6a48725094fa7f235b1f9
+        failing since 23 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-11T21:15:12.938035  / # #
+
+    2023-08-11T21:15:13.040228  export SHELL=3D/bin/sh
+
+    2023-08-11T21:15:13.040955  #
+
+    2023-08-11T21:15:13.142395  / # export SHELL=3D/bin/sh. /lava-11267227/=
+environment
+
+    2023-08-11T21:15:13.143102  =
+
+
+    2023-08-11T21:15:13.244584  / # . /lava-11267227/environment/lava-11267=
+227/bin/lava-test-runner /lava-11267227/1
+
+    2023-08-11T21:15:13.245730  =
+
+
+    2023-08-11T21:15:13.246701  / # /lava-11267227/bin/lava-test-runner /la=
+va-11267227/1
+
+    2023-08-11T21:15:13.312583  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-11T21:15:13.313122  + cd /lava-112672<8>[   19.301555] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11267227_1.5.2.4.5>
+ =
+
+    ... (28 line(s) more)  =
+
+ =
+
+
+
+platform        | arch  | lab           | compiler | defconfig | regressions
+----------------+-------+---------------+----------+-----------+------------
+r8a779m1-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/64d6a4af25094fa7f235b2a7
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
+4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64d6a4af25094fa7f235b2ac
+        failing since 23 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-11T21:14:24.561393  / # #
+
+    2023-08-11T21:14:25.641241  export SHELL=3D/bin/sh
+
+    2023-08-11T21:14:25.642998  #
+
+    2023-08-11T21:14:27.132338  / # export SHELL=3D/bin/sh. /lava-11267236/=
+environment
+
+    2023-08-11T21:14:27.134097  =
+
+
+    2023-08-11T21:14:29.856569  / # . /lava-11267236/environment/lava-11267=
+236/bin/lava-test-runner /lava-11267236/1
+
+    2023-08-11T21:14:29.858777  =
+
+
+    2023-08-11T21:14:29.868436  / # /lava-11267236/bin/lava-test-runner /la=
+va-11267236/1
+
+    2023-08-11T21:14:29.928407  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-11T21:14:29.928864  + cd /lava-112672<8>[   28.511291] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11267236_1.5.2.4.5>
+ =
+
+    ... (38 line(s) more)  =
+
+ =20
