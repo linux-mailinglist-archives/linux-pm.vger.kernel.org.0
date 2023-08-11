@@ -2,136 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7929477887C
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 09:43:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC9AB778882
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 09:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjHKHnx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 03:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43634 "EHLO
+        id S231279AbjHKHqn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 03:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjHKHnw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 03:43:52 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B651FDD;
-        Fri, 11 Aug 2023 00:43:51 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37B7hgYU048602;
-        Fri, 11 Aug 2023 02:43:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1691739822;
-        bh=Dl8RPieEXeiZEbz73dFPq3V0iyFKJlept9ooTpzXOH8=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=l17Am+s6UOZI3RnBL/wKdJGl82Pxt7PJ8EpXtyOTUBkFyHJ6qiAGvOKr8n0XEeRU0
-         Jrj36GWPhUPxOO8gazWgJtbNmzA46ZwnXd8O8bwLi/+RzljtwjyoxriTPPUF3OkBzq
-         9avXJtIUzPD7VYlHULQ7+qMWk1qF0yg56RE3W0oc=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37B7hfs6053880
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 11 Aug 2023 02:43:42 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 11
- Aug 2023 02:43:41 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 11 Aug 2023 02:43:41 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37B7hfDs026904;
-        Fri, 11 Aug 2023 02:43:41 -0500
-Date:   Fri, 11 Aug 2023 13:13:40 +0530
-From:   Dhruva Gole <d-gole@ti.com>
-To:     Nishanth Menon <nm@ti.com>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        Vibhore Vardhan <vibhore@ti.com>
-Subject: Re: [PATCH V4 1/2] dt-bindings: opp: Convert ti-omap5-opp-supply to
- json schema
-Message-ID: <20230811074340.jspxuw6zeaxdh2yf@dhruva>
-References: <20230811031458.957624-1-nm@ti.com>
- <20230811031458.957624-2-nm@ti.com>
+        with ESMTP id S229835AbjHKHqm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 03:46:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7F1FDD;
+        Fri, 11 Aug 2023 00:46:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 74CB0648F4;
+        Fri, 11 Aug 2023 07:46:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFF5C433C8;
+        Fri, 11 Aug 2023 07:46:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691740000;
+        bh=GuyoCPl/YJ4xO8sOUZZlYV2+Wm0YbUzDtduIENXUP5Q=;
+        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+        b=e1diiZqDkCg25FdOmDG287DkAJgVNNQAff+9luMOhmk0PipbY7RrX5yIwP7buDo/A
+         yrrEVU9hCyH/fScD5LTtvcoRVU+HMPE3DHBMxiNsKTOsGqHhsj1QTRThfkDZiK4MK3
+         jWhSEXxPrQBu6H3G+KEAaE4gxU2HPyVpHFaf2fjEAu3FoMHdaOzo+Zf45gUa/UwejU
+         zBdCFsmlUUqeJ92Ba5MRwjmYov++aY+MxhEHW4QB188/xnVIckJhm68PyHf/xTdV0K
+         KhbA3TXdbO7n5HQNY9kK3YTgc8Q6YzoI9a0QYgRvGcIC/NGA85aK/sPzYNqvXNmIa1
+         3F7KBkmymQvAw==
+Message-ID: <58ea6863-53cd-228b-1474-f67b0bb134f0@kernel.org>
+Date:   Fri, 11 Aug 2023 10:46:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230811031458.957624-2-nm@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From:   Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH v3 1/3] debugfs: Add write support to debugfs_create_str()
+To:     Mike Tipton <quic_mdtipton@quicinc.com>,
+        gregkh@linuxfoundation.org, rafael@kernel.org, corbet@lwn.net
+Cc:     linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        quic_okukatla@quicinc.com, quic_viveka@quicinc.com,
+        peterz@infradead.org, quic_pkondeti@quicinc.com
+References: <20230807142914.12480-1-quic_mdtipton@quicinc.com>
+ <20230807142914.12480-2-quic_mdtipton@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20230807142914.12480-2-quic_mdtipton@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Aug 10, 2023 at 22:14:57 -0500, Nishanth Menon wrote:
-> Rename ti-omap5-opp-supply to be bit more generic omap-opp-supply and
-> convert the free text binding to json-schema.
+On 7.08.23 17:29, Mike Tipton wrote:
+> Currently, debugfs_create_str() only supports reading strings from
+> debugfs. Add support for writing them as well.
 > 
-> Signed-off-by: Nishanth Menon <nm@ti.com>
+> Based on original implementation by Peter Zijlstra [0]. Write support
+> was present in the initial patch version, but dropped in v2 due to lack
+> of users. We have a user now, so reintroduce it.
+> 
+> [0] https://lore.kernel.org/all/YF3Hv5zXb%2F6lauzs@hirez.programming.kicks-ass.net/
+> 
+
+Hi Greg,
+
+Looks like the original code was reviewed two years ago (not sure if it
+counts). But in any case, i need an ack from you to apply this.
+
+There is no build dependency with the rest of the patches (but there is a
+functional one). It should be also fine if you apply it directly, if you
+prefer so?
+
+Thanks,
+Georgi
+
+> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
 > ---
-> Changes since V3:
-> * Rewrote the description of the binding to something more relevant to
->   current style of documentation.
+>   fs/debugfs/file.c | 48 +++++++++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 46 insertions(+), 2 deletions(-)
 > 
-> V3: https://lore.kernel.org/all/20230809023045.1870410-2-nm@ti.com/
-> V2: https://lore.kernel.org/all/20230801233341.1416552-2-nm@ti.com/
-> V1: https://lore.kernel.org/all/20230724153911.1376830-5-nm@ti.com/
-> 
->  .../bindings/opp/ti,omap-opp-supply.yaml      | 106 ++++++++++++++++++
->  .../bindings/opp/ti-omap5-opp-supply.txt      |  63 -----------
->  2 files changed, 106 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
->  delete mode 100644 Documentation/devicetree/bindings/opp/ti-omap5-opp-supply.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml b/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
-> new file mode 100644
-> index 000000000000..25a0cb5ec6ff
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/opp/ti,omap-opp-supply.yaml
-> @@ -0,0 +1,106 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/opp/ti,omap-opp-supply.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+> index b7711888dd17..87b3753aa4b1 100644
+> --- a/fs/debugfs/file.c
+> +++ b/fs/debugfs/file.c
+> @@ -904,8 +904,52 @@ EXPORT_SYMBOL_GPL(debugfs_create_str);
+>   static ssize_t debugfs_write_file_str(struct file *file, const char __user *user_buf,
+>   				      size_t count, loff_t *ppos)
+>   {
+> -	/* This is really only for read-only strings */
+> -	return -EINVAL;
+> +	struct dentry *dentry = F_DENTRY(file);
+> +	char *old, *new = NULL;
+> +	int pos = *ppos;
+> +	int r;
 > +
-> +title: Texas Instruments OMAP compatible OPP supply
+> +	r = debugfs_file_get(dentry);
+> +	if (unlikely(r))
+> +		return r;
 > +
-> +description:
-> +  OMAP5, DRA7, and AM57 families of SoCs have Class 0 AVS eFuse
-> +  registers, which contain OPP-specific voltage information tailored
-> +  for the specific device. This binding provides the information
-> +  needed to describe such a hardware values and relate them to program
-> +  the primary regulator during an OPP transition.
+> +	old = *(char **)file->private_data;
 > +
-> +  Also, some supplies may have an associated vbb-supply, an Adaptive
-> +  Body Bias regulator, which must transition in a specific sequence
-> +  w.r.t the vdd-supply and clk when making an OPP transition. By
-> +  supplying two regulators to the device that will undergo OPP
-> +  transitions, we can use the multi-regulator support implemented by
-> +  the OPP core to describe both regulators the platform needs. The
-> +  OPP core binding Documentation/devicetree/bindings/opp/opp-v2.yaml
-> +  provides further information (refer to Example 4 Handling multiple
+> +	/* only allow strict concatenation */
+> +	r = -EINVAL;
+> +	if (pos && pos != strlen(old))
+> +		goto error;
+> +
+> +	r = -E2BIG;
+> +	if (pos + count + 1 > PAGE_SIZE)
+> +		goto error;
+> +
+> +	r = -ENOMEM;
+> +	new = kmalloc(pos + count + 1, GFP_KERNEL);
+> +	if (!new)
+> +		goto error;
+> +
+> +	if (pos)
+> +		memcpy(new, old, pos);
+> +
+> +	r = -EFAULT;
+> +	if (copy_from_user(new + pos, user_buf, count))
+> +		goto error;
+> +
+> +	new[pos + count] = '\0';
+> +	strim(new);
+> +
+> +	rcu_assign_pointer(*(char **)file->private_data, new);
+> +	synchronize_rcu();
+> +	kfree(old);
+> +
+> +	debugfs_file_put(dentry);
+> +	return count;
+> +
+> +error:
+> +	kfree(new);
+> +	debugfs_file_put(dentry);
+> +	return r;
+>   }
+>   
+>   static const struct file_operations fops_str = {
 
-Thanks, this makes it much more clear to me :)
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
-
-> +  regulators).
-> +
-> +maintainers:
-> +  - Nishanth Menon <nm@ti.com>
-> +
-[...]
-
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
