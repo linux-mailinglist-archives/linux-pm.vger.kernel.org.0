@@ -2,96 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0524377979C
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C2BD7797A0
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjHKTQk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 15:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S232453AbjHKTSw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 11 Aug 2023 15:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjHKTQj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:16:39 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFBB2709;
-        Fri, 11 Aug 2023 12:16:38 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31783d02093so2050284f8f.0;
-        Fri, 11 Aug 2023 12:16:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691781396; x=1692386196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CKEqk+rQUgsDa0MyxwSGJG/hgltrCH/MdLQiHM1K+qI=;
-        b=EQdKQ8kuv0BJmnKR6Bzp22lkL/B/gDBln4n2d+ZVCjA3jEPSfSCRz6uvlrtYhndRKZ
-         I+xYR311HKybC2Ws9BkzpTB2rITLZEUsE/PBoNVhG4gCOimR92HBTKkv1Ao8ZDNM/KEr
-         JdXf1DS4ogSTJtO4lJ11WX779N4utEVHdGkcWksD+3o+PiTP7deXJBzZFqgzuLkfuhCK
-         IxBpHraauyiGh3TDpumJHDqP9nd4HLgGHg8zk1euL5zOm2C2kZhWUqDFPCHVmB0EU66s
-         xHjl4+Yx4rA8p4F9gGNx25zZf6ROmH2SQ1cEz9MOmZG7zyjOa2giPuMLyAd6ZwpTS/Dc
-         8CFQ==
+        with ESMTP id S230315AbjHKTSv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:18:51 -0400
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFE92709;
+        Fri, 11 Aug 2023 12:18:51 -0700 (PDT)
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-56d26137095so370150eaf.1;
+        Fri, 11 Aug 2023 12:18:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691781396; x=1692386196;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CKEqk+rQUgsDa0MyxwSGJG/hgltrCH/MdLQiHM1K+qI=;
-        b=djKe9WRizWxdrY7Ta7WyzzHNWmvYCoEbR5koDh4rQq6VB5PFvPVErg1sdkUwvYlHAh
-         AFyY+S+t03GAaKfYKxuMsLAkhB4JWRYxWt9nq2GN9g4dAZsrYZ7/DB57T97Xkqczq4NP
-         L8ampNXkGcSXvR5l8c9uMFa590nuD8/OgZ5JkE5OPP4r00xUe9ywN7SqdfpK1mawvDWI
-         p9JUZLE+kiruCI9MyoCg7vM8s0hNobd/HNMF6gQDYbYx+FqnCpa+JzpvVIYrZ0pVFIUp
-         8fqjKnu2Oxwg9RbvJ1ye/FwMm/qPk6yjnbEs9I0jgd9p7vvH8soDW0Y6ZGeuc1VkDSz8
-         Xjew==
-X-Gm-Message-State: AOJu0YyVuOGG7iVSsSsKMeCTlbmwhv02aQBIlTbjRQlzKJRKn4JCGgq7
-        IDB1EN/e4g4LNtVkI98ZPkMA4y11JZYMLg==
-X-Google-Smtp-Source: AGHT+IHy1BP64VVNr5s/sBjbEt2+yIEuIbk9q9z67s8+uMUbcS+3O0vip6aAZflo5/Zqwk8v4fgCbw==
-X-Received: by 2002:adf:f6cf:0:b0:317:ca89:f6db with SMTP id y15-20020adff6cf000000b00317ca89f6dbmr2054296wrp.44.1691781396018;
-        Fri, 11 Aug 2023 12:16:36 -0700 (PDT)
-Received: from localhost.localdomain ([92.85.190.61])
-        by smtp.gmail.com with ESMTPSA id s10-20020a05600c044a00b003fbc9d178a8sm8944750wmb.4.2023.08.11.12.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 12:16:35 -0700 (PDT)
-From:   Andrei Coardos <aboutphysycs@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     alex@shruggie.ro, rui.zhang@intel.com, amitk@kernel.org,
-        daniel.lezcano@linaro.org, rafael@kernel.org,
-        Andrei Coardos <aboutphysycs@gmail.com>
-Subject: [PATCH] thermal: max77620_thermal: removed unneeded call to platform_set_drvdata()
-Date:   Fri, 11 Aug 2023 22:15:48 +0300
-Message-Id: <20230811191548.3340-1-aboutphysycs@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1691781531; x=1692386331;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AyTF5NgYb8GTCLi6gpcp9i9P/ufgxXkVq7a1/z7YV5g=;
+        b=QoQW5sRuUgL01dnb8ChiJcr7RJn0N9n75BCipiTPpqwjWVeyAlQtuViSOTmIQ3cTf7
+         7A4Kke/2a3kzzyeh4iNNh98RfPvTK04JqOQGFpEFSJUIuIbrYoUV2KgqLhCI3ZX/V/Ce
+         r9SPo0wM0LBDU+u3Rp9kB8ic2/SA3VExa1qLaHZ0xDfN4dpCNudyIjLS3MfDltF3uuuQ
+         czaJOKi5LJLDq9KmIZ+QxMBCr/ilCx6HakAaCREi2mL2apQXLepQ0BQHCaZffLMMKXOz
+         2xXpcb+lrJ0Z9lEehK9XxxsyXoVy1WUbtkx2KyBCOBXJ9Lt/iKrr5nLewZKiAYxrUb6R
+         C2+g==
+X-Gm-Message-State: AOJu0Yyki/BcXva8CyJhLez5S11dxzCMLcYHu5gyrYeF/0mFbzyZFxCg
+        wqOwpr9VlzJZeqssih0T4bx17CtPSaDt875j7KgeoLKP
+X-Google-Smtp-Source: AGHT+IFRUoYMKTpyUiA0wxMpAiHOModCyNfbW9NdMHU/GXgJUj820mik8xPWHE5qFw8J56v4Sybc7Y0XrVHm3dNZYfw=
+X-Received: by 2002:a05:6820:136:b0:56d:72dc:5410 with SMTP id
+ i22-20020a056820013600b0056d72dc5410mr2079960ood.1.1691781530668; Fri, 11 Aug
+ 2023 12:18:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230809112348.2302384-1-boris.brezillon@collabora.com>
+In-Reply-To: <20230809112348.2302384-1-boris.brezillon@collabora.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 11 Aug 2023 21:18:39 +0200
+Message-ID: <CAJZ5v0jZ8By3Mz_JM6O79p0af4GaRBXE4PgiCHVOuHWcf=UQsA@mail.gmail.com>
+Subject: Re: [PATCH] thermal/of: Fix a leak in thermal_of_zone_register()
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This function call was found to be unnecessary as there is no equivalent
-platform_get_drvdata() call to access the private data of the driver. Also,
-the private data is defined in this driver, so there is no risk of it being
-accessed outside of this driver file.
+On Wed, Aug 9, 2023 at 1:23 PM Boris Brezillon
+<boris.brezillon@collabora.com> wrote:
+>
+> thermal_zone_device_register_with_trips() copies the tzp info. After
+> calling this function, we should free the tzp object, otherwise it's
+> leaked.
+>
+> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 
-Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
----
- drivers/thermal/max77620_thermal.c | 2 --
- 1 file changed, 2 deletions(-)
+Hasn't this been fixed in -rc5?
 
-diff --git a/drivers/thermal/max77620_thermal.c b/drivers/thermal/max77620_thermal.c
-index 61c7622d9945..919b6ee208d8 100644
---- a/drivers/thermal/max77620_thermal.c
-+++ b/drivers/thermal/max77620_thermal.c
-@@ -139,8 +139,6 @@ static int max77620_thermal_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	platform_set_drvdata(pdev, mtherm);
--
- 	return 0;
- }
- 
--- 
-2.34.1
-
+> ---
+>  drivers/thermal/thermal_of.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 6fb14e521197..e74ef4fa576b 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -524,10 +524,17 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+>         tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+>                                                      mask, data, of_ops, tzp,
+>                                                      pdelay, delay);
+> +
+> +       /*
+> +        * thermal_zone_device_register_with_trips() copies the tzp info.
+> +        * We don't need it after that point.
+> +        */
+> +       kfree(tzp);
+> +
+>         if (IS_ERR(tz)) {
+>                 ret = PTR_ERR(tz);
+>                 pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
+> -               goto out_kfree_tzp;
+> +               goto out_kfree_trips;
+>         }
+>
+>         ret = thermal_zone_device_enable(tz);
+> @@ -540,8 +547,6 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+>
+>         return tz;
+>
+> -out_kfree_tzp:
+> -       kfree(tzp);
+>  out_kfree_trips:
+>         kfree(trips);
+>  out_kfree_of_ops:
+> --
+> 2.41.0
+>
