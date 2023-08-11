@@ -2,86 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 581A4778939
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 10:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E7877893F
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 10:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjHKIwL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 04:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S234550AbjHKIw6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 11 Aug 2023 04:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjHKIwK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 04:52:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1846D2712;
-        Fri, 11 Aug 2023 01:52:09 -0700 (PDT)
-Date:   Fri, 11 Aug 2023 10:52:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1691743927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YBpK1gVUIGuSu6Q8X/sPY0RHI56c2CcVVsMSn3o9lA8=;
-        b=YWmCxuqaPyFXZYtbg8XLRgNpfoYLNLJSKGUCKhFKvFLrGDHXLM26uabgv6jy09o5+6jy6V
-        /XfjpmaKFXkr4697KMW704FdOvM7oBEqhFJHylsdmdbHnnYzKWydAFNUqz2SAO/lXbkfkm
-        mdkDGIHnTraqPNIabhn1EdjR2jSMexVyg3wPbczML3trXbrRRr+9oSxOKLVy4pwvlpJ0m5
-        0b80LkbA39SwoIbKY30NemxDCVnPQIcmCXwQ1BuEJfTyWcKiN+1P2bLGKBlZrZiqueM6vt
-        cblFnORjWeCqNXslsiEcxVbA/IIDQ47rq8O4Po0PXL2OAInFxo8j2+o/3+sNAg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1691743927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YBpK1gVUIGuSu6Q8X/sPY0RHI56c2CcVVsMSn3o9lA8=;
-        b=pxCiC7Jt0Obuam3FqrqxN5tnlucxLXzuCNe3hwJsD/PbnJCni+ZThWUIpdjinNsBfH2OwF
-        xF+xChq9KIe+ZbAQ==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-Subject: Re: [RFT][PATCH v2 2/3] cpuidle: teo: Skip tick_nohz_get_sleep_length()
- call in some cases
-In-Reply-To: <2167194.irdbgypaU6@kreacher>
-Message-ID: <28e2d9ce-89db-807a-9d39-f2fcccfb2ad4@linutronix.de>
-References: <5712331.DvuYhMxLoT@kreacher> <2167194.irdbgypaU6@kreacher>
+        with ESMTP id S234546AbjHKIw5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 04:52:57 -0400
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A922712;
+        Fri, 11 Aug 2023 01:52:57 -0700 (PDT)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-56ddf189fa0so223200eaf.1;
+        Fri, 11 Aug 2023 01:52:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691743977; x=1692348777;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AY1lB638PqnQ1Gj4LXDU5aM2F6L9q84K/WHnvLK5Anw=;
+        b=TzmWlHV/NdHTTViuag5zM1MgBeILELVlxDWFfU6orwnNBJEk1ctUX1OVYyu3b2Q8wB
+         zGAJzZ0XGIJ1NitAprVZqi9cQwhrEWH+NKkQyeCXoN1DjVW/k0f92XUgOMUE0ErGwe5r
+         ziFel3PVSqozCF0NZj1htjZ6RJuBFXNmirc9yKYC8eusNfZCPmsnjimaETDZLCcN9s4s
+         JbLH/aWdOEt04Ub0VAupXcVDQSo4xBAONC7f++a4NKbhBOvbwhlzCABG5Wpy6NtW4l/M
+         fxt6yTCG5ud+Z1LgxICtX6uW5wZ/Xctk1yJUhz31CN25mjofdNr8vPIT6jE9jecARx6y
+         GtLA==
+X-Gm-Message-State: AOJu0Yx+ec+ZW7rW0L1b/6LS8bUjhi+/zi5nYqL7Ke/s7l5MehOjk3CE
+        JNv26EK/i3zciVgvBPaUYyhGALkN1xvDAs+dCwM=
+X-Google-Smtp-Source: AGHT+IFNQWU6A1bg9nxCeoRgf8cQevz7hf6MuTqgGHO9kLpP4cYKyQkAwxtePwuw/rDeOGUJmGA1G5V8ynuiooQKd28=
+X-Received: by 2002:a05:6820:1687:b0:566:951e:140c with SMTP id
+ bc7-20020a056820168700b00566951e140cmr1022767oob.1.1691743976685; Fri, 11 Aug
+ 2023 01:52:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230803014354.3304825-1-li.meng@amd.com> <20230811061733.mvqlir3nbnzdp6tx@vireshk-i7>
+In-Reply-To: <20230811061733.mvqlir3nbnzdp6tx@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 11 Aug 2023 10:52:45 +0200
+Message-ID: <CAJZ5v0ho8msfa08MkvYSm8BhfVu3Y+f2thHV+s7raFdshhbenA@mail.gmail.com>
+Subject: Re: [PATCH V2] cpufreq: amd-pstate-ut: Modify the function to get the
+ highest_perf value
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Borislav Petkov <bp@alien8.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Fri, Aug 11, 2023 at 8:17 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 03-08-23, 09:43, Meng Li wrote:
+> > The previous function amd_get_highest_perf() will be deprecated.
+> > It can only return 166 or 255 by cpuinfo. For platforms that
+> > support preferred core, the value of highest perf can be between
+> > 166 and 255. Therefore, it will cause amd-pstate-ut to fail when
+> > run amd_pstate_ut_check_perf().
+> >
+> > Signed-off-by: Meng Li <li.meng@amd.com>
+> > ---
+> >  drivers/cpufreq/amd-pstate-ut.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> Applied. Thanks.
 
-On Thu, 3 Aug 2023, Rafael J. Wysocki wrote:
+So may I leave all of the amd-pstate patches to you?
 
-> Index: linux-pm/drivers/cpuidle/governors/teo.c
-> ===================================================================
-> --- linux-pm.orig/drivers/cpuidle/governors/teo.c
-> +++ linux-pm/drivers/cpuidle/governors/teo.c
-> @@ -166,6 +166,12 @@
->   */
->  #define NR_RECENT	9
->  
-> +/*
-> + * Idle state target residency threshold used for deciding whether or not to
-> + * check the time till the closest expected timer event.
-> + */
-> +#define RESIDENCY_THRESHOLD_NS	(15 * NSEC_PER_USEC)
-> +
-
-I would like to understand why this residency threshold is a fixed value
-and not related to TICK_NSEC. I'm sure there is a reason for it - but for
-me it is not obvious. Can you please explain it to me?
-
-Thanks,
-
-	Anna-Maria
-
+I would gladly do that. :-)
