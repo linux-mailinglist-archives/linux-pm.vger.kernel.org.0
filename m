@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0855F778F0F
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 14:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5854C778EFA
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 14:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236535AbjHKMRM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 08:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
+        id S236134AbjHKMRK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 08:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236568AbjHKMQy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 08:16:54 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255AA3C18
-        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 05:16:20 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b9db1de50cso29261511fa.3
-        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 05:16:20 -0700 (PDT)
+        with ESMTP id S236557AbjHKMQx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 08:16:53 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638393C1B
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 05:16:21 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b9cbaee7a9so30171491fa.0
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 05:16:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691756151; x=1692360951;
+        d=linaro.org; s=google; t=1691756152; x=1692360952;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nkM+FovsTlUwb/sPXMPrEPRPO+X9OnVJmkSbyVZt4vc=;
-        b=Soev9TgtBP478lr2f46cbWfE98N2qx6xm4tzGvNcemb83PSgILSbyx/Z0cA1ojjHn3
-         lbYFYQBiWwVsHtFTUF9Vqv8GbDcRtPKfxp3bBwvvE1IJ3lPdARl25clxYr5r3y1/tyE+
-         bD1HvcojqHLnCJCWknSnTVG34PiJPI5JQeuX37xf2Rq/GWWY/3x5ZrYBif3/IV1bskdz
-         jNw5LeXelVtpXpUBurjlcd4zOZbztAs5dVMZGChL018AMPIJs/lHsyhR8b0PU/s7TmkF
-         Fc/84btH757CljDlSKAFw1jzrts4WDBcjNf5jGOGe7PkDlGH5EG285lx4DY+KelH/iqc
-         XEAw==
+        bh=scoeTIYy4vb5EgheFAepiFWqi4fXeq1lFa7JMfWYqi4=;
+        b=C5hjA2S/Uccx24YZCltvH14WW1DjSgehLr2zvEQ1zUpYLvp3Ep2058M7NUD/fJGVzK
+         e2XH3FuUjUGSCMCKGE8UbXPsSJyr266p/higTc21BDWeZ/m6QeBr7Z127hQcuKGMQm72
+         KJOL9opmyXTRykWJGm2Y6o41dhy7hnmD0ctwV/rrEWseng6GJEEjMlnRXQPn2Whtjf73
+         3FQAwBYlL5YlGWGvW14+omJmvN/gheBRiurkr4HOQCIz0xIHh0xEAon/DpMd9VeREqvC
+         F+ikY6h5TT28GPwhHi2GWpHflDc77C2fJGCdgitJCCFrfqu5UEDw69hsHTbJhUhM4P/U
+         CLyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691756151; x=1692360951;
+        d=1e100.net; s=20221208; t=1691756152; x=1692360952;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nkM+FovsTlUwb/sPXMPrEPRPO+X9OnVJmkSbyVZt4vc=;
-        b=PEfRqCG7wRr3F2PTt8E9SNMxHwFDh8+aTsFYmOMQhx0bBOAShdUWha6p3YOsxr4oYs
-         64eEoom2rl3QTv010aM6A8D2fbx+V0redM/V4Zwb7RLAdTBWujwwiSCUeGYmjluBUnzq
-         ynZl/RMx2ax1nJNib7ucJ9o+eetaYF0QyRRqONs4ReVTaiahUwiPc7LlMZ0FZUfAlkIz
-         wsj0XfBmSNYjVsSTxJufxkJP/hvh5noPQAdjg6lqFkeWuKxnwkuiZLSffWmmdyRkogmN
-         lndA0YHjjXHNrl/gnqGL6V4abYLg749ghzfDrOeLprs8WNCzPDH8Q5/gU9SEYQ4v0rwQ
-         vXBQ==
-X-Gm-Message-State: AOJu0Yz0e8IqB46YJ+oS/vwG0DxlSIeMmUui/ktsWxMzfn1G7Zq7BDps
-        Y9zrPwx8dcKsvq9Hpw+JlyxGzg==
-X-Google-Smtp-Source: AGHT+IHNV9Q6Coi0Bh0gxX95eZRf9cwoIPIh4C4sJJljVVzInhuXsvsYF79RRLipqi0G2K96BhbapQ==
-X-Received: by 2002:a2e:7209:0:b0:2b6:df8a:d44b with SMTP id n9-20020a2e7209000000b002b6df8ad44bmr1241676ljc.36.1691756151004;
-        Fri, 11 Aug 2023 05:15:51 -0700 (PDT)
+        bh=scoeTIYy4vb5EgheFAepiFWqi4fXeq1lFa7JMfWYqi4=;
+        b=axM7v/+PXW3OtYaBuhvPZJ2CXPh7dKKgU6mTmIG43zfkYSLcmwcnkBarYN9egZkHA0
+         7R/CNcKnFNpYczxWOW6pO0Dl5auYOon66N9mRSjq1H0aV7gXlBn9iOMxDPKm62doxYgu
+         9bzA80yeuCldsyQS5QeJ+Mw6s/IywTRsr/UJK8xudoy1Vw/q7wNlyAwovYRVs27AHp2U
+         IWMwauKP2t20UQK6Lp2VTPsBG5m/OYooQtmi3/nprNp52/1bVPQXbWl+kQj1luv4bGqM
+         HlSosUv5BHSug4M8BXoNo0EcSfxaqV2K86Bz9VTAI1WJ+5Ercb3Pzmhx6AqLb6rt8Dls
+         HQpw==
+X-Gm-Message-State: AOJu0YxOIGZkTMwg4yYCuKtYAEb44GK/aJ7pj5B9vZUsH5pi3wnKM6Ks
+        9JyGbrfiJxpoJ8Daa6obC0sUsQ==
+X-Google-Smtp-Source: AGHT+IHUQj4nlzIpMERyWnRpPlm8/hRJlhu2LuR3NUI9A+k9Uov93YlmNF9lJlfR1mhihnZVThwHlQ==
+X-Received: by 2002:a2e:7e0f:0:b0:2b7:344c:a039 with SMTP id z15-20020a2e7e0f000000b002b7344ca039mr1516337ljc.33.1691756152190;
+        Fri, 11 Aug 2023 05:15:52 -0700 (PDT)
 Received: from [192.168.1.101] (abyj188.neoplus.adsl.tpnet.pl. [83.9.29.188])
-        by smtp.gmail.com with ESMTPSA id m12-20020a2e870c000000b002b9ec22d9fasm848487lji.29.2023.08.11.05.15.50
+        by smtp.gmail.com with ESMTPSA id m12-20020a2e870c000000b002b9ec22d9fasm848487lji.29.2023.08.11.05.15.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 05:15:50 -0700 (PDT)
+        Fri, 11 Aug 2023 05:15:51 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 11 Aug 2023 14:15:30 +0200
-Subject: [PATCH 19/20] interconnect: qcom: sm8350: Retire DEFINE_QBCM
+Date:   Fri, 11 Aug 2023 14:15:31 +0200
+Subject: [PATCH 20/20] interconnect: qcom: icc-rpmh: Retire DEFINE_QBCM
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230811-topic-icc_retire_macrosd-v1-19-c03aaeffc769@linaro.org>
+Message-Id: <20230811-topic-icc_retire_macrosd-v1-20-c03aaeffc769@linaro.org>
 References: <20230811-topic-icc_retire_macrosd-v1-0-c03aaeffc769@linaro.org>
 In-Reply-To: <20230811-topic-icc_retire_macrosd-v1-0-c03aaeffc769@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -66,349 +66,49 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1691756124; l=9015;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691756124; l=1036;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=FY8c36vkvzMQhDJMdfMk6D0Dbl/U6g583C761q8CoX4=;
- b=M1K6A9PwRIKr1h8RCSzlQ0xKWaEaZ/LaPH3NbxYkOoH/bmikeWMlXexBfaE4lpPnwK0tBWiKO
- v/kH19L9EM3BUoM6F35UKm0IiybatAp6oOqCidip1FuZvclt89VHpPy
+ bh=d/FxCw9vPsUH66qzqeSqW0F14Dv5hGAeVeTLrU6DYfA=;
+ b=9QE5KS8si/WcCOpbrLw414HVV5vapAeqBDPdSGPCaJePvsiXpQVgYDPEb06sIUCTNNw1thasA
+ 6zdLGvveLtKB2JHjNFvHKEXfBCdO0HaDXN87WN7arvIF3dFtHTIBI7o
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The struct definition macros are hard to read and comapre, expand them.
+This helper has no users anymore. Kill it with heavy fire.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/sm8350.c | 308 +++++++++++++++++++++++++++++++++----
- 1 file changed, 276 insertions(+), 32 deletions(-)
+ drivers/interconnect/qcom/bcm-voter.h | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sm8350.c b/drivers/interconnect/qcom/sm8350.c
-index 4f3b9b1ab101..bdf75839e6d1 100644
---- a/drivers/interconnect/qcom/sm8350.c
-+++ b/drivers/interconnect/qcom/sm8350.c
-@@ -1354,38 +1354,282 @@ static struct qcom_icc_node qns_mem_noc_sf_disp = {
- 	.links = { SM8350_MASTER_MNOC_SF_MEM_NOC_DISP },
- };
+diff --git a/drivers/interconnect/qcom/bcm-voter.h b/drivers/interconnect/qcom/bcm-voter.h
+index 0f64c0bab2c0..b4d36e349f3c 100644
+--- a/drivers/interconnect/qcom/bcm-voter.h
++++ b/drivers/interconnect/qcom/bcm-voter.h
+@@ -12,14 +12,6 @@
  
--DEFINE_QBCM(bcm_acv, "ACV", false, &ebi);
--DEFINE_QBCM(bcm_ce0, "CE0", false, &qxm_crypto);
--DEFINE_QBCM(bcm_cn0, "CN0", true, &qnm_gemnoc_cnoc, &qnm_gemnoc_pcie);
--DEFINE_QBCM(bcm_cn1, "CN1", false, &xm_qdss_dap, &qhs_ahb2phy0, &qhs_ahb2phy1, &qhs_aoss, &qhs_apss, &qhs_camera_cfg, &qhs_clk_ctl, &qhs_compute_cfg, &qhs_cpr_cx, &qhs_cpr_mmcx, &qhs_cpr_mx, &qhs_crypto0_cfg, &qhs_cx_rdpm, &qhs_dcc_cfg, &qhs_display_cfg, &qhs_gpuss_cfg, &qhs_hwkm, &qhs_imem_cfg, &qhs_ipa, &qhs_ipc_router, &qhs_mss_cfg, &qhs_mx_rdpm, &qhs_pcie0_cfg, &qhs_pcie1_cfg, &qhs_pimem_cfg, &qhs_pka_wrapper_cfg, &qhs_pmu_wrapper_cfg, &qhs_qdss_cfg, &qhs_qup0, &qhs_qup1, &qhs_qup2, &qhs_security, &qhs_spss_cfg, &qhs_tcsr, &qhs_tlmm, &qhs_ufs_card_cfg, &qhs_ufs_mem_cfg, &qhs_usb3_0, &qhs_usb3_1, &qhs_venus_cfg, &qhs_vsense_ctrl_cfg, &qns_a1_noc_cfg, &qns_a2_noc_cfg, &qns_ddrss_cfg, &qns_mnoc_cfg, &qns_snoc_cfg, &srvc_cnoc);
--DEFINE_QBCM(bcm_cn2, "CN2", false, &qhs_lpass_cfg, &qhs_pdm, &qhs_qspi, &qhs_sdc2, &qhs_sdc4);
--DEFINE_QBCM(bcm_co0, "CO0", false, &qns_nsp_gemnoc);
--DEFINE_QBCM(bcm_co3, "CO3", false, &qxm_nsp);
--DEFINE_QBCM(bcm_mc0, "MC0", true, &ebi);
--DEFINE_QBCM(bcm_mm0, "MM0", true, &qns_mem_noc_hf);
--DEFINE_QBCM(bcm_mm1, "MM1", false, &qnm_camnoc_hf, &qxm_mdp0, &qxm_mdp1);
--DEFINE_QBCM(bcm_mm4, "MM4", false, &qns_mem_noc_sf);
--DEFINE_QBCM(bcm_mm5, "MM5", false, &qnm_camnoc_icp, &qnm_camnoc_sf, &qnm_video0, &qnm_video1, &qnm_video_cvp, &qxm_rot);
--DEFINE_QBCM(bcm_sh0, "SH0", true, &qns_llcc);
--DEFINE_QBCM(bcm_sh2, "SH2", false, &alm_gpu_tcu, &alm_sys_tcu);
--DEFINE_QBCM(bcm_sh3, "SH3", false, &qnm_cmpnoc);
--DEFINE_QBCM(bcm_sh4, "SH4", false, &chm_apps);
--DEFINE_QBCM(bcm_sn0, "SN0", true, &qns_gemnoc_sf);
--DEFINE_QBCM(bcm_sn2, "SN2", false, &qns_gemnoc_gc);
--DEFINE_QBCM(bcm_sn3, "SN3", false, &qxs_pimem);
--DEFINE_QBCM(bcm_sn4, "SN4", false, &xs_qdss_stm);
--DEFINE_QBCM(bcm_sn5, "SN5", false, &xm_pcie3_0);
--DEFINE_QBCM(bcm_sn6, "SN6", false, &xm_pcie3_1);
--DEFINE_QBCM(bcm_sn7, "SN7", false, &qnm_aggre1_noc);
--DEFINE_QBCM(bcm_sn8, "SN8", false, &qnm_aggre2_noc);
--DEFINE_QBCM(bcm_sn14, "SN14", false, &qns_pcie_mem_noc);
--DEFINE_QBCM(bcm_acv_disp, "ACV", false, &ebi_disp);
--DEFINE_QBCM(bcm_mc0_disp, "MC0", false, &ebi_disp);
--DEFINE_QBCM(bcm_mm0_disp, "MM0", false, &qns_mem_noc_hf_disp);
--DEFINE_QBCM(bcm_mm1_disp, "MM1", false, &qxm_mdp0_disp, &qxm_mdp1_disp);
--DEFINE_QBCM(bcm_mm4_disp, "MM4", false, &qns_mem_noc_sf_disp);
--DEFINE_QBCM(bcm_mm5_disp, "MM5", false, &qxm_rot_disp);
--DEFINE_QBCM(bcm_sh0_disp, "SH0", false, &qns_llcc_disp);
-+static struct qcom_icc_bcm bcm_acv = {
-+	.name = "ACV",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &ebi },
-+};
-+
-+static struct qcom_icc_bcm bcm_ce0 = {
-+	.name = "CE0",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qxm_crypto },
-+};
-+
-+static struct qcom_icc_bcm bcm_cn0 = {
-+	.name = "CN0",
-+	.keepalive = true,
-+	.num_nodes = 2,
-+	.nodes = { &qnm_gemnoc_cnoc, &qnm_gemnoc_pcie },
-+};
-+
-+static struct qcom_icc_bcm bcm_cn1 = {
-+	.name = "CN1",
-+	.keepalive = false,
-+	.num_nodes = 47,
-+	.nodes = { &xm_qdss_dap,
-+		   &qhs_ahb2phy0,
-+		   &qhs_ahb2phy1,
-+		   &qhs_aoss,
-+		   &qhs_apss,
-+		   &qhs_camera_cfg,
-+		   &qhs_clk_ctl,
-+		   &qhs_compute_cfg,
-+		   &qhs_cpr_cx,
-+		   &qhs_cpr_mmcx,
-+		   &qhs_cpr_mx,
-+		   &qhs_crypto0_cfg,
-+		   &qhs_cx_rdpm,
-+		   &qhs_dcc_cfg,
-+		   &qhs_display_cfg,
-+		   &qhs_gpuss_cfg,
-+		   &qhs_hwkm,
-+		   &qhs_imem_cfg,
-+		   &qhs_ipa,
-+		   &qhs_ipc_router,
-+		   &qhs_mss_cfg,
-+		   &qhs_mx_rdpm,
-+		   &qhs_pcie0_cfg,
-+		   &qhs_pcie1_cfg,
-+		   &qhs_pimem_cfg,
-+		   &qhs_pka_wrapper_cfg,
-+		   &qhs_pmu_wrapper_cfg,
-+		   &qhs_qdss_cfg,
-+		   &qhs_qup0,
-+		   &qhs_qup1,
-+		   &qhs_qup2,
-+		   &qhs_security,
-+		   &qhs_spss_cfg,
-+		   &qhs_tcsr,
-+		   &qhs_tlmm,
-+		   &qhs_ufs_card_cfg,
-+		   &qhs_ufs_mem_cfg,
-+		   &qhs_usb3_0,
-+		   &qhs_usb3_1,
-+		   &qhs_venus_cfg,
-+		   &qhs_vsense_ctrl_cfg,
-+		   &qns_a1_noc_cfg,
-+		   &qns_a2_noc_cfg,
-+		   &qns_ddrss_cfg,
-+		   &qns_mnoc_cfg,
-+		   &qns_snoc_cfg,
-+		   &srvc_cnoc
-+	},
-+};
-+
-+static struct qcom_icc_bcm bcm_cn2 = {
-+	.name = "CN2",
-+	.keepalive = false,
-+	.num_nodes = 5,
-+	.nodes = { &qhs_lpass_cfg, &qhs_pdm, &qhs_qspi, &qhs_sdc2, &qhs_sdc4 },
-+};
-+
-+static struct qcom_icc_bcm bcm_co0 = {
-+	.name = "CO0",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_nsp_gemnoc },
-+};
-+
-+static struct qcom_icc_bcm bcm_co3 = {
-+	.name = "CO3",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qxm_nsp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mc0 = {
-+	.name = "MC0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &ebi },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm0 = {
-+	.name = "MM0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &qns_mem_noc_hf },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm1 = {
-+	.name = "MM1",
-+	.keepalive = false,
-+	.num_nodes = 3,
-+	.nodes = { &qnm_camnoc_hf, &qxm_mdp0, &qxm_mdp1 },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm4 = {
-+	.name = "MM4",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_mem_noc_sf },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm5 = {
-+	.name = "MM5",
-+	.keepalive = false,
-+	.num_nodes = 6,
-+	.nodes = { &qnm_camnoc_icp,
-+		   &qnm_camnoc_sf,
-+		   &qnm_video0,
-+		   &qnm_video1,
-+		   &qnm_video_cvp,
-+		   &qxm_rot
-+	},
-+};
-+
-+static struct qcom_icc_bcm bcm_sh0 = {
-+	.name = "SH0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &qns_llcc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh2 = {
-+	.name = "SH2",
-+	.keepalive = false,
-+	.num_nodes = 2,
-+	.nodes = { &alm_gpu_tcu, &alm_sys_tcu },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh3 = {
-+	.name = "SH3",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qnm_cmpnoc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh4 = {
-+	.name = "SH4",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &chm_apps },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn0 = {
-+	.name = "SN0",
-+	.keepalive = true,
-+	.num_nodes = 1,
-+	.nodes = { &qns_gemnoc_sf },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn2 = {
-+	.name = "SN2",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_gemnoc_gc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn3 = {
-+	.name = "SN3",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qxs_pimem },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn4 = {
-+	.name = "SN4",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &xs_qdss_stm },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn5 = {
-+	.name = "SN5",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &xm_pcie3_0 },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn6 = {
-+	.name = "SN6",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &xm_pcie3_1 },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn7 = {
-+	.name = "SN7",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qnm_aggre1_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn8 = {
-+	.name = "SN8",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qnm_aggre2_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_sn14 = {
-+	.name = "SN14",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_pcie_mem_noc },
-+};
-+
-+static struct qcom_icc_bcm bcm_acv_disp = {
-+	.name = "ACV",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &ebi_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mc0_disp = {
-+	.name = "MC0",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &ebi_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm0_disp = {
-+	.name = "MM0",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_mem_noc_hf_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm1_disp = {
-+	.name = "MM1",
-+	.keepalive = false,
-+	.num_nodes = 2,
-+	.nodes = { &qxm_mdp0_disp, &qxm_mdp1_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm4_disp = {
-+	.name = "MM4",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_mem_noc_sf_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_mm5_disp = {
-+	.name = "MM5",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qxm_rot_disp },
-+};
-+
-+static struct qcom_icc_bcm bcm_sh0_disp = {
-+	.name = "SH0",
-+	.keepalive = false,
-+	.num_nodes = 1,
-+	.nodes = { &qns_llcc_disp },
-+};
+ #include "icc-rpmh.h"
  
- static struct qcom_icc_bcm * const aggre1_noc_bcms[] = {
- };
+-#define DEFINE_QBCM(_name, _bcmname, _keepalive, ...)			       \
+-static struct qcom_icc_bcm _name = {					       \
+-	.name = _bcmname,						       \
+-	.keepalive = _keepalive,					       \
+-	.num_nodes = ARRAY_SIZE(((struct qcom_icc_node *[]){ __VA_ARGS__ })),  \
+-	.nodes = { __VA_ARGS__ },					       \
+-}
+-
+ struct bcm_voter *of_bcm_voter_get(struct device *dev, const char *name);
+ void qcom_icc_bcm_voter_add(struct bcm_voter *voter, struct qcom_icc_bcm *bcm);
+ int qcom_icc_bcm_voter_commit(struct bcm_voter *voter);
 
 -- 
 2.41.0
