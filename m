@@ -2,65 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 920477797C5
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE287797E3
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbjHKT27 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 15:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
+        id S231201AbjHKTko (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 15:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbjHKT26 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:28:58 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A0030E6;
-        Fri, 11 Aug 2023 12:28:58 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso21438945e9.0;
-        Fri, 11 Aug 2023 12:28:57 -0700 (PDT)
+        with ESMTP id S235584AbjHKTko (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:40:44 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D5B30E6;
+        Fri, 11 Aug 2023 12:40:43 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-76cd8dab98fso172346885a.3;
+        Fri, 11 Aug 2023 12:40:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691782136; x=1692386936;
+        d=gmail.com; s=20221208; t=1691782842; x=1692387642;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yXWmRapdmWSpOJGcCnf+eTbv0hwO0eR2fATZocuX9i0=;
-        b=M4zMHdklTi41Vs2EVIqzFP2uvzg71K+uZTT7l1mwsTIvPH7npW6JMwx+UepkXInA2Q
-         U3aTBo6YuIKIw82euChV6xBdwwQPGA3nRTfc6Omf9XUBWnzctWHOe2ZD9WVM45y0Q7Cj
-         azumh/Tu3XaF+dnqtICRy4ld5RAE3SFxYN7IFo+2r37jC8gBeXV5UAgKJA7fHMnHvVvr
-         Lpvp+rQ+9rC+/j7rGuviRy4oY5Jlm58VyTaLLuisnaErMCR560KlYf4H21ZL0hz4GvFJ
-         9oy2ToFc1t/CDvu8Psl5qCBO39bybfdeyZdE5XY6y0bMp9GgQ1rAfodrqhhWMLswYfkF
-         gx5g==
+        bh=K8XAdlCauzuqTqX7DL7uCr2jVWlrna5hii1a8kj15JE=;
+        b=i6oD9bghJDTu1zIQIV4UtUAx1+dPDP6CDrtzU9vghK3CiuknavQ6GqZJhbsOQVSMI2
+         OV8W/NB2Z2SY+Jkf8lUEOxUjQIqmbxHu6jquYhiyp/0M2+yG8f/qDgaq2CbO2dLVp1dq
+         +7/kqN0uTWYkwyjAuNnr6AuOtZG/vR6lP0L427ToteS19YuwsytmuMdebanfvGRNNOx5
+         3p6DSoODvzu+GeZZd+si7+4RKOumeXVfqkLQLG8yaIArCBk+UWiLylcKWRB56HRCX/vX
+         82k9L25AmzIFT5jInmSyANwga3Ke6p4QgJraLbfmT7IY/+7D/ca0rZ788xZWoQBtKi2z
+         bVyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691782136; x=1692386936;
+        d=1e100.net; s=20221208; t=1691782842; x=1692387642;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yXWmRapdmWSpOJGcCnf+eTbv0hwO0eR2fATZocuX9i0=;
-        b=iV+YSpX/kdUJek4FeGyuvEfhU7CUqCKRWAuEncdgYvkqacS9DSFW3UWx7GBmTjjCMi
-         j0e8qlcv8UQwNtOKgIJQuJp7Mx5ejZKe/ewzazD9OcspugvVcFR3jRXW493wdLMFyOrv
-         9kHN7EmjAnrRHLIWg+YbPUDs+15VHKBjggL/BH+Aydps7Xqag2w9FDOBbJVdxJ4UAVD6
-         sI0b6vvC8IMtBci8EqN1Jt9Va5OAs3G5KRnUBOVVJdnMA0HGqEjPo03iMB0pXfoGLCug
-         Bee8B3T3HVnnneVryW0wUbsp8qQlY/LnsyKSs9BTUnT7sdpzJ6bt6xEUwJ7WBMbxd9LV
-         asLw==
-X-Gm-Message-State: AOJu0Yy8DgaHY7/M8tzJ4Gx6XztyrhIxUcjiMafjKlXwLRUj0FlMeHOM
-        MYPnzCvfdK3+2mvfHjmc/TI=
-X-Google-Smtp-Source: AGHT+IFbYgQt8ICnMPepR4vjBncTPqeCwItzMpL0iUVa8ME8CdhVjlBBG5eEBluNJoJzLV9WIwI0EQ==
-X-Received: by 2002:a1c:7c10:0:b0:3fd:2dd9:6d58 with SMTP id x16-20020a1c7c10000000b003fd2dd96d58mr2153458wmc.26.1691782136239;
-        Fri, 11 Aug 2023 12:28:56 -0700 (PDT)
+        bh=K8XAdlCauzuqTqX7DL7uCr2jVWlrna5hii1a8kj15JE=;
+        b=Wrvpk0Y/j23ESVsqJn6MHvNY3GDYEebQTAl2LHSGbThaxtVDMn1nOFlPX5w1EktesT
+         Vwo0akzYrblHAkPb86MpPpq08/JQuOOIR6Dsk5hisH98otgxt6IwL8TPKndWNktLqVgs
+         Jg6JInolMI/+bZ8ByqxtAkGhdfgdfARlCMxXp1E0PzermtKdJFjDEH3BKFiH/2DS1cyZ
+         FVxpJ0xVbgSkBv/+dhW6mJECn8pnAGLNRMHx3QKn19a+1WZoHbgYudzww5a2G3M/tAR+
+         eZIZUgydD7ShWj6sy/H88exH/6vW+2SuCvEICC1XJJ2RymDNwfelYm/TjHwGn6DAXMxe
+         6tZg==
+X-Gm-Message-State: AOJu0Yzu9vMp00iJbvY+ZVG/xrPsu1n+VSVse+/BjYSRj2utnswQVPbg
+        pSq/DIB/iI2+njvgHZTnmqbOuiZLPRx0rg==
+X-Google-Smtp-Source: AGHT+IEd6FKDf2LUftPdhsoDiwuk7hY3RyxprWEjQIOiy+tECLHywU9E044swelPCq0F+bD0scVt7w==
+X-Received: by 2002:a05:620a:24c:b0:767:4016:29f3 with SMTP id q12-20020a05620a024c00b00767401629f3mr2941226qkn.58.1691782842614;
+        Fri, 11 Aug 2023 12:40:42 -0700 (PDT)
 Received: from localhost.localdomain ([92.85.190.61])
-        by smtp.gmail.com with ESMTPSA id f20-20020a1c6a14000000b003fe8b249df1sm1871152wmc.41.2023.08.11.12.28.55
+        by smtp.gmail.com with ESMTPSA id j1-20020ac84f81000000b003ef2db16e72sm1375329qtw.94.2023.08.11.12.40.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 12:28:55 -0700 (PDT)
+        Fri, 11 Aug 2023 12:40:42 -0700 (PDT)
 From:   Andrei Coardos <aboutphysycs@gmail.com>
-To:     linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     rdunlap@infradead.org, void0red@hust.edu.cn, daniel@makrotopia.org,
-        bchihi@baylibre.com, aouledameur@baylibre.com,
-        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
+To:     linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
         rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, alex@shruggie.ro,
-        Andrei Coardos <aboutphysycs@gmail.com>
-Subject: [PATCH] thermal: mediatek: auxadc_thermal: removed call to platform_set_drvdata()
-Date:   Fri, 11 Aug 2023 22:28:47 +0300
-Message-Id: <20230811192847.3838-1-aboutphysycs@gmail.com>
+        rafael@kernel.org, tiny.windzz@gmail.com, anarsoul@gmail.com,
+        alex@shruggie.ro, Andrei Coardos <aboutphysycs@gmail.com>
+Subject: [PATCH] thermal: sun8i_thermal: remove unneeded call to platform_set_drvdata()
+Date:   Fri, 11 Aug 2023 22:40:32 +0300
+Message-Id: <20230811194032.4240-1-aboutphysycs@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,22 +78,22 @@ accessed outside of this driver file.
 
 Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
 ---
- drivers/thermal/mediatek/auxadc_thermal.c | 2 --
+ drivers/thermal/sun8i_thermal.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
-index f59d36de20a0..99a1c35c68e7 100644
---- a/drivers/thermal/mediatek/auxadc_thermal.c
-+++ b/drivers/thermal/mediatek/auxadc_thermal.c
-@@ -1283,8 +1283,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
- 					      auxadc_phys_base, ctrl_id);
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 195f3c5d0b38..61a2f287ac90 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -489,8 +489,6 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+ 	if (!tmdev->chip)
+ 		return -EINVAL;
  
--	platform_set_drvdata(pdev, mt);
+-	platform_set_drvdata(pdev, tmdev);
 -
- 	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
- 					      &mtk_thermal_ops);
- 	if (IS_ERR(tzdev))
+ 	ret = sun8i_ths_resource_init(tmdev);
+ 	if (ret)
+ 		return ret;
 -- 
 2.34.1
 
