@@ -2,67 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE287797E3
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE1677981F
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 22:05:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjHKTko (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 15:40:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S236285AbjHKUFS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 16:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235584AbjHKTko (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:40:44 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D5B30E6;
-        Fri, 11 Aug 2023 12:40:43 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-76cd8dab98fso172346885a.3;
-        Fri, 11 Aug 2023 12:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691782842; x=1692387642;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K8XAdlCauzuqTqX7DL7uCr2jVWlrna5hii1a8kj15JE=;
-        b=i6oD9bghJDTu1zIQIV4UtUAx1+dPDP6CDrtzU9vghK3CiuknavQ6GqZJhbsOQVSMI2
-         OV8W/NB2Z2SY+Jkf8lUEOxUjQIqmbxHu6jquYhiyp/0M2+yG8f/qDgaq2CbO2dLVp1dq
-         +7/kqN0uTWYkwyjAuNnr6AuOtZG/vR6lP0L427ToteS19YuwsytmuMdebanfvGRNNOx5
-         3p6DSoODvzu+GeZZd+si7+4RKOumeXVfqkLQLG8yaIArCBk+UWiLylcKWRB56HRCX/vX
-         82k9L25AmzIFT5jInmSyANwga3Ke6p4QgJraLbfmT7IY/+7D/ca0rZ788xZWoQBtKi2z
-         bVyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691782842; x=1692387642;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K8XAdlCauzuqTqX7DL7uCr2jVWlrna5hii1a8kj15JE=;
-        b=Wrvpk0Y/j23ESVsqJn6MHvNY3GDYEebQTAl2LHSGbThaxtVDMn1nOFlPX5w1EktesT
-         Vwo0akzYrblHAkPb86MpPpq08/JQuOOIR6Dsk5hisH98otgxt6IwL8TPKndWNktLqVgs
-         Jg6JInolMI/+bZ8ByqxtAkGhdfgdfARlCMxXp1E0PzermtKdJFjDEH3BKFiH/2DS1cyZ
-         FVxpJ0xVbgSkBv/+dhW6mJECn8pnAGLNRMHx3QKn19a+1WZoHbgYudzww5a2G3M/tAR+
-         eZIZUgydD7ShWj6sy/H88exH/6vW+2SuCvEICC1XJJ2RymDNwfelYm/TjHwGn6DAXMxe
-         6tZg==
-X-Gm-Message-State: AOJu0Yzu9vMp00iJbvY+ZVG/xrPsu1n+VSVse+/BjYSRj2utnswQVPbg
-        pSq/DIB/iI2+njvgHZTnmqbOuiZLPRx0rg==
-X-Google-Smtp-Source: AGHT+IEd6FKDf2LUftPdhsoDiwuk7hY3RyxprWEjQIOiy+tECLHywU9E044swelPCq0F+bD0scVt7w==
-X-Received: by 2002:a05:620a:24c:b0:767:4016:29f3 with SMTP id q12-20020a05620a024c00b00767401629f3mr2941226qkn.58.1691782842614;
-        Fri, 11 Aug 2023 12:40:42 -0700 (PDT)
-Received: from localhost.localdomain ([92.85.190.61])
-        by smtp.gmail.com with ESMTPSA id j1-20020ac84f81000000b003ef2db16e72sm1375329qtw.94.2023.08.11.12.40.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 12:40:42 -0700 (PDT)
-From:   Andrei Coardos <aboutphysycs@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Cc:     samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
-        rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
-        rafael@kernel.org, tiny.windzz@gmail.com, anarsoul@gmail.com,
-        alex@shruggie.ro, Andrei Coardos <aboutphysycs@gmail.com>
-Subject: [PATCH] thermal: sun8i_thermal: remove unneeded call to platform_set_drvdata()
-Date:   Fri, 11 Aug 2023 22:40:32 +0300
-Message-Id: <20230811194032.4240-1-aboutphysycs@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        with ESMTP id S236490AbjHKUFE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 16:05:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DBA30E7;
+        Fri, 11 Aug 2023 13:05:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C0E75667D3;
+        Fri, 11 Aug 2023 20:05:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 21353C433C9;
+        Fri, 11 Aug 2023 20:05:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1691784303;
+        bh=V8o+NDqK1NPT6RsvD7EXIlfUi1eIdaL3mISx6uPok2M=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=apF9jdvXbY2wZ9FV5SEf4JGV2UXxzdTzaoMRobh7WKZB7dld6xK/yzJkK4fwKVDLx
+         stfCBZ48QdTRsjjh4ULtEK8HDaOKc5iMpQCIdr9E1xNvFYg05130av21UMlYZipbMM
+         Cb99pAM1/MWdCeiZnYxYuLvvUJxpUU/CtVx2akb3zyCAWy/W5rSkXbRH4UEkLYSgiV
+         b+zoZmzfR/jDrnaCkYenx40LzaR7hrmasttwKO9cwteCscsffHP9ZZXfRO4BZsqJaJ
+         sAoLZ2m20M+gEYWbal5Z5gnZqxF1H0hc5pj1gv1fZC5beCDTeJQixHp3xAN1LzdP45
+         5FZDrwwvaPuPA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C8397C3274B;
+        Fri, 11 Aug 2023 20:05:02 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fixes for v6.5-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0jsb8ezbg9P_HqgY2Q8UqEwRuMUMs=COyiAF-carAYQJw@mail.gmail.com>
+References: <CAJZ5v0jsb8ezbg9P_HqgY2Q8UqEwRuMUMs=COyiAF-carAYQJw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0jsb8ezbg9P_HqgY2Q8UqEwRuMUMs=COyiAF-carAYQJw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.5-rc6
+X-PR-Tracked-Commit-Id: 4778e1288447d9f90d87df07d195dc89e290d973
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9578b04c32397e664bd4643c8b7f525728df3028
+Message-Id: <169178430281.22025.10802734537321907881.pr-tracker-bot@kernel.org>
+Date:   Fri, 11 Aug 2023 20:05:02 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,29 +62,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This function call was found to be unnecessary as there is no equivalent
-platform_get_drvdata() call to access the private data of the driver. Also,
-the private data is defined in this driver, so there is no risk of it being
-accessed outside of this driver file.
+The pull request you sent on Fri, 11 Aug 2023 20:50:42 +0200:
 
-Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
----
- drivers/thermal/sun8i_thermal.c | 2 --
- 1 file changed, 2 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.5-rc6
 
-diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 195f3c5d0b38..61a2f287ac90 100644
---- a/drivers/thermal/sun8i_thermal.c
-+++ b/drivers/thermal/sun8i_thermal.c
-@@ -489,8 +489,6 @@ static int sun8i_ths_probe(struct platform_device *pdev)
- 	if (!tmdev->chip)
- 		return -EINVAL;
- 
--	platform_set_drvdata(pdev, tmdev);
--
- 	ret = sun8i_ths_resource_init(tmdev);
- 	if (ret)
- 		return ret;
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9578b04c32397e664bd4643c8b7f525728df3028
+
+Thank you!
+
 -- 
-2.34.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
