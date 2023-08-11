@@ -2,127 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D14779141
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 16:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 517437792AF
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 17:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbjHKODO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 10:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S236009AbjHKPR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 11:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjHKODN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 10:03:13 -0400
+        with ESMTP id S236030AbjHKPR1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 11:17:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB16D7;
-        Fri, 11 Aug 2023 07:03:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48D530DD;
+        Fri, 11 Aug 2023 08:17:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3563461027;
-        Fri, 11 Aug 2023 14:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A98C433C8;
-        Fri, 11 Aug 2023 14:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691762591;
-        bh=Rwte/OWk/9AiP4X5ERNrL4uMce/okwOLafpa1wIjvcU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iHxF4zhpAyB1MpfdvOyE9wXlrfpIeAzo4t5tPxRh0wYKbOSc0LZXB5LdvRl98GgRD
-         uc9bYvmtzMWnYB4RbApbvXg9nibbNKnOsnzSDs/UXtV039ZYpHmyUp7UhzjdyIS/4Z
-         FPXKn0OgFrhWfCAe6S3+Ftl4Wzj7b6oLDw/AUoQoeTPZ8YiI3OOBtlz3quB0cVFjbq
-         UjWMP53q61ClEw66XSwz56A1bes64qQj3FJybtKAm2Ie4fKexYIvkkYu/ya8+kw5lo
-         xIiGj9zA1TgT/QMwTUaxI0oCUcYHb5AszCpcb7EwwrcHM7tME8q1ilm9GWKTrpA4uR
-         LCoxTjbORxdGw==
-Date:   Fri, 11 Aug 2023 22:02:59 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Peng Fan <peng.fan@nxp.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH V3 0/8] genpd: imx: relocate scu-pd and misc update
-Message-ID: <20230811140259.GT151430@dragon>
-References: <20230731064746.2717684-1-peng.fan@oss.nxp.com>
- <CAPDyKFqvP71ZDcamFo5AijhTXEJKHUPNE=-dOvXYw3pr4XxK6A@mail.gmail.com>
- <DU0PR04MB9417E648E4442FE8518CFB9E8812A@DU0PR04MB9417.eurprd04.prod.outlook.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 72BB46747F;
+        Fri, 11 Aug 2023 15:17:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9247C433C9;
+        Fri, 11 Aug 2023 15:17:20 +0000 (UTC)
+Date:   Fri, 11 Aug 2023 11:17:19 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Atul Pant <quic_atulpant@quicinc.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_ashayj@quicinc.com,
+        quic_rgottimu@quicinc.com, quic_shashim@quicinc.com
+Subject: Re: Prevent RT-throttling for idle-injection threads
+Message-ID: <20230811111719.17f9965a@gandalf.local.home>
+In-Reply-To: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
+References: <20230808112523.2788452-1-quic_atulpant@quicinc.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DU0PR04MB9417E648E4442FE8518CFB9E8812A@DU0PR04MB9417.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 09, 2023 at 01:32:28AM +0000, Peng Fan wrote:
-> > Subject: Re: [PATCH V3 0/8] genpd: imx: relocate scu-pd and misc update
-> > 
-> > On Mon, 31 Jul 2023 at 08:43, Peng Fan (OSS) <peng.fan@oss.nxp.com>
-> > wrote:
-> > >
-> > > From: Peng Fan <peng.fan@nxp.com>
-> > >
-> > > V3:
-> > >  return -EBUSY instead of return 0 in patch 4
-> > >
-> > > V2:
-> > > Move drivers/firmware/imx/scu-pd.c to drivers/genpd/imx
-> > >
-> > > This patchset is to upstream NXP downstream scu-pd driver patches.
-> > > patch is to relocate scu-pd to genpd
-> > > patch 2,3 is to support more PDs
-> > > patch 4 is to not power off console when no console suspend patch 5 is
-> > > to suppress bind patch 6 is to make genpd align with HW state patch 7
-> > > is to support LP mode in runtime suspend, OFF mode in system suspend.
-> > > patch 8 is to change init level to avoid uneccessary defer probe
-> > >
-> > > V1:
-> > > This patchset is to upstream NXP downstream scu-pd driver patches.
-> > > patch 1,2 is to support more PDs
-> > > patch 3 is to not power off console when no console suspend patch 4 is
-> > > to suppress bind patch 5 is to make genpd align with HW state patch 6
-> > > is to support LP mode in runtime suspend, OFF mode in system suspend.
-> > > patch 7 is to change init level to avoid uneccessary defer probe
-> > >
-> > > Dong Aisheng (1):
-> > >   genpd: imx: scu-pd: change init level to subsys_initcall
-> > >
-> > > Peng Fan (7):
-> > >   genpd: imx: relocate scu-pd under genpd
-> > >   genpd: imx: scu-pd: enlarge PD range
-> > >   genpd: imx: scu-pd: add more PDs
-> > >   genpd: imx: scu-pd: do not power off console if no_console_suspend
-> > >   genpd: imx: scu-pd: Suppress bind attrs
-> > >   genpd: imx: scu-pd: initialize is_off according to HW state
-> > >   genpd: imx: scu-pd: add multi states support
-> > >
-> > >  drivers/firmware/imx/Makefile            |   1 -
-> > >  drivers/genpd/imx/Makefile               |   1 +
-> > >  drivers/{firmware => genpd}/imx/scu-pd.c | 193
-> > > +++++++++++++++++++++--
-> > >  3 files changed, 183 insertions(+), 12 deletions(-)  rename
-> > > drivers/{firmware => genpd}/imx/scu-pd.c (70%)
-> > >
-> > 
-> > Moving this to the new genpd subsystem makes sense to me.
-> > 
-> > Even if we can't get the whole series ready for v6.6, we can certainly pick
-> > patch1. Either we can funnel this via my new genpd tree [1] or if Shawn
-> > picks it up. If the latter, Shawn needs to merge my immutable branch [2]
-> > before applying. I am fine either way.
+On Tue,  8 Aug 2023 16:55:23 +0530
+Atul Pant <quic_atulpant@quicinc.com> wrote:
+
+> Hi all,
+> We are trying to implement a solution for thermal mitigation by using
+> idle injection on CPUs. However we face some limitations with the current
+> idle-inject framework. As per our need, we want to start injecting idle
+> cycles on a CPU for indefinite time (until the temperature/power of the
+> CPU falls below a threshold). This will help to keep the hot CPUs in the
+> sleep state until we see improvement in temperature/power. If we set the
+> idle duration to a large value or have an idle-injection ratio of 100%,
+> then the idle-inject RT thread suffers from RT throttling. This results
+> in the CPU exiting from the sleep state and consuming some power.
 > 
-> There is no rush to catch v6.6 for this patchset.  It could go via your genpd
-> tree for v6.7 from my view. Anyway, up to you and Shawn to decide.
+> The above situation can be avoided, if we can prevent RT throttling on
+> the injected CPU. With the currently available sysctl parameters,
+> sched_rt_runtime_us and sched_rt_period_us, we can prevent RT throttling
+> by either setting sched_rt_runtime_us equal to sched_rt_period_us or,
+> setting sched_rt_runtime_us to -1. Since these parameters are system
+> wide, so it will affect the RT tasks on non idle-injected CPUs as well.
+> To overcome this, will it be feasible to have these two parameters on a
+> per CPU basis? This will allow to selectively disable RT throttling on
+> idle-injected CPUs.
 
-I prefer to have this go via genpd tree.
+I wonder if the deadline scheduler that Daniel is working on would help in this case?
 
-Shawn
+-- Steve
+
