@@ -2,148 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9AB778882
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 09:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFFC77888F
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 09:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjHKHqn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 03:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
+        id S233757AbjHKHuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 03:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjHKHqm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 03:46:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB7F1FDD;
-        Fri, 11 Aug 2023 00:46:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74CB0648F4;
-        Fri, 11 Aug 2023 07:46:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CFF5C433C8;
-        Fri, 11 Aug 2023 07:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691740000;
-        bh=GuyoCPl/YJ4xO8sOUZZlYV2+Wm0YbUzDtduIENXUP5Q=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=e1diiZqDkCg25FdOmDG287DkAJgVNNQAff+9luMOhmk0PipbY7RrX5yIwP7buDo/A
-         yrrEVU9hCyH/fScD5LTtvcoRVU+HMPE3DHBMxiNsKTOsGqHhsj1QTRThfkDZiK4MK3
-         jWhSEXxPrQBu6H3G+KEAaE4gxU2HPyVpHFaf2fjEAu3FoMHdaOzo+Zf45gUa/UwejU
-         zBdCFsmlUUqeJ92Ba5MRwjmYov++aY+MxhEHW4QB188/xnVIckJhm68PyHf/xTdV0K
-         KhbA3TXdbO7n5HQNY9kK3YTgc8Q6YzoI9a0QYgRvGcIC/NGA85aK/sPzYNqvXNmIa1
-         3F7KBkmymQvAw==
-Message-ID: <58ea6863-53cd-228b-1474-f67b0bb134f0@kernel.org>
-Date:   Fri, 11 Aug 2023 10:46:34 +0300
+        with ESMTP id S234297AbjHKHuV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 03:50:21 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C8A30C0;
+        Fri, 11 Aug 2023 00:50:18 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 37B7o8ik046448;
+        Fri, 11 Aug 2023 02:50:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1691740208;
+        bh=G9OWHXsY19lEsHCXBg4q5dQSET0RUIrirgxjNztR6zo=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=r0IUwQ7SyVQc39ZJ6k2ogGmvZ8/jqnrTO3EvuN7TGO65KjgI2Go1vhvYNDffHTGi7
+         7JD/47W8JpEB46FY9PoZkbuAO0RyOWI1IwWAsRXLvJ4rhkvNuzLPu6WqMiu7mxmznd
+         yO6YrjxyVJycnMQNpviV5ejvkcO7vPGagdAphRWA=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 37B7o8Nd128937
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 11 Aug 2023 02:50:08 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 11
+ Aug 2023 02:50:07 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 11 Aug 2023 02:50:07 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 37B7o6Gu003878;
+        Fri, 11 Aug 2023 02:50:07 -0500
+Date:   Fri, 11 Aug 2023 13:20:06 +0530
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        Vibhore Vardhan <vibhore@ti.com>
+Subject: Re: [PATCH V4 2/2] dt-bindings: cpufreq: Convert ti-cpufreq to json
+ schema
+Message-ID: <20230811075006.wlx5qq2tkz5zn7ok@dhruva>
+References: <20230811031458.957624-1-nm@ti.com>
+ <20230811031458.957624-3-nm@ti.com>
 MIME-Version: 1.0
-From:   Georgi Djakov <djakov@kernel.org>
-Subject: Re: [PATCH v3 1/3] debugfs: Add write support to debugfs_create_str()
-To:     Mike Tipton <quic_mdtipton@quicinc.com>,
-        gregkh@linuxfoundation.org, rafael@kernel.org, corbet@lwn.net
-Cc:     linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        quic_okukatla@quicinc.com, quic_viveka@quicinc.com,
-        peterz@infradead.org, quic_pkondeti@quicinc.com
-References: <20230807142914.12480-1-quic_mdtipton@quicinc.com>
- <20230807142914.12480-2-quic_mdtipton@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20230807142914.12480-2-quic_mdtipton@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230811031458.957624-3-nm@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7.08.23 17:29, Mike Tipton wrote:
-> Currently, debugfs_create_str() only supports reading strings from
-> debugfs. Add support for writing them as well.
+On Aug 10, 2023 at 22:14:58 -0500, Nishanth Menon wrote:
+> Move the ti-cpufreq binding over to opp and convert the free text
+> binding to json-schema.
 > 
-> Based on original implementation by Peter Zijlstra [0]. Write support
-> was present in the initial patch version, but dropped in v2 due to lack
-> of users. We have a user now, so reintroduce it.
-> 
-> [0] https://lore.kernel.org/all/YF3Hv5zXb%2F6lauzs@hirez.programming.kicks-ass.net/
-> 
-
-Hi Greg,
-
-Looks like the original code was reviewed two years ago (not sure if it
-counts). But in any case, i need an ack from you to apply this.
-
-There is no build dependency with the rest of the patches (but there is a
-functional one). It should be also fine if you apply it directly, if you
-prefer so?
-
-Thanks,
-Georgi
-
-> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
 > ---
->   fs/debugfs/file.c | 48 +++++++++++++++++++++++++++++++++++++++++++++--
->   1 file changed, 46 insertions(+), 2 deletions(-)
-> 
-> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
-> index b7711888dd17..87b3753aa4b1 100644
-> --- a/fs/debugfs/file.c
-> +++ b/fs/debugfs/file.c
-> @@ -904,8 +904,52 @@ EXPORT_SYMBOL_GPL(debugfs_create_str);
->   static ssize_t debugfs_write_file_str(struct file *file, const char __user *user_buf,
->   				      size_t count, loff_t *ppos)
->   {
-> -	/* This is really only for read-only strings */
-> -	return -EINVAL;
-> +	struct dentry *dentry = F_DENTRY(file);
-> +	char *old, *new = NULL;
-> +	int pos = *ppos;
-> +	int r;
-> +
-> +	r = debugfs_file_get(dentry);
-> +	if (unlikely(r))
-> +		return r;
-> +
-> +	old = *(char **)file->private_data;
-> +
-> +	/* only allow strict concatenation */
-> +	r = -EINVAL;
-> +	if (pos && pos != strlen(old))
-> +		goto error;
-> +
-> +	r = -E2BIG;
-> +	if (pos + count + 1 > PAGE_SIZE)
-> +		goto error;
-> +
-> +	r = -ENOMEM;
-> +	new = kmalloc(pos + count + 1, GFP_KERNEL);
-> +	if (!new)
-> +		goto error;
-> +
-> +	if (pos)
-> +		memcpy(new, old, pos);
-> +
-> +	r = -EFAULT;
-> +	if (copy_from_user(new + pos, user_buf, count))
-> +		goto error;
-> +
-> +	new[pos + count] = '\0';
-> +	strim(new);
-> +
-> +	rcu_assign_pointer(*(char **)file->private_data, new);
-> +	synchronize_rcu();
-> +	kfree(old);
-> +
-> +	debugfs_file_put(dentry);
-> +	return count;
-> +
-> +error:
-> +	kfree(new);
-> +	debugfs_file_put(dentry);
-> +	return r;
->   }
->   
->   static const struct file_operations fops_str = {
+> Changes since V3:
+> * Rewrote the description of the binding to something more relevant to
+>   current style of documentation.
+> * Due to the rewrite in description, I have dropped Dhruva's
+>   Reviewed-by.
 
+OK
+
+> 
+> V3: https://lore.kernel.org/all/20230809023045.1870410-3-nm@ti.com/
+> V2: https://lore.kernel.org/all/20230801233341.1416552-3-nm@ti.com
+> V1: https://lore.kernel.org/all/20230724153911.1376830-6-nm@ti.com/
+> 
+>  .../bindings/cpufreq/ti-cpufreq.txt           | 132 ------------------
+>  .../opp/operating-points-v2-ti-cpu.yaml       |  92 ++++++++++++
+>  2 files changed, 92 insertions(+), 132 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/cpufreq/ti-cpufreq.txt
+>  create mode 100644 Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> 
+[...]
+> diff --git a/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> new file mode 100644
+> index 000000000000..02d1d2c17129
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/opp/operating-points-v2-ti-cpu.yaml
+> @@ -0,0 +1,92 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/opp/operating-points-v2-ti-cpu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI CPU OPP (Operating Performance Points)
+> +
+> +description:
+> +  TI SoCs, like those in the AM335x, AM437x, AM57xx, AM62x, and DRA7xx
+> +  families, the CPU frequencies subset and the voltage value of each
+> +  OPP vary based on the silicon variant used. The data sheet sections
+> +  corresponding to "Operating Performance Points" describe the frequency
+> +  and voltage values based on device type and speed bin information
+> +  blown in corresponding eFuse bits as referred to by the Technical
+> +  Reference Manual.
+> +
+> +  This document extends the operating-points-v2 binding by providing
+> +  the hardware description for the scheme mentioned above.
+> +
+[...]
+
+
+Thanks for addressing my comments,
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
+-- 
+Best regards,
+Dhruva Gole <d-gole@ti.com>
