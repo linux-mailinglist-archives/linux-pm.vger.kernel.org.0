@@ -2,119 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D279779138
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 16:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D14779141
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 16:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjHKOBA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 10:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48242 "EHLO
+        id S229992AbjHKODO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 10:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjHKOBA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 10:01:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B33D7;
-        Fri, 11 Aug 2023 07:00:59 -0700 (PDT)
+        with ESMTP id S229657AbjHKODN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 10:03:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB16D7;
+        Fri, 11 Aug 2023 07:03:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78B7F631B1;
-        Fri, 11 Aug 2023 14:00:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C24B3C433C7;
-        Fri, 11 Aug 2023 14:00:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3563461027;
+        Fri, 11 Aug 2023 14:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88A98C433C8;
+        Fri, 11 Aug 2023 14:03:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691762458;
-        bh=C4cXeWQX/r0IzEoOEZ08WLIpkcXhN7kt7P6JcA2SsfA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=rjOirqlUfvyMrYGK2PVWBJ5zUsGe2FKOjHY1dp1jcP9Za9VNrHnzeLPV7j1s1GKa1
-         pnp1TVUnexW5wXbSCI3Uk3aG2vO8T4NzWCjTg3lJK8GOE2Ino+Ns0Y/bKJM3NavB2d
-         3iUhkptkfGP3N80QGn989MfZaaFKYrBXKHxS/3AgluHVulS8sMU19qP0/juWN2eCCY
-         DRFczAh/0LRrjffN/6Wp78U0yrotycsm4dPQ5UJL878xSXCDzRFY+d6EZFHZXMjbS9
-         cuExJx9o92mxn5k/NIJeQDrfDBE/26mqajanE/DM4vYlIGsPLyiz2hHJqA/dR5sOLK
-         H24h7Nxq2gFqQ==
-Received: (nullmailer pid 3322998 invoked by uid 1000);
-        Fri, 11 Aug 2023 14:00:55 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1691762591;
+        bh=Rwte/OWk/9AiP4X5ERNrL4uMce/okwOLafpa1wIjvcU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iHxF4zhpAyB1MpfdvOyE9wXlrfpIeAzo4t5tPxRh0wYKbOSc0LZXB5LdvRl98GgRD
+         uc9bYvmtzMWnYB4RbApbvXg9nibbNKnOsnzSDs/UXtV039ZYpHmyUp7UhzjdyIS/4Z
+         FPXKn0OgFrhWfCAe6S3+Ftl4Wzj7b6oLDw/AUoQoeTPZ8YiI3OOBtlz3quB0cVFjbq
+         UjWMP53q61ClEw66XSwz56A1bes64qQj3FJybtKAm2Ie4fKexYIvkkYu/ya8+kw5lo
+         xIiGj9zA1TgT/QMwTUaxI0oCUcYHb5AszCpcb7EwwrcHM7tME8q1ilm9GWKTrpA4uR
+         LCoxTjbORxdGw==
+Date:   Fri, 11 Aug 2023 22:02:59 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH V3 0/8] genpd: imx: relocate scu-pd and misc update
+Message-ID: <20230811140259.GT151430@dragon>
+References: <20230731064746.2717684-1-peng.fan@oss.nxp.com>
+ <CAPDyKFqvP71ZDcamFo5AijhTXEJKHUPNE=-dOvXYw3pr4XxK6A@mail.gmail.com>
+ <DU0PR04MB9417E648E4442FE8518CFB9E8812A@DU0PR04MB9417.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>, linux-pm@vger.kernel.org,
-        Zhang Rui <rui.zhang@intel.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        netdev@vger.kernel.org, NXP Linux Team <linux-imx@nxp.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-In-Reply-To: <20230810144451.1459985-3-alexander.stein@ew.tq-group.com>
-References: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
- <20230810144451.1459985-3-alexander.stein@ew.tq-group.com>
-Message-Id: <169176235704.3319932.12605780111430379869.robh@kernel.org>
-Subject: Re: [PATCH 2/6] dt-bindings: imx-thermal: Add
- #thermal-sensor-cells property
-Date:   Fri, 11 Aug 2023 08:00:55 -0600
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DU0PR04MB9417E648E4442FE8518CFB9E8812A@DU0PR04MB9417.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On Thu, 10 Aug 2023 16:44:47 +0200, Alexander Stein wrote:
-> This property is defined in thermal-sensor.yaml. Reference this file and
-> constraint '#thermal-sensor-cells' to 0 for imx-thermal.
-> Fixes the warning:
-> arch/arm/boot/dts/nxp/imx/imx6q-mba6a.dtb: tempmon:
->  '#thermal-sensor-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
->  From schema: Documentation/devicetree/bindings/thermal/imx-thermal.yaml
+On Wed, Aug 09, 2023 at 01:32:28AM +0000, Peng Fan wrote:
+> > Subject: Re: [PATCH V3 0/8] genpd: imx: relocate scu-pd and misc update
+> > 
+> > On Mon, 31 Jul 2023 at 08:43, Peng Fan (OSS) <peng.fan@oss.nxp.com>
+> > wrote:
+> > >
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > V3:
+> > >  return -EBUSY instead of return 0 in patch 4
+> > >
+> > > V2:
+> > > Move drivers/firmware/imx/scu-pd.c to drivers/genpd/imx
+> > >
+> > > This patchset is to upstream NXP downstream scu-pd driver patches.
+> > > patch is to relocate scu-pd to genpd
+> > > patch 2,3 is to support more PDs
+> > > patch 4 is to not power off console when no console suspend patch 5 is
+> > > to suppress bind patch 6 is to make genpd align with HW state patch 7
+> > > is to support LP mode in runtime suspend, OFF mode in system suspend.
+> > > patch 8 is to change init level to avoid uneccessary defer probe
+> > >
+> > > V1:
+> > > This patchset is to upstream NXP downstream scu-pd driver patches.
+> > > patch 1,2 is to support more PDs
+> > > patch 3 is to not power off console when no console suspend patch 4 is
+> > > to suppress bind patch 5 is to make genpd align with HW state patch 6
+> > > is to support LP mode in runtime suspend, OFF mode in system suspend.
+> > > patch 7 is to change init level to avoid uneccessary defer probe
+> > >
+> > > Dong Aisheng (1):
+> > >   genpd: imx: scu-pd: change init level to subsys_initcall
+> > >
+> > > Peng Fan (7):
+> > >   genpd: imx: relocate scu-pd under genpd
+> > >   genpd: imx: scu-pd: enlarge PD range
+> > >   genpd: imx: scu-pd: add more PDs
+> > >   genpd: imx: scu-pd: do not power off console if no_console_suspend
+> > >   genpd: imx: scu-pd: Suppress bind attrs
+> > >   genpd: imx: scu-pd: initialize is_off according to HW state
+> > >   genpd: imx: scu-pd: add multi states support
+> > >
+> > >  drivers/firmware/imx/Makefile            |   1 -
+> > >  drivers/genpd/imx/Makefile               |   1 +
+> > >  drivers/{firmware => genpd}/imx/scu-pd.c | 193
+> > > +++++++++++++++++++++--
+> > >  3 files changed, 183 insertions(+), 12 deletions(-)  rename
+> > > drivers/{firmware => genpd}/imx/scu-pd.c (70%)
+> > >
+> > 
+> > Moving this to the new genpd subsystem makes sense to me.
+> > 
+> > Even if we can't get the whole series ready for v6.6, we can certainly pick
+> > patch1. Either we can funnel this via my new genpd tree [1] or if Shawn
+> > picks it up. If the latter, Shawn needs to merge my immutable branch [2]
+> > before applying. I am fine either way.
 > 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  Documentation/devicetree/bindings/thermal/imx-thermal.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+> There is no rush to catch v6.6 for this patchset.  It could go via your genpd
+> tree for v6.7 from my view. Anyway, up to you and Shawn to decide.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+I prefer to have this go via genpd tree.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/imx-thermal.example.dtb: tempmon: '#thermal-sensor-cells' is a required property
-	from schema $id: http://devicetree.org/schemas/thermal/imx-thermal.yaml#
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230810144451.1459985-3-alexander.stein@ew.tq-group.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Shawn
