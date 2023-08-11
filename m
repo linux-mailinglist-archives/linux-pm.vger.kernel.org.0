@@ -2,68 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB71779A04
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 23:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E75779AD8
+	for <lists+linux-pm@lfdr.de>; Sat, 12 Aug 2023 00:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235706AbjHKV5e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 17:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
+        id S234660AbjHKWxj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 18:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237207AbjHKV5P (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 17:57:15 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA9B3580
-        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 14:57:14 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-267ffa7e441so1648662a91.1
-        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 14:57:14 -0700 (PDT)
+        with ESMTP id S230077AbjHKWxj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 18:53:39 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3B12684
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 15:53:38 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-268113acd37so4136437a91.0
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 15:53:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1691791034; x=1692395834;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ya7YlFK/hZAPdXzrc2wsK46NfqzB7JlOp2RoQE2MLEk=;
-        b=Je8PTPcrzHIVGl8Br/r3yHCe94uP5R5ge1JTKi/g9gh6O+9lufNZb26eieiGOB2Daz
-         sgewEDWK6D+l8AvJ6cTqdLoJiXMg08qr3pOajDmUyyBp9FU86L1ybfKcFfHA3TUhG3ed
-         vvAF5hweNTTyy+QuJM3tNmMkGKDCV7Ix+Pg82ZMOPU6fl9PvmqnLF2NnRUMHGeCCM1Bs
-         t/9HdbCLzX1apoMLAOxYO8yVf3m49UkuOKV02fA12blgpYpSjzvEYcxgXgAtZknBysUx
-         pU7t1iQ6K18Rc9NtvFgPtX8lpe9+U47MmZk0NEAXAAvYkIQe5rDlpdQFbk2n/bTMTNg0
-         Z8AQ==
+        d=google.com; s=20221208; t=1691794418; x=1692399218;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wCh9SVmlxV8iSfQqkpg+zJJ3iZh5ZfIYHEkLVt/OL10=;
+        b=FE2fzx07q4xlYY4C0wE4aD1mX9gWSh85eC53ruh7GiVxDqxWT1OqfmzHrSL+reMOp2
+         iOW87/vurbXgIFkp8qu7bso81R7PSiR1Fu7mzqDvK24dSERJAPz/mog0xkMe6o2+w2qf
+         KPGWAUcZuFDav+W40yPqI53PaMKAdcSMDmpVyGgVuh5929O5skwfNTAMmvT+BIpIk9oI
+         zX90EI4WOOfQzqwdsAEWyKRHJKpblhUspOfUeKluUKS0I9YI2z8f4QNQrUG7cj7U47Un
+         ozRwnFscaS5jQJ3Fnv3zi8azK2cDDOWqIarvruNoIv4guehV/BgSOYZuffxDoUteuhOB
+         9k6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691791034; x=1692395834;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ya7YlFK/hZAPdXzrc2wsK46NfqzB7JlOp2RoQE2MLEk=;
-        b=fo8ten3glzeXSONRgaHbseeLMiEvawtmUNbweu+fFXXg0at6h75hON29aE+8i7kgXe
-         FLJRCDRgiLRkVKZzS2Lzw1g7RBuElA+q9Kex9z//OR0jtiP0inlfjoy7E9wMIhCpSzdS
-         p5m/voGbo2yT2Y0Xl2AeQS6D16b42wiaqZLNFbD7//kjBVoN5FuAi6jWYdOn94MqGIO9
-         pWUQRnlJajxaYU2Km8A5zfdd7aGjiNMa9qwJ4RiIkBPw0R8wHSSB9sjJLf4+LKY060J7
-         seu+v4mwpPDjaJayYACrg5UA3ddpPw9MXEOk0PEymfpGvZzcyzH0O1sOOWydi03ySbCk
-         cLeg==
-X-Gm-Message-State: AOJu0YyXiszgnJgzVuV9v2tGe6X4MGaZxgseiptj7iR8slyzuAd9ShDI
-        5f1muPj9Z1OMG4xqNhOJtFxReQ==
-X-Google-Smtp-Source: AGHT+IENu5W0ahvB8cumYBKhI9MvQS7GdfRLvz5U9OW7vbv3AbEllk+EPlcaCvotk6aMuDjhegRz7g==
-X-Received: by 2002:a17:90a:d515:b0:261:1141:b716 with SMTP id t21-20020a17090ad51500b002611141b716mr2530877pju.33.1691791033768;
-        Fri, 11 Aug 2023 14:57:13 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id gd10-20020a17090b0fca00b002635db431a0sm3794757pjb.45.2023.08.11.14.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Aug 2023 14:57:13 -0700 (PDT)
-Message-ID: <64d6aeb9.170a0220.e4744.7704@mx.google.com>
-Date:   Fri, 11 Aug 2023 14:57:13 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: acpi-6.5-rc6-79-g9a4efd57c80c
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-Subject: pm/testing baseline: 50 runs,
- 4 regressions (acpi-6.5-rc6-79-g9a4efd57c80c)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        d=1e100.net; s=20221208; t=1691794418; x=1692399218;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wCh9SVmlxV8iSfQqkpg+zJJ3iZh5ZfIYHEkLVt/OL10=;
+        b=Yxqa2RCB0wee8VbUvqVUydwy4CLmz7/bI89fY5N89wzSzq8bGT4fwCkO83iAYAkOQo
+         NLt8RzuJSz/h3mxFcfI9UWLHe7zjyrmEFteUOj7enjOP9xmIKt9TtVjKhkOLyJg9Y6I1
+         jWJr2c+dGWWA0tFXNa8lnUbe3lTGCdKRzCS78nG0dQt+omKUYokwsJoo3cVFSU2n77Ep
+         wh5KIT0kmMtodgsd8/GfGlYCOR5ytFfc4njOwEt4JauUuYuNQMV14IQzCk0SQiF7JEW9
+         ZVFJH9ldgeNxAkH8Bq3/e2ohJLKWQEU40+bX1ML8aA9eEy47KLftW2Rhrj6XQyQab7i0
+         F/Ug==
+X-Gm-Message-State: AOJu0YyLbPwB/YJi5da7/77ARg3CuxKZscEsWQdzi+k48OQIak4Yf8P9
+        bvZ7RFnACoeBBP6VVe+f5Jvi4X8CE71ay7OZlp2Jy9YVT0JyVAbFjZZCcEuh7YlT4vuCNJHNqsg
+        czMh+zXRscnV1m1lsglKu9Y/Q71bJCXBVSMCdbI0NzpddFie9MoWICt2g42qctWI74Fv+ADqo
+X-Google-Smtp-Source: AGHT+IGJ5G7oxa9OUzN2JT+w+t3qvhrMzqm8FxNorCFsdY+qFFahaL4zMgEUaNm9s0eCd/UV1D9FDI9XbUo5SIg=
+X-Received: from tessier.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5422])
+ (user=radusolea job=sendgmr) by 2002:a17:90b:fd3:b0:268:96c1:c101 with SMTP
+ id gd19-20020a17090b0fd300b0026896c1c101mr1797901pjb.0.1691794418148; Fri, 11
+ Aug 2023 15:53:38 -0700 (PDT)
+Date:   Fri, 11 Aug 2023 15:52:48 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.694.ge786442a9b-goog
+Message-ID: <20230811225247.1271387-2-radusolea@google.com>
+Subject: [RFC PATCH RESEND] thermal core: add option to run PM_POST_SUSPEND asynchronously
+From:   Radu Solea <radusolea@google.com>
+To:     linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, Radu Solea <radusolea@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,250 +66,142 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 50 runs, 4 regressions (acpi-6.5-rc6-79-g9a4efd57c80c)
+Some thermal zones are bus connected and slow to resume, thus
+delaying actions which depend on completion of PM_POST_SUSPEND.
+Add optional execution path to resume thermal zones on the system
+unbounded workqueue.
+
+Signed-off-by: Radu Solea <radusolea@google.com>
+---
+ drivers/thermal/Kconfig        | 11 +++++++
+ drivers/thermal/thermal_core.c | 58 ++++++++++++++++++++++++++++++----
+ 2 files changed, 62 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 19a4b33cb564..8dbcc62ccf8a 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -91,6 +91,17 @@ config THERMAL_WRITABLE_TRIPS
+ 	  Say 'Y' here if you would like to allow userspace tools to
+ 	  change trip temperatures.
+ 
++config THERMAL_ASYNC_RESUME
++	bool "Thermal async init zones on system resume"
++	default n
++	help
++	  Re-initialize thermal zones asynchronously on system resume.
++	  Thermal zone sensors may be attached on slow buses, impacting
++	  the duration of PM_POST_SUSPEND. If that is a concern enable
++	  this switch.
++
++	  If in doubt, say N.
++
+ choice
+ 	prompt "Default Thermal governor"
+ 	default THERMAL_DEFAULT_GOV_STEP_WISE
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 842f678c1c3e..5794832e4223 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -21,6 +21,10 @@
+ #include <linux/of.h>
+ #include <linux/suspend.h>
+ 
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++#include <linux/workqueue.h>
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
+ #define CREATE_TRACE_POINTS
+ #include "thermal_trace.h"
+ 
+@@ -41,6 +45,10 @@ static atomic_t in_suspend;
+ 
+ static struct thermal_governor *def_governor;
+ 
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++struct work_struct *resume_thermal_zones_wk;
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
+ /*
+  * Governor section: set of functions to handle thermal governors
+  *
+@@ -1495,26 +1503,53 @@ struct thermal_zone_device *thermal_zone_get_zone_by_name(const char *name)
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_get_zone_by_name);
+ 
+-static int thermal_pm_notify(struct notifier_block *nb,
+-			     unsigned long mode, void *_unused)
++static inline void resume_thermal_zones(void)
+ {
+ 	struct thermal_zone_device *tz;
+ 
++	list_for_each_entry(tz, &thermal_tz_list, node) {
++		if (!thermal_zone_device_is_enabled(tz))
++			continue;
++
++		thermal_zone_device_init(tz);
++		thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
++	}
++}
++
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++static void thermal_resume_work_fn(struct work_struct *work)
++{
++	resume_thermal_zones();
++}
++
++static inline void thermal_resume_enqueue(void)
++{
++	INIT_WORK(resume_thermal_zones_wk, thermal_resume_work_fn);
++	queue_work(system_unbound_wq, resume_thermal_zones_wk);
++}
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
++static int thermal_pm_notify(struct notifier_block *nb,
++			     unsigned long mode, void *_unused)
++{
+ 	switch (mode) {
+ 	case PM_HIBERNATION_PREPARE:
+ 	case PM_RESTORE_PREPARE:
+ 	case PM_SUSPEND_PREPARE:
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++		flush_work(resume_thermal_zones_wk);
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
+ 		atomic_set(&in_suspend, 1);
+ 		break;
+ 	case PM_POST_HIBERNATION:
+ 	case PM_POST_RESTORE:
+ 	case PM_POST_SUSPEND:
+ 		atomic_set(&in_suspend, 0);
+-		list_for_each_entry(tz, &thermal_tz_list, node) {
+-			thermal_zone_device_init(tz);
+-			thermal_zone_device_update(tz,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		}
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++		thermal_resume_enqueue();
++#else /* CONFIG_THERMAL_ASYNC_RESUME */
++		resume_thermal_zones();
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
+ 		break;
+ 	default:
+ 		break;
+@@ -1530,6 +1565,15 @@ static int __init thermal_init(void)
+ {
+ 	int result;
+ 
++#ifdef CONFIG_THERMAL_ASYNC_RESUME
++	resume_thermal_zones_wk = kmalloc(sizeof(*resume_thermal_zones_wk),
++					GFP_KERNEL);
++	if (!resume_thermal_zones_wk) {
++		result = -ENOMEM;
++		goto error;
++	}
++#endif /* CONFIG_THERMAL_ASYNC_RESUME */
++
+ 	result = thermal_netlink_init();
+ 	if (result)
+ 		goto error;
+-- 
+2.41.0.694.ge786442a9b-goog
 
-Regressions Summary
--------------------
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-fsl-ls2088a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
-
-fsl-lx2160a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
-
-r8a77960-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-r8a779m1-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/acpi-6.5=
--rc6-79-g9a4efd57c80c/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: acpi-6.5-rc6-79-g9a4efd57c80c
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      9a4efd57c80c7873d53315cf3d4509ff5dcebb62 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-fsl-ls2088a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64d6a50c3d73a6730f35b1e0
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64d6a50c3d73a6730f35b1e3
-        failing since 28 days (last pass: v6.0-rc3-85-gf6f4c123bfbc, first =
-fail: v6.5-rc1-21-g3c61a03588dd8)
-
-    2023-08-11T21:15:36.474763  [   15.715306] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-1243059_1.5.2.4.1>
-    2023-08-11T21:15:36.580207  =
-
-    2023-08-11T21:15:36.681403  / # #export SHELL=3D/bin/sh
-    2023-08-11T21:15:36.681933  =
-
-    2023-08-11T21:15:36.782933  / # export SHELL=3D/bin/sh. /lava-1243059/e=
-nvironment
-    2023-08-11T21:15:36.783418  =
-
-    2023-08-11T21:15:36.884421  / # . /lava-1243059/environment/lava-124305=
-9/bin/lava-test-runner /lava-1243059/1
-    2023-08-11T21:15:36.885132  =
-
-    2023-08-11T21:15:36.889519  / # /lava-1243059/bin/lava-test-runner /lav=
-a-1243059/1
-    2023-08-11T21:15:36.911791  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-fsl-lx2160a-rdb | arm64 | lab-nxp       | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64d6a50fed7be8398835b1d9
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64d6a50fed7be8398835b1dc
-        failing since 148 days (last pass: v6.1-rc5-55-g60453df62d30, first=
- fail: v6.3-rc2-33-g1240ce78c05e)
-
-    2023-08-11T21:15:38.648074  [   13.048398] <LAVA_SIGNAL_ENDRUN 0_dmesg =
-1243061_1.5.2.4.1>
-    2023-08-11T21:15:38.753326  =
-
-    2023-08-11T21:15:38.854646  / # #export SHELL=3D/bin/sh
-    2023-08-11T21:15:38.855052  =
-
-    2023-08-11T21:15:38.956030  / # export SHELL=3D/bin/sh. /lava-1243061/e=
-nvironment
-    2023-08-11T21:15:38.956433  =
-
-    2023-08-11T21:15:39.057405  / # . /lava-1243061/environment/lava-124306=
-1/bin/lava-test-runner /lava-1243061/1
-    2023-08-11T21:15:39.058067  =
-
-    2023-08-11T21:15:39.061972  / # /lava-1243061/bin/lava-test-runner /lav=
-a-1243061/1
-    2023-08-11T21:15:39.085505  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-r8a77960-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64d6a48725094fa7f235b1f4
-
-  Results:     4 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a77960-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64d6a48725094fa7f235b1f9
-        failing since 23 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-08-11T21:15:12.938035  / # #
-
-    2023-08-11T21:15:13.040228  export SHELL=3D/bin/sh
-
-    2023-08-11T21:15:13.040955  #
-
-    2023-08-11T21:15:13.142395  / # export SHELL=3D/bin/sh. /lava-11267227/=
-environment
-
-    2023-08-11T21:15:13.143102  =
-
-
-    2023-08-11T21:15:13.244584  / # . /lava-11267227/environment/lava-11267=
-227/bin/lava-test-runner /lava-11267227/1
-
-    2023-08-11T21:15:13.245730  =
-
-
-    2023-08-11T21:15:13.246701  / # /lava-11267227/bin/lava-test-runner /la=
-va-11267227/1
-
-    2023-08-11T21:15:13.312583  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-08-11T21:15:13.313122  + cd /lava-112672<8>[   19.301555] <LAVA_SI=
-GNAL_STARTRUN 1_bootrr 11267227_1.5.2.4.5>
- =
-
-    ... (28 line(s) more)  =
-
- =
-
-
-
-platform        | arch  | lab           | compiler | defconfig | regressions
-----------------+-------+---------------+----------+-----------+------------
-r8a779m1-ulcb   | arm64 | lab-collabora | gcc-10   | defconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/64d6a4af25094fa7f235b2a7
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/acpi-6.5-rc6-79-g9a=
-4efd57c80c/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/64d6a4af25094fa7f235b2ac
-        failing since 23 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
-st fail: v6.5-rc2-44-g6384f300e9f3)
-
-    2023-08-11T21:14:24.561393  / # #
-
-    2023-08-11T21:14:25.641241  export SHELL=3D/bin/sh
-
-    2023-08-11T21:14:25.642998  #
-
-    2023-08-11T21:14:27.132338  / # export SHELL=3D/bin/sh. /lava-11267236/=
-environment
-
-    2023-08-11T21:14:27.134097  =
-
-
-    2023-08-11T21:14:29.856569  / # . /lava-11267236/environment/lava-11267=
-236/bin/lava-test-runner /lava-11267236/1
-
-    2023-08-11T21:14:29.858777  =
-
-
-    2023-08-11T21:14:29.868436  / # /lava-11267236/bin/lava-test-runner /la=
-va-11267236/1
-
-    2023-08-11T21:14:29.928407  + export 'TESTRUN_ID=3D1_bootrr'
-
-    2023-08-11T21:14:29.928864  + cd /lava-112672<8>[   28.511291] <LAVA_SI=
-GNAL_STARTRUN 1_bootrr 11267236_1.5.2.4.5>
- =
-
-    ... (38 line(s) more)  =
-
- =20
