@@ -2,112 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C2BD7797A0
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920477797C5
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 21:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjHKTSw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 11 Aug 2023 15:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S236812AbjHKT27 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 15:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjHKTSv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:18:51 -0400
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFE92709;
-        Fri, 11 Aug 2023 12:18:51 -0700 (PDT)
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-56d26137095so370150eaf.1;
-        Fri, 11 Aug 2023 12:18:51 -0700 (PDT)
+        with ESMTP id S231126AbjHKT26 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 15:28:58 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A0030E6;
+        Fri, 11 Aug 2023 12:28:58 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso21438945e9.0;
+        Fri, 11 Aug 2023 12:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691782136; x=1692386936;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yXWmRapdmWSpOJGcCnf+eTbv0hwO0eR2fATZocuX9i0=;
+        b=M4zMHdklTi41Vs2EVIqzFP2uvzg71K+uZTT7l1mwsTIvPH7npW6JMwx+UepkXInA2Q
+         U3aTBo6YuIKIw82euChV6xBdwwQPGA3nRTfc6Omf9XUBWnzctWHOe2ZD9WVM45y0Q7Cj
+         azumh/Tu3XaF+dnqtICRy4ld5RAE3SFxYN7IFo+2r37jC8gBeXV5UAgKJA7fHMnHvVvr
+         Lpvp+rQ+9rC+/j7rGuviRy4oY5Jlm58VyTaLLuisnaErMCR560KlYf4H21ZL0hz4GvFJ
+         9oy2ToFc1t/CDvu8Psl5qCBO39bybfdeyZdE5XY6y0bMp9GgQ1rAfodrqhhWMLswYfkF
+         gx5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691781531; x=1692386331;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AyTF5NgYb8GTCLi6gpcp9i9P/ufgxXkVq7a1/z7YV5g=;
-        b=QoQW5sRuUgL01dnb8ChiJcr7RJn0N9n75BCipiTPpqwjWVeyAlQtuViSOTmIQ3cTf7
-         7A4Kke/2a3kzzyeh4iNNh98RfPvTK04JqOQGFpEFSJUIuIbrYoUV2KgqLhCI3ZX/V/Ce
-         r9SPo0wM0LBDU+u3Rp9kB8ic2/SA3VExa1qLaHZ0xDfN4dpCNudyIjLS3MfDltF3uuuQ
-         czaJOKi5LJLDq9KmIZ+QxMBCr/ilCx6HakAaCREi2mL2apQXLepQ0BQHCaZffLMMKXOz
-         2xXpcb+lrJ0Z9lEehK9XxxsyXoVy1WUbtkx2KyBCOBXJ9Lt/iKrr5nLewZKiAYxrUb6R
-         C2+g==
-X-Gm-Message-State: AOJu0Yyki/BcXva8CyJhLez5S11dxzCMLcYHu5gyrYeF/0mFbzyZFxCg
-        wqOwpr9VlzJZeqssih0T4bx17CtPSaDt875j7KgeoLKP
-X-Google-Smtp-Source: AGHT+IFRUoYMKTpyUiA0wxMpAiHOModCyNfbW9NdMHU/GXgJUj820mik8xPWHE5qFw8J56v4Sybc7Y0XrVHm3dNZYfw=
-X-Received: by 2002:a05:6820:136:b0:56d:72dc:5410 with SMTP id
- i22-20020a056820013600b0056d72dc5410mr2079960ood.1.1691781530668; Fri, 11 Aug
- 2023 12:18:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691782136; x=1692386936;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yXWmRapdmWSpOJGcCnf+eTbv0hwO0eR2fATZocuX9i0=;
+        b=iV+YSpX/kdUJek4FeGyuvEfhU7CUqCKRWAuEncdgYvkqacS9DSFW3UWx7GBmTjjCMi
+         j0e8qlcv8UQwNtOKgIJQuJp7Mx5ejZKe/ewzazD9OcspugvVcFR3jRXW493wdLMFyOrv
+         9kHN7EmjAnrRHLIWg+YbPUDs+15VHKBjggL/BH+Aydps7Xqag2w9FDOBbJVdxJ4UAVD6
+         sI0b6vvC8IMtBci8EqN1Jt9Va5OAs3G5KRnUBOVVJdnMA0HGqEjPo03iMB0pXfoGLCug
+         Bee8B3T3HVnnneVryW0wUbsp8qQlY/LnsyKSs9BTUnT7sdpzJ6bt6xEUwJ7WBMbxd9LV
+         asLw==
+X-Gm-Message-State: AOJu0Yy8DgaHY7/M8tzJ4Gx6XztyrhIxUcjiMafjKlXwLRUj0FlMeHOM
+        MYPnzCvfdK3+2mvfHjmc/TI=
+X-Google-Smtp-Source: AGHT+IFbYgQt8ICnMPepR4vjBncTPqeCwItzMpL0iUVa8ME8CdhVjlBBG5eEBluNJoJzLV9WIwI0EQ==
+X-Received: by 2002:a1c:7c10:0:b0:3fd:2dd9:6d58 with SMTP id x16-20020a1c7c10000000b003fd2dd96d58mr2153458wmc.26.1691782136239;
+        Fri, 11 Aug 2023 12:28:56 -0700 (PDT)
+Received: from localhost.localdomain ([92.85.190.61])
+        by smtp.gmail.com with ESMTPSA id f20-20020a1c6a14000000b003fe8b249df1sm1871152wmc.41.2023.08.11.12.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 12:28:55 -0700 (PDT)
+From:   Andrei Coardos <aboutphysycs@gmail.com>
+To:     linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     rdunlap@infradead.org, void0red@hust.edu.cn, daniel@makrotopia.org,
+        bchihi@baylibre.com, aouledameur@baylibre.com,
+        angelogioacchino.delregno@collabora.com, matthias.bgg@gmail.com,
+        rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org, alex@shruggie.ro,
+        Andrei Coardos <aboutphysycs@gmail.com>
+Subject: [PATCH] thermal: mediatek: auxadc_thermal: removed call to platform_set_drvdata()
+Date:   Fri, 11 Aug 2023 22:28:47 +0300
+Message-Id: <20230811192847.3838-1-aboutphysycs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230809112348.2302384-1-boris.brezillon@collabora.com>
-In-Reply-To: <20230809112348.2302384-1-boris.brezillon@collabora.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 11 Aug 2023 21:18:39 +0200
-Message-ID: <CAJZ5v0jZ8By3Mz_JM6O79p0af4GaRBXE4PgiCHVOuHWcf=UQsA@mail.gmail.com>
-Subject: Re: [PATCH] thermal/of: Fix a leak in thermal_of_zone_register()
-To:     Boris Brezillon <boris.brezillon@collabora.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 9, 2023 at 1:23 PM Boris Brezillon
-<boris.brezillon@collabora.com> wrote:
->
-> thermal_zone_device_register_with_trips() copies the tzp info. After
-> calling this function, we should free the tzp object, otherwise it's
-> leaked.
->
-> Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
+This function call was found to be unnecessary as there is no equivalent
+platform_get_drvdata() call to access the private data of the driver. Also,
+the private data is defined in this driver, so there is no risk of it being
+accessed outside of this driver file.
 
-Hasn't this been fixed in -rc5?
+Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
+---
+ drivers/thermal/mediatek/auxadc_thermal.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-> ---
->  drivers/thermal/thermal_of.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 6fb14e521197..e74ef4fa576b 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -524,10 +524,17 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->         tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
->                                                      mask, data, of_ops, tzp,
->                                                      pdelay, delay);
-> +
-> +       /*
-> +        * thermal_zone_device_register_with_trips() copies the tzp info.
-> +        * We don't need it after that point.
-> +        */
-> +       kfree(tzp);
-> +
->         if (IS_ERR(tz)) {
->                 ret = PTR_ERR(tz);
->                 pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-> -               goto out_kfree_tzp;
-> +               goto out_kfree_trips;
->         }
->
->         ret = thermal_zone_device_enable(tz);
-> @@ -540,8 +547,6 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->
->         return tz;
->
-> -out_kfree_tzp:
-> -       kfree(tzp);
->  out_kfree_trips:
->         kfree(trips);
->  out_kfree_of_ops:
-> --
-> 2.41.0
->
+diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/thermal/mediatek/auxadc_thermal.c
+index f59d36de20a0..99a1c35c68e7 100644
+--- a/drivers/thermal/mediatek/auxadc_thermal.c
++++ b/drivers/thermal/mediatek/auxadc_thermal.c
+@@ -1283,8 +1283,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 			mtk_thermal_init_bank(mt, i, apmixed_phys_base,
+ 					      auxadc_phys_base, ctrl_id);
+ 
+-	platform_set_drvdata(pdev, mt);
+-
+ 	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+ 					      &mtk_thermal_ops);
+ 	if (IS_ERR(tzdev))
+-- 
+2.34.1
+
