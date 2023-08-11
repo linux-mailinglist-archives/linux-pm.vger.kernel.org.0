@@ -2,131 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E214B778E6C
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 13:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3609778EDA
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 14:15:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232087AbjHKL54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Aug 2023 07:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59944 "EHLO
+        id S234199AbjHKMPc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Aug 2023 08:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjHKL5x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 07:57:53 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864662D66
-        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 04:57:48 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4fe21e7f3d1so3036917e87.3
-        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 04:57:48 -0700 (PDT)
+        with ESMTP id S229657AbjHKMPb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 08:15:31 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F14271E
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 05:15:27 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4fe45da0a89so3542287e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 11 Aug 2023 05:15:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691755067; x=1692359867;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PGRjmcPR0ggWOyPN0x8FFsJH5U36A3nsKo7NqXApY5c=;
-        b=gZhN7DrVpJJrz2QSkHmOvpCKCmf+zWa7XN5Et5MZAvJfzNVM4mPJYRm+zGUXwT8YCV
-         C410+FCk5OAsDMdaqjxDupGY0c2n0Md3+pNjI9VKekbE8h98Rta8Rh5it+8uIPUnRqNO
-         fjruaU4jfnNiKSJymBO+FVEUvd9MiZOP9LSt9UgYs8pUNa/1tCEmJ3n7BwCauoo2G+FC
-         9JUFtm4mHH+bDUr5A67I93p1bXM8Z8uDbmAOCVwksx4wGo0+7RV1z0t2C7cwSNFZAYCP
-         WgFsX2XYyUo5AAUZDzFolbX3ik1x1RHsFvqoQ4cUr7fXiIj6BgYZzzNJZRzeA8W4Siri
-         bnZA==
+        d=linaro.org; s=google; t=1691756125; x=1692360925;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zv4D1GbqB9ZbsMi2EXSpye3Fn8OSo1vne5gRlJ3Jxx4=;
+        b=qWLm3kD1Ky4tjPSWEkoJO7hwurBoHTGscGrARyUUaQ4YUvBM2ho6eCIL+lbqyN+rq2
+         Hv0r6HC94Rre02mAEjucnEW6DdycwboDO1xZfw48EU9fVJWUvCMlWRBhG4MKhuK0XEZV
+         TcwDOQh1XK/H8cDqN+eky0Shbzim+JuJuyehKUsItINzab6U6QPd86769S7To8cLRktt
+         KN6yapB9f7N+zA1y5+PGjD2TMy7LFl+VxjIEDL/wQQax5YEaHdkPb+dGVoUWgJF+3Vbm
+         EXqHl+jaqsp2wNd2qPE4Wd8uxAN4YxLS001w1/fls+vV5VHtmDM8aHtFRsiBv7Xk5R0b
+         7qcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691755067; x=1692359867;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PGRjmcPR0ggWOyPN0x8FFsJH5U36A3nsKo7NqXApY5c=;
-        b=driEU6F2AQjoYBAUGJ+S1W/dF0aTB5ikl2yTdhUe3Yl8XqN07k9QWFHVF4ArVlonZ0
-         vP7VZkXMpaodbWdXSvaF8qyasaYmwXueWicIuEwwYVNjXrZ7bWAcPVGestt/ae/irXw8
-         TK0P6lU9lqnaoBzNiHzMrB1x7asQ4BfWEJAcvHrPtFLRzi4+MznFlDQOaUBD5yXlECdt
-         zQreJfiOLG0uONEPhXO/KNPdNhbNIADkwG4zUFoe0Ohefn5IYCB5RnNkfxZyiFNK5rfK
-         1/x/W/GxYWKaFjdYLBukZnCK53eJxpOCxfoyIHYHIb8mqYnOelny8Xz40eAdKLzd0aue
-         I4pA==
-X-Gm-Message-State: AOJu0YyImho0uAaSTuamS1odHmEUDWB/dFt0j3/MwlbUJGg9wxWTb86h
-        rBsrkiPvAsxTQxmLPr4JFuabLd/r6ASVucHYd1Y=
-X-Google-Smtp-Source: AGHT+IHfFNzj7TZoosPHfQcFyI/Zru3Fx/9Sh4T8l7y7AepoDwWD2lbzXLfTuQnLVPbUobihqR0zDA==
-X-Received: by 2002:a05:6512:acd:b0:4fd:faa1:fefc with SMTP id n13-20020a0565120acd00b004fdfaa1fefcmr1171122lfu.56.1691755066613;
-        Fri, 11 Aug 2023 04:57:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1691756125; x=1692360925;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zv4D1GbqB9ZbsMi2EXSpye3Fn8OSo1vne5gRlJ3Jxx4=;
+        b=Y4kivU4adFW5Mtlh56MACrgCUF+bcJthUDcrO+0HGDbiksOCZxJaHCQ4TIgdenIJg2
+         1iOjs3jUXN0ZwGVyz2lqjXt/dZEqFAYxN1qSGjTlPTsP5Blys6maM6cJ0k/taz2Pqpyp
+         dg7TO/25pr0wDBNotRitk+/SjnaRhk3CLlBUYpR1atiikXPpl2myNv2EdHOeGu5xmZ54
+         8CQV1iHT/0dz++AEMpaoSkf4b8tKxgTCTOpIRzhK1mhHtkKfDJmKM2B0U1YrBaMiwlSb
+         lAIdahAzwJ/WPvv5g4P+otaaWY+pD29oLBrDNOMNRq1B0YWAKYsuRzDEDc2dh4c+s1pA
+         DvKQ==
+X-Gm-Message-State: AOJu0Yx5LYSrO6GcGg+Ynuz1FeMGEpM/w6TeUrpevg0d9mxC57yGfAMm
+        OjtBx6OgjyOTsAu3Uv6FPAgjZw==
+X-Google-Smtp-Source: AGHT+IFhSczT38AwuVtfp7EdIrNxloj+5FVCduWCuoWeXnKglCczq0TSsDoPHfrTa8kwVL92tbhgrw==
+X-Received: by 2002:a05:6512:696:b0:4f8:6b98:f4dd with SMTP id t22-20020a056512069600b004f86b98f4ddmr1953606lfe.32.1691756125423;
+        Fri, 11 Aug 2023 05:15:25 -0700 (PDT)
 Received: from [192.168.1.101] (abyj188.neoplus.adsl.tpnet.pl. [83.9.29.188])
-        by smtp.gmail.com with ESMTPSA id l25-20020ac24319000000b004fe0c0235ddsm704728lfh.143.2023.08.11.04.57.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Aug 2023 04:57:46 -0700 (PDT)
-Message-ID: <b881d6d4-3187-44cd-ac0c-66c3c1b8aef4@linaro.org>
-Date:   Fri, 11 Aug 2023 13:57:45 +0200
+        by smtp.gmail.com with ESMTPSA id m12-20020a2e870c000000b002b9ec22d9fasm848487lji.29.2023.08.11.05.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Aug 2023 05:15:24 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 00/20] Retire DEFINE_QBCM/DEFINE_QNODE macros
+Date:   Fri, 11 Aug 2023 14:15:11 +0200
+Message-Id: <20230811-topic-icc_retire_macrosd-v1-0-c03aaeffc769@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] Improve enable_mask handling
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE8m1mQC/x2N0QqDMAxFf0XyvICtOsZ+ZQxp0zgDrpVEx0D89
+ 5U9ngvnngOMVdjg3hyg/BGTkiu4SwM0h/xilFQZfOu79uYcbmUVQiEalTdRHt+BtFhCn3rqp6E
+ brpGg6jEYY9SQaa4HeV+WOq7Kk3z/vcfzPH9ABbtlfwAAAA==
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Mike Tipton <mdtipton@codeaurora.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
+        Georgi Djakov <djakov@kernel.org>
 Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-References: <20230811-topic-icc_fix_1he-v1-0-5c96ccef3399@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230811-topic-icc_fix_1he-v1-0-5c96ccef3399@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1691756123; l=2517;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=FiDUMnSBdWJzoYcyBNMnjUE7y8sQMKXFNcH57iH1p8I=;
+ b=PPz6vRUqwAebWI9mn+JLBDnLT+zNIMgvSsSNcnC0IkYLusTJcvT5Hsxo0UdY0ob/TpW9jgGYv
+ jcuqSbpyAIlBIZ2xUyp4tL5Cu+5th39Z8MwJJoSCG6jJ5eYlvzqw4Se
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11.08.2023 13:55, Konrad Dybcio wrote:
-> As pointed out by Bjorn and Mike in [1], we can simplify the handling
-> of enable_mask-based BCMs. This series attemps to do so and fixes a bug
-> that snuck in.
-> 
-> Gave a quick spin on 8450, doesn't seem to have exploded.
-> 
-> [1] https://lore.kernel.org/linux-arm-msm/113b50f8-35f6-73fc-4fc9-302262927c5e@quicinc.com/
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-+CC Mike's QUIC address, looks like the tree I based it on didn't
-yet catch the CAF mailmap patch
+This is ripped out of the bigger patch series at [1], as this part
+doesn't really have any dependencies and (hopefully) brings no
+functional change.
 
-Konrad
+Compile-tested for the most part, bloat-o-meter reports no size change
+
+[1] https://lore.kernel.org/linux-arm-msm/20230708-topic-rpmh_icc_rsc-v1-0-b223bd2ac8dd@linaro.org/
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (20):
+      interconnect: qcom: sc7180: Retire DEFINE_QNODE
+      interconnect: qcom: sdm670: Retire DEFINE_QNODE
+      interconnect: qcom: sdm845: Retire DEFINE_QNODE
+      interconnect: qcom: sdx55: Retire DEFINE_QNODE
+      interconnect: qcom: sdx65: Retire DEFINE_QNODE
+      interconnect: qcom: sm6350: Retire DEFINE_QNODE
+      interconnect: qcom: sm8150: Retire DEFINE_QNODE
+      interconnect: qcom: sm8250: Retire DEFINE_QNODE
+      interconnect: qcom: sm8350: Retire DEFINE_QNODE
+      interconnect: qcom: icc-rpmh: Retire DEFINE_QNODE
+      interconnect: qcom: sc7180: Retire DEFINE_QBCM
+      interconnect: qcom: sdm670: Retire DEFINE_QBCM
+      interconnect: qcom: sdm845: Retire DEFINE_QBCM
+      interconnect: qcom: sdx55: Retire DEFINE_QBCM
+      interconnect: qcom: sdx65: Retire DEFINE_QBCM
+      interconnect: qcom: sm6350: Retire DEFINE_QBCM
+      interconnect: qcom: sm8150: Retire DEFINE_QBCM
+      interconnect: qcom: sm8250: Retire DEFINE_QBCM
+      interconnect: qcom: sm8350: Retire DEFINE_QBCM
+      interconnect: qcom: icc-rpmh: Retire DEFINE_QBCM
+
+ drivers/interconnect/qcom/bcm-voter.h |    8 -
+ drivers/interconnect/qcom/icc-rpmh.h  |   10 -
+ drivers/interconnect/qcom/sc7180.c    | 1613 ++++++++++++++++++++++++++---
+ drivers/interconnect/qcom/sdm670.c    | 1386 ++++++++++++++++++++++---
+ drivers/interconnect/qcom/sdm845.c    | 1655 +++++++++++++++++++++++++++---
+ drivers/interconnect/qcom/sdx55.c     |  843 ++++++++++++++--
+ drivers/interconnect/qcom/sdx65.c     |  830 +++++++++++++--
+ drivers/interconnect/qcom/sm6350.c    | 1526 +++++++++++++++++++++++++---
+ drivers/interconnect/qcom/sm8150.c    | 1686 ++++++++++++++++++++++++++++---
+ drivers/interconnect/qcom/sm8250.c    | 1745 ++++++++++++++++++++++++++++----
+ drivers/interconnect/qcom/sm8350.c    | 1798 +++++++++++++++++++++++++++++----
+ 11 files changed, 11786 insertions(+), 1314 deletions(-)
+---
+base-commit: 39a1ff5094638b367bbd17e6a79591c67eed1a67
+change-id: 20230811-topic-icc_retire_macrosd-2d4c4f5356bc
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
