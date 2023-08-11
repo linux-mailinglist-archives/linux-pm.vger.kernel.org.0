@@ -2,49 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC465779555
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 18:55:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE5077955A
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Aug 2023 18:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjHKQzc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 11 Aug 2023 12:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46938 "EHLO
+        id S233928AbjHKQ5X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 11 Aug 2023 12:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbjHKQzb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 12:55:31 -0400
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BB02D7D;
-        Fri, 11 Aug 2023 09:55:31 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-56d75fb64a6so415411eaf.0;
-        Fri, 11 Aug 2023 09:55:31 -0700 (PDT)
+        with ESMTP id S235502AbjHKQ5V (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Aug 2023 12:57:21 -0400
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB172D79;
+        Fri, 11 Aug 2023 09:57:21 -0700 (PDT)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-56d0deeca09so401101eaf.0;
+        Fri, 11 Aug 2023 09:57:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691772931; x=1692377731;
+        d=1e100.net; s=20221208; t=1691773040; x=1692377840;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LTQqkkPYcIfD6dJJByzooT8UPz1lJcIxZqzAyRvmCqI=;
-        b=HKJUEmbOQY8wgPsjB3lY6WRDW6v9FAfseYr58ZtYjhY506ozMkOdXBe+sKfEM+zg+W
-         RqycZ0LBvBR9pe4ms17GSTfW1rINvASkPAenajuVqlx4FDh/wd37e8vU+C8UQjPJdQQ9
-         O5CBcd2hB4uuEtauTb1UhnCH0GUBmU9yS3YynkiolWONUPkkeK0SAedchSMV8/hyse4E
-         jlhwydJ0JDJhaTZ+8vLrWHfbhz9Li1cGDyt54lREtqhf5Y4xXswvWzmY+zBoTVpGTdhx
-         6m4yJ6SuCcpL2cIk1VkqHuUjHurG+P40BES/aVNPowwOw6egRi/uNAkeOPcsPXfR55jp
-         dj0Q==
-X-Gm-Message-State: AOJu0YwTRkAVhSeuBISjgf15uP30VOpGVqHX5e15fGs1GWJKtP2tGnqN
-        a717iKsGIxCxnUWQPzSQnyReXnsiCdx84dU03FbCVQR4ZZQ=
-X-Google-Smtp-Source: AGHT+IEVa+py3wEfHBgVZ95VICoZy/Uf5NEmDzrfAEH99viNNNjK0BKnRZJ+96adoYzQDJR6Xpdhkda0vL6Sno2PjCk=
-X-Received: by 2002:a05:6820:1ace:b0:560:b01a:653d with SMTP id
- bu14-20020a0568201ace00b00560b01a653dmr2308895oob.0.1691772930921; Fri, 11
- Aug 2023 09:55:30 -0700 (PDT)
+        bh=/MKrsTvyOkFqYnQxHrODPvzn4CYiImWubBs2zxt84WE=;
+        b=N5zN+I8pPchiAd+KAWPGPUQU50wB0o4Q8DHbGKcz5BDjqyXOn/7BKL7q6+bCOyg/Oj
+         X9Qb++jgWKLOfyqCil6MTnsef/wNKvF0N3X+Jw1+bApaxg91CZSPyXLxvs7e3YLeI4dD
+         zaiitjwoWnLxJCVOA6v6te64qqbdL4bCjS74dlk7Bp5HE4QZorIV0neDHOzVEIkvSx87
+         7plLYsGgzIU2XOFIb+syK84yL5Ww3lDlCWgENwTKA6ynsSkhQ4ILDYchhZcGe2bae7kc
+         aEAcHCxr+QB5TdzlhuucbnRWMVSXSK+/gGswqVC/cQJ9a6nd/r9vK0fTx7D7l2yCuZ7x
+         Bilw==
+X-Gm-Message-State: AOJu0Yw6PAg/IaMe1xlmv/7/8qn14nWrkvieRPDEgx54UWLCvsG8Y3Fp
+        5b/h4HJPQJjrEx0obBzE88xAehIfPk7tTI1dCsPIwELz
+X-Google-Smtp-Source: AGHT+IFMyWrzb3vv1ElBiPYzpwa36cwgwBCpEMcLCPL2IYmDcOJa1XmuQJK0vw7falr30iJFoiXy4kqHBDPTohgtiSs=
+X-Received: by 2002:a4a:e04e:0:b0:569:a08a:d9c5 with SMTP id
+ v14-20020a4ae04e000000b00569a08ad9c5mr1997794oos.0.1691773040594; Fri, 11 Aug
+ 2023 09:57:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230811084523.1689671-1-rui.zhang@intel.com>
-In-Reply-To: <20230811084523.1689671-1-rui.zhang@intel.com>
+References: <20230810171429.31759-1-jack@suse.cz> <20230811110504.27514-16-jack@suse.cz>
+In-Reply-To: <20230811110504.27514-16-jack@suse.cz>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 11 Aug 2023 18:55:19 +0200
-Message-ID: <CAJZ5v0jgvfzN+Ug9G_gLV=NXLvfmuC98XzjLes709g2uypQ5nA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: intel_soc_dts_iosf: Fix thermal_zone removal
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rafael.j.wysocki@intel.com, daniel.lezcano@linaro.or,
-        srinivas.pandruvada@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
+Date:   Fri, 11 Aug 2023 18:57:09 +0200
+Message-ID: <CAJZ5v0jpCQugJCqPEXCsjskmRRoF9PTj0p696WA+GoKVroL0Lw@mail.gmail.com>
+Subject: Re: [PATCH 16/29] PM: hibernate: Convert to bdev_open_by_dev()
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -57,58 +56,106 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 10:45 AM Zhang Rui <rui.zhang@intel.com> wrote:
+On Fri, Aug 11, 2023 at 1:05 PM Jan Kara <jack@suse.cz> wrote:
 >
-> All of the existing callers of remove_dts_thermal_zone() pass a valid
-> pointer as the argument, so checking for the NULL pointer is redundant.
-
-True.
-
-> Plus, when calling remove_dts_thermal_zone() from
-> intel_soc_dts_iosf_init(), it is possible that
-> 1. dts->tzone is an error pointer, when the sensor fails to be
->    registered as a valid thermal zone
-> 2. dts->tzone is unregistered in add_dts_thermal_zone(), when some
->    failure occurs after thermal zone registered
-> In both cases, there is no need to unregister dts->tzone in
-> remove_dts_thermal_zone().
+> Convert hibernation code to use bdev_open_by_dev().
 >
-> Clear dst->tzone when add_dts_thermal_zone() fails. And do thermal zone
-> removal in remove_dts_thermal_zone() only when dts->tzone is set.
+> CC: linux-pm@vger.kernel.org
+> Signed-off-by: Jan Kara <jack@suse.cz>
 
-Well, I'm not sure.
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-thermal_zone_device_unregister() will do nothing if the thermal zone
-is not really registered AFAICS and it is prudent to restore
-SOC_DTS_OFFSET_ENABLE on failure IMO.
-
-
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > ---
->  drivers/thermal/intel/intel_soc_dts_iosf.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  kernel/power/swap.c | 31 ++++++++++++++++---------------
+>  1 file changed, 16 insertions(+), 15 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> index 7a66d0f077b0..c5203ba8f0b9 100644
-> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> @@ -212,7 +212,7 @@ static int soc_dts_enable(int id)
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index f6ebcd00c410..b475bee282ff 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -222,7 +222,7 @@ int swsusp_swap_in_use(void)
+>   */
 >
->  static void remove_dts_thermal_zone(struct intel_soc_dts_sensor_entry *dts)
+>  static unsigned short root_swap = 0xffff;
+> -static struct block_device *hib_resume_bdev;
+> +static struct bdev_handle *hib_resume_bdev_handle;
+>
+>  struct hib_bio_batch {
+>         atomic_t                count;
+> @@ -276,7 +276,8 @@ static int hib_submit_io(blk_opf_t opf, pgoff_t page_off, void *addr,
+>         struct bio *bio;
+>         int error = 0;
+>
+> -       bio = bio_alloc(hib_resume_bdev, 1, opf, GFP_NOIO | __GFP_HIGH);
+> +       bio = bio_alloc(hib_resume_bdev_handle->bdev, 1, opf,
+> +                       GFP_NOIO | __GFP_HIGH);
+>         bio->bi_iter.bi_sector = page_off * (PAGE_SIZE >> 9);
+>
+>         if (bio_add_page(bio, page, PAGE_SIZE, 0) < PAGE_SIZE) {
+> @@ -356,14 +357,14 @@ static int swsusp_swap_check(void)
+>                 return res;
+>         root_swap = res;
+>
+> -       hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device,
+> +       hib_resume_bdev_handle = bdev_open_by_dev(swsusp_resume_device,
+>                         BLK_OPEN_WRITE, NULL, NULL);
+> -       if (IS_ERR(hib_resume_bdev))
+> -               return PTR_ERR(hib_resume_bdev);
+> +       if (IS_ERR(hib_resume_bdev_handle))
+> +               return PTR_ERR(hib_resume_bdev_handle);
+>
+> -       res = set_blocksize(hib_resume_bdev, PAGE_SIZE);
+> +       res = set_blocksize(hib_resume_bdev_handle->bdev, PAGE_SIZE);
+>         if (res < 0)
+> -               blkdev_put(hib_resume_bdev, NULL);
+> +               bdev_release(hib_resume_bdev_handle);
+>
+>         return res;
+>  }
+> @@ -1521,10 +1522,10 @@ int swsusp_check(bool snapshot_test)
+>         void *holder = snapshot_test ? &swsusp_holder : NULL;
+>         int error;
+>
+> -       hib_resume_bdev = blkdev_get_by_dev(swsusp_resume_device, BLK_OPEN_READ,
+> -                                           holder, NULL);
+> -       if (!IS_ERR(hib_resume_bdev)) {
+> -               set_blocksize(hib_resume_bdev, PAGE_SIZE);
+> +       hib_resume_bdev_handle = bdev_open_by_dev(swsusp_resume_device,
+> +                               BLK_OPEN_READ, holder, NULL);
+> +       if (!IS_ERR(hib_resume_bdev_handle)) {
+> +               set_blocksize(hib_resume_bdev_handle->bdev, PAGE_SIZE);
+>                 clear_page(swsusp_header);
+>                 error = hib_submit_io(REQ_OP_READ, swsusp_resume_block,
+>                                         swsusp_header, NULL);
+> @@ -1549,11 +1550,11 @@ int swsusp_check(bool snapshot_test)
+>
+>  put:
+>                 if (error)
+> -                       blkdev_put(hib_resume_bdev, holder);
+> +                       bdev_release(hib_resume_bdev_handle);
+>                 else
+>                         pr_debug("Image signature found, resuming\n");
+>         } else {
+> -               error = PTR_ERR(hib_resume_bdev);
+> +               error = PTR_ERR(hib_resume_bdev_handle);
+>         }
+>
+>         if (error)
+> @@ -1568,12 +1569,12 @@ int swsusp_check(bool snapshot_test)
+>
+>  void swsusp_close(bool snapshot_test)
 >  {
-> -       if (dts) {
-> +       if (dts->tzone) {
->                 iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
->                                SOC_DTS_OFFSET_ENABLE, dts->store_status);
->                 thermal_zone_device_unregister(dts->tzone);
-> @@ -277,6 +277,7 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
->  err_enable:
->         thermal_zone_device_unregister(dts->tzone);
->  err_ret:
-> +       dts->tzone = NULL;
->         return ret;
+> -       if (IS_ERR(hib_resume_bdev)) {
+> +       if (IS_ERR(hib_resume_bdev_handle)) {
+>                 pr_debug("Image device not initialised\n");
+>                 return;
+>         }
+>
+> -       blkdev_put(hib_resume_bdev, snapshot_test ? &swsusp_holder : NULL);
+> +       bdev_release(hib_resume_bdev_handle);
 >  }
 >
+>  /**
 > --
-> 2.34.1
+> 2.35.3
 >
