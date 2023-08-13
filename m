@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC4977A7C9
-	for <lists+linux-pm@lfdr.de>; Sun, 13 Aug 2023 17:51:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488B977A865
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Aug 2023 18:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbjHMPuo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Aug 2023 11:50:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S229802AbjHMQC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Aug 2023 12:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjHMPuR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Aug 2023 11:50:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E39172E;
-        Sun, 13 Aug 2023 08:50:09 -0700 (PDT)
+        with ESMTP id S232316AbjHMQCB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Aug 2023 12:02:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A06C2694;
+        Sun, 13 Aug 2023 09:01:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17A9D6308C;
-        Sun, 13 Aug 2023 15:50:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8BFC433CB;
-        Sun, 13 Aug 2023 15:50:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DBF7D63512;
+        Sun, 13 Aug 2023 16:01:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B205C433C9;
+        Sun, 13 Aug 2023 16:01:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691941808;
-        bh=DQCVMid+Kv3APLbJLaODg3sH5+RSUiuxHo5XmS285SI=;
+        s=k20201202; t=1691942491;
+        bh=1IQvXCc2XxngrZZ5LpFHbstwUHnokwcIkOEoeJcq/sc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jJxfL9olJlqRrZsyojKG9xFfucu14y1CYrq3azQcAXoZ0Fnu+s+pc+5Mo+B2C3/Sf
-         VO32exSmzz+BiZ9X25Y8K1V8tuZT+/JqxpiKm5DKAt9ON1YepHFZYDpK+5vy7kJLeB
-         5ia1WYnxxMc4J7qreUYD56VscWilEm6LAf9WNGX77dd/jWehxzw8/nGDyyZsTa1RMc
-         9LFw/q6mKy94WUiLxizzkCBJZKDhWJKsBee02aIjeO+tJSFHO9AMt84/w3tNq7UAkB
-         NvAAs0AwRX6Pu/ZoFLRUqMvLZc3mjg8Gvy8Q1kFhCL4fKUZON7RO3vC42OpUoUb9wV
-         E8nWbMhBwlP3w==
+        b=u3sVQeZhmGzIdauSUdBafteVA+STMIbDw2CvfGGEqr64kdlymEK08nxcJfyPnseXL
+         Vp8soKJZ5x/nJdduME6/aL5yK/WCLIIYpIpCXUsYpKvNe9k8auzPUq3pYBKY7lqifC
+         6eIcn6ZEMiNGnFTXAlY4U40DzQZMiT27mCl/F+zPGC5eky+qrzjKGtiffNqOr6W16X
+         glUyzgxAhMVfdx/eQxXEA+Vc7rip5s7nkLPr12+6O6sII/vVmVhpZEBf7Kd9aDhbBl
+         lnkeBR9jH4MgYE+NwoqMFfTOK1DKfP+QynJ/6x35r5HP6hfx9Ga25uotcrqm36j0jU
+         WLoog68dSm0HQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
@@ -39,19 +39,19 @@ Cc:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
         "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
         linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 18/54] thermal: core: constify params in thermal_zone_device_register
-Date:   Sun, 13 Aug 2023 11:48:57 -0400
-Message-Id: <20230813154934.1067569-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 16/47] thermal: core: constify params in thermal_zone_device_register
+Date:   Sun, 13 Aug 2023 11:59:11 -0400
+Message-Id: <20230813160006.1073695-16-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230813154934.1067569-1-sashal@kernel.org>
-References: <20230813154934.1067569-1-sashal@kernel.org>
+In-Reply-To: <20230813160006.1073695-1-sashal@kernel.org>
+References: <20230813160006.1073695-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.10
+X-stable-base: Linux 6.1.45
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,10 +82,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 842f678c1c3e1..cc2b5e81c6205 100644
+index 1eae4ec719a8f..2d5085488733e 100644
 --- a/drivers/thermal/thermal_core.c
 +++ b/drivers/thermal/thermal_core.c
-@@ -1203,7 +1203,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+@@ -1178,7 +1178,7 @@ static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms
  struct thermal_zone_device *
  thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
  					void *devdata, struct thermal_zone_device_ops *ops,
@@ -94,7 +94,7 @@ index 842f678c1c3e1..cc2b5e81c6205 100644
  					int polling_delay)
  {
  	struct thermal_zone_device *tz;
-@@ -1371,7 +1371,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
+@@ -1335,7 +1335,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
  
  struct thermal_zone_device *thermal_zone_device_register(const char *type, int ntrips, int mask,
  							 void *devdata, struct thermal_zone_device_ops *ops,
@@ -104,10 +104,10 @@ index 842f678c1c3e1..cc2b5e81c6205 100644
  {
  	return thermal_zone_device_register_with_trips(type, NULL, ntrips, mask,
 diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 87837094d549f..dee66ade89a03 100644
+index 5e093602e8fcd..a339d3af9f9f4 100644
 --- a/include/linux/thermal.h
 +++ b/include/linux/thermal.h
-@@ -301,14 +301,14 @@ int thermal_acpi_critical_trip_temp(struct acpi_device *adev, int *ret_temp);
+@@ -337,14 +337,14 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
  #ifdef CONFIG_THERMAL
  struct thermal_zone_device *thermal_zone_device_register(const char *, int, int,
  		void *, struct thermal_zone_device_ops *,
@@ -122,9 +122,9 @@ index 87837094d549f..dee66ade89a03 100644
 -					struct thermal_zone_params *, int, int);
 +					const struct thermal_zone_params *, int, int);
  
- void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
- const char *thermal_zone_device_type(struct thermal_zone_device *tzd);
-@@ -348,7 +348,7 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz);
+ int thermal_zone_bind_cooling_device(struct thermal_zone_device *, int,
+ 				     struct thermal_cooling_device *,
+@@ -378,7 +378,7 @@ void thermal_zone_device_critical(struct thermal_zone_device *tz);
  static inline struct thermal_zone_device *thermal_zone_device_register(
  	const char *type, int trips, int mask, void *devdata,
  	struct thermal_zone_device_ops *ops,
