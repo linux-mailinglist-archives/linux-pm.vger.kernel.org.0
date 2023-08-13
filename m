@@ -2,58 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F7377A020
-	for <lists+linux-pm@lfdr.de>; Sat, 12 Aug 2023 15:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E815D77A4C2
+	for <lists+linux-pm@lfdr.de>; Sun, 13 Aug 2023 04:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232602AbjHLNZZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 12 Aug 2023 09:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55150 "EHLO
+        id S229727AbjHMCwe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 12 Aug 2023 22:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjHLNZY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Aug 2023 09:25:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41C312D;
-        Sat, 12 Aug 2023 06:25:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A515616C0;
-        Sat, 12 Aug 2023 13:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A5EEC433C8;
-        Sat, 12 Aug 2023 13:25:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691846726;
-        bh=acH4iXVTyH8arS/ZaHuARQxhgHeP/BeIYrb55TADdkU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jAiS+JBekZTpk11e3gPdsoJbBUwLcAk1BW7fhTrlvoEpXh1oHTasqLgyWGfcZPSzz
-         4/ibQ9r78l0t5JL+dg6qjHC3AzfI/Md+HLbZVAkEyHIn8MKPtfdb+DLqIIZwr30hZp
-         cG+easCVHSQevriIlAyaxuy5/S3A/ww2WWJ5593CgthT3siQLb3Cxz+xPzaUwXZ1Fo
-         brm+K7/WXhcp2THjIIXfHj5b8Q4mtzIe1ae67QJ5gbUppBdUYakj8BHhkoAlDo51s1
-         buIH8ZeLnl+FPQe+VWTCEKaRx5fKCspy1uALEsuSEImjrjNAeJ9UiYUgJnW9Tu8RTp
-         f28LAOd2evR2w==
-Message-ID: <7c045f1e-4d20-b798-bd74-8e8b9d8ea7e6@kernel.org>
-Date:   Sat, 12 Aug 2023 16:25:21 +0300
+        with ESMTP id S229506AbjHMCwe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 12 Aug 2023 22:52:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BFE9170A;
+        Sat, 12 Aug 2023 19:52:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691895155; x=1723431155;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ayErGxhRHllzcsmwaeQTU9qCRuFG7WI+4RAgT9UUgu8=;
+  b=fUODolnNdp2RRSymIvAVwGyAwYod0K7UOjKK4k4pLziCd6vliRl1EveH
+   vMZX7SfNKmErGSRW3RYSMLhBS/sgbV1KN0wWHEhHELICxKGJNlM+c8luy
+   I9KFUTYReutIEF1scPt4+NQfcu9zuBOppXC8QYJJpQ3aBQg/1OZeVbB+X
+   /NF+4USC6x5AOZU68g+QIn+dtWlEfQW17DPIdRTTEOiWj+B+KXzIu4X8d
+   z0V+wOuqs6EWFebNm4qzzEhrPCGtsabT932gtJ5ggSaHtCa6zXYcVY7Gd
+   GVtkTBsmFiXBVhw/XvjXFN7f9izf3ZwfJSCKEk/jRjCpsXb9Fut0LjWkT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10800"; a="356823901"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="356823901"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 19:52:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10800"; a="762570867"
+X-IronPort-AV: E=Sophos;i="6.01,169,1684825200"; 
+   d="scan'208";a="762570867"
+Received: from yingyuel-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.255.29.168])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2023 19:52:32 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     rafael.j.wysocki@intel.com
+Cc:     daniel.lezcano@linaro.or, srinivas.pandruvada@intel.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH V2] thermal: intel: intel_soc_dts_iosf: Remove redundant check
+Date:   Sun, 13 Aug 2023 10:52:20 +0800
+Message-Id: <20230813025220.1752489-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 1/3] debugfs: Add write support to debugfs_create_str()
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Cc:     rafael@kernel.org, corbet@lwn.net, linux-pm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, quic_okukatla@quicinc.com,
-        quic_viveka@quicinc.com, peterz@infradead.org,
-        quic_pkondeti@quicinc.com
-References: <20230807142914.12480-1-quic_mdtipton@quicinc.com>
- <20230807142914.12480-2-quic_mdtipton@quicinc.com>
- <2023081203-happier-mutable-e4f0@gregkh>
-From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <2023081203-happier-mutable-e4f0@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,108 +58,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Greg,
+Remove the redundant check in remove_dts_thermal_zone() because all of
+its existing callers pass a valid pointer as the argument.
 
-Thanks for the comments!
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ drivers/thermal/intel/intel_soc_dts_iosf.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-On 12.08.23 13:40, Greg KH wrote:
-> On Mon, Aug 07, 2023 at 07:29:12AM -0700, Mike Tipton wrote:
->> Currently, debugfs_create_str() only supports reading strings from
->> debugfs. Add support for writing them as well.
->>
->> Based on original implementation by Peter Zijlstra [0]. Write support
->> was present in the initial patch version, but dropped in v2 due to lack
->> of users. We have a user now, so reintroduce it.
->>
->> [0] https://lore.kernel.org/all/YF3Hv5zXb%2F6lauzs@hirez.programming.kicks-ass.net/
->>
->> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
->> ---
->>   fs/debugfs/file.c | 48 +++++++++++++++++++++++++++++++++++++++++++++--
->>   1 file changed, 46 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
->> index b7711888dd17..87b3753aa4b1 100644
->> --- a/fs/debugfs/file.c
->> +++ b/fs/debugfs/file.c
->> @@ -904,8 +904,52 @@ EXPORT_SYMBOL_GPL(debugfs_create_str);
->>   static ssize_t debugfs_write_file_str(struct file *file, const char __user *user_buf,
->>   				      size_t count, loff_t *ppos)
->>   {
->> -	/* This is really only for read-only strings */
->> -	return -EINVAL;
->> +	struct dentry *dentry = F_DENTRY(file);
->> +	char *old, *new = NULL;
->> +	int pos = *ppos;
->> +	int r;
->> +
->> +	r = debugfs_file_get(dentry);
->> +	if (unlikely(r))
->> +		return r;
->> +
->> +	old = *(char **)file->private_data;
->> +
->> +	/* only allow strict concatenation */
->> +	r = -EINVAL;
->> +	if (pos && pos != strlen(old))
->> +		goto error;
->> +
->> +	r = -E2BIG;
->> +	if (pos + count + 1 > PAGE_SIZE)
->> +		goto error;
->> +
->> +	r = -ENOMEM;
->> +	new = kmalloc(pos + count + 1, GFP_KERNEL);
->> +	if (!new)
->> +		goto error;
->> +
->> +	if (pos)
->> +		memcpy(new, old, pos);
->> +
->> +	r = -EFAULT;
->> +	if (copy_from_user(new + pos, user_buf, count))
->> +		goto error;
->> +
->> +	new[pos + count] = '\0';
->> +	strim(new);
->> +
->> +	rcu_assign_pointer(*(char **)file->private_data, new);
->> +	synchronize_rcu();
->> +	kfree(old);
->> +
->> +	debugfs_file_put(dentry);
->> +	return count;
->> +
->> +error:
->> +	kfree(new);
->> +	debugfs_file_put(dentry);
->> +	return r;
->>   }
-> 
-> So you just added write support for ALL debugfs files that use the
-> string interface, what did you just allow to break?
+diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+index db97499f4f0a..22fc2970c67d 100644
+--- a/drivers/thermal/intel/intel_soc_dts_iosf.c
++++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+@@ -245,11 +245,9 @@ static int soc_dts_enable(int id)
+ 
+ static void remove_dts_thermal_zone(struct intel_soc_dts_sensor_entry *dts)
+ {
+-	if (dts) {
+-		iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
+-			       SOC_DTS_OFFSET_ENABLE, dts->store_status);
+-		thermal_zone_device_unregister(dts->tzone);
+-	}
++	iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
++		       SOC_DTS_OFFSET_ENABLE, dts->store_status);
++	thermal_zone_device_unregister(dts->tzone);
+ }
+ 
+ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+-- 
+2.34.1
 
-Not really. According to the existing code, the write support for strings
-is enabled only when the file is created with +w permissions. For read-only
-files, we use fops_str_ro, which is the case for all existing string files:
-
-$ git grep -w debugfs_create_str | egrep -v "fs/debugfs/file.c|include/linux/debugfs.h"
-drivers/firmware/arm_scmi/driver.c:	debugfs_create_str("instance_name", 0400, top_dentry,
-drivers/firmware/arm_scmi/driver.c:	debugfs_create_str("type", 0400, trans, (char **)&dbg->type);
-drivers/opp/debugfs.c:	debugfs_create_str("of_name", S_IRUGO, d, (char **)&opp->of_name);
-
-For fops_str_ro, the .write function is not implemented, so nothing should break?
-
-> I recommend just using your own debugfs file function instead, as this
-> could cause bad problems, right?
-
-Agree, and that should be exactly what this patch does.
-
-> Are you sure that all string calls can
-> handle the variable be freed underneath it like this call will allow to
-> happen?
-
-Looks fine, at least for this patch-set.
-
-Thanks,
-Georgi
