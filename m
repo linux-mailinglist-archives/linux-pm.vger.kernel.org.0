@@ -2,62 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128F377B794
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 13:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FF0C77B7C0
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 13:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234618AbjHNL2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 07:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
+        id S232492AbjHNLqj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 07:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233875AbjHNL21 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 07:28:27 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E38127
-        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:28:26 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-d62bdd1a97dso4293696276.3
-        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:28:26 -0700 (PDT)
+        with ESMTP id S233575AbjHNLqH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 07:46:07 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FE5EA
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:46:06 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d35a9d7a5bdso4156052276.0
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:46:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692012505; x=1692617305;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zV7e4uqCOZfFxUomsrlciPWk9Fd/IJUmKy5w/Bnb3o0=;
-        b=hOuVghxDpW00pxzb5dzoUPvu+bMfT+myG9WRxGoIkKOK1x4kzwy+0gTqN6gkGlcSQC
-         WTgLmNAoH87AxbTzpjzbUyvoQKuvVsuPGvofRsogfLe0foUruUjpIHaQaR3VRc1ripik
-         V4swmeIgAiSpr18UvxsG16sTKF80yC6bmtzmOneCvuLZICL+dAtkmclKH/rkjQQMSJep
-         fpm0wbwIF2WNlU1VGC7WYAYcexXXFrpgMPWhBUrgRj2fUKqMpXo/GGBl6P9p6JSokRIJ
-         b5b8cyMMkMnQgFGXB4rnbu4gubZzOOpsFjAnsA6tfu5GZPQtp1lhI2snVhHu1YKan758
-         4rNw==
+        d=linaro.org; s=google; t=1692013565; x=1692618365;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2P1gn77Ztxq7xPn+wQ0Fs/wFqOGj6ZlA2NPjSUCwZ3U=;
+        b=fHU5HVcyteFyoy8ercb7Q0BmuyOD576qTt9aNQFaZu6+A8JckEDLK1IYmFkOJRPbnJ
+         +1+tSXOAG6Dr1q8G/VBwED0SKGHQH0Pg0KyNvtnOuAHWrjto2N23ing7FZt1DfYYUnF6
+         DcMnmV0kN0NSKr1RHMqqlJGefP2gYE4UHs5uhVLQRV9s/Nv6hc9u99mLlkNJAFqDAwoL
+         J5AsFApAqVQ2tlZZ/89AWys/6npIRdu4JhrCgSv8GlB7gAA1wIlzlfu55UcAOw0qGrH5
+         qh2sJ4BlGmYV1uUC2TMykqdfD/Q+8zBkH6NdWK6iBe/DF8HPCRoDRu3J0N5xnZt0Dp1k
+         9feQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692012505; x=1692617305;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zV7e4uqCOZfFxUomsrlciPWk9Fd/IJUmKy5w/Bnb3o0=;
-        b=lY6/P/T9gXkfdkmObBLsa76w2NHK/jEHNY2fxTs+Km85zwvysguW3kJbtzoEcYi/H+
-         z84lEcXFeqbK8ot3lEtvbJIH0Fm7OymdeAOJhC3mWNRgXMcM/7YX7h8jDpMuzYfCfIpO
-         DDP03wVao/6qW7K7FLdDhSm51+oCGjTuu1WDG/hgRFmmBnySZh1y4GlUSuE72SPWzSgJ
-         ZLfjj9kkJUd6a2kMG2Y0EnJg+b3YgS56+bpjCeLr6322Kr6Mb8U8x+3ItaFbrAAso8lc
-         /v/LPKoObb3VOfvx7hiiDXlHkU3qSsrE71/7KjW0gKCgdECV1lvb4PdL0jZKNrXIsnZF
-         F+wg==
-X-Gm-Message-State: AOJu0YyTgizF5900KdIsxVn70/+n+GDnc1NXK0ePTQFsuZzp374BDlXM
-        QaF8bfHFHSRvaWhCgPUbHo4b7ej/eCyWIt2G2e0MDQ==
-X-Google-Smtp-Source: AGHT+IGnQJT82CyRJQHGhUeBgoe4lkdDdYbjacPwBMd98HAzPlLW3y5rC5ORU5ANElco5nbwuNNBY+6yI+wNMWRcDkQ=
-X-Received: by 2002:a25:bcc4:0:b0:d21:ef87:c1be with SMTP id
- l4-20020a25bcc4000000b00d21ef87c1bemr9876239ybm.27.1692012505512; Mon, 14 Aug
- 2023 04:28:25 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692013565; x=1692618365;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2P1gn77Ztxq7xPn+wQ0Fs/wFqOGj6ZlA2NPjSUCwZ3U=;
+        b=k/5GvACgOEbkR93V0OWMEsW/XZUGvLErua0AKgBRitUHsG79tBPNLcXKPUgEznw3Su
+         kXevZwAlQDpE1OLGnr9juv/lpsUzNszfN//nh/Za5wKZjTbfEIN2dLvaHMB9D0YNrHPK
+         1VwT/pX6/KzYUEnhPg6bo5AD7aJbeCppzl+Fv79RGv0bdgXkGcElJ51ko4eGTyuXblp4
+         c0W9LimHiYZdT18FL7yRmV/nYMljFvWfW5xaKDOMBIIdvas9NLKpd8aaUdvTFn66FvUH
+         IgbHrKYfl0gaSSgkOMrfKWG1QzpwGIL06ZuvBlVz6/oDAQslAWkkUiWq9pbZdR8j1tSr
+         GJZg==
+X-Gm-Message-State: AOJu0YyZ3z0Rd3wLiyHzPoUw0JPassWfMj6txzQjgQVIcB7sesiN7zuM
+        VcTyWEc+HjQrf7MnQqXpz5yTf+2Mp69Aphr7VKqyWA==
+X-Google-Smtp-Source: AGHT+IE52lkpTSCVEEuMCNFDfYTvvpD0HznuYfzxrW7Dx9SI0gi3S2xayhsie8DQkNLi3uASK7R4w3gQBDEN6QweWhM=
+X-Received: by 2002:a25:dbc6:0:b0:d09:a5e8:8692 with SMTP id
+ g189-20020a25dbc6000000b00d09a5e88692mr9932582ybf.45.1692013565501; Mon, 14
+ Aug 2023 04:46:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230814104127.1929-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230814104127.1929-1-peng.fan@oss.nxp.com>
+References: <20230731110012.2913742-1-jagan@edgeble.ai> <20230731110012.2913742-2-jagan@edgeble.ai>
+ <5699457.DvuYhMxLoT@diego> <3694249.5fSG56mABF@diego>
+In-Reply-To: <3694249.5fSG56mABF@diego>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 14 Aug 2023 13:27:49 +0200
-Message-ID: <CAPDyKFowxz_Ndy5uFmXaTmQoY1SUNNg7-R04JUUXX0n=5FH_fA@mail.gmail.com>
-Subject: Re: [PATCH V4 0/8] genpd: imx: relocate scu-pd and misc update
-To:     shawnguo@kernel.org, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
+Date:   Mon, 14 Aug 2023 13:45:29 +0200
+Message-ID: <CAPDyKFo=OWGSp00n7ihUuDv7ico6DPp73kYwU1rFf6GYLwKACA@mail.gmail.com>
+Subject: Re: [PATCH 01/14] genpd: rockchip: Add PD_VO entry for rv1126
+To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, Jagan Teki <jagan@edgeble.ai>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -67,59 +69,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 14 Aug 2023 at 12:36, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+On Sat, 12 Aug 2023 at 14:57, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
 >
-> From: Peng Fan <peng.fan@nxp.com>
->
-> V4:
->  Update commit message in patch 4
->
-> V3:
->  return -EBUSY instead of return 0 in patch 4
->
-> V2:
-> Move drivers/firmware/imx/scu-pd.c to drivers/genpd/imx
->
-> This patchset is to upstream NXP downstream scu-pd driver patches.
-> patch is to relocate scu-pd to genpd
-> patch 2,3 is to support more PDs
-> patch 4 is to not power off console when no console suspend
-> patch 5 is to suppress bind
-> patch 6 is to make genpd align with HW state
-> patch 7 is to support LP mode in runtime suspend, OFF mode in system suspend.
-> patch 8 is to change init level to avoid uneccessary defer probe
->
-> V1:
-> This patchset is to upstream NXP downstream scu-pd driver patches.
-> patch 1,2 is to support more PDs
-> patch 3 is to not power off console when no console suspend
-> patch 4 is to suppress bind
-> patch 5 is to make genpd align with HW state
-> patch 6 is to support LP mode in runtime suspend, OFF mode in system suspend.
-> patch 7 is to change init level to avoid uneccessary defer probe
->
->
-> Dong Aisheng (1):
->   genpd: imx: scu-pd: change init level to subsys_initcall
->
-> Peng Fan (7):
->   genpd: imx: relocate scu-pd under genpd
->   genpd: imx: scu-pd: enlarge PD range
->   genpd: imx: scu-pd: add more PDs
->   genpd: imx: scu-pd: do not power off console if no_console_suspend
->   genpd: imx: scu-pd: Suppress bind attrs
->   genpd: imx: scu-pd: initialize is_off according to HW state
->   genpd: imx: scu-pd: add multi states support
->
->  drivers/firmware/imx/Makefile            |   1 -
->  drivers/genpd/imx/Makefile               |   1 +
->  drivers/{firmware => genpd}/imx/scu-pd.c | 193 +++++++++++++++++++++--
->  3 files changed, 183 insertions(+), 12 deletions(-)
->  rename drivers/{firmware => genpd}/imx/scu-pd.c (70%)
->
+> Am Montag, 31. Juli 2023, 22:48:45 CEST schrieb Heiko St=C3=BCbner:
+> > Am Montag, 31. Juli 2023, 12:59:59 CEST schrieb Jagan Teki:
+> > > PD_VO power-domain entry in RV1126 are connected to
+> > > - BIU_VO
+> > > - VOP
+> > > - RGA
+> > > - IEP
+> > > - DSIHOST
+> > >
+> > > Add an entry for it.
+> > >
+> > > Signed-off-by: Jagan Teki <jagan@edgeble.ai>
+> >
+> > Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> >
+> > @Ulf: now that we have a genpd subsystem, I assume you're going
+> > to pick up this patch, right?
 
-I am fine to pick up patch 1 -> patch 6, to let them go in for v6.6.
-Should we do that or defer until the complete series is ready?
+Yes, that's the intent. At least after v6.6-rc1.
+
+>
+> Looking at other soc trees, it looks like genpd changes right now are
+> often still going through these ... so I've gone forward, merged the
+> genpd shared tag and applied this patch on top in my rockchip drivers
+> branch.
+
+That's fine. We are in an intermediate phase, so things are being
+queued both via the soc trees and the genpd tree.
+
+I am planning to send a pull-request to Linus for v6.6-rc1 to make
+sure the delta that hasn't already been pulled by Arnd gets included
+too. If you merge the immutable branch, you should have the necessary
+parts.
 
 Kind regards
 Uffe
