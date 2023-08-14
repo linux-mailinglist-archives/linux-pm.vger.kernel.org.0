@@ -2,58 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BE677B31C
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 09:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D5277B3CC
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 10:18:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234384AbjHNH5x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 03:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
+        id S234010AbjHNIRl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 04:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234391AbjHNH5Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 03:57:24 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A5D4B5;
-        Mon, 14 Aug 2023 00:57:21 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.201])
-        by gateway (Coremail) with SMTP id _____8Bx5fBg3tlkIwkYAA--.49714S3;
-        Mon, 14 Aug 2023 15:57:20 +0800 (CST)
-Received: from [10.20.42.201] (unknown [10.20.42.201])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx3yNd3tlkmZxZAA--.49687S3;
-        Mon, 14 Aug 2023 15:57:18 +0800 (CST)
-Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
-To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
-        Liu Yun <liuyun@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        zhuyinbo@loongson.cn
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
- <20230803063703.5659-2-zhuyinbo@loongson.cn>
- <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
- <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
- <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
-Date:   Mon, 14 Aug 2023 15:57:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S234469AbjHNIRQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 04:17:16 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B4F10F0
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 01:17:15 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fe4ad22eb0so39725375e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 01:17:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692001034; x=1692605834;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=e3CFhGYYBnmc/7BGz71n+APKSrpv4uhL75vkasqQJ4o=;
+        b=iQkwPbQN3DsEDOtJk3CJaT+avcrhQmZRMrmuydv4HhzxFDJqxw9vGX/2VyMkUMA1wL
+         jk+ff37u88MZw/dBof5+1vAQrQoUsZRVs3rlTi0p0x633eGOAj0RobNrihc/vuOa7pHG
+         6eAH/89w+vFWZOFZKuerCFUtKJltGh7FmZ8pO7PYlqTZ0a/VC8XtnkggkA2JAFhJv0Bq
+         XuPNI1tM13nTx7WnwNrHP7EJRu30NfUNL14KiE7pfsaKcQNbGHrbWnb6HNFNCHTwS0HG
+         GcFhASxwqz+vqOX7V/nyAXR1aQ+K6hWKSIyZVhA20KJfGBBz8iVnsEyNGQ2cl706sOdd
+         157Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692001034; x=1692605834;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e3CFhGYYBnmc/7BGz71n+APKSrpv4uhL75vkasqQJ4o=;
+        b=IQu4pqagIfE5RIzdZ2ZVXoU9ZjU77iLKPv8zeq4Js7DMYlAXBU2UmmRnm2q1fAouRr
+         BTHrJzoRcg6Cu+wgmxlucutBmrTqHqXYog38xA8Rdw7BUUV/XE5mUST/huoGVRxkibIA
+         wSKCylnY6yQmEhjM+Ti3SrJG7JZ5h2LHpE9hLA74q5JTYB997Y0CVDUGhpVSBfZO0JNc
+         zJ52TTcq87m4b2nyq3njOVs3RD/1BDPDuKLEw/1phPP8a172MhO4SVHQBEQi0IcTko9r
+         Kx8ar1nKo+LVGz/KY1fA7uE/l/n91ErsWBK7biYBplaglBuAh9aTLkeJj0tlc8+KKSyS
+         oqiQ==
+X-Gm-Message-State: AOJu0Yyzrs4jr7xuHejKzV0ZV+GgCNUCMRPaABSKCmLXJyUPXegh6A6h
+        MsCsCo5dmOg/SzUxymhKxxZv9Q==
+X-Google-Smtp-Source: AGHT+IEXbvgn6LW0yU+nkhHkcfkiCGwjUBAMcP+fKEDjyEF9E2V8kNEM6NVC/BjPKkIdX0hZ6fKCKg==
+X-Received: by 2002:adf:f24e:0:b0:319:7b50:cf5e with SMTP id b14-20020adff24e000000b003197b50cf5emr880096wrp.19.1692001034196;
+        Mon, 14 Aug 2023 01:17:14 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0? ([2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0])
+        by smtp.gmail.com with ESMTPSA id x13-20020a5d444d000000b00317f29ad113sm13580045wrr.32.2023.08.14.01.17.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 01:17:13 -0700 (PDT)
+Message-ID: <ff999018-8490-0f58-0a50-e82f1effce5c@linaro.org>
+Date:   Mon, 14 Aug 2023 10:17:12 +0200
 MIME-Version: 1.0
-In-Reply-To: <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v2 09/15] pinctrl: pinctrl-oxnas: remove obsolete pinctrl
+ driver
 Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-oxnas@groups.io,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Golle <daniel@makrotopia.org>
+References: <20230630-topic-oxnas-upstream-remove-v2-0-fb6ab3dea87c@linaro.org>
+ <20230630-topic-oxnas-upstream-remove-v2-9-fb6ab3dea87c@linaro.org>
+ <a9074f2d-ffa2-477f-e3b5-2c7d213ec72c@linaro.org>
+ <CACRpkdbMy=JWAgybtimQXJRQ7jsVZ1g-DfqjryjP31JT9f=Prg@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CACRpkdbMy=JWAgybtimQXJRQ7jsVZ1g-DfqjryjP31JT9f=Prg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bx3yNd3tlkmZxZAA--.49687S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,86 +108,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-在 2023/8/12 下午8:25, Arnd Bergmann 写道:
-> On Fri, Aug 4, 2023, at 04:54, Yinbo Zhu wrote:
->> 在 2023/8/3 下午3:44, Arnd Bergmann 写道:
->>> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
->>>
->>>> +  loongson,suspend-address:
->>>> +    $ref: /schemas/types.yaml#/definitions/uint64
->>>> +    description:
->>>> +      The "loongson,suspend-address" is a deep sleep state (Suspend To
->>>> +      RAM) firmware entry address which was jumped from kernel and it's
->>>> +      value was dependent on specific platform firmware code. In
->>>> +      addition, the PM need according to it to indicate that current
->>>> +      SoC whether support Suspend To RAM.
->>>> +
->>>
->>> I just commented on this in the driver patch, assuming this
->>> was an MMIO address, but I'm even more confused now, since
->>> we try hard to not rely on being able to just interface with
->>> firmware like this.
->>>
->>> If this is executable code, where does this actually reside?
+On 07/08/2023 15:44, Linus Walleij wrote:
+> On Mon, Jul 31, 2023 at 4:44 PM Neil Armstrong
+> <neil.armstrong@linaro.org> wrote:
+>> On 30/06/2023 18:58, Neil Armstrong wrote:
+>>> Due to lack of maintenance and stall of development for a few years now,
+>>> and since no new features will ever be added upstream, remove support
+>>> for OX810 and OX820 pinctrl & gpio.
 >>
->>
->> Pmon firmware code.
->>
->>> Is this some SRAM that needs to execute the suspend logic
->>> in order to shut down memory and cache controllers?
->>
->>
->> Yes, The suspend-to-ram after into pmon firmware code and set
->> self-refresh mode in memory controller and ensure that memory data is
->> not lost then shut down memory controller.
+>> Do you plan to take patches 9, 10 & 11 or should I funnel them via a final SoC PR ?
 > 
-> I'm sorry I missed your reply earlier, getting back to the
-> thread now. So it's clear that this code needs to run in a
-> special memory from your description, but I'm still trying
-> to understand the details better.
-> 
-> I found https://github.com/loongson-community/pmon source
-> code, and a reference to its origin at LSI Logic at
-> https://www.linux-mips.org/wiki/PMON but otherwise have
-> no idea about what this actually is, or how it relates
-> to your UEFI firmware. Did you add UEFI support to PMON,
-> or do you use it as a first stage loader that loads
-> the actual UEFI implementation (EDK2 or u-boot, I guess)?
+> I tried to apply them to the pinctrl tree but that fails ...
+> Could you rebase patches 9,10,11 onto my "devel" branch
+> and send separately? Then I will apply them right away.
 
+Sure, sent them right now!
 
-Pmon and uefi are two different firmware, and there is no connection
-between them.
+Thx,
+Neil
 
 > 
->>> Or is
->>> this a runtime firmware interface similar to how UEFI handles
->>> its runtime services to keep the implementation out of
->>> the kernel?
->>
->>
->> No, The main cpu and other cpu will offline that after into firmware and
->> finished Corresponding operations, the pmon firmware will not run.
-> 
-> I'm still trying to understand your explanations here.
-> You say that pmon no longer runs, but that seems to contradict
-> what you said earlier about branching into pmon firmware code
-> for suspend.
-
-
-It's not contradictory.  The suspend-to-ram is that from kernel goto to
-pmon firmware code, then pmon finished corresponding operations, which
-was to set self-refresh mode in memory controller, then memory HW will
-maintain its own data and no longer requires software processing, pmon
-firmware will not run.
-
-> 
-> Is this executing directly from ROM then?
-
-
-Yes.
-
-Thanks,
-Yinbo
+> Yours,
+> Linus Walleij
 
