@@ -2,173 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B6477C157
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 22:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04AE77C261
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 23:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232085AbjHNUNf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 16:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
+        id S232891AbjHNV2k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 17:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjHNUNZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 16:13:25 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906C313E;
-        Mon, 14 Aug 2023 13:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692044003; x=1723580003;
-  h=date:from:to:cc:subject:message-id;
-  bh=hqw5SfjEoG+z3rv5ZlFyo7lmRfDYcSlFwwV0692yl0c=;
-  b=Y+h5IxFyzIbNUYnexnd/Ufjx6U5uuEy5CQFvAEW9gWL+HdapNjZ67H7H
-   zkhj+zcCjQFJZxeXceEpz5eh259ogrNIQqa5PCO0arnlA0rn5d1Tna9zA
-   P2ztP8C1ro2noIFkI8WXvtmfY8KT/o0Oz/tu9h8OJybQqq65b3EuFVaCD
-   gN6EW6/dOuToLgVUX60DwwjSwWlB0CQyusk010bhR7B8j4SGO8toJwTNt
-   5zO2CAInsbKFUp8fnB4T3w0pOPCwqDxzRvAQRU9hu5NzX7ZQvOh/6CbqE
-   l9f53Dmtp8wDyXG/mgCuj468DkUOfnPOXezsnmaoRdEh7k+zfU2g9bvX9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="369604778"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="369604778"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 13:13:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="683421919"
-X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
-   d="scan'208";a="683421919"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2023 13:13:16 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qVdw3-0000OP-1c;
-        Mon, 14 Aug 2023 20:13:10 +0000
-Date:   Tue, 15 Aug 2023 04:12:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
-        linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- dd86d4481e181c84b56d260878a59ea7931930f7
-Message-ID: <202308150422.7eREQLcb-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+        with ESMTP id S232920AbjHNV2S (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 17:28:18 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B60E10CE
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 14:28:18 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-34a91a25db9so1519895ab.1
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 14:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1692048497; x=1692653297;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BR+JPGscnhVrEQwfTBpqpRvh0fXBlGtikJiTfcgyxCo=;
+        b=d/ywBwrd9M+sJ2oLD7lb5RO45Wn3GHcJFxuEAgzXWyM2OyF+cAh9MS495TBGtyEyx1
+         xKK8FnnecwdPy1xPtgyjkgnXJBdOowmQb5Ty1hmFcCTSqdRVwkGPVQvBs5ByQyB/2r/v
+         VPS0ZDhVhZKTaqi9fdJGdge+cefEDDssk/BZc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692048497; x=1692653297;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BR+JPGscnhVrEQwfTBpqpRvh0fXBlGtikJiTfcgyxCo=;
+        b=QQ+63yPYer6c/KdmbVRTzDDdjIr6lPNQuUDfwN0BJZ+4uOTw9+13WIDsofbfX+G3Mr
+         cz8fK9KtoWa4qnkwiHpXMDHI1e6e8Q5R5GHohPIZ+iFx36bzhrfLMlBlyRoxV6Egx+xg
+         +xdOrV+hqcxrQ4jwyrSHSIptE2SDRH/zjC8Sh2LPYndeAbJnMnvxat9Wh6I+SKb+1ffV
+         xSzeZxUwUtJC365yUD3bFBCPI1zRE/qxejWxm7puSd88zcDGo743RnSuShjXlaIh3aVu
+         tZqn3W+ktpDlNrjzBigjtxqO94FzrVEvViZnIE387Zfhd0LWfarsnyb5MkfdieEqd0NT
+         o+tA==
+X-Gm-Message-State: AOJu0YztW23A8VGPa+3PgbokeqIj/gm/GwF1ChHPDx48HsRUZBrigxnK
+        TwoVykfTPBsdd6jOyG8yrysjQA==
+X-Google-Smtp-Source: AGHT+IH8EVgnmRaisZltngF35iIiJkH0e7AIZDFQ1T/J2Wk/+Drqq2c8Fae/qJUTgBCf+akPS2exhg==
+X-Received: by 2002:a05:6602:3890:b0:790:f2c3:2fd with SMTP id br16-20020a056602389000b00790f2c302fdmr14455621iob.0.1692048497468;
+        Mon, 14 Aug 2023 14:28:17 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id o3-20020a5e8a43000000b0078714764ca0sm3439153iom.40.2023.08.14.14.28.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Aug 2023 14:28:16 -0700 (PDT)
+Message-ID: <dcb720bc-113f-e467-01bd-3d19869e13ac@linuxfoundation.org>
+Date:   Mon, 14 Aug 2023 15:28:15 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] cpupower: Fix querying boost support for amd-pstate-epp
+ mode
+Content-Language: en-US
+To:     Huang Rui <ray.huang@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>,
+        "trenn@suse.com" <trenn@suse.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chenhq2005@gmail.com" <chenhq2005@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230811213501.17293-1-mario.limonciello@amd.com>
+ <ZNmqQkOK7CLa7TNl@amd.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZNmqQkOK7CLa7TNl@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: dd86d4481e181c84b56d260878a59ea7931930f7  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On 8/13/23 22:14, Huang Rui wrote:
+> On Sat, Aug 12, 2023 at 05:35:01AM +0800, Limonciello, Mario wrote:
+>> When running in active mode the driver for amd-pstate has -epp appended.
+>> This throws off amd-pstate detection.
+>>
+>> To detect amd-pstate look for the prefix instead.
+>>
+>> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors")
+>> Reported-by: chenhq2005@gmail.com
+>> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217755
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> 
 
-elapsed time: 720m
+This patch doesn't apply on top of cpupower latest:
 
-configs tested: 97
-configs skipped: 3
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git coupower
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Please rebase and send it.
 
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r023-20230814   gcc  
-alpha                randconfig-r035-20230814   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r036-20230814   gcc  
-arc                  randconfig-r043-20230814   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r046-20230814   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r006-20230814   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r022-20230814   gcc  
-hexagon              randconfig-r026-20230814   clang
-hexagon              randconfig-r041-20230814   clang
-hexagon              randconfig-r045-20230814   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230814   gcc  
-i386         buildonly-randconfig-r005-20230814   gcc  
-i386         buildonly-randconfig-r006-20230814   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230814   gcc  
-i386                 randconfig-i002-20230814   gcc  
-i386                 randconfig-i003-20230814   gcc  
-i386                 randconfig-i004-20230814   gcc  
-i386                 randconfig-i005-20230814   gcc  
-i386                 randconfig-i006-20230814   gcc  
-i386                 randconfig-i011-20230814   clang
-i386                 randconfig-i012-20230814   clang
-i386                 randconfig-i013-20230814   clang
-i386                 randconfig-i014-20230814   clang
-i386                 randconfig-i015-20230814   clang
-i386                 randconfig-i016-20230814   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r004-20230814   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r003-20230814   gcc  
-openrisc             randconfig-r005-20230814   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc              randconfig-r021-20230814   clang
-powerpc              randconfig-r024-20230814   clang
-powerpc              randconfig-r031-20230814   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r042-20230814   clang
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230814   clang
-sh                               allmodconfig   gcc  
-sh                   randconfig-r032-20230814   gcc  
-sh                   randconfig-r034-20230814   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64              randconfig-r025-20230814   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230814   gcc  
-x86_64       buildonly-randconfig-r002-20230814   gcc  
-x86_64       buildonly-randconfig-r003-20230814   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r033-20230814   gcc  
-x86_64               randconfig-x006-20230814   clang
-x86_64               randconfig-x011-20230814   gcc  
-x86_64               randconfig-x012-20230814   gcc  
-x86_64               randconfig-x013-20230814   gcc  
-x86_64               randconfig-x014-20230814   gcc  
-x86_64               randconfig-x015-20230814   gcc  
-x86_64               randconfig-x016-20230814   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r002-20230814   gcc  
+thanks,
+-- Shuah
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
