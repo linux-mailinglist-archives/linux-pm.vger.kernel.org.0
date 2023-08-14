@@ -2,89 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE0C77C0FF
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 21:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B6477C157
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 22:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232031AbjHNToQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 15:44:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S232085AbjHNUNf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 16:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjHNTnt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 15:43:49 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0CCAF;
-        Mon, 14 Aug 2023 12:43:48 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37EIxfBK005221;
-        Mon, 14 Aug 2023 19:43:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=gGU4i3Wetb6vziDtdg288vqP3V8FSa2AfKVET40eFEw=;
- b=AF+u8VmKqhTMkiT7a3hPOnk6qOJJyjC3DVWtOMr2hcHwF6s7gol7UC6qIaZNdWPYSL++
- 0zKqTNR+HmTqAwezenJ+JrcmJVRfSuUrorPsGmKp+vlCUcrz/CBFLom9SxA1B0XlZtGI
- YHwrCPxtyR5sf3vSKpuLY/bUl1PtYxcrDhK7HyoGXS3v+0+daQJMziDpqVD6LQhf4gZw
- VZPB4PfHC7s56XlcdHCEayG7llbPlSEI5zAKE4SHD8q12XQ4jj7rIyd+wUkGbCDe2Nfo
- 39hzZ5pWCJeuPlDkI3LzxTTfesiasK9lhgzO17bkROaIfePGio9o5CjxSyJTfY1mZZyK fw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sffxt9kcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 19:43:37 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37EJhaQQ022267
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 19:43:36 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 14 Aug 2023 12:43:36 -0700
-Date:   Mon, 14 Aug 2023 12:43:35 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Andrei Coardos <aboutphysycs@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <alex@shruggie.ro>,
-        <sre@kernel.org>, <konrad.dybcio@linaro.org>,
-        <andersson@kernel.org>, <agross@kernel.org>
-Subject: Re: [PATCH] power: reset: qcom-pon: removed unneeded call to
- platform_set_drvdata()
-Message-ID: <20230814194335.GV1428172@hu-bjorande-lv.qualcomm.com>
-References: <20230814181823.3662-1-aboutphysycs@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230814181823.3662-1-aboutphysycs@gmail.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: OO5ixX7UXJgjFtaOm1oNnqoH7ygK8_-p
-X-Proofpoint-GUID: OO5ixX7UXJgjFtaOm1oNnqoH7ygK8_-p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-14_17,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=937 spamscore=0
- malwarescore=0 clxscore=1011 suspectscore=0 adultscore=0 bulkscore=0
- mlxscore=0 priorityscore=1501 impostorscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308140181
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229952AbjHNUNZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 16:13:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906C313E;
+        Mon, 14 Aug 2023 13:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692044003; x=1723580003;
+  h=date:from:to:cc:subject:message-id;
+  bh=hqw5SfjEoG+z3rv5ZlFyo7lmRfDYcSlFwwV0692yl0c=;
+  b=Y+h5IxFyzIbNUYnexnd/Ufjx6U5uuEy5CQFvAEW9gWL+HdapNjZ67H7H
+   zkhj+zcCjQFJZxeXceEpz5eh259ogrNIQqa5PCO0arnlA0rn5d1Tna9zA
+   P2ztP8C1ro2noIFkI8WXvtmfY8KT/o0Oz/tu9h8OJybQqq65b3EuFVaCD
+   gN6EW6/dOuToLgVUX60DwwjSwWlB0CQyusk010bhR7B8j4SGO8toJwTNt
+   5zO2CAInsbKFUp8fnB4T3w0pOPCwqDxzRvAQRU9hu5NzX7ZQvOh/6CbqE
+   l9f53Dmtp8wDyXG/mgCuj468DkUOfnPOXezsnmaoRdEh7k+zfU2g9bvX9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="369604778"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="369604778"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2023 13:13:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="683421919"
+X-IronPort-AV: E=Sophos;i="6.01,173,1684825200"; 
+   d="scan'208";a="683421919"
+Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2023 13:13:16 -0700
+Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qVdw3-0000OP-1c;
+        Mon, 14 Aug 2023 20:13:10 +0000
+Date:   Tue, 15 Aug 2023 04:12:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-acpi@vger.kernel.org, devel@acpica.org,
+        linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ dd86d4481e181c84b56d260878a59ea7931930f7
+Message-ID: <202308150422.7eREQLcb-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 09:18:23PM +0300, Andrei Coardos wrote:
-> This function call was found to be unnecessary as there is no equivalent
-> platform_get_drvdata() call to access the private data of the driver. Also,
-> the private data is defined in this driver, so there is no risk of it being
-> accessed outside of this driver file.
-> 
-> Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: dd86d4481e181c84b56d260878a59ea7931930f7  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-Reviewed-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+elapsed time: 720m
 
-Regards,
-Bjorn
+configs tested: 97
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r023-20230814   gcc  
+alpha                randconfig-r035-20230814   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r036-20230814   gcc  
+arc                  randconfig-r043-20230814   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230814   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230814   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r022-20230814   gcc  
+hexagon              randconfig-r026-20230814   clang
+hexagon              randconfig-r041-20230814   clang
+hexagon              randconfig-r045-20230814   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230814   gcc  
+i386         buildonly-randconfig-r005-20230814   gcc  
+i386         buildonly-randconfig-r006-20230814   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230814   gcc  
+i386                 randconfig-i002-20230814   gcc  
+i386                 randconfig-i003-20230814   gcc  
+i386                 randconfig-i004-20230814   gcc  
+i386                 randconfig-i005-20230814   gcc  
+i386                 randconfig-i006-20230814   gcc  
+i386                 randconfig-i011-20230814   clang
+i386                 randconfig-i012-20230814   clang
+i386                 randconfig-i013-20230814   clang
+i386                 randconfig-i014-20230814   clang
+i386                 randconfig-i015-20230814   clang
+i386                 randconfig-i016-20230814   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r004-20230814   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230814   gcc  
+openrisc             randconfig-r005-20230814   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r021-20230814   clang
+powerpc              randconfig-r024-20230814   clang
+powerpc              randconfig-r031-20230814   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230814   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230814   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r032-20230814   gcc  
+sh                   randconfig-r034-20230814   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64              randconfig-r025-20230814   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230814   gcc  
+x86_64       buildonly-randconfig-r002-20230814   gcc  
+x86_64       buildonly-randconfig-r003-20230814   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r033-20230814   gcc  
+x86_64               randconfig-x006-20230814   clang
+x86_64               randconfig-x011-20230814   gcc  
+x86_64               randconfig-x012-20230814   gcc  
+x86_64               randconfig-x013-20230814   gcc  
+x86_64               randconfig-x014-20230814   gcc  
+x86_64               randconfig-x015-20230814   gcc  
+x86_64               randconfig-x016-20230814   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r002-20230814   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
