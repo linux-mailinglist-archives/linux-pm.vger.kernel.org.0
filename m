@@ -2,88 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A454677B152
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 08:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1DE77B155
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 08:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbjHNGQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S232763AbjHNGQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 14 Aug 2023 02:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjHNGQc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 02:16:32 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02503F4;
-        Sun, 13 Aug 2023 23:16:31 -0700 (PDT)
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37E6Bkb0022430;
-        Mon, 14 Aug 2023 06:15:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Z4fU+YYJUASo5wHESwfoB5sizpj1SLIP29KWGgkn9p4=;
- b=ZPGpBSRRsNQxbfXUWXytkgZrJ5puMr/YQbuBo+/jSurFUpKLtg/etEjz9yAmMYAAfQE6
- eCbslPsNPoQSZif2h+3C1AHCSkYWao3s9tqN1hkW7oaXGeV+3driaG4hXAH3j2ekU+FT
- vZzZwNy+ULyTpBmEgB2RWW4EBGopQ8n0RkoW8xFa9tqWTFdT2y8T9i7vBHYlsJ4yDP/Q
- pMJRL5J0GM8ukZRHhW10f+X4u63xjFiY3s3nIIcqukdtZhZ2A/l6wemZA7BIrYuWb7Zi
- psuZquyiGAvbti6n+4JFda3MZnK4jS2tstcuZHUtcbKonQCIBsopnEKJg6ZQVCRdEzEv pw== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sfek2g7kk-10
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 06:15:33 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37E4vifS013413;
-        Mon, 14 Aug 2023 06:07:25 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3sepmj97ca-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Aug 2023 06:07:25 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37E67NI936897134
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Aug 2023 06:07:23 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 58B5C2004F;
-        Mon, 14 Aug 2023 06:07:23 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCA0D2004E;
-        Mon, 14 Aug 2023 06:07:22 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Aug 2023 06:07:22 +0000 (GMT)
-Received: from bgray-lenovo-p15.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id BDE9A60648;
-        Mon, 14 Aug 2023 16:07:17 +1000 (AEST)
-From:   Benjamin Gray <bgray@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-doc@vger.kernel.org, bpf@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        jan.kiszka@siemens.com, kbingham@kernel.org, mykolal@fb.com,
-        Benjamin Gray <bgray@linux.ibm.com>
-Subject: [PATCH 8/8] selftests/bpf: fix Python string escapes in f-strings
-Date:   Mon, 14 Aug 2023 16:07:04 +1000
-Message-ID: <20230814060704.79655-9-bgray@linux.ibm.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230814060704.79655-1-bgray@linux.ibm.com>
-References: <20230814060704.79655-1-bgray@linux.ibm.com>
+        with ESMTP id S232760AbjHNGQi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 02:16:38 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F98F4
+        for <linux-pm@vger.kernel.org>; Sun, 13 Aug 2023 23:16:36 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe55d70973so4615914e87.0
+        for <linux-pm@vger.kernel.org>; Sun, 13 Aug 2023 23:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1691993795; x=1692598595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mtp1bzCVDFwIiSovncTLXWQtJcUXbRosxyZwqe0vmGs=;
+        b=YDpPpXmNzXUlbdG/UEBe8x7JmXGK7eWE++II4MlYs3jd4ooDq7+4xrWE/uz3RVWarW
+         X9MKyT7BzZoZQFd7YypPoAau3NpVVvknneEgz5Sos4Qs2eRGxA7eGm6eB+wwEi+Znb2b
+         xSluQmB9hDhc+I75zzM4QOJgc0Q4pAcqvEb8QxQ3VJ4vKjQ4XnJCeg5VWRoMdCI2JK5e
+         CTePX9wdt/V1Ecneh4tno0VhK+I07wNN1/lBqT/G034Xv2fJgLKTVsh9znST1GKP4Odh
+         DvY5tGtIAZHWHFtS7F06t0Kc0YuAn9kfB8BKy7MPRlxUCRJU+X2FBUHixQlcD3VbJDiv
+         JKPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691993795; x=1692598595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mtp1bzCVDFwIiSovncTLXWQtJcUXbRosxyZwqe0vmGs=;
+        b=L173dgwkvnfgQi8a3GF/R8oDIGk4fWPdWCst07vXk+aBqLckJss14lTb2GlWLWJHAK
+         NLnCjtrB0XGh8UbxAosos2/AlBZiQK4k/rPOoS81Sl2Knoz/159s8iEix3jvI4FWBypO
+         UrEZ3eiEa5k10eurGF918KOlbuwiYaVTL1yHiL8nu1tjzjdhVpgbH/TNEpmRScLKx4JQ
+         qFXkCS1qMtjauabgj1/UEAJyBQTQUSrVW4+Ct3gBMxs0XSQVr7mNHY+KSy35HAKwVSKN
+         I21509bDsNXVNWGIgmYE7WrCWnq6/w1X6iezGLeZP7pHBnD/oj8xXH1wg6DbrlegnNnt
+         1mLA==
+X-Gm-Message-State: AOJu0Yz4Fho2qiiNoundqC5znVCvwdIJYOpMD2AhU1WeLKV8LOfXjREj
+        gZvgjf1/BjUt20iSdFVwUo3Dh9a72bI0vLMC4PkbZA==
+X-Google-Smtp-Source: AGHT+IEB803wvl7rL05GuOz87zusd0mp83hEVNoYiEid4k5V2fkib0/LS0E2ZX26IunNIvwK54X/SvavadmoSxcMyr8=
+X-Received: by 2002:a05:6512:110d:b0:4fe:8c1a:e9b7 with SMTP id
+ l13-20020a056512110d00b004fe8c1ae9b7mr3885743lfg.34.1691993794927; Sun, 13
+ Aug 2023 23:16:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FPckdZT2o3A_ZwQtcMaL8l2LrUWOqdaj
-X-Proofpoint-ORIG-GUID: FPckdZT2o3A_ZwQtcMaL8l2LrUWOqdaj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-13_24,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 mlxscore=0 phishscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- clxscore=1015 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2306200000 definitions=main-2308140055
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230813190845.49738-1-alex@shruggie.ro> <CAGXv+5F8HZOawAKoDvVCx7+mGmEPsELzp-r-6c5tw64c87Aa_A@mail.gmail.com>
+In-Reply-To: <CAGXv+5F8HZOawAKoDvVCx7+mGmEPsELzp-r-6c5tw64c87Aa_A@mail.gmail.com>
+From:   Alexandru Ardelean <alex@shruggie.ro>
+Date:   Mon, 14 Aug 2023 09:16:23 +0300
+Message-ID: <CAH3L5QpgFzyhru8AXHHnp5DFqb60tGxQ93Kf_+vdm12N5V72tw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/mediatek: remove redundant dev_warn in probe
+To:     Chen-Yu Tsai <wenst@chromium.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        aouledameur@baylibre.com, daniel@makrotopia.org,
+        void0red@hust.edu.cn, aboutphysycs@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,57 +72,66 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-be a syntax error.
+On Mon, Aug 14, 2023 at 8:20=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org> w=
+rote:
+>
+> On Mon, Aug 14, 2023 at 3:09=E2=80=AFAM Alexandru Ardelean <alex@shruggie=
+.ro> wrote:
+> >
+> > There's no need to print any extra messages in the driver if
+> > devm_thermal_add_hwmon_sysfs() fails.
+> > If this function has any failures, they will already be printed.
+> >
+> > While looking inside 'drivers/thermal/mediatek/auxadc_thermal.c', the
+> > failure will be either be one of:
+> >   'Failed to allocate device resource data'
+> > or
+> >   'Failed to add hwmon sysfs attributes'
+> >
+> > Also, the failure will be reported on the 'dev' object passed to
+> > 'devm_thermal_add_hwmon_sysfs()', so it should be clear which device th=
+is
+> > error belongs to.
+> >
+> > Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
+> > ---
+> >  drivers/thermal/mediatek/auxadc_thermal.c | 6 +-----
+> >  1 file changed, 1 insertion(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/thermal/mediatek/auxadc_thermal.c b/drivers/therma=
+l/mediatek/auxadc_thermal.c
+> > index f59d36de20a0..55f7fde470e5 100644
+> > --- a/drivers/thermal/mediatek/auxadc_thermal.c
+> > +++ b/drivers/thermal/mediatek/auxadc_thermal.c
+> > @@ -1290,11 +1290,7 @@ static int mtk_thermal_probe(struct platform_dev=
+ice *pdev)
+> >         if (IS_ERR(tzdev))
+> >                 return PTR_ERR(tzdev);
+> >
+> > -       ret =3D devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
+> > -       if (ret)
+> > -               dev_warn(&pdev->dev, "error in thermal_add_hwmon_sysfs"=
+);
+> > -
+> > -       return 0;
+> > +       return devm_thermal_add_hwmon_sysfs(&pdev->dev, tzdev);
+>
+> You changed the logic here. The original logic is to print a warning
+> if the hwmon sysfs stuff failed, but continue to probe the driver. In
+> other words, hwmon sysfs failing is a non-fatal error.
+>
+> Your changes make it fatal.
 
-Fix these now to get ahead of it before it's an error.
+Ah, right.
+My bad
 
-Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
----
- tools/testing/selftests/bpf/test_bpftool_synctypes.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_bpftool_synctypes.py b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-index b21bc1a35bf4..a93144b3b2b0 100755
---- a/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-+++ b/tools/testing/selftests/bpf/test_bpftool_synctypes.py
-@@ -66,7 +66,7 @@ class ArrayParser(BlockParser):
- 
-     def __init__(self, reader, array_name):
-         self.array_name = array_name
--        self.start_marker = re.compile(f'(static )?const bool {self.array_name}\[.*\] = {{\n')
-+        self.start_marker = re.compile(f'(static )?const bool {self.array_name}\\[.*\\] = {{\n')
-         super().__init__(reader)
- 
-     def search_block(self):
-@@ -226,7 +226,7 @@ class FileExtractor(object):
- 
-         @block_name: name of the blog to parse, 'TYPE' in the example
-         """
--        start_marker = re.compile(f'\*{block_name}\* := {{')
-+        start_marker = re.compile(f'\\*{block_name}\\* := {{')
-         pattern = re.compile('\\*\\*([\\w/-]+)\\*\\*')
-         end_marker = re.compile('}\n')
-         return self.__get_description_list(start_marker, pattern, end_marker)
-@@ -245,7 +245,7 @@ class FileExtractor(object):
- 
-         @block_name: name of the blog to parse, 'TYPE' in the example
-         """
--        start_marker = re.compile(f'"\s*{block_name} := {{')
-+        start_marker = re.compile(f'"\\s*{block_name} := {{')
-         pattern = re.compile('([\\w/]+) [|}]')
-         end_marker = re.compile('}')
-         return self.__get_description_list(start_marker, pattern, end_marker)
-@@ -264,7 +264,7 @@ class FileExtractor(object):
- 
-         @macro: macro starting the block, 'HELP_SPEC_OPTIONS' in the example
-         """
--        start_marker = re.compile(f'"\s*{macro}\s*" [|}}]')
-+        start_marker = re.compile(f'"\\s*{macro}\\s*" [|}}]')
-         pattern = re.compile('([\\w-]+) ?(?:\\||}[ }\\]])')
-         end_marker = re.compile('}\\\\n')
-         return self.__get_description_list(start_marker, pattern, end_marker)
--- 
-2.41.0
-
+>
+> ChenYu
+>
+> >  }
+> >
+> >  static struct platform_driver mtk_thermal_driver =3D {
+> > --
+> > 2.41.0
+> >
+> >
