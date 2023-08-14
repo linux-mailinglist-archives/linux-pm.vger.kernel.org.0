@@ -2,71 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E724A77BC0F
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 16:52:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D469D77BE2D
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 18:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjHNOwR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 10:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
+        id S229798AbjHNQff (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 12:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbjHNOvx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 10:51:53 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C09E73
-        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 07:51:52 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-317716a4622so3903721f8f.1
-        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 07:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1692024711; x=1692629511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QKUbWP/5wD+R2VLBW3T27yTkiHC3+pkgzxkv5KBw7oU=;
-        b=NWMm8VPXlx1C0KCYzCe2DHfP0ywDplps9vTIQABh7xZoJm7n121tukAMxAJkOEcKO1
-         0xqtrcZb5TkS2OkP8NvwgtnoL5TAP072lBKrIlWawF3Ew0KTiF9Kox9etTzy+vL5rZcK
-         sCiesV6PZKDzp4Wf53mfDZkd52w9eAFV/TKXBw9fXJ1k4uA+h15fZObpyGfK/HcUssVy
-         B5k4eymGhpX0E42pGWsbggffH7svbOgwN5J6MgJBQ2Bws+/JKTEPVFpX09EJFzvp9jwF
-         8Im/hZajaQu70a0c4GjxLLdEhXKqo7mNEomTbXuKkRmUM19ggJSLjxvA/cGAMxTEqQOB
-         kUVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692024711; x=1692629511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QKUbWP/5wD+R2VLBW3T27yTkiHC3+pkgzxkv5KBw7oU=;
-        b=DhCYpx8esUCp7M0exuGEIsXKVv6+77ne5MfNPvQj3DAjqfFBGrLYwmQ+3uUvLtsvaf
-         KoTA3+02eDLVwgxkQRWjiXKAQhPl7Frr/1d/ks/9t/b0FFgtNgfQ3P1EduAWjWgJPznq
-         noptfP11RjygUiFL3MyYLyr+h84L1LIctRzjVTP8pzo+55Ixn3OUbcs8Gl5PdFHisFfE
-         G6sv5isoI9si20HnjeVNOK4jJySI45e01DtlPPuUQ1ZJjs70GwEaV70K9DvpWw6pF++p
-         1CCmg0feVknI8CBjinBA6bJiVckQ92BjbWHL7RjeOd2HMYm9M02DaUoR+X6hmgGSAptP
-         1SAg==
-X-Gm-Message-State: AOJu0YxL/QFmedPNyT8wrXQBWEqG/zLojnBkI/uC4GIRdm7t3iUbTLtL
-        oxs47YYo42P6oeci1dltoiF1ysw3McTtYvud9qB8hg==
-X-Google-Smtp-Source: AGHT+IEEW+/30gbtZROsRL2IsI6Cw+bkkZB/Yvn9l+bRXLpl21thcXBP5yldQkoLluhgI/aa/jQxdwaoWF6L50EREuc=
-X-Received: by 2002:a5d:618d:0:b0:313:f783:262b with SMTP id
- j13-20020a5d618d000000b00313f783262bmr6915039wru.26.1692024710910; Mon, 14
- Aug 2023 07:51:50 -0700 (PDT)
+        with ESMTP id S233100AbjHNQfc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 12:35:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7563BE0;
+        Mon, 14 Aug 2023 09:35:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1324C6171C;
+        Mon, 14 Aug 2023 16:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433BCC433C8;
+        Mon, 14 Aug 2023 16:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692030930;
+        bh=5rqGMhzjNA2uxOwCAkvro64W6zVd58aje4qxMuDi/sE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=a1Bu6NHwKJ7TamWenDpHupeJDBxC2HGPPagp5H//vVCjSfakH5Dp4KBFP4EsTqdsB
+         QXUQok8ckzKtSWSkWeFaqmjXXkWQy9ojJ2wWWODCcu8EPaLOf+X4RBoBOGsPKoyWsr
+         zLug+GKtopOp0Q0SNX+7Tr3a53GjkJmMa9IEcsJEXuMR7AaCRSSiFdt2VLq9q/lZXB
+         R1jJmeypfVF9Ook6wrRiL4jYtOOHLcEN7UJPp4ckdt9Uyia9jRhWNIIksnCrHmS8S5
+         qj5HDfJHXz3jujFiF5+GB3iT6WU2FU3SQn0GytLjOushdSCh0C4PVBXhrjB376BaC6
+         Ifm9mpgcsmhzg==
+Date:   Mon, 14 Aug 2023 11:35:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Greenman, Gregory" <gregory.greenman@intel.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "usa@junocomputers.com" <usa@junocomputers.com>,
+        linux-wireless@vger.kernel.org, linux-pci@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: firmware-iwlwifi: Wireless AC 7265 lacks D3cold support
+Message-ID: <20230814163528.GA177266@bhelgaas>
 MIME-Version: 1.0
-References: <12275372.O9o76ZdvQC@kreacher>
-In-Reply-To: <12275372.O9o76ZdvQC@kreacher>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Mon, 14 Aug 2023 07:51:41 -0700
-Message-ID: <CAAYoRsUYrE7gM28VCB0KrP2dCr7NmH2wuDnhT6h1D=S7go6fJA@mail.gmail.com>
-Subject: Re: [RFT] [PATCH v2] cpuidle: menu: Skip tick_nohz_get_sleep_length()
- call in some cases
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <29c5e32631abc368e7272fd193b0289ff8da0f95.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,38 +56,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 11:38=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysocki.n=
-et> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH] cpuidle: menu: Skip tick_nohz_get_sleep_length() call in=
- some cases
->
-> Because the cost of calling tick_nohz_get_sleep_length() may increase
-> in the future, reorder the code in menu_select() so it first uses the
-> statistics to determine the expected idle duration.  If that value is
-> higher than RESIDENCY_THRESHOLD_NS, tick_nohz_get_sleep_length() will
-> be called to obtain the time till the closest timer and refine the
-> idle duration prediction if necessary.
->
-> This causes the governor to always take the full overhead of
-> get_typical_interval() with the assumption that the cost will be
-> amortized by skipping the tick_nohz_get_sleep_length() call in the
-> cases when the predicted idle duration is relatively very small.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+[+cc Mario, linux-pm]
 
-I ran the same tests as I did for the teo governor changes.
-Nothing of significance to report (well, some minor improvements
-in records per second at the long interval end of the sleeping
-ebizzy test, with a corresponding slight increase in processor
-package power).
+On Sun, Aug 13, 2023 at 03:33:21PM +0000, Greenman, Gregory wrote:
+> On Fri, 2023-08-11 at 15:34 -0400, Juno Computers USA wrote:
+> > Any updates on this?
 
-Tested-by: Doug Smythies <dsmythies@telus.net>
+D3cold support has been a problem area, and there are some changes in
+progress [1] that could be related.
 
-> ---
->
-> v1 -> v2: Add missing max check to get_typical_interval().
->
+Could you possibly collect the complete dmesg logs (with a recent
+upstream kernel, e.g., v6.4, if possible)?  And the output of
+"sudo lspci -vv"?  And the contents of /sys/firmware/acpi/tables/?
+You can attach them to the Debian bug report if that's convenient for
+you.
 
-... Doug
+Bjorn
+
+[1] https://lore.kernel.org/r/20230809185453.40916-1-mario.limonciello@amd.com
+
+> > On Aug 3 2023, at 8:01 am, Juno Computers USA <usa@junocomputers.com> wrote:
+> > > Dear Maintainer,
+> > > 
+> > > If D3Cold is enabled from BIOS the tablet boots without Wifi.
+> > > The only two ways to enable wifi support is either by disabling
+> > > D3Cold from BIOS (not ideal) or adding pcie_port_pm=off to grub
+> > > 
+> > > [   12.681303] iwlwifi 0000:01:00.0: Detected Intel(R) Dual Band Wireless AC 7265, REV=0x210
+> > > 
+> > > This is needed for our new Juno Tab 2
+> > > 
+> > > https://junocomputers.com/us/product/juno-tab-2/
+> > > 
+> > > I also filed this under Debian bug-tracker.
+> > > 
+> > > https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1036633
+> > > Thanks,
+> > > 
+> > > Giovanni Caligaris
+> > > Juno Computers USA
+> > > P: (215) 509-5472
+> > > W: https://junocomputers.com/us
+> 
+> This device is very old and actually already EOL, so I'll not be
+> able to get any support for this internally. D3 works fine with this
+> NIC on standard, off the shelf laptops, so I'd guess that the probem
+> could be rooted in the tablets' PCIe hardware or maybe the BIOS
+> itself.
