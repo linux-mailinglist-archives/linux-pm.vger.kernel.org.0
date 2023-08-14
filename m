@@ -2,45 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BC477B26A
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 09:28:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BE677B31C
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 09:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233736AbjHNH1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 03:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S234384AbjHNH5x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 03:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234299AbjHNH1b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 03:27:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFA73E73;
-        Mon, 14 Aug 2023 00:27:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B9CE92F4;
-        Mon, 14 Aug 2023 00:28:07 -0700 (PDT)
-Received: from e129154.nice.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 013CE3F64C;
-        Mon, 14 Aug 2023 00:27:21 -0700 (PDT)
-Date:   Mon, 14 Aug 2023 09:27:17 +0200
-From:   Beata Michalska <beata.michalska@arm.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        catalin.marinas@arm.com, mark.rutland@arm.com, rafael@kernel.org,
-        viresh.kumar@linaro.org, ionela.voinescu@arm.com,
-        sumitg@nvidia.com, yang@os.amperecomputing.com
-Subject: Re: [PATCH] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <ZNnXVXHYjzZV15y_@e129154.nice.arm.com>
-References: <20230606155754.245998-1-beata.michalska@arm.com>
- <20230607095856.7nyv7vzuehceudnl@bogus>
- <ZICNkXfBQUiT/BvK@e120325.cambridge.arm.com>
- <20230727095604.GA18721@willie-the-truck>
+        with ESMTP id S234391AbjHNH5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 03:57:24 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A5D4B5;
+        Mon, 14 Aug 2023 00:57:21 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.201])
+        by gateway (Coremail) with SMTP id _____8Bx5fBg3tlkIwkYAA--.49714S3;
+        Mon, 14 Aug 2023 15:57:20 +0800 (CST)
+Received: from [10.20.42.201] (unknown [10.20.42.201])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bx3yNd3tlkmZxZAA--.49687S3;
+        Mon, 14 Aug 2023 15:57:18 +0800 (CST)
+Subject: Re: [PATCH v6 1/2] soc: dt-bindings: add loongson-2 pm
+To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        soc@kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
+        Liu Yun <liuyun@loongson.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        zhuyinbo@loongson.cn
+References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
+ <20230803063703.5659-2-zhuyinbo@loongson.cn>
+ <193f9138-57e0-4d4b-8225-54d38be9bfbc@app.fastmail.com>
+ <8efeac46-ebb7-fa05-3d88-7c21acd59c8b@loongson.cn>
+ <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <0616585d-1459-b6ef-375b-890426004e01@loongson.cn>
+Date:   Mon, 14 Aug 2023 15:57:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230727095604.GA18721@willie-the-truck>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <6d7335b4-63e2-4a7e-9620-8a0012558dfd@app.fastmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Bx3yNd3tlkmZxZAA--.49687S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,59 +61,86 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 10:56:05AM +0100, Will Deacon wrote:
-> On Wed, Jun 07, 2023 at 03:00:49PM +0100, Beata Michalska wrote:
-> > On Wed, Jun 07, 2023 at 10:58:56AM +0100, Sudeep Holla wrote:
-> > > On Tue, Jun 06, 2023 at 04:57:54PM +0100, Beata Michalska wrote:
-> > > > With the Frequency Invariance Engine (FIE) being already wired up with
-> > > > sched tick and making use of relevant (core counter and constant
-> > > > counter) AMU counters, getting the current frequency for a given CPU
-> > > > on supported platforms, can be achieved by utilizing the frequency scale
-> > > > factor which reflects an average CPU frequency for the last tick period
-> > > > length.
-> > > > 
-> > > > With that at hand, arch_freq_get_on_cpu dedicated implementation
-> > > > gets enrolled into cpuinfo_cur_freq policy sysfs attribute handler,
-> > > > which is expected to represent the current frequency of a given CPU,
-> > > > as obtained by the hardware. This is exactly the type of feedback that
-> > > > cycle counters provide.
-> > > > 
-> > > > In order to avoid calling arch_freq_get_on_cpu from the scaling_cur_freq
-> > > > attribute handler for platforms that do provide cpuinfo_cur_freq, and
-> > > > yet keeping things intact for those platform that do not, its use gets
-> > > > conditioned on the presence of cpufreq_driver (*get) callback (which also
-> > > > seems to be the case for creating cpuinfo_cur_freq attribute).
-> > > >
-> > > 
-> > > LGTM,
-> > > 
-> > > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > > 
-> > Thanks for the review.
-> > > However I fail to understand if both the changes are dependent ?
-> > > Can this be split into 2 patches ? I fail to see the dependency, what
-> > > am I missing ? Even if there is some dependency to get arch value
-> > > (arch_freq_get_on_cpu() from show_cpuinfo_cur_freq()), you can push
-> > > that change first followed by the arm64 change as 2 different change.
-> > > 
-> > I guess I could split the patch into two parts:
-> > 1. adding implementation for the arch_freq_get_on_cpu
-> > 2. wiring it up with the cpufreq relevant attrib handlers
-> > 
-> > or the other way round (if that's what you have in mind).
-> > 
-> > Will wait a bit for any further comments before pushing new v.
+
+
+在 2023/8/12 下午8:25, Arnd Bergmann 写道:
+> On Fri, Aug 4, 2023, at 04:54, Yinbo Zhu wrote:
+>> 在 2023/8/3 下午3:44, Arnd Bergmann 写道:
+>>> On Thu, Aug 3, 2023, at 08:37, Yinbo Zhu wrote:
+>>>
+>>>> +  loongson,suspend-address:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint64
+>>>> +    description:
+>>>> +      The "loongson,suspend-address" is a deep sleep state (Suspend To
+>>>> +      RAM) firmware entry address which was jumped from kernel and it's
+>>>> +      value was dependent on specific platform firmware code. In
+>>>> +      addition, the PM need according to it to indicate that current
+>>>> +      SoC whether support Suspend To RAM.
+>>>> +
+>>>
+>>> I just commented on this in the driver patch, assuming this
+>>> was an MMIO address, but I'm even more confused now, since
+>>> we try hard to not rely on being able to just interface with
+>>> firmware like this.
+>>>
+>>> If this is executable code, where does this actually reside?
+>>
+>>
+>> Pmon firmware code.
+>>
+>>> Is this some SRAM that needs to execute the suspend logic
+>>> in order to shut down memory and cache controllers?
+>>
+>>
+>> Yes, The suspend-to-ram after into pmon firmware code and set
+>> self-refresh mode in memory controller and ensure that memory data is
+>> not lost then shut down memory controller.
 > 
-> Are you still planning on a v2?
-
-Apologies for late reply, 've been away for a while and then got bit swamped.
-I do not think there will be v2 unless I'll find reasonable way to handle cases
-as one mentioned in [1].
-
----
-BR
-B.
-
-[1] https://lore.kernel.org/linux-arm-kernel/691d3eb2-cd93-f0fc-a7a4-2a8c0d44262c@nvidia.com/T/#m4e74cb5a0aaa353c60fedc6cfb95ab7a6e381e3c
+> I'm sorry I missed your reply earlier, getting back to the
+> thread now. So it's clear that this code needs to run in a
+> special memory from your description, but I'm still trying
+> to understand the details better.
 > 
-> Will
+> I found https://github.com/loongson-community/pmon source
+> code, and a reference to its origin at LSI Logic at
+> https://www.linux-mips.org/wiki/PMON but otherwise have
+> no idea about what this actually is, or how it relates
+> to your UEFI firmware. Did you add UEFI support to PMON,
+> or do you use it as a first stage loader that loads
+> the actual UEFI implementation (EDK2 or u-boot, I guess)?
+
+
+Pmon and uefi are two different firmware, and there is no connection
+between them.
+
+> 
+>>> Or is
+>>> this a runtime firmware interface similar to how UEFI handles
+>>> its runtime services to keep the implementation out of
+>>> the kernel?
+>>
+>>
+>> No, The main cpu and other cpu will offline that after into firmware and
+>> finished Corresponding operations, the pmon firmware will not run.
+> 
+> I'm still trying to understand your explanations here.
+> You say that pmon no longer runs, but that seems to contradict
+> what you said earlier about branching into pmon firmware code
+> for suspend.
+
+
+It's not contradictory.  The suspend-to-ram is that from kernel goto to
+pmon firmware code, then pmon finished corresponding operations, which
+was to set self-refresh mode in memory controller, then memory HW will
+maintain its own data and no longer requires software processing, pmon
+firmware will not run.
+
+> 
+> Is this executing directly from ROM then?
+
+
+Yes.
+
+Thanks,
+Yinbo
+
