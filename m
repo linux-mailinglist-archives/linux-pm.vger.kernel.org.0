@@ -2,207 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6663477B78C
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 13:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128F377B794
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Aug 2023 13:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234441AbjHNL0E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Aug 2023 07:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S234618AbjHNL2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Aug 2023 07:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjHNLZe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 07:25:34 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0486E62
-        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:25:32 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d6d52f4f977so455268276.2
-        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:25:32 -0700 (PDT)
+        with ESMTP id S233875AbjHNL21 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Aug 2023 07:28:27 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E38127
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:28:26 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-d62bdd1a97dso4293696276.3
+        for <linux-pm@vger.kernel.org>; Mon, 14 Aug 2023 04:28:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692012332; x=1692617132;
+        d=linaro.org; s=google; t=1692012505; x=1692617305;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KS7KVcgftVL37t1n9Che7EJW3j0iqYnMxaJ13obaF6g=;
-        b=pGZf4oMW7KC/g9GiLfwbb7+ZOWIZRij69MhybRVywOgC7Ni84ZUKWxbJZ4K1lwHBKW
-         wUBBrLoHl0RB/t9AgOQ/IpvjGHh8orLDgkhjrWvDIw0JYqo6ilxSo5UVrVK3Kk5ZCI8q
-         rV5R4DziiIAq+HgsTvv7gQdWnofFck99BSICcWnPSizyjgH0WSIudWNomIy/fEcgx8lS
-         CF1h+9FDMrAv9vJ4nmq3AvWQ7DRKgUj1UZnirx7L9+lYxqkipu08SvxK0tw42uni+8GW
-         3Y1fpOT6eobDpkq7KInwApKGjoj9btgJmThWI/yIF1M99vr9v6XhCsmhnq900gcMQxhO
-         AcUw==
+        bh=zV7e4uqCOZfFxUomsrlciPWk9Fd/IJUmKy5w/Bnb3o0=;
+        b=hOuVghxDpW00pxzb5dzoUPvu+bMfT+myG9WRxGoIkKOK1x4kzwy+0gTqN6gkGlcSQC
+         WTgLmNAoH87AxbTzpjzbUyvoQKuvVsuPGvofRsogfLe0foUruUjpIHaQaR3VRc1ripik
+         V4swmeIgAiSpr18UvxsG16sTKF80yC6bmtzmOneCvuLZICL+dAtkmclKH/rkjQQMSJep
+         fpm0wbwIF2WNlU1VGC7WYAYcexXXFrpgMPWhBUrgRj2fUKqMpXo/GGBl6P9p6JSokRIJ
+         b5b8cyMMkMnQgFGXB4rnbu4gubZzOOpsFjAnsA6tfu5GZPQtp1lhI2snVhHu1YKan758
+         4rNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692012332; x=1692617132;
+        d=1e100.net; s=20221208; t=1692012505; x=1692617305;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KS7KVcgftVL37t1n9Che7EJW3j0iqYnMxaJ13obaF6g=;
-        b=GBR6AZ5TUbrJCYF6Vci6W5+t21MqsuuC5ZAsa44nzfz76xw4LG0TD5FFOSwa/pzp9M
-         Ha20WB2HonSdAOFrq8nr3qhhpqM+Wp9UxUox+xxQh74T1vBY/bJ6dQyaNqew5hjY850u
-         v6vzKV9o/Dbb4QHKgbsBPEYAhLwI+jSarJWJrrheswoRg9r4fzapAPfWgFqDoWV3CzYP
-         G6XD/BU+1mmLkwp7hrCBlaWzDilD8TDxDAzxl/QurPsMta/Vm0VcaKHTCaMs0kHetRDk
-         2/2IYSlM95GUKpm2pTJg9YiO/41XCIIjzkHUhAr3xvsHZs28PNOei+Vb0JEtYUe54rPv
-         aSdw==
-X-Gm-Message-State: AOJu0Yw1osX9yz7NDyu8UBg0h2FDt5GeV6yv2h4JS0bTzwA0ONb7Sp/Y
-        9C6Hj1la4rZug5Q3AQzWfs4hGiyVTezvoQM8dVVkXw==
-X-Google-Smtp-Source: AGHT+IES5ORseNqi8LIzHc7ycAD1U+yCVVZUaRHk5zU+z/Eghzgj0E95t8Xr6/jAR11PIgqVILcctQWrS2XEADPK17o=
-X-Received: by 2002:a81:a542:0:b0:583:c917:7ff0 with SMTP id
- v2-20020a81a542000000b00583c9177ff0mr8563710ywg.51.1692012332124; Mon, 14 Aug
- 2023 04:25:32 -0700 (PDT)
+        bh=zV7e4uqCOZfFxUomsrlciPWk9Fd/IJUmKy5w/Bnb3o0=;
+        b=lY6/P/T9gXkfdkmObBLsa76w2NHK/jEHNY2fxTs+Km85zwvysguW3kJbtzoEcYi/H+
+         z84lEcXFeqbK8ot3lEtvbJIH0Fm7OymdeAOJhC3mWNRgXMcM/7YX7h8jDpMuzYfCfIpO
+         DDP03wVao/6qW7K7FLdDhSm51+oCGjTuu1WDG/hgRFmmBnySZh1y4GlUSuE72SPWzSgJ
+         ZLfjj9kkJUd6a2kMG2Y0EnJg+b3YgS56+bpjCeLr6322Kr6Mb8U8x+3ItaFbrAAso8lc
+         /v/LPKoObb3VOfvx7hiiDXlHkU3qSsrE71/7KjW0gKCgdECV1lvb4PdL0jZKNrXIsnZF
+         F+wg==
+X-Gm-Message-State: AOJu0YyTgizF5900KdIsxVn70/+n+GDnc1NXK0ePTQFsuZzp374BDlXM
+        QaF8bfHFHSRvaWhCgPUbHo4b7ej/eCyWIt2G2e0MDQ==
+X-Google-Smtp-Source: AGHT+IGnQJT82CyRJQHGhUeBgoe4lkdDdYbjacPwBMd98HAzPlLW3y5rC5ORU5ANElco5nbwuNNBY+6yI+wNMWRcDkQ=
+X-Received: by 2002:a25:bcc4:0:b0:d21:ef87:c1be with SMTP id
+ l4-20020a25bcc4000000b00d21ef87c1bemr9876239ybm.27.1692012505512; Mon, 14 Aug
+ 2023 04:28:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230814104127.1929-1-peng.fan@oss.nxp.com> <20230814104127.1929-8-peng.fan@oss.nxp.com>
-In-Reply-To: <20230814104127.1929-8-peng.fan@oss.nxp.com>
+References: <20230814104127.1929-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20230814104127.1929-1-peng.fan@oss.nxp.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 14 Aug 2023 13:24:56 +0200
-Message-ID: <CAPDyKFqaA2q=jEYDwAE58vERcHC_rtNYpYf8TbvU80a29oFy3w@mail.gmail.com>
-Subject: Re: [PATCH V4 7/8] genpd: imx: scu-pd: add multi states support
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Date:   Mon, 14 Aug 2023 13:27:49 +0200
+Message-ID: <CAPDyKFowxz_Ndy5uFmXaTmQoY1SUNNg7-R04JUUXX0n=5FH_fA@mail.gmail.com>
+Subject: Re: [PATCH V4 0/8] genpd: imx: relocate scu-pd and misc update
+To:     shawnguo@kernel.org, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 14 Aug 2023 at 12:37, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+On Mon, 14 Aug 2023 at 12:36, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
 >
 > From: Peng Fan <peng.fan@nxp.com>
 >
-> Add multi states support, this is to support devices could run in LP mode
-> when runtime suspend, and OFF mode when system suspend.
+> V4:
+>  Update commit message in patch 4
+>
+> V3:
+>  return -EBUSY instead of return 0 in patch 4
+>
+> V2:
+> Move drivers/firmware/imx/scu-pd.c to drivers/genpd/imx
+>
+> This patchset is to upstream NXP downstream scu-pd driver patches.
+> patch is to relocate scu-pd to genpd
+> patch 2,3 is to support more PDs
+> patch 4 is to not power off console when no console suspend
+> patch 5 is to suppress bind
+> patch 6 is to make genpd align with HW state
+> patch 7 is to support LP mode in runtime suspend, OFF mode in system suspend.
+> patch 8 is to change init level to avoid uneccessary defer probe
+>
+> V1:
+> This patchset is to upstream NXP downstream scu-pd driver patches.
+> patch 1,2 is to support more PDs
+> patch 3 is to not power off console when no console suspend
+> patch 4 is to suppress bind
+> patch 5 is to make genpd align with HW state
+> patch 6 is to support LP mode in runtime suspend, OFF mode in system suspend.
+> patch 7 is to change init level to avoid uneccessary defer probe
+>
+>
+> Dong Aisheng (1):
+>   genpd: imx: scu-pd: change init level to subsys_initcall
+>
+> Peng Fan (7):
+>   genpd: imx: relocate scu-pd under genpd
+>   genpd: imx: scu-pd: enlarge PD range
+>   genpd: imx: scu-pd: add more PDs
+>   genpd: imx: scu-pd: do not power off console if no_console_suspend
+>   genpd: imx: scu-pd: Suppress bind attrs
+>   genpd: imx: scu-pd: initialize is_off according to HW state
+>   genpd: imx: scu-pd: add multi states support
+>
+>  drivers/firmware/imx/Makefile            |   1 -
+>  drivers/genpd/imx/Makefile               |   1 +
+>  drivers/{firmware => genpd}/imx/scu-pd.c | 193 +++++++++++++++++++++--
+>  3 files changed, 183 insertions(+), 12 deletions(-)
+>  rename drivers/{firmware => genpd}/imx/scu-pd.c (70%)
+>
 
-For my understanding, is there a functional problem to support OFF at
-runtime suspend too?
-
->
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/genpd/imx/scu-pd.c | 48 ++++++++++++++++++++++++++++++++++++--
->  1 file changed, 46 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/genpd/imx/scu-pd.c b/drivers/genpd/imx/scu-pd.c
-> index 2f693b67ddb4..30da101119eb 100644
-> --- a/drivers/genpd/imx/scu-pd.c
-> +++ b/drivers/genpd/imx/scu-pd.c
-> @@ -65,6 +65,12 @@
->  #include <linux/pm_domain.h>
->  #include <linux/slab.h>
->
-> +enum {
-> +       PD_STATE_LP,
-> +       PD_STATE_OFF,
-> +       PD_STATE_MAX
-> +};
-> +
->  /* SCU Power Mode Protocol definition */
->  struct imx_sc_msg_req_set_resource_power_mode {
->         struct imx_sc_rpc_msg hdr;
-> @@ -368,7 +374,8 @@ static int imx_sc_pd_power(struct generic_pm_domain *domain, bool power_on)
->         hdr->size = 2;
->
->         msg.resource = pd->rsrc;
-> -       msg.mode = power_on ? IMX_SC_PM_PW_MODE_ON : IMX_SC_PM_PW_MODE_LP;
-> +       msg.mode = power_on ? IMX_SC_PM_PW_MODE_ON : pd->pd.state_idx ?
-> +                  IMX_SC_PM_PW_MODE_OFF : IMX_SC_PM_PW_MODE_LP;
->
->         /* keep uart console power on for no_console_suspend */
->         if (imx_con_rsrc == pd->rsrc && !console_suspend_enabled && !power_on)
-> @@ -412,11 +419,33 @@ static struct generic_pm_domain *imx_scu_pd_xlate(struct of_phandle_args *spec,
->         return domain;
->  }
->
-> +static bool imx_sc_pd_suspend_ok(struct device *dev)
-> +{
-> +       /* Always true */
-> +       return true;
-> +}
-> +
-> +static bool imx_sc_pd_power_down_ok(struct dev_pm_domain *pd)
-> +{
-> +       struct generic_pm_domain *genpd = pd_to_genpd(pd);
-> +
-> +       /* For runtime suspend, choose LP mode */
-> +       genpd->state_idx = 0;
-> +
-> +       return true;
-> +}
-
-I am wondering if we couldn't use the simple_qos_governor here
-instead. In principle it looks like we want a QoS latency constraint
-to be set during runtime, to prevent the OFF state.
-
-During system wide suspend, the deepest state is always selected by genpd.
-
-> +
-> +struct dev_power_governor imx_sc_pd_qos_governor = {
-> +       .suspend_ok = imx_sc_pd_suspend_ok,
-> +       .power_down_ok = imx_sc_pd_power_down_ok,
-> +};
-> +
->  static struct imx_sc_pm_domain *
->  imx_scu_add_pm_domain(struct device *dev, int idx,
->                       const struct imx_sc_pd_range *pd_ranges)
->  {
->         struct imx_sc_pm_domain *sc_pd;
-> +       struct genpd_power_state *states;
->         bool is_off;
->         int mode, ret;
->
-> @@ -427,9 +456,22 @@ imx_scu_add_pm_domain(struct device *dev, int idx,
->         if (!sc_pd)
->                 return ERR_PTR(-ENOMEM);
->
-> +       states = devm_kcalloc(dev, PD_STATE_MAX, sizeof(*states), GFP_KERNEL);
-> +       if (!states) {
-> +               devm_kfree(dev, sc_pd);
-> +               return ERR_PTR(-ENOMEM);
-> +       }
-> +
->         sc_pd->rsrc = pd_ranges->rsrc + idx;
->         sc_pd->pd.power_off = imx_sc_pd_power_off;
->         sc_pd->pd.power_on = imx_sc_pd_power_on;
-> +       states[PD_STATE_LP].power_off_latency_ns = 25000;
-> +       states[PD_STATE_LP].power_on_latency_ns =  25000;
-> +       states[PD_STATE_OFF].power_off_latency_ns = 2500000;
-> +       states[PD_STATE_OFF].power_on_latency_ns =  2500000;
-
-We should probably describe these in DT instead? The
-domain-idle-states bindings allows us to do this. See
-Documentation/devicetree/bindings/power/domain-idle-state.yaml.
-
-Then we have of_genpd_parse_idle_states(), a helper that parses the values.
-
-> +
-> +       sc_pd->pd.states = states;
-> +       sc_pd->pd.state_count = PD_STATE_MAX;
->
->         if (pd_ranges->postfix)
->                 snprintf(sc_pd->name, sizeof(sc_pd->name),
-> @@ -455,14 +497,16 @@ imx_scu_add_pm_domain(struct device *dev, int idx,
->                          sc_pd->name, sc_pd->rsrc);
->
->                 devm_kfree(dev, sc_pd);
-> +               devm_kfree(dev, states);
->                 return NULL;
->         }
->
-> -       ret = pm_genpd_init(&sc_pd->pd, NULL, is_off);
-> +       ret = pm_genpd_init(&sc_pd->pd, &imx_sc_pd_qos_governor, is_off);
->         if (ret) {
->                 dev_warn(dev, "failed to init pd %s rsrc id %d",
->                          sc_pd->name, sc_pd->rsrc);
->                 devm_kfree(dev, sc_pd);
-> +               devm_kfree(dev, states);
->                 return NULL;
->         }
->
-> --
-> 2.37.1
->
+I am fine to pick up patch 1 -> patch 6, to let them go in for v6.6.
+Should we do that or defer until the complete series is ready?
 
 Kind regards
 Uffe
