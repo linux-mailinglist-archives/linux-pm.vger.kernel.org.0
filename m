@@ -2,140 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4088977C7B0
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Aug 2023 08:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6EC77C82C
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Aug 2023 08:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235094AbjHOGT2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Aug 2023 02:19:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S234257AbjHOG53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Aug 2023 02:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbjHOGSO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Aug 2023 02:18:14 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2057.outbound.protection.outlook.com [40.107.244.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D193B26B3;
-        Mon, 14 Aug 2023 23:17:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LBQZk2YDzZjRbDyMJKJT4alVTnLui+ZvWRHGGDfV4z/cq24+9Vvlqu8DKNXhqGakw3wwfYV7eldMsj/MGyjkdA/zNO+EapB/YyLBV7sJIKX3CMpzyZmihfbZwp+K9pHJ2T8wBXhl6h06jZ3iKd7C3v52HhtLxIepN/aYxyHWzXJ+PE8XRrc5c1VEBWW4XJhojwrpkeNkRa4Mj2gH3MWDT1U+TfWuU8k7PXk5sDP1Uym76YFWtVfV5/W+pUz4ZesWZxPVWpUQ4kPp6wQWwWxTe1HPKBFzMVGkSpLReV1nR4CRgxQFWnuSPksAhi3b4tRtIofsnYl9MDxXREHHB/mLJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fD5SW4ZMZUACDC28VDgFXSClMzlQYedjVWuE+bSD/4U=;
- b=L2tViCdkb++o2ecI5tti4EEwJt7DwqZJRqOy7U3TkYcydFk+d9fLNEaOgHndxm7WfIaPm4qPJBGNbuZpkkLwfvsubx8UyV7GgLEM6yDpTkwzSbh4d1hNqi8thw1BtnlYZoLDGItFjgaaMCBhp9xDNWMLQor4avloBlF4YtcmiiBdo3eUZYb2oXXSnY9mwQl8N6zA5ZdW75im1dNA9YgI57NnT3bAyZwv+v0jV95vqWibGvrXiELQEOWv39mMgS8w4axHIzEIC96P4g/CihIxQbYoLpNqblF4KCYuwvLk4NXaaqsUuf7+YDT2e2/wKldy1MdE24pn6CrLqCjLdn1tfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fD5SW4ZMZUACDC28VDgFXSClMzlQYedjVWuE+bSD/4U=;
- b=lf0/2wmscXW7GiId4MTQzSrNqpus+ndMkN+wupy0PexDhOUgDX1AslumtETI5hVpAzO9ftzfjV4V7dYn8gAV5dSQ9IiPgaiEP1FcSEI5K6qS+aUv+WhA7dCr66CwuwHovIllqaPk13eEc1nZNXxG348uVa0vJGNc9VdbYBFfvrw=
-Received: from MW4PR04CA0140.namprd04.prod.outlook.com (2603:10b6:303:84::25)
- by SN7PR12MB6791.namprd12.prod.outlook.com (2603:10b6:806:268::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.24; Tue, 15 Aug
- 2023 06:17:33 +0000
-Received: from CO1PEPF000044F6.namprd21.prod.outlook.com
- (2603:10b6:303:84:cafe::14) by MW4PR04CA0140.outlook.office365.com
- (2603:10b6:303:84::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.33 via Frontend
- Transport; Tue, 15 Aug 2023 06:17:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F6.mail.protection.outlook.com (10.167.241.196) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6723.3 via Frontend Transport; Tue, 15 Aug 2023 06:17:33 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 15 Aug
- 2023 01:17:27 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        "Nathan Fontenot" <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: [PATCH V2 7/7] Documentation: introduce AMD Pstate Preferrd Core mode kernel command line options
-Date:   Tue, 15 Aug 2023 14:15:46 +0800
-Message-ID: <20230815061546.3556083-8-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230815061546.3556083-1-li.meng@amd.com>
-References: <20230815061546.3556083-1-li.meng@amd.com>
+        with ESMTP id S235295AbjHOG5C (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Aug 2023 02:57:02 -0400
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C2C10C0;
+        Mon, 14 Aug 2023 23:57:01 -0700 (PDT)
+Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-56c711a889dso3592589eaf.0;
+        Mon, 14 Aug 2023 23:57:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692082620; x=1692687420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gUF7+zEwFhnnxO0YUzrV1ZAOv1FqyPAGYAalPW9tUBE=;
+        b=IIiMuHsVnAlCIxFfXYA2IZ3IwE5c9M3UboDhuUYimh7CaDhdCMr0CscYJSTEb8n3rS
+         249+hMUP8she9bC3BXRxvgFlxKrpWOyzxEDi6S9EnkmO/ZuexFH1un2cHVO7lG1rfIFJ
+         lWxhMG5PPIkPlsIpoPW11d5+ZiaGhps7X0CHwvAjt6LAzT2um3A++OwpcjKdwNjs1VnZ
+         hzYpFOvh1R+5NCYs6iN4lpZ68C+pIjjSVX+HsfxGCRL2xPeuvyjni+IFS02KwQ3VI3s0
+         wUCuhUr0LJwjm3VLng7WXF/nUYZeudxEzh7vt+pCqLmQLZq1VxsNjom4m/xPXcX1tTGY
+         8Rjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692082620; x=1692687420;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gUF7+zEwFhnnxO0YUzrV1ZAOv1FqyPAGYAalPW9tUBE=;
+        b=OErGh9uomnbaAoZcQ6Cmt2z3eXv7YkU0Lv758phHaxmfswR7vzxnmm8a3eL0qf2Se5
+         f71IEzksiQwIvlB23eOye6N6uaAbaqP7Y5s3er2tcNM1WfAaEXgc9RYkn8hTneCYcG6n
+         4VFWqJTvZPYOILRAOPCOWWGpeL/5z8eXt/e89IYxWt9nqDJl7l8+A5RBGwXrNzpKgNUo
+         a1j6BlxtvZqPxI3ZN4HTbcI/u4bD3MExosV2sXkzeM+3kzvwfLUrwzy1DYGxNgSXI0S8
+         yjTREAWuGN56+c3BW2t1nRby4ZeEdzYKdH4MDveIaMfWsepdJgtwEx/faQIaN5hjtcuv
+         niJQ==
+X-Gm-Message-State: AOJu0YwpnB+qRb8I86XtHOvdjh59WJfdzeaysbDDEctbi6cWAZ1rSdj/
+        ALN0ChjVotMTLx/RGAXaDah0FsuEFPobU+NwnZA=
+X-Google-Smtp-Source: AGHT+IF9wHpQbz6RjsFYq8asdD4gmXQL8tAld3WVXDlp4tr4KWfme3FVlS7l/mjFiuvLMcN8VLs04uIMXrcfGkSNZyA=
+X-Received: by 2002:a05:6871:28e:b0:1b0:3ffc:97e9 with SMTP id
+ i14-20020a056871028e00b001b03ffc97e9mr13997249oae.0.1692082620445; Mon, 14
+ Aug 2023 23:57:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F6:EE_|SN7PR12MB6791:EE_
-X-MS-Office365-Filtering-Correlation-Id: f101cc84-d0a3-46e9-6b01-08db9d574ffb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1RHaqXVRk2Jj3xamC56i2BJ8MPGNKkOw/pPlu50JDEtxRw0XPj5JP3nrhkgS2SH8A0R1OOVYdRQdPYMMDe9qWvUv/de/Yiobayx6/b58H1N//Puzs2sEBiEt4vD/AodOV46OPT7TzAPtsJLQLBxSjHOLqqXgeCw+ZfuawaN5i1XBg4f8rX8It0Sja6RC93anMM9cnnBwYMH/CJgj9g4voR6DzxiR+NdQ3wmksj981KjMGmD7RCnXBR/+vUIMT1YT4NxL6ptC262JoHocrpPdX0LS3gduV51qgvkfvRsKFYkEK/g7OJzGgPYC0rdEHgCkhZ5ei1lZKK3f7YSOnyulpVwI95rr6qgHLrg+P7MXoBd2PR9yhNmxLneShAC/khkeAqXwPj10plY9vAUFE7ive5qLwA+sQrLjz7/zeddr356a3gaFlD1MSadtOCzyebG8r8WtAKxpgFsivKnUGqPwiAiLrvhVHCgBLcjHbrwOW9f4eajC/dQu8OKVcnmPP5brVbZ2CHBWVwg7Ftb2aHGFzjBVq+Fe2ZiCdku84vD6aNUJWq8fD6YawPZCNRTMpQFZNx/UQMnIKN7aRK/F+LQhPfSId40Ham9XAd0d6TiQyrPDgKE9pm2PTUFO9n/Fn5aCKXgdFzlxOk+PYTKg1aMQHlcDTgfb8/O9t6OfuZ5iN/AbtJEbPF4KH1j7G6uN2y5sPvQs8zVtHbDJlRWcmgMsfIzOuT30O6h0vvKB3fA0+sCm5ZbVPWtLve1lFsFGL0PhAXVbTccO7wEK+bl0dXltEkReFyLg8eoPfpVgfCWCvFHbirp/yNdgKVWMUnjCbpF5
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(376002)(136003)(396003)(186006)(1800799006)(451199021)(82310400008)(40470700004)(36840700001)(46966006)(83380400001)(36756003)(426003)(336012)(47076005)(36860700001)(86362001)(40480700001)(41300700001)(478600001)(356005)(81166007)(54906003)(70586007)(6636002)(70206006)(316002)(8676002)(110136005)(5660300002)(4326008)(82740400003)(8936002)(40460700003)(2616005)(1076003)(16526019)(26005)(7696005)(6666004)(2906002)(4744005)(36900700001)(14943795004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2023 06:17:33.0931
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f101cc84-d0a3-46e9-6b01-08db9d574ffb
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044F6.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6791
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+References: <20230807062345.490-1-xuewen.yan@unisoc.com>
+In-Reply-To: <20230807062345.490-1-xuewen.yan@unisoc.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Tue, 15 Aug 2023 14:56:49 +0800
+Message-ID: <CAB8ipk9wJ-VDHrLMgEoVcdquWptkLnXZ15xFvugC8+WXOf6_Og@mail.gmail.com>
+Subject: Re: [PATCH] PM: QOS: Always use "kstrtos32_from_user()" in cpu_latency_qos_write()
+To:     Xuewen Yan <xuewen.yan@unisoc.com>
+Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        qyousef@layalina.io, guohua.yan@unisoc.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-AMD Pstate driver support enable/disable Preferred core.
-Default enabled on platforms supporting AMD Preferred Core.
-Disable AMD Pstate Preferred Core with
-"amd_prefcore=disable" added to the kernel command line.
+Hi rafael
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+What do you think of this patch=EF=BC=9F
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 23ebe34ff901..4f78067bb8af 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -363,6 +363,11 @@
- 			  selects a performance level in this range and appropriate
- 			  to the current workload.
- 
-+	amd_prefcore=
-+			[X86]
-+			disable
-+			  Disable AMD Pstate Preferred Core.
-+
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
- 			Format: <a>,<b>
--- 
-2.34.1
+ # echo 500 > /dev/cpu_dma_latency
+[T4893] write: qos value=3D170930229
+[T4893] write: count value=3D4
 
+the value is 170930229 is because it's hex is 0x0A303035,  It is
+exactly the "500\0"
+
+ # echo 200> /dev/cpu_dma_latency
+[T4893] write: qos value=3D170930226
+[T4893] write: count value=3D4
+
+the value is 170930226 is because it's hex is 0x0A303032,  It is
+exactly the "200\0"
+
+Thanks!
+
+On Mon, Aug 7, 2023 at 3:17=E2=80=AFPM Xuewen Yan <xuewen.yan@unisoc.com> w=
+rote:
+>
+> In cpu_latency_qos_write, there is a judgment on whether the count
+> value is equal to sizeof(s32). This means that when user write 100~999,
+> it would get error value because it would call the "copy_from_user()"
+> instead of "kstrtos32".
+> Just like:
+>
+>  # echo 500 > /dev/cpu_dma_latency
+> [T4893] write: qos value=3D170930229
+> [T4893] write: count value=3D4
+>
+> [T4893] write: qos value=3D170930226
+> [T4893] write: count value=3D4
+>
+> To prevent this happening, delete the "copy_from_user()" and
+> always use "kstrtos32_from_user()".
+>
+> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+> ---
+>  kernel/power/qos.c | 14 ++++----------
+>  1 file changed, 4 insertions(+), 10 deletions(-)
+>
+> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
+> index 782d3b41c1f3..21a2f873e921 100644
+> --- a/kernel/power/qos.c
+> +++ b/kernel/power/qos.c
+> @@ -379,17 +379,11 @@ static ssize_t cpu_latency_qos_write(struct file *f=
+ilp, const char __user *buf,
+>                                      size_t count, loff_t *f_pos)
+>  {
+>         s32 value;
+> +       int ret;
+>
+> -       if (count =3D=3D sizeof(s32)) {
+> -               if (copy_from_user(&value, buf, sizeof(s32)))
+> -                       return -EFAULT;
+> -       } else {
+> -               int ret;
+> -
+> -               ret =3D kstrtos32_from_user(buf, count, 16, &value);
+> -               if (ret)
+> -                       return ret;
+> -       }
+> +       ret =3D kstrtos32_from_user(buf, count, 16, &value);
+> +       if (ret)
+> +               return ret;
+>
+>         cpu_latency_qos_update_request(filp->private_data, value);
+>
+> --
+> 2.25.1
+>
