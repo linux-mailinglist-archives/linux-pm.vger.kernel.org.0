@@ -2,144 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6EC77C82C
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Aug 2023 08:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10F1477CC0B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Aug 2023 13:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234257AbjHOG53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Aug 2023 02:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35562 "EHLO
+        id S232625AbjHOLwS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Aug 2023 07:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235295AbjHOG5C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Aug 2023 02:57:02 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C2C10C0;
-        Mon, 14 Aug 2023 23:57:01 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-56c711a889dso3592589eaf.0;
-        Mon, 14 Aug 2023 23:57:01 -0700 (PDT)
+        with ESMTP id S236881AbjHOLwI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Aug 2023 07:52:08 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBA9C9
+        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 04:52:03 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fe8c3b5ca0so8621022e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 04:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692082620; x=1692687420;
+        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1692100322; x=1692705122;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gUF7+zEwFhnnxO0YUzrV1ZAOv1FqyPAGYAalPW9tUBE=;
-        b=IIiMuHsVnAlCIxFfXYA2IZ3IwE5c9M3UboDhuUYimh7CaDhdCMr0CscYJSTEb8n3rS
-         249+hMUP8she9bC3BXRxvgFlxKrpWOyzxEDi6S9EnkmO/ZuexFH1un2cHVO7lG1rfIFJ
-         lWxhMG5PPIkPlsIpoPW11d5+ZiaGhps7X0CHwvAjt6LAzT2um3A++OwpcjKdwNjs1VnZ
-         hzYpFOvh1R+5NCYs6iN4lpZ68C+pIjjSVX+HsfxGCRL2xPeuvyjni+IFS02KwQ3VI3s0
-         wUCuhUr0LJwjm3VLng7WXF/nUYZeudxEzh7vt+pCqLmQLZq1VxsNjom4m/xPXcX1tTGY
-         8Rjg==
+        bh=BhMoPgkdQ6YofmpZ1OJSuXaWlrDNH20HBw8OL7m09Z4=;
+        b=t1e0ddP6D1O5GOQyKZl594DRM+vK2mIwGeOEeRFZdrYeoUe1NNeAVS/FgrrrdxWTzf
+         ZGs/qQQSY+NXDjyI+Eo9/MAlv2a9v0zJi1jLUG5EAhvtYUlCoyVn4TimoUUxc6ea0Y1d
+         v7ZkOYr7qocC5CzlQ6iVMZqJ0NQL7cPyLGWzox6BxMrlNrgalvDotvnWYQTsM9u8jKdb
+         6i2/sVQgrVlK6cBCRkrfiM6q4MXMe6vCVaqD3ShOF2LzQB7DYwrz9gWSdev84lCjhme2
+         msHKbdLBLpzwEtV0ES2188UOc4RvGTU5iEtQEnGW3sWnu4h3IPKntKvTWMlcTLIa2NUm
+         Go8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692082620; x=1692687420;
+        d=1e100.net; s=20221208; t=1692100322; x=1692705122;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gUF7+zEwFhnnxO0YUzrV1ZAOv1FqyPAGYAalPW9tUBE=;
-        b=OErGh9uomnbaAoZcQ6Cmt2z3eXv7YkU0Lv758phHaxmfswR7vzxnmm8a3eL0qf2Se5
-         f71IEzksiQwIvlB23eOye6N6uaAbaqP7Y5s3er2tcNM1WfAaEXgc9RYkn8hTneCYcG6n
-         4VFWqJTvZPYOILRAOPCOWWGpeL/5z8eXt/e89IYxWt9nqDJl7l8+A5RBGwXrNzpKgNUo
-         a1j6BlxtvZqPxI3ZN4HTbcI/u4bD3MExosV2sXkzeM+3kzvwfLUrwzy1DYGxNgSXI0S8
-         yjTREAWuGN56+c3BW2t1nRby4ZeEdzYKdH4MDveIaMfWsepdJgtwEx/faQIaN5hjtcuv
-         niJQ==
-X-Gm-Message-State: AOJu0YwpnB+qRb8I86XtHOvdjh59WJfdzeaysbDDEctbi6cWAZ1rSdj/
-        ALN0ChjVotMTLx/RGAXaDah0FsuEFPobU+NwnZA=
-X-Google-Smtp-Source: AGHT+IF9wHpQbz6RjsFYq8asdD4gmXQL8tAld3WVXDlp4tr4KWfme3FVlS7l/mjFiuvLMcN8VLs04uIMXrcfGkSNZyA=
-X-Received: by 2002:a05:6871:28e:b0:1b0:3ffc:97e9 with SMTP id
- i14-20020a056871028e00b001b03ffc97e9mr13997249oae.0.1692082620445; Mon, 14
- Aug 2023 23:57:00 -0700 (PDT)
+        bh=BhMoPgkdQ6YofmpZ1OJSuXaWlrDNH20HBw8OL7m09Z4=;
+        b=jQJTVd6aWTYPJWG1DnrTtFC1KNky34yv+TZjJB3C3zfxZ+qwbZA/8StF1g4x6ICfvE
+         8hLgKX3NWTms2Q81dJXNGhecRJLhT2Egbbzj1zwLSmfDzAk3gf0FVlivZU3nnWPJ6T+k
+         zLw/NGL3BvsY0bJBbgDQenVpmZDGdHnuYMu2B9A1ppG8NYUGTE/+waJGN/T0bK3BofCw
+         7RzEM64xUcM2ONJle4bpZy8lD55/8L7dQVq1Td6khUdn1cW2stu+CTjV8zSDfm1Fnt6o
+         tizui4iRqijPFGTYJ31Kae/irT62j3gEkr3F5sRpzwLCMJe2sEIyu/ktWBvnm1DWyE1C
+         2/Nw==
+X-Gm-Message-State: AOJu0YxMN8B2YgMc67ACIN95Kgj88k7F8HiIJ49iZtRzVFfURY7sIJdl
+        j9ET88LXSNWFYmdP6kdaHbr86+smFBjDFlny8GtbKQ==
+X-Google-Smtp-Source: AGHT+IFDrx5gLOZ18cjfQa+q7nuirjsCz4WSOfLoXZDh9drjy333lH0vXwkgc31jA3rKTDQaNHGZ/fUC+289v/9JGrk=
+X-Received: by 2002:a05:6512:234c:b0:4f9:5933:8eea with SMTP id
+ p12-20020a056512234c00b004f959338eeamr9070237lfu.3.1692100321940; Tue, 15 Aug
+ 2023 04:52:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230807062345.490-1-xuewen.yan@unisoc.com>
-In-Reply-To: <20230807062345.490-1-xuewen.yan@unisoc.com>
-From:   Xuewen Yan <xuewen.yan94@gmail.com>
-Date:   Tue, 15 Aug 2023 14:56:49 +0800
-Message-ID: <CAB8ipk9wJ-VDHrLMgEoVcdquWptkLnXZ15xFvugC8+WXOf6_Og@mail.gmail.com>
-Subject: Re: [PATCH] PM: QOS: Always use "kstrtos32_from_user()" in cpu_latency_qos_write()
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        qyousef@layalina.io, guohua.yan@unisoc.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230814180921.3336-1-aboutphysycs@gmail.com>
+In-Reply-To: <20230814180921.3336-1-aboutphysycs@gmail.com>
+From:   Alexandru Ardelean <alex@shruggie.ro>
+Date:   Tue, 15 Aug 2023 14:51:50 +0300
+Message-ID: <CAH3L5QqCOUYm31MNRgZEXG8qvqexOmuG0E=we4k4hyEe1+FTiQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: generic-adc: removed unneeded call to platform_set_drvdata()
+To:     Andrei Coardos <aboutphysycs@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org, daniel.lezcano@linaro.org,
+        rafael@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi rafael
-
-What do you think of this patch=EF=BC=9F
-
- # echo 500 > /dev/cpu_dma_latency
-[T4893] write: qos value=3D170930229
-[T4893] write: count value=3D4
-
-the value is 170930229 is because it's hex is 0x0A303035,  It is
-exactly the "500\0"
-
- # echo 200> /dev/cpu_dma_latency
-[T4893] write: qos value=3D170930226
-[T4893] write: count value=3D4
-
-the value is 170930226 is because it's hex is 0x0A303032,  It is
-exactly the "200\0"
-
-Thanks!
-
-On Mon, Aug 7, 2023 at 3:17=E2=80=AFPM Xuewen Yan <xuewen.yan@unisoc.com> w=
-rote:
+On Mon, Aug 14, 2023 at 9:09=E2=80=AFPM Andrei Coardos <aboutphysycs@gmail.=
+com> wrote:
 >
-> In cpu_latency_qos_write, there is a judgment on whether the count
-> value is equal to sizeof(s32). This means that when user write 100~999,
-> it would get error value because it would call the "copy_from_user()"
-> instead of "kstrtos32".
-> Just like:
+> This function call was found to be unnecessary as there is no equivalent
+> platform_get_drvdata() call to access the private data of the driver. Als=
+o,
+> the private data is defined in this driver, so there is no risk of it bei=
+ng
+> accessed outside of this driver file.
 >
->  # echo 500 > /dev/cpu_dma_latency
-> [T4893] write: qos value=3D170930229
-> [T4893] write: count value=3D4
->
-> [T4893] write: qos value=3D170930226
-> [T4893] write: count value=3D4
->
-> To prevent this happening, delete the "copy_from_user()" and
-> always use "kstrtos32_from_user()".
->
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+
+Reviewed-by: Alexandru Ardelean <alex@shruggie.ro>
+
+> Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
 > ---
->  kernel/power/qos.c | 14 ++++----------
->  1 file changed, 4 insertions(+), 10 deletions(-)
+>  drivers/thermal/thermal-generic-adc.c | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index 782d3b41c1f3..21a2f873e921 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -379,17 +379,11 @@ static ssize_t cpu_latency_qos_write(struct file *f=
-ilp, const char __user *buf,
->                                      size_t count, loff_t *f_pos)
->  {
->         s32 value;
-> +       int ret;
+> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/ther=
+mal-generic-adc.c
+> index f4f1a04f8c0f..1717e4a19dcb 100644
+> --- a/drivers/thermal/thermal-generic-adc.c
+> +++ b/drivers/thermal/thermal-generic-adc.c
+> @@ -142,7 +142,6 @@ static int gadc_thermal_probe(struct platform_device =
+*pdev)
+>                 return ret;
 >
-> -       if (count =3D=3D sizeof(s32)) {
-> -               if (copy_from_user(&value, buf, sizeof(s32)))
-> -                       return -EFAULT;
-> -       } else {
-> -               int ret;
-> -
-> -               ret =3D kstrtos32_from_user(buf, count, 16, &value);
-> -               if (ret)
-> -                       return ret;
-> -       }
-> +       ret =3D kstrtos32_from_user(buf, count, 16, &value);
-> +       if (ret)
-> +               return ret;
+>         gti->dev =3D &pdev->dev;
+> -       platform_set_drvdata(pdev, gti);
 >
->         cpu_latency_qos_update_request(filp->private_data, value);
->
+>         gti->tz_dev =3D devm_thermal_of_zone_register(&pdev->dev, 0, gti,
+>                                                     &gadc_thermal_ops);
 > --
-> 2.25.1
+> 2.34.1
 >
