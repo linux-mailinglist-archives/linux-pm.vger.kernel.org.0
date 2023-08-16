@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C5E77E803
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 19:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6FD77E80C
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 19:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345304AbjHPR5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 13:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47046 "EHLO
+        id S1345323AbjHPR7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 13:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345313AbjHPR53 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 13:57:29 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C272716
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 10:57:28 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b9c0391749so109673461fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 10:57:27 -0700 (PDT)
+        with ESMTP id S1345320AbjHPR64 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 13:58:56 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30E5270D
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 10:58:54 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so108967461fa.2
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 10:58:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692208646; x=1692813446;
+        d=linaro.org; s=google; t=1692208733; x=1692813533;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7uDt0NxNxXFzfodfNG4W77fcE+wpKFBuIG9H30V+bqI=;
-        b=wDfV70HndFq8g7gapcZcFUqLiC8SeeV1C9ZEYXjM5GXV7ThET0jLWC5ThA6ga5Xcwo
-         Np56CVZyb5fo1ApLY1aonW9sEfWAaLq2hIH0vRtxwKuKQNHCyo32PtQmPrGdzLTzdZwO
-         ym3k8LBKarUWUeiy7Zt+KKv0uaAmhJvkW67Ufz1Z1HxbNuufBqcglqXD+SBO1h+AMgNG
-         URqN/Od72M0wih//cjNxBHCbI4R+bv+YjMDTHbTBbVildlcEM0CWZUDHlmsBw4evqy2+
-         PscZGvx5jh4kD6dpMTGHe97yVO8dWrospQEKGeqXvqVXD7cOnTyWMOmdj7H6j9eM3lHo
-         lgaw==
+        bh=rL1d5IkkpVuyaHJUviWq3wb0oe5qxAALKeywaszABpo=;
+        b=f9t0VBOxRmhAPHWhEew70l7ub3eQ1HxIhoi1qa1w7k0EFrextvcWK3vdTGbL8aPiIp
+         Q3doG/2Mey7PKIb6XIlJpGeKG+0iLHUY8UBgSnrQIPFXhhGyHLw+xKpvSrDiA1HNg2t8
+         4iB2q0A2hkAjUVXDq7rDwqHxdT3j5VxELLYwucVD6Yz/vYDR5whteKmqLVsJ7Vh9sQQ4
+         kRQeYNrEfbQzhLq2/5knVeS4py+fev72cCaHwOr+TaFRX0JYmQ3RsbcPBUMTkCVLKrFI
+         c/CBNFc5T/LAcnl5wK4VNjQxiTtSqTfIuLwgUfh1hjoKKld+QQ6whrSD6mk1Smf35gKV
+         dWdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692208646; x=1692813446;
+        d=1e100.net; s=20221208; t=1692208733; x=1692813533;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7uDt0NxNxXFzfodfNG4W77fcE+wpKFBuIG9H30V+bqI=;
-        b=cdXLDOm1Z4RLSzm1K5vO7b66ub9+SlEj+E0DXl7Oq6dRfcyg9WU2sid3GgmoWQ0exh
-         Z44QBM4VCeMxPb7olr/dgpnE+XXt95t4lUmgJb3ZSu+fd7x9NNwBcIGcibh9WF/qkFG1
-         S8FfCrGUz6B8JxT6TTZRqRqqMTC9qEnFJ5RsA1fV9ATFYw0qPi39aDholYLGgELv/KVj
-         p68tnnpU+zVIDeKOyzHPyPO7x87TuVm4lXx9J+8r/V9WFTEuXax4B3kwZWV1Pc/r0SXj
-         Kg87qH07TJSZfNTz80p3gR+yXYSwasbAPegAU63+c75ourV7P8ovjim7numY7gozBo3T
-         zZlw==
-X-Gm-Message-State: AOJu0YwmTzz2xo3b2SKvHkxzUOrQZozvrW8E8b6hZ8ssdCUBvDLefxom
-        pqNVAsS3cIRyx8TKoUsPK83aBg==
-X-Google-Smtp-Source: AGHT+IFtgIMjRpVQgufqjZinZG+rB5+M7QauwsHgw8yM3RGpZaBIlTHOVKUaxsnUYjRyY9Vo60Sz6g==
-X-Received: by 2002:a2e:2e10:0:b0:2bb:985f:847b with SMTP id u16-20020a2e2e10000000b002bb985f847bmr1976798lju.27.1692208646360;
-        Wed, 16 Aug 2023 10:57:26 -0700 (PDT)
+        bh=rL1d5IkkpVuyaHJUviWq3wb0oe5qxAALKeywaszABpo=;
+        b=J4Cw0FUMzuwD2Tv5NKDqJd9UInnqsC+51b8Bj/AeZWDVlHwEZ583wgKEk9lxFsUAde
+         J45e5N2PFtJDzu5JxrwtX2yhL3iYz2bZIdiPlo4dey4dhmYlOiaeDbR/GRCfylykd7Tx
+         Q0fToKSBMZgpXemb16Q0sxA3Zr2xpc66r9WHkxXsKpACKDmfHxrfbVLuJZXJgQmI6HXy
+         wtB94RNaBfxQLeBVAx9Ai0IxngUwYFt3z/2v1388++8c4xJBZ1xUEpcMYPPtuUhvWfNu
+         OTEXC5BX46cOF/hzF0sMX+TwOKqTAaxpznnN1KOkxBt8lRjFCo+JMfaVtjb7LVJr6lO1
+         sOuA==
+X-Gm-Message-State: AOJu0YxlHIBlJmDe76E3cGcrrObj2BgzJdRAz6+PE9RXUTIqRnatI73U
+        xml9jeH6UTBo5iMNK5gn4yU1FA==
+X-Google-Smtp-Source: AGHT+IGmlFLezr5yGl7cSouAqe8XS1SwhcY8CrjyqarVswLmc7p7MEkLmDIAAfCbjQRhEMEbcAsTjw==
+X-Received: by 2002:a2e:9c99:0:b0:2b6:e618:b593 with SMTP id x25-20020a2e9c99000000b002b6e618b593mr2263846lji.31.1692208733180;
+        Wed, 16 Aug 2023 10:58:53 -0700 (PDT)
 Received: from [192.168.1.101] (abxi8.neoplus.adsl.tpnet.pl. [83.9.2.8])
-        by smtp.gmail.com with ESMTPSA id k22-20020a2e2416000000b002b9e0aeff68sm3581086ljk.95.2023.08.16.10.57.25
+        by smtp.gmail.com with ESMTPSA id k22-20020a2e2416000000b002b9e0aeff68sm3581086ljk.95.2023.08.16.10.58.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 10:57:25 -0700 (PDT)
-Message-ID: <f66dabb9-1068-40d0-9a73-b59f1cdf90e0@linaro.org>
-Date:   Wed, 16 Aug 2023 19:57:25 +0200
+        Wed, 16 Aug 2023 10:58:52 -0700 (PDT)
+Message-ID: <ef031105-3b77-484d-8f47-a6c0233dd9c2@linaro.org>
+Date:   Wed, 16 Aug 2023 19:58:51 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/6] clk: qcom: videocc-sm8550: Use HW_CTRL_TRIGGER
- instead of HW_CTRL for GDSC
+Subject: Re: [PATCH v2 6/6] venus: pm_helpers: Use dev_pm_genpd_set_hwmode to
+ switch GDSC mode
 Content-Language: en-US
 To:     Abel Vesa <abel.vesa@linaro.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -72,7 +72,7 @@ Cc:     linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org,
         Jagadeesh Kona <quic_jkona@quicinc.com>
 References: <20230816145741.1472721-1-abel.vesa@linaro.org>
- <20230816145741.1472721-6-abel.vesa@linaro.org>
+ <20230816145741.1472721-7-abel.vesa@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -109,13 +109,13 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230816145741.1472721-6-abel.vesa@linaro.org>
+In-Reply-To: <20230816145741.1472721-7-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -125,16 +125,49 @@ X-Mailing-List: linux-pm@vger.kernel.org
 On 16.08.2023 16:57, Abel Vesa wrote:
 > From: Jagadeesh Kona <quic_jkona@quicinc.com>
 > 
-> HW_CTRL moves the GDSC to HW control mode as part of GDSC enable itself.
-> Use HW_CTRL_TRIGGER flag instead of HW_CTRL flag for video GDSC's to
-> switch the GDSC to HW/SW control modes only when consumer requested to
-> switch GDSC mode using dev_pm_genpd_set_hwmode.
+> This change demonstrates the use of dev_pm_genpd_set_hwmode API from
+> video driver to switch the video mvs0 gdsc to SW/HW modes at runtime
+> based on requirement.
+> 
+> This change adds a new boolean array member vcodec_pmdomains_hwctrl in
+> venus_resources structure to indicate if GDSC's have HW control support
+> or not. This data is used in vcodec_control_v4() to check if GDSC has
+> support to switch to HW control mode and then call dev_pm_genpd_set_hwmode
+> to switch the GDSC mode.
 > 
 > Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
-Any reason for it to be a separate patch?
+[...]
 
-I'd say either keep all changes separate (for easier bisecting) or keep
-them all in a single commit.
+>  static int vcodec_control_v4(struct venus_core *core, u32 coreid, bool enable)
+>  {
+> -	void __iomem *ctrl, *stat;
+> -	u32 val;
+> -	int ret;
+> -
+> -	if (IS_V6(core)) {
+> -		ctrl = core->wrapper_base + WRAPPER_CORE_POWER_CONTROL_V6;
+> -		stat = core->wrapper_base + WRAPPER_CORE_POWER_STATUS_V6;
+> -	} else if (coreid == VIDC_CORE_ID_1) {
+> -		ctrl = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_CONTROL;
+> -		stat = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_STATUS;
+> -	} else {
+> -		ctrl = core->wrapper_base + WRAPPER_VCODEC1_MMCC_POWER_CONTROL;
+> -		stat = core->wrapper_base + WRAPPER_VCODEC1_MMCC_POWER_STATUS;
+> -	}
+> -
+> -	if (enable) {
+> -		writel(0, ctrl);
+> -
+> -		ret = readl_poll_timeout(stat, val, val & BIT(1), 1, 100);
+> -		if (ret)
+> -			return ret;
+> -	} else {
+> -		writel(1, ctrl);
+This removal cries for better explanation.
+
+Has the venus hw been setting some registers that alter the GDSC's state?
+Or the hardware's expectations of the GDSC state?
 
 Konrad
