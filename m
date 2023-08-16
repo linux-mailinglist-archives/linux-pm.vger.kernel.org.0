@@ -2,78 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B65377EBAD
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 23:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4476A77ED9E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 01:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346470AbjHPVYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 17:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        id S1347106AbjHPXED (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 19:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346516AbjHPVX7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 17:23:59 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1468A2715
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 14:23:56 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d62ae3fc7f1so5495967276.2
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 14:23:56 -0700 (PDT)
+        with ESMTP id S1347132AbjHPXDn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 19:03:43 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0622D40;
+        Wed, 16 Aug 2023 16:03:24 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-586a684e85aso76741447b3.2;
+        Wed, 16 Aug 2023 16:03:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692221035; x=1692825835;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kn/dW2gjADRkMAXWEOHlhcgyXacpbjUI5D7Piu6MKb8=;
-        b=pqUQArodozLMBU3kibz8HlzXV2Vq14BX1+4zKl35oEO21xawr3ZLUum99rkFotGRvp
-         fqgcnNksj/tX4lEHT3LCq1f+8K+FVhlMj4SIB1jKx+s40ALjrwC4n/nKsL5HvWH3/ufM
-         VlyKi3Y8T6XGGN59RqL8nCXW90+7/OtVeB3XnyuhMgK6m6MUYHEXeyzUKnaPJhO9i6tp
-         RmdGAoBKOcHokMoGFr5zjt7QhTdm+OkzJXkFJbdgC4Og2kGXlknLJ1615Lup3hgRrjb5
-         Bak2//9W1Ecj2PZ2Xg2Jbl0nQbbceT0QJ6EuU4ojl1DxPB5aZTT6K1IZf1MrurBJLioG
-         wtNA==
+        d=gmail.com; s=20221208; t=1692227004; x=1692831804;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=14Y4PnSZD+AWELkkOV5EhbFkig7uI2PkD6OuZnm0uRc=;
+        b=ZvDYQIuraumOQfPyDlsoewwPhl1eHz0Nej1DcEJ1W3D+EtajuuDXfsz7ccCxZigBeu
+         liKhDFmxgoNX1EeAQpS6+6IPI2pLzEx3I1nQfc5jjlXj3db4c2DeocRT0tF9zQ0woQ4M
+         36qhZ2BAMkyAOgYU5O8LjaRFWO5CKAFHQkv+ggaZi0s3GpuqKY/bndi9dL/QDhasTXdT
+         yk91z9+9WRsqnGU5Og8BTxoEV+NdqsIEvagdUN1ZYJUN5lbbp2UuoCyHZScuCFM9h6Q8
+         Ns1ypUUcAUfpPti/NjUioIXisQdsyTMR1e9/H0I13KTgWd1vVqb+wOCrr58w+jkJk6gR
+         +kyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692221035; x=1692825835;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kn/dW2gjADRkMAXWEOHlhcgyXacpbjUI5D7Piu6MKb8=;
-        b=luu4I1uPzg+WWID6nMm8IwG5GTl1EfZ6WfvCdUpgwNixRBzozgfej6V6JnY1Orve9T
-         OSBn5t3vnbhr2QNlOzVC5Cwkdao/QKiowEGQoZIZISS9LFOupmBPW4DDg24jZHMLm8e3
-         2HzlBNNXDrEA0hbbk90vY3LrbHZzrUEdnPE3bryMhSJ8DlZeOSvB/6zgv/3qS/5xaCZF
-         7+yUWirVRoSCRVYELP+vHhcBaOe2jhT1nPR5eNerr+chVCjqHSASEzgIUn65S+OIsy50
-         0KpxV71Y2sAK75s8lJk9cgWJG8EqBo6FUYS7ZH8e8AX6BP0BhK4uaUSEoQWIGKzuMG/U
-         EZLg==
-X-Gm-Message-State: AOJu0YwKnrBpxsQ0HR1syPtCqgid5YY8etvjal5zJZtglhk2r90MKg5+
-        cHIOq2qNg9NIci6AI5/qVI1bxvMDpvMizHmXJ7lE4g==
-X-Google-Smtp-Source: AGHT+IEs/O8+aVnBl6tUrBldR+WvjodOGYHAIeYGnweFVvwa4LLtkk+Yw67XTXiP3kSG7mlt6NbXT4Odl42kQaARy/E=
-X-Received: by 2002:a25:2d1b:0:b0:d4b:64ac:a4e0 with SMTP id
- t27-20020a252d1b000000b00d4b64aca4e0mr3231751ybt.32.1692221035246; Wed, 16
- Aug 2023 14:23:55 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692227004; x=1692831804;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=14Y4PnSZD+AWELkkOV5EhbFkig7uI2PkD6OuZnm0uRc=;
+        b=d6JcSeH03Smj+7r9eLKu0qhXSBGTYaa8I19m2HCr2FivoqKrkGtPmX4YG5rh/g4GZT
+         vEU7wa131FHt86YRq7YaMFSkvT7/N4Ve77KlN8zO4zBO5jvWS/sEPpHsH9umAFNSOsAc
+         lySYnBAhB8Vr288oMyKgNCJnw8j0icj+aJGdHPFoC5cLpTaJY/LiLqpwkH6bF50GZI/A
+         VZL3sH1EyCo7I+nP4FCtZ/5Qco2hQAcnlakGuS1E+5VtOTL3ov8gIeRPDBbXLubz6lD/
+         pHeo7bhuG4RvqKyIJWaJg0iH+ykRBbt+CBqOJlyfPDnguFT0bfE7a0V9b3XwiWz4jIVM
+         Jj4w==
+X-Gm-Message-State: AOJu0YyFIbDOrBTn72lEsR0hT5FMf4kDri25X6WPrlshLG6f5Yf4093T
+        c0Fp4OYLBrQ6KbeD+q7oSqK4MVopEUI=
+X-Google-Smtp-Source: AGHT+IE/6FlWPVtFAZtYs8px7qlhku3MpHBUisCflrI1zNJWpGYhmRS+2tmFk4NB8DPBVKQj/xhUrQ==
+X-Received: by 2002:a81:6205:0:b0:586:c0bc:77aa with SMTP id w5-20020a816205000000b00586c0bc77aamr3363265ywb.24.1692227003822;
+        Wed, 16 Aug 2023 16:03:23 -0700 (PDT)
+Received: from localhost ([2607:fea8:529e:7800::5ee])
+        by smtp.gmail.com with ESMTPSA id z16-20020a81c210000000b005463e45458bsm4263179ywc.123.2023.08.16.16.03.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 16:03:23 -0700 (PDT)
+Date:   Wed, 16 Aug 2023 19:03:21 -0400
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add SDM670 OSM L3
+ compatible
+Message-ID: <ZN1VuZCwd8xYsEkV@radian>
+References: <20230815223108.306018-5-mailingradian@gmail.com>
+ <20230815223108.306018-6-mailingradian@gmail.com>
 MIME-Version: 1.0
-References: <20230712210505.1536416-1-Frank.Li@nxp.com> <f1d4ed62-8d01-173f-6e41-4671228782fd@linaro.org>
- <ZLGDhOffQwh7xW/n@lizhi-Precision-Tower-5810> <7eacc4da-ab14-3df5-2864-44a7262bac27@linaro.org>
- <ZNz5Drb+EVLjWxRV@lizhi-Precision-Tower-5810> <dd42952c-4dea-ea57-7ad2-73fa159d265d@linaro.org>
- <ZN0CVa9or/FltHJM@lizhi-Precision-Tower-5810> <80324fb7-3d2a-ecd3-f1ca-9745a366eb0a@linaro.org>
-In-Reply-To: <80324fb7-3d2a-ecd3-f1ca-9745a366eb0a@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 16 Aug 2023 23:23:17 +0200
-Message-ID: <CAPDyKFp8-XwwHEt9dKeTMj0ZmoS6nzXrUYAFmpzZm16-Uf6=xw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] thermal/drivers/imx_sc_thermal: return -EAGAIN when
- SCFW turn off resource
-To:     Frank Li <frank.li@nxp.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230815223108.306018-6-mailingradian@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,100 +81,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 16 Aug 2023 at 22:46, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+On Tue, Aug 15, 2023 at 06:31:10PM -0400, Richard Acayan wrote:
+> Add the compatible for the OSM L3 interconnect used in the Snapdragon
+> 670.
 >
-> On 16/08/2023 19:07, Frank Li wrote:
-> > On Wed, Aug 16, 2023 at 06:47:17PM +0200, Daniel Lezcano wrote:
-> >> On 16/08/2023 18:28, Frank Li wrote:
-> >>> On Wed, Aug 16, 2023 at 10:44:32AM +0200, Daniel Lezcano wrote:
-> >>>>
-> >>>> Hi Frank,
-> >>>>
-> >>>> sorry for the delay
-> >>>>
-> >>>> On 14/07/2023 19:19, Frank Li wrote:
-> >>>>> On Thu, Jul 13, 2023 at 02:49:54PM +0200, Daniel Lezcano wrote:
-> >>>>>> On 12/07/2023 23:05, Frank Li wrote:
-> >>>>>>> Avoid endless print following message when SCFW turns off resource.
-> >>>>>>>      [ 1818.342337] thermal thermal_zone0: failed to read out thermal zone (-1)
-> >>>>>>>
-> >>>>>>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> >>>>>>> ---
-> >>>>>>>      drivers/thermal/imx_sc_thermal.c | 4 +++-
-> >>>>>>>      1 file changed, 3 insertions(+), 1 deletion(-)
-> >>>>>>>
-> >>>>>>> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-> >>>>>>> index 8d6b4ef23746..0533d58f199f 100644
-> >>>>>>> --- a/drivers/thermal/imx_sc_thermal.c
-> >>>>>>> +++ b/drivers/thermal/imx_sc_thermal.c
-> >>>>>>> @@ -58,7 +58,9 @@ static int imx_sc_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> >>>>>>>         hdr->size = 2;
-> >>>>>>>         ret = imx_scu_call_rpc(thermal_ipc_handle, &msg, true);
-> >>>>>>> -       if (ret)
-> >>>>>>> +       if (ret == -EPERM) /* NO POWER */
-> >>>>>>> +               return -EAGAIN;
-> >>>>>>
-> >>>>>> Isn't there a chain call somewhere when the resource is turned off, so the
-> >>>>>> thermal zone can be disabled?
-> >>>>>
-> >>>>> A possible place in drivers/firmware/imx/scu-pd.c. but I am not sure how to
-> >>>>> get thermal devices. I just found a API thermal_zone_get_zone_by_name(). I
-> >>>>> am not sure if it is good to depend on "name", which add coupling between
-> >>>>> two drivers and if there are external thermal devices(such as) has the
-> >>>>> same name, it will wrong turn off.
-> >>>>
-> >>>> Correct
-> >>>>
-> >>>>> If add power domain notification in thermal driver, I am not how to get
-> >>>>> other devices's pd in thermal driver.
-> >>>>>
-> >>>>> Any example I can refer?
-> >>>>>
-> >>>>> Or this is simple enough solution.
-> >>>>
-> >>>> The solution works for removing the error message but it does not solve the
-> >>>> root cause of the issue. The thermal zone keeps monitoring while the sensor
-> >>>> is down.
-> >>>>
-> >>>> So the question is why the sensor is shut down if it is in use?
-> >>>
-> >>> Do you know if there are any code I reference? I supposed it is quite common.
-> >>
-> >> Sorry, I don't get your comment
-> >>
-> >> What I meant is why is the sensor turned off if it is in use ?
-> >
-> > One typical example is cpu hotplug. The sensor is located CPU power domain.
-> > If CPU hotplug off,  CPU power domain will be turn off.
-> >
-> > It doesn't make sensor keep monitor such sensor when CPU already power off.
-> > It doesn't make sensor to keep CPU power on just because want to get sensor
-> > data.
-> >
-> > Anthor example is GPU, if there are GPU0 and GPU1. Most case just GPU0
-> > work.  GPU1 may turn off when less loading.
-> >
-> > Ideally, thermal can get notification from power domain driver.
-> > when such power domain turn off,  disable thermal zone.
-> >
-> > So far, I have not idea how to do that.
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+
+The subject line should be "dt-bindings: interconnect: OSM L3: add
+SDM670 compatible" to follow the same format as other patches to this
+file.
+
+>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> Ulf,
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> index 9d0a98d77ae9..21dae0b92819 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> @@ -21,6 +21,7 @@ properties:
+>            - enum:
+>                - qcom,sc7180-osm-l3
+>                - qcom,sc8180x-osm-l3
+> +              - qcom,sdm670-osm-l3
+>                - qcom,sdm845-osm-l3
+>                - qcom,sm6350-osm-l3
+>                - qcom,sm8150-osm-l3
+> -- 
+> 2.41.0
 >
-> do you have a guidance to link the thermal zone and the power domain in
-> order to get a poweron/off notification leading to enable/disable the
-> thermal zone ?
-
-I don't know the details here, so apologize for my ignorance to start
-with. What platform is this?
-
-A vague idea could be to hook up the thermal sensor to the
-corresponding CPU power domain. Assuming the CPU power domain is
-modelled as a genpd provider, then this allows the driver for the
-thermal sensor to register for power-on/off notifications of the genpd
-(see dev_pm_genpd_add_notifier()).
-
-Can this work?
-
-Kind regards
-Uffe
