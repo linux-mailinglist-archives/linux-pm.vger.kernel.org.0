@@ -2,218 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A7077DA74
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 08:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5528277DB1A
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 09:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242077AbjHPG2F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 02:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
+        id S240150AbjHPH1n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 03:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242114AbjHPG2D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 02:28:03 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B501BF8
-        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 23:28:00 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bc34b32785so39111275ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 23:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692167280; x=1692772080;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R9swZ9sobe/UyaVKZ0ksxQMitw8thN1Q9u7bV7nG1uY=;
-        b=cvImbZnTYQoZ9txKjQ0qTOvVJRFxUFIG4pfT7z6GQqWPDb4oyqRtDxJ7IvWcA+WWXT
-         ZWz7q0sNpzb0kabUVuf4AfhUbbwLDFLOkgqXu0yOvosFxXAqyt8wyreKrVA+TcCcsnLR
-         8SvUGMO5vyUbt02rZ2aRiqok8hhv0eXZD5fcQ85e1kw6Oh5wZY0rTjJzP4uR84fdcfvY
-         hDQTa6GEmQZnW/iu6xaypzd73KZOK2/nDftBjodhsuKZZIfzg+WvmhAOKNQQszW8Mw+3
-         lakcraer/uqUTMPjwMIAgN3nnxuCkR9ZiI77vPF7d4VaqAsnP6PTkB1eAOANwyRnvxwf
-         mR5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692167280; x=1692772080;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R9swZ9sobe/UyaVKZ0ksxQMitw8thN1Q9u7bV7nG1uY=;
-        b=Baa57Nns2qrxIJFc/wg2dmVp/tiCZHqjs2kBTvqeLkU8gjtIo3GZ4GWPNg5Gd4KvUC
-         FvKahKomm6LZr+T+Sk4wpuB3eKrJO8llFA7hU9OghLB9WU5BWWfjY5eEQlJRFI3l/qT7
-         r1Ku5+jkZV0ypg8lt6H6YpHSF7PR3ZPW3M8V9rGDA084ekzOJ/N6n5DFzjX/TBRhZdFB
-         YMq7S94M5xyCOGwxPsqTyBYhZgGHPmFiMSmf9UjyUNiBIuT8Ev50Zq9iZgntNzoAXb6E
-         Q0c2vnZYPUw+My2pDj+4r/Ytuz+O7Ik3nluwlyGlnV4eR39hMIKV1k2eDcHYO/xJXEf5
-         wXmw==
-X-Gm-Message-State: AOJu0YzElpzWSRQp27EaH+EmtXUQ7cpKwv2WKH1748YkNuj8orjmEaRE
-        NilkLS3DXfTLznhRDv/+DqhaWg==
-X-Google-Smtp-Source: AGHT+IG+7YkbZ3410JWVHZ1nOSSxRvqGUiSUTPvOM7VFDZgTy0GOMytoHqUZQnyQD/fllIOZfZswXA==
-X-Received: by 2002:a17:902:e84c:b0:1b8:a569:f980 with SMTP id t12-20020a170902e84c00b001b8a569f980mr1330252plg.65.1692167280004;
-        Tue, 15 Aug 2023 23:28:00 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id x7-20020a170902820700b001b392bf9192sm12205855pln.145.2023.08.15.23.27.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 23:27:59 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 11:57:57 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jie Zhan <zhanjie9@hisilicon.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-        xuwei5@huawei.com, wanghuiqiang@huawei.com,
-        jonathan.cameron@huawei.com, wangxiongfeng2@huawei.com
-Subject: Re: [RFC PATCH] cpufreq: Support per-policy performance boost
-Message-ID: <20230816062757.tocdrqh3isxcrt3r@vireshk-i7>
-References: <20230724075827.4160512-1-zhanjie9@hisilicon.com>
+        with ESMTP id S240063AbjHPH12 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 03:27:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0E0C1;
+        Wed, 16 Aug 2023 00:27:25 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RQfkn5RDNztS1S;
+        Wed, 16 Aug 2023 15:23:45 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 16 Aug 2023 15:27:21 +0800
+Message-ID: <8fea501c-b950-17bd-c710-c923b9af6e62@huawei.com>
+Date:   Wed, 16 Aug 2023 15:27:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230724075827.4160512-1-zhanjie9@hisilicon.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] cpufreq: cppc: Add missing error pointer check
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230816030549.849824-1-liaochang1@huawei.com>
+ <20230816034630.a4hvsj373q6aslk3@vireshk-i7>
+From:   "Liao, Chang" <liaochang1@huawei.com>
+In-Reply-To: <20230816034630.a4hvsj373q6aslk3@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jie,
+Hi Viresh,
 
-I am not sure how useful this per-policy boost is for your use case,
-but I have no objection to the same if it is worth it.
-
-On 24-07-23, 15:58, Jie Zhan wrote:
-> The boost control currently applies to the whole system.  However, users
-> may prefer to boost a subset of cores in order to provide prioritized
-> performance to workloads running on the boosted cores.
+在 2023/8/16 11:46, Viresh Kumar 写道:
+> On 16-08-23, 03:05, Liao Chang wrote:
+>> The function cppc_freq_invariance_init() may failed to create
+>> kworker_fie, make it more robust by checking the return value to prevent
+>> an invalid pointer dereference in kthread_destroy_worker(), which called
+>> from cppc_freq_invariance_exit().
+>>
+>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+>> ---
+>>  drivers/cpufreq/cppc_cpufreq.c | 21 ++++++++++++++-------
+>>  1 file changed, 14 insertions(+), 7 deletions(-)
 > 
-> Enable per-policy boost by adding a 'local_boost' sysfs interface.  This
-> can be found at:
+> I think why it was designed this way was to make the driver work,
+> without invariance support, in the worst case instead of just failing
+> completely. The invariance thing is a good to have feature, but not
+> really necessary and so failing probing the driver for that isn't
+> worth it. We should print all error messages though.
 > 
-> 	/sys/devices/system/cpu/cpufreq/policy<*>/local_boost
+Thanks for pointing that out. I think you are right that the kworker created
+in the cppc driver is not the only arch_freq_scale updater, the ARCH provided
+updater has more priority than the driver, so the driver should still work even
+without kworker_fie supports.
 
-Just name it boost instead of local_boost, it is present in the
-policy's directory, that is enough.
+If that is the case, i think the best thing to do is checking the error pointer
+and printing an error message before calling kthread_destroy() in cppc_freq_invariance_exit(),
+this is because at that point, it is really necessary to ensure the kworker_fie has
+been initialized as expected, otherwise it will raise a NULL pointer exception.
 
-> 
-> Same to the global boost switch, writing 1/0 to 'local_boost'
-> enables/disables boost on a cpufreq policy respectively.
-> 
-> The user view of global and local boost controls should be:
-> 
-> 1. Enabling global boost initially enables local boost on all policies, and
-> local boost can then be enabled or disabled individually on each policy,
-> given that the platform does support so.
-> 
-> 2. Disabling global boost makes enabling local boost illegal, while writing
-> 0 to 'local_boost' is fine but takes no effect.
-> 
-> A possible question could be: why not just limiting 'scaling_max_freq'?
-> Well, the fundamental difference is that 'local_boost' could be more
-> user-friendly.  When global boost is enabled, it is not straightforward to
-> figure out the base frequency for setting 'scaling_max_freq' to a non-boost
-> value. Also, this is supposed to take effect on the physical upper
-> frequency limit, reflected through 'cpuinfo_max_freq'.
-> 
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 33 +++++++++++++++++++++++++++++++++
->  include/linux/cpufreq.h   |  3 +++
->  2 files changed, 36 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 6b52ebe5a890..14579c59f7ba 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -621,6 +621,35 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
->  }
->  define_one_global_rw(boost);
->  
-> +static ssize_t show_local_boost(struct cpufreq_policy *policy, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%d\n", policy->local_boost_enabled);
-> +}
-> +
-> +static ssize_t store_local_boost(struct cpufreq_policy *policy,
-> +				 const char *buf, size_t count)
-> +{
-> +	int ret, enable;
-> +
-> +	ret = kstrtoint(buf, 10, &enable);
-> +	if (ret || enable < 0 || enable > 1)
-> +		return -EINVAL;
-> +
-> +	if (enable && !cpufreq_driver->boost_enabled)
-> +		return -EINVAL;
-
-Not just while enabling it, you should check for boost_enabled all the
-time.
-
-Also, you can optimize here if the state is being set to existing
-state and quit early. This is done in the case of global boost
-already. Have a look.
-
-> +
-> +	cpus_read_lock();
-> +	ret = cpufreq_driver->set_boost(policy, enable);
-> +	cpus_read_unlock();
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	policy->local_boost_enabled = enable;
-
-s/local_//
-
-> +
-> +	return count;
-> +}
-> +
->  static struct cpufreq_governor *find_governor(const char *str_governor)
->  {
->  	struct cpufreq_governor *t;
-> @@ -931,6 +960,7 @@ cpufreq_freq_attr_rw(scaling_min_freq);
->  cpufreq_freq_attr_rw(scaling_max_freq);
->  cpufreq_freq_attr_rw(scaling_governor);
->  cpufreq_freq_attr_rw(scaling_setspeed);
-> +cpufreq_freq_attr_rw(local_boost);
->  
->  static struct attribute *cpufreq_attrs[] = {
->  	&cpuinfo_min_freq.attr,
-> @@ -944,6 +974,7 @@ static struct attribute *cpufreq_attrs[] = {
->  	&scaling_driver.attr,
->  	&scaling_available_governors.attr,
->  	&scaling_setspeed.attr,
-> +	&local_boost.attr,
-
-Making this file available if the global boost file isn't present is a
-bit tricky I think. Maybe at least check for cpufreq_boost_supported()
-before doing so.
-
->  	NULL
->  };
->  ATTRIBUTE_GROUPS(cpufreq);
-> @@ -2716,6 +2747,8 @@ int cpufreq_boost_trigger_state(int state)
->  		ret = cpufreq_driver->set_boost(policy, state);
->  		if (ret)
->  			goto err_reset_state;
-> +
-> +		policy->local_boost_enabled = state;
->  	}
->  	cpus_read_unlock();
->  
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 26e2eb399484..a99a48ac9fdb 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -140,6 +140,9 @@ struct cpufreq_policy {
->  	 */
->  	bool			dvfs_possible_from_any_cpu;
->  
-> +	/* Per policy boost enabled flag. */
-> +	bool			local_boost_enabled;
-> +
->  	 /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
->  	unsigned int cached_target_freq;
->  	unsigned int cached_resolved_idx;
-> -- 
-> 2.30.0
+I hope this makes sense, thanks.
 
 -- 
-viresh
+BR
+Liao, Chang
