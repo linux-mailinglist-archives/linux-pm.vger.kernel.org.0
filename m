@@ -2,47 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CB777E231
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 15:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A60277E45A
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 16:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244731AbjHPNJV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 09:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
+        id S1343883AbjHPO6E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 10:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244495AbjHPNIr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 09:08:47 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0439126BB;
-        Wed, 16 Aug 2023 06:08:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 011AED75;
-        Wed, 16 Aug 2023 06:09:27 -0700 (PDT)
-Received: from [192.168.178.38] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 208113F6C4;
-        Wed, 16 Aug 2023 06:08:42 -0700 (PDT)
-Message-ID: <2b54b79f-5313-497d-55ae-1ffa1f4c6bf5@arm.com>
-Date:   Wed, 16 Aug 2023 15:08:32 +0200
+        with ESMTP id S1343853AbjHPO5x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 10:57:53 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75EA26A1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 07:57:51 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-99bccc9ec02so927298966b.2
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 07:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692197870; x=1692802670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IIQG2DiKif0iuRguAVDSpo28maNi/+e2Wh3y0OW3ETY=;
+        b=JAhXsXlZCZLyqm3g9Os4EymAcm/sNnLBrHr70bHU7WReDU2kCeo0ccKEFZX0vwjhQ3
+         rGhFhsrvJq/vHmUVDVyQA/uPp/5TaDE2Qz9uiIeHUQtsNf2uhIuzW/dpWMigsZudI9Vg
+         7Q0XBVSpTKxeJsSv4TyhWzbMtlrXJDAp2+La2MAXl47nSgotZCbKk9/FbRhyNySTAXGl
+         k2tycdhlQxKSGw6Arx90ZQjj6SecxT1pqpQ1G21UI1jdfQGacClDoGlcks2F3YNJjQjo
+         eB1xSpS4s0YNSYLpCU+NnVcJ+XHCouCwJMm1AUqOMZ1gGdcwKwfilrk0n6BNpHhpjBm9
+         WBWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692197870; x=1692802670;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IIQG2DiKif0iuRguAVDSpo28maNi/+e2Wh3y0OW3ETY=;
+        b=juYbsUJvg1vpRBDABw36vzjtac2Z5hTmohmQP8olzk5WZv7pq4V7FNKs6272SPLLbP
+         UP10ipMFLhBe4TzAyvb/aXMIdSEEubRAF5dI/+T2bqo4ppgE2fqJ7DSbE/rZbbaoPYqA
+         T6TEE7hD7HQ7iV6MVIaBeVbL1bB3MY9ZoDWL4DBiWGzAbpNoVtHAo7vNoVuMQVnXtS0o
+         2iP4wqied8gsFmZ/Kb4s1fjntW7QWdoY0ATj6F7Wtda3ShVgLJXr/h4/isptCLz2gD0a
+         7VFiuwCdh+k4FfrpcjY2TgDEnHumJb7zJSps5PQsYz6TWvqrnnnUmre+4H8HR05VMJ5Q
+         F5xg==
+X-Gm-Message-State: AOJu0YzUwJimzvi9DqNn9sfZrwWnjEebxuBo8VZ/VB+OiDp9oTzlLr+4
+        F2OjL1io9iV1/Z1ArvJ4S3dKoA==
+X-Google-Smtp-Source: AGHT+IFcKm59rZ2xvqc5dn0ecwLhmzoC3eXfnItV2uaIIwaTEUFAFOMvqtp735pgK7t/8GXSTTWHsg==
+X-Received: by 2002:a17:906:3287:b0:99b:f534:9bb6 with SMTP id 7-20020a170906328700b0099bf5349bb6mr1550926ejw.9.1692197869878;
+        Wed, 16 Aug 2023 07:57:49 -0700 (PDT)
+Received: from hackbox.lan ([84.232.191.92])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170906561000b00992076f4a01sm8610403ejq.190.2023.08.16.07.57.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Aug 2023 07:57:49 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Taniya Das <tdas@qti.qualcomm.com>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2 0/6] PM: domains: Add control for switching back and forth to HW control
+Date:   Wed, 16 Aug 2023 17:57:35 +0300
+Message-Id: <20230816145741.1472721-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 12/12] Documentation: EM: Update with runtime
- modification design
-Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
-        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
-        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
-        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
-        mhiramat@kernel.org
-References: <20230721155022.2339982-1-lukasz.luba@arm.com>
- <20230721155022.2339982-13-lukasz.luba@arm.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230721155022.2339982-13-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,132 +79,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/07/2023 17:50, Lukasz Luba wrote:
-> Add a new section 'Design' which covers the information about Energy
-> Model. It contains the design decisions, describes models and how they
-> reflect the reality. Add description of the basic const. EM. Change the
+The v1 (and the back story) can be found here:
+https://lore.kernel.org/all/20230628105652.1670316-1-abel.vesa@linaro.org/
 
-Nit pick: Can we just use one tag for this EM? I would propose
-'default'. So code and doc are aligned.
+Changes since v1:
+ * patch for printing domain HW-managed mode in the summary
+ * patch that adds one consumer (venus)
+ * patch for gdsc with new (different) flag
+ * patch for videocc GDSC provider to update flags
 
-> other section IDs. Add documentation bit for the new feature which
-> allows o modify the EM in runtime.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  Documentation/power/energy-model.rst | 150 +++++++++++++++++++++++++--
->  1 file changed, 140 insertions(+), 10 deletions(-)
-> 
-> diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-> index ef341be2882b..01d4d806a123 100644
-> --- a/Documentation/power/energy-model.rst
-> +++ b/Documentation/power/energy-model.rst
-> @@ -72,16 +72,70 @@ required to have the same micro-architecture. CPUs in different performance
->  domains can have different micro-architectures.
->  
->  
-> -2. Core APIs
-> +2. Design
-> +-----------------
-> +
-> +2.1 Basic EM
-> +^^^^^^^^^^^^
-> +
-> +The basic EM is built around constant power information for each performance
-> +state, which is accessible in: 'dev->em_pd->default_table->state'. This model
-> +can be derived based on power measurements of the device e.g. CPU while
-> +running some benchmark. The benchmark might be integer heavy or floating point
-> +computation with a data set fitting into the CPU cache or registers. Bare in
-> +mind that this model might not cover all possible workloads running on CPUs.
-> +Thus, please run a few different benchmarks and verify with some real
-> +workloads your power model values. The power variation due to the workload
-> +instruction mix and data set is not modeled. The static power, which can
-> +change during runtime due to variation of SOC temperature, is not modeled in
-> +this basic EM.
+Abel Vesa (1):
+  PM: domains: Add the domain HW-managed mode to the summary
 
-s/in this basic EM/either
+Jagadeesh Kona (4):
+  clk: qcom: gdsc: Add set and get hwmode callbacks to switch GDSC mode
+  clk: qcom: Use HW_CTRL_TRIGGER flag to switch video GDSC to HW mode
+  clk: qcom: videocc-sm8550: Use HW_CTRL_TRIGGER instead of HW_CTRL for
+    GDSC
+  venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode
 
-> +
-> +2.2 Runtime modifiable EM
-> +^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +To better reflect power variation due to static power (leakage) the EM
-> +supports runtime modifications of the power values. The mechanism relies on
-> +RCU to free the modifiable EM perf_state table memory. Its user, the task
-> +scheduler, also uses RCU to access this memory. The EM framework is
-> +responsible for allocating the new memory for the modifiable EM perf_state
-> +table. The old memory is freed automatically using RCU callback mechanism.
-> +This design decision is made based on task scheduler using that data and
-> +to prevent wrong usage of kernel modules if they would be responsible for the
-> +memory management.
-> +
-> +There are two structures with the performance state tables in the EM:
-> +a) dev->em_pd->default_table
-> +b) dev->em_pd->runtime_table
-> +They both point to the same memory location via:
-> +'em_perf_table::state' pointer, until the first modification of the values
-> +This should save memory on platforms which would never modify the EM. When
-> +the first modification is made the 'default_table' (a) contains the old
-> +EM which was created during the setup. The modified EM is available in the
-> +'runtime_table' (b).
-> +
-> +Only EAS uses the 'runtime_table' and benefits from the updates to the
-> +EM values. Other sub-systems (thermal, powercap) use the 'default_table' (a)
-> +since they don't need such optimization.
+Ulf Hansson (1):
+  PM: domains: Allow devices attached to genpd to be managed by HW
 
-The interested user immediately ask WHY here. Maybe skip this last part
-of the sentence in case you don't want to provide the WHY here.
+ drivers/base/power/domain.c                   | 84 ++++++++++++++++++-
+ drivers/clk/qcom/gdsc.c                       | 32 +++++++
+ drivers/clk/qcom/gdsc.h                       |  1 +
+ drivers/clk/qcom/videocc-sc7180.c             |  2 +-
+ drivers/clk/qcom/videocc-sc7280.c             |  2 +-
+ drivers/clk/qcom/videocc-sdm845.c             |  4 +-
+ drivers/clk/qcom/videocc-sm8250.c             |  4 +-
+ drivers/clk/qcom/videocc-sm8550.c             |  4 +-
+ drivers/media/platform/qcom/venus/core.c      |  4 +
+ drivers/media/platform/qcom/venus/core.h      |  1 +
+ .../media/platform/qcom/venus/pm_helpers.c    | 47 +++++------
+ include/linux/pm_domain.h                     | 17 ++++
+ 12 files changed, 165 insertions(+), 37 deletions(-)
 
-> +The drivers which want to modify the EM values are protected from concurrent
-
-Does it have to be a driver?
-
-> +access using a mutex. Therefore, the drivers must use sleeping context when
-> +they want to modify the EM. The runtime modifiable EM might also be used for
-> +better reflecting real workload scenarios, e.g. when they pop-up on the screen
-
-I would describe this a little bit more generic. The current description
-seems to be linked to Android foreground processes.
-
-> +and will run for longer period, such as: games, video recoding or playing,
-> +video calls, etc. It is up to the platform engineers to experiment and choose
-> +the right approach for their device.
-
-Maybe you can say here that with the runtime modifiable EM we switch
-from a 'single and during the entire runtime static EM' (system
-property) design to a 'single EM which can be changed during runtime
-according e.g. to the workload' (system and workload property) design.
-
-[...]
-
-> +3.4 Runtime modifications
-> +^^^^^^^^^^^^^^^^^^^^^^^^^
-> +
-> +Drivers willing to modify the EM at runtime should use the following API::
-> +
->  
-> +  int em_dev_update_perf_domain(struct device *dev,
-> +			struct em_data_callback *cb, void *priv);
->  
-> -2.4 Description details of this API
-> +Drivers must provide a callback .update_power() returning power value for each
-> +performance state. The callback function provided by the driver is free
-> +to fetch data from any relevant location (DT, firmware, ...) or sensor.
-> +The .update_power() callback is called by the EM for each performance state to
-> +provide new power value. In the Section 4.2 there is an example driver
-> +which shows simple implementation of this mechanism. The callback can be
-> +declared with EM_UPDATE_CB() macro. The caller of that callback also passes
-> +a private void pointer back to the driver which tries to update EM.
-> +It is useful and helps to maintain the consistent context for all performance
-> +state calls for a given EM.
-> +The artificial EM also supports runtime modifications. For this type of EM
-> +there is a need to provide one more callback: .get_cost(). The .get_cost()
-> +returns the cost value for each performance state, which better reflects the
-> +efficiency of the CPUs which use artificial EM. Those two callbacks:
-> +.update_power() and get .get_cost() can be declared with one macro
-> +EM_ADV_UPDATE_CB() and then passed to the em_dev_update_perf_domain().
-
-Can't find EM_ADV_UPDATE_CB().
-
-[...]
+-- 
+2.34.1
 
