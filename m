@@ -2,115 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0913877DDE0
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 11:52:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D7F77DE27
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 12:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243595AbjHPJwA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 05:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
+        id S243694AbjHPKFI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 06:05:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243665AbjHPJvy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 05:51:54 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A638273B;
-        Wed, 16 Aug 2023 02:51:24 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RQjzZ0pwTz1GDHX;
-        Wed, 16 Aug 2023 17:50:02 +0800 (CST)
-Received: from huawei.com (10.67.174.28) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 16 Aug
- 2023 17:51:21 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] cpufreq: cppc: Set fie_disabled to FIE_DISABLED if fails to create kworker_fie
-Date:   Wed, 16 Aug 2023 09:49:38 +0000
-Message-ID: <20230816094938.862186-1-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S243776AbjHPKFG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 06:05:06 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC47E3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:05:02 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31965c94001so3782101f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:05:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692180301; x=1692785101;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AXexP5J2IB86LOs7JUU2PjEMrJazlbcjbHMuFD834+M=;
+        b=i4mEovXgQd4EmL17YmGNfmx7BiPnJ8rYLqIZVgELKnIDaVjme+nSNmkXBgq1r01riU
+         D9jbtq5YKdgzJp04nLuzumD2SCASPuHNpMfdgvpST4bKpzUlOEAXFur+pFGWF+hqxYfu
+         dMhtF4P7BJngyc1ERtiYgY2Dt+bC7gy48nYIx7wtOAQjsuDZCQdO505WLSoUWAZSE/Ye
+         wIwjgJXh2y0sxy7BO3+KAcUnDeFiZMFwg9Q03O7zL8vUSnoBOMhQ5QYE0H78MnJWHE9d
+         pgcWzLp3BH5AvxDi555Rn/cPWDq0L2GALv3NqaeiQ0a98rN3QbWRhq3FhZVnu/QDV+/7
+         BLZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692180301; x=1692785101;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AXexP5J2IB86LOs7JUU2PjEMrJazlbcjbHMuFD834+M=;
+        b=k2FJP4ftDUpL+UNqyYrElFHHjBthMr3I+kRHhkB3Sx3D34z9okyJfdtnQhCZhuhRhf
+         w42D85yXh/qyV0mDP24CX1pyH8PJlHv702zN/25o4r5X14JDCNrPy3QFbdRXCYwVAi3U
+         5Reh/HprKNkKWmkLp1pYJpklCoXOTRUcli95SvgnJyQg6fcYO39Ai09iX4m8qhjhv8xT
+         49Mc5QRnvl3qbDQWQas77fxk6Z0LnEC2728mPItMreJKyvWr0VOO1vC7yM9Gs5/J8Obc
+         a36pdEXQlO16BoHkJpefqAeBL5UonsLbvw45fjVT3Q/3hhRP69MVZWneKTn+WumEi8wD
+         kk/A==
+X-Gm-Message-State: AOJu0YxyfBMy8gJ5/Z+EaDSpD/nfG3v/vQKtlUG0sJwlr08MWluLXvyi
+        vd4HQkHApvxfhimNLc2pD5yxXg==
+X-Google-Smtp-Source: AGHT+IE7WTr4mwMLvR3/of6jx6jHLQJNhj1JGefVICNU1EcR9Md8dsCZ3SrFuXbKjenuHFR0Jnl06w==
+X-Received: by 2002:adf:d0c3:0:b0:319:62ba:5d08 with SMTP id z3-20020adfd0c3000000b0031962ba5d08mr994283wrh.33.1692180301070;
+        Wed, 16 Aug 2023 03:05:01 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id d10-20020a056000114a00b00301a351a8d6sm20552461wrx.84.2023.08.16.03.05.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Aug 2023 03:05:00 -0700 (PDT)
+Message-ID: <47417e4b-f230-7182-5cb5-c76b34b635c0@linaro.org>
+Date:   Wed, 16 Aug 2023 12:04:59 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.28]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o trips
+ subnode
+Content-Language: en-US
+To:     Icenowy Zheng <zhengxingda@iscas.ac.cn>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Icenowy Zheng <uwu@icenowy.me>
+References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function cppc_freq_invariance_init() may failed to create
-kworker_fie, make it more robust by setting fie_disabled to FIE_DISBALED
-to prevent an invalid pointer dereference in kthread_destroy_worker(),
-which called from cppc_freq_invariance_exit().
+On 22/07/2023 14:25, Icenowy Zheng wrote:
+> From: Icenowy Zheng <uwu@icenowy.me>
+> 
+> Although the current device tree binding of thermal zones require the
+> trips subnode, the binding in kernel v5.15 does not require it, and many
+> device trees shipped with the kernel, for example,
+> allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
+> comply to the old binding and contain no trips subnode.
+> 
+> Allow the code to successfully register thermal zones w/o trips subnode
+> for DT binding compatibility now.
+> 
+> Furtherly, the inconsistency between DTs and bindings should be resolved
+> by either adding empty trips subnode or dropping the trips subnode
+> requirement.
+> 
+> Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
+> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> ---
+> 
+> Unfortunately the code gets dropped by mailing lists again and again...
+> 
+> Sorry for the disturbance.
+> 
+>   drivers/thermal/thermal_of.c | 17 +++++++++++------
+>   1 file changed, 11 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 6fb14e521197..2c76df847e84 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -127,15 +127,17 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
+>   
+>   	trips = of_get_child_by_name(np, "trips");
+>   	if (!trips) {
+> -		pr_err("Failed to find 'trips' node\n");
+> -		return ERR_PTR(-EINVAL);
+> +		pr_debug("Failed to find 'trips' node\n");
+> +		*ntrips = 0;
 
-Link: https://lore.kernel.org/all/20230816034630.a4hvsj373q6aslk3@vireshk-i7/
+set ntrips at the beginning of the function.
 
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+> +		return NULL;
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 022e3555407c..bff4cde06083 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -220,6 +220,15 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
- 	}
- }
- 
-+static void cppc_freq_invariance_exit(void)
-+{
-+	if (fie_disabled)
-+		return;
-+
-+	kthread_destroy_worker(kworker_fie);
-+	kworker_fie = NULL;
-+}
-+
- static void __init cppc_freq_invariance_init(void)
- {
- 	struct sched_attr attr = {
-@@ -249,27 +258,22 @@ static void __init cppc_freq_invariance_init(void)
- 		return;
- 
- 	kworker_fie = kthread_create_worker(0, "cppc_fie");
--	if (IS_ERR(kworker_fie))
-+	if (IS_ERR(kworker_fie)) {
-+		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
-+			PTR_ERR(kworker_fie));
-+		fie_disabled = FIE_DISABLED;
- 		return;
-+	}
- 
- 	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
- 	if (ret) {
- 		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
- 			ret);
--		kthread_destroy_worker(kworker_fie);
--		return;
-+		cppc_freq_invariance_exit();
-+		fie_disabled = FIE_DISABLED;
- 	}
- }
- 
--static void cppc_freq_invariance_exit(void)
--{
--	if (fie_disabled)
--		return;
--
--	kthread_destroy_worker(kworker_fie);
--	kworker_fie = NULL;
--}
--
- #else
- static inline void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- {
+return ERR_PTR(-ENXIO);
+
+>   	}
+>   
+>   	count = of_get_child_count(trips);
+>   	if (!count) {
+> -		pr_err("No trip point defined\n");
+> -		ret = -EINVAL;
+> -		goto out_of_node_put;
+> +		pr_debug("No trip point defined\n");
+> +		of_node_put(trips);
+> +		*ntrips = 0;
+> +		return NULL;
+
+Why not keep goto out_of_node_put ?
+
+>   	}
+>   
+>   	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
+> @@ -519,7 +521,10 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
+
+
+The function should check the return value of thermal_of_trips_init()
+
+If this one returns -ENXIO, it should pr_warn().
+
+>   	of_ops->bind = thermal_of_bind;
+>   	of_ops->unbind = thermal_of_unbind;
+>   
+> -	mask = GENMASK_ULL((ntrips) - 1, 0);
+> +	if (ntrips)
+> +		mask = GENMASK_ULL((ntrips) - 1, 0);
+> +	else
+> +		mask = 0;
+
+	mask = ntrips ? GENMASK_ULL((ntrips) - 1, 0) : 0;
+
+>   	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+>   						     mask, data, of_ops, tzp,
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
