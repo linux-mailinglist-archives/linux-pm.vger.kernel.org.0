@@ -2,76 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39EFF77DE52
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 12:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FD577DE64
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 12:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243793AbjHPKP5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 06:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39464 "EHLO
+        id S243827AbjHPKTL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 06:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243863AbjHPKPw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 06:15:52 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58102FE
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:15:50 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-307d58b3efbso5525660f8f.0
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:15:50 -0700 (PDT)
+        with ESMTP id S243825AbjHPKSk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 06:18:40 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA81D1999
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:18:38 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3198d2745feso783804f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:18:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692180949; x=1692785749;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=linaro.org; s=google; t=1692181117; x=1692785917;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wKKgBBisqytUj4cW8xuK5eYALL8492/KSwF6veUAcHE=;
-        b=D3OP/V2exGjRUPhNnd7mGYofJlGZYIoAMiTRSkHe1/kbuyqR9SDdop2M/iKTYMBGw9
-         3m5tzQFVHeZbGfb7jRLxPjxzcTexkHieMOMxdr/cVXWd0mt+tDY72tmkv+Gh3q8pes96
-         vdFuLcFUbeJ97MDzTNFBTKlwAiv8XD4L7FeNsX19BCOYARRBNnIeCZn+0I83EZE3PWgl
-         lPZjQFMJzSN4AVizI8LujDhHp1jBlS6OFpibP+wCOBx5RM6f/zDxj9jV9F4hRZ7uPhdu
-         zE7tiLqlphc0M3e0GZnQ7rVKDjGqaBbtn3uPztFdOJlZxKamXnYHQ6D1ZStQjNBnoY8O
-         KKuw==
+        bh=C/clY/dRW1xIHeRIxZxe1CCICvaVCPAzy02zhvzR3a8=;
+        b=TSzgzVTJUl1fWL09M1YvugYA7/4Jvd3vZ2D+VuPfos/0AqPx3UGohziKzqIuD5U2le
+         dkk/F3CVBrtSFwUs+/Q229MyfCq2F/pSetQdFWbh6tEOseCv/cjAYfY3pnLo7y5/lWJm
+         1PiN5UGdAvY6CtT5ufUKcRzmif3VDU92qRay8b7d9aw/FDj7TncIZaWMiqOc/AAKQ1A8
+         8Jb7Wh3JA4jowbNVrQ7lrEf3gC2CO4qjQ5PJepyXO6G1zaQxFzUCDEMSEwH9tXyC+vux
+         4mO0obfH7cNCUVOqMVDDDQ9EoaK8MRAoBObskQCyUgAVWQlAm+3gFosgnQRKcE9vAQGx
+         c6QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692180949; x=1692785749;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20221208; t=1692181117; x=1692785917;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wKKgBBisqytUj4cW8xuK5eYALL8492/KSwF6veUAcHE=;
-        b=ZFO9QNyWFd+9nWnFp6987P/+WGa2RtEYd3bXHBUAht8PTcVeUa1uYWwiCyPp8eAX7p
-         1Sa3kWZLQKqteATXmzX53TeakPsl35meKSfzSi4/HpRhYIhJM6lEvjvtnS5o+qflpfex
-         dubBC/w9RWEWOaq5q+8IUkaubPjvO0+fTyoO1yvXRDw2evXkZUg7FpVpFiFg7ak0kM8A
-         RQI70IGE68ijsZMCONApCabF9LVLSb1SUSFX/6COMXLqjfrD/hyJObWj0nq05SBhnIQs
-         XEIspVWZj0f7Qyx2rO2Zl84OoeTHjy5hab+D1YTz0w0ozwYfEfq8p/PNu+36iL4c+ei2
-         fTSw==
-X-Gm-Message-State: AOJu0YzqJnYgyYWexEVRuwAH0ILlaRjd47ItTUfID11McWloWF7LupuC
-        B0xDl8KjPHDMr2R2Qsv77pXHmkYLh/YI4UvvXIo=
-X-Google-Smtp-Source: AGHT+IGuxahEpScu0GulwO2zvI7Rhyna98xQswwF5RjaDjtX792Tt4gc3qCKw7lITa7rBCJG1GKeKQ==
-X-Received: by 2002:adf:e68a:0:b0:319:75e0:c49 with SMTP id r10-20020adfe68a000000b0031975e00c49mr951649wrm.13.1692180948643;
-        Wed, 16 Aug 2023 03:15:48 -0700 (PDT)
+        bh=C/clY/dRW1xIHeRIxZxe1CCICvaVCPAzy02zhvzR3a8=;
+        b=kwN/fGem9s1p38a8POdCuZSnhd/aFJ+g5fqYvm9DUoRV5JD2ZSwqHzaASLYMapkYJ9
+         fCNau6NPBgmu0t2N5RKdIxQDm9REEQGdnMRvPykzoGb/PWJYxKzoohkrWcOOd83ag0s2
+         nVkXLBu2cXziW3YZD1HFT1n0SntQLMPtO6PPFJCvz9j0L7/hejy2Uezi8OgNDrQZDFoQ
+         EPjZmYlWCmFMnofrCjaqSqH85LRg4yFSbwPiCptNvRWDMgH7512Ofy3HpNFNNkwL3Ktx
+         HcNrqjBX+6OsbeHgnGyXzNsgTr/jpKy4DTmH3kB6vM3HbZP3Wl0Z9+dSKOOYUzXfR1vL
+         4WZQ==
+X-Gm-Message-State: AOJu0YwewdgKl8hK3sZhN+1L/sXYneP+yjAVjHM+UHzZBx6+3whou/VZ
+        O1tPEAkKhVtGhzKtgp+eE+OMYQ==
+X-Google-Smtp-Source: AGHT+IGSAcO4vvHBg5CZaQLs9ZmCtlKhhEMI+nYCq411MHuYciX17G3u31bOFeatoypWnqfRoF5UWA==
+X-Received: by 2002:adf:fcc8:0:b0:317:71bb:7ccd with SMTP id f8-20020adffcc8000000b0031771bb7ccdmr950387wrs.52.1692181117335;
+        Wed, 16 Aug 2023 03:18:37 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e1-20020a5d5941000000b003141f96ed36sm20892952wri.0.2023.08.16.03.15.47
+        by smtp.googlemail.com with ESMTPSA id h1-20020adffd41000000b0030ae499da59sm20896988wrs.111.2023.08.16.03.18.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 03:15:48 -0700 (PDT)
-Message-ID: <8ea8370a-50bd-99e9-064c-66b006aa454b@linaro.org>
-Date:   Wed, 16 Aug 2023 12:15:47 +0200
+        Wed, 16 Aug 2023 03:18:37 -0700 (PDT)
+Message-ID: <cecec127-5494-297f-9be0-51a76ce9f149@linaro.org>
+Date:   Wed, 16 Aug 2023 12:18:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] thermal: k3_j72xx_bandgap: Add cooling device support
+Subject: Re: [PATCH] thermal: broadcom: sr-thermal: removed call to
+ platform_set_drvdata()
 Content-Language: en-US
-To:     Apurva Nandan <a-nandan@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Udit Kumar <u-kumar1@ti.com>, Keerthy J <j-keerthy@ti.com>
-References: <20230809173905.1844132-1-a-nandan@ti.com>
- <20230809173905.1844132-2-a-nandan@ti.com>
+To:     Andrei Coardos <aboutphysycs@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     hayashi.kunihiko@socionext.com, bchihi@baylibre.com,
+        rui.zhang@intel.com, amitk@kernel.org, rafael@kernel.org,
+        alex@shruggie.ro
+References: <20230810111330.3248-1-aboutphysycs@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230809173905.1844132-2-a-nandan@ti.com>
+In-Reply-To: <20230810111330.3248-1-aboutphysycs@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,210 +77,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/08/2023 19:39, Apurva Nandan wrote:
-> From: Keerthy <j-keerthy@ti.com>
+On 10/08/2023 13:13, Andrei Coardos wrote:
+> This function call was found to be unnecessary as there is no equivalent
+> platform_get_drvdata() call to access the private data of the driver. Also,
+> the private data is defined in this driver, so there is no risk of it being
+> accessed outside of this driver file.
 > 
-> Add cpufreq as a cooling device, based on the inputs from the thermal
-> sensors.
-
-I don't understand these changes.
-
-By using the DT, it is all done automatically, no ?
-
-> 
-> Signed-off-by: Keerthy <j-keerthy@ti.com>
-> Signed-off-by: Apurva Nandan <a-nandan@ti.com>
+> Signed-off-by: Andrei Coardos <aboutphysycs@gmail.com>
 > ---
->   drivers/thermal/k3_j72xx_bandgap.c | 121 +++++++++++++++++++++++++++++
->   1 file changed, 121 insertions(+)
-> 
-> diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-> index a5a0fc9b9356..c844cb527761 100644
-> --- a/drivers/thermal/k3_j72xx_bandgap.c
-> +++ b/drivers/thermal/k3_j72xx_bandgap.c
-> @@ -19,6 +19,9 @@
->   #include <linux/of.h>
->   #include <linux/delay.h>
->   #include <linux/slab.h>
-> +#include <linux/cpufreq.h>
-> +#include <linux/cpumask.h>
-> +#include <linux/cpu_cooling.h>
->   
->   #define K3_VTM_DEVINFO_PWR0_OFFSET		0x4
->   #define K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK	0xf0
-> @@ -183,10 +186,28 @@ struct k3_j72xx_bandgap {
->   /* common data structures */
->   struct k3_thermal_data {
->   	struct k3_j72xx_bandgap *bgp;
-> +	struct cpufreq_policy *policy;
-> +	struct thermal_zone_device *ti_thermal;
-> +	struct thermal_cooling_device *cool_dev;
-> +	struct work_struct thermal_wq;
->   	u32 ctrl_offset;
->   	u32 stat_offset;
-> +	enum thermal_device_mode mode;
-> +	int prev_temp;
-> +	int sensor_id;
->   };
->   
-> +static void k3_thermal_work(struct work_struct *work)
-> +{
-> +	struct k3_thermal_data *data = container_of(work,
-> +					struct k3_thermal_data, thermal_wq);
-> +
-> +	thermal_zone_device_update(data->ti_thermal, THERMAL_EVENT_UNSPECIFIED);
-> +
-> +	dev_info(&data->ti_thermal->device, "updated thermal zone %s\n",
-> +		 data->ti_thermal->type);
-> +}
-> +
->   static int two_cmp(int tmp, int mask)
->   {
->   	tmp = ~(tmp);
-> @@ -251,8 +272,40 @@ static int k3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
->   	return k3_bgp_read_temp(thermal_zone_device_priv(tz), temp);
->   }
->   
-> +static int k3_thermal_get_trend(struct thermal_zone_device *tz, int trip, enum thermal_trend *trend)
-> +{
-> +	struct k3_thermal_data *data = tz->devdata;
-> +	struct k3_j72xx_bandgap *bgp;
-> +	u32 temp1, temp2;
-> +	int tr, ret = 0;
-> +
-> +	bgp = data->bgp;
-> +
-> +	ret = k3_thermal_get_temp(tz, &temp1);
-> +	if (ret)
-> +		return ret;
-> +	temp2 = data->prev_temp;
-> +
-> +	tr = temp1 - temp2;
-> +
-> +	data->prev_temp = temp1;
-> +
-> +	if (tr > 0)
-> +		*trend = THERMAL_TREND_RAISING;
-> +	else if (tr < 0)
-> +		*trend = THERMAL_TREND_DROPPING;
-> +	else
-> +		*trend = THERMAL_TREND_STABLE;
-> +
-> +	dev_dbg(bgp->dev, "The temperatures are t1 = %d and t2 = %d and trend =%d\n",
-> +		temp1, temp2, *trend);
-> +
-> +	return ret;
-> +}
-> +
->   static const struct thermal_zone_device_ops k3_of_thermal_ops = {
->   	.get_temp = k3_thermal_get_temp,
-> +	.get_trend = k3_thermal_get_trend,
->   };
->   
->   static int k3_j72xx_bandgap_temp_to_adc_code(int temp)
-> @@ -342,6 +395,63 @@ struct k3_j72xx_bandgap_data {
->   	const bool has_errata_i2128;
->   };
->   
-> +static int k3_thermal_register_cpu_cooling(struct k3_j72xx_bandgap *bgp, int id)
-> +{
-> +	struct k3_thermal_data *data;
-> +	struct device_node *np = bgp->dev->of_node;
-> +
-> +	/*
-> +	 * We are assuming here that if one deploys the zone
-> +	 * using DT, then it must be aware that the cooling device
-> +	 * loading has to happen via cpufreq driver.
-> +	 */
-> +	if (of_find_property(np, "#thermal-sensor-cells", NULL))
-> +		return 0;
-> +
-> +	data = bgp->ts_data[id];
-> +	if (!data)
-> +		return -EINVAL;
-> +
-> +	data->policy = cpufreq_cpu_get(0);
-> +	if (!data->policy) {
-> +		pr_debug("%s: CPUFreq policy not found\n", __func__);
-> +		return -EPROBE_DEFER;
-> +	}
-> +
-> +	/* Register cooling device */
-> +	data->cool_dev = cpufreq_cooling_register(data->policy);
-> +	if (IS_ERR(data->cool_dev)) {
-> +		int ret = PTR_ERR(data->cool_dev);
-> +
-> +		dev_err(bgp->dev, "Failed to register cpu cooling device %d\n",
-> +			ret);
-> +		cpufreq_cpu_put(data->policy);
-> +
-> +		return ret;
-> +	}
-> +
-> +	data->mode = THERMAL_DEVICE_ENABLED;
-> +
-> +	INIT_WORK(&data->thermal_wq, k3_thermal_work);
-> +
-> +	return 0;
-> +}
-> +
-> +static int k3_thermal_unregister_cpu_cooling(struct k3_j72xx_bandgap *bgp, int id)
-> +{
-> +	struct k3_thermal_data *data;
-> +
-> +	data = bgp->ts_data[id];
-> +
-> +	if (!IS_ERR_OR_NULL(data)) {
-> +		cpufreq_cooling_unregister(data->cool_dev);
-> +		if (data->policy)
-> +			cpufreq_cpu_put(data->policy);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   {
->   	int ret = 0, cnt, val, id;
-> @@ -452,6 +562,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   	/* Register the thermal sensors */
->   	for (id = 0; id < cnt; id++) {
->   		data[id].bgp = bgp;
-> +		data[id].sensor_id = id;
->   		data[id].ctrl_offset = K3_VTM_TMPSENS0_CTRL_OFFSET + id * 0x20;
->   		data[id].stat_offset = data[id].ctrl_offset +
->   					K3_VTM_TMPSENS_STAT_OFFSET;
-> @@ -477,6 +588,12 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   		writel(val, data[id].bgp->cfg2_base + data[id].ctrl_offset);
->   
->   		bgp->ts_data[id] = &data[id];
-> +
-> +		if (id == 1)
-> +			ret = k3_thermal_register_cpu_cooling(bgp, 1);
-> +		if (ret)
-> +			goto err_alloc;
-> +
->   		ti_thermal = devm_thermal_of_zone_register(bgp->dev, id, &data[id],
->   							   &k3_of_thermal_ops);
->   		if (IS_ERR(ti_thermal)) {
-> @@ -514,6 +631,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   	return 0;
->   
->   err_free_ref_table:
-> +	k3_thermal_unregister_cpu_cooling(bgp, 1);
->   	kfree(ref_table);
->   
->   err_alloc:
-> @@ -525,6 +643,9 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->   
->   static int k3_j72xx_bandgap_remove(struct platform_device *pdev)
->   {
-> +	struct k3_j72xx_bandgap *bgp = platform_get_drvdata(pdev);
-> +
-> +	k3_thermal_unregister_cpu_cooling(bgp, 1);
->   	pm_runtime_put_sync(&pdev->dev);
->   	pm_runtime_disable(&pdev->dev);
->   
+
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
