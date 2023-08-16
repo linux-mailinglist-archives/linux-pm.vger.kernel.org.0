@@ -2,172 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D6FD77E80C
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 19:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E84E77EA30
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 21:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345323AbjHPR7Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 13:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S1345974AbjHPT6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 15:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345320AbjHPR64 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 13:58:56 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30E5270D
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 10:58:54 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b9cdba1228so108967461fa.2
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 10:58:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692208733; x=1692813533;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rL1d5IkkpVuyaHJUviWq3wb0oe5qxAALKeywaszABpo=;
-        b=f9t0VBOxRmhAPHWhEew70l7ub3eQ1HxIhoi1qa1w7k0EFrextvcWK3vdTGbL8aPiIp
-         Q3doG/2Mey7PKIb6XIlJpGeKG+0iLHUY8UBgSnrQIPFXhhGyHLw+xKpvSrDiA1HNg2t8
-         4iB2q0A2hkAjUVXDq7rDwqHxdT3j5VxELLYwucVD6Yz/vYDR5whteKmqLVsJ7Vh9sQQ4
-         kRQeYNrEfbQzhLq2/5knVeS4py+fev72cCaHwOr+TaFRX0JYmQ3RsbcPBUMTkCVLKrFI
-         c/CBNFc5T/LAcnl5wK4VNjQxiTtSqTfIuLwgUfh1hjoKKld+QQ6whrSD6mk1Smf35gKV
-         dWdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692208733; x=1692813533;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rL1d5IkkpVuyaHJUviWq3wb0oe5qxAALKeywaszABpo=;
-        b=J4Cw0FUMzuwD2Tv5NKDqJd9UInnqsC+51b8Bj/AeZWDVlHwEZ583wgKEk9lxFsUAde
-         J45e5N2PFtJDzu5JxrwtX2yhL3iYz2bZIdiPlo4dey4dhmYlOiaeDbR/GRCfylykd7Tx
-         Q0fToKSBMZgpXemb16Q0sxA3Zr2xpc66r9WHkxXsKpACKDmfHxrfbVLuJZXJgQmI6HXy
-         wtB94RNaBfxQLeBVAx9Ai0IxngUwYFt3z/2v1388++8c4xJBZ1xUEpcMYPPtuUhvWfNu
-         OTEXC5BX46cOF/hzF0sMX+TwOKqTAaxpznnN1KOkxBt8lRjFCo+JMfaVtjb7LVJr6lO1
-         sOuA==
-X-Gm-Message-State: AOJu0YxlHIBlJmDe76E3cGcrrObj2BgzJdRAz6+PE9RXUTIqRnatI73U
-        xml9jeH6UTBo5iMNK5gn4yU1FA==
-X-Google-Smtp-Source: AGHT+IGmlFLezr5yGl7cSouAqe8XS1SwhcY8CrjyqarVswLmc7p7MEkLmDIAAfCbjQRhEMEbcAsTjw==
-X-Received: by 2002:a2e:9c99:0:b0:2b6:e618:b593 with SMTP id x25-20020a2e9c99000000b002b6e618b593mr2263846lji.31.1692208733180;
-        Wed, 16 Aug 2023 10:58:53 -0700 (PDT)
-Received: from [192.168.1.101] (abxi8.neoplus.adsl.tpnet.pl. [83.9.2.8])
-        by smtp.gmail.com with ESMTPSA id k22-20020a2e2416000000b002b9e0aeff68sm3581086ljk.95.2023.08.16.10.58.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 10:58:52 -0700 (PDT)
-Message-ID: <ef031105-3b77-484d-8f47-a6c0233dd9c2@linaro.org>
-Date:   Wed, 16 Aug 2023 19:58:51 +0200
+        with ESMTP id S1346005AbjHPT6L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 15:58:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5AA91BEE;
+        Wed, 16 Aug 2023 12:57:47 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8D89666071BF;
+        Wed, 16 Aug 2023 20:57:43 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1692215866;
+        bh=FMkSrLQnK0fv59W1YNP5gvyExhodhHPfroxk6P347ts=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TxkNLLmSy4yNx8xb1w/UCoaDppZS9oG1fLVkiOHuPJF62f+5oY0MQxhr5IcKYBM99
+         RsCiuZ1QIlMG/BNB4EBH6HBxsKtVMkzdSEJUcFfffi6cDhYOsC2aHBfkDHr3mL/YEF
+         M0vXiAsq6rNNqk7Qzdstia4opWm4VLPvULlj5libNlu3JWCGmLswtOavtxCDCu4j74
+         L35yOR34cTWlYe/DUxdKpAWvNX6WtaVPnSPq17ip3+40sEGILhWetPEe9nEu5Jg7wp
+         yjkzVEBm4Yjj/sencVpY0dEvFa3C8JUORYccPz82YQDNcKBNuoaLq7RSk1FUPFFmP3
+         PECPQU6PptiFQ==
+Date:   Wed, 16 Aug 2023 15:57:40 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     daniel.lezcano@linaro.org
+Cc:     Bernhard =?utf-8?Q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
+        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, abailon@baylibre.com,
+        amergnat@baylibre.com, khilman@baylibre.com
+Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
+Message-ID: <107678ff-c3d5-4c3a-ad0e-fa292a125daa@notapiano>
+References: <20230530195132.2286163-1-bero@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/6] venus: pm_helpers: Use dev_pm_genpd_set_hwmode to
- switch GDSC mode
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
-References: <20230816145741.1472721-1-abel.vesa@linaro.org>
- <20230816145741.1472721-7-abel.vesa@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230816145741.1472721-7-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230530195132.2286163-1-bero@baylibre.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16.08.2023 16:57, Abel Vesa wrote:
-> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+On Tue, May 30, 2023 at 09:51:27PM +0200, Bernhard Rosenkränzer wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> This change demonstrates the use of dev_pm_genpd_set_hwmode API from
-> video driver to switch the video mvs0 gdsc to SW/HW modes at runtime
-> based on requirement.
+> Add full LVTS support (MCU thermal domain + AP thermal domain) to MediaTek MT8192 SoC.
+> Also, add Suspend and Resume support to LVTS Driver (all SoCs),
+> and update the documentation that describes the Calibration Data Offsets.
 > 
-> This change adds a new boolean array member vcodec_pmdomains_hwctrl in
-> venus_resources structure to indicate if GDSC's have HW control support
-> or not. This data is used in vcodec_control_v4() to check if GDSC has
-> support to switch to HW control mode and then call dev_pm_genpd_set_hwmode
-> to switch the GDSC mode.
+> Changelog:
+>     v4 :
+>         - Shrink the lvts_ap thermal sensor I/O range to 0xc00 to make
+>           room for SVS support, pointed out by
+>           AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > 
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-[...]
+>     v3 : 
+>         - Rebased :
+>             base-commit: 6a3d37b4d885129561e1cef361216f00472f7d2e
+>         - Fix issues in v2 pointed out by Nícolas F. R. A. Prado <nfraprado@collabora.com>:
+>           Use filtered mode to make sure threshold interrupts are triggered,
+>           protocol documentation, cosmetics
+>         - I (bero@baylibre.com) will be taking care of this patchset
+>           from now on, since Balsam has left BayLibre. Thanks for
+>           getting it almost ready, Balsam!
+> 
+>     v2 :
+>         - Based on top of thermal/linux-next :
+>             base-commit: 7ac82227ee046f8234471de4c12a40b8c2d3ddcc
+>         - Squash "add thermal zones and thermal nodes" and
+>             "add temperature mitigation threshold" commits together to form
+>             "arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones" commit.
+>         - Add Suspend and Resume support to LVTS Driver.
+>         - Update Calibration Data documentation.
+>         - Fix calibration data offsets for mt8192
+>             (Thanks to "Chen-Yu Tsai" and "Nícolas F. R. A. Prado").
+>         https://lore.kernel.org/all/20230425133052.199767-1-bchihi@baylibre.com/
+>         Tested-by: Chen-Yu Tsai <wenst@chromium.org>
+> 
+>     v1 :
+>         - The initial series "Add LVTS support for mt8192" :
+>             "https://lore.kernel.org/all/20230307163413.143334-1-bchihi@baylibre.com/".
+> 
+> Balsam CHIHI (5):
+>   dt-bindings: thermal: mediatek: Add LVTS thermal controller definition
+>     for mt8192
+>   thermal/drivers/mediatek/lvts_thermal: Add suspend and resume
+>   thermal/drivers/mediatek/lvts_thermal: Add mt8192 support
+>   arm64: dts: mediatek: mt8192: Add thermal nodes and thermal zones
+>   thermal/drivers/mediatek/lvts_thermal: Update calibration data
+>     documentation
+> 
+>  arch/arm64/boot/dts/mediatek/mt8192.dtsi      | 454 ++++++++++++++++++
+>  drivers/thermal/mediatek/lvts_thermal.c       | 160 +++++-
+>  .../thermal/mediatek,lvts-thermal.h           |  19 +
+>  3 files changed, 631 insertions(+), 2 deletions(-)
+> 
+> base-commit: 8c33787278ca8db73ad7d23f932c8c39b9f6e543
 
->  static int vcodec_control_v4(struct venus_core *core, u32 coreid, bool enable)
->  {
-> -	void __iomem *ctrl, *stat;
-> -	u32 val;
-> -	int ret;
-> -
-> -	if (IS_V6(core)) {
-> -		ctrl = core->wrapper_base + WRAPPER_CORE_POWER_CONTROL_V6;
-> -		stat = core->wrapper_base + WRAPPER_CORE_POWER_STATUS_V6;
-> -	} else if (coreid == VIDC_CORE_ID_1) {
-> -		ctrl = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_CONTROL;
-> -		stat = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_STATUS;
-> -	} else {
-> -		ctrl = core->wrapper_base + WRAPPER_VCODEC1_MMCC_POWER_CONTROL;
-> -		stat = core->wrapper_base + WRAPPER_VCODEC1_MMCC_POWER_STATUS;
-> -	}
-> -
-> -	if (enable) {
-> -		writel(0, ctrl);
-> -
-> -		ret = readl_poll_timeout(stat, val, val & BIT(1), 1, 100);
-> -		if (ret)
-> -			return ret;
-> -	} else {
-> -		writel(1, ctrl);
-This removal cries for better explanation.
+Hi Daniel,
 
-Has the venus hw been setting some registers that alter the GDSC's state?
-Or the hardware's expectations of the GDSC state?
+just a gentle reminder. As you've just applied [1], there are no longer any
+concerns with this series, and it'll provide both working interrupts and
+reliable thermal readings on MT8192.
 
-Konrad
+Thanks,
+Nícolas
+
+[1] https://lore.kernel.org/all/89fabd50-66ce-d94f-38c8-6dd6f343958d@linaro.org
