@@ -2,90 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F322077D938
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 05:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FCE77D9CF
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 07:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241642AbjHPDrA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Aug 2023 23:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S241894AbjHPFg7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 01:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241662AbjHPDqh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Aug 2023 23:46:37 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED280270E
-        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 20:46:33 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-56546b45f30so4698068a12.3
-        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 20:46:33 -0700 (PDT)
+        with ESMTP id S241934AbjHPFgo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 01:36:44 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB23326AD
+        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 22:36:41 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fe28f92d8eso9646846e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 22:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692157593; x=1692762393;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G+vgvJ6TFAXdFkNnwX1pcyLIRLHR7+l39dpOnpYtuks=;
-        b=Vjtos6vZ+Xbw2Tr0VGiU9Q7tOvlLA1Vlq4kJJ/ie4BZqPTb1qCXJSQswipWeok2idq
-         4NuLeFnlgGUuMul/mGSpmMlEMJfNPY45WfX7hRSklPwgKbThUbDjfdC1WapaLrMN/Cjq
-         23+95uYGNiAJ5VY4HAowQ8DGFX+XXrrwi9nlmcv3xSTsBsbZBRZKZrC9Ty/hGcuGTW+o
-         yiy61y4/HpQnR1ZIUqnbWhutEXKAB/ofcorGqPRxjcJxB7sWMgjcS73P8jJDeNE/2JWA
-         a/MLaNeEQFm7G/qvT/hVWS7HVjyF+feIGub8UsLYaeGbePz61n1gdWlGmXPcwnWZFOgw
-         GZvA==
+        d=linaro.org; s=google; t=1692164200; x=1692769000;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ik7oB2lk1wIqJS13yqGm2Jzcg954+ej63dLWafujLc=;
+        b=Jm6G45hlR9D4az3ti0gcPLs4wGjFIUBqIFwbcKTT3jMnFeIazCVB+qCferkNs9C6JC
+         LuRsPJjdBwO2uzLRbNl+S17gdQrKWedPjJYRcKsgYVKFRfAkf8lIAYQzjyWcne8C72yj
+         Cm9C7S1HNnh+mLFk07mZiH4rh8yiJhTe/AOEDLoz8kb2RCj8A1LzasCKZVN32qOXt/qw
+         MA+1il5inA5DhGyht9qIGQJgzt7x6t1LvPOdo+FaqAsyyLs4Vg8hkjRs7R6hqQGNtkjT
+         P8LbHQkpC2kQS5n3fZSGpdBHNEJkVw17Zlb2WR5yj8rSQ3Bz9WcUEQj898bFGkAzSXiU
+         YN2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692157593; x=1692762393;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G+vgvJ6TFAXdFkNnwX1pcyLIRLHR7+l39dpOnpYtuks=;
-        b=CZRaYCF+Y6NGOq1x1XOC4rNhBf10bUR6u53oo12rgvdMLtPqXcWMyvJ97vyvr2T2zl
-         19t/2Sn5fKM2I4hmxr+SXCRwEW/AyZpnGAExCL27GAYP9XiCle78mtDYkFzn9RpKswj8
-         VI0W+8C6JW2gjDnbsX4r3LsiJ48F65xNw/sHWLxfwKK68GvY9uNKLZJT7iWFgTp54gcP
-         yQR/MNpe9V2sXOrPTlhBvbCwXcYsvxm7sQktgCQIOziWffFqT250VdO/d5BmrtU2hJpy
-         LKfTkBxt0kos6wra+g9wVPC/St7DMnXG1VMRYROIoD+BTnCI88SHeHumEsyeG9luaETr
-         ii/g==
-X-Gm-Message-State: AOJu0Yx8cQPCbFgMDeBw/KQfObg/BTNvRwxS262WUmzviFyYaR1bMcYH
-        M+/79JAzA+QylMH+WYsWWKSdvg==
-X-Google-Smtp-Source: AGHT+IFAwO8zl5m4rxVLs37ZIAWJetQxo766SxNRFLdA2ZTNgvX1k8qTbU1IxGbgO+hleLKVDNNEWA==
-X-Received: by 2002:a17:90a:fb4c:b0:267:ffcf:e9e3 with SMTP id iq12-20020a17090afb4c00b00267ffcfe9e3mr462676pjb.46.1692157593453;
-        Tue, 15 Aug 2023 20:46:33 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id gf12-20020a17090ac7cc00b0026961746a8fsm4501171pjb.27.2023.08.15.20.46.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 20:46:32 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 09:16:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Liao Chang <liaochang1@huawei.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: cppc: Add missing error pointer check
-Message-ID: <20230816034630.a4hvsj373q6aslk3@vireshk-i7>
-References: <20230816030549.849824-1-liaochang1@huawei.com>
+        d=1e100.net; s=20221208; t=1692164200; x=1692769000;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Ik7oB2lk1wIqJS13yqGm2Jzcg954+ej63dLWafujLc=;
+        b=KShn1/3/KGfxsZ5pDil4Oe+s+KxfJf4unHMkhpzsa0vlTJ+Jnjl1tlxgYwBBgHKZnD
+         ZUOvjdy3uBKXtfCHOgS3vYJcYPRZMxPhsWhl15VP8DYBgop1D7Q0brq74gfsr1fBH8Bb
+         Fhf53LmpY2PzVDn4vmcj6GkdhLmk5uvgMaaIZ2KCGDX6hFlGE8zKVL/0IqAmB4y/BBEA
+         SJ1S/oJT4EraQn0i20X6GG43QAHHDUFltjmbQ7CWfNXhN+fdislIYoYBDdpkXeExWE7R
+         IA9oXwOzx55oqgDpsrn9B/aKzKwXNHdft4FKefgg48njc1OFzyWpfGh2dzcdVdHKTnKW
+         JmDg==
+X-Gm-Message-State: AOJu0YzxdvkaoQ52NwvSirzAEFBqdjcNGVTqtfDNRG+I2L4HidtfS2P4
+        I9XdQBAL+PkqP33jaHaS5NLy2g==
+X-Google-Smtp-Source: AGHT+IFAs62wSEs2OIDQDCPJhNq9ervbfVQQNZaVRMpFSL1Wxj0WM+O93QtbpxtBP9I9KfbxKfhHKA==
+X-Received: by 2002:a05:6512:3410:b0:4fe:6fc:1fc7 with SMTP id i16-20020a056512341000b004fe06fc1fc7mr654460lfr.27.1692164200175;
+        Tue, 15 Aug 2023 22:36:40 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id v2-20020a5d6102000000b003141e629cb6sm19799961wrt.101.2023.08.15.22.36.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 22:36:39 -0700 (PDT)
+Message-ID: <02ade1e1-e319-2f95-4645-95e9f9f00843@linaro.org>
+Date:   Wed, 16 Aug 2023 07:36:38 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230816030549.849824-1-liaochang1@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 2/3] dt-bindings: cpufreq: cpufreq-qcom-hw: add SDM670
+ compatible
+Content-Language: en-US
+To:     Richard Acayan <mailingradian@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230815223108.306018-5-mailingradian@gmail.com>
+ <20230815223108.306018-7-mailingradian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230815223108.306018-7-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-08-23, 03:05, Liao Chang wrote:
-> The function cppc_freq_invariance_init() may failed to create
-> kworker_fie, make it more robust by checking the return value to prevent
-> an invalid pointer dereference in kthread_destroy_worker(), which called
-> from cppc_freq_invariance_exit().
+On 16/08/2023 00:31, Richard Acayan wrote:
+> The bindings for Qualcomm CPU frequency have a compatible for each SoC.
+
+Drop this sentence, it is not relevant.
+
+> Add the compatible for SDM670.
 > 
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 > ---
->  drivers/cpufreq/cppc_cpufreq.c | 21 ++++++++++++++-------
->  1 file changed, 14 insertions(+), 7 deletions(-)
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-I think why it was designed this way was to make the driver work,
-without invariance support, in the worst case instead of just failing
-completely. The invariance thing is a good to have feature, but not
-really necessary and so failing probing the driver for that isn't
-worth it. We should print all error messages though.
+You missed to update rest of the file.
 
--- 
-viresh
+Best regards,
+Krzysztof
+
