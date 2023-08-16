@@ -2,79 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D936D77E466
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 16:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C73877E497
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 17:04:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243423AbjHPO6e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 10:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40168 "EHLO
+        id S240200AbjHPPD4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 11:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343856AbjHPO6D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 10:58:03 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB2C10E9
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 07:58:01 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99c1f6f3884so902943566b.0
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 07:58:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692197880; x=1692802680;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LXXq2J2v0znEd/slBrHNIHaX0NWnThgRSmGcOnkclzo=;
-        b=RLLFm963QdYyPg8NmWkJFydVAkFAbPWKZsRnRObJNKKKGL1F3Wq8wcfwTScjRvo051
-         JL7xt1zPDSLk2kBVTGRfndqzd0PRptvfnxAInTozWs6nuMxiTgAJzvKwV+5fxqqvf4Jn
-         YQd3tvcuBzoS1UgUzymGphSEtLs41u3vDurGWIBIjupLOZuVv9zD5xHYqjXnH259dSLx
-         y+QaWXlXKxXLiMBqKonuzpoCmDReg/TrGyDkYQTqR1GnJpVkyIJX6H2QiNhsQ3TUpQqB
-         P4NtwqzR3mZ6FpeJIRthfTGMo/GgmWsyYv+k8AfRZ+tzcll921q3ArrU2IXUGQ9dXXgm
-         277A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692197880; x=1692802680;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LXXq2J2v0znEd/slBrHNIHaX0NWnThgRSmGcOnkclzo=;
-        b=gSbXWzfBS+mPJyUuXxR+xnp3ykNq6ff8BOirH/kipGPSvxt76C7zScFJAoQ9TJgNt2
-         2vLDcu6D9KcbnRuqyWZ5Skitf7gOpoMik4luIHU+0Q7IiMlW9hUuKCZ9+HKuHIguAdEm
-         P5IxMyoM3XesO+E2TDOeqGLyqXxcPQiacWh5F1S3f1qiJRmWRrBAd6CkzqtW83RhZOdr
-         GagXf6RqahKx72M9X5HMkjzuLCjl6ocepWFLDTYZO6+eHEzZckLRwRS22+/M0KGFAVvr
-         bvXs5q25wZgulmLR9stBSuLzB2ln2j8GzF6rnJ7V+aqexZEFxiGPkyohaJt5BdwocKEQ
-         xKYQ==
-X-Gm-Message-State: AOJu0YwsHhDmYvKrpLhg6Q3n2wbBLJoIDs3LOlgE2vOxv2u36Cc6PsbN
-        1kw0hefw0x49JcwwwTJtzJEDsg==
-X-Google-Smtp-Source: AGHT+IErWuo487P1gppy5gcseBIz5s35Q9KNWleS48GF3pBAoqGSehYn6+tyyO8P2oP4eNnMDzvG4g==
-X-Received: by 2002:a17:907:78c2:b0:993:e691:6dd5 with SMTP id kv2-20020a17090778c200b00993e6916dd5mr1755130ejc.7.1692197880305;
-        Wed, 16 Aug 2023 07:58:00 -0700 (PDT)
-Received: from hackbox.lan ([84.232.191.92])
-        by smtp.gmail.com with ESMTPSA id f16-20020a170906561000b00992076f4a01sm8610403ejq.190.2023.08.16.07.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 07:57:59 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@qti.qualcomm.com>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Jagadeesh Kona <quic_jkona@quicinc.com>
-Subject: [PATCH v2 6/6] venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode
-Date:   Wed, 16 Aug 2023 17:57:41 +0300
-Message-Id: <20230816145741.1472721-7-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230816145741.1472721-1-abel.vesa@linaro.org>
-References: <20230816145741.1472721-1-abel.vesa@linaro.org>
+        with ESMTP id S1344060AbjHPPDy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 11:03:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F902D4D;
+        Wed, 16 Aug 2023 08:03:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E3066AA1;
+        Wed, 16 Aug 2023 15:03:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F794C433C8;
+        Wed, 16 Aug 2023 15:03:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692198223;
+        bh=ybS6uqvUJjZUOrjpJirDQxk6fGQf8MUbm6m3qINtles=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ljEsF4ZyI0sF50+4wHtnjRTLWK+sgJA8Dtlz7c/FGGq7vSw8VUd5t/eGcbx7ea77F
+         KQjefUoRyQqAdvthzEzwbF6Hf8+j62t08/R7DDINL/AQt48ONzKpmJ5Xz/10WXST9Q
+         EffHv/DFsEb/38B0BsMdroXYnySupq4FPmiruDn8=
+Date:   Wed, 16 Aug 2023 17:03:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     saravanak@google.com, stable@vger.kernel.org,
+        John Stultz <jstultz@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+        Ricardo =?iso-8859-1?Q?Ca=F1uelo?= Navarro 
+        <ricardo.canuelo@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        usama.anjum@collabora.com, kernelci@lists.linux.dev
+Subject: Re: [PATCH 5.17 127/298] driver core: Fix wait_for_device_probe() &
+ deferred_probe_timeout interaction
+Message-ID: <2023081619-slapping-congrats-8e85@gregkh>
+References: <20220613094924.913340374@linuxfoundation.org>
+ <20220613094928.793712131@linuxfoundation.org>
+ <6283c4b1-2513-207d-4ed6-fdabf3f3880e@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6283c4b1-2513-207d-4ed6-fdabf3f3880e@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,134 +80,114 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
+On Wed, Aug 16, 2023 at 03:09:27PM +0530, Shreeya Patel wrote:
+> On 13/06/22 15:40, Greg Kroah-Hartman wrote:
+> > From: Saravana Kannan<saravanak@google.com>
+> > 
+> > [ Upstream commit 5ee76c256e928455212ab759c51d198fedbe7523 ]
+> > 
+> > Mounting NFS rootfs was timing out when deferred_probe_timeout was
+> > non-zero [1].  This was because ip_auto_config() initcall times out
+> > waiting for the network interfaces to show up when
+> > deferred_probe_timeout was non-zero. While ip_auto_config() calls
+> > wait_for_device_probe() to make sure any currently running deferred
+> > probe work or asynchronous probe finishes, that wasn't sufficient to
+> > account for devices being deferred until deferred_probe_timeout.
+> > 
+> > Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
+> > until the deferred_probe_timeout fires") tried to fix that by making
+> > sure wait_for_device_probe() waits for deferred_probe_timeout to expire
+> > before returning.
+> > 
+> > However, if wait_for_device_probe() is called from the kernel_init()
+> > context:
+> > 
+> > - Before deferred_probe_initcall() [2], it causes the boot process to
+> >    hang due to a deadlock.
+> > 
+> > - After deferred_probe_initcall() [3], it blocks kernel_init() from
+> >    continuing till deferred_probe_timeout expires and beats the point of
+> >    deferred_probe_timeout that's trying to wait for userspace to load
+> >    modules.
+> > 
+> > Neither of this is good. So revert the changes to
+> > wait_for_device_probe().
+> > 
+> > [1] -https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
+> > [2] -https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
+> > [3] -https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
+> 
+> Hi Saravana, Greg,
+> 
+> 
+> KernelCI found this patch causes the baseline.bootrr.deferred-probe-empty test to fail on r8a77960-ulcb,
+> see the following details for more information.
+> 
+> KernelCI dashboard link:
+> https://linux.kernelci.org/test/plan/id/64d2a6be8c1a8435e535b264/
+> 
+> Error messages from the logs :-
+> 
+> + UUID=11236495_1.5.2.4.5
+> + set +x
+> + export 'PATH=/opt/bootrr/libexec/bootrr/helpers:/lava-11236495/1/../bin:/sbin:/usr/sbin:/bin:/usr/bin'
+> + cd /opt/bootrr/libexec/bootrr
+> + sh helpers/bootrr-auto
+> e6800000.ethernet	
+> e6700000.dma-controller	
+> e7300000.dma-controller	
+> e7310000.dma-controller	
+> ec700000.dma-controller	
+> ec720000.dma-controller	
+> fea20000.vsp	
+> feb00000.display	
+> fea28000.vsp	
+> fea30000.vsp	
+> fe9a0000.vsp	
+> fe9af000.fcp	
+> fea27000.fcp	
+> fea2f000.fcp	
+> fea37000.fcp	
+> sound	
+> ee100000.mmc	
+> ee140000.mmc	
+> ec500000.sound	
+> /lava-11236495/1/../bin/lava-test-case
+> <8>[   17.476741] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=deferred-probe-empty RESULT=fail>
+> 
+> Test case failing :-
+> Baseline Bootrr deferred-probe-empty test -https://github.com/kernelci/bootrr/blob/main/helpers/bootrr-generic-tests
+> 
+> Regression Reproduced :-
+> 
+> Lava job after reverting the commit 5ee76c256e92
+> https://lava.collabora.dev/scheduler/job/11292890
+> 
+> 
+> Bisection report from KernelCI can be found at the bottom of the email.
+> 
+> Thanks,
+> Shreeya Patel
+> 
+> #regzbot introduced: 5ee76c256e92
+> #regzbot title: KernelCI: Multiple devices deferring on r8a77960-ulcb
+> 
+> ---------------------------------------------------------------------------------------------------------------------------------------------------
+> 
+> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **
+> * If you do send a fix, please include this trailer: *
+> * Reported-by: "kernelci.org bot" <bot@...> *
+> * *
+> * Hope this helps! *
+> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+> 
+> stable-rc/linux-5.10.y bisection: baseline.bootrr.deferred-probe-empty on
+> r8a77960-ulcb
 
-This change demonstrates the use of dev_pm_genpd_set_hwmode API from
-video driver to switch the video mvs0 gdsc to SW/HW modes at runtime
-based on requirement.
+You are testing 5.10.y, yet the subject says 5.17?
 
-This change adds a new boolean array member vcodec_pmdomains_hwctrl in
-venus_resources structure to indicate if GDSC's have HW control support
-or not. This data is used in vcodec_control_v4() to check if GDSC has
-support to switch to HW control mode and then call dev_pm_genpd_set_hwmode
-to switch the GDSC mode.
+Which is it here?
 
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
- drivers/media/platform/qcom/venus/core.c      |  4 ++
- drivers/media/platform/qcom/venus/core.h      |  1 +
- .../media/platform/qcom/venus/pm_helpers.c    | 47 ++++++++-----------
- 3 files changed, 25 insertions(+), 27 deletions(-)
+confused,
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 054b8e74ba4f..8145062ab6f7 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -706,6 +706,7 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.vcodec1_clks = { "vcodec1_core", "vcodec1_bus" },
- 	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
-+	.vcodec_pmdomains_hwctrl = { false, true, true },
- 	.vcodec_pmdomains_num = 3,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 2,
-@@ -755,6 +756,7 @@ static const struct venus_resources sc7180_res = {
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains_hwctrl = { false, true },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-@@ -812,6 +814,7 @@ static const struct venus_resources sm8250_res = {
- 	.vcodec0_clks = { "vcodec0_core" },
- 	.vcodec_clks_num = 1,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains_hwctrl = { false, true },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "mx", NULL },
- 	.vcodec_num = 1,
-@@ -871,6 +874,7 @@ static const struct venus_resources sc7280_res = {
- 	.vcodec0_clks = {"vcodec_core", "vcodec_bus"},
- 	.vcodec_clks_num = 2,
- 	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains_hwctrl = { false, true },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 4a633261ece4..6d591ecad482 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -73,6 +73,7 @@ struct venus_resources {
- 	const char * const vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	unsigned int vcodec_clks_num;
- 	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	bool vcodec_pmdomains_hwctrl[VIDC_PMDOMAINS_NUM_MAX];
- 	unsigned int vcodec_pmdomains_num;
- 	const char **opp_pmdomain;
- 	unsigned int vcodec_num;
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index 48c9084bb4db..c53eef23c793 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -408,35 +408,28 @@ static const struct venus_pm_ops pm_ops_v3 = {
- 
- static int vcodec_control_v4(struct venus_core *core, u32 coreid, bool enable)
- {
--	void __iomem *ctrl, *stat;
--	u32 val;
--	int ret;
--
--	if (IS_V6(core)) {
--		ctrl = core->wrapper_base + WRAPPER_CORE_POWER_CONTROL_V6;
--		stat = core->wrapper_base + WRAPPER_CORE_POWER_STATUS_V6;
--	} else if (coreid == VIDC_CORE_ID_1) {
--		ctrl = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_CONTROL;
--		stat = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_STATUS;
--	} else {
--		ctrl = core->wrapper_base + WRAPPER_VCODEC1_MMCC_POWER_CONTROL;
--		stat = core->wrapper_base + WRAPPER_VCODEC1_MMCC_POWER_STATUS;
--	}
--
--	if (enable) {
--		writel(0, ctrl);
--
--		ret = readl_poll_timeout(stat, val, val & BIT(1), 1, 100);
--		if (ret)
--			return ret;
--	} else {
--		writel(1, ctrl);
-+	int i, ret = 0;
-+	struct device *dev = core->dev;
-+	const struct venus_resources *res = core->res;
- 
--		ret = readl_poll_timeout(stat, val, !(val & BIT(1)), 1, 100);
--		if (ret)
--			return ret;
-+	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
-+		if (res->vcodec_pmdomains_hwctrl[i]) {
-+
-+			if (!core->pmdomains[i])
-+				return -ENODEV;
-+
-+			/*
-+			 * enable( true ), switch the gdsc to SW mode
-+			 * enable( false), switch the gdsc to HW mode
-+			 */
-+			ret = dev_pm_genpd_set_hwmode(core->pmdomains[i], !enable);
-+			if (ret) {
-+				dev_err(dev, "Failed to switch power-domain:%d to %s mode\n",
-+					i, enable ? "SW" : "HW");
-+				return ret;
-+			}
-+		}
- 	}
--
- 	return 0;
- }
- 
--- 
-2.34.1
-
+greg k-h
