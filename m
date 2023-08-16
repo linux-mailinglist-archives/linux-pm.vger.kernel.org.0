@@ -2,122 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7160777EA97
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 22:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C797B77EAF1
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 22:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241470AbjHPUTm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 16:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S1346207AbjHPUnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 16:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346104AbjHPUTX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 16:19:23 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42DBF1FF3
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 13:19:22 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-589b0bbc290so84179847b3.1
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 13:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692217161; x=1692821961;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=3wsWTylhhPdG3/T8LNZoJaxLDgLi/vqIDceWVK88NME=;
-        b=Ht3ZRd1ImNrc2iTkzCJ5Fql3ljWCB2/SIVSsRNPxYYsUGod5lhvmeTUN5m3FrjuquK
-         yL/RgT2BZliIqrkqCktYGQQQcjCncJNHHINboxuRqGGFWxbtQ1YDCAEtEKwrmFE4ZBHP
-         UFxkKjPiw6Qij5Ai7S4lvAOmHBP0MUy6fAM+SSZwI/F5Z1pCqWikJh4O7NUr7IxN2+7V
-         dC2jUXD03hBSxm5SCpr2+nuPq9ZM3WVjvxqaJCnHxvtyEduJvTqlMNLMf6Dt7hNGzZxV
-         OObllt001yGEJEjG4sYLTOL+Q2yr8czIGVcvpF7v5/YIvcUWt2l8KuK7e8rBtnrhKKZG
-         fv/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692217161; x=1692821961;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3wsWTylhhPdG3/T8LNZoJaxLDgLi/vqIDceWVK88NME=;
-        b=ka++e1Ht4rgG/6D2+5gY+VdxAQZZxpSWCxXgwURHt+Jt3+D92DlFi123k7vUWFgzXB
-         OzxxEpxZuCjM4ptIIWqlZuLnyWoTaLKuaLQ/ranKWbhzsPqCzBKsj4zFx5mzavibR4HS
-         jrfrzj2jLtkASRCZyg9akjJ0fhxgO8wvJZkws4Iqv5LTpqgV0ToxkkW7jkv3fNdwxNj0
-         dHBNj/c1SAHQONjBRKeP6tSH5Rk5SwaagIHTYMOPxaktbMb4acyzm98qxFNSSnRP+z0a
-         zY8nDoNpRg1Ty7uJ/FsFltcnSR+VHF5vbLCU3/vCVyiVZ9dBRsftT1RIzMdEo3bZz4pN
-         hFlQ==
-X-Gm-Message-State: AOJu0YzenzyblmsEch59UgO7aMHhN/yHDQ1iw5unHb+jyFyQxFiIz86r
-        aCYTHkQj0km60BXuqGe3FxqYuGpIlJp0rNp4nQ==
-X-Google-Smtp-Source: AGHT+IF1NY2O9E+AcCVUc6YmSnFStWnAWmT+ayAT17Q7KEQNdNUBTRt8h9InsGVkNddn7kVhEA8MaXYUcc13W2aRUA==
-X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a81:4407:0:b0:58c:b45f:3e94 with SMTP
- id r7-20020a814407000000b0058cb45f3e94mr37282ywa.8.1692217161433; Wed, 16 Aug
- 2023 13:19:21 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 20:19:06 +0000
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIADkv3WQC/x3NSw7CMAxF0a1UHmMpCVX5bAUxqMgLeEASbIiKq
- u6diOGZ3LuSQQVG52ElRROTkjv8bqDbY853sMRuCi7s3dFP3IpEjioNahzRkuLFaMhvxvLNxbj W54encY7ehfF0SIF6rCqSLP/R5bptPwOrzAp4AAAA
-X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692217160; l=1505;
- i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=3i09RUBjajBo5aL6e0TrKmXYq85q23Jzin6ZTPYdgyY=; b=S4oTPqidmSx4pnXekqz3cAvXwTPXkBzQ1EIFWu9hSsoThdtp9eduwMFBcm4W1kNzVJZvIyFio
- YGlmbwClC6pBWurTU/dRHGUj2NmAVzjjY0yT3dMx3QDNiHt27E7UCjd
-X-Mailer: b4 0.12.3
-Message-ID: <20230816-void-drivers-devfreq-event-exynos-ppmu-v1-1-3fac11083742@google.com>
-Subject: [PATCH] PM / devfreq: exynos-ppmu: fix clang -Wvoid-pointer-to-enum-cast
- warning
-From:   Justin Stitt <justinstitt@google.com>
-To:     Chanwoo Choi <cw00.choi@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        with ESMTP id S1346252AbjHPUnO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 16:43:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DA51BE6
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 13:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692218547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Dcr9awbp01H1CoQcQY28YU+zOq3gLrw7va+rOtopp8=;
+        b=eoQdyNJNw5zyy1r+8Ihmi4yVmX5Di7KY5imuxq7gvfVBViaVOMlbDTkoev98D2OTMz7mxJ
+        F03xtYQ8MCQVV65eVcB+IPuOCcJcvedv+Y+5VYQhTDScaxX1n/uF9SjCk4CKVRkVz7718U
+        IaFvIoVkQJZ67CTm5LVRARaK5MwXp1Q=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-686-WvFTTRhQNZ-CNATJ-EXJfA-1; Wed, 16 Aug 2023 16:42:24 -0400
+X-MC-Unique: WvFTTRhQNZ-CNATJ-EXJfA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61F9F8DC664;
+        Wed, 16 Aug 2023 20:42:23 +0000 (UTC)
+Received: from [10.22.17.252] (unknown [10.22.17.252])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CA6471121314;
+        Wed, 16 Aug 2023 20:42:20 +0000 (UTC)
+Message-ID: <0c238ca2-691f-b69c-76d3-efac330570da@redhat.com>
+Date:   Wed, 16 Aug 2023 16:42:20 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v6 0/4] x86/speculation: Disable IBRS when idle
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20230727184600.26768-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230727184600.26768-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When building with clang 18 I see the following warning:
-|       drivers/devfreq/event/exynos-ppmu.c:530:21: warning: cast to smaller
-|       integer type 'enum exynos_ppmu_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-|         530 |       info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
+On 7/27/23 14:45, Waiman Long wrote:
+>   v6:
+>    - Fix allyesconfig build error by moving __update_spec_ctrl()
+>      helper from nospec-branch.h to spec-ctrl.h and include it in files
+>      that need the helper.
+>
+>   v5:
+>    - Update comment in patch 1.
+>    - Minor doc update and code twist in patch 4 as suggested by Peter and
+>      Randy.
+>
+>   v4:
+>    - Add a new __update_spec_ctrl() helper in patch 1.
+>    - Rebased to the latest linux kernel.
+>
+>   v3:
+>    - Drop patches 1 ("x86/speculation: Provide a debugfs file to dump
+>      SPEC_CTRL MSRs") and 5 ("x86/idle: Disable IBRS entering mwait idle
+>      and enable it on wakeup") for now.
+>    - Drop the MSR restoration code in ("x86/idle: Disable IBRS when cpu
+>      is offline") as native_play_dead() does not return.
+>    - For patch ("intel_idle: Add ibrs_off module parameter to force
+>      disable IBRS"), change the name from "no_ibrs" to "ibrs_off" and
+>      document the new parameter in intel_idle.rst.
+>
+> For Intel processors that need to turn on IBRS to protect against
+> Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
+> the performance of the whole core even if only one thread is turning
+> it on when running in the kernel. For user space heavy applications,
+> the performance impact of occasionally turning IBRS on during syscalls
+> shouldn't be significant. Unfortunately, that is not the case when the
+> sibling thread is idling in the kernel. In that case, the performance
+> impact can be significant.
+>
+> When DPDK is running on an isolated CPU thread processing network packets
+> in user space while its sibling thread is idle. The performance of the
+> busy DPDK thread with IBRS on and off in the sibling idle thread are:
+>
+>                                  IBRS on         IBRS off
+>                                  -------         --------
+>    packets/second:                  7.8M           10.4M
+>    avg tsc cycles/packet:         282.26          209.86
+>
+> This is a 25% performance degradation. The test system is a Intel Xeon
+> 4114 CPU @ 2.20GHz.
+>
+> Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+> disables IBRS when the CPU enters long idle (C6 or below). However, there
+> are existing users out there who have set "intel_idle.max_cstate=1"
+> to decrease latency. Those users won't be able to benefit from this
+> commit. This patch series extends this commit by providing a new
+> "intel_idle.ibrs_off" module parameter to force disable IBRS even when
+> "intel_idle.max_cstate=1" at the expense of increased IRQ response
+> latency. It also includes a commit to allow the disabling of IBRS when
+> a CPU becomes offline.
+>
+> Waiman Long (4):
+>    x86/speculation: Add __update_spec_ctrl() helper
+>    x86/idle: Disable IBRS when cpu is offline
+>    intel_idle: Use __update_spec_ctrl() in intel_idle_ibrs()
+>    intel_idle: Add ibrs_off module parameter to force disable IBRS
+>
+>   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
+>   arch/x86/include/asm/spec-ctrl.h            | 11 +++++++++++
+>   arch/x86/kernel/smpboot.c                   |  8 ++++++++
+>   drivers/idle/intel_idle.c                   | 18 +++++++++++++-----
+>   4 files changed, 48 insertions(+), 6 deletions(-)
+>
+Peter,
 
-This is due to the fact that `of_id->data` is a void* while
-`enum exynos_ppmu_type` has the size of an int.
+Is this patch series good enough to be merged?
 
-Cast `of_id->data` to a uintptr_t to silence the above warning for clang
-builds using W=1
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Justin Stitt <justinstitt@google.com>
----
- drivers/devfreq/event/exynos-ppmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/devfreq/event/exynos-ppmu.c b/drivers/devfreq/event/exynos-ppmu.c
-index 896a6cc93b00..f798e1d6994d 100644
---- a/drivers/devfreq/event/exynos-ppmu.c
-+++ b/drivers/devfreq/event/exynos-ppmu.c
-@@ -527,7 +527,7 @@ static int of_get_devfreq_events(struct device_node *np,
- 
- 	of_id = of_match_device(exynos_ppmu_id_match, dev);
- 	if (of_id)
--		info->ppmu_type = (enum exynos_ppmu_type)of_id->data;
-+		info->ppmu_type = (uintptr_t)of_id->data;
- 	else {
- 		of_node_put(events_np);
- 		return -EINVAL;
-
----
-base-commit: 2ccdd1b13c591d306f0401d98dedc4bdcd02b421
-change-id: 20230816-void-drivers-devfreq-event-exynos-ppmu-64ad102497f2
-
-Best regards,
---
-Justin Stitt <justinstitt@google.com>
+Thanks,
+Longman
 
