@@ -2,82 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DA877D9D6
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 07:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A7077DA74
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 08:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241907AbjHPFig (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 01:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S242077AbjHPG2F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 02:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241909AbjHPFiQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 01:38:16 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95241FC8
-        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 22:38:14 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3159d5e409dso4272679f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 22:38:14 -0700 (PDT)
+        with ESMTP id S242114AbjHPG2D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 02:28:03 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B501BF8
+        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 23:28:00 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1bc34b32785so39111275ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 15 Aug 2023 23:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692164293; x=1692769093;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8F8dsCkk6ZPrci6fxkiAuyGIgEKgA2xSQZz7L6wCHm0=;
-        b=B2BOVwAVzvcsUEILOBGaR3Qa2q0ygXF+je8fx+7e9tlqwuwSWKXN5heJMWK7PuDIDJ
-         tNjm+fcvPaGftv/zOkZ7CB12HMreW2biM9RlPlfd7C8lA1cwTFv/T0NKHHd0puKgy63y
-         JkzfYkbhCFi3fvpeZQkPyrhM1iLv7425HO4uT0vI6G1IU0gIDiGDeyf9LH56hnJE+3By
-         cnavjGzQoIHntNquQ/ORiCX3Hc2UfenePi03MBhZnDm2VA+uKAGPtBfPMAGN9POZMq06
-         D1P5G02UvgX5qxm/EYoYRAnkUkR0Ct2+CuY5NUsWSC7RcGZzGfcWk7TI7eeq1j5rHv0E
-         i3Ow==
+        d=linaro.org; s=google; t=1692167280; x=1692772080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R9swZ9sobe/UyaVKZ0ksxQMitw8thN1Q9u7bV7nG1uY=;
+        b=cvImbZnTYQoZ9txKjQ0qTOvVJRFxUFIG4pfT7z6GQqWPDb4oyqRtDxJ7IvWcA+WWXT
+         ZWz7q0sNpzb0kabUVuf4AfhUbbwLDFLOkgqXu0yOvosFxXAqyt8wyreKrVA+TcCcsnLR
+         8SvUGMO5vyUbt02rZ2aRiqok8hhv0eXZD5fcQ85e1kw6Oh5wZY0rTjJzP4uR84fdcfvY
+         hDQTa6GEmQZnW/iu6xaypzd73KZOK2/nDftBjodhsuKZZIfzg+WvmhAOKNQQszW8Mw+3
+         lakcraer/uqUTMPjwMIAgN3nnxuCkR9ZiI77vPF7d4VaqAsnP6PTkB1eAOANwyRnvxwf
+         mR5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692164293; x=1692769093;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8F8dsCkk6ZPrci6fxkiAuyGIgEKgA2xSQZz7L6wCHm0=;
-        b=E7sls9jOM20jq0hg2Kxn9JdgE3YzGS7Jc21v4u6k9mD3tlhOUgBu/mBmJx2b1lrMlP
-         eA0ihgyODh0GkqEIspkcP5h+TpAg8ppD4n84iMkJvYasO4clTAD/Kb3CVx5IQc6IqafH
-         bTz+0jmYbwdmgs/VAZ/BRpV6RG0OlOmuyiq5ghyMWuNQMAV1w5emSXepc+ccIrrJCmyV
-         VeSyHF/dECeJAPf/M+O0wNRFajysrf/a9UkDQqmwID2Hf3cGMZOJXkvMqZE+SSip17/G
-         BZaT1HqIsU5x6KMW8ebWd54FlJWFtqztzF9MkID1Gnz0kBxt5xkh1Cdt5UW75msKBTk9
-         IzZQ==
-X-Gm-Message-State: AOJu0YwECn0RRf8jBcxQYNsYaEL4Bk3hxA1EpSiWwKzvX3xgphlmMPSf
-        yjTSoKP/NwSvUfN9Mlu54UnlcA==
-X-Google-Smtp-Source: AGHT+IH8d0jEduR2jGvvdHBTTTW+3Pwg15uUMmJmSaTcjdGFrXK7owZU613L5tXrSuWbBeRmQ+pSdg==
-X-Received: by 2002:a05:6000:1a51:b0:317:59ea:1c6b with SMTP id t17-20020a0560001a5100b0031759ea1c6bmr2444807wry.35.1692164293271;
-        Tue, 15 Aug 2023 22:38:13 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id l11-20020a05600012cb00b003177f57e79esm7743919wrx.88.2023.08.15.22.38.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Aug 2023 22:38:12 -0700 (PDT)
-Message-ID: <34ae2658-f6eb-1ad6-5d59-35ff5ad3a97f@linaro.org>
-Date:   Wed, 16 Aug 2023 07:38:10 +0200
+        d=1e100.net; s=20221208; t=1692167280; x=1692772080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R9swZ9sobe/UyaVKZ0ksxQMitw8thN1Q9u7bV7nG1uY=;
+        b=Baa57Nns2qrxIJFc/wg2dmVp/tiCZHqjs2kBTvqeLkU8gjtIo3GZ4GWPNg5Gd4KvUC
+         FvKahKomm6LZr+T+Sk4wpuB3eKrJO8llFA7hU9OghLB9WU5BWWfjY5eEQlJRFI3l/qT7
+         r1Ku5+jkZV0ypg8lt6H6YpHSF7PR3ZPW3M8V9rGDA084ekzOJ/N6n5DFzjX/TBRhZdFB
+         YMq7S94M5xyCOGwxPsqTyBYhZgGHPmFiMSmf9UjyUNiBIuT8Ev50Zq9iZgntNzoAXb6E
+         Q0c2vnZYPUw+My2pDj+4r/Ytuz+O7Ik3nluwlyGlnV4eR39hMIKV1k2eDcHYO/xJXEf5
+         wXmw==
+X-Gm-Message-State: AOJu0YzElpzWSRQp27EaH+EmtXUQ7cpKwv2WKH1748YkNuj8orjmEaRE
+        NilkLS3DXfTLznhRDv/+DqhaWg==
+X-Google-Smtp-Source: AGHT+IG+7YkbZ3410JWVHZ1nOSSxRvqGUiSUTPvOM7VFDZgTy0GOMytoHqUZQnyQD/fllIOZfZswXA==
+X-Received: by 2002:a17:902:e84c:b0:1b8:a569:f980 with SMTP id t12-20020a170902e84c00b001b8a569f980mr1330252plg.65.1692167280004;
+        Tue, 15 Aug 2023 23:28:00 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170902820700b001b392bf9192sm12205855pln.145.2023.08.15.23.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 23:27:59 -0700 (PDT)
+Date:   Wed, 16 Aug 2023 11:57:57 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jie Zhan <zhanjie9@hisilicon.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        xuwei5@huawei.com, wanghuiqiang@huawei.com,
+        jonathan.cameron@huawei.com, wangxiongfeng2@huawei.com
+Subject: Re: [RFC PATCH] cpufreq: Support per-policy performance boost
+Message-ID: <20230816062757.tocdrqh3isxcrt3r@vireshk-i7>
+References: <20230724075827.4160512-1-zhanjie9@hisilicon.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sdm670: add specific cpufreq
- compatible
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230815223108.306018-5-mailingradian@gmail.com>
- <20230815223108.306018-8-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230815223108.306018-8-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230724075827.4160512-1-zhanjie9@hisilicon.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,17 +72,148 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/08/2023 00:31, Richard Acayan wrote:
-> The bindings for the CPU frequency scaling driver require a specific
-> compatible for the SoC. Add the compatible.
+Hi Jie,
+
+I am not sure how useful this per-policy boost is for your use case,
+but I have no objection to the same if it is worth it.
+
+On 24-07-23, 15:58, Jie Zhan wrote:
+> The boost control currently applies to the whole system.  However, users
+> may prefer to boost a subset of cores in order to provide prioritized
+> performance to workloads running on the boosted cores.
 > 
-> Fixes: 0c665213d126 ("arm64: dts: qcom: sdm670: add cpu frequency scaling")
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> Enable per-policy boost by adding a 'local_boost' sysfs interface.  This
+> can be found at:
+> 
+> 	/sys/devices/system/cpu/cpufreq/policy<*>/local_boost
 
-There was no such compatible in your series, so backporting only this is
-not enough.
+Just name it boost instead of local_boost, it is present in the
+policy's directory, that is enough.
 
+> 
+> Same to the global boost switch, writing 1/0 to 'local_boost'
+> enables/disables boost on a cpufreq policy respectively.
+> 
+> The user view of global and local boost controls should be:
+> 
+> 1. Enabling global boost initially enables local boost on all policies, and
+> local boost can then be enabled or disabled individually on each policy,
+> given that the platform does support so.
+> 
+> 2. Disabling global boost makes enabling local boost illegal, while writing
+> 0 to 'local_boost' is fine but takes no effect.
+> 
+> A possible question could be: why not just limiting 'scaling_max_freq'?
+> Well, the fundamental difference is that 'local_boost' could be more
+> user-friendly.  When global boost is enabled, it is not straightforward to
+> figure out the base frequency for setting 'scaling_max_freq' to a non-boost
+> value. Also, this is supposed to take effect on the physical upper
+> frequency limit, reflected through 'cpuinfo_max_freq'.
+> 
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 33 +++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h   |  3 +++
+>  2 files changed, 36 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 6b52ebe5a890..14579c59f7ba 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -621,6 +621,35 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
+>  }
+>  define_one_global_rw(boost);
+>  
+> +static ssize_t show_local_boost(struct cpufreq_policy *policy, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", policy->local_boost_enabled);
+> +}
+> +
+> +static ssize_t store_local_boost(struct cpufreq_policy *policy,
+> +				 const char *buf, size_t count)
+> +{
+> +	int ret, enable;
+> +
+> +	ret = kstrtoint(buf, 10, &enable);
+> +	if (ret || enable < 0 || enable > 1)
+> +		return -EINVAL;
+> +
+> +	if (enable && !cpufreq_driver->boost_enabled)
+> +		return -EINVAL;
 
-Best regards,
-Krzysztof
+Not just while enabling it, you should check for boost_enabled all the
+time.
 
+Also, you can optimize here if the state is being set to existing
+state and quit early. This is done in the case of global boost
+already. Have a look.
+
+> +
+> +	cpus_read_lock();
+> +	ret = cpufreq_driver->set_boost(policy, enable);
+> +	cpus_read_unlock();
+> +
+> +	if (ret)
+> +		return ret;
+> +
+> +	policy->local_boost_enabled = enable;
+
+s/local_//
+
+> +
+> +	return count;
+> +}
+> +
+>  static struct cpufreq_governor *find_governor(const char *str_governor)
+>  {
+>  	struct cpufreq_governor *t;
+> @@ -931,6 +960,7 @@ cpufreq_freq_attr_rw(scaling_min_freq);
+>  cpufreq_freq_attr_rw(scaling_max_freq);
+>  cpufreq_freq_attr_rw(scaling_governor);
+>  cpufreq_freq_attr_rw(scaling_setspeed);
+> +cpufreq_freq_attr_rw(local_boost);
+>  
+>  static struct attribute *cpufreq_attrs[] = {
+>  	&cpuinfo_min_freq.attr,
+> @@ -944,6 +974,7 @@ static struct attribute *cpufreq_attrs[] = {
+>  	&scaling_driver.attr,
+>  	&scaling_available_governors.attr,
+>  	&scaling_setspeed.attr,
+> +	&local_boost.attr,
+
+Making this file available if the global boost file isn't present is a
+bit tricky I think. Maybe at least check for cpufreq_boost_supported()
+before doing so.
+
+>  	NULL
+>  };
+>  ATTRIBUTE_GROUPS(cpufreq);
+> @@ -2716,6 +2747,8 @@ int cpufreq_boost_trigger_state(int state)
+>  		ret = cpufreq_driver->set_boost(policy, state);
+>  		if (ret)
+>  			goto err_reset_state;
+> +
+> +		policy->local_boost_enabled = state;
+>  	}
+>  	cpus_read_unlock();
+>  
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 26e2eb399484..a99a48ac9fdb 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -140,6 +140,9 @@ struct cpufreq_policy {
+>  	 */
+>  	bool			dvfs_possible_from_any_cpu;
+>  
+> +	/* Per policy boost enabled flag. */
+> +	bool			local_boost_enabled;
+> +
+>  	 /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
+>  	unsigned int cached_target_freq;
+>  	unsigned int cached_resolved_idx;
+> -- 
+> 2.30.0
+
+-- 
+viresh
