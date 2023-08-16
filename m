@@ -2,150 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C797B77EAF1
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 22:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0B077EAF9
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 22:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346207AbjHPUnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 16:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55290 "EHLO
+        id S1346234AbjHPUqP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 16:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346252AbjHPUnO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 16:43:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57DA51BE6
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 13:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1692218547;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6Dcr9awbp01H1CoQcQY28YU+zOq3gLrw7va+rOtopp8=;
-        b=eoQdyNJNw5zyy1r+8Ihmi4yVmX5Di7KY5imuxq7gvfVBViaVOMlbDTkoev98D2OTMz7mxJ
-        F03xtYQ8MCQVV65eVcB+IPuOCcJcvedv+Y+5VYQhTDScaxX1n/uF9SjCk4CKVRkVz7718U
-        IaFvIoVkQJZ67CTm5LVRARaK5MwXp1Q=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-686-WvFTTRhQNZ-CNATJ-EXJfA-1; Wed, 16 Aug 2023 16:42:24 -0400
-X-MC-Unique: WvFTTRhQNZ-CNATJ-EXJfA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 61F9F8DC664;
-        Wed, 16 Aug 2023 20:42:23 +0000 (UTC)
-Received: from [10.22.17.252] (unknown [10.22.17.252])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA6471121314;
-        Wed, 16 Aug 2023 20:42:20 +0000 (UTC)
-Message-ID: <0c238ca2-691f-b69c-76d3-efac330570da@redhat.com>
-Date:   Wed, 16 Aug 2023 16:42:20 -0400
+        with ESMTP id S1346244AbjHPUqE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 16:46:04 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3C72701
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 13:46:01 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-3198d2745feso1295610f8f.1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 13:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692218760; x=1692823560;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TkXb2WGp3h74munhQBcxJdaPjXLiOtVi3bcX2GvRbiM=;
+        b=LnidPeWZ68hHT3vmVcrWLwEKcFkq4CDLvdUzfp+NwBdRsr9XftyyY8sjU5NiqaEzyx
+         JtjKantdFtlrT1PmvexQZIm8pfBY9kYjLtnhOnvVlwNLbPKKZksZly9mmsZxYQrahmWf
+         PdwrmHNfKwY4crutRgaYeGUCH/Wd+uW2V5/4uJk8fULsAb1vPg6v9MxHuCDuGZ9JCW+i
+         XBcvpY8OJSiAUU/y767JR9wWz99jKRFR2HJu/XT1P8NGNlNpavXRY8XkxZvYgl6ThLkG
+         BnNFEdhTj1JWmtKH5AuFzd7248fjW0pRn57++uI2elg/nkNzKQKJm5E3D3tjPpahwmEA
+         DmZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692218760; x=1692823560;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TkXb2WGp3h74munhQBcxJdaPjXLiOtVi3bcX2GvRbiM=;
+        b=OUCf11uF+PIUj0jL7PTnqWoAVRwJ8eWbgCNNqp9Ye4MTNE0tnSNvvRXVM/6e2i9OcR
+         plK0BHuTIMV3Z65sjdsbr9eUe5sUptqKeOXdWwKiJgqDaFOImig2YwnZ4cRgRa0t7WqB
+         TWyzCbWM4ho+zMf8FmUHtWYCSkph7/431/Rc9QmpaSkYxQcHYqPHjoM6f0Docm0h6j5p
+         XYS7YlKtCa3SsjIjJLsvc5dv07Qs94+KAF9o7uOOpAm6TMudXQVxSDBFY9p8OJgExkmp
+         QW/62PZGGfzRQ/m7yh3O4wLjjv7zXNVhZzjxSv63W8cl3HY5TqsasjgaYnOD9n/gaMGu
+         FiKA==
+X-Gm-Message-State: AOJu0YxGZTmdOUtFJwIj5fBMGpuqqRVppPrrfp1XMm337Uifpmy/Mdpg
+        ayHg8NidqdKwe3kR2nwN5aMHdw==
+X-Google-Smtp-Source: AGHT+IESQMA85nb+JSfmJKhTWpUYk+N9FpiLZfwfyUrSPcDBPNyxrQUaYqAZtwGjVEqX1pP5dYPRPQ==
+X-Received: by 2002:a5d:444b:0:b0:317:5f04:c3de with SMTP id x11-20020a5d444b000000b003175f04c3demr1871081wrr.4.1692218760145;
+        Wed, 16 Aug 2023 13:46:00 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id x4-20020a5d4904000000b003143801f8d8sm22450450wrq.103.2023.08.16.13.45.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Aug 2023 13:45:59 -0700 (PDT)
+Message-ID: <80324fb7-3d2a-ecd3-f1ca-9745a366eb0a@linaro.org>
+Date:   Wed, 16 Aug 2023 22:45:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v6 0/4] x86/speculation: Disable IBRS when idle
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/1] thermal/drivers/imx_sc_thermal: return -EAGAIN when
+ SCFW turn off resource
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20230727184600.26768-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230727184600.26768-1-longman@redhat.com>
+To:     Frank Li <Frank.li@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+References: <20230712210505.1536416-1-Frank.Li@nxp.com>
+ <f1d4ed62-8d01-173f-6e41-4671228782fd@linaro.org>
+ <ZLGDhOffQwh7xW/n@lizhi-Precision-Tower-5810>
+ <7eacc4da-ab14-3df5-2864-44a7262bac27@linaro.org>
+ <ZNz5Drb+EVLjWxRV@lizhi-Precision-Tower-5810>
+ <dd42952c-4dea-ea57-7ad2-73fa159d265d@linaro.org>
+ <ZN0CVa9or/FltHJM@lizhi-Precision-Tower-5810>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ZN0CVa9or/FltHJM@lizhi-Precision-Tower-5810>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 7/27/23 14:45, Waiman Long wrote:
->   v6:
->    - Fix allyesconfig build error by moving __update_spec_ctrl()
->      helper from nospec-branch.h to spec-ctrl.h and include it in files
->      that need the helper.
->
->   v5:
->    - Update comment in patch 1.
->    - Minor doc update and code twist in patch 4 as suggested by Peter and
->      Randy.
->
->   v4:
->    - Add a new __update_spec_ctrl() helper in patch 1.
->    - Rebased to the latest linux kernel.
->
->   v3:
->    - Drop patches 1 ("x86/speculation: Provide a debugfs file to dump
->      SPEC_CTRL MSRs") and 5 ("x86/idle: Disable IBRS entering mwait idle
->      and enable it on wakeup") for now.
->    - Drop the MSR restoration code in ("x86/idle: Disable IBRS when cpu
->      is offline") as native_play_dead() does not return.
->    - For patch ("intel_idle: Add ibrs_off module parameter to force
->      disable IBRS"), change the name from "no_ibrs" to "ibrs_off" and
->      document the new parameter in intel_idle.rst.
->
-> For Intel processors that need to turn on IBRS to protect against
-> Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
-> the performance of the whole core even if only one thread is turning
-> it on when running in the kernel. For user space heavy applications,
-> the performance impact of occasionally turning IBRS on during syscalls
-> shouldn't be significant. Unfortunately, that is not the case when the
-> sibling thread is idling in the kernel. In that case, the performance
-> impact can be significant.
->
-> When DPDK is running on an isolated CPU thread processing network packets
-> in user space while its sibling thread is idle. The performance of the
-> busy DPDK thread with IBRS on and off in the sibling idle thread are:
->
->                                  IBRS on         IBRS off
->                                  -------         --------
->    packets/second:                  7.8M           10.4M
->    avg tsc cycles/packet:         282.26          209.86
->
-> This is a 25% performance degradation. The test system is a Intel Xeon
-> 4114 CPU @ 2.20GHz.
->
-> Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
-> disables IBRS when the CPU enters long idle (C6 or below). However, there
-> are existing users out there who have set "intel_idle.max_cstate=1"
-> to decrease latency. Those users won't be able to benefit from this
-> commit. This patch series extends this commit by providing a new
-> "intel_idle.ibrs_off" module parameter to force disable IBRS even when
-> "intel_idle.max_cstate=1" at the expense of increased IRQ response
-> latency. It also includes a commit to allow the disabling of IBRS when
-> a CPU becomes offline.
->
-> Waiman Long (4):
->    x86/speculation: Add __update_spec_ctrl() helper
->    x86/idle: Disable IBRS when cpu is offline
->    intel_idle: Use __update_spec_ctrl() in intel_idle_ibrs()
->    intel_idle: Add ibrs_off module parameter to force disable IBRS
->
->   Documentation/admin-guide/pm/intel_idle.rst | 17 ++++++++++++++++-
->   arch/x86/include/asm/spec-ctrl.h            | 11 +++++++++++
->   arch/x86/kernel/smpboot.c                   |  8 ++++++++
->   drivers/idle/intel_idle.c                   | 18 +++++++++++++-----
->   4 files changed, 48 insertions(+), 6 deletions(-)
->
-Peter,
+On 16/08/2023 19:07, Frank Li wrote:
+> On Wed, Aug 16, 2023 at 06:47:17PM +0200, Daniel Lezcano wrote:
+>> On 16/08/2023 18:28, Frank Li wrote:
+>>> On Wed, Aug 16, 2023 at 10:44:32AM +0200, Daniel Lezcano wrote:
+>>>>
+>>>> Hi Frank,
+>>>>
+>>>> sorry for the delay
+>>>>
+>>>> On 14/07/2023 19:19, Frank Li wrote:
+>>>>> On Thu, Jul 13, 2023 at 02:49:54PM +0200, Daniel Lezcano wrote:
+>>>>>> On 12/07/2023 23:05, Frank Li wrote:
+>>>>>>> Avoid endless print following message when SCFW turns off resource.
+>>>>>>>      [ 1818.342337] thermal thermal_zone0: failed to read out thermal zone (-1)
+>>>>>>>
+>>>>>>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+>>>>>>> ---
+>>>>>>>      drivers/thermal/imx_sc_thermal.c | 4 +++-
+>>>>>>>      1 file changed, 3 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+>>>>>>> index 8d6b4ef23746..0533d58f199f 100644
+>>>>>>> --- a/drivers/thermal/imx_sc_thermal.c
+>>>>>>> +++ b/drivers/thermal/imx_sc_thermal.c
+>>>>>>> @@ -58,7 +58,9 @@ static int imx_sc_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+>>>>>>>      	hdr->size = 2;
+>>>>>>>      	ret = imx_scu_call_rpc(thermal_ipc_handle, &msg, true);
+>>>>>>> -	if (ret)
+>>>>>>> +	if (ret == -EPERM) /* NO POWER */
+>>>>>>> +		return -EAGAIN;
+>>>>>>
+>>>>>> Isn't there a chain call somewhere when the resource is turned off, so the
+>>>>>> thermal zone can be disabled?
+>>>>>
+>>>>> A possible place in drivers/firmware/imx/scu-pd.c. but I am not sure how to
+>>>>> get thermal devices. I just found a API thermal_zone_get_zone_by_name(). I
+>>>>> am not sure if it is good to depend on "name", which add coupling between
+>>>>> two drivers and if there are external thermal devices(such as) has the
+>>>>> same name, it will wrong turn off.
+>>>>
+>>>> Correct
+>>>>
+>>>>> If add power domain notification in thermal driver, I am not how to get
+>>>>> other devices's pd in thermal driver.
+>>>>>
+>>>>> Any example I can refer?
+>>>>>
+>>>>> Or this is simple enough solution.
+>>>>
+>>>> The solution works for removing the error message but it does not solve the
+>>>> root cause of the issue. The thermal zone keeps monitoring while the sensor
+>>>> is down.
+>>>>
+>>>> So the question is why the sensor is shut down if it is in use?
+>>>
+>>> Do you know if there are any code I reference? I supposed it is quite common.
+>>
+>> Sorry, I don't get your comment
+>>
+>> What I meant is why is the sensor turned off if it is in use ?
+> 
+> One typical example is cpu hotplug. The sensor is located CPU power domain.
+> If CPU hotplug off,  CPU power domain will be turn off.
+> 
+> It doesn't make sensor keep monitor such sensor when CPU already power off.
+> It doesn't make sensor to keep CPU power on just because want to get sensor
+> data.
+> 
+> Anthor example is GPU, if there are GPU0 and GPU1. Most case just GPU0
+> work.  GPU1 may turn off when less loading.
+> 
+> Ideally, thermal can get notification from power domain driver.
+> when such power domain turn off,  disable thermal zone.
+> 
+> So far, I have not idea how to do that.
 
-Is this patch series good enough to be merged?
+Ulf,
 
-Thanks,
-Longman
+do you have a guidance to link the thermal zone and the power domain in 
+order to get a poweron/off notification leading to enable/disable the 
+thermal zone ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
