@@ -2,71 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7F77DE27
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 12:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E00477DE30
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 12:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243694AbjHPKFI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 06:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37854 "EHLO
+        id S243710AbjHPKHs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 06:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243776AbjHPKFG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 06:05:06 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC47E3
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:05:02 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31965c94001so3782101f8f.3
-        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:05:02 -0700 (PDT)
+        with ESMTP id S243736AbjHPKHT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 06:07:19 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5992727
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:06:51 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fe4cdb727cso64473615e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 03:06:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692180301; x=1692785101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1692180410; x=1692785210;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AXexP5J2IB86LOs7JUU2PjEMrJazlbcjbHMuFD834+M=;
-        b=i4mEovXgQd4EmL17YmGNfmx7BiPnJ8rYLqIZVgELKnIDaVjme+nSNmkXBgq1r01riU
-         D9jbtq5YKdgzJp04nLuzumD2SCASPuHNpMfdgvpST4bKpzUlOEAXFur+pFGWF+hqxYfu
-         dMhtF4P7BJngyc1ERtiYgY2Dt+bC7gy48nYIx7wtOAQjsuDZCQdO505WLSoUWAZSE/Ye
-         wIwjgJXh2y0sxy7BO3+KAcUnDeFiZMFwg9Q03O7zL8vUSnoBOMhQ5QYE0H78MnJWHE9d
-         pgcWzLp3BH5AvxDi555Rn/cPWDq0L2GALv3NqaeiQ0a98rN3QbWRhq3FhZVnu/QDV+/7
-         BLZA==
+        bh=hbB0m9jG4429KI47XkJsVs85hA3EGeFnXeCiJDrb/4k=;
+        b=r9gn5CeiUSXfg+w1EI5cqkxp28xR87PUwiWYn2eefFZJfOqMMFn1CDOOzLMg0e2e/D
+         2lMbEqH6MulqSl63hi+Bd9TrMcfAJCy+/JOzr7cWjrhrn4lCmcKQIOLqcLmBxvs9GtMD
+         Rtocrug9Rnww7uuW9jFAPsEV47g5pVmz0vXDozvIyzqvfwiP4lOri+WD/9iE/v5v7rWf
+         JxVf0eSsbGeNl/CT8SqtUGA61x+Q+gnPbyQrAwqRe2qDwL/CE1KNV03a/gY9eXqj+Lbq
+         K9JkPpBnsNq/Ae2MraylUXCrwD/IuKSkDJEQRQF0la12TAoZGgrMtXJ3d96iFfr2EGzJ
+         B9dA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692180301; x=1692785101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1692180410; x=1692785210;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AXexP5J2IB86LOs7JUU2PjEMrJazlbcjbHMuFD834+M=;
-        b=k2FJP4ftDUpL+UNqyYrElFHHjBthMr3I+kRHhkB3Sx3D34z9okyJfdtnQhCZhuhRhf
-         w42D85yXh/qyV0mDP24CX1pyH8PJlHv702zN/25o4r5X14JDCNrPy3QFbdRXCYwVAi3U
-         5Reh/HprKNkKWmkLp1pYJpklCoXOTRUcli95SvgnJyQg6fcYO39Ai09iX4m8qhjhv8xT
-         49Mc5QRnvl3qbDQWQas77fxk6Z0LnEC2728mPItMreJKyvWr0VOO1vC7yM9Gs5/J8Obc
-         a36pdEXQlO16BoHkJpefqAeBL5UonsLbvw45fjVT3Q/3hhRP69MVZWneKTn+WumEi8wD
-         kk/A==
-X-Gm-Message-State: AOJu0YxyfBMy8gJ5/Z+EaDSpD/nfG3v/vQKtlUG0sJwlr08MWluLXvyi
-        vd4HQkHApvxfhimNLc2pD5yxXg==
-X-Google-Smtp-Source: AGHT+IE7WTr4mwMLvR3/of6jx6jHLQJNhj1JGefVICNU1EcR9Md8dsCZ3SrFuXbKjenuHFR0Jnl06w==
-X-Received: by 2002:adf:d0c3:0:b0:319:62ba:5d08 with SMTP id z3-20020adfd0c3000000b0031962ba5d08mr994283wrh.33.1692180301070;
-        Wed, 16 Aug 2023 03:05:01 -0700 (PDT)
+        bh=hbB0m9jG4429KI47XkJsVs85hA3EGeFnXeCiJDrb/4k=;
+        b=H6xfbS0KGYnpu/tiIB9cds9CgNFx51/ebbeJ+WJ3wtSpYVM9cea+VJ9z4xpywjHRYh
+         D8cxY5zLY98aq69KjQK3ggUnZNSFfjU7qtXquQVKNTYdeYZ4qoju5oq3jLTqymEIQ2Qn
+         GJpQhrft+onHWGABcODIOfv3T/E2L6RGVZjQgqtoo4ofkvKXiYZv1FNOp7oj4HqWuv/8
+         +/50jDcaA23nLRuiSdT3XGMVcCeYnK4eSZCQetUeYXUQaHX31AwOEq/WpDziL5RDDt4N
+         QxZYmuk88vBR2uzhm5838xLvwVN8wUsdYJrLckietqUguDCC701smzBfPAh1jkdz0PyI
+         1TOQ==
+X-Gm-Message-State: AOJu0YyMvePWx65xLG4dG2xTgf4DhMVaPRolbeA6ZJGQ9cvg/iHOTd1x
+        Q+K/FnnHI0vQVAic1U7YeDllWA==
+X-Google-Smtp-Source: AGHT+IGWY/WCLAfZebyqWJoXw+L01sLw0TskurC4DcPHDorGVHqeHdru6MlwysH4nH9IQcec3JPUCQ==
+X-Received: by 2002:a5d:456d:0:b0:315:ad00:e628 with SMTP id a13-20020a5d456d000000b00315ad00e628mr1033039wrc.47.1692180409880;
+        Wed, 16 Aug 2023 03:06:49 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id d10-20020a056000114a00b00301a351a8d6sm20552461wrx.84.2023.08.16.03.05.00
+        by smtp.googlemail.com with ESMTPSA id l18-20020a5d4112000000b003144b95e1ecsm20731349wrp.93.2023.08.16.03.06.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 03:05:00 -0700 (PDT)
-Message-ID: <47417e4b-f230-7182-5cb5-c76b34b635c0@linaro.org>
-Date:   Wed, 16 Aug 2023 12:04:59 +0200
+        Wed, 16 Aug 2023 03:06:49 -0700 (PDT)
+Message-ID: <5545c715-0c30-7da5-fe5f-d414681ca7e9@linaro.org>
+Date:   Wed, 16 Aug 2023 12:06:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND RESEND] thermal/of: support thermal zones w/o trips
- subnode
+Subject: Re: [PATCH -next] thermal: Clean up redundant dev_err_probe()
 Content-Language: en-US
-To:     Icenowy Zheng <zhengxingda@iscas.ac.cn>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Icenowy Zheng <uwu@icenowy.me>
-References: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
+To:     Chen Jiahao <chenjiahao16@huawei.com>, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, bchihi@baylibre.com,
+        wenst@chromium.org, robh@kernel.org, frank.li@vivo.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230802094527.988842-1-chenjiahao16@huawei.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230722122534.2279689-1-zhengxingda@iscas.ac.cn>
+In-Reply-To: <20230802094527.988842-1-chenjiahao16@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,89 +77,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/07/2023 14:25, Icenowy Zheng wrote:
-> From: Icenowy Zheng <uwu@icenowy.me>
+On 02/08/2023 11:45, Chen Jiahao wrote:
+> Referring to platform_get_irq()'s definition, the return value has
+> already been checked if ret < 0, and printed via dev_err_probe().
+> Calling dev_err_probe() one more time outside platform_get_irq()
+> is obviously redundant.
 > 
-> Although the current device tree binding of thermal zones require the
-> trips subnode, the binding in kernel v5.15 does not require it, and many
-> device trees shipped with the kernel, for example,
-> allwinner/sun50i-a64.dtsi and mediatek/mt8183-kukui.dtsi in ARM64, still
-> comply to the old binding and contain no trips subnode.
+> Removing dev_err_probe() outside platform_get_irq() to clean up
+> above problem.
 > 
-> Allow the code to successfully register thermal zones w/o trips subnode
-> for DT binding compatibility now.
-> 
-> Furtherly, the inconsistency between DTs and bindings should be resolved
-> by either adding empty trips subnode or dropping the trips subnode
-> requirement.
-> 
-> Fixes: d0c75fa2c17f ("thermal/of: Initialize trip points separately")
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+> Signed-off-by: Chen Jiahao <chenjiahao16@huawei.com>
 > ---
-> 
-> Unfortunately the code gets dropped by mailing lists again and again...
-> 
-> Sorry for the disturbance.
-> 
->   drivers/thermal/thermal_of.c | 17 +++++++++++------
->   1 file changed, 11 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 6fb14e521197..2c76df847e84 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -127,15 +127,17 @@ static struct thermal_trip *thermal_of_trips_init(struct device_node *np, int *n
->   
->   	trips = of_get_child_by_name(np, "trips");
->   	if (!trips) {
-> -		pr_err("Failed to find 'trips' node\n");
-> -		return ERR_PTR(-EINVAL);
-> +		pr_debug("Failed to find 'trips' node\n");
-> +		*ntrips = 0;
 
-set ntrips at the beginning of the function.
-
-> +		return NULL;
-
-return ERR_PTR(-ENXIO);
-
->   	}
->   
->   	count = of_get_child_count(trips);
->   	if (!count) {
-> -		pr_err("No trip point defined\n");
-> -		ret = -EINVAL;
-> -		goto out_of_node_put;
-> +		pr_debug("No trip point defined\n");
-> +		of_node_put(trips);
-> +		*ntrips = 0;
-> +		return NULL;
-
-Why not keep goto out_of_node_put ?
-
->   	}
->   
->   	tt = kzalloc(sizeof(*tt) * count, GFP_KERNEL);
-> @@ -519,7 +521,10 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
-
-
-The function should check the return value of thermal_of_trips_init()
-
-If this one returns -ENXIO, it should pr_warn().
-
->   	of_ops->bind = thermal_of_bind;
->   	of_ops->unbind = thermal_of_unbind;
->   
-> -	mask = GENMASK_ULL((ntrips) - 1, 0);
-> +	if (ntrips)
-> +		mask = GENMASK_ULL((ntrips) - 1, 0);
-> +	else
-> +		mask = 0;
-
-	mask = ntrips ? GENMASK_ULL((ntrips) - 1, 0) : 0;
-
->   	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
->   						     mask, data, of_ops, tzp,
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
