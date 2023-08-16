@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A747B77EDA4
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 01:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BAF77EDAA
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 01:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242040AbjHPXGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S1347124AbjHPXGL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Wed, 16 Aug 2023 19:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347141AbjHPXFm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 19:05:42 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FEA272E;
-        Wed, 16 Aug 2023 16:05:19 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-58c656824c1so19614327b3.1;
-        Wed, 16 Aug 2023 16:05:19 -0700 (PDT)
+        with ESMTP id S233746AbjHPXFn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 19:05:43 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B60E2D40;
+        Wed, 16 Aug 2023 16:05:21 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-58a24ac48eeso35961327b3.0;
+        Wed, 16 Aug 2023 16:05:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692227118; x=1692831918;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYx9iws2nClYMbUAf9YvAdzd7ShM6EtmZD702/MbwWg=;
-        b=R77pa2H5q2Chu/1FyEBrcvHQ9uGjDDwm2rRE8idAuXxBzmD/1V/YwSqlloUKRf836X
-         S7+UGTbmw9oQLoQYgFiqZiu1vPYTmxyIHVSEGnfEyF3I9euS87pD16HscoWcCIw2bni1
-         nZbyIIsjt0JhysDjZGOZK2bpJ+oBq0h4t9uizDx9FZbEZOVYgpUIfZPZ4d+1jE3IW4vP
-         7oaKEc6IVt/Zi5W7AK9OGFnrUXKsStAROeX3RYvpr1YJC7VZeXIrh9ABBglVAVhhsAvE
-         tak+yqujdjYQO/4ZosZh/6FkfzhDFEoilZEUys8Gq4UQUZOv8lNDkWYB4FcCSaN0jJ6x
-         PTpQ==
+        d=gmail.com; s=20221208; t=1692227120; x=1692831920;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SHHvH1R50hlGEwDWy54Ftr/XiT00eGPxCBa6hf7d2fM=;
+        b=W23vD8o4X5LLWIfiibjOhbKtgecPu+KNermLmBs/7pYz7KDKfIJDg+q567b8ox2Bss
+         m9OYBmYQY1d89/9AcfrE6S4ZBGMe4aVREMMbJNhG2jV+t1qyQLMAycJzX9x/jy72ikTw
+         G7/YlWhTnp7dKuejFVcI8JKfQegKA7CGZ/+NNBHn3vlqyFxXsNd9gP+LGvpvaxuh//Wk
+         CU29132IWrdZcM2Ztos+r9qaXoov6GTYB9TnnPti+fbHChQqCqX0AND7IHcMiophXWFy
+         D6zHg4OZaXwxuHBcRco5TKjWVo2Om2S9LyjbBlL3M5uJ+/fEZ2iu0Hc4P9r9LN9RAd72
+         Dp1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692227118; x=1692831918;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CYx9iws2nClYMbUAf9YvAdzd7ShM6EtmZD702/MbwWg=;
-        b=XnJwAw3bSR/WU0dj4egTXkrKIOxTMj7cXxlLoc69/9bwHoAlz/aujLM1SXYYjNZYnp
-         1YMqcjUOno4KpCn4b5zb9ij21STNwdM0VWg2Fd+SNFrudmLSQIN4g+o3Pj3y7zYO6WXR
-         LjWNpH6wZ5QxHB4ZTn8zte6tfaD3aPP6vLPibrtnf6N3Q7+9kO9Nq5SlO2ceLgXAOri5
-         efwlk2pzLvX5R/Xlgi215DTb4HnLF0dwqv/Z/xziBba+ZqWXG33+Ps2vUHH+wiLD7Soy
-         1P+INI2LjsA9GfLSW62vDMe1T2juLufwhFNeUatPgFRcmJ1i6cKTr+rRT+1h+h1etVQK
-         8DVg==
-X-Gm-Message-State: AOJu0YwPIvPy3lktNH2RoWOUCsPhaSwSSCGlPKZDaiaYpjhYlBKu11f4
-        AK3M5q25QlVM73pJn+PnYPY=
-X-Google-Smtp-Source: AGHT+IE9r73iETFP8CVz3qlC40gSCwC0lyM23W8Sji2G9+CnfkViSYSEaeEHpLfU9JjnSbSFGMDKUA==
-X-Received: by 2002:a81:ab4e:0:b0:58c:6bcd:f562 with SMTP id d14-20020a81ab4e000000b0058c6bcdf562mr3901550ywk.20.1692227118566;
-        Wed, 16 Aug 2023 16:05:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692227120; x=1692831920;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SHHvH1R50hlGEwDWy54Ftr/XiT00eGPxCBa6hf7d2fM=;
+        b=imc3wLx6JvyTFhzE7Ra+2oeteL+UdDKlar/m5mmk/iZ1ISt+kMrcibjY5ZQoN6PPyL
+         dYch45rXzrutgq1Nmy2yNJKCNReKsaMS6R66zpGHCaVbZgfFkhqqKcOAYUcDeHSS5Rj7
+         9Pnr/c/gJbHlNA7eME5GFteJ3Mqh0/2+MQhuQWo5zHPeDPhQ7gR4ivlz0ty+HHY93U03
+         uyGXdN9w4FHXxGYyZii0FRfmmkkmK5ZuudXNpMBdnbrfGFtbGHaSHbXT9VeGnVvFvz10
+         pFhd7QxpkFzPWbBM+I/Fel4RhylxFd7ZH3s72SY1TpqxZNcJS+rCVBSB0P7fGyIX09BJ
+         c6aQ==
+X-Gm-Message-State: AOJu0YyFfN2M0Fp9JsZCNhEanw0XWkJB0gjl6Hb+u4bkRhUTcbQsABK/
+        o9n0sHFtPYfzJnblrkk+XvQ=
+X-Google-Smtp-Source: AGHT+IFIRlOddrCV9PtsKBnmPPmXUmelfYWp4Rc/jMrEYbo1bELrr5kxUHq45TbObXEYY0nJJSLSew==
+X-Received: by 2002:a81:8ac3:0:b0:586:9e0a:e3c4 with SMTP id a186-20020a818ac3000000b005869e0ae3c4mr3466574ywg.30.1692227120377;
+        Wed, 16 Aug 2023 16:05:20 -0700 (PDT)
 Received: from localhost ([2607:fea8:529e:7800::5ee])
-        by smtp.gmail.com with ESMTPSA id g63-20020a0dc442000000b0057a5302e2fesm4289463ywd.5.2023.08.16.16.05.17
+        by smtp.gmail.com with ESMTPSA id y6-20020a818806000000b0057736c436f1sm4269905ywf.141.2023.08.16.16.05.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 16:05:17 -0700 (PDT)
+        Wed, 16 Aug 2023 16:05:20 -0700 (PDT)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -62,15 +63,17 @@ To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
 Cc:     Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v2 0/3] SDM670 CPU frequency scaling: dtschema fixes
-Date:   Wed, 16 Aug 2023 19:04:14 -0400
-Message-ID: <20230816230412.76862-6-mailingradian@gmail.com>
+Subject: [PATCH v2 1/3] dt-bindings: interconnect: OSM L3: add SDM670 compatible
+Date:   Wed, 16 Aug 2023 19:04:15 -0400
+Message-ID: <20230816230412.76862-7-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230816230412.76862-6-mailingradian@gmail.com>
+References: <20230816230412.76862-6-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,27 +81,27 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Changes since v1 (20230815223108.306018-5-mailingradian@gmail.com):
- - add compatible to allOf area (2/3)
- - change subject line (Acked-by tag retained) (1/3)
- - add fixes tag (2/3)
+Add the compatible for the OSM L3 interconnect used in the Snapdragon
+670.
 
-This adds appropriate compatible strings to pass bindings checks.
-
-Patch 1/3 is preserved from a previous series, as it was not applied to
-linux-next yet and I wasn't notified that it was applied anywhere else:
-https://lore.kernel.org/linux-arm-msm/20230724214209.208699-7-mailingradian@gmail.com/
-
-Richard Acayan (3):
-  dt-bindings: interconnect: OSM L3: add SDM670 compatible
-  dt-bindings: cpufreq: cpufreq-qcom-hw: add SDM670 compatible
-  arm64: dts: qcom: sdm670: add specific cpufreq compatible
-
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml  | 2 ++
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
- arch/arm64/boot/dts/qcom/sdm670.dtsi                            | 2 +-
- 3 files changed, 4 insertions(+), 1 deletion(-)
+ 1 file changed, 1 insertion(+)
 
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+index 9d0a98d77ae9..21dae0b92819 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+@@ -21,6 +21,7 @@ properties:
+           - enum:
+               - qcom,sc7180-osm-l3
+               - qcom,sc8180x-osm-l3
++              - qcom,sdm670-osm-l3
+               - qcom,sdm845-osm-l3
+               - qcom,sm6350-osm-l3
+               - qcom,sm8150-osm-l3
 -- 
 2.41.0
 
