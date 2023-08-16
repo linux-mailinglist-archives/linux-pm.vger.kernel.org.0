@@ -2,192 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C73877E497
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 17:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 677AE77E652
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Aug 2023 18:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbjHPPD4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 11:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        id S234123AbjHPQ0B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 12:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344060AbjHPPDy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 11:03:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F902D4D;
-        Wed, 16 Aug 2023 08:03:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 50E3066AA1;
-        Wed, 16 Aug 2023 15:03:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F794C433C8;
-        Wed, 16 Aug 2023 15:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692198223;
-        bh=ybS6uqvUJjZUOrjpJirDQxk6fGQf8MUbm6m3qINtles=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ljEsF4ZyI0sF50+4wHtnjRTLWK+sgJA8Dtlz7c/FGGq7vSw8VUd5t/eGcbx7ea77F
-         KQjefUoRyQqAdvthzEzwbF6Hf8+j62t08/R7DDINL/AQt48ONzKpmJ5Xz/10WXST9Q
-         EffHv/DFsEb/38B0BsMdroXYnySupq4FPmiruDn8=
-Date:   Wed, 16 Aug 2023 17:03:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     saravanak@google.com, stable@vger.kernel.org,
-        John Stultz <jstultz@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
-        Ricardo =?iso-8859-1?Q?Ca=F1uelo?= Navarro 
-        <ricardo.canuelo@collabora.com>,
-        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
-        usama.anjum@collabora.com, kernelci@lists.linux.dev
-Subject: Re: [PATCH 5.17 127/298] driver core: Fix wait_for_device_probe() &
- deferred_probe_timeout interaction
-Message-ID: <2023081619-slapping-congrats-8e85@gregkh>
-References: <20220613094924.913340374@linuxfoundation.org>
- <20220613094928.793712131@linuxfoundation.org>
- <6283c4b1-2513-207d-4ed6-fdabf3f3880e@collabora.com>
+        with ESMTP id S1344115AbjHPQZg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 12:25:36 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0F22727
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 09:25:32 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3fe2048c910so62351335e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 16 Aug 2023 09:25:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692203131; x=1692807931;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=08B+ShI7xrrN5X88VrSc2sfz7TBWkw8FJeF7CumSbag=;
+        b=WU8Ohxl7XC8aAQCY6gaC4M7nujPuhmMcqm9o+3KtSZNuHlbXpGYPN/o+dA62H0Bv7k
+         iHvelKaABBbNWwSa+5lo3OpKW8wQQ4hRrOYffMVSWcHq4mHKeRPzojG2WDQbTu6NI+ll
+         cmYGdykzrHtTqsWnzrOOdlyERYWvh4HnxLsggRX0WmCmjHqiLCJg7T1aKx1hjn0uyedn
+         C2wePv67sOSdJwdgiL9R/8TeNkwThTZiRXk/jbufruq9xmByq601akaend3ZoDenLwcD
+         ir/VSP6i6ZbdazRrMCW2Q9TUEr20FTp8y5/wwV7pc6clBxag4XW92LkH7PQyUv6Se1Em
+         3L/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692203131; x=1692807931;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=08B+ShI7xrrN5X88VrSc2sfz7TBWkw8FJeF7CumSbag=;
+        b=Tr7XQ7XuH/bQ8A0tIO+1G9MYdJIQTKyFrKp7BNbWtuXK1yQakshRsjtaKecXvqQp1g
+         PDj2sTcW+pN/GIGz1tgJK+pD2jHTyQ5hSou3xz3A2T0BeqKI23mN2BntVx4syhCzoGkL
+         H20KwBBBszd55cTk4UG0JZfwoS/xtN6I8EMlXUkfjr0xjJVdn7Cl/hrCcJpy+VmilLod
+         yd4otUblXhaejcmEJ0GdGhU3aLiSqWQHpQfaLOhpaZaSwaUm4TqoTDORBmvn90WcNVKE
+         bUtEsrSPCgY1zr3R6BGmqD4OksWscXYmfS24V0qS8nEHNKxfaq9O7YxA2lW9W0b3lE4n
+         Z/PQ==
+X-Gm-Message-State: AOJu0YzPbXu0YfYYu9TrhqUeQm49EA5sRuKY2hKhwWfY+RJGghQ3xxXJ
+        Q5FkT4GzW16XwHtugcjE6fQt4hbv7iyrZDEGy/k=
+X-Google-Smtp-Source: AGHT+IGgD7U5dlhpBPbYmCPv5P83ayzCohsiJSs0Azcg9o8gUOJhbXugj2UuZQBo5tDzBEA3lZtIYw==
+X-Received: by 2002:a05:600c:3797:b0:3fe:5501:d282 with SMTP id o23-20020a05600c379700b003fe5501d282mr1966098wmr.34.1692203131198;
+        Wed, 16 Aug 2023 09:25:31 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id n5-20020a05600c294500b003fbaade0735sm24687785wmd.19.2023.08.16.09.25.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Aug 2023 09:25:30 -0700 (PDT)
+Message-ID: <c53f99db-353a-26c3-3b0a-3a3befbed528@linaro.org>
+Date:   Wed, 16 Aug 2023 18:25:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6283c4b1-2513-207d-4ed6-fdabf3f3880e@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 05/11] ACPI: thermal: Carry out trip point updates
+ under zone lock
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <13318886.uLZWGnKmhe@kreacher> <4503814.LvFx2qVVIh@kreacher>
+ <2236767.iZASKD2KPV@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <2236767.iZASKD2KPV@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 03:09:27PM +0530, Shreeya Patel wrote:
-> On 13/06/22 15:40, Greg Kroah-Hartman wrote:
-> > From: Saravana Kannan<saravanak@google.com>
-> > 
-> > [ Upstream commit 5ee76c256e928455212ab759c51d198fedbe7523 ]
-> > 
-> > Mounting NFS rootfs was timing out when deferred_probe_timeout was
-> > non-zero [1].  This was because ip_auto_config() initcall times out
-> > waiting for the network interfaces to show up when
-> > deferred_probe_timeout was non-zero. While ip_auto_config() calls
-> > wait_for_device_probe() to make sure any currently running deferred
-> > probe work or asynchronous probe finishes, that wasn't sufficient to
-> > account for devices being deferred until deferred_probe_timeout.
-> > 
-> > Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
-> > until the deferred_probe_timeout fires") tried to fix that by making
-> > sure wait_for_device_probe() waits for deferred_probe_timeout to expire
-> > before returning.
-> > 
-> > However, if wait_for_device_probe() is called from the kernel_init()
-> > context:
-> > 
-> > - Before deferred_probe_initcall() [2], it causes the boot process to
-> >    hang due to a deadlock.
-> > 
-> > - After deferred_probe_initcall() [3], it blocks kernel_init() from
-> >    continuing till deferred_probe_timeout expires and beats the point of
-> >    deferred_probe_timeout that's trying to wait for userspace to load
-> >    modules.
-> > 
-> > Neither of this is good. So revert the changes to
-> > wait_for_device_probe().
-> > 
-> > [1] -https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
-> > [2] -https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
-> > [3] -https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
+On 07/08/2023 20:08, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Hi Saravana, Greg,
+> There is a race condition between acpi_thermal_trips_update() and
+> acpi_thermal_check_fn(), because the trip points may get updated while
+> the latter is running which in theory may lead to inconsistent results.
+> For example, if two trips are updated together, using the temperature
+> value of one of them from before the update and the temperature value
+> of the other one from after the update may not lead to the expected
+> outcome.
 > 
+> Moreover, if thermal_get_trend() runs when a trip points update is in
+> progress, it may end up using stale trip point temperatures.
 > 
-> KernelCI found this patch causes the baseline.bootrr.deferred-probe-empty test to fail on r8a77960-ulcb,
-> see the following details for more information.
+> To address this, make acpi_thermal_trips_update() call
+> thermal_zone_device_adjust() to carry out the trip points update and
+> provide a new  acpi_thermal_adjust_thermal_zone() wrapper around
+> __acpi_thermal_trips_update() as the callback function for the latter.
 > 
-> KernelCI dashboard link:
-> https://linux.kernelci.org/test/plan/id/64d2a6be8c1a8435e535b264/
+> While at it, change the acpi_thermal_trips_update() return data type
+> to void as that function always returns 0 anyway.
 > 
-> Error messages from the logs :-
-> 
-> + UUID=11236495_1.5.2.4.5
-> + set +x
-> + export 'PATH=/opt/bootrr/libexec/bootrr/helpers:/lava-11236495/1/../bin:/sbin:/usr/sbin:/bin:/usr/bin'
-> + cd /opt/bootrr/libexec/bootrr
-> + sh helpers/bootrr-auto
-> e6800000.ethernet	
-> e6700000.dma-controller	
-> e7300000.dma-controller	
-> e7310000.dma-controller	
-> ec700000.dma-controller	
-> ec720000.dma-controller	
-> fea20000.vsp	
-> feb00000.display	
-> fea28000.vsp	
-> fea30000.vsp	
-> fe9a0000.vsp	
-> fe9af000.fcp	
-> fea27000.fcp	
-> fea2f000.fcp	
-> fea37000.fcp	
-> sound	
-> ee100000.mmc	
-> ee140000.mmc	
-> ec500000.sound	
-> /lava-11236495/1/../bin/lava-test-case
-> <8>[   17.476741] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=deferred-probe-empty RESULT=fail>
-> 
-> Test case failing :-
-> Baseline Bootrr deferred-probe-empty test -https://github.com/kernelci/bootrr/blob/main/helpers/bootrr-generic-tests
-> 
-> Regression Reproduced :-
-> 
-> Lava job after reverting the commit 5ee76c256e92
-> https://lava.collabora.dev/scheduler/job/11292890
-> 
-> 
-> Bisection report from KernelCI can be found at the bottom of the email.
-> 
-> Thanks,
-> Shreeya Patel
-> 
-> #regzbot introduced: 5ee76c256e92
-> #regzbot title: KernelCI: Multiple devices deferring on r8a77960-ulcb
-> 
-> ---------------------------------------------------------------------------------------------------------------------------------------------------
-> 
-> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **
-> * If you do send a fix, please include this trailer: *
-> * Reported-by: "kernelci.org bot" <bot@...> *
-> * *
-> * Hope this helps! *
-> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> 
-> stable-rc/linux-5.10.y bisection: baseline.bootrr.deferred-probe-empty on
-> r8a77960-ulcb
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-You are testing 5.10.y, yet the subject says 5.17?
+[ ... ]
 
-Which is it here?
+>   {
+> -	int i, ret = acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
+>   	bool valid;
+> +	int i;
+>   
+> -	if (ret)
+> -		return ret;
+> +	__acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
+>   
+>   	valid = tz->trips.critical.valid |
+>   		tz->trips.hot.valid |
+> @@ -710,6 +732,7 @@ static struct thermal_zone_device_ops ac
+>   	.get_trend = thermal_get_trend,
+>   	.hot = acpi_thermal_zone_device_hot,
+>   	.critical = acpi_thermal_zone_device_critical,
+> +	.update = acpi_thermal_adjust_thermal_zone,
 
-confused,
+It is too bad we have to add a callback in the core code just for this 
+driver.
 
-greg k-h
+I'm wondering if it is not possible to get rid of it ?
+
+Is it possible to use an internal lock for the ACPI driver to solve the 
+race issue above ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
