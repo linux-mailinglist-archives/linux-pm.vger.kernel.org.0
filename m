@@ -2,129 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9875A77F259
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 10:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F07877F25C
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 10:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349116AbjHQInr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 04:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S1349018AbjHQIoU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 04:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349053AbjHQInV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 04:43:21 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C1B26A8
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:43:16 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-565e54cb93aso1398192a12.3
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:43:16 -0700 (PDT)
+        with ESMTP id S1349064AbjHQIoC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 04:44:02 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1230173F
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:44:01 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6889656eb58so886896b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:44:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692261796; x=1692866596;
+        d=linaro.org; s=google; t=1692261841; x=1692866641;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=q2L4C5R28cbryggTkgsTbJhOs95hAoOhjBRL8672G4w=;
-        b=w48wRkJFgSgs14mGvW8yL9VkRkVfhujtSK5SMpUTWjNIRTy4j3dqLigip+/7P/yqxl
-         WAos9+gjFyT/LWGz0ZFfpGKJZBg4c6atVw8+J1vAxiSPInA2eRFw2nwTLVE5EQzXRBDt
-         mF+8zvQp/dS1vqYRlIRfzx2NX99kIiwe4ZAaV8nSwUA6PzhedfBo6aEg6AOii1v6SN6/
-         a/cYPh2RBcwLRuLteXsUKHjCopAqQ/yQy9BZFAGhBNAU95POH70qyJBgR/Gu/7D0fl3H
-         GNNNgAZ7ETMyc63vxwFlo1Snn4h6bJ0JFZLaXHGuRWH7vpdky/EiNSSAy88PWanFaHsS
-         itkg==
+        bh=fR5pG2U0zFVAXgwh49Fb4a1m5XkUhPxLBUBEsrZbP70=;
+        b=E5e/gAx7h9EuB5jHU91xKT217LmYKJt1fHHKqi8Ja6aAjs+rpyTX4jwk36pZL3155x
+         FX4II9kCVzDTDci+URUTmoV8fDv/IDwlt3B2fGDAST4ckNEjhCU7Ksgdfls11OMLJ/X2
+         l307nVljP7KK/RA59cYRys2bsqSeOkYzkAyBrxccQsTRa1pxH42e1R3s5rmF3niB4H2V
+         ScA77+uytHBl7AHZDXqyWJnt14lUGU858PbzdZyZQf9JIkH5CYi+FNALP/AFPG4hsJgI
+         8r+WNQmmcgAgpG6VU60S31W9d9rC8b9jUldOcB9zCSM06PnQ7wVXkpyGsOORJg8CJuQp
+         R96Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692261796; x=1692866596;
+        d=1e100.net; s=20221208; t=1692261841; x=1692866641;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q2L4C5R28cbryggTkgsTbJhOs95hAoOhjBRL8672G4w=;
-        b=SMM8zQnH0skbQFeP6kb9PW9wkiRszHswi/lYTOqePADdYnWp+vvyfqGoa+MgtTdaDS
-         kIQ7dQrvUYpd2UurQVWjaXgWC4+mRg1qPdg2RdfDjGUq6M/tQpe+MTGTMTU5fwL2g1au
-         sn95gVKO0eL0jktbrU7j0B2Pcfym6VeTO9cL1WosP/MvcqbCfoVSEjNEL7P1AcYrgue/
-         xmlqTcpjUlVxhIGqdUjmnB1Z2b5SIKrkT6D2hQ6+laMoIxOJty66g+15ssTJokO8+XCV
-         gjyEuhB7aLzmla4iwFpc8lGf5UWqDV2d6n3ZKIvLsVjSUhJ3dR92+BzggsiRkerdVyYd
-         iQIw==
-X-Gm-Message-State: AOJu0Yz3gYlNrEimJUfLNu++zJKkQ14E6FhtPrRuSZiycNOJo5lZdheQ
-        BjVf0WjJQvEYlRYkNu22z+MzTQ==
-X-Google-Smtp-Source: AGHT+IGQrst5AZOFbEPCDmMYUExv2C/YC6Cai1Zz5cEBkHsY3pX7eqss6vxelOypQNoP9bmFVWQC1A==
-X-Received: by 2002:a17:90a:c7c4:b0:268:5575:93d9 with SMTP id gf4-20020a17090ac7c400b00268557593d9mr3260325pjb.10.1692261796011;
-        Thu, 17 Aug 2023 01:43:16 -0700 (PDT)
+        bh=fR5pG2U0zFVAXgwh49Fb4a1m5XkUhPxLBUBEsrZbP70=;
+        b=XUt9bI2pPI/08zcJ6CKj0lKo3MLl7W8kHmtsAGuNBIYhqhuF2NL8RbNEjoBjNs5eJm
+         ozqv0B1nKyPXew1+rZzv2QlMe3rKLJD949CjCVGRKn5INCxisM032GjG8kZn6TQ9Yq8D
+         HF+bhJboYjzTFlYE1GxoZ95tSKoiX4Bt/QV6Sd61an6cp6icw2K7nLbLFnqcDGjNXVkg
+         p3SK0fqwYA8xKmf3HDrtJBPlqtmMPYopFunaODloiRIi7i4rjmcAOLm99Cnx1MWrj+x5
+         KskpFnGPQN/BnEAH/j7NXBdK2D+6MYBkD+xXYoEqw+S8BK+N0rFT3JYL6LdKMn5htRfY
+         x2dQ==
+X-Gm-Message-State: AOJu0YyUspYR8PQw4j4MSl/QSfesiSF15eYo9GO2PhS5QM9faaed/l4s
+        O0g+J2/eNMdAYwT25uDZet3divlvii+YgBMPjPA=
+X-Google-Smtp-Source: AGHT+IGh/haHyCY6XRyeot4wtRP9PEqm3NELI02P19jxlZ5Ji+qTmnbf6VMZvmPdHiVPT/uUeA0CBQ==
+X-Received: by 2002:a05:6a21:819b:b0:135:4527:efcc with SMTP id pd27-20020a056a21819b00b001354527efccmr4303456pzb.46.1692261841234;
+        Thu, 17 Aug 2023 01:44:01 -0700 (PDT)
 Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id b19-20020a17090ae39300b002682523653asm1057274pjz.49.2023.08.17.01.43.14
+        by smtp.gmail.com with ESMTPSA id j17-20020a62b611000000b0067777e960d9sm12339594pff.155.2023.08.17.01.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 01:43:15 -0700 (PDT)
-Date:   Thu, 17 Aug 2023 14:13:13 +0530
+        Thu, 17 Aug 2023 01:44:00 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 14:13:58 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     Liao Chang <liaochang1@huawei.com>
 Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] cpufreq: cppc: Set fie_disabled to FIE_DISABLED if
- fails to create kworker_fie
-Message-ID: <20230817084313.2tffmexdzvmpyend@vireshk-i7>
-References: <20230817074756.883380-1-liaochang1@huawei.com>
+Subject: Re: [PATCH 1/2] cpufreq: Prefer to print cpuid in MIN/MAX QoS
+ register error message
+Message-ID: <20230817084358.7gg4lsudfpv2ziso@vireshk-i7>
+References: <20230815014002.4132226-1-liaochang1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230817074756.883380-1-liaochang1@huawei.com>
+In-Reply-To: <20230815014002.4132226-1-liaochang1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-08-23, 07:47, Liao Chang wrote:
-> The function cppc_freq_invariance_init() may failed to create
-> kworker_fie, make it more robust by setting fie_disabled to FIE_DISBALED
-> to prevent an invalid pointer dereference in kthread_destroy_worker(),
-> which called from cppc_freq_invariance_exit().
-> 
-> v3:
-> Simplify cleanup code when invariance initialization fails.
-> 
-> v2:
-> Set fie_disabled to FIE_DISABLED when invariance initialization fails.
-> 
-> Link: https://lore.kernel.org/all/20230816034630.a4hvsj373q6aslk3@vireshk-i7/
+On 15-08-23, 09:40, Liao Chang wrote:
+> When a cpufreq_policy is allocated, the cpus, related_cpus and real_cpus
+> of policy are still unset. Therefore, it is preferable to print the
+> passed 'cpu' parameter instead of a empty 'cpus' cpumask in error
+> message when registering MIN/MAX QoS notifier fails.
 > 
 > Signed-off-by: Liao Chang <liaochang1@huawei.com>
 > ---
->  drivers/cpufreq/cppc_cpufreq.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+>  drivers/cpufreq/cpufreq.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 022e3555407c..4d501f0bf55d 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -249,15 +249,19 @@ static void __init cppc_freq_invariance_init(void)
->  		return;
->  
->  	kworker_fie = kthread_create_worker(0, "cppc_fie");
-> -	if (IS_ERR(kworker_fie))
-> +	if (IS_ERR(kworker_fie)) {
-> +		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
-> +			PTR_ERR(kworker_fie));
-> +		fie_disabled = FIE_DISABLED;
->  		return;
-> +	}
->  
->  	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 50bbc969ffe5..a757f90aa9d6 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1234,16 +1234,16 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+>  	ret = freq_qos_add_notifier(&policy->constraints, FREQ_QOS_MIN,
+>  				    &policy->nb_min);
 >  	if (ret) {
->  		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
->  			ret);
->  		kthread_destroy_worker(kworker_fie);
-> -		return;
-> +		fie_disabled = FIE_DISABLED;
+> -		dev_err(dev, "Failed to register MIN QoS notifier: %d (%*pbl)\n",
+> -			ret, cpumask_pr_args(policy->cpus));
+> +		dev_err(dev, "Failed to register MIN QoS notifier: %d (CPU%u)\n",
+> +			ret, cpu);
+>  		goto err_kobj_remove;
 >  	}
->  }
 >  
-> @@ -267,7 +271,6 @@ static void cppc_freq_invariance_exit(void)
->  		return;
->  
->  	kthread_destroy_worker(kworker_fie);
-> -	kworker_fie = NULL;
->  }
->  
->  #else
+>  	ret = freq_qos_add_notifier(&policy->constraints, FREQ_QOS_MAX,
+>  				    &policy->nb_max);
+>  	if (ret) {
+> -		dev_err(dev, "Failed to register MAX QoS notifier: %d (%*pbl)\n",
+> -			ret, cpumask_pr_args(policy->cpus));
+> +		dev_err(dev, "Failed to register MAX QoS notifier: %d (CPU%u)\n",
+> +			ret, cpu);
+>  		goto err_min_qos_notifier;
+>  	}
 
-Applied. Thanks.
+Applied both the patches. Thanks.
 
 -- 
 viresh
