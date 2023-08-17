@@ -2,147 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8BD677EF1E
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 04:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1B577F13A
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 09:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237251AbjHQCdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 22:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S1348466AbjHQHcJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 03:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235022AbjHQCdS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 22:33:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97900270C;
-        Wed, 16 Aug 2023 19:33:16 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RR89259nMzNmyn;
-        Thu, 17 Aug 2023 10:29:42 +0800 (CST)
-Received: from [10.67.110.108] (10.67.110.108) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Thu, 17 Aug 2023 10:33:14 +0800
-Message-ID: <e727d702-314a-e3ec-4ee6-8d4e2df73c92@huawei.com>
-Date:   Thu, 17 Aug 2023 10:33:13 +0800
+        with ESMTP id S1348471AbjHQHcF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 03:32:05 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083B02D50
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 00:32:00 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso72429065e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 00:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692257518; x=1692862318;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jj+zmFcS53FxiFXdFT3100UbX55OahW6GngbYoCny6o=;
+        b=PLVH/ed2a/eOd6iKZuSO3DTDv56DPfgIfYVnkAxbHUSMCBruBJmvkn+sIy9aZXCqE+
+         v1k1/IsCVUvm6B2CZnVw5Pq597Kx+gDtKmw3aiL9oFi4S3tWGB2p1W+gTgTdrMEwuNyX
+         i7fgPASN/i/3/wKKpfNPgQWA77eHoqrsU8tDGdq7UAqe97I25xiYm6lwLr8LrE7u1qm/
+         to/joITdRq0K8T/voGQm4z5qxDUw+dHfOrg3D6HXyzzjjiNy+HGKBaBsH98ot7aWoHjw
+         88q5Ijr+eV7E6RZ1R0X6anDg5bL8vxm26JJRgMEowKLw04lzXg67jzYpJshVTXGgMwSQ
+         QeCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692257518; x=1692862318;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jj+zmFcS53FxiFXdFT3100UbX55OahW6GngbYoCny6o=;
+        b=Ql+IM/h+a7CVKl8+tyobi+7FOOwghW0HTjFsedAj5tzYCFf42pSGAQuoKA1vgENGqn
+         VGS/DKEsFh1z4vqJrENl7Cfl1atj7EaAnjkZezLsIm7dZnZzFY2DBiIsbZYwOpMgZ2xM
+         Q55QJEWeh+WAyAxIftwikP0fvLTQLluwQoTZuyZEOTi+WJ7bOioqeHBoLgcCMwxeMo03
+         fqJwM+tYtLczf9f82SNisiF+q87kISkH6tSwOIIWYyKnM6zxUWrcCjL0bHtIs8xqHjC2
+         IbvsvlE2ZGB1PjaJt/BDYLw+q0ocvdWQX1YpoZWZlUHJ8Y0pizSj4wl2o+eMljWNLiA4
+         PoiQ==
+X-Gm-Message-State: AOJu0YzuiLkyLGuRJK+MgS9tDJspwZI4EPaseHtamgk53k885+tTe+X1
+        KPR9WbidwORjoIYPmkaP/jEirg==
+X-Google-Smtp-Source: AGHT+IGzexNfIMNiyYf04wPFvQ+KprnkNte0v5qmm1q1BFzdIXuiSxv8wB5TM7QDdlSZYaz7yM/Ehw==
+X-Received: by 2002:a05:600c:228d:b0:3fe:16c0:6b44 with SMTP id 13-20020a05600c228d00b003fe16c06b44mr3303735wmf.12.1692257518429;
+        Thu, 17 Aug 2023 00:31:58 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id j11-20020a5d604b000000b0031ad5470f89sm1740984wrt.18.2023.08.17.00.31.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Aug 2023 00:31:58 -0700 (PDT)
+Message-ID: <b59547f8-6301-8c95-546f-d454f98d00fc@linaro.org>
+Date:   Thu, 17 Aug 2023 09:31:57 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH v2] cpufreq: cppc: Set fie_disabled to FIE_DISABLED if
- fails to create kworker_fie
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230816094938.862186-1-liaochang1@huawei.com>
- <20230816103731.qwx3j3rmwyszq45j@vireshk-i7>
-From:   "Liao, Chang" <liaochang1@huawei.com>
-In-Reply-To: <20230816103731.qwx3j3rmwyszq45j@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.110.108]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v16 1/2] thermal: loongson-2: add thermal management
+ support
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        loongson-kernel@lists.loongnix.cn,
+        zhanghongchen <zhanghongchen@loongson.cn>
+References: <20230817021007.10350-1-zhuyinbo@loongson.cn>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230817021007.10350-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-在 2023/8/16 18:37, Viresh Kumar 写道:
-> On 16-08-23, 09:49, Liao Chang wrote:
->> The function cppc_freq_invariance_init() may failed to create
->> kworker_fie, make it more robust by setting fie_disabled to FIE_DISBALED
->> to prevent an invalid pointer dereference in kthread_destroy_worker(),
->> which called from cppc_freq_invariance_exit().
->>
->> Link: https://lore.kernel.org/all/20230816034630.a4hvsj373q6aslk3@vireshk-i7/
->>
->> Signed-off-by: Liao Chang <liaochang1@huawei.com>
->> ---
->>  drivers/cpufreq/cppc_cpufreq.c | 28 ++++++++++++++++------------
->>  1 file changed, 16 insertions(+), 12 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index 022e3555407c..bff4cde06083 100644
->> --- a/drivers/cpufreq/cppc_cpufreq.c
->> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -220,6 +220,15 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->>  	}
->>  }
->>  
->> +static void cppc_freq_invariance_exit(void)
->> +{
->> +	if (fie_disabled)
->> +		return;
->> +
->> +	kthread_destroy_worker(kworker_fie);
->> +	kworker_fie = NULL;
->> +}
->> +
->>  static void __init cppc_freq_invariance_init(void)
->>  {
->>  	struct sched_attr attr = {
->> @@ -249,27 +258,22 @@ static void __init cppc_freq_invariance_init(void)
->>  		return;
->>  
->>  	kworker_fie = kthread_create_worker(0, "cppc_fie");
->> -	if (IS_ERR(kworker_fie))
->> +	if (IS_ERR(kworker_fie)) {
->> +		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
->> +			PTR_ERR(kworker_fie));
->> +		fie_disabled = FIE_DISABLED;
->>  		return;
->> +	}
->>  
->>  	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
->>  	if (ret) {
->>  		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
->>  			ret);
->> -		kthread_destroy_worker(kworker_fie);
->> -		return;
->> +		cppc_freq_invariance_exit();
+On 17/08/2023 04:10, Yinbo Zhu wrote:
+> This patch adds the support for Loongson-2 thermal sensor controller,
+> which can support maximum four sensor selectors that corresponding to four
+> sets of thermal control registers and one set of sampling register. The
+> sensor selector can selector a speific thermal sensor as temperature input.
+> The sampling register is used to obtain the temperature in real time, the
+> control register GATE field is used to set the threshold of high or low
+> temperature, when the input temperature is higher than the high temperature
+> threshold or lower than the low temperature threshold, an interrupt will
+> occur.
 > 
-> I don't really like this change, there aren't a lot of things that we
-> need to do here on cleanup, but just kthread_destroy_worker(). Calling
-> it directly makes more sense I guess.
+> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+> Change in v16:
+> 		1. Remove the test and message in the context of
+> 		   devm_thermal_add_hwmon_sysfs.
 
-OK，I will simplify code in next revisoin.
+Applied, thanks
 
-> 
->> +		fie_disabled = FIE_DISABLED;
->>  	}
->>  }
->>  
->> -static void cppc_freq_invariance_exit(void)
->> -{
->> -	if (fie_disabled)
->> -		return;
->> -
->> -	kthread_destroy_worker(kworker_fie);
-> 
->> -	kworker_fie = NULL;
-> 
-> I don't see the point of this line. Probably it can be dropped.
-
-I agree with you, when fie_disbaled is set to FIE_DISABLED and kthred_destroy_worker() is called,
-the driver has no chance to access the invalid kworker_fie pointer.
-
-Thanks.
-
-> 
->> -}
->> -
->>  #else
->>  static inline void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->>  {
->> -- 
->> 2.34.1
-> 
-
--- 
-BR
-Liao, Chang
