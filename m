@@ -2,124 +2,321 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0169D77F56E
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 13:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B663977F651
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 14:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350377AbjHQLjv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 07:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36072 "EHLO
+        id S237219AbjHQMSi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 08:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350374AbjHQLjW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 07:39:22 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A6910E6
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 04:39:20 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe5c0e5747so5609615e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 04:39:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692272359; x=1692877159;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TTEZsdCY4/ROvTDegYueu3UoNKVTo+C9n4Jn+JaTP2o=;
-        b=oX5yPVth+PHIjocLUBndePdGLypDvYq2solc5BzuflSzikrFXb3kjbOOxCzeIXUOc2
-         eMRRn1Y5UkU4Y7HoKz9ahfaZy2mVS5ClWAtrqtSr5TZ+Zxe/kyZM8J1YkzTb+9LS5T7c
-         iEawd+lQth5ZCOZC1GA5tHDPx4dG/nU+F9hV4Rg4zFa/seAonVVXc7XYFbWzxdN7l/yi
-         yZ2YYFXEsbbBOg2qRfFt9dPWobIgklKKF1O9yB5b/8u4n3ehRrRCpcqoojzhPe5mG2Ae
-         KqeCVbtlKG4lP6k/0BhYNtRVHXy7GVEcVY2etFpfdOQmrcff1COpd+rvL+gcXg/Vg1+n
-         yWjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692272359; x=1692877159;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TTEZsdCY4/ROvTDegYueu3UoNKVTo+C9n4Jn+JaTP2o=;
-        b=faNOqrSEA31AKv4859LG6utqoTtODTw3nDjBQeef04v/gtFzQiTLB50tYSpzQ4bNWC
-         yHP9p8phgyWKjvnLf5+OlmgWKPrDmchkJb3Iixi2f6TPxMRd8g5+p67lfrIfBYF/kJqL
-         C8qsiYxCPixLrwx3ViX4155EyC4sFPTomdPtg0s8wg5jQ0+w+o+FGQq7VTlMEmkZJ1oO
-         9+dQ31JZ49TUDHggVoX1AAN1vW3HnB2Se4ZORVnRl6/MBfZm31DiPNvbOT4GpFcUUvOf
-         3o3h5Ou5c/0kWJ2LkBI9UQHGj3SC0ZvtDDnupgYma15yCfjlgZ660SEZjjcWe6g60G/t
-         xEZw==
-X-Gm-Message-State: AOJu0Yy/SmWq24RERnz9Zx+PC3R0FmzZWIM7RFxC66IrjI8AUk8YNdbA
-        wdotN36wyOP7sbXJWfDtjP6VOg==
-X-Google-Smtp-Source: AGHT+IGplJUJS6D5RdP0gSy2QTohSeSR4gSIA81af/fmBPrRIPnGjoUraXeZu9PIoTjkHGZhXLeFjw==
-X-Received: by 2002:a05:600c:3c8b:b0:3fe:4c29:e626 with SMTP id bg11-20020a05600c3c8b00b003fe4c29e626mr1942612wmb.13.1692272358746;
-        Thu, 17 Aug 2023 04:39:18 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id a23-20020a05600c225700b003fe1cdbc33dsm2749722wmm.9.2023.08.17.04.39.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 04:39:18 -0700 (PDT)
-Message-ID: <d5393131-602f-c9ae-8ca9-1ee69479c705@linaro.org>
-Date:   Thu, 17 Aug 2023 13:39:17 +0200
+        with ESMTP id S1350754AbjHQMSH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 08:18:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2875CE7C;
+        Thu, 17 Aug 2023 05:18:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692274685; x=1723810685;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=C4c6AKUHEkPYgp9NFigxij3BZiIJDVglDccALiQyRUo=;
+  b=nOae0Pjq/HFBNZQVHhiPaAjAYkZqcSG6Emxz8QxOMX/DcK/DPKccP0Kc
+   F+xSE3fRujZteO1DM0EnupIJVCAUn4wOvNg+BKR4f01TkG6DAUucKFBTu
+   1pByBeTGkFC5c2TmMOXRBx1BdQeomxDF80jtyCpXrOOG426GYlmbBM6r+
+   qRV9ccqVbBO6nKiaLHLjevyJ1dJ1XLkiAdqI3kHJOy8gvzd1vrv2ZEx7y
+   HFnilzvsE8/7Zgs8h7qNuxlh+GjHkG0eJJ5qtHlts9W+vW8B4B3ww1jNE
+   yNMZx8GMp83FKlD575SpBi/YXV9bBgYcGW/MxgEYnPdCEfIknmouwYvc2
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="436696851"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="436696851"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 05:18:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848873185"
+X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
+   d="scan'208";a="848873185"
+Received: from lababeix-mobl1.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.251.212.52])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 05:18:00 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Alex Deucher <alexdeucher@gmail.com>
+Subject: [PATCH 09/10] thermal: Add PCIe cooling driver
+Date:   Thu, 17 Aug 2023 15:17:07 +0300
+Message-Id: <20230817121708.53213-10-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230817121708.53213-1-ilpo.jarvinen@linux.intel.com>
+References: <20230817121708.53213-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-References: <20230530195132.2286163-1-bero@baylibre.com>
- <107678ff-c3d5-4c3a-ad0e-fa292a125daa@notapiano>
- <a97efd71-23e2-5ac9-8d3d-427a431353c6@linaro.org>
- <CAGXv+5EFD_yMF7q0P5rqiRWeyRqm016Or8iB0niwj26HFVp93Q@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAGXv+5EFD_yMF7q0P5rqiRWeyRqm016Or8iB0niwj26HFVp93Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/08/2023 10:45, Chen-Yu Tsai wrote:
-> On Thu, Aug 17, 2023 at 4:49 AM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi,
->>
->> On 16/08/2023 21:57, Nícolas F. R. A. Prado wrote:
->>
->> [ ... ]
->>
->>> Hi Daniel,
->>>
->>> just a gentle reminder. As you've just applied [1], there are no longer any
->>> concerns with this series, and it'll provide both working interrupts and
->>> reliable thermal readings on MT8192.
->>
->> There are still concerns and questions in the series for patch2 and 3.
-> 
-> FWIW the readout errors raised in patch 3 were fixed by
-> 
-> "thermal/drivers/mediatek/lvts_thermal: Make readings valid in filtered mode"
-> 
-> So I guess the remaining concern is on patch 2 about whether the noirq
-> suspend callback should be used instead.
+Add a thermal cooling driver to provide path to access PCIe bandwidth
+controller using the usual thermal interfaces.
 
-Yes, and the reordering of the lvts_of_match
+A cooling device is instantiated for controllable PCIe ports from the
+bwctrl service driver.
 
+The thermal side state 0 means no throttling, i.e., maximum supported
+PCIe speed.
 
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ MAINTAINERS                    |   1 +
+ drivers/pci/pcie/bwctrl.c      |  11 ++++
+ drivers/thermal/Kconfig        |  10 +++
+ drivers/thermal/Makefile       |   2 +
+ drivers/thermal/pcie_cooling.c | 107 +++++++++++++++++++++++++++++++++
+ include/linux/pci-bwctrl.h     |  15 +++++
+ 6 files changed, 146 insertions(+)
+ create mode 100644 drivers/thermal/pcie_cooling.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d2eed2883a43..a0b40253fd5a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16421,6 +16421,7 @@ PCIE BANDWIDTH CONTROLLER
+ M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+ S:	Supported
+ F:	drivers/pci/pcie/bwctrl.c
++F:	drivers/thermal/pcie_cooling.c
+ F:	include/linux/pci-bwctrl.h
+ 
+ PCIE DRIVER FOR AMAZON ANNAPURNA LABS
+diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
+index e3172d69476f..13c73546244e 100644
+--- a/drivers/pci/pcie/bwctrl.c
++++ b/drivers/pci/pcie/bwctrl.c
+@@ -34,9 +34,11 @@
+ /**
+  * struct bwctrl_service_data - PCIe Port Bandwidth Controller
+  * @set_speed_mutex: serializes link speed changes
++ * @cdev: thermal cooling device associated with the port
+  */
+ struct bwctrl_service_data {
+ 	struct mutex set_speed_mutex;
++	struct thermal_cooling_device *cdev;
+ };
+ 
+ static bool bwctrl_valid_pcie_speed(enum pci_bus_speed speed)
+@@ -253,8 +255,16 @@ static int pcie_bandwidth_notification_probe(struct pcie_device *srv)
+ 	pcie_enable_link_bandwidth_notification(port);
+ 	pci_info(port, "enabled with IRQ %d\n", srv->irq);
+ 
++	data->cdev = pcie_cooling_device_register(port, srv);
++	if (IS_ERR(data->cdev)) {
++		ret = PTR_ERR(data->cdev);
++		goto disable_notifications;
++	}
+ 	return 0;
+ 
++disable_notifications:
++	pcie_disable_link_bandwidth_notification(srv->port);
++	kfree(data);
+ free_irq:
+ 	free_irq(srv->irq, srv);
+ 	return ret;
+@@ -264,6 +274,7 @@ static void pcie_bandwidth_notification_remove(struct pcie_device *srv)
+ {
+ 	struct bwctrl_service_data *data = get_service_data(srv);
+ 
++	pcie_cooling_device_unregister(data->cdev);
+ 	pcie_disable_link_bandwidth_notification(srv->port);
+ 	free_irq(srv->irq, srv);
+ 	mutex_destroy(&data->set_speed_mutex);
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index 19a4b33cb564..7deda3a0237d 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -219,6 +219,16 @@ config DEVFREQ_THERMAL
+ 
+ 	  If you want this support, you should say Y here.
+ 
++config PCIE_THERMAL
++	bool "PCIe cooling support"
++	depends on PCIEPORTBUS
++	select PCIE_BW
++	help
++	  This implements PCIe cooling mechanism through bandwidth reduction
++	  for PCIe devices.
++
++	  If you want this support, you should say Y here.
++
+ config THERMAL_EMULATION
+ 	bool "Thermal emulation mode support"
+ 	help
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 058664bc3ec0..065972a08c84 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -30,6 +30,8 @@ thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
+ # devfreq cooling
+ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
+ 
++thermal_sys-$(CONFIG_PCIE_THERMAL) += pcie_cooling.o
++
+ obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o k3_j72xx_bandgap.o
+ # platform thermal drivers
+ obj-y				+= broadcom/
+diff --git a/drivers/thermal/pcie_cooling.c b/drivers/thermal/pcie_cooling.c
+new file mode 100644
+index 000000000000..d86265c03e80
+--- /dev/null
++++ b/drivers/thermal/pcie_cooling.c
+@@ -0,0 +1,107 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * PCIe cooling device
++ *
++ * Copyright (C) 2023 Intel Corporation.
++ */
++
++#include <linux/build_bug.h>
++#include <linux/err.h>
++#include <linux/kernel.h>
++#include <linux/pci.h>
++#include <linux/pci-bwctrl.h>
++#include <linux/slab.h>
++#include <linux/string.h>
++#include <linux/thermal.h>
++
++#define COOLING_DEV_TYPE_PREFIX		"PCIe_Port_"
++
++struct pcie_cooling_device {
++	struct pci_dev *port;
++	struct pcie_device *pdev;
++};
++
++static int pcie_cooling_get_max_level(struct thermal_cooling_device *cdev, unsigned long *state)
++{
++	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
++
++	/* cooling state 0 is same as the maximum PCIe speed */
++	*state = pcie_cdev->port->subordinate->max_bus_speed - PCIE_SPEED_2_5GT;
++
++	return 0;
++}
++
++static int pcie_cooling_get_cur_level(struct thermal_cooling_device *cdev, unsigned long *state)
++{
++	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
++
++	/* cooling state 0 is same as the maximum PCIe speed */
++	*state = cdev->max_state -
++		 (pcie_cdev->port->subordinate->cur_bus_speed - PCIE_SPEED_2_5GT);
++
++	return 0;
++}
++
++static int pcie_cooling_set_cur_level(struct thermal_cooling_device *cdev, unsigned long state)
++{
++	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
++	enum pci_bus_speed speed;
++
++	/* cooling state 0 is same as the maximum PCIe speed */
++	speed = (cdev->max_state - state) + PCIE_SPEED_2_5GT;
++
++	return bwctrl_set_current_speed(pcie_cdev->pdev, speed);
++}
++
++static struct thermal_cooling_device_ops pcie_cooling_ops = {
++	.get_max_state = pcie_cooling_get_max_level,
++	.get_cur_state = pcie_cooling_get_cur_level,
++	.set_cur_state = pcie_cooling_set_cur_level,
++};
++
++struct thermal_cooling_device *pcie_cooling_device_register(struct pci_dev *port,
++							    struct pcie_device *pdev)
++{
++	struct pcie_cooling_device *pcie_cdev;
++	struct thermal_cooling_device *cdev;
++	size_t name_len;
++	char *name;
++
++	pcie_cdev = kzalloc(sizeof(*pcie_cdev), GFP_KERNEL);
++	if (!pcie_cdev)
++		return ERR_PTR(-ENOMEM);
++
++	pcie_cdev->port = port;
++	pcie_cdev->pdev = pdev;
++
++	name_len = strlen(COOLING_DEV_TYPE_PREFIX) + strlen(pci_name(port)) + 1;
++	name = kzalloc(name_len, GFP_KERNEL);
++	if (!name) {
++		kfree(pcie_cdev);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	snprintf(name, name_len, COOLING_DEV_TYPE_PREFIX "%s", pci_name(port));
++	cdev = thermal_cooling_device_register(name, pcie_cdev, &pcie_cooling_ops);
++	kfree(name);
++
++	return cdev;
++}
++
++void pcie_cooling_device_unregister(struct thermal_cooling_device *cdev)
++{
++	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
++
++	thermal_cooling_device_unregister(cdev);
++	kfree(pcie_cdev);
++}
++
++/* For bus_speed <-> state arithmetic */
++static_assert(PCIE_SPEED_2_5GT + 1 == PCIE_SPEED_5_0GT);
++static_assert(PCIE_SPEED_5_0GT + 1 == PCIE_SPEED_8_0GT);
++static_assert(PCIE_SPEED_8_0GT + 1 == PCIE_SPEED_16_0GT);
++static_assert(PCIE_SPEED_16_0GT + 1 == PCIE_SPEED_32_0GT);
++static_assert(PCIE_SPEED_32_0GT + 1 == PCIE_SPEED_64_0GT);
++
++MODULE_AUTHOR("Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>");
++MODULE_DESCRIPTION("PCIe cooling driver");
+diff --git a/include/linux/pci-bwctrl.h b/include/linux/pci-bwctrl.h
+index 46026fa25deb..366445517b72 100644
+--- a/include/linux/pci-bwctrl.h
++++ b/include/linux/pci-bwctrl.h
+@@ -15,4 +15,19 @@ struct thermal_cooling_device;
+ 
+ int bwctrl_set_current_speed(struct pcie_device *srv, enum pci_bus_speed speed);
+ 
++#ifdef CONFIG_PCIE_THERMAL
++struct thermal_cooling_device *pcie_cooling_device_register(struct pci_dev *port,
++							    struct pcie_device *pdev);
++void pcie_cooling_device_unregister(struct thermal_cooling_device *cdev);
++#else
++static inline struct thermal_cooling_device *pcie_cooling_device_register(struct pci_dev *port,
++									  struct pcie_device *pdev)
++{
++	return NULL;
++}
++static inline void pcie_cooling_device_unregister(struct thermal_cooling_device *cdev)
++{
++}
++#endif
++
+ #endif
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.30.2
 
