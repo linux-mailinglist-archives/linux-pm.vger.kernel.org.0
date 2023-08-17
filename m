@@ -2,321 +2,220 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B663977F651
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 14:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24FE77F75D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 15:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237219AbjHQMSi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 08:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
+        id S1351233AbjHQNLO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 09:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350754AbjHQMSH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 08:18:07 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2875CE7C;
-        Thu, 17 Aug 2023 05:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692274685; x=1723810685;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=C4c6AKUHEkPYgp9NFigxij3BZiIJDVglDccALiQyRUo=;
-  b=nOae0Pjq/HFBNZQVHhiPaAjAYkZqcSG6Emxz8QxOMX/DcK/DPKccP0Kc
-   F+xSE3fRujZteO1DM0EnupIJVCAUn4wOvNg+BKR4f01TkG6DAUucKFBTu
-   1pByBeTGkFC5c2TmMOXRBx1BdQeomxDF80jtyCpXrOOG426GYlmbBM6r+
-   qRV9ccqVbBO6nKiaLHLjevyJ1dJ1XLkiAdqI3kHJOy8gvzd1vrv2ZEx7y
-   HFnilzvsE8/7Zgs8h7qNuxlh+GjHkG0eJJ5qtHlts9W+vW8B4B3ww1jNE
-   yNMZx8GMp83FKlD575SpBi/YXV9bBgYcGW/MxgEYnPdCEfIknmouwYvc2
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="436696851"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="436696851"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 05:18:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="848873185"
-X-IronPort-AV: E=Sophos;i="6.01,180,1684825200"; 
-   d="scan'208";a="848873185"
-Received: from lababeix-mobl1.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.251.212.52])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 05:18:00 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Subject: [PATCH 09/10] thermal: Add PCIe cooling driver
-Date:   Thu, 17 Aug 2023 15:17:07 +0300
-Message-Id: <20230817121708.53213-10-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230817121708.53213-1-ilpo.jarvinen@linux.intel.com>
-References: <20230817121708.53213-1-ilpo.jarvinen@linux.intel.com>
+        with ESMTP id S1351489AbjHQNLJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 09:11:09 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676E735B8;
+        Thu, 17 Aug 2023 06:10:40 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
+ id 781fc99a341be9fa; Thu, 17 Aug 2023 15:09:35 +0200
+Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
+   discourages use of this host) smtp.mailfrom=rjwysocki.net 
+   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
+   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
+Received: from kreacher.localnet (unknown [195.136.19.94])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 0A246662A72;
+        Thu, 17 Aug 2023 15:09:35 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Michal Wilczynski <michal.wilczynski@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH v5 05/11] ACPI: thermal: Carry out trip point updates under zone lock
+Date:   Thu, 17 Aug 2023 15:09:34 +0200
+Message-ID: <3262036.aeNJFYEL58@kreacher>
+In-Reply-To: <c53f99db-353a-26c3-3b0a-3a3befbed528@linaro.org>
+References: <13318886.uLZWGnKmhe@kreacher> <2236767.iZASKD2KPV@kreacher> <c53f99db-353a-26c3-3b0a-3a3befbed528@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudduuddgieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+ thhtohepmhhitghhrghlrdifihhltgiihihnshhkihesihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a thermal cooling driver to provide path to access PCIe bandwidth
-controller using the usual thermal interfaces.
+On Wednesday, August 16, 2023 6:25:30 PM CEST Daniel Lezcano wrote:
+> On 07/08/2023 20:08, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > 
+> > There is a race condition between acpi_thermal_trips_update() and
+> > acpi_thermal_check_fn(), because the trip points may get updated while
+> > the latter is running which in theory may lead to inconsistent results.
+> > For example, if two trips are updated together, using the temperature
+> > value of one of them from before the update and the temperature value
+> > of the other one from after the update may not lead to the expected
+> > outcome.
+> > 
+> > Moreover, if thermal_get_trend() runs when a trip points update is in
+> > progress, it may end up using stale trip point temperatures.
+> > 
+> > To address this, make acpi_thermal_trips_update() call
+> > thermal_zone_device_adjust() to carry out the trip points update and
+> > provide a new  acpi_thermal_adjust_thermal_zone() wrapper around
+> > __acpi_thermal_trips_update() as the callback function for the latter.
+> > 
+> > While at it, change the acpi_thermal_trips_update() return data type
+> > to void as that function always returns 0 anyway.
+> > 
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> 
+> [ ... ]
+> 
+> >   {
+> > -	int i, ret = acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
+> >   	bool valid;
+> > +	int i;
+> >   
+> > -	if (ret)
+> > -		return ret;
+> > +	__acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
+> >   
+> >   	valid = tz->trips.critical.valid |
+> >   		tz->trips.hot.valid |
+> > @@ -710,6 +732,7 @@ static struct thermal_zone_device_ops ac
+> >   	.get_trend = thermal_get_trend,
+> >   	.hot = acpi_thermal_zone_device_hot,
+> >   	.critical = acpi_thermal_zone_device_critical,
+> > +	.update = acpi_thermal_adjust_thermal_zone,
+> 
+> It is too bad we have to add a callback in the core code just for this 
+> driver.
+> 
+> I'm wondering if it is not possible to get rid of it ?
 
-A cooling device is instantiated for controllable PCIe ports from the
-bwctrl service driver.
+Well, it is possible to pass the callback as an argument to the function running it.
 
-The thermal side state 0 means no throttling, i.e., maximum supported
-PCIe speed.
+The code is slightly simpler this way, so I think I'm going to do that.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Please see the appended replacement for patch [02/11].
+
+Of course, it also is possible to provide accessors for acquiring and releasing
+the zone lock, which would be more straightforward still (as mentioned before),
+but I kind of understand the concerns regarding possible abuse of those by
+drivers.
+
+> Is it possible to use an internal lock for the ACPI driver to solve the 
+> race issue above ?
+
+No, it is not, and I have already explained it at least once, but let me do
+that once again.
+
+There are three code paths that need to be synchronized, because each of them
+can run in parallel with any of the other two.
+
+(a) acpi_thermal_trips_update() called via acpi_thermal_notify() which runs
+    in the ACPI notify kworker context.
+(b) thermal_get_trend(), already called under the zone lock by the core.
+(c) acpi_thermal_check_fn() running in a kworker context, which calls
+    thermal_zone_device_update() which it turn takes the zone lock.
+
+Also the trip points update should not race with any computations using trip
+point temperatures in the core or in the governors (they are carried out under
+the zone lock as a rule).
+
+(b) means that the local lock would need to be always taken under the zone
+lock and then either acpi_thermal_check_fn() would need to be able to take
+the local lock under the zone lock (so it would need to be able to acquire
+the zone lock more or less directly), or acpi_thermal_trips_update() can
+use the zone lock (which happens in the $subject patch via the new helper
+function).
+
+Moreover, using a local lock in acpi_thermal_trips_update() does not provide
+any protection for the code using trip temperatures that runs under the zone
+lock mentioned above.
+
+So as I said, the patch below replaces [02/11] and it avoids adding a new
+callback to zone operations.  The code gets slightly simpler with [02/11]
+replaced with the appended one, so I'm going to use the latter.
+
+It requires the $subject patch and patch [11/11] to be rebased, but that
+is so trivial that I'm not even going to send updates of these patches.
+
+The current series is available in the acpi-thermal git branch in
+linux-pm.git.
+
 ---
- MAINTAINERS                    |   1 +
- drivers/pci/pcie/bwctrl.c      |  11 ++++
- drivers/thermal/Kconfig        |  10 +++
- drivers/thermal/Makefile       |   2 +
- drivers/thermal/pcie_cooling.c | 107 +++++++++++++++++++++++++++++++++
- include/linux/pci-bwctrl.h     |  15 +++++
- 6 files changed, 146 insertions(+)
- create mode 100644 drivers/thermal/pcie_cooling.c
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH] thermal: core: Introduce thermal_zone_device_exec()
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d2eed2883a43..a0b40253fd5a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16421,6 +16421,7 @@ PCIE BANDWIDTH CONTROLLER
- M:	Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
- S:	Supported
- F:	drivers/pci/pcie/bwctrl.c
-+F:	drivers/thermal/pcie_cooling.c
- F:	include/linux/pci-bwctrl.h
+Introduce a new helper function, thermal_zone_device_exec(), that can
+be used by drivers to run a given callback routine under the zone lock.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.c |   19 +++++++++++++++++++
+ include/linux/thermal.h        |    4 ++++
+ 2 files changed, 23 insertions(+)
+
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -323,6 +323,10 @@ int thermal_zone_unbind_cooling_device(s
+ 				       struct thermal_cooling_device *);
+ void thermal_zone_device_update(struct thermal_zone_device *,
+ 				enum thermal_notify_event);
++void thermal_zone_device_exec(struct thermal_zone_device *tz,
++			      void (*cb)(struct thermal_zone_device *,
++					 unsigned long),
++			      unsigned long data);
  
- PCIE DRIVER FOR AMAZON ANNAPURNA LABS
-diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
-index e3172d69476f..13c73546244e 100644
---- a/drivers/pci/pcie/bwctrl.c
-+++ b/drivers/pci/pcie/bwctrl.c
-@@ -34,9 +34,11 @@
- /**
-  * struct bwctrl_service_data - PCIe Port Bandwidth Controller
-  * @set_speed_mutex: serializes link speed changes
-+ * @cdev: thermal cooling device associated with the port
-  */
- struct bwctrl_service_data {
- 	struct mutex set_speed_mutex;
-+	struct thermal_cooling_device *cdev;
- };
+ struct thermal_cooling_device *thermal_cooling_device_register(const char *,
+ 		void *, const struct thermal_cooling_device_ops *);
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -497,6 +497,25 @@ void thermal_zone_device_update(struct t
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_device_update);
  
- static bool bwctrl_valid_pcie_speed(enum pci_bus_speed speed)
-@@ -253,8 +255,16 @@ static int pcie_bandwidth_notification_probe(struct pcie_device *srv)
- 	pcie_enable_link_bandwidth_notification(port);
- 	pci_info(port, "enabled with IRQ %d\n", srv->irq);
- 
-+	data->cdev = pcie_cooling_device_register(port, srv);
-+	if (IS_ERR(data->cdev)) {
-+		ret = PTR_ERR(data->cdev);
-+		goto disable_notifications;
-+	}
- 	return 0;
- 
-+disable_notifications:
-+	pcie_disable_link_bandwidth_notification(srv->port);
-+	kfree(data);
- free_irq:
- 	free_irq(srv->irq, srv);
- 	return ret;
-@@ -264,6 +274,7 @@ static void pcie_bandwidth_notification_remove(struct pcie_device *srv)
- {
- 	struct bwctrl_service_data *data = get_service_data(srv);
- 
-+	pcie_cooling_device_unregister(data->cdev);
- 	pcie_disable_link_bandwidth_notification(srv->port);
- 	free_irq(srv->irq, srv);
- 	mutex_destroy(&data->set_speed_mutex);
-diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-index 19a4b33cb564..7deda3a0237d 100644
---- a/drivers/thermal/Kconfig
-+++ b/drivers/thermal/Kconfig
-@@ -219,6 +219,16 @@ config DEVFREQ_THERMAL
- 
- 	  If you want this support, you should say Y here.
- 
-+config PCIE_THERMAL
-+	bool "PCIe cooling support"
-+	depends on PCIEPORTBUS
-+	select PCIE_BW
-+	help
-+	  This implements PCIe cooling mechanism through bandwidth reduction
-+	  for PCIe devices.
-+
-+	  If you want this support, you should say Y here.
-+
- config THERMAL_EMULATION
- 	bool "Thermal emulation mode support"
- 	help
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 058664bc3ec0..065972a08c84 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -30,6 +30,8 @@ thermal_sys-$(CONFIG_CPU_IDLE_THERMAL)	+= cpuidle_cooling.o
- # devfreq cooling
- thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
- 
-+thermal_sys-$(CONFIG_PCIE_THERMAL) += pcie_cooling.o
-+
- obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o k3_j72xx_bandgap.o
- # platform thermal drivers
- obj-y				+= broadcom/
-diff --git a/drivers/thermal/pcie_cooling.c b/drivers/thermal/pcie_cooling.c
-new file mode 100644
-index 000000000000..d86265c03e80
---- /dev/null
-+++ b/drivers/thermal/pcie_cooling.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * PCIe cooling device
-+ *
-+ * Copyright (C) 2023 Intel Corporation.
++/**
++ * thermal_zone_device_exec - Run a callback under the zone lock.
++ * @tz: Thermal zone.
++ * @cb: Callback to run.
++ * @data: Data to pass to the callback.
 + */
-+
-+#include <linux/build_bug.h>
-+#include <linux/err.h>
-+#include <linux/kernel.h>
-+#include <linux/pci.h>
-+#include <linux/pci-bwctrl.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+#include <linux/thermal.h>
-+
-+#define COOLING_DEV_TYPE_PREFIX		"PCIe_Port_"
-+
-+struct pcie_cooling_device {
-+	struct pci_dev *port;
-+	struct pcie_device *pdev;
-+};
-+
-+static int pcie_cooling_get_max_level(struct thermal_cooling_device *cdev, unsigned long *state)
++void thermal_zone_device_exec(struct thermal_zone_device *tz,
++				void (*cb)(struct thermal_zone_device *,
++					   unsigned long),
++				unsigned long data)
 +{
-+	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
++	mutex_lock(&tz->lock);
 +
-+	/* cooling state 0 is same as the maximum PCIe speed */
-+	*state = pcie_cdev->port->subordinate->max_bus_speed - PCIE_SPEED_2_5GT;
++	cb(tz, data);
 +
-+	return 0;
++	mutex_unlock(&tz->lock);
 +}
++EXPORT_SYMBOL_GPL(thermal_zone_device_exec);
 +
-+static int pcie_cooling_get_cur_level(struct thermal_cooling_device *cdev, unsigned long *state)
-+{
-+	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
-+
-+	/* cooling state 0 is same as the maximum PCIe speed */
-+	*state = cdev->max_state -
-+		 (pcie_cdev->port->subordinate->cur_bus_speed - PCIE_SPEED_2_5GT);
-+
-+	return 0;
-+}
-+
-+static int pcie_cooling_set_cur_level(struct thermal_cooling_device *cdev, unsigned long state)
-+{
-+	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
-+	enum pci_bus_speed speed;
-+
-+	/* cooling state 0 is same as the maximum PCIe speed */
-+	speed = (cdev->max_state - state) + PCIE_SPEED_2_5GT;
-+
-+	return bwctrl_set_current_speed(pcie_cdev->pdev, speed);
-+}
-+
-+static struct thermal_cooling_device_ops pcie_cooling_ops = {
-+	.get_max_state = pcie_cooling_get_max_level,
-+	.get_cur_state = pcie_cooling_get_cur_level,
-+	.set_cur_state = pcie_cooling_set_cur_level,
-+};
-+
-+struct thermal_cooling_device *pcie_cooling_device_register(struct pci_dev *port,
-+							    struct pcie_device *pdev)
-+{
-+	struct pcie_cooling_device *pcie_cdev;
-+	struct thermal_cooling_device *cdev;
-+	size_t name_len;
-+	char *name;
-+
-+	pcie_cdev = kzalloc(sizeof(*pcie_cdev), GFP_KERNEL);
-+	if (!pcie_cdev)
-+		return ERR_PTR(-ENOMEM);
-+
-+	pcie_cdev->port = port;
-+	pcie_cdev->pdev = pdev;
-+
-+	name_len = strlen(COOLING_DEV_TYPE_PREFIX) + strlen(pci_name(port)) + 1;
-+	name = kzalloc(name_len, GFP_KERNEL);
-+	if (!name) {
-+		kfree(pcie_cdev);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	snprintf(name, name_len, COOLING_DEV_TYPE_PREFIX "%s", pci_name(port));
-+	cdev = thermal_cooling_device_register(name, pcie_cdev, &pcie_cooling_ops);
-+	kfree(name);
-+
-+	return cdev;
-+}
-+
-+void pcie_cooling_device_unregister(struct thermal_cooling_device *cdev)
-+{
-+	struct pcie_cooling_device *pcie_cdev = cdev->devdata;
-+
-+	thermal_cooling_device_unregister(cdev);
-+	kfree(pcie_cdev);
-+}
-+
-+/* For bus_speed <-> state arithmetic */
-+static_assert(PCIE_SPEED_2_5GT + 1 == PCIE_SPEED_5_0GT);
-+static_assert(PCIE_SPEED_5_0GT + 1 == PCIE_SPEED_8_0GT);
-+static_assert(PCIE_SPEED_8_0GT + 1 == PCIE_SPEED_16_0GT);
-+static_assert(PCIE_SPEED_16_0GT + 1 == PCIE_SPEED_32_0GT);
-+static_assert(PCIE_SPEED_32_0GT + 1 == PCIE_SPEED_64_0GT);
-+
-+MODULE_AUTHOR("Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>");
-+MODULE_DESCRIPTION("PCIe cooling driver");
-diff --git a/include/linux/pci-bwctrl.h b/include/linux/pci-bwctrl.h
-index 46026fa25deb..366445517b72 100644
---- a/include/linux/pci-bwctrl.h
-+++ b/include/linux/pci-bwctrl.h
-@@ -15,4 +15,19 @@ struct thermal_cooling_device;
- 
- int bwctrl_set_current_speed(struct pcie_device *srv, enum pci_bus_speed speed);
- 
-+#ifdef CONFIG_PCIE_THERMAL
-+struct thermal_cooling_device *pcie_cooling_device_register(struct pci_dev *port,
-+							    struct pcie_device *pdev);
-+void pcie_cooling_device_unregister(struct thermal_cooling_device *cdev);
-+#else
-+static inline struct thermal_cooling_device *pcie_cooling_device_register(struct pci_dev *port,
-+									  struct pcie_device *pdev)
-+{
-+	return NULL;
-+}
-+static inline void pcie_cooling_device_unregister(struct thermal_cooling_device *cdev)
-+{
-+}
-+#endif
-+
- #endif
--- 
-2.30.2
+ static void thermal_zone_device_check(struct work_struct *work)
+ {
+ 	struct thermal_zone_device *tz = container_of(work, struct
+
+
 
