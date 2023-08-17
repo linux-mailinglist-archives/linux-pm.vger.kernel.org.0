@@ -2,220 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24FE77F75D
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 15:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B0677FAA5
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 17:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351233AbjHQNLO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 09:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60376 "EHLO
+        id S1344284AbjHQPWt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 11:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351489AbjHQNLJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 09:11:09 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676E735B8;
-        Thu, 17 Aug 2023 06:10:40 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 781fc99a341be9fa; Thu, 17 Aug 2023 15:09:35 +0200
-Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
-   discourages use of this host) smtp.mailfrom=rjwysocki.net 
-   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
-   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 0A246662A72;
-        Thu, 17 Aug 2023 15:09:35 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Michal Wilczynski <michal.wilczynski@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH v5 05/11] ACPI: thermal: Carry out trip point updates under zone lock
-Date:   Thu, 17 Aug 2023 15:09:34 +0200
-Message-ID: <3262036.aeNJFYEL58@kreacher>
-In-Reply-To: <c53f99db-353a-26c3-3b0a-3a3befbed528@linaro.org>
-References: <13318886.uLZWGnKmhe@kreacher> <2236767.iZASKD2KPV@kreacher> <c53f99db-353a-26c3-3b0a-3a3befbed528@linaro.org>
+        with ESMTP id S1353265AbjHQPWq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 11:22:46 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B34C3A9F
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 08:22:18 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe4ad22eb0so76622265e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 08:22:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692285736; x=1692890536;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N+m+PTw0k6AC8rmqKYLCDM9O9JDb4NfevxZn8zh7yzg=;
+        b=DujAfsTIBytRQvSe7wUMxeQAWhB8J8q4GMWCEd6aq1KuZuR1vyJjvAFnEFU5C1RbWo
+         coJvnnGga2H9mxqr4jbS6ugRQdWi0oXkVU7xIJKOa5EQai32yWIs8vUGSn8VrTH2eG9C
+         ZhuiATj+KO1aho6UdtHbgx6OVt91iVHCVbh3c5gISwJvYtYwg4VwbNtlwToR6EyYh2UW
+         goWndmKC5SHgs4hLpoOFKpbhngQmPq7yQjXrReHHjzDIywskylFoPN+UlhB7hQLxOAgr
+         PfsfaDWtVTe2hESt9rwE8QzpqaU002LTDqHskQiXKAEIlKk1GerPeruOpwdM2yt/Zgon
+         efGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692285736; x=1692890536;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N+m+PTw0k6AC8rmqKYLCDM9O9JDb4NfevxZn8zh7yzg=;
+        b=lcz2ml3VRLDf+lNyJdIuRCqRNKrm98XqlKg+Kj5YvjQh6egPBhAkBTWdKa20VamvaM
+         y2f66E4USEAQ30zU0glep45x6F2WRp604+K0UKlH8e6IDqwNpZhxJdPNdioMjVd8HGft
+         4iUMDbkIW/dj5wMaAt0x7Q2ombXfCNzitUACwUi98hg0mBgz33dTD0RWsCZFePiPpS3j
+         vEXpG0GUSLHqCCaH3Qf53+Pnap/ySs1USZQxdvjs9ow4e2Kg+RjGWcNyQTeSZk3IGqxf
+         A+N9UfIBIgSvibQ+5S/alhwY1aV+TYo9G4xgEejqTUvC7NY7LWiKzNm5UI03WOXA3AJM
+         liPw==
+X-Gm-Message-State: AOJu0Yx9T1jv18kHvVTcg4W93VWjNu2/MnNyTELpVKJOQQLwWKeypj8c
+        JEew964t+LKS2D8/fXJQiHAlBA==
+X-Google-Smtp-Source: AGHT+IF5/0EH0rrwS5mRtnXkgEWcUUJYw6UaJ8JOTi2YZGRv05ycxeO+0VwPyIb9mw06hKSiDZV2Ew==
+X-Received: by 2002:a05:600c:234a:b0:3fe:2120:a87a with SMTP id 10-20020a05600c234a00b003fe2120a87amr27260wmq.37.1692285735728;
+        Thu, 17 Aug 2023 08:22:15 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id w17-20020adfee51000000b00317eee26bf0sm25088797wro.69.2023.08.17.08.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Aug 2023 08:22:15 -0700 (PDT)
+Message-ID: <483b71f6-3812-81ad-a495-beda3f0bf034@linaro.org>
+Date:   Thu, 17 Aug 2023 17:22:14 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedrudduuddgieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
- thhtohepmhhitghhrghlrdifihhltgiihihnshhkihesihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/1] thermal/drivers/imx_sc_thermal: return -EAGAIN when
+ SCFW turn off resource
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>, Frank Li <frank.li@nxp.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+References: <20230712210505.1536416-1-Frank.Li@nxp.com>
+ <f1d4ed62-8d01-173f-6e41-4671228782fd@linaro.org>
+ <ZLGDhOffQwh7xW/n@lizhi-Precision-Tower-5810>
+ <7eacc4da-ab14-3df5-2864-44a7262bac27@linaro.org>
+ <ZNz5Drb+EVLjWxRV@lizhi-Precision-Tower-5810>
+ <dd42952c-4dea-ea57-7ad2-73fa159d265d@linaro.org>
+ <ZN0CVa9or/FltHJM@lizhi-Precision-Tower-5810>
+ <80324fb7-3d2a-ecd3-f1ca-9745a366eb0a@linaro.org>
+ <CAPDyKFp8-XwwHEt9dKeTMj0ZmoS6nzXrUYAFmpzZm16-Uf6=xw@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAPDyKFp8-XwwHEt9dKeTMj0ZmoS6nzXrUYAFmpzZm16-Uf6=xw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wednesday, August 16, 2023 6:25:30 PM CEST Daniel Lezcano wrote:
-> On 07/08/2023 20:08, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > There is a race condition between acpi_thermal_trips_update() and
-> > acpi_thermal_check_fn(), because the trip points may get updated while
-> > the latter is running which in theory may lead to inconsistent results.
-> > For example, if two trips are updated together, using the temperature
-> > value of one of them from before the update and the temperature value
-> > of the other one from after the update may not lead to the expected
-> > outcome.
-> > 
-> > Moreover, if thermal_get_trend() runs when a trip points update is in
-> > progress, it may end up using stale trip point temperatures.
-> > 
-> > To address this, make acpi_thermal_trips_update() call
-> > thermal_zone_device_adjust() to carry out the trip points update and
-> > provide a new  acpi_thermal_adjust_thermal_zone() wrapper around
-> > __acpi_thermal_trips_update() as the callback function for the latter.
-> > 
-> > While at it, change the acpi_thermal_trips_update() return data type
-> > to void as that function always returns 0 anyway.
-> > 
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
+
+Hi Ulf,
+
+thanks for your answer
+
+On 16/08/2023 23:23, Ulf Hansson wrote:
+> On Wed, 16 Aug 2023 at 22:46, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+
+[ ... ]
+
+>>>>>>> If add power domain notification in thermal driver, I am not how to get
+>>>>>>> other devices's pd in thermal driver.
+>>>>>>>
+>>>>>>> Any example I can refer?
+>>>>>>>
+>>>>>>> Or this is simple enough solution.
+>>>>>>
+>>>>>> The solution works for removing the error message but it does not solve the
+>>>>>> root cause of the issue. The thermal zone keeps monitoring while the sensor
+>>>>>> is down.
+>>>>>>
+>>>>>> So the question is why the sensor is shut down if it is in use?
+>>>>>
+>>>>> Do you know if there are any code I reference? I supposed it is quite common.
+>>>>
+>>>> Sorry, I don't get your comment
+>>>>
+>>>> What I meant is why is the sensor turned off if it is in use ?
+>>>
+>>> One typical example is cpu hotplug. The sensor is located CPU power domain.
+>>> If CPU hotplug off,  CPU power domain will be turn off.
+>>>
+>>> It doesn't make sensor keep monitor such sensor when CPU already power off.
+>>> It doesn't make sensor to keep CPU power on just because want to get sensor
+>>> data.
+>>>
+>>> Anthor example is GPU, if there are GPU0 and GPU1. Most case just GPU0
+>>> work.  GPU1 may turn off when less loading.
+>>>
+>>> Ideally, thermal can get notification from power domain driver.
+>>> when such power domain turn off,  disable thermal zone.
+>>>
+>>> So far, I have not idea how to do that.
+>>
+>> Ulf,
+>>
+>> do you have a guidance to link the thermal zone and the power domain in
+>> order to get a poweron/off notification leading to enable/disable the
+>> thermal zone ?
 > 
-> [ ... ]
+> I don't know the details here, so apologize for my ignorance to start
+> with. What platform is this?
+
+I will let Frank answer this
+
+> A vague idea could be to hook up the thermal sensor to the
+> corresponding CPU power domain. Assuming the CPU power domain is
+> modelled as a genpd provider, then this allows the driver for the
+> thermal sensor to register for power-on/off notifications of the genpd
+> (see dev_pm_genpd_add_notifier()).
 > 
-> >   {
-> > -	int i, ret = acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
-> >   	bool valid;
-> > +	int i;
-> >   
-> > -	if (ret)
-> > -		return ret;
-> > +	__acpi_thermal_trips_update(tz, ACPI_TRIPS_INIT);
-> >   
-> >   	valid = tz->trips.critical.valid |
-> >   		tz->trips.hot.valid |
-> > @@ -710,6 +732,7 @@ static struct thermal_zone_device_ops ac
-> >   	.get_trend = thermal_get_trend,
-> >   	.hot = acpi_thermal_zone_device_hot,
-> >   	.critical = acpi_thermal_zone_device_critical,
-> > +	.update = acpi_thermal_adjust_thermal_zone,
-> 
-> It is too bad we have to add a callback in the core code just for this 
-> driver.
-> 
-> I'm wondering if it is not possible to get rid of it ?
+> Can this work?
 
-Well, it is possible to pass the callback as an argument to the function running it.
-
-The code is slightly simpler this way, so I think I'm going to do that.
-
-Please see the appended replacement for patch [02/11].
-
-Of course, it also is possible to provide accessors for acquiring and releasing
-the zone lock, which would be more straightforward still (as mentioned before),
-but I kind of understand the concerns regarding possible abuse of those by
-drivers.
-
-> Is it possible to use an internal lock for the ACPI driver to solve the 
-> race issue above ?
-
-No, it is not, and I have already explained it at least once, but let me do
-that once again.
-
-There are three code paths that need to be synchronized, because each of them
-can run in parallel with any of the other two.
-
-(a) acpi_thermal_trips_update() called via acpi_thermal_notify() which runs
-    in the ACPI notify kworker context.
-(b) thermal_get_trend(), already called under the zone lock by the core.
-(c) acpi_thermal_check_fn() running in a kworker context, which calls
-    thermal_zone_device_update() which it turn takes the zone lock.
-
-Also the trip points update should not race with any computations using trip
-point temperatures in the core or in the governors (they are carried out under
-the zone lock as a rule).
-
-(b) means that the local lock would need to be always taken under the zone
-lock and then either acpi_thermal_check_fn() would need to be able to take
-the local lock under the zone lock (so it would need to be able to acquire
-the zone lock more or less directly), or acpi_thermal_trips_update() can
-use the zone lock (which happens in the $subject patch via the new helper
-function).
-
-Moreover, using a local lock in acpi_thermal_trips_update() does not provide
-any protection for the code using trip temperatures that runs under the zone
-lock mentioned above.
-
-So as I said, the patch below replaces [02/11] and it avoids adding a new
-callback to zone operations.  The code gets slightly simpler with [02/11]
-replaced with the appended one, so I'm going to use the latter.
-
-It requires the $subject patch and patch [11/11] to be rebased, but that
-is so trivial that I'm not even going to send updates of these patches.
-
-The current series is available in the acpi-thermal git branch in
-linux-pm.git.
-
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH] thermal: core: Introduce thermal_zone_device_exec()
-
-Introduce a new helper function, thermal_zone_device_exec(), that can
-be used by drivers to run a given callback routine under the zone lock.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c |   19 +++++++++++++++++++
- include/linux/thermal.h        |    4 ++++
- 2 files changed, 23 insertions(+)
-
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -323,6 +323,10 @@ int thermal_zone_unbind_cooling_device(s
- 				       struct thermal_cooling_device *);
- void thermal_zone_device_update(struct thermal_zone_device *,
- 				enum thermal_notify_event);
-+void thermal_zone_device_exec(struct thermal_zone_device *tz,
-+			      void (*cb)(struct thermal_zone_device *,
-+					 unsigned long),
-+			      unsigned long data);
- 
- struct thermal_cooling_device *thermal_cooling_device_register(const char *,
- 		void *, const struct thermal_cooling_device_ops *);
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -497,6 +497,25 @@ void thermal_zone_device_update(struct t
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_update);
- 
-+/**
-+ * thermal_zone_device_exec - Run a callback under the zone lock.
-+ * @tz: Thermal zone.
-+ * @cb: Callback to run.
-+ * @data: Data to pass to the callback.
-+ */
-+void thermal_zone_device_exec(struct thermal_zone_device *tz,
-+				void (*cb)(struct thermal_zone_device *,
-+					   unsigned long),
-+				unsigned long data)
-+{
-+	mutex_lock(&tz->lock);
-+
-+	cb(tz, data);
-+
-+	mutex_unlock(&tz->lock);
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device_exec);
-+
- static void thermal_zone_device_check(struct work_struct *work)
- {
- 	struct thermal_zone_device *tz = container_of(work, struct
+Yes indeed it sounds like what should be achieved. Assuming it is not 
+modeled with genpd how would you describe those in order to have the 
+sensor belonging to one specific power domain?
 
 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
