@@ -2,106 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C5B77F261
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 10:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D6877F287
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 10:57:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239310AbjHQIq2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 04:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S240114AbjHQI4u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 04:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349069AbjHQIqC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 04:46:02 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B241FC3
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:46:00 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-4882197e0ebso935147e0c.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:46:00 -0700 (PDT)
+        with ESMTP id S1349149AbjHQI42 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 04:56:28 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7ACA2684
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:56:27 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1bf1935f6c2so1901025ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 01:56:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692261960; x=1692866760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HqYCpJ77ukc6LNS1A4X/No1oC3nfzVx+pg4F8CfKxUc=;
-        b=BHw3mJbM4hiuKYmnePc4eJjfyuFoK/yRMWyAEy7IWaPgRQKpe059qpCObRoV/bBlwH
-         uKp+QwZnGCcAgbn6bXRqBpw0Tqecrmhy7Dt4tVldyFCdMlMBQxzMcWLkKMIkpx7I0CT/
-         MA7P6Z8cybRNmGJMtvbrQtbbTToOTVaG4Izsk=
+        d=linaro.org; s=google; t=1692262587; x=1692867387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ptze6wxZV514oS0u92VIY9O4Y7H/mluSZc2DMC6gWxY=;
+        b=FkGU/hYU22VtQfcjslmCB7Eku6oqlepKKvYflypvWxwE5eJurcUMGULy6KJ4NsCqPY
+         TdWSGeDmWVbZftbl7rc9eU5nta2jIa/Xf1nukzVpcLk6macZBlbFHlvrNWMKc35mE+bc
+         y+IBiXwDawJN0XHqZQ7rlIjM69uHAMtoREtvYzvQfiBiCDxuIk4WF57HJOLMQx6gUZ2V
+         9IeVSD8jE9VfEBD/2J9VKZeC26my7sQM8+OisNt4LFVPHEQLZYeA0g75586NUbLaTDsH
+         45lP7QpKCAfYeUhfzLhl8uuXyXCbcBG8nHQ7PIE042Stn8nhF5xSkm/aI8LL3aB/35LN
+         zT9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692261960; x=1692866760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HqYCpJ77ukc6LNS1A4X/No1oC3nfzVx+pg4F8CfKxUc=;
-        b=OdxHUS2dLUeSkDUfjWlWham5fo1ULG47h0G/q2BTae/7KOURFdqBsjKCKl960qmmD4
-         EhXeCXOH57s1FSvXAgUk/qZrFF+ovEa0i5JwgZiUTWsERSUTHeiUB3TqHVuz51AJkeox
-         qY3lP/CUkUs4h6gqQ1n1pz0LzErpgup8FIRCLS5QwBaABc0vG8KubYTUvF4xpzy85/mj
-         MJU5TgLtKnnYNeiKivccXhMGHErB0Cmd4iN1wbjCDenxcR2rusm/vlbNZw2wN+a6CAdf
-         Y3q5Cf49IbFUbDM+LXHunT1URkg50sq5QNtD1nJeAWwuL6gkxMDlwtErbrDkRxRKbsPx
-         0SoA==
-X-Gm-Message-State: AOJu0YyH9xDiMXW5n+sJbIw19AhHwNgtHtLW9zFnMmkp27GCMb5+7y16
-        lTQUGzrKPLLN2KvhXXk4RNdWRKe0hM/SK1Au+Oe4yw==
-X-Google-Smtp-Source: AGHT+IHXlDV52tzwpRP9Q+YvnVRJMnf3bkME2JfcNlfX9z20DgAbY8v2IRSoiHr9VM/ZIT8Hmy6flouitCaU4ecYlfQ=
-X-Received: by 2002:a1f:eac2:0:b0:48c:2b9f:ee1d with SMTP id
- i185-20020a1feac2000000b0048c2b9fee1dmr609627vkh.16.1692261959110; Thu, 17
- Aug 2023 01:45:59 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692262587; x=1692867387;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ptze6wxZV514oS0u92VIY9O4Y7H/mluSZc2DMC6gWxY=;
+        b=SSIv/dMjTWqz37T5wNEm4t3IYziK05tpCmu3OzQGQWP90fJb0UY4uPX8uSj70P8YT8
+         RZ+Km1+wUb7A0jSrYgPp0szVzsdrb4RsYawIMf3LLmbGmAApDCPxwK8evH1nRaISadH7
+         1FTgeKbHBD1SWQfku2DCwGB1Npc7Z+Ki1f3ge6wvbq13pA+uxKMg6yBuI1bMgCRxF5T8
+         Zayo1LgRU165gr7XqqCW8Zz0KKaOMYEUR2HvCJAdQuR427BvzmnknDMJVEQRbUvNoKsI
+         BYxlgkY6Lp7HPVYoBA0XQNGrAcyVPgcvppNK323+4wWJqYy+5JoBTxvdJO/Y7PXzBwtp
+         1d/w==
+X-Gm-Message-State: AOJu0YzUyIkUdpiULlp5faMn2cNFgriUvSQHe7vP/S5K1GacdWoRmntc
+        cPTPAuTBJG8/h1fuKUGi3FzNug==
+X-Google-Smtp-Source: AGHT+IFYnONOUzUUhleUOayXtQmkupns0vXfS1SaXmi+vUdyLJtjr255SOUv8MF7357tYQr9D1ZTmA==
+X-Received: by 2002:a17:902:d48e:b0:1b8:a67f:1c15 with SMTP id c14-20020a170902d48e00b001b8a67f1c15mr2681591plg.25.1692262587137;
+        Thu, 17 Aug 2023 01:56:27 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id jd2-20020a170903260200b001bdcafcf8d3sm10164168plb.69.2023.08.17.01.56.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 01:56:26 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 14:26:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] cpufreq: cppc: Set fie_disabled to FIE_DISABLED if
+ fails to create kworker_fie
+Message-ID: <20230817085624.dfevjozfpmmxcldn@vireshk-i7>
+References: <20230817074756.883380-1-liaochang1@huawei.com>
 MIME-Version: 1.0
-References: <20230530195132.2286163-1-bero@baylibre.com> <107678ff-c3d5-4c3a-ad0e-fa292a125daa@notapiano>
- <a97efd71-23e2-5ac9-8d3d-427a431353c6@linaro.org>
-In-Reply-To: <a97efd71-23e2-5ac9-8d3d-427a431353c6@linaro.org>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 17 Aug 2023 16:45:48 +0800
-Message-ID: <CAGXv+5EFD_yMF7q0P5rqiRWeyRqm016Or8iB0niwj26HFVp93Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] Add LVTS support for mt8192
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        james.lo@mediatek.com, rex-bc.chen@mediatek.com,
-        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817074756.883380-1-liaochang1@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 4:49=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi,
->
-> On 16/08/2023 21:57, N=C3=ADcolas F. R. A. Prado wrote:
->
-> [ ... ]
->
-> > Hi Daniel,
-> >
-> > just a gentle reminder. As you've just applied [1], there are no longer=
- any
-> > concerns with this series, and it'll provide both working interrupts an=
-d
-> > reliable thermal readings on MT8192.
->
-> There are still concerns and questions in the series for patch2 and 3.
+On 17-08-23, 07:47, Liao Chang wrote:
+> The function cppc_freq_invariance_init() may failed to create
+> kworker_fie, make it more robust by setting fie_disabled to FIE_DISBALED
+> to prevent an invalid pointer dereference in kthread_destroy_worker(),
+> which called from cppc_freq_invariance_exit().
 
-FWIW the readout errors raised in patch 3 were fixed by
+Btw, this version information present below should be added ... (see later)
 
-"thermal/drivers/mediatek/lvts_thermal: Make readings valid in filtered mod=
-e"
+> v3:
+> Simplify cleanup code when invariance initialization fails.
+> 
+> v2:
+> Set fie_disabled to FIE_DISABLED when invariance initialization fails.
+> 
+> Link: https://lore.kernel.org/all/20230816034630.a4hvsj373q6aslk3@vireshk-i7/
+> 
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+> ---
 
-So I guess the remaining concern is on patch 2 about whether the noirq
-suspend callback should be used instead.
+... here after the "---" line, this way this not-so-useful information will not
+be committed while applying the patch.
 
-ChenYu
+>  drivers/cpufreq/cppc_cpufreq.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+-- 
+viresh
