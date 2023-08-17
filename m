@@ -2,156 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A0277FEE6
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 22:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A76277FEF6
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 22:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349599AbjHQUOM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 17 Aug 2023 16:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
+        id S1354830AbjHQUX5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 16:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354392AbjHQUN6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 16:13:58 -0400
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328D630DF;
-        Thu, 17 Aug 2023 13:13:57 -0700 (PDT)
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-56d67c5e87cso37785eaf.0;
-        Thu, 17 Aug 2023 13:13:57 -0700 (PDT)
+        with ESMTP id S1354882AbjHQUXo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 16:23:44 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D7835AE
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 13:23:37 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-34a91a25db9so268155ab.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 13:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1692303817; x=1692908617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ctD5tHxh8kgFl4uPzWKbzXoO7ZYmYJnR4HDtMsNhGnc=;
+        b=W4ibDs5DBdEd4UQjK72PNxJMfP4ExYP+b1HbFVa4PxBF4Rzl2SucgPXGUyrhiJ/eP9
+         Zcfan+GqPuCx9ifeHXAuy3BnUGlc+cXVRAovkDEG25XQfxSmjBbtYYRW15/+/q6r2ELu
+         o13VLO7RRnc2X7lMotATsBKmCx1tHewpcHzpY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692303236; x=1692908036;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EOOmb1fYQq61nhxtEFTLGG2RcS7GExUOqCV3eOpnV0g=;
-        b=jDX0mwaXFGiz67630thfsu5IOb5l6kW43G9vk4IRjwgk/SeANRRxuBuOJcHWim0cOr
-         cXEvNw0Qhkx14IskwPUbUtnUTpEXTx1yZMSmjr6bMhAjQi2B3AmvuuGpRhDDuUy4B3Bb
-         7WXNZ/fOKxCZR2DCuLN3NOJZG2pYLwI3dDMc1gjaiL/Ak2NVu8G//P/G0bswkgHx7IGn
-         6QTOoyIQhnuX9zk3FxL/JG8ksLZPXqX93TUlzqIXR8/ChfE7ps5kdlDXZNnw9DfXIEBW
-         UX5ZNMu2pbSmqGAi2Apm+BJpV6AJwLrqzAF2spcpu5qwqF1UWgch5WV0ZCCC/+IatjI3
-         XyRQ==
-X-Gm-Message-State: AOJu0YzK8REa2hq1bUU4lCkwmRp3gjTjWgxwqSeYhjXqybF9PTh1snuy
-        0mRwpTL82Vutafdn38f6xik81hIRH2dPvYCvSZMB1QvX
-X-Google-Smtp-Source: AGHT+IGjC9+wUR9A0gG3IWLckX1X6Q5UeD/Qk4UQ+t+dOUMjkRWCz3mvd18QlzJOJ50MjmHkAQQ79RUXJ/N5v2JoerM=
-X-Received: by 2002:a05:6820:44a:b0:563:3b56:5dc1 with SMTP id
- p10-20020a056820044a00b005633b565dc1mr886196oou.0.1692303236438; Thu, 17 Aug
- 2023 13:13:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692303817; x=1692908617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ctD5tHxh8kgFl4uPzWKbzXoO7ZYmYJnR4HDtMsNhGnc=;
+        b=H0wATmde44pNbCLLaJkSOKbl/k2WJ9E0qQG+mLtnxo/HLf40mVkZHpOHG9kT6qMTHC
+         BqSb6P0TY4EGTeooKqbqwuMoAWDNQYBn3RmKRn4g1Ahe5IGcOX/0DMZ1/NJ20FZdUgvN
+         n79LQosS+8DlINLK46trHmT19TLeTc7BvYvEi9zVGVN1x4PVPwPyJtkJvvgBHUGYg4Qf
+         XUXromEQet4YKj12BjRYIhIGWahY3hiabAN/bHjyRq+j2kUV6pGELTrAFJJ7uJjXuPOL
+         i6Jg7mUtxVazcKDauZlPkzk3On6myExXn6M4qdwYhvxBm3JuPf57kvewZhaO2KdiyhUm
+         uvag==
+X-Gm-Message-State: AOJu0YwgvBWRPIYeUvkSoRaJq4wAW7PyvG0lfiGPz6+6WxQ4q6v8x+td
+        85hTxLIHlifG+1YUy/LeCSvxYA==
+X-Google-Smtp-Source: AGHT+IH9443ew05VRXg9438t3UQ8u0XSyabqLN3iXPrEg4r6cnXlOhesTdal3Zsb0le9INBr3dk+5g==
+X-Received: by 2002:a92:d488:0:b0:349:1d60:7250 with SMTP id p8-20020a92d488000000b003491d607250mr806977ilg.0.1692303817020;
+        Thu, 17 Aug 2023 13:23:37 -0700 (PDT)
+Received: from localhost.localdomain ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id t9-20020a056e02010900b00348ea1a31ccsm79014ilm.12.2023.08.17.13.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 13:23:36 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     trenn@suse.com, shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, zuraxt@gmail.com,
+        temuri.doghonadze@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpupower: Add Georgian translation to Makefile LANGUAGES
+Date:   Thu, 17 Aug 2023 14:23:35 -0600
+Message-Id: <20230817202335.25060-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230717195405.730869-1-srinivas.pandruvada@linux.intel.com> <20230717195405.730869-7-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230717195405.730869-7-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 17 Aug 2023 22:13:45 +0200
-Message-ID: <CAJZ5v0juNDN+8ZiSLp4XT6yYHGMrKHfQK08ZX1EAaFx6f4PWXg@mail.gmail.com>
-Subject: Re: [PATCH v2 6/7] thermal/drivers/int340x: Support workload hint interrupts
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 9:54 PM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On thermal device interrupt, if the interrupt is generated for passing
-> workload hint, call the callback to pass notification to the user
-> space.
->
-> First call proc_thermal_check_wlt_intr() to check interrupt, if this
-> callback returns true, wake IRQ thread. Call
-> proc_thermal_wlt_intr_callback() to notify user space.
->
-> While here remove function pkg_thermal_schedule_work() and move the
-> processing to the caller. The function pkg_thermal_schedule_work() just
-> called schedule_delayed_work().
+Commit 4680b734e729 ("cpupower: Add Georgian translation") added
+new language support. This change didn't add "ka" to Makefile
+LANGUAGES variable. Add it now.
 
-This extra change is somewhat confusing.  I would move it to a separate patch.
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/power/cpupower/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> No change
->
->  .../processor_thermal_device_pci.c            | 33 ++++++++++++++-----
->  1 file changed, 24 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> index ee5a4c227d96..83177ed9db49 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-> @@ -115,27 +115,40 @@ static void proc_thermal_threshold_work_fn(struct work_struct *work)
->         proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 1);
->  }
->
-> -static void pkg_thermal_schedule_work(struct delayed_work *work)
-> +static irqreturn_t proc_thermal_irq_thread_handler(int irq, void *devid)
->  {
-> -       unsigned long ms = msecs_to_jiffies(notify_delay_ms);
-> +       struct proc_thermal_pci *pci_info = devid;
-> +
-> +       proc_thermal_wlt_intr_callback(pci_info->pdev, pci_info->proc_priv);
->
-> -       schedule_delayed_work(work, ms);
-> +       return IRQ_HANDLED;
->  }
->
->  static irqreturn_t proc_thermal_irq_handler(int irq, void *devid)
->  {
->         struct proc_thermal_pci *pci_info = devid;
-> +       struct proc_thermal_device *proc_priv;
-> +       int ret = IRQ_HANDLED;
->         u32 status;
->
-> +       proc_priv = pci_info->proc_priv;
-> +
-> +       if (proc_priv->mmio_feature_mask & PROC_THERMAL_FEATURE_WLT_HINT) {
-> +               if (proc_thermal_check_wlt_intr(pci_info->proc_priv))
-> +                       ret = IRQ_WAKE_THREAD;
-> +       }
-> +
->         proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_INT_STATUS_0, &status);
-> +       if (status) {
-> +               unsigned long ms = msecs_to_jiffies(notify_delay_ms);
->
-> -       /* Disable enable interrupt flag */
-> -       proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
-> +               /* Disable enable interrupt flag */
-> +               proc_thermal_mmio_write(pci_info, PROC_THERMAL_MMIO_INT_ENABLE_0, 0);
-> +               schedule_delayed_work(&pci_info->work, ms);
-> +       }
->         pci_write_config_byte(pci_info->pdev, 0xdc, 0x01);
->
-> -       pkg_thermal_schedule_work(&pci_info->work);
-> -
-> -       return IRQ_HANDLED;
-> +       return ret;
->  }
->
->  static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
-> @@ -269,7 +282,7 @@ static int proc_thermal_pci_probe(struct pci_dev *pdev, const struct pci_device_
->         }
->
->         ret = devm_request_threaded_irq(&pdev->dev, irq,
-> -                                       proc_thermal_irq_handler, NULL,
-> +                                       proc_thermal_irq_handler, proc_thermal_irq_thread_handler,
->                                         irq_flag, KBUILD_MODNAME, pci_info);
->         if (ret) {
->                 dev_err(&pdev->dev, "Request IRQ %d failed\n", pdev->irq);
-> @@ -383,6 +396,8 @@ static struct pci_driver proc_thermal_pci_driver = {
->
->  module_pci_driver(proc_thermal_pci_driver);
->
-> +MODULE_IMPORT_NS(INT340X_THERMAL);
-> +
->  MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
->  MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
->  MODULE_LICENSE("GPL v2");
-> --
-> 2.38.1
->
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index dc531805a570..b53753dee02f 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -57,7 +57,7 @@ LIB_MIN=			1
+ 
+ PACKAGE =			cpupower
+ PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
+-LANGUAGES = 			de fr it cs pt
++LANGUAGES = 			de fr it cs pt ka
+ 
+ 
+ # Directory definitions. These are default and most probably
+-- 
+2.39.2
+
