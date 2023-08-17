@@ -2,108 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD3477FFD4
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 23:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CBD78000C
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 23:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355295AbjHQVYz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 17:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45110 "EHLO
+        id S1355389AbjHQVlp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 17:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355351AbjHQVYe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 17:24:34 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0F72D68
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 14:24:27 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4fe85fd3d27so301970e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 14:24:27 -0700 (PDT)
+        with ESMTP id S1355394AbjHQVlN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 17:41:13 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FB42D70
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 14:41:10 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3a44cccbd96so161749b6e.3
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 14:41:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692307466; x=1692912266;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tFUOLUXpj1dXg7TLVnO3NtdI64oXAg1azufv8G6+Zj0=;
-        b=P4C2CjcA9VNpVw3Df7IPAStdEG3gkltmqpOtebRM9iZhI96EamgMUOJlG7uE3Vmnt8
-         daePybAkK85mzqiH3aX9OxP1hYKE4N9xxrfvBrLTFMry5JTSjYByv7QZviw/+nFjYnXD
-         6e6mB1ssXK7U+Lpmf/wKTJeaE8p9Ygtg0JAZzCUgvhjxj9ym3xAaZUGxNyCKvchLsMR0
-         rcYtjIUmCW6TmwdqQFe5bXzO1C7KowWZ7wym+PMR+ffIDYh953bew/BTM2ZQFpY/kr/p
-         FU6lAWidC+wn/3sSHGl5HzX8egj7nBImPjN5H+qzVeuO9OgXSpRypgqHUWKYnvnTsdt+
-         IIDA==
+        d=linaro.org; s=google; t=1692308469; x=1692913269;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UHP45uaFg26bDt9C3NjYmwlB/Xxdc09WAmYuHekD+ac=;
+        b=CCrCjXjFN5onVCafgHStwnPqHLtQWJTLFQVipHt2IjUeR5cIWDYbOJLvvfXU1d4Uzo
+         pnY9e3NLLuSBbx8gkstQR6gSvbiOVH7VFpr9oxVpA6gJk8g8ONxO+URIEiaYkY9vrvpT
+         LUAFEJhUuNdU/O8gN97INDqbTBsXO6IvnofvBRFyS3WwQammeQ/4xTpfFcbt5rUBoFkK
+         fZI0p/tFWaHaHV/nVC+LNOuhgWH4MpLX6JFKDFJbUeG1zDBRw6oIoURDOUahPbyd30e5
+         GX4BtX0yQ8U3Ao+ViRaa2FeJ2yLj5wdxc4WiQQ0pyDQ/tmiw2+3iwoUouKD3v3ru+RBO
+         Garg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692307466; x=1692912266;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tFUOLUXpj1dXg7TLVnO3NtdI64oXAg1azufv8G6+Zj0=;
-        b=bmg80MaRh7g7/s+nVlcXzH+VC2EhhODbqLA/vrb8zEG+Fr70fW5H8w6DfUaeVzj9NV
-         tbG7OtHXCrc+Zh3hITMOQ5WbmXfNJheQBoxsUsuYVNM4sTqkJzVkLar7itwCi03GMN8P
-         YX0zXc22nTueUxN5y/EirLYgV2/g4wIg8AaCi5SZLeX/dHh9O2mNH3aty9qtBVNN50KA
-         n5jsjqozC6wUDFzHbAIFmFwNr9a402YSxQ6hvNonFyqvcTjGKcXfzQLqKhekQoYwd/+M
-         6TGKsnzdSQ4qIwd5N1D4/T6+HctNoq6pa1HOOvKx6rRt+sPgivBIlQtCjNqTBdvEW+6n
-         4k8w==
-X-Gm-Message-State: AOJu0YwM7W50EHamkipuI+8XY3/u4tcw14Te1EFhu7ft6yqCcF+QwC8d
-        EQVRZQnhI1U5WzRqOX2bydgtZQ==
-X-Google-Smtp-Source: AGHT+IElWD75J4SIIC/MNWL6hF9/PvvD/kZT+7BtDaZ4TU+S9G5p/gNu72OiCqPgfHXNY+6jGjxwRw==
-X-Received: by 2002:a05:6512:477:b0:4f8:49a7:2deb with SMTP id x23-20020a056512047700b004f849a72debmr365449lfd.8.1692307465984;
-        Thu, 17 Aug 2023 14:24:25 -0700 (PDT)
-Received: from [192.168.1.101] (abxh52.neoplus.adsl.tpnet.pl. [83.9.1.52])
-        by smtp.gmail.com with ESMTPSA id c8-20020ac24148000000b004fe3bd81278sm57267lfi.70.2023.08.17.14.24.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 14:24:25 -0700 (PDT)
-Message-ID: <ad30a8ed-87d3-46dd-8b34-83f6cfac0e4a@linaro.org>
-Date:   Thu, 17 Aug 2023 23:24:23 +0200
+        d=1e100.net; s=20221208; t=1692308469; x=1692913269;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UHP45uaFg26bDt9C3NjYmwlB/Xxdc09WAmYuHekD+ac=;
+        b=PsUD3gCgHa7Kf6Tf7O03njg/4plJM9IEKJqZ5nMuU63DyXaqv6AJBwpID2zqpKe81e
+         Tu9a0Sk4QWjSMxghQKPXCVCzX9wdSUwH+iGTaNpiWAmxe0GU3uvju3pYPfZGvsboaKBV
+         nu0WcuOCtA784FVqU8PY6AnnlTnbhsarxrwQp/10Aqy5WIWyyxWZhbBvmi254TN0r6mP
+         YYfz36cXjsS8/Kpu2UtXA33vZ7L09ONPjrF4RjBORCpf8D1hiJFxA2jDE5sbfW/H/Jvw
+         w4ll0c+sy5u0dSe7CbYMQyUXjMWbprAZ6Xsj8vxn2s/ZlvLEr2/3Vobb5ZlPYu1UjO4Q
+         ADgA==
+X-Gm-Message-State: AOJu0YwT2WNUdbo7/Otqd2cYSdyZ/F2S/gziWBw73Z6naC/92i6bnu3c
+        Uu3LzcxQvynKCiq8BWt8mxTGTA6/cl4OnitlF4iSjw==
+X-Google-Smtp-Source: AGHT+IFUZs8ZPSWUYmwSLIkhAyTIYgwiQYbgBz6pIl0IEMdSU6JAncGTpZTGOHR7YdG6+DJPI3Zrggdniiye1Xhemkc=
+X-Received: by 2002:a05:6358:428e:b0:133:7f9:303f with SMTP id
+ s14-20020a056358428e00b0013307f9303fmr893048rwc.23.1692308469265; Thu, 17 Aug
+ 2023 14:41:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect: qcom: Annotate struct icc_onecell_data with
- __counted_by
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Andy Gross <agross@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-References: <20230817204215.never.916-kees@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
- BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
- HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
- TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
- zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
- MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
- t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
- UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
- aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
- kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
- Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
- R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
- BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
- yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
- xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
- 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
- GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
- mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
- x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
- BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
- mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
- Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
- xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
- AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
- 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
- jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
- cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
- jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
- cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
- bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
- YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
- bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
- nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
- izWDgYvmBE8=
-In-Reply-To: <20230817204215.never.916-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230712210505.1536416-1-Frank.Li@nxp.com> <f1d4ed62-8d01-173f-6e41-4671228782fd@linaro.org>
+ <ZLGDhOffQwh7xW/n@lizhi-Precision-Tower-5810> <7eacc4da-ab14-3df5-2864-44a7262bac27@linaro.org>
+ <ZNz5Drb+EVLjWxRV@lizhi-Precision-Tower-5810> <dd42952c-4dea-ea57-7ad2-73fa159d265d@linaro.org>
+ <ZN0CVa9or/FltHJM@lizhi-Precision-Tower-5810> <80324fb7-3d2a-ecd3-f1ca-9745a366eb0a@linaro.org>
+ <CAPDyKFp8-XwwHEt9dKeTMj0ZmoS6nzXrUYAFmpzZm16-Uf6=xw@mail.gmail.com> <ZN49MnvZ4XWQPGd7@lizhi-Precision-Tower-5810>
+In-Reply-To: <ZN49MnvZ4XWQPGd7@lizhi-Precision-Tower-5810>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 17 Aug 2023 23:40:33 +0200
+Message-ID: <CAPDyKFqKibp2d7GHZwxi1Kf3oPhM+wF1c+YEfO3viRc0HSufwA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] thermal/drivers/imx_sc_thermal: return -EAGAIN when
+ SCFW turn off resource
+To:     Frank Li <Frank.li@nxp.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -114,29 +82,165 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17.08.2023 22:42, Kees Cook wrote:
-> Prepare for the coming implementation by GCC and Clang of the __counted_by
-> attribute. Flexible array members annotated with __counted_by can have
-> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
-> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
-> functions).
-> 
-> As found with Coccinelle[1], add __counted_by for struct icc_onecell_data.
-> Additionally, since the element count member must be set before accessing
-> the annotated flexible array member, move its initialization earlier.
-> 
-> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
-> 
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Cc: Georgi Djakov <djakov@kernel.org>
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-Very nice, thanks
+On Thu, 17 Aug 2023 at 17:31, Frank Li <Frank.li@nxp.com> wrote:
+>
+> On Wed, Aug 16, 2023 at 11:23:17PM +0200, Ulf Hansson wrote:
+> > On Wed, 16 Aug 2023 at 22:46, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> > >
+> > > On 16/08/2023 19:07, Frank Li wrote:
+> > > > On Wed, Aug 16, 2023 at 06:47:17PM +0200, Daniel Lezcano wrote:
+> > > >> On 16/08/2023 18:28, Frank Li wrote:
+> > > >>> On Wed, Aug 16, 2023 at 10:44:32AM +0200, Daniel Lezcano wrote:
+> > > >>>>
+> > > >>>> Hi Frank,
+> > > >>>>
+> > > >>>> sorry for the delay
+> > > >>>>
+> > > >>>> On 14/07/2023 19:19, Frank Li wrote:
+> > > >>>>> On Thu, Jul 13, 2023 at 02:49:54PM +0200, Daniel Lezcano wrote:
+> > > >>>>>> On 12/07/2023 23:05, Frank Li wrote:
+> > > >>>>>>> Avoid endless print following message when SCFW turns off resource.
+> > > >>>>>>>      [ 1818.342337] thermal thermal_zone0: failed to read out thermal zone (-1)
+> > > >>>>>>>
+> > > >>>>>>> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > >>>>>>> ---
+> > > >>>>>>>      drivers/thermal/imx_sc_thermal.c | 4 +++-
+> > > >>>>>>>      1 file changed, 3 insertions(+), 1 deletion(-)
+> > > >>>>>>>
+> > > >>>>>>> diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
+> > > >>>>>>> index 8d6b4ef23746..0533d58f199f 100644
+> > > >>>>>>> --- a/drivers/thermal/imx_sc_thermal.c
+> > > >>>>>>> +++ b/drivers/thermal/imx_sc_thermal.c
+> > > >>>>>>> @@ -58,7 +58,9 @@ static int imx_sc_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> > > >>>>>>>         hdr->size = 2;
+> > > >>>>>>>         ret = imx_scu_call_rpc(thermal_ipc_handle, &msg, true);
+> > > >>>>>>> -       if (ret)
+> > > >>>>>>> +       if (ret == -EPERM) /* NO POWER */
+> > > >>>>>>> +               return -EAGAIN;
+> > > >>>>>>
+> > > >>>>>> Isn't there a chain call somewhere when the resource is turned off, so the
+> > > >>>>>> thermal zone can be disabled?
+> > > >>>>>
+> > > >>>>> A possible place in drivers/firmware/imx/scu-pd.c. but I am not sure how to
+> > > >>>>> get thermal devices. I just found a API thermal_zone_get_zone_by_name(). I
+> > > >>>>> am not sure if it is good to depend on "name", which add coupling between
+> > > >>>>> two drivers and if there are external thermal devices(such as) has the
+> > > >>>>> same name, it will wrong turn off.
+> > > >>>>
+> > > >>>> Correct
+> > > >>>>
+> > > >>>>> If add power domain notification in thermal driver, I am not how to get
+> > > >>>>> other devices's pd in thermal driver.
+> > > >>>>>
+> > > >>>>> Any example I can refer?
+> > > >>>>>
+> > > >>>>> Or this is simple enough solution.
+> > > >>>>
+> > > >>>> The solution works for removing the error message but it does not solve the
+> > > >>>> root cause of the issue. The thermal zone keeps monitoring while the sensor
+> > > >>>> is down.
+> > > >>>>
+> > > >>>> So the question is why the sensor is shut down if it is in use?
+> > > >>>
+> > > >>> Do you know if there are any code I reference? I supposed it is quite common.
+> > > >>
+> > > >> Sorry, I don't get your comment
+> > > >>
+> > > >> What I meant is why is the sensor turned off if it is in use ?
+> > > >
+> > > > One typical example is cpu hotplug. The sensor is located CPU power domain.
+> > > > If CPU hotplug off,  CPU power domain will be turn off.
+> > > >
+> > > > It doesn't make sensor keep monitor such sensor when CPU already power off.
+> > > > It doesn't make sensor to keep CPU power on just because want to get sensor
+> > > > data.
+> > > >
+> > > > Anthor example is GPU, if there are GPU0 and GPU1. Most case just GPU0
+> > > > work.  GPU1 may turn off when less loading.
+> > > >
+> > > > Ideally, thermal can get notification from power domain driver.
+> > > > when such power domain turn off,  disable thermal zone.
+> > > >
+> > > > So far, I have not idea how to do that.
+> > >
+> > > Ulf,
+> > >
+> > > do you have a guidance to link the thermal zone and the power domain in
+> > > order to get a poweron/off notification leading to enable/disable the
+> > > thermal zone ?
+> >
+> > I don't know the details here, so apologize for my ignorance to start
+> > with. What platform is this?
+>
+> i.MX8QM.
 
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Thanks!
 
-Konrad
+>
+> >
+> > A vague idea could be to hook up the thermal sensor to the
+> > corresponding CPU power domain. Assuming the CPU power domain is
+> > modelled as a genpd provider, then this allows the driver for the
+> > thermal sensor to register for power-on/off notifications of the genpd
+> > (see dev_pm_genpd_add_notifier()).
+> >
+> > Can this work?
+>
+> I don't think. dev_pm_genpd_ad_notifier() need a dev, which binded to pd.
+
+Yes, correct.
+
+>
+> tsens: thermal-sensor {
+>         compatible = "fsl,imx-sc-thermal";
+>         tsens-num = <6>;
+>         #thermal-sensor-cells = <1>;
+> };
+
+Are you saying that the above doesn't have a corresponding struct
+device created for it? That sounds like a problem that can be fixed,
+right? Not sure if it makes sense though.
+
+>
+> we have 6 thermal-sensor, which assocated with 6 pd,
+>         IMX_SC_R_SYSTEM, IMX_SC_R_PMIC_0,
+>         IMX_SC_R_AP_0, IMX_SC_R_AP_1,
+>         IMX_SC_R_GPU_0_PID0, IMX_SC_R_GPU_1_PID0,
+>         IMX_SC_R_DRC_0
+>
+> We don't want to hold PD on just because want to get temperature. GPU pd
+> consume much power.
+
+Of course, that would be a bad idea it seems like.
+
+The corresponding struct device that's hooked up to a genpd, can
+remain runtime suspended as long as you think it makes sense. Thus it
+would not keep the PM domain powered on when it isn't needed.
+
+>
+> I want to register one callback at thermal-sensor driver, when GPU pd on,
+> enable thermal-zone. when GPU pd off, disable thermal zone.
+
+Right, that should work fine too, I think. It seems like this is just
+a matter of modelling this correctly in DT, I have no strong opinion
+in this regard.
+
+>
+> we can do more common way.
+>
+>         gpu-thermal1 {
+>                         polling-delay-passive = <250>;
+>                         polling-delay = <2000>;
+>         >>>             pd=<&GPU1_PD>
+>                         thermal-sensors = <&tsens IMX_SC_R_GPU_1_PID0>;
+>
+>                 };
+>
+> if GPU1_PD on, then gpu-thermal1 enable,
+> if GPU1_PD off, then gpu-thermal1 disable.
+>
+
+Sounds like it's worth a try! Please keep me posted.
+
+Kind regards
+Uffe
