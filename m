@@ -2,92 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A76277FEF6
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 22:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A89F77FF06
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 22:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354830AbjHQUX5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 16:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S1349307AbjHQU3Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Aug 2023 16:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354882AbjHQUXo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 16:23:44 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D7835AE
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 13:23:37 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-34a91a25db9so268155ab.1
-        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 13:23:37 -0700 (PDT)
+        with ESMTP id S1354881AbjHQU3T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 16:29:19 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE564E7C
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 13:29:17 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6887bc25e6bso139255b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 13:29:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692303817; x=1692908617;
+        d=chromium.org; s=google; t=1692304157; x=1692908957;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ctD5tHxh8kgFl4uPzWKbzXoO7ZYmYJnR4HDtMsNhGnc=;
-        b=W4ibDs5DBdEd4UQjK72PNxJMfP4ExYP+b1HbFVa4PxBF4Rzl2SucgPXGUyrhiJ/eP9
-         Zcfan+GqPuCx9ifeHXAuy3BnUGlc+cXVRAovkDEG25XQfxSmjBbtYYRW15/+/q6r2ELu
-         o13VLO7RRnc2X7lMotATsBKmCx1tHewpcHzpY=
+        bh=UBC0kyACp6cZakr+/LVmBs8MHr/PelOvdSb/J30Xonc=;
+        b=D3BLvgRIzTueG23XC0/di+/pbRKmgOg9JH+UkYD5kCvW0hFBHl7MTDaUBOFP1+Hmim
+         Em2szVmnvj7xaNBUHKCmEdkGhdqhcaKTRDwaZlPA9FycY+p9OoI87eKnsS5usZ1T5r8c
+         rw6/n9HNCHlpT+2i2UO2k9c/G/pwFCqGcjN9Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692303817; x=1692908617;
+        d=1e100.net; s=20221208; t=1692304157; x=1692908957;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ctD5tHxh8kgFl4uPzWKbzXoO7ZYmYJnR4HDtMsNhGnc=;
-        b=H0wATmde44pNbCLLaJkSOKbl/k2WJ9E0qQG+mLtnxo/HLf40mVkZHpOHG9kT6qMTHC
-         BqSb6P0TY4EGTeooKqbqwuMoAWDNQYBn3RmKRn4g1Ahe5IGcOX/0DMZ1/NJ20FZdUgvN
-         n79LQosS+8DlINLK46trHmT19TLeTc7BvYvEi9zVGVN1x4PVPwPyJtkJvvgBHUGYg4Qf
-         XUXromEQet4YKj12BjRYIhIGWahY3hiabAN/bHjyRq+j2kUV6pGELTrAFJJ7uJjXuPOL
-         i6Jg7mUtxVazcKDauZlPkzk3On6myExXn6M4qdwYhvxBm3JuPf57kvewZhaO2KdiyhUm
-         uvag==
-X-Gm-Message-State: AOJu0YwgvBWRPIYeUvkSoRaJq4wAW7PyvG0lfiGPz6+6WxQ4q6v8x+td
-        85hTxLIHlifG+1YUy/LeCSvxYA==
-X-Google-Smtp-Source: AGHT+IH9443ew05VRXg9438t3UQ8u0XSyabqLN3iXPrEg4r6cnXlOhesTdal3Zsb0le9INBr3dk+5g==
-X-Received: by 2002:a92:d488:0:b0:349:1d60:7250 with SMTP id p8-20020a92d488000000b003491d607250mr806977ilg.0.1692303817020;
-        Thu, 17 Aug 2023 13:23:37 -0700 (PDT)
-Received: from localhost.localdomain ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id t9-20020a056e02010900b00348ea1a31ccsm79014ilm.12.2023.08.17.13.23.36
+        bh=UBC0kyACp6cZakr+/LVmBs8MHr/PelOvdSb/J30Xonc=;
+        b=e+vrT8eTOZA3xwqaTIfiEH0ycXMwJI77jzm0QnkEFpqNZDTQkH6MrwoVmZhTxb4TK0
+         gHwAKo5YtSjTWIo3YpvBmLNWZ2HiSEvAHAh0L1ezQ8S+ED3ng/Aj9VvqfbbvpcIr6oZY
+         URSgtFkGGFYK99ZIgOP3KqfOz6jEnKWwpoCSCn+zTi/0tVEwlckNypgkETTzy/WB5qAE
+         YfE4lP9eADWdNxPL+0z+laY/KauAzOUyj6yD5CyqKzomMUCd3wx9XfPJf/DzdNj2JJAX
+         tp8oLB4SHD0K3WfEE6D4VNzCZx91MiB1TD3r4/kuHefoc8+CEI7dEup3gDZEMAKQj8H1
+         RiKQ==
+X-Gm-Message-State: AOJu0YwERSv60hLnjPjwKpO4KUlJjwr7rTq3iMJDCFoaUyw2VTT4stMF
+        Zh/KzEEx2WdhlLF8DOBSS9vwAg==
+X-Google-Smtp-Source: AGHT+IE7lenirKPXRZ81vsUg+uiz21E6QGGGQWt45oeRx5Z2P4xIkRjz8TrSA5QwtdIXR+cRojXk/Q==
+X-Received: by 2002:a05:6a00:24c6:b0:687:7b0a:fae4 with SMTP id d6-20020a056a0024c600b006877b0afae4mr860075pfv.0.1692304157183;
+        Thu, 17 Aug 2023 13:29:17 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id f8-20020a633808000000b0055c02b8688asm104792pga.20.2023.08.17.13.29.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 13:23:36 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     trenn@suse.com, shuah@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, zuraxt@gmail.com,
-        temuri.doghonadze@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpupower: Add Georgian translation to Makefile LANGUAGES
-Date:   Thu, 17 Aug 2023 14:23:35 -0600
-Message-Id: <20230817202335.25060-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 17 Aug 2023 13:29:16 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Georgi Djakov <djakov@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>, linux-pm@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: [PATCH] interconnect: icc-clk: Annotate struct icc_clk_provider with __counted_by
+Date:   Thu, 17 Aug 2023 13:29:15 -0700
+Message-Id: <20230817202914.never.661-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1168; i=keescook@chromium.org;
+ h=from:subject:message-id; bh=V/JCGKhhIUvYMZwINl/W0cWShIAE6EyAXc3VChYyI48=;
+ b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBk3oMbZWS6f4Gn2UrbPx823jib67w4/eDfzQkNc
+ 8O/6ildBgOJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZN6DGwAKCRCJcvTf3G3A
+ Jmt3EACiQyI5QLyRqha/vGjQqFJOXqtFjcN9mt/F/ayeNCxUvPbrt8FYFRLgRht8uX0saNCudAk
+ ke+mW9O8NefD1xoVSvt1W08jN/v+63aZ0yIQUnp/CLb3BV6SO33EWj22w77Hx7i7GgxyDIiVLnH
+ f9KLTAfoQnloXyk5vfFecdmKewwa2wAXVirnkGqVvw5GexvknXAdVAdgw+znrGu+Sc481EbV+hF
+ 2OoqpBQ33YctAqJUVTeg4HfoJLyEWBHH918kk1Q12U2oYUcf5aFd0wmJZsLjUefjBV5SvAZFZiZ
+ Cw2/ymHRWHOmJ0YMxp91JuL2x16H+ozABgmMlG88q72KfSg9UH0VSYn1mSPNQ2YhShAnA25/Sxc
+ M61r3jF+BiE9QChOPFriiV050W8RsVNMpX3RBqR19jThspygD4bd3xUqXfxJ8mOHl4AP5ykeURf
+ Fxa/RuWNGUXfy/6hD/v41uXp9+1IKom3zooPuGdoDeEhJ54CvvHrnyWH1pke6NndkibWPDK97MY
+ zo/0iDbdKXMFSdebJDWjWiCwe2Eabu8dkEb0ASCTA+bZaQzGB7jCt9de4wq8tCHEU1xRyxf4Ga/
+ /L9fMyRP9Karpe1y0LXyjLHU728TNd7iLQYn7g2EeFNwNz9Y5pzQW8taQ1Re1R0Vj33476iGUwh
+ 2d9k7+i FKtaJuTQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 4680b734e729 ("cpupower: Add Georgian translation") added
-new language support. This change didn't add "ka" to Makefile
-LANGUAGES variable. Add it now.
+Prepare for the coming implementation by GCC and Clang of the __counted_by
+attribute. Flexible array members annotated with __counted_by can have
+their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+(for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+functions).
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+As found with Coccinelle[1], add __counted_by for struct icc_clk_provider.
+
+[1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+
+Cc: Georgi Djakov <djakov@kernel.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/power/cpupower/Makefile | 2 +-
+ drivers/interconnect/icc-clk.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index dc531805a570..b53753dee02f 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -57,7 +57,7 @@ LIB_MIN=			1
+diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
+index 4d43ebff4257..d787f2ea36d9 100644
+--- a/drivers/interconnect/icc-clk.c
++++ b/drivers/interconnect/icc-clk.c
+@@ -16,7 +16,7 @@ struct icc_clk_node {
+ struct icc_clk_provider {
+ 	struct icc_provider provider;
+ 	int num_clocks;
+-	struct icc_clk_node clocks[];
++	struct icc_clk_node clocks[] __counted_by(num_clocks);
+ };
  
- PACKAGE =			cpupower
- PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
--LANGUAGES = 			de fr it cs pt
-+LANGUAGES = 			de fr it cs pt ka
- 
- 
- # Directory definitions. These are default and most probably
+ #define to_icc_clk_provider(_provider) \
 -- 
-2.39.2
+2.34.1
 
