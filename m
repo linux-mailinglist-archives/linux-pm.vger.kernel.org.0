@@ -2,52 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A57577EEF3
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 04:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BD677EF1E
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Aug 2023 04:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237258AbjHQCKg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Aug 2023 22:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S237251AbjHQCdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Aug 2023 22:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347580AbjHQCKa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 22:10:30 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 152402712;
-        Wed, 16 Aug 2023 19:10:27 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.201])
-        by gateway (Coremail) with SMTP id _____8CxLOuSgd1kcFYZAA--.46707S3;
-        Thu, 17 Aug 2023 10:10:26 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.20.42.201])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx4eSBgd1kMmpcAA--.30172S3;
-        Thu, 17 Aug 2023 10:10:23 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v16 2/2] thermal: dt-bindings: add loongson-2 thermal
-Date:   Thu, 17 Aug 2023 10:10:07 +0800
-Message-Id: <20230817021007.10350-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230817021007.10350-1-zhuyinbo@loongson.cn>
-References: <20230817021007.10350-1-zhuyinbo@loongson.cn>
+        with ESMTP id S235022AbjHQCdS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Aug 2023 22:33:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97900270C;
+        Wed, 16 Aug 2023 19:33:16 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RR89259nMzNmyn;
+        Thu, 17 Aug 2023 10:29:42 +0800 (CST)
+Received: from [10.67.110.108] (10.67.110.108) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Thu, 17 Aug 2023 10:33:14 +0800
+Message-ID: <e727d702-314a-e3ec-4ee6-8d4e2df73c92@huawei.com>
+Date:   Thu, 17 Aug 2023 10:33:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] cpufreq: cppc: Set fie_disabled to FIE_DISABLED if
+ fails to create kworker_fie
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230816094938.862186-1-liaochang1@huawei.com>
+ <20230816103731.qwx3j3rmwyszq45j@vireshk-i7>
+From:   "Liao, Chang" <liaochang1@huawei.com>
+In-Reply-To: <20230816103731.qwx3j3rmwyszq45j@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx4eSBgd1kMmpcAA--.30172S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+X-Originating-IP: [10.67.110.108]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,122 +50,99 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the Loongson-2 thermal binding with DT schema format using
-json-schema.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v16:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v15:
-		1. Use the specific compatible.
-Change in v14:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v13:
-		1. Drop the sensor id.
-Change in v12:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v11:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v10:
-		1. Add all history change log information.
-Change in v9:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v8:
-                1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-Change in v7:
-		1. Split the modification of patch 3 and merge it into this patch.
-Change in v6:
-		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-		   when compile the yaml.
-Change in v5:
-		1. Keep use same quotes "'" in all places. 
-Change in v4:
-		1. Fixup the compatible.
-		2. Update the binding file name.
-		3. Include irq.h to fix compile issue.
-Change in v3:
-		1. Remove the sensor id.
-		2. Remove the interrupt-parent in thermal required property.
-		3. Update the thermal binding file name.
-		4. Fixup the commit log information.
-Change in v2:
-		1. Add description and type about the "id".	
-		2. Make the filename was based on compatible.
 
- .../thermal/loongson,ls2k-thermal.yaml        | 44 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 45 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+在 2023/8/16 18:37, Viresh Kumar 写道:
+> On 16-08-23, 09:49, Liao Chang wrote:
+>> The function cppc_freq_invariance_init() may failed to create
+>> kworker_fie, make it more robust by setting fie_disabled to FIE_DISBALED
+>> to prevent an invalid pointer dereference in kthread_destroy_worker(),
+>> which called from cppc_freq_invariance_exit().
+>>
+>> Link: https://lore.kernel.org/all/20230816034630.a4hvsj373q6aslk3@vireshk-i7/
+>>
+>> Signed-off-by: Liao Chang <liaochang1@huawei.com>
+>> ---
+>>  drivers/cpufreq/cppc_cpufreq.c | 28 ++++++++++++++++------------
+>>  1 file changed, 16 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>> index 022e3555407c..bff4cde06083 100644
+>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>> @@ -220,6 +220,15 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>>  	}
+>>  }
+>>  
+>> +static void cppc_freq_invariance_exit(void)
+>> +{
+>> +	if (fie_disabled)
+>> +		return;
+>> +
+>> +	kthread_destroy_worker(kworker_fie);
+>> +	kworker_fie = NULL;
+>> +}
+>> +
+>>  static void __init cppc_freq_invariance_init(void)
+>>  {
+>>  	struct sched_attr attr = {
+>> @@ -249,27 +258,22 @@ static void __init cppc_freq_invariance_init(void)
+>>  		return;
+>>  
+>>  	kworker_fie = kthread_create_worker(0, "cppc_fie");
+>> -	if (IS_ERR(kworker_fie))
+>> +	if (IS_ERR(kworker_fie)) {
+>> +		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
+>> +			PTR_ERR(kworker_fie));
+>> +		fie_disabled = FIE_DISABLED;
+>>  		return;
+>> +	}
+>>  
+>>  	ret = sched_setattr_nocheck(kworker_fie->task, &attr);
+>>  	if (ret) {
+>>  		pr_warn("%s: failed to set SCHED_DEADLINE: %d\n", __func__,
+>>  			ret);
+>> -		kthread_destroy_worker(kworker_fie);
+>> -		return;
+>> +		cppc_freq_invariance_exit();
+> 
+> I don't really like this change, there aren't a lot of things that we
+> need to do here on cleanup, but just kthread_destroy_worker(). Calling
+> it directly makes more sense I guess.
 
-diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-new file mode 100644
-index 000000000000..7538469997f9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Thermal sensors on Loongson-2 SoCs
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - loongson,ls2k1000-thermal
-+      - items:
-+          - enum:
-+              - loongson,ls2k2000-thermal
-+          - const: loongson,ls2k1000-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    thermal: thermal-sensor@1fe01500 {
-+        compatible = "loongson,ls2k1000-thermal";
-+        reg = <0x1fe01500 0x30>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f5015f20b0b3..da97f44b53f0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12378,6 +12378,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
- F:	drivers/thermal/loongson2_thermal.c
- 
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+OK，I will simplify code in next revisoin.
+
+> 
+>> +		fie_disabled = FIE_DISABLED;
+>>  	}
+>>  }
+>>  
+>> -static void cppc_freq_invariance_exit(void)
+>> -{
+>> -	if (fie_disabled)
+>> -		return;
+>> -
+>> -	kthread_destroy_worker(kworker_fie);
+> 
+>> -	kworker_fie = NULL;
+> 
+> I don't see the point of this line. Probably it can be dropped.
+
+I agree with you, when fie_disbaled is set to FIE_DISABLED and kthred_destroy_worker() is called,
+the driver has no chance to access the invalid kworker_fie pointer.
+
+Thanks.
+
+> 
+>> -}
+>> -
+>>  #else
+>>  static inline void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>>  {
+>> -- 
+>> 2.34.1
+> 
+
 -- 
-2.20.1
-
+BR
+Liao, Chang
