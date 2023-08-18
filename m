@@ -2,259 +2,353 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E68780B5B
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 13:46:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 774F7780B85
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 14:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376619AbjHRLpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Aug 2023 07:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S1376781AbjHRMHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Aug 2023 08:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376697AbjHRLpo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 07:45:44 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2087.outbound.protection.outlook.com [40.107.93.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B8B2723;
-        Fri, 18 Aug 2023 04:45:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ke4aNMUN4zvgiGJ0og23EcEg8tlUfvI24SiDaZkgPDGFztxDEMzId/5RkMANGxRhw4WtyajH8majPFJ97WP+QYvU2BE3FTFquVoJilyanunE4/QwO2nZoSHSgph1xD8C+oH5DxSCjqb15WHHuHTu12rMOeVkdcSExzLMP2UPnesAlEPh7/eGRL6QdyCACW52GCssm0ZL08bdbjBmujsggGPr3k9bMVACJHGPGLXxzd2RU89mCJWzPb+zZ+zTTXEUH3RjqWiyPi2YXVoaPxr/5tHkqQfY3VRRvFpwKImidXjQRvkBuRavfk2wy0GSMgzY094/3OiMt/JYThj1l4uLSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qbCkFvZmQVjvEPMj0X65iiUoV9b7/t4uD64UZ1z7Cy4=;
- b=TiN6n5JA8EKt+oDD+udhnvpGkbW5pCg06SjbFmiCjxyczqR9Hz0oroOpOSGbGKbRxzUQBK+o7dbAwq31+X67jd3z2rWdUGBsSIRw0eEvc4yjnjq0M3c2VacZycAfPSa3l8J/4Lb7UfgE5VOy/peOWe3DJ89Z5Jj2v8aVB7J0lY68xD7Cs95oN368538NWd5pNqWQeKC5S0HEpVotYmgcIbwtTvRwuYf09Hjs2Ho5//aKOLW4YGLK9zcYBnfzIykEZGxE3kG25lnuFqEBg6/o1qGV+uBechv5spIiwmYOaQ3jtXfHAUmbw+6InvVsw8PrsFz5eM+eduLwzEuAfNVQKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qbCkFvZmQVjvEPMj0X65iiUoV9b7/t4uD64UZ1z7Cy4=;
- b=NJiE/lT+OuUHRqzbbRyqfa5u7F5o17J8+vOYHPG338bmirUpdKerKFA+sEb6C5i0q3W0icajQ1l3jLyjnf2xIqjxFN+iXFKFPvfcDC/5/F+l+Cs3F5v0XQhJdWy6m01xJgvBviQZNG4x9rrWSkc/gN1JODWkwtezS//kGMY2Wyk=
-Received: from MW4PR04CA0095.namprd04.prod.outlook.com (2603:10b6:303:83::10)
- by CY5PR12MB6106.namprd12.prod.outlook.com (2603:10b6:930:29::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Fri, 18 Aug
- 2023 11:45:39 +0000
-Received: from MWH0EPF000989EA.namprd02.prod.outlook.com
- (2603:10b6:303:83:cafe::a) by MW4PR04CA0095.outlook.office365.com
- (2603:10b6:303:83::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.19 via Frontend
- Transport; Fri, 18 Aug 2023 11:45:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000989EA.mail.protection.outlook.com (10.167.241.137) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6699.14 via Frontend Transport; Fri, 18 Aug 2023 11:45:38 +0000
-Received: from ethanolxb491host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 18 Aug
- 2023 06:45:37 -0500
-From:   Swapnil Sapkal <swapnil.sapkal@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gautham.shenoy@amd.com>, Swapnil Sapkal <swapnil.sapkal@amd.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        Meng Li <li.meng@amd.com>, "Wyes Karny" <wyes.karny@amd.com>
-Subject: [PATCH v1 2/2] amd-pstate-ut: Fix kernel panic due to loading amd-pstate-ut driver
-Date:   Fri, 18 Aug 2023 11:44:52 +0000
-Message-ID: <20230818114452.66780-3-swapnil.sapkal@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230818114452.66780-1-swapnil.sapkal@amd.com>
-References: <20230818114452.66780-1-swapnil.sapkal@amd.com>
+        with ESMTP id S236248AbjHRMHI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 08:07:08 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42BCD30E6;
+        Fri, 18 Aug 2023 05:07:06 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B97ED75;
+        Fri, 18 Aug 2023 05:07:46 -0700 (PDT)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 634F03F6C4;
+        Fri, 18 Aug 2023 05:07:02 -0700 (PDT)
+Date:   Fri, 18 Aug 2023 13:06:59 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Martin Botka <martin.botka@somainline.org>
+Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Alan Ma <tech@biqu3d.com>,
+        Luke Harrison <bttuniversity@biqu3d.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin@biqu3d.com>
+Subject: Re: [PATCH 2/3] thermal: sun8i: Add support for H616 THS controller
+Message-ID: <20230818130659.49346be5@donnerap.manchester.arm.com>
+In-Reply-To: <CB2LZR.1KPTPXNXKA5H3@somainline.org>
+References: <20230818-ths-h616-v1-0-0e1e058b9c7a@somainline.org>
+        <20230818-ths-h616-v1-2-0e1e058b9c7a@somainline.org>
+        <20230818112930.6b152491@donnerap.manchester.arm.com>
+        <CB2LZR.1KPTPXNXKA5H3@somainline.org>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000989EA:EE_|CY5PR12MB6106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4ce0ecb6-8c7e-4ebf-2c90-08db9fe0a4d2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aBl9T6dHMjqxDNvO78kNDj+Vc5x69IjB3pEQKSooh57s6RffKZ7GMWlgAcMLNH3B4LBD1SqfOSeL2DmQsQKWCESJCdsye2gfjNHbNan6OACMrtIfr6T9RY0DRo+eVnZt/hJkCkHZr0nFa/vAhdJZpKNBzYHIIy/XZftyX4T8NqQzeEm96JIZyWbXroe0j5Z3oxPsjiPxvJMP8H2x/UGFgQv5DhYWJ0AqkHYV2G0I3q2mVvvza+BsnH21hvEujcCBC66Y4+EiNtxuaSATU0nYDBtMczf4/O+o5taWdz0YcBlKvm5BmqdhIxSbumRp80Ct9wrQa9GK5fiysb4E5uFrUVFmYa+ALeHnDmmeXwHT10viECRKFN1QgxVhQxmJUPuL+QQ7Fqzrsbf9x8JEkvTUMp9wRLBaCPJT795vCfgQHyj+iKAZFCpvyVGII5BsnbkzZU2uXAIlDg0nxw+8reaGTrxGiV3lxgTqoxM8qAgB0GTN3YoqrbEfGcoEgnoSZp1S4V0yytjtu2h52VjhKfW4KDYv3AGJIX8FxoToaBwB9n1lGUP94sNRITdCQW9Z6slZol+Ko2OfnIQirqCK1SKm4uuK9CQ0G8ONSWiVH+KZkReRvit2F5SQ21cPAOMZmCzuU7/eOE8xwf6iCrkglRSplsfg1DlSzvRZDpDDRTWoxxLPAeApVYH+Hzb9uW2NF6YOP5rRwNO5x3MkRg7eiksTCrIpk2KC464YUnHMWHD07ZxBTyNrs8SDLCTV6aubsQ5i1+8LPCLxZ1sKzSS4Y0dXMZ2A2UpHXLVEjW94U9vNTSo=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(396003)(39860400002)(136003)(451199024)(82310400011)(1800799009)(186009)(36840700001)(40470700004)(46966006)(356005)(40460700003)(316002)(2616005)(36860700001)(426003)(1076003)(336012)(16526019)(6666004)(26005)(7696005)(47076005)(44832011)(83380400001)(4326008)(5660300002)(8936002)(8676002)(2906002)(478600001)(41300700001)(70586007)(110136005)(54906003)(70206006)(82740400003)(36756003)(40480700001)(86362001)(81166007)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 11:45:38.8222
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4ce0ecb6-8c7e-4ebf-2c90-08db9fe0a4d2
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989EA.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6106
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-After loading amd-pstate-ut driver, amd_pstate_ut_check_perf()
-and amd_pstate_ut_check_freq() functions uses cpufreq_cpu_get()
-to get the policy of the cpu and mark it as busy. In this
-functions cpufreq_cpu_put() should be used to release the
-policy. As cpufreq_cpu_put() is not used to release the policy,
-any other entity trying to access the policy is blocked indefinitely.
-One such scenario is when amd_pstate mode is changed leading to following
-splat:
+On Fri, 18 Aug 2023 12:54:48 +0200
+Martin Botka <martin.botka@somainline.org> wrote:
 
-[ 1332.103727] INFO: task bash:2929 blocked for more than 120 seconds.
-[ 1332.110001]       Not tainted 6.5.0-rc2-amd-pstate-ut #5
-[ 1332.115315] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-[ 1332.123140] task:bash            state:D stack:0     pid:2929  ppid:2873   flags:0x00004006
-[ 1332.123143] Call Trace:
-[ 1332.123145]  <TASK>
-[ 1332.123148]  __schedule+0x3c1/0x16a0
-[ 1332.123154]  ? _raw_read_lock_irqsave+0x2d/0x70
-[ 1332.123157]  schedule+0x6f/0x110
-[ 1332.123160]  schedule_timeout+0x14f/0x160
-[ 1332.123162]  ? preempt_count_add+0x86/0xd0
-[ 1332.123165]  __wait_for_common+0x92/0x190
-[ 1332.123168]  ? __pfx_schedule_timeout+0x10/0x10
-[ 1332.123170]  wait_for_completion+0x28/0x30
-[ 1332.123173]  cpufreq_policy_put_kobj+0x4d/0x90
-[ 1332.123177]  cpufreq_policy_free+0x157/0x1d0
-[ 1332.123178]  ? preempt_count_add+0x58/0xd0
-[ 1332.123180]  cpufreq_remove_dev+0xb6/0x100
-[ 1332.123182]  subsys_interface_unregister+0x114/0x120
-[ 1332.123185]  ? preempt_count_add+0x58/0xd0
-[ 1332.123187]  ? __pfx_amd_pstate_change_driver_mode+0x10/0x10
-[ 1332.123190]  cpufreq_unregister_driver+0x3b/0xd0
-[ 1332.123192]  amd_pstate_change_driver_mode+0x1e/0x50
-[ 1332.123194]  store_status+0xe9/0x180
-[ 1332.123197]  dev_attr_store+0x1b/0x30
-[ 1332.123199]  sysfs_kf_write+0x42/0x50
-[ 1332.123202]  kernfs_fop_write_iter+0x143/0x1d0
-[ 1332.123204]  vfs_write+0x2df/0x400
-[ 1332.123208]  ksys_write+0x6b/0xf0
-[ 1332.123210]  __x64_sys_write+0x1d/0x30
-[ 1332.123213]  do_syscall_64+0x60/0x90
-[ 1332.123216]  ? fpregs_assert_state_consistent+0x2e/0x50
-[ 1332.123219]  ? exit_to_user_mode_prepare+0x49/0x1a0
-[ 1332.123223]  ? irqentry_exit_to_user_mode+0xd/0x20
-[ 1332.123225]  ? irqentry_exit+0x3f/0x50
-[ 1332.123226]  ? exc_page_fault+0x8e/0x190
-[ 1332.123228]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-[ 1332.123232] RIP: 0033:0x7fa74c514a37
-[ 1332.123234] RSP: 002b:00007ffe31dd0788 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-[ 1332.123238] RAX: ffffffffffffffda RBX: 0000000000000008 RCX: 00007fa74c514a37
-[ 1332.123239] RDX: 0000000000000008 RSI: 000055e27c447aa0 RDI: 0000000000000001
-[ 1332.123241] RBP: 000055e27c447aa0 R08: 00007fa74c5d1460 R09: 000000007fffffff
-[ 1332.123242] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000008
-[ 1332.123244] R13: 00007fa74c61a780 R14: 00007fa74c616600 R15: 00007fa74c615a00
-[ 1332.123247]  </TASK>
+Hi Martin,
 
-Fixed this by calling cpufreq_cpu_put() wherever necessary.
+> On Fri, Aug 18 2023 at 11:29:30 AM +01:00:00, Andre Przywara 
+> <andre.przywara@arm.com> wrote:
+> > On Fri, 18 Aug 2023 10:43:17 +0200
+> > Martin Botka <martin.botka@somainline.org> wrote:
+> > 
+> > Hi Martin,
+> > 
+> > many thanks for the time and effort for upstreaming this!
+> >   
+> >>  Add support for the thermal sensor found in H616 SoC
+> >>  which slightly resembles the H6 thermal sensor
+> >>  controller with few changes like 4 sensors.
+> >> 
+> >>  Signed-off-by: Martin Botka <martin.botka@somainline.org>
+> >>  ---
+> >>   drivers/thermal/sun8i_thermal.c | 115 
+> >> ++++++++++++++++++++++++++++++++++++++++
+> >>   1 file changed, 115 insertions(+)
+> >> 
+> >>  diff --git a/drivers/thermal/sun8i_thermal.c 
+> >> b/drivers/thermal/sun8i_thermal.c
+> >>  index 195f3c5d0b38..9d73e4313ad8 100644
+> >>  --- a/drivers/thermal/sun8i_thermal.c
+> >>  +++ b/drivers/thermal/sun8i_thermal.c
+> >>  @@ -108,6 +108,12 @@ static int sun50i_h5_calc_temp(struct 
+> >> ths_device *tmdev,
+> >>   		return -1590 * reg / 10 + 276000;
+> >>   }
+> >> 
+> >>  +static int sun50i_h616_calc_temp(struct ths_device *tmdev,
+> >>  +			       int id, int reg)
+> >>  +{
+> >>  +	return (reg + tmdev->chip->offset) * tmdev->chip->scale;  
+> > 
+> > So if my school maths is not letting me down, this is the same as the
+> > sun8i_ths_calc_temp() function, when using:
+> > scale = h616_scale * -10
+> > offset = h616_offset * h616_scale
+> > 
+> > So we do not need this new function, when we use:
+> > +	.offset = 263655,
+> > +	.scale = 810,
+> > below, right?  
+> That looks correct. Seems like my brain has let me down once again hehe.
 
-Fixes: 14eb1c96e3a3 ("cpufreq: amd-pstate: Add test module for amd-pstate driver") 
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Meng Li <li.meng@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Suggested-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
----
- drivers/cpufreq/amd-pstate-ut.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+Well, I guess you took the code from some BSP drop, right? And "same code
+written differently" is a common pattern in those vendor kernels, because
+they work on this "new SoC, new Linux kernel" premise, and miss out in
+factoring out the commonalities. Which on the other hand is something that
+Linux maintainers tend to push for.
 
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index cf07ee77d3cc..502d494499ae 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -140,7 +140,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 			if (ret) {
- 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 				pr_err("%s cppc_get_perf_caps ret=%d error!\n", __func__, ret);
--				return;
-+				goto skip_test;
- 			}
- 
- 			nominal_perf = cppc_perf.nominal_perf;
-@@ -151,7 +151,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 			if (ret) {
- 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 				pr_err("%s read CPPC_CAP1 ret=%d error!\n", __func__, ret);
--				return;
-+				goto skip_test;
- 			}
- 
- 			nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
-@@ -169,7 +169,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 				nominal_perf, cpudata->nominal_perf,
- 				lowest_nonlinear_perf, cpudata->lowest_nonlinear_perf,
- 				lowest_perf, cpudata->lowest_perf);
--			return;
-+			goto skip_test;
- 		}
- 
- 		if (!((highest_perf >= nominal_perf) &&
-@@ -180,11 +180,15 @@ static void amd_pstate_ut_check_perf(u32 index)
- 			pr_err("%s cpu%d highest=%d >= nominal=%d > lowest_nonlinear=%d > lowest=%d > 0, the formula is incorrect!\n",
- 				__func__, cpu, highest_perf, nominal_perf,
- 				lowest_nonlinear_perf, lowest_perf);
--			return;
-+			goto skip_test;
- 		}
-+		cpufreq_cpu_put(policy);
- 	}
- 
- 	amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
-+	return;
-+skip_test:
-+	cpufreq_cpu_put(policy);
- }
- 
- /*
-@@ -212,14 +216,14 @@ static void amd_pstate_ut_check_freq(u32 index)
- 			pr_err("%s cpu%d max=%d >= nominal=%d > lowest_nonlinear=%d > min=%d > 0, the formula is incorrect!\n",
- 				__func__, cpu, cpudata->max_freq, cpudata->nominal_freq,
- 				cpudata->lowest_nonlinear_freq, cpudata->min_freq);
--			return;
-+			goto skip_test;
- 		}
- 
- 		if (cpudata->min_freq != policy->min) {
- 			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 			pr_err("%s cpu%d cpudata_min_freq=%d policy_min=%d, they should be equal!\n",
- 				__func__, cpu, cpudata->min_freq, policy->min);
--			return;
-+			goto skip_test;
- 		}
- 
- 		if (cpudata->boost_supported) {
-@@ -231,16 +235,20 @@ static void amd_pstate_ut_check_freq(u32 index)
- 				pr_err("%s cpu%d policy_max=%d should be equal cpu_max=%d or cpu_nominal=%d !\n",
- 					__func__, cpu, policy->max, cpudata->max_freq,
- 					cpudata->nominal_freq);
--				return;
-+				goto skip_test;
- 			}
- 		} else {
- 			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 			pr_err("%s cpu%d must support boost!\n", __func__, cpu);
--			return;
-+			goto skip_test;
- 		}
-+		cpufreq_cpu_put(policy);
- 	}
- 
- 	amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
-+	return;
-+skip_test:
-+	cpufreq_cpu_put(policy);
- }
- 
- static int __init amd_pstate_ut_init(void)
--- 
-2.34.1
+> > Those values are not only positive, but also seem closer to the other
+> > SoC's values.
+> > This of course requires some small adjustment in the calibrate 
+> > function,
+> > to accommodate for the changed scale, but I leave this up as an 
+> > exercise
+> > to the reader ;-)
+> > 
+> > Martin, can you confirm that this works?  
+> Will do :)
+> >   
+> >>  +}
+> >>  +
+> >>   static int sun8i_ths_get_temp(struct thermal_zone_device *tz, int 
+> >> *temp)
+> >>   {
+> >>   	struct tsensor *s = thermal_zone_device_priv(tz);
+> >>  @@ -278,6 +284,64 @@ static int sun50i_h6_ths_calibrate(struct 
+> >> ths_device *tmdev,
+> >>   	return 0;
+> >>   }
+> >> 
+> >>  +static int sun50i_h616_ths_calibrate(struct ths_device *tmdev,
+> >>  +				   u16 *caldata, int callen)  
+> > 
+> > nit: alignment  
+> ack
+> >   
+> >>  +{
+> >>  +	struct device *dev = tmdev->dev;
+> >>  +	int i, ft_temp;
+> >>  +
+> >>  +	if (!caldata[0])
+> >>  +		return -EINVAL;
+> >>  +
+> >>  +	/*
+> >>  +	 * h616 efuse THS calibration data layout:
+> >>  +	 *
+> >>  +	 * 0      11  16     27   32     43   48    57
+> >>  +	 * +----------+-----------+-----------+-----------+
+> >>  +	 * |  temp |  |sensor0|   |sensor1|   |sensor2|   |
+> >>  +	 * +----------+-----------+-----------+-----------+
+> >>  +	 *                      ^           ^           ^
+> >>  +	 *                      |           |           |
+> >>  +	 *                      |           |           sensor3[11:8]
+> >>  +	 *                      |           sensor3[7:4]
+> >>  +	 *                      sensor3[3:0]
+> >>  +	 *
+> >>  +	 * The calibration data on the H616 is the ambient temperature and
+> >>  +	 * sensor values that are filled during the factory test stage.
+> >>  +	 *
+> >>  +	 * The unit of stored FT temperature is 0.1 degreee celusis.  
+> > 
+> > nit: degree Celsius  
+> .... I can't even legit excuse this typo (If it even can be called 
+> typo). Got it tho.
+> >   
+> >>  +	 */
+> >>  +	ft_temp = caldata[0] & FT_TEMP_MASK;
+> >>  +
+> >>  +	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+> >>  +		int delta, cdata, offset, reg;
+> >>  +
+> >>  +		if (i == 3)
+> >>  +			reg = (caldata[1] >> 12)
+> >>  +			      | (caldata[2] >> 12 << 4)
+> >>  +			      | (caldata[3] >> 12 << 8);  
+> > 
+> > Can you add parentheses around the (caldata[2|3] >> 12) part? Makes 
+> > it a
+> > bit more readable.  
+> yep
+> >   
+> >>  +		else
+> >>  +			reg = (int)caldata[i + 1] & TEMP_CALIB_MASK;
+> >>  +
+> >>  +		delta = (ft_temp * 100 - tmdev->chip->calc_temp(tmdev, i, reg))
+> >>  +			/ tmdev->chip->scale;  
+> > 
+> > Looks a bit odd, can you write this as over two lines?
+> > 		delta = ft_temp ...;
+> > 		delta /= tmdev->chip_scale;  
+> can do.
+> > 
+> > (And this would be the place where you adjust the calculation to use 
+> > the
+> > new scale value).  
+> yep. Tho it is bit of a spoiler for the reader ;)
+> >   
+> >>  +		cdata = CALIBRATE_DEFAULT - delta;
+> >>  +		if (cdata & ~TEMP_CALIB_MASK) {
+> >>  +			dev_warn(dev, "sensor%d is not calibrated.\n", i);
+> >>  +
+> >>  +			continue;
+> >>  +		}
+> >>  +
+> >>  +		offset = (i % 2) * 16;
+> >>  +		regmap_update_bits(tmdev->regmap,
+> >>  +				   SUN50I_H6_THS_TEMP_CALIB + (i / 2 * 4),
+> >>  +				   0xfff << offset,  
+> > 
+> > That should be TEMP_CALIB_MASK << offset, compare the H6 code.  
+> Agreed. Missed this one. Ty.
+> >   
+> >>  +				   cdata << offset);
+> >>  +	}
+> >>  +
+> >>  +	return 0;
+> >>  +}
+> >>  +
+> >>   static int sun8i_ths_calibrate(struct ths_device *tmdev)
+> >>   {
+> >>   	struct nvmem_cell *calcell;
+> >>  @@ -453,6 +517,43 @@ static int sun50i_h6_thermal_init(struct 
+> >> ths_device *tmdev)
+> >>   	return 0;
+> >>   }
+> >> 
+> >>  +static int sun50i_h616_thermal_init(struct ths_device *tmdev)
+> >>  +{
+> >>  +	int val;
+> >>  +
+> >>  +	/*
+> >>  +	 * T_acq = 20us
+> >>  +	 * clkin = 24MHz
+> >>  +	 *
+> >>  +	 * x = T_acq * clkin - 1
+> >>  +	 *   = 479
+> >>  +	 */
+> >>  +	regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
+> >>  +		     SUN8I_THS_CTRL0_T_ACQ0(47) | SUN8I_THS_CTRL2_T_ACQ1(479));  
+> > 
+> > So this whole function is the same as the H6 (diff it!), except this 
+> > line.
+> > Which is actually also the same, just written differently (47 == 
+> > 0x2f).
+> > Can you please double check this, and if you agree, remove the whole
+> > function and just use the H6 version?  
+> They are not the same. Yes the 47 can be replaced with the unknown 
+> value from H6.
+> What isnt the same is the CTRL at the end. CTRL0 in H6 and CTRL2 in 
+> H616. A very
+> small change :)
+
+But the definitions of SUN8I_THS_CTRL2_T_ACQ1 and SUN50I_THS_CTRL0_T_ACQ
+are the same, aren't they?
+I wonder if we are missing one piece of info for the H6 here, so the
+"magic" 47 isn't actually magic, but there is some formula involving
+clocks, similar to the one that results in 479.
+Because then this would be more similar across the different SoCs: there
+are *two* timing values for each SoC, and they just happen to be the same
+for the H3 (20us), but are different for the H6 and H616 (one 2us, the
+other 20us). And then your H616 line would make sense for the H6 as well:
+		2us				20us
+	SUN8I_THS_CTRL0_T_ACQ0(47) | SUN8I_THS_CTRL2_T_ACQ1(479));
+
+In any case I still believe the H6 line results in the very same bit
+pattern than your H616 line, but I am happy to stand corrected.
+In which case I would ask you to unify the code anyway, somehow, so you
+better hope I am right ;-)
+
+Cheers,
+Andre
+
+> >>  +	/* average over 4 samples */
+> >>  +	regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
+> >>  +		     SUN50I_THS_FILTER_EN |
+> >>  +		     SUN50I_THS_FILTER_TYPE(1));
+> >>  +	/*
+> >>  +	 * clkin = 24MHz
+> >>  +	 * filter_samples = 4
+> >>  +	 * period = 0.25s
+> >>  +	 *
+> >>  +	 * x = period * clkin / 4096 / filter_samples - 1
+> >>  +	 *   = 365
+> >>  +	 */
+> >>  +	regmap_write(tmdev->regmap, SUN50I_H6_THS_PC,
+> >>  +		     SUN50I_H6_THS_PC_TEMP_PERIOD(365));
+> >>  +	/* enable sensor */
+> >>  +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
+> >>  +	regmap_write(tmdev->regmap, SUN50I_H6_THS_ENABLE, val);
+> >>  +	/* thermal data interrupt enable */
+> >>  +	val = GENMASK(tmdev->chip->sensor_num - 1, 0);
+> >>  +	regmap_write(tmdev->regmap, SUN50I_H6_THS_DIC, val);
+> >>  +
+> >>  +	return 0;
+> >>  +}
+> >>  +
+> >>   static int sun8i_ths_register(struct ths_device *tmdev)
+> >>   {
+> >>   	int i;
+> >>  @@ -608,6 +709,19 @@ static const struct ths_thermal_chip 
+> >> sun50i_h6_ths = {
+> >>   	.calc_temp = sun8i_ths_calc_temp,
+> >>   };
+> >> 
+> >>  +static const struct ths_thermal_chip sun50i_h616_ths = {
+> >>  +	.sensor_num = 4,
+> >>  +	.has_bus_clk_reset = true,
+> >>  +	.ft_deviation = 8000,
+> >>  +	.offset = -3255,
+> >>  +	.scale = -81,
+> >>  +	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
+> >>  +	.calibrate = sun50i_h616_ths_calibrate,
+> >>  +	.init = sun50i_h616_thermal_init,
+> >>  +	.irq_ack = sun50i_h6_irq_ack,
+> >>  +	.calc_temp = sun50i_h616_calc_temp,
+> >>  +};
+> >>  +
+> >>   static const struct of_device_id of_ths_match[] = {
+> >>   	{ .compatible = "allwinner,sun8i-a83t-ths", .data = 
+> >> &sun8i_a83t_ths },
+> >>   	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+> >>  @@ -616,6 +730,7 @@ static const struct of_device_id of_ths_match[] 
+> >> = {
+> >>   	{ .compatible = "allwinner,sun50i-a100-ths", .data = 
+> >> &sun50i_a100_ths },
+> >>   	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths 
+> >> },
+> >>   	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths 
+> >> },
+> >>  +	{ .compatible = "allwinner,sun50i-h616-ths", .data = 
+> >> &sun50i_h616_ths },
+> >>   	{ /* sentinel */ },
+> >>   };
+> >>   MODULE_DEVICE_TABLE(of, of_ths_match);
+> >>   
+> >   
+> 
+> 
 
