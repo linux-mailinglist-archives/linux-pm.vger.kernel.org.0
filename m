@@ -2,125 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09ECC7808B0
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 11:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590E37808D5
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 11:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241308AbjHRJgX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Aug 2023 05:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S1359392AbjHRJlM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Aug 2023 05:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359195AbjHRJf4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 05:35:56 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCED35A4
-        for <linux-pm@vger.kernel.org>; Fri, 18 Aug 2023 02:35:53 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RRxXh0RZ3z1GF9w;
-        Fri, 18 Aug 2023 17:34:28 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
- 2023 17:35:50 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next] thermal/drivers/imx: Use the devm_clk_get_enabled() helper function
-Date:   Fri, 18 Aug 2023 17:35:24 +0800
-Message-ID: <20230818093525.1059106-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1359369AbjHRJkt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 05:40:49 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D2E121
+        for <linux-pm@vger.kernel.org>; Fri, 18 Aug 2023 02:40:45 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe2de785e7so989402e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Aug 2023 02:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692351643; x=1692956443;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kr50GcAKm2aJwhKCS62LKftx0ItaoNANdBm3FHGUdv8=;
+        b=OkCG2fh5IVrVZlI5WVmkxFkfVT/zTmQUg/N8Hpi5VWnPibTSpXEyHhskzdGVv3dOnA
+         sceOYUgkvK1rDrpkWiUFg+l4SslbKLAuwud99ssU7hF5RotT1jHCUMz3ci6gK9ADmdk+
+         xUrNl5iWksSm+vVNmlJKtYOjgJa+0l34MN+23xjCShOdVMJswUJMJycEAh8YMt/W1faP
+         3L/qYjhiLLLIMFFAD3qx5sr3byUzOhwv8B1MGCeFhkLtBWERrwbaTxXievjVB7xfLZTT
+         ZIdrPoayGkAS+zLb2SU57GpGNyN0fIaJzSy+XZYRsaQ8nlFX/pY9I3IcMY85pXwHnQPK
+         gufg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692351643; x=1692956443;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kr50GcAKm2aJwhKCS62LKftx0ItaoNANdBm3FHGUdv8=;
+        b=RRxbruvN2466C77eAHGoQzesAnrIAYtp+UP9k61wtRP7SQ9VHJZx+gn6dKx1WWR0OZ
+         H5a9pNLMxRjWapaJH7T3udkRZDKqPKyAcT79AN6bnCsP9JfcqBObOa+yBOGf3p+gmg4M
+         gncrA5kT+sDsHVmzT1C4VrzhLywkKipMTzxGFhfi5ffEQPb2KMgO5flUArol/1QSxHBc
+         4g6Gw597vsqLmRwhJ1UT9/fhrcWAurPbpwDFXrzV/RjxjDjJm3OAoXa+ZZyivPkp99TX
+         aBBYwXlDiZFJBf04KmK16nJfQB0hBoU+xUwH8grGQkPd7g8pQrbWhXkjgzH2ZMOuILES
+         VVgA==
+X-Gm-Message-State: AOJu0Yz2hC4wUkQz0AbXCSM1NY4y87FuodsJ05d51PUQojAhMn2Re+Ea
+        Ed3mE/bQLSd7EctiAqUsu7Q7sg==
+X-Google-Smtp-Source: AGHT+IEN+Nr8hsbijZjf0KtwcLHjgvGL7uY++tgh1sm+MN0PUZe+8JQ4CXRLAN6xNxItm7lBZDZONg==
+X-Received: by 2002:ac2:5475:0:b0:4fd:cc8c:54e5 with SMTP id e21-20020ac25475000000b004fdcc8c54e5mr1302639lfn.41.1692351642925;
+        Fri, 18 Aug 2023 02:40:42 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id k6-20020a1709062a4600b0099bcbaa242asm967546eje.9.2023.08.18.02.40.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Aug 2023 02:40:42 -0700 (PDT)
+Message-ID: <cc428a34-7c06-964c-2cec-123e99c92c4e@linaro.org>
+Date:   Fri, 18 Aug 2023 11:40:41 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v2 2/3] dt-bindings: cpufreq: cpufreq-qcom-hw: add SDM670
+ compatible
+Content-Language: en-US
+To:     Richard Acayan <mailingradian@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230816230412.76862-6-mailingradian@gmail.com>
+ <20230816230412.76862-8-mailingradian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230816230412.76862-8-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-With devm_clk_get_enabled() the call to clk_disable_unprepare() can be
-dropped from the error path and the remove callback.
+On 17/08/2023 01:04, Richard Acayan wrote:
+> The bindings for Qualcomm CPU frequency have a compatible for each SoC.
+> Add the compatible for SDM670.
+> 
+> Fixes: 0c665213d126 ("arm64: dts: qcom: sdm670: add cpu frequency scaling")
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
----
- drivers/thermal/imx8mm_thermal.c | 19 ++++---------------
- 1 file changed, 4 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index e89b11b3f2b9..c74df5de0450 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -313,16 +313,10 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
- 	if (IS_ERR(tmu->base))
- 		return PTR_ERR(tmu->base);
- 
--	tmu->clk = devm_clk_get(&pdev->dev, NULL);
-+	tmu->clk = devm_clk_get_enabled(&pdev->dev, NULL);
- 	if (IS_ERR(tmu->clk))
- 		return dev_err_probe(&pdev->dev, PTR_ERR(tmu->clk),
--				     "failed to get tmu clock\n");
--
--	ret = clk_prepare_enable(tmu->clk);
--	if (ret) {
--		dev_err(&pdev->dev, "failed to enable tmu clock: %d\n", ret);
--		return ret;
--	}
-+				     "failed to enable tmu clock\n");
- 
- 	/* disable the monitor during initialization */
- 	imx8mm_tmu_enable(tmu, false);
-@@ -338,7 +332,7 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
- 			dev_err(&pdev->dev,
- 				"failed to register thermal zone sensor[%d]: %d\n",
- 				i, ret);
--			goto disable_clk;
-+			return ret;
- 		}
- 		tmu->sensors[i].hw_id = i;
- 
-@@ -349,7 +343,7 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
- 
- 	ret = imx8mm_tmu_probe_set_calib(pdev, tmu);
- 	if (ret)
--		goto disable_clk;
-+		return ret;
- 
- 	/* enable all the probes for V2 TMU */
- 	if (tmu->socdata->version == TMU_VER2)
-@@ -359,10 +353,6 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
- 	imx8mm_tmu_enable(tmu, true);
- 
- 	return 0;
--
--disable_clk:
--	clk_disable_unprepare(tmu->clk);
--	return ret;
- }
- 
- static int imx8mm_tmu_remove(struct platform_device *pdev)
-@@ -372,7 +362,6 @@ static int imx8mm_tmu_remove(struct platform_device *pdev)
- 	/* disable TMU */
- 	imx8mm_tmu_enable(tmu, false);
- 
--	clk_disable_unprepare(tmu->clk);
- 	platform_set_drvdata(pdev, NULL);
- 
- 	return 0;
--- 
-2.34.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
