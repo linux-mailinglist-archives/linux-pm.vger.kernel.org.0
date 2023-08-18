@@ -2,118 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F947803BD
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 04:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DC17805A7
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 07:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357208AbjHRCR5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Aug 2023 22:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S1357215AbjHRF2N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Aug 2023 01:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357211AbjHRCRx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Aug 2023 22:17:53 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A0E3589;
-        Thu, 17 Aug 2023 19:17:50 -0700 (PDT)
-X-UUID: 6b5f923a3d6d11ee9cb5633481061a41-20230818
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=2Z2wzmI8dgxrpulUWgeoh6/Sd2+6AGOoVETN0WTE9p8=;
-        b=sneZgkzYS0MAm93o2qcyOIC/zR6QZVmHLs06UH1e9g5Ket936tHNTtDhxU4qeRnUFlsiOfzqfUI+ycmR9qsLGZSr9DHO1+IslyQuueSw8Swdy9Xi0U1Ikyz2gwRsmzmby97eqtdHg4O5OtJgMdfhokPVyAlcDl9pJm3JUGKifig=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.31,REQID:f05789b7-a5f4-43f3-b176-e3aa465d622c,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:95
-X-CID-INFO: VERSION:1.1.31,REQID:f05789b7-a5f4-43f3-b176-e3aa465d622c,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:95
-X-CID-META: VersionHash:0ad78a4,CLOUDID:4013a9ee-9a6e-4c39-b73e-f2bc08ca3dc5,B
-        ulkID:2308181017462TQ0VDES,BulkQuantity:0,Recheck:0,SF:38|29|28|17|19|48,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_SDM,TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,
-        TF_CID_SPAM_FSD
-X-UUID: 6b5f923a3d6d11ee9cb5633481061a41-20230818
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
-        (envelope-from <chun-jen.tseng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 322382278; Fri, 18 Aug 2023 10:17:45 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS14N2.mediatek.inc (172.21.101.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Fri, 18 Aug 2023 10:17:44 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 18 Aug 2023 10:17:44 +0800
-From:   Mark Tseng <chun-jen.tseng@mediatek.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <chun-jen.tseng@mediatek.com>
-Subject: [PATCH] PM / devfreq: mediatek: protect oop in critical session
-Date:   Fri, 18 Aug 2023 10:17:41 +0800
-Message-ID: <20230818021741.6173-1-chun-jen.tseng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        with ESMTP id S239444AbjHRF1n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 01:27:43 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7841DCD
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 22:27:42 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-68879c4cadeso449681b3a.2
+        for <linux-pm@vger.kernel.org>; Thu, 17 Aug 2023 22:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692336462; x=1692941262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HU5RTBEwbDAykOIX7ilNn8IFEodPR9FSTcqGXKFW6xA=;
+        b=kI7/9v41wk6+l3PeHPG73dQNP7pL/7JGVtK0+HWlj+5FFKj4vuSLj5YWmYmlsTZzsc
+         cWZogyWlpiHrskHQBT+2ebjqXs+rDefOIcuBrdqNFrrVBQUFtD62s1UfdHIym1+ygvQZ
+         rxI7JPRIb/mwCAU+7Cf1dI/yVydlM0ITWdF0wGhClFJJqUWsq167stnU2JcEsRsrJN4i
+         TFldG3qAup4/LZMB5+V455v0FgMxCp9TVY+3sOYB4/O8oXE8EEizKDZW/qJIIxsRx1Ay
+         p5rtQnt1BEuklbpPl/tMhS15t19vYBtOT4SuCoruajwzViWprtF5OGF5kSPkbsNdxR7y
+         QOmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692336462; x=1692941262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HU5RTBEwbDAykOIX7ilNn8IFEodPR9FSTcqGXKFW6xA=;
+        b=B8YZCND4JUjJKlICZO2N8qkTSUaYLQXcRUG5/Vp1GAkmagXcZaaRCMbPprHwmobmYs
+         ece6TEWnUEm10WKS/z4heLuzROnfvVHWpPm1UcpNr4JWUlgSqivKnQ5XtmZVZn4P+/vm
+         DyzppqAdSgJRRfnw0h64GhSvyabs+xqDf5GR/M39bz1OUe8kWs6PqdDlFLJJVpknl0Eu
+         AozXKbn1VJbnPIqLeL+OtFLrvPc//0FnhYzcqaRpnq4tac1OA3qrS9CF5DLRJP7i4IS4
+         VuxNlmjmJQ2yHhUICV7oiyEMcEogeHBW9R6V7avpB+e9szulO/BJ4s4B0SpHNMtH2mln
+         Lwqw==
+X-Gm-Message-State: AOJu0YwqunrE63v1Ol1HFVa26pW3zt5DoKEK5OsCRxHa2Sdk8/jYzZvp
+        74JPliH3h5m4/7f51OWCvljskA==
+X-Google-Smtp-Source: AGHT+IGdceAFfzkeXASXtoi9F+09M7iSr9jZEZyAjFpb7p5vcHPA2aRwThZNz09QG1DSLwecPrpPNg==
+X-Received: by 2002:a05:6a20:656:b0:13e:b58a:e3e8 with SMTP id 22-20020a056a20065600b0013eb58ae3e8mr1572913pzm.50.1692336461933;
+        Thu, 17 Aug 2023 22:27:41 -0700 (PDT)
+Received: from localhost ([122.172.87.195])
+        by smtp.gmail.com with ESMTPSA id v2-20020aa78502000000b00686bef8e55csm671681pfn.39.2023.08.17.22.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 22:27:41 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] OPP: Fix argument name in doc comment
+Date:   Fri, 18 Aug 2023 10:57:33 +0530
+Message-Id: <a5a297918abba9e35b4b1683b14542d6b7f31ade.1692336440.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-mtk_ccifreq_opp_notifier is reenter function when policy0 / policy6
-change freq, so metex_lock should protect all OPP event.
+The name of the argument is "opp_table" and not "table", fix the
+comment.
 
-Signed-off-by: Mark Tseng <chun-jen.tseng@mediatek.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202308172310.FzcidE4c-lkp@intel.com/
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/devfreq/mtk-cci-devfreq.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/opp/cpu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/devfreq/mtk-cci-devfreq.c b/drivers/devfreq/mtk-cci-devfreq.c
-index 83a73f0ccd80..b0ed25e33f2b 100644
---- a/drivers/devfreq/mtk-cci-devfreq.c
-+++ b/drivers/devfreq/mtk-cci-devfreq.c
-@@ -137,6 +137,8 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
- 	if (drv->pre_freq == *freq)
- 		return 0;
- 
-+	mutex_lock(&drv->reg_lock);
-+
- 	inter_voltage = drv->inter_voltage;
- 	cci_pll = clk_get_parent(drv->cci_clk);
- 
-@@ -147,8 +149,6 @@ static int mtk_ccifreq_target(struct device *dev, unsigned long *freq,
- 		return PTR_ERR(opp);
- 	}
- 
--	mutex_lock(&drv->reg_lock);
--
- 	voltage = dev_pm_opp_get_voltage(opp);
- 	dev_pm_opp_put(opp);
- 
-@@ -227,9 +227,9 @@ static int mtk_ccifreq_opp_notifier(struct notifier_block *nb,
- 	drv = container_of(nb, struct mtk_ccifreq_drv, opp_nb);
- 
- 	if (event == OPP_EVENT_ADJUST_VOLTAGE) {
-+		mutex_lock(&drv->reg_lock);
- 		freq = dev_pm_opp_get_freq(opp);
- 
--		mutex_lock(&drv->reg_lock);
- 		/* current opp item is changed */
- 		if (freq == drv->pre_freq) {
- 			volt = dev_pm_opp_get_voltage(opp);
+diff --git a/drivers/opp/cpu.c b/drivers/opp/cpu.c
+index 3c3506021501..12c429b407ca 100644
+--- a/drivers/opp/cpu.c
++++ b/drivers/opp/cpu.c
+@@ -24,7 +24,7 @@
+ /**
+  * dev_pm_opp_init_cpufreq_table() - create a cpufreq table for a device
+  * @dev:	device for which we do this operation
+- * @table:	Cpufreq table returned back to caller
++ * @opp_table:	Cpufreq table returned back to caller
+  *
+  * Generate a cpufreq table for a provided device- this assumes that the
+  * opp table is already initialized and ready for usage.
+@@ -89,7 +89,7 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_init_cpufreq_table);
+ /**
+  * dev_pm_opp_free_cpufreq_table() - free the cpufreq table
+  * @dev:	device for which we do this operation
+- * @table:	table to free
++ * @opp_table:	table to free
+  *
+  * Free up the table allocated by dev_pm_opp_init_cpufreq_table
+  */
 -- 
-2.18.0
+2.31.1.272.g89b43f80a514
 
