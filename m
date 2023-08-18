@@ -2,68 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D2D47808E0
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 11:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 146A37808F3
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 11:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359383AbjHRJpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Aug 2023 05:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S238682AbjHRJwG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Aug 2023 05:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359404AbjHRJpb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 05:45:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C5341FC3;
-        Fri, 18 Aug 2023 02:45:30 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 33B47D75;
-        Fri, 18 Aug 2023 02:46:10 -0700 (PDT)
-Received: from bogus (unknown [10.57.34.159])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9CB0B3F762;
-        Fri, 18 Aug 2023 02:45:27 -0700 (PDT)
-Date:   Fri, 18 Aug 2023 10:44:53 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] power: vexpress: fix -Wvoid-pointer-to-enum-cast warning
-Message-ID: <20230818094453.pc7zlzl4lvjk3zpx@bogus>
-References: <20230814-void-drivers-power-reset-vexpress-poweroff-v1-1-c3d9b0107e5d@google.com>
+        with ESMTP id S1357543AbjHRJvw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 05:51:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A60F92684;
+        Fri, 18 Aug 2023 02:51:50 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RRxtB4JmpzVk4Y;
+        Fri, 18 Aug 2023 17:49:38 +0800 (CST)
+Received: from huawei.com (10.67.174.28) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
+ 2023 17:51:46 +0800
+From:   Liao Chang <liaochang1@huawei.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: stats: Improve the performance of cpufreq_stats_create_table()
+Date:   Fri, 18 Aug 2023 09:50:00 +0000
+Message-ID: <20230818095000.937633-1-liaochang1@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230814-void-drivers-power-reset-vexpress-poweroff-v1-1-c3d9b0107e5d@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.28]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 10:21:51PM +0000, Justin Stitt wrote:
-> When building with clang 18 I see the following warning:
-> |       drivers/power/reset/vexpress-poweroff.c:124:10: warning: cast to smaller integer type 'enum vexpress_reset_func' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-> |         124 |         switch ((enum vexpress_reset_func)match->data) {
-> 
-> This is due to the fact that `match->data` is a void* while `enum vexpress_reset_func`
-> has the size of an int. This leads to truncation and possible data loss.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1910
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
+In the worst case, the freq_table of policy data is not sorted and
+contains duplicate frequencies, this means that it needs to iterate
+through the entire freq_table of policy to ensure each frequency is
+unique in the freq_table of stats data, this has a time complexity of
+O(N^2), where N is the number of frequencies in the freq_table of
+policy.
 
-Hi Sebastian,
+However, if the policy.freq_table is already sorted and contains no
+duplicate frequencices, it can reduce the time complexity of creating
+stats.freq_table to O(N), the 'freq_table_sorted' field of policy data
+can be used to indicate whether the policy.freq_table is sorted.
 
-I am assuming you will pick this up.
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+---
+ drivers/cpufreq/cpufreq_stats.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
+diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
+index 55c7ffd37d1c..fcb74050711a 100644
+--- a/drivers/cpufreq/cpufreq_stats.c
++++ b/drivers/cpufreq/cpufreq_stats.c
+@@ -243,7 +243,8 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
+ 
+ 	/* Find valid-unique entries */
+ 	cpufreq_for_each_valid_entry(pos, policy->freq_table)
+-		if (freq_table_get_index(stats, pos->frequency) == -1)
++		if ((policy->freq_table_sorted != CPUFREQ_TABLE_UNSORTED) ||
++		    (freq_table_get_index(stats, pos->frequency) == -1))
+ 			stats->freq_table[i++] = pos->frequency;
+ 
+ 	stats->state_num = i;
 -- 
-Regards,
-Sudeep
+2.34.1
+
