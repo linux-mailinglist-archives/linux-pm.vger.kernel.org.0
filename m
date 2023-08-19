@@ -2,271 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52DE781440
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Aug 2023 22:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF70781670
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Aug 2023 03:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379959AbjHRUUz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Aug 2023 16:20:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S242734AbjHSBeM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Aug 2023 21:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379956AbjHRUU1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 16:20:27 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C976F3A98
-        for <linux-pm@vger.kernel.org>; Fri, 18 Aug 2023 13:20:23 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-40c72caec5cso80151cf.0
-        for <linux-pm@vger.kernel.org>; Fri, 18 Aug 2023 13:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692390023; x=1692994823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hJivKRUQVufG/gPmQeTicJgOw5YOtNiOedA2X8vU9zE=;
-        b=G3VGxR5zQ/wn8bs1jFo/t0VmyFqMoOtDmLslbRIHJk21UrHdZY8HT8PexNES69U8cc
-         COydRhoSc2QngvCduPSEVYlodpuas9ObmPtUWW122HK8lZTSSCvjoy30H7lDXADy4EXV
-         5C1siSFS37lpkbu/yoolDQK8T/bXCB7/7pnZ0E7eraoK1ikRGty5FCbdgH7oR8AYFbS+
-         zO7O/LqS2xLH9BzUgKyBFydjigHDw9QQKSK25RA/gnWIpbLhEJlj3WcgLwP+XBVe17Mq
-         cO5v1MaDpawx4RoM46uQ94x3vozEKXF6MjTydtMTTAlt+XTyWdZlDPZbjfwvbnNnRpqG
-         qmPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692390023; x=1692994823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hJivKRUQVufG/gPmQeTicJgOw5YOtNiOedA2X8vU9zE=;
-        b=AXxJHQ4glGZ4iOy/mwhKb48dDH8N/+XiyOadYgD+sgRk5eNadiH1pAvITIshWHDPYZ
-         75XHBnAbgWBigkx4519msr0/e6gSVt2qntOO9emlfve8CUKIUvSGREg0STKH6YcPb0d5
-         UzpdStjJWIZiizHjePHeOHdZfABRXYCF2VrJorLbpLqJlz+k4qgJGIVQNrhwbDSFx9yu
-         aMaMChRt5WisOEtAxYg8ZGx79E+W2jkYP47PTED0pkna6TH9Q47wpdgP4kLnaGowGlXv
-         nznMErQmuwnKf6DGG5bR9p595/9RtPYzdZ4fQpZyf48Rz0JHgKyULbJxf4KgFnF8htmv
-         FtNQ==
-X-Gm-Message-State: AOJu0YzBcXFubN0T8EJIgqjJjlKo38IVt9HlQjWCTVbOXkj4o6O04JkE
-        4VDNDra/qIPT/F4zM2SMXQCXY851QI2nmMz6KwLvQA==
-X-Google-Smtp-Source: AGHT+IEhwnsWoqhjrCcucUjO6z8QLTGzlIDf8prugA9O2RpP4srmVZqsJbmCcbZ5tZ9oWV31HG4wWi04/nNC4NUYdz4=
-X-Received: by 2002:ac8:5782:0:b0:40f:d1f4:aa58 with SMTP id
- v2-20020ac85782000000b0040fd1f4aa58mr288786qta.8.1692390022713; Fri, 18 Aug
- 2023 13:20:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613094924.913340374@linuxfoundation.org> <20220613094928.793712131@linuxfoundation.org>
- <6283c4b1-2513-207d-4ed6-fdabf3f3880e@collabora.com> <2023081619-slapping-congrats-8e85@gregkh>
- <471bf84d-9d58-befc-8224-359a62e29786@collabora.com> <CAGETcx-NVoN7b8XCV09ouof81XxZk4wtGhEcqcFAt6Gs=JWKdw@mail.gmail.com>
- <d8f8ddf6-8063-fb3a-7dad-4064a47c5fe8@collabora.com>
-In-Reply-To: <d8f8ddf6-8063-fb3a-7dad-4064a47c5fe8@collabora.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Fri, 18 Aug 2023 13:19:46 -0700
-Message-ID: <CAGETcx-DUm417mM-Nmyqj-e_rKUw69m=rTe5R6_Vxd_rsKMmGg@mail.gmail.com>
-Subject: Re: [PATCH 5.17 127/298] driver core: Fix wait_for_device_probe() &
- deferred_probe_timeout interaction
-To:     Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        with ESMTP id S241952AbjHSBdg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Aug 2023 21:33:36 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDF3272D;
+        Fri, 18 Aug 2023 18:33:34 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37J1EFhH000646;
+        Sat, 19 Aug 2023 01:33:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=/nheY/iUEN8kTSous6Kxe+kn4fcnQDy/yMwkoJBqaGU=;
+ b=mNBUSeXO/+uoA1vRY0Cl6XsFZSK+2VPLLs71gNoavyDVoyyFgdhlAhG4byTYayjGsHxd
+ 8RsvlOkD8pt6omTZKXdc8jmxVA/FiAOkic2LFbzrZlXruqm5w53YjW+lY3U5KWznPtV8
+ AYe4NKIoFPTCiDuc1XMb6hQ/IYx5w/JsCugGP0IDTzwKUvDwJVBC9FNCpJeNBGd9yIpX
+ vx/kmGdLBVXoIkasJXJSivfam6i4IcGqaLkWS9qX9MzPihies2z6GYnxOj9lLV9sq/QK
+ 7UdXOTKHsuR6tpgv94Wa+K+Exsems2hYr7tNqVAAzdmqsmFXiPP9UHPDcrlQR/KypCo8 Bg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3shsd0ju6u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 19 Aug 2023 01:33:07 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37J1X6dd001510
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 19 Aug 2023 01:33:06 GMT
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 18 Aug
+ 2023 18:33:05 -0700
+Date:   Fri, 18 Aug 2023 18:33:04 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        "Kees Cook" <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, Will Deacon <will@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Stultz <jstultz@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
-        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo_Navarro?= 
-        <ricardo.canuelo@collabora.com>,
-        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
-        usama.anjum@collabora.com, kernelci@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        <quic_pkondeti@quicinc.com>, <u.kleine-koenig@pengutronix.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 0/1] Add add-maintainer.py script
+Message-ID: <20230819013303.GA22393@quicinc.com>
+Mail-Followup-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Kees Cook <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+References: <cover.1691049436.git.quic_gurus@quicinc.com>
+ <20230810185526.GC31860@quicinc.com>
+ <4d94d0fd-72d4-0196-3a30-3e1efb9f5aca@linaro.org>
+ <20230816171538.GB26279@quicinc.com>
+ <6fb1176f-90f1-7a65-3ab5-f6447418c51e@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <6fb1176f-90f1-7a65-3ab5-f6447418c51e@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WhmHuQE8I7-E65WCSPveQnCup9-NoBff
+X-Proofpoint-ORIG-GUID: WhmHuQE8I7-E65WCSPveQnCup9-NoBff
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-18_29,2023-08-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ impostorscore=0 adultscore=0 mlxlogscore=739 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308190012
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 4:13=E2=80=AFPM Shreeya Patel
-<shreeya.patel@collabora.com> wrote:
->
-> Hi Geert, Saravana,
->
-> On 18/08/23 00:03, Saravana Kannan wrote:
-> > On Thu, Aug 17, 2023 at 4:37=E2=80=AFAM Shreeya Patel
-> > <shreeya.patel@collabora.com> wrote:
-> >> Hi Greg,
-> >>
-> >> On 16/08/23 20:33, Greg Kroah-Hartman wrote:
-> >>> On Wed, Aug 16, 2023 at 03:09:27PM +0530, Shreeya Patel wrote:
-> >>>> On 13/06/22 15:40, Greg Kroah-Hartman wrote:
-> >>>>> From: Saravana Kannan<saravanak@google.com>
-> >>>>>
-> >>>>> [ Upstream commit 5ee76c256e928455212ab759c51d198fedbe7523 ]
-> >>>>>
-> >>>>> Mounting NFS rootfs was timing out when deferred_probe_timeout was
-> >>>>> non-zero [1].  This was because ip_auto_config() initcall times out
-> >>>>> waiting for the network interfaces to show up when
-> >>>>> deferred_probe_timeout was non-zero. While ip_auto_config() calls
-> >>>>> wait_for_device_probe() to make sure any currently running deferred
-> >>>>> probe work or asynchronous probe finishes, that wasn't sufficient t=
-o
-> >>>>> account for devices being deferred until deferred_probe_timeout.
-> >>>>>
-> >>>>> Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() w=
-aits
-> >>>>> until the deferred_probe_timeout fires") tried to fix that by makin=
-g
-> >>>>> sure wait_for_device_probe() waits for deferred_probe_timeout to ex=
-pire
-> >>>>> before returning.
-> >>>>>
-> >>>>> However, if wait_for_device_probe() is called from the kernel_init(=
-)
-> >>>>> context:
-> >>>>>
-> >>>>> - Before deferred_probe_initcall() [2], it causes the boot process =
-to
-> >>>>>      hang due to a deadlock.
-> >>>>>
-> >>>>> - After deferred_probe_initcall() [3], it blocks kernel_init() from
-> >>>>>      continuing till deferred_probe_timeout expires and beats the p=
-oint of
-> >>>>>      deferred_probe_timeout that's trying to wait for userspace to =
-load
-> >>>>>      modules.
-> >>>>>
-> >>>>> Neither of this is good. So revert the changes to
-> >>>>> wait_for_device_probe().
-> >>>>>
-> >>>>> [1] -https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41F=
-D8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
-> >>>>> [2] -https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-=
-3990X/
-> >>>>> [3] -https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
-> >>>> Hi Saravana, Greg,
-> >>>>
-> >>>>
-> >>>> KernelCI found this patch causes the baseline.bootrr.deferred-probe-=
-empty test to fail on r8a77960-ulcb,
-> >>>> see the following details for more information.
-> >>>>
-> >>>> KernelCI dashboard link:
-> >>>> https://linux.kernelci.org/test/plan/id/64d2a6be8c1a8435e535b264/
-> >>>>
-> >>>> Error messages from the logs :-
-> >>>>
-> >>>> + UUID=3D11236495_1.5.2.4.5
-> >>>> + set +x
-> >>>> + export 'PATH=3D/opt/bootrr/libexec/bootrr/helpers:/lava-11236495/1=
-/../bin:/sbin:/usr/sbin:/bin:/usr/bin'
-> >>>> + cd /opt/bootrr/libexec/bootrr
-> >>>> + sh helpers/bootrr-auto
-> >>>> e6800000.ethernet
-> >>>> e6700000.dma-controller
-> >>>> e7300000.dma-controller
-> >>>> e7310000.dma-controller
-> >>>> ec700000.dma-controller
-> >>>> ec720000.dma-controller
-> >>>> fea20000.vsp
-> >>>> feb00000.display
-> >>>> fea28000.vsp
-> >>>> fea30000.vsp
-> >>>> fe9a0000.vsp
-> >>>> fe9af000.fcp
-> >>>> fea27000.fcp
-> >>>> fea2f000.fcp
-> >>>> fea37000.fcp
-> >>>> sound
-> >>>> ee100000.mmc
-> >>>> ee140000.mmc
-> >>>> ec500000.sound
-> >>>> /lava-11236495/1/../bin/lava-test-case
-> >>>> <8>[   17.476741] <LAVA_SIGNAL_TESTCASE TEST_CASE_ID=3Ddeferred-prob=
-e-empty RESULT=3Dfail>
-> >>>>
-> >>>> Test case failing :-
-> >>>> Baseline Bootrr deferred-probe-empty test -https://github.com/kernel=
-ci/bootrr/blob/main/helpers/bootrr-generic-tests
-> >>>>
-> >>>> Regression Reproduced :-
-> >>>>
-> >>>> Lava job after reverting the commit 5ee76c256e92
-> >>>> https://lava.collabora.dev/scheduler/job/11292890
-> >>>>
-> >>>>
-> >>>> Bisection report from KernelCI can be found at the bottom of the ema=
-il.
-> >>>>
-> >>>> Thanks,
-> >>>> Shreeya Patel
-> >>>>
-> >>>> #regzbot introduced: 5ee76c256e92
-> >>>> #regzbot title: KernelCI: Multiple devices deferring on r8a77960-ulc=
-b
-> >>>>
-> >>>> --------------------------------------------------------------------=
----------------------------------------------------------------------------=
-----
-> >>>>
-> >>>> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * **
-> >>>> * If you do send a fix, please include this trailer: *
-> >>>> * Reported-by: "kernelci.org bot" <bot@...> *
-> >>>> * *
-> >>>> * Hope this helps! *
-> >>>> * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> >>>>
-> >>>> stable-rc/linux-5.10.y bisection: baseline.bootrr.deferred-probe-emp=
-ty on
-> >>>> r8a77960-ulcb
-> >>> You are testing 5.10.y, yet the subject says 5.17?
-> >>>
-> >>> Which is it here?
-> >> Sorry, I accidentally used the lore link for 5.17 while reporting this
-> >> issue,
-> >> but this test does fail on all the stable releases from 5.10 onwards.
-> >>
-> >> stable 5.15 :-
-> >> https://linux.kernelci.org/test/case/id/64dd156a5ac58d0cf335b1ea/
-> >> mainline :-
-> >> https://linux.kernelci.org/test/case/id/64dc13d55cb51357a135b209/
-> >>
-> > Shreeya, can you try the patch Geert suggested and let us know if it
-> > helps? If not, then I can try to take a closer look.
->
-> I tried to test the kernel with 9be4cbd09da8 but it didn't change the
-> result.
-> https://lava.collabora.dev/scheduler/job/11311615
->
-> Also, I am not sure if this can change things but just FYI, KernelCI
-> adds some kernel parameters when running these tests and one of the
-> parameter is deferred_probe_timeout=3D60.
+On Aug 18 2023 10:43, Krzysztof Kozlowski wrote:
+> >> For newcomers, OTOH, I would either recommend simple workflow or just
+> >> use b4. Why? Because if you cannot use git-send-email, then it means
+> >> your email setup will make your life difficult and adding maintainers to
+> >> existing patch won't help you.
+> > 
+> > You've mentioned a "simple workflow" many times - could you please share more
+> > details on the steps you follow in your workflow for sending patches?
+> 
+> I shared it on LKML few times already (and Rob's git send-email identity
+> is also on LKML), so one more time:
+> 
+> https://github.com/krzk/tools/blob/master/linux/.bash_aliases_linux#L91
 
-Ah this is good to know.
+Thank you for sharing this - it is really neat indeed and you certainly don't
+need a step #2 with this method.
 
-> You can check this in the definition details given in the Lava job. I
-> also tried to remove this parameter and rerun the test but again I got
-> the same result.
+However, I see areas for improvement in the alias:
+- Subsystem-specific mailing lists, maintainers, reviewers, and other roles are
+  all marked as "To: " sans distinction via the alias whereas
+  `add-maintainer.py` and `b4` both provide marking of lists as "Cc: " which
+  seems aesthetically and semantically more pleasing.
+- Only `add-maintainer.py` allows for maintainers to be selectively in "To: "
+  and "Cc: " for patches in a series depending on whether they are the
+  maintainers for that particular patch or not.
 
-How long does the test wait after boot before checking for the
-deferred devices list?
+> >> This tool depends on the command line and shell interface of
+> >> scripts/get_maintainers.pl which is another reason why it might not be a
+> >> good idea.
+> > 
+> > Could you please elaborate on why depending on the output of
+> > `get_maintainer.pl` is a bad idea? It's what everyone uses, no?
+> 
+> No, because if interface changes you need to update two tools.
 
-> I will try to add 9be4cbd09da8 to mainline kernel and see what results I
-> get.
+But `b4 prep --auto-to-cc` also uses `get_maintainer.pl`!
 
-Now I'm confused. What do you mean by mainline? Are you saying the tip
-of tree of Linus's tree is also hitting this issue?
+Also, in your previous email you said to "just use b4", which also depends on
+the command line and shell interface of `get_maintainers.pl`. Depending on
+`get_maintainer.pl` is therefore perfectly okay - there is no need to reinvent
+it or disregard it for whatever reasons.
 
--Saravana
+Thank you.
+
+Guru Das.
