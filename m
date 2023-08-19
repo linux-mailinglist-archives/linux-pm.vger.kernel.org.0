@@ -2,138 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62777817E9
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Aug 2023 09:05:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268D878181D
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Aug 2023 09:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344002AbjHSHDy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Aug 2023 03:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43470 "EHLO
+        id S241313AbjHSHvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Aug 2023 03:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343991AbjHSHDW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Aug 2023 03:03:22 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441F64489
-        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 00:03:18 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id 5614622812f47-3a6f3ef3155so1179364b6e.1
-        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 00:03:18 -0700 (PDT)
+        with ESMTP id S1344452AbjHSHvB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Aug 2023 03:51:01 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 997D83C06
+        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 00:50:59 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-522dd6b6438so2001027a12.0
+        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 00:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692428597; x=1693033397;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
-        b=nLON0lFU1HFxhxnwtvUZc9wvmWS7rbdnt2RdpqIoCtsDwWwHx0Gyjn1xZGSC5eb2FC
-         WmmpNW+ObIBj4H3oVA528E09LKJ9Oh4DAMKSu6pEL6PL1RhqFN61P9gLSK/8SD4vx9bP
-         JUWK2MGIfhLYg/xJvX06ahmCeb/lUSvcNrFKmvYLJLEYQO5IwjUSUqLNIk0w8cK+2/XQ
-         dSqtK5eCnXC+wrkDAzHrF00pkROWtcttibp6ntDQXOVUlo6vsHjNyWdY7UHT1JYeF2xL
-         PB0ef0uQvzc5mw6gaoXP2KOWKvpRua/iGaOI4B4VGugPnWVRf5iIcCLUY0NkKk3Xl8rO
-         5wkg==
+        d=linaro.org; s=google; t=1692431458; x=1693036258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=c2oYh3TTzNeTuUfhfe9bLaXyjjwVpe2Z5um2bA3QDLw=;
+        b=Ch/ZUaVNG8SyNggdPRWr6YWdqOGZg9KmQXV1MOwzgEX3peRKUvPm3qzctqZUm9a0aI
+         kRC+/gGhtCI7g8sjK+u5t5Zk0SUw58alahFB0Vh9L0BkVu51DJXGCi208IAjV7KH8I6H
+         wcfu5b6Eoiv5q9qMtSJ58Ki4JqKywBtcrDcg9/aIZi2EV6bIO09rOVUEUw1yHvX4ckJ1
+         KQ1+WilUo9q+JN1bUn6h3xCKTIpamsMgNaeAZsem+BQjBXRQKXsThG6eYb0SDRwaH71v
+         6w0wHUTJoU31hTog5O+hcTHB73XgPmQW2CuEiparQvtfcMVERR/yEht/HeyGyyC1KU0W
+         2yAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692428597; x=1693033397;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kydyMnwD//o0quRqImkimRYfrWW9k+FT8t/oHoxyE8=;
-        b=gfBIDWk9HIa6LDzvh0bGZx/KbVbB4YeBt6xkA08M1dpCmeZ0wxLdkADqkfiWBYsOQJ
-         C3i5dCBmphfif8QocGwADLxh4UwLru/ZKIqhhlN6IjjqK8ZPv40zWbV3OprV7swUjFjH
-         kV4JLGqDRMkeYUJzKXK6yJhz2s+A7+zpVuze5KDNsvUdiOKVTJawM3Y/8ZXxcProterr
-         CRgaEDR1JLC81ELVZyyu4wY1uzZdYBl5CzoVlydrQoy4L/NTs2sxXhMytp1mM85MjbaJ
-         oUWzDKCILmo4fk2ONtPFmlr5thqzZfpWcoW2aw9QKw5MEyagT4T3zMdIfrQNQXRcMUSm
-         LE/w==
-X-Gm-Message-State: AOJu0YzDWAahoNHSx9kjsXsJFCKFutfsG15LQFNZOIM1dhKrBpCMlbyI
-        szYPD/N/eUpro5hL00QIP7oZXBC4OICQnfg99JBeeWxHkG95Jw==
-X-Google-Smtp-Source: AGHT+IHBFHux9W7amy752XAKQ4G+pXj9K8KLABgekYkKVjTaNiUovhqWPJjy5q7mdLIzANUAVG24gzrYlmHT6Kjn7Kk=
-X-Received: by 2002:a81:8782:0:b0:589:a9fc:ffcd with SMTP id
- x124-20020a818782000000b00589a9fcffcdmr1407212ywf.20.1692428576106; Sat, 19
- Aug 2023 00:02:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692431458; x=1693036258;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=c2oYh3TTzNeTuUfhfe9bLaXyjjwVpe2Z5um2bA3QDLw=;
+        b=joFLRU1vLD0kXrG2++AG8LQ8GTHwkIF9eStG7aownDrZ1huwbukSBJQ62FeYu7Dsb4
+         WX7iL+z1T0erRq+KVPbWFdmqXAgvZtjkQUWBE1MBIB/aXExLr9VDVyd4IdSuaA4FJ+WX
+         SLFmVP4BIScaoaJVBDoar3wOqSqX6yxhAy2CN2VKU0cNsKmCBoKh99pOoA2F4CFI/Ycs
+         Goaw9JPoTOjGOtzCU3UbJTZd2VJ/nyyLJeTCNMEHqm904/RJeSfTT8rgTTWMs0zcHErD
+         qQ8cwYU4YpHA+iiVPxXr7amvkvYp7fpxDW7C3ven267+/Yd3NtIpfSE19VsCUhzip6M2
+         wrNA==
+X-Gm-Message-State: AOJu0YzIlfJd8uRE8XWkSTxW5zesjiHMURbJjfohsFHgtoKM6FgKG8eL
+        8yRPLsXiisq+fL2xyQ3SrexTRw==
+X-Google-Smtp-Source: AGHT+IH5bBzz6oXjRhDT4zgMtjhALSUwRs/3e/TBQjpuXStR7NkNyoV3p/BdDFW1VR4ywleUSwPN7g==
+X-Received: by 2002:aa7:d6cc:0:b0:525:69c8:6f4f with SMTP id x12-20020aa7d6cc000000b0052569c86f4fmr1081908edr.23.1692431458128;
+        Sat, 19 Aug 2023 00:50:58 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id c22-20020aa7c756000000b00522572f323dsm2052775eds.16.2023.08.19.00.50.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Aug 2023 00:50:57 -0700 (PDT)
+Message-ID: <6f475c9b-dc0e-078e-9aa2-d876a1e02467@linaro.org>
+Date:   Sat, 19 Aug 2023 09:50:56 +0200
 MIME-Version: 1.0
-Reply-To: razumkoykhailo@gmail.com
-Sender: mrtombaba@gmail.com
-Received: by 2002:a05:7000:5395:b0:4f4:2174:eed4 with HTTP; Sat, 19 Aug 2023
- 00:02:55 -0700 (PDT)
-From:   "Mr.Razum Khailo" <razumkoykhailo@gmail.com>
-Date:   Sat, 19 Aug 2023 00:02:55 -0700
-X-Google-Sender-Auth: TD1SbUwALQWUaG93zNo0ky4SaO8
-Message-ID: <CADXgghn2t3mU_VvtZDjHwnbadg2QnVcJ30yFd0kN8SL6NDhY1g@mail.gmail.com>
-Subject: Greetings from Ukraine,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        MILLION_USD,MONEY_FREEMAIL_REPTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:244 listed in]
-        [list.dnswl.org]
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0001]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [razumkoykhailo[at]gmail.com]
-        *  2.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.4 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  2.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v2 0/1] Add add-maintainer.py script
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Kees Cook <keescook@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, Will Deacon <will@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        quic_pkondeti@quicinc.com, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <cover.1691049436.git.quic_gurus@quicinc.com>
+ <20230810185526.GC31860@quicinc.com>
+ <4d94d0fd-72d4-0196-3a30-3e1efb9f5aca@linaro.org>
+ <20230816171538.GB26279@quicinc.com>
+ <6fb1176f-90f1-7a65-3ab5-f6447418c51e@linaro.org>
+ <20230818194609.GA1428172@hu-bjorande-lv.qualcomm.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230818194609.GA1428172@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-R3JlZXRpbmdzwqBmcm9twqBVa3JhaW5lLA0KDQpNci7CoFJhenVta292wqBNeWtoYWlsbyzCoGFu
-wqBlbnRyZXByZW5ldXLCoGJ1c2luZXNzbWFuwqBmcm9twqBPZGVzc2ENClVrcmFpbmUuwqBXaXRo
-aW7CoGHCoHllYXLCoHBsdXPCoHNvbWXCoG1vbnRoc8Kgbm93LMKgbW9yZcKgdGhhbsKgOC4ywqBt
-aWxsaW9uDQpwZW9wbGXCoGFyb3VuZMKgdGhlwqBjaXRpZXPCoG9mwqBtecKgY291bnRyecKgVWty
-YWluZcKgaGF2ZcKgYmVlbsKgZXZhY3VhdGVkwqB0bw0KYcKgc2FmZcKgbG9jYXRpb27CoGFuZMKg
-b3V0wqBvZsKgdGhlwqBjb3VudHJ5LMKgbW9zdMKgZXNwZWNpYWxsecKgY2hpbGRyZW7CoHdpdGgN
-CnRoZWlywqBwYXJlbnRzLMKgbnVyc2luZ8KgbW90aGVyc8KgYW5kwqBwcmVnbmFudMKgd29tZW4s
-wqBhbmTCoHRob3NlwqB3aG/CoGhhdmUNCmJlZW7CoHNlcmlvdXNsecKgd291bmRlZMKgYW5kwqBu
-ZWVkwqB1cmdlbnTCoG1lZGljYWzCoGF0dGVudGlvbi7CoEnCoHdhc8KgYW1vbmcNCnRob3NlwqB0
-aGF0wqB3ZXJlwqBhYmxlwqB0b8KgZXZhY3VhdGXCoHRvwqBvdXLCoG5laWdoYm91cmluZ8KgY291
-bnRyaWVzwqBhbmTCoEnigJltDQpub3fCoGluwqB0aGXCoHJlZnVnZWXCoGNhbXDCoG9mwqBUZXLC
-oEFwZWzCoEdyb25pbmdlbsKgaW7CoHRoZcKgTmV0aGVybGFuZHMuDQoNCknCoG5lZWTCoGHCoGZv
-cmVpZ27CoHBhcnRuZXLCoHRvwqBlbmFibGXCoG1lwqB0b8KgdHJhbnNwb3J0wqBtecKgaW52ZXN0
-bWVudA0KY2FwaXRhbMKgYW5kwqB0aGVuwqByZWxvY2F0ZcKgd2l0aMKgbXnCoGZhbWlseSzCoGhv
-bmVzdGx5wqBpwqB3aXNowqBJwqB3aWxsDQpkaXNjdXNzwqBtb3JlwqBhbmTCoGdldMKgYWxvbmcu
-wqBJwqBuZWVkwqBhwqBwYXJ0bmVywqBiZWNhdXNlwqBtecKgaW52ZXN0bWVudA0KY2FwaXRhbMKg
-aXPCoGluwqBtecKgaW50ZXJuYXRpb25hbMKgYWNjb3VudC7CoEnigJltwqBpbnRlcmVzdGVkwqBp
-bsKgYnV5aW5nDQpwcm9wZXJ0aWVzLMKgaG91c2VzLMKgYnVpbGRpbmfCoHJlYWzCoGVzdGF0ZXMs
-wqBtecKgY2FwaXRhbMKgZm9ywqBpbnZlc3RtZW50DQppc8KgKCQzMMKgTWlsbGlvbsKgVVNEKcKg
-LsKgVGhlwqBmaW5hbmNpYWzCoGluc3RpdHV0aW9uc8KgaW7CoG15wqBjb3VudHJ5DQpVa3JhaW5l
-wqBhcmXCoGFsbMKgc2hvdMKgZG93bsKgZHVlwqB0b8KgdGhlwqBjcmlzaXPCoG9mwqB0aGlzwqB3
-YXLCoG9uwqBVa3JhaW5lDQpzb2lswqBiecKgdGhlwqBSdXNzaWFuwqBmb3JjZXMuwqBNZWFud2hp
-bGUswqBpZsKgdGhlcmXCoGlzwqBhbnnCoHByb2ZpdGFibGUNCmludmVzdG1lbnTCoHRoYXTCoHlv
-dcKgaGF2ZcKgc2/CoG11Y2jCoGV4cGVyaWVuY2XCoGluwqB5b3VywqBjb3VudHJ5LMKgdGhlbsKg
-d2UNCmNhbsKgam9pbsKgdG9nZXRoZXLCoGFzwqBwYXJ0bmVyc8Kgc2luY2XCoEnigJltwqBhwqBm
-b3JlaWduZXIuDQoNCknCoGNhbWXCoGFjcm9zc8KgeW91csKgZS1tYWlswqBjb250YWN0wqB0aHJv
-dWdowqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLCoGFzc2lzdGFu
-Y2XCoGFuZMKgScKgZGVjaWRlZMKgdG/CoGNvbnRhY3TCoHlvdcKgZGlyZWN0bHnCoHRvwqBhc2vC
-oHlvdcKgaWYNCnlvdcKga25vd8KgYW55wqBsdWNyYXRpdmXCoGJ1c2luZXNzwqBpbnZlc3RtZW50
-wqBpbsKgeW91csKgY291bnRyecKgacKgY2FuDQppbnZlc3TCoG15wqBtb25lecKgc2luY2XCoG15
-wqBjb3VudHJ5wqBVa3JhaW5lwqBzZWN1cml0ecKgYW5kwqBlY29ub21pYw0KaW5kZXBlbmRlbnTC
-oGhhc8KgbG9zdMKgdG/CoHRoZcKgZ3JlYXRlc3TCoGxvd2VywqBsZXZlbCzCoGFuZMKgb3VywqBj
-dWx0dXJlwqBoYXMNCmxvc3TCoGluY2x1ZGluZ8Kgb3VywqBoYXBwaW5lc3PCoGhhc8KgYmVlbsKg
-dGFrZW7CoGF3YXnCoGZyb23CoHVzLsKgT3VywqBjb3VudHJ5DQpoYXPCoGJlZW7CoG9uwqBmaXJl
-wqBmb3LCoG1vcmXCoHRoYW7CoGHCoHllYXLCoG5vdy4NCg0KSWbCoHlvdcKgYXJlwqBjYXBhYmxl
-wqBvZsKgaGFuZGxpbmfCoHRoaXPCoGJ1c2luZXNzwqBwYXJ0bmVyc2hpcCzCoGNvbnRhY3TCoG1l
-DQpmb3LCoG1vcmXCoGRldGFpbHMswqBJwqB3aWxswqBhcHByZWNpYXRlwqBpdMKgaWbCoHlvdcKg
-Y2FuwqBjb250YWN0wqBtZQ0KaW1tZWRpYXRlbHkuwqBZb3XCoG1hecKgYXPCoHdlbGzCoHRlbGzC
-oG1lwqBhwqBsaXR0bGXCoG1vcmXCoGFib3V0wqB5b3Vyc2VsZi4NCkNvbnRhY3TCoG1lwqB1cmdl
-bnRsecKgdG/CoGVuYWJsZcKgdXPCoHRvwqBwcm9jZWVkwqB3aXRowqB0aGXCoGJ1c2luZXNzLsKg
-ScKgd2lsbA0KYmXCoHdhaXRpbmfCoGZvcsKgeW91csKgcmVzcG9uc2UuwqBNecKgc2luY2VyZcKg
-YXBvbG9naWVzwqBmb3LCoHRoZQ0KaW5jb252ZW5pZW5jZS4NCg0KDQpUaGFua8KgeW91IQ0KDQpN
-ci4gUmF6dW1rb3bCoE15a2hhaWxvLg0K
+On 18/08/2023 21:46, Bjorn Andersson wrote:
+>>>
+>>> With this script, the workflow would be as simple as:
+>>>
+>>>   1. Generate patches using `git format-patch`
+>>>   2. Run `add-maintainer.py` on the above patches
+>>>   3. `git send-email` the patches.
+>>
+>> So one more unnecessary step (2). I don't think it is easier than my
+>> workflow.
+>>
+>> I just do only 1 and 3 and that's it. The simplest way ever.
+>>
+> 
+> There's no get_maintainer.pl in either 1, or 3, so obviously this isn't
+> the only thing you do.
+> 
+> Thanks for the link to your alias below, it's now clear that you don't
+> need an extra step in the procedure, if you only have your extra wrapper
+> around step 3.
+> 
+> 
+> I now also understand why you never ever have a cover-letter, something
+> Guru's proposed flow handles quite nicely.
+
+It's not related. I usually don't create cover letter from laziness, but
+pretty often I create them as well and my script/alias works there
+perfectly. Cover letter is just one more step:
+1. git branch --edit-description
+2. git format-patch --cover-letter (with format.coverFromDescription =
+subject in gitconfig)
+3. git_send_email 0*
+
+No need to run any other tool, no need to add any maintainer entries
+(unless touching defconfig and specific soc@ stuff, but this is always
+the case regardless of tools).
+
+Really, that script proposed here is the unnecessary step.
+
+Rob's approach with git send-email identity required some work for
+cover-letter, but it was also running get_maintainer.pl per each patch,
+so recipients did not receive everything. Unless patchset is big, I
+prefer to send everything to everyone.
+
+> 
+> 
+> That said, b4 prep and b4 send seems like a better suggestion to those
+> who doesn't already have a workflow in place.
+
+Yes.
+
+
+Best regards,
+Krzysztof
+
