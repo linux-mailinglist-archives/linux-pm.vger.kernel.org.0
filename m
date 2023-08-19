@@ -2,97 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07BF78199E
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Aug 2023 14:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A309781BB3
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 02:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232633AbjHSM7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Aug 2023 08:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S229499AbjHTA2J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Aug 2023 20:28:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232550AbjHSM7A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Aug 2023 08:59:00 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33ED64ED2
-        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 05:58:03 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ff9b389677so2663980e87.3
-        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 05:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692449881; x=1693054681;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0883NRcCCKexhwRmxde3MLpdkmxRH7uy2OPJomVHVjI=;
-        b=bTr80jcI8JhImFmfVBHqOBPuokD6WYH6Bk6HkAPe5lh7nVV9TdijBZRSBzwZ1o6wQW
-         sUMZ7v0pjXY2ZBih/aJWdZI7D+PEbHPTeDXJtsbs1DO9B31/hLIucWoCI89Od1Dkvhvc
-         KsUrLzpGt9PcBd12n97IG9Co8Ufzw0UMHSsgG3NQKjwlQNz1isrowYbu1FncumQM2FPV
-         LUFReGrdfGBE4b4SG0oZ5UHkZaPzrp5THVV/Fd3lesctC1qslfACRBk4nUXXt/M2IWrn
-         fQ5+wxVzpgIcq6w7x06QJdxDwowNN7og/NbZzvHQ2WcjaAa8iZJcHNrix1z2UnEO+YYN
-         ARxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692449881; x=1693054681;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0883NRcCCKexhwRmxde3MLpdkmxRH7uy2OPJomVHVjI=;
-        b=E6d+8i6USMqo9GPdcN3WtNvB1/hONdOoMN2mcTyVxC6szE2o5lImlP6qQZ9LlbKFua
-         dVnNsaVkXLCpHFPu2CaHhKHEh4BmHASfNyt/Eu1Stio7JFl+4T0nfTIjcPxxfdtigBPH
-         plmcIAGfq3201mmY98s3wXER/VQE35wzaHKLUEd9g9d8jida5xsBuLgbCFEl01RFVAF9
-         TMDxj4gQLfq80Nmbgwpqz2bnYBHd/eDHQdJpbDgpEUmpE8dzTNz+2hweo4OJLoOVqz0A
-         BDb/WyyZFpkSJCaw1an6YXQDTxZZH2McoUgtH/trZm/btTbfzKGrsDtXaayIdRReb+M/
-         U5wQ==
-X-Gm-Message-State: AOJu0YwmGGfOYFTd3VzqVr78T5MeUpzSurLeikr6Kib4FHOPwazRSEO7
-        GuyrS3oT3guPprIS1nFD3j7r/Q==
-X-Google-Smtp-Source: AGHT+IEfxVtqHYjR/3kmzxaHPugRDyg/pQWHcu0erc5asJNqUrmkSk7jYnDb6Ze39ETaNoHwrLXf3Q==
-X-Received: by 2002:a05:6512:3a88:b0:4fe:7dcb:4150 with SMTP id q8-20020a0565123a8800b004fe7dcb4150mr1454176lfu.67.1692449880647;
-        Sat, 19 Aug 2023 05:58:00 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id y9-20020a170906524900b0099bc0daf3d7sm2703480ejm.182.2023.08.19.05.57.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Aug 2023 05:58:00 -0700 (PDT)
-Message-ID: <73e515b4-a8fc-35a8-7f34-720e4daf8e81@linaro.org>
-Date:   Sat, 19 Aug 2023 14:57:58 +0200
+        with ESMTP id S229576AbjHTA1m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Aug 2023 20:27:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C7311C246
+        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 15:38:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 957FA61D0A
+        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 22:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EDBBAC433C9
+        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 22:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692484696;
+        bh=SN3BNIuPEy4bSj1HUPaeSzEzCA800LyZc95ZF4vTMH8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Q23WDCRsgcyw1yAtpK/xxsPqDBKJuh5Cto8NTEpJZNFr5ADAcr/zPMXIywhcwH44y
+         bvbM9BpJCgrUAJZuFqnAirxHW0SUCP0pYtsCK1i263RR45kKnpKfzdU+w/g+KNZNr5
+         5VpTFLq4LeAGUBiOdTed9DQPdC0wLUoi1FNcj7lqJ/x5xbZf0NCqd2GNpbMRjk3zpB
+         oiv4kJIjxw1sCAHmR6MuwXzlcuHCpq5dTWvTk1MonJ2GRmX591kiwX5RwqKGCNJL0o
+         UKhKhQm1acGR1a86bHTVirOQosvbolrRGFzORhB4JmLZ+aaUXS4G8akHOJeRvafm6a
+         jf1IQ2WP6qnSA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id D635EC53BC6; Sat, 19 Aug 2023 22:38:15 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [Bug 217809] Core frequencies do not float correctly on AMD Ryzen 7
+ 5700U when running on battery
+Date:   Sat, 19 Aug 2023 22:38:15 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: soren@stoutner.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc attachments.created
+Message-ID: <bug-217809-137361-won9PdcSP5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217809-137361@https.bugzilla.kernel.org/>
+References: <bug-217809-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH V5 2/2] dt-bindings: cpufreq: Convert ti-cpufreq to json
- schema
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Vibhore Vardhan <vibhore@ti.com>, Dhruva Gole <d-gole@ti.com>
-References: <20230818124504.3718266-1-nm@ti.com>
- <20230818124504.3718266-3-nm@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230818124504.3718266-3-nm@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/08/2023 14:45, Nishanth Menon wrote:
-> Move the ti-cpufreq binding over to opp and convert the free text
-> binding to json-schema.
-> 
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217809
 
+Soren Stoutner (soren@stoutner.com) changed:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |soren@stoutner.com
 
-Best regards,
-Krzysztof
+--- Comment #1 from Soren Stoutner (soren@stoutner.com) ---
+Created attachment 304913
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304913&action=3Dedit
+Screenshot of core frequencies
 
+This screenshot shows several KDE widgets.  The one on the top right shows =
+core
+utilization, with the second core (blue) pushed to 100%.  The second widget
+down (which is expanded to the left with a detailed view) shows the frequen=
+cy
+of each core, with the second core locked to the lowest possible value of 3=
+99
+MHz.  It also shows that some of the other cores have floated up to higher
+values even though they have lower utilization.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
