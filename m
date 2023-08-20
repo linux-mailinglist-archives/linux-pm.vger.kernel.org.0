@@ -2,25 +2,25 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46EE781EEF
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 19:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB58781EF1
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 19:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230145AbjHTRLi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Aug 2023 13:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S229938AbjHTRLj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Aug 2023 13:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjHTRLg (ORCPT
+        with ESMTP id S229845AbjHTRLg (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Aug 2023 13:11:36 -0400
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9ED074202;
-        Sun, 20 Aug 2023 10:08:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B49D2420C;
+        Sun, 20 Aug 2023 10:08:52 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="6.01,188,1684767600"; 
-   d="scan'208";a="173400404"
+   d="scan'208";a="173400407"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 21 Aug 2023 02:08:49 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 21 Aug 2023 02:08:52 +0900
 Received: from localhost.localdomain (unknown [10.226.92.18])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id EB44A40062AF;
-        Mon, 21 Aug 2023 02:08:46 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 099A340062AF;
+        Mon, 21 Aug 2023 02:08:49 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Sebastian Reichel <sre@kernel.org>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-pm@vger.kernel.org,
@@ -29,9 +29,9 @@ Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-pm@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Andi Shyti <andi.shyti@kernel.org>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 1/2] power: supply: sbs-battery: Make similar OF and ID table
-Date:   Sun, 20 Aug 2023 18:08:40 +0100
-Message-Id: <20230820170841.82501-2-biju.das.jz@bp.renesas.com>
+Subject: [PATCH 2/2] power: supply: sbs-battery: Convert enum->pointer for data in the match tables
+Date:   Sun, 20 Aug 2023 18:08:41 +0100
+Message-Id: <20230820170841.82501-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230820170841.82501-1-biju.das.jz@bp.renesas.com>
 References: <20230820170841.82501-1-biju.das.jz@bp.renesas.com>
@@ -46,33 +46,114 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Make similar OF and ID table to extend support for ID match
-using i2c_match_data()/device_get_match_data() later. Currently
-it works only for OF match tables as the driver_data is wrong for
-ID match.
+Convert enum->pointer for data in the match tables, so that
+device_get_match_data() can do match against OF/ACPI/I2C tables, once i2c
+bus type match support added to it and it returns NULL for non-match.
+
+Therefore it is better to convert enum->pointer for data match and extend
+match support for both ID and OF tables using i2c_get_match_data() by
+adding struct sbs_data with flags variable and replacing flags->data in
+struct sbs_info.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
- drivers/power/supply/sbs-battery.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/power/supply/sbs-battery.c | 42 ++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index cdfc8466d129..50b11b6df1b3 100644
+index 50b11b6df1b3..06df188c9229 100644
 --- a/drivers/power/supply/sbs-battery.c
 +++ b/drivers/power/supply/sbs-battery.c
-@@ -1253,9 +1253,9 @@ static SIMPLE_DEV_PM_OPS(sbs_pm_ops, sbs_suspend, NULL);
+@@ -201,6 +201,10 @@ static const enum power_supply_property string_properties[] = {
+ 
+ #define NR_STRING_BUFFERS	ARRAY_SIZE(string_properties)
+ 
++struct sbs_data {
++	u32 flags;
++};
++
+ struct sbs_info {
+ 	struct i2c_client		*client;
+ 	struct power_supply		*power_supply;
+@@ -213,7 +217,7 @@ struct sbs_info {
+ 	u32				poll_retry_count;
+ 	struct delayed_work		work;
+ 	struct mutex			mode_lock;
+-	u32				flags;
++	const struct sbs_data		*data;
+ 	int				technology;
+ 	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
+ };
+@@ -579,7 +583,7 @@ static int sbs_get_battery_presence_and_health(
+ 	struct sbs_info *chip = i2c_get_clientdata(client);
+ 	int ret;
+ 
+-	if (chip->flags & SBS_FLAGS_TI_BQ20ZX5)
++	if (chip->data->flags & SBS_FLAGS_TI_BQ20ZX5)
+ 		return sbs_get_ti_battery_presence_and_health(client, psp, val);
+ 
+ 	/* Dummy command; if it succeeds, battery is present. */
+@@ -1135,7 +1139,7 @@ static int sbs_probe(struct i2c_client *client)
+ 	if (!chip)
+ 		return -ENOMEM;
+ 
+-	chip->flags = (u32)(uintptr_t)device_get_match_data(&client->dev);
++	chip->data = i2c_get_match_data(client);
+ 	chip->client = client;
+ 	psy_cfg.of_node = client->dev.of_node;
+ 	psy_cfg.drv_data = chip;
+@@ -1233,7 +1237,7 @@ static int sbs_suspend(struct device *dev)
+ 	if (chip->poll_time > 0)
+ 		cancel_delayed_work_sync(&chip->work);
+ 
+-	if (chip->flags & SBS_FLAGS_TI_BQ20ZX5) {
++	if (chip->data->flags & SBS_FLAGS_TI_BQ20ZX5) {
+ 		/* Write to manufacturer access with sleep command. */
+ 		ret = sbs_write_word_data(client,
+ 					  sbs_data[REG_MANUFACTURER_DATA].addr,
+@@ -1252,24 +1256,30 @@ static SIMPLE_DEV_PM_OPS(sbs_pm_ops, sbs_suspend, NULL);
+ #define SBS_PM_OPS NULL
  #endif
  
++static const struct sbs_data bq20z65 = {
++	.flags = SBS_FLAGS_TI_BQ20ZX5,
++};
++
++static const struct sbs_data bq20z75 = {
++	.flags = SBS_FLAGS_TI_BQ20ZX5,
++};
++
++static const struct sbs_data sbs_battery = {
++	.flags = 0,
++};
++
  static const struct i2c_device_id sbs_id[] = {
--	{ "bq20z65", 0 },
--	{ "bq20z75", 0 },
--	{ "sbs-battery", 1 },
-+	{ "bq20z65", SBS_FLAGS_TI_BQ20ZX5 },
-+	{ "bq20z75", SBS_FLAGS_TI_BQ20ZX5 },
-+	{ "sbs-battery", 0 },
+-	{ "bq20z65", SBS_FLAGS_TI_BQ20ZX5 },
+-	{ "bq20z75", SBS_FLAGS_TI_BQ20ZX5 },
+-	{ "sbs-battery", 0 },
++	{ "bq20z65", (kernel_ulong_t)&bq20z65 },
++	{ "bq20z75", (kernel_ulong_t)&bq20z75 },
++	{ "sbs-battery", (kernel_ulong_t)&sbs_battery },
  	{}
  };
  MODULE_DEVICE_TABLE(i2c, sbs_id);
+ 
+ static const struct of_device_id sbs_dt_ids[] = {
+-	{ .compatible = "sbs,sbs-battery" },
+-	{
+-		.compatible = "ti,bq20z65",
+-		.data = (void *)SBS_FLAGS_TI_BQ20ZX5,
+-	},
+-	{
+-		.compatible = "ti,bq20z75",
+-		.data = (void *)SBS_FLAGS_TI_BQ20ZX5,
+-	},
++	{ .compatible = "sbs,sbs-battery", .data = &sbs_battery },
++	{ .compatible = "ti,bq20z65", .data = &bq20z65 },
++	{ .compatible = "ti,bq20z75", .data = &bq20z75 },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, sbs_dt_ids);
 -- 
 2.25.1
 
