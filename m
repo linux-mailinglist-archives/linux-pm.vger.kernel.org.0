@@ -2,138 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B30781D80
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 12:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FDB781D70
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 12:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjHTKxa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Aug 2023 06:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S230365AbjHTKc5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Aug 2023 06:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjHTKx3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Aug 2023 06:53:29 -0400
+        with ESMTP id S230378AbjHTKcz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Aug 2023 06:32:55 -0400
 Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7DF351742
-        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 12:05:49 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fe2ba3e260so19352295e9.2
-        for <linux-pm@vger.kernel.org>; Sat, 19 Aug 2023 12:05:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E3F5267;
+        Sun, 20 Aug 2023 03:28:34 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3feddbb670cso11555565e9.3;
+        Sun, 20 Aug 2023 03:28:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20221208.gappssmtp.com; s=20221208; t=1692471947; x=1693076747;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=trFaQ1MmMfStgpCB/p3Yn8RIH87psb6mJSLUb1/AQTo=;
-        b=HRh4DQVXXRG518N2ue9H8MNnberIftcKYu2q9/f2B0/rL0ManezfXiJluyjy7qPl2N
-         ZyCLCct79XgOHvehPM1faMI7j8doWqi6Y5i/Fn99mPV0+GrDtlOIgEUobS5yrPFMDaVF
-         +76lrANs3b4RR0H8kTUevgYlF4/0QBAZ+VLTkU+cK2T/MBzJsY+qBryiFZn09GL2jbRv
-         gu2SS0mINDiLdjE0MgHsfG1Ce/7D/It1TiDb0Bk2dxO12EHAGGNIQ+EN08tdRWE1XlXQ
-         fe60NI+SnQFA0YJxl+eAgKqvgR3oF9a/P6G3nt/7a3/Hi059RScsyEDtDXWu0vsFZXxN
-         1OTw==
+        d=gmail.com; s=20221208; t=1692527310; x=1693132110;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=94uIH6VS6gCDgKqMKOSc2iIFz6eCet2HKZcMlYptNYI=;
+        b=aS96MJM/fQ8ImFphvXUauVSn/5sbW0er4pALKMkXG89QEVHNEdQlkukP6V/HhTtzUs
+         llTS/R9oLd2u2Y6Qw+ojLYbEBajEAPgYfUKzZCKWifQi4nALNfAe3STKpiHcgS4XMLXC
+         Zocbvr0Z8uS7BaKuksrk2jAW3nPLbxU5F2eVTZLg0SA4UeQrOZtd7jfsVzE634nM05Lk
+         DntXnoLUv0y32Mez0IbqvK+1e3tpluX2Dm2KsWTMoJwfPYbWIn+tBVAlBrDcdSYZv8TX
+         57zbtqR0NxYCdFHwXa5x1OGIyjkPKOmhRK2Iw8HLIzTpcWAVb/JJAemZAOfWjRiabJLg
+         DoVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692471947; x=1693076747;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=trFaQ1MmMfStgpCB/p3Yn8RIH87psb6mJSLUb1/AQTo=;
-        b=BpX4BE2IhgRO3L5U/GhAKLB8Dm8dDyGC5escxI4kzUtEELwKvMXhSd+ZD3EEhHsa7S
-         wqJvR5zVwwqnWjOBPvHWi+0ZgYpx3fMPRI0VPlkUNYId+NYIsllo9ipBtu7bmt/dtcJg
-         KDV554PH/9v3ZEshf9Ll69r6G5NH6YW/7fJ9TIY9fR0KUoUTqGM92sduhh69KGW+7AW9
-         h5MeAmq1f1y9iibwb7z8R3vfdMYKYIUgEYXza4gFYtZURPWvHdRIr5MX3bWOvCrEF8Ob
-         I5SbGMhXCucJeRfp/+/0b2Fps+CxY7urA5JpggURCKvyDtTI88yQ6eHBTipr/Q+TaMBe
-         8Xvg==
-X-Gm-Message-State: AOJu0YxPFiwmyq3mCq8Z1wg1fQyKJ544qJZK7e6PmAunlMts4+FfK4Fs
-        HUItaOi8SZlk3Advdjv30CXUGP7TJrET+45aloE=
-X-Google-Smtp-Source: AGHT+IG1z0qNY5Y3AbdQZOxfo5gLaJUlK0AVnYmT/DyMt6SAjsDS7IkLmAzWQ9T3jh0aIIJ27fSACA==
-X-Received: by 2002:a1c:f204:0:b0:3fe:d1e9:e6b8 with SMTP id s4-20020a1cf204000000b003fed1e9e6b8mr1882855wmc.12.1692471947005;
-        Sat, 19 Aug 2023 12:05:47 -0700 (PDT)
-Received: from airbuntu (host109-151-228-137.range109-151.btcentralplus.com. [109.151.228.137])
-        by smtp.gmail.com with ESMTPSA id q12-20020a05600c040c00b003fe2397c17fsm10403886wmb.17.2023.08.19.12.05.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Aug 2023 12:05:46 -0700 (PDT)
-Date:   Sat, 19 Aug 2023 20:05:44 +0100
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        guohua.yan@unisoc.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PM: QOS: Always use "kstrtos32_from_user()" in
- cpu_latency_qos_write()
-Message-ID: <20230819190544.kvf6rr4yhukpktle@airbuntu>
-References: <20230807062345.490-1-xuewen.yan@unisoc.com>
+        d=1e100.net; s=20221208; t=1692527310; x=1693132110;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=94uIH6VS6gCDgKqMKOSc2iIFz6eCet2HKZcMlYptNYI=;
+        b=ZqNo9s6OfJ6P1BCKiULQd0LtboFP6w8PcfT/4HIhXDVwX8Eqyo21Rr79KzXt83o1+x
+         /HOd3KF19HbOekWeB2v/A2qcGJg9ftEefMxcJAXW+yUEgMYvnCRm6bGcxEziNFPKHhao
+         K34wvzbjZvqeEF7J5/vovUceK+M7I/Gba6Wxm3RX50AYqyH8wYvRB2/msDXC6B+v22Gf
+         lSV88lpG/jZNywoo3L3B15rYvzLHGpUXisQSkl03RSKzPeZe/CQjg5yBN5hcAzppzv2m
+         zLPHTIorUpTll/di0LpO7+tLlwcpfg9ctn2P7jZbDG7HMmYeCwAWIpbaxgaP5QyV/jlC
+         yWDg==
+X-Gm-Message-State: AOJu0YwQBX2HQn2GdrcW9nin9MW0SEPkOjlKlg9Qj/KzWBedWMbRarRU
+        ERy/SVCf0uyqAAJPSN8rq5c=
+X-Google-Smtp-Source: AGHT+IFf5aNDzN2MDrJ91cQtvrfXkuniDVlVThP7KPuXd+BLNJhyHXibCDp0X5/LQ8xN7vQMRvwg9A==
+X-Received: by 2002:a7b:c38a:0:b0:3fe:ba7:f1ef with SMTP id s10-20020a7bc38a000000b003fe0ba7f1efmr2778520wmj.30.1692527309808;
+        Sun, 20 Aug 2023 03:28:29 -0700 (PDT)
+Received: from ?IPV6:2a01:cb15:b7:2500:4ac9:fac6:b0ea:bf8d? ([2a01:cb15:b7:2500:4ac9:fac6:b0ea:bf8d])
+        by smtp.gmail.com with ESMTPSA id f19-20020a7bcc13000000b003fe24441e23sm8822260wmh.24.2023.08.20.03.28.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Aug 2023 03:28:29 -0700 (PDT)
+Message-ID: <5799076a-7fbe-cba9-5c6a-73de83351a3a@gmail.com>
+Date:   Sun, 20 Aug 2023 12:28:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230807062345.490-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] intel_idle: Add RaptorLake support
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "jacob.jun.pan@linux.intel.com" <jacob.jun.pan@linux.intel.com>,
+        "noltari@gmail.com" <noltari@gmail.com>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "Bityutskiy, Artem" <artem.bityutskiy@intel.com>,
+        "Kumar, Vinay" <vinay.kumar@intel.com>
+References: <20230119070205.90047-1-noltari@gmail.com>
+ <c79904e98b86b68c87add286aa1487b3f81712b6.camel@intel.com>
+ <c7d1eced-d77b-aca7-1422-6eefaf704f3e@gmail.com>
+ <7e2c1da24b48217045e8ad95b739ec96cdce5931.camel@intel.com>
+Content-Language: en-US, fr-FR
+From:   Guillaume Martres <smarter3@gmail.com>
+In-Reply-To: <7e2c1da24b48217045e8ad95b739ec96cdce5931.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/07/23 14:23, Xuewen Yan wrote:
-> In cpu_latency_qos_write, there is a judgment on whether the count
-> value is equal to sizeof(s32). This means that when user write 100~999,
-> it would get error value because it would call the "copy_from_user()"
-> instead of "kstrtos32".
-> Just like:
-> 
->  # echo 500 > /dev/cpu_dma_latency
-> [T4893] write: qos value=170930229
-> [T4893] write: count value=4
-> 
-> [T4893] write: qos value=170930226
-> [T4893] write: count value=4
-> 
-> To prevent this happening, delete the "copy_from_user()" and
-> always use "kstrtos32_from_user()".
-> 
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
-> ---
->  kernel/power/qos.c | 14 ++++----------
->  1 file changed, 4 insertions(+), 10 deletions(-)
-> 
-> diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-> index 782d3b41c1f3..21a2f873e921 100644
-> --- a/kernel/power/qos.c
-> +++ b/kernel/power/qos.c
-> @@ -379,17 +379,11 @@ static ssize_t cpu_latency_qos_write(struct file *filp, const char __user *buf,
->  				     size_t count, loff_t *f_pos)
->  {
->  	s32 value;
-> +	int ret;
->  
-> -	if (count == sizeof(s32)) {
-> -		if (copy_from_user(&value, buf, sizeof(s32)))
-> -			return -EFAULT;
-
-In your test you use `echo` which produces a string. But from C, someone can
-write a program where buf contains s32 and not a string, and this will break
-those programs. If this expectations is no longer valid, then it's fine to
-remove it.
-
-Maybe we can change the order to call kstrtos32() first, but this is not bullet
-proof though..
 
 
-Cheers
-
---
-Qais Yousef
-
-> -	} else {
-> -		int ret;
-> -
-> -		ret = kstrtos32_from_user(buf, count, 16, &value);
-> -		if (ret)
-> -			return ret;
-> -	}
-> +	ret = kstrtos32_from_user(buf, count, 16, &value);
-> +	if (ret)
-> +		return ret;
->  
->  	cpu_latency_qos_update_request(filp->private_data, value);
->  
-> -- 
-> 2.25.1
+Le 20/08/2023 à 11:20, Zhang, Rui a écrit :
+> On Sat, 2023-08-19 at 21:41 +0200, Guillaume Martres wrote:
+>> On 1/19/23 17:13, Zhang, Rui wrote:
+>>> On Thu, 2023-01-19 at 08:02 +0100, Álvaro Fernández Rojas wrote:
+>>>> This patch adds RaptorLake support to the intel_idle driver.
+>>>>
+>>>> Since RaptorLake and AlderLake C-state are characteristics the
+>>>> same,
+>>>> we use
+>>>> AlderLake C-states tables for RaptorLake as well.
+>>>
+>>> RPL and ADL have same cstates and use the same mwait hints, but the
+>>> latency of each c-state are still different on different platforms.
+>>> So we can not just duplicate the ADL table on RPL.
+>>>
+>>> There is an effort ongoing that measures the latency of each
+>>> cstate on the RPL platforms. And based on the measurement result,
+>>> we
+>>> can decide if a new custom table is needed or we can just copy the
+>>> previous platform. Hopefully we will have a patch in a couple of
+>>> weeks.
+>>
+>> Hi, I just stumbled upon this patch series as I was wondering about
+>> the
+>> lack of support for Raptor Lake in intel_idle.
 > 
+> intel_idle support for RaptorLake, and also other platforms that don't
+> have a custom table, is always there as long as we have BIOS support.
+> The custom table is just an optimization.
+
+Thanks for the information, I might be misinterpreting the effect of
+this patch then. I can report that on a Thinkpad P1 Gen 6 using a stock
+6.4.11 kernel, the list of C-states looks like this:
+
+$ cat /sys/devices/system/cpu/cpu0/cpuidle/state*/name
+POLL
+C1_ACPI
+C2_ACPI
+C3_ACPI
+
+Whereas with this patch they look like this:
+
+$ cat /sys/devices/system/cpu/cpu0/cpuidle/state*/name
+POLL
+C1E
+C6
+C8
+C10
+
+Neither of which looks quite complete (and
+/sys/module/intel_idle/parameters/max_cstate is set to 9). Is this
+something I should open a bug report about?
+
+Thanks,
+Guillaume
