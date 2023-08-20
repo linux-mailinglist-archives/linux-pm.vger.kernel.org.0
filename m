@@ -2,74 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914C0781DF4
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 15:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 067F0781EED
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Aug 2023 19:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjHTNXr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Aug 2023 09:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229579AbjHTRLi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Aug 2023 13:11:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbjHTNXp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Aug 2023 09:23:45 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21D018E;
-        Sun, 20 Aug 2023 06:22:48 -0700 (PDT)
-Received: from p200300cf17418700333267be2b9ea1d1.dip0.t-ipconnect.de ([2003:cf:1741:8700:3332:67be:2b9e:a1d1]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qXiOD-0008Pc-U1; Sun, 20 Aug 2023 15:22:45 +0200
-Message-ID: <48b80ab9-560d-3a8c-bfa8-b2983ca591fa@leemhuis.info>
-Date:   Sun, 20 Aug 2023 15:22:44 +0200
+        with ESMTP id S229805AbjHTRLf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Aug 2023 13:11:35 -0400
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E56E83C3D;
+        Sun, 20 Aug 2023 10:08:46 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="6.01,188,1684767600"; 
+   d="scan'208";a="173400400"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie5.idc.renesas.com with ESMTP; 21 Aug 2023 02:08:46 +0900
+Received: from localhost.localdomain (unknown [10.226.92.18])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DA59440062AF;
+        Mon, 21 Aug 2023 02:08:43 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>, linux-pm@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 0/2] Convert enum->pointer for data in the tmp51x match tables
+Date:   Sun, 20 Aug 2023 18:08:39 +0100
+Message-Id: <20230820170841.82501-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Fwd: System becomes hot when put to sleep
-Content-Language: en-US, de-DE
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Shubhra Prakash Nandi <email2shubhra@gmail.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Power Management <linux-pm@vger.kernel.org>,
-        Linux Stable <stable@vger.kernel.org>,
-        Linux GPIO <linux-gpio@vger.kernel.org>
-References: <430ca35e-70a1-e2b0-34e4-2586bebccd44@gmail.com>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <430ca35e-70a1-e2b0-34e4-2586bebccd44@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1692537768;ac97949c;
-X-HE-SMSGID: 1qXiOD-0008Pc-U1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03.08.23 16:13, Bagas Sanjaya wrote:
+Convert enum->pointer for data in the match tables, so that
+device_get_match_data() can do match against OF/ACPI/I2C tables, once i2c
+bus type match support added to it. see [1]
 
-> I notice a regression report on Bugzilla [1]. Quoting from it:
->> I have a Dell Inspiron 14 5425 laptop with hardware specified below. Up till kernel version 6.1.39 the system can sleep and resume correctly but with kernel version 6.1.40 it heats up when put to sleep and drains battery very quickly. It seems CPU cannot suspend though the system can resume correctly and functions correctly after that. I believe many GPIO and pinctrl patches/fixes for the AMD platform beginning 6.1.40 and 6.4.5 has caused this issue. There is no error in logs and sleep/resume log messages in both 6.1.39 and 6.1.40 are the same. Only s2idle sleep mode is available on my system.
-> [...] 
+This patch series extend support for retrieving match data for ID lookup.
+The first patch fixes the driver_data for ID table and second patch
+convert enum->pointer to avoid non zero values as the proposed
+solution returns NULL for non-match.
 
-TWIMC, Mario is working on it and proposed a fix:
+This patch series is only compile tested.
 
-#regzbot introduced: 65f6c7c91cb2
-#regzbot monitor:
-https://lore.kernel.org/all/20230818144850.1439-1-mario.limonciello@amd.com/
+[1] https://lore.kernel.org/all/20230804161728.394920-1-biju.das.jz@bp.renesas.com/
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Biju Das (2):
+  power: supply: sbs-battery: Make similar OF and ID table
+  power: supply: sbs-battery: Convert enum->pointer for data in the
+    match tables
 
-#regzbot ignore-activity
+ drivers/power/supply/sbs-battery.c | 42 ++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
+
+-- 
+2.25.1
+
