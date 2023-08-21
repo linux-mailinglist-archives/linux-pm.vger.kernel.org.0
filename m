@@ -2,126 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE0D782BA6
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 16:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EFDB782BED
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 16:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbjHUOXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 10:23:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
+        id S236003AbjHUOd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 10:33:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235820AbjHUOXv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 10:23:51 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FE4EC
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:23:48 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d6b0c2cca0aso3386995276.0
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:23:48 -0700 (PDT)
+        with ESMTP id S235932AbjHUOd2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 10:33:28 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1A4E2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:33:26 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d712d86eb96so3130124276.3
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:33:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692627828; x=1693232628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qI4t8SDVJMhXzDamC4q86X6ieBjYdmuT6UT0C+IJ2Og=;
-        b=bS3lH48mYdBNX7MAw649CJx0NJABczQrfg8v+P2nTXm0EmwA6Fvw7NI3XcQLURinCQ
-         NIrTj2+EVwXdQDrW9aD8GwmZOl6hAKX6QAyKguViuJh80M9yGN5MUs5OFZLrMWqM0SSv
-         hq2ithUtqT4wULnTqR1i49+e7Dc/T7DgLkjKVnVLtCFTw7U3ZXNSGqWp/Cnkw6aVOdC/
-         ziMwuECpNBQ5jY9otfSFJZPUXjagWLLE56LxmXsVlJacYFfINB/J7PpoO/ASKbGNhe37
-         bcCwhIRm8SFx2vykm5Xq4Gt7GuIABQSTpj/pUVamPHoCcvoNDdBK1sXcHBsJJTKoME81
-         I22A==
+        d=linaro.org; s=google; t=1692628405; x=1693233205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JVf6fM0iJ2iIkGIz1YOTaiRR1OthdLkPvJ97HGCmhgA=;
+        b=O0mLKFdREezoY2/1oR2MOzof4eSxczj6uQdNs2otCl3toxWc5nmFXkEyCfAIVQwIPE
+         hezvo5QD6eADUgHlL3Wq9G+YHn2FLk652AW4Lnl60Or0i9E78llV2EN0bplGBYERVniD
+         Q7eeaxX9BOOtEvPDQcn67qKQtorseu+NmUEJGhUlFPstw2CZxEJ2Dqiz8xdVPSx5Rt6f
+         8zsSzcezeQrcid7n/tkOrY9K4dK3PpCdBCgsJZ7I59YeP4FyRlJjwft/dmV2OsmQ/chv
+         TWd7SheQ/+Qr03dqIFb11o/hAAuqdezONokX1wwtokLq1z8MYwSqCYrX9h07LIswzCpN
+         ei1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692627828; x=1693232628;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qI4t8SDVJMhXzDamC4q86X6ieBjYdmuT6UT0C+IJ2Og=;
-        b=SKApATGSN0jDFw+wWY01hJvcNoDX2EGq1hUo11zJPJz4iNOtf2UkkqX8LaEs3SMBi5
-         0EAsy0XrvZqI5Ux+3EOeS0PrrPZTmRJ0FMRpQzQCZ+jWxdpReqbJgYeIaRyOeM604bUk
-         WTwJeSBppLXwFrAZwYEiNFkRpevCPJSdranQ9KurnCULNs3tzHcdpoPXIq3JtaTooFly
-         8NTf4hThuReYsaMHb/e1qcLu03A6KQ5HAMaGn0gkSlC9FKX0yNjIM2+1m9B2FEquIfue
-         uFMRoH0sw0nyp5ccKEB6Fjt8d7cgDwUVVjEZO0AJFG6E9Z4mEzKk1cxBNx/xkSZYw8KA
-         mmzA==
-X-Gm-Message-State: AOJu0YwkzEL3AZzEY2MxQJuABUq08iRk8yoTylgi7wstMGeFy4NOH1hd
-        m386aP78zk73NdbhF5nBVe/IbSqBtYnC9T33YhlPpw==
-X-Google-Smtp-Source: AGHT+IG8w7sOTs96ZQbK783vPuu7KIpqKAevj7gF4qW1xaxthEWCfaFl/an/E9olSOG2iOL03miEu7a+d+VYztk6RPE=
-X-Received: by 2002:a25:258a:0:b0:d21:ef87:c1c4 with SMTP id
- l132-20020a25258a000000b00d21ef87c1c4mr7280290ybl.33.1692627827942; Mon, 21
- Aug 2023 07:23:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692628405; x=1693233205;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JVf6fM0iJ2iIkGIz1YOTaiRR1OthdLkPvJ97HGCmhgA=;
+        b=II1/WPxxIuZV8FqgTB7otHsmnuU+0BfXWTUmC7kAdc84HDxJmLoO2tyGhD1jfumCQK
+         aJ2WV2AO54HP0NxnpPb++PUV7HbFGWG/SbDiYsP/7f3quEVHqPdjNw654zfBQ9cjpD51
+         Vn9dPctESZabM9so33JB9xLGD3uBrEm8wMqw5n4fN0khGMBvJCE6IVwfDGp3F71iOo6u
+         Rfq0VWeoMkUbrkX4yrOf/rhHS9AgPmMC1I4n80faF+xHO3FJzqEhm7M7vaerqgUCQ6aD
+         mst4Ji9nmqjqVkczqaYDMe6+xM0FsWQo5OnnPNMVcKNVQV1dUnj1SQ7fCggg8l+rimAw
+         06pw==
+X-Gm-Message-State: AOJu0YwNbQGIAhuu/OG2hjvDKHOufJCIcTA6IorL8kGGX1Gnefe5VOeh
+        Ju3BT5/9HEls/kHAIpE9p/RRryQMrNbxIYaYKW6f1w==
+X-Google-Smtp-Source: AGHT+IF8pqtgsDod4AcLNDd7B46cZvClFs4sWgkMxAtQQuCt9OO664LsbLksG7aBhJow6s/DU6WNo/6kzskR+zV3X2k=
+X-Received: by 2002:a25:bcc7:0:b0:d74:66aa:a277 with SMTP id
+ l7-20020a25bcc7000000b00d7466aaa277mr6691513ybm.65.1692628405501; Mon, 21 Aug
+ 2023 07:33:25 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-10-ulf.hansson@linaro.org> <20230719152426.qwc5qqewrfjsarlz@bogus>
- <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com>
- <20230721143728.GB1092306-robh@kernel.org> <CAPDyKFr9V6iPJhXXrv5RxgAE-YvXDboN5GP8E=q2VHnjs8cL5w@mail.gmail.com>
-In-Reply-To: <CAPDyKFr9V6iPJhXXrv5RxgAE-YvXDboN5GP8E=q2VHnjs8cL5w@mail.gmail.com>
+ <20230713141738.23970-9-ulf.hansson@linaro.org> <20230719151716.qhobfnclrjf4yqkg@bogus>
+ <CAPDyKFpjMWOAbV+b2DcxDWqvRDQCbSC6Ti+KGGPWJoC4Ghp7=w@mail.gmail.com>
+ <20230721115535.mx46dg56pxjnzbuv@bogus> <20230721143304.GA1092306-robh@kernel.org>
+ <20230721183817.34lgb42nlnsvqx4s@bogus> <CAPDyKFqsaz=hruktv+sPQz-ttOtWa9O_Jvp2iLnpxQqX2r7yBQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFqsaz=hruktv+sPQz-ttOtWa9O_Jvp2iLnpxQqX2r7yBQ@mail.gmail.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 21 Aug 2023 16:23:11 +0200
-Message-ID: <CAPDyKFq=WaR-=xO-OTLYRxN0QF_WtgCk4axMFO0kB4XWLbL=7g@mail.gmail.com>
-Subject: Re: [PATCH v2 09/11] cpufreq: scmi: Add support to parse domain-id
- using #power-domain-cells
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
+Date:   Mon, 21 Aug 2023 16:32:49 +0200
+Message-ID: <CAPDyKFr5pJR5+PrSrWEA_hZmureacxuT-T5OxitdFs2AXoRUyg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/11] dt-bindings: firmware: arm,scmi: Extend bindings
+ for protocol@13
+To:     Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
         Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
         Stephen Boyd <sboyd@kernel.org>,
         Nikunj Kela <nkela@quicinc.com>,
         Prasad Sodagudi <psodagud@quicinc.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
         linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 26 Jul 2023 at 13:20, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Wed, 26 Jul 2023 at 13:12, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> On Fri, 21 Jul 2023 at 16:37, Rob Herring <robh@kernel.org> wrote:
+> On Fri, 21 Jul 2023 at 20:38, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > >
-> > On Fri, Jul 21, 2023 at 01:52:17PM +0200, Ulf Hansson wrote:
-> > > On Wed, 19 Jul 2023 at 17:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> > > > On Thu, Jul 13, 2023 at 04:17:36PM +0200, Ulf Hansson wrote:
-> > > > > The performance domain-id can be described in DT using the power-domains
-> > > > > property or the clock property. The latter is already supported, so let's
-> > > > > add support for the power-domains too.
+> > On Fri, Jul 21, 2023 at 08:33:04AM -0600, Rob Herring wrote:
+> > > On Fri, Jul 21, 2023 at 12:55:35PM +0100, Sudeep Holla wrote:
+> > > > On Fri, Jul 21, 2023 at 01:42:43PM +0200, Ulf Hansson wrote:
+> > > > > On Wed, 19 Jul 2023 at 17:17, Sudeep Holla <sudeep.holla@arm.com>=
+ wrote:
+> > > > > >
+> > > > > > On Thu, Jul 13, 2023 at 04:17:35PM +0200, Ulf Hansson wrote:
+> > > > > > > The protocol@13 node is describing the performance scaling op=
+tion for the
+> > > > > > > ARM SCMI interface, as a clock provider. This is unnecessary =
+limiting, as
+> > > > > > > performance scaling is in many cases not limited to switching=
+ a clock's
+> > > > > > > frequency.
+> > > > > > >
+> > > > > > > Therefore, let's extend the binding so the interface can be m=
+odelled as a
+> > > > > > > generic performance domaintoo. The common way to describe thi=
+s, is to use
+> > > > > > > the "power-domain" DT bindings, so let's use that.
+> > > > > > >
+> > > > > >
+> > > > > > One thing I forgot to ask earlier is how we can manage differen=
+t domain IDs
+> > > > > > for perf and power domains which is the case with current SCMI =
+platforms as
+> > > > > > the spec never mandated or can ever mandate the perf and power =
+domains IDs
+> > > > > > to match. They need not be same anyways.
 > > > > >
+> > > > > Based upon what you describe above, I have modelled the perf-doma=
+in
+> > > > > and the power-domain as two separate power-domain providers.
+> > > > >
+> > > > > A consumer device being hooked up to both domains, would specify =
+the
+> > > > > domain IDs in the second power-domain-cell, along the lines of th=
+e
+> > > > > below. Then we would use power-domain-names to specify what each
+> > > > > power-domain represents.
+> > > > >
+> > > > > power-domains =3D <&scmi_pd 2>, <&scmi_dvfs 4>;
+> > > > > power-domain-names =3D "power", "perf";
+> > > > >
+> > > > > I hope this makes it clearer!?
 > > > >
-> > > > How is this supposed to work for the CPUs ? The CPU power domains are
-> > > > generally PSCI on most of the platforms and the one using OSI explicitly
-> > > > need to specify the details while ones using PC will not need to. Also they
-> > > > can never be performance domains too. So I am not sure if I am following this
-> > > > correctly.
+> > > > Yes it make is clear definitely, but it does change the definition =
+of the
+> > > > generic binding of the "power-domains" property now. I am interesti=
+ng in
+> > > > the feedback from the binding maintainers with respect to that. Or =
+is it
+> > > > already present ? IIUC, the ones supported already are generally bo=
+th
+> > > > power and performance providers. May be it doesn't matter much, jus=
+t
+> > > > wanted to explicit ask and confirm those details.
 > > >
-> > > Your concerns are certainly correct, I completely forgot about this.
-> > > We need to specify what power-domain index belongs to what, by using
-> > > power-domain-names in DT. So a CPU node, that has both psci for power
-> > > and scmi for performance would then typically look like this:
+> > > I commented on v1.
 > > >
-> > > power-domains = <&CPU_PD0>, <&scmi_dvfs 4>;
-> > > power-domain-names = "psci", "scmi";
+> > > Looks like abuse of "power-domains" to me, but nothing new really.
+> > > Please define when to use a power domain vs. a perf domain and don't
+> > > leave it up to the whims of the platform. Maybe perf domains was a
+> > > mistake and they should be deprecated?
+> > >
 > >
-> > That is completely backwards. Entries are named based on the consumer
-> > side. The function of each clock or interrupt for example. Here your
-> > entries are based on the provider which should be opaque to the
-> > consumer.
+> > Just a thought here, instead of deprecating it I was thinking if possib=
+le
+> > to keep the power-domains and performance-domains separate and just ext=
+end
+> > the genpd to handle the latter. There by we are not mixing up and creat=
+ing
+> > confusions that need more specific definitions in the binding(which is =
+not
+> > a big deal) but platforms getting it wrong inspite of that is a big pro=
+blem.
+> > Keep it separate makes it more aligned to the hardware and doesn't dilu=
+te
+> > the definitions and probably avoids any possible mistakes due to that.
+> >
+> > Sorry Ulf I am just not yet convinced to mix them up yet =F0=9F=98=89 a=
+nd wish you
+> > don't convince me to. Let me know why the above suggestion won't work.
 >
-> Okay, so you would rather prefer something along the lines of the below?
+> The main point I think we need to consider too, is that on some
+> platforms, the power-domain and the performance-domain are managed
+> together by the FW. It is not really two separate things and hence it
+> would not quite be correct to describe it as two different types of
+> providers in DT.
 >
-> power-domain-names = "power", "perf";
+> If we should follow your suggestion above, to use the
+> performance-domain bindings, then I think we need an additional new
+> binding to cover the above mentioned case too. This would lead us into
+> having one binding for the power-domain, another for the
+> performance-domain and a third for the power+performance-domain.
 >
-> The "psci" name is already part of the current cpus DT binding
-> (Documentation/devicetree/bindings/arm/cpus.yaml), so then it looks
-> like that deserves an update too. Right?
+> In my opinion this sounds quite like a mess. I would rather keep using
+> the power-domain bindings for all these cases. Of course, it's a bit
+> of a stretch too, but I think it should be less confusing in the end,
+> assuming we extend/clarify the description of the power-domain
+> bindings, of course.
+>
+> Did that convince you? :-)
 
-Rob, may I have your thoughts around this? Is this an acceptable way
-forward? Please advise me on what power-domain-names I should use
-then.
+Sudeep, Rob,
 
-Or, if you are insisting on using the performance-domain bindings?
+Can we try to conclude on the way forward?
+
+Is it acceptable to keep using the power-domain bindings (with some
+clarifications) for performance domains or should we start moving to
+the performance-domain bindings?
+
+If moving to the performance-domain binding, should we start migrating
+existing users of the power-domain binding too - or what is your take
+on this?
 
 Kind regards
 Uffe
