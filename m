@@ -2,74 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1268F782834
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 13:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9797D78283D
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 13:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjHULsz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 07:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
+        id S233706AbjHULvl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 07:51:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbjHULsy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 07:48:54 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCA7B4
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 04:48:52 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50078eba7afso1954345e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 04:48:52 -0700 (PDT)
+        with ESMTP id S232702AbjHULvk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 07:51:40 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEBB90
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 04:51:39 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ffa6e25ebbso3114250e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 04:51:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692618530; x=1693223330;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=6jpPgZAeElmXGtb0PqmsjBOSpf3lKASmC+qJNGlCgOU=;
-        b=Nx0mXFrLktFVA4VZ9N+i4E4Y1snUfGy24Y6Q9tdSYr2e+Q3iWmnrX4sLRjhnUY1Ywx
-         /AseYWvwCs7LFrdSxyp6J361PB5Yr5ECvyAMeBF4A82EuvKggYP6d7bHNlJXQCND6fNL
-         TgDLIWUyu+Oxs2nvysl6MpenenDZHa7Vx4f3okbGUwYdZAJZ44jHow43vBL39F2CEsBU
-         d6hGIQ7yGRWgm2Zvms7Qhfh1BMSnNzUijpc9bXxJo/d9XnkdXrrnbwJ5o0RPMtNX2jCL
-         ef5JltJDvCM15uemRenCQT2qjt0iBue75s5xr0e5TDw7pwSwrtSABuiI886vEZKExGyn
-         ZsJw==
+        d=linaro.org; s=google; t=1692618697; x=1693223497;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3b2yLOM0f17cuFM+3MIUHPF74PLoLewkSNQ+u/wpVaE=;
+        b=ZgTruNrvblM21E41kE7NTP5eu/OgJ0Mkg6jh6dTvHMmmQj4ccmc5Ugn6uHi8WDxUdz
+         RsgGqEimJaJ4ayqtoNx1p/CjLN+D21C27fB/3bwESloECVcKYjmNfncYBGt9UgBdvhF3
+         g8Hkk5MVZTk6A3v1cnnoAYAoxoyiEKBRWG28FeUAZCatn7BLXc53/LrdKcDWXyV80iM6
+         LI4P7rmagc3S6BhfiFVhxT8Q99e78Car/kBNMK5zspoTtI4smctPo/pgtemummTBpsdb
+         kEDbjc74MQkuMknU62EJy7HomOWqtmFj5g6dUvvSW3AYcjDpNSv+YL7EANWt8MiMpL9k
+         6lsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692618530; x=1693223330;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6jpPgZAeElmXGtb0PqmsjBOSpf3lKASmC+qJNGlCgOU=;
-        b=At6ZENoIDkxOgKRMROuhpoZpa6vBiQ56mLkRn3hdQ7cZbnpUcfrwj6tN9HOmbVg04x
-         LTBGD6lwpJjWxziwNNEIUQ7IMZp0b8MQ+yhYsvrcRDAutxXuoxYvb1QnOFT+NMekhgeJ
-         qE7mt3P2llAuK3DHmw9fzzu22YMDYzqg4L1OdxmB/x+xIVTy4DbIJeBt03HCdDHiGpwa
-         W5IjBdLHoOhKO0AeVTTLJ8gWENm3IiUrvnMPcpdzt5rOnhJA1muv0YLl8RkgCE1mV5Eh
-         zGQ+DAmOS2mT2rLS+Rr0Ynwcnt5Qk4qIK8OTRkPFgM8opt5ZjmfavStoaDzO2OzV+iG9
-         tZeA==
-X-Gm-Message-State: AOJu0YwkG3OPwTjpZB7KotN+Uo6nDnRWMK3hGDOKzqoAgh+t3xnJ9GYy
-        sHOVYYSrTDJgfllvGTh/f5Vn0w==
-X-Google-Smtp-Source: AGHT+IGkEBTA1b3Ei0zhoRGYSyGGxy/Is1oU+WlqClkEhdcYMVu4aRzAOHe6+OPUnL5sNtt7LnmxuA==
-X-Received: by 2002:a05:6512:3b28:b0:4fe:ecd:4959 with SMTP id f40-20020a0565123b2800b004fe0ecd4959mr5652116lfv.32.1692618530392;
-        Mon, 21 Aug 2023 04:48:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692618697; x=1693223497;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3b2yLOM0f17cuFM+3MIUHPF74PLoLewkSNQ+u/wpVaE=;
+        b=lMsSynrD7VtmEqLr5JhyiNtNa6yaWJnPDm+GWdnB+0+yXTW2kYXgrjpNIRfxzYXuqY
+         xtaegj/MqnwuswiP0F+dUJj/xHVru4Qrw8zVhDiEfz3SIfDF9NiUVaXGDJSdCmRDytFs
+         vl9T0yEReRFoHXSyvFAKWD2g4GSvvW2Uq0o39hJaUL1rAYBTraKRyPaDZgQNsnIS49+T
+         7dA0F2lbT8PULbvEg1py7fgYSOySCI4pFmmWsFmwMfSx21Z6XEdKub4FlI3Hgb3lGoV3
+         ww8zItum3cETVOGXs5q/+thySA5qxZP/ZDh/gavrY9FmYsd5jD3pbUeVIjM1Wi2luUmH
+         /b5Q==
+X-Gm-Message-State: AOJu0Ywszrq+ded5laEk6QI8oSLuzWJ3yH8MFqB4uxAwXQEvqDFkwf7J
+        BIVqBoR/ho+PGmzIxUoiuTj2yA==
+X-Google-Smtp-Source: AGHT+IGCkEZKU+n3qi5qLSW+38jWWOavubfWnJAJB9SG8yOfyKLeFv4CMn1xv7n+QBJOKP6M1eTE6A==
+X-Received: by 2002:a05:6512:615:b0:4f8:5e62:b94b with SMTP id b21-20020a056512061500b004f85e62b94bmr1917344lfe.9.1692618697531;
+        Mon, 21 Aug 2023 04:51:37 -0700 (PDT)
 Received: from [192.168.1.101] (abyk181.neoplus.adsl.tpnet.pl. [83.9.30.181])
-        by smtp.gmail.com with ESMTPSA id p22-20020a19f016000000b004fe0c51fb41sm1705937lfc.45.2023.08.21.04.48.49
+        by smtp.gmail.com with ESMTPSA id f16-20020ac251b0000000b004fdc7ec5cbesm1713953lfk.300.2023.08.21.04.51.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Aug 2023 04:48:49 -0700 (PDT)
-Message-ID: <0f1e59ef-f8e7-4f78-b5b3-1a5ad16faab9@linaro.org>
-Date:   Mon, 21 Aug 2023 13:48:48 +0200
+        Mon, 21 Aug 2023 04:51:37 -0700 (PDT)
+Message-ID: <ea0a31ac-6860-4cd2-a2ec-25416d035278@linaro.org>
+Date:   Mon, 21 Aug 2023 13:51:35 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] cpufreq: qcom-cpufreq-hw: add support for 4 freq
- domains
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: tsens: Add sa8775p compatible
+Content-Language: en-US
+To:     Priyansh Jain <quic_priyjain@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230821-topic-sm8x50-upstream-cpufreq-4-domains-v1-0-2d4d9fc828d8@linaro.org>
- <20230821-topic-sm8x50-upstream-cpufreq-4-domains-v1-2-2d4d9fc828d8@linaro.org>
-Content-Language: en-US
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_manafm@quicinc.com
+References: <20230821112928.19284-1-quic_priyjain@quicinc.com>
+ <20230821112928.19284-2-quic_priyjain@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -106,25 +107,36 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230821-topic-sm8x50-upstream-cpufreq-4-domains-v1-2-2d4d9fc828d8@linaro.org>
+In-Reply-To: <20230821112928.19284-2-quic_priyjain@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21.08.2023 09:39, Neil Armstrong wrote:
-> Add support for up to 4 frequency domains as used on new
-> platforms.
+On 21.08.2023 13:29, Priyansh Jain wrote:
+> Add compatibility string for the thermal sensors on sa8775p platform.
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
 > ---
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 27e9e16e6455..37d0c9150327 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -65,6 +65,7 @@ properties:
+>                - qcom,sm8350-tsens
+>                - qcom,sm8450-tsens
+>                - qcom,sm8550-tsens
+> +              - qcom,sa8775p-tsens
+>            - const: qcom,tsens-v2
+Please keep this sorted alphanumerically.
 
 Konrad
