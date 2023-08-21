@@ -2,125 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2B7782EF5
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 19:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D7D2782F3A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 19:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234364AbjHURAf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 13:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S236998AbjHURNA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 13:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbjHURAf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 13:00:35 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F0010F;
-        Mon, 21 Aug 2023 10:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692637218; x=1724173218;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n7S/UFEeowdzIZmbsuVfPC9j0Vf3rJq/KFb1fvy2s7A=;
-  b=m0OiH4fvmlXCOg8qHcR9OuNUs9bOoFVFdJYAIS7UGNVK78ZYJfh6nUB3
-   n2r7Ri4anQbzS9BO7vhJ8LSkgSQomGbopYrcO+k+3V6hS8LIalT1hXWnq
-   M7rtqTqDL62hdjPTIZtiCk08u2I7cCEDoQZp84YqyPGXVoAeVeV7LPu58
-   L7WdVhdF/DaFx1GUxRygbxu2eYCYBwa5gkBqwFfbNb9E3FHqGxdcG8g47
-   7gMxp2sEaps5mahBLHsLflERFcrmqwdvatsIS6OXyJNP9hpxO4VjKpjdP
-   14NS/ZvFwTj60kQzVpEC3EQa/y8lOKMB/4lYhVIBqO/uX0HY8cFVkoJ2c
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="372546682"
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="372546682"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 10:00:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="826004434"
-X-IronPort-AV: E=Sophos;i="6.01,190,1684825200"; 
-   d="scan'208";a="826004434"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Aug 2023 10:00:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qY8G7-005X2E-2I;
-        Mon, 21 Aug 2023 20:00:07 +0300
-Date:   Mon, 21 Aug 2023 20:00:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Balsam CHIHI <bchihi@baylibre.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        with ESMTP id S230360AbjHURM7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 13:12:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB84123;
+        Mon, 21 Aug 2023 10:12:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17E186402E;
+        Mon, 21 Aug 2023 17:12:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A083C433C8;
+        Mon, 21 Aug 2023 17:12:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692637967;
+        bh=pecT+7jt2WFbXfJOVTRSd9o3RBK/Imr4a3p3S+M/2x4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=F4U/ZhLydZ7TzaxBv+r0Ch2NVqY7bI4P84YF474cteSwc/8gpGPpXXr5iKbPPHc3Q
+         CzWJg3qW2J9WktqjWOKHZMOyvto9vQNEyWcCPjCyx+aABrFoaPcO2pKsZgSRoHtgwU
+         tM/Suhol2ESmfpub9Jiypc7ok56BnzExf039SiXVTigfExNTHbOz6eTegmmcB7l5md
+         GTazQjsnarYCoQhfjMcbJ2AWtOlatA5JowGK6WkDc9qJQOEyZmCaurB2g2guXabLBL
+         cgpRxS98pCfScD2RFFQMLIrcqxuy5FdfaCiDpwk/FYlBJDZcBNqQgdXE2mbfNieLeX
+         IJqlKMF+abvIw==
+Received: (nullmailer pid 1975482 invoked by uid 1000);
+        Mon, 21 Aug 2023 17:12:44 -0000
+Date:   Mon, 21 Aug 2023 12:12:44 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
         linux-pm@vger.kernel.org
-Cc:     Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH v2 00/10] pinctrl: Provide NOIRQ PM helper and use it
-Message-ID: <ZOOYFxDktwce79Yc@smile.fi.intel.com>
-References: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH 3/6] dt-bindings: display: imx: hdmi: Allow 'reg' and
+ 'interrupts'
+Message-ID: <20230821171244.GA1963855-robh@kernel.org>
+References: <20230810144451.1459985-1-alexander.stein@ew.tq-group.com>
+ <20230810144451.1459985-4-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230717172821.62827-1-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230810144451.1459985-4-alexander.stein@ew.tq-group.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 08:28:11PM +0300, Andy Shevchenko wrote:
-> Intel pin control drivers use NOIRQ variant of the PM callbacks.
-> Besides that several other drivers do similar. Provide a helper
-> to make them smaller and less error prone against different
-> kernel configurations (with possible defined but not used variables).
+On Thu, Aug 10, 2023 at 04:44:48PM +0200, Alexander Stein wrote:
+> Although defined in synopsys,dw-hdmi.yaml, they need to explicitly allowed
+> in fsl,imx6-hdmi.yaml. Fixes the warning:
+> arch/arm/boot/dts/nxp/imx/imx6q-mba6a.dtb: hdmi@120000: 'interrupts',
+>  'reg' do not match any of the regexes: 'pinctrl-[0-9]+'
+>  From schema: Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
 > 
-> The idea is to have an immutable branch that PM tree can pull as well as
-> main pin control one. We also can do other way around, if Rafael prefers
-> that.
+> Fixes: b935c3a2e07b ("dt-bindings: display: imx: hdmi: Convert binding to YAML")
+> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  .../devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml         | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml b/Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
+> index af7fe9c4d196..d6af28e86ab4 100644
+> --- a/Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
+> +++ b/Documentation/devicetree/bindings/display/imx/fsl,imx6-hdmi.yaml
+> @@ -22,6 +22,9 @@ properties:
+>        - fsl,imx6dl-hdmi
+>        - fsl,imx6q-hdmi
+>  
+> +  reg: true
+> +  interrupts: true
+> +
 
-I have partially applied the series to my review and testing queue with
-the following changes (besides the tags added):
-- split pm_ptr() patches to be first with lynxpoint commit message updated
-- fixed wording in the pm.h comment
-- amended cherryview to wrap long line
-- explained __maybe_unused and pm_ptr() changes in at91 commit message
-- added pm_sleep_ptr() and explained that in the tegra commit message
-- renesas and mvebu went as is
-- intel and mediatek left aside for better rework
+You should change additionalProperties to unevaluatedProperties instead.
 
- drivers/pinctrl/intel/pinctrl-baytrail.c    | 11 +++--------
- drivers/pinctrl/intel/pinctrl-cherryview.c  | 10 +++-------
- drivers/pinctrl/intel/pinctrl-lynxpoint.c   |  7 +++----
- drivers/pinctrl/mvebu/pinctrl-armada-37xx.c | 14 +++-----------
- drivers/pinctrl/pinctrl-at91.c              | 10 ++++------
- drivers/pinctrl/renesas/core.c              | 16 +++++++---------
- drivers/pinctrl/tegra/pinctrl-tegra.c       |  5 +----
- drivers/pinctrl/tegra/pinctrl-tegra210.c    |  2 +-
- include/linux/pm.h                          |  9 +++++++++
- 9 files changed, 34 insertions(+), 50 deletions(-)
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Rob
