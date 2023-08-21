@@ -2,89 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CAB782A0E
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 15:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C143B782B1A
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 16:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbjHUNLo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 09:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
+        id S235600AbjHUOD4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 10:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbjHUNLn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 09:11:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524EFE8;
-        Mon, 21 Aug 2023 06:11:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S231825AbjHUODz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 10:03:55 -0400
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4797C2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:03:52 -0700 (PDT)
+Received: from [192.168.2.137] (bband-dyn221.178-41-211.t-com.sk [178.41.211.221])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC7B563544;
-        Mon, 21 Aug 2023 13:11:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81813C433C8;
-        Mon, 21 Aug 2023 13:11:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692623500;
-        bh=fKeIzDelBhcXSFwPC4v8AT95YfiJ57nqdgQdtNrfJN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VsfbPZUkFt08a+Wx0UN0m8lvTnb/61UGGxfrg1HRj7GndsGHSlQ6Z7DiMk+vQwlho
-         TTSL29bxPpzAy02jyElUvTTOnXNiWXT/Mm/G5GFQJAL8AzvZs4N9NR9yS8DvmAsiE2
-         X+/mMIN1FnSaaYoXTbhV7ANfuPzYQzpLlF75tlgPgbFAs/ooMbq7cGQILEV6ZpWJ2k
-         fGLfYtU0WktuizrYDj2suYlO/9wI2muPELUhvd5nfPR+Jq8iAyGqaNVy/PnM6qo171
-         9dek6upF92jpbeNkPF5C1jx2jDXOUklt8z3S0Mf4ZbxHLmC1ei/bIkCxIDhEy2Doqs
-         a/DT28fVwfJnQ==
-Date:   Mon, 21 Aug 2023 14:11:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Stultz <jstultz@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
-        Ricardo =?iso-8859-1?Q?Ca=F1uelo?= Navarro 
-        <ricardo.canuelo@collabora.com>,
-        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
-        usama.anjum@collabora.com, kernelci@lists.linux.dev
-Subject: Re: [PATCH 5.17 127/298] driver core: Fix wait_for_device_probe() &
- deferred_probe_timeout interaction
-Message-ID: <0a06a54e-0348-4964-ab90-48c648712ed6@sirena.org.uk>
-References: <20220613094924.913340374@linuxfoundation.org>
- <20220613094928.793712131@linuxfoundation.org>
- <6283c4b1-2513-207d-4ed6-fdabf3f3880e@collabora.com>
- <2023081619-slapping-congrats-8e85@gregkh>
- <471bf84d-9d58-befc-8224-359a62e29786@collabora.com>
- <CAGETcx-NVoN7b8XCV09ouof81XxZk4wtGhEcqcFAt6Gs=JWKdw@mail.gmail.com>
- <d8f8ddf6-8063-fb3a-7dad-4064a47c5fe8@collabora.com>
- <CAGETcx-DUm417mM-Nmyqj-e_rKUw69m=rTe5R6_Vxd_rsKMmGg@mail.gmail.com>
- <97b06c78-da3c-d8ab-ca72-ff37b9976f2a@collabora.com>
- <6d7a7ecc-1364-5cbe-0485-01d693dbdc6c@arm.com>
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id E86A63F30B;
+        Mon, 21 Aug 2023 16:03:48 +0200 (CEST)
+From:   Martin Botka <martin.botka@somainline.org>
+Subject: [PATCH v2 0/3] Add support for H616 Thermal system
+Date:   Mon, 21 Aug 2023 16:03:45 +0200
+Message-Id: <20230821-ths-h616-v2-0-cda60d556798@somainline.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9yeLbFu7ADkQpySe"
-Content-Disposition: inline
-In-Reply-To: <6d7a7ecc-1364-5cbe-0485-01d693dbdc6c@arm.com>
-X-Cookie: Do not write below this line.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMFu42QC/0XMQQrCMBCF4auUWTuSRNOkrryHdJG2YzOgSUlKU
+ UrvbiyIy//x+FbIlJgyXKoVEi2cOYYS6lBB710YCXkoDUqok7BS4+wz+lrWaEynhk7XWp0bKPc
+ p0Z1fO3VrS3vOc0zvXV7kd/0h9o8sEgUKkiS07ZreuGuOT8fhwYGOMY3Qbtv2AUEeW2WlAAAA
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Andre Przywara <andre.przywara@arm.com>,
+        Alan Ma <tech@biqu3d.com>,
+        Luke Harrison <bttuniversity@biqu3d.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin@biqu3d.com>,
+        Martin Botka <martin.botka@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692626628; l=1641;
+ i=martin.botka@somainline.org; s=20230811; h=from:subject:message-id;
+ bh=DJBh216VE8/GQJzrTvmlTLXla05Im/ECScvbd00nu20=;
+ b=VRrVoI/qxDMBF10i+PzdqsGwvgJofvviGYIuaLgVX8dIN7c5iUIsRfC596/y9nIZD9cZVWlOF
+ T2SjoM7M/DVBaxv4LM+Rg03wL2oOM79ptTMDxUfrx4TVwwtuZ9tXO5w
+X-Developer-Key: i=martin.botka@somainline.org; a=ed25519;
+ pk=aTCd3jmwU8GrJidWg3DSKLpdVMcpFzXzCSLXLR6NtWU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,40 +71,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
---9yeLbFu7ADkQpySe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch series adds support to thermal system
+found in H616 SoC.
 
-On Mon, Aug 21, 2023 at 01:39:11PM +0100, Robin Murphy wrote:
-> On 2023-08-21 12:35, Shreeya Patel wrote:
+There are 4 thermal sensors in this SoC.
+One for GPU, CPU, DRAM and VE.
 
-> > AFAIK, script for running the tests is immediately ran after the boot
-> > process is complete so there is no wait time.
+Trips while unused for now until cpufreq is implemented
+(WIP) are required by dt-bindings and thus included here.
 
-> Regardless of what the kernel is doing, it seems like a fundamentally dumb
-> test to specifically ask deferred probe to wait for up to a minute then
-> complain that it hasn't finished after 11 seconds :/
+Cheers,
+Martin
 
-IIRC that stuff is expecting the modules to be loaded from the initramfs
-and checking from the main system which is a bit more sensible (at least
-in the case where there is a main filesystem).  It's vulnerable to races
-but less so, especially given the time a Debian rootfs typically takes
-to boot over NFS.
+---------------
 
---9yeLbFu7ADkQpySe
-Content-Type: application/pgp-signature; name="signature.asc"
+Hello,
+Im very much not sure if the trips should be included or not.
+Since they are not optional part I decided to add them but
+please let me know.
 
------BEGIN PGP SIGNATURE-----
+Cheers,
+Martin
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTjYoEACgkQJNaLcl1U
-h9A6Swf/XtoTqsAUrhDq/Wh7JfVm3BoLQKbTuySudRcbCDjKQqaSOK6krL2dOyho
-pMlwv20MA3H+NF8I/hbsKh76FXvk08d1iLcKHll3kfZOxLUmdhOXY56bn88FStfd
-Yja0b9OFe5TkkxZngSggpps6F+hhI0Q1GbuX+VZKqwZ3+1cbM+osTfZDzxy5Y47x
-NwqGj95If45WtM2T1uom9ODZS1xKNH3Y7TO7Ifkpqf9sV0h+l4cWYEUOahfcEh6z
-hIH1+EeAJSqWhvoWxXgc0KkmrTV3MQetnfOOpofb9YEO7zvRnU2k/vzhY142cS3Z
-MfbPxUXC9o6LeMMrbYdhvLEEImawAQ==
-=cxsG
------END PGP SIGNATURE-----
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
+---
+Changes in v2:
+- Fix typos
+- Remove h616 calc and init functions
+- Use TEMP_CALIB_MASK insteaf of 0xffff
+- Adjust calibration function to new offset and scale
+- Add proper comment to bindings patch
+- Split delta calculations to 2 lines
+- Add parentheses around caldata[2|3] >> 12
+- Negate bindings if for clocks
+- Link to v1: https://lore.kernel.org/r/20230818-ths-h616-v1-0-0e1e058b9c7a@somainline.org
 
---9yeLbFu7ADkQpySe--
+---
+Martin Botka (3):
+      dt-bindings: thermal: sun8i: Add binding for H616 THS controller
+      thermal: sun8i: Add support for H616 THS controller
+      arm64: dts: allwinner: h616: Add thermal sensor and thermal zones
+
+ .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml | 18 ++---
+ arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi     | 87 ++++++++++++++++++++++
+ drivers/thermal/sun8i_thermal.c                    | 74 ++++++++++++++++++
+ 3 files changed, 169 insertions(+), 10 deletions(-)
+---
+base-commit: df6283416a280d17609f5e55388601458241348c
+change-id: 20230815-ths-h616-77b2db565249
+
+Best regards,
+-- 
+Martin Botka <martin.botka@somainline.org>
+
