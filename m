@@ -2,91 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FC478272E
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 12:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A44578276F
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 12:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234775AbjHUKe1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Aug 2023 06:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S229637AbjHUK4e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Aug 2023 06:56:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234765AbjHUKeX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 06:34:23 -0400
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820C7E3;
-        Mon, 21 Aug 2023 03:34:22 -0700 (PDT)
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-6b9cd6876bbso914066a34.1;
-        Mon, 21 Aug 2023 03:34:22 -0700 (PDT)
+        with ESMTP id S229577AbjHUK4d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 06:56:33 -0400
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2C6D9;
+        Mon, 21 Aug 2023 03:56:32 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-570b3ebb3faso98112eaf.0;
+        Mon, 21 Aug 2023 03:56:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692614062; x=1693218862;
+        d=1e100.net; s=20221208; t=1692615392; x=1693220192;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Re72V6BeZKtZ/a9D1veoORPiF+NDDFb8xZ/o+5KvXIM=;
-        b=BxHqzrH0LQF6PABG0VrXpzwdL43C0Z+l04Q+Z3/hCtmVnm70JllBSishTfliH9jNZH
-         FSBvHX4BVKi6a1nEfvDrAMDAEo326g34lM73FGLTlBEI2yJylRjdcnLc73ytx8HlUQOl
-         rusTP9hd8+uqQPDbEQMwyop6O5cBVZP7v4bY2pEtGP9VmkSM++IdEaI7lHNUiaZZsndF
-         SKsVRgfCEt/TrtzjeVXY6u+JVeYffvU6mRvo0h5v7kOoirKJM2EZGoVzOex224n0Z1xv
-         p3g0Jr3eR0Y4ltlki5GeNMB6fj/dmPjOoD6bPM4ZXHfFErcdnv5oqTwCYlzrFKjuE1tN
-         HA8Q==
-X-Gm-Message-State: AOJu0YxFruZABK2uUPMIVBpVAxJXFyXh0cH12e8Zm3l1CDvTM4sGD4zD
-        OKG/CKPsukcoUvfa0N56KXbH4naD/kNNmV2QqOw=
-X-Google-Smtp-Source: AGHT+IEl8uJHZjylgJUYx/CkJvCBSBek95QEaUoSD0JiPf8+JDXWvz8jz9v3PmcUNRBF3ruNKHSF4hVq5so0j5VruNU=
+        bh=CN5lMKccOwwzdoBewRQ8cXjpNAWqbcdLedtKOodtvi0=;
+        b=KTX/6fzLhCtV4qrnyfRd5QHca55BpzcAydfZwZokrrKDj06GEGGJhQX7j5cxJKy+Q+
+         p0uMJi+scyuYqzSY00D4SG9Kqs34oeX5zAguQk98rj+TVbcS6yhzVt7TsTooJPyH+PIe
+         YccD0PDaHgU7tC6Zn/xokg8JX/WN3jjEqRxO+QMOED0q3hYS/4vDh1wLHB9/6ly8NhCI
+         LoFLbHZSIyNiPyEQSuXDeP/MUE+d4FAmwAQ4fiKhfGiVx+5VKzvC8GosdOcOzVTsNqCv
+         0g6Ybq3l0KxtpM+YR/gLSoPKsvoYCP84qaZjt+uwYygFqn1AzUus79aDB/709pR1TZJC
+         65fA==
+X-Gm-Message-State: AOJu0YzktfTgi+/jCEXBA3YjJKPH1kGQk+jUMmsEUTjcC2WUHbKzt9jQ
+        5SddTP7POFX3ExStrVzLsurVqPqmQUGUqTpFkAq0iM21
+X-Google-Smtp-Source: AGHT+IFgo0/izNdE/i8dxOf47JBFgnuUZHiXA1fNXsADt9QyH5FsOxEa5TyRPDUJlGIsXHVtRn4MVYDxxj8rA9e6zkA=
 X-Received: by 2002:a4a:e741:0:b0:56e:94ed:c098 with SMTP id
- n1-20020a4ae741000000b0056e94edc098mr5753921oov.0.1692614061699; Mon, 21 Aug
- 2023 03:34:21 -0700 (PDT)
+ n1-20020a4ae741000000b0056e94edc098mr5793638oov.0.1692615391688; Mon, 21 Aug
+ 2023 03:56:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230820210640.585311-1-qyousef@layalina.io>
-In-Reply-To: <20230820210640.585311-1-qyousef@layalina.io>
+References: <acaa61be-aa68-22bc-4838-e345de13d2b0@kernel.org>
+In-Reply-To: <acaa61be-aa68-22bc-4838-e345de13d2b0@kernel.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Aug 2023 12:34:06 +0200
-Message-ID: <CAJZ5v0jjwKr0py8H34-8ZRS8xS455YUuew8GxBex13uRq7LBPQ@mail.gmail.com>
-Subject: Re: [PATCH 0/4] Fix dvfs_headroom escaping uclamp constraints
-To:     Qais Yousef <qyousef@layalina.io>
+Date:   Mon, 21 Aug 2023 12:56:16 +0200
+Message-ID: <CAJZ5v0iTEUsUWZurJKEyB9kj6qOWmHQsd43B5VgFhqyHhUF0cg@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.6
+To:     Chanwoo Choi <chanwoo@kernel.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 20, 2023 at 11:08 PM Qais Yousef <qyousef@layalina.io> wrote:
+On Sun, Aug 20, 2023 at 11:53 PM Chanwoo Choi <chanwoo@kernel.org> wrote:
 >
-> DVFS headroom, or map_util_perf(), is applied after uclamp restrictions are
-> applied in effective_cpu_util(). This will lead to two problems for uclamp:
+> Dear Rafael,
 >
->         1. If util < uclamp_min, we'll run faster than uclamp_min. For example
->            util = 50, uclamp_min = 100. map_util_perf() = 125 instead of 100.
+> This is devfreq-next pull request for v6.6. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
 >
->         2. If util > uclamp_max, we'll run faster than uclamp_max. For example
->            util = 900, uclamp_max = 800, map_util_perf() = 1000.
+> Best Regards,
+> Chanwoo Choi
 >
-> First patch rename the function to apply_dvfs_headroom() to reflect what it
-> really does. It is not really mapping util, but provides some headroom for the
-> util to grow. Provide a documentation for the function too.
+> The following changes since commit fdf0eaf11452d72945af31804e2a1048ee1b574c:
 >
-> Second patch is the actual fix.
+>   Linux 6.5-rc2 (2023-07-16 15:10:37 -0700)
 >
-> Third patch moves apply_dvfs_headroom() to sched.h as there are no longer
-> users outside the scheduler.
+> are available in the Git repository at:
 >
-> Fourth patch is an RFC to redefine what the headroom means for RT, DL and IRQ
-> pressures.
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.6
 >
-> Thanks!
+> for you to fetch changes up to 5693d077595de721f9ddbf9d37f40e5409707dfe:
+>
+>   PM / devfreq: Fix leak in devfreq_dev_release() (2023-08-10 22:48:16 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v6.6
+>
+> Detailed description for this pull request:
+> - Include correct DT header including explicitly for imx-bus/imx8m-ddrc/
+>   mtk-cci/tegra30 tegra drivers.
+>
+> - Reword the kernel-doc comment for devfreq_monitor_start() API using to specify
+> the default timer as deferrable timer because devfreq core supports both delayed
+> timer and deferrable timer according to devfreq device profile.
+>
+> - Add missing srcu_cleanup_notifier_head() when releasing devfreq device.
+> : srcu_init_notifier_head() allocates resources that need to be released
+> with a srcu_cleanup_notifier_head() call.
+> ----------------------------------------------------------------
+> Boris Brezillon (1):
+>       PM / devfreq: Fix leak in devfreq_dev_release()
+>
+> Manivannan Sadhasivam (1):
+>       PM / devfreq: Reword the kernel-doc comment for devfreq_monitor_start() API
+>
+> Rob Herring (1):
+>       PM / devfreq: Explicitly include correct DT includes
+>
+>  drivers/devfreq/devfreq.c         | 10 ++++++----
+>  drivers/devfreq/imx-bus.c         |  2 +-
+>  drivers/devfreq/imx8m-ddrc.c      |  2 +-
+>  drivers/devfreq/mtk-cci-devfreq.c |  1 -
+>  drivers/devfreq/tegra30-devfreq.c |  2 +-
+>  5 files changed, 9 insertions(+), 8 deletions(-)
 
-For the first 3 patches in the series
+Pulled and added to the linux-next branch in linux-pm.git.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Thanks!
