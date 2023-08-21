@@ -2,118 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A44578276F
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 12:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F87E7827E9
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 13:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjHUK4e convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Aug 2023 06:56:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40236 "EHLO
+        id S232257AbjHULaM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 07:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjHUK4d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 06:56:33 -0400
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2C6D9;
-        Mon, 21 Aug 2023 03:56:32 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-570b3ebb3faso98112eaf.0;
-        Mon, 21 Aug 2023 03:56:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692615392; x=1693220192;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CN5lMKccOwwzdoBewRQ8cXjpNAWqbcdLedtKOodtvi0=;
-        b=KTX/6fzLhCtV4qrnyfRd5QHca55BpzcAydfZwZokrrKDj06GEGGJhQX7j5cxJKy+Q+
-         p0uMJi+scyuYqzSY00D4SG9Kqs34oeX5zAguQk98rj+TVbcS6yhzVt7TsTooJPyH+PIe
-         YccD0PDaHgU7tC6Zn/xokg8JX/WN3jjEqRxO+QMOED0q3hYS/4vDh1wLHB9/6ly8NhCI
-         LoFLbHZSIyNiPyEQSuXDeP/MUE+d4FAmwAQ4fiKhfGiVx+5VKzvC8GosdOcOzVTsNqCv
-         0g6Ybq3l0KxtpM+YR/gLSoPKsvoYCP84qaZjt+uwYygFqn1AzUus79aDB/709pR1TZJC
-         65fA==
-X-Gm-Message-State: AOJu0YzktfTgi+/jCEXBA3YjJKPH1kGQk+jUMmsEUTjcC2WUHbKzt9jQ
-        5SddTP7POFX3ExStrVzLsurVqPqmQUGUqTpFkAq0iM21
-X-Google-Smtp-Source: AGHT+IFgo0/izNdE/i8dxOf47JBFgnuUZHiXA1fNXsADt9QyH5FsOxEa5TyRPDUJlGIsXHVtRn4MVYDxxj8rA9e6zkA=
-X-Received: by 2002:a4a:e741:0:b0:56e:94ed:c098 with SMTP id
- n1-20020a4ae741000000b0056e94edc098mr5793638oov.0.1692615391688; Mon, 21 Aug
- 2023 03:56:31 -0700 (PDT)
+        with ESMTP id S232252AbjHULaL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 07:30:11 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF87DC;
+        Mon, 21 Aug 2023 04:30:10 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37L9nALR012208;
+        Mon, 21 Aug 2023 11:29:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=2bGeNySEojbg2dTxdAAkGSRrFPGQrUJyQxlv6t6DU/U=;
+ b=KLx/m+HG/V6e2BufNULfS1UvnmsXNQb9VCVxUWH6hVDBChuXzlKuXY/hpvo5FXTigd1m
+ Kzz3pelAx0q6Q+lu2c3+DOZ/hLVDQfWLByy0nRjHQfu2PG/O1t2uur/Sgw04lMS4ZNq7
+ jTPYx47RQ3GMhBWC94mXA6e0ykwBKOEt5TjOczSNJPb98Wd3O1NSjCLe1Qs0lIVzd64z
+ nCmKaAKfn9/LuKbT2poancEaRw/o/BDpCsDCQvjqjccMXfdT8hvgsOq7wil08lbGkFic
+ okHUnIy+Y1OM4DhSqADaM3Y92L84a3+W8JQ0Uf7FKGxcvXfVDJFDk0mKXrZES+yP0hIh OQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sm5mcr5n9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Aug 2023 11:29:59 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37LBTwxA028725
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Aug 2023 11:29:58 GMT
+Received: from hu-priyjain-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Mon, 21 Aug 2023 04:29:53 -0700
+From:   Priyansh Jain <quic_priyjain@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_manafm@quicinc.com>, <quic_priyjain@quicinc.com>
+Subject: [PATCH 0/2]  Enable tsens and thermal for sa8775p SoC
+Date:   Mon, 21 Aug 2023 16:59:26 +0530
+Message-ID: <20230821112928.19284-1-quic_priyjain@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <acaa61be-aa68-22bc-4838-e345de13d2b0@kernel.org>
-In-Reply-To: <acaa61be-aa68-22bc-4838-e345de13d2b0@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Aug 2023 12:56:16 +0200
-Message-ID: <CAJZ5v0iTEUsUWZurJKEyB9kj6qOWmHQsd43B5VgFhqyHhUF0cg@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq next for 6.6
-To:     Chanwoo Choi <chanwoo@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -mBeysoGSF2iksRYDy7_MB9H1nd4A7UW
+X-Proofpoint-ORIG-GUID: -mBeysoGSF2iksRYDy7_MB9H1nd4A7UW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-21_01,2023-08-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=684
+ malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308210106
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 20, 2023 at 11:53 PM Chanwoo Choi <chanwoo@kernel.org> wrote:
->
-> Dear Rafael,
->
-> This is devfreq-next pull request for v6.6. I add detailed description of
-> this pull request on the following tag. Please pull devfreq with
-> following updates.
->
-> Best Regards,
-> Chanwoo Choi
->
-> The following changes since commit fdf0eaf11452d72945af31804e2a1048ee1b574c:
->
->   Linux 6.5-rc2 (2023-07-16 15:10:37 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.6
->
-> for you to fetch changes up to 5693d077595de721f9ddbf9d37f40e5409707dfe:
->
->   PM / devfreq: Fix leak in devfreq_dev_release() (2023-08-10 22:48:16 +0900)
->
-> ----------------------------------------------------------------
-> Update devfreq next for v6.6
->
-> Detailed description for this pull request:
-> - Include correct DT header including explicitly for imx-bus/imx8m-ddrc/
->   mtk-cci/tegra30 tegra drivers.
->
-> - Reword the kernel-doc comment for devfreq_monitor_start() API using to specify
-> the default timer as deferrable timer because devfreq core supports both delayed
-> timer and deferrable timer according to devfreq device profile.
->
-> - Add missing srcu_cleanup_notifier_head() when releasing devfreq device.
-> : srcu_init_notifier_head() allocates resources that need to be released
-> with a srcu_cleanup_notifier_head() call.
-> ----------------------------------------------------------------
-> Boris Brezillon (1):
->       PM / devfreq: Fix leak in devfreq_dev_release()
->
-> Manivannan Sadhasivam (1):
->       PM / devfreq: Reword the kernel-doc comment for devfreq_monitor_start() API
->
-> Rob Herring (1):
->       PM / devfreq: Explicitly include correct DT includes
->
->  drivers/devfreq/devfreq.c         | 10 ++++++----
->  drivers/devfreq/imx-bus.c         |  2 +-
->  drivers/devfreq/imx8m-ddrc.c      |  2 +-
->  drivers/devfreq/mtk-cci-devfreq.c |  1 -
->  drivers/devfreq/tegra30-devfreq.c |  2 +-
->  5 files changed, 9 insertions(+), 8 deletions(-)
+Adding compatible string in TSENS dt-bindings, device node
+for TSENS controller and Thermal zone support
 
-Pulled and added to the linux-next branch in linux-pm.git.
+Priyansh Jain (2):
+  dt-bindings: thermal: tsens: Add sa8775p compatible
+  arm64: dts: qcom: Enable tsens and thermal for sa8775p SoC
 
-Thanks!
+ .../bindings/thermal/qcom-tsens.yaml          |    1 +
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi         | 1096 +++++++++++++++++
+ 2 files changed, 1097 insertions(+)
+
+-- 
+2.17.1
+
