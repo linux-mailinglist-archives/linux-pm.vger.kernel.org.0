@@ -2,205 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50882782B1F
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 16:03:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE0D782BA6
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 16:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235596AbjHUOD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 10:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40446 "EHLO
+        id S235908AbjHUOXw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 10:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235609AbjHUOD4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 10:03:56 -0400
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [5.144.164.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58273E8
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:03:53 -0700 (PDT)
-Received: from [192.168.2.137] (bband-dyn221.178-41-211.t-com.sk [178.41.211.221])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 510F53F324;
-        Mon, 21 Aug 2023 16:03:51 +0200 (CEST)
-From:   Martin Botka <martin.botka@somainline.org>
-Date:   Mon, 21 Aug 2023 16:03:48 +0200
-Subject: [PATCH v2 3/3] arm64: dts: allwinner: h616: Add thermal sensor and
- thermal zones
+        with ESMTP id S235820AbjHUOXv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 10:23:51 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FE4EC
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:23:48 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-d6b0c2cca0aso3386995276.0
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692627828; x=1693232628;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qI4t8SDVJMhXzDamC4q86X6ieBjYdmuT6UT0C+IJ2Og=;
+        b=bS3lH48mYdBNX7MAw649CJx0NJABczQrfg8v+P2nTXm0EmwA6Fvw7NI3XcQLURinCQ
+         NIrTj2+EVwXdQDrW9aD8GwmZOl6hAKX6QAyKguViuJh80M9yGN5MUs5OFZLrMWqM0SSv
+         hq2ithUtqT4wULnTqR1i49+e7Dc/T7DgLkjKVnVLtCFTw7U3ZXNSGqWp/Cnkw6aVOdC/
+         ziMwuECpNBQ5jY9otfSFJZPUXjagWLLE56LxmXsVlJacYFfINB/J7PpoO/ASKbGNhe37
+         bcCwhIRm8SFx2vykm5Xq4Gt7GuIABQSTpj/pUVamPHoCcvoNDdBK1sXcHBsJJTKoME81
+         I22A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692627828; x=1693232628;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qI4t8SDVJMhXzDamC4q86X6ieBjYdmuT6UT0C+IJ2Og=;
+        b=SKApATGSN0jDFw+wWY01hJvcNoDX2EGq1hUo11zJPJz4iNOtf2UkkqX8LaEs3SMBi5
+         0EAsy0XrvZqI5Ux+3EOeS0PrrPZTmRJ0FMRpQzQCZ+jWxdpReqbJgYeIaRyOeM604bUk
+         WTwJeSBppLXwFrAZwYEiNFkRpevCPJSdranQ9KurnCULNs3tzHcdpoPXIq3JtaTooFly
+         8NTf4hThuReYsaMHb/e1qcLu03A6KQ5HAMaGn0gkSlC9FKX0yNjIM2+1m9B2FEquIfue
+         uFMRoH0sw0nyp5ccKEB6Fjt8d7cgDwUVVjEZO0AJFG6E9Z4mEzKk1cxBNx/xkSZYw8KA
+         mmzA==
+X-Gm-Message-State: AOJu0YwkzEL3AZzEY2MxQJuABUq08iRk8yoTylgi7wstMGeFy4NOH1hd
+        m386aP78zk73NdbhF5nBVe/IbSqBtYnC9T33YhlPpw==
+X-Google-Smtp-Source: AGHT+IG8w7sOTs96ZQbK783vPuu7KIpqKAevj7gF4qW1xaxthEWCfaFl/an/E9olSOG2iOL03miEu7a+d+VYztk6RPE=
+X-Received: by 2002:a25:258a:0:b0:d21:ef87:c1c4 with SMTP id
+ l132-20020a25258a000000b00d21ef87c1c4mr7280290ybl.33.1692627827942; Mon, 21
+ Aug 2023 07:23:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230821-ths-h616-v2-3-cda60d556798@somainline.org>
-References: <20230821-ths-h616-v2-0-cda60d556798@somainline.org>
-In-Reply-To: <20230821-ths-h616-v2-0-cda60d556798@somainline.org>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Andre Przywara <andre.przywara@arm.com>,
-        Alan Ma <tech@biqu3d.com>,
-        Luke Harrison <bttuniversity@biqu3d.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Martin Botka <martin@biqu3d.com>,
-        Martin Botka <martin.botka@somainline.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1692626628; l=3135;
- i=martin.botka@somainline.org; s=20230811; h=from:subject:message-id;
- bh=Y5wSSzIWuOFKSGGZMNJjnzIykv3kiku+VUt8NVG55u0=;
- b=7EqC6e2dCq8+IHUQbrSK/ZIw526FrhhLr0JeelOvsJp1ijiF9qXcOtLFt9HQJg6vhbKiJtIGw
- wVuertO4HyZDwx5j+3/wWqHiU6KJfvu92iSpV5FjkzUs1QKbOaIlE1C
-X-Developer-Key: i=martin.botka@somainline.org; a=ed25519;
- pk=aTCd3jmwU8GrJidWg3DSKLpdVMcpFzXzCSLXLR6NtWU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230713141738.23970-1-ulf.hansson@linaro.org>
+ <20230713141738.23970-10-ulf.hansson@linaro.org> <20230719152426.qwc5qqewrfjsarlz@bogus>
+ <CAPDyKFogrwFnz2ZuKE-mLrCQmTCQcrtjhhyzB4CnoVnxAXqKEg@mail.gmail.com>
+ <20230721143728.GB1092306-robh@kernel.org> <CAPDyKFr9V6iPJhXXrv5RxgAE-YvXDboN5GP8E=q2VHnjs8cL5w@mail.gmail.com>
+In-Reply-To: <CAPDyKFr9V6iPJhXXrv5RxgAE-YvXDboN5GP8E=q2VHnjs8cL5w@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 21 Aug 2023 16:23:11 +0200
+Message-ID: <CAPDyKFq=WaR-=xO-OTLYRxN0QF_WtgCk4axMFO0kB4XWLbL=7g@mail.gmail.com>
+Subject: Re: [PATCH v2 09/11] cpufreq: scmi: Add support to parse domain-id
+ using #power-domain-cells
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nikunj Kela <nkela@quicinc.com>,
+        Prasad Sodagudi <psodagud@quicinc.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are 4 thermal sensors:
-- CPU
-- GPU
-- VE
-- DRAM
+On Wed, 26 Jul 2023 at 13:20, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Fri, 21 Jul 2023 at 16:37, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Fri, Jul 21, 2023 at 01:52:17PM +0200, Ulf Hansson wrote:
+> > > On Wed, 19 Jul 2023 at 17:24, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > >
+> > > > On Thu, Jul 13, 2023 at 04:17:36PM +0200, Ulf Hansson wrote:
+> > > > > The performance domain-id can be described in DT using the power-domains
+> > > > > property or the clock property. The latter is already supported, so let's
+> > > > > add support for the power-domains too.
+> > > > >
+> > > >
+> > > > How is this supposed to work for the CPUs ? The CPU power domains are
+> > > > generally PSCI on most of the platforms and the one using OSI explicitly
+> > > > need to specify the details while ones using PC will not need to. Also they
+> > > > can never be performance domains too. So I am not sure if I am following this
+> > > > correctly.
+> > >
+> > > Your concerns are certainly correct, I completely forgot about this.
+> > > We need to specify what power-domain index belongs to what, by using
+> > > power-domain-names in DT. So a CPU node, that has both psci for power
+> > > and scmi for performance would then typically look like this:
+> > >
+> > > power-domains = <&CPU_PD0>, <&scmi_dvfs 4>;
+> > > power-domain-names = "psci", "scmi";
+> >
+> > That is completely backwards. Entries are named based on the consumer
+> > side. The function of each clock or interrupt for example. Here your
+> > entries are based on the provider which should be opaque to the
+> > consumer.
+>
+> Okay, so you would rather prefer something along the lines of the below?
+>
+> power-domain-names = "power", "perf";
+>
+> The "psci" name is already part of the current cpus DT binding
+> (Documentation/devicetree/bindings/arm/cpus.yaml), so then it looks
+> like that deserves an update too. Right?
 
-Add the thermal sensor configuration and thermal zones
+Rob, may I have your thoughts around this? Is this an acceptable way
+forward? Please advise me on what power-domain-names I should use
+then.
 
-Signed-off-by: Martin Botka <martin.botka@somainline.org>
----
- arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi | 87 ++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+Or, if you are insisting on using the performance-domain bindings?
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
-index d549d277d972..063db9634e5f 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-h616.dtsi
-@@ -9,6 +9,7 @@
- #include <dt-bindings/clock/sun6i-rtc.h>
- #include <dt-bindings/reset/sun50i-h616-ccu.h>
- #include <dt-bindings/reset/sun50i-h6-r-ccu.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -138,6 +139,10 @@ sid: efuse@3006000 {
- 			reg = <0x03006000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+
-+			ths_calibration: thermal-sensor-calibration@14 {
-+				reg = <0x14 0x8>;
-+			};
- 		};
- 
- 		watchdog: watchdog@30090a0 {
-@@ -511,6 +516,18 @@ mdio0: mdio {
- 			};
- 		};
- 
-+		ths: thermal-sensor@5070400 {
-+			compatible = "allwinner,sun50i-h616-ths";
-+			reg = <0x05070400 0x400>;
-+			interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_THS>;
-+			clock-names = "bus";
-+			resets = <&ccu RST_BUS_THS>;
-+			nvmem-cells = <&ths_calibration>;
-+			nvmem-cell-names = "calibration";
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		usbotg: usb@5100000 {
- 			compatible = "allwinner,sun50i-h616-musb",
- 				     "allwinner,sun8i-h3-musb";
-@@ -755,4 +772,74 @@ r_rsb: rsb@7083000 {
- 			#size-cells = <0>;
- 		};
- 	};
-+
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <500>;
-+			polling-delay = <1000>;
-+			thermal-sensors = <&ths 2>;
-+			sustainable-power = <1000>;
-+
-+			trips {
-+				cpu_threshold: cpu-trip-0 {
-+					temperature = <60000>;
-+					type = "passive";
-+					hysteresis = <0>;
-+				};
-+				cpu_target: cpu-trip-1 {
-+					temperature = <70000>;
-+					type = "passive";
-+					hysteresis = <0>;
-+				};
-+				cpu_critical: cpu-trip-2 {
-+					temperature = <110000>;
-+					type = "critical";
-+					hysteresis = <0>;
-+				};
-+			};
-+		};
-+
-+		gpu-thermal {
-+			polling-delay-passive = <500>;
-+			polling-delay = <1000>;
-+			thermal-sensors = <&ths 0>;
-+			sustainable-power = <1100>;
-+
-+			trips {
-+				gpu_temp_critical: gpu-trip-0 {
-+					temperature = <110000>;
-+					type = "critical";
-+					hysteresis = <0>;
-+				};
-+			};
-+		};
-+
-+		ve-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&ths 1>;
-+
-+			trips {
-+				ve_temp_critical: ve-trip-0 {
-+					temperature = <110000>;
-+					type = "critical";
-+					hysteresis = <0>;
-+				};
-+			};
-+		};
-+
-+		ddr-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&ths 3>;
-+
-+			trips {
-+				ddr_temp_critical: ddr-trip-0 {
-+					temperature = <110000>;
-+					type = "critical";
-+					hysteresis = <0>;
-+				};
-+			};
-+		};
-+	};
- };
-
--- 
-2.41.0
-
+Kind regards
+Uffe
