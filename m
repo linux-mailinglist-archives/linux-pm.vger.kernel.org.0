@@ -2,203 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFDB782BED
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 16:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA70782D1B
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 17:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236003AbjHUOd2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 10:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S236264AbjHUPWB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 11:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235932AbjHUOd2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 10:33:28 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1A4E2
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:33:26 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-d712d86eb96so3130124276.3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 07:33:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692628405; x=1693233205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JVf6fM0iJ2iIkGIz1YOTaiRR1OthdLkPvJ97HGCmhgA=;
-        b=O0mLKFdREezoY2/1oR2MOzof4eSxczj6uQdNs2otCl3toxWc5nmFXkEyCfAIVQwIPE
-         hezvo5QD6eADUgHlL3Wq9G+YHn2FLk652AW4Lnl60Or0i9E78llV2EN0bplGBYERVniD
-         Q7eeaxX9BOOtEvPDQcn67qKQtorseu+NmUEJGhUlFPstw2CZxEJ2Dqiz8xdVPSx5Rt6f
-         8zsSzcezeQrcid7n/tkOrY9K4dK3PpCdBCgsJZ7I59YeP4FyRlJjwft/dmV2OsmQ/chv
-         TWd7SheQ/+Qr03dqIFb11o/hAAuqdezONokX1wwtokLq1z8MYwSqCYrX9h07LIswzCpN
-         ei1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692628405; x=1693233205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JVf6fM0iJ2iIkGIz1YOTaiRR1OthdLkPvJ97HGCmhgA=;
-        b=II1/WPxxIuZV8FqgTB7otHsmnuU+0BfXWTUmC7kAdc84HDxJmLoO2tyGhD1jfumCQK
-         aJ2WV2AO54HP0NxnpPb++PUV7HbFGWG/SbDiYsP/7f3quEVHqPdjNw654zfBQ9cjpD51
-         Vn9dPctESZabM9so33JB9xLGD3uBrEm8wMqw5n4fN0khGMBvJCE6IVwfDGp3F71iOo6u
-         Rfq0VWeoMkUbrkX4yrOf/rhHS9AgPmMC1I4n80faF+xHO3FJzqEhm7M7vaerqgUCQ6aD
-         mst4Ji9nmqjqVkczqaYDMe6+xM0FsWQo5OnnPNMVcKNVQV1dUnj1SQ7fCggg8l+rimAw
-         06pw==
-X-Gm-Message-State: AOJu0YwNbQGIAhuu/OG2hjvDKHOufJCIcTA6IorL8kGGX1Gnefe5VOeh
-        Ju3BT5/9HEls/kHAIpE9p/RRryQMrNbxIYaYKW6f1w==
-X-Google-Smtp-Source: AGHT+IF8pqtgsDod4AcLNDd7B46cZvClFs4sWgkMxAtQQuCt9OO664LsbLksG7aBhJow6s/DU6WNo/6kzskR+zV3X2k=
-X-Received: by 2002:a25:bcc7:0:b0:d74:66aa:a277 with SMTP id
- l7-20020a25bcc7000000b00d7466aaa277mr6691513ybm.65.1692628405501; Mon, 21 Aug
- 2023 07:33:25 -0700 (PDT)
+        with ESMTP id S234483AbjHUPWA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 11:22:00 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 05DC1E2;
+        Mon, 21 Aug 2023 08:21:58 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66ED82F4;
+        Mon, 21 Aug 2023 08:22:39 -0700 (PDT)
+Received: from [10.57.91.118] (unknown [10.57.91.118])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2D943F740;
+        Mon, 21 Aug 2023 08:21:55 -0700 (PDT)
+Message-ID: <de53f559-0e12-d754-52e7-9ee3bee5ffa6@arm.com>
+Date:   Mon, 21 Aug 2023 16:22:31 +0100
 MIME-Version: 1.0
-References: <20230713141738.23970-1-ulf.hansson@linaro.org>
- <20230713141738.23970-9-ulf.hansson@linaro.org> <20230719151716.qhobfnclrjf4yqkg@bogus>
- <CAPDyKFpjMWOAbV+b2DcxDWqvRDQCbSC6Ti+KGGPWJoC4Ghp7=w@mail.gmail.com>
- <20230721115535.mx46dg56pxjnzbuv@bogus> <20230721143304.GA1092306-robh@kernel.org>
- <20230721183817.34lgb42nlnsvqx4s@bogus> <CAPDyKFqsaz=hruktv+sPQz-ttOtWa9O_Jvp2iLnpxQqX2r7yBQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFqsaz=hruktv+sPQz-ttOtWa9O_Jvp2iLnpxQqX2r7yBQ@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 21 Aug 2023 16:32:49 +0200
-Message-ID: <CAPDyKFr5pJR5+PrSrWEA_hZmureacxuT-T5OxitdFs2AXoRUyg@mail.gmail.com>
-Subject: Re: [PATCH v2 08/11] dt-bindings: firmware: arm,scmi: Extend bindings
- for protocol@13
-To:     Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nikunj Kela <nkela@quicinc.com>,
-        Prasad Sodagudi <psodagud@quicinc.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 06/12] PM: EM: Refactor struct em_perf_domain and add
+ default_table
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     rui.zhang@intel.com, amit.kucheria@verdurent.com,
+        amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+        viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+        Pierre.Gondois@arm.com, ionela.voinescu@arm.com,
+        mhiramat@kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230721155022.2339982-1-lukasz.luba@arm.com>
+ <20230721155022.2339982-7-lukasz.luba@arm.com>
+ <d4bb4680-fbde-00f5-32ca-4e5478f73647@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <d4bb4680-fbde-00f5-32ca-4e5478f73647@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 26 Jul 2023 at 13:12, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Fri, 21 Jul 2023 at 20:38, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Fri, Jul 21, 2023 at 08:33:04AM -0600, Rob Herring wrote:
-> > > On Fri, Jul 21, 2023 at 12:55:35PM +0100, Sudeep Holla wrote:
-> > > > On Fri, Jul 21, 2023 at 01:42:43PM +0200, Ulf Hansson wrote:
-> > > > > On Wed, 19 Jul 2023 at 17:17, Sudeep Holla <sudeep.holla@arm.com>=
- wrote:
-> > > > > >
-> > > > > > On Thu, Jul 13, 2023 at 04:17:35PM +0200, Ulf Hansson wrote:
-> > > > > > > The protocol@13 node is describing the performance scaling op=
-tion for the
-> > > > > > > ARM SCMI interface, as a clock provider. This is unnecessary =
-limiting, as
-> > > > > > > performance scaling is in many cases not limited to switching=
- a clock's
-> > > > > > > frequency.
-> > > > > > >
-> > > > > > > Therefore, let's extend the binding so the interface can be m=
-odelled as a
-> > > > > > > generic performance domaintoo. The common way to describe thi=
-s, is to use
-> > > > > > > the "power-domain" DT bindings, so let's use that.
-> > > > > > >
-> > > > > >
-> > > > > > One thing I forgot to ask earlier is how we can manage differen=
-t domain IDs
-> > > > > > for perf and power domains which is the case with current SCMI =
-platforms as
-> > > > > > the spec never mandated or can ever mandate the perf and power =
-domains IDs
-> > > > > > to match. They need not be same anyways.
-> > > > >
-> > > > > Based upon what you describe above, I have modelled the perf-doma=
-in
-> > > > > and the power-domain as two separate power-domain providers.
-> > > > >
-> > > > > A consumer device being hooked up to both domains, would specify =
-the
-> > > > > domain IDs in the second power-domain-cell, along the lines of th=
-e
-> > > > > below. Then we would use power-domain-names to specify what each
-> > > > > power-domain represents.
-> > > > >
-> > > > > power-domains =3D <&scmi_pd 2>, <&scmi_dvfs 4>;
-> > > > > power-domain-names =3D "power", "perf";
-> > > > >
-> > > > > I hope this makes it clearer!?
-> > > >
-> > > > Yes it make is clear definitely, but it does change the definition =
-of the
-> > > > generic binding of the "power-domains" property now. I am interesti=
-ng in
-> > > > the feedback from the binding maintainers with respect to that. Or =
-is it
-> > > > already present ? IIUC, the ones supported already are generally bo=
-th
-> > > > power and performance providers. May be it doesn't matter much, jus=
-t
-> > > > wanted to explicit ask and confirm those details.
-> > >
-> > > I commented on v1.
-> > >
-> > > Looks like abuse of "power-domains" to me, but nothing new really.
-> > > Please define when to use a power domain vs. a perf domain and don't
-> > > leave it up to the whims of the platform. Maybe perf domains was a
-> > > mistake and they should be deprecated?
-> > >
-> >
-> > Just a thought here, instead of deprecating it I was thinking if possib=
-le
-> > to keep the power-domains and performance-domains separate and just ext=
-end
-> > the genpd to handle the latter. There by we are not mixing up and creat=
-ing
-> > confusions that need more specific definitions in the binding(which is =
-not
-> > a big deal) but platforms getting it wrong inspite of that is a big pro=
-blem.
-> > Keep it separate makes it more aligned to the hardware and doesn't dilu=
-te
-> > the definitions and probably avoids any possible mistakes due to that.
-> >
-> > Sorry Ulf I am just not yet convinced to mix them up yet =F0=9F=98=89 a=
-nd wish you
-> > don't convince me to. Let me know why the above suggestion won't work.
->
-> The main point I think we need to consider too, is that on some
-> platforms, the power-domain and the performance-domain are managed
-> together by the FW. It is not really two separate things and hence it
-> would not quite be correct to describe it as two different types of
-> providers in DT.
->
-> If we should follow your suggestion above, to use the
-> performance-domain bindings, then I think we need an additional new
-> binding to cover the above mentioned case too. This would lead us into
-> having one binding for the power-domain, another for the
-> performance-domain and a third for the power+performance-domain.
->
-> In my opinion this sounds quite like a mess. I would rather keep using
-> the power-domain bindings for all these cases. Of course, it's a bit
-> of a stretch too, but I think it should be less confusing in the end,
-> assuming we extend/clarify the description of the power-domain
-> bindings, of course.
->
-> Did that convince you? :-)
+Hi Dietmar,
 
-Sudeep, Rob,
+On 8/16/23 14:04, Dietmar Eggemann wrote:
+> On 21/07/2023 17:50, Lukasz Luba wrote:
+>> The Energy Model is going to support runtime modifications. Refactor old
+>> implementation which accessed struct em_perf_state and introduce
+>> em_perf_domain::default_table to clean up the design. This new field
+>> will help to better distinguish 2 performance state tables.
+>>
+>> Update all drivers or frameworks which used the old field:
+>> em_perf_domain::table and now should use em_perf_domain::default_table.
+>>
+> 
+> This doesn't compile:
+> 
+>    SYNC    include/config/auto.conf.cmd
+>    UPD     include/config/kernel.release
+>    UPD     include/generated/utsrelease.h
+>    CC      arch/arm64/kernel/asm-offsets.s
+> In file included from ./include/linux/device.h:16,
+>                   from ./include/linux/acpi.h:14,
+>                   from ./include/acpi/apei.h:9,
+>                   from ./include/acpi/ghes.h:5,
+>                   from ./include/linux/arm_sdei.h:8,
+>                   from arch/arm64/kernel/asm-offsets.c:10:
+> ./include/linux/energy_model.h: In function ‘em_cpu_energy’:
+> ./include/linux/energy_model.h:256:10: error: ‘struct em_perf_domain’ has no member named ‘table’
+>    256 |  ps = &pd->table[pd->nr_perf_states - 1];
+>        |          ^~
+> ./include/linux/energy_model.h:266:34: error: ‘struct em_perf_domain’ has no member named ‘table’
+>    266 |  i = em_pd_get_efficient_state(pd->table, pd->nr_perf_states, freq,
+>        |                                  ^~
+> ./include/linux/energy_model.h:268:10: error: ‘struct em_perf_domain’ has no member named ‘table’
+>    268 |  ps = &pd->table[i];
+>        |          ^~
+> make[2]: *** [scripts/Makefile.build:116: arch/arm64/kernel/asm-offsets.s] Error 1
+> make[1]: *** [/opt/git/kernel_org/Makefile:1275: prepare0] Error 2
+> make: *** [Makefile:234: __sub-make] Error 2
+> 
+> In v2 this patch was much later in the set.
+> 
+> 
+> 
 
-Can we try to conclude on the way forward?
+Yes, you are right. It didn't trigger somehow in my build testing
+probably due to my ccache or missed step and built+test the whole set.
+My apologies for that, I'll double check that next time.
 
-Is it acceptable to keep using the power-domain bindings (with some
-clarifications) for performance domains or should we start moving to
-the performance-domain bindings?
-
-If moving to the performance-domain binding, should we start migrating
-existing users of the power-domain binding too - or what is your take
-on this?
-
-Kind regards
-Uffe
+Regards,
+Lukasz
