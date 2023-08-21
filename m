@@ -2,58 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9797D78283D
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 13:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF06782855
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 13:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233706AbjHULvl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 07:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S233807AbjHULzv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 07:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbjHULvk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 07:51:40 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEBB90
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 04:51:39 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ffa6e25ebbso3114250e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 04:51:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692618697; x=1693223497;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3b2yLOM0f17cuFM+3MIUHPF74PLoLewkSNQ+u/wpVaE=;
-        b=ZgTruNrvblM21E41kE7NTP5eu/OgJ0Mkg6jh6dTvHMmmQj4ccmc5Ugn6uHi8WDxUdz
-         RsgGqEimJaJ4ayqtoNx1p/CjLN+D21C27fB/3bwESloECVcKYjmNfncYBGt9UgBdvhF3
-         g8Hkk5MVZTk6A3v1cnnoAYAoxoyiEKBRWG28FeUAZCatn7BLXc53/LrdKcDWXyV80iM6
-         LI4P7rmagc3S6BhfiFVhxT8Q99e78Car/kBNMK5zspoTtI4smctPo/pgtemummTBpsdb
-         kEDbjc74MQkuMknU62EJy7HomOWqtmFj5g6dUvvSW3AYcjDpNSv+YL7EANWt8MiMpL9k
-         6lsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692618697; x=1693223497;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3b2yLOM0f17cuFM+3MIUHPF74PLoLewkSNQ+u/wpVaE=;
-        b=lMsSynrD7VtmEqLr5JhyiNtNa6yaWJnPDm+GWdnB+0+yXTW2kYXgrjpNIRfxzYXuqY
-         xtaegj/MqnwuswiP0F+dUJj/xHVru4Qrw8zVhDiEfz3SIfDF9NiUVaXGDJSdCmRDytFs
-         vl9T0yEReRFoHXSyvFAKWD2g4GSvvW2Uq0o39hJaUL1rAYBTraKRyPaDZgQNsnIS49+T
-         7dA0F2lbT8PULbvEg1py7fgYSOySCI4pFmmWsFmwMfSx21Z6XEdKub4FlI3Hgb3lGoV3
-         ww8zItum3cETVOGXs5q/+thySA5qxZP/ZDh/gavrY9FmYsd5jD3pbUeVIjM1Wi2luUmH
-         /b5Q==
-X-Gm-Message-State: AOJu0Ywszrq+ded5laEk6QI8oSLuzWJ3yH8MFqB4uxAwXQEvqDFkwf7J
-        BIVqBoR/ho+PGmzIxUoiuTj2yA==
-X-Google-Smtp-Source: AGHT+IGCkEZKU+n3qi5qLSW+38jWWOavubfWnJAJB9SG8yOfyKLeFv4CMn1xv7n+QBJOKP6M1eTE6A==
-X-Received: by 2002:a05:6512:615:b0:4f8:5e62:b94b with SMTP id b21-20020a056512061500b004f85e62b94bmr1917344lfe.9.1692618697531;
-        Mon, 21 Aug 2023 04:51:37 -0700 (PDT)
-Received: from [192.168.1.101] (abyk181.neoplus.adsl.tpnet.pl. [83.9.30.181])
-        by smtp.gmail.com with ESMTPSA id f16-20020ac251b0000000b004fdc7ec5cbesm1713953lfk.300.2023.08.21.04.51.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Aug 2023 04:51:37 -0700 (PDT)
-Message-ID: <ea0a31ac-6860-4cd2-a2ec-25416d035278@linaro.org>
-Date:   Mon, 21 Aug 2023 13:51:35 +0200
+        with ESMTP id S233572AbjHULzv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 07:55:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D30123;
+        Mon, 21 Aug 2023 04:55:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A17631B1;
+        Mon, 21 Aug 2023 11:55:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7CC4C433C7;
+        Mon, 21 Aug 2023 11:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692618933;
+        bh=igfPK8Ut0G6WW9AgjVkO2dIZKnXUDkIdWv6y8DUVBtU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jPUZgDWXRA0kI9T8IdWEZjlzn50ZLdy+d8JKJlI5iwbppWAJEfcSEfkvA4sjdbOc1
+         HqC+/w5124SiKljJLUCZZVGTOdF1bWE1IptWcZH91elOVyCDwzx09CtaJZ62jniuv0
+         3Bkt4p/KbbQnu33KkUaGbp62ybqIdaK5iQuu3kj1LuIRXLyvbLaTZRzCnUXBMzJeB9
+         vzpxGaYEY2LD8ruQwXXCsCAII+Lbo9VlaShZJ+RQmA2LcE7o+FmfdFaKc3LNxjYU8s
+         xaSI2qhN+QvhMgmfocvyzfHf0jcutAj1JODTh52MGBt6Lzm/Z4XwI4CF7MgOqJx0w+
+         BplsdCbRpr8DA==
+Message-ID: <ac153c9b-f698-47f4-9d52-b3ea5c9ba213@kernel.org>
+Date:   Mon, 21 Aug 2023 13:55:27 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: tsens: Add sa8775p compatible
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: Enable tsens and thermal for
+ sa8775p SoC
 Content-Language: en-US
 To:     Priyansh Jain <quic_priyjain@quicinc.com>,
         Andy Gross <agross@kernel.org>,
@@ -70,49 +54,15 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_manafm@quicinc.com
 References: <20230821112928.19284-1-quic_priyjain@quicinc.com>
- <20230821112928.19284-2-quic_priyjain@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230821112928.19284-2-quic_priyjain@quicinc.com>
+ <20230821112928.19284-3-quic_priyjain@quicinc.com>
+From:   Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <20230821112928.19284-3-quic_priyjain@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -120,23 +70,46 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 21.08.2023 13:29, Priyansh Jain wrote:
-> Add compatibility string for the thermal sensors on sa8775p platform.
+> Add tsens and thermal devicetree node for sa8775p SoC.
 > 
 > Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi | 1096 +++++++++++++++++++++++++
+>  1 file changed, 1096 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index 27e9e16e6455..37d0c9150327 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -65,6 +65,7 @@ properties:
->                - qcom,sm8350-tsens
->                - qcom,sm8450-tsens
->                - qcom,sm8550-tsens
-> +              - qcom,sa8775p-tsens
->            - const: qcom,tsens-v2
-Please keep this sorted alphanumerically.
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> index b130136acffe..b9c622b3bf7e 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+> @@ -2306,6 +2306,1102 @@
+>  
+>  			#freq-domain-cells = <1>;
+>  		};
+> +
+> +		tsens0: thermal-sensor@c222000 {
+> +			compatible = "qcom,sa8775p-tsens", "qcom,tsens-v2";
+> +			reg = <0x0C263000 0x1ff>,  /* TM */
+> +				<0x0C222000 0x1ff>; /* SROT */
+1. Test your patches. This will obviously not work due to the
+   #address/size-cells values of /soc@0.
+
+2. Use lowercase hex.
+
+3. Align subsequent entries for a property with the previous line
+
+4. Are you sure SROT is 0x1ff-long?
+
+5. The usefulness of these comments is questionable, many DTs have
+   them because of copypasta but I think it's time to stop that.
+
+6. No pdc wake-capable interrupts?
+
+> +			#qcom,sensors = <12>;
+> +			interrupts = <GIC_SPI 506 IRQ_TYPE_LEVEL_HIGH>,
+> +				<GIC_SPI 508 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "uplow","critical";
+Missing space after the comma
+
+Please move interrupt properties right after 'reg'.
 
 Konrad
