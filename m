@@ -2,48 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6EC78309E
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 21:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7993A7834B3
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Aug 2023 23:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjHUTBl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Aug 2023 15:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
+        id S229866AbjHUVKl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Mon, 21 Aug 2023 17:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjHUTBl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 15:01:41 -0400
+        with ESMTP id S229864AbjHUVKl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 17:10:41 -0400
 Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552802B75;
-        Mon, 21 Aug 2023 12:01:15 -0700 (PDT)
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-570c1364e5eso201159eaf.0;
-        Mon, 21 Aug 2023 12:01:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A821113;
+        Mon, 21 Aug 2023 14:10:39 -0700 (PDT)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-56e280cc606so534057eaf.1;
+        Mon, 21 Aug 2023 14:10:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692644435; x=1693249235;
+        d=1e100.net; s=20221208; t=1692652238; x=1693257038;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dNp3AUDBDmRP8zOuyU6wAmgsOeKZml27ZjzCAYtUuro=;
-        b=G2NE8y241AY1fLP+iUjzKWRhVHCrkBSzPsK0SsI/y6dLAvHtnHPy7pKt5GRt7s6zqk
-         zfBBEhV0IcbxP0CHmggzNISRaVt4i8Evi++P/xFL68sWK/ac7gdehLgXeTRYG/Dmu4Oj
-         8TvzOvnSmx8zk38efUzIe0vx40uzqhDy0dzA6qPeuZmanM6ozalexpJq2lzUD8ZlIo7o
-         j0qqVpZJAFFvr7tSt+heID9iTb2NNyyYlFFxpn0kBkNA/fOMFx6yEDl0VC7Txf+0a7Jg
-         9M294wkJdC87S0M1uMXnOwUbCIeLzfUknkQvV1nDzKZCxWc0Kj99apw6JWbTg+jqoLpk
-         w8TQ==
-X-Gm-Message-State: AOJu0YwN+Q+8KHXXgq9HrR8cfvuM7G/j7AB9wrsZKmn1/AlDECiWyRUu
-        6IGdIUkFUK1MZw0Iuguk1sXmSFPQzkOuDsv8h/U=
-X-Google-Smtp-Source: AGHT+IET7xDFhw0lhmuvHU7xZKLn/zR3KZrVO90fcqOdlfl5V5xtYbQUcJEQH5/vcBfsF0a5M20ZpVvtfknl+97axAw=
+        bh=i3VkaElbXUDdfTX416XO4ch3nnzvO+a6QraObVmCpUU=;
+        b=AYOfw0U238ptNbH+/xQ65RxeU1j/DZhzjaoSihEA8wetJB0ORdrzoF1tdu9Y3pdKpw
+         MjuFG08tqKbQ9rFyQqXQvs4X9ocwLx3XTr9nEl+LVvLBsJIpA0cLyjrYNs6lNfHjtPnV
+         8o3rK+mjzXtdNm/RPbAvPqG2R6FNvQ5zQXqxXtSOwSzjTK/73a4vmnHnhjX5q8yDFRXf
+         iIEyj0K2v5UKKVI3fqyqnVCBRiufTM/tksux4+cV8b9Sc7Mdw47ae72pEli+lVT+ErBu
+         HSnDQHu8tEBGa961RY6p49g9TuPrQday/SL8PwbPwbto3urofDNxZo2KO0t27OUy17jX
+         je7g==
+X-Gm-Message-State: AOJu0Ywuila9quvv2l+tE8UVk28WtdhTxfiPFEhRMgMrd2pr1QlHsAju
+        HLtnHQqRdzaGBYVNBeHVmqrZPWempL1dXUIFRdbCGWeC
+X-Google-Smtp-Source: AGHT+IHzghcRQ9Pnqhre/wjZH1QWgPRg9m085l5BTowOExRsX+CsEexMxP6omb/iU4xVrS8FnUdrcFKR9OYw/d1JOms=
 X-Received: by 2002:a4a:37c3:0:b0:570:cad0:fce9 with SMTP id
- r186-20020a4a37c3000000b00570cad0fce9mr3687062oor.1.1692644435445; Mon, 21
- Aug 2023 12:00:35 -0700 (PDT)
+ r186-20020a4a37c3000000b00570cad0fce9mr3955923oor.1.1692652238387; Mon, 21
+ Aug 2023 14:10:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230818095000.937633-1-liaochang1@huawei.com> <20230821091336.w4wcbvuarzxrvlkk@dhruva>
-In-Reply-To: <20230821091336.w4wcbvuarzxrvlkk@dhruva>
+References: <20230703171502.44657-1-nfraprado@collabora.com>
+In-Reply-To: <20230703171502.44657-1-nfraprado@collabora.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Aug 2023 21:00:24 +0200
-Message-ID: <CAJZ5v0iyLmT=V1rSehkSaO7Yzn0RG53vdBQ-+R0tM-HZg1xE-Q@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: stats: Improve the performance of cpufreq_stats_create_table()
-To:     Dhruva Gole <d-gole@ti.com>, Liao Chang <liaochang1@huawei.com>
-Cc:     viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Mon, 21 Aug 2023 23:10:27 +0200
+Message-ID: <CAJZ5v0hiiiReiJBPZRCMs16E247GL-nJGjnwkiMCNq5q4VjkyQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core: Don't update trip points inside the
+ hysteresis range
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -56,49 +63,95 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 11:14 AM Dhruva Gole <d-gole@ti.com> wrote:
+On Mon, Jul 3, 2023 at 7:15 PM Nícolas F. R. A. Prado
+<nfraprado@collabora.com> wrote:
 >
-> On Aug 18, 2023 at 09:50:00 +0000, Liao Chang wrote:
-> > In the worst case, the freq_table of policy data is not sorted and
-> > contains duplicate frequencies, this means that it needs to iterate
-> > through the entire freq_table of policy to ensure each frequency is
-> > unique in the freq_table of stats data, this has a time complexity of
-> > O(N^2), where N is the number of frequencies in the freq_table of
-> > policy.
-> >
-> > However, if the policy.freq_table is already sorted and contains no
-> > duplicate frequencices, it can reduce the time complexity of creating
+> When searching for the trip points that need to be set, the nearest trip
+> point's temperature is used for the high trip, while the nearest trip
+> point's temperature minus the hysteresis is used for the low trip. The
+> issue with this logic is that when the current temperature is inside a
+> trip point's hysteresis range, both high and low trips will come from
+> the same trip point. As a consequence instability can still occur like
+> this:
+> * the temperature rises slightly and enters the hysteresis range of a
+>   trip point
+> * polling happens and updates the trip points to the hysteresis range
+> * the temperature falls slightly, exiting the hysteresis range, crossing
+>   the trip point and triggering an IRQ, the trip points are updated
+> * repeat
 >
-> s/frequencices/frequencies?
-
-I've fixed this when applying the patch.
-
-> > stats.freq_table to O(N), the 'freq_table_sorted' field of policy data
-> > can be used to indicate whether the policy.freq_table is sorted.
-> >
-> > Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> > ---
-> >  drivers/cpufreq/cpufreq_stats.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-> > index 55c7ffd37d1c..fcb74050711a 100644
-> > --- a/drivers/cpufreq/cpufreq_stats.c
-> > +++ b/drivers/cpufreq/cpufreq_stats.c
-> > @@ -243,7 +243,8 @@ void cpufreq_stats_create_table(struct cpufreq_policy *policy)
-> >
-> >       /* Find valid-unique entries */
-> >       cpufreq_for_each_valid_entry(pos, policy->freq_table)
-> > -             if (freq_table_get_index(stats, pos->frequency) == -1)
-> > +             if ((policy->freq_table_sorted != CPUFREQ_TABLE_UNSORTED) ||
-
-I've also removed the redundant parens from this check.
-
+> So even though the current hysteresis implementation prevents
+> instability from happening due to IRQs triggering on the same
+> temperature value, both ways, it doesn't prevent it from happening due
+> to an IRQ on one way and polling on the other.
 >
-> [...]
+> To properly implement a hysteresis behavior, when inside the hysteresis
+> range, don't update the trip points. This way, the previously set trip
+> points will stay in effect, which will in a way remember the previous
+> state (if the temperature signal came from above or below the range) and
+> therefore have the right trip point already set. The exception is if
+> there was no previous trip point set, in which case a previous state
+> doesn't exist, and so it's sensible to allow the hysteresis range as
+> trip points.
 >
-> Otherwise looks okay to me,
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 >
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>
+>  drivers/thermal/thermal_trip.c | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+> index 907f3a4d7bc8..c386ac5d8bad 100644
+> --- a/drivers/thermal/thermal_trip.c
+> +++ b/drivers/thermal/thermal_trip.c
+> @@ -57,6 +57,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+>  {
+>         struct thermal_trip trip;
+>         int low = -INT_MAX, high = INT_MAX;
+> +       int low_trip_id = -1, high_trip_id = -2;
+>         int i, ret;
+>
+>         lockdep_assert_held(&tz->lock);
+> @@ -73,18 +74,34 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz)
+>
+>                 trip_low = trip.temperature - trip.hysteresis;
+>
+> -               if (trip_low < tz->temperature && trip_low > low)
+> +               if (trip_low < tz->temperature && trip_low > low) {
+>                         low = trip_low;
+> +                       low_trip_id = i;
+> +               }
+>
 
-Applied as 6.6 material (with the changes mentioned above), thanks!
+I think I get the idea, but wouldn't a similar effect be achieved by
+adding an "else" here?
+
+>                 if (trip.temperature > tz->temperature &&
+> -                   trip.temperature < high)
+> +                   trip.temperature < high) {
+>                         high = trip.temperature;
+> +                       high_trip_id = i;
+> +               }
+>         }
+>
+>         /* No need to change trip points */
+>         if (tz->prev_low_trip == low && tz->prev_high_trip == high)
+>                 return;
+>
+> +       /*
+> +        * If the current temperature is inside a trip point's hysteresis range,
+> +        * don't update the trip points, rely on the previously set ones to
+> +        * rememember the previous state.
+> +        *
+> +        * Unless no previous trip point was set, in which case there's no
+> +        * previous state to remember.
+> +        */
+> +       if ((tz->prev_low_trip > -INT_MAX || tz->prev_high_trip < INT_MAX) &&
+> +           low_trip_id == high_trip_id)
+> +               return;
+> +
+>         tz->prev_low_trip = low;
+>         tz->prev_high_trip = high;
+>
+> --
