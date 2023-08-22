@@ -2,158 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C058783848
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 05:05:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FBB7838D6
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 06:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232428AbjHVDFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 23:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S230491AbjHVEeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 00:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjHVDFc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 23:05:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E05F185
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 20:05:30 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RVDfS4wZfzLp5v;
-        Tue, 22 Aug 2023 11:02:24 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Tue, 22 Aug 2023 11:05:28 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 11:05:27 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-pm@vger.kernel.org>
-CC:     <sre@kernel.org>, <lee@kernel.org>, <jahau@rocketmail.com>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next] power: supply: rt5033_charger: fix missing unlock
-Date:   Tue, 22 Aug 2023 11:02:07 +0800
-Message-ID: <20230822030207.644738-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S230037AbjHVEeE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 00:34:04 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F75184
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 21:34:02 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-68a41031768so1098792b3a.3
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 21:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1692678842; x=1693283642;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=GurahkdBXJump+yUwDFBhdwe87qzd0hQjyHpUS/+z2U=;
+        b=ZCgVWd7gelBe2mZkfsLlystHt9QhpbdnzmlFcEGSST8QohlqFH3h9mtYQE6oqpjfyk
+         1MnsPogze65XqAvnxuWieJsNMjhhy5RoxDxt00xsVK/ewP+PPD/3Y3Gih59X0OiBuI3O
+         Ql3MMAvauKhLj5xUUiggncMa5T5MoRe8qMcxy4TMnyKolM/d+kMB2IkkTmgCW2w130EI
+         2WaJb4Uq3ESPUWsPfnbjhx6GLW2bcPdnEz4TIjHUYyBU6kURMqFm0FBHfP9WLGuWt3H+
+         CnOW/udC6CyUXqk1gYKqKxUx0Z0DaN4FzQ0iziOq5OU5oMXPfDS82ETsk94Ypmr/UWbT
+         9NTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692678842; x=1693283642;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GurahkdBXJump+yUwDFBhdwe87qzd0hQjyHpUS/+z2U=;
+        b=DGed6/+Zfj2vN59enpwtU/fYyi+3jPcCR2DoT3H+mIu+Tab+/qfuUiBh76+Li9QLE6
+         YOXqbS5GUVzha1JUJrVYQ/x4aOwnJ8Tz6BRj87SrK6cUtV+oaKu6Q0THmMpCbrAQ1ehA
+         L8/Aof1STsoJXmCDRBOfoMZBhnqt1muBfL7FkFECcVwmUin9i39LDAqqKI9H4gJ3lLDp
+         9n19ZHMDB6eg9xzy3IfL2kUlqcQCL7AEPJ6ACmkfJqd/YWJb8YFGS44+epvXDdlufHkq
+         Ow8r2ifziGcabsxCDUF4e12BvKPssSGJEFTvXYL4XbDRfY8Qt0YAh0oXKf5EJTYmVDfn
+         Lt3Q==
+X-Gm-Message-State: AOJu0YycfO0CdxhxZjlPCtVsYiCPoStTKEBiqbBYhSS84jX1cStBJHVa
+        k3c9n3xH1aodlyw8bCkgqVsW4Q==
+X-Google-Smtp-Source: AGHT+IFgmLu7VHwxyFc+zpJCIrcWQqg6Z+wkNlJHfhzO26Ybl0G6UdMBC/MrpMb/t1INQNpMKG/N8A==
+X-Received: by 2002:a05:6a20:6a05:b0:130:7803:5843 with SMTP id p5-20020a056a206a0500b0013078035843mr8096843pzk.4.1692678841845;
+        Mon, 21 Aug 2023 21:34:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id ja15-20020a170902efcf00b001bb9bc8d232sm7904741plb.61.2023.08.21.21.34.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Aug 2023 21:34:01 -0700 (PDT)
+Message-ID: <64e43ab9.170a0220.bfeef.f298@mx.google.com>
+Date:   Mon, 21 Aug 2023 21:34:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.5-rc7-96-gabb51b0e3f333
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.5-rc7-96-gabb51b0e3f333)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix missing mutex_unlock() in some error path.
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.5-rc7-96-gab=
+b51b0e3f333)
 
-Fixes: 12cc585f36b8 ("power: supply: rt5033_charger: Add cable detection and USB OTG supply")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+5-rc7-96-gabb51b0e3f333/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.5-rc7-96-gabb51b0e3f333
+Git Commit: abb51b0e3f3336875a4b59f74a118134ce8c45fa
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/power/supply/rt5033_charger.c | 28 ++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/power/supply/rt5033_charger.c b/drivers/power/supply/rt5033_charger.c
-index 4ea769775fa5..6ce83c22c4e9 100644
---- a/drivers/power/supply/rt5033_charger.c
-+++ b/drivers/power/supply/rt5033_charger.c
-@@ -361,7 +361,8 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
- 			0x37 << RT5033_CHGCTRL2_CV_SHIFT);
- 	if (ret) {
- 		dev_err(charger->dev, "Failed set OTG boost v_out\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_unlock;
- 	}
- 
- 	/* Set operation mode to OTG */
-@@ -369,7 +370,8 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
- 			RT5033_CHGCTRL1_MODE_MASK, RT5033_BOOST_MODE);
- 	if (ret) {
- 		dev_err(charger->dev, "Failed to update OTG mode.\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_unlock;
- 	}
- 
- 	/* In case someone switched from charging to OTG directly */
-@@ -378,9 +380,10 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
- 
- 	charger->otg = true;
- 
-+out_unlock:
- 	mutex_unlock(&charger->lock);
- 
--	return 0;
-+	return ret;
- }
- 
- static int rt5033_charger_unset_otg(struct rt5033_charger *charger)
-@@ -420,8 +423,10 @@ static int rt5033_charger_set_charging(struct rt5033_charger *charger)
- 	/* In case someone switched from OTG to charging directly */
- 	if (charger->otg) {
- 		ret = rt5033_charger_unset_otg(charger);
--		if (ret)
-+		if (ret) {
-+			mutex_unlock(&charger->lock);
- 			return -EINVAL;
-+		}
- 	}
- 
- 	charger->online = true;
-@@ -448,6 +453,7 @@ static int rt5033_charger_set_mivr(struct rt5033_charger *charger)
- 			RT5033_CHGCTRL4_MIVR_MASK, RT5033_CHARGER_MIVR_4600MV);
- 	if (ret) {
- 		dev_err(charger->dev, "Failed to set MIVR level.\n");
-+		mutex_unlock(&charger->lock);
- 		return -EINVAL;
- 	}
- 
-@@ -463,7 +469,7 @@ static int rt5033_charger_set_mivr(struct rt5033_charger *charger)
- 
- static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
- {
--	int ret;
-+	int ret = 0;
- 
- 	mutex_lock(&charger->lock);
- 
-@@ -475,7 +481,8 @@ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
- 				RT5033_CHARGER_MIVR_DISABLE);
- 		if (ret) {
- 			dev_err(charger->dev, "Failed to disable MIVR.\n");
--			return -EINVAL;
-+			ret = -EINVAL;
-+			goto out_unlock;
- 		}
- 
- 		charger->mivr_enabled = false;
-@@ -483,16 +490,19 @@ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
- 
- 	if (charger->otg) {
- 		ret = rt5033_charger_unset_otg(charger);
--		if (ret)
--			return -EINVAL;
-+		if (ret) {
-+			ret = -EINVAL;
-+			goto out_unlock;
-+		}
- 	}
- 
- 	if (charger->online)
- 		charger->online = false;
- 
-+out_unlock:
- 	mutex_unlock(&charger->lock);
- 
--	return 0;
-+	return ret;
- }
- 
- static enum power_supply_property rt5033_charger_props[] = {
--- 
-2.25.1
-
+For more info write to <info@kernelci.org>
