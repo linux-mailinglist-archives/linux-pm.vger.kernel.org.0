@@ -2,199 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F0EC783CB6
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 11:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9803B783D15
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 11:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbjHVJRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 05:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
+        id S234411AbjHVJka (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 05:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbjHVJRs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 05:17:48 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD49C113;
-        Tue, 22 Aug 2023 02:17:45 -0700 (PDT)
-Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVNvC0NVnztRrB;
-        Tue, 22 Aug 2023 17:13:59 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
- (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
- 2023 17:17:41 +0800
-Message-ID: <ce499ce6-0b05-a17c-fe03-b2630acb97ce@hisilicon.com>
-Date:   Tue, 22 Aug 2023 17:17:41 +0800
+        with ESMTP id S234412AbjHVJk3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 05:40:29 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E20CCB
+        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 02:40:21 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso42257525e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 02:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692697220; x=1693302020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1XxbZRN4jmL3a0nc2ifDPcCmugot7f1jM/8M26QHFg0=;
+        b=vmDaXar3+AB6GJ6EAzW9apvRLL/smgHgLSOyl5bT/KZdA4BWL7EwjK/DSlRFrZ8BiI
+         rIkLio7BmldXqk6tachx0jLQTB7m/E+BebIzZmbPw1NqeENMgha1dG9Cnspp9vaJV80n
+         LNJ3jLeRS3huhB1jiX/2m9GKTHrIcJp2pEZ24emU5l9YGy/NyMN3/3K/91gQXuDiS425
+         KH7c/vJkIwdhLlNeXpLe4M18KfVJ+BTdkdDLG1PIXEx3bDq+v2E8K4PiXCopuokNFSdb
+         pPd18QvL+PfzFIa1IbSbHdRgV4k7AX/RE/2MaXCajl3z8/jQRZGCwlX406U4RjEj8Bt5
+         jQow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692697220; x=1693302020;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1XxbZRN4jmL3a0nc2ifDPcCmugot7f1jM/8M26QHFg0=;
+        b=WOF8BDb3hzbKU1+i8d+5htygMnkEjn/tVmvMd5ZmOCWwcVs25K5t7VURJpS8r81a8I
+         W76JkCoLpp9Cw50Ix6TYoXKAxMZ+VjsnDFi7Ca2MYmJ313RN8b9iWO1uGWd88AgRb+aE
+         OCoGRlegIE9PF3zAXTp3nHL9jA5VRRa9OBp+0PyqU7HTlAT/e6CFWwCblRSC0XMl+yrM
+         lKDRI90uEcoZ2sVfTpRi6iTk/ieziZhTX3KuK8rtCVtMKaO+JPCqJijbvn+CCkH6ULTv
+         45QksPlV6/LfIcXrE+ILi2UP4H7yZo8ZVZpMxvIcrofpA5IbrIgA3GbG8U9YE5/gokLw
+         cpFg==
+X-Gm-Message-State: AOJu0YyvsJ2CYkSo6eYRjDBFQHA0tA0L9Yq4/IrFdA6nlEwbU+gcEOKz
+        hLbrzyiXjET65ty5fQXv58owfw==
+X-Google-Smtp-Source: AGHT+IEd8TSiFhSI6XUuAO1eeONR/Hp0YIDvNgJRQDSrlnBN1IvmuVPwCOn6bKwKbO/U9p5nlx6/bw==
+X-Received: by 2002:a7b:c7c3:0:b0:3fd:2e1d:eca1 with SMTP id z3-20020a7bc7c3000000b003fd2e1deca1mr6904271wmk.4.1692697219827;
+        Tue, 22 Aug 2023 02:40:19 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id a22-20020a05600c225600b003fed8e12d62sm13126474wmm.27.2023.08.22.02.40.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Aug 2023 02:40:19 -0700 (PDT)
+Message-ID: <ffa78419-4944-b777-3ff5-58651363a17d@linaro.org>
+Date:   Tue, 22 Aug 2023 11:40:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [RFC PATCH] cpufreq: Support per-policy performance boost
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <xuwei5@huawei.com>, <wanghuiqiang@huawei.com>,
-        <jonathan.cameron@huawei.com>, <wangxiongfeng2@huawei.com>
-References: <20230724075827.4160512-1-zhanjie9@hisilicon.com>
- <20230816062757.tocdrqh3isxcrt3r@vireshk-i7>
-From:   Jie Zhan <zhanjie9@hisilicon.com>
-In-Reply-To: <20230816062757.tocdrqh3isxcrt3r@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.121.58]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500019.china.huawei.com (7.185.36.137)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: imx8mm: Forcing a reboot when critical temp is reached
+Content-Language: en-US
+To:     Fabio Estevam <festevam@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Cc:     linux-pm@vger.kernel.org
+References: <CAOMZO5ByXdEK6Zsa3ObNinnROn=qsde_xvn3WcR2RLioMKk0JQ@mail.gmail.com>
+ <CAOMZO5AR5AP_bBJxn8GE6sZXQq6wgzU-qDda43567fs=m7eoRA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAOMZO5AR5AP_bBJxn8GE6sZXQq6wgzU-qDda43567fs=m7eoRA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
 
-Many thanks for your sugguestion.
+Hi Fabio,
 
-Happy with all the comments. Will send a v2 soon.
+On 22/08/2023 04:21, Fabio Estevam wrote:
+> On Mon, Aug 21, 2023 at 2:27 PM Fabio Estevam <festevam@gmail.com> wrote:
+>>
+>> Hi,
+>>
+>> I am working with an i.MX8MM-based board and I do see that the system shuts down
+>> when the critical trip point is reached, as expected.
+>>
+>> As the board is unattended, it would be more appropriate if the board
+>> could reboot itself instead of shutting down when the critical
+>> temperature is reached.
+>>
+>> The bootloader has a mechanism to only allow to boot the kernel when
+>> the temperature is below a certain temperature.
+>>
+>> Is there a mechanism in place to force a reboot instead of shutdown
+>> when the critical temperature is reached?
+> 
+> I did an ugly hack like this:
+> 
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -315,16 +315,10 @@ static void handle_non_critical_trips(struct
+> thermal_zone_device *tz, int trip)
+> 
+>   void thermal_zone_device_critical(struct thermal_zone_device *tz)
+>   {
+> - /*
+> - * poweroff_delay_ms must be a carefully profiled positive value.
+> - * Its a must for forced_emergency_poweroff_work to be scheduled.
+> - */
+> - int poweroff_delay_ms = CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
+> -
+>    dev_emerg(&tz->device, "%s: critical temperature reached, "
+> -   "shutting down\n", tz->type);
+> +   "rebooting\n", tz->type);
+> 
+> - hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
+> + kernel_restart("w");
+>   }
+>   EXPORT_SYMBOL(thermal_zone_device_critical);
+> 
+> and this causes a reboot after the critical temperature is reached.
+> 
+> Would it be OK to add a devicetree property that when present would
+> call kernel_restart()?
+> 
+> Any suggestions?
 
-Jie
+Yes, you can override the function by defining your own critical ops in 
+the thermal zone device ops like [1]. If the critical ops is not 
+defined, then it defaults to thermal_zone_device_critical().
 
-On 16/08/2023 14:27, Viresh Kumar wrote:
-> Hi Jie,
->
-> I am not sure how useful this per-policy boost is for your use case,
-> but I have no objection to the same if it is worth it.
->
-> On 24-07-23, 15:58, Jie Zhan wrote:
->> The boost control currently applies to the whole system.  However, users
->> may prefer to boost a subset of cores in order to provide prioritized
->> performance to workloads running on the boosted cores.
->>
->> Enable per-policy boost by adding a 'local_boost' sysfs interface.  This
->> can be found at:
->>
->> 	/sys/devices/system/cpu/cpufreq/policy<*>/local_boost
-> Just name it boost instead of local_boost, it is present in the
-> policy's directory, that is enough.
->
->> Same to the global boost switch, writing 1/0 to 'local_boost'
->> enables/disables boost on a cpufreq policy respectively.
->>
->> The user view of global and local boost controls should be:
->>
->> 1. Enabling global boost initially enables local boost on all policies, and
->> local boost can then be enabled or disabled individually on each policy,
->> given that the platform does support so.
->>
->> 2. Disabling global boost makes enabling local boost illegal, while writing
->> 0 to 'local_boost' is fine but takes no effect.
->>
->> A possible question could be: why not just limiting 'scaling_max_freq'?
->> Well, the fundamental difference is that 'local_boost' could be more
->> user-friendly.  When global boost is enabled, it is not straightforward to
->> figure out the base frequency for setting 'scaling_max_freq' to a non-boost
->> value. Also, this is supposed to take effect on the physical upper
->> frequency limit, reflected through 'cpuinfo_max_freq'.
->>
->> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
->> Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
->> ---
->>   drivers/cpufreq/cpufreq.c | 33 +++++++++++++++++++++++++++++++++
->>   include/linux/cpufreq.h   |  3 +++
->>   2 files changed, 36 insertions(+)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 6b52ebe5a890..14579c59f7ba 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -621,6 +621,35 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
->>   }
->>   define_one_global_rw(boost);
->>   
->> +static ssize_t show_local_boost(struct cpufreq_policy *policy, char *buf)
->> +{
->> +	return sysfs_emit(buf, "%d\n", policy->local_boost_enabled);
->> +}
->> +
->> +static ssize_t store_local_boost(struct cpufreq_policy *policy,
->> +				 const char *buf, size_t count)
->> +{
->> +	int ret, enable;
->> +
->> +	ret = kstrtoint(buf, 10, &enable);
->> +	if (ret || enable < 0 || enable > 1)
->> +		return -EINVAL;
->> +
->> +	if (enable && !cpufreq_driver->boost_enabled)
->> +		return -EINVAL;
-> Not just while enabling it, you should check for boost_enabled all the
-> time.
->
-> Also, you can optimize here if the state is being set to existing
-> state and quit early. This is done in the case of global boost
-> already. Have a look.
->
->> +
->> +	cpus_read_lock();
->> +	ret = cpufreq_driver->set_boost(policy, enable);
->> +	cpus_read_unlock();
->> +
->> +	if (ret)
->> +		return ret;
->> +
->> +	policy->local_boost_enabled = enable;
-> s/local_//
->
->> +
->> +	return count;
->> +}
->> +
->>   static struct cpufreq_governor *find_governor(const char *str_governor)
->>   {
->>   	struct cpufreq_governor *t;
->> @@ -931,6 +960,7 @@ cpufreq_freq_attr_rw(scaling_min_freq);
->>   cpufreq_freq_attr_rw(scaling_max_freq);
->>   cpufreq_freq_attr_rw(scaling_governor);
->>   cpufreq_freq_attr_rw(scaling_setspeed);
->> +cpufreq_freq_attr_rw(local_boost);
->>   
->>   static struct attribute *cpufreq_attrs[] = {
->>   	&cpuinfo_min_freq.attr,
->> @@ -944,6 +974,7 @@ static struct attribute *cpufreq_attrs[] = {
->>   	&scaling_driver.attr,
->>   	&scaling_available_governors.attr,
->>   	&scaling_setspeed.attr,
->> +	&local_boost.attr,
-> Making this file available if the global boost file isn't present is a
-> bit tricky I think. Maybe at least check for cpufreq_boost_supported()
-> before doing so.
->
->>   	NULL
->>   };
->>   ATTRIBUTE_GROUPS(cpufreq);
->> @@ -2716,6 +2747,8 @@ int cpufreq_boost_trigger_state(int state)
->>   		ret = cpufreq_driver->set_boost(policy, state);
->>   		if (ret)
->>   			goto err_reset_state;
->> +
->> +		policy->local_boost_enabled = state;
->>   	}
->>   	cpus_read_unlock();
->>   
->> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
->> index 26e2eb399484..a99a48ac9fdb 100644
->> --- a/include/linux/cpufreq.h
->> +++ b/include/linux/cpufreq.h
->> @@ -140,6 +140,9 @@ struct cpufreq_policy {
->>   	 */
->>   	bool			dvfs_possible_from_any_cpu;
->>   
->> +	/* Per policy boost enabled flag. */
->> +	bool			local_boost_enabled;
->> +
->>   	 /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
->>   	unsigned int cached_target_freq;
->>   	unsigned int cached_resolved_idx;
->> -- 
->> 2.30.0
+Hope that helps
+
+   -- Daniel
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/intel/intel_pch_thermal.c?h=thermal/bleeding-edge#n136
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
