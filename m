@@ -2,215 +2,307 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8137838F3
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 06:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3E178392C
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 07:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjHVEyc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 00:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S229733AbjHVFRh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 01:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjHVEyc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 00:54:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8111B11C;
-        Mon, 21 Aug 2023 21:54:30 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37M4nRcQ024823;
-        Tue, 22 Aug 2023 04:54:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=qcppdkim1;
- bh=SAs9CDXh/Luh+5xE/9okTidiVvDMJtvJVDgPqA5oHuQ=;
- b=YcIBcccW86J5fKzOREGtMemu+Tjsf5CWTzYMBC3KoPYVch+0FRYFn9AjdXs7souHMv2b
- QPqhXEtiee0ZG7NRdly+9Tq5Vn2lbm6wIJ4Gc5Dx8knVsgeCpzx4vfTH68UlBzUQHu9I
- 321JrsW/00/xReybIBy4946HLgvcDaczUefMcJwHKWm3YQtpGhaX2qGud3Y6ucRsD7wF
- afPCv3lrsJr92jd3dS8dt/dmCjnMpJFCfaGDKWe5jPeDppeJyDrtP4xua8lLtqomQAM5
- ZEBp/eBgA4TkgiNrhK0TKeHC+xKbFTX1iwumjMbtYXF/ktD+/1ZVftIHvkqH66KzE2MI 3A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3smf3q8qeb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Aug 2023 04:54:14 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37M4rwqo032361
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Aug 2023 04:53:59 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Mon, 21 Aug 2023 21:53:51 -0700
-Date:   Tue, 22 Aug 2023 10:23:48 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-CC:     Pavan Kondeti <quic_pkondeti@quicinc.com>,
-        <manivannan.sadhasivam@linaro.org>, <helgaas@kernel.org>,
-        <linux-pci@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <quic_parass@quicinc.com>,
-        <krzysztof.kozlowski@linaro.org>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 3/3] PCI: qcom: Add OPP support for speed based
- performance state of RPMH
-Message-ID: <a0465222-6e03-4fef-a662-4a2c22240d91@quicinc.com>
-References: <1692627343-4380-1-git-send-email-quic_krichai@quicinc.com>
- <1692627343-4380-4-git-send-email-quic_krichai@quicinc.com>
- <95078a8b-857d-4900-8737-a495212db935@quicinc.com>
- <162b135d-7e27-bf3b-df8f-45e2a5e73897@quicinc.com>
+        with ESMTP id S232734AbjHVFRh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 01:17:37 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C09FB
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 22:17:32 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1bc63ef9959so31746205ad.2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 22:17:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1692681452; x=1693286252;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=FQZ/m8I9oxo4meYaUYaNYiPmTXoy5qeBEjwh4qCEsFQ=;
+        b=2Lf18s18/fCOt/lP/xzKyLNTBRYczfBcD0F1YcpRiFf1CeJzCCKhogJqRua9D2eat3
+         3LrB4kLFDIBodS/xbDO0YEh+5HT6Rr8nKxCaZYt49vNNO3Il0o6rjaNAPLqA4mcg8GOs
+         EYgymRf8QDB+1DyiKouqVqFLdsQgLoXUYmjPHWfcJ5f44ncgCi1Ezd9+LZ6mtbZNRMhJ
+         pWzoZMgPC2/74oL6cR5OREMJYjQh+YgEGUSeqFJ0cL+jWh42zXVeEOO6oHAt47XCbnWK
+         +VIpJwdB4Clz8m0ZmUd8xFWbg5cqg2/bv77HTADkByMSJFnooOKAR0UkC+gtc+BgI9Ex
+         mCHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692681452; x=1693286252;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FQZ/m8I9oxo4meYaUYaNYiPmTXoy5qeBEjwh4qCEsFQ=;
+        b=b3ZlmBWYPwUvaUlALhCMguNppo2ywUSZhGAKbqmytSemzUH9TNWDt0I0y96YHPDjMy
+         hWjLMRXSfOddFd+1angm3gIVjWRA/RIwaHeTHUnkI7wA7Svqr0/BYY1Zz+9Ar/fBiuq1
+         pJ2LYbKVAVlAEqh/elJKxTekatRxc12XDHBOF+EFe8hUMYXiDWx4khlo83ZLPsGt07On
+         eKi6jgeTveyMnf5gIO2WZQSm7PR95W2yeX1c4zgKlrQ3a4BJdb89gyFxe2LiSGWD7eO9
+         x823fdGficKV2YwG0zAL8nICBseTEkgl0kioIj0aXp7Yqhs4Cs/pWEKO6n0FumIPzFBp
+         fiGA==
+X-Gm-Message-State: AOJu0YxyKgBA/hr0Z9iibJiylnGA6p9jMaaGR4Acf7b/Fag2VYorRcJK
+        cK1qT3Qu4lpK40bRNi7coo7MDQ==
+X-Google-Smtp-Source: AGHT+IE8jyVG+fb0ymoFOLD4aD93wy5vIAXcDxHdsYsQSL5JnNC/OtMqDeppJmlnbb489/SvpH1a8A==
+X-Received: by 2002:a17:902:e846:b0:1b9:e241:ad26 with SMTP id t6-20020a170902e84600b001b9e241ad26mr11334141plg.9.1692681452278;
+        Mon, 21 Aug 2023 22:17:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902bd4b00b001bba373919bsm7978689plx.261.2023.08.21.22.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Aug 2023 22:17:31 -0700 (PDT)
+Message-ID: <64e444eb.170a0220.9838.f04f@mx.google.com>
+Date:   Mon, 21 Aug 2023 22:17:31 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <162b135d-7e27-bf3b-df8f-45e2a5e73897@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: C3fxsfgQuSMU2ac_LgQk342vUF_KY1EZ
-X-Proofpoint-ORIG-GUID: C3fxsfgQuSMU2ac_LgQk342vUF_KY1EZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-22_02,2023-08-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
- lowpriorityscore=0 priorityscore=1501 adultscore=0 mlxlogscore=999
- bulkscore=0 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
- impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2306200000 definitions=main-2308220039
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.5-rc7-96-gabb51b0e3f333
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 49 runs,
+ 4 regressions (v6.5-rc7-96-gabb51b0e3f333)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+linux-pm and OPP maintainers
+pm/testing baseline: 49 runs, 4 regressions (v6.5-rc7-96-gabb51b0e3f333)
 
-On Tue, Aug 22, 2023 at 09:57:41AM +0530, Krishna Chaitanya Chundru wrote:
-> 
-> On 8/22/2023 9:33 AM, Pavan Kondeti wrote:
-> > On Mon, Aug 21, 2023 at 07:45:43PM +0530, Krishna chaitanya chundru wrote:
-> > > Before link training vote for the maximum performance state of RPMH
-> > > and once link is up, vote for the performance state based upon the link
-> > > speed.
-> > > 
-> > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > ---
-> > >   drivers/pci/controller/dwc/pcie-qcom.c | 47 ++++++++++++++++++++++++++++++++++
-> > >   1 file changed, 47 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 7a87a47..c57ca1a 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -22,6 +22,7 @@
-> > >   #include <linux/of_device.h>
-> > >   #include <linux/of_gpio.h>
-> > >   #include <linux/pci.h>
-> > > +#include <linux/pm_opp.h>
-> > >   #include <linux/pm_runtime.h>
-> > >   #include <linux/platform_device.h>
-> > >   #include <linux/phy/pcie.h>
-> > > @@ -1357,6 +1358,32 @@ static int qcom_pcie_icc_init(struct qcom_pcie *pcie)
-> > >   	return 0;
-> > >   }
-> > > +static void qcom_pcie_opp_update(struct qcom_pcie *pcie)
-> > > +{
-> > > +	struct dw_pcie *pci = pcie->pci;
-> > > +	struct dev_pm_opp *opp;
-> > > +	u32 offset, status;
-> > > +	int speed, ret = 0;
-> > > +
-> > > +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > > +	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-> > > +
-> > > +	/* Only update constraints if link is up. */
-> > > +	if (!(status & PCI_EXP_LNKSTA_DLLLA))
-> > > +		return;
-> > > +
-> > What happens if link is not up during probe? We set max vote before
-> > this, should not we bring it down in suspend and vote it back again in
-> > resume?
-> 
-> ok, I will set to lower value in the suspend path if the link is not up.  If
-> the link is already up driver will not
-> 
-> do any modifications.
-> 
-> > 
-> > > +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
-> > > +
-> > > +	opp = dev_pm_opp_find_level_exact(pci->dev, speed);
-> > > +	if (!IS_ERR(opp)) {
-> > > +		ret = dev_pm_opp_set_opp(pci->dev, opp);
-> > > +		if (ret)
-> > > +			dev_err(pci->dev, "Failed to set opp: %d\n", ret);
-> > > +		dev_pm_opp_put(opp);
-> > > +	}
-> > Since you added an error message, make it more useful by printing the
-> > opp level also. dev_pm_opp_get_level().
-> Sure I will add this in next patch.
-> > 
-> > > +
-> > > +}
-> > > +
-> > >   static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
-> > >   {
-> > >   	struct dw_pcie *pci = pcie->pci;
-> > > @@ -1439,8 +1466,10 @@ static void qcom_pcie_init_debugfs(struct qcom_pcie *pcie)
-> > >   static int qcom_pcie_probe(struct platform_device *pdev)
-> > >   {
-> > >   	const struct qcom_pcie_cfg *pcie_cfg;
-> > > +	unsigned long max_freq = INT_MAX;
-> > >   	struct device *dev = &pdev->dev;
-> > >   	struct qcom_pcie *pcie;
-> > > +	struct dev_pm_opp *opp;
-> > >   	struct dw_pcie_rp *pp;
-> > >   	struct resource *res;
-> > >   	struct dw_pcie *pci;
-> > > @@ -1511,6 +1540,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> > >   	if (ret)
-> > >   		goto err_pm_runtime_put;
-> > > +	/* OPP table is optional */
-> > > +	ret = devm_pm_opp_of_add_table(dev);
-> > > +	if (ret && ret != -ENODEV) {
-> > > +		dev_err(dev, "Invalid OPP table in Device tree\n");
-> > > +		goto err_pm_runtime_put;
-> > > +	}
-> > > +
-> > > +	/* vote for max level in the opp table */
-> > > +	opp = dev_pm_opp_find_freq_floor(dev, &max_freq);
-> > > +	if (!IS_ERR(opp)) {
-> > > +		ret = dev_pm_opp_set_opp(dev, opp);
-> > > +		if (ret)
-> > > +			dev_err(pci->dev, "Failed to set opp: %d\n", ret);
-> > > +		dev_pm_opp_put(opp);
-> > > +	}
-> > > +
-> > This needs an update since you moved from frequency based voting to link
-> > speed based voting.
-> 
-> dev_pm_opp_find_freq_floor will give us the max the opp level opp we don't
-> have a similar API to get max opp-level
-> 
-> For that reason we are using this API.
-> 
+Regressions Summary
+-------------------
 
-Ok, thanks. I get that it is working. Would you be not knowing the exact
-level for the max speed supported? if that is unknown, I believe we have
-a use case for dev_pm_opp_find_level_floor() API. Adding the best people
-on this matter for thei valuable opinion/suggestions.
+platform          | arch  | lab           | compiler | defconfig | regressi=
+ons
+------------------+-------+---------------+----------+-----------+---------=
+---
+fsl-ls2088a-rdb   | arm64 | lab-nxp       | gcc-10   | defconfig | 1       =
+   =
 
-Thanks,
-Pavan
+fsl-lx2160a-rdb   | arm64 | lab-nxp       | gcc-10   | defconfig | 1       =
+   =
 
+r8a779m1-ulcb     | arm64 | lab-collabora | gcc-10   | defconfig | 1       =
+   =
+
+rk3399-rock-pi-4b | arm64 | lab-collabora | gcc-10   | defconfig | 1       =
+   =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.5-rc7=
+-96-gabb51b0e3f333/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.5-rc7-96-gabb51b0e3f333
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      abb51b0e3f3336875a4b59f74a118134ce8c45fa =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform          | arch  | lab           | compiler | defconfig | regressi=
+ons
+------------------+-------+---------------+----------+-----------+---------=
+---
+fsl-ls2088a-rdb   | arm64 | lab-nxp       | gcc-10   | defconfig | 1       =
+   =
+
+
+  Details:     https://kernelci.org/test/plan/id/64e43b3737eff20aaadc95f0
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-ls2088a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64e43b3737eff20aaadc95f3
+        failing since 38 days (last pass: v6.0-rc3-85-gf6f4c123bfbc, first =
+fail: v6.5-rc1-21-g3c61a03588dd8)
+
+    2023-08-22T04:35:37.408242  + [   16.486639] <LAVA_SIGNAL_ENDRUN 0_dmes=
+g 1244679_1.5.2.4.1>
+    2023-08-22T04:35:37.408536  set +x
+    2023-08-22T04:35:37.513858  =
+
+    2023-08-22T04:35:37.615105  / # #export SHELL=3D/bin/sh
+    2023-08-22T04:35:37.615572  =
+
+    2023-08-22T04:35:37.716540  / # export SHELL=3D/bin/sh. /lava-1244679/e=
+nvironment
+    2023-08-22T04:35:37.716972  =
+
+    2023-08-22T04:35:37.817946  / # . /lava-1244679/environment/lava-124467=
+9/bin/lava-test-runner /lava-1244679/1
+    2023-08-22T04:35:37.818636  =
+
+    2023-08-22T04:35:37.821777  / # /lava-1244679/bin/lava-test-runner /lav=
+a-1244679/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform          | arch  | lab           | compiler | defconfig | regressi=
+ons
+------------------+-------+---------------+----------+-----------+---------=
+---
+fsl-lx2160a-rdb   | arm64 | lab-nxp       | gcc-10   | defconfig | 1       =
+   =
+
+
+  Details:     https://kernelci.org/test/plan/id/64e43b3494903e13e9dc95de
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-nxp/baseline-fsl-lx2160a-rdb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64e43b3494903e13e9dc95e1
+        failing since 159 days (last pass: v6.1-rc5-55-g60453df62d30, first=
+ fail: v6.3-rc2-33-g1240ce78c05e)
+
+    2023-08-22T04:35:36.328207  [   12.820576] <LAVA_SIGNAL_ENDRUN 0_dmesg =
+1244678_1.5.2.4.1>
+    2023-08-22T04:35:36.433406  =
+
+    2023-08-22T04:35:36.534603  / # #export SHELL=3D/bin/sh
+    2023-08-22T04:35:36.535065  =
+
+    2023-08-22T04:35:36.636100  / # export SHELL=3D/bin/sh. /lava-1244678/e=
+nvironment
+    2023-08-22T04:35:36.636519  =
+
+    2023-08-22T04:35:36.737555  / # . /lava-1244678/environment/lava-124467=
+8/bin/lava-test-runner /lava-1244678/1
+    2023-08-22T04:35:36.738282  =
+
+    2023-08-22T04:35:36.742113  / # /lava-1244678/bin/lava-test-runner /lav=
+a-1244678/1
+    2023-08-22T04:35:36.763925  + export 'TESTRUN_ID=3D1_bootrr' =
+
+    ... (11 line(s) more)  =
+
+ =
+
+
+
+platform          | arch  | lab           | compiler | defconfig | regressi=
+ons
+------------------+-------+---------------+----------+-----------+---------=
+---
+r8a779m1-ulcb     | arm64 | lab-collabora | gcc-10   | defconfig | 1       =
+   =
+
+
+  Details:     https://kernelci.org/test/plan/id/64e43ac218ec7c2e79dc95e5
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-collabora/baseline-r8a779m1-ulcb.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/64e43ac218ec7c2e79dc95ea
+        failing since 33 days (last pass: pm-6.5-rc2-210-ga648a2d354da, fir=
+st fail: v6.5-rc2-44-g6384f300e9f3)
+
+    2023-08-22T04:34:07.913654  / # #
+
+    2023-08-22T04:34:08.993452  export SHELL=3D/bin/sh
+
+    2023-08-22T04:34:08.995236  #
+
+    2023-08-22T04:34:10.485787  / # export SHELL=3D/bin/sh. /lava-11329648/=
+environment
+
+    2023-08-22T04:34:10.487609  =
+
+
+    2023-08-22T04:34:13.208227  / # . /lava-11329648/environment/lava-11329=
+648/bin/lava-test-runner /lava-11329648/1
+
+    2023-08-22T04:34:13.210491  =
+
+
+    2023-08-22T04:34:13.222911  / # /lava-11329648/bin/lava-test-runner /la=
+va-11329648/1
+
+    2023-08-22T04:34:13.281939  + export 'TESTRUN_ID=3D1_bootrr'
+
+    2023-08-22T04:34:13.282411  + cd /lava-113296<8>[   28.556801] <LAVA_SI=
+GNAL_STARTRUN 1_bootrr 11329648_1.5.2.4.5>
+ =
+
+    ... (44 line(s) more)  =
+
+ =
+
+
+
+platform          | arch  | lab           | compiler | defconfig | regressi=
+ons
+------------------+-------+---------------+----------+-----------+---------=
+---
+rk3399-rock-pi-4b | arm64 | lab-collabora | gcc-10   | defconfig | 1       =
+   =
+
+
+  Details:     https://kernelci.org/test/plan/id/64e43bb0af5a236a02dc95cc
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.5-rc7-96-gabb51b=
+0e3f333/arm64/defconfig/gcc-10/lab-collabora/baseline-rk3399-rock-pi-4b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/64e43bb0af5a236a02dc9=
+5cd
+        new failure (last pass: v6.5-rc6-81-ge8cde28ba5123) =
+
+ =20
