@@ -2,54 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF04784AF5
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6ED6784B26
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjHVUFR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
+        id S229619AbjHVUJf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjHVUFR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:05:17 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2961DCE3;
-        Tue, 22 Aug 2023 13:05:16 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-55b5a37acb6so311985a12.0;
-        Tue, 22 Aug 2023 13:05:16 -0700 (PDT)
+        with ESMTP id S229516AbjHVUJe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:09:34 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36BD10CA;
+        Tue, 22 Aug 2023 13:09:14 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1bdb3ecd20dso8855065ad.0;
+        Tue, 22 Aug 2023 13:09:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692734715; x=1693339515;
+        d=1e100.net; s=20221208; t=1692734927; x=1693339727;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6nEly565Pd1n4WCOmXfLlZXqFmNl3e/Ja0A4TkYgo6M=;
-        b=JfABTYuDcKNUNptaVknLE+zVdd8OhcYdhZnX3P0LhRQ3Or2/UTzQl9rTiumqSm6oGm
-         0tdpGCtm7qmNpDcpo9048vZ/e/B7OZvC5dm0/0CrRZosP/CCPYuPWDzT5HDhXaBhuIDp
-         xXcIkc0Ht9pa2koTWRdj3P74Dn6fATNeXmdj3g/NSGI2McgfyqNC9B6bCGF7p64vw3gG
-         npv7UGDyTsyLTMJJKE2zUBMctpGoAoN/B4I3wLoy36xHQsTNHjjj1l4tvFAoswAADS0g
-         cWG97NDPq/Dj7UdXUR0usZzD55vWSQpmGd+ejRq3oncCiyL2Kie2qDlCxfhApd4KGygy
-         h9KA==
-X-Gm-Message-State: AOJu0YxktNqRVzjqfYo5GNODGdfP+fjyfG5ViDqDhvihA2GghTBHPdAA
-        NMoB9NXWjbzl+93HSGmuG7pnyJYWXQAl8xe6Tnk=
-X-Google-Smtp-Source: AGHT+IG6mc3lJzxWNu/ElWNj2ObP6RcbJ1uBedWK259bxTSk3JV+Q6upDJQ61fv8Xf8AiZswjscDuYPw1TcteOJXnTI=
-X-Received: by 2002:a05:6a20:7da2:b0:13e:7439:1449 with SMTP id
- v34-20020a056a207da200b0013e74391449mr12997402pzj.0.1692734715646; Tue, 22
- Aug 2023 13:05:15 -0700 (PDT)
+        bh=l6YwQR5cxz4EihrKcIMUeaFlqPXySrQcy+IZQv5pQoU=;
+        b=H17jVMf+GbSsSTArxsd/bw1gxi33jfuJiIuuBXAUXxYP1u5DDnAP0fanALaq7xHeLP
+         eMct5kQJiRm3Msoomo7SsLPz98hiM5FGwXxwlgTD7rrEqcsr9vY76ODvPALWYidM711X
+         p/W4N9Ye/1q/ve3zoMnkYEzSiG4ryr86MaCYgAdMZ2ceWL6JYyrxvZhGna4L0Jf1Ljdo
+         nJVA/0HfcJv4BOIaY/kxk1ehZVWvDVPHLnRkhOZsX2bs8OLgPhJ4EopXS5nXS5c2hNQX
+         Fvr6b5NGA9uCaoolXIsHG612g6HRGSlgiHIOdTxS8tsWtMxS04Qmgncqq9V+jmQty2Ml
+         tllQ==
+X-Gm-Message-State: AOJu0YzApeSXpeyjMuQWmWfBJWJjKFJmtpFBUNKFC/uH9n1KfRGbX7Gl
+        7evUALbVBj5716cnDJs8CX0HNBKzW/8Fv6k7vvzuaT+C
+X-Google-Smtp-Source: AGHT+IGuIs4VdgEB0UAz+cjFTXvcTdPa0uRUFsSTITaqRGzShMO2JghGVD1/90Pd4eVDpNXbpPkUQQiGm8E0xbQC0Ag=
+X-Received: by 2002:a17:90a:9e2:b0:26d:1eff:619f with SMTP id
+ 89-20020a17090a09e200b0026d1eff619fmr9483306pjo.2.1692734927088; Tue, 22 Aug
+ 2023 13:08:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230810162119.152589-1-ulf.hansson@linaro.org> <DU0PR04MB94175C3C8869A61403975E76881AA@DU0PR04MB9417.eurprd04.prod.outlook.com>
-In-Reply-To: <DU0PR04MB94175C3C8869A61403975E76881AA@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20230813025220.1752489-1-rui.zhang@intel.com>
+In-Reply-To: <20230813025220.1752489-1-rui.zhang@intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Aug 2023 22:05:03 +0200
-Message-ID: <CAJZ5v0iBOSnSdMitUHGk6aUJaA6+6NFOLP06FJJai-Fe3kpOnQ@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: Add helpers to allow a device to remain powered-on
-To:     Peng Fan <peng.fan@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Patrice Chotard <patrice.chotard@st.com>,
-        Ajay Agarwal <ajayagarwal@google.com>,
-        Michael Shavit <mshavit@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Date:   Tue, 22 Aug 2023 22:08:35 +0200
+Message-ID: <CAJZ5v0gLnqxTPux9x=aGhLQoNAwkANPy4UoT0gYEchayE20=DQ@mail.gmail.com>
+Subject: Re: [PATCH V2] thermal: intel: intel_soc_dts_iosf: Remove redundant check
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rafael.j.wysocki@intel.com, daniel.lezcano@linaro.or,
+        srinivas.pandruvada@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -62,32 +57,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 11:40 AM Peng Fan <peng.fan@nxp.com> wrote:
+On Sun, Aug 13, 2023 at 4:52 AM Zhang Rui <rui.zhang@intel.com> wrote:
 >
-> > Subject: [PATCH] PM: sleep: Add helpers to allow a device to remain
-> > powered-on
-> >
-> > On some platforms a device and its corresponding PM domain, may need to
-> > remain powered-on during system wide suspend, to support various use
-> > cases.
-> > For example, when the console_suspend_enabled flag is unset for a serial
-> > controller, the corresponding device may need to remain powered on.
-> > Other use cases exists too.
-> >
-> > In fact, we already have the mechanism in the PM core to deal with these
-> > kind of use cases. However, the current naming of the corresponding
-> > functions/flags clearly suggests these should be use for system wakeup.
-> > See device_wakeup_path(), device_set_wakeup_path and
-> > dev->power.wakeup_path.
-> >
-> > As a way to extend the use of the existing mechanism, let's introduce two
-> > new helpers functions, device_awake_path() and device_set_awake_path().
-> > At this point, let them act as wrappers of the existing functions. Ideally,
-> > when all users have been converted to use the new helpers, we may decide
-> > to drop the old ones and rename the flag.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Remove the redundant check in remove_dts_thermal_zone() because all of
+> its existing callers pass a valid pointer as the argument.
 >
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/thermal/intel/intel_soc_dts_iosf.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+> index db97499f4f0a..22fc2970c67d 100644
+> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
+> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+> @@ -245,11 +245,9 @@ static int soc_dts_enable(int id)
+>
+>  static void remove_dts_thermal_zone(struct intel_soc_dts_sensor_entry *dts)
+>  {
+> -       if (dts) {
+> -               iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
+> -                              SOC_DTS_OFFSET_ENABLE, dts->store_status);
+> -               thermal_zone_device_unregister(dts->tzone);
+> -       }
+> +       iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
+> +                      SOC_DTS_OFFSET_ENABLE, dts->store_status);
+> +       thermal_zone_device_unregister(dts->tzone);
+>  }
+>
+>  static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+> --
 
 Applied as 6.6 material, thanks!
