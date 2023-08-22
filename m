@@ -2,76 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B9C7843F3
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 16:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B23784496
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 16:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233184AbjHVOYY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 10:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S236890AbjHVOmq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 10:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbjHVOYY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 10:24:24 -0400
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB4AD7;
-        Tue, 22 Aug 2023 07:24:22 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-56e9b517f85so614091eaf.0;
-        Tue, 22 Aug 2023 07:24:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692714262; x=1693319062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KmSCrZH9zH56Z617nsLmAsTMojl4ZJS3KiHCDxmS6QY=;
-        b=QVJPu/Xt8Az9RpnmeBUhK4HXvN9PlQDrhf0sZYRhVJl+deJ3X2dGhIkal5yvsNul4W
-         uS+0Dt0KcMfPorpgiC3v3Qjxdmc+4ZVlOuGO9pm13z12xqR5u0uoVzbkiNeqSOAmSNoU
-         HUfkPN/MQ8kgVmyM/flozhppF2qB0qoVomPWR7iUfrxV5EGv68t8J2SlEFbmpLbRWkL/
-         BjFioeDZ6vDYW+Ha17SXFBR+QyfsNyiP4wiVFHl+IGd/1QPRjPBkYDKesRFeKKVP/Bm/
-         i43z3v1qen0+4Uydn1Kfw2tp5ljfr2uHDpFqCSEMTMVdBBgtAfr60I35Rws1yBUM6f86
-         E5kw==
-X-Gm-Message-State: AOJu0YzPgl/OiC+qvpVmuGmScQ1MwQq2ZePuAWUOSkKisEOyGp2Q6I0F
-        FlHKy9xBqXDRPmeH8mTYLPYR6qDbYUZmEMH9SOs=
-X-Google-Smtp-Source: AGHT+IEEdGlZBWwY7yJerpt9YwN/bszz4ZO++XFidrVpQNglkrKdNyEcCzGGMOCj/YAvRnZxQSAu/+zCkvgnsu5Yohk=
-X-Received: by 2002:a4a:bc85:0:b0:560:b01a:653d with SMTP id
- m5-20020a4abc85000000b00560b01a653dmr9136308oop.0.1692714261958; Tue, 22 Aug
- 2023 07:24:21 -0700 (PDT)
+        with ESMTP id S236887AbjHVOmp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 10:42:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043C8187;
+        Tue, 22 Aug 2023 07:42:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E2A46592A;
+        Tue, 22 Aug 2023 14:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A521C433C9;
+        Tue, 22 Aug 2023 14:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692715362;
+        bh=JwRaFdXpBFPQvWg+7PAhwk5RLTvKjoAS3evEC/T1Ics=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0euQLufgFNRSnjyplQRQhH6HbdZ16LqtVmuSb58MLZK863JtFKmETmzT7qsFuvx/1
+         7AZFXTdjbLMe+TvyViLIOikGnRQlyITSgy6SalJvI4fc9sZgJ1Gyv3f4zzqpVi5SkV
+         rMT1Wl/QM+uKVEgvzVXFUQNMsQRQCzzhGz5Nl3IY=
+Date:   Tue, 22 Aug 2023 16:42:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Grant B Adams <nemith592@gmail.com>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
+        Sebastian Reichel <sre@kernel.org>, Bin Liu <b-liu@ti.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: musb: dsps: Fix vbus vs tps65217-charger irq
+ conflict
+Message-ID: <2023082256-judiciary-udder-6d06@gregkh>
+References: <20230822132202.19659-1-nemith592@gmail.com>
 MIME-Version: 1.0
-References: <20230822115514.999111-1-chenfeiyang@loongson.cn> <c8beef70-1639-c11e-ae38-d8a07279720@linux.intel.com>
-In-Reply-To: <c8beef70-1639-c11e-ae38-d8a07279720@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Aug 2023 16:24:09 +0200
-Message-ID: <CAJZ5v0hpngg6WF7Q2P-MhcTGN8qtAx2U2-ODm=YMzs9=C44DSQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when available
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
-        rafael.j.wysocki@intel.com, mika.westerberg@linux.intel.com,
-        helgaas@kernel.org, anders.roxell@linaro.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        guyinggang@loongson.cn, siyanteng@loongson.cn,
-        chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn,
-        chris.chenfeiyang@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230822132202.19659-1-nemith592@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 3:24 PM Ilpo Järvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Tue, 22 Aug 2023, Feiyang Chen wrote:
->
-> > When the current state is already PCI_D0, pci_power_up() will return
-> > 0 even though dev->pm_cap is not set. In that case, we should not
-> > read the PCI_PM_CTRL register in pci_set_full_power_state().
->
-> IMHO, this is a bit misleading because after this patch, pci_power_up()
-> returns always an error if dev->pm_cap is not set.
+On Tue, Aug 22, 2023 at 03:22:02PM +0200, Grant B Adams wrote:
+> Enabling the tps65217-charger driver/module causes an interrupt conflict
+> with the vbus driver resulting in a probe failure.
+> The conflict is resolved by changing both driver's threaded interrupt
+> request function from IRQF_ONESHOT to IRQF_SHARED.
+> 
+> Signed-off-by: Grant B Adams <nemith592@gmail.com>
+> ---
+>  drivers/usb/musb/musb_dsps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+> index 9119b1d51370..cbb45de5a76f 100644
+> --- a/drivers/usb/musb/musb_dsps.c
+> +++ b/drivers/usb/musb/musb_dsps.c
+> @@ -851,7 +851,7 @@ static int dsps_setup_optional_vbus_irq(struct platform_device *pdev,
+>  
+>  	error = devm_request_threaded_irq(glue->dev, glue->vbus_irq,
+>  					  NULL, dsps_vbus_threaded_irq,
+> -					  IRQF_ONESHOT,
+> +					  IRQF_SHARED,
+>  					  "vbus", glue);
+>  	if (error) {
+>  		glue->vbus_irq = 0;
+> -- 
+> 2.34.1
+> 
 
-Yes, it does, but it has 2 callers only and the other one ignores the
-return value, so this only matters here.
+Why is the patch here talking about the tps65217-charger driver?  That's
+totally independent.
+
+Also, your patches are not threaded, how did you send them?  Are they
+related in some way or not?
+
+thanks,
+
+greg k-h
