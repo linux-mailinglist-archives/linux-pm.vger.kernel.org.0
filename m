@@ -2,48 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DA4783A4B
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 09:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35DA3783A4E
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 09:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233161AbjHVHGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 03:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54222 "EHLO
+        id S233153AbjHVHHs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 03:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233156AbjHVHG3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 03:06:29 -0400
+        with ESMTP id S229514AbjHVHHr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 03:07:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5641B0
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 00:06:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C389130;
+        Tue, 22 Aug 2023 00:07:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BEDB6417A
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 07:06:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58984C433C7;
-        Tue, 22 Aug 2023 07:06:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B6E64244;
+        Tue, 22 Aug 2023 07:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1D55C433C8;
+        Tue, 22 Aug 2023 07:07:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692687985;
-        bh=zGBDUxjIvZcPtg0R5Ea1vqqrPZXmIjW0tJmo05UyV2w=;
+        s=k20201202; t=1692688065;
+        bh=d7xbpsQutE/31GLl4hB/Q4ABnnr1PfLlY7OsceIn+zM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D+845Wz02SgTgXrdg0yrrCpnyHfNVqozPaP+/t2NsJwHnczswD4OY0FYAzQGC0wJM
-         H4oVcXHnQhGCmuxCBRfTZOq25+CBdyWX5COetGV1Mup50/epsrjb8pyNvHDnOBkMnI
-         mrqIH26DD5BdRnZCy5Ay/h3KvGvZfpJLsmIumDlD+zu36gO8BL+trAzQtGad2oKOzn
-         Px7Vogjw+hgr8BtwRh0RNDMZCXDtMjCWTPrUcjO6F+vivAiRsrhRoLkSw9EKjHXciq
-         /NNWb3MPJvaqvU83a4awxo8lMemzfsdhfED2Nr6ikHZJAtdd5ZrH1OalCSVIkqOEcW
-         drVelCZqUMO5Q==
-Date:   Tue, 22 Aug 2023 08:06:21 +0100
+        b=NdhbNII6nUMZKsIFq4qeXlqiEpIjGqdASMrzWamLsOrQryVdbEm/QJwtB3stP9mQJ
+         9oZ/5yE8XLY2e7tERRhVXaF6XibplLcBURaCEyMMw/3kDOUshPMn/zkKtYop/fk5Pg
+         4O+jL77Y1RKE4EQMMYEb8bw7gW08+rsLjeNW8MKbCdKBJEVL2VOy7BF2Z1A8rccAE5
+         H6FgYXH4s8KDs6kF9qeXoUzQFjS9tnVQE4XtKxmMBEBE264Dafp86nSy3AApTdmPOy
+         eNKAtYvwWSFxo43maiTIMRgY+1yD9G93Ed3B81geIBtKXdnYREEStW3vgft96okARm
+         AqjD//LPfo2Aw==
+Date:   Tue, 22 Aug 2023 08:07:37 +0100
 From:   Lee Jones <lee@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-pm@vger.kernel.org, sre@kernel.org, jahau@rocketmail.com
-Subject: Re: [PATCH -next] power: supply: rt5033_charger: fix missing unlock
-Message-ID: <20230822070621.GO1380343@google.com>
-References: <20230822030207.644738-1-yangyingliang@huawei.com>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jakob Hauser <jahau@rocketmail.com>
+Cc:     Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: (subset) [PATCH v6 06/10 RESEND] power: supply: rt5033_charger:
+ Add cable detection and USB OTG supply
+Message-ID: <20230822070737.GP1380343@google.com>
+References: <cover.1684182964.git.jahau@rocketmail.com>
+ <223b440ab6831f2e7302d2c49b2cfd7779d5effd.1684182964.git.jahau@rocketmail.com>
+ <169226510772.947223.494995318945916008.b4-ty@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230822030207.644738-1-yangyingliang@huawei.com>
+In-Reply-To: <169226510772.947223.494995318945916008.b4-ty@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,22 +73,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 22 Aug 2023, Yang Yingliang wrote:
+On Thu, 17 Aug 2023, Lee Jones wrote:
 
-> Fix missing mutex_unlock() in some error path.
+> On Mon, 15 May 2023 22:57:15 +0200, Jakob Hauser wrote:
+> > Implement cable detection by extcon and handle the driver according to the
+> > connector type.
+> > 
+> > There are basically three types of action: "set_charging", "set_otg" and
+> > "set_disconnect".
+> > 
+> > A forth helper function to "unset_otg" was added because this is used in both
+> > "set_charging" and "set_disconnect". In the first case it covers the rather
+> > rare event that someone changes from OTG to charging without disconnect. In
+> > the second case, when disconnecting, the values are set back to the ones from
+> > initialization to return into a defined state.
+> > 
+> > [...]
 > 
-> Fixes: 12cc585f36b8 ("power: supply: rt5033_charger: Add cable detection and USB OTG supply")
+> Applied, thanks!
+> 
+> [06/10] power: supply: rt5033_charger: Add cable detection and USB OTG supply
+>         commit: c1af6bcc8583b0a1083338cd26c2090d0bcb0810
 
-Okay, this patch is causing too much trouble now.
+Multiple fixes now follow this patch, so I am unapplying it.
 
-Sebastian would you be able to take it instead please?
-
-(I'm going to reply to it now to say that I'm removing it)
-
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> ---
->  drivers/power/supply/rt5033_charger.c | 28 ++++++++++++++++++---------
->  1 file changed, 19 insertions(+), 9 deletions(-)
+Sebastian, would you mind collecting it up please?
 
 -- 
 Lee Jones [李琼斯]
