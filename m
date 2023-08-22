@@ -2,130 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AAA17841CD
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 15:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FA37841DC
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 15:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbjHVNRn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 09:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S235979AbjHVNVJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 09:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbjHVNRm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 09:17:42 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5D2CD5;
-        Tue, 22 Aug 2023 06:17:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692710259; x=1724246259;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=8QjVgJK0ehD50JuTqi+K7huI6Js9GaH6nNc65R78Mcw=;
-  b=f5hER7qRAyWiRRu6cUgv9k19MYWWfup6HxN0yJYFSz3C3R3ByQU/aeNw
-   ddJhm7DO8a0qF6Zhk/7IuGUULodB8pextokFrlwmm/KwOKZmtMKrQReQa
-   EiM4niGJKr4UAJSnHx4WOJ3pDV5WA/NeEZNONumT3F4yEhTEWArMYYuDK
-   IR2mIX873RdxLTnGON0m8l3sR1BStCqcDF7mx36LBusB1kdv11K/uukwB
-   uy9/7FE+1lu9FjU74iRf69YshukqzqONbQC9MLqMgV++lLP8kl2RxOx7c
-   EOFojBF079+JMiovwJLvdTDNupWcG0uIeXmQEOJB8njkHVbvXkxBNgwN1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="353440328"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="353440328"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 06:17:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="850616660"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="850616660"
-Received: from refaase-mobl.ger.corp.intel.com ([10.252.53.244])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 06:17:34 -0700
-Date:   Tue, 22 Aug 2023 16:17:32 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Anders Roxell <anders.roxell@linaro.org>
-cc:     Feiyang Chen <chenfeiyang@loongson.cn>, bhelgaas@google.com,
-        rafael.j.wysocki@intel.com, mika.westerberg@linux.intel.com,
-        helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
-        siyanteng@loongson.cn, chenhuacai@loongson.cn,
-        loongson-kernel@lists.loongnix.cn, chris.chenfeiyang@gmail.com
-Subject: Re: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when
- available
-In-Reply-To: <CADYN=9L-RS1NPZqogi4M9oLEB8Tod31pn2+D6sk1Am++b8LE9g@mail.gmail.com>
-Message-ID: <5077577-baf2-39a1-d28e-e022bcd96039@linux.intel.com>
-References: <20230822115514.999111-1-chenfeiyang@loongson.cn> <CADYN=9L-RS1NPZqogi4M9oLEB8Tod31pn2+D6sk1Am++b8LE9g@mail.gmail.com>
+        with ESMTP id S235977AbjHVNVJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 09:21:09 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF8618B;
+        Tue, 22 Aug 2023 06:21:07 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-523bf06f7f8so5364566a12.1;
+        Tue, 22 Aug 2023 06:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692710466; x=1693315266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7u0D1vKsgp+LzrkxafeIdw43ha9lu5raeDJAVDWxoo8=;
+        b=cZwaRC3X2zDR0oj+ZR+Axpm6IjYOrIyh4H6kiJ206iG3Q5SM6vHIsx+kyuS1vlXwWo
+         AEEo2iAHs1W5XQ6iMxQRdIH+j1ZxXvksmhMcHQBtO0tub71ygab7VO5DCFtDDQoBSCYC
+         fYcgtVIgs8AzwX7WoEhBp6iJljuIbcnrIRWZlGYB4D3/Tsc8llHgUriCRxs4KCBQ4jiw
+         pFOetxlCOiNe68vpUHMaDqb+UHvYQ7hAFcmnKLgvkQ57ZYuJJTsKuXaCgOls1a5sfi0N
+         0ShSVG95vUJOqCWzlsbqv6rejro/Hbk6p0jMxCRKjpFt1OqeRLxRRljwesXS/c3wUNca
+         LzBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692710466; x=1693315266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7u0D1vKsgp+LzrkxafeIdw43ha9lu5raeDJAVDWxoo8=;
+        b=SGnWlesolpmzG/WrDSgbTAGue4r77WbLcRhA41fzinoGtz47ZjJbfu0M8ThPH89w9C
+         ZMCkiJLQv5KAZGvskvYjNt0JCXqIhPLFiE9fzC/47IQ93vGH4cqD7obfijLXhi6OjX+Z
+         +ebeyo+L1OZlRYPnOccIC5Jtb5fRFFNsOpqXw93mfddZaI3kzUBF8GOgne+0EH9XaSoN
+         vnE5dkIEQjrZeOSCUPZd1Pvl7To1gpsNs/XuvWVIYfBiXpIzaQTdr/5txmo0HHd/xcqm
+         jLqDnJdbi2hogNo/WTXhYbFMmt3sL2H37SaRAi1a/704GpUhJZjlq0rCRQ2z7PLjBjUU
+         zj+w==
+X-Gm-Message-State: AOJu0Yzj1xhquQhSyzFjlbq660rSC72JEXqyxfBnwCwtefbOX8b5mr52
+        DKDkapN3LyxHMJ5n9sfajBX1uiVmOe/SXg==
+X-Google-Smtp-Source: AGHT+IFUVTI6k19eR4xuknD+vKQzdm0gfqs/b2MGnOosJG8jTdAOtaVMgsMwmYfDYT+IAOu1YT3WmA==
+X-Received: by 2002:a05:6402:648:b0:52a:943:9ab5 with SMTP id u8-20020a056402064800b0052a09439ab5mr4952530edx.31.1692710465748;
+        Tue, 22 Aug 2023 06:21:05 -0700 (PDT)
+Received: from localhost.localdomain ([102.39.140.247])
+        by smtp.gmail.com with ESMTPSA id c4-20020aa7df04000000b00523b1335618sm7582034edy.97.2023.08.22.06.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Aug 2023 06:21:05 -0700 (PDT)
+From:   Grant B Adams <nemith592@gmail.com>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
+        Grant B Adams <nemith592@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>, Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 1/2] power: supply: Fix tps65217-charger vs vbus irq conflict
+Date:   Tue, 22 Aug 2023 15:19:53 +0200
+Message-Id: <20230822131953.19582-1-nemith592@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 22 Aug 2023, Anders Roxell wrote:
+Enabling the tps65217-charger driver/module causes an interrupt conflict
+with the vbus driver resulting in a probe failure.
+The conflict is resolved by changing both driver's threaded interrupt
+request function from IRQF_ONESHOT to IRQF_SHARED.
 
-> On Tue, 22 Aug 2023 at 13:55, Feiyang Chen <chenfeiyang@loongson.cn> wrote:
-> >
-> > When the current state is already PCI_D0, pci_power_up() will return
-> > 0 even though dev->pm_cap is not set. In that case, we should not
-> > read the PCI_PM_CTRL register in pci_set_full_power_state().
-> >
-> > Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
-> > Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> > ---
-> >  drivers/pci/pci.c | 9 +++++----
-> >  1 file changed, 5 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index 60230da957e0..7e90ab7b47a1 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
-> >                 else
-> >                         dev->current_state = state;
-> >
-> > -               if (state == PCI_D0)
-> > -                       return 0;
-> > -
-> >                 return -EIO;
-> >         }
-> >
-> > @@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
-> >         int ret;
-> >
-> >         ret = pci_power_up(dev);
-> > -       if (ret < 0)
-> > +       if (ret < 0) {
-> > +               if (dev->current_state == PCI_D0)
-> > +                       return 0;
-> > +
-> >                 return ret;
-> > +       }
-> >
-> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> >         dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
-> 
-> In fuction pci_power_up() there's another if-statement
-> if (state == PCI_D0)
->         goto end;
->
-> That also will return 0 if need_restore isn't true.
-> What will happen then?
+Signed-off-by: Grant B Adams <nemith592@gmail.com>
+---
+ drivers/power/supply/tps65217_charger.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That case is only after pci_power_up() has returned because of 
-!dev->pm_cap. As such, it looks unrelated to the case this patch is fixing 
-which is the read from PCI_PM_CTRL when dev->pm_cap is not there.
-
-> Would this work?
-> 
->         ret = pci_power_up(dev);
-> -       if (ret < 0)
-> +       if (ret <= 0)
->                  return ret;
-
-
+diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supply/tps65217_charger.c
+index a4bc9f2a10bc..6f68becdbfd0 100644
+--- a/drivers/power/supply/tps65217_charger.c
++++ b/drivers/power/supply/tps65217_charger.c
+@@ -238,7 +238,7 @@ static int tps65217_charger_probe(struct platform_device *pdev)
+ 	for (i = 0; i < NUM_CHARGER_IRQS; i++) {
+ 		ret = devm_request_threaded_irq(&pdev->dev, irq[i], NULL,
+ 						tps65217_charger_irq,
+-						IRQF_ONESHOT, "tps65217-charger",
++						IRQF_SHARED, "tps65217-charger",
+ 						charger);
+ 		if (ret) {
+ 			dev_err(charger->dev,
 -- 
- i.
+2.34.1
 
