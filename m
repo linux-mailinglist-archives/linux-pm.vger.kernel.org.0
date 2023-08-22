@@ -2,124 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C770B78372E
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 03:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8D67837DE
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 04:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbjHVBEV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 21:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58916 "EHLO
+        id S232006AbjHVCWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 22:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjHVBES (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 21:04:18 -0400
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F110213D;
-        Mon, 21 Aug 2023 18:04:12 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 74037580B0C;
-        Mon, 21 Aug 2023 21:04:09 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Mon, 21 Aug 2023 21:04:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1692666249; x=1692673449; bh=qh
-        2CEBnXfgbEiktWUfRJjND/5Zat3Dd90949X0OO51Q=; b=H/HSy01numTud2NhfV
-        iwYgxWNVHTY7qmQo2LJUW/vLLjoZoXpmIt/7C1aA7YOzJsjziV6twMQVydM8Ihd5
-        YgEKlFt6JxGCF5zx7tRVwP0E/vqK2EnqmssDd5tzEAyQ9cJmxBoM3FNwFhJGAz/7
-        IgR2DxPGEDaskpggR08r28NCSaxyAO1yGUK/jCq4BGsrgQGY4P8JOohdOnBrXAxV
-        TQ+Btl6lHiCGpLCOjvBcCOqFYyzfamVZQ++ZMCgH3dCzBk7C/3JFr7V5NDoa95kn
-        xPIVmwcjW8fXjok0rtIYeOVPY3Pnr1wNvJhq3zyDw1vSNl5rN5dV6vNoMebQ1+f/
-        bQCA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1692666249; x=1692673449; bh=qh2CEBnXfgbEi
-        ktWUfRJjND/5Zat3Dd90949X0OO51Q=; b=O7SKG7KQHhG7tXidrMdNKr+WyRw0t
-        dkXpvWRFazxtDK4PomrIPwyM+9S6Ub5Ip/ZQ5nbl4LiqOiA58oeofiuJEM5gLS7P
-        2gms/5u+Jd4pHfbWLGzdZA+LsS70aaBvYVMztjRIaHz2z77hszu3t62LgSxbtcgc
-        SNjNh+cnq/DasFADiC21yL38GEC8zRF+xLlie+6wtXPbFsioaofYWEpJFnRCoY4W
-        oiMOTg2E3Xrla8abD+izeZtcGiXNELBD7OXDa8tClxNeI8MQJJwx5fHqIGAe2xYd
-        +UUagAfkST6p85heilhUhwZ9Ee6Fmm6A5BIkAj2mVMTuZrJ+mDN2Zl3RA==
-X-ME-Sender: <xms:iAnkZJ9YK-iCxdeJWVdDS90L4ZuIv0_9bOkKmqOprzMBbmOoI9QCvg>
-    <xme:iAnkZNuxnai4KRWbLirda7qYBUMv_U3BrFXcweu7_Cv9-WuQDpBkNOg9fV9JeHTZ5
-    UCnN3T00ZAYnUzrCzY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddvtddggeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
-    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:iAnkZHDUM1Bt3-3KTwZiB6I0MfHCZMUbT167o-q7vvB1YTcHYTUnYw>
-    <xmx:iAnkZNd_EfM-meaNWCblZxXKJxVn41Tb1LEUysNtibp1mboCRTmyFQ>
-    <xmx:iAnkZONcxr99azeIyV0m47kJAkNUzMS9ouiavhmzoesUd0xjggimQA>
-    <xmx:iQnkZKm8VF6a4MKJf9NNVNHXWrv_lKptknMxkDw0SYz6jFizNlOZOA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 62E01B60089; Mon, 21 Aug 2023 21:04:08 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-647-g545049cfe6-fm-20230814.001-g545049cf
-Mime-Version: 1.0
-Message-Id: <556a5e72-4001-4d28-affb-831f5c8f9e26@app.fastmail.com>
-In-Reply-To: <20230803063703.5659-1-zhuyinbo@loongson.cn>
-References: <20230803063703.5659-1-zhuyinbo@loongson.cn>
-Date:   Mon, 21 Aug 2023 21:03:48 -0400
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Yinbo Zhu" <zhuyinbo@loongson.cn>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        soc@kernel.org, "Ulf Hansson" <ulf.hansson@linaro.org>
-Cc:     "Jianmin Lv" <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        "Liu Peibao" <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, loongarch@lists.linux.dev,
-        "Liu Yun" <liuyun@loongson.cn>
-Subject: Re: [PATCH v6 0/2] soc: loongson2_pm: add power management support
-Content-Type: text/plain
+        with ESMTP id S232090AbjHVCWJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 22:22:09 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A371918B
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 19:22:07 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bf1876ef69so4569225ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 19:22:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692670927; x=1693275727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+6x7mtElCvEcBk5Pz54P3MMXpgHbAKCeqZ4XfiqbTIQ=;
+        b=Fb0KlB9sgWlcj/n8dReUcucTUxY0oXEV/OcFUcBli+/QtHOht4H4ph4z2f7Yj1qVKL
+         6dZYWPgtYVPd3kIPo/kmR0eiZpaz8p5NaROizgrYoYHGxN3mWylfrJetBVMJ9IFPTpaC
+         ufOJ6Lt038m//UBZbeb5zblHAMY6dkhr1W2VLH634ucn/wW0RpSZ1SNc3dEsam9KP6yW
+         Rojli5ue8ytoeQwIGekeHM+uxa5U4SH6Pn2YXd+8O9KA7/GHSbKvWIBfoz4jfob0JdG/
+         CX2Kz7EiHjxQTldshFeV/dWS4IfN7KIcofquMaFUBhfw0txSVTrfBMaxe73fGINwrpz+
+         dFag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692670927; x=1693275727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+6x7mtElCvEcBk5Pz54P3MMXpgHbAKCeqZ4XfiqbTIQ=;
+        b=IOwvqwqZR61RYSI75EmAC29L4+hvdYD71oyWfnqU9NxdtqKYrBkQKNEHmcEGyymk8s
+         X4FQfLYqZtN32Vy4YUDXX8JMNKnlhzEENQuSnCbqaC1H40RgO8G9XP4cZC/dJ7a1TPZW
+         Vz4vZLy0dJg9I77t5UCGK4NjpOuhfW8Ok+G9mUmlXQ+9lW6vzIG/4fsDU4WTAr+Lds/9
+         3PphrhVD5IGSolz2StXSZQNOgpxCBfAUk2OVTBPx00slGxRU4mdn0V5gWM/BABjrQ+o0
+         aWwWINZpZd2bSa0iFBtYc2EoAxwrW+Y68/7yJzkrvi9u3kT96TNiIxB3sdTEGEZcajbV
+         OatA==
+X-Gm-Message-State: AOJu0YzXEF9ZwuiWdireJxFmF0Vbe7fZuYrvpfpdaJOMzsmjNl+iUpXt
+        LZ3iVnGLCSAjzAqP8QUO1hIRymqPTRfLG1uLdx8=
+X-Google-Smtp-Source: AGHT+IFVEXCRSQY4QtDg39s8bPLq+nx4l4a4RUH9JGPC+4Id/dx6B65bLlcZmOJX5zJBrlPDg5FjHyh2CLlcgJ9PSa0=
+X-Received: by 2002:a17:90a:64c9:b0:263:2312:60c2 with SMTP id
+ i9-20020a17090a64c900b00263231260c2mr7450026pjm.3.1692670927048; Mon, 21 Aug
+ 2023 19:22:07 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAOMZO5ByXdEK6Zsa3ObNinnROn=qsde_xvn3WcR2RLioMKk0JQ@mail.gmail.com>
+In-Reply-To: <CAOMZO5ByXdEK6Zsa3ObNinnROn=qsde_xvn3WcR2RLioMKk0JQ@mail.gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 21 Aug 2023 23:21:55 -0300
+Message-ID: <CAOMZO5AR5AP_bBJxn8GE6sZXQq6wgzU-qDda43567fs=m7eoRA@mail.gmail.com>
+Subject: Re: imx8mm: Forcing a reboot when critical temp is reached
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+Cc:     linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Aug 3, 2023, at 02:37, Yinbo Zhu wrote:
-> Loongson-2 platform support Power Management Controller (ACPI) and this
-> series patch was to add PM driver that base on dts and PM binding support.
+On Mon, Aug 21, 2023 at 2:27=E2=80=AFPM Fabio Estevam <festevam@gmail.com> =
+wrote:
 >
-> Change in v6:
-> 		1. The patch "[PATCH v3 1/3] loongarch: export some arch-specific
-> 		   pm interfaces" had been merged into mainline tree in v6.5-rc1
-> 		   thus this v6 series patch need drop it and need depend on it
-> 		   and it's patch link was:
-> https://lore.kernel.org/all/20230615091757.24686-2-zhuyinbo@loongson.cn/
-> 		2. Adding Ulf Hansson to Cc.
-> 		3. Adding soc@kernel.org to Cc.
-> 		4. Keep indented with one tab +2 spaces in Kconfig help text.
+> Hi,
+>
+> I am working with an i.MX8MM-based board and I do see that the system shu=
+ts down
+> when the critical trip point is reached, as expected.
+>
+> As the board is unattended, it would be more appropriate if the board
+> could reboot itself instead of shutting down when the critical
+> temperature is reached.
+>
+> The bootloader has a mechanism to only allow to boot the kernel when
+> the temperature is below a certain temperature.
+>
+> Is there a mechanism in place to force a reboot instead of shutdown
+> when the critical temperature is reached?
 
-I talked to WANG Xuerui on IRC, and he was able to clarify some of the
-missing bits of information for me, after which I merged both patches,
-even though my concerns are not fully addressed:
+I did an ugly hack like this:
 
-- I still think that branching into ROM code from the kernel is a mistake
-  and we should have never allowed that as an ad-hoc interface in the ACPI
-  variant to start with. It's hard to change that now though, and having
-  a DT interface to access the same entry point does not really make it
-  worse. This might need a redesign for future firmware though, to have
-  a proper runtime interface
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -315,16 +315,10 @@ static void handle_non_critical_trips(struct
+thermal_zone_device *tz, int trip)
 
-- The bigger problem I still see is the DT-enabled boot with PMon without
-  the UEFI firmware. This does not impact the DT binding, but I would
-  consider all non-UEFI booting firmware images broken and not supported
-  by the kernel, as we originally discussed when merging the kernel.
-  These should still be fixable by upgrading PMon to a UEFI-enabled
-  version.
+ void thermal_zone_device_critical(struct thermal_zone_device *tz)
+ {
+- /*
+- * poweroff_delay_ms must be a carefully profiled positive value.
+- * Its a must for forced_emergency_poweroff_work to be scheduled.
+- */
+- int poweroff_delay_ms =3D CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
+-
+  dev_emerg(&tz->device, "%s: critical temperature reached, "
+-   "shutting down\n", tz->type);
++   "rebooting\n", tz->type);
 
-     Arnd
+- hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
++ kernel_restart("w");
+ }
+ EXPORT_SYMBOL(thermal_zone_device_critical);
+
+and this causes a reboot after the critical temperature is reached.
+
+Would it be OK to add a devicetree property that when present would
+call kernel_restart()?
+
+Any suggestions?
+
+Thanks
