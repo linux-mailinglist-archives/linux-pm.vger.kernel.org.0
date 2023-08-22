@@ -2,121 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8D67837DE
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 04:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C058783848
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 05:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbjHVCWO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Aug 2023 22:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
+        id S232428AbjHVDFc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Aug 2023 23:05:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjHVCWJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 22:22:09 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A371918B
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 19:22:07 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bf1876ef69so4569225ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 19:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692670927; x=1693275727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+6x7mtElCvEcBk5Pz54P3MMXpgHbAKCeqZ4XfiqbTIQ=;
-        b=Fb0KlB9sgWlcj/n8dReUcucTUxY0oXEV/OcFUcBli+/QtHOht4H4ph4z2f7Yj1qVKL
-         6dZYWPgtYVPd3kIPo/kmR0eiZpaz8p5NaROizgrYoYHGxN3mWylfrJetBVMJ9IFPTpaC
-         ufOJ6Lt038m//UBZbeb5zblHAMY6dkhr1W2VLH634ucn/wW0RpSZ1SNc3dEsam9KP6yW
-         Rojli5ue8ytoeQwIGekeHM+uxa5U4SH6Pn2YXd+8O9KA7/GHSbKvWIBfoz4jfob0JdG/
-         CX2Kz7EiHjxQTldshFeV/dWS4IfN7KIcofquMaFUBhfw0txSVTrfBMaxe73fGINwrpz+
-         dFag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692670927; x=1693275727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+6x7mtElCvEcBk5Pz54P3MMXpgHbAKCeqZ4XfiqbTIQ=;
-        b=IOwvqwqZR61RYSI75EmAC29L4+hvdYD71oyWfnqU9NxdtqKYrBkQKNEHmcEGyymk8s
-         X4FQfLYqZtN32Vy4YUDXX8JMNKnlhzEENQuSnCbqaC1H40RgO8G9XP4cZC/dJ7a1TPZW
-         Vz4vZLy0dJg9I77t5UCGK4NjpOuhfW8Ok+G9mUmlXQ+9lW6vzIG/4fsDU4WTAr+Lds/9
-         3PphrhVD5IGSolz2StXSZQNOgpxCBfAUk2OVTBPx00slGxRU4mdn0V5gWM/BABjrQ+o0
-         aWwWINZpZd2bSa0iFBtYc2EoAxwrW+Y68/7yJzkrvi9u3kT96TNiIxB3sdTEGEZcajbV
-         OatA==
-X-Gm-Message-State: AOJu0YzXEF9ZwuiWdireJxFmF0Vbe7fZuYrvpfpdaJOMzsmjNl+iUpXt
-        LZ3iVnGLCSAjzAqP8QUO1hIRymqPTRfLG1uLdx8=
-X-Google-Smtp-Source: AGHT+IFVEXCRSQY4QtDg39s8bPLq+nx4l4a4RUH9JGPC+4Id/dx6B65bLlcZmOJX5zJBrlPDg5FjHyh2CLlcgJ9PSa0=
-X-Received: by 2002:a17:90a:64c9:b0:263:2312:60c2 with SMTP id
- i9-20020a17090a64c900b00263231260c2mr7450026pjm.3.1692670927048; Mon, 21 Aug
- 2023 19:22:07 -0700 (PDT)
+        with ESMTP id S232420AbjHVDFc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Aug 2023 23:05:32 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E05F185
+        for <linux-pm@vger.kernel.org>; Mon, 21 Aug 2023 20:05:30 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RVDfS4wZfzLp5v;
+        Tue, 22 Aug 2023 11:02:24 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Tue, 22 Aug 2023 11:05:28 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
+ 2023 11:05:27 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-pm@vger.kernel.org>
+CC:     <sre@kernel.org>, <lee@kernel.org>, <jahau@rocketmail.com>,
+        <yangyingliang@huawei.com>
+Subject: [PATCH -next] power: supply: rt5033_charger: fix missing unlock
+Date:   Tue, 22 Aug 2023 11:02:07 +0800
+Message-ID: <20230822030207.644738-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAOMZO5ByXdEK6Zsa3ObNinnROn=qsde_xvn3WcR2RLioMKk0JQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5ByXdEK6Zsa3ObNinnROn=qsde_xvn3WcR2RLioMKk0JQ@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Mon, 21 Aug 2023 23:21:55 -0300
-Message-ID: <CAOMZO5AR5AP_bBJxn8GE6sZXQq6wgzU-qDda43567fs=m7eoRA@mail.gmail.com>
-Subject: Re: imx8mm: Forcing a reboot when critical temp is reached
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
-Cc:     linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 2:27=E2=80=AFPM Fabio Estevam <festevam@gmail.com> =
-wrote:
->
-> Hi,
->
-> I am working with an i.MX8MM-based board and I do see that the system shu=
-ts down
-> when the critical trip point is reached, as expected.
->
-> As the board is unattended, it would be more appropriate if the board
-> could reboot itself instead of shutting down when the critical
-> temperature is reached.
->
-> The bootloader has a mechanism to only allow to boot the kernel when
-> the temperature is below a certain temperature.
->
-> Is there a mechanism in place to force a reboot instead of shutdown
-> when the critical temperature is reached?
+Fix missing mutex_unlock() in some error path.
 
-I did an ugly hack like this:
+Fixes: 12cc585f36b8 ("power: supply: rt5033_charger: Add cable detection and USB OTG supply")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/power/supply/rt5033_charger.c | 28 ++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -315,16 +315,10 @@ static void handle_non_critical_trips(struct
-thermal_zone_device *tz, int trip)
-
- void thermal_zone_device_critical(struct thermal_zone_device *tz)
- {
-- /*
-- * poweroff_delay_ms must be a carefully profiled positive value.
-- * Its a must for forced_emergency_poweroff_work to be scheduled.
-- */
-- int poweroff_delay_ms =3D CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS;
--
-  dev_emerg(&tz->device, "%s: critical temperature reached, "
--   "shutting down\n", tz->type);
-+   "rebooting\n", tz->type);
-
-- hw_protection_shutdown("Temperature too high", poweroff_delay_ms);
-+ kernel_restart("w");
+diff --git a/drivers/power/supply/rt5033_charger.c b/drivers/power/supply/rt5033_charger.c
+index 4ea769775fa5..6ce83c22c4e9 100644
+--- a/drivers/power/supply/rt5033_charger.c
++++ b/drivers/power/supply/rt5033_charger.c
+@@ -361,7 +361,8 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
+ 			0x37 << RT5033_CHGCTRL2_CV_SHIFT);
+ 	if (ret) {
+ 		dev_err(charger->dev, "Failed set OTG boost v_out\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto out_unlock;
+ 	}
+ 
+ 	/* Set operation mode to OTG */
+@@ -369,7 +370,8 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
+ 			RT5033_CHGCTRL1_MODE_MASK, RT5033_BOOST_MODE);
+ 	if (ret) {
+ 		dev_err(charger->dev, "Failed to update OTG mode.\n");
+-		return -EINVAL;
++		ret = -EINVAL;
++		goto out_unlock;
+ 	}
+ 
+ 	/* In case someone switched from charging to OTG directly */
+@@ -378,9 +380,10 @@ static int rt5033_charger_set_otg(struct rt5033_charger *charger)
+ 
+ 	charger->otg = true;
+ 
++out_unlock:
+ 	mutex_unlock(&charger->lock);
+ 
+-	return 0;
++	return ret;
  }
- EXPORT_SYMBOL(thermal_zone_device_critical);
+ 
+ static int rt5033_charger_unset_otg(struct rt5033_charger *charger)
+@@ -420,8 +423,10 @@ static int rt5033_charger_set_charging(struct rt5033_charger *charger)
+ 	/* In case someone switched from OTG to charging directly */
+ 	if (charger->otg) {
+ 		ret = rt5033_charger_unset_otg(charger);
+-		if (ret)
++		if (ret) {
++			mutex_unlock(&charger->lock);
+ 			return -EINVAL;
++		}
+ 	}
+ 
+ 	charger->online = true;
+@@ -448,6 +453,7 @@ static int rt5033_charger_set_mivr(struct rt5033_charger *charger)
+ 			RT5033_CHGCTRL4_MIVR_MASK, RT5033_CHARGER_MIVR_4600MV);
+ 	if (ret) {
+ 		dev_err(charger->dev, "Failed to set MIVR level.\n");
++		mutex_unlock(&charger->lock);
+ 		return -EINVAL;
+ 	}
+ 
+@@ -463,7 +469,7 @@ static int rt5033_charger_set_mivr(struct rt5033_charger *charger)
+ 
+ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
+ {
+-	int ret;
++	int ret = 0;
+ 
+ 	mutex_lock(&charger->lock);
+ 
+@@ -475,7 +481,8 @@ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
+ 				RT5033_CHARGER_MIVR_DISABLE);
+ 		if (ret) {
+ 			dev_err(charger->dev, "Failed to disable MIVR.\n");
+-			return -EINVAL;
++			ret = -EINVAL;
++			goto out_unlock;
+ 		}
+ 
+ 		charger->mivr_enabled = false;
+@@ -483,16 +490,19 @@ static int rt5033_charger_set_disconnect(struct rt5033_charger *charger)
+ 
+ 	if (charger->otg) {
+ 		ret = rt5033_charger_unset_otg(charger);
+-		if (ret)
+-			return -EINVAL;
++		if (ret) {
++			ret = -EINVAL;
++			goto out_unlock;
++		}
+ 	}
+ 
+ 	if (charger->online)
+ 		charger->online = false;
+ 
++out_unlock:
+ 	mutex_unlock(&charger->lock);
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static enum power_supply_property rt5033_charger_props[] = {
+-- 
+2.25.1
 
-and this causes a reboot after the critical temperature is reached.
-
-Would it be OK to add a devicetree property that when present would
-call kernel_restart()?
-
-Any suggestions?
-
-Thanks
