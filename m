@@ -2,45 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72BC784A00
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 21:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70057784A5A
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 21:23:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjHVTLU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 15:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S229555AbjHVTXz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 15:23:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjHVTLU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 15:11:20 -0400
+        with ESMTP id S229787AbjHVTXy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 15:23:54 -0400
 Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6651CCFC;
-        Tue, 22 Aug 2023 12:11:12 -0700 (PDT)
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-68bbd45d0d5so106543b3a.1;
-        Tue, 22 Aug 2023 12:11:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499CE91;
+        Tue, 22 Aug 2023 12:23:53 -0700 (PDT)
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-68bbd45d0d5so108566b3a.1;
+        Tue, 22 Aug 2023 12:23:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692731472; x=1693336272;
+        d=1e100.net; s=20221208; t=1692732233; x=1693337033;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Lz2e1mvvdxZXFPReu3GXvWGTqdMFsbCnxoB/bFwtJmM=;
-        b=XggKg1hbxtVzHL5dwBiPoQPo4nqKfL4feJRLEphFo7VVoJxIhUCRnQZISqMduTp7Eb
-         XY3JJswhySuX1E7v+i/tBkeVYAxcTCap+N0ZtiVbabGGkUx+m1r9XXsCmTvxQL9PhKEr
-         euqxSH0PjJnnJQH7bvhQei2vjUZ0aYg7sQ61VR+3RYpMVOB9QxchZqwJMRgwnVYeRZ5o
-         xg7/YQv3BKK2KGVrskI0UBOZw0lD9PnChQte61GyRC9TTn6YSvDf/OR33My5JPRHxrvQ
-         ptOSUOe4wbI+Nx+og79CIyEyGhalSwNGv/njo9PY88PQR8mPwDtg/ebt5zLkfZC63Z1k
-         B+Xw==
-X-Gm-Message-State: AOJu0Yz+iBrUeB2Q65HCvS5I9JEbVNWd5mcOYLLZPT7ldKsHFBj8dlYI
-        j33hRlqaDlZdQAc257pWTC6+iI1co/X+C8biGjg=
-X-Google-Smtp-Source: AGHT+IFFwXVB1r7EoBPbnbE8ziIOn0Iod0CU42evFU9L9K0QWS8YN4WX5qd1mD8B7zlzI3lKExZ/BFDmsJgDqK14NoA=
+        bh=0vRvWkHiLQlzYJ0T4TJoqXPJveLoj3En7SEm7QqmgPg=;
+        b=WSu1YuzD0cLroxNg7pxarlr32FZ1BBYkx6DheH1SO5+R0SGnnHdLnZABJNQvBlg7tM
+         Fms8gXzPZsptE9md1KcqYnKBaQQtzYmBFjoJElLRFN9hq6UFwSdyl0SFZQNwWrvzYjgz
+         DD8F24uCRVAE2heiYbHIuZ5TLQhAULrThY9372FuFTge4aHHVgb3FdPqDwNet/ud5uli
+         cKywYWUUDU6T2fR41SBbEp22Od2k/jMo3WEyMW2o6bbhE3+Ecow5ZnE/0H8mJ6rNLlW7
+         9H9KBLT9v6w9XwCk5GSzy8T5R8yx1/CBCOKCQDNYxjy3lRg7ZVAVkDu6JZXJWQZiC6O1
+         7WhA==
+X-Gm-Message-State: AOJu0YwPDuPO3S6mrQ5arMsc5WrK68vBy9H0qg5nvnECKh0AqlnVLbqo
+        heUm7clOByvPeFmZPCuVGman0ByO+AVCjsJ1mFw=
+X-Google-Smtp-Source: AGHT+IHGVPRaWr+d59LoKVGfLZDWhuyOrS9NjpOdXHwPo6NpMlstPvrLuhmY+TwCRYnECZeckT3j9IFSVeoNG5kaNCs=
 X-Received: by 2002:a05:6a00:1892:b0:68a:61fb:8025 with SMTP id
- x18-20020a056a00189200b0068a61fb8025mr4451893pfh.1.1692731471673; Tue, 22 Aug
- 2023 12:11:11 -0700 (PDT)
+ x18-20020a056a00189200b0068a61fb8025mr4482870pfh.1.1692732232733; Tue, 22 Aug
+ 2023 12:23:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230719011636.2893238-1-peng.fan@oss.nxp.com>
-In-Reply-To: <20230719011636.2893238-1-peng.fan@oss.nxp.com>
+References: <20230724071646.2744900-1-peng.fan@oss.nxp.com> <20230724071646.2744900-3-peng.fan@oss.nxp.com>
+In-Reply-To: <20230724071646.2744900-3-peng.fan@oss.nxp.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Aug 2023 21:10:59 +0200
-Message-ID: <CAJZ5v0hH29C3_XQGt+ndb9dxgc3JZXYfwaN_5qXS0sVPY1xhig@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal/core: fix potential memory leak
+Date:   Tue, 22 Aug 2023 21:23:40 +0200
+Message-ID: <CAJZ5v0hq7=7TvoMzvbauaK7zZODpS18Y5NikTLy1sCRZMeAH0Q@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] thermal/of: accessing potential uninitialized value
 To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
         rui.zhang@intel.com, linux-pm@vger.kernel.org,
@@ -57,36 +57,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jul 19, 2023 at 3:12 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+On Mon, Jul 24, 2023 at 9:12 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
 >
 > From: Peng Fan <peng.fan@nxp.com>
 >
-> thermal_set_governor may allocate memory for tz->governor_data, so
-> need free it in failure handling path.
+> If of_parse_phandle_with_args returns failure, the cooling_spec.np is
+> uninitialized. So move of_node_put below the return value check to avoid
+> accessing uninitialized value.
 >
-> Addresses-Coverity: 25777220 ("Memory leak")
+> Addresses-Coverity: 25772185 ("Uninitialized pointer read")
+> Addresses-Coverity: 25772845 ("Uninitialized pointer read")
+> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  drivers/thermal/thermal_core.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/thermal/thermal_of.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 842f678c1c3e..f633924406ad 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1355,6 +1355,9 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->         return tz;
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 330690a3a208..4ca905723429 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -291,13 +291,13 @@ static int __thermal_of_unbind(struct device_node *map_np, int index, int trip_i
+>         ret = of_parse_phandle_with_args(map_np, "cooling-device", "#cooling-cells",
+>                                          index, &cooling_spec);
 >
->  unregister:
-> +       if (tz->governor && tz->governor->unbind_from_tz)
-> +               tz->governor->unbind_from_tz(tz);
-
-It looks like thermal_governor_lock should be held around this, shouldn't it?
-
+> -       of_node_put(cooling_spec.np);
+> -
+>         if (ret < 0) {
+>                 pr_err("Invalid cooling-device entry\n");
+>                 return ret;
+>         }
+>
+> +       of_node_put(cooling_spec.np);
 > +
->         device_del(&tz->device);
->  release_device:
->         put_device(&tz->device);
-> --
-> 2.37.1
+>         if (cooling_spec.args_count < 2) {
+>                 pr_err("wrong reference to cooling device, missing limits\n");
+>                 return -EINVAL;
+> @@ -324,13 +324,13 @@ static int __thermal_of_bind(struct device_node *map_np, int index, int trip_id,
+>         ret = of_parse_phandle_with_args(map_np, "cooling-device", "#cooling-cells",
+>                                          index, &cooling_spec);
 >
+> -       of_node_put(cooling_spec.np);
+> -
+>         if (ret < 0) {
+>                 pr_err("Invalid cooling-device entry\n");
+>                 return ret;
+>         }
+>
+> +       of_node_put(cooling_spec.np);
+> +
+>         if (cooling_spec.args_count < 2) {
+>                 pr_err("wrong reference to cooling device, missing limits\n");
+>                 return -EINVAL;
+> --
+
+Applied (with some edits in the subject and changelog) as 6.6 material, thanks!
