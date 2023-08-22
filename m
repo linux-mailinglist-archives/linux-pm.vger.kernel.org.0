@@ -2,82 +2,154 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C86784B67
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B90784BFF
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 23:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjHVUc2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S231277AbjHVV3Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 17:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjHVUc2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:32:28 -0400
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB43CC
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 13:32:26 -0700 (PDT)
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1bdb3ecd20dso8890245ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 13:32:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692736346; x=1693341146;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XLyy3Q1H8KrLwXpWgraGaTRGriez2byM5532r5vLlxY=;
-        b=Pl9mZW8+KBaohn2x8WeyVgipOfSqK7ujF3CibyUgwSW2ZP+URvMzhN+Fn7A70YZUUQ
-         WI4Z0UORehBKI4j06uc2qskzTbIGyDv0cYstSwQ6m00M5AcSF8ogd0TLKiesyMdQCONa
-         KtqdxF27TM6XeSEY8R4dbwShCnWs6Nz6wB82A2FJ10aBLpjOcNiR9D1qEvoWXjKsBG/4
-         oPQpXPfOeLHYUxD6ycEFVJZpg4/9dr7K8MWOTxbEBZgamjpBPzWcFls5U1bRSxbp3BRu
-         Wo5RzNDa8SUgBKkvyh5PM4gS9Y7XtBFVcQkNSbsTzmgWDeHaQ7JHeBsRve3JhZq1EzU4
-         Y2Jw==
-X-Gm-Message-State: AOJu0Yw/h2+Mb6tiFAwo1uT5QVAVEwUtMAf2j/hbwvCRjWRRP7N0qHLD
-        W9KVsdgMvLxqJ5nDYNpP/+CY2jwZvsiPGb7fRl0=
-X-Google-Smtp-Source: AGHT+IGe0ltRWTv26v8RgENHIjqkX2gM5Za4HZ4awrMhZMnA96WY8/DakG0IhXjQJLeOaVRwckUjNTf7VC/jsBUIZU8=
-X-Received: by 2002:a17:903:1d2:b0:1bb:c2b1:9c19 with SMTP id
- e18-20020a17090301d200b001bbc2b19c19mr12211806plh.6.1692736346254; Tue, 22
- Aug 2023 13:32:26 -0700 (PDT)
+        with ESMTP id S231199AbjHVV3P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 17:29:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DF5CF3;
+        Tue, 22 Aug 2023 14:29:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4205464375;
+        Tue, 22 Aug 2023 21:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FDC8C433C8;
+        Tue, 22 Aug 2023 21:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692739752;
+        bh=tntbjmmBDt88Ki9dV0KrgN4VlUqrLRu3FZus/NGOeis=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uXDdUsgc1UkDTjIF9HGwWUS3dbXAxyRVQI/WyKzdTZNjcnGmESXJQ6SgRvJt0jyxP
+         nQBV/vQD3NnAuw5S+Q2uM862Re9MG7pmY3m0TgXiO7dzmCUMU5FIBcMVeZTTsiaZVQ
+         VOgR1MXlU496jbYFo0jgKqfLWLpS5CIz/CiF9doggeA3At3QaYlqCVDjGVRtT4lNW0
+         5TkloUU0dB9EYwLdCWgvU/Aa+2TsJV6QCsg7ECaJSVuA4zSbMuezwREi2lPV5oIRde
+         oDvJ50V7dVrseKH3/6fDHwfQACZc8fWD4pjYC7mBfSX4dAjq/vxw80ad/4gJ+DZiEo
+         hXqO7bqm6EISg==
+Received: by mercury (Postfix, from userid 1000)
+        id 847E71062B36; Tue, 22 Aug 2023 23:29:09 +0200 (CEST)
+Date:   Tue, 22 Aug 2023 23:29:09 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jakob Hauser <jahau@rocketmail.com>,
+        Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: (subset) [PATCH v6 06/10 RESEND] power: supply: rt5033_charger:
+ Add cable detection and USB OTG supply
+Message-ID: <20230822212909.mcnziqsuu523e4gk@mercury.elektranox.org>
+References: <cover.1684182964.git.jahau@rocketmail.com>
+ <223b440ab6831f2e7302d2c49b2cfd7779d5effd.1684182964.git.jahau@rocketmail.com>
+ <169226510772.947223.494995318945916008.b4-ty@kernel.org>
+ <20230822070737.GP1380343@google.com>
 MIME-Version: 1.0
-References: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
- <CAJZ5v0i3DiLTcqcFbUqQaBcmA0epJz9m0QdSm+45kTepfuWdHg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i3DiLTcqcFbUqQaBcmA0epJz9m0QdSm+45kTepfuWdHg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Aug 2023 22:32:14 +0200
-Message-ID: <CAJZ5v0hJ1qrj+MSLfgypSNkbx98W1UWn6GrHUcK+ZvyZhu4ybg@mail.gmail.com>
-Subject: Re: [CfP] Power Management and Thermal Control MC (LPC2023)
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ktx2qheykwtretld"
+Content-Disposition: inline
+In-Reply-To: <20230822070737.GP1380343@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Folks,
 
-On Wed, Jul 19, 2023 at 7:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> It has been possible to submit micro-conference topics through the LPC
-> website for a while, so please take the time to submit your Power
-> Management and Thermal Control MC topic to allow the schedule to be
-> put together.
+--ktx2qheykwtretld
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please submit all of the Power Management and Thermal Control MC
-topics, if you have not done that yet, by the end of this week (August
-27).  It will not be possible to submit any more topics to this MC
-later.
+Hi,
 
-Thanks!
+On Tue, Aug 22, 2023 at 08:07:37AM +0100, Lee Jones wrote:
+> On Thu, 17 Aug 2023, Lee Jones wrote:
+>=20
+> > On Mon, 15 May 2023 22:57:15 +0200, Jakob Hauser wrote:
+> > > Implement cable detection by extcon and handle the driver according t=
+o the
+> > > connector type.
+> > >=20
+> > > There are basically three types of action: "set_charging", "set_otg" =
+and
+> > > "set_disconnect".
+> > >=20
+> > > A forth helper function to "unset_otg" was added because this is used=
+ in both
+> > > "set_charging" and "set_disconnect". In the first case it covers the =
+rather
+> > > rare event that someone changes from OTG to charging without disconne=
+ct. In
+> > > the second case, when disconnecting, the values are set back to the o=
+nes from
+> > > initialization to return into a defined state.
+> > >=20
+> > > [...]
+> >=20
+> > Applied, thanks!
+> >=20
+> > [06/10] power: supply: rt5033_charger: Add cable detection and USB OTG =
+supply
+> >         commit: c1af6bcc8583b0a1083338cd26c2090d0bcb0810
+>=20
+> Multiple fixes now follow this patch, so I am unapplying it.
+>=20
+> Sebastian, would you mind collecting it up please?
+
+I'm leaving for a two week hiking trip (with basically no internet
+access) in some hours. My planed return date is basically when Linus
+is expected to tag 6.6-rc1, so I will not queue any more patches and
+send my pull request early (within the next few hours).
+
+I planned to catch up with the power-supply backlog last week during
+Chaos Communication Camp, but it was too hot to do any sensible
+review. Now I expect to process the power-supply backlog in the
+week after the merge window.
+
+Greetings and sorry for the inconvenience,
+
+-- Sebastian
+
+--ktx2qheykwtretld
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmTlKKIACgkQ2O7X88g7
++pqjYQ//ROIQG4T2Lapk4Xk/B5nCt2gNSRs+4MOpOagMBah1hKrG7uVUIz2n3p3v
+DLGombVmYmFyGhJiBN99NdzfbL95WbMGjftJ7Y+TCCdHFPXX7fYxmmaQed7AVq+H
+HGQuIMDtFt+JYIPmbvbz+Adsl8+1QUIQp+QKX4DJkoYo1RWS7MujVojFsErAbxw4
+KZnMsJuI426C4uFBp+W7PKSnEA0Z8+9L0O1ZDfJl1uW4/mtJTZJH1XEzB9XOpdgP
+A5mx29rTvjii6g9h43aiRX6Msc5vbOVvDzI3DNPONyuo84GavL6JKu6WUrTdCB2T
+VJowdPUybL7Ub8ZVb0/vzosU9qQzis1uQR1rFTtXAWyHxUf+k1nfA55p/OP4bQRf
+GGzYkgkRK1n9U9b4ZLq4S2nASwim85MDvlTGpg/olzv+A3gZXsvGy3F4SCQek1Tj
+d87rxX1Hv8Zk4+N/Rpt3QodyklaCZTkC7qJFSzHq/lxIb33/Q5EcKFfk4s8jULwY
+r3UosP4gn7rsQUT8Ln/y6KkoPtwcts+Gv21ofiIQ21o5SsEj5CDuAvgDLCsdbgxP
+pB4fZw2j41TjeRSLrx/s4OMa18lRpm4FW2i3Oxt14+/IO8ZHwLwZJpEf/gswVVpn
++nuatb3nTikeHaR1V2fqD4GJ1C7gCgT6XSCXfrH8VsgUcE8hy4Q=
+=VkC1
+-----END PGP SIGNATURE-----
+
+--ktx2qheykwtretld--
