@@ -2,152 +2,149 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AA7784C19
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 23:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F327784CE6
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 00:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjHVVeO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 17:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59060 "EHLO
+        id S231425AbjHVWiw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 18:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjHVVeO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 17:34:14 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588D9CDF;
-        Tue, 22 Aug 2023 14:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692740052; x=1724276052;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jFiuc+5ZD8mqAh5S86UOzr7YSQ2lNVgtFtNzA+uNvS0=;
-  b=DJRZKJKRtSEeWo25fS6O/bz4FRff4TnY+69bI45Xu9xAXRQyIqEKT+ws
-   CzyA8xrP0MF5ORweEefdgWz0C/cFBm6/tRqeyeuW3TgwR3VqBaWHx1lyx
-   BKf4acng7MFVfAVqzjnYcM3/PEoX2g/vF1Jl7ly9dm1g/OpVBzMKvitst
-   Ex60cpMpPYTYqNO34bVBuXW9U5x1nHMQXISw8U16DeuAUU3PS6+pJEv8K
-   hdGhCfUAR+Q8Mj49K4fIUX4pW6VGBcVyMfhlCEVX+qcN2v2h4GA9OeANu
-   +fYyfibMcTaX6ewsTvq8F8LdGZuwRW67wJFp9Bumb1FVQ6f1JiRJSKvFo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="437932847"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="437932847"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 14:34:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="1067202911"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="1067202911"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2023 14:34:07 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qYZ0o-0000Xi-1a;
-        Tue, 22 Aug 2023 21:34:06 +0000
-Date:   Wed, 23 Aug 2023 05:33:30 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        manivannan.sadhasivam@linaro.org
-Cc:     oe-kbuild-all@lists.linux.dev, helgaas@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, quic_parass@quicinc.com,
-        krzysztof.kozlowski@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "(open list:OPERATING PERFORMANCE POINTS (OPP))" 
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 3/4] OPP: Add api to retrieve opps which is at most
- the provided level
-Message-ID: <202308230526.RjJmRzFy-lkp@intel.com>
-References: <1692717141-32743-4-git-send-email-quic_krichai@quicinc.com>
+        with ESMTP id S230187AbjHVWiw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 18:38:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DECCDD;
+        Tue, 22 Aug 2023 15:38:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 442E563D4B;
+        Tue, 22 Aug 2023 22:38:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BACC433B6;
+        Tue, 22 Aug 2023 22:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692743929;
+        bh=U15eYY76gsnD/RHRrRp2WW4I4OCWvlLasJey1YPS3bA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jn4NXR0lfbWYS5Bph9NDsU+CUS6oKPixIBuJYm6y13c3Oey4zsZFxl5LEbilQxJik
+         FeYi4hk81hW93Pito7BlDOIWLAaYnB0RhnPhbkxJtYjIwxdi5/i0pNyJyNN/nCccuI
+         fmY+ssuFxpfa7I30gkLK8YDwU53i5SgxztwwtwOd89uEzAB/wmwwNcI4B7etE38nUX
+         1KT94QzqmI87253Kc52MD6Y8fou1jBGiX1pJkpWJMnTdedMpWf+KZdUDC39Y5QFc9X
+         pamJJqabcmOvoF7HZyud2tyJQOPli0tj7WP4SaXb0FkLx82tm9eotCxnMBwonE7SUu
+         gzqa24AIGrPmA==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2bcb89b4767so43872971fa.3;
+        Tue, 22 Aug 2023 15:38:49 -0700 (PDT)
+X-Gm-Message-State: AOJu0YyZus2vU2dDMD/W5mtDf7ItNOiHAf94VYBt93eGRNIVi07Bba4y
+        YLO+AhO3AfymF9WV/yf61eGt2ld82IGHHHEKPA==
+X-Google-Smtp-Source: AGHT+IF0JLsyZnXZQBcgCFuF2kEmLMhxys3SoS78ueuZDPswTtorzz1H8NCRQqi/aO+jact/25/WQ07MKCBccdqUsKI=
+X-Received: by 2002:a2e:9919:0:b0:2bb:8d96:6041 with SMTP id
+ v25-20020a2e9919000000b002bb8d966041mr7975933lji.45.1692743927592; Tue, 22
+ Aug 2023 15:38:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1692717141-32743-4-git-send-email-quic_krichai@quicinc.com>
+References: <20230714175008.4064592-1-robh@kernel.org> <CAJZ5v0i-OByOSjpxrj5d9S9QHRySK-MEUo+bK_J_4ihsCBmnSg@mail.gmail.com>
+ <CAL_JsqLy22S5bTFu-ZKXhSMtMPPq9z1Gdb5kJMVmhui55miDsQ@mail.gmail.com> <CAJZ5v0hM63nVphwkYK1bL4uf_dXSew2+LBuG9kuhvvLdrhLxAw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hM63nVphwkYK1bL4uf_dXSew2+LBuG9kuhvvLdrhLxAw@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 22 Aug 2023 17:38:32 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJGoDPLKgu8awJfuWpqzg8HOuruDa1z4s-Swb7Cm5OaJw@mail.gmail.com>
+Message-ID: <CAL_JsqJGoDPLKgu8awJfuWpqzg8HOuruDa1z4s-Swb7Cm5OaJw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Explicitly include correct DT includes
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Guillaume La Roque <glaroque@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Markus Mayer <mmayer@broadcom.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krishna,
+On Thu, Jul 20, 2023 at 1:50=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Fri, Jul 14, 2023 at 9:53=E2=80=AFPM Rob Herring <robh@kernel.org> wro=
+te:
+> >
+> > On Fri, Jul 14, 2023 at 12:54=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> > >
+> > > On Fri, Jul 14, 2023 at 7:51=E2=80=AFPM Rob Herring <robh@kernel.org>=
+ wrote:
+> > > >
+> > > > The DT of_device.h and of_platform.h date back to the separate
+> > > > of_platform_bus_type before it as merged into the regular platform =
+bus.
+> > > > As part of that merge prepping Arm DT support 13 years ago, they
+> > > > "temporarily" include each other. They also include platform_device=
+.h
+> > > > and of.h. As a result, there's a pretty much random mix of those in=
+clude
+> > > > files used throughout the tree. In order to detangle these headers =
+and
+> > > > replace the implicit includes with struct declarations, users need =
+to
+> > > > explicitly include the correct includes.
+> > > >
+> > > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > >
+> > > Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> > >
+> > > or please let me know if you want me to pick this up.
+> >
+> > Single patch in your subsystem with no dependencies. Please pick it up.
+>
+> Done, thanks!
 
-kernel test robot noticed the following build warnings:
+I'm not seeing this in linux-next.
 
-[auto build test WARNING on pci/for-linus]
-[also build test WARNING on robh/for-next rafael-pm/linux-next linus/master v6.5-rc7 next-20230822]
-[cannot apply to pci/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/dt-bindings-pci-qcom-Add-opp-table/20230822-232104
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
-patch link:    https://lore.kernel.org/r/1692717141-32743-4-git-send-email-quic_krichai%40quicinc.com
-patch subject: [PATCH v4 3/4] OPP: Add api to retrieve opps which is at most the provided level
-config: parisc-randconfig-r081-20230823 (https://download.01.org/0day-ci/archive/20230823/202308230526.RjJmRzFy-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230526.RjJmRzFy-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308230526.RjJmRzFy-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/opp/core.c:756: warning: Function parameter or member 'level' not described in 'dev_pm_opp_find_level_floor'
->> drivers/opp/core.c:756: warning: Excess function parameter 'freq' description in 'dev_pm_opp_find_level_floor'
-   drivers/opp/core.c:2025: warning: Function parameter or member 'opp_table' not described in '_opp_set_supported_hw'
-   drivers/opp/core.c:2025: warning: Excess function parameter 'dev' description in '_opp_set_supported_hw'
-   drivers/opp/core.c:2068: warning: Function parameter or member 'opp_table' not described in '_opp_set_prop_name'
-   drivers/opp/core.c:2068: warning: Excess function parameter 'dev' description in '_opp_set_prop_name'
-   drivers/opp/core.c:2109: warning: Function parameter or member 'opp_table' not described in '_opp_set_regulators'
-   drivers/opp/core.c:2109: warning: Excess function parameter 'count' description in '_opp_set_regulators'
-   drivers/opp/core.c:2213: warning: Function parameter or member 'opp_table' not described in '_opp_set_clknames'
-   drivers/opp/core.c:2213: warning: Function parameter or member 'config_clks' not described in '_opp_set_clknames'
-   drivers/opp/core.c:2311: warning: Function parameter or member 'opp_table' not described in '_opp_set_config_regulators_helper'
-   drivers/opp/core.c:2375: warning: Function parameter or member 'opp_table' not described in '_opp_attach_genpd'
-   drivers/opp/core.c:2602: warning: Function parameter or member 'token' not described in 'dev_pm_opp_clear_config'
-   drivers/opp/core.c:2602: warning: Excess function parameter 'opp_table' description in 'dev_pm_opp_clear_config'
-
-
-vim +756 drivers/opp/core.c
-
-   734	
-   735	
-   736	/**
-   737	 * dev_pm_opp_find_level_floor() - Search for a rounded floor freq
-   738	 * @dev:	device for which we do this operation
-   739	 * @freq:	Start level
-   740	 *
-   741	 * Search for the matching floor *available* OPP from a starting level
-   742	 * for a device.
-   743	 *
-   744	 * Return: matching *opp and refreshes *level accordingly, else returns
-   745	 * ERR_PTR in case of error and should be handled using IS_ERR. Error return
-   746	 * values can be:
-   747	 * EINVAL:	for bad pointer
-   748	 * ERANGE:	no match found for search
-   749	 * ENODEV:	if device not found in list of registered devices
-   750	 *
-   751	 * The callers are required to call dev_pm_opp_put() for the returned OPP after
-   752	 * use.
-   753	 */
-   754	struct dev_pm_opp *dev_pm_opp_find_level_floor(struct device *dev,
-   755						      unsigned long *level)
- > 756	{
-   757		return _find_key_floor(dev, level, 0, true, _read_level, NULL);
-   758	}
-   759	EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_floor);
-   760	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rob
