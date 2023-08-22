@@ -2,110 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9BD784997
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 20:50:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2B1A7849C0
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 20:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjHVSuG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 14:50:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S229476AbjHVSym convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 14:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjHVSuE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 14:50:04 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D61E10B
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 11:50:03 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-76d8f2be749so306061185a.3
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 11:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692730202; x=1693335002;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfpP3q9QbQ/9V8DIYX+5NYoCJ0g6gbyQdcSY95Lp5IM=;
-        b=SD6aK9LGm3psw81R50iBb8SXKR1GkoxkK9BNNXiFYTPVVRy/FqRIWriDTEQ25cr3Ny
-         Nn6UmbrIotKWSIWNmjU6eWa7GkN9SezDJAkcIqJhESVubahMYRe9f+datjpJsSKcy41o
-         DpigTWW9+7gb+zgTVIkmtAmGreSpkSuzRKXAxp6/ne7Ydz/gVzqTC9h+HmtAElAbIp1a
-         vZRbgHrSYSvdeMnV/Rcsz7Gs5qyMpwYa9upYi04qyR7iMhY/YXF9oJAVhhm3XcEVRtsm
-         u/PYVkCNWUwPwK0vsRBBsihh4lENOYZ4egZlfnHgOXjHqEFYr73ohWiHdXayqdcoSIzt
-         D4EA==
+        with ESMTP id S229539AbjHVSym (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 14:54:42 -0400
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52A810B;
+        Tue, 22 Aug 2023 11:54:40 -0700 (PDT)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-68a32506e90so743403b3a.1;
+        Tue, 22 Aug 2023 11:54:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692730202; x=1693335002;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UfpP3q9QbQ/9V8DIYX+5NYoCJ0g6gbyQdcSY95Lp5IM=;
-        b=QSsGSMZeHxUzvdVWnqhyUWl9/UFFjNZowDu5C7hTBs1c5rxAwCESLqImA+7GuO4qbY
-         e+dTYIkLoHQNJGEFjtMt8fexouHj7J0uTyrNYXCqc2b1c3FwBeiLkVdtxWCQ9cUXSERk
-         Wjiz9H0/PkfDJI1SdyyV83OlxXH0pGnedWIIVOQqbpj48MApvwkuXskoZ0XVW2w1d2Sh
-         QjC+FXAZpK20+TVdMGJ8gqmHCNUSc8oVh5GzabXik441AMqswPfaVPJV099ENiU6lARA
-         anijSDVWZUXEoXGoqA5ZEsedRj4GZVEl52CYSr5bJ9ozVfwvjXMP2fqvG0K9Urckn1Kw
-         Imag==
-X-Gm-Message-State: AOJu0Yykv9CecNiS22v0ksF3C/e1mcGR/kAfQXUu8ML8fSJOEui1sBSP
-        3gJJR1SR2h5nsnglfQDM/9kQmu6bYt8=
-X-Google-Smtp-Source: AGHT+IGIV3yUNeZOLmOV98Yt2kQSEiuFnMcu0ibbOpIPKUfes5M3GdAJNEN5py35dzoWATyuE4yEnA==
-X-Received: by 2002:a05:620a:1a84:b0:76d:a52a:fd74 with SMTP id bl4-20020a05620a1a8400b0076da52afd74mr1165636qkb.62.1692730201769;
-        Tue, 22 Aug 2023 11:50:01 -0700 (PDT)
-Received: from udipad-dell.. ([2607:fb91:de1:80c7:7185:95ab:794f:b3d9])
-        by smtp.gmail.com with ESMTPSA id c19-20020a05620a165300b0076d9f2d4fabsm2343227qko.15.2023.08.22.11.50.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 11:50:01 -0700 (PDT)
-From:   Meet Udeshi <mudeshi1209@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Meet Udeshi <mudeshi1209@gmail.com>
-Subject: [PATCH] tools/thermal: tmon: Fix sample data update in PID
-Date:   Tue, 22 Aug 2023 14:49:40 -0400
-Message-Id: <20230822184940.31316-1-mudeshi1209@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20221208; t=1692730480; x=1693335280;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hvDQtztLIY+cdOtcu3sc3WtCIys2WUi05X4v/3QNJBs=;
+        b=ajeJFNr60m9ofo41tyeO/ZLWqSv7Xa8QDvEBu3mvJky5aBnHWQwGuCSVFHdu1Zmndx
+         jAonec1WA2QMfngXisch7gZ5x8IVJgdlVHnCH+KoBC3TpTB8zMyPdNJf/WLY5TALntaF
+         OAHnrsuHFf/kAt5Mu1u/ZLMZexPykPFgDbAoirm4xyKNm6bueyQrVjJQ9geeGRE8Oy7J
+         Dp92EhZJ5/tDqaPu78B48JS5BpFf+LHS4C9Gggg5vk4ScxuACFNMwkH7uyK1weq8UBmt
+         m37D4Inl2fA1mzQzjZgxXotq4lU8FTFwMFSxxb1JtD8scN/JpCic90EAomMTJ7TyXxBL
+         YrZg==
+X-Gm-Message-State: AOJu0Yx9/a4NCfO1dQbMtOflDeBI29zsFF6MCdwhkyAk9X6cuBEBcoD6
+        1HG6QU5v49/EggkPg9YZSimsD4Cun9xObuHjwdg=
+X-Google-Smtp-Source: AGHT+IFqJaPZoitnFsoD0BvnxsjVda1SXYA8SQRmkLHzByCU5AnsucL7HDuA1V69fu68SF3SA5w6skk9ICdrGAJrxQk=
+X-Received: by 2002:a05:6a00:2d0c:b0:676:2a5c:7bc5 with SMTP id
+ fa12-20020a056a002d0c00b006762a5c7bc5mr11676824pfb.1.1692730480210; Tue, 22
+ Aug 2023 11:54:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230822115514.999111-1-chenfeiyang@loongson.cn>
+In-Reply-To: <20230822115514.999111-1-chenfeiyang@loongson.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Aug 2023 20:54:28 +0200
+Message-ID: <CAJZ5v0iGLe6XEpvf0uvHuCE3c-_BtVrPw+3rn=EP=8HrX2rmSg@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when available
+To:     Feiyang Chen <chenfeiyang@loongson.cn>
+Cc:     bhelgaas@google.com, rafael.j.wysocki@intel.com,
+        mika.westerberg@linux.intel.com, helgaas@kernel.org,
+        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
+        siyanteng@loongson.cn, chenhuacai@loongson.cn,
+        loongson-kernel@lists.loongnix.cn, chris.chenfeiyang@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fixed the order of update for `xk_1` and `xk_2` in the PID controller in
-function `controller_handler()`.
+On Tue, Aug 22, 2023 at 1:55 PM Feiyang Chen <chenfeiyang@loongson.cn> wrote:
+>
+> When the current state is already PCI_D0, pci_power_up() will return
+> 0 even though dev->pm_cap is not set. In that case, we should not
+> read the PCI_PM_CTRL register in pci_set_full_power_state().
+>
+> Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
+> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
 
-The previous timestep data in the PID controller, `xk_1` and `xk_2`,
-were updated in the wrong order. `xk_1` was overwritten before `xk_2`
-was assigned. This caused both `xk_1` and `xk_2` to take the value of
-`xk` when the function `controller_handler()` was called.
-This means the D-term of the PID controller was simplified from
-a second-order approximation using two previous timesteps to a
-first-order approximation using one previous timestep.
+Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
 
-    xk - 2 * xk_1 + xk_2 => xk - xk_1
-
-This degraded the performance of the PID controller by making it more
-noisy and less accurate.
-
-This bug was found by reverse engineering the tmon binary using the
-[REMaQE tool](https://arxiv.org/abs/2305.06902).
-
-Signed-off-by: Meet Udeshi <mudeshi1209@gmail.com>
-Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal subsystem")
----
- tools/thermal/tmon/pid.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/thermal/tmon/pid.c b/tools/thermal/tmon/pid.c
-index da20088285bd..1c02eb675088 100644
---- a/tools/thermal/tmon/pid.c
-+++ b/tools/thermal/tmon/pid.c
-@@ -103,8 +103,8 @@ void controller_handler(const double xk, double *yk)
- 	/* compute output */
- 	*yk += p_term + i_term + d_term;
- 	/* update sample data */
--	xk_1 = xk;
- 	xk_2 = xk_1;
-+	xk_1 = xk;
- 
- 	/* clamp output adjustment range */
- 	if (*yk < -LIMIT_HIGH)
--- 
-2.34.1
-
+> ---
+>  drivers/pci/pci.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 60230da957e0..7e90ab7b47a1 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
+>                 else
+>                         dev->current_state = state;
+>
+> -               if (state == PCI_D0)
+> -                       return 0;
+> -
+>                 return -EIO;
+>         }
+>
+> @@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
+>         int ret;
+>
+>         ret = pci_power_up(dev);
+> -       if (ret < 0)
+> +       if (ret < 0) {
+> +               if (dev->current_state == PCI_D0)
+> +                       return 0;
+> +
+>                 return ret;
+> +       }
+>
+>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+>         dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+> --
+> 2.39.3
+>
