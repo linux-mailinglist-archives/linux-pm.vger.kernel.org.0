@@ -2,93 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8AC784B56
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C86784B67
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjHVUYj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
+        id S229928AbjHVUc2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjHVUYj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:24:39 -0400
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C455DCC;
-        Tue, 22 Aug 2023 13:24:37 -0700 (PDT)
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1c0a4333e03so628685ad.0;
-        Tue, 22 Aug 2023 13:24:37 -0700 (PDT)
+        with ESMTP id S229667AbjHVUc2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:32:28 -0400
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB43CC
+        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 13:32:26 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-1bdb3ecd20dso8890245ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 13:32:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692735877; x=1693340677;
+        d=1e100.net; s=20221208; t=1692736346; x=1693341146;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rRjwbC3faFyj1ntUMUYXl/W2oCQKNk5Ltvd5akdjB5M=;
-        b=XBuqHbFeJBy9crGJX1IjvnCJJGZd/hhku/yc9USqPU+M7hDBulx3wP/qB2thW5RGpd
-         D9pijijahwTw9BdvcutJv5iCA2snr8PnaiUJwlwKZw3mR/0y0QXBjCN3eU6y9v4vinli
-         fF1lArKh5iMawBM53+wB0SCvwW1MGjejp3S2BXVFnUQTH5D4qMRLHGVVJXJJ/o2zqiqU
-         7x97uF0SyjsFnY4yjbNSWKiEb7g05k4pOE7UFKj0l3MYBmyn/tiimqGPv7iZR0kRLZCR
-         pXzkF6NegM/aVookEF/TlTIdNQzvXYj5syQSbmxOc2gD6BxqBZRZ1wNUNftivCkzSGmu
-         9g6Q==
-X-Gm-Message-State: AOJu0YzXMmG0u5vWSG6bjxWL8W8zu/ZnAVOep7ofrMF92FccGCOlY62R
-        NAqewlzX6DqnrbIuGsIt4yH+h6AsCdq2bBvEKaNU7oWj
-X-Google-Smtp-Source: AGHT+IGMUPtyUadxi5DFzNZrTXoyg21N2lb/li23jigebTRkrG58L2O8qutnwi/o7gn7wVUUP+rB4nTU99ifNDuI3pc=
-X-Received: by 2002:a17:90a:64c9:b0:263:2312:60c2 with SMTP id
- i9-20020a17090a64c900b00263231260c2mr9571280pjm.3.1692735877175; Tue, 22 Aug
- 2023 13:24:37 -0700 (PDT)
+        bh=XLyy3Q1H8KrLwXpWgraGaTRGriez2byM5532r5vLlxY=;
+        b=Pl9mZW8+KBaohn2x8WeyVgipOfSqK7ujF3CibyUgwSW2ZP+URvMzhN+Fn7A70YZUUQ
+         WI4Z0UORehBKI4j06uc2qskzTbIGyDv0cYstSwQ6m00M5AcSF8ogd0TLKiesyMdQCONa
+         KtqdxF27TM6XeSEY8R4dbwShCnWs6Nz6wB82A2FJ10aBLpjOcNiR9D1qEvoWXjKsBG/4
+         oPQpXPfOeLHYUxD6ycEFVJZpg4/9dr7K8MWOTxbEBZgamjpBPzWcFls5U1bRSxbp3BRu
+         Wo5RzNDa8SUgBKkvyh5PM4gS9Y7XtBFVcQkNSbsTzmgWDeHaQ7JHeBsRve3JhZq1EzU4
+         Y2Jw==
+X-Gm-Message-State: AOJu0Yw/h2+Mb6tiFAwo1uT5QVAVEwUtMAf2j/hbwvCRjWRRP7N0qHLD
+        W9KVsdgMvLxqJ5nDYNpP/+CY2jwZvsiPGb7fRl0=
+X-Google-Smtp-Source: AGHT+IGe0ltRWTv26v8RgENHIjqkX2gM5Za4HZ4awrMhZMnA96WY8/DakG0IhXjQJLeOaVRwckUjNTf7VC/jsBUIZU8=
+X-Received: by 2002:a17:903:1d2:b0:1bb:c2b1:9c19 with SMTP id
+ e18-20020a17090301d200b001bbc2b19c19mr12211806plh.6.1692736346254; Tue, 22
+ Aug 2023 13:32:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230818114452.66780-1-swapnil.sapkal@amd.com>
-In-Reply-To: <20230818114452.66780-1-swapnil.sapkal@amd.com>
+References: <CAJZ5v0juUuy2xKZHMXAKSRtfQxMyL6z12AFdU8_ZbdFRKKrR=Q@mail.gmail.com>
+ <CAJZ5v0i3DiLTcqcFbUqQaBcmA0epJz9m0QdSm+45kTepfuWdHg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i3DiLTcqcFbUqQaBcmA0epJz9m0QdSm+45kTepfuWdHg@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Aug 2023 22:24:25 +0200
-Message-ID: <CAJZ5v0hH1iJ-QT+Sm32ESy_JstD+1TF=wV3FW7rnkCAiDjEeig@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] amd-pstate-ut: Fix issues observed after loading
- amd-pstate-ut driver
-To:     Swapnil Sapkal <swapnil.sapkal@amd.com>
-Cc:     ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gautham.shenoy@amd.com
+Date:   Tue, 22 Aug 2023 22:32:14 +0200
+Message-ID: <CAJZ5v0hJ1qrj+MSLfgypSNkbx98W1UWn6GrHUcK+ZvyZhu4ybg@mail.gmail.com>
+Subject: Re: [CfP] Power Management and Thermal Control MC (LPC2023)
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 1:45 PM Swapnil Sapkal <swapnil.sapkal@amd.com> wrote:
->
-> This series fixes amd-pstate-ut which is currently failing for two
-> reasons:
->
-> 1) The code for amd-pstate-ut was written when CONFIG_X86_AMD_PSTATE
-> was tristate config and amd_pstate can be built as module. In
-> current implementation the driver is built-in and previous module
-> parameters are removed. But amd-pstate-ut still try to read old module
-> parameters. Therefore, test fails. First patch fixes this issue by
-> removing those module parameter references.
->
-> 2) In amd_pstate_ut_check_perf() and amd_pstate_ut_check_freq()
-> functions, cpufreq_cpu_get() is called to get policy of the
-> cpu and mark it as busy. In these functions cpufreq_cpu_put()
-> should be used to release the policy. As cpufreq_cpu_put()
-> is not used to release the policy, any other entity trying to
-> access the policy is blocked indefinitely. One such scenario
-> occurs when mode of amd-pstate is changed. Second patch fixes this
-> by calling cpufreq_cpu_put() wherever necessary.
->
-> Swapnil Sapkal (2):
->   amd-pstate-ut: Remove module parameter access from amd-pstate-ut
->   amd-pstate-ut: Fix kernel panic due to loading amd-pstate-ut driver
->
->  drivers/cpufreq/amd-pstate-ut.c | 46 +++++++++++++--------------------
->  1 file changed, 18 insertions(+), 28 deletions(-)
->
-> --
+Hi Folks,
 
-Both patches applied as 6.6 material with subjects adjusted to the
-usual cpufreq patch naming pattern and some changelog edits.
+On Wed, Jul 19, 2023 at 7:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> It has been possible to submit micro-conference topics through the LPC
+> website for a while, so please take the time to submit your Power
+> Management and Thermal Control MC topic to allow the schedule to be
+> put together.
+
+Please submit all of the Power Management and Thermal Control MC
+topics, if you have not done that yet, by the end of this week (August
+27).  It will not be possible to submit any more topics to this MC
+later.
 
 Thanks!
