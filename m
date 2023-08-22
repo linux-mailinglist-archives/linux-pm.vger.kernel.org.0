@@ -2,103 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B5278402F
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 13:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9291078413A
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 14:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233305AbjHVLzs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 07:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        id S235257AbjHVMv3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 08:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbjHVLzr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 07:55:47 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE947E67;
-        Tue, 22 Aug 2023 04:55:32 -0700 (PDT)
-Received: from loongson.cn (unknown [112.20.109.102])
-        by gateway (Coremail) with SMTP id _____8Cx5_ExouRksucaAA--.54912S3;
-        Tue, 22 Aug 2023 19:55:29 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.20.109.102])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxXSMvouRk30RgAA--.19507S2;
-        Tue, 22 Aug 2023 19:55:28 +0800 (CST)
-From:   Feiyang Chen <chenfeiyang@loongson.cn>
-To:     bhelgaas@google.com, rafael.j.wysocki@intel.com
-Cc:     Feiyang Chen <chenfeiyang@loongson.cn>,
-        mika.westerberg@linux.intel.com, helgaas@kernel.org,
-        anders.roxell@linaro.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, guyinggang@loongson.cn,
-        siyanteng@loongson.cn, chenhuacai@loongson.cn,
-        loongson-kernel@lists.loongnix.cn, chris.chenfeiyang@gmail.com
-Subject: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when available
-Date:   Tue, 22 Aug 2023 19:55:14 +0800
-Message-Id: <20230822115514.999111-1-chenfeiyang@loongson.cn>
-X-Mailer: git-send-email 2.39.3
+        with ESMTP id S231901AbjHVMv3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 08:51:29 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3523FCC6;
+        Tue, 22 Aug 2023 05:51:27 -0700 (PDT)
+Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVTdn53VSztRwS;
+        Tue, 22 Aug 2023 20:47:41 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.2) by
+ dggpeml500019.china.huawei.com (7.185.36.137) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Tue, 22 Aug 2023 20:51:24 +0800
+From:   Jie Zhan <zhanjie9@hisilicon.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <zhanjie9@hisilicon.com>,
+        <xuwei5@huawei.com>, <wanghuiqiang@huawei.com>,
+        <jonathan.cameron@huawei.com>, <wangxiongfeng2@huawei.com>
+Subject: [PATCH v2] cpufreq: Support per-policy performance boost
+Date:   Tue, 22 Aug 2023 20:48:37 +0800
+Message-ID: <20230822124837.3016641-1-zhanjie9@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxXSMvouRk30RgAA--.19507S2
-X-CM-SenderInfo: hfkh0wphl1t03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrtFyfKr1fZr43CFy3tFW7ZFc_yoWDtrgE93
-        ykZa4xZrWqyFn8Cas8Aws7ZrW09anxurn7uFs2qF13CF1xW34kJFyUZrn8Cry3W3y5WF98
-        u3srGw15CryvyosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUb-8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r12
-        6r1DMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-        0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AK
-        xVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-        AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI
-        42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-        IF0xvEx4A2jsIE14v26r4UJVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jn4SrUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When the current state is already PCI_D0, pci_power_up() will return
-0 even though dev->pm_cap is not set. In that case, we should not
-read the PCI_PM_CTRL register in pci_set_full_power_state().
+The boost control currently applies to the whole system.  However, users
+may prefer to boost a subset of cores in order to provide prioritized
+performance to workloads running on the boosted cores.
 
-Fixes: e200904b275c ("PCI/PM: Split pci_power_up()")
-Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
+Enable per-policy boost by adding a 'boost' sysfs interface under each
+policy path.  This can be found at:
+
+	/sys/devices/system/cpu/cpufreq/policy<*>/boost
+
+Same to the global boost switch, writing 1/0 to the per-policy 'boost'
+enables/disables boost on a cpufreq policy respectively.
+
+The user view of global and per-policy boost controls should be:
+
+1. Enabling global boost initially enables boost on all policies, and
+per-policy boost can then be enabled or disabled individually, given that
+the platform does support so.
+
+2. Disabling global boost makes the per-policy boost interface illegal.
+
+Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
 ---
- drivers/pci/pci.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+A possible question could be: why not just limiting 'scaling_max_freq'?
+Well, the fundamental difference is that per-policy boost could be more
+user-friendly.  When global boost is enabled, it is not straightforward
+to figure out the base frequency for setting 'scaling_max_freq' to a
+non-boost value. Also, this is supposed to take effect on the physical
+upper frequency limit, reflected through 'cpuinfo_max_freq'.
 
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 60230da957e0..7e90ab7b47a1 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -1242,9 +1242,6 @@ int pci_power_up(struct pci_dev *dev)
- 		else
- 			dev->current_state = state;
+v1->v2:
+- Rename the interface from 'local_boost' to 'boost'.
+- Illegalize writing 0 to per-policy even if global boost is off.
+- Show the per-policy 'boost' file only when ->set_boost() is available.
+
+v1: https://lore.kernel.org/linux-pm/20230724075827.4160512-1-zhanjie9@hisilicon.com/
+
+ drivers/cpufreq/cpufreq.c | 43 +++++++++++++++++++++++++++++++++++++++
+ include/linux/cpufreq.h   |  3 +++
+ 2 files changed, 46 insertions(+)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 50bbc969ffe5..81e21fa070e1 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -86,6 +86,7 @@ static void cpufreq_governor_limits(struct cpufreq_policy *policy);
+ static int cpufreq_set_policy(struct cpufreq_policy *policy,
+ 			      struct cpufreq_governor *new_gov,
+ 			      unsigned int new_pol);
++static bool cpufreq_boost_supported(void);
  
--		if (state == PCI_D0)
--			return 0;
--
- 		return -EIO;
+ /*
+  * Two notifier lists: the "policy" list is involved in the
+@@ -621,6 +622,40 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
+ }
+ define_one_global_rw(boost);
+ 
++static ssize_t show_local_boost(struct cpufreq_policy *policy, char *buf)
++{
++	return sysfs_emit(buf, "%d\n", policy->boost_enabled);
++}
++
++static ssize_t store_local_boost(struct cpufreq_policy *policy,
++				 const char *buf, size_t count)
++{
++	int ret, enable;
++
++	ret = kstrtoint(buf, 10, &enable);
++	if (ret || enable < 0 || enable > 1)
++		return -EINVAL;
++
++	if (!cpufreq_driver->boost_enabled)
++		return -EINVAL;
++
++	if (policy->boost_enabled == enable)
++		return count;
++
++	cpus_read_lock();
++	ret = cpufreq_driver->set_boost(policy, enable);
++	cpus_read_unlock();
++
++	if (ret)
++		return ret;
++
++	policy->boost_enabled = enable;
++
++	return count;
++}
++
++static struct freq_attr local_boost = __ATTR(boost, 0644, show_local_boost, store_local_boost);
++
+ static struct cpufreq_governor *find_governor(const char *str_governor)
+ {
+ 	struct cpufreq_governor *t;
+@@ -1055,6 +1090,12 @@ static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
+ 			return ret;
  	}
  
-@@ -1302,8 +1299,12 @@ static int pci_set_full_power_state(struct pci_dev *dev)
- 	int ret;
- 
- 	ret = pci_power_up(dev);
--	if (ret < 0)
-+	if (ret < 0) {
-+		if (dev->current_state == PCI_D0)
-+			return 0;
-+
- 		return ret;
++	if (cpufreq_boost_supported()) {
++		ret = sysfs_create_file(&policy->kobj, &local_boost.attr);
++		if (ret)
++			return ret;
 +	}
++
+ 	return 0;
+ }
  
- 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
- 	dev->current_state = pmcsr & PCI_PM_CTRL_STATE_MASK;
+@@ -2716,6 +2757,8 @@ int cpufreq_boost_trigger_state(int state)
+ 		ret = cpufreq_driver->set_boost(policy, state);
+ 		if (ret)
+ 			goto err_reset_state;
++
++		policy->boost_enabled = state;
+ 	}
+ 	cpus_read_unlock();
+ 
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 172ff51c1b2a..fa02f2fa88c4 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -140,6 +140,9 @@ struct cpufreq_policy {
+ 	 */
+ 	bool			dvfs_possible_from_any_cpu;
+ 
++	/* Per policy boost enabled flag. */
++	bool			boost_enabled;
++
+ 	 /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
+ 	unsigned int cached_target_freq;
+ 	unsigned int cached_resolved_idx;
 -- 
-2.39.3
+2.30.0
 
