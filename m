@@ -2,152 +2,192 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B32F784D2D
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 01:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55293784D43
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 01:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbjHVXKv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 19:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53246 "EHLO
+        id S229569AbjHVXSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 19:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjHVXKv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 19:10:51 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE53810D;
-        Tue, 22 Aug 2023 16:10:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692745848; x=1724281848;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3c2oE48QdtSIDfdgYyeQETAU7cBTOr2uHvBC3KHuxjw=;
-  b=NnSUtIrD6RxZVD6f8vcvMeWLEls3YVmQ3pNEgocHIjsV6ZRah3S5HFsg
-   6JK5ZsoRN+GeoN0IPs0cK5A7SMxDW03aF+tunWU/FaKBVmz3ekeLLnl1s
-   TJ0Av73m6+KTe/IqKUZUO4MYYQilk6kW2k3vh3SRCY/mfB4sVXDKqTn89
-   Dl8d8vbAPU8qt0vtjH06vJyKMjyOfKAEWdH0o79STECJyhNB4FvQcW1i1
-   1hr7PCWv2s0MqtBZQ8Avp1YxKrmOAQ4X3VLz8gysFFbP+fWEUZM0qvOd2
-   b+NLJ02QomNokLzYXcoWemzX+LLeFVQ98XD2p5EMo1sYJbakkw80q2EgO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="405015243"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="405015243"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 16:10:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="736414493"
-X-IronPort-AV: E=Sophos;i="6.01,194,1684825200"; 
-   d="scan'208";a="736414493"
-Received: from lkp-server02.sh.intel.com (HELO daf8bb0a381d) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 22 Aug 2023 16:10:43 -0700
-Received: from kbuild by daf8bb0a381d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qYaWI-0000bs-1u;
-        Tue, 22 Aug 2023 23:10:42 +0000
-Date:   Wed, 23 Aug 2023 07:10:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        manivannan.sadhasivam@linaro.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_nitegupt@quicinc.com,
-        quic_skananth@quicinc.com, quic_ramkri@quicinc.com,
-        quic_parass@quicinc.com, krzysztof.kozlowski@linaro.org,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "(open list:OPERATING PERFORMANCE POINTS (OPP))" 
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v4 3/4] OPP: Add api to retrieve opps which is at most
- the provided level
-Message-ID: <202308230637.gz3wmjrT-lkp@intel.com>
-References: <1692717141-32743-4-git-send-email-quic_krichai@quicinc.com>
+        with ESMTP id S231683AbjHVXSE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 19:18:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BA9E5C;
+        Tue, 22 Aug 2023 16:17:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6879560C85;
+        Tue, 22 Aug 2023 23:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCFBC433C7;
+        Tue, 22 Aug 2023 23:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692746264;
+        bh=9oZG9mNUNqXOkpnGqTbRp0qqK3g9lEw8FAP2NViIlxQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ODKT/SD+7rzT8jVeBffPr2hjzf65TRmj3MghPtULvyc/8MG1hBNRWAlC0k2knLaQl
+         etQnAkKJt3r6EN9I91eiSLTZnJCH7TgBBs3PR/kJj368NfkrUeZ0fcue2+hz8ASeNi
+         yDhDNeXHho40pgPnwhWjPXIdBrHA3YqRZRz8ryZ+cRI3roPuq+qfJIzo2r3fj0kRwf
+         j+0g0sYOQf8+Bo9U32KbLd+J1SoEFo0ZqvYoUwUFFslLyLCvOfUEQhVR3gpfr7tZNe
+         jUOnXf3/j2z9PqPRAy3AHIA1D/PnaX3N/4MqooA6oBxmgyFftLzM3TnQqA7rMdYlIE
+         31zR8ooRnWDEg==
+Received: by mercury (Postfix, from userid 1000)
+        id 5212E10618A0; Wed, 23 Aug 2023 01:17:42 +0200 (CEST)
+Date:   Wed, 23 Aug 2023 01:17:42 +0200
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.6
+Message-ID: <20230822231742.nccvz5kkvono4fvt@mercury.elektranox.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qm5eec6ga6hniwrb"
 Content-Disposition: inline
-In-Reply-To: <1692717141-32743-4-git-send-email-quic_krichai@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Krishna,
 
-kernel test robot noticed the following build warnings:
+--qm5eec6ga6hniwrb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-[auto build test WARNING on pci/for-linus]
-[also build test WARNING on robh/for-next rafael-pm/linux-next linus/master v6.5-rc7 next-20230822]
-[cannot apply to pci/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Hi Linus,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-chaitanya-chundru/dt-bindings-pci-qcom-Add-opp-table/20230822-232104
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
-patch link:    https://lore.kernel.org/r/1692717141-32743-4-git-send-email-quic_krichai%40quicinc.com
-patch subject: [PATCH v4 3/4] OPP: Add api to retrieve opps which is at most the provided level
-config: x86_64-randconfig-073-20230823 (https://download.01.org/0day-ci/archive/20230823/202308230637.gz3wmjrT-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230823/202308230637.gz3wmjrT-lkp@intel.com/reproduce)
+Here is an early pull request with the power-supply changes for the
+v6.6 cycle, since I'm AFK from now until 2023-09-10. All changes
+have been in linux-next for 3 weeks.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308230637.gz3wmjrT-lkp@intel.com/
+-- Sebastian
 
-All warnings (new ones prefixed by >>):
+The following changes since commit 06c2afb862f9da8dc5efa4b6076a0e48c3fbaaa5:
 
->> drivers/opp/core.c:756: warning: Function parameter or member 'level' not described in 'dev_pm_opp_find_level_floor'
->> drivers/opp/core.c:756: warning: Excess function parameter 'freq' description in 'dev_pm_opp_find_level_floor'
-   drivers/opp/core.c:2025: warning: Function parameter or member 'opp_table' not described in '_opp_set_supported_hw'
-   drivers/opp/core.c:2025: warning: Excess function parameter 'dev' description in '_opp_set_supported_hw'
-   drivers/opp/core.c:2068: warning: Function parameter or member 'opp_table' not described in '_opp_set_prop_name'
-   drivers/opp/core.c:2068: warning: Excess function parameter 'dev' description in '_opp_set_prop_name'
-   drivers/opp/core.c:2109: warning: Function parameter or member 'opp_table' not described in '_opp_set_regulators'
-   drivers/opp/core.c:2109: warning: Excess function parameter 'count' description in '_opp_set_regulators'
-   drivers/opp/core.c:2213: warning: Function parameter or member 'opp_table' not described in '_opp_set_clknames'
-   drivers/opp/core.c:2213: warning: Function parameter or member 'config_clks' not described in '_opp_set_clknames'
-   drivers/opp/core.c:2311: warning: Function parameter or member 'opp_table' not described in '_opp_set_config_regulators_helper'
-   drivers/opp/core.c:2375: warning: Function parameter or member 'opp_table' not described in '_opp_attach_genpd'
-   drivers/opp/core.c:2602: warning: Function parameter or member 'token' not described in 'dev_pm_opp_clear_config'
-   drivers/opp/core.c:2602: warning: Excess function parameter 'opp_table' description in 'dev_pm_opp_clear_config'
+  Linux 6.5-rc1 (2023-07-09 13:53:13 -0700)
 
+are available in the Git repository at:
 
-vim +756 drivers/opp/core.c
+  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.6
 
-   734	
-   735	
-   736	/**
-   737	 * dev_pm_opp_find_level_floor() - Search for a rounded floor freq
-   738	 * @dev:	device for which we do this operation
-   739	 * @freq:	Start level
-   740	 *
-   741	 * Search for the matching floor *available* OPP from a starting level
-   742	 * for a device.
-   743	 *
-   744	 * Return: matching *opp and refreshes *level accordingly, else returns
-   745	 * ERR_PTR in case of error and should be handled using IS_ERR. Error return
-   746	 * values can be:
-   747	 * EINVAL:	for bad pointer
-   748	 * ERANGE:	no match found for search
-   749	 * ENODEV:	if device not found in list of registered devices
-   750	 *
-   751	 * The callers are required to call dev_pm_opp_put() for the returned OPP after
-   752	 * use.
-   753	 */
-   754	struct dev_pm_opp *dev_pm_opp_find_level_floor(struct device *dev,
-   755						      unsigned long *level)
- > 756	{
-   757		return _find_key_floor(dev, level, 0, true, _read_level, NULL);
-   758	}
-   759	EXPORT_SYMBOL_GPL(dev_pm_opp_find_level_floor);
-   760	
+for you to fetch changes up to 7e6311f04b41174ccc738d37dcb4b93cd4de98b0:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+  power: supply: qcom_pmi8998_charger: fix charger status (2023-08-03 02:23:42 +0200)
+
+----------------------------------------------------------------
+power supply and reset changes for the 6.6 series
+
+* core: avoid duplicate hwmon device from thermal framework
+* convert multiple drivers to devm_platform_ioremap_resource
+* at91-reset: add sysfs interface to the power on reason
+* misc. small fixes and improvements
+
+----------------------------------------------------------------
+Caleb Connolly (2):
+      power: supply: qcom_pmi8998_charger: remove CHARGE_CONTROL_LIMIT_* props
+      power: supply: qcom_pmi8998_charger: fix charger status
+
+Chen-Yu Tsai (1):
+      power: supply: core: Avoid duplicate hwmon device from thermal framework
+
+Colin Ian King (1):
+      power: supply: bd99954: make read-only array sub_status_reg
+
+Kamel Bouhara (1):
+      power: reset: at91-reset: add sysfs interface to the power on reason
+
+Neil Armstrong (1):
+      power: reset: oxnas-restart: remove obsolete restart driver
+
+Ricardo Rivera-Matos (1):
+      power: supply: bq24190: Considers FORCE_20PCT when getting IPRECHG
+
+Rob Herring (1):
+      power: Explicitly include correct DT includes
+
+Yangtao Li (6):
+      power: reset: at91-poweroff: Convert to devm_platform_ioremap_resource()
+      power: reset: at91-sama5d2_shdwc: Convert to devm_platform_ioremap_resource()
+      power: reset: brcm-kona: Convert to devm_platform_ioremap_resource()
+      power: reset: gemini-poweroff: Convert to devm_platform_ioremap_resource()
+      power: reset: msm: Convert to devm_platform_ioremap_resource()
+      power: reset: ocelot: Convert to devm_platform_ioremap_resource()
+
+Yu Liao (1):
+      power: supply: qcom_pmi8998_charger: fix uninitialized variable
+
+ .../ABI/testing/sysfs-platform-power-on-reason     |  12 ++
+ drivers/power/reset/Kconfig                        |   7 -
+ drivers/power/reset/Makefile                       |   1 -
+ drivers/power/reset/as3722-poweroff.c              |   1 -
+ drivers/power/reset/at91-poweroff.c                |   4 +-
+ drivers/power/reset/at91-reset.c                   |  37 +++-
+ drivers/power/reset/at91-sama5d2_shdwc.c           |   4 +-
+ drivers/power/reset/brcm-kona-reset.c              |   8 +-
+ drivers/power/reset/gemini-poweroff.c              |   4 +-
+ drivers/power/reset/gpio-poweroff.c                |   3 +-
+ drivers/power/reset/gpio-restart.c                 |   2 +-
+ drivers/power/reset/keystone-reset.c               |   3 +-
+ drivers/power/reset/msm-poweroff.c                 |   6 +-
+ drivers/power/reset/ocelot-reset.c                 |   9 +-
+ drivers/power/reset/odroid-go-ultra-poweroff.c     |   3 +-
+ drivers/power/reset/oxnas-restart.c                | 233 ---------------------
+ drivers/power/reset/st-poweroff.c                  |   2 +-
+ drivers/power/reset/syscon-poweroff.c              |   3 +-
+ drivers/power/reset/syscon-reboot.c                |   3 +-
+ drivers/power/reset/xgene-reboot.c                 |   2 +-
+ drivers/power/supply/axp20x_ac_power.c             |   1 -
+ drivers/power/supply/axp20x_battery.c              |   1 -
+ drivers/power/supply/axp20x_usb_power.c            |   1 -
+ drivers/power/supply/bd99954-charger.c             |   2 +-
+ drivers/power/supply/bq24190_charger.c             |  17 +-
+ drivers/power/supply/cpcap-battery.c               |   2 +-
+ drivers/power/supply/da9150-charger.c              |   2 -
+ drivers/power/supply/da9150-fg.c                   |   1 -
+ drivers/power/supply/lego_ev3_battery.c            |   2 +-
+ drivers/power/supply/ltc2941-battery-gauge.c       |   2 +-
+ drivers/power/supply/ltc4162-l-charger.c           |   2 +-
+ drivers/power/supply/max14656_charger_detector.c   |   2 +-
+ drivers/power/supply/max17040_battery.c            |   2 +-
+ drivers/power/supply/max8903_charger.c             |   1 -
+ drivers/power/supply/power_supply_core.c           |   6 +-
+ drivers/power/supply/qcom_pmi8998_charger.c        |  13 +-
+ drivers/power/supply/rn5t618_power.c               |   1 -
+ drivers/power/supply/rt5033_charger.c              |   2 +-
+ drivers/power/supply/rt9455_charger.c              |   3 +-
+ drivers/power/supply/sbs-battery.c                 |   2 +-
+ drivers/power/supply/tps65090-charger.c            |   2 +-
+ drivers/power/supply/tps65217_charger.c            |   1 -
+ drivers/power/supply/twl4030_charger.c             |   1 +
+ include/linux/power/power_on_reason.h              |  19 ++
+ 44 files changed, 114 insertions(+), 321 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-power-on-reason
+ delete mode 100644 drivers/power/reset/oxnas-restart.c
+ create mode 100644 include/linux/power/power_on_reason.h
+
+--qm5eec6ga6hniwrb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmTlQhUACgkQ2O7X88g7
++pp/iQ/8Dujdr9rxvSUCV7ZLt5xADdmsziJtcVgqirE5rDJ7qDfpG8SYgQDZw8hN
+I+tM290SsdHUHalCKXXENCk0cLcxS8XQ3kUiTgZjznCnrLNuA4ElhN1nuNRrXKOr
+8vGWbOgpOcErTYQ6j+ehPPUUsf5r76KGjKJUU6Qb5xogPgBRjQcejoGR6lo1/LRr
+qooQYZ+mnEko03Fud63hb1zioz3/l9vqQ4coOx4eGj2c3dIg2tJhpQmXJB/jW36G
+LkaH39uSqdchfrr6q21wMqHa1MiVmx6FDPQ9/UneJ+FFGhUhHNzWLvYbos8w7tuQ
+oqZjBz0ttiptOcj4nX9RkTLND33Hin4XfgH+ga3kM7Yp0yf3pWhGCP/E1y+iTZf5
+VdfAH3J+7h+l6LuX3hI3IbtvWowOKRFdDlizn93cnLjGYIA/Zr5ZmiDu639XQMQi
+aizgfOvOxbHX98Djm0nZ3jB5b/JXEAAg55NRtpU/EePNL9bFUvIIZPDZ3BjkZmw7
+qmg+Nb2oKBe0W1YPKag4B6tvvM5NmUAgqDc2wen44j277kQEZNu5FsKBorH1YKT4
+d9Sw4elRJnurilMJHMXiJw+D6E8HWe/pJgpnj5ZzOMehgpNXPbNNEWAI87nroqTf
+VN/aFVP26Vi3qc/qFVScIyxjrWumATN7qAgkcllZ0QvTI1Zla1w=
+=LmoY
+-----END PGP SIGNATURE-----
+
+--qm5eec6ga6hniwrb--
