@@ -2,215 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A712783B56
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 10:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0EC783CB6
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 11:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233657AbjHVIA4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 04:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47020 "EHLO
+        id S234236AbjHVJRs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Aug 2023 05:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233557AbjHVIAS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 04:00:18 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0EAEE9
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 01:00:16 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id 46e09a7af769-6bc9811558cso3048015a34.0
-        for <linux-pm@vger.kernel.org>; Tue, 22 Aug 2023 01:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692691216; x=1693296016;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=n3VViHsFxlPFAPr63U9JvG58yR6RMSw03dS38fpjRKw=;
-        b=kEUJ8tova0sWmKZ6bvTwW4OP0MQLl6BVY41Mwc/ZIfjm5xVSwRiOfdAcyLqbjplugR
-         5xLYBjx8IsCe/1BUhE5UC7nF5HZKWIlf/pUP3LmhuCR7RLeCT0H3/KTtC/7gCq2X0BQu
-         dVklsfn4q2RpUilASToM75Nac+P1QJdkdp9PBPLsf33LgzHG8GgU8UZt/6gL/TSAS59w
-         NpME9h9mDX75vDnd/+QfhltDu8iHKCoj0ycy4vWAXkxeq+emVyYgg6tgkUMA5eb4bAWZ
-         XOO4SSwAk8HSBfd3jMwt7l305OIyMKWSLFAL92BFmPx8aVr5vc1x28rb2TgXLDe/5Chw
-         nNCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692691216; x=1693296016;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n3VViHsFxlPFAPr63U9JvG58yR6RMSw03dS38fpjRKw=;
-        b=Ntk66yCjaZTkWxzj0K+dxwNY/9iJQ8GXcFjD/HN4zOsR/4IdNGss4B17038PCP8ayF
-         L0Ct9X4srimmtdCNUynk0BXKpOBmfwN9b9J/DSwA3DFYaiMaxR2x9hVi809IGRuJpyrb
-         //5J9oa6k10EyvVZwJQwzL5Jl7IakJnyvhlLWpYH01YChEBvwRT1i9RWPQMKZWENqBr2
-         wDE4iMX1MpD+Gxc4rdjbLYxa2dKJlhRXUFxYP9YEfWTLKxysZu4H4JWRQhI7BNXiPfqz
-         VqbAPWV3tSGF6HsRbsg/8t9a3voOEvnrlMbzcStQ60KENIpaQNr+w6gP5R+THmhprmZK
-         W3MA==
-X-Gm-Message-State: AOJu0Yx7fzZ8fc+o4MpKoiR6tkn3ijadWYF3Pbb1NoZQNtJOjQHdUi/t
-        dguZISzyCWuNvllVNGQKcE0eLA==
-X-Google-Smtp-Source: AGHT+IGmh/rVLTK3rvnSpFjCcFQAC30iokXX35BjBJboi7/mvGuN/LFYZsml4vDwAgsZssXQp0hW+w==
-X-Received: by 2002:a05:6830:1009:b0:6b9:2869:bd81 with SMTP id a9-20020a056830100900b006b92869bd81mr10738128otp.18.1692691216025;
-        Tue, 22 Aug 2023 01:00:16 -0700 (PDT)
-Received: from localhost ([122.172.87.195])
-        by smtp.gmail.com with ESMTPSA id p8-20020a63ab08000000b005642a68a508sm7536867pgf.35.2023.08.22.01.00.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 01:00:15 -0700 (PDT)
-Date:   Tue, 22 Aug 2023 13:30:13 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
-Cc:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
-        manivannan.sadhasivam@linaro.org, helgaas@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, quic_parass@quicinc.com,
-        krzysztof.kozlowski@linaro.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] PCI: qcom: Add OPP support for speed based
- performance state of RPMH
-Message-ID: <20230822080013.4bedtd5bkjjltfqo@vireshk-i7>
-References: <1692627343-4380-1-git-send-email-quic_krichai@quicinc.com>
- <1692627343-4380-4-git-send-email-quic_krichai@quicinc.com>
- <95078a8b-857d-4900-8737-a495212db935@quicinc.com>
- <162b135d-7e27-bf3b-df8f-45e2a5e73897@quicinc.com>
- <a0465222-6e03-4fef-a662-4a2c22240d91@quicinc.com>
+        with ESMTP id S234131AbjHVJRs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 05:17:48 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD49C113;
+        Tue, 22 Aug 2023 02:17:45 -0700 (PDT)
+Received: from dggpeml500019.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RVNvC0NVnztRrB;
+        Tue, 22 Aug 2023 17:13:59 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by dggpeml500019.china.huawei.com
+ (7.185.36.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Tue, 22 Aug
+ 2023 17:17:41 +0800
+Message-ID: <ce499ce6-0b05-a17c-fe03-b2630acb97ce@hisilicon.com>
+Date:   Tue, 22 Aug 2023 17:17:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a0465222-6e03-4fef-a662-4a2c22240d91@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [RFC PATCH] cpufreq: Support per-policy performance boost
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+CC:     <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <xuwei5@huawei.com>, <wanghuiqiang@huawei.com>,
+        <jonathan.cameron@huawei.com>, <wangxiongfeng2@huawei.com>
+References: <20230724075827.4160512-1-zhanjie9@hisilicon.com>
+ <20230816062757.tocdrqh3isxcrt3r@vireshk-i7>
+From:   Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20230816062757.tocdrqh3isxcrt3r@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.121.58]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500019.china.huawei.com (7.185.36.137)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22-08-23, 10:23, Pavan Kondeti wrote:
-> +linux-pm and OPP maintainers
-> 
-> On Tue, Aug 22, 2023 at 09:57:41AM +0530, Krishna Chaitanya Chundru wrote:
-> > 
-> > On 8/22/2023 9:33 AM, Pavan Kondeti wrote:
-> > > On Mon, Aug 21, 2023 at 07:45:43PM +0530, Krishna chaitanya chundru wrote:
-> > > > Before link training vote for the maximum performance state of RPMH
-> > > > and once link is up, vote for the performance state based upon the link
-> > > > speed.
-> > > > 
-> > > > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > > > ---
-> > > >   drivers/pci/controller/dwc/pcie-qcom.c | 47 ++++++++++++++++++++++++++++++++++
-> > > >   1 file changed, 47 insertions(+)
-> > > > 
-> > > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > > index 7a87a47..c57ca1a 100644
-> > > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > > @@ -22,6 +22,7 @@
-> > > >   #include <linux/of_device.h>
-> > > >   #include <linux/of_gpio.h>
-> > > >   #include <linux/pci.h>
-> > > > +#include <linux/pm_opp.h>
-> > > >   #include <linux/pm_runtime.h>
-> > > >   #include <linux/platform_device.h>
-> > > >   #include <linux/phy/pcie.h>
-> > > > @@ -1357,6 +1358,32 @@ static int qcom_pcie_icc_init(struct qcom_pcie *pcie)
-> > > >   	return 0;
-> > > >   }
-> > > > +static void qcom_pcie_opp_update(struct qcom_pcie *pcie)
-> > > > +{
-> > > > +	struct dw_pcie *pci = pcie->pci;
-> > > > +	struct dev_pm_opp *opp;
-> > > > +	u32 offset, status;
-> > > > +	int speed, ret = 0;
-> > > > +
-> > > > +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > > > +	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-> > > > +
-> > > > +	/* Only update constraints if link is up. */
-> > > > +	if (!(status & PCI_EXP_LNKSTA_DLLLA))
-> > > > +		return;
-> > > > +
-> > > What happens if link is not up during probe? We set max vote before
-> > > this, should not we bring it down in suspend and vote it back again in
-> > > resume?
-> > 
-> > ok, I will set to lower value in the suspend path if the link is not up.  If
-> > the link is already up driver will not
-> > 
-> > do any modifications.
-> > 
-> > > 
-> > > > +	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
-> > > > +
-> > > > +	opp = dev_pm_opp_find_level_exact(pci->dev, speed);
-> > > > +	if (!IS_ERR(opp)) {
-> > > > +		ret = dev_pm_opp_set_opp(pci->dev, opp);
-> > > > +		if (ret)
-> > > > +			dev_err(pci->dev, "Failed to set opp: %d\n", ret);
-> > > > +		dev_pm_opp_put(opp);
-> > > > +	}
-> > > Since you added an error message, make it more useful by printing the
-> > > opp level also. dev_pm_opp_get_level().
-> > Sure I will add this in next patch.
-> > > 
-> > > > +
-> > > > +}
-> > > > +
-> > > >   static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
-> > > >   {
-> > > >   	struct dw_pcie *pci = pcie->pci;
-> > > > @@ -1439,8 +1466,10 @@ static void qcom_pcie_init_debugfs(struct qcom_pcie *pcie)
-> > > >   static int qcom_pcie_probe(struct platform_device *pdev)
-> > > >   {
-> > > >   	const struct qcom_pcie_cfg *pcie_cfg;
-> > > > +	unsigned long max_freq = INT_MAX;
-> > > >   	struct device *dev = &pdev->dev;
-> > > >   	struct qcom_pcie *pcie;
-> > > > +	struct dev_pm_opp *opp;
-> > > >   	struct dw_pcie_rp *pp;
-> > > >   	struct resource *res;
-> > > >   	struct dw_pcie *pci;
-> > > > @@ -1511,6 +1540,22 @@ static int qcom_pcie_probe(struct platform_device *pdev)
-> > > >   	if (ret)
-> > > >   		goto err_pm_runtime_put;
-> > > > +	/* OPP table is optional */
-> > > > +	ret = devm_pm_opp_of_add_table(dev);
-> > > > +	if (ret && ret != -ENODEV) {
-> > > > +		dev_err(dev, "Invalid OPP table in Device tree\n");
-> > > > +		goto err_pm_runtime_put;
-> > > > +	}
-> > > > +
-> > > > +	/* vote for max level in the opp table */
-> > > > +	opp = dev_pm_opp_find_freq_floor(dev, &max_freq);
-> > > > +	if (!IS_ERR(opp)) {
-> > > > +		ret = dev_pm_opp_set_opp(dev, opp);
-> > > > +		if (ret)
-> > > > +			dev_err(pci->dev, "Failed to set opp: %d\n", ret);
-> > > > +		dev_pm_opp_put(opp);
-> > > > +	}
-> > > > +
-> > > This needs an update since you moved from frequency based voting to link
-> > > speed based voting.
-> > 
-> > dev_pm_opp_find_freq_floor will give us the max the opp level opp we don't
-> > have a similar API to get max opp-level
-> > 
-> > For that reason we are using this API.
-> > 
-> 
-> Ok, thanks. I get that it is working. Would you be not knowing the exact
-> level for the max speed supported? if that is unknown, I believe we have
-> a use case for dev_pm_opp_find_level_floor() API. Adding the best people
-> on this matter for thei valuable opinion/suggestions.
+Hi Viresh,
 
-If required feel free to add dev_pm_opp_find_level_floor(), based on
-dev_pm_opp_find_level_ceil().
+Many thanks for your sugguestion.
 
--- 
-viresh
+Happy with all the comments. Will send a v2 soon.
+
+Jie
+
+On 16/08/2023 14:27, Viresh Kumar wrote:
+> Hi Jie,
+>
+> I am not sure how useful this per-policy boost is for your use case,
+> but I have no objection to the same if it is worth it.
+>
+> On 24-07-23, 15:58, Jie Zhan wrote:
+>> The boost control currently applies to the whole system.  However, users
+>> may prefer to boost a subset of cores in order to provide prioritized
+>> performance to workloads running on the boosted cores.
+>>
+>> Enable per-policy boost by adding a 'local_boost' sysfs interface.  This
+>> can be found at:
+>>
+>> 	/sys/devices/system/cpu/cpufreq/policy<*>/local_boost
+> Just name it boost instead of local_boost, it is present in the
+> policy's directory, that is enough.
+>
+>> Same to the global boost switch, writing 1/0 to 'local_boost'
+>> enables/disables boost on a cpufreq policy respectively.
+>>
+>> The user view of global and local boost controls should be:
+>>
+>> 1. Enabling global boost initially enables local boost on all policies, and
+>> local boost can then be enabled or disabled individually on each policy,
+>> given that the platform does support so.
+>>
+>> 2. Disabling global boost makes enabling local boost illegal, while writing
+>> 0 to 'local_boost' is fine but takes no effect.
+>>
+>> A possible question could be: why not just limiting 'scaling_max_freq'?
+>> Well, the fundamental difference is that 'local_boost' could be more
+>> user-friendly.  When global boost is enabled, it is not straightforward to
+>> figure out the base frequency for setting 'scaling_max_freq' to a non-boost
+>> value. Also, this is supposed to take effect on the physical upper
+>> frequency limit, reflected through 'cpuinfo_max_freq'.
+>>
+>> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+>> Reviewed-by: Wei Xu <xuwei5@hisilicon.com>
+>> ---
+>>   drivers/cpufreq/cpufreq.c | 33 +++++++++++++++++++++++++++++++++
+>>   include/linux/cpufreq.h   |  3 +++
+>>   2 files changed, 36 insertions(+)
+>>
+>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+>> index 6b52ebe5a890..14579c59f7ba 100644
+>> --- a/drivers/cpufreq/cpufreq.c
+>> +++ b/drivers/cpufreq/cpufreq.c
+>> @@ -621,6 +621,35 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
+>>   }
+>>   define_one_global_rw(boost);
+>>   
+>> +static ssize_t show_local_boost(struct cpufreq_policy *policy, char *buf)
+>> +{
+>> +	return sysfs_emit(buf, "%d\n", policy->local_boost_enabled);
+>> +}
+>> +
+>> +static ssize_t store_local_boost(struct cpufreq_policy *policy,
+>> +				 const char *buf, size_t count)
+>> +{
+>> +	int ret, enable;
+>> +
+>> +	ret = kstrtoint(buf, 10, &enable);
+>> +	if (ret || enable < 0 || enable > 1)
+>> +		return -EINVAL;
+>> +
+>> +	if (enable && !cpufreq_driver->boost_enabled)
+>> +		return -EINVAL;
+> Not just while enabling it, you should check for boost_enabled all the
+> time.
+>
+> Also, you can optimize here if the state is being set to existing
+> state and quit early. This is done in the case of global boost
+> already. Have a look.
+>
+>> +
+>> +	cpus_read_lock();
+>> +	ret = cpufreq_driver->set_boost(policy, enable);
+>> +	cpus_read_unlock();
+>> +
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	policy->local_boost_enabled = enable;
+> s/local_//
+>
+>> +
+>> +	return count;
+>> +}
+>> +
+>>   static struct cpufreq_governor *find_governor(const char *str_governor)
+>>   {
+>>   	struct cpufreq_governor *t;
+>> @@ -931,6 +960,7 @@ cpufreq_freq_attr_rw(scaling_min_freq);
+>>   cpufreq_freq_attr_rw(scaling_max_freq);
+>>   cpufreq_freq_attr_rw(scaling_governor);
+>>   cpufreq_freq_attr_rw(scaling_setspeed);
+>> +cpufreq_freq_attr_rw(local_boost);
+>>   
+>>   static struct attribute *cpufreq_attrs[] = {
+>>   	&cpuinfo_min_freq.attr,
+>> @@ -944,6 +974,7 @@ static struct attribute *cpufreq_attrs[] = {
+>>   	&scaling_driver.attr,
+>>   	&scaling_available_governors.attr,
+>>   	&scaling_setspeed.attr,
+>> +	&local_boost.attr,
+> Making this file available if the global boost file isn't present is a
+> bit tricky I think. Maybe at least check for cpufreq_boost_supported()
+> before doing so.
+>
+>>   	NULL
+>>   };
+>>   ATTRIBUTE_GROUPS(cpufreq);
+>> @@ -2716,6 +2747,8 @@ int cpufreq_boost_trigger_state(int state)
+>>   		ret = cpufreq_driver->set_boost(policy, state);
+>>   		if (ret)
+>>   			goto err_reset_state;
+>> +
+>> +		policy->local_boost_enabled = state;
+>>   	}
+>>   	cpus_read_unlock();
+>>   
+>> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+>> index 26e2eb399484..a99a48ac9fdb 100644
+>> --- a/include/linux/cpufreq.h
+>> +++ b/include/linux/cpufreq.h
+>> @@ -140,6 +140,9 @@ struct cpufreq_policy {
+>>   	 */
+>>   	bool			dvfs_possible_from_any_cpu;
+>>   
+>> +	/* Per policy boost enabled flag. */
+>> +	bool			local_boost_enabled;
+>> +
+>>   	 /* Cached frequency lookup from cpufreq_driver_resolve_freq. */
+>>   	unsigned int cached_target_freq;
+>>   	unsigned int cached_resolved_idx;
+>> -- 
+>> 2.30.0
+
