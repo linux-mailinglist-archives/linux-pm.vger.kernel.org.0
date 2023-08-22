@@ -2,49 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6ED6784B26
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006A5784B30
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 22:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbjHVUJf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S229930AbjHVUM7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 16:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjHVUJe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:09:34 -0400
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36BD10CA;
-        Tue, 22 Aug 2023 13:09:14 -0700 (PDT)
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1bdb3ecd20dso8855065ad.0;
-        Tue, 22 Aug 2023 13:09:14 -0700 (PDT)
+        with ESMTP id S230412AbjHVUM7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 16:12:59 -0400
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A000CF2;
+        Tue, 22 Aug 2023 13:12:51 -0700 (PDT)
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-564670fad4bso390861a12.1;
+        Tue, 22 Aug 2023 13:12:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692734927; x=1693339727;
+        d=1e100.net; s=20221208; t=1692735170; x=1693339970;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l6YwQR5cxz4EihrKcIMUeaFlqPXySrQcy+IZQv5pQoU=;
-        b=H17jVMf+GbSsSTArxsd/bw1gxi33jfuJiIuuBXAUXxYP1u5DDnAP0fanALaq7xHeLP
-         eMct5kQJiRm3Msoomo7SsLPz98hiM5FGwXxwlgTD7rrEqcsr9vY76ODvPALWYidM711X
-         p/W4N9Ye/1q/ve3zoMnkYEzSiG4ryr86MaCYgAdMZ2ceWL6JYyrxvZhGna4L0Jf1Ljdo
-         nJVA/0HfcJv4BOIaY/kxk1ehZVWvDVPHLnRkhOZsX2bs8OLgPhJ4EopXS5nXS5c2hNQX
-         Fvr6b5NGA9uCaoolXIsHG612g6HRGSlgiHIOdTxS8tsWtMxS04Qmgncqq9V+jmQty2Ml
-         tllQ==
-X-Gm-Message-State: AOJu0YzApeSXpeyjMuQWmWfBJWJjKFJmtpFBUNKFC/uH9n1KfRGbX7Gl
-        7evUALbVBj5716cnDJs8CX0HNBKzW/8Fv6k7vvzuaT+C
-X-Google-Smtp-Source: AGHT+IGuIs4VdgEB0UAz+cjFTXvcTdPa0uRUFsSTITaqRGzShMO2JghGVD1/90Pd4eVDpNXbpPkUQQiGm8E0xbQC0Ag=
+        bh=siLUU7UI21mtrF8XjGqquGwWwBmXNv2duIOgwsdbXFY=;
+        b=SdoPRnFR0gPQ8LgLwXG8Vz8W1SUtI2EELMupegEovWpr/qyRWuTmrChqf9C6sIvBMS
+         dxrMPLCtre0igZVlBiNbmth9ntQz3u0YfknObQyX5LKhbUgGWpCemqQKJHjI3GrznxdX
+         MeQ6H17SrE5T2DFee9tA2qJWW9BXOilCyggFXGQ1uOLB2UJC5qmX3wnNpjaECcBP4xwK
+         f6VAVDJ4gDTri0GV+toS1SNCxYAiNhSQ11Zp73bo9ILczJ0tS9b/fbAB3CEDiwGEFfRR
+         FDejOAtAUcCR7m0MqPAxqCsUGMMpWQIQs7+y99M/KFwmWcCj83BTw+35dIyaVIaio/t4
+         Z66w==
+X-Gm-Message-State: AOJu0Yyn4ZGmlh0s+aNI6EW7xJfzBc95+97TS4hR3q2bqixXu/3NW+mJ
+        +lxMiozuYzat9m2L0AhISsHR6+lq749DcZFG/JanZbBU
+X-Google-Smtp-Source: AGHT+IEF8qO0OLSmYdUOVvoponXXRc10qcPC1HbOP0TCjZjNBEd99A1VYJCP4YaSf4W/njAKoK46oZKO8JXo2fATNeU=
 X-Received: by 2002:a17:90a:9e2:b0:26d:1eff:619f with SMTP id
- 89-20020a17090a09e200b0026d1eff619fmr9483306pjo.2.1692734927088; Tue, 22 Aug
- 2023 13:08:47 -0700 (PDT)
+ 89-20020a17090a09e200b0026d1eff619fmr9494145pjo.2.1692735170564; Tue, 22 Aug
+ 2023 13:12:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230813025220.1752489-1-rui.zhang@intel.com>
-In-Reply-To: <20230813025220.1752489-1-rui.zhang@intel.com>
+References: <20230816015853.849426-1-liaochang1@huawei.com>
+In-Reply-To: <20230816015853.849426-1-liaochang1@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 22 Aug 2023 22:08:35 +0200
-Message-ID: <CAJZ5v0gLnqxTPux9x=aGhLQoNAwkANPy4UoT0gYEchayE20=DQ@mail.gmail.com>
-Subject: Re: [PATCH V2] thermal: intel: intel_soc_dts_iosf: Remove redundant check
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rafael.j.wysocki@intel.com, daniel.lezcano@linaro.or,
-        srinivas.pandruvada@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
+Date:   Tue, 22 Aug 2023 22:12:39 +0200
+Message-ID: <CAJZ5v0jVUjXNZ+03QBXkyjCbDnB7LAOUwKSeVt95LqkeiK33BQ@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Use clamp helper macro to improve the code readability
+To:     Liao Chang <liaochang1@huawei.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -57,35 +56,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Aug 13, 2023 at 4:52 AM Zhang Rui <rui.zhang@intel.com> wrote:
+On Wed, Aug 16, 2023 at 4:00 AM Liao Chang <liaochang1@huawei.com> wrote:
 >
-> Remove the redundant check in remove_dts_thermal_zone() because all of
-> its existing callers pass a valid pointer as the argument.
+> The valid values of policy.{min, max} should be between 'min' and 'max',
+> so use clamp() helper macro to makes cpufreq_verify_within_limits() more
+> readable.
 >
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Liao Chang <liaochang1@huawei.com>
 > ---
->  drivers/thermal/intel/intel_soc_dts_iosf.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+>  include/linux/cpufreq.h | 14 +++-----------
+>  1 file changed, 3 insertions(+), 11 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> index db97499f4f0a..22fc2970c67d 100644
-> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> @@ -245,11 +245,9 @@ static int soc_dts_enable(int id)
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 99da27466b8f..43b363a99215 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -19,6 +19,7 @@
+>  #include <linux/pm_qos.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/sysfs.h>
+> +#include <linux/minmax.h>
 >
->  static void remove_dts_thermal_zone(struct intel_soc_dts_sensor_entry *dts)
+>  /*********************************************************************
+>   *                        CPUFREQ INTERFACE                          *
+> @@ -467,17 +468,8 @@ static inline void cpufreq_verify_within_limits(struct cpufreq_policy_data *poli
+>                                                 unsigned int min,
+>                                                 unsigned int max)
 >  {
-> -       if (dts) {
-> -               iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
-> -                              SOC_DTS_OFFSET_ENABLE, dts->store_status);
-> -               thermal_zone_device_unregister(dts->tzone);
-> -       }
-> +       iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
-> +                      SOC_DTS_OFFSET_ENABLE, dts->store_status);
-> +       thermal_zone_device_unregister(dts->tzone);
+> -       if (policy->min < min)
+> -               policy->min = min;
+> -       if (policy->max < min)
+> -               policy->max = min;
+> -       if (policy->min > max)
+> -               policy->min = max;
+> -       if (policy->max > max)
+> -               policy->max = max;
+> -       if (policy->min > policy->max)
+> -               policy->min = policy->max;
+> -       return;
+> +       policy->max = clamp(policy->max, min, max);
+> +       policy->min = clamp(policy->min, min, policy->max);
 >  }
 >
->  static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+>  static inline void
 > --
 
-Applied as 6.6 material, thanks!
+Applied (with minor edits in the subject and changelog) as 6.6 material, thanks!
