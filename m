@@ -2,249 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9982F783FFD
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 13:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BABE3783FEE
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Aug 2023 13:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235329AbjHVLtL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Aug 2023 07:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50954 "EHLO
+        id S231320AbjHVLsZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Tue, 22 Aug 2023 07:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233339AbjHVLtL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 07:49:11 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE468E7B;
-        Tue, 22 Aug 2023 04:48:49 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.2.0)
- id 09be78d781e11d50; Tue, 22 Aug 2023 13:40:06 +0200
-Authentication-Results: v370.home.net.pl; spf=softfail (domain owner 
-   discourages use of this host) smtp.mailfrom=rjwysocki.net 
-   (client-ip=195.136.19.94; helo=[195.136.19.94]; 
-   envelope-from=rjw@rjwysocki.net; receiver=<UNKNOWN>)
-Received: from kreacher.localnet (unknown [195.136.19.94])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 06EF4662D25;
-        Tue, 22 Aug 2023 13:40:06 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>, linux-omap@vger.kernel.org
-Subject: [PATCH v1] thermal: core: Rework .get_trend() thermal zone callback
-Date:   Tue, 22 Aug 2023 13:40:06 +0200
-Message-ID: <4511659.LvFx2qVVIh@kreacher>
+        with ESMTP id S233277AbjHVLsZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Aug 2023 07:48:25 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F5DCF4;
+        Tue, 22 Aug 2023 04:47:57 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6b9cd6876bbso1150850a34.1;
+        Tue, 22 Aug 2023 04:47:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692704775; x=1693309575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g7u+tVATkyR9TopllPsPyWrgo7wbCnZAY5KeZRAKErs=;
+        b=fYBYZF+QBKTET8EU18hXhSHDRpACK/Y8laQ6cBMrjQJM7ZX/Sxo5heR8pp1HeQjIPT
+         HpVPuOrVo71kmj8lkfQu/cuXr4dhSUTWfNrcJyKKI6CHnm60xqpCxteh9i38Ejd1Yg+H
+         +kceec33utg8Nmc3zRsxmokDhKWR8V4iyHuq4Upks3nN8UhmQ8pfPDbIhMl8LxNM1O1d
+         pjgQ4koSJO7wVPGd5OYlzhRL8aQ4QsOwhVYJF8uzKJPAvEDERtcgicfR7kMCmJsInOYj
+         2+lXFPErfVxpTBUoaWgJW8W4R40aMUcZNRY/34Nyv2PZhL3efv3gUSPDkjd6/OWe1bxs
+         OgRg==
+X-Gm-Message-State: AOJu0YwtFGWspBTTWD0f/ZVEzwMbt3tQDqIIVOuvH1znNxHKSG5X4/GI
+        Nl4jYx3qoCkzLL8JIQcq45WLzFtYVc6iB5e5eplVB/8z
+X-Google-Smtp-Source: AGHT+IGWlZQ4G1HOEeubKL8xUdbNvbEszjfcNSDx8X+wo9LdrzY6RcILaZiAHAqd/iGYHo1AJ8ZpLt926DA/Tq/N9tY=
+X-Received: by 2002:a4a:e741:0:b0:56e:94ed:c098 with SMTP id
+ n1-20020a4ae741000000b0056e94edc098mr8769210oov.0.1692704775454; Tue, 22 Aug
+ 2023 04:46:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <001d01d9d3a7$71736f50$545a4df0$@telus.net>
+In-Reply-To: <001d01d9d3a7$71736f50$545a4df0$@telus.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 22 Aug 2023 13:46:04 +0200
+Message-ID: <CAJZ5v0g=TEY0+dL9AGh1cYNnwQ=L6G8CRxXVD0AyWsaK5aDsdA@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: intel_pstate: set stale CPU frequency to minimum
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yang.jie@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedviedruddvuddggedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthht
- oheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sun, Aug 20, 2023 at 10:46 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> The intel_pstate CPU frequency scaling driver does not
+> use policy->cur and it is 0.
+> When the CPU frequency is outdated arch_freq_get_on_cpu()
+> will default to the nominal clock frequency when its call to
+> cpufreq_quick_getpolicy_cur returns the never updated 0.
+> Thus, the listed frequency might be outside of currently
+> set limits. Some users are complaining about the high
+> reported frequency, albeit stale, when their system is
+> idle and/or it is above the reduced maximum they have set.
+>
+> This patch will maintain policy_cur for the intel_pstate
+> driver at the current minimum CPU frequency.
+>
+> Reported-by: Yang Jie <yang.jie@linux.intel.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217597
+> Signed-off-by: Doug Smythies <dsmythies@telus.net>
+> ---
+>
+> v1 -> v2:
+>    * v1 was a completely different approach, programming around
+>      the issue rather than fixing it at the source.
+>      reference:
+>      https://patchwork.kernel.org/project/linux-pm/patch/006901d9be8c$f4439930$dccacb90$@telus.net/
+>    * v2 does not fix an issue with the intel_cpufreq CPU scaling
+>      driver (A.K.A. the intel_pstate driver in passive mode) and
+>      the schedutil CPU frequency scaling governor when HWP is enabled
+>      where limit changes are not reflected in the stale listed frequencies.
+>      A fix for that will be some future patch.
+>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 8ca2bce4341a..08284dee583a 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2609,6 +2609,11 @@ static int intel_pstate_set_policy(struct cpufreq_policy *policy)
+>                         intel_pstate_clear_update_util_hook(policy->cpu);
+>                 intel_pstate_hwp_set(policy->cpu);
+>         }
+> +       /* policy current is never updated with the intel_pstate driver
+> +        * but it is used as a stale frequency value. So, keep it within
+> +        * limits.
+> +        */
+> +       policy->cur = policy->min;
+>
+>         mutex_unlock(&intel_pstate_limits_lock);
+>
+> --
 
-Passing a struct thermal_trip pointer instead of a trip index to the
-.get_trend() thermal zone callback allows one of its 2 implementations,
-the thermal_get_trend() function in the ACPI thermal driver, to be
-simplified quite a bit, and the other implementation of it in the
-ti-soc-thermal driver does not even use the relevant callback argument.
+Applied as 6.6 material, with some mailer-induced white space damage
+fixed and the new comment adjusted to the kernel coding style.
 
-For this reason, change the .get_trend() thermal zone callback
-definition and adjust the related code accordingly.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-This is based on the thermal branch in linux-pm.git (which is also
-included in the linux-next branch of that tree).
-
----
- drivers/acpi/thermal.c                             |   41 +++++++++------------
- drivers/thermal/thermal_core.h                     |    2 -
- drivers/thermal/thermal_helpers.c                  |    3 +
- drivers/thermal/ti-soc-thermal/ti-thermal-common.c |    3 +
- include/linux/thermal.h                            |   30 +++++++--------
- 5 files changed, 38 insertions(+), 41 deletions(-)
-
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -53,6 +53,20 @@ enum thermal_notify_event {
- 	THERMAL_EVENT_KEEP_ALIVE, /* Request for user space handler to respond */
- };
- 
-+/**
-+ * struct thermal_trip - representation of a point in temperature domain
-+ * @temperature: temperature value in miliCelsius
-+ * @hysteresis: relative hysteresis in miliCelsius
-+ * @type: trip point type
-+ * @priv: pointer to driver data associated with this trip
-+ */
-+struct thermal_trip {
-+	int temperature;
-+	int hysteresis;
-+	enum thermal_trip_type type;
-+	void *priv;
-+};
-+
- struct thermal_zone_device_ops {
- 	int (*bind) (struct thermal_zone_device *,
- 		     struct thermal_cooling_device *);
-@@ -70,26 +84,12 @@ struct thermal_zone_device_ops {
- 	int (*set_trip_hyst) (struct thermal_zone_device *, int, int);
- 	int (*get_crit_temp) (struct thermal_zone_device *, int *);
- 	int (*set_emul_temp) (struct thermal_zone_device *, int);
--	int (*get_trend) (struct thermal_zone_device *, int,
-+	int (*get_trend) (struct thermal_zone_device *, struct thermal_trip *,
- 			  enum thermal_trend *);
- 	void (*hot)(struct thermal_zone_device *);
- 	void (*critical)(struct thermal_zone_device *);
- };
- 
--/**
-- * struct thermal_trip - representation of a point in temperature domain
-- * @temperature: temperature value in miliCelsius
-- * @hysteresis: relative hysteresis in miliCelsius
-- * @type: trip point type
-- * @priv: pointer to driver data associated with this trip
-- */
--struct thermal_trip {
--	int temperature;
--	int hysteresis;
--	enum thermal_trip_type type;
--	void *priv;
--};
--
- struct thermal_cooling_device_ops {
- 	int (*get_max_state) (struct thermal_cooling_device *, unsigned long *);
- 	int (*get_cur_state) (struct thermal_cooling_device *, unsigned long *);
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -492,26 +492,22 @@ static int thermal_get_temp(struct therm
- }
- 
- static int thermal_get_trend(struct thermal_zone_device *thermal,
--			     int trip_index, enum thermal_trend *trend)
-+			     struct thermal_trip *trip,
-+			     enum thermal_trend *trend)
- {
- 	struct acpi_thermal *tz = thermal_zone_device_priv(thermal);
- 	struct acpi_thermal_trip *acpi_trip;
--	int t, i;
-+	int t;
- 
--	if (!tz || trip_index < 0)
-+	if (!tz || !trip)
- 		return -EINVAL;
- 
--	if (tz->trips.critical.valid)
--		trip_index--;
--
--	if (tz->trips.hot.valid)
--		trip_index--;
--
--	if (trip_index < 0)
-+	acpi_trip = trip->priv;
-+	if (!acpi_trip || !acpi_trip->valid)
- 		return -EINVAL;
- 
--	acpi_trip = &tz->trips.passive.trip;
--	if (acpi_trip->valid && !trip_index--) {
-+	switch (trip->type) {
-+	case THERMAL_TRIP_PASSIVE:
- 		t = tz->trips.passive.tc1 * (tz->temperature -
- 						tz->last_temperature) +
- 			tz->trips.passive.tc2 * (tz->temperature -
-@@ -524,19 +520,18 @@ static int thermal_get_trend(struct ther
- 			*trend = THERMAL_TREND_STABLE;
- 
- 		return 0;
--	}
--
--	t = acpi_thermal_temp(tz, tz->temperature);
- 
--	for (i = 0; i < ACPI_THERMAL_MAX_ACTIVE; i++) {
--		acpi_trip = &tz->trips.active[i].trip;
--		if (acpi_trip->valid && !trip_index--) {
--			if (t > acpi_thermal_temp(tz, acpi_trip->temperature)) {
--				*trend = THERMAL_TREND_RAISING;
--				return 0;
--			}
-+	case THERMAL_TRIP_ACTIVE:
-+		t = acpi_thermal_temp(tz, tz->temperature);
-+		if (t <= trip->temperature)
- 			break;
--		}
-+
-+		*trend = THERMAL_TREND_RAISING;
-+
-+		return 0;
-+
-+	default:
-+		break;
- 	}
- 
- 	return -EINVAL;
-Index: linux-pm/drivers/thermal/thermal_core.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.h
-+++ linux-pm/drivers/thermal/thermal_core.h
-@@ -70,7 +70,7 @@ static inline bool cdev_is_power_actor(s
- void thermal_cdev_update(struct thermal_cooling_device *);
- void __thermal_cdev_update(struct thermal_cooling_device *cdev);
- 
--int get_tz_trend(struct thermal_zone_device *tz, int trip);
-+int get_tz_trend(struct thermal_zone_device *tz, int trip_index);
- 
- struct thermal_instance *
- get_thermal_instance(struct thermal_zone_device *tz,
-Index: linux-pm/drivers/thermal/thermal_helpers.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_helpers.c
-+++ linux-pm/drivers/thermal/thermal_helpers.c
-@@ -22,8 +22,9 @@
- #include "thermal_core.h"
- #include "thermal_trace.h"
- 
--int get_tz_trend(struct thermal_zone_device *tz, int trip)
-+int get_tz_trend(struct thermal_zone_device *tz, int trip_index)
- {
-+	struct thermal_trip *trip = tz->trips ? &tz->trips[trip_index] : NULL;
- 	enum thermal_trend trend;
- 
- 	if (tz->emul_temperature || !tz->ops->get_trend ||
-Index: linux-pm/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-===================================================================
---- linux-pm.orig/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-+++ linux-pm/drivers/thermal/ti-soc-thermal/ti-thermal-common.c
-@@ -109,7 +109,8 @@ static inline int __ti_thermal_get_temp(
- 	return ret;
- }
- 
--static int __ti_thermal_get_trend(struct thermal_zone_device *tz, int trip, enum thermal_trend *trend)
-+static int __ti_thermal_get_trend(struct thermal_zone_device *tz,
-+				  struct thermal_trip *trip, enum thermal_trend *trend)
- {
- 	struct ti_thermal_data *data = thermal_zone_device_priv(tz);
- 	struct ti_bandgap *bgp;
-
-
-
+Thanks!
