@@ -2,101 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6914A785181
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 09:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F73D7851F3
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Aug 2023 09:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233285AbjHWH3R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Aug 2023 03:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S233571AbjHWHs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Aug 2023 03:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233290AbjHWH3R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 03:29:17 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00AB128;
-        Wed, 23 Aug 2023 00:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692775727; x=1724311727;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=SUoqDDcxYlG8V3jukvYQZ2xipB4tsoc0+yDmyBxqiMc=;
-  b=EF/VMSmIx0VZgKKtcrxlgMDmCJoOCjaiAEX/LSMxjQFpls7Klf69zs2j
-   VrFw/LF9MW3xOD5TrdHBiiJiWhWp3crTOrfTKd7hi46ZbVRMrSgDgMzH2
-   IfG7vBmPQMfzYk9F7Er3mVzUerMkLH/KgErcuyd0CI7v0fz3DQoezEO1t
-   EkXmfXkzi+9H/TzVturICwn7U26goFNasK96xmpQYU7d56Z/WbOUaM9un
-   lY2aP5motjaPLesssJhn82B8CObtHiS2UTsqGH0SCPvFgStuWegvyCzBs
-   QQiKvAqLxhHDfsqq8tJOCU0+bgQsPFi1ibxhN2i5/aKke8GglzwdgbQVo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="376822384"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="376822384"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 00:28:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="686336420"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="686336420"
-Received: from amangalo-mobl4.ger.corp.intel.com ([10.252.55.236])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 00:28:39 -0700
-Date:   Wed, 23 Aug 2023 10:28:36 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Feiyang Chen <chenfeiyang@loongson.cn>
-cc:     bhelgaas@google.com, rafael.j.wysocki@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        helgaas@kernel.org, anders.roxell@linaro.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        guyinggang@loongson.cn, siyanteng@loongson.cn,
-        chenhuacai@loongson.cn, loongson-kernel@lists.loongnix.cn,
-        chris.chenfeiyang@gmail.com
-Subject: Re: [PATCH v2] PCI/PM: Only read PCI_PM_CTRL register when
- available
-In-Reply-To: <CAJZ5v0hpngg6WF7Q2P-MhcTGN8qtAx2U2-ODm=YMzs9=C44DSQ@mail.gmail.com>
-Message-ID: <68a839ff-817e-c5b6-c0a9-7862792786c2@linux.intel.com>
-References: <20230822115514.999111-1-chenfeiyang@loongson.cn> <c8beef70-1639-c11e-ae38-d8a07279720@linux.intel.com> <CAJZ5v0hpngg6WF7Q2P-MhcTGN8qtAx2U2-ODm=YMzs9=C44DSQ@mail.gmail.com>
+        with ESMTP id S231131AbjHWHsZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Aug 2023 03:48:25 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDC4E4A
+        for <linux-pm@vger.kernel.org>; Wed, 23 Aug 2023 00:48:22 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31c615eb6feso1192653f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 23 Aug 2023 00:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692776901; x=1693381701;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yMLqQ07/1S4FGZac+b+3f8r1p2hwvkhxqYFR9XhasgQ=;
+        b=xPQOyHts+i9uO+7Lq2SW75l7BNzXbnEHzbY/GIalOHkJV0T9C1s+5e2PYA/yb58BRc
+         j3JJEx2+1mhKBwvTO2lioBRdZYiQRurrgvJyx2sdWR3Zd4a1ryZfz1PkrK79eJCrSMc8
+         HCTJM2m7WTAMp3zHz2u1Guc7CHjED0IIOQB8B+CJW2DPAWhLPMhaOebScjTyT4ipNn4e
+         Y9lU477EdYf0BA/2IscFXXaGlvGtStv0SwE1h7CwP7aMbc2RuN5ImU5o6X3iRxsQO+IC
+         yRGmw1iqFdhUYbu2X3QIKq168/Hmwi0u5YsS7X6VgaM2TGa0pyZnkdKsoLwzno1yWsu9
+         fVIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692776901; x=1693381701;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yMLqQ07/1S4FGZac+b+3f8r1p2hwvkhxqYFR9XhasgQ=;
+        b=Zu1SmpDa2A+8GbxjEi36yI8OHxwWuFhWdDOiRRPKDU+JneGJx/+RhxAWqM4uyi/ZX3
+         TPf/OCh65bc4c6auf/6Y8TvBnf+IvAOBeOO0AnnaiOumKBMFQDRxpVxZ7CY4L5CiQaR0
+         udpDJqqwruy2/b964nw5OIKojXc5yWx8d5GIfYKxuKI+q2F9dTvE/HuOkXQFIMwyzm+s
+         7YD2jJA6jU0qYTCXM5kONvbJa7SvgsTKAhFtTYUW/6StqLsZBCNV35XInZ97vG+ryclW
+         ez/bOkkHpQV7LSb66ZdfHa6ew8r/LPTDxaulvn2tOUfs2JVhnuQehC5J9Sofpc23/MoZ
+         ZksQ==
+X-Gm-Message-State: AOJu0YyMyJMawa92HM++djj5XDwvStGzv+WKKHWazjIhLtSwdpZSKIJN
+        g6jaw49RJ7b/ZTyHzZXYLV0wSg==
+X-Google-Smtp-Source: AGHT+IEJCgqNoN/t/JtugjJDUHt4ZTgJERVOv2dLtodMoCTxdTohodR2lggnhDmB/2raLk4Fvg/g7w==
+X-Received: by 2002:a5d:46cd:0:b0:317:5c36:913b with SMTP id g13-20020a5d46cd000000b003175c36913bmr9140847wrs.48.1692776901194;
+        Wed, 23 Aug 2023 00:48:21 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id g16-20020adff3d0000000b00318147fd2d3sm17986636wrp.41.2023.08.23.00.48.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Aug 2023 00:48:20 -0700 (PDT)
+Message-ID: <b544e079-c9de-23d3-80f7-cff89293eeb5@linaro.org>
+Date:   Wed, 23 Aug 2023 09:48:19 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1547078131-1692775722=:1805"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 2/5] thermal/drivers/mediatek/lvts_thermal: Add suspend
+ and resume
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        matthias.bgg@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        wenst@chromium.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com, nfraprado@collabora.com,
+        abailon@baylibre.com, amergnat@baylibre.com, khilman@baylibre.com
+References: <20230530195132.2286163-1-bero@baylibre.com>
+ <20230530195132.2286163-3-bero@baylibre.com>
+ <371790cd-5a7c-8fa6-cc38-3a3680525092@collabora.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <371790cd-5a7c-8fa6-cc38-3a3680525092@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 31/05/2023 10:05, AngeloGioacchino Del Regno wrote:
 
---8323329-1547078131-1692775722=:1805
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+[ ... ]
 
-On Tue, 22 Aug 2023, Rafael J. Wysocki wrote:
-
-> On Tue, Aug 22, 2023 at 3:24 PM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > On Tue, 22 Aug 2023, Feiyang Chen wrote:
-> >
-> > > When the current state is already PCI_D0, pci_power_up() will return
-> > > 0 even though dev->pm_cap is not set. In that case, we should not
-> > > read the PCI_PM_CTRL register in pci_set_full_power_state().
-> >
-> > IMHO, this is a bit misleading because after this patch, pci_power_up()
-> > returns always an error if dev->pm_cap is not set.
+>>   static const struct lvts_ctrl_data mt8195_lvts_mcu_data_ctrl[] = {
+>>       {
+>>           .cal_offset = { 0x04, 0x07 },
+>> @@ -1268,6 +1300,8 @@ MODULE_DEVICE_TABLE(of, lvts_of_match);
+>>   static struct platform_driver lvts_driver = {
+>>       .probe = lvts_probe,
+>>       .remove = lvts_remove,
+>> +    .suspend = lvts_suspend,
 > 
-> Yes, it does, but it has 2 callers only and the other one ignores the
-> return value, so this only matters here.
+> Should we do that in noirq handlers?
+> We're risking to miss a thermal interrupt.
 
-I did only mean that the changelog could be more clear how it achieves 
-the desired result (as currently it states opposite of what the code 
-does w.r.t. that return value).
+I'm not sure missing a thermal interrupt is a problem in this context 
+but we may go in the irq routine with an undefined state sensor setup 
+(eg. the internal clock stopped in the suspend and then read the sensor 
+in the isr).
 
-I'm not against the approach taken by patch.
+IMO, using suspend_noirq and resume_noirq may be required here.
+
+Alexandre are you taking over the next iteration?
+
 
 -- 
- i.
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
---8323329-1547078131-1692775722=:1805--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
